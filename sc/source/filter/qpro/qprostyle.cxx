@@ -91,19 +91,19 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     rItemSet.Put( SvxHorJustifyItem( eJustify, ATTR_HOR_JUSTIFY ) );
 
     // Vertical Alignment
-    SvxCellVerJustify eVerJustify = SVX_VER_JUSTIFY_STANDARD;
+    SvxCellVerJustify eVerJustify = SvxCellVerJustify::Standard;
     switch( nVer )
     {
         case 0x00:
-            eVerJustify = SVX_VER_JUSTIFY_BOTTOM;
+            eVerJustify = SvxCellVerJustify::Bottom;
             break;
 
         case 0x08:
-            eVerJustify = SVX_VER_JUSTIFY_CENTER;
+            eVerJustify = SvxCellVerJustify::Center;
             break;
 
         case 0x10:
-            eVerJustify = SVX_VER_JUSTIFY_TOP;
+            eVerJustify = SvxCellVerJustify::Top;
             break;
     }
 

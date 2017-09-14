@@ -2814,7 +2814,7 @@ void ScFiltersTest::testCondFormatParentXLSX()
     const ScPatternAttr* pPattern = rDoc.GetPattern(2, 5, 0);
     const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet);
     const SvxVerJustifyItem& rVerJustify = static_cast<const SvxVerJustifyItem&>(rPoolItem);
-    CPPUNIT_ASSERT_EQUAL(SVX_VER_JUSTIFY_TOP, rVerJustify.GetValue());
+    CPPUNIT_ASSERT_EQUAL(SvxCellVerJustify::Top, rVerJustify.GetValue());
 
     xDocSh->DoClose();
 }
@@ -3061,7 +3061,7 @@ void ScFiltersTest::testOrcusODSStyleInterface()
         pStyleSheet->GetItemSet().HasItem(ATTR_VER_JUSTIFY, &pItem));
 
     const SvxVerJustifyItem* pVerJustify = static_cast<const SvxVerJustifyItem*>(pItem);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with ver justify", SVX_VER_JUSTIFY_CENTER, pVerJustify->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with ver justify", SvxCellVerJustify::Center, pVerJustify->GetValue());
 
 }
 

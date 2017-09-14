@@ -4089,7 +4089,7 @@ long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
 
     for (sal_Int32 i = 0; i < nParaCount; ++i)
     {
-        if (GetVerJustification(i) != SVX_VER_JUSTIFY_BLOCK)
+        if (GetVerJustification(i) != SvxCellVerJustify::Block)
             // All paragraphs must have the block justification set.
             return 0;
 

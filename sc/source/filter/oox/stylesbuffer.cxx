@@ -1192,24 +1192,24 @@ void Alignment::finalizeImport()
 
 ::SvxCellVerJustify Alignment::GetScVerAlign() const
 {
-    ::SvxCellVerJustify nVert = ::SVX_VER_JUSTIFY_STANDARD;
+    ::SvxCellVerJustify nVert = ::SvxCellVerJustify::Standard;
     switch ( maApiData.mnVerJustify )
     {
         case css::table::CellVertJustify2::BOTTOM:
-            nVert = ::SVX_VER_JUSTIFY_BOTTOM;
+            nVert = ::SvxCellVerJustify::Bottom;
             break;
         case css::table::CellVertJustify2::CENTER:
-            nVert = ::SVX_VER_JUSTIFY_CENTER;
+            nVert = ::SvxCellVerJustify::Center;
             break;
         case css::table::CellVertJustify2::TOP:
-            nVert = ::SVX_VER_JUSTIFY_TOP;
+            nVert = ::SvxCellVerJustify::Top;
             break;
         case css::table::CellVertJustify2::BLOCK:
-            nVert = ::SVX_VER_JUSTIFY_BLOCK;
+            nVert = ::SvxCellVerJustify::Block;
             break;
         case css::table::CellVertJustify2::STANDARD:
         default:
-            nVert = ::SVX_VER_JUSTIFY_STANDARD;
+            nVert = ::SvxCellVerJustify::Standard;
             break;
     }
     return nVert;

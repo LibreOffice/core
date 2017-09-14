@@ -111,7 +111,7 @@ DefItems::DefItems()
     rDefItems[14] = new SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST );
     rDefItems[15] = new SvxTabStopItem( 0, 0, SvxTabAdjust::Left, EE_PARA_TABS );
     rDefItems[16] = new SvxJustifyMethodItem( SvxCellJustifyMethod::Auto, EE_PARA_JUST_METHOD );
-    rDefItems[17] = new SvxVerJustifyItem( SVX_VER_JUSTIFY_STANDARD, EE_PARA_VER_JUST );
+    rDefItems[17] = new SvxVerJustifyItem( SvxCellVerJustify::Standard, EE_PARA_VER_JUST );
 
     // Character attributes:
     rDefItems[18] = new SvxColorItem( Color( COL_AUTO ), EE_CHAR_COLOR );

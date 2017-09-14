@@ -814,16 +814,16 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         long nOffsetY = 0;
         const SvxVerJustifyItem* pVerJustifyItem = static_cast< const SvxVerJustifyItem* >(
             rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_VER_JUSTIFY ) );
-        SvxCellVerJustify eVerJust = ( pVerJustifyItem ? pVerJustifyItem->GetValue() : SVX_VER_JUSTIFY_STANDARD );
+        SvxCellVerJustify eVerJust = ( pVerJustifyItem ? pVerJustifyItem->GetValue() : SvxCellVerJustify::Standard );
         switch ( eVerJust )
         {
-            case SVX_VER_JUSTIFY_STANDARD:
-            case SVX_VER_JUSTIFY_BOTTOM:
+            case SvxCellVerJustify::Standard:
+            case SvxCellVerJustify::Bottom:
                 {
                     nOffsetY = nSizeY - nBottomM - nTextHeight;
                 }
                 break;
-            case SVX_VER_JUSTIFY_CENTER:
+            case SvxCellVerJustify::Center:
                 {
                     nOffsetY = ( nSizeY - nTopM - nBottomM - nTextHeight ) / 2 + nTopM;
                 }

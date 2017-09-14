@@ -493,19 +493,19 @@ void OP_VerAlign123(LotusContext& /*rContext*/, sal_uInt8 nAlignPattern, SfxItem
     switch (nAlignPattern)
     {
         case 0:
-            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY) );
+            rPatternItemSet.Put( SvxVerJustifyItem(SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY) );
             break;
         case 1:
-            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_TOP, ATTR_VER_JUSTIFY) );
+            rPatternItemSet.Put( SvxVerJustifyItem(SvxCellVerJustify::Top, ATTR_VER_JUSTIFY) );
             break;
         case 2:
-            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY) );
+            rPatternItemSet.Put( SvxVerJustifyItem(SvxCellVerJustify::Center, ATTR_VER_JUSTIFY) );
             break;
         case 4:
-            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_BOTTOM, ATTR_VER_JUSTIFY) );
+            rPatternItemSet.Put( SvxVerJustifyItem(SvxCellVerJustify::Bottom, ATTR_VER_JUSTIFY) );
             break;
         default:
-            rPatternItemSet.Put( SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY) );
+            rPatternItemSet.Put( SvxVerJustifyItem(SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY) );
             break;
     }
 }
