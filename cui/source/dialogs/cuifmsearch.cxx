@@ -297,7 +297,7 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton, void)
         if (pButton == m_prbSingleField)
         {
             m_plbField->Enable();
-            m_pSearchEngine->RebuildUsedFields(m_plbField->GetSelectEntryPos());
+            m_pSearchEngine->RebuildUsedFields(m_plbField->GetSelectedEntryPos());
         }
         else
         {
@@ -409,17 +409,17 @@ IMPL_LINK(FmSearchDialog, OnPositionSelected, ListBox&, rBox, void)
 {
     DBG_ASSERT(rBox.GetSelectEntryCount() == 1, "FmSearchDialog::OnMethodSelected : unexpected : not exactly one entry selected!");
 
-    m_pSearchEngine->SetPosition(m_plbPosition->GetSelectEntryPos());
+    m_pSearchEngine->SetPosition(m_plbPosition->GetSelectedEntryPos());
 }
 
 IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox&, rBox, void)
 {
     DBG_ASSERT(rBox.GetSelectEntryCount() == 1, "FmSearchDialog::OnFieldSelected : unexpected : not exactly one entry select!");
 
-    m_pSearchEngine->RebuildUsedFields(m_prbAllFields->IsChecked() ? -1 : (sal_Int16)m_plbField->GetSelectEntryPos());
+    m_pSearchEngine->RebuildUsedFields(m_prbAllFields->IsChecked() ? -1 : (sal_Int16)m_plbField->GetSelectedEntryPos());
         // calls m_pSearchEngine->InvalidatePreviousLoc too
 
-    sal_Int32 nCurrentContext = m_plbForm->GetSelectEntryPos();
+    sal_Int32 nCurrentContext = m_plbForm->GetSelectedEntryPos();
     if (nCurrentContext != LISTBOX_ENTRY_NOTFOUND)
         m_arrContextFields[nCurrentContext] = m_plbField->GetSelectedEntry();
 }
@@ -551,7 +551,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
 
 IMPL_LINK( FmSearchDialog, OnContextSelection, ListBox&, rBox, void)
 {
-    InitContext(rBox.GetSelectEntryPos());
+    InitContext(rBox.GetSelectedEntryPos());
 }
 
 void FmSearchDialog::EnableSearchUI(bool bEnable)
@@ -674,13 +674,13 @@ IMPL_LINK_NOARG(FmSearchDialog, OnDelayedPaint, Timer *, void)
 void FmSearchDialog::OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPos)
 {
     FmFoundRecordInformation friInfo;
-    friInfo.nContext = m_plbForm->GetSelectEntryPos();
+    friInfo.nContext = m_plbForm->GetSelectedEntryPos();
     // if I don't do a search in a context, this has an invalid value - but then it doesn't matter anyway
     friInfo.aPosition = aCursorPos;
     if (m_prbAllFields->IsChecked())
         friInfo.nFieldPos = nFieldPos;
     else
-        friInfo.nFieldPos = m_plbField->GetSelectEntryPos();
+        friInfo.nFieldPos = m_plbField->GetSelectedEntryPos();
         // this of course implies that I have really searched in the field that is selected in the listbox,
         // which is made sure in RebuildUsedFields
 
@@ -736,7 +736,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
             if (m_lnkCanceledNotFoundHdl.IsSet())
             {
                 FmFoundRecordInformation friInfo;
-                friInfo.nContext = m_plbForm->GetSelectEntryPos();
+                friInfo.nContext = m_plbForm->GetSelectedEntryPos();
                 // if I don't do a search in a context, this has an invalid value - but then it doesn't matter anyway
                 friInfo.aPosition = pProgress->aBookmark;
                 m_lnkCanceledNotFoundHdl.Call(friInfo);

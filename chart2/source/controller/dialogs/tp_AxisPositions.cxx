@@ -116,18 +116,18 @@ VclPtr<SfxTabPage> AxisPositionsTabPage::Create(vcl::Window* pWindow,const SfxIt
 bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     // axis line
-    sal_Int32 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLB_CrossesAt->GetSelectedEntryPos();
     rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_POSITION, nPos+1 ));
     if( nPos==2 )
     {
         double fCrossover = m_pED_CrossesAt->GetValue();
         if( m_bCrossingAxisIsCategoryAxis )
-            fCrossover = m_pED_CrossesAtCategory->GetSelectEntryPos()+1;
+            fCrossover = m_pED_CrossesAtCategory->GetSelectedEntryPos()+1;
         rOutAttrs->Put(SvxDoubleItem(fCrossover,SCHATTR_AXIS_POSITION_VALUE));
     }
 
     // labels
-    sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectEntryPos();
+    sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectedEntryPos();
     if( nLabelPos != LISTBOX_ENTRY_NOTFOUND )
         rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_LABEL_POSITION, nLabelPos ));
 
@@ -147,7 +147,7 @@ bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_TICKS,nTicks));
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_HELPTICKS,nMinorTicks));
 
-    sal_Int32 nMarkPos = m_pLB_PlaceTicks->GetSelectEntryPos();
+    sal_Int32 nMarkPos = m_pLB_PlaceTicks->GetSelectedEntryPos();
     if( nMarkPos != LISTBOX_ENTRY_NOTFOUND )
         rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_MARK_POSITION, nMarkPos ));
 
@@ -315,7 +315,7 @@ void AxisPositionsTabPage::SupportAxisPositioning( bool bSupportAxisPositioning 
 
 IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, ListBox&, void)
 {
-    sal_Int32 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLB_CrossesAt->GetSelectedEntryPos();
     m_pED_CrossesAt->Show( (nPos==2) && !m_bCrossingAxisIsCategoryAxis );
     m_pED_CrossesAtCategory->Show( (nPos==2) && m_bCrossingAxisIsCategoryAxis );
 
@@ -329,12 +329,12 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(AxisPositionsTabPage, PlaceLabelsSelectHdl, ListBox&, void)
 {
-    sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectEntryPos();
+    sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectedEntryPos();
 
     bool bEnableTickmarkPlacement = (nLabelPos>1);
     if( bEnableTickmarkPlacement )
     {
-        sal_Int32 nAxisPos = m_pLB_CrossesAt->GetSelectEntryPos();
+        sal_Int32 nAxisPos = m_pLB_CrossesAt->GetSelectedEntryPos();
         if( nLabelPos-2 == nAxisPos )
             bEnableTickmarkPlacement=false;
     }

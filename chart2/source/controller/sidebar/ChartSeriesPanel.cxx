@@ -478,7 +478,7 @@ IMPL_LINK_NOARG(ChartSeriesPanel, ListBoxHdl, ListBox&, void)
 {
     OUString aCID = getCID(mxModel);
 
-    sal_Int32 nPos = mpLBLabelPlacement->GetSelectEntryPos();
+    sal_Int32 nPos = mpLBLabelPlacement->GetSelectedEntryPos();
     setDataLabelPlacement(mxModel, aCID, nPos);
 }
 

@@ -168,7 +168,7 @@ void PageStylesPanel::Initialize()
 
 void PageStylesPanel::Update()
 {
-    const eFillStyle eXFS = (eFillStyle)mpBgFillType->GetSelectEntryPos();
+    const eFillStyle eXFS = (eFillStyle)mpBgFillType->GetSelectedEntryPos();
     SfxObjectShell* pSh = SfxObjectShell::Current();
     switch(eXFS)
     {
@@ -459,7 +459,7 @@ void PageStylesPanel::NotifyItemUpdate(
 
 IMPL_LINK_NOARG( PageStylesPanel, ModifyColumnCountHdl, ListBox&, void )
 {
-    sal_uInt16 nColumnType = mpColumnCount->GetSelectEntryPos() + 1;
+    sal_uInt16 nColumnType = mpColumnCount->GetSelectedEntryPos() + 1;
     mpPageColumnItem->SetValue( nColumnType );
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLUMN,
             SfxCallMode::RECORD, { mpPageColumnItem.get() });
@@ -467,21 +467,21 @@ IMPL_LINK_NOARG( PageStylesPanel, ModifyColumnCountHdl, ListBox&, void )
 
 IMPL_LINK_NOARG( PageStylesPanel, ModifyNumberingHdl, ListBox&, void )
 {
-    SvxNumType nEntryData = static_cast<SvxNumType>(reinterpret_cast<sal_uLong>(mpNumberSelectLB->GetEntryData(mpNumberSelectLB->GetSelectEntryPos())));
+    SvxNumType nEntryData = static_cast<SvxNumType>(reinterpret_cast<sal_uLong>(mpNumberSelectLB->GetEntryData(mpNumberSelectLB->GetSelectedEntryPos())));
     mpPageItem->SetNumType(nEntryData);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD, { mpPageItem.get() });
 }
 
 IMPL_LINK_NOARG( PageStylesPanel, ModifyLayoutHdl, ListBox&, void )
 {
-    sal_uInt16 nUse = mpLayoutSelectLB->GetSelectEntryPos();
+    sal_uInt16 nUse = mpLayoutSelectLB->GetSelectedEntryPos();
     mpPageItem->SetPageUsage(PosToPageUsage_Impl(nUse));
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD, { mpPageItem.get() });
 }
 
 IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, ListBox&, void)
 {
-    const eFillStyle eXFS = (eFillStyle)mpBgFillType->GetSelectEntryPos();
+    const eFillStyle eXFS = (eFillStyle)mpBgFillType->GetSelectedEntryPos();
     Update();
 
     switch (eXFS)
@@ -530,7 +530,7 @@ IMPL_LINK_NOARG(PageStylesPanel, ModifyFillStyleHdl, ListBox&, void)
 
 void PageStylesPanel::ModifyFillColor()
 {
-    const eFillStyle eXFS = (eFillStyle)mpBgFillType->GetSelectEntryPos();
+    const eFillStyle eXFS = (eFillStyle)mpBgFillType->GetSelectedEntryPos();
     SfxObjectShell* pSh = SfxObjectShell::Current();
     switch(eXFS)
     {
@@ -553,7 +553,7 @@ void PageStylesPanel::ModifyFillColor()
         case HATCH:
         {
             const SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
-            sal_uInt16 nPos = mpBgHatchingLB->GetSelectEntryPos();
+            sal_uInt16 nPos = mpBgHatchingLB->GetSelectedEntryPos();
             XHatch aHatch = aHatchListItem.GetHatchList()->GetHatch(nPos)->GetHatch();
             const OUString aHatchName = aHatchListItem.GetHatchList()->GetHatch(nPos)->GetName();
 
@@ -564,7 +564,7 @@ void PageStylesPanel::ModifyFillColor()
         case BITMAP:
         case PATTERN:
         {
-            sal_Int16 nPos = mpBgBitmapLB->GetSelectEntryPos();
+            sal_Int16 nPos = mpBgBitmapLB->GetSelectedEntryPos();
             GraphicObject aBitmap;
             OUString aBitmapName;
 

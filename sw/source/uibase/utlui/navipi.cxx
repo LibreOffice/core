@@ -142,7 +142,7 @@ static void lcl_UnSelectFrame(SwWrtShell *pSh)
 
 IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox&, rBox, void )
 {
-    int nEntryIdx = rBox.GetSelectEntryPos();
+    int nEntryIdx = rBox.GetSelectedEntryPos();
     SwView *pView ;
     pView = SwModule::GetFirstView();
     while (nEntryIdx-- && pView)

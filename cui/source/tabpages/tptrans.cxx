@@ -152,7 +152,7 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void const * pControl)
 {
     if(pControl == m_pLbTrgrGradientType || pControl == this)
     {
-        css::awt::GradientStyle eXGS = (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos();
+        css::awt::GradientStyle eXGS = (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos();
         SetControlState_Impl( eXGS );
     }
 
@@ -162,7 +162,7 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(void const * pControl)
     XGradient aTmpGradient(
                 Color(nStartCol, nStartCol, nStartCol),
                 Color(nEndCol, nEndCol, nEndCol),
-                (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos(),
+                (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos(),
                 (sal_uInt16)m_pMtrTrgrAngle->GetValue() * 10,
                 (sal_uInt16)m_pMtrTrgrCenterX->GetValue(),
                 (sal_uInt16)m_pMtrTrgrCenterY->GetValue(),
@@ -181,7 +181,7 @@ void SvxTransparenceTabPage::ActivateGradient(bool bActivate)
 
     if(bActivate)
     {
-        css::awt::GradientStyle eXGS = (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos();
+        css::awt::GradientStyle eXGS = (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos();
         SetControlState_Impl( eXGS );
     }
 }
@@ -346,7 +346,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
             XGradient aTmpGradient(
                         Color(nStartCol, nStartCol, nStartCol),
                         Color(nEndCol, nEndCol, nEndCol),
-                        (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos(),
+                        (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectedEntryPos(),
                         (sal_uInt16)m_pMtrTrgrAngle->GetValue() * 10,
                         (sal_uInt16)m_pMtrTrgrCenterX->GetValue(),
                         (sal_uInt16)m_pMtrTrgrCenterY->GetValue(),

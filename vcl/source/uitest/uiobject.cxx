@@ -826,7 +826,7 @@ StringMap ListBoxUIObject::get_state()
     aMap["MultiSelect"] = OUString::boolean(mxListBox->IsMultiSelectionEnabled());
     aMap["EntryCount"] = OUString::number(mxListBox->GetEntryCount());
     aMap["SelectEntryCount"] = OUString::number(mxListBox->GetSelectEntryCount());
-    aMap["SelectEntryPos"] = OUString::number(mxListBox->GetSelectEntryPos());
+    aMap["SelectEntryPos"] = OUString::number(mxListBox->GetSelectedEntryPos());
     aMap["SelectEntryText"] = mxListBox->GetSelectedEntry();
 
     return aMap;
@@ -841,7 +841,7 @@ OUString ListBoxUIObject::get_action(VclEventId nEvent) const
 {
     if (nEvent == VclEventId::ListboxSelect)
     {
-        sal_Int32 nPos = mxListBox->GetSelectEntryPos();
+        sal_Int32 nPos = mxListBox->GetSelectedEntryPos();
         return "Action on element: " + mxListBox->get_id() + " with action : SELECT and content {\"POS\": \"" + OUString::number(nPos) + "\"}";
     }
     else

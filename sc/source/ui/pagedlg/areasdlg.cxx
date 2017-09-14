@@ -481,7 +481,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, Button*, pBtn, void )
             // Printing area changed?
 
             // first try the list box, if "Entire sheet" is selected
-            bool bEntireSheet = (pLbPrintArea->GetSelectEntryPos() == SC_AREASDLG_PR_ENTIRE);
+            bool bEntireSheet = (pLbPrintArea->GetSelectedEntryPos() == SC_AREASDLG_PR_ENTIRE);
             SfxBoolItem aEntireSheet( FN_PARAM_4, bEntireSheet );
 
             bool bDataChanged = bEntireSheet != pDoc->IsPrintEntireSheet( nCurTab );
@@ -540,7 +540,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control&, rCtrl, void )
 IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox&, rLb, void )
 {
     ListBox* pLb = &rLb;
-    const sal_Int32 nSelPos = pLb->GetSelectEntryPos();
+    const sal_Int32 nSelPos = pLb->GetSelectedEntryPos();
     Edit* pEd = nullptr;
 
     // list box positions of specific entries, default to "repeat row/column" list boxes

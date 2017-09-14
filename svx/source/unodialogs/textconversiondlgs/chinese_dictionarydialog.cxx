@@ -649,7 +649,7 @@ bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() con
             return false;
         if( pE->m_aMapping != m_pED_Mapping->GetText() )
             return false;
-        if( pE->m_nConversionPropertyType != m_pLB_Property->GetSelectEntryPos()+1 )
+        if( pE->m_nConversionPropertyType != m_pLB_Property->GetSelectedEntryPos()+1 )
             return false;
         return true;
     }
@@ -709,7 +709,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, AddHdl, Button*, void)
     if( !isEditFieldsHaveContent() )
         return;
 
-    sal_Int16 nConversionPropertyType = m_pLB_Property->GetSelectEntryPos()+1;
+    sal_Int16 nConversionPropertyType = m_pLB_Property->GetSelectedEntryPos()+1;
 
     getActiveDictionary().addEntry( m_pED_Term->GetText(), m_pED_Mapping->GetText(), nConversionPropertyType );
 
@@ -726,7 +726,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl, Button*, void)
 {
     OUString aTerm( m_pED_Term->GetText() );
     OUString aMapping( m_pED_Mapping->GetText() );
-    sal_Int16 nConversionPropertyType = m_pLB_Property->GetSelectEntryPos()+1;
+    sal_Int16 nConversionPropertyType = m_pLB_Property->GetSelectedEntryPos()+1;
 
     DictionaryList& rActive  = getActiveDictionary();
     DictionaryList& rReverse = getReverseDictionary();

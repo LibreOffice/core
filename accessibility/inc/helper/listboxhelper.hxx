@@ -147,9 +147,9 @@ public:
         m_aComboListBox.SetNoSelection();
     }
 
-    virtual sal_Int32       GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const override
+    virtual sal_Int32       GetSelectedEntryPos( sal_Int32  nSelIndex = 0 ) const override
     {
-        return m_aComboListBox.GetSelectEntryPos(nSelIndex);
+        return m_aComboListBox.GetSelectedEntryPos(nSelIndex);
     }
 
     virtual bool            IsInDropDown() const override

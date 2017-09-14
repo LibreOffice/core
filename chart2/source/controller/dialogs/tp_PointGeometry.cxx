@@ -62,7 +62,7 @@ bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     {
         long nSegs=32;
 
-        long nShape = m_pGeometryResources->GetSelectEntryPos();
+        long nShape = m_pGeometryResources->GetSelectedEntryPos();
         if(nShape==CHART_SHAPE3D_PYRAMID)
             nSegs=4;
 

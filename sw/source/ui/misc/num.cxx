@@ -596,8 +596,8 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl, ListBox&, void)
             SwNumFormat aNumFormat(pActNum->Get(i));
 
             const sal_Int32 nPos = m_pAlignLB->IsVisible()
-                                ? m_pAlignLB->GetSelectEntryPos()
-                                : m_pAlign2LB->GetSelectEntryPos();
+                                ? m_pAlignLB->GetSelectedEntryPos()
+                                : m_pAlign2LB->GetSelectedEntryPos();
             SvxAdjust eAdjust = SvxAdjust::Center;
             if(nPos == 0)
                 eAdjust = SvxAdjust::Left;
@@ -762,7 +762,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, void)
     // determine value to be set at the chosen list levels
     SvxNumberFormat::LabelFollowedBy eLabelFollowedBy = SvxNumberFormat::LISTTAB;
     {
-        const sal_Int32 nPos = m_pLabelFollowedByLB->GetSelectEntryPos();
+        const sal_Int32 nPos = m_pLabelFollowedByLB->GetSelectedEntryPos();
         if ( nPos == 1 )
         {
             eLabelFollowedBy = SvxNumberFormat::SPACE;

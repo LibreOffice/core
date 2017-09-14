@@ -35,7 +35,7 @@ public:
     void Enable( bool bEnable );
 
     sal_Int32 GetSelectEntryCount() const;
-    sal_Int32 GetSelectEntryPos() const;
+    sal_Int32 GetSelectedEntryPos() const;
     void SelectEntryPos(sal_Int32 nPos);
 
     void SetSelectHdl( const Link<ListBox&,void>& rLink );

@@ -750,7 +750,7 @@ void NavElementBox_Impl::Select()
 
     if ( !IsTravelSelect() )
     {
-        sal_uInt16 nPos = GetSelectEntryPos();
+        sal_uInt16 nPos = GetSelectedEntryPos();
         // adjust array index for Ids after NID_PREV in aNavigationInsertIds
         if ( nPos >= NID_COUNT/2 - 1 )
             ++nPos;

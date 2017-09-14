@@ -44,7 +44,7 @@ public:
     }
     sal_Int32 GetSelectedIdx() const
     {
-        return m_pGlosBox->GetSelectEntryPos();
+        return m_pGlosBox->GetSelectedEntryPos();
     }
     void SelectEntryPos(sal_Int32 nIdx)
     {

@@ -171,7 +171,7 @@ PresetPropertyBox::~PresetPropertyBox()
 
 Any PresetPropertyBox::getValue()
 {
-    return makeAny( maPropertyValues[mpControl->GetSelectEntryPos()] );
+    return makeAny( maPropertyValues[mpControl->GetSelectedEntryPos()] );
 }
 
 Control* PresetPropertyBox::getControl()
@@ -1258,18 +1258,18 @@ void CustomAnimationEffectTabPage::dispose()
 
 void CustomAnimationEffectTabPage::updateControlStates()
 {
-    sal_Int32 nPos = mpLBAfterEffect->GetSelectEntryPos();
+    sal_Int32 nPos = mpLBAfterEffect->GetSelectedEntryPos();
     mpCLBDimColor->Enable( nPos == 1 );
     mpFTDimColor->Enable( nPos == 1 );
 
     if( mbHasText )
     {
-        nPos = mpLBTextAnim->GetSelectEntryPos();
+        nPos = mpLBTextAnim->GetSelectedEntryPos();
         mpMFTextDelay->Enable( nPos != 0 );
         mpFTTextDelay->Enable( nPos != 0 );
     }
 
-    nPos = mpLBSound->GetSelectEntryPos();
+    nPos = mpLBSound->GetSelectedEntryPos();
     mpPBSoundPreview->Enable( nPos >= 2 );
 }
 
@@ -1291,7 +1291,7 @@ void CustomAnimationEffectTabPage::implHdl(Control const * pControl )
     }
     else if( pControl == mpLBSound )
     {
-        sal_Int32 nPos = mpLBSound->GetSelectEntryPos();
+        sal_Int32 nPos = mpLBSound->GetSelectedEntryPos();
         if( nPos == (mpLBSound->GetEntryCount() - 1) )
         {
             openSoundFileDialog();
@@ -1345,7 +1345,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleDecelerate, makeAny( fTemp ) );
     }
 
-    sal_Int32 nPos = mpLBAfterEffect->GetSelectEntryPos();
+    sal_Int32 nPos = mpLBAfterEffect->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         bool bAfterEffect = nPos != 0;
@@ -1381,7 +1381,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleAfterEffectOnNextEffect, makeAny( bAfterEffectOnNextEffect ) );
     }
 
-    nPos = mpLBTextAnim->GetSelectEntryPos();
+    nPos = mpLBTextAnim->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_Int16 nIterateType;
@@ -1414,7 +1414,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleIterateInterval, makeAny( fIterateInterval ) );
     }
 
-    nPos = mpLBSound->GetSelectEntryPos();
+    nPos = mpLBSound->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         Any aNewSoundURL, aOldSoundURL( makeAny( (sal_Int32) 0 ) );
@@ -1532,7 +1532,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
 
 void CustomAnimationEffectTabPage::onSoundPreview()
 {
-    const sal_Int32 nPos = mpLBSound->GetSelectEntryPos();
+    const sal_Int32 nPos = mpLBSound->GetSelectedEntryPos();
 
     if( nPos >= 2 ) try
     {
@@ -1797,7 +1797,7 @@ void CustomAnimationDurationTabPage::implHdl( Control const * pControl )
 
 void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 {
-    sal_Int32 nPos = mpLBStart->GetSelectEntryPos();
+    sal_Int32 nPos = mpLBStart->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_Int16 nStart;
@@ -1829,7 +1829,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleBegin, makeAny( fBegin ) );
     }
 
-    nPos = mpCBRepeat->GetSelectEntryPos();
+    nPos = mpCBRepeat->GetSelectedEntryPos();
     if( (nPos != LISTBOX_ENTRY_NOTFOUND) || (!mpCBRepeat->GetText().isEmpty()) )
     {
         Any aRepeatCount;
@@ -1916,7 +1916,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 
     if( mpRBInteractive->IsChecked() )
     {
-        nPos = mpLBTrigger->GetSelectEntryPos();
+        nPos = mpLBTrigger->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_Int32 nShape = (sal_Int32)reinterpret_cast<sal_IntPtr>(mpLBTrigger->GetEntryData( nPos ));
@@ -2065,7 +2065,7 @@ void CustomAnimationTextAnimTabPage::dispose()
 
 void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 {
-    sal_Int32 nPos = maLBGroupText->GetSelectEntryPos();
+    sal_Int32 nPos = maLBGroupText->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_Int32 nTextGrouping = nPos - 1;
@@ -2119,7 +2119,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 
 void CustomAnimationTextAnimTabPage::updateControlStates()
 {
-    sal_Int32 nPos = maLBGroupText->GetSelectEntryPos();
+    sal_Int32 nPos = maLBGroupText->GetSelectedEntryPos();
 
     maCBXGroupAuto->Enable( nPos > 1 );
     maMFGroupAuto->Enable( nPos > 1 );

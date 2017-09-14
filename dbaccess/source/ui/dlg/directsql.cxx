@@ -323,7 +323,7 @@ namespace dbaui
     {
         if (!m_pSQLHistory->IsTravelSelect())
         {
-            const sal_Int32 nSelected = m_pSQLHistory->GetSelectEntryPos();
+            const sal_Int32 nSelected = m_pSQLHistory->GetSelectedEntryPos();
             if (LISTBOX_ENTRY_NOTFOUND != nSelected)
                 switchToHistory(nSelected);
         }

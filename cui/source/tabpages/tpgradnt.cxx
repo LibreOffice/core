@@ -238,7 +238,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
         aString = "gradient";
         pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
                     m_pLbColorTo->GetSelectEntryColor(),
-                    (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                    (css::awt::GradientStyle) m_pLbGradientType->GetSelectedEntryPos(),
                     static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
                     (sal_uInt16) m_pMtrCenterX->GetValue(),
                     (sal_uInt16) m_pMtrCenterY->GetValue(),
@@ -331,7 +331,7 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
     if(pControl == m_pSliderIncrement)
         m_pMtrIncrement->SetValue( m_pSliderIncrement->GetThumbPos() );
 
-    css::awt::GradientStyle eXGS = (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos();
+    css::awt::GradientStyle eXGS = (css::awt::GradientStyle) m_pLbGradientType->GetSelectedEntryPos();
 
     XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                           m_pLbColorTo->GetSelectEntryColor(),
@@ -411,7 +411,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
     {
         XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                               m_pLbColorTo->GetSelectEntryColor(),
-                              (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                              (css::awt::GradientStyle) m_pLbGradientType->GetSelectedEntryPos(),
                               static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
                               (sal_uInt16) m_pMtrCenterX->GetValue(),
                               (sal_uInt16) m_pMtrCenterY->GetValue(),
@@ -450,7 +450,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 
         XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                               m_pLbColorTo->GetSelectEntryColor(),
-                              (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                              (css::awt::GradientStyle) m_pLbGradientType->GetSelectedEntryPos(),
                               static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
                               (sal_uInt16) m_pMtrCenterX->GetValue(),
                               (sal_uInt16) m_pMtrCenterY->GetValue(),

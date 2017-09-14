@@ -190,7 +190,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
         // Enable or disable field depending on preceding Listbox selection
         maSortKeyItems[0]->EnableField();
         for ( sal_uInt16 i=1; i<nSortKeyCount; i++ )
-            if ( maSortKeyItems[i - 1]->m_pLbSort->GetSelectEntryPos() == 0 )
+            if ( maSortKeyItems[i - 1]->m_pLbSort->GetSelectedEntryPos() == 0 )
                 maSortKeyItems[i]->DisableField();
             else
                 maSortKeyItems[i]->EnableField();
@@ -226,7 +226,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
     }
 
     // Make sure that there is always a last undefined sort key
-    if ( maSortKeyItems[nSortKeyCount - 1]->m_pLbSort->GetSelectEntryPos() > 0 )
+    if ( maSortKeyItems[nSortKeyCount - 1]->m_pLbSort->GetSelectedEntryPos() > 0 )
         SetLastSortKey( nSortKeyCount );
 }
 
@@ -249,7 +249,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
 
     for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
     {
-        nSortPos.push_back( maSortKeyItems[i]->m_pLbSort->GetSelectEntryPos() );
+        nSortPos.push_back( maSortKeyItems[i]->m_pLbSort->GetSelectedEntryPos() );
 
         if ( nSortPos[i] == LISTBOX_ENTRY_NOTFOUND ) nSortPos[i] = 0;
     }
@@ -304,7 +304,7 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
         {
             std::vector<sal_uInt16> nCurSel;
             for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-                nCurSel.push_back( maSortKeyItems[i]->m_pLbSort->GetSelectEntryPos() );
+                nCurSel.push_back( maSortKeyItems[i]->m_pLbSort->GetSelectedEntryPos() );
 
             bHasHeader  = pDlg->GetHeaders();
             bSortByRows = pDlg->GetByRows();
@@ -732,7 +732,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     aNewSortData.nDestTab        = theOutPos.Tab();
     aNewSortData.bUserDef        = m_pBtnSortUser->IsChecked();
     aNewSortData.nUserIndex      = (m_pBtnSortUser->IsChecked())
-                                   ? m_pLbSortUser->GetSelectEntryPos()
+                                   ? m_pLbSortUser->GetSelectedEntryPos()
                                    : 0;
 
     // get locale
@@ -745,7 +745,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     {
         uno::Sequence<OUString> aAlgos = pColWrap->listCollatorAlgorithms(
                 aNewSortData.aCollatorLocale );
-        const sal_Int32 nSel = m_pLbAlgorithm->GetSelectEntryPos();
+        const sal_Int32 nSel = m_pLbAlgorithm->GetSelectedEntryPos();
         if ( nSel < aAlgos.getLength() )
             sAlg = aAlgos[nSel];
     }
@@ -880,7 +880,7 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox&, rLb, void )
     if (&rLb == m_pLbOutPos)
     {
         OUString  aString;
-        const sal_Int32 nSelPos = m_pLbOutPos->GetSelectEntryPos();
+        const sal_Int32 nSelPos = m_pLbOutPos->GetSelectedEntryPos();
 
         if ( nSelPos > 0 )
             aString = *static_cast<OUString*>(m_pLbOutPos->GetEntryData( nSelPos ));

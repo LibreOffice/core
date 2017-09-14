@@ -267,7 +267,7 @@ Color ImpLineListData::GetColorDist( const Color& rMain, const Color& rDefault )
 SvxBorderLineStyle LineListBox::GetSelectEntryStyle() const
 {
     SvxBorderLineStyle nStyle = SvxBorderLineStyle::SOLID;
-    sal_Int32 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectedEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if (!m_sNone.isEmpty())
@@ -612,7 +612,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
 
     UpdatePaintLineColor( );
 
-    sal_Int32      nSelEntry = GetSelectEntryPos();
+    sal_Int32      nSelEntry = GetSelectedEntryPos();
     sal_Int32       nTypePos = GetStylePos( nSelEntry, nOldWidth );
 
     // Remove the old entries

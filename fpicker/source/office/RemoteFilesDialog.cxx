@@ -522,7 +522,7 @@ void RemoteFilesDialog::FillServicesListbox()
 
 int RemoteFilesDialog::GetSelectedServicePos()
 {
-    int nSelected = m_pServices_lb->GetSelectEntryPos();
+    int nSelected = m_pServices_lb->GetSelectedEntryPos();
     int nPos = 0;
     int i = -1;
 
@@ -553,7 +553,7 @@ void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rTyp
     m_aFilters.emplace_back( rFilter, rType );
     m_pFilter_lb->InsertEntry( sName );
 
-    if( m_pFilter_lb->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+    if( m_pFilter_lb->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         m_pFilter_lb->SelectEntryPos( 0 );
 }
 
@@ -806,7 +806,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
     OString sIdent( pButton->GetCurItemIdent() );
     if( sIdent == "edit_service"  && m_pServices_lb->GetEntryCount() > 0 )
     {
-        unsigned int nSelected = m_pServices_lb->GetSelectEntryPos();
+        unsigned int nSelected = m_pServices_lb->GetSelectedEntryPos();
         int nPos = GetSelectedServicePos();
 
         if( nPos >= 0 )
@@ -846,7 +846,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
     }
     if( sIdent == "delete_service"  && m_pServices_lb->GetEntryCount() > 0 )
     {
-        unsigned int nSelected = m_pServices_lb->GetSelectEntryPos();
+        unsigned int nSelected = m_pServices_lb->GetSelectedEntryPos();
         int nPos = GetSelectedServicePos();
 
         if( nPos >= 0 )
@@ -1041,7 +1041,7 @@ IMPL_LINK_NOARG( RemoteFilesDialog, SplitHdl, Splitter*, void )
 
 IMPL_LINK_NOARG( RemoteFilesDialog, SelectFilterHdl, ListBox&, void )
 {
-    unsigned int nPos = m_pFilter_lb->GetSelectEntryPos();
+    unsigned int nPos = m_pFilter_lb->GetSelectedEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND && !m_aFilters[nPos].second.isEmpty() )
     {

@@ -1260,11 +1260,11 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox&, rLB, void )
         if(bHori)
         {
             sal_uInt16 nRel = GetRelation(*m_pHoriToLB);
-            if(RelOrientation::PRINT_AREA == nRel && 0 == m_pVertLB->GetSelectEntryPos())
+            if(RelOrientation::PRINT_AREA == nRel && 0 == m_pVertLB->GetSelectedEntryPos())
             {
                 m_pVertLB->SelectEntryPos(1);
             }
-            else if(RelOrientation::CHAR == nRel && 1 == m_pVertLB->GetSelectEntryPos())
+            else if(RelOrientation::CHAR == nRel && 1 == m_pVertLB->GetSelectedEntryPos())
             {
                 m_pVertLB->SelectEntryPos(0);
             }
@@ -1303,7 +1303,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
     if (rLB.GetSelectEntryCount())
     {
 
-        if (pRelLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+        if (pRelLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
             nRel = static_cast<RelationMap *>(pRelLB->GetSelectEntryData())->nRelation;
 
         FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB, *pRelFT);
@@ -1322,7 +1322,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
             // on the right only below is allowed - from the left only at the top
             // from the left at the character -> below
             if((HoriOrientation::LEFT == nAlign || HoriOrientation::RIGHT == nAlign) &&
-                    0 == m_pVertLB->GetSelectEntryPos())
+                    0 == m_pVertLB->GetSelectedEntryPos())
             {
                 if(RelOrientation::FRAME == nRel)
                     m_pVertLB->SelectEntryPos(1);
@@ -1330,12 +1330,12 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
                     m_pVertLB->SelectEntryPos(0);
                 bSet = true;
             }
-            else if(HoriOrientation::LEFT == nAlign && 1 == m_pVertLB->GetSelectEntryPos())
+            else if(HoriOrientation::LEFT == nAlign && 1 == m_pVertLB->GetSelectedEntryPos())
             {
                 m_pVertLB->SelectEntryPos(0);
                 bSet = true;
             }
-            else if(HoriOrientation::NONE == nAlign && 1 == m_pVertLB->GetSelectEntryPos())
+            else if(HoriOrientation::NONE == nAlign && 1 == m_pVertLB->GetSelectedEntryPos())
             {
                 m_pVertLB->SelectEntryPos(0);
                 bSet = true;
@@ -1347,7 +1347,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
         {
             if(VertOrientation::TOP == nAlign)
             {
-                if(1 == m_pHoriLB->GetSelectEntryPos())
+                if(1 == m_pHoriLB->GetSelectedEntryPos())
                 {
                     m_pHoriLB->SelectEntryPos(0);
                     bSet = true;
@@ -1356,7 +1356,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
             }
             else if(VertOrientation::CHAR_BOTTOM == nAlign)
             {
-                if(2 == m_pHoriLB->GetSelectEntryPos())
+                if(2 == m_pHoriLB->GetSelectedEntryPos())
                 {
                     m_pHoriLB->SelectEntryPos(0);
                     bSet = true;
@@ -1399,7 +1399,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, ProtectHdl, Button*, void)
 short SvxSwPosSizeTabPage::GetRelation(ListBox const &rRelationLB)
 {
     short nRel = 0;
-    sal_Int32 nPos = rRelationLB.GetSelectEntryPos();
+    sal_Int32 nPos = rRelationLB.GetSelectedEntryPos();
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1419,7 +1419,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
     if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap ||
             pMap == aVCharMap )
     {
-        if (rRelationLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+        if (rRelationLB.GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
         {
             LB  nRel = static_cast<RelationMap *>(rRelationLB.GetSelectEntryData())->nLBRelation;
             std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
@@ -1448,7 +1448,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
 sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox const &rAlignLB)
 {
     sal_uInt16 nMapPos = 0;
-    sal_Int32 nLBSelPos = rAlignLB.GetSelectEntryPos();
+    sal_Int32 nLBSelPos = rAlignLB.GetSelectedEntryPos();
 
     if (nLBSelPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1485,21 +1485,21 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
                                 long   nX,
                                 long   nY)
 {
-    sal_Int32 nPos = m_pVertLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pVertLB->GetSelectedEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND && m_pVMap )
     {
         m_nOldV    = m_pVMap[nPos].nAlign;
-        nPos = m_pVertToLB->GetSelectEntryPos();
+        nPos = m_pVertToLB->GetSelectedEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
             m_nOldVRel = static_cast<RelationMap *>(m_pVertToLB->GetEntryData(nPos))->nRelation;
     }
 
-    nPos = m_pHoriLB->GetSelectEntryPos();
+    nPos = m_pHoriLB->GetSelectedEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND && m_pHMap )
     {
         m_nOldH    = m_pHMap[nPos].nAlign;
 
-        nPos = m_pHoriToLB->GetSelectEntryPos();
+        nPos = m_pHoriToLB->GetSelectedEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
             m_nOldHRel = static_cast<RelationMap *>(m_pHoriToLB->GetEntryData(nPos))->nRelation;
     }
@@ -1628,7 +1628,7 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
 
 void SvxSwPosSizeTabPage::UpdateExample()
 {
-    sal_Int32 nPos = m_pHoriLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pHoriLB->GetSelectedEntryPos();
     if ( m_pHMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_pHoriLB);
@@ -1639,7 +1639,7 @@ void SvxSwPosSizeTabPage::UpdateExample()
         m_pExampleWN->SetHoriRel(nRel);
     }
 
-    nPos = m_pVertLB->GetSelectEntryPos();
+    nPos = m_pVertLB->GetSelectedEntryPos();
     if ( m_pVMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_pVertLB);

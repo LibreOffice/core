@@ -1623,7 +1623,7 @@ sal_Int16 VCLXListBox::getSelectedItemPos()
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
-    return pBox ? pBox->GetSelectEntryPos() : 0;
+    return pBox ? pBox->GetSelectedEntryPos() : 0;
 }
 
 css::uno::Sequence<sal_Int16> VCLXListBox::getSelectedItemsPos()
@@ -1637,7 +1637,7 @@ css::uno::Sequence<sal_Int16> VCLXListBox::getSelectedItemsPos()
         const sal_Int32 nSelEntries = pBox->GetSelectEntryCount();
         aSeq = css::uno::Sequence<sal_Int16>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
-            aSeq.getArray()[n] = pBox->GetSelectEntryPos( n );
+            aSeq.getArray()[n] = pBox->GetSelectedEntryPos( n );
     }
     return aSeq;
 }
@@ -2027,7 +2027,7 @@ void VCLXListBox::ImplCallItemListeners()
         aEvent.Highlighted = 0;
 
         // Set to 0xFFFF on multiple selection, selected entry ID otherwise
-        aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 ) ? pListBox->GetSelectEntryPos() : 0xFFFF;
+        aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 ) ? pListBox->GetSelectedEntryPos() : 0xFFFF;
 
         maItemListeners.itemStateChanged( aEvent );
     }

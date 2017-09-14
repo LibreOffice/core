@@ -302,9 +302,9 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, ListBox&, void)
 
         uno::Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( m_xChartModel ) );
 
-        if( m_pLB_Scheme->GetSelectEntryPos() == POS_3DSCHEME_REALISTIC )
+        if( m_pLB_Scheme->GetSelectedEntryPos() == POS_3DSCHEME_REALISTIC )
             ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Realistic );
-        else if( m_pLB_Scheme->GetSelectEntryPos() == POS_3DSCHEME_SIMPLE )
+        else if( m_pLB_Scheme->GetSelectedEntryPos() == POS_3DSCHEME_SIMPLE )
             ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
         else
         {

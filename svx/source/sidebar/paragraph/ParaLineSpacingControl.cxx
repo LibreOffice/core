@@ -243,7 +243,7 @@ void ParaLineSpacingControl::Initialize()
 
 void ParaLineSpacingControl::UpdateMetricFields()
 {
-    switch (mpLineDist->GetSelectEntryPos())
+    switch (mpLineDist->GetSelectedEntryPos())
     {
         case LLINESPACE_1:
         case LLINESPACE_115:
@@ -340,7 +340,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
     mpLineDist->SaveValue();
 
     SvxLineSpacingItem aSpacing(DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
-    const sal_Int32 nPos = mpLineDist->GetSelectEntryPos();
+    const sal_Int32 nPos = mpLineDist->GetSelectedEntryPos();
 
     switch ( nPos )
     {

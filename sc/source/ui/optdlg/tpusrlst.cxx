@@ -455,7 +455,7 @@ IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox&, rLb, void )
 {
     if ( &rLb == mpLbLists )
     {
-        sal_Int32 nSelPos = mpLbLists->GetSelectEntryPos();
+        sal_Int32 nSelPos = mpLbLists->GetSelectedEntryPos();
         if ( nSelPos != LISTBOX_ENTRY_NOTFOUND )
         {
             if ( !mpFtEntries->IsEnabled() )  mpFtEntries->Enable();
@@ -479,7 +479,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
         if ( !bCancelMode )
         {
             nCancelPos = ( mpLbLists->GetEntryCount() > 0 )
-                            ? mpLbLists->GetSelectEntryPos()
+                            ? mpLbLists->GetSelectedEntryPos()
                             : 0;
             mpLbLists->SetNoSelection();
             mpFtLists->Disable();
@@ -568,7 +568,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
         }
         else // if ( bModifyMode )
         {
-            sal_Int32 nSelList = mpLbLists->GetSelectEntryPos();
+            sal_Int32 nSelList = mpLbLists->GetSelectedEntryPos();
 
             OSL_ENSURE( nSelList != LISTBOX_ENTRY_NOTFOUND, "Modify without List :-/" );
 
@@ -608,7 +608,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, Button*, pBtn, void )
     {
         if ( mpLbLists->GetEntryCount() > 0 )
         {
-            sal_Int32 nRemovePos   = mpLbLists->GetSelectEntryPos();
+            sal_Int32 nRemovePos   = mpLbLists->GetSelectedEntryPos();
             OUString aMsg = aStrQueryRemove.getToken( 0, '#' )
                           + mpLbLists->GetEntry( nRemovePos )
                           + aStrQueryRemove.getToken( 1, '#' );

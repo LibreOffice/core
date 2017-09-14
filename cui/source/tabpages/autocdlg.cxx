@@ -119,7 +119,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
         nLangList |= SvxLanguageListFlags::CJK;
     m_pLanguageLB->SetLanguageList( nLangList, true, true );
     m_pLanguageLB->SelectLanguage( LANGUAGE_NONE );
-    sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLanguageLB->GetSelectedEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
     m_pLanguageLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_uInt16)LANGUAGE_UNDETERMINED) );
 
@@ -160,7 +160,7 @@ static bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
                     CollatorWrapper const & rCmpClass )
 {
     sal_Int32 nCount = rLB.GetEntryCount();
-    sal_Int32 nSelPos = rLB.GetSelectEntryPos();
+    sal_Int32 nSelPos = rLB.GetSelectedEntryPos();
     sal_Int32 i;
     for(i = 0; i < nCount; i++)
     {
@@ -177,7 +177,7 @@ static bool lcl_FindEntry( ListBox& rLB, const OUString& rEntry,
 
 IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectedEntryPos();
     void* pVoid = rBox.GetEntryData(nPos);
     LanguageType eNewLang = LanguageType(reinterpret_cast<sal_IntPtr>(pVoid));
     // save old settings and fill anew
@@ -729,7 +729,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, DoubleClickEditHdl, SvTreeListBox*, boo
 
 IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)
 {
-    sal_uLong nSelEntryPos = m_pCheckLB->GetSelectEntryPos();
+    sal_uLong nSelEntryPos = m_pCheckLB->GetSelectedEntryPos();
     if( nSelEntryPos == REPLACE_BULLETS ||
         nSelEntryPos == APPLY_NUMBERING)
     {
@@ -843,7 +843,7 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
     if(!rKEvt.GetKeyCode().GetModifier() &&
         KEY_SPACE == rKEvt.GetKeyCode().GetCode())
     {
-        sal_uLong nSelPos = GetSelectEntryPos();
+        sal_uLong nSelPos = GetSelectedEntryPos();
         sal_uInt16 nCol = GetCurrentTabPos() - 1;
         if ( nCol < 2 )
         {
@@ -2278,7 +2278,7 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     bModified |= nVal != pOpt->nAutoCmpltListLen;
     pOpt->nAutoCmpltListLen = nVal;
 
-    const sal_Int32 nPos = m_pDCBExpandKey->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pDCBExpandKey->GetSelectedEntryPos();
     if( nPos < m_pDCBExpandKey->GetEntryCount() )
     {
         sal_uLong nKey = reinterpret_cast<sal_uLong>(m_pDCBExpandKey->GetEntryData( nPos ));
@@ -2360,7 +2360,7 @@ IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl, Button*, void)
         (m_pAutoCompleteList) ? m_pLBEntries->GetSelectEntryCount() : 0;
     while( nSelCnt )
     {
-        sal_Int32 nPos = m_pLBEntries->GetSelectEntryPos( --nSelCnt );
+        sal_Int32 nPos = m_pLBEntries->GetSelectedEntryPos( --nSelCnt );
         OUString* pStr = static_cast<OUString*>(m_pLBEntries->GetEntryData(nPos));
         m_pLBEntries->RemoveEntry( nPos );
         editeng::IAutoCompleteString hack(*pStr); // UGLY
@@ -2572,7 +2572,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 */
 IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl, Button*, void)
 {
-    const sal_uLong nPos = m_pSmartTagTypesLB->GetSelectEntryPos();
+    const sal_uLong nPos = m_pSmartTagTypesLB->GetSelectedEntryPos();
     const SvTreeListEntry* pEntry = m_pSmartTagTypesLB->GetEntry(nPos);
     const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
@@ -2607,7 +2607,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl, SvTreeListBox*, void)
     if ( m_pSmartTagTypesLB->GetEntryCount() < 1 )
         return;
 
-    const sal_uLong nPos = m_pSmartTagTypesLB->GetSelectEntryPos();
+    const sal_uLong nPos = m_pSmartTagTypesLB->GetSelectedEntryPos();
     const SvTreeListEntry* pEntry = m_pSmartTagTypesLB->GetEntry(nPos);
     const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;

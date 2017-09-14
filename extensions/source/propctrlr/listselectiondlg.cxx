@@ -134,7 +134,7 @@ namespace pcr
         const sal_Int32 nSelectedCount = m_pEntries->GetSelectEntryCount( );
         _rSelection.resize( nSelectedCount );
         for ( sal_Int32 selected = 0; selected < nSelectedCount; ++selected )
-            _rSelection[selected] = static_cast< sal_Int16 >( m_pEntries->GetSelectEntryPos( selected ) );
+            _rSelection[selected] = static_cast< sal_Int16 >( m_pEntries->GetSelectedEntryPos( selected ) );
     }
 
 

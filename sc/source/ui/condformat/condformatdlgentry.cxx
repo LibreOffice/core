@@ -284,7 +284,7 @@ void ScConditionFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 
 ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
 {
-    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType->GetSelectEntryPos());
+    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType->GetSelectedEntryPos());
     OUString aExpr1 = maEdVal1->GetText();
     OUString aExpr2;
     if (GetNumberEditFields(eMode) == 2)
@@ -408,7 +408,7 @@ sal_Int32 ScConditionFrmtEntry::GetNumberEditFields( ScConditionMode eMode )
 
 OUString ScConditionFrmtEntry::GetExpressionString()
 {
-    return ScCondFormatHelper::GetExpression(CONDITION, maLbCondType->GetSelectEntryPos(), maEdVal1->GetText(), maEdVal2->GetText());
+    return ScCondFormatHelper::GetExpression(CONDITION, maLbCondType->GetSelectedEntryPos(), maEdVal1->GetText(), maEdVal2->GetText());
 }
 
 ScFormatEntry* ScConditionFrmtEntry::GetEntry() const
@@ -418,7 +418,7 @@ ScFormatEntry* ScConditionFrmtEntry::GetEntry() const
 
 void ScConditionFrmtEntry::SetActive()
 {
-    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType->GetSelectEntryPos());
+    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType->GetSelectedEntryPos());
     maLbCondType->Show();
     switch(GetNumberEditFields(eMode))
     {
@@ -477,7 +477,7 @@ namespace {
 
 void StyleSelect( ListBox& rLbStyle, const ScDocument* pDoc, SvxFontPrevWindow& rWdPreview )
 {
-    if(rLbStyle.GetSelectEntryPos() == 0)
+    if(rLbStyle.GetSelectedEntryPos() == 0)
     {
         // call new style dialog
         SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, (sal_uInt16) SfxStyleFamily::Para );
@@ -686,7 +686,7 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
 {
 
     // color scale does not have the automatic entry
-    sal_Int32 nPos = rType.GetSelectEntryPos();
+    sal_Int32 nPos = rType.GetSelectedEntryPos();
     if(!bDataBar)
         ++nPos;
 
@@ -852,7 +852,7 @@ IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
         return;
 
     bool bEnableEdit = true;
-    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectedEntryPos();
     if(nPos < 2)
     {
         bEnableEdit = false;
@@ -945,7 +945,7 @@ ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const
 {
     ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mpDoc);
     pColorScale->AddEntry(createColorScaleEntry(*maLbEntryTypeMin.get(), *maLbColMin.get(), *maEdMin.get(), mpDoc, maPos));
-    if(maLbColorFormat->GetSelectEntryPos() == 1)
+    if(maLbColorFormat->GetSelectedEntryPos() == 1)
         pColorScale->AddEntry(createColorScaleEntry(*maLbEntryTypeMiddle.get(), *maLbColMiddle.get(), *maEdMiddle.get(), mpDoc, maPos));
     pColorScale->AddEntry(createColorScaleEntry(*maLbEntryTypeMax.get(), *maLbColMax.get(), *maEdMax.get(), mpDoc, maPos));
     return pColorScale;
@@ -1012,7 +1012,7 @@ IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
         return;
 
     bool bEnableEdit = true;
-    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectedEntryPos();
     if(nPos < 2)
     {
         bEnableEdit = false;
@@ -1026,7 +1026,7 @@ IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox&, rBox, void )
 
 IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl, ListBox&, void )
 {
-    sal_Int32 nSelectPos = maLbCondType->GetSelectEntryPos();
+    sal_Int32 nSelectPos = maLbCondType->GetSelectedEntryPos();
     ScConditionMode eMode = EntryPosToConditionMode(nSelectPos);
     switch(GetNumberEditFields(eMode))
     {
@@ -1191,13 +1191,13 @@ void ScDataBarFrmtEntry::SetInactive()
 
 IMPL_LINK_NOARG( ScDataBarFrmtEntry, DataBarTypeSelectHdl, ListBox&, void )
 {
-    sal_Int32 nSelectPos = maLbDataBarMinType->GetSelectEntryPos();
+    sal_Int32 nSelectPos = maLbDataBarMinType->GetSelectedEntryPos();
     if(nSelectPos <= COLORSCALE_MAX)
         maEdDataBarMin->Disable();
     else
         maEdDataBarMin->Enable();
 
-    nSelectPos = maLbDataBarMaxType->GetSelectEntryPos();
+    nSelectPos = maLbDataBarMaxType->GetSelectedEntryPos();
     if(nSelectPos <= COLORSCALE_MAX)
         maEdDataBarMax->Disable();
     else
@@ -1300,7 +1300,7 @@ void ScDateFrmtEntry::Notify( SfxBroadcaster&, const SfxHint& rHint )
 ScFormatEntry* ScDateFrmtEntry::GetEntry() const
 {
     ScCondDateFormatEntry* pNewEntry = new ScCondDateFormatEntry(mpDoc);
-    condformat::ScCondFormatDateType eType = static_cast<condformat::ScCondFormatDateType>(maLbDateEntry->GetSelectEntryPos());
+    condformat::ScCondFormatDateType eType = static_cast<condformat::ScCondFormatDateType>(maLbDateEntry->GetSelectedEntryPos());
     pNewEntry->SetDateType(eType);
     pNewEntry->SetStyleName(maLbStyle->GetSelectedEntry());
     return pNewEntry;
@@ -1413,7 +1413,7 @@ void ScIconSetFrmtDataEntry::dispose()
 
 ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const
 {
-    sal_Int32 nPos = maLbEntryType->GetSelectEntryPos();
+    sal_Int32 nPos = maLbEntryType->GetSelectedEntryPos();
     OUString aText = maEdEntry->GetText();
     ScColorScaleEntry* pEntry = new ScColorScaleEntry();
 
@@ -1513,7 +1513,7 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl, ListBox&, void )
 {
     const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
 
-    sal_Int32 nPos = maLbIconSetType->GetSelectEntryPos();
+    sal_Int32 nPos = maLbIconSetType->GetSelectedEntryPos();
     sal_uInt32 nElements = pMap[nPos].nElements;
 
     for (auto it = maEntries.begin(); it != maEntries.end(); ++it)
@@ -1567,7 +1567,7 @@ ScFormatEntry* ScIconSetFrmtEntry::GetEntry() const
     ScIconSetFormat* pFormat = new ScIconSetFormat(mpDoc);
 
     ScIconSetFormatData* pData = new ScIconSetFormatData;
-    pData->eIconSetType = static_cast<ScIconSetType>(maLbIconSetType->GetSelectEntryPos());
+    pData->eIconSetType = static_cast<ScIconSetType>(maLbIconSetType->GetSelectedEntryPos());
     for(ScIconSetFrmtDataEntriesType::const_iterator itr = maEntries.begin(),
             itrEnd = maEntries.end(); itr != itrEnd; ++itr)
     {

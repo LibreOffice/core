@@ -59,7 +59,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, Button*, void)
         css::uno::Reference< css::beans::XPropertySet > xCol;
         for (sal_Int32 i=0; i < m_pList->GetSelectEntryCount(); ++i)
         {
-            m_xColumns->getByIndex(sal::static_int_cast<sal_Int32>(reinterpret_cast<sal_uIntPtr>(m_pList->GetEntryData(m_pList->GetSelectEntryPos(i))))) >>= xCol;
+            m_xColumns->getByIndex(sal::static_int_cast<sal_Int32>(reinterpret_cast<sal_uIntPtr>(m_pList->GetEntryData(m_pList->GetSelectedEntryPos(i))))) >>= xCol;
             if (xCol.is())
             {
                 try

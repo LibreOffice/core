@@ -189,8 +189,8 @@ namespace dbaui
     OUString OpenDocumentListBox::GetSelectedDocumentURL() const
     {
         OUString sURL;
-        sal_Int32 nSelected = GetSelectEntryPos();
-        if ( LISTBOX_ENTRY_NOTFOUND != GetSelectEntryPos() )
+        sal_Int32 nSelected = GetSelectedEntryPos();
+        if ( LISTBOX_ENTRY_NOTFOUND != GetSelectedEntryPos() )
             sURL = impl_getDocumentAtIndex( nSelected ).first;
         return sURL;
     }
@@ -198,8 +198,8 @@ namespace dbaui
     OUString OpenDocumentListBox::GetSelectedDocumentFilter() const
     {
         OUString sFilter;
-        sal_Int32 nSelected = GetSelectEntryPos();
-        if ( LISTBOX_ENTRY_NOTFOUND != GetSelectEntryPos() )
+        sal_Int32 nSelected = GetSelectedEntryPos();
+        if ( LISTBOX_ENTRY_NOTFOUND != GetSelectedEntryPos() )
             sFilter = impl_getDocumentAtIndex( nSelected ).second;
         return sFilter;
     }

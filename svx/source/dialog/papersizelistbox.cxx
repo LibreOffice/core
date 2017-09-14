@@ -73,7 +73,7 @@ void PaperSizeListBox::SetSelection( Paper ePreselectPaper )
 
 Paper PaperSizeListBox::GetSelection() const
 {
-    const sal_Int32 nPos = GetSelectEntryPos();
+    const sal_Int32 nPos = GetSelectedEntryPos();
     Paper ePaper = (Paper)reinterpret_cast<sal_uLong>(GetEntryData( nPos ));
 
     return ePaper;

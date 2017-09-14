@@ -456,7 +456,7 @@ void ScOptSolverDlg::ReadConditions()
         ScOptConditionRow aRowEntry;
         aRowEntry.aLeftStr = mpLeftEdit[nRow]->GetText();
         aRowEntry.aRightStr = mpRightEdit[nRow]->GetText();
-        aRowEntry.nOperator = mpOperator[nRow]->GetSelectEntryPos();
+        aRowEntry.nOperator = mpOperator[nRow]->GetSelectedEntryPos();
 
         long nVecPos = nScrollPos + nRow;
         if ( nVecPos >= (long)maConditions.size() && !aRowEntry.IsDefault() )

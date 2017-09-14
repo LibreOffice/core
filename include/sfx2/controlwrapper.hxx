@@ -485,7 +485,7 @@ void MetricFieldWrapper< ValueT >::SetControlValue( ValueT nValue )
 template< typename ValueT >
 ValueT ListBoxWrapper< ValueT >::GetControlValue() const
 {
-    return this->GetValueFromPos( this->GetControl().GetSelectEntryPos() );
+    return this->GetValueFromPos( this->GetControl().GetSelectedEntryPos() );
 }
 
 template< typename ValueT >

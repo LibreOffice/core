@@ -95,7 +95,7 @@ void Dim3DLookResourceGroup::fillControls( const ChartTypeParameter& rParameter 
 void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.b3DLook = m_pCB_3DLook->IsChecked();
-    const sal_Int32 nPos = m_pLB_Scheme->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLB_Scheme->GetSelectedEntryPos();
     if( nPos == POS_3DSCHEME_SIMPLE )
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Simple;
     else if( nPos == POS_3DSCHEME_REALISTIC )
@@ -366,16 +366,16 @@ void SplinePropertiesDialog::fillControls( const ChartTypeParameter& rParameter 
     m_pMF_SplineResolution->SetValue( rParameter.nCurveResolution );
 
     //dis/enabling
-    m_pFT_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS);
-    m_pMF_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS);
+    m_pFT_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS);
+    m_pMF_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS);
 }
 void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines )
 {
     if(!bSmoothLines)
         rParameter.eCurveStyle=CurveStyle_LINES;
-    else if(m_pLB_Spline_Type->GetSelectEntryPos() == CUBIC_SPLINE_POS)
+    else if(m_pLB_Spline_Type->GetSelectedEntryPos() == CUBIC_SPLINE_POS)
         rParameter.eCurveStyle=CurveStyle_CUBIC_SPLINES;
-    else if(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS)
+    else if(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS)
         rParameter.eCurveStyle=CurveStyle_B_SPLINES;
 
     rParameter.nCurveResolution = static_cast< sal_Int32 >( m_pMF_SplineResolution->GetValue());
@@ -383,8 +383,8 @@ void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool
 }
 IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl, ListBox&, void)
 {
-    m_pFT_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS);
-    m_pMF_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS);
+    m_pFT_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS);
+    m_pMF_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectedEntryPos() == B_SPLINE_POS);
 }
 
 class SteppedPropertiesDialog : public ModalDialog
@@ -551,7 +551,7 @@ void SplineResourceGroup::fillControls( const ChartTypeParameter& rParameter )
 }
 void SplineResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
-    switch (m_pLB_LineType->GetSelectEntryPos())
+    switch (m_pLB_LineType->GetSelectedEntryPos())
     {
         case POS_LINETYPE_SMOOTH:
             getSplinePropertiesDialog().fillParameter( rParameter, true );
@@ -573,9 +573,9 @@ IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl, Button*, void)
 {
 
     ChartTypeParameter aOldParameter;
-    getSplinePropertiesDialog().fillParameter( aOldParameter, m_pLB_LineType->GetSelectEntryPos() == POS_LINETYPE_SMOOTH );
+    getSplinePropertiesDialog().fillParameter( aOldParameter, m_pLB_LineType->GetSelectedEntryPos() == POS_LINETYPE_SMOOTH );
 
-    const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectEntryPos();
+    const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectedEntryPos();
     m_pLB_LineType->SelectEntryPos(POS_LINETYPE_SMOOTH);
     if( getSplinePropertiesDialog().Execute() == RET_OK )
     {
@@ -593,9 +593,9 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, Button*, void)
 {
 
     ChartTypeParameter aOldParameter;
-    getSteppedPropertiesDialog().fillParameter( aOldParameter, m_pLB_LineType->GetSelectEntryPos() == POS_LINETYPE_STEPPED );
+    getSteppedPropertiesDialog().fillParameter( aOldParameter, m_pLB_LineType->GetSelectedEntryPos() == POS_LINETYPE_STEPPED );
 
-    const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectEntryPos();
+    const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectedEntryPos();
     m_pLB_LineType->SelectEntryPos(POS_LINETYPE_STEPPED);
     if( getSteppedPropertiesDialog().Execute() == RET_OK )
     {
@@ -650,7 +650,7 @@ void GeometryResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.nGeometry3D = 1;
     if( m_aGeometryResources.GetSelectEntryCount() )
-        rParameter.nGeometry3D = m_aGeometryResources.GetSelectEntryPos();
+        rParameter.nGeometry3D = m_aGeometryResources.GetSelectedEntryPos();
 }
 
 IMPL_LINK_NOARG(GeometryResourceGroup, GeometryChangeHdl, ListBox&, void)
@@ -847,7 +847,7 @@ ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
 {
     ChartTypeDialogController* pTypeController = nullptr;
     std::vector< ChartTypeDialogController* >::size_type nM = static_cast< std::vector< ChartTypeDialogController* >::size_type >(
-        m_pMainTypeList->GetSelectEntryPos() );
+        m_pMainTypeList->GetSelectedEntryPos() );
     if( nM<m_aChartTypeDialogControllerList.size() )
         pTypeController = m_aChartTypeDialogControllerList[nM];
     return pTypeController;

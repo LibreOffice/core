@@ -53,7 +53,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox const * pBox, PushButton* pPropBtn,
                                   Printer const * pPrinter, Printer* pTempPrinterIn )
 {
     VclPtr<Printer> pTempPrinter( pTempPrinterIn );
-    if ( pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+    if ( pBox->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
         const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectedEntry(), true );
         if( pInfo)
@@ -109,7 +109,7 @@ Printer* ImplPrnDlgUpdatePrinter( Printer const * pPrinter, Printer* pTempPrinte
 
 void ImplPrnDlgUpdateQueueInfo( ListBox const * pBox, QueueInfo& rInfo )
 {
-    if ( pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+    if ( pBox->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
         const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectedEntry(), true );
         if( pInfo )

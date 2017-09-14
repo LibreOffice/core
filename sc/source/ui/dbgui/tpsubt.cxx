@@ -200,7 +200,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
     std::unique_ptr<ScSubTotalFunc[]> pFunctions;
     std::unique_ptr<SCCOL[]>          pSubTotals;
-    const sal_Int32 nGroup      = mpLbGroup->GetSelectEntryPos();
+    const sal_Int32 nGroup      = mpLbGroup->GetSelectedEntryPos();
     const sal_Int32 nEntryCount = mpLbColumns->GetEntryCount();
     const sal_Int32 nCheckCount = mpLbColumns->GetCheckedEntryCount();
 
@@ -356,8 +356,8 @@ void ScTpSubTotalGroup::SelectHdl(const void *pLb)
     if (   (mpLbColumns->GetEntryCount() > 0)
         && (mpLbColumns->GetSelectionCount() > 0) )
     {
-        const sal_Int32 nFunction   = mpLbFunctions->GetSelectEntryPos();
-        const sal_Int32 nColumn     = mpLbColumns->GetSelectEntryPos();
+        const sal_Int32 nFunction   = mpLbFunctions->GetSelectedEntryPos();
+        const sal_Int32 nColumn     = mpLbColumns->GetSelectedEntryPos();
         sal_uInt16*     pFunction   = static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( nColumn ));
 
         OSL_ENSURE( pFunction, "EntryData not found!" );
@@ -548,7 +548,7 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
     theSubTotalData.bAscending      = pBtnAscending->IsChecked();
     theSubTotalData.bUserDef        = pBtnUserDef->IsChecked();
     theSubTotalData.nUserIndex      = (pBtnUserDef->IsChecked())
-                                    ? pLbUserDef->GetSelectEntryPos()
+                                    ? pLbUserDef->GetSelectedEntryPos()
                                     : 0;
 
     rArgSet->Put( ScSubTotalItem( nWhichSubTotals, &theSubTotalData ) );

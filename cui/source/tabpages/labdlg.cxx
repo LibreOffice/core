@@ -201,7 +201,7 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
     {
         long    nVal = 0;
 
-        switch( m_pLB_ANSATZ_REL->GetSelectEntryPos() )
+        switch( m_pLB_ANSATZ_REL->GetSelectedEntryPos() )
         {
             case AT_OBEN:   nVal=0;break;
             case AT_MITTE:  nVal=5000;break;
@@ -422,7 +422,7 @@ IMPL_LINK( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox&, rListBox, void )
 {
     if (&rListBox == m_pLB_ANSATZ)
     {
-        SetupAnsatz_Impl( m_pLB_ANSATZ->GetSelectEntryPos() );
+        SetupAnsatz_Impl( m_pLB_ANSATZ->GetSelectedEntryPos() );
     }
 }
 
@@ -430,7 +430,7 @@ IMPL_LINK( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox&, rListBox, void 
 {
     if (&rListBox == m_pLB_ANSATZ_REL)
     {
-        nAnsatzRelPos = m_pLB_ANSATZ_REL->GetSelectEntryPos();
+        nAnsatzRelPos = m_pLB_ANSATZ_REL->GetSelectedEntryPos();
     }
 }
 

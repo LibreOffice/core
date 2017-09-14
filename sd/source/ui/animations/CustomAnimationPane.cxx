@@ -1910,7 +1910,7 @@ void CustomAnimationPane::onChangeStart()
     if( mpLBStart->GetSelectEntryCount() == 1 )
     {
         sal_Int16 nNodeType;
-        switch( mpLBStart->GetSelectEntryPos() )
+        switch( mpLBStart->GetSelectedEntryPos() )
         {
         case 0: nNodeType = EffectNodeType::ON_CLICK; break;
         case 1: nNodeType = EffectNodeType::WITH_PREVIOUS; break;
@@ -1994,9 +1994,9 @@ PathKind CustomAnimationPane::getCreatePathKind() const
     PathKind eKind = PathKind::NONE;
 
     if( ( mpLBAnimation->GetSelectEntryCount() == 1 ) &&
-        ( mpLBCategory->GetSelectEntryPos() == mnMotionPathPos ) )
+        ( mpLBCategory->GetSelectedEntryPos() == mnMotionPathPos ) )
     {
-        const sal_Int32 nPos = mpLBAnimation->GetSelectEntryPos();
+        const sal_Int32 nPos = mpLBAnimation->GetSelectedEntryPos();
         if( nPos == mnCurvePathPos )
         {
             eKind = PathKind::CURVE;
@@ -2190,7 +2190,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, DurationModifiedHdl, Edit&, void)
 sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 {
     PresetCategoryList rCategoryList;
-    sal_uInt16 nPosition = mpLBCategory->GetSelectEntryPos();
+    sal_uInt16 nPosition = mpLBCategory->GetSelectedEntryPos();
     const CustomAnimationPresets& rPresets (getPresets());
     switch(nPosition)
     {

@@ -295,10 +295,10 @@ bool DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
     if( m_pCBWrapText->GetState()!= TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_WRAP_TEXT, m_pCBWrapText->IsChecked()) );
 
-    OUString aSep = our_aLBEntryMap[m_pLB_Separator->GetSelectEntryPos()];
+    OUString aSep = our_aLBEntryMap[m_pLB_Separator->GetSelectedEntryPos()];
     rOutAttrs->Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, aSep) );
 
-    std::map< sal_uInt16, sal_Int32 >::const_iterator aIt( m_aListBoxToPlacementMap.find(m_pLB_LabelPlacement->GetSelectEntryPos()) );
+    std::map< sal_uInt16, sal_Int32 >::const_iterator aIt( m_aListBoxToPlacementMap.find(m_pLB_LabelPlacement->GetSelectedEntryPos()) );
     if(aIt!=m_aListBoxToPlacementMap.end())
     {
         sal_Int32 nValue = aIt->second;

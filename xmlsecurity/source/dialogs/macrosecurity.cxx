@@ -207,7 +207,7 @@ void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
     m_pViewCertPB->Enable( bCertSelected );
     m_pRemoveCertPB->Enable( bCertSelected && !mbAuthorsReadonly);
 
-    bool bLocationSelected = m_pTrustFileLocLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    bool bLocationSelected = m_pTrustFileLocLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND;
     m_pRemoveLocPB->Enable( bLocationSelected && !mbURLsReadonly);
 }
 
@@ -286,7 +286,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl, Button*, void)
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, Button*, void)
 {
-    sal_Int32  nSel = m_pTrustFileLocLB->GetSelectEntryPos();
+    sal_Int32  nSel = m_pTrustFileLocLB->GetSelectedEntryPos();
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pTrustFileLocLB->RemoveEntry( nSel );

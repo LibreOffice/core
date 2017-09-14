@@ -272,7 +272,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     }
 
 
-    sal_Int32 nPos = m_pLbLineStyles->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbLineStyles->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         *pPosDashLb = nPos;
@@ -357,7 +357,7 @@ void SvxLineDefTabPage::SelectLinestyleHdl_Impl(ListBox const * p)
 {
     if(pDashList->Count())
     {
-        int nTmp = m_pLbLineStyles->GetSelectEntryPos();
+        int nTmp = m_pLbLineStyles->GetSelectedEntryPos();
 
         if(LISTBOX_ENTRY_NOTFOUND == nTmp)
         {
@@ -501,7 +501,7 @@ void  SvxLineDefTabPage::SelectTypeHdl_Impl(ListBox* p)
 {
     if ( p == m_pLbType1 || !p )
     {
-        if ( m_pLbType1->GetSelectEntryPos() == 0 )
+        if ( m_pLbType1->GetSelectedEntryPos() == 0 )
         {
             m_pMtrLength1->Disable();
             m_pMtrLength1->SetText( "" );
@@ -515,7 +515,7 @@ void  SvxLineDefTabPage::SelectTypeHdl_Impl(ListBox* p)
 
     if ( p == m_pLbType2 || !p )
     {
-        if ( m_pLbType2->GetSelectEntryPos() == 0 )
+        if ( m_pLbType2->GetSelectedEntryPos() == 0 )
         {
             m_pMtrLength2->Disable();
             m_pMtrLength2->SetText( "" );
@@ -613,7 +613,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pLbLineStyles->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbLineStyles->GetSelectedEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -678,7 +678,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pLbLineStyles->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbLineStyles->GetSelectedEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -853,9 +853,9 @@ void SvxLineDefTabPage::FillDash_Impl()
 
     aDash.SetDashStyle( eXDS );
     aDash.SetDots( (sal_uInt8) m_pNumFldNumber1->GetValue() );
-    aDash.SetDotLen( m_pLbType1->GetSelectEntryPos() == 0 ? 0 : GetCoreValue( *m_pMtrLength1, ePoolUnit ) );
+    aDash.SetDotLen( m_pLbType1->GetSelectedEntryPos() == 0 ? 0 : GetCoreValue( *m_pMtrLength1, ePoolUnit ) );
     aDash.SetDashes( (sal_uInt8) m_pNumFldNumber2->GetValue() );
-    aDash.SetDashLen( m_pLbType2->GetSelectEntryPos() == 0 ? 0 : GetCoreValue( *m_pMtrLength2, ePoolUnit ) );
+    aDash.SetDashLen( m_pLbType2->GetSelectedEntryPos() == 0 ? 0 : GetCoreValue( *m_pMtrLength2, ePoolUnit ) );
     aDash.SetDistance( GetCoreValue( *m_pMtrDistance, ePoolUnit ) );
 
     rXLSet.Put( XLineDashItem( OUString(), aDash ) );
@@ -900,7 +900,7 @@ void SvxLineDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        sal_Int32 nOldSelect = m_pLbLineStyles->GetSelectEntryPos();
+        sal_Int32 nOldSelect = m_pLbLineStyles->GetSelectedEntryPos();
         m_pLbLineStyles->Clear();
         m_pLbLineStyles->Fill( pDashList );
         m_pLbLineStyles->SelectEntryPos( nOldSelect );

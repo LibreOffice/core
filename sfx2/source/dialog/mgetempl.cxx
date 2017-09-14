@@ -87,7 +87,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     else
         m_pEditStyleBtn->Enable();
 
-    sal_Int32 linkSelectPos = m_pBaseLb->GetSelectEntryPos();
+    sal_Int32 linkSelectPos = m_pBaseLb->GetSelectedEntryPos();
     if ( linkSelectPos == 0 )
         m_pEditLinkStyleBtn->Disable();
     else
@@ -355,7 +355,7 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl, Button*, void )
 
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl, ListBox&, void )
 {
-    sal_Int32 linkSelectPos = m_pBaseLb->GetSelectEntryPos();
+    sal_Int32 linkSelectPos = m_pBaseLb->GetSelectedEntryPos();
     if ( linkSelectPos == 0 )
         m_pEditLinkStyleBtn->Disable();
     else
@@ -452,7 +452,7 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
 */
 
 {
-    const sal_Int32 nFilterIdx = m_pFilterLb->GetSelectEntryPos();
+    const sal_Int32 nFilterIdx = m_pFilterLb->GetSelectedEntryPos();
 
     // Set Filter
 

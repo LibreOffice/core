@@ -211,7 +211,7 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
         rAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
     }
 
-    BitmapStyle eStylePos = (BitmapStyle)m_pBitmapStyleLB->GetSelectEntryPos();        bool bIsStretched( eStylePos == STRETCHED );
+    BitmapStyle eStylePos = (BitmapStyle)m_pBitmapStyleLB->GetSelectedEntryPos();        bool bIsStretched( eStylePos == STRETCHED );
     bool bIsTiled( eStylePos == TILED );
 
     rAttrs->Put( XFillBmpTileItem(bIsTiled) );
@@ -256,14 +256,14 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* rAttrs )
     }
 
     if(m_pPositionLB->IsEnabled())
-        rAttrs->Put( XFillBmpPosItem( static_cast<RectPoint>( m_pPositionLB->GetSelectEntryPos() ) ) );
+        rAttrs->Put( XFillBmpPosItem( static_cast<RectPoint>( m_pPositionLB->GetSelectedEntryPos() ) ) );
     if(m_pPositionOffX->IsEnabled())
         rAttrs->Put( XFillBmpPosOffsetXItem( m_pPositionOffX->GetValue() ) );
     if(m_pPositionOffY->IsEnabled())
         rAttrs->Put( XFillBmpPosOffsetYItem( m_pPositionOffY->GetValue() ) );
     if(m_pTileOffBox->IsEnabled())
     {
-        TileOffset eValue = static_cast<TileOffset>(m_pTileOffLB->GetSelectEntryPos());
+        TileOffset eValue = static_cast<TileOffset>(m_pTileOffLB->GetSelectedEntryPos());
         sal_uInt16 nOffsetValue = static_cast<sal_uInt16>(m_pTileOffset->GetValue());
         sal_uInt16 nRowOff = (eValue == ROW) ? nOffsetValue : 0;
         sal_uInt16 nColOff = (eValue == COLUMN) ? nOffsetValue : 0;
@@ -330,7 +330,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         }
     }
 
-    if( m_pBitmapStyleLB->GetSelectEntryPos() == 0 && rAttrs->GetItemState( XATTR_FILLBMP_STRETCH ) != SfxItemState::DONTCARE)
+    if( m_pBitmapStyleLB->GetSelectedEntryPos() == 0 && rAttrs->GetItemState( XATTR_FILLBMP_STRETCH ) != SfxItemState::DONTCARE)
     {
         if( static_cast<const XFillBmpStretchItem&>( rAttrs->Get( XATTR_FILLBMP_STRETCH ) ).GetValue() )
         {
@@ -373,7 +373,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
         nHeight = (OutputDevice::LogicToLogic(nHeight, mePoolUnit, MapUnit::Map100thMM )) / fUIScale;
     }
 
-    if(m_pBitmapStyleLB->GetSelectEntryPos() == 0)
+    if(m_pBitmapStyleLB->GetSelectedEntryPos() == 0)
     {
         if( nWidth == rBitmapSize.Width() && nHeight == rBitmapSize.Height() )
             m_pBitmapStyleLB->SelectEntryPos( static_cast<sal_Int32>(ORIGINAL) );
@@ -619,7 +619,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 
 IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapSizeHdl, Edit&, void )
 {
-    if( m_pTsbScale->GetState() != TRISTATE_TRUE && static_cast<BitmapStyle>(m_pBitmapStyleLB->GetSelectEntryPos()) != TILED )
+    if( m_pTsbScale->GetState() != TRISTATE_TRUE && static_cast<BitmapStyle>(m_pBitmapStyleLB->GetSelectedEntryPos()) != TILED )
     {
         sal_Int64 nWidthPercent = m_pBitmapWidth->Denormalize( m_pBitmapWidth->GetValue() );
         sal_Int64 nHeightPercent = m_pBitmapHeight->Denormalize( m_pBitmapHeight->GetValue() );
@@ -645,7 +645,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ClickScaleHdl, Button*, void )
 
 IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
 {
-    BitmapStyle eStylePos = (BitmapStyle)m_pBitmapStyleLB->GetSelectEntryPos();
+    BitmapStyle eStylePos = (BitmapStyle)m_pBitmapStyleLB->GetSelectedEntryPos();
     bool bIsStretched( eStylePos == STRETCHED );
     bool bIsTiled( eStylePos == TILED );
 
@@ -720,7 +720,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, ListBox&, void )
 IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapPositionHdl, ListBox&, void)
 {
     if(m_pPositionLB->IsEnabled())
-        m_rXFSet.Put( XFillBmpPosItem( static_cast< RectPoint >( m_pPositionLB->GetSelectEntryPos() ) ) );
+        m_rXFSet.Put( XFillBmpPosItem( static_cast< RectPoint >( m_pPositionLB->GetSelectedEntryPos() ) ) );
 
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->Invalidate();
@@ -743,10 +743,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, Edit&, void)
     sal_uInt16 nTileXOff = 0;
     sal_uInt16 nTileYOff = 0;
 
-    if(m_pTileOffLB->GetSelectEntryPos() == static_cast<sal_Int32>(ROW))
+    if(m_pTileOffLB->GetSelectedEntryPos() == static_cast<sal_Int32>(ROW))
         nTileXOff = m_pTileOffset->GetValue();
 
-    if(m_pTileOffLB->GetSelectEntryPos() == static_cast<sal_Int32>(COLUMN))
+    if(m_pTileOffLB->GetSelectedEntryPos() == static_cast<sal_Int32>(COLUMN))
         nTileYOff = m_pTileOffset->GetValue();
 
     m_rXFSet.Put( XFillBmpTileOffsetXItem(nTileXOff) );

@@ -323,21 +323,21 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pLbConnect1->Hide();
     // Disable/Enable Logic:
 
-       (pLbField1->GetSelectEntryPos() != 0)
-    && (pLbField2->GetSelectEntryPos() != 0)
+       (pLbField1->GetSelectedEntryPos() != 0)
+    && (pLbField2->GetSelectedEntryPos() != 0)
         ? pLbConnect2->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(1).eConnect )
         : pLbConnect2->SetNoSelection();
 
-       (pLbField2->GetSelectEntryPos() != 0)
-    && (pLbField3->GetSelectEntryPos() != 0)
+       (pLbField2->GetSelectedEntryPos() != 0)
+    && (pLbField3->GetSelectedEntryPos() != 0)
         ? pLbConnect3->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(2).eConnect )
         : pLbConnect3->SetNoSelection();
 
-       (pLbField3->GetSelectEntryPos() != 0)
-    && (pLbField4->GetSelectEntryPos() != 0)
+       (pLbField3->GetSelectedEntryPos() != 0)
+    && (pLbField4->GetSelectedEntryPos() != 0)
         ? pLbConnect4->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(3).eConnect )
         : pLbConnect4->SetNoSelection();
-    if ( pLbField1->GetSelectEntryPos() == 0 )
+    if ( pLbField1->GetSelectedEntryPos() == 0 )
     {
         pLbConnect2->Disable();
         pLbField2->Disable();
@@ -351,7 +351,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         pEdVal2->Disable();
     }
 
-    if ( pLbField2->GetSelectEntryPos() == 0 )
+    if ( pLbField2->GetSelectedEntryPos() == 0 )
     {
         pLbConnect3->Disable();
         pLbField3->Disable();
@@ -364,7 +364,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         pLbCond3->Disable();
         pEdVal3->Disable();
     }
-    if ( pLbField3->GetSelectEntryPos() == 0 )
+    if ( pLbField3->GetSelectedEntryPos() == 0 )
     {
         pLbConnect4->Disable();
         pLbField4->Disable();
@@ -466,7 +466,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
     if (pDoc && nList > 0 && nList <= QUERY_ENTRY_COUNT)
     {
         ComboBox*   pValList        = maValueEdArr[nList-1].get();
-        const sal_Int32 nFieldSelPos = maFieldLbArr[nList-1]->GetSelectEntryPos();
+        const sal_Int32 nFieldSelPos = maFieldLbArr[nList-1]->GetSelectedEntryPos();
         sal_Int32 nListPos = 0;
         OUString aCurValue = pValList->GetText();
 
@@ -561,7 +561,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     if (nList == 0 || nList > QUERY_ENTRY_COUNT)
         return;
 
-    size_t nFieldSelPos = maFieldLbArr[nList-1]->GetSelectEntryPos();
+    size_t nFieldSelPos = maFieldLbArr[nList-1]->GetSelectedEntryPos();
     if (!nFieldSelPos)
         return;
 
@@ -739,7 +739,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
         pLbCond1->Enable();
         pEdVal1->Enable();
 
-        const sal_Int32 nConnect1 = pLbConnect1->GetSelectEntryPos();
+        const sal_Int32 nConnect1 = pLbConnect1->GetSelectedEntryPos();
         size_t nQE = nOffset;
         theQueryData.GetEntry(nQE).eConnect =(ScQueryConnect)nConnect1;
         if (maRefreshExceptQuery.size() < nQE + 1)
@@ -753,7 +753,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
         pLbCond2->Enable();
         pEdVal2->Enable();
 
-        const sal_Int32 nConnect2 = pLbConnect2->GetSelectEntryPos();
+        const sal_Int32 nConnect2 = pLbConnect2->GetSelectedEntryPos();
         size_t nQE = 1+nOffset;
         theQueryData.GetEntry(nQE).eConnect =(ScQueryConnect)nConnect2;
         if (maRefreshExceptQuery.size() < nQE + 1)
@@ -766,7 +766,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
         pLbCond3->Enable();
         pEdVal3->Enable();
 
-        const sal_Int32 nConnect3 = pLbConnect3->GetSelectEntryPos();
+        const sal_Int32 nConnect3 = pLbConnect3->GetSelectedEntryPos();
         size_t nQE = 2 + nOffset;
         theQueryData.GetEntry(nQE).eConnect = (ScQueryConnect)nConnect3;
         if (maRefreshExceptQuery.size() < nQE + 1)
@@ -780,7 +780,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
         pLbCond4->Enable();
         pEdVal4->Enable();
 
-        const sal_Int32 nConnect4 = pLbConnect4->GetSelectEntryPos();
+        const sal_Int32 nConnect4 = pLbConnect4->GetSelectedEntryPos();
         size_t nQE = 3 + nOffset;
         theQueryData.GetEntry(nQE).eConnect = (ScQueryConnect)nConnect4;
         if (maRefreshExceptQuery.size() < nQE + 1)
@@ -789,7 +789,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
     }
     else if ( &rLb == pLbField1 )
     {
-        if ( pLbField1->GetSelectEntryPos() == 0 )
+        if ( pLbField1->GetSelectedEntryPos() == 0 )
         {
             pLbConnect2->SetNoSelection();
             pLbConnect3->SetNoSelection();
@@ -836,13 +836,13 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
                 pLbConnect2->Enable();
             }
             theQueryData.GetEntry(nOffset).bDoQuery = true;
-            const sal_Int32 nField  = rLb.GetSelectEntryPos();
+            const sal_Int32 nField  = rLb.GetSelectedEntryPos();
             theQueryData.GetEntry(nOffset).nField = theQueryData.nCol1 + static_cast<SCCOL>(nField) - 1 ;
         }
     }
     else if ( &rLb == pLbField2 )
     {
-        if ( pLbField2->GetSelectEntryPos() == 0 )
+        if ( pLbField2->GetSelectedEntryPos() == 0 )
         {
             pLbConnect3->SetNoSelection();
             pLbConnect4->SetNoSelection();
@@ -882,7 +882,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
             {
                 pLbConnect3->Enable();
             }
-            const sal_Int32 nField = rLb.GetSelectEntryPos();
+            const sal_Int32 nField = rLb.GetSelectedEntryPos();
             sal_uInt16 nQ=1+nOffset;
             theQueryData.GetEntry(nQ).bDoQuery = true;
             theQueryData.GetEntry(nQ).nField = theQueryData.nCol1 + static_cast<SCCOL>(nField) - 1 ;
@@ -890,7 +890,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
     }
     else if ( &rLb == pLbField3 )
     {
-        if ( pLbField3->GetSelectEntryPos() == 0 )
+        if ( pLbField3->GetSelectedEntryPos() == 0 )
         {
             pLbConnect4->SetNoSelection();
             pLbField4->SelectEntryPos( 0 );
@@ -923,7 +923,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
                 pLbConnect4->Enable();
             }
 
-            const sal_Int32 nField = rLb.GetSelectEntryPos();
+            const sal_Int32 nField = rLb.GetSelectedEntryPos();
             sal_uInt16 nQ=2+nOffset;
             theQueryData.GetEntry(nQ).bDoQuery = true;
             theQueryData.GetEntry(nQ).nField = theQueryData.nCol1 + static_cast<SCCOL>(nField) - 1 ;
@@ -932,7 +932,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
     }
     else if ( &rLb == pLbField4 )
     {
-        if ( pLbField4->GetSelectEntryPos() == 0 )
+        if ( pLbField4->GetSelectedEntryPos() == 0 )
         {
             ClearValueList( 4 );
             sal_uInt16 nTemp=nOffset+3;
@@ -950,7 +950,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
         else
         {
             UpdateValueList( 4 );
-            const sal_Int32 nField = rLb.GetSelectEntryPos();
+            const sal_Int32 nField = rLb.GetSelectedEntryPos();
             sal_uInt16 nQ=3+nOffset;
             theQueryData.GetEntry(nQ).bDoQuery = true;
             theQueryData.GetEntry(nQ).nField = theQueryData.nCol1 + static_cast<SCCOL>(nField) - 1 ;
@@ -959,22 +959,22 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
     }
     else if ( &rLb == pLbCond1)
     {
-        theQueryData.GetEntry(nOffset).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
+        theQueryData.GetEntry(nOffset).eOp=(ScQueryOp)rLb.GetSelectedEntryPos();
     }
     else if ( &rLb == pLbCond2)
     {
         sal_uInt16 nQ=1+nOffset;
-        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
+        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectedEntryPos();
     }
     else if ( &rLb == pLbCond3)
     {
         sal_uInt16 nQ=2+nOffset;
-        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
+        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectedEntryPos();
     }
     else
     {
         sal_uInt16 nQ=3+nOffset;
-        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
+        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectedEntryPos();
     }
 }
 
@@ -988,10 +988,10 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
 
     if ( pBox == pBtnHeader )              // Field list and value list
     {
-        const sal_Int32 nCurSel1 = pLbField1->GetSelectEntryPos();
-        const sal_Int32 nCurSel2 = pLbField2->GetSelectEntryPos();
-        const sal_Int32 nCurSel3 = pLbField3->GetSelectEntryPos();
-        const sal_Int32 nCurSel4 = pLbField4->GetSelectEntryPos();
+        const sal_Int32 nCurSel1 = pLbField1->GetSelectedEntryPos();
+        const sal_Int32 nCurSel2 = pLbField2->GetSelectedEntryPos();
+        const sal_Int32 nCurSel3 = pLbField3->GetSelectedEntryPos();
+        const sal_Int32 nCurSel4 = pLbField4->GetSelectedEntryPos();
         FillFieldLists();
         pLbField1->SelectEntryPos( nCurSel1 );
         pLbField2->SelectEntryPos( nCurSel2 );
@@ -1059,7 +1059,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, Edit&, rEd, void )
 
     ScQueryEntry& rEntry = theQueryData.GetEntry( nQE );
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-    bool bDoThis = (pLbField->GetSelectEntryPos() != 0);
+    bool bDoThis = (pLbField->GetSelectedEntryPos() != 0);
     rEntry.bDoQuery = bDoThis;
 
     if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
@@ -1086,11 +1086,11 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, Edit&, rEd, void )
             rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
         }
 
-        const sal_Int32 nField = pLbField->GetSelectEntryPos();
+        const sal_Int32 nField = pLbField->GetSelectedEntryPos();
         rEntry.nField = nField ? (theQueryData.nCol1 +
             static_cast<SCCOL>(nField) - 1) : static_cast<SCCOL>(0);
 
-        ScQueryOp eOp  = (ScQueryOp)pLbCond->GetSelectEntryPos();
+        ScQueryOp eOp  = (ScQueryOp)pLbCond->GetSelectedEntryPos();
         rEntry.eOp     = eOp;
         if (maHasDates[nQE] && !bByEmptyOrNotByEmpty)
             rItem.meType = ScQueryEntry::ByDate;

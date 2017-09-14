@@ -211,17 +211,17 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 
     // disable/enable logic:
 
-       (m_pLbField1->GetSelectEntryPos() != 0)
-    && (m_pLbField2->GetSelectEntryPos() != 0)
+       (m_pLbField1->GetSelectedEntryPos() != 0)
+    && (m_pLbField2->GetSelectedEntryPos() != 0)
         ? m_pLbConnect1->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(1).eConnect )
         : m_pLbConnect1->SetNoSelection();
 
-       (m_pLbField2->GetSelectEntryPos() != 0)
-    && (m_pLbField3->GetSelectEntryPos() != 0)
+       (m_pLbField2->GetSelectedEntryPos() != 0)
+    && (m_pLbField3->GetSelectedEntryPos() != 0)
         ? m_pLbConnect2->SelectEntryPos( (sal_uInt16)theQueryData.GetEntry(2).eConnect )
         : m_pLbConnect2->SetNoSelection();
 
-    if ( m_pLbField1->GetSelectEntryPos() == 0 )
+    if ( m_pLbField1->GetSelectedEntryPos() == 0 )
     {
         m_pLbConnect1->Disable();
         m_pLbField2->Disable();
@@ -235,7 +235,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         m_pEdVal2->Disable();
     }
 
-    if ( m_pLbField2->GetSelectEntryPos() == 0 )
+    if ( m_pLbField2->GetSelectedEntryPos() == 0 )
     {
         m_pLbConnect2->Disable();
         m_pLbField3->Disable();
@@ -289,7 +289,7 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
     if ( pDoc && nList>0 && nList<=3 )
     {
         ComboBox*   pValList        = aValueEdArr[nList-1].get();
-        sal_Int32   nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectEntryPos();
+        sal_Int32   nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectedEntryPos();
         sal_Int32   nListPos        = 0;
         OUString    aCurValue       = pValList->GetText();
 
@@ -350,17 +350,17 @@ sal_uInt16 ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
 const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 {
     ScQueryParam    theParam( theQueryData );
-    sal_Int32          nConnect1 = m_pLbConnect1->GetSelectEntryPos();
-    sal_Int32          nConnect2 = m_pLbConnect2->GetSelectEntryPos();
+    sal_Int32          nConnect1 = m_pLbConnect1->GetSelectedEntryPos();
+    sal_Int32          nConnect2 = m_pLbConnect2->GetSelectedEntryPos();
 
     svl::SharedStringPool& rPool = pViewData->GetDocument()->GetSharedStringPool();
 
     for ( SCSIZE i=0; i<3; i++ )
     {
-        const sal_Int32 nField = aFieldLbArr[i]->GetSelectEntryPos();
-        ScQueryOp   eOp     = (ScQueryOp)aCondLbArr[i]->GetSelectEntryPos();
+        const sal_Int32 nField = aFieldLbArr[i]->GetSelectedEntryPos();
+        ScQueryOp   eOp     = (ScQueryOp)aCondLbArr[i]->GetSelectedEntryPos();
 
-        bool bDoThis = (aFieldLbArr[i]->GetSelectEntryPos() != 0);
+        bool bDoThis = (aFieldLbArr[i]->GetSelectedEntryPos() != 0);
         theParam.GetEntry(i).bDoQuery = bDoThis;
 
         if ( bDoThis )
@@ -449,7 +449,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox&, rLb, void )
     }
     else if (&rLb == m_pLbField1)
     {
-        if ( m_pLbField1->GetSelectEntryPos() == 0 )
+        if ( m_pLbField1->GetSelectedEntryPos() == 0 )
         {
             m_pLbConnect1->SetNoSelection();
             m_pLbConnect2->SetNoSelection();
@@ -481,7 +481,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox&, rLb, void )
     }
     else if (&rLb == m_pLbField2)
     {
-        if ( m_pLbField2->GetSelectEntryPos() == 0 )
+        if ( m_pLbField2->GetSelectedEntryPos() == 0 )
         {
             m_pLbConnect2->SetNoSelection();
             m_pLbField3->SelectEntryPos( 0 );
@@ -505,7 +505,7 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox&, rLb, void )
     }
     else if (&rLb == m_pLbField3)
     {
-        ( m_pLbField3->GetSelectEntryPos() == 0 )
+        ( m_pLbField3->GetSelectedEntryPos() == 0 )
             ? ClearValueList( 3 )
             : UpdateValueList( 3 );
     }

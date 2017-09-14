@@ -956,7 +956,7 @@ void AssignmentPersistentData::ImplCommit()
             "AddressBookSourceDialog::OnFieldScroll: invalid list box entry!");
 
         // update the array where we remember the field selections
-        if (0 == _rListbox.GetSelectEntryPos())
+        if (0 == _rListbox.GetSelectedEntryPos())
             // it's the "no field selection" entry
             m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex].clear();
         else

@@ -508,7 +508,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void )
     {
         bEnableTo = false;
 
-        sal_Int32 n, nInsPos = m_pLbTableCol->GetSelectEntryPos(),
+        sal_Int32 n, nInsPos = m_pLbTableCol->GetSelectedEntryPos(),
                nCnt = m_pLbTableDbColumn->GetEntryCount();
         if( LISTBOX_APPEND == nInsPos )
             for( n = 0; n < nCnt; ++n )
@@ -521,10 +521,10 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void )
         m_pLbTableDbColumn->SelectEntryPos( LISTBOX_APPEND );
     }
     else if( pButton == m_pIbDbcolOneTo &&
-            LISTBOX_ENTRY_NOTFOUND != m_pLbTableDbColumn->GetSelectEntryPos() )
+            LISTBOX_ENTRY_NOTFOUND != m_pLbTableDbColumn->GetSelectedEntryPos() )
     {
-        sal_Int32 nInsPos = m_pLbTableCol->GetSelectEntryPos(),
-               nDelPos = m_pLbTableDbColumn->GetSelectEntryPos(),
+        sal_Int32 nInsPos = m_pLbTableCol->GetSelectedEntryPos(),
+               nDelPos = m_pLbTableDbColumn->GetSelectedEntryPos(),
                nTopPos = m_pLbTableDbColumn->GetTopEntry();
         m_pLbTableCol->InsertEntry( m_pLbTableDbColumn->GetEntry( nDelPos ), nInsPos );
         m_pLbTableDbColumn->RemoveEntry( nDelPos );
@@ -539,10 +539,10 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void )
     }
     else if( pButton == m_pIbDbcolOneFrom )
     {
-        if( LISTBOX_ENTRY_NOTFOUND != m_pLbTableCol->GetSelectEntryPos() )
+        if( LISTBOX_ENTRY_NOTFOUND != m_pLbTableCol->GetSelectedEntryPos() )
         {
             sal_Int32 nInsPos,
-                    nDelPos = m_pLbTableCol->GetSelectEntryPos(),
+                    nDelPos = m_pLbTableCol->GetSelectedEntryPos(),
                     nTopPos = m_pLbTableCol->GetTopEntry();
 
             // look for the right InsertPos!!

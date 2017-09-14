@@ -678,7 +678,7 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox&, rListBox, void )
 {
     if( &rListBox == mpDeviceBox && Sane::IsSane() && Sane::CountDevices() )
     {
-        int nNewNumber = mpDeviceBox->GetSelectEntryPos();
+        int nNewNumber = mpDeviceBox->GetSelectedEntryPos();
         int nOldNumber = mrSane.GetDeviceNumber();
         if (nNewNumber != nOldNumber)
         {

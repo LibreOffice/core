@@ -166,7 +166,7 @@ void SvxEventConfigPage::ImplInitDocument()
 IMPL_LINK_NOARG( SvxEventConfigPage, SelectHdl_Impl, ListBox&, void )
 {
     bool* bApp = static_cast<bool*>(m_pSaveInListBox->GetEntryData(
-            m_pSaveInListBox->GetSelectEntryPos()));
+            m_pSaveInListBox->GetSelectedEntryPos()));
 
     mpImpl->pEventLB->SetUpdateMode( false );
     if ( *bApp )

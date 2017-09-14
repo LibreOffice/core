@@ -380,7 +380,7 @@ bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 
     for( sal_Int32 j = 0; m_bPKey && j < nCount; ++j )
     {
-        OFieldDescription* pField = static_cast<OFieldDescription*>(GetEntryData(GetSelectEntryPos(j)));
+        OFieldDescription* pField = static_cast<OFieldDescription*>(GetEntryData(GetSelectedEntryPos(j)));
         if(!pField || pField->getTypeInfo()->nSearchType == ColumnSearch::NONE)
             return false;
     }

@@ -1180,7 +1180,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 
         case MID_RENAME :
            {
-            sal_Int32 nPos = GetSelectEntryPos();
+            sal_Int32 nPos = GetSelectedEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 ScopedVclPtrInstance< SfxAddHelpBookmarkDialog_Impl > aDlg(this, true);
@@ -1202,7 +1202,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 
         case MID_DELETE :
         {
-            sal_Int32 nPos = GetSelectEntryPos();
+            sal_Int32 nPos = GetSelectedEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 RemoveEntry( nPos );
@@ -1486,7 +1486,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
     }
 
     m_pActiveLB->SetDropDownLineCount( (sal_uInt16)aFactories.size() );
-    if ( m_pActiveLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+    if ( m_pActiveLB->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         SetActiveFactory();
 }
 
@@ -1506,7 +1506,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
         *pFactory = pFactory->toAsciiLowerCase();
         if ( *pFactory == pIPage->GetFactory() )
         {
-            if ( m_pActiveLB->GetSelectEntryPos() != i )
+            if ( m_pActiveLB->GetSelectedEntryPos() != i )
             {
                 m_pActiveLB->SelectEntryPos(i);
                 aSelectFactoryLink.Call( nullptr );

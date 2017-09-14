@@ -759,7 +759,7 @@ IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox&, rList, void )
 {
     if ( &rList == m_pLbDefined )
     {
-        ScHFEntryId eSel = static_cast<ScHFEntryId>(m_pLbDefined->GetSelectEntryPos());
+        ScHFEntryId eSel = static_cast<ScHFEntryId>(m_pLbDefined->GetSelectedEntryPos());
         if(!m_pLbDefined->IsTravelSelect())
         {
             ProcessDefinedListSel(eSel, false);

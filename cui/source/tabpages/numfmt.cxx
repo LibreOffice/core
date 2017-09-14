@@ -841,7 +841,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
     }
     else
     {
-        nTmpCatPos=m_pLbCategory->GetSelectEntryPos();
+        nTmpCatPos=m_pLbCategory->GetSelectedEntryPos();
     }
 
     switch (nTmpCatPos)
@@ -898,13 +898,13 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_False*/ )
 {
     OUString    theFormat           = m_pEdFormat->GetText();
-    sal_Int32   nCurCategory        = m_pLbCategory->GetSelectEntryPos();
+    sal_Int32   nCurCategory        = m_pLbCategory->GetSelectedEntryPos();
     sal_uInt16  nCategory           = static_cast<sal_uInt16>(nCurCategory);
     sal_uInt16  nDecimals           = 0;
     sal_uInt16  nZeroes             = 0;
     bool        bNegRed             = false;
     bool        bThousand           = false;
-    sal_Int32   nCurrencyPos        =m_pLbCurrency->GetSelectEntryPos();
+    sal_Int32   nCurrencyPos        =m_pLbCurrency->GetSelectedEntryPos();
 
     if(bOneAreaFlag)
         nCurCategory=nFixedCategory;
@@ -982,7 +982,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             m_pFtLeadZeroes->Enable();
             m_pEdLeadZeroes->Enable();
             m_pBtnNegRed->Enable();
-            if ( nCategory == CAT_NUMBER && m_pLbFormat->GetSelectEntryPos() == 0 )
+            if ( nCategory == CAT_NUMBER && m_pLbFormat->GetSelectedEntryPos() == 0 )
                 m_pEdDecimals->SetText( "" ); //General format tdf#44399
             else
                 if ( nCategory == CAT_FRACTION )
@@ -1053,7 +1053,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
     }
     else
     {
-        nTmpCatPos=m_pLbCategory->GetSelectEntryPos();
+        nTmpCatPos=m_pLbCategory->GetSelectedEntryPos();
     }
 
 
@@ -1139,7 +1139,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
 
 void SvxNumberFormatTabPage::UpdateThousandEngineeringCheckBox()
 {
-    bool bIsScientific = m_pLbCategory->GetSelectEntryPos() == CAT_SCIENTIFIC;
+    bool bIsScientific = m_pLbCategory->GetSelectedEntryPos() == CAT_SCIENTIFIC;
     m_pBtnThousand->Show( !bIsScientific );
     m_pBtnEngineering->Show( bIsScientific );
 }
@@ -1153,7 +1153,7 @@ void SvxNumberFormatTabPage::UpdateThousandEngineeringCheckBox()
 
 void SvxNumberFormatTabPage::UpdateDecimalsDenominatorEditBox()
 {
-    bool bIsFraction = m_pLbCategory->GetSelectEntryPos() == CAT_FRACTION;
+    bool bIsFraction = m_pLbCategory->GetSelectedEntryPos() == CAT_FRACTION;
     m_pFtDecimals->Show( !bIsFraction );
     m_pEdDecimals->Show( !bIsFraction );
     m_pFtDenominator->Show( bIsFraction );
@@ -1233,7 +1233,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
         // And yes, m_pLbFormat is a SvxFontListBox with sal_uLong list positions,
         // implementation returns a TREELIST_ENTRY_NOTFOUND if empty,
         // comparison with sal_Int32 LISTBOX_ENTRY_NOTFOUND wouldn't match.
-        if ( m_pLbFormat->GetSelectEntryPos() == TREELIST_ENTRY_NOTFOUND )
+        if ( m_pLbFormat->GetSelectedEntryPos() == TREELIST_ENTRY_NOTFOUND )
             pLb = m_pLbCategory; // continue with the current category selected
         else
             pLb = m_pLbFormat;   // continue with the current format selected
@@ -1247,12 +1247,12 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
     }
     else
     {
-        nTmpCatPos=m_pLbCategory->GetSelectEntryPos();
+        nTmpCatPos=m_pLbCategory->GetSelectedEntryPos();
     }
 
     if (nTmpCatPos==CAT_CURRENCY && pLb == m_pLbCurrency )
     {
-        sal_Int32 nCurrencyPos = m_pLbCurrency->GetSelectEntryPos();
+        sal_Int32 nCurrencyPos = m_pLbCurrency->GetSelectedEntryPos();
         pNumFmtShell->SetCurrencySymbol(static_cast<sal_uInt32>(nCurrencyPos));
     }
 
@@ -1260,7 +1260,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
     // Format-ListBox ----------------------------------------------------
     if (pLb == m_pLbFormat)
     {
-        sal_uLong nSelPos = m_pLbFormat->GetSelectEntryPos();
+        sal_uLong nSelPos = m_pLbFormat->GetSelectedEntryPos();
         short nFmtLbSelPos = static_cast<short>(nSelPos);
 
         OUString aFormat = pNumFmtShell->GetFormat4Entry(nFmtLbSelPos);
@@ -1625,7 +1625,7 @@ void SvxNumberFormatTabPage::OptHdl_Impl( void const * pOptCtrl )
         pNumFmtShell->MakeFormat( aFormat,
                                   bThousand, bNegRed,
                                   nPrecision, nLeadZeroes,
-                                  (sal_uInt16)m_pLbFormat->GetSelectEntryPos() );
+                                  (sal_uInt16)m_pLbFormat->GetSelectedEntryPos() );
 
         m_pEdFormat->SetText( aFormat );
         MakePreviewText( aFormat );
@@ -1675,7 +1675,7 @@ IMPL_LINK( SvxNumberFormatTabPage, LostFocusHdl_Impl, Control&, rControl, void)
         m_pFtComment->Show();
         if(!m_pIbAdd->IsEnabled())
         {
-            sal_uInt16  nSelPos = (sal_uInt16) m_pLbFormat->GetSelectEntryPos();
+            sal_uInt16  nSelPos = (sal_uInt16) m_pLbFormat->GetSelectedEntryPos();
             pNumFmtShell->SetComment4Entry(nSelPos,
                                         m_pEdComment->GetText());
             m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    // String for user defined
@@ -1783,7 +1783,7 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
 
 void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
 {
-    sal_uInt16  nCurCategory = m_pLbCategory->GetSelectEntryPos();
+    sal_uInt16  nCurCategory = m_pLbCategory->GetSelectedEntryPos();
     sal_uInt16 nTmpCatPos;
 
     if(bOneAreaFlag)

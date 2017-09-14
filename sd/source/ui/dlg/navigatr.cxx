@@ -308,7 +308,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 
 IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
 {
-    if( !mbDocImported || maLbDocs->GetSelectEntryPos() != 0 )
+    if( !mbDocImported || maLbDocs->GetSelectedEntryPos() != 0 )
     {
         NavDocInfo* pInfo = GetDocInfo();
 
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
 IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl, ListBox&, void)
 {
     OUString aStrLb = maLbDocs->GetSelectedEntry();
-    long   nPos = maLbDocs->GetSelectEntryPos();
+    long   nPos = maLbDocs->GetSelectedEntryPos();
     bool   bFound = false;
     ::sd::DrawDocShell* pDocShell = nullptr;
     NavDocInfo* pInfo = GetDocInfo();
@@ -555,7 +555,7 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
     }
     else
     {
-        nPos = maLbDocs->GetSelectEntryPos();
+        nPos = maLbDocs->GetSelectedEntryPos();
         if( nPos == LISTBOX_ENTRY_NOTFOUND )
             nPos = 0;
 
@@ -644,7 +644,7 @@ OUString SdNavigatorWin::GetDragTypeSdBmpId(NavigatorDragType eDT)
 
 NavDocInfo* SdNavigatorWin::GetDocInfo()
 {
-    sal_uInt32 nPos = maLbDocs->GetSelectEntryPos();
+    sal_uInt32 nPos = maLbDocs->GetSelectedEntryPos();
 
     if( mbDocImported )
     {

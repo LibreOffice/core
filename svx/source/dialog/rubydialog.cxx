@@ -594,7 +594,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl, Button*, void)
 IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
 {
     AssertOneEntry();
-    sal_Int16 nAdjust = rBox.GetSelectEntryPos();
+    sal_Int16 nAdjust = rBox.GetSelectedEntryPos();
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     for (PropertyValues & rProps : aRubyValues)
     {
@@ -611,7 +611,7 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox&, rBox, void)
 IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox&, rBox, void)
 {
     AssertOneEntry();
-    bool bAbove = !rBox.GetSelectEntryPos();
+    bool bAbove = !rBox.GetSelectedEntryPos();
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     for (PropertyValues & rProps : aRubyValues)
     {
@@ -629,7 +629,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
 {
     AssertOneEntry();
     OUString sStyleName;
-    if (LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
+    if (LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectedEntryPos())
         sStyleName = *static_cast<OUString*>(m_pCharStyleLB->GetSelectEntryData());
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     for (PropertyValues & rProps : aRubyValues)
@@ -801,7 +801,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     long nRubyWidth = rRenderContext.GetTextWidth(sRubyText);
     rRenderContext.SetFont(aSaveFont);
 
-    RubyAdjust nAdjust = (RubyAdjust)m_pParentDlg->m_pAdjustLB->GetSelectEntryPos();
+    RubyAdjust nAdjust = (RubyAdjust)m_pParentDlg->m_pAdjustLB->GetSelectedEntryPos();
     //use center if no adjustment is available
     if (nAdjust > RubyAdjust_INDENT_BLOCK)
         nAdjust = RubyAdjust_CENTER;
@@ -817,7 +817,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
 
     //use above also if no selection is set
-    bool bAbove = m_pParentDlg->m_pPositionLB->GetSelectEntryPos() != 1;
+    bool bAbove = m_pParentDlg->m_pPositionLB->GetSelectedEntryPos() != 1;
     if (!bAbove)
     {
         long nTmp = nYRuby;

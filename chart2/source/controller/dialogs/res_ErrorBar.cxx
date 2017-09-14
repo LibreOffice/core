@@ -254,7 +254,7 @@ void ErrorBarResources::UpdateControlStates()
     // unit for metric fields
     bool bIsErrorMargin(
         ( m_pRbFunction->IsChecked()) &&
-        ( m_pLbFunction->GetSelectEntryPos() == CHART_LB_FUNCTION_ERROR_MARGIN ));
+        ( m_pLbFunction->GetSelectedEntryPos() == CHART_LB_FUNCTION_ERROR_MARGIN ));
     bool bIsPercentage( m_pRbPercent->IsChecked() || bIsErrorMargin );
     FieldUnit eFieldUnit = FUNIT_NONE;
 
@@ -308,7 +308,7 @@ void ErrorBarResources::UpdateControlStates()
     }
 
     // all functions except error margin take no arguments
-    if( m_pRbFunction->IsChecked() &&  ( m_pLbFunction->GetSelectEntryPos() != CHART_LB_FUNCTION_ERROR_MARGIN ))
+    if( m_pRbFunction->IsChecked() &&  ( m_pLbFunction->GetSelectedEntryPos() != CHART_LB_FUNCTION_ERROR_MARGIN ))
     {
         bPosEnabled = false;
         bNegEnabled = false;
@@ -362,7 +362,7 @@ IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen, Button*, void )
     {
         if( m_pLbFunction->GetSelectEntryCount() == 1 )
         {
-            switch( m_pLbFunction->GetSelectEntryPos())
+            switch( m_pLbFunction->GetSelectedEntryPos())
             {
                 case CHART_LB_FUNCTION_STD_ERROR:
                     m_eErrorKind = SvxChartKindError::StdError; break;

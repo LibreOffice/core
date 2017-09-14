@@ -181,7 +181,7 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
     if (!maInputRange.IsValid())
         return;
 
-    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
+    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectedEntryPos();
     sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>(mpDistributionCombo->GetEntryData(aSelectedIndex));
 
     sal_uInt32 seedValue;
@@ -380,7 +380,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, InputRangeModified, Edit&, void)
 
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter1ValueModified, Edit&, void)
 {
-    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
+    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectedEntryPos();
     sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
     if (aSelectedId == DIST_UNIFORM ||
         aSelectedId == DIST_UNIFORM_INTEGER)
@@ -396,7 +396,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter1ValueModified, Edit&, v
 
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter2ValueModified, Edit&, void)
 {
-    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
+    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectedEntryPos();
     sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
     if (aSelectedId == DIST_UNIFORM ||
         aSelectedId == DIST_UNIFORM_INTEGER)
@@ -418,7 +418,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, CheckChanged, CheckBox&, void)
 
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, void)
 {
-    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
+    sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectedEntryPos();
     sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
 
     mpParameter1Value->SetMin(SAL_MIN_INT64);

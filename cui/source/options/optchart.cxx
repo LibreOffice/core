@@ -27,7 +27,7 @@
 
 Color SvxDefaultColorOptPage::GetSelectEntryColor() const
 {
-    sal_Int32 nPos = m_pLbChartColors->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbChartColors->GetSelectedEntryPos();
     Color aColor;
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
         aColor = GetEntryColor(nPos);
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor, Button*, void)
 
 IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, void )
 {
-    sal_Int32 nIndex = m_pLbChartColors->GetSelectEntryPos();
+    sal_Int32 nIndex = m_pLbChartColors->GetSelectedEntryPos();
 
     if (m_pLbChartColors->GetSelectEntryCount() == 0)
         return;
@@ -331,7 +331,7 @@ IMPL_LINK_NOARG( SvxDefaultColorOptPage, ListClickedHdl, ListBox&, void )
 
 IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, void)
 {
-    sal_Int32 nIdx = m_pLbChartColors->GetSelectEntryPos();
+    sal_Int32 nIdx = m_pLbChartColors->GetSelectedEntryPos();
     if( nIdx != LISTBOX_ENTRY_NOTFOUND )
     {
         const XColorEntry aEntry( m_pValSetColorBox->GetItemColor( m_pValSetColorBox->GetSelectItemId() ), m_pLbChartColors->GetSelectedEntry() );

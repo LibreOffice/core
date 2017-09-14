@@ -518,7 +518,7 @@ IMPL_LINK_NOARG( SvxPersonalizationTabPage, SelectInstalledPersona, ListBox&, vo
 
     // Get the details of the selected theme.
     m_pExtensionPersonaPreview->Show();
-    sal_Int32 nSelectedPos = m_pPersonaList->GetSelectEntryPos();
+    sal_Int32 nSelectedPos = m_pPersonaList->GetSelectedEntryPos();
     OUString aSettings = m_vExtensionPersonaSettings[nSelectedPos];
     sal_Int32 nIndex = aSettings.indexOf( ';' );
     OUString aPreviewFile = aSettings.copy( 0, nIndex );

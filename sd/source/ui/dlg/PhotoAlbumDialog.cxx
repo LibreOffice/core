@@ -128,7 +128,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
         const AutoLayout aAutoLayout(bCreateCaptions ? AUTOLAYOUT_TITLE_ONLY : AUTOLAYOUT_NONE);
 
         // get the option
-        const sal_Int32 nOpt = pInsTypeCombo->GetSelectEntryPos();
+        const sal_Int32 nOpt = pInsTypeCombo->GetSelectedEntryPos();
         if ( nOpt == ONE_IMAGE )
         {
             OUString sUrl;
@@ -540,10 +540,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl, Button*, void)
 
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl, Button*, void)
 {
-    if (pImagesLst->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND
-        && pImagesLst->GetSelectEntryPos() != 0)
+    if (pImagesLst->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND
+        && pImagesLst->GetSelectedEntryPos() != 0)
     {
-        const sal_Int32 nActPos = pImagesLst->GetSelectEntryPos();
+        const sal_Int32 nActPos = pImagesLst->GetSelectedEntryPos();
         OUString sActEntry( pImagesLst->GetEntry(nActPos) );
         // actual data
         OUString* pActData = static_cast<OUString*>(pImagesLst->GetEntryData(nActPos));
@@ -571,7 +571,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl, Button*, void)
 
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl, Button*, void)
 {
-    const sal_Int32 nActPos = pImagesLst->GetSelectEntryPos();
+    const sal_Int32 nActPos = pImagesLst->GetSelectedEntryPos();
     if (!pImagesLst->GetEntry(nActPos + 1).isEmpty())
     {
         OUString sActEntry( pImagesLst->GetSelectedEntry() );
@@ -599,7 +599,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl, Button*, void)
 
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl, Button*, void)
 {
-    pImagesLst->RemoveEntry( pImagesLst->GetSelectEntryPos() );
+    pImagesLst->RemoveEntry( pImagesLst->GetSelectedEntryPos() );
     pImg->SetImage(Image());
 
     EnableDisableButtons();
@@ -666,7 +666,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, TypeSelectHdl, ListBox&, void)
 {
     // Enable "Fill Slide" only for one image
     // If we want to have it for other images too, we need to implement the actual cropping.
-    bool const bEnable = pInsTypeCombo->GetSelectEntryPos() == ONE_IMAGE;
+    bool const bEnable = pInsTypeCombo->GetSelectedEntryPos() == ONE_IMAGE;
     pASRCheckCrop->Enable(bEnable);
     if (!bEnable)
         pASRCheckCrop->Check(false);
@@ -806,9 +806,9 @@ void SdPhotoAlbumDialog::EnableDisableButtons()
 {
     pRemoveBtn->Enable(pImagesLst->GetSelectEntryCount() > 0);
     pUpBtn->Enable(pImagesLst->GetSelectEntryCount() > 0 &&
-                   pImagesLst->GetSelectEntryPos() != 0);
+                   pImagesLst->GetSelectedEntryPos() != 0);
     pDownBtn->Enable(pImagesLst->GetSelectEntryCount() > 0 &&
-                     pImagesLst->GetSelectEntryPos() < pImagesLst->GetEntryCount()-1);
+                     pImagesLst->GetSelectedEntryPos() < pImagesLst->GetEntryCount()-1);
 }
 
 } // end of namespace sd

@@ -439,7 +439,7 @@ void SvxStyleBox_Impl::Select()
         bool bDoIt = true, bClear = false;
         if( bInSpecialMode )
         {
-            if( aSearchEntry == aClearFormatKey && GetSelectEntryPos() == 0 )
+            if( aSearchEntry == aClearFormatKey && GetSelectedEntryPos() == 0 )
             {
                 aSearchEntry = sDefaultStyle;
                 bClear = true;
@@ -448,7 +448,7 @@ void SvxStyleBox_Impl::Select()
                 SfxToolBoxControl::Dispatch( m_xDispatchProvider, ".uno:ResetAttributes",
                     aEmptyVals);
             }
-            else if( aSearchEntry == aMoreKey && GetSelectEntryPos() == ( GetEntryCount() - 1 ) )
+            else if( aSearchEntry == aMoreKey && GetSelectedEntryPos() == ( GetEntryCount() - 1 ) )
             {
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 DBG_ASSERT( pViewFrm, "SvxStyleBox_Impl::Select(): no viewframe" );
@@ -521,7 +521,7 @@ bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
     MouseNotifyEvent nType = rNEvt.GetType();
 
     if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
-        nCurSel = GetSelectEntryPos();
+        nCurSel = GetSelectedEntryPos();
     else if ( MouseNotifyEvent::LOSEFOCUS == nType )
     {
         // don't handle before our Select() is called
@@ -545,7 +545,7 @@ bool SvxStyleBox_Impl::EventNotify( NotifyEvent& rNEvt )
             {
                 if(IsInDropDown())
                 {
-                    const sal_Int32 nItem = GetSelectEntryPos() - 1;
+                    const sal_Int32 nItem = GetSelectedEntryPos() - 1;
                     if(nItem < MAX_STYLES_ENTRIES)
                         m_pButtons[nItem]->ExecuteMenu();
                     bHandled = true;
@@ -812,7 +812,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     const tools::Rectangle& rRect(rUDEvt.GetRect());
-    bool bIsNotSelected = rUDEvt.GetItemId() != GetSelectEntryPos();
+    bool bIsNotSelected = rUDEvt.GetItemId() != GetSelectedEntryPos();
 
     SetupEntry(*pDevice, rUDEvt.GetWindow(), nItem, rRect, aStyleName, bIsNotSelected);
 
@@ -1322,7 +1322,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
     }
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
     mpPaletteListBox->SelectEntry( aPaletteName );
-    const sal_Int32 nSelectedEntry(mpPaletteListBox->GetSelectEntryPos());
+    const sal_Int32 nSelectedEntry(mpPaletteListBox->GetSelectedEntryPos());
     if (nSelectedEntry != LISTBOX_ENTRY_NOTFOUND)
         mrPaletteManager.SetPalette(nSelectedEntry);
 
@@ -1471,7 +1471,7 @@ IMPL_LINK(SvxColorWindow, SelectHdl, ValueSet*, pColorSet, void)
 
 IMPL_LINK_NOARG(SvxColorWindow, SelectPaletteHdl, ListBox&, void)
 {
-    sal_Int32 nPos = mpPaletteListBox->GetSelectEntryPos();
+    sal_Int32 nPos = mpPaletteListBox->GetSelectedEntryPos();
     mrPaletteManager.SetPalette( nPos );
     mrPaletteManager.ReloadColorSet(*mpColorSet);
     mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
@@ -2107,10 +2107,10 @@ IMPL_LINK_NOARG(SvxCurrencyList_Impl, SelectHdl, ListBox&, void)
     if (!m_xControl.is())
         return;
 
-    m_rSelectedFormat = m_aFormatEntries[ m_pCurrencyLb->GetSelectEntryPos() ];
+    m_rSelectedFormat = m_aFormatEntries[ m_pCurrencyLb->GetSelectedEntryPos() ];
     m_eSelectedLanguage = m_eFormatLanguage;
 
-    m_xControl->execute( m_pCurrencyLb->GetSelectEntryPos() + 1 );
+    m_xControl->execute( m_pCurrencyLb->GetSelectedEntryPos() + 1 );
 }
 
 IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
@@ -2120,7 +2120,7 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
     SvxBorderLineStyle  nStyle = m_aLineStyleLb->GetSelectEntryStyle();
 
-    if ( m_aLineStyleLb->GetSelectEntryPos( ) > 0 )
+    if ( m_aLineStyleLb->GetSelectedEntryPos( ) > 0 )
     {
         SvxBorderLine aTmp;
         aTmp.SetBorderLineStyle( nStyle );

@@ -196,7 +196,7 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
                 m_pNonPropFontsOnlyCB->IsChecked(), batch);
     //font name changes cannot be detected by saved values
     OUString sFontName;
-    if(m_pFontNameLB->GetSelectEntryPos())
+    if(m_pFontNameLB->GetSelectedEntryPos())
         sFontName = m_pFontNameLB->GetSelectedEntry();
     officecfg::Office::Common::Font::SourceViewFont::FontName::set(
         boost::optional< OUString >(sFontName), batch);

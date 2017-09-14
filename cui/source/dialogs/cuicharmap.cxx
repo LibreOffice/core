@@ -635,7 +635,7 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
 
 IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
 {
-    const sal_Int32 nPos = m_pFontLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pFontLB->GetSelectedEntryPos();
     const sal_uInt16 nFont = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos ));
     aFont = GetDevFont( nFont );
     aFont.SetWeight( WEIGHT_DONTKNOW );
@@ -722,7 +722,7 @@ void SvxCharacterMap::setCharName(sal_UCS4 nDecimalValue)
 
 IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
 {
-    const sal_Int32 nPos = m_pSubsetLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pSubsetLB->GetSelectedEntryPos();
     const Subset* pSubset = static_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
     if( pSubset && !isSearchMode)
     {

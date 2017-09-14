@@ -133,7 +133,7 @@ void ScFunctionWin::InitLRUList()
     ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
     pFuncMgr->fillLastRecentlyUsedFunctions(aLRUList);
 
-    sal_Int32  nSelPos   = aCatBox->GetSelectEntryPos();
+    sal_Int32  nSelPos   = aCatBox->GetSelectedEntryPos();
 
     if(nSelPos == 0)
         UpdateFunctionList();
@@ -181,7 +181,7 @@ void ScFunctionWin::SetDescription()
     aFiFuncDesc->SetText( EMPTY_OUSTRING );
     const ScFuncDesc* pDesc =
              static_cast<const ScFuncDesc*>(aFuncList->GetEntryData(
-                    aFuncList->GetSelectEntryPos() ));
+                    aFuncList->GetSelectedEntryPos() ));
     if (pDesc)
     {
         pDesc->initArgumentInfo();      // full argument info is needed
@@ -216,7 +216,7 @@ void ScFunctionWin::SetDescription()
 
 void ScFunctionWin::UpdateFunctionList()
 {
-    sal_Int32  nSelPos   = aCatBox->GetSelectEntryPos();
+    sal_Int32  nSelPos   = aCatBox->GetSelectedEntryPos();
     sal_Int32  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? (nSelPos-1) : 0;
 
@@ -302,7 +302,7 @@ void ScFunctionWin::DoEnter()
         }
         const ScFuncDesc* pDesc =
              static_cast<const ScFuncDesc*>(aFuncList->GetEntryData(
-                    aFuncList->GetSelectEntryPos() ));
+                    aFuncList->GetSelectedEntryPos() ));
         if (pDesc)
         {
             pFuncDesc=pDesc;

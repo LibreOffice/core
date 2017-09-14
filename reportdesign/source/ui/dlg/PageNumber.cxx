@@ -86,7 +86,7 @@ short OPageNumberDialog::Execute()
             sal_Int32 nPosX = 0;
             sal_Int32 nPos2X = 0;
             awt::Size aRptSize = getStyleProperty<awt::Size>(m_xHoldAlive,PROPERTY_PAPERSIZE);
-            switch ( m_pAlignmentLst->GetSelectEntryPos() )
+            switch ( m_pAlignmentLst->GetSelectedEntryPos() )
             {
                 case 0: // left
                     nPosX = getStyleProperty<sal_Int32>(m_xHoldAlive,PROPERTY_LEFTMARGIN);
@@ -105,7 +105,7 @@ short OPageNumberDialog::Execute()
                 default:
                     break;
             }
-            if ( m_pAlignmentLst->GetSelectEntryPos() > 2 )
+            if ( m_pAlignmentLst->GetSelectedEntryPos() > 2 )
                 nPosX = nPos2X;
 
             uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({

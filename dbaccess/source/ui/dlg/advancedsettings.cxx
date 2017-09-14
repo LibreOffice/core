@@ -316,7 +316,7 @@ namespace dbaui
         {
             if ( m_pBooleanComparisonMode->IsValueChangedFromSaved() )
             {
-                _rSet->Put( SfxInt32Item( DSID_BOOLEANCOMPARISON, m_pBooleanComparisonMode->GetSelectEntryPos() ) );
+                _rSet->Put( SfxInt32Item( DSID_BOOLEANCOMPARISON, m_pBooleanComparisonMode->GetSelectedEntryPos() ) );
                 bChangedSomething = true;
             }
         }

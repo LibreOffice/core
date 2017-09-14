@@ -990,7 +990,7 @@ bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
 
 IMPL_LINK_NOARG(TabControl, ImplListBoxSelectHdl, ListBox&, void)
 {
-    SelectTabPage( GetPageId( mpTabCtrlData->mpListBox->GetSelectEntryPos() ) );
+    SelectTabPage( GetPageId( mpTabCtrlData->mpListBox->GetSelectedEntryPos() ) );
 }
 
 IMPL_LINK( TabControl, ImplWindowEventListener, VclWindowEvent&, rEvent, void )

@@ -443,7 +443,7 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         case GalleryHintType::THEME_RENAMED:
         {
-            const sal_Int32 nCurSelectPos = mpThemes->GetSelectEntryPos();
+            const sal_Int32 nCurSelectPos = mpThemes->GetSelectedEntryPos();
             const sal_Int32 nRenameEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
 
             mpThemes->RemoveEntry( rGalleryHint.GetThemeName() );
@@ -465,7 +465,7 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
         case GalleryHintType::CLOSE_THEME:
         {
-            const sal_Int32 nCurSelectPos = mpThemes->GetSelectEntryPos();
+            const sal_Int32 nCurSelectPos = mpThemes->GetSelectedEntryPos();
             const sal_Int32 nCloseEntryPos = mpThemes->GetEntryPos( rGalleryHint.GetThemeName() );
 
             if( nCurSelectPos == nCloseEntryPos )
@@ -580,7 +580,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl, void*, void)
         aMenu->RemoveDisabledEntries();
 
         const tools::Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
-        Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectEntryPos() ).Center() );
+        Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectedEntryPos() ).Center() );
 
         aSelPos.X() = std::max( std::min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() );
         aSelPos.Y() = std::max( std::min( aSelPos.Y(), aThemesRect.Bottom() ), aThemesRect.Top() );

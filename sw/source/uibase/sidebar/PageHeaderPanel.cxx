@@ -249,7 +249,7 @@ IMPL_LINK_NOARG( PageHeaderPanel, HeaderSpacingHdl, ListBox&, void )
 }
 IMPL_LINK_NOARG( PageHeaderPanel, HeaderLayoutHdl, ListBox&, void )
 {
-    sal_uInt16 nVal = mpHeaderLayoutLB->GetSelectEntryPos();
+    sal_uInt16 nVal = mpHeaderLayoutLB->GetSelectedEntryPos();
     mpHeaderLayoutItem->SetValue(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_LAYOUT,
                                                  SfxCallMode::RECORD, { mpHeaderLayoutItem.get() } );

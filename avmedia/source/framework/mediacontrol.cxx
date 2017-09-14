@@ -327,7 +327,7 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox&, p, void )
     MediaItem aExecItem;
     css::media::ZoomLevel eLevel;
 
-    switch( p.GetSelectEntryPos() )
+    switch( p.GetSelectedEntryPos() )
     {
         case AVMEDIA_ZOOMLEVEL_50: eLevel = css::media::ZoomLevel_ZOOM_1_TO_2; break;
         case AVMEDIA_ZOOMLEVEL_100: eLevel = css::media::ZoomLevel_ORIGINAL; break;

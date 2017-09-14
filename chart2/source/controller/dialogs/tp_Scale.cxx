@@ -254,7 +254,7 @@ enum AxisTypeListBoxEntry
 
 IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl, ListBox&, void)
 {
-    const sal_Int32 nPos = m_pLB_AxisType->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLB_AxisType->GetSelectedEntryPos();
     if( nPos==TYPE_DATE )
         m_nAxisType = chart2::AxisType::DATE;
     else
@@ -276,7 +276,7 @@ bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXISTYPE, m_nAxisType));
     if(m_bAllowDateAxis)
-        rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_DATEAXIS, m_pLB_AxisType->GetSelectEntryPos()==TYPE_AUTO));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_DATEAXIS, m_pLB_AxisType->GetSelectedEntryPos()==TYPE_AUTO));
 
     bool bAutoScale = false;
     if( m_nAxisType==chart2::AxisType::CATEGORY )
@@ -438,9 +438,9 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     fOrigin = m_pFmtFldOrigin->GetValue();
     fStepMain = bDateAxis ? m_pMt_MainDateStep->GetValue() : m_pFmtFldStepMain->GetValue();
     nStepHelp = static_cast< sal_Int32 >( m_pMtStepHelp->GetValue());
-    m_nTimeResolution = m_pLB_TimeResolution->GetSelectEntryPos();
-    m_nMainTimeUnit = m_pLB_MainTimeUnit->GetSelectEntryPos();
-    m_nHelpTimeUnit = m_pLB_HelpTimeUnit->GetSelectEntryPos();
+    m_nTimeResolution = m_pLB_TimeResolution->GetSelectedEntryPos();
+    m_nMainTimeUnit = m_pLB_MainTimeUnit->GetSelectedEntryPos();
+    m_nHelpTimeUnit = m_pLB_HelpTimeUnit->GetSelectedEntryPos();
 
     if( m_nAxisType != chart2::AxisType::REALNUMBER )
         m_pCbxLogarithm->Show( false );

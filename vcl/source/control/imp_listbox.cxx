@@ -393,10 +393,10 @@ sal_Int32 ImplEntryList::GetSelectEntryCount() const
 
 OUString ImplEntryList::GetSelectedEntry( sal_Int32 nIndex ) const
 {
-    return GetEntryText( GetSelectEntryPos( nIndex ) );
+    return GetEntryText( GetSelectedEntryPos( nIndex ) );
 }
 
-sal_Int32 ImplEntryList::GetSelectEntryPos( sal_Int32 nIndex ) const
+sal_Int32 ImplEntryList::GetSelectedEntryPos( sal_Int32 nIndex ) const
 {
     sal_Int32 nSelEntryPos = LISTBOX_ENTRY_NOTFOUND;
     sal_Int32 nSel = 0;
@@ -688,7 +688,7 @@ void ImplListBoxWindow::ImplCallSelect()
     if ( !IsTravelSelect() && GetEntryList()->GetMaxMRUCount() )
     {
         // Insert the selected entry as MRU, if not already first MRU
-        sal_Int32 nSelected = GetEntryList()->GetSelectEntryPos( 0 );
+        sal_Int32 nSelected = GetEntryList()->GetSelectedEntryPos( 0 );
         sal_Int32 nMRUCount = GetEntryList()->GetMRUCount();
         OUString aSelected = GetEntryList()->GetEntryText( nSelected );
         sal_Int32 nFirstMatchingEntryPos = GetEntryList()->FindEntry( aSelected, true );
@@ -837,7 +837,7 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
             if( nSelect != LISTBOX_ENTRY_NOTFOUND )
             {
                 if ( !mbMulti && GetEntryList()->GetSelectEntryCount() )
-                    mnTrackingSaveSelection = GetEntryList()->GetSelectEntryPos( 0 );
+                    mnTrackingSaveSelection = GetEntryList()->GetSelectedEntryPos( 0 );
                 else
                     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
 
@@ -901,7 +901,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 // Select only visible Entries with MouseMove, otherwise Tracking...
                 if ( IsVisible( nSelect ) &&
                     mpEntryList->IsEntrySelectable( nSelect ) &&
-                    ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectEntryPos( 0 ) ) ) )
+                    ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectedEntryPos( 0 ) ) ) )
                 {
                     mbTrackingSelect = true;
                     if ( SelectEntries( nSelect, LET_TRACKING ) )
@@ -929,7 +929,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
             if ( rMEvt.IsLeft() && !rMEvt.IsSynthetic() )
             {
                 if ( !mbMulti && GetEntryList()->GetSelectEntryCount() )
-                    mnTrackingSaveSelection = GetEntryList()->GetSelectEntryPos( 0 );
+                    mnTrackingSaveSelection = GetEntryList()->GetSelectedEntryPos( 0 );
                 else
                     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
 
@@ -946,7 +946,7 @@ void ImplListBoxWindow::DeselectAll()
 {
     while ( GetEntryList()->GetSelectEntryCount() )
     {
-        sal_Int32 nS = GetEntryList()->GetSelectEntryPos( 0 );
+        sal_Int32 nS = GetEntryList()->GetSelectedEntryPos( 0 );
         SelectEntry( nS, false );
     }
 }
@@ -961,7 +961,7 @@ void ImplListBoxWindow::SelectEntry( sal_Int32 nPos, bool bSelect )
             if( !mbMulti )
             {
                 // deselect the selected entry
-                sal_Int32 nDeselect = GetEntryList()->GetSelectEntryPos( 0 );
+                sal_Int32 nDeselect = GetEntryList()->GetSelectedEntryPos( 0 );
                 if( nDeselect != LISTBOX_ENTRY_NOTFOUND )
                 {
                     //SelectEntryPos( nDeselect, false );
@@ -1011,7 +1011,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
         // here (Single-ListBox) only one entry can be deselected
         if( !mbMulti )
         {
-            sal_Int32 nDeselect = mpEntryList->GetSelectEntryPos( 0 );
+            sal_Int32 nDeselect = mpEntryList->GetSelectedEntryPos( 0 );
             if( nSelect != nDeselect )
             {
                 SelectEntry( nSelect, true );
@@ -1076,7 +1076,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
                 sal_Int32 nAnchor = mpEntryList->GetSelectionAnchor();
                 if( ( nAnchor == LISTBOX_ENTRY_NOTFOUND ) && ( mpEntryList->GetSelectEntryCount() || mbStackMode ) )
                 {
-                    nAnchor = mbStackMode ? 0 : mpEntryList->GetSelectEntryPos( mpEntryList->GetSelectEntryCount() - 1 );
+                    nAnchor = mbStackMode ? 0 : mpEntryList->GetSelectedEntryPos( mpEntryList->GetSelectEntryCount() - 1 );
                 }
                 if( nAnchor != LISTBOX_ENTRY_NOTFOUND )
                 {
@@ -1265,7 +1265,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                 if ( !mbMulti && GetEntryList()->GetSelectEntryCount() )
                 {
                     mbTrackingSelect = true;
-                    SelectEntry( GetEntryList()->GetSelectEntryPos( 0 ), false );
+                    SelectEntry( GetEntryList()->GetSelectedEntryPos( 0 ), false );
                     mbTrackingSelect = false;
                 }
                 else if ( mbStackMode )
@@ -2261,8 +2261,8 @@ void ImplListBox::ImplCheckScrollBars()
 
         // check of the scrolled-out region
         if( GetEntryList()->GetSelectEntryCount() == 1 &&
-            GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
-            ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
+            GetEntryList()->GetSelectedEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
+            ShowProminentEntry( GetEntryList()->GetSelectedEntryPos( 0 ) );
         else
             SetTopEntry( GetTopEntry() );   // MaxTop is being checked...
     }
@@ -2298,8 +2298,8 @@ void ImplListBox::ImplCheckScrollBars()
 
                     // check of the scrolled-out region
                     if( GetEntryList()->GetSelectEntryCount() == 1 &&
-                        GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
-                        ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
+                        GetEntryList()->GetSelectedEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
+                        ShowProminentEntry( GetEntryList()->GetSelectedEntryPos( 0 ) );
                     else
                         SetTopEntry( GetTopEntry() );   // MaxTop is being checked...
                 }
@@ -3050,7 +3050,7 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
         SetSizePixel( aFloatSz );
         mpImplLB->SetSizePixel( GetOutputSizePixel() );
 
-        sal_Int32 nPos = mpImplLB->GetEntryList()->GetSelectEntryPos( 0 );
+        sal_Int32 nPos = mpImplLB->GetEntryList()->GetSelectedEntryPos( 0 );
         mnPopupModeStartSaveSelection = nPos;
 
         Size aSz = GetParent()->GetSizePixel();

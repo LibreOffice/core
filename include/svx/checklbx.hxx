@@ -64,8 +64,8 @@ public:
     void            RemoveEntry         ( sal_uLong  nPos );
 
     void            SelectEntryPos      ( sal_uLong  nPos );
-    sal_uLong       GetSelectEntryPos   () const;
-    void*           GetSelectEntryData  () const { return GetEntryData(GetSelectEntryPos()); }
+    sal_uLong       GetSelectedEntryPos   () const;
+    void*           GetSelectEntryData  () const { return GetEntryData(GetSelectedEntryPos()); }
 
     OUString        GetText             ( sal_uLong  nPos ) const;
     sal_uLong       GetCheckedEntryCount() const;
