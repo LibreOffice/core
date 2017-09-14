@@ -403,7 +403,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    return( static_cast< sal_Int16 >( mnUnmutedVolume / 100 ) );
+    return static_cast< sal_Int16 >( mnUnmutedVolume / 100 );
 }
 
 
