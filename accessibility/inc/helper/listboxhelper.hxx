@@ -137,9 +137,9 @@ public:
         m_aComboListBox.SelectEntryPos(nPos,bSelect);
     }
 
-    virtual sal_Int32       GetSelectEntryCount() const override
+    virtual sal_Int32       GetSelectedEntryCount() const override
     {
-        return m_aComboListBox.GetSelectEntryCount();
+        return m_aComboListBox.GetSelectedEntryCount();
     }
 
     virtual void    SetNoSelection() override

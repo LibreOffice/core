@@ -534,7 +534,7 @@ void VCLXAccessibleBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& r
         VclPtr< ListBox > pListBox = GetAs< ListBox >();
         if (pListBox != nullptr && pListBox->GetEntryCount() > 0)
         {
-            nSelectedEntryCount = pListBox->GetSelectEntryCount();
+            nSelectedEntryCount = pListBox->GetSelectedEntryCount();
             if ( nSelectedEntryCount == 0)
                 rStateSet.AddState(AccessibleStateType::INDETERMINATE);
         }

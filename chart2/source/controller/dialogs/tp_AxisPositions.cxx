@@ -321,7 +321,7 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, ListBox&, void)
 
     if( m_pED_CrossesAt->GetText().isEmpty() )
         m_pED_CrossesAt->SetValue(0.0);
-    if( m_pED_CrossesAtCategory->GetSelectEntryCount() == 0 )
+    if( m_pED_CrossesAtCategory->GetSelectedEntryCount() == 0 )
         m_pED_CrossesAtCategory->SelectEntryPos(0);
 
     PlaceLabelsSelectHdl( *m_pLB_PlaceLabels );

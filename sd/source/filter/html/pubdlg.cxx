@@ -951,7 +951,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, Button *, pButton, void )
         pPage1_Designs->Enable();
         pPage1_DelDesign->Enable();
 
-        if(pPage1_Designs->GetSelectEntryCount() == 0)
+        if(pPage1_Designs->GetSelectedEntryCount() == 0)
             pPage1_Designs->SelectEntryPos(0);
 
         const sal_Int32 nPos = pPage1_Designs->GetSelectedEntryPos();

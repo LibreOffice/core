@@ -51,7 +51,7 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
         SAL_WARN("cui.options", "TSAURLsDialog::TSAURLsDialog(): caught exception" << e.Message);
     }
 
-    if ( m_pURLListBox->GetSelectEntryCount() == 0 )
+    if ( m_pURLListBox->GetSelectedEntryCount() == 0 )
     {
         m_pDeleteBtn->Disable();
     }
