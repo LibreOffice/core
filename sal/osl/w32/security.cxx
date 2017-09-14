@@ -55,7 +55,7 @@ typedef BOOL (STDMETHODCALLTYPE FAR * LPFNUNLOADUSERPROFILE) (
 
 typedef BOOL (STDMETHODCALLTYPE FAR * LPFNGETUSERPROFILEDIR) (
   HANDLE hToken,
-  LPTSTR lpProfileDir,
+  LPWSTR lpProfileDir,
   LPDWORD lpcchSize
 );
 
@@ -66,7 +66,7 @@ typedef BOOL (STDMETHODCALLTYPE FAR * LPFNGETUSERPROFILEDIR) (
 #define TOKEN_DUP_QUERY (TOKEN_QUERY|TOKEN_DUPLICATE)
 
 static bool GetSpecialFolder(rtl_uString **strPath,int nFolder);
-static BOOL Privilege(LPTSTR pszPrivilege, BOOL bEnable);
+static BOOL Privilege(LPCWSTR pszPrivilege, BOOL bEnable);
 static bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName, bool bIncludeDomain);
 
 oslSecurity SAL_CALL osl_getCurrentSecurity(void)
@@ -99,7 +99,7 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
     }
 
     // this process must have the right: 'act as a part of operatingsystem'
-    OSL_ASSERT(LookupPrivilegeValue(nullptr, SE_TCB_NAME, &luid));
+    OSL_ASSERT(LookupPrivilegeValueW(nullptr, L"SeTcbPrivilege", &luid));
     (void) luid;
 
     if (LogonUserW(SAL_W(strUser), strDomain ? SAL_W(strDomain) : L"", SAL_W(rtl_uString_getStr(strPasswd)),
@@ -199,7 +199,7 @@ static BOOL WINAPI CheckTokenMembership_Stub( HANDLE TokenHandle, PSID SidToChec
     if ( !hModule )
     {
         /* SAL is always linked against ADVAPI32 so we can rely on that it is already mapped */
-        hModule = GetModuleHandleA( "ADVAPI32.DLL" );
+        hModule = GetModuleHandleW( L"ADVAPI32.DLL" );
 
         pCheckTokenMembership = reinterpret_cast<CheckTokenMembership_PROC>(GetProcAddress( hModule, "CheckTokenMembership" ));
     }
@@ -303,7 +303,6 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
 
         if (hAccessToken)
         {
-            sal_Char        *Ident;
             DWORD  nInfoBuffer = 512;
             UCHAR* pInfoBuffer = static_cast<UCHAR *>(malloc(nInfoBuffer));
 
@@ -342,16 +341,16 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 dwSubAuthorities = (*pSSACount < 5) ? *pSSACount : 5;
 
                 /* buffer length: S-SID_REVISION- + identifierauthority- + subauthorities- + NULL */
-                Ident=static_cast<sal_Char *>(malloc(88*sizeof(sal_Char)));
+                sal_Unicode *Ident=static_cast<sal_Unicode *>(malloc(88*sizeof(sal_Unicode)));
 
                 /* prepare S-SID_REVISION- */
-                dwSidSize=wsprintf(Ident, TEXT("S-%lu-"), SID_REVISION);
+                dwSidSize=wsprintfW(SAL_W(Ident), L"S-%lu-", SID_REVISION);
 
                 /* prepare SidIdentifierAuthority */
                 if ((psia->Value[0] != 0) || (psia->Value[1] != 0))
                 {
-                    dwSidSize+=wsprintf(Ident + strlen(Ident),
-                                TEXT("0x%02hx%02hx%02hx%02hx%02hx%02hx"),
+                    dwSidSize+=wsprintfW(SAL_W(Ident) + wcslen(SAL_W(Ident)),
+                                L"0x%02hx%02hx%02hx%02hx%02hx%02hx",
                                 (USHORT)psia->Value[0],
                                 (USHORT)psia->Value[1],
                                 (USHORT)psia->Value[2],
@@ -361,8 +360,8 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 }
                 else
                 {
-                    dwSidSize+=wsprintf(Ident + strlen(Ident),
-                                TEXT("%lu"),
+                    dwSidSize+=wsprintfW(SAL_W(Ident) + wcslen(SAL_W(Ident)),
+                                L"%lu",
                                 (ULONG)(psia->Value[5]      )   +
                                 (ULONG)(psia->Value[4] <<  8)   +
                                 (ULONG)(psia->Value[3] << 16)   +
@@ -372,11 +371,11 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 /* loop through SidSubAuthorities */
                 for (dwCounter=0; dwCounter < dwSubAuthorities; dwCounter++)
                 {
-                    dwSidSize+=wsprintf(Ident + dwSidSize, TEXT("-%lu"),
+                    dwSidSize+=wsprintfW(SAL_W(Ident) + dwSidSize, L"-%lu",
                                 *GetSidSubAuthority(pSid, dwCounter) );
                 }
 
-                rtl_uString_newFromAscii( strIdent, Ident );
+                rtl_uString_newFromStr( strIdent, Ident );
 
                 free(pInfoBuffer);
                 free(Ident);
@@ -389,7 +388,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
             DWORD needed = 0;
             sal_Unicode *Ident;
 
-            WNetGetUserA(nullptr, nullptr, &needed);
+            WNetGetUserW(nullptr, nullptr, &needed);
             if (needed < 16)
                 needed = 16;
 
@@ -511,7 +510,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
     RegCloseKey(HKEY_CURRENT_USER);
 
-    if (Privilege(const_cast<char *>(SE_RESTORE_NAME), TRUE))
+    if (Privilege(L"SeRestorePrivilege", TRUE))
     {
         HMODULE                 hUserEnvLib         = nullptr;
         LPFNLOADUSERPROFILE     fLoadUserProfile    = nullptr;
@@ -532,7 +531,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
             }
         }
 
-        hUserEnvLib = LoadLibraryA("userenv.dll");
+        hUserEnvLib = LoadLibraryW(L"userenv.dll");
 
         if (hUserEnvLib)
         {
@@ -576,7 +575,6 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
     if ( static_cast<oslSecurityImpl*>(Security)->m_hProfile != nullptr )
     {
         HMODULE                 hUserEnvLib         = nullptr;
-        LPFNLOADUSERPROFILE     fLoadUserProfile    = nullptr;
         LPFNUNLOADUSERPROFILE   fUnloadUserProfile  = nullptr;
         HANDLE                  hAccessToken        = static_cast<oslSecurityImpl*>(Security)->m_hToken;
 
@@ -593,22 +591,19 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
             }
         }
 
-        hUserEnvLib = LoadLibrary("userenv.dll");
+        hUserEnvLib = LoadLibraryW(L"userenv.dll");
 
         if (hUserEnvLib)
         {
-            fLoadUserProfile = reinterpret_cast<LPFNLOADUSERPROFILE>(GetProcAddress(hUserEnvLib, "LoadUserProfileA"));
             fUnloadUserProfile = reinterpret_cast<LPFNUNLOADUSERPROFILE>(GetProcAddress(hUserEnvLib, "UnloadUserProfile"));
 
-            if (fLoadUserProfile && fUnloadUserProfile)
+            if (fUnloadUserProfile)
             {
                 /* unloading the user profile */
-                if (fLoadUserProfile && fUnloadUserProfile)
-                    fUnloadUserProfile(hAccessToken, static_cast<oslSecurityImpl*>(Security)->m_hProfile);
-
-                if (hUserEnvLib)
-                    FreeLibrary(hUserEnvLib);
+                fUnloadUserProfile(hAccessToken, static_cast<oslSecurityImpl*>(Security)->m_hProfile);
             }
+
+            FreeLibrary(hUserEnvLib);
         }
 
         static_cast<oslSecurityImpl*>(Security)->m_hProfile = nullptr;
@@ -621,17 +616,12 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
 static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 {
     bool bRet = false;
-    HINSTANCE hLibrary;
-    sal_Char PathA[_MAX_PATH];
-    sal_Unicode PathW[_MAX_PATH];
+    HINSTANCE hLibrary = LoadLibraryW(L"shell32.dll");
 
-    if ((hLibrary = LoadLibrary("shell32.dll")) != nullptr)
+    if (hLibrary != nullptr)
     {
-        BOOL (WINAPI *pSHGetSpecialFolderPathA)(HWND, LPSTR, int, BOOL);
-        BOOL (WINAPI *pSHGetSpecialFolderPathW)(HWND, LPWSTR, int, BOOL);
-
-        pSHGetSpecialFolderPathA = reinterpret_cast<BOOL (WINAPI *)(HWND, LPSTR, int, BOOL)>(GetProcAddress(hLibrary, "SHGetSpecialFolderPathA"));
-        pSHGetSpecialFolderPathW = reinterpret_cast<BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL)>(GetProcAddress(hLibrary, "SHGetSpecialFolderPathW"));
+        sal_Unicode PathW[_MAX_PATH];
+        BOOL (WINAPI *pSHGetSpecialFolderPathW)(HWND, LPWSTR, int, BOOL) = reinterpret_cast<BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL)>(GetProcAddress(hLibrary, "SHGetSpecialFolderPathW"));
 
         if (pSHGetSpecialFolderPathW)
         {
@@ -641,23 +631,13 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                 bRet = true;
             }
         }
-        else if (pSHGetSpecialFolderPathA)
-        {
-            if (pSHGetSpecialFolderPathA(GetActiveWindow(), PathA, nFolder, TRUE))
-            {
-                rtl_string2UString( strPath, PathA, (sal_Int32) strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
-                OSL_ASSERT(*strPath != nullptr);
-                bRet = true;
-            }
-        }
         else
         {
             HRESULT (WINAPI *pSHGetSpecialFolderLocation)(HWND, int, LPITEMIDLIST *) = reinterpret_cast<HRESULT (WINAPI *)(HWND, int, LPITEMIDLIST *)>(GetProcAddress(hLibrary, "SHGetSpecialFolderLocation"));
-            BOOL (WINAPI *pSHGetPathFromIDListA)(LPCITEMIDLIST, LPSTR) = reinterpret_cast<BOOL (WINAPI *)(LPCITEMIDLIST, LPSTR)>(GetProcAddress(hLibrary, "SHGetPathFromIDListA"));
             BOOL (WINAPI *pSHGetPathFromIDListW)(LPCITEMIDLIST, LPWSTR) = reinterpret_cast<BOOL (WINAPI *)(LPCITEMIDLIST, LPWSTR)>(GetProcAddress(hLibrary, "SHGetPathFromIDListW"));
-             HRESULT (WINAPI *pSHGetMalloc)(LPMALLOC *) = reinterpret_cast<HRESULT (WINAPI *)(LPMALLOC *)>(GetProcAddress(hLibrary, "SHGetMalloc"));
+            HRESULT (WINAPI *pSHGetMalloc)(LPMALLOC *) = reinterpret_cast<HRESULT (WINAPI *)(LPMALLOC *)>(GetProcAddress(hLibrary, "SHGetMalloc"));
 
-            if (pSHGetSpecialFolderLocation && (pSHGetPathFromIDListA || pSHGetPathFromIDListW ) && pSHGetMalloc )
+            if (pSHGetSpecialFolderLocation && pSHGetPathFromIDListW && pSHGetMalloc )
             {
                 LPITEMIDLIST pidl;
                 LPMALLOC pMalloc;
@@ -671,22 +651,22 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                 {
                     HKEY hRegKey;
 
-                    if (RegOpenKey(HKEY_CURRENT_USER,
-                                   "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+                    if (RegOpenKeyW(HKEY_CURRENT_USER,
+                                   L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
                                    &hRegKey) == ERROR_SUCCESS)
                     {
                         LONG lRet;
-                        DWORD lSize = SAL_N_ELEMENTS(PathA);
+                        DWORD lSize = sizeof(PathW);
                         DWORD Type = REG_SZ;
 
                         switch (nFolder)
                         {
                             case CSIDL_APPDATA:
-                                lRet = RegQueryValueEx(hRegKey, "AppData", nullptr, &Type, reinterpret_cast<LPBYTE>(PathA), &lSize);
+                                lRet = RegQueryValueExW(hRegKey, L"AppData", nullptr, &Type, reinterpret_cast<LPBYTE>(PathW), &lSize);
                                   break;
 
                             case CSIDL_PERSONAL:
-                                lRet = RegQueryValueEx(hRegKey, "Personal", nullptr, &Type, reinterpret_cast<LPBYTE>(PathA), &lSize);
+                                lRet = RegQueryValueExW(hRegKey, L"Personal", nullptr, &Type, reinterpret_cast<LPBYTE>(PathW), &lSize);
                                 break;
 
                             default:
@@ -695,8 +675,8 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 
                         if ((lRet == ERROR_SUCCESS) && (Type == REG_SZ))
                         {
-                            if (_access(PathA, 0) < 0)
-                                CreateDirectory(PathA, nullptr);
+                            if (_waccess(SAL_W(PathW), 0) < 0)
+                                CreateDirectoryW(SAL_W(PathW), nullptr);
 
                                hr = pSHGetSpecialFolderLocation(GetActiveWindow(), nFolder, &pidl);
                         }
@@ -707,23 +687,13 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 
                 if (SUCCEEDED(hr))
                 {
-                    if (pSHGetPathFromIDListW && pSHGetPathFromIDListW(pidl, SAL_W(PathW)))
+                    if (pSHGetPathFromIDListW(pidl, SAL_W(PathW)))
                     {
                         /* if directory does not exist, create it */
                         if (_waccess(SAL_W(PathW), 0) < 0)
                             CreateDirectoryW(SAL_W(PathW), nullptr);
 
                         rtl_uString_newFromStr( strPath, PathW);
-                        bRet = true;
-                    }
-                    else if (pSHGetPathFromIDListA && pSHGetPathFromIDListA(pidl, PathA))
-                    {
-                        /* if directory does not exist, create it */
-                        if (_access(PathA, 0) < 0)
-                            CreateDirectoryA(PathA, nullptr);
-
-                        rtl_string2UString( strPath, PathA, (sal_Int32) strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
-                        OSL_ASSERT(*strPath != nullptr);
                         bRet = true;
                     }
                 }
@@ -735,14 +705,14 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
                 }
             }
         }
-    }
 
-    FreeLibrary(hLibrary);
+        FreeLibrary(hLibrary);
+    }
 
     return bRet;
 }
 
-static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
+static BOOL Privilege(LPCWSTR strPrivilege, BOOL bEnable)
 {
     HANDLE           hToken;
     TOKEN_PRIVILEGES tp;
@@ -752,7 +722,7 @@ static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
         return FALSE;
 
     // get the luid
-    if (!LookupPrivilegeValue(nullptr, strPrivilege, &tp.Privileges[0].Luid))
+    if (!LookupPrivilegeValueW(nullptr, strPrivilege, &tp.Privileges[0].Luid))
         return FALSE;
 
     tp.PrivilegeCount = 1;
