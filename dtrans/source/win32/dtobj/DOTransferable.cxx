@@ -364,7 +364,7 @@ LCID SAL_CALL CDOTransferable::getLocaleFromClipboard( )
     {
         CFormatEtc fetc = CDataFormatTranslator::getFormatEtcForClipformat( CF_LOCALE );
         ByteSequence_t aLCIDSeq = getClipboardData( fetc );
-        lcid = *(reinterpret_cast<LCID*>( aLCIDSeq.getArray( ) ) );
+        lcid = *reinterpret_cast<LCID*>( aLCIDSeq.getArray( ) );
 
         // because of a Win95/98 Bug; there the high word
         // of a locale has the same value as the
