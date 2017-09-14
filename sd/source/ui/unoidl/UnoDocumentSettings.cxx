@@ -1083,10 +1083,10 @@ DocumentSettings::_getPropertyValues(
                 }
                 break;
             case HANDLE_SCALE_NUM:
-                *pValue <<= (sal_Int32)pDoc->GetUIScale().GetNumerator();
+                *pValue <<= pDoc->GetUIScale().GetNumerator();
                 break;
             case HANDLE_SCALE_DOM:
-                *pValue <<= (sal_Int32)pDoc->GetUIScale().GetDenominator();
+                *pValue <<= pDoc->GetUIScale().GetDenominator();
                 break;
             case HANDLE_TABSTOP:
                 *pValue <<= (sal_Int32)pDoc->GetDefaultTabulator();

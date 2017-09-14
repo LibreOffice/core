@@ -33,16 +33,14 @@
 #include <boost/math/common_factor_rt.hpp>
 #include <boost/rational.hpp>
 
-template<typename T>
-static boost::rational<T> rational_FromDouble(double dVal);
+static boost::rational<sal_Int32> rational_FromDouble(double dVal);
 
-template<typename T>
-static void rational_ReduceInaccurate(boost::rational<T>& rRational, unsigned nSignificantBits);
+static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, unsigned nSignificantBits);
 
 struct Fraction::Impl
 {
     bool                        valid;
-    boost::rational<sal_Int64>  value;
+    boost::rational<sal_Int32>  value;
 
     Impl()
         : valid(false)
@@ -72,8 +70,12 @@ Fraction::Fraction( Fraction&& rFrac ) : mpImpl(std::move(rFrac.mpImpl))
 // Negative values in the denominator are invalid and cause the
 // inversion of both nominator and denominator signs
 // in order to return the correct value.
-Fraction::Fraction( long nNum, long nDen ) : mpImpl(new Impl)
+Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mpImpl(new Impl)
 {
+    assert( nNum >= std::numeric_limits<sal_Int32>::min() );
+    assert( nNum <= std::numeric_limits<sal_Int32>::max( ));
+    assert( nDen >= std::numeric_limits<sal_Int32>::min() );
+    assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
     if ( nDen == 0 )
     {
         mpImpl->valid = false;
@@ -88,7 +90,7 @@ Fraction::Fraction( double dVal ) : mpImpl(new Impl)
 {
     try
     {
-        mpImpl->value = rational_FromDouble<sal_Int64>( dVal );
+        mpImpl->value = rational_FromDouble( dVal );
         if ( HasOverflowValue() )
             throw boost::bad_rational();
         mpImpl->valid = true;
@@ -107,10 +109,10 @@ Fraction::~Fraction()
 bool Fraction::HasOverflowValue()
 {
     //coverity[result_independent_of_operands]
-    return mpImpl->value.numerator() < std::numeric_limits<long>::min() ||
-        mpImpl->value.numerator() > std::numeric_limits<long>::max() ||
-        mpImpl->value.denominator() < std::numeric_limits<long>::min() ||
-        mpImpl->value.denominator() > std::numeric_limits<long>::max();
+    return mpImpl->value.numerator() < std::numeric_limits<sal_Int32>::min() ||
+        mpImpl->value.numerator() > std::numeric_limits<sal_Int32>::max() ||
+        mpImpl->value.denominator() < std::numeric_limits<sal_Int32>::min() ||
+        mpImpl->value.denominator() > std::numeric_limits<sal_Int32>::max();
 }
 
 Fraction::operator double() const
@@ -126,7 +128,7 @@ Fraction::operator double() const
 
 // This methods first validates both values.
 // If one of the arguments is invalid, the whole operation is invalid.
-// After computation detect if result overflows a long value
+// After computation detect if result overflows a sal_Int32 value
 // which cause the operation to be marked as invalid
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
@@ -268,7 +270,7 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     rational_ReduceInaccurate(mpImpl->value, nSignificantBits);
 }
 
-long Fraction::GetNumerator() const
+sal_Int32 Fraction::GetNumerator() const
 {
     if ( !mpImpl->valid )
     {
@@ -278,7 +280,7 @@ long Fraction::GetNumerator() const
     return mpImpl->value.numerator();
 }
 
-long Fraction::GetDenominator() const
+sal_Int32 Fraction::GetDenominator() const
 {
     if ( !mpImpl->valid )
     {
@@ -309,14 +311,14 @@ bool Fraction::IsValid() const
     return mpImpl->valid;
 }
 
-Fraction::operator long() const
+Fraction::operator sal_Int32() const
 {
     if ( !mpImpl->valid )
     {
-        SAL_WARN( "tools.fraction", "'operator long()' on invalid fraction" );
+        SAL_WARN( "tools.fraction", "'operator sal_Int32()' on invalid fraction" );
         return 0;
     }
-    return boost::rational_cast<long>(mpImpl->value);
+    return boost::rational_cast<sal_Int32>(mpImpl->value);
 }
 
 Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
@@ -421,12 +423,6 @@ SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
         rOStream.WriteInt32( 0 );
         rOStream.WriteInt32( -1 );
     } else {
-#if OSL_DEBUG_LEVEL > 0
-        // can only write 32 bits - check that no data is lost!
-        boost::rational<sal_Int64> copy(rFract.mpImpl->value);
-        rational_ReduceInaccurate(copy, 32);
-        assert(copy == rFract.mpImpl->value && "data loss in WriteFraction!");
-#endif
         rOStream.WriteInt32( rFract.mpImpl->value.numerator() );
         rOStream.WriteInt32( rFract.mpImpl->value.denominator() );
     }
@@ -437,21 +433,20 @@ SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 // Otherwise, dVal and denominator are multiplied by 10, until one of them
 // is larger than (LONG_MAX / 10).
 //
-// NOTE: here we use 'long' due that only values in long range are valid.
-template<typename T>
-static boost::rational<T> rational_FromDouble(double dVal)
+// NOTE: here we use 'sal_Int32' due that only values in sal_Int32 range are valid.
+static boost::rational<sal_Int32> rational_FromDouble(double dVal)
 {
-    if ( dVal > std::numeric_limits<long>::max() ||
-            dVal < std::numeric_limits<long>::min() )
+    if ( dVal > std::numeric_limits<sal_Int32>::max() ||
+            dVal < std::numeric_limits<sal_Int32>::min() )
         throw boost::bad_rational();
 
-    const long nMAX = std::numeric_limits<long>::max() / 10;
-    long nDen = 1;
+    const sal_Int32 nMAX = std::numeric_limits<sal_Int32>::max() / 10;
+    sal_Int32 nDen = 1;
     while ( std::abs( dVal ) < nMAX && nDen < nMAX ) {
         dVal *= 10;
         nDen *= 10;
     }
-    return boost::rational<T>( long(dVal), nDen );
+    return boost::rational<sal_Int32>( sal_Int32(dVal), nDen );
 }
 
 // Similar to clz_table that can be googled
@@ -463,7 +458,7 @@ const char nbits_table[32] =
     21, 12, 16,  8, 11,  7,  6,  5
 };
 
-static int impl_NumberOfBits( unsigned long nNum )
+static int impl_NumberOfBits( sal_uInt32 nNum )
 {
     // http://en.wikipedia.org/wiki/De_Bruijn_sequence
     // background paper: Using de Bruijn Sequences to Index a 1 in a
@@ -485,28 +480,8 @@ static int impl_NumberOfBits( unsigned long nNum )
     sal_uInt32 nNumber;
     int nBonus;
 
-#if SAL_TYPES_SIZEOFLONG == 4
     nNumber = nNum;
     nBonus = 0;
-#elif SAL_TYPES_SIZEOFLONG == 8
-    nNum |= ( nNum >> 32 );
-
-    if ( nNum & 0x80000000 )
-    {
-        nNumber = sal_uInt32( nNum >> 32 );
-        nBonus = 32;
-
-        if ( nNumber == 0 )
-            return 32;
-    }
-    else
-    {
-        nNumber = sal_uInt32( nNum & 0xFFFFFFFF );
-        nBonus = 0;
-    }
-#else
-#error "Unknown size of long!"
-#endif
 
     // De facto shift left of nDeBruijn using multiplication (nNumber
     // is all ones from topmost bit, thus nDeBruijn + (nDeBruijn *
@@ -539,16 +514,15 @@ static int impl_NumberOfBits( unsigned long nNum )
 
     A ReduceInaccurate(8) yields 1/1.
 */
-template<typename T>
-static void rational_ReduceInaccurate(boost::rational<T>& rRational, unsigned nSignificantBits)
+static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, unsigned nSignificantBits)
 {
     if ( !rRational )
         return;
 
     // http://www.boost.org/doc/libs/release/libs/rational/rational.html#Internal%20representation
     const bool bNeg = ( rRational.numerator() < 0 );
-    T nMul = bNeg? -rRational.numerator(): rRational.numerator();
-    T nDiv = rRational.denominator();
+    sal_Int32 nMul = bNeg? -rRational.numerator(): rRational.numerator();
+    sal_Int32 nDiv = rRational.denominator();
 
     DBG_ASSERT(nSignificantBits<65, "More than 64 bit of significance is overkill!");
 
@@ -568,7 +542,7 @@ static void rational_ReduceInaccurate(boost::rational<T>& rRational, unsigned nS
         return;
     }
 
-    rRational.assign( bNeg? -T( nMul ): T( nMul ), nDiv );
+    rRational.assign( bNeg ? -nMul : nMul, nDiv );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
