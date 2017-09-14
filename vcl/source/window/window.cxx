@@ -617,7 +617,6 @@ WindowImpl::WindowImpl( WindowType nType )
     mnEventListenersIteratingCount = 0;
     mnChildEventListenersIteratingCount = 0;
     mpCursor                            = nullptr;                      // cursor
-    mpControlFont                       = nullptr;                      // font properties
     mpVCLXWindow                        = nullptr;
     mpAccessibleInfos                   = nullptr;
     maControlForeground                 = Color( COL_TRANSPARENT );  // no foreground set
@@ -743,7 +742,6 @@ WindowImpl::~WindowImpl()
 {
     delete mpChildClipRegion;
     delete mpAccessibleInfos;
-    delete mpControlFont;
 }
 
 ImplWinData::ImplWinData() :
