@@ -405,7 +405,7 @@ bool SwBoxAutoFormat::operator==(const SwBoxAutoFormat& rRight)
 bool SwBoxAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer )
 {
     SfxPoolItem* pNew;
-    SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0);
+    SvxOrientationItem aOrientation( SvxCellOrientation::Standard, 0);
 
     READ( m_aFont,        SvxFontItem            , rVersions.nFontVersion)
 
@@ -578,7 +578,7 @@ bool SwBoxAutoFormat::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion )
 
     rStream.WriteUInt16( m_aHorJustify.GetVersion( fileVersion ) );
     rStream.WriteUInt16( m_aVerJustify.GetVersion( fileVersion ) );
-    rStream.WriteUInt16( SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0).GetVersion( fileVersion ) );
+    rStream.WriteUInt16( SvxOrientationItem(SvxCellOrientation::Standard, 0).GetVersion( fileVersion ) );
     rStream.WriteUInt16( m_aMargin.GetVersion( fileVersion ) );
     rStream.WriteUInt16( m_aLinebreak.GetVersion( fileVersion ) );
     rStream.WriteUInt16( m_aRotateAngle.GetVersion( fileVersion ) );

@@ -222,7 +222,7 @@ private:
 
     void            ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle& rAlignRect,
                                     long nLeftM, long nTopM, long nRightM, long nBottomM,
-                                    bool bWidth, sal_uInt16 nOrient, long nAttrRotate, bool bPixelToLogic,
+                                    bool bWidth, SvxCellOrientation nOrient, long nAttrRotate, bool bPixelToLogic,
                                     long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
                                     bool& rLeftClip, bool& rRightClip );
 

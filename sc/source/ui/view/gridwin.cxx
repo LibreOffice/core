@@ -5074,7 +5074,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
 
         // vertical can not (yet) be clicked:
 
-    if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
+    if (pPattern->GetCellOrientation() != SvxCellOrientation::Standard)
         return false;
 
     bool bBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||

@@ -191,7 +191,7 @@ long ScColumn::GetNeededSize(
     //  get other attributes from pattern and conditional formatting
 
     SvxCellOrientation eOrient = pPattern->GetCellOrientation( pCondSet );
-    bool bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
+    bool bAsianVertical = ( eOrient == SvxCellOrientation::Stacked &&
             static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet )).GetValue() );
     if ( bAsianVertical )
         bBreak = false;
@@ -201,7 +201,7 @@ long ScColumn::GetNeededSize(
 
     long nRotate = 0;
     SvxRotateMode eRotMode = SVX_ROTATE_MODE_STANDARD;
-    if ( eOrient == SVX_ORIENTATION_STANDARD )
+    if ( eOrient == SvxCellOrientation::Standard )
     {
         if (pCondSet &&
                 pCondSet->GetItemState(ATTR_ROTATE_VALUE, true, &pCondItem) == SfxItemState::SET)
@@ -225,7 +225,7 @@ long ScColumn::GetNeededSize(
     if ( eHorJust == SvxCellHorJustify::Repeat )
     {
         // ignore orientation/rotation if "repeat" is active
-        eOrient = SVX_ORIENTATION_STANDARD;
+        eOrient = SvxCellOrientation::Standard;
         nRotate = 0;
         bAsianVertical = false;
     }
@@ -253,7 +253,7 @@ long ScColumn::GetNeededSize(
     //  bGetFont is set also if script type changes
     if (rOptions.bGetFont)
     {
-        Fraction aFontZoom = ( eOrient == SVX_ORIENTATION_STANDARD ) ? rZoomX : rZoomY;
+        Fraction aFontZoom = ( eOrient == SvxCellOrientation::Standard ) ? rZoomX : rZoomY;
         vcl::Font aFont;
         // font color doesn't matter here
         pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aFontZoom, pCondSet, nScript );
@@ -264,7 +264,7 @@ long ScColumn::GetNeededSize(
     CellType eCellType = aCell.meType;
 
     bool bEditEngine = (eCellType == CELLTYPE_EDIT ||
-                        eOrient == SVX_ORIENTATION_STACKED ||
+                        eOrient == SvxCellOrientation::Stacked ||
                         IsAmbiguousScript(nScript) ||
                         ((eCellType == CELLTYPE_FORMULA) && aCell.mpFormula->IsMultilineResult()));
 
@@ -280,7 +280,7 @@ long ScColumn::GetNeededSize(
             //  SetFont is moved up
 
             Size aSize( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
-            if ( eOrient != SVX_ORIENTATION_STANDARD )
+            if ( eOrient != SvxCellOrientation::Standard )
             {
                 long nTemp = aSize.Width();
                 aSize.Width() = aSize.Height();
@@ -398,7 +398,7 @@ long ScColumn::GetNeededSize(
         }
 
         Size aPaper = Size( 1000000, 1000000 );
-        if ( eOrient==SVX_ORIENTATION_STACKED && !bAsianVertical )
+        if ( eOrient==SvxCellOrientation::Stacked && !bAsianVertical )
             aPaper.Width() = 1;
         else if (bBreak)
         {
@@ -458,7 +458,7 @@ long ScColumn::GetNeededSize(
         pEngine->SetUpdateMode( true );
 
         bool bEdWidth = bWidth;
-        if ( eOrient != SVX_ORIENTATION_STANDARD && eOrient != SVX_ORIENTATION_STACKED )
+        if ( eOrient != SvxCellOrientation::Standard && eOrient != SvxCellOrientation::Stacked )
             bEdWidth = !bEdWidth;
         if ( nRotate )
         {
@@ -809,7 +809,7 @@ void ScColumn::GetOptimalHeight(
         }
         else
         {
-            bool bStdAllowed = (pPattern->GetCellOrientation() == SVX_ORIENTATION_STANDARD);
+            bool bStdAllowed = (pPattern->GetCellOrientation() == SvxCellOrientation::Standard);
             bool bStdOnly = false;
             if (bStdAllowed)
             {
