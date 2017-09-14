@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2794fc89",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 10298,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-09-14T08:18:49Z",
+      "side": 1,
+      "message": "Because teh CI ist currently failing, as it doesn\u0027t have gcc installed that is still needed by the windres prerpocessor, and all attempts to eliminate this dependency failed that far, I suggest to add yet another pbscure configuration option, e.g.: --enable-gpg or some such? That way we could merge this change without breaking the CI, but still be able to build libgpg-error and other gpgme stuff on Windows natively, on machines with cygwin\u0027s binutils + gcc installed.",
+      "range": {
+        "startLine": 10296,
+        "startChar": 0,
+        "endLine": 10298,
+        "endChar": 2
+      },
+      "revId": "a2dbaea26dcca54654d2faad9eec9fb6e9c1f041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e781144c",
+        "filename": "solenv/gcc-wrappers/wrapper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-09-14T08:18:49Z",
+      "side": 1,
+      "message": "This should be extracted in its own change.",
+      "revId": "a2dbaea26dcca54654d2faad9eec9fb6e9c1f041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
