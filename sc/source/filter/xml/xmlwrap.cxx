@@ -704,8 +704,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
             {
                 SCTAB nTabCount = rDoc.GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                    if (rDoc.IsStreamValid(nTab))
-                        rDoc.SetStreamValid(nTab, false);
+                    rDoc.SetStreamValid(nTab, false);
             }
         }
         else

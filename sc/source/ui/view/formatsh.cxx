@@ -887,8 +887,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             SCTAB nTabCount = rDoc.GetTableCount();
                             for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                                if (rDoc.IsStreamValid(nTab))
-                                    rDoc.SetStreamValid(nTab, false);
+                                rDoc.SetStreamValid(nTab, false);
 
                             sal_uLong nOldFormat = static_cast<const SfxUInt32Item&>(aOldSet.
                                                     Get( ATTR_VALUE_FORMAT )).GetValue();

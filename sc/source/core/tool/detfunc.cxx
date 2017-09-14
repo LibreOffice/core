@@ -271,8 +271,7 @@ void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
 
 void ScDetectiveFunc::Modified()
 {
-    if (pDoc->IsStreamValid(nTab))
-        pDoc->SetStreamValid(nTab, false);
+    pDoc->SetStreamValid(nTab, false);
 }
 
 inline bool Intersect( SCCOL nStartCol1, SCROW nStartRow1, SCCOL nEndCol1, SCROW nEndRow1,

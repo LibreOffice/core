@@ -386,7 +386,7 @@ const OUString& ScTable::GetUpperName() const
 
 void ScTable::SetVisible( bool bVis )
 {
-    if (bVisible != bVis && IsStreamValid())
+    if (bVisible != bVis)
         SetStreamValid(false);
 
     bVisible = bVis;
@@ -394,6 +394,8 @@ void ScTable::SetVisible( bool bVis )
 
 void ScTable::SetStreamValid( bool bSet, bool bIgnoreLock )
 {
+    if (!bStreamValid && !bSet)
+        return; // shortcut
     if ( bIgnoreLock || !pDocument->IsStreamValidLocked() )
         bStreamValid = bSet;
 }
@@ -419,8 +421,7 @@ void ScTable::SetTabBgColor(const Color& rColor)
     {
         // The tab color has changed.  Set this table 'modified'.
         aTabBgColor = rColor;
-        if (IsStreamValid())
-            SetStreamValid(false);
+        SetStreamValid(false);
     }
 }
 
@@ -440,8 +441,7 @@ void ScTable::SetLink( ScLinkMode nMode,
     aLinkTab = rTab;        // Sheet name in source file
     nLinkRefreshDelay = nRefreshDelay;  // refresh delay in seconds, 0==off
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 sal_uInt16 ScTable::GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
@@ -1668,7 +1668,7 @@ void ScTable::UpdateReference(
         }
     }
 
-    if (bUpdated && IsStreamValid())
+    if (bUpdated)
         SetStreamValid(false);
 
     if(mpCondFormatList)
@@ -1717,8 +1717,7 @@ void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     for (SCCOL i=0; i < aCol.size(); i++)
         aCol[i].UpdateInsertTab(rCxt);
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
@@ -1747,8 +1746,7 @@ void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     for (SCCOL i = 0; i < aCol.size(); ++i)
         aCol[i].UpdateDeleteTab(rCxt);
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 void ScTable::UpdateMoveTab(
@@ -1776,8 +1774,7 @@ void ScTable::UpdateMoveTab(
             pProgress->SetState(pProgress->GetState() + aCol[i].GetCodeCount());
     }
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 void ScTable::UpdateCompile( bool bForceIfNameInUse )
@@ -2016,8 +2013,7 @@ void ScTable::SetRepeatColRange( const ScRange* pNew )
 {
     setPrintRange( pRepeatColRange, pNew );
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 
     InvalidatePageBreaks();
 }
@@ -2026,8 +2022,7 @@ void ScTable::SetRepeatRowRange( const ScRange* pNew )
 {
     setPrintRange( pRepeatRowRange, pNew );
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 
     InvalidatePageBreaks();
 }
@@ -2037,8 +2032,7 @@ void ScTable::ClearPrintRanges()
     aPrintRanges.clear();
     bPrintEntireSheet = false;
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 
     InvalidatePageBreaks();     // #i117952# forget page breaks for an old print range
 }
@@ -2049,8 +2043,7 @@ void ScTable::AddPrintRange( const ScRange& rNew )
     if( aPrintRanges.size() < 0xFFFF )
         aPrintRanges.push_back( rNew );
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 
     InvalidatePageBreaks();
 }
