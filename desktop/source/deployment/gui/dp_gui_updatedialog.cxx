@@ -1115,7 +1115,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, SvTreeListBox*, void)
 {
     OUStringBuffer b;
     UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(
-        m_pUpdates->GetSelectEntryData());
+        m_pUpdates->GetSelectedEntryData());
     clearDescription();
 
     if ( p != nullptr )

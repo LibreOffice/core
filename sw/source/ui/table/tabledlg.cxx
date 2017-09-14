@@ -1410,7 +1410,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     {
           bModified |= nullptr != rSet->Put(
                     SvxFrameDirectionItem( static_cast<SvxFrameDirection>(
-                        reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetSelectEntryData()))
+                        reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetSelectedEntryData()))
                         , FN_TABLE_BOX_TEXTORIENTATION));
     }
 

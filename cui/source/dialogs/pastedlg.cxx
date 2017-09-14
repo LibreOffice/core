@@ -198,7 +198,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
 
     if( Dialog::Execute() == RET_OK )
     {
-        nSelFormat = static_cast<SotClipboardFormatId>(reinterpret_cast<sal_uLong>(ObjectLB().GetSelectEntryData()));
+        nSelFormat = static_cast<SotClipboardFormatId>(reinterpret_cast<sal_uLong>(ObjectLB().GetSelectedEntryData()));
     }
 
     return nSelFormat;

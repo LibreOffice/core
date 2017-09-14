@@ -336,7 +336,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl, Edit&, void)
     bool bEnableNew = true;
     bool bEnableDel = false;
     sal_uLong nCaseReadonly =
-            reinterpret_cast<sal_uLong>(m_pPathLB->GetSelectEntryData());
+            reinterpret_cast<sal_uLong>(m_pPathLB->GetSelectedEntryData());
     bool bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
 
     if(sEntry.isEmpty() || bDirReadonly)

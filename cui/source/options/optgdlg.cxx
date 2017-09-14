@@ -1329,7 +1329,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         // handle settings for UI Language
         // a change of setting needs to bring up a warning message
         OUString aLangString;
-        sal_Int32 d = (sal_Int32)reinterpret_cast<sal_IntPtr>(m_pUserInterfaceLB->GetSelectEntryData());
+        sal_Int32 d = (sal_Int32)reinterpret_cast<sal_IntPtr>(m_pUserInterfaceLB->GetSelectedEntryData());
         if( d > 0 && seqInstalledLanguages.getLength() > d-1)
             aLangString = seqInstalledLanguages[d-1];
 
@@ -1408,7 +1408,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
 
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
-    const NfCurrencyEntry* pCurr = static_cast<const NfCurrencyEntry*>(m_pCurrencyLB->GetSelectEntryData());
+    const NfCurrencyEntry* pCurr = static_cast<const NfCurrencyEntry*>(m_pCurrencyLB->GetSelectedEntryData());
     OUString sNewCurr;
     if ( pCurr )
         sNewCurr = SvtSysLocaleOptions::CreateCurrencyConfigString(

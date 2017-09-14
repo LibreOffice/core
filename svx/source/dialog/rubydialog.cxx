@@ -630,7 +630,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl, ListBox&, void)
     AssertOneEntry();
     OUString sStyleName;
     if (LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectedEntryPos())
-        sStyleName = *static_cast<OUString*>(m_pCharStyleLB->GetSelectEntryData());
+        sStyleName = *static_cast<OUString*>(m_pCharStyleLB->GetSelectedEntryData());
     Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     for (PropertyValues & rProps : aRubyValues)
     {

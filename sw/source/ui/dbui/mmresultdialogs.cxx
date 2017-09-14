@@ -435,7 +435,7 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     if (m_pAttachmentED->GetText().isEmpty())
     {
         OUString sAttach = "." + lcl_GetExtensionForDocType(
-                    reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData()));
+                    reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectedEntryData()));
         m_pAttachmentED->SetText(sAttach);
 
     }
@@ -860,7 +860,7 @@ IMPL_LINK(SwMMResultPrintDialog, PrinterSetupHdl_Impl, Button*, pButton, void)
 
 IMPL_LINK(SwMMResultEmailDialog, SendTypeHdl_Impl, ListBox&, rBox, void)
 {
-    sal_uLong nDocType = reinterpret_cast<sal_uLong>(rBox.GetSelectEntryData());
+    sal_uLong nDocType = reinterpret_cast<sal_uLong>(rBox.GetSelectedEntryData());
     bool bEnable = MM_DOCTYPE_HTML != nDocType && MM_DOCTYPE_TEXT != nDocType;
     m_pSendAsPB->Enable( bEnable );
     m_pAttachmentGroup->Enable( bEnable );
@@ -941,7 +941,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
     std::shared_ptr<const SfxFilter> pSfxFlt;
-    sal_uLong nDocType = reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData());
+    sal_uLong nDocType = reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectedEntryData());
     OUString sExtension = lcl_GetExtensionForDocType(nDocType);
     switch( nDocType )
     {
@@ -1034,7 +1034,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
                 ++nTokenCount;
             }
             sAttach = comphelper::string::setToken(sAttach, nTokenCount - 1, '.', lcl_GetExtensionForDocType(
-                     reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData())));
+                     reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectedEntryData())));
             m_pAttachmentED->SetText(sAttach);
         }
         else

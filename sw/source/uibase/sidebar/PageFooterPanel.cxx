@@ -230,7 +230,7 @@ IMPL_LINK_NOARG( PageFooterPanel, FooterToggleHdl, Button*, void )
 
 IMPL_LINK_NOARG( PageFooterPanel, FooterLRMarginHdl, ListBox&, void )
 {
-    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpFooterMarginPresetLB->GetSelectEntryData());
+    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpFooterMarginPresetLB->GetSelectedEntryData());
     mpFooterLRMarginItem->SetLeft(nVal);
     mpFooterLRMarginItem->SetRight(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_FOOTER_LRMARGIN,
@@ -239,7 +239,7 @@ IMPL_LINK_NOARG( PageFooterPanel, FooterLRMarginHdl, ListBox&, void )
 
 IMPL_LINK_NOARG( PageFooterPanel, FooterSpacingHdl, ListBox&, void )
 {
-    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpFooterSpacingLB->GetSelectEntryData());
+    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpFooterSpacingLB->GetSelectedEntryData());
     mpFooterSpacingItem->SetUpper(nVal);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_FOOTER_SPACING,
                                                  SfxCallMode::RECORD, { mpFooterSpacingItem.get() } );

@@ -1661,7 +1661,7 @@ sal_Int16 SwFramePage::GetAlignment(FrameMap *pMap, sal_Int32 nMapPos,
         return 0;
 
     const RelationMap *const pRelationMap = static_cast<const RelationMap *>(
-        rRelationLB.GetSelectEntryData());
+        rRelationLB.GetSelectedEntryData());
     const LB nRel = pRelationMap->nLBRelation;
     const SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
@@ -1979,7 +1979,7 @@ IMPL_LINK( SwFramePage, PosHdl, ListBox&, rLB, void )
     {
 
         if (pRelLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-            nRel = static_cast<RelationMap *>(pRelLB->GetSelectEntryData())->nRelation;
+            nRel = static_cast<RelationMap *>(pRelLB->GetSelectedEntryData())->nRelation;
 
         FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB, *pRelFT);
     }

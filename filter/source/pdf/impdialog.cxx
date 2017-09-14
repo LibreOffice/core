@@ -1682,7 +1682,7 @@ void ImplErrorDialog::dispose()
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl, ListBox&, void)
 {
-    OUString* pStr = static_cast<OUString*>(m_pErrors->GetSelectEntryData());
+    OUString* pStr = static_cast<OUString*>(m_pErrors->GetSelectedEntryData());
     m_pExplanation->SetText( pStr ? *pStr : OUString() );
 }
 

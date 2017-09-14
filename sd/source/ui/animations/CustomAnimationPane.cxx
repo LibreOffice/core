@@ -1820,7 +1820,7 @@ void CustomAnimationPane::onAdd()
         return;
 
     mpLBAnimation->SelectEntryPos(nFirstEffect);
-    void* pEntryData = mpLBAnimation->GetSelectEntryData();
+    void* pEntryData = mpLBAnimation->GetSelectedEntryData();
     if( pEntryData )
         pDescriptor = *static_cast< CustomAnimationPresetPtr* >( pEntryData );
 
@@ -2112,7 +2112,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 {
     if( maListSelection.size() == 1 )
     {
-        CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
+        CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectedEntryData());
         PathKind ePathKind = getCreatePathKind();
 
         // tdf#99137, the selected entry may also be a subcategory title, so not an effect
