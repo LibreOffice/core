@@ -1083,7 +1083,7 @@ void SearchTabPage_Impl::SetDoubleClickHdl( const Link<ListBox&,void>& rLink )
 OUString SearchTabPage_Impl::GetSelectedEntry() const
 {
     OUString aRet;
-    OUString* pData = static_cast<OUString*>(m_pResultsLB->GetSelectEntryData());
+    OUString* pData = static_cast<OUString*>(m_pResultsLB->GetSelectedEntryData());
     if ( pData )
         aRet = *pData;
     return aRet;
@@ -1329,7 +1329,7 @@ void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link<ListBox&,void>& rLink 
 OUString BookmarksTabPage_Impl::GetSelectedEntry() const
 {
     OUString aRet;
-    OUString* pData = static_cast<OUString*>(m_pBookmarksBox->GetSelectEntryData());
+    OUString* pData = static_cast<OUString*>(m_pBookmarksBox->GetSelectedEntryData());
     if ( pData )
         aRet = *pData;
     return aRet;
@@ -1569,7 +1569,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl, Timer *, void)
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Timer *, void)
 {
-    OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetSelectEntryData());
+    OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetSelectedEntryData());
     if ( pFactory )
     {
         SetFactory( pFactory->toAsciiLowerCase(), false );

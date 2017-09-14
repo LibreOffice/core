@@ -286,7 +286,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
     }
     if( pKey )
     {
-        PPDValue* pValue = static_cast<PPDValue*>(rBox.GetSelectEntryData());
+        PPDValue* pValue = static_cast<PPDValue*>(rBox.GetSelectedEntryData());
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
         update();
     }
@@ -432,7 +432,7 @@ sal_uLong RTSDevicePage::getColorDevice()
 
 sal_uLong RTSDevicePage::getLevel()
 {
-    sal_uLong nLevel = reinterpret_cast<sal_uLong>(m_pLevelBox->GetSelectEntryData());
+    sal_uLong nLevel = reinterpret_cast<sal_uLong>(m_pLevelBox->GetSelectedEntryData());
     if (nLevel == 0)
         return 0;   //automatic
     return nLevel < 10 ? nLevel-1 : 0;
@@ -440,7 +440,7 @@ sal_uLong RTSDevicePage::getLevel()
 
 sal_uLong RTSDevicePage::getPDFDevice()
 {
-    sal_uLong nLevel = reinterpret_cast<sal_uLong>(m_pLevelBox->GetSelectEntryData());
+    sal_uLong nLevel = reinterpret_cast<sal_uLong>(m_pLevelBox->GetSelectedEntryData());
     if (nLevel > 9)
         return 2;   //explicitly PDF
     else if (nLevel == 0)
@@ -460,13 +460,13 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox&, rBox, void )
 {
     if( &rBox == m_pPPDKeyBox )
     {
-        const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectEntryData());
+        const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectedEntryData());
         FillValueBox( pKey );
     }
     else if( &rBox == m_pPPDValueBox )
     {
-        const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectEntryData());
-        const PPDValue* pValue = static_cast<PPDValue*>(m_pPPDValueBox->GetSelectEntryData());
+        const PPDKey* pKey = static_cast<PPDKey*>(m_pPPDKeyBox->GetSelectedEntryData());
+        const PPDValue* pValue = static_cast<PPDValue*>(m_pPPDValueBox->GetSelectedEntryData());
         if (pKey && pValue)
         {
             m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );

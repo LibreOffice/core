@@ -266,7 +266,7 @@ void SwCaptionDialog::Apply()
         aOpt.SetCategory(comphelper::string::strip(aName, ' '));
         aOpt.SetNumSeparator( m_pNumberingSeparatorED->GetText() );
     }
-    aOpt.SetNumType( (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectEntryData()) );
+    aOpt.SetNumType( (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectedEntryData()) );
     aOpt.SetSeparator( m_pSepEdit->IsEnabled() ? m_pSepEdit->GetText() : OUString() );
     aOpt.SetCaption( m_pTextEdit->GetText() );
     aOpt.SetPos( m_pPosBox->GetSelectedEntryPos() );
@@ -347,7 +347,7 @@ void SwCaptionDialog::DrawSample()
     bool bNone = sFieldTypeName == m_sNone;
     if( !bNone )
     {
-        const sal_uInt16 nNumFormat = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectEntryData());
+        const sal_uInt16 nNumFormat = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectedEntryData());
         if( SVX_NUM_NUMBER_NONE != nNumFormat )
         {
             // category
