@@ -43,19 +43,6 @@ using namespace osl;
 namespace stoc_corefl
 {
 
-#define IMPLNAME    "com.sun.star.comp.stoc.CoreReflection"
-
-static Sequence< OUString > core_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames { "com.sun.star.reflection.CoreReflection" };
-    return seqNames;
-}
-
-static OUString core_getImplementationName()
-{
-    return OUString(IMPLNAME);
-}
-
 IdlReflectionServiceImpl::IdlReflectionServiceImpl(
     const Reference< XComponentContext > & xContext )
     : OComponentHelper( _aComponentMutex )
@@ -140,7 +127,7 @@ void IdlReflectionServiceImpl::dispose()
 
 OUString IdlReflectionServiceImpl::getImplementationName()
 {
-    return core_getImplementationName();
+    return OUString("com.sun.star.comp.stoc.CoreReflection");
 }
 
 sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceName )
@@ -150,7 +137,8 @@ sal_Bool IdlReflectionServiceImpl::supportsService( const OUString & rServiceNam
 
 Sequence< OUString > IdlReflectionServiceImpl::getSupportedServiceNames()
 {
-    return core_getSupportedServiceNames();
+    Sequence< OUString > seqNames { "com.sun.star.reflection.CoreReflection" };
+    return seqNames;
 }
 
 // XIdlReflection
@@ -390,32 +378,35 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
 }
 
-/// @throws css::uno::Exception
-Reference< XInterface > SAL_CALL IdlReflectionServiceImpl_create(
-    const Reference< XComponentContext > & xContext )
-{
-    return Reference< XInterface >( static_cast<XWeak *>(static_cast<OWeakObject *>(new IdlReflectionServiceImpl( xContext ))) );
-}
-
 }
 
 
-using namespace stoc_corefl;
+namespace {
 
-static const struct ImplementationEntry g_entries[] =
-{
-    {
-        IdlReflectionServiceImpl_create, core_getImplementationName,
-        core_getSupportedServiceNames, createSingleComponentFactory,
-        nullptr, 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
+struct Instance {
+    explicit Instance(
+        css::uno::Reference<css::uno::XComponentContext> const & context):
+        instance(new stoc_corefl::IdlReflectionServiceImpl(context))
+    {}
+
+    rtl::Reference<cppu::OWeakObject> instance;
 };
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL reflection_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_stoc_CoreReflection_get_implementation(
+    css::uno::XComponentContext * context,
+    css::uno::Sequence<css::uno::Any> const & arguments)
 {
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
+    SAL_WARN_IF(
+        arguments.hasElements(), "stoc", "unexpected singleton arguments");
+    return cppu::acquire(Singleton::get(context).instance.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
