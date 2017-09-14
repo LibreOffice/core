@@ -7,16 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,xml2))
+$(eval $(call gb_ExternalProject_ExternalProject,libxml2))
 
-$(eval $(call gb_ExternalProject_register_targets,xml2,\
+$(eval $(call gb_ExternalProject_register_targets,libxml2,\
 	build \
 ))
 
 ifeq ($(OS),WNT)
-$(call gb_ExternalProject_use_external_project,xml2,icu)
+$(call gb_ExternalProject_use_external_project,libxml2,icu)
 
-$(call gb_ExternalProject_get_state_target,xml2,build):
+$(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js \
 			iconv=no icu=yes sax1=yes $(if $(MSVC_USE_DEBUG_RUNTIME),run_debug=yes cruntime=/MDd) \
@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,xml2,build):
 		&& LIB="$(ILIB)" nmake \
 	,win32)
 else # OS!=WNT
-$(call gb_ExternalProject_get_state_target,xml2,build):
+$(call gb_ExternalProject_get_state_target,libxml2,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --disable-ipv6 --without-python --without-zlib --with-sax1 \
 			--without-lzma \

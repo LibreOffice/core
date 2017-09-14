@@ -10,9 +10,9 @@
 $(eval $(call gb_Module_Module,libxml2))
 
 $(eval $(call gb_Module_add_targets,libxml2,\
-	ExternalPackage_xml2 \
-	ExternalProject_xml2 \
-	UnpackedTarball_xml2 \
+	ExternalPackage_libxml2 \
+	ExternalProject_libxml2 \
+	UnpackedTarball_libxml2 \
 ))
 
 # vim: set noet sw=4 ts=4:
