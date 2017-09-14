@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,ConvertTextToNumber))
+$(eval $(call gb_Module_Module,ct2n))
 
-$(eval $(call gb_Module_add_targets,ConvertTextToNumber,\
+$(eval $(call gb_Module_add_targets,ct2n,\
 	ExternalPackage_ct2n \
 	UnpackedTarball_ct2n \
 ))

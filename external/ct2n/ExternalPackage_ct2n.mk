@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,ct2n,ConvertTextToNumber))
+$(eval $(call gb_ExternalPackage_ExternalPackage,ct2n,ct2n))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files_with_dir,ct2n,$(LIBO_SHARE_FOLDER)/extensions/ConvertTextToNumber,\
     Addons.xcu \

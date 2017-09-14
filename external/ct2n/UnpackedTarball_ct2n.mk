@@ -7,16 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,ConvertTextToNumber))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,ct2n))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,ConvertTextToNumber,$(CT2N_TARBALL),0))
+$(eval $(call gb_UnpackedTarball_set_tarball,ct2n,$(CT2N_TARBALL),0))
 
-$(eval $(call gb_UnpackedTarball_add_patches,ConvertTextToNumber,\
+$(eval $(call gb_UnpackedTarball_add_patches,ct2n,\
 	external/ct2n/ConvertTextToNumber-1.3.2-no-license.patch \
 	external/ct2n/ConvertTextToNumber-1.3.2-no-visible-by-default.patch \
 ))
 
-$(eval $(call gb_UnpackedTarball_fix_end_of_line,ConvertTextToNumber,\
+$(eval $(call gb_UnpackedTarball_fix_end_of_line,ct2n,\
 	description.xml \
 	Office/UI/BaseWindowState.xcu \
 	Office/UI/BasicIDEWindowState.xcu \
