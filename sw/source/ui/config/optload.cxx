@@ -817,7 +817,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry const * pEntry)
             pOpt->SetCategory("");
         else
             pOpt->SetCategory(comphelper::string::strip(aName, ' '));
-        pOpt->SetNumType((sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetSelectEntryData()));
+        pOpt->SetNumType((sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetSelectedEntryData()));
         pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString() );
         pOpt->SetPos(m_pPosBox->GetSelectedEntryPos());
         sal_Int32 nPos = m_pLbLevel->GetSelectedEntryPos();

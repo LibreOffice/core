@@ -515,7 +515,7 @@ bool SwMailMergeDlg::ExecQryShell()
         if (!AskUserFilename()) {
             pModOpt->SetNameFromColumn(m_pColumnLB->GetSelectedEntry());
             if( m_pFilterLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-                m_sSaveFilter = *static_cast<const OUString*>(m_pFilterLB->GetSelectEntryData());
+                m_sSaveFilter = *static_cast<const OUString*>(m_pFilterLB->GetSelectedEntryData());
             m_sFilename = OUString();
         } else {
             //#i97667# reset column name - otherwise it's remembered from the last run

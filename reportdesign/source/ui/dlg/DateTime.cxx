@@ -224,11 +224,11 @@ sal_Int32 ODateTimeDialog::getFormatKey(bool _bDate) const
     sal_Int32 nFormatKey;
     if ( _bDate )
     {
-         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pDateListBox->GetSelectEntryData()));
+         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pDateListBox->GetSelectedEntryData()));
     }
     else
     {
-         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pTimeListBox->GetSelectEntryData()));
+         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pTimeListBox->GetSelectedEntryData()));
     }
     return nFormatKey;
 }

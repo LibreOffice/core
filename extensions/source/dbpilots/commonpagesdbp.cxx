@@ -182,7 +182,7 @@ namespace dbp
                 rContext.xForm->setPropertyValue("DataSourceName", makeAny( sDataSource ) );
             }
             OUString sCommand = m_pTable->GetSelectedEntry();
-            sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_pTable->GetSelectEntryData() );
+            sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_pTable->GetSelectedEntryData() );
 
             rContext.xForm->setPropertyValue("Command", makeAny( sCommand ) );
             rContext.xForm->setPropertyValue("CommandType", makeAny( nCommandType ) );

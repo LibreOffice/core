@@ -260,7 +260,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 
     if ( aODFVersionLB->IsValueChangedFromSaved() )
     {
-        sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetSelectEntryData() );
+        sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetSelectedEntryData() );
         aSaveOpt.SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion( nVersion ) );
     }
 
@@ -631,7 +631,7 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
 
 IMPL_LINK_NOARG(SvxSaveTabPage, ODFVersionHdl_Impl, ListBox&, void)
 {
-    sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetSelectEntryData() );
+    sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetSelectedEntryData() );
     bool bShown = SvtSaveOptions::ODFDefaultVersion( nVersion ) != SvtSaveOptions::ODFVER_LATEST;
     if ( bShown )
     {
@@ -647,7 +647,7 @@ IMPL_LINK_NOARG(SvxSaveTabPage, ODFVersionHdl_Impl, ListBox&, void)
         }
 
         bShown = !bHasODFFormat
-                || ( aSaveAsLB->GetSelectEntryData() != nullptr );
+                || ( aSaveAsLB->GetSelectedEntryData() != nullptr );
     }
 
     aODFWarningFI->Show( bShown );

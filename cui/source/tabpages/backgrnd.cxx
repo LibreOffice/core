@@ -101,7 +101,7 @@ struct SvxBackgroundPage_Impl
 /// Returns the fill style of the currently selected entry.
 static drawing::FillStyle lcl_getFillStyle(ListBox const * pLbSelect)
 {
-    return (drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetSelectEntryData());
+    return (drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetSelectedEntryData());
 }
 
 // Selects the entry matching the specified fill style.

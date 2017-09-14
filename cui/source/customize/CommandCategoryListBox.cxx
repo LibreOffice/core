@@ -198,7 +198,7 @@ OUString CommandCategoryListBox::MapCommand2UIName(const OUString& sCommand)
 void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
                                                 const OUString& filterTerm )
 {
-    SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(GetSelectEntryData());
+    SfxGroupInfo_Impl *pInfo = static_cast<SfxGroupInfo_Impl*>(GetSelectedEntryData());
     pFunctionListBox->SetUpdateMode(false);
     pFunctionListBox->ClearAll();
 
