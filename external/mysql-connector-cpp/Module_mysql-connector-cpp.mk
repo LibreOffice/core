@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,mysqlcppconn))
+$(eval $(call gb_Module_Module,mysql-connector-cpp))
 
-$(eval $(call gb_Module_add_targets,mysqlcppconn,\
-	UnpackedTarball_mysqlcppconn \
+$(eval $(call gb_Module_add_targets,mysql-connector-cpp,\
+	UnpackedTarball_mysql-connector-cpp \
 	Library_mysqlcppconn \
 ))
 

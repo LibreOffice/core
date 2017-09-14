@@ -22,7 +22,7 @@ $(eval $(call gb_Extension_add_files,mysql-connector-ooo,images,\
     $(SRCDIR)/icon-themes/galaxy/desktop/res/extension_32.png \
 ))
 
-ifeq ($(SYSTEM_MYSQL_CPPCONN),)
+ifeq ($(SYSTEM_MYSQL_CONNECTOR_CPP),)
 $(eval $(call gb_Extension_add_library,mysql-connector-ooo,mysqlcppconn))
 endif
 
