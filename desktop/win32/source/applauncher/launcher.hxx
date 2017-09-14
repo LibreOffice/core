@@ -20,23 +20,7 @@
 #pragma once
 
 #include <windows.h>
-#include <winbase.h>
-#include <windef.h>
-#include <shlwapi.h>
 
-#ifndef _INC_TCHAR
-#   ifdef UNICODE
-#       define _UNICODE
-#   endif
-#   include <tchar.h>
-#endif
-
-#ifdef UNICODE
-#   define GetArgv( pArgc )         CommandLineToArgvW( GetCommandLine(), pArgc )
-#else
-#   define GetArgv( pArgc )         (*pArgc = __argc, __argv)
-#endif
-
-extern _TCHAR APPLICATION_SWITCH[];
+extern WCHAR APPLICATION_SWITCH[];
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

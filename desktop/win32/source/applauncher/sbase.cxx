@@ -19,6 +19,6 @@
 
 #include "launcher.hxx"
 
-_TCHAR APPLICATION_SWITCH[] = _T( "--base" );
+WCHAR APPLICATION_SWITCH[] = L"--base";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

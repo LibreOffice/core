@@ -19,6 +19,6 @@
 
 #include "launcher.hxx"
 
-_TCHAR APPLICATION_SWITCH[] = _T( "--draw" );
+WCHAR APPLICATION_SWITCH[] = L"--draw";
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

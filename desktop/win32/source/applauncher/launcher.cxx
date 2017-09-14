@@ -19,50 +19,42 @@
 
 #include "launcher.hxx"
 
-#include <shellapi.h>
-
 #include <stdlib.h>
 #include <malloc.h>
 
-extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
+extern "C" int APIENTRY wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 {
     // Retrieve startup info
 
-    STARTUPINFO aStartupInfo;
+    STARTUPINFOW aStartupInfo;
 
     ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
     aStartupInfo.cb = sizeof( aStartupInfo );
-    GetStartupInfo( &aStartupInfo );
+    GetStartupInfoW( &aStartupInfo );
 
     // Retrieve command line
 
-    LPTSTR  lpCommandLine = GetCommandLine();
+    LPWSTR lpCommandLine = static_cast<LPWSTR>(_alloca( sizeof(WCHAR) * (wcslen(GetCommandLineW()) + wcslen(APPLICATION_SWITCH) + 2) ));
 
-    {
-        lpCommandLine = static_cast<LPTSTR>(_alloca( sizeof(_TCHAR) * (_tcslen(lpCommandLine) + _tcslen(APPLICATION_SWITCH) + 2) ));
-
-        _tcscpy( lpCommandLine, GetCommandLine() );
-        _tcscat( lpCommandLine, _T(" ") );
-        _tcscat( lpCommandLine, APPLICATION_SWITCH );
-    }
-
+    wcscpy( lpCommandLine, GetCommandLineW() );
+    wcscat( lpCommandLine, L" " );
+    wcscat( lpCommandLine, APPLICATION_SWITCH );
 
     // Calculate application name
 
-    TCHAR   szApplicationName[MAX_PATH];
-    TCHAR   szDrive[MAX_PATH];
-    TCHAR   szDir[MAX_PATH];
-    TCHAR   szFileName[MAX_PATH];
-    TCHAR   szExt[MAX_PATH];
+    WCHAR szApplicationName[MAX_PATH];
+    WCHAR szDrive[MAX_PATH];
+    WCHAR szDir[MAX_PATH];
+    WCHAR szFileName[MAX_PATH];
+    WCHAR szExt[MAX_PATH];
 
-    GetModuleFileName( nullptr, szApplicationName, MAX_PATH );
-    _tsplitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
-    _tmakepath( szApplicationName, szDrive, szDir, _T("soffice"), _T(".exe") );
-
+    GetModuleFileNameW( nullptr, szApplicationName, MAX_PATH );
+    _wsplitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
+    _wmakepath( szApplicationName, szDrive, szDir, L"soffice", L".exe" );
 
     PROCESS_INFORMATION aProcessInfo;
 
-    BOOL    fSuccess = CreateProcess(
+    BOOL fSuccess = CreateProcessW(
         szApplicationName,
         lpCommandLine,
         nullptr,
@@ -87,28 +79,28 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         return 0;
     }
 
-    DWORD   dwError = GetLastError();
+    DWORD dwError = GetLastError();
 
-    LPVOID lpMsgBuf;
+    LPWSTR lpMsgBuf;
 
-    FormatMessage(
+    FormatMessageW(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM,
         nullptr,
         dwError,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        reinterpret_cast<LPTSTR>(&lpMsgBuf),
+        reinterpret_cast<LPWSTR>(&lpMsgBuf),
         0,
         nullptr
     );
 
     // Display the string.
-    MessageBox( nullptr, static_cast<LPCTSTR>(lpMsgBuf), nullptr, MB_OK | MB_ICONERROR );
+    MessageBoxW( nullptr, lpMsgBuf, nullptr, MB_OK | MB_ICONERROR );
 
     // Free the buffer.
     LocalFree( lpMsgBuf );
 
-    return GetLastError();
+    return dwError;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
