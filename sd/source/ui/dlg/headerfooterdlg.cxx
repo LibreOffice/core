@@ -471,7 +471,7 @@ void HeaderFooterTabPage::dispose()
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl, ListBox&, void)
 {
-    FillFormatList( (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetSelectEntryData()) );
+    FillFormatList( (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetSelectedEntryData()) );
 }
 
 void HeaderFooterTabPage::FillFormatList( int eFormat )
@@ -544,7 +544,7 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
     rSettings.maHeaderText = mpTBHeader->GetText();
 
     if( mpCBDateTimeFormat->GetSelectedEntryCount() == 1 )
-        rSettings.meDateTimeFormat = (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetSelectEntryData());
+        rSettings.meDateTimeFormat = (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetSelectedEntryData());
 
     LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectLanguage();
     if( eLanguage != meOldLanguage )

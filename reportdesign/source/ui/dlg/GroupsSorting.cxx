@@ -925,7 +925,7 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
         xGroup->setKeepTogether( m_pKeepTogetherLst->GetSelectedEntryPos() );
     if ( m_pGroupOnLst->IsValueChangedFromSaved() )
     {
-        sal_Int16 nGroupOn = static_cast<sal_Int16>(reinterpret_cast<sal_IntPtr>(m_pGroupOnLst->GetSelectEntryData()));
+        sal_Int16 nGroupOn = static_cast<sal_Int16>(reinterpret_cast<sal_IntPtr>(m_pGroupOnLst->GetSelectedEntryData()));
         xGroup->setGroupOn( nGroupOn );
     }
     if ( m_pGroupIntervalEd->IsValueChangedFromSaved() )

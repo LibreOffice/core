@@ -243,7 +243,7 @@ void SwColumnDlg::ObjectHdl(ListBox const * pBox)
     {
         pTabPage->FillItemSet(pSet);
     }
-    nOldSelection = reinterpret_cast<sal_IntPtr>(m_pApplyToLB->GetSelectEntryData());
+    nOldSelection = reinterpret_cast<sal_IntPtr>(m_pApplyToLB->GetSelectedEntryData());
     long nWidth = nSelectionWidth;
     switch(nOldSelection)
     {

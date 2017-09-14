@@ -270,7 +270,7 @@ IMPL_LINK_NOARG(SwEnvPage, FieldHdl, Button*, void)
 {
     OUString aStr("<" + m_pDatabaseLB->GetSelectedEntry() + "." +
                   m_pTableLB->GetSelectedEntry() + "." +
-                  OUString(m_pTableLB->GetSelectEntryData() == nullptr ? '0' : '1') + "." +
+                  OUString(m_pTableLB->GetSelectedEntryData() == nullptr ? '0' : '1') + "." +
                   m_pDBFieldLB->GetSelectedEntry() + ">");
     m_pAddrEdit->ReplaceSelected(aStr);
     Selection aSel = m_pAddrEdit->GetSelection();

@@ -1304,7 +1304,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
     {
 
         if (pRelLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-            nRel = static_cast<RelationMap *>(pRelLB->GetSelectEntryData())->nRelation;
+            nRel = static_cast<RelationMap *>(pRelLB->GetSelectedEntryData())->nRelation;
 
         FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB, *pRelFT);
     }
@@ -1421,7 +1421,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
     {
         if (rRelationLB.GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
         {
-            LB  nRel = static_cast<RelationMap *>(rRelationLB.GetSelectEntryData())->nLBRelation;
+            LB  nRel = static_cast<RelationMap *>(rRelationLB.GetSelectedEntryData())->nLBRelation;
             std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
