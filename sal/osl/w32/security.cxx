@@ -633,20 +633,20 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
         pSHGetSpecialFolderPathA = reinterpret_cast<BOOL (WINAPI *)(HWND, LPSTR, int, BOOL)>(GetProcAddress(hLibrary, "SHGetSpecialFolderPathA"));
         pSHGetSpecialFolderPathW = reinterpret_cast<BOOL (WINAPI *)(HWND, LPWSTR, int, BOOL)>(GetProcAddress(hLibrary, "SHGetSpecialFolderPathW"));
 
-        if (pSHGetSpecialFolderPathA)
+        if (pSHGetSpecialFolderPathW)
+        {
+            if (pSHGetSpecialFolderPathW(GetActiveWindow(), SAL_W(PathW), nFolder, TRUE))
+            {
+                rtl_uString_newFromStr( strPath, PathW);
+                bRet = true;
+            }
+        }
+        else if (pSHGetSpecialFolderPathA)
         {
             if (pSHGetSpecialFolderPathA(GetActiveWindow(), PathA, nFolder, TRUE))
             {
                 rtl_string2UString( strPath, PathA, (sal_Int32) strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
                 OSL_ASSERT(*strPath != nullptr);
-                bRet = true;
-            }
-        }
-        else if (pSHGetSpecialFolderPathW)
-        {
-            if (pSHGetSpecialFolderPathW(GetActiveWindow(), SAL_W(PathW), nFolder, TRUE))
-            {
-                rtl_uString_newFromStr( strPath, PathW);
                 bRet = true;
             }
         }
