@@ -1925,7 +1925,8 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
     }
 
     // Allocate memory for subject name.
-    LPTSTR szName = (LPTSTR)LocalAlloc(LPTR, dwData * sizeof(TCHAR));
+    LPTSTR szName = static_cast<LPTSTR>(
+        LocalAlloc(LPTR, dwData * sizeof(TCHAR)));
     if (!szName)
     {
         SAL_WARN("svl.crypto", "ValidateSignature: Unable to allocate memory for subject name");
