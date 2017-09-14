@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_a7ee2c20",
+        "filename": "external/libgpg-error/w32-build-fixes-3.patch.1",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-09-14T08:22:14Z",
+      "side": 1,
+      "message": "We sgould try upstream this diff. Other libgpg-error parts already correctly use portable string comparisson functions.",
+      "revId": "a2dbaea26dcca54654d2faad9eec9fb6e9c1f041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_e781144c",
         "filename": "solenv/gcc-wrappers/wrapper.cxx",
         "patchSetId": 5
