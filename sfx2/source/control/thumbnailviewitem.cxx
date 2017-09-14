@@ -204,7 +204,13 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
 
 void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, drawinglayer::primitive2d::Primitive2DContainer& rSeq)
 {
+    // adjust text drawing position according to text font
     drawinglayer::primitive2d::TextLayouterDevice aTextDev;
+    aTextDev.setFontAttribute(
+        pAttrs->aFontAttr,
+        pAttrs->aFontSize.getX(),
+        pAttrs->aFontSize.getY(),
+        css::lang::Locale());
 
     aPos.setY(aPos.getY() + aTextDev.getTextHeight());
 
