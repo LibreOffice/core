@@ -20,7 +20,7 @@ bool SvXMLAttrCollection::operator ==( const SvXMLAttrCollection& rCmp ) const
 bool SvXMLAttrCollection::AddAttr( const OUString& rLName,
                                        const OUString& rValue )
 {
-    aAttrs.push_back( SvXMLAttr(rLName, rValue) );
+    aAttrs.emplace_back(rLName, rValue );
     return true;
 }
 
@@ -30,7 +30,7 @@ bool SvXMLAttrCollection::AddAttr( const OUString& rPrefix,
                                        const OUString& rValue )
 {
     sal_uInt16 nPos = aNamespaceMap.Add( rPrefix, rNamespace );
-    aAttrs.push_back( SvXMLAttr(nPos, rLName, rValue) );
+    aAttrs.emplace_back(nPos, rLName, rValue );
     return true;
 }
 
@@ -41,7 +41,7 @@ bool SvXMLAttrCollection::AddAttr( const OUString& rPrefix,
     sal_uInt16 nPos = aNamespaceMap.GetIndexByPrefix( rPrefix );
     if( USHRT_MAX == nPos )
         return false;
-    aAttrs.push_back( SvXMLAttr(nPos, rLName, rValue) );
+    aAttrs.emplace_back(nPos, rLName, rValue );
     return true;
 }
 

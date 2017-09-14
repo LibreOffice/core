@@ -3753,7 +3753,7 @@ void SdXMLCustomShapeContext::EndElement()
             }
             else
             {
-                maCustomShapeGeometry.push_back(beans::PropertyValue());
+                maCustomShapeGeometry.emplace_back();
                 pItem = &maCustomShapeGeometry.back();
             }
 

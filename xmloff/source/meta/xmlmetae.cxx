@@ -381,8 +381,8 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
                     }
                 }
                 if (!found) {
-                    m_preservedNSs.push_back(beans::StringPair(name,
-                        i_xAttribs->getValueByIndex(i)));
+                    m_preservedNSs.emplace_back(name,
+                        i_xAttribs->getValueByIndex(i));
                 }
             }
         }

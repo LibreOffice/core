@@ -110,7 +110,7 @@ SvXMLImportContext* SchXMLTextListContext::CreateChildContext(
     SvXMLImportContext* pContext = nullptr;
     if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_LIST_ITEM ) )
     {
-        m_aTextVector.push_back( OUString() );
+        m_aTextVector.emplace_back( );
         pContext = new SchXMLListItemContext( GetImport(), rLocalName, m_aTextVector.back() );
     }
     else

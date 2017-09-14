@@ -287,7 +287,7 @@ void OFormLayerXMLImport_Impl::registerCellValueBinding( const Reference< XPrope
 {
     OSL_ENSURE( _rxControlModel.is() && !_rCellAddress.isEmpty(),
         "OFormLayerXMLImport_Impl::registerCellValueBinding: invalid arguments!" );
-    m_aCellValueBindings.push_back( ModelStringPair( _rxControlModel, _rCellAddress ) );
+    m_aCellValueBindings.emplace_back( _rxControlModel, _rCellAddress );
 }
 
 void OFormLayerXMLImport_Impl::registerXFormsValueBinding(
@@ -297,8 +297,7 @@ void OFormLayerXMLImport_Impl::registerXFormsValueBinding(
     // TODO: is an empty binding name allowed?
     OSL_ENSURE( _rxControlModel.is(), "need  model" );
 
-    m_aXFormsValueBindings.push_back(
-        ModelStringPair( _rxControlModel, _rBindingID ) );
+    m_aXFormsValueBindings.emplace_back( _rxControlModel, _rBindingID );
 }
 
 void OFormLayerXMLImport_Impl::registerXFormsListBinding(
@@ -308,8 +307,7 @@ void OFormLayerXMLImport_Impl::registerXFormsListBinding(
     // TODO: is an empty binding name allowed?
     OSL_ENSURE( _rxControlModel.is(), "need  model" );
 
-    m_aXFormsListBindings.push_back(
-        ModelStringPair( _rxControlModel, _rBindingID ) );
+    m_aXFormsListBindings.emplace_back( _rxControlModel, _rBindingID );
 }
 
 void OFormLayerXMLImport_Impl::registerXFormsSubmission(
@@ -319,15 +317,14 @@ void OFormLayerXMLImport_Impl::registerXFormsSubmission(
     // TODO: is an empty binding name allowed?
     OSL_ENSURE( _rxControlModel.is(), "need  model" );
 
-    m_aXFormsSubmissions.push_back(
-        ModelStringPair( _rxControlModel, _rSubmissionID ) );
+    m_aXFormsSubmissions.emplace_back( _rxControlModel, _rSubmissionID );
 }
 
 void OFormLayerXMLImport_Impl::registerCellRangeListSource( const Reference< XPropertySet >& _rxControlModel, const OUString& _rCellRangeAddress )
 {
     OSL_ENSURE( _rxControlModel.is() && !_rCellRangeAddress.isEmpty(),
         "OFormLayerXMLImport_Impl::registerCellRangeListSource: invalid arguments!" );
-    m_aCellRangeListSources.push_back( ModelStringPair( _rxControlModel, _rCellRangeAddress ) );
+    m_aCellRangeListSources.emplace_back( _rxControlModel, _rCellRangeAddress );
 }
 const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const OUString& _rStyleName) const
 {
@@ -367,7 +364,7 @@ void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPrope
 {
     OSL_ENSURE(!_rReferringControls.isEmpty(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (empty) control id list!");
     OSL_ENSURE(_rxControl.is(), "OFormLayerXMLImport_Impl::registerControlReferences: invalid (NULL) control!");
-    m_aControlReferences.push_back( ModelStringPair( _rxControl, _rReferringControls ) );
+    m_aControlReferences.emplace_back( _rxControl, _rReferringControls );
 }
 
 void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPage)

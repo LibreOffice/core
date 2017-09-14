@@ -1082,13 +1082,13 @@ void SvXMLExport::ImplExportSettings()
     // view settings
     uno::Sequence< beans::PropertyValue > aViewSettings;
     GetViewSettingsAndViews( aViewSettings );
-    aSettings.push_back( SettingsGroup( XML_VIEW_SETTINGS, aViewSettings ) );
+    aSettings.emplace_back( XML_VIEW_SETTINGS, aViewSettings );
     nSettingsCount += aViewSettings.getLength();
 
     // configuration settings
     uno::Sequence<beans::PropertyValue> aConfigSettings;
     GetConfigurationSettings( aConfigSettings );
-    aSettings.push_back( SettingsGroup( XML_CONFIGURATION_SETTINGS, aConfigSettings ) );
+    aSettings.emplace_back( XML_CONFIGURATION_SETTINGS, aConfigSettings );
     nSettingsCount += aConfigSettings.getLength();
 
     // any document specific settings

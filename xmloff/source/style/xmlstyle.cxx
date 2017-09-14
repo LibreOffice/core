@@ -276,7 +276,7 @@ SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
 
 inline void SvXMLStylesContext_Impl::AddStyle( SvXMLStyleContext *pStyle )
 {
-    aStyles.push_back( pStyle );
+    aStyles.emplace_back(pStyle );
 
     FlushIndex();
 }

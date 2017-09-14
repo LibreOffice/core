@@ -2647,7 +2647,7 @@ void XMLTextImportHelper::addFieldParam( const OUString& name, const OUString& v
     assert(!m_xImpl->m_FieldStack.empty());
     if (!m_xImpl->m_FieldStack.empty()) {
         Impl::field_stack_item_t & FieldStackItem(m_xImpl->m_FieldStack.top());
-        FieldStackItem.second.push_back(Impl::field_param_t( name, value ));
+        FieldStackItem.second.emplace_back( name, value );
     }
 }
 
