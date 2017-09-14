@@ -2576,7 +2576,10 @@ bool ScFormulaCell::NeedsInterpret() const
 void ScFormulaCell::MaybeInterpret()
 {
     if (NeedsInterpret())
+    {
+        assert(osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier());
         Interpret();
+    }
 }
 
 bool ScFormulaCell::IsHyperLinkCell() const
