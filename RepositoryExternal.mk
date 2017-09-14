@@ -2644,7 +2644,7 @@ endif # ENABLE_DBUS
 
 ifneq ($(SYSTEM_LIBPNG),)
 
-define gb_LinkTarget__use_png
+define gb_LinkTarget__use_libpng
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(LIBPNG_CFLAGS) \
@@ -2656,25 +2656,25 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-gb_ExternalProject__use_png :=
+gb_ExternalProject__use_libpng :=
 
 else # !SYSTEM_LIBPNG
 
-define gb_LinkTarget__use_png
+define gb_LinkTarget__use_libpng
 $(call gb_LinkTarget_set_include,$(1),\
 	$(LIBPNG_CFLAGS) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	png \
+	libpng \
 )
 $(call gb_LinkTarget__use_zlib,$(1))
 
 endef
 
-define gb_ExternalProject__use_png
+define gb_ExternalProject__use_libpng
 $(call gb_ExternalProject_use_static_libraries,$(1),\
-	png \
+	libpng \
 )
 
 endef

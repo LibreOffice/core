@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,libzmf,\
 $(eval $(call gb_ExternalProject_use_externals,libzmf,\
 	boost_headers \
 	icu \
-	png \
+	libpng \
 	revenge \
 	zlib \
 ))

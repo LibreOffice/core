@@ -67,7 +67,7 @@ $(eval $(call gb_Library_use_externals,avmedia,\
 	collada2gltf \
 	libxml2 \
 	opencollada_parser \
-	png \
+	libpng \
 ))
 
 endif
