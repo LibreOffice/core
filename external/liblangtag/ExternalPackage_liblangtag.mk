@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,liblangtag,langtag))
+$(eval $(call gb_ExternalPackage_ExternalPackage,liblangtag,liblangtag))
 
-$(eval $(call gb_ExternalPackage_use_external_project,liblangtag,langtag))
+$(eval $(call gb_ExternalPackage_use_external_project,liblangtag,liblangtag))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,liblangtag,$(LIBO_LIB_FOLDER)/liblangtag.1.dylib,liblangtag/.libs/liblangtag.1.dylib))

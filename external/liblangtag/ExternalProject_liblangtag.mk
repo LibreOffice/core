@@ -7,20 +7,20 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,langtag))
+$(eval $(call gb_ExternalProject_ExternalProject,liblangtag))
 
-$(eval $(call gb_ExternalProject_use_external,langtag,libxml2))
+$(eval $(call gb_ExternalProject_use_external,liblangtag,libxml2))
 
-$(eval $(call gb_ExternalProject_use_autoconf,langtag,build))
+$(eval $(call gb_ExternalProject_use_autoconf,liblangtag,build))
 
-$(eval $(call gb_ExternalProject_register_targets,langtag,\
+$(eval $(call gb_ExternalProject_register_targets,liblangtag,\
 	build \
 ))
 
 # disable ccache on windows, as it doesn't cope with the quoted defines
 # liblangtag uses (-DBUILDDIR="\"$(abs_top_builddir)\"" and similar).
 # Results in "cl : Command line error D8003 : missing source filename"
-$(call gb_ExternalProject_get_state_target,langtag,build):
+$(call gb_ExternalProject_get_state_target,liblangtag,build):
 	$(call gb_ExternalProject_run,build,\
 		MAKE=$(MAKE) ./configure --disable-modules --disable-test --disable-introspection --with-pic \
 		$(if $(or $(DISABLE_DYNLOADING),$(filter MSC,$(COM))), \
@@ -44,7 +44,7 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 			REAL_CC_FLAGS="$(filter -%,$(CC))") \
 		   $(if $(verbose),V=1) \
 		   $(MAKE) \
-                LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,langtag)/liblangtag/.libs))' \
+                LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,liblangtag)/liblangtag/.libs))' \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl URELIB \
 				$(EXTERNAL_WORKDIR)/liblangtag/.libs/liblangtag.1.dylib \

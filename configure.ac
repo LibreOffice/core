@@ -11251,11 +11251,11 @@ else
     SYSTEM_LIBLANGTAG=
     AC_MSG_RESULT([no])
     BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
-    LIBLANGTAG_CFLAGS="-I${WORKDIR}/UnpackedTarball/langtag"
+    LIBLANGTAG_CFLAGS="-I${WORKDIR}/UnpackedTarball/liblangtag"
     if test "$COM" = "MSC"; then
-        LIBLANGTAG_LIBS="${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs/liblangtag.lib"
+        LIBLANGTAG_LIBS="${WORKDIR}/UnpackedTarball/liblangtag/liblangtag/.libs/liblangtag.lib"
     else
-        LIBLANGTAG_LIBS="-L${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs -llangtag"
+        LIBLANGTAG_LIBS="-L${WORKDIR}/UnpackedTarball/liblangtag/liblangtag/.libs -llangtag"
     fi
 fi
 AC_SUBST(SYSTEM_LIBLANGTAG)
