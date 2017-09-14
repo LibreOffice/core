@@ -1912,12 +1912,12 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
     OUString subjectName;
 
     // Get Subject name size.
-    DWORD dwData = CertGetNameString(pCertContext,
-                                     CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                                     0,
-                                     nullptr,
-                                     nullptr,
-                                     0);
+    DWORD dwData = CertGetNameStringW(pCertContext,
+                                      CERT_NAME_SIMPLE_DISPLAY_TYPE,
+                                      0,
+                                      nullptr,
+                                      nullptr,
+                                      0);
     if (!dwData)
     {
         SAL_WARN("svl.crypto", "ValidateSignature: CertGetNameString failed");
@@ -1925,8 +1925,8 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
     }
 
     // Allocate memory for subject name.
-    LPTSTR szName = static_cast<LPTSTR>(
-        LocalAlloc(LPTR, dwData * sizeof(TCHAR)));
+    LPWSTR szName = static_cast<LPWSTR>(
+        LocalAlloc(LPTR, dwData * sizeof(WCHAR)));
     if (!szName)
     {
         SAL_WARN("svl.crypto", "ValidateSignature: Unable to allocate memory for subject name");
@@ -1934,18 +1934,18 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
     }
 
     // Get subject name.
-    if (!CertGetNameString(pCertContext,
-                           CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                           0,
-                           nullptr,
-                           szName,
-                           dwData))
+    if (!CertGetNameStringW(pCertContext,
+                            CERT_NAME_SIMPLE_DISPLAY_TYPE,
+                            0,
+                            nullptr,
+                            szName,
+                            dwData))
     {
         SAL_WARN("svl.crypto", "ValidateSignature: CertGetNameString failed");
         return subjectName;
     }
 
-    subjectName = OUString::fromUtf8(OString(szName));
+    subjectName = OUString(reinterpret_cast<sal_Unicode*>(szName));
 
     if (szName != nullptr)
         LocalFree(szName);
