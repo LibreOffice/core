@@ -172,7 +172,7 @@ void ScDPFunctionListBox::SetSelection( PivotFunc nFuncMask )
 PivotFunc ScDPFunctionListBox::GetSelection() const
 {
     PivotFunc nFuncMask = PivotFunc::NONE;
-    for( sal_Int32 nSel = 0, nCount = GetSelectEntryCount(); nSel < nCount; ++nSel )
+    for( sal_Int32 nSel = 0, nCount = GetSelectedEntryCount(); nSel < nCount; ++nSel )
         nFuncMask |= spnFunctions[ GetSelectedEntryPos( nSel ) ];
     return nFuncMask;
 }
@@ -645,7 +645,7 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     // *** HIERARCHY ***
 
-    rLabelData.mnUsedHier = m_pLbHierarchy->GetSelectEntryCount() ? m_pLbHierarchy->GetSelectedEntryPos() : 0;
+    rLabelData.mnUsedHier = m_pLbHierarchy->GetSelectedEntryCount() ? m_pLbHierarchy->GetSelectedEntryPos() : 0;
 }
 
 void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayout )

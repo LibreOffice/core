@@ -868,7 +868,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if( pDlg->Execute() == RET_OK )
                 {
-                    const sal_Int32 nSelCount = pDlg->GetSelectEntryCount();
+                    const sal_Int32 nSelCount = pDlg->GetSelectedEntryCount();
                     for( sal_Int32 nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
                         aIndexList.insert( aIndexList.begin()+nSelIx, pDlg->GetSelectedEntryPos( nSelIx ) );
                     pDlg.disposeAndClear();

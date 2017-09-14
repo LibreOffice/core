@@ -465,7 +465,7 @@ IMPL_LINK( SpellDialog, ExtClickHdl, Button *, pBtn, void )
             //the current suggestion should be used
             //if it's not the 'no suggestions' entry
             if(sWrong == sCurrentErrorText &&
-                    m_pSuggestionLB->IsEnabled() && m_pSuggestionLB->GetSelectEntryCount() > 0 &&
+                    m_pSuggestionLB->IsEnabled() && m_pSuggestionLB->GetSelectedEntryCount() > 0 &&
                     m_sNoSuggestionsST != m_pSuggestionLB->GetSelectedEntry())
             {
                 sCurrentErrorText = m_pSuggestionLB->GetSelectedEntry();
@@ -529,7 +529,7 @@ OUString SpellDialog::getReplacementString() const
     OUString sReplacement(sOrigString);
 
     if(m_pSuggestionLB->IsEnabled() &&
-            m_pSuggestionLB->GetSelectEntryCount()>0 &&
+            m_pSuggestionLB->GetSelectedEntryCount()>0 &&
             m_sNoSuggestionsST != m_pSuggestionLB->GetSelectedEntry())
         sReplacement = m_pSuggestionLB->GetSelectedEntry();
 

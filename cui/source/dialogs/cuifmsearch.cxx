@@ -407,14 +407,14 @@ IMPL_LINK_NOARG(FmSearchDialog, OnFocusGrabbed, Control&, void)
 
 IMPL_LINK(FmSearchDialog, OnPositionSelected, ListBox&, rBox, void)
 {
-    DBG_ASSERT(rBox.GetSelectEntryCount() == 1, "FmSearchDialog::OnMethodSelected : unexpected : not exactly one entry selected!");
+    DBG_ASSERT(rBox.GetSelectedEntryCount() == 1, "FmSearchDialog::OnMethodSelected : unexpected : not exactly one entry selected!");
 
     m_pSearchEngine->SetPosition(m_plbPosition->GetSelectedEntryPos());
 }
 
 IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox&, rBox, void)
 {
-    DBG_ASSERT(rBox.GetSelectEntryCount() == 1, "FmSearchDialog::OnFieldSelected : unexpected : not exactly one entry select!");
+    DBG_ASSERT(rBox.GetSelectedEntryCount() == 1, "FmSearchDialog::OnFieldSelected : unexpected : not exactly one entry select!");
 
     m_pSearchEngine->RebuildUsedFields(m_prbAllFields->IsChecked() ? -1 : (sal_Int16)m_plbField->GetSelectedEntryPos());
         // calls m_pSearchEngine->InvalidatePreviousLoc too

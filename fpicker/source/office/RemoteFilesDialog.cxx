@@ -634,7 +634,7 @@ void RemoteFilesDialog::EnableControls()
     {
         m_pServices_lb->Enable();
 
-        if( m_pServices_lb->GetSelectEntryCount() )
+        if( m_pServices_lb->GetSelectedEntryCount() )
         {
             m_pAddMenu->EnableItem( "change_password", false );
 

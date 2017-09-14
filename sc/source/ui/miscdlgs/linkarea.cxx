@@ -273,7 +273,7 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
 
 void ScLinkedAreaDlg::UpdateEnable()
 {
-    bool bEnable = ( pSourceShell && m_pLbRanges->GetSelectEntryCount() );
+    bool bEnable = ( pSourceShell && m_pLbRanges->GetSelectedEntryCount() );
     m_pBtnOk->Enable( bEnable );
 
     bool bReload = m_pBtnReload->IsChecked();
@@ -314,7 +314,7 @@ OUString ScLinkedAreaDlg::GetOptions()
 OUString ScLinkedAreaDlg::GetSource()
 {
     OUStringBuffer aBuf;
-    const sal_Int32 nCount = m_pLbRanges->GetSelectEntryCount();
+    const sal_Int32 nCount = m_pLbRanges->GetSelectedEntryCount();
     for (sal_Int32 i=0; i<nCount; ++i)
     {
         if (i > 0)

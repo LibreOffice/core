@@ -108,10 +108,10 @@ namespace dbp
         if (!OControlWizardPage::canAdvance())
             return false;
 
-        if (0 == m_pDatasource->GetSelectEntryCount())
+        if (0 == m_pDatasource->GetSelectedEntryCount())
             return false;
 
-        if (0 == m_pTable->GetSelectEntryCount())
+        if (0 == m_pTable->GetSelectedEntryCount())
             return false;
 
         return true;
@@ -229,7 +229,7 @@ namespace dbp
 
     IMPL_LINK( OTableSelectionPage, OnListboxDoubleClicked, ListBox&, _rBox, void )
     {
-        if (_rBox.GetSelectEntryCount())
+        if (_rBox.GetSelectedEntryCount())
             getDialog()->travelNext();
     }
 

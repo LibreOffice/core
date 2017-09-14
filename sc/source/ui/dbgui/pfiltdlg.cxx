@@ -228,7 +228,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         m_pLbCond2->Disable();
         m_pEdVal2->Disable();
     }
-    else if ( m_pLbConnect1->GetSelectEntryCount() == 0 )
+    else if ( m_pLbConnect1->GetSelectedEntryCount() == 0 )
     {
         m_pLbField2->Disable();
         m_pLbCond2->Disable();
@@ -242,7 +242,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         m_pLbCond3->Disable();
         m_pEdVal3->Disable();
     }
-    else if ( m_pLbConnect2->GetSelectEntryCount() == 0 )
+    else if ( m_pLbConnect2->GetSelectedEntryCount() == 0 )
     {
         m_pLbField3->Disable();
         m_pLbCond3->Disable();

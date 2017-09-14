@@ -126,7 +126,7 @@ bool ScScenarioListBox::EventNotify( NotifyEvent& rNEvt )
             break;
         }
     }
-    else if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND && GetSelectEntryCount() )
+    else if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND && GetSelectedEntryCount() )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt && pCEvt->GetCommand() == CommandEventId::ContextMenu )
@@ -170,19 +170,19 @@ void ScScenarioListBox::ExecuteScenarioSlot( sal_uInt16 nSlotId )
 
 void ScScenarioListBox::SelectScenario()
 {
-    if( GetSelectEntryCount() > 0 )
+    if( GetSelectedEntryCount() > 0 )
         ExecuteScenarioSlot( SID_SELECT_SCENARIO );
 }
 
 void ScScenarioListBox::EditScenario()
 {
-    if( GetSelectEntryCount() > 0 )
+    if( GetSelectedEntryCount() > 0 )
         ExecuteScenarioSlot( SID_EDIT_SCENARIO );
 }
 
 void ScScenarioListBox::DeleteScenario()
 {
-    if( GetSelectEntryCount() > 0 )
+    if( GetSelectedEntryCount() > 0 )
         if( ScopedVclPtrInstance<QueryBox>( nullptr, MessBoxStyle::YesNo | MessBoxStyle::DefaultYes, ScGlobal::GetRscString( STR_QUERY_DELSCENARIO ) )->Execute() == RET_YES )
             ExecuteScenarioSlot( SID_DELETE_SCENARIO );
 }

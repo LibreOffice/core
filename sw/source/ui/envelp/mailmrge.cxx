@@ -304,9 +304,9 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     } else
         m_pColumnLB->SelectEntry(pModOpt->GetNameFromColumn());
 
-    if (m_pAddressFieldLB->GetSelectEntryCount() == 0)
+    if (m_pAddressFieldLB->GetSelectedEntryCount() == 0)
         m_pAddressFieldLB->SelectEntryPos(0);
-    if (m_pColumnLB->GetSelectEntryCount() == 0)
+    if (m_pColumnLB->GetSelectedEntryCount() == 0)
         m_pColumnLB->SelectEntryPos(0);
 
     const bool bEnable = m_aSelection.getLength() != 0;

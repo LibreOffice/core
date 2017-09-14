@@ -453,7 +453,7 @@ void SwFieldRefPage::SubTypeHdl()
     switch(nTypeId)
     {
         case TYP_GETREFFLD:
-            if (!IsFieldEdit() || m_pSelectionLB->GetSelectEntryCount())
+            if (!IsFieldEdit() || m_pSelectionLB->GetSelectedEntryCount())
             {
                 m_pNameED->SetText(m_pSelectionLB->GetSelectedEntry());
                 ModifyHdl(*m_pNameED);
@@ -485,7 +485,7 @@ void SwFieldRefPage::SubTypeHdl()
         break;
 
         default:
-            if (!IsFieldEdit() || m_pSelectionLB->GetSelectEntryCount())
+            if (!IsFieldEdit() || m_pSelectionLB->GetSelectedEntryCount())
                 m_pNameED->SetText(m_pSelectionLB->GetSelectedEntry());
             break;
     }
@@ -721,11 +721,11 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
         if ( bEnable )
         {
             m_pSelectionLB->SelectEntry(sOldSel);
-            if (!m_pSelectionLB->GetSelectEntryCount() && !IsFieldEdit())
+            if (!m_pSelectionLB->GetSelectedEntryCount() && !IsFieldEdit())
                 m_pSelectionLB->SelectEntryPos(0);
         }
 
-        if (IsFieldEdit() && !m_pSelectionLB->GetSelectEntryCount()) // in case the reference was already deleted...
+        if (IsFieldEdit() && !m_pSelectionLB->GetSelectedEntryCount()) // in case the reference was already deleted...
             m_pNameED->SetText(sOldSel);
     }
 }
@@ -843,10 +843,10 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         else
             m_pFormatLB->SelectEntry(SwResId(FMT_REF_ARY[GetCurField()->GetFormat()]));
 
-        if (!m_pFormatLB->GetSelectEntryCount())
+        if (!m_pFormatLB->GetSelectedEntryCount())
         {
             m_pFormatLB->SelectEntryPos(nFieldDlgFormatSel);
-            if (!m_pFormatLB->GetSelectEntryCount())
+            if (!m_pFormatLB->GetSelectedEntryCount())
                 m_pFormatLB->SelectEntryPos(0);
         }
     }

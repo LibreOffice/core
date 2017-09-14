@@ -289,7 +289,7 @@ public:
                             SingleControlWrapper< ListBox, ValueT >( rListBox ), MapperType( WRAPPER_LISTBOX_ENTRY_NOTFOUND, pMap ) {}
 
     virtual bool        IsControlDontKnow() const SAL_OVERRIDE
-                            { return this->GetControl().GetSelectEntryCount() == 0; }
+                            { return this->GetControl().GetSelectedEntryCount() == 0; }
     virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE
                             { if( bSet ) this->GetControl().SetNoSelection(); }
 
