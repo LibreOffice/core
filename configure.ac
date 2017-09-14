@@ -8156,7 +8156,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
     AC_MSG_CHECKING([which MariaDB to use])
     if test "$with_system_mariadb" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_MARIADB=TRUE
+        SYSTEM_MARIADB_CONNECTOR_C=TRUE
         #AC_PATH_PROG(MARIADBCONFIG, [mariadb_config])
         if test -z "$MARIADBCONFIG"; then
             AC_PATH_PROG(MARIADBCONFIG, [mysql_config])
@@ -8193,7 +8193,7 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         AC_MSG_CHECKING([whether to bundle the MySQL/MariaDB client library])
         if test "$enable_bundle_mariadb" = "yes"; then
             AC_MSG_RESULT([yes])
-            BUNDLE_MARIADB=TRUE
+            BUNDLE_MARIADB_CONNECTOR_C=TRUE
             LIBMARIADB=lib$(echo "${MARIADB_LIBS}" | sed -e 's/[[[:space:]]]\{1,\}-l\([[^[:space:]]]\{1,\}\)/\
 \1\
 /g' -e 's/^-l\([[^[:space:]]]\{1,\}\)[[[:space:]]]*/\
@@ -8217,22 +8217,22 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
             fi
         else
             AC_MSG_RESULT([no])
-            BUNDLE_MARIADB=
+            BUNDLE_MARIADB_CONNECTOR_C=
         fi
     else
         AC_MSG_RESULT([internal])
-        SYSTEM_MARIADB=
-        MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb/include"
-        MARIADB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lmariadblib"
-        BUILD_TYPE="$BUILD_TYPE MARIADB"
+        SYSTEM_MARIADB_CONNECTOR_C=
+        MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb-connector-c/include"
+        MARIADB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lmariadb-connector-c"
+        BUILD_TYPE="$BUILD_TYPE MARIADB_CONNECTOR_C"
     fi
 
-    AC_SUBST(SYSTEM_MARIADB)
+    AC_SUBST(SYSTEM_MARIADB_CONNECTOR_C)
     AC_SUBST(MARIADB_CFLAGS)
     AC_SUBST(MARIADB_LIBS)
     AC_SUBST(LIBMARIADB)
     AC_SUBST(LIBMARIADB_PATH)
-    AC_SUBST(BUNDLE_MARIADB)
+    AC_SUBST(BUNDLE_MARIADB_CONNECTOR_C)
 
     AC_LANG_PUSH([C++])
     dnl ===================================================================

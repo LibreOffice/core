@@ -164,7 +164,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		LIBXMLSEC_TARBALL \
 		$(call fetch_Optional,LIBXSLT,LIBXSLT_TARBALL) \
 		$(call fetch_Optional,LPSOLVE,LPSOLVE_TARBALL) \
-		$(call fetch_Optional,MARIADB,MARIADB_TARBALL) \
+		$(call fetch_Optional,MARIADB_CONNECTOR_C,MARIADB_CONNECTOR_C_TARBALL) \
 		$(call fetch_Optional,MDDS,MDDS_TARBALL) \
 		$(call fetch_Optional,MDNSRESPONDER,MDNSRESPONDER_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_CALADEA_TARBALL) \

@@ -226,9 +226,9 @@ $(call gb_LinkTarget_add_libs,$(1),-liconv)
 
 endef
 
-ifneq ($(SYSTEM_MARIADB),)
+ifneq ($(SYSTEM_MARIADB_CONNECTOR_C),)
 
-define gb_LinkTarget__use_mariadb
+define gb_LinkTarget__use_mariadb-connector-c
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
     $(MARIADB_CFLAGS) \
@@ -236,29 +236,29 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),$(MARIADB_LIBS))
 
 endef
-gb_ExternalProject__use_mariadb :=
+gb_ExternalProject__use_mariadb-connector-c :=
 
-else # !SYSTEM_MARIADB
+else # !SYSTEM_MARIADB_CONNECTOR_C
 
-define gb_LinkTarget__use_mariadb
+define gb_LinkTarget__use_mariadb-connector-c
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(MARIADB_CFLAGS) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	mariadblib \
+	mariadb-connector-c \
 )
 
 endef
-define gb_ExternalProject__use_mariadb
-$(call gb_ExternalProject_use_static_libraries,$(1),mariadblib)
+define gb_ExternalProject__use_mariadb-connector-c
+$(call gb_ExternalProject_use_static_libraries,$(1),mariadb-connector-c)
 
 endef
 
-endif # SYSTEM_MARIADB
+endif # SYSTEM_MARIADB_CONNECTOR_C
 
 
-ifneq ($(SYSTEM_MARIADB),)
+ifneq ($(SYSTEM_MARIADB_CONNECTOR_C),)
 
 define gb_LinkTarget__use_mysql
 
