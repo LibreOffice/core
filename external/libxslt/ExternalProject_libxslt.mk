@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalProject_ExternalProject,xslt))
+$(eval $(call gb_ExternalProject_ExternalProject,libxslt))
 
-$(eval $(call gb_ExternalProject_use_external,xslt,libxml2))
+$(eval $(call gb_ExternalProject_use_external,libxslt,libxml2))
 
-$(eval $(call gb_ExternalProject_register_targets,xslt,\
+$(eval $(call gb_ExternalProject_register_targets,libxslt,\
 	build \
 ))
 ifeq ($(OS),WNT)
-$(call gb_ExternalProject_get_state_target,xslt,build):
+$(call gb_ExternalProject_get_state_target,libxslt,build):
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),cruntime=/MDd) \
@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 		&& LIB="$(ILIB)" nmake \
 	,win32)
 else # OS!=WNT
-$(call gb_ExternalProject_get_state_target,xslt,build):
+$(call gb_ExternalProject_get_state_target,libxslt,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --without-crypto --without-python \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-				$(gb_Package_SOURCEDIR_xslt)/libxslt/.libs/libxslt.1.dylib \
+				$(gb_Package_SOURCEDIR_libxslt)/libxslt/.libs/libxslt.1.dylib \
 		) \
 	)
 endif

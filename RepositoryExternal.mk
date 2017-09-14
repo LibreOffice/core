@@ -877,42 +877,42 @@ endef
 else # !SYSTEM_LIBXSLT
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
-	xslt \
+	libxslt \
 ))
 
 define gb_LinkTarget__use_libxslt
-$(call gb_LinkTarget_use_package,$(1),xslt)
+$(call gb_LinkTarget_use_package,$(1),libxslt)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(call gb_UnpackedTarball_get_dir,xslt) \
+	-I$(call gb_UnpackedTarball_get_dir,libxslt) \
 )
 
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,xslt)/win32/bin.msvc/libxslt.lib \
+	$(call gb_UnpackedTarball_get_dir,libxslt)/win32/bin.msvc/libxslt.lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,xslt)/libxslt/.libs -lxslt \
+	-L$(call gb_UnpackedTarball_get_dir,libxslt)/libxslt/.libs -lxslt \
 )
 endif
 
 endef
 
 define gb_LinkTarget__use_libexslt
-$(call gb_LinkTarget_use_package,$(1),xslt)
+$(call gb_LinkTarget_use_package,$(1),libxslt)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(call gb_UnpackedTarball_get_dir,xslt) \
+	-I$(call gb_UnpackedTarball_get_dir,libxslt) \
 )
 
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,xslt)/win32/bin.msvc/libexslt.lib \
+	$(call gb_UnpackedTarball_get_dir,libxslt)/win32/bin.msvc/libexslt.lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,xslt)/libexslt/.libs -lexslt \
+	-L$(call gb_UnpackedTarball_get_dir,libxslt)/libexslt/.libs -lexslt \
 )
 endif
 
@@ -3925,11 +3925,11 @@ gb_ExternalExecutable__register_xsltproc :=
 else # ! SYSTEM_LIBXSLT_FOR_BUILD
 
 define gb_ExternalExecutable__register_xsltproc
-$(call gb_ExternalExecutable_set_internal,xsltproc,$(WORKDIR_FOR_BUILD)/UnpackedTarball/xslt/$(if $(filter MSC,$(COM)),win32/bin.msvc,xsltproc)/xsltproc$(gb_Executable_EXT_for_build),xslt)
+$(call gb_ExternalExecutable_set_internal,xsltproc,$(WORKDIR_FOR_BUILD)/UnpackedTarball/libxslt/$(if $(filter MSC,$(COM)),win32/bin.msvc,xsltproc)/xsltproc$(gb_Executable_EXT_for_build),libxslt)
 $(call gb_ExternalExecutable_add_dependencies,xsltproc,\
 	$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,icu_ure)) \
 	$(call gb_Package_get_target,libxml2) \
-	$(call gb_Package_get_target,xslt) \
+	$(call gb_Package_get_target,libxslt) \
 )
 
 endef

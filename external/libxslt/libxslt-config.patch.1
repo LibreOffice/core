@@ -13,13 +13,13 @@ Hack the xslt-config to return paths into WORKDIR.
 +#includedir=@includedir@
 +#libdir=@libdir@
 +
-+prefix=${WORKDIR}/UnpackedTarball/xslt
-+exec_prefix=${WORKDIR}/UnpackedTarball/xsltproc
++prefix=${WORKDIR}/UnpackedTarball/libxslt
++exec_prefix=${WORKDIR}/UnpackedTarball/libxslt
  exec_prefix_set=no
 -includedir=@includedir@
 -libdir=@libdir@
-+includedir=${WORKDIR}/UnpackedTarball/xslt/libxslt
-+libdir=${WORKDIR}/UnpackedTarball/xslt/libxslt/.libs
++includedir=${WORKDIR}/UnpackedTarball/libxslt/libxslt
++libdir=${WORKDIR}/UnpackedTarball/libxslt/libxslt/.libs
  
  usage()
  {
