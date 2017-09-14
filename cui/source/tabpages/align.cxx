@@ -72,13 +72,13 @@ typedef sfx::ListBoxConnection< VerJustItemWrapper > VerJustConnection;
 
 static const VerJustConnection::MapEntryType s_pVerJustMap[] =
 {
-    { ALIGNDLG_VERALIGN_STD,    SVX_VER_JUSTIFY_STANDARD    },
-    { ALIGNDLG_VERALIGN_TOP,    SVX_VER_JUSTIFY_TOP         },
-    { ALIGNDLG_VERALIGN_MID,    SVX_VER_JUSTIFY_CENTER      },
-    { ALIGNDLG_VERALIGN_BOTTOM, SVX_VER_JUSTIFY_BOTTOM      },
-    { ALIGNDLG_VERALIGN_BLOCK,  SVX_VER_JUSTIFY_BLOCK       },
-    { ALIGNDLG_VERALIGN_DISTRIBUTED, SVX_VER_JUSTIFY_BLOCK  },
-    { WRAPPER_LISTBOX_ENTRY_NOTFOUND,   SVX_VER_JUSTIFY_STANDARD    }
+    { ALIGNDLG_VERALIGN_STD,          SvxCellVerJustify::Standard },
+    { ALIGNDLG_VERALIGN_TOP,          SvxCellVerJustify::Top      },
+    { ALIGNDLG_VERALIGN_MID,          SvxCellVerJustify::Center   },
+    { ALIGNDLG_VERALIGN_BOTTOM,       SvxCellVerJustify::Bottom   },
+    { ALIGNDLG_VERALIGN_BLOCK,        SvxCellVerJustify::Block    },
+    { ALIGNDLG_VERALIGN_DISTRIBUTED,  SvxCellVerJustify::Block    },
+    { WRAPPER_LISTBOX_ENTRY_NOTFOUND, SvxCellVerJustify::Standard }
 };
 
 // cell rotate mode -----------------------------------------------------------
@@ -315,7 +315,7 @@ void AlignmentTabPage::Reset( const SfxItemSet* rCoreAttrs )
     lcl_MaybeResetAlignToDistro<SvxCellVerJustify, SvxCellVerJustify>(
         *m_pLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, *rCoreAttrs,
         GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY), GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD),
-        SVX_VER_JUSTIFY_BLOCK);
+        SvxCellVerJustify::Block);
 
     UpdateEnableControls();
 }

@@ -195,7 +195,7 @@ void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
         WriteAutoFormatSwBlob( rStream, swVersions );
 
     rStream.WriteUInt16( SvxHorJustifyItem(SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY).GetVersion(fileVersion) );
-    rStream.WriteUInt16( SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY).GetVersion(fileVersion) );
+    rStream.WriteUInt16( SvxVerJustifyItem(SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxOrientationItem(SvxCellOrientation::Standard, 0).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxMarginItem(ATTR_MARGIN).GetVersion(fileVersion) );
     rStream.WriteUInt16( SfxBoolItem(ATTR_LINEBREAK).GetVersion(fileVersion) );
@@ -233,7 +233,7 @@ ScAutoFormatDataField::ScAutoFormatDataField() :
     aBackground( ATTR_BACKGROUND ),
     aAdjust( SvxAdjust::Left, 0 ),
     aHorJustify( SvxCellHorJustify::Standard, ATTR_HOR_JUSTIFY ),
-    aVerJustify( SVX_VER_JUSTIFY_STANDARD, ATTR_VER_JUSTIFY ),
+    aVerJustify( SvxCellVerJustify::Standard, ATTR_VER_JUSTIFY ),
     aMargin( ATTR_MARGIN ),
     aLinebreak( ATTR_LINEBREAK ),
     aRotateAngle( ATTR_ROTATE_VALUE ),

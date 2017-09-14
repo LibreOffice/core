@@ -112,13 +112,13 @@ enum class SvxCellJustifyMethod
     Distribute
 };
 
-enum SvxCellVerJustify
+enum class SvxCellVerJustify
 {
-    SVX_VER_JUSTIFY_STANDARD,
-    SVX_VER_JUSTIFY_TOP,
-    SVX_VER_JUSTIFY_CENTER,
-    SVX_VER_JUSTIFY_BOTTOM,
-    SVX_VER_JUSTIFY_BLOCK
+    Standard,
+    Top,
+    Center,
+    Bottom,
+    Block
 };
 
 enum class SvxCellOrientation

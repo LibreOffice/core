@@ -65,7 +65,7 @@ public:
     explicit SvxVerJustifyItem( const sal_uInt16 nId  );
 
     SvxVerJustifyItem(
-        const SvxCellVerJustify eJustify /*= SVX_VER_JUSTIFY_STANDARD*/,
+        const SvxCellVerJustify eJustify,
         const sal_uInt16 nId  );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -77,7 +77,7 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual sal_uInt16       GetValueCount() const override;
-    static OUString          GetValueText( sal_uInt16 nVal );
+    static OUString          GetValueText( SvxCellVerJustify nVal );
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
@@ -105,7 +105,7 @@ public:
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual sal_uInt16       GetValueCount() const override;
-    static OUString          GetValueText( sal_uInt16 nVal );
+    static OUString          GetValueText( SvxCellJustifyMethod nVal );
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
     SvxJustifyMethodItem& operator=(const SvxJustifyMethodItem& r);
