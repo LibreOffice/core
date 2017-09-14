@@ -307,8 +307,7 @@ void ScTable::RemoveManualBreaks()
     maColManualBreaks.clear();
     InvalidatePageBreaks();
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 bool ScTable::HasManualBreaks() const
@@ -320,16 +319,14 @@ void ScTable::SetRowManualBreaks( const ::std::set<SCROW>& rBreaks )
 {
     maRowManualBreaks = rBreaks;
     InvalidatePageBreaks();
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 void ScTable::SetColManualBreaks( const ::std::set<SCCOL>& rBreaks )
 {
     maColManualBreaks = rBreaks;
     InvalidatePageBreaks();
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 void ScTable::GetAllRowBreaks(set<SCROW>& rBreaks, bool bPage, bool bManual) const
@@ -591,8 +588,7 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
 
     if (bChanged)
     {
-        if (IsStreamValid())
-            SetStreamValid(false);
+        SetStreamValid(false);
 
         {   // Scoped bulk broadcast.
             // Only subtotal formula cells will accept the notification of
@@ -619,10 +615,7 @@ void ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
         bChanged = mpHiddenCols->setFalse(nStartCol, nEndCol);
 
     if (bChanged)
-    {
-        if (IsStreamValid())
-            SetStreamValid(false);
-    }
+        SetStreamValid(false);
 }
 
 void ScTable::CopyColHidden(const ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
@@ -1064,8 +1057,7 @@ void ScTable::SetProtection(const ScTableProtection* pProtect)
     else
         pTabProtection.reset();
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 ScTableProtection* ScTable::GetProtection()
@@ -1161,8 +1153,7 @@ void ScTable::SetPageStyle( const OUString& rName )
             if ( pNewStyle )            // also without the old one (for UpdateStdNames)
                 aPageStyle = aStrNew;
 
-            if (IsStreamValid())
-                SetStreamValid(false);
+            SetStreamValid(false);
         }
     }
 }

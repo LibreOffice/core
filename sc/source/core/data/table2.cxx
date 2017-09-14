@@ -132,8 +132,7 @@ void ScTable::SetSheetEvents( const ScSheetEvents* pNew )
 
     SetCalcNotification( false );       // discard notifications before the events were set
 
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 void ScTable::SetCalcNotification( bool bSet )
@@ -197,10 +196,9 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
     InvalidatePageBreaks();
 
-    if (IsStreamValid())
-        // TODO: In the future we may want to check if the table has been
-        // really modified before setting the stream invalid.
-        SetStreamValid(false);
+    // TODO: In the future we may want to check if the table has been
+    // really modified before setting the stream invalid.
+    SetStreamValid(false);
 }
 
 void ScTable::DeleteRow(
@@ -256,10 +254,9 @@ void ScTable::DeleteRow(
 
     InvalidatePageBreaks();
 
-    if (IsStreamValid())
-        // TODO: In the future we may want to check if the table has been
-        // really modified before setting the stream invalid.
-        SetStreamValid(false);
+    // TODO: In the future we may want to check if the table has been
+    // really modified before setting the stream invalid.
+    SetStreamValid(false);
 }
 
 bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) const
@@ -350,10 +347,9 @@ void ScTable::InsertCol(
 
     InvalidatePageBreaks();
 
-    if (IsStreamValid())
-        // TODO: In the future we may want to check if the table has been
-        // really modified before setting the stream invalid.
-        SetStreamValid(false);
+    // TODO: In the future we may want to check if the table has been
+    // really modified before setting the stream invalid.
+    SetStreamValid(false);
 }
 
 void ScTable::DeleteCol(
@@ -419,10 +415,9 @@ void ScTable::DeleteCol(
 
     InvalidatePageBreaks();
 
-    if (IsStreamValid())
-        // TODO: In the future we may want to check if the table has been
-        // really modified before setting the stream invalid.
-        SetStreamValid(false);
+    // TODO: In the future we may want to check if the table has been
+    // really modified before setting the stream invalid.
+    SetStreamValid(false);
 }
 
 void ScTable::DeleteArea(
@@ -452,10 +447,9 @@ void ScTable::DeleteArea(
             mpCondFormatList->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
     }
 
-    if (IsStreamValid())
-        // TODO: In the future we may want to check if the table has been
-        // really modified before setting the stream invalid.
-        SetStreamValid(false);
+    // TODO: In the future we may want to check if the table has been
+    // really modified before setting the stream invalid.
+    SetStreamValid(false);
 }
 
 void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
@@ -488,10 +482,9 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
         ApplySelectionCache( &aCache, rMark );
     }
 
-    if (IsStreamValid())
-        // TODO: In the future we may want to check if the table has been
-        // really modified before setting the stream invalid.
-        SetStreamValid(false);
+    // TODO: In the future we may want to check if the table has been
+    // really modified before setting the stream invalid.
+    SetStreamValid(false);
 }
 
 // pTable = Clipboard
@@ -3722,7 +3715,7 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
 
     // #i102616# actions that modify the draw page size count as sheet modification
     // (exception: InitDrawLayer)
-    if (bResetStreamValid && IsStreamValid())
+    if (bResetStreamValid)
         SetStreamValid(false);
 }
 
@@ -3732,8 +3725,7 @@ void ScTable::SetRangeName(ScRangeName* pNew)
     mpRangeName = pNew;
 
     //fdo#39792: mark stream as invalid, otherwise new ScRangeName will not be written to file
-    if (IsStreamValid())
-        SetStreamValid(false);
+    SetStreamValid(false);
 }
 
 ScRangeName* ScTable::GetRangeName() const

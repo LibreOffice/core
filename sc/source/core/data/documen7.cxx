@@ -75,7 +75,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
     {
         SCTAB nTab = rHint.GetAddress().Tab();
-        if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsStreamValid())
+        if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
             maTabs[nTab]->SetStreamValid(false);
     }
 }

@@ -114,8 +114,7 @@ IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction, void )
     ScDocument& rDoc = rDocShell.GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-        if (rDoc.IsStreamValid(nTab))
-            rDoc.SetStreamValid(nTab, false);
+        rDoc.SetStreamValid(nTab, false);
 }
 
 //  paint row above the range (because of lines after AdjustRowHeight)
@@ -1212,8 +1211,7 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
     if( rDoc.IsUndoEnabled() )
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideNote( rDocShell, rPos, bShow ) );
 
-    if (rDoc.IsStreamValid(rPos.Tab()))
-        rDoc.SetStreamValid(rPos.Tab(), false);
+     rDoc.SetStreamValid(rPos.Tab(), false);
 
     ScTabView::OnLOKNoteStateChanged(pNote);
 
@@ -1242,8 +1240,7 @@ void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
 
     //! Undo !!!
 
-    if (rDoc.IsStreamValid(rPos.Tab()))
-        rDoc.SetStreamValid(rPos.Tab(), false);
+    rDoc.SetStreamValid(rPos.Tab(), false);
 
     rDocShell.PostPaintCell( rPos );
     aModificator.SetDocumentModified();
@@ -1297,8 +1294,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         // repaint cell (to make note marker visible)
         rDocShell.PostPaintCell( rPos );
 
-        if (rDoc.IsStreamValid(rPos.Tab()))
-            rDoc.SetStreamValid(rPos.Tab(), false);
+        rDoc.SetStreamValid(rPos.Tab(), false);
 
         aModificator.SetDocumentModified();
 
@@ -3679,8 +3675,7 @@ bool ScDocFunc::InsertPageBreak( bool bColumn, const ScAddress& rPos,
     rDoc.InvalidatePageBreaks(nTab);
     rDoc.UpdatePageBreaks( nTab );
 
-    if (rDoc.IsStreamValid(nTab))
-        rDoc.SetStreamValid(nTab, false);
+    rDoc.SetStreamValid(nTab, false);
 
     if (bColumn)
     {
@@ -3743,8 +3738,7 @@ bool ScDocFunc::RemovePageBreak( bool bColumn, const ScAddress& rPos,
 
     rDoc.UpdatePageBreaks( nTab );
 
-    if (rDoc.IsStreamValid(nTab))
-        rDoc.SetStreamValid(nTab, false);
+    rDoc.SetStreamValid(nTab, false);
 
     if (bColumn)
     {

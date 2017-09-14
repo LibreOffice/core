@@ -248,7 +248,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                     InvalidateTextWidth( nullptr, nullptr, bNumFormatChanged );
 
                 for (SCTAB nTab=0; nTab<=MAXTAB; ++nTab)
-                    if (maTabs[nTab] && maTabs[nTab]->IsStreamValid())
+                    if (maTabs[nTab])
                         maTabs[nTab]->SetStreamValid( false );
 
                 sal_uLong nOldFormat =

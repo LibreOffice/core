@@ -147,8 +147,7 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern )
     }
     mvData.resize(0);
 
-    if (pDocument->IsStreamValid(nTab))
-        pDocument->SetStreamValid(nTab, false);
+    pDocument->SetStreamValid(nTab, false);
 
     mvData.resize(1);
     const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pDocPool->Put(*pPattern) );
@@ -597,8 +596,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                     RemoveCellCharAttribs(nStartRow, nEndRow, pPattern, pDataArray);
             }
 
-            if (pDocument->IsStreamValid(nTab))
-                pDocument->SetStreamValid(nTab, false);
+            pDocument->SetStreamValid(nTab, false);
         }
     }
 
@@ -675,8 +673,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
         }
         while ((nStart <= nEndRow) && (nPos < mvData.size()));
 
-        if (pDocument->IsStreamValid(nTab))
-            pDocument->SetStreamValid(nTab, false);
+        pDocument->SetStreamValid(nTab, false);
     }
 
 #if DEBUG_SC_TESTATTRARRAY
@@ -903,8 +900,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
         }
         while (nStart <= nEndRow);
 
-        if (pDocument->IsStreamValid(nTab))
-            pDocument->SetStreamValid(nTab, false);
+        pDocument->SetStreamValid(nTab, false);
     }
 
 #if DEBUG_SC_TESTATTRARRAY

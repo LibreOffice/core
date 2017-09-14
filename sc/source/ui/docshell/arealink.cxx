@@ -161,8 +161,7 @@ void ScAreaLink::Closed()
     }
 
     SCTAB nDestTab = aDestArea.aStart.Tab();
-    if (rDoc.IsStreamValid(nDestTab))
-        rDoc.SetStreamValid(nDestTab, false);
+    rDoc.SetStreamValid(nDestTab, false);
 
     SvBaseLink::Closed();
 }

@@ -178,8 +178,7 @@ void FuText::StopEditMode()
 
         // invalidate stream positions only for the affected sheet
         rDoc.LockStreamValid(false);
-        if (rDoc.IsStreamValid(aNotePos.Tab()))
-            rDoc.SetStreamValid(aNotePos.Tab(), false);
+        rDoc.SetStreamValid(aNotePos.Tab(), false);
     }
 }
 

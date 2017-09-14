@@ -3102,10 +3102,8 @@ void ScDocShell::UseSheetSaveEntries()
         {
             // if no positions were set (for example, export to other format),
             // reset all "valid" flags
-
             for (nTab = 0; nTab < nTabCount; ++nTab)
-                if (aDocument.IsStreamValid(nTab))
-                    aDocument.SetStreamValid(nTab, false);
+                aDocument.SetStreamValid(nTab, false);
         }
     }
 }

@@ -911,7 +911,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
                 // but the XML stream must be re-generated.
                 TableContainer::iterator it = maTabs.begin();
                 for (; it != maTabs.end(); ++it)
-                    if ( *it && (*it)->IsStreamValid())
+                    if ( *it )
                         (*it)->SetStreamValid( false );
 
                 if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())

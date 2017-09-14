@@ -110,8 +110,7 @@ void ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
                                         pUndoTab, bColumns, true ) );
         }
 
-        if (rDoc.IsStreamValid(nTab))
-            rDoc.SetStreamValid(nTab, false);
+        rDoc.SetStreamValid(nTab, false);
 
         PaintPartFlags nParts = PaintPartFlags::NONE;   // Data range hasn't been changed
         if ( bColumns )
@@ -173,8 +172,7 @@ void ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool
                                             pUndoTab, bColumns, false ) );
             }
 
-            if (rDoc.IsStreamValid(nTab))
-                rDoc.SetStreamValid(nTab, false);
+            rDoc.SetStreamValid(nTab, false);
 
             PaintPartFlags nParts = PaintPartFlags::NONE;   // Data range hasn't been changed
             if ( bColumns )
@@ -239,8 +237,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
 
         rDoc.UpdatePageBreaks( nTab );
 
-        if (rDoc.IsStreamValid(nTab))
-            rDoc.SetStreamValid(nTab, false);
+        rDoc.SetStreamValid(nTab, false);
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
                                     PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size );
@@ -306,8 +303,7 @@ void ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
                                     pUndoDoc, pUndoTab ) );
     }
 
-    if (rDoc.IsStreamValid(nTab))
-        rDoc.SetStreamValid(nTab, false);
+    rDoc.SetStreamValid(nTab, false);
 
     rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size );
     rDocShell.SetDocumentModified();
