@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e7403459",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-14T15:53:31Z",
+      "side": 1,
+      "message": "Better state what you did, not why, or re-state the bug description",
+      "revId": "e5115d213b5189e210734643e0cb8c7161d75486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_072620ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-14T15:53:31Z",
+      "side": 1,
+      "message": "this is actually a much better subject line",
+      "revId": "e5115d213b5189e210734643e0cb8c7161d75486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
