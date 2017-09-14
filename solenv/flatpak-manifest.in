@@ -292,10 +292,10 @@
                     "dest-filename": "external/tarballs/libwpd-0.10.1.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libwpg-0.3.1.tar.bz2",
-                    "sha256": "29049b95895914e680390717a243b291448e76e0f82fb4d2479adee5330fbb59",
+                    "url": "https://dev-www.libreoffice.org/src/libwpg-0.3.2.tar.xz",
+                    "sha256": "57faf1ab97d63d57383ac5d7875e992a3d190436732f4083310c0471e72f8c33",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libwpg-0.3.1.tar.bz2"
+                    "dest-filename": "external/tarballs/libwpg-0.3.2.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libwps-0.4.7.tar.xz",
@@ -346,10 +346,10 @@
                     "dest-filename": "external/tarballs/liborcus-0.12.1.tar.gz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/poppler-0.57.0.tar.xz",
-                    "sha256": "0ea37de71b7db78212ebc79df59f99b66409a29c2eac4d882dae9f2397fe44d8",
+                    "url": "https://dev-www.libreoffice.org/src/poppler-0.59.0.tar.xz",
+                    "sha256": "a3d626b24cd14efa9864e12584b22c9c32f51c46417d7c10ca17651f297c9641",
                     "type": "file",
-                    "dest-filename": "external/tarballs/poppler-0.57.0.tar.xz"
+                    "dest-filename": "external/tarballs/poppler-0.59.0.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2",
