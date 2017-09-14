@@ -237,7 +237,7 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
     DataPilotFieldReference aRef;
 
     aRef.ReferenceType = mxLbTypeWrp->GetControlValue();
-    aRef.ReferenceField = GetBaseFieldName(mpLbBaseField->GetSelectEntry());
+    aRef.ReferenceField = GetBaseFieldName(mpLbBaseField->GetSelectedEntry());
 
     sal_Int32 nBaseItemPos = mpLbBaseItem->GetSelectEntryPos();
     switch( nBaseItemPos )
@@ -252,7 +252,7 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
         {
             aRef.ReferenceItemType = DataPilotFieldReferenceItemType::NAMED;
             if( !mbEmptyItem || (nBaseItemPos > SC_BASEITEM_USER_POS) )
-                aRef.ReferenceItemName = GetBaseItemName(mpLbBaseItem->GetSelectEntry());
+                aRef.ReferenceItemName = GetBaseItemName(mpLbBaseItem->GetSelectedEntry());
         }
     }
 
@@ -610,7 +610,7 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     else
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::DATA;
 
-    ScDPName aFieldName = GetFieldName(m_pLbSortBy->GetSelectEntry());
+    ScDPName aFieldName = GetFieldName(m_pLbSortBy->GetSelectedEntry());
     if (!aFieldName.maName.isEmpty())
     {
         rLabelData.maSortInfo.Field =
@@ -626,7 +626,7 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     // *** AUTO SHOW ***
 
-    aFieldName = GetFieldName(m_pLbShowUsing->GetSelectEntry());
+    aFieldName = GetFieldName(m_pLbShowUsing->GetSelectedEntry());
     if (!aFieldName.maName.isEmpty())
     {
         rLabelData.maShowInfo.IsEnabled = m_pCbShow->IsChecked();
@@ -870,7 +870,7 @@ OUString ScDPShowDetailDlg::GetDimensionName() const
 {
     // Look up the internal dimension name which may be different from the
     // displayed field name.
-    OUString aSelectedName = mpLbDims->GetSelectEntry();
+    OUString aSelectedName = mpLbDims->GetSelectedEntry();
     DimNameIndexMap::const_iterator itr = maNameIndexMap.find(aSelectedName);
     if (itr == maNameIndexMap.end())
         // This should never happen!

@@ -455,7 +455,7 @@ void SwFieldRefPage::SubTypeHdl()
         case TYP_GETREFFLD:
             if (!IsFieldEdit() || m_pSelectionLB->GetSelectEntryCount())
             {
-                m_pNameED->SetText(m_pSelectionLB->GetSelectEntry());
+                m_pNameED->SetText(m_pSelectionLB->GetSelectedEntry());
                 ModifyHdl(*m_pNameED);
             }
             break;
@@ -486,7 +486,7 @@ void SwFieldRefPage::SubTypeHdl()
 
         default:
             if (!IsFieldEdit() || m_pSelectionLB->GetSelectEntryCount())
-                m_pNameED->SetText(m_pSelectionLB->GetSelectEntry());
+                m_pNameED->SetText(m_pSelectionLB->GetSelectedEntry());
             break;
     }
 }
@@ -923,7 +923,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         else if (REFFLDFLAG_FOOTNOTE == nTypeId)        // footnotes
         {
             SwSeqFieldList aArr;
-            SeqFieldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
+            SeqFieldLstElem aElem( m_pSelectionLB->GetSelectedEntry(), 0 );
 
             size_t nPos = 0;
 
@@ -944,7 +944,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         else if (REFFLDFLAG_ENDNOTE == nTypeId)         // endnotes
         {
             SwSeqFieldList aArr;
-            SeqFieldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
+            SeqFieldLstElem aElem( m_pSelectionLB->GetSelectedEntry(), 0 );
 
             size_t nPos = 0;
 
@@ -1013,7 +1013,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
             if( pType )
             {
                 SwSeqFieldList aArr;
-                SeqFieldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
+                SeqFieldLstElem aElem( m_pSelectionLB->GetSelectedEntry(), 0 );
 
                 size_t nPos = 0;
 

@@ -391,7 +391,7 @@ sal_Int32 ImplEntryList::GetSelectEntryCount() const
     return nSelCount;
 }
 
-OUString ImplEntryList::GetSelectEntry( sal_Int32 nIndex ) const
+OUString ImplEntryList::GetSelectedEntry( sal_Int32 nIndex ) const
 {
     return GetEntryText( GetSelectEntryPos( nIndex ) );
 }

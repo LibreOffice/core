@@ -1403,7 +1403,7 @@ sal_Int32 SwFramePage::FillPosLB(const FrameMap* _pMap,
                             ListBox& _rLB )
 {
     OUString sSelEntry;
-    const OUString sOldEntry = _rLB.GetSelectEntry();
+    const OUString sOldEntry = _rLB.GetSelectedEntry();
 
     _rLB.Clear();
 
@@ -1470,7 +1470,7 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
     {
         if (_pMap == aVAsCharHtmlMap || _pMap == aVAsCharMap)
         {
-            const OUString sOldEntry(_rLB.GetSelectEntry());
+            const OUString sOldEntry(_rLB.GetSelectedEntry());
             SvxSwFramePosString::StringId eStrId = _pMap[_nLBSelPos].eStrId;
 
             for (size_t nMapPos = 0; nMapPos < nMapCount; nMapPos++)
@@ -1684,7 +1684,7 @@ sal_Int32 SwFramePage::GetMapPos( const FrameMap *pMap, ListBox const &rAlignLB 
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
             const size_t nMapCount = ::lcl_GetFrameMapCount(pMap);
-            const OUString sSelEntry(rAlignLB.GetSelectEntry());
+            const OUString sSelEntry(rAlignLB.GetSelectedEntry());
 
             for (size_t i = 0; i < nMapCount; i++)
             {
@@ -3162,9 +3162,9 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
         {
             OUString sCurrentPrevChain, sCurrentNextChain;
             if(m_pPrevLB->GetSelectEntryPos())
-                sCurrentPrevChain = m_pPrevLB->GetSelectEntry();
+                sCurrentPrevChain = m_pPrevLB->GetSelectedEntry();
             if(m_pNextLB->GetSelectEntryPos())
-                sCurrentNextChain = m_pNextLB->GetSelectEntry();
+                sCurrentNextChain = m_pNextLB->GetSelectedEntry();
             const SwFormatChain &rChain = pFormat->GetChain();
             const SwFlyFrameFormat* pFlyFormat;
             OUString sNextChain, sPrevChain;
@@ -3216,9 +3216,9 @@ IMPL_LINK(SwFrameAddPage, ChainModifyHdl, ListBox&, rBox, void)
 {
     OUString sCurrentPrevChain, sCurrentNextChain;
     if(m_pPrevLB->GetSelectEntryPos())
-        sCurrentPrevChain = m_pPrevLB->GetSelectEntry();
+        sCurrentPrevChain = m_pPrevLB->GetSelectedEntry();
     if(m_pNextLB->GetSelectEntryPos())
-        sCurrentNextChain = m_pNextLB->GetSelectEntry();
+        sCurrentNextChain = m_pNextLB->GetSelectedEntry();
     SwFrameFormat* pFormat = m_pWrtSh->GetFlyFrameFormat();
     if (pFormat)
     {

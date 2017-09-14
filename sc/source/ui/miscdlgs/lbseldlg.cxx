@@ -53,9 +53,9 @@ void ScSelEntryDlg::dispose()
 }
 
 
-OUString ScSelEntryDlg::GetSelectEntry() const
+OUString ScSelEntryDlg::GetSelectedEntry() const
 {
-    return m_pLb->GetSelectEntry();
+    return m_pLb->GetSelectedEntry();
 }
 
 IMPL_LINK_NOARG(ScSelEntryDlg, DblClkHdl, ListBox&, void)

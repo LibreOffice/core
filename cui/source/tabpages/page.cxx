@@ -850,7 +850,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
         {
             bModified = true;
             rSet->Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
-                            m_pRegisterLB->GetSelectEntry()));
+                            m_pRegisterLB->GetSelectedEntry()));
         }
     }
 
@@ -894,7 +894,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
         // already filled
         return;
 
-    OUString aOldName = m_pPaperTrayBox->GetSelectEntry();
+    OUString aOldName = m_pPaperTrayBox->GetSelectedEntry();
     m_pPaperTrayBox->SetUpdateMode( false );
     m_pPaperTrayBox->Clear();
     sal_Int32 nEntryPos = m_pPaperTrayBox->InsertEntry(

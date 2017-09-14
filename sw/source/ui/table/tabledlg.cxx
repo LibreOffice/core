@@ -1350,7 +1350,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
 
         if ( bState )
         {
-            sPage = m_pPageCollLB->GetSelectEntry();
+            sPage = m_pPageCollLB->GetSelectedEntry();
         }
         sal_uInt16 nPgNum = static_cast< sal_uInt16 >(m_pPageNoNF->GetValue());
         bool const usePageNo(bState && m_pPageNoCB->IsChecked());

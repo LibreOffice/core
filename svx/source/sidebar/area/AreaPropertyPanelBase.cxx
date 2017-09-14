@@ -348,7 +348,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                     if(mnLastPosHatch < pXHatchList->Count())
                     {
                         const XHatch aHatch = pXHatchList->GetHatch(mnLastPosHatch)->GetHatch();
-                        const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectEntry(), aHatch);
+                        const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectedEntry(), aHatch);
 
                         // #i122676# change FillStyle and Hatch in one call
                         XFillStyleItem aXFillStyleItem(drawing::FillStyle_HATCH);
@@ -394,7 +394,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                         {
                             const XBitmapEntry* pXBitmapEntry = pXBitmapList->GetBitmap(mnLastPosBitmap);
                             aBitmap = pXBitmapEntry->GetGraphicObject();
-                            aName = mpLbFillAttr->GetSelectEntry();
+                            aName = mpLbFillAttr->GetSelectedEntry();
                             mpLbFillAttr->SelectEntryPos(mnLastPosBitmap);
                         }
                     }
@@ -420,7 +420,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
                         {
                             const XBitmapEntry* pXPatternEntry = pXPatternList->GetBitmap(mnLastPosPattern);
                             aBitmap = pXPatternEntry->GetGraphicObject();
-                            aName = mpLbFillAttr->GetSelectEntry();
+                            aName = mpLbFillAttr->GetSelectedEntry();
                             mpLbFillAttr->SelectEntryPos(mnLastPosPattern);
                         }
                     }
@@ -506,7 +506,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
                 aGradient.SetStartColor(mpLbFillGradFrom->GetSelectEntryColor());
                 aGradient.SetEndColor(mpLbFillGradTo->GetSelectEntryColor());
 
-                const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
+                const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectedEntry(), aGradient);
 
                     // #i122676# Change FillStyle and Gradinet in one call
                 XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
@@ -530,7 +530,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
                 if(nPos < aItem.GetHatchList()->Count())
                 {
                     const XHatch aHatch = aItem.GetHatchList()->GetHatch(nPos)->GetHatch();
-                    const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch);
+                    const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectedEntry(), aHatch);
 
                     // #i122676# Change FillStyle and Hatch in one call
                     XFillStyleItem aXFillStyleItem(drawing::FillStyle_HATCH);
@@ -560,7 +560,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
                 if(nPos < aItem.GetBitmapList()->Count())
                 {
                     const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
-                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
+                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectedEntry(), pXBitmapEntry->GetGraphicObject());
 
                     // #i122676# Change FillStyle and Bitmap in one call
                     XFillStyleItem aXFillStyleItem(drawing::FillStyle_BITMAP);
@@ -590,7 +590,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
                 if(nPos < aItem.GetPatternList()->Count())
                 {
                     const XBitmapEntry* pXPatternEntry = aItem.GetPatternList()->GetBitmap(nPos);
-                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXPatternEntry->GetGraphicObject());
+                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectedEntry(), pXPatternEntry->GetGraphicObject());
 
                     // #i122676# Change FillStyle and Bitmap in one call
                     XFillStyleItem aXFillStyleItem(drawing::FillStyle_BITMAP);

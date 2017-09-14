@@ -1649,7 +1649,7 @@ OUString VCLXListBox::getSelectedItem()
     OUString aItem;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
-        aItem = pBox->GetSelectEntry();
+        aItem = pBox->GetSelectedEntry();
     return aItem;
 }
 
@@ -1664,7 +1664,7 @@ css::uno::Sequence< OUString> VCLXListBox::getSelectedItems()
         const sal_Int32 nSelEntries = pBox->GetSelectEntryCount();
         aSeq = css::uno::Sequence< OUString>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
-            aSeq.getArray()[n] = pBox->GetSelectEntry( n );
+            aSeq.getArray()[n] = pBox->GetSelectedEntry( n );
     }
     return aSeq;
 }
@@ -1795,7 +1795,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     // Call ActionListener on DropDown event
                     css::awt::ActionEvent aEvent;
                     aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                    aEvent.ActionCommand = pListBox->GetSelectEntry();
+                    aEvent.ActionCommand = pListBox->GetSelectedEntry();
                     maActionListeners.actionPerformed( aEvent );
                 }
 
@@ -1812,7 +1812,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 css::awt::ActionEvent aEvent;
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                aEvent.ActionCommand = GetAs<ListBox>()->GetSelectEntry();
+                aEvent.ActionCommand = GetAs<ListBox>()->GetSelectedEntry();
                 maActionListeners.actionPerformed( aEvent );
             }
             break;

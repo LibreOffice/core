@@ -701,7 +701,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
                 // For added security
                 if( m_pDashList->Count() > (long) ( nPos - 2 ) )
                 {
-                    XLineDashItem aDashItem( m_pLbLineStyle->GetSelectEntry(),
+                    XLineDashItem aDashItem( m_pLbLineStyle->GetSelectedEntry(),
                                         m_pDashList->GetDash( nPos - 2 )->GetDash() );
                     pOld = GetOldItem( *rAttrs, XATTR_LINEDASH );
                     if ( !pOld || !( *static_cast<const XLineDashItem*>(pOld) == aDashItem ) )
@@ -756,7 +756,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
 
     // Line color
     {
-        NamedColor aColor = m_pLbColor->GetSelectEntry();
+        NamedColor aColor = m_pLbColor->GetSelectedEntry();
         XLineColorItem aItem(aColor.second, aColor.first);
         pOld = GetOldItem( *rAttrs, XATTR_LINECOLOR );
         if ( !pOld || !( *static_cast<const XLineColorItem*>(pOld) == aItem ) )
@@ -776,7 +776,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             if( nPos == 0 )
                 pItem.reset(new XLineStartItem());
             else if( m_pLineEndList->Count() > (long) ( nPos - 1 ) )
-                pItem.reset(new XLineStartItem( m_pLbStartStyle->GetSelectEntry(), m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
+                pItem.reset(new XLineStartItem( m_pLbStartStyle->GetSelectedEntry(), m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
             pOld = GetOldItem( *rAttrs, XATTR_LINESTART );
             if( pItem && ( !pOld || !( *static_cast<const XLineEndItem*>(pOld) == *pItem ) ) )
             {
@@ -792,7 +792,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             if( nPos == 0 )
                 pItem.reset(new XLineEndItem());
             else if( m_pLineEndList->Count() > (long) ( nPos - 1 ) )
-                pItem.reset(new XLineEndItem( m_pLbEndStyle->GetSelectEntry(), m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
+                pItem.reset(new XLineEndItem( m_pLbEndStyle->GetSelectedEntry(), m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
             pOld = GetOldItem( *rAttrs, XATTR_LINEEND );
             if( pItem &&
                 ( !pOld || !( *static_cast<const XLineEndItem*>(pOld) == *pItem ) ) )
@@ -978,7 +978,7 @@ void SvxLineTabPage::FillXLSet_Impl()
         nPos = m_pLbLineStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            m_rXLSet.Put( XLineDashItem( m_pLbLineStyle->GetSelectEntry(),
+            m_rXLSet.Put( XLineDashItem( m_pLbLineStyle->GetSelectedEntry(),
                             m_pDashList->GetDash( nPos - 2 )->GetDash() ) );
         }
     }
@@ -989,7 +989,7 @@ void SvxLineTabPage::FillXLSet_Impl()
         if( nPos == 0 )
             m_rXLSet.Put( XLineStartItem() );
         else
-            m_rXLSet.Put( XLineStartItem( m_pLbStartStyle->GetSelectEntry(),
+            m_rXLSet.Put( XLineStartItem( m_pLbStartStyle->GetSelectedEntry(),
                         m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
     nPos = m_pLbEndStyle->GetSelectEntryPos();
@@ -998,7 +998,7 @@ void SvxLineTabPage::FillXLSet_Impl()
         if( nPos == 0 )
             m_rXLSet.Put( XLineEndItem() );
         else
-            m_rXLSet.Put( XLineEndItem( m_pLbEndStyle->GetSelectEntry(),
+            m_rXLSet.Put( XLineEndItem( m_pLbEndStyle->GetSelectedEntry(),
                         m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
 
@@ -1058,7 +1058,7 @@ void SvxLineTabPage::FillXLSet_Impl()
     m_rXLSet.Put( XLineEndWidthItem( GetCoreValue( *m_pMtrEndWidth, m_ePoolUnit ) ) );
 
     m_rXLSet.Put( XLineWidthItem( GetCoreValue( *m_pMtrLineWidth, m_ePoolUnit ) ) );
-    NamedColor aColor = m_pLbColor->GetSelectEntry();
+    NamedColor aColor = m_pLbColor->GetSelectedEntry();
     m_rXLSet.Put(XLineColorItem(aColor.second, aColor.first));
 
     // Centered line end

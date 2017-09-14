@@ -226,10 +226,10 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
     if(!bAll)
     {
         for(sal_Int32 i=0; i < pLeft->GetSelectEntryCount(); ++i)
-            moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectEntry(i),sExtraChars,nMaxNameLen,aCase);
+            moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectedEntry(i),sExtraChars,nMaxNameLen,aCase);
 
         for(sal_Int32 j=pLeft->GetSelectEntryCount(); j ; --j)
-            pLeft->RemoveEntry(pLeft->GetSelectEntry(j-1));
+            pLeft->RemoveEntry(pLeft->GetSelectedEntry(j-1));
     }
     else
     {
@@ -270,9 +270,9 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox&, rListBox, void )
     fillColumns(pRight,aRightColumns);
 
     for(sal_Int32 i=0; i < pLeft->GetSelectEntryCount(); ++i)
-        moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectEntry(i),sExtraChars,nMaxNameLen,aCase);
+        moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectedEntry(i),sExtraChars,nMaxNameLen,aCase);
     for(sal_Int32 j=pLeft->GetSelectEntryCount(); j ; )
-        pLeft->RemoveEntry(pLeft->GetSelectEntry(--j));
+        pLeft->RemoveEntry(pLeft->GetSelectedEntry(--j));
 
     enableButtons();
 }

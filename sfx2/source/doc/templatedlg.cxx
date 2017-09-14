@@ -481,7 +481,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
 {
-    const OUString sSelectedRegion = mpCBFolder->GetSelectEntry();
+    const OUString sSelectedRegion = mpCBFolder->GetSelectedEntry();
 
     if(mpCBFolder->GetSelectEntryPos() == 0)
     {
@@ -823,7 +823,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
         mpLocalView->Show();
         mpLocalView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
         mpLocalView->reload();
-        OUString sLastFolder = mpCBFolder->GetSelectEntry();
+        OUString sLastFolder = mpCBFolder->GetSelectedEntry();
         mpLocalView->showRegion(sLastFolder);
         mpActionMenu->ShowItem(MNI_ACTION_RENAME_FOLDER);
     }
@@ -1124,7 +1124,7 @@ void SfxTemplateManagerDlg::OnCategoryNew()
 
 void SfxTemplateManagerDlg::OnCategoryRename()
 {
-    OUString sCategory = mpCBFolder->GetSelectEntry();
+    OUString sCategory = mpCBFolder->GetSelectedEntry();
     ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW),this);
 
     dlg->SetEntryText(sCategory);
@@ -1363,7 +1363,7 @@ IMPL_LINK_NOARG(SfxTemplateCategoryDialog, SelectCategoryHdl, ListBox&, void)
     }
     else
     {
-        msSelectedCategory = mpLBCategory->GetSelectEntry();
+        msSelectedCategory = mpLBCategory->GetSelectedEntry();
         mpNewCategoryEdit->Disable();
         mpOKButton->Enable();
     }

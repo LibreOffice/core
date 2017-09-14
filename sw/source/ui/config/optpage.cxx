@@ -444,7 +444,7 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
         if (m_pInMarginsRB->IsChecked()) aAddPrinterAttr.m_nPrintPostIts =
                                                         SwPostItMode::InMargins;
 
-        const OUString sFax = m_pFaxLB->GetSelectEntry();
+        const OUString sFax = m_pFaxLB->GetSelectedEntry();
         aAddPrinterAttr.m_sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
         rCoreSet->Put(aAddPrinterAttr);
     }

@@ -612,7 +612,7 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
         }
         else
         {
-            OUString sSelect = rBox.GetSelectEntry();
+            OUString sSelect = rBox.GetSelectedEntry();
             const OUString* pFilters = pImpl->aFilterArr[nData].getConstArray();
             OUString* pUIFilters = pImpl->aUIFilterArr[nData].getArray();
             for(int i = 0; i < pImpl->aUIFilterArr[nData].getLength(); i++)

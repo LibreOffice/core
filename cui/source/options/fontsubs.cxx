@@ -188,7 +188,7 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
         comphelper::ConfigurationChanges::create());
     if(m_pFontHeightLB->IsValueChangedFromSaved())
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::set(
-            static_cast< sal_Int16 >(m_pFontHeightLB->GetSelectEntry().toInt32()),
+            static_cast< sal_Int16 >(m_pFontHeightLB->GetSelectedEntry().toInt32()),
             batch);
     if(m_pNonPropFontsOnlyCB->IsValueChangedFromSaved())
         officecfg::Office::Common::Font::SourceViewFont::
@@ -197,7 +197,7 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
     //font name changes cannot be detected by saved values
     OUString sFontName;
     if(m_pFontNameLB->GetSelectEntryPos())
-        sFontName = m_pFontNameLB->GetSelectEntry();
+        sFontName = m_pFontNameLB->GetSelectedEntry();
     officecfg::Office::Common::Font::SourceViewFont::FontName::set(
         boost::optional< OUString >(sFontName), batch);
     batch->commit();
@@ -345,7 +345,7 @@ void SvxFontSubstTabPage::SelectHdl(vcl::Window const * pWin)
 
 IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, Button*, pBox, void)
 {
-    OUString sFontName = m_pFontNameLB->GetSelectEntry();
+    OUString sFontName = m_pFontNameLB->GetSelectedEntry();
     bool bNonPropOnly = static_cast<CheckBox*>(pBox)->IsChecked();
     m_pFontNameLB->Clear();
     FontList aFntLst( Application::GetDefaultDevice() );

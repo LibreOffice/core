@@ -130,7 +130,7 @@ public:
     void            SelectEntry( sal_Int32  nPos, bool bSelect );
 
     sal_Int32       GetSelectEntryCount() const;
-    OUString        GetSelectEntry( sal_Int32  nIndex ) const;
+    OUString        GetSelectedEntry( sal_Int32  nIndex ) const;
     sal_Int32       GetSelectEntryPos( sal_Int32  nIndex ) const;
     bool            IsEntryPosSelected( sal_Int32  nIndex ) const;
 

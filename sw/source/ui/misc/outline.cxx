@@ -93,7 +93,7 @@ void SwNumNamesDlg::dispose()
 // remember selected entry
 IMPL_LINK( SwNumNamesDlg, SelectHdl, ListBox&, rBox, void )
 {
-    m_pFormEdit->SetText(rBox.GetSelectEntry());
+    m_pFormEdit->SetText(rBox.GetSelectedEntry());
     m_pFormEdit->SetSelection(Selection(0, SELECTION_MAX));
 }
 
@@ -605,7 +605,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox&, rBox, void )
 {
     sal_uInt8 i;
 
-    const OUString aCollName(rBox.GetSelectEntry());
+    const OUString aCollName(rBox.GetSelectedEntry());
     //0xFFFF not allowed here (disable)
     sal_uInt16 nTmpLevel = lcl_BitToLevel(nActLevel);
     OUString sOldName( pCollNames[nTmpLevel] );
@@ -702,7 +702,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, Edit&, rEdit, void )
 
 IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFormatHdl, ListBox&, void)
 {
-    OUString sEntry = m_pCharFormatLB->GetSelectEntry();
+    OUString sEntry = m_pCharFormatLB->GetSelectedEntry();
     sal_uInt16 nMask = 1;
     bool bFormatNone = sEntry == SwViewShell::GetShellRes()->aStrNone;
     SwCharFormat* pFormat = nullptr;

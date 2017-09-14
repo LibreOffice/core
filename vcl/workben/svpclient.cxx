@@ -249,7 +249,7 @@ IMPL_STATIC_LINK_NOARG( MyWin, QuitHdl, Button*, void)
 
 IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)
 {
-    OUString aEntry = m_aSvpBitmaps->GetSelectEntry();
+    OUString aEntry = m_aSvpBitmaps->GetSelectedEntry();
     sal_Int32 nPos = aEntry.indexOf( ": " );
     if( nPos != -1 )
     {

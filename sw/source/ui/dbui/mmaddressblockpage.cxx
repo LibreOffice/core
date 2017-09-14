@@ -929,9 +929,9 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
             pNewLB->SelectEntry(rHeader);
         //then the preview can be filled accordingly
         if(xColAccess.is() && pNewLB->GetSelectEntryPos() > 0 &&
-                xColAccess->hasByName(pNewLB->GetSelectEntry()))
+                xColAccess->hasByName(pNewLB->GetSelectedEntry()))
         {
-            uno::Any aCol = xColAccess->getByName(pNewLB->GetSelectEntry());
+            uno::Any aCol = xColAccess->getByName(pNewLB->GetSelectedEntry());
             uno::Reference< XColumn > xColumn;
             aCol >>= xColumn;
             if(xColumn.is())
@@ -1111,7 +1111,7 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll, void)
 
 IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox&, rBox, void)
 {
-    const OUString sColumn = rBox.GetSelectEntry();
+    const OUString sColumn = rBox.GetSelectedEntry();
     uno::Reference< XColumnsSupplier > xColsSupp( m_rConfigItem->GetResultSet(), uno::UNO_QUERY);
     uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
     OUString sPreview;
@@ -1230,7 +1230,7 @@ uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
                 aLBIter != m_pFieldsControl->m_aMatches.end();
                     ++aLBIter, ++nIndex)
     {
-        const OUString sSelect = (*aLBIter)->GetSelectEntry();
+        const OUString sSelect = (*aLBIter)->GetSelectedEntry();
         pAssignments[nIndex] = (m_sNone != sSelect) ? sSelect : OUString();
     }
     return aAssignments;

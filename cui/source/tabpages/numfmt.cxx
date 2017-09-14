@@ -807,7 +807,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         if(m_pLbLanguage->IsVisible() &&
                 LISTBOX_ENTRY_NOTFOUND != m_pLbLanguage->GetEntryPos(sAutomaticEntry))
                 rCoreAttrs->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO,
-                    m_pLbLanguage->GetSelectEntry() == sAutomaticEntry));
+                    m_pLbLanguage->GetSelectedEntry() == sAutomaticEntry));
     }
 
     return bDataChanged;

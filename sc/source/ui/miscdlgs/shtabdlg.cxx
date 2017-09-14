@@ -71,9 +71,9 @@ sal_Int32 ScShowTabDlg::GetSelectEntryCount() const
     return m_pLb->GetSelectEntryCount();
 }
 
-OUString ScShowTabDlg::GetSelectEntry(sal_Int32 nPos) const
+OUString ScShowTabDlg::GetSelectedEntry(sal_Int32 nPos) const
 {
-    return m_pLb->GetSelectEntry(nPos);
+    return m_pLb->GetSelectedEntry(nPos);
 }
 
 sal_Int32 ScShowTabDlg::GetSelectEntryPos(sal_Int32 nPos) const

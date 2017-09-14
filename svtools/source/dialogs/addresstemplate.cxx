@@ -911,7 +911,7 @@ void AssignmentPersistentData::ImplCommit()
         for (sal_Int32 i=0; i<FIELD_CONTROLS_VISIBLE; ++i, ++aInitialSelection)
         {
             VclPtr<ListBox>& pListbox = m_pImpl->pFields[i];
-            sSaveSelection = pListbox->GetSelectEntry();
+            sSaveSelection = pListbox->GetSelectedEntry();
 
             pListbox->Clear();
 
@@ -961,7 +961,7 @@ void AssignmentPersistentData::ImplCommit()
             m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex].clear();
         else
             // it's a regular field entry
-            m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = _rListbox.GetSelectEntry();
+            m_pImpl->aFieldAssignments[m_pImpl->nFieldScrollPos * 2 + nListBoxIndex] = _rListbox.GetSelectedEntry();
     }
 
 

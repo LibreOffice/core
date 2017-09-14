@@ -764,7 +764,7 @@ IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, void)
     assert(xConfigItem);
     if (rBox.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {
-        const QueueInfo* pInfo = Printer::GetQueueInfo( rBox.GetSelectEntry(), false );
+        const QueueInfo* pInfo = Printer::GetQueueInfo( rBox.GetSelectedEntry(), false );
 
         if( pInfo )
         {
@@ -790,7 +790,7 @@ IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, void)
     else
         m_pPrinterSettingsPB->Disable();
 
-    xConfigItem->SetSelectedPrinter(rBox.GetSelectEntry());
+    xConfigItem->SetSelectedPrinter(rBox.GetSelectedEntry());
 }
 
 IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
@@ -1040,7 +1040,7 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
         else
             return; // back to the dialog
     }
-    OUString sEMailColumn = m_pMailToLB->GetSelectEntry();
+    OUString sEMailColumn = m_pMailToLB->GetSelectedEntry();
     OSL_ENSURE( !sEMailColumn.isEmpty(), "No email column selected");
     Reference< sdbcx::XColumnsSupplier > xColsSupp( xConfigItem->GetResultSet(), UNO_QUERY);
     Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;

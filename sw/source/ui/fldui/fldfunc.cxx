@@ -417,7 +417,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, SelectHdl, ListBox&, void)
     const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     if( TYP_MACROFLD == nTypeId )
-        m_pNameED->SetText( m_pSelectionLB->GetSelectEntry() );
+        m_pNameED->SetText( m_pSelectionLB->GetSelectedEntry() );
 }
 
 IMPL_LINK_NOARG(SwFieldFuncPage, InsertMacroHdl, ListBox&, void)
@@ -456,7 +456,7 @@ void SwFieldFuncPage::ListModifyHdl(Control const * pControl)
         {
             if(nSelPos)
             {
-                const OUString sEntry = m_pListItemsLB->GetSelectEntry();
+                const OUString sEntry = m_pListItemsLB->GetSelectedEntry();
                 m_pListItemsLB->RemoveEntry(nSelPos);
                 nSelPos--;
                 m_pListItemsLB->InsertEntry(sEntry, nSelPos);
@@ -467,7 +467,7 @@ void SwFieldFuncPage::ListModifyHdl(Control const * pControl)
         {
             if(nSelPos < m_pListItemsLB->GetEntryCount() - 1)
             {
-                const OUString sEntry = m_pListItemsLB->GetSelectEntry();
+                const OUString sEntry = m_pListItemsLB->GetSelectedEntry();
                 m_pListItemsLB->RemoveEntry(nSelPos);
                 nSelPos++;
                 m_pListItemsLB->InsertEntry(sEntry, nSelPos);

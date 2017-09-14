@@ -271,7 +271,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
     rSet->Put( XFillBackgroundItem( m_pCbBackgroundColor->IsChecked() ) );
     if (m_pCbBackgroundColor->IsChecked())
     {
-        NamedColor aColor = m_pLbBackgroundColor->GetSelectEntry();
+        NamedColor aColor = m_pLbBackgroundColor->GetSelectedEntry();
         rSet->Put(XFillColorItem(aColor.second, aColor.first));
     }
     return true;

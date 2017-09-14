@@ -852,7 +852,7 @@ IMPL_LINK ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, void )
         if( nPos >= 0 )
         {
             OUString sMsg = FpsResId( STR_SVT_DELETESERVICE );
-            sMsg = sMsg.replaceFirst( "$servicename$", m_pServices_lb->GetSelectEntry() );
+            sMsg = sMsg.replaceFirst( "$servicename$", m_pServices_lb->GetSelectedEntry() );
             ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VclMessageType::Question, VclButtonsType::YesNo );
 
             if( aBox->Execute() == RET_YES )

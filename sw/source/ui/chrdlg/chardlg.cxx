@@ -270,11 +270,11 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     bModified = bURLModified || bNameModified || bTargetModified;
 
     // set valid settings first
-    OUString sEntry = m_pVisitedLB->GetSelectEntry();
+    OUString sEntry = m_pVisitedLB->GetSelectedEntry();
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, SwGetPoolIdFromName::ChrFmt);
     aINetFormat.SetVisitedFormatAndId( sEntry, nId );
 
-    sEntry = m_pNotVisitedLB->GetSelectEntry();
+    sEntry = m_pNotVisitedLB->GetSelectedEntry();
     nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, SwGetPoolIdFromName::ChrFmt);
     aINetFormat.SetINetFormatAndId( sEntry, nId );
 

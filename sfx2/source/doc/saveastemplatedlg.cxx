@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, SelectCategoryHdl, ListBox&, void)
     }
     else
     {
-        msSelectedCategory = mpLBCategory->GetSelectEntry();
+        msSelectedCategory = mpLBCategory->GetSelectedEntry();
         mpOKButton->Enable(!msTemplateName.isEmpty());
     }
 }

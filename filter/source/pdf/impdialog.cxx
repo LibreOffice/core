@@ -1802,7 +1802,7 @@ void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     paParent->msSignReason = mpEdSignReason->GetText();
     // Entry 0 is 'None'
     if (mpLBSignTSA->GetSelectEntryPos() >= 1)
-        paParent->msSignTSA = mpLBSignTSA->GetSelectEntry();
+        paParent->msSignTSA = mpLBSignTSA->GetSelectedEntry();
 }
 
 

@@ -1414,7 +1414,7 @@ void SmSymbolDialog::FillSymbolSets()
 
 IMPL_LINK_NOARG( SmSymbolDialog, SymbolSetChangeHdl, ListBox&, void )
 {
-    SelectSymbolSet(m_pSymbolSets->GetSelectEntry());
+    SelectSymbolSet(m_pSymbolSets->GetSelectedEntry());
 }
 
 
@@ -1428,7 +1428,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, Button*, void)
     ScopedVclPtrInstance<SmSymDefineDialog> pDialog(this, pFontListDev, rSymbolMgr);
 
     // set current symbol and SymbolSet for the new dialog
-    const OUString  aSymSetName (m_pSymbolSets->GetSelectEntry()),
+    const OUString  aSymSetName (m_pSymbolSets->GetSelectedEntry()),
                     aSymName    (m_pSymbolName->GetText());
     pDialog->SelectOldSymbolSet(aSymSetName);
     pDialog->SelectOldSymbol(aSymName);
@@ -1436,7 +1436,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, Button*, void)
     pDialog->SelectSymbol(aSymName);
 
     // remember old SymbolSet
-    OUString  aOldSymbolSet (m_pSymbolSets->GetSelectEntry());
+    OUString  aOldSymbolSet (m_pSymbolSets->GetSelectedEntry());
 
     sal_uInt16 nSymPos = m_pSymbolSetDisplay->GetSelectSymbol();
 
@@ -1710,7 +1710,7 @@ void SmSymDefineDialog::FillStyles()
     pStyles->Clear();
     pStyles->SetText(OUString());
 
-    OUString aText (pFonts->GetSelectEntry());
+    OUString aText (pFonts->GetSelectedEntry());
     if (!aText.isEmpty())
     {
         // use own StyleNames
@@ -1779,7 +1779,7 @@ IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox&, rListBox, void )
     (void) rListBox;
     assert(&rListBox == pFonts && "Sm : wrong argument");
 
-    SelectFont(pFonts->GetSelectEntry());
+    SelectFont(pFonts->GetSelectedEntry());
 }
 
 
@@ -1937,7 +1937,7 @@ void SmSymDefineDialog::UpdateButtons()
         bool bEqual = pOrigSymbol
                     && aTmpSymbolSetName.equalsIgnoreAsciiCase(pOldSymbolSetName->GetText())
                     && aTmpSymbolName == pOrigSymbol->GetName()
-                    && pFonts->GetSelectEntry().equalsIgnoreAsciiCase(
+                    && pFonts->GetSelectedEntry().equalsIgnoreAsciiCase(
                             pOrigSymbol->GetFace().GetFamilyName())
                     && pStyles->GetText().equalsIgnoreAsciiCase(
                             GetFontStyles().GetStyleName(pOrigSymbol->GetFace()))
@@ -2285,7 +2285,7 @@ bool SmSymDefineDialog::SelectFont(const OUString &rFontName, bool bApplyFont)
             SelectStyle(pStyles->GetEntry(0));
         if (bApplyFont)
         {
-            SetFont(pFonts->GetSelectEntry(), pStyles->GetText());
+            SetFont(pFonts->GetSelectedEntry(), pStyles->GetText());
             pSymbolDisplay->SetSymbol( pCharsetDisplay->GetSelectCharacter(), pCharsetDisplay->GetFont() );
         }
         bRet = true;
@@ -2314,7 +2314,7 @@ bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
         pStyles->SetText(pStyles->GetEntry(nPos));
         if (bApplyFont)
         {
-            SetFont(pFonts->GetSelectEntry(), pStyles->GetText());
+            SetFont(pFonts->GetSelectedEntry(), pStyles->GetText());
             pSymbolDisplay->SetSymbol( pCharsetDisplay->GetSelectCharacter(), pCharsetDisplay->GetFont() );
         }
         bRet = true;

@@ -286,7 +286,7 @@ bool SvxLineDefTabPage::FillItemSet( SfxItemSet* rAttrs )
         {
             FillDash_Impl();
 
-            OUString aString( m_pLbLineStyles->GetSelectEntry() );
+            OUString aString( m_pLbLineStyles->GetSelectedEntry() );
             rAttrs->Put( XLineStyleItem( drawing::LineStyle_DASH ) );
             rAttrs->Put( XLineDashItem( aString, aDash ) );
         }

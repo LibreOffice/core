@@ -546,7 +546,7 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
     if ( mbIsPixelFormat )
     {
         sal_Int32 nBitsPerPixel = 24;
-        OUString aEntry( mpLbColorDepth->GetSelectEntry() );
+        OUString aEntry( mpLbColorDepth->GetSelectedEntry() );
         if ( ms1BitTreshold == aEntry )
             nBitsPerPixel = 1;
         else if ( ms1BitDithered == aEntry )
