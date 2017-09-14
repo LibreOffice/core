@@ -44,6 +44,7 @@ public:
     void testDeleteArea_0Ranges();
     void testJoin_Case1();
     void testJoin_Case2();
+    void testJoin_Case3();
     void testGetIntersectedRange();
 
     void testUpdateReference_DeleteRow();
@@ -72,6 +73,7 @@ public:
     CPPUNIT_TEST(testDeleteArea_0Ranges);
     CPPUNIT_TEST(testJoin_Case1);
     CPPUNIT_TEST(testJoin_Case2);
+    CPPUNIT_TEST(testJoin_Case3);
     CPPUNIT_TEST(testUpdateReference_DeleteRow);
     CPPUNIT_TEST(testUpdateReference_DeleteLastRow);
     CPPUNIT_TEST(testUpdateReference_DeleteCol);
@@ -422,6 +424,27 @@ void Test::testJoin_Case2()
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
     CPPUNIT_ASSERT_EQUAL(ScRange(1,1,0,9,3,0), *aList[0]);
+}
+
+void Test::testJoin_Case3()
+{
+    ScRangeList aList;
+    aList.Join(ScRange(1,1,0,6,6,0));
+    aList.Join(ScRange(3,3,0,4,4,0));
+
+    // The second one should have been swallowed by the first one
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(1,1,0,6,6,0), *aList[0]);
+
+    // Add a disjoint one
+    aList.Join(ScRange(8,8,0,9,9,0));
+
+    // Should be two ones now
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
+    // The first one should still be as is
+    CPPUNIT_ASSERT_EQUAL(ScRange(1,1,0,6,6,0), *aList[0]);
+    // Ditto for the second one
+    CPPUNIT_ASSERT_EQUAL(ScRange(8,8,0,9,9,0), *aList[1]);
 }
 
 void Test::testUpdateReference_DeleteRow()
