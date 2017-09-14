@@ -25,6 +25,8 @@ private:
     DECL_LINK(DeleteHdl_Impl, Button*, void);
     DECL_LINK(OKHdl_Impl, Button*, void);
 
+    DECL_LINK(SelectHdl, ListBox&, void);
+
     std::set<OUString> m_aURLs;
 
     void AddTSAURL(const OUString &rURL);
