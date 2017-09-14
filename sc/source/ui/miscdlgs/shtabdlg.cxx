@@ -66,9 +66,9 @@ void ScShowTabDlg::Insert( const OUString& rString, bool bSelected )
         m_pLb->SelectEntryPos( m_pLb->GetEntryCount() - 1 );
 }
 
-sal_Int32 ScShowTabDlg::GetSelectEntryCount() const
+sal_Int32 ScShowTabDlg::GetSelectedEntryCount() const
 {
-    return m_pLb->GetSelectEntryCount();
+    return m_pLb->GetSelectedEntryCount();
 }
 
 OUString ScShowTabDlg::GetSelectedEntry(sal_Int32 nPos) const

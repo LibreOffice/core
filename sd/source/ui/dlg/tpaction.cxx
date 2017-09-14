@@ -277,7 +277,7 @@ bool SdTPAction::FillItemSet( SfxItemSet* rAttrs )
     bool bModified = false;
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
 
-    if( m_pLbAction->GetSelectEntryCount() )
+    if( m_pLbAction->GetSelectedEntryCount() )
         eCA = GetActualClickAction();
 
     if( m_pLbAction->IsValueChangedFromSaved() )

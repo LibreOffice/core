@@ -290,7 +290,7 @@ IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, Button*, pButton, void )
 {
     sal_Int32 nIndex = m_pLbChartColors->GetSelectedEntryPos();
 
-    if (m_pLbChartColors->GetSelectEntryCount() == 0)
+    if (m_pLbChartColors->GetSelectedEntryCount() == 0)
         return;
 
     if( pColorConfig )

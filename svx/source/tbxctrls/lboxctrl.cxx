@@ -126,7 +126,7 @@ IMPL_LINK_NOARG(SvxUndoRedoControl, PopupModeEndHdl, FloatingWindow*, void)
     if( pPopupWin && FloatWinPopupFlags::NONE == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
     {
-        const sal_Int32 nCount = pPopupWin->GetListBox().GetSelectEntryCount();
+        const sal_Int32 nCount = pPopupWin->GetListBox().GetSelectedEntryCount();
 
         INetURLObject aObj( m_aCommandURL );
 
@@ -162,7 +162,7 @@ IMPL_LINK_NOARG(SvxUndoRedoControl, SelectHdl, ListBox&, void)
 
         ListBox &rListBox = pPopupWin->GetListBox();
         if (rListBox.IsTravelSelect())
-            Impl_SetInfo( rListBox.GetSelectEntryCount() );
+            Impl_SetInfo( rListBox.GetSelectedEntryCount() );
         else
         {
             pPopupWin->SetUserSelected( true );
@@ -244,7 +244,7 @@ VclPtr<SfxPopupWindow> SvxUndoRedoControl::CreatePopupWindow()
     rListBox.SelectEntryPos( 0 );
     aActionStr = SvxResId(SID_UNDO == GetSlotId() ?
                                   RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS);
-    Impl_SetInfo( rListBox.GetSelectEntryCount() );
+    Impl_SetInfo( rListBox.GetSelectedEntryCount() );
 
     // move focus in floating window without
     // closing it (GrabFocus() would close it!)

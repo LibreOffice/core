@@ -378,10 +378,10 @@ namespace dbp
 
     void OGridFieldsSelection::implCheckButtons()
     {
-        m_pSelectOne->Enable(m_pExistFields->GetSelectEntryCount() != 0);
+        m_pSelectOne->Enable(m_pExistFields->GetSelectedEntryCount() != 0);
         m_pSelectAll->Enable(m_pExistFields->GetEntryCount() != 0);
 
-        m_pDeselectOne->Enable(m_pSelFields->GetSelectEntryCount() != 0);
+        m_pDeselectOne->Enable(m_pSelFields->GetSelectedEntryCount() != 0);
         m_pDeselectAll->Enable(m_pSelFields->GetEntryCount() != 0);
 
         getDialog()->enableButtons(WizardButtonFlags::FINISH, 0 != m_pSelFields->GetEntryCount());
