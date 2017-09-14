@@ -409,7 +409,7 @@ RDFaImportHelper::AddRDFa(
         SAL_WARN("xmloff.core", "AddRDFa: invalid arg: null RDFa attributes");
         return;
     }
-    m_RDFaEntries.push_back(RDFaEntry(i_xObject, i_pRDFaAttributes));
+    m_RDFaEntries.emplace_back(i_xObject, i_pRDFaAttributes);
 }
 
 void

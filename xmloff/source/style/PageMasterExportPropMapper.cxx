@@ -56,7 +56,7 @@ static void lcl_RemoveStateIfZero16( XMLPropertyState* pState )
 static void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int32 nIndex, const OUString& rProperty, const uno::Reference< beans::XPropertySet >& xProps)
 {
     if(::cppu::any2bool(xProps->getPropertyValue(rProperty)))
-        rPropState.push_back(XMLPropertyState (nIndex, css::uno::Any(true)));
+        rPropState.emplace_back(nIndex, css::uno::Any(true));
 }
 
 // helper struct to handle equal XMLPropertyState's for page, header and footer

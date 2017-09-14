@@ -134,7 +134,7 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
 
 void MultiImageImportHelper::addContent(const SvXMLImportContext& rSvXMLImportContext)
 {
-    maImplContextVector.push_back(SvXMLImportContextRef(const_cast< SvXMLImportContext* >(&rSvXMLImportContext)));
+    maImplContextVector.emplace_back(const_cast< SvXMLImportContext* >(&rSvXMLImportContext));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

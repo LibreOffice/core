@@ -349,8 +349,8 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     if ( rNPList.empty() ) {
         // create default list style for top level
         sal_Int16 lev(0);
-        rNPList.push_back(::std::make_pair(none,
-            MakeNumRule(i_rImport, nullptr, none, none, lev) ));
+        rNPList.emplace_back(none,
+            MakeNumRule(i_rImport, nullptr, none, none, lev) );
     }
     // create num rule first because this might clamp the level...
     uno::Reference<container::XIndexReplace> xNumRules;

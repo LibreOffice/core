@@ -151,7 +151,7 @@ SvXMLAttributeList::~SvXMLAttributeList()
 void SvXMLAttributeList::AddAttribute(  const OUString &sName ,
                                         const OUString &sValue )
 {
-    m_pImpl->vecAttribute.push_back( SvXMLTagAttribute_Impl( sName , sValue ) );
+    m_pImpl->vecAttribute.emplace_back( sName , sValue );
 }
 
 void SvXMLAttributeList::Clear()
@@ -183,9 +183,9 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< css::xml::sa
     m_pImpl->vecAttribute.reserve( nTotalSize );
 
     for( sal_Int16 i = 0 ; i < nMax ; ++i ) {
-        m_pImpl->vecAttribute.push_back( SvXMLTagAttribute_Impl(
+        m_pImpl->vecAttribute.emplace_back(
             r->getNameByIndex( i ) ,
-            r->getValueByIndex( i )));
+            r->getValueByIndex( i ));
     }
 
     OSL_ASSERT( nTotalSize == (SvXMLAttributeList_Impl::size_type)getLength());
