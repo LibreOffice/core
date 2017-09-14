@@ -104,6 +104,7 @@ public:
     void testTdf92076();
     void testTdf59046();
     void testTdf105739();
+    void testTdf111863();
     void testTdf111518();
     void testTdf106867();
     void testTdf112280();
@@ -140,6 +141,7 @@ public:
     CPPUNIT_TEST(testTdf92076);
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
+    CPPUNIT_TEST(testTdf111863);
     CPPUNIT_TEST(testTdf111518);
     CPPUNIT_TEST(testTdf106867);
     CPPUNIT_TEST(testTdf112280);
@@ -807,6 +809,19 @@ void SdOOXMLExportTest2::testTdf105739()
     }
 
     xShell->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf111863()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf111863.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // check that transition attribute didn't change from 'out' to 'in'
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animEffect",
+        "transition", "out");
 }
 
 void SdOOXMLExportTest2::testTdf111518()

@@ -1454,18 +1454,19 @@ void PowerPointExport::WriteAnimationNodeSeq( const FSHelperPtr& pFS, const Refe
 void PowerPointExport::WriteAnimationNodeEffect( const FSHelperPtr& pFS, const Reference< XAnimationNode >& rXNode, sal_Int32, bool bMainSeqChild )
 {
     SAL_INFO("sd.eppt", "write animation node FILTER");
-    Reference< XTransitionFilter > xFilter( rXNode, UNO_QUERY );
-    if ( xFilter.is() ) {
-    const char* pFilter = ::ppt::AnimationExporter::FindTransitionName( xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection() );
-    const char* pDirection = xFilter->getDirection() ? "in" : "out";
-    pFS->startElementNS( XML_p, XML_animEffect,
-                 XML_filter, pFilter,
-                 XML_transition, pDirection,
-                 FSEND );
+    Reference< XTransitionFilter > xFilter(rXNode, UNO_QUERY);
+    if (xFilter.is())
+    {
+        const char* pFilter = ::ppt::AnimationExporter::FindTransitionName(xFilter->getTransition(), xFilter->getSubtype(), xFilter->getDirection());
+        const char* pMode = xFilter->getMode() ? "in" : "out";
+        pFS->startElementNS(XML_p, XML_animEffect,
+                            XML_filter, pFilter,
+                            XML_transition, pMode,
+                            FSEND);
 
-    WriteAnimationNodeAnimateInside( pFS, rXNode, bMainSeqChild, false );
+        WriteAnimationNodeAnimateInside( pFS, rXNode, bMainSeqChild, false );
 
-    pFS->endElementNS( XML_p, XML_animEffect );
+        pFS->endElementNS( XML_p, XML_animEffect );
     }
 }
 
