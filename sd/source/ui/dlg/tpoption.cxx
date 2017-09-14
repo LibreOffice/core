@@ -414,7 +414,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // metric
-    const sal_Int32 nMPos = m_pLbMetric->GetSelectEntryPos();
+    const sal_Int32 nMPos = m_pLbMetric->GetSelectedEntryPos();
     if ( m_pLbMetric->IsValueChangedFromSaved() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nMPos ));
@@ -530,7 +530,7 @@ VclPtr<SfxTabPage> SdTpOptionsMisc::Create( vcl::Window* pWindow,
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox&, void)
 {
-    sal_Int32 nPos = m_pLbMetric->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbMetric->GetSelectedEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {

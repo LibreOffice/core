@@ -585,7 +585,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     // - no line - should not be selected
 
-    if ( m_pLbLineStyle->GetSelectEntryPos() == 0 )
+    if ( m_pLbLineStyle->GetSelectedEntryPos() == 0 )
     {
         m_pLbLineStyle->SelectEntryPos( 1 );
         SelStyleHdl_Impl(*m_pLbLineStyle);
@@ -878,7 +878,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
     if( m_pFrameSel->IsAnyBorderSelected() )
     {
         // any visible style, but "no-line" in line list box? -> use hair-line
-        if( (m_pLbLineStyle->GetSelectEntryPos() == 0) || (m_pLbLineStyle->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND) )
+        if( (m_pLbLineStyle->GetSelectedEntryPos() == 0) || (m_pLbLineStyle->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND) )
             m_pLbLineStyle->SelectEntryPos( 1 );
 
         // set current style to all previously selected lines

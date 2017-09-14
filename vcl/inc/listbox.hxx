@@ -131,7 +131,7 @@ public:
 
     sal_Int32       GetSelectEntryCount() const;
     OUString        GetSelectedEntry( sal_Int32  nIndex ) const;
-    sal_Int32       GetSelectEntryPos( sal_Int32  nIndex ) const;
+    sal_Int32       GetSelectedEntryPos( sal_Int32  nIndex ) const;
     bool            IsEntryPosSelected( sal_Int32  nIndex ) const;
 
     void            SetLastSelected( sal_Int32  nPos )  { mnLastSelected = nPos; }

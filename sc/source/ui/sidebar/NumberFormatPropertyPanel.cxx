@@ -104,7 +104,7 @@ void NumberFormatPropertyPanel::Initialize()
 
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, void )
 {
-    const sal_Int32 nVal = rBox.GetSelectEntryPos();
+    const sal_Int32 nVal = rBox.GetSelectedEntryPos();
     if( nVal != mnCategorySelected )
     {
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nVal );
@@ -268,7 +268,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             else if ( mpBtnEngineering->IsVisible() )
                 mpBtnEngineering->Check(bThousand);
             mpBtnNegRed->Check(bNegRed);
-            if ( mpLbCategory->GetSelectEntryPos() == 0 )
+            if ( mpLbCategory->GetSelectedEntryPos() == 0 )
                 mpEdDecimals->SetText(""); // tdf#44399
             else if ( mpEdDecimals->IsVisible() )
                 mpEdDecimals->SetValue(nPrecision);

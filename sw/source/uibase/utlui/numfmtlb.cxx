@@ -327,14 +327,14 @@ void NumFormatListBox::SetDefFormat(const sal_uInt32 nDefaultFormat)
 
 sal_uInt32 NumFormatListBox::GetFormat() const
 {
-    sal_Int32 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectedEntryPos();
 
     return static_cast<sal_uInt32>(reinterpret_cast<sal_uIntPtr>(GetEntryData(nPos)));
 }
 
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
 {
-    const sal_Int32 nPos = rBox.GetSelectEntryPos();
+    const sal_Int32 nPos = rBox.GetSelectedEntryPos();
     OUString sDefine(SwResId( STR_DEFINE_NUMBERFORMAT ));
     SwView *pView = GetActiveView();
 

@@ -305,7 +305,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
     const sal_Int32 nOld = GetTypeSel();
 
     // current ListBoxPos
-    SetTypeSel(m_pTypeLB->GetSelectEntryPos());
+    SetTypeSel(m_pTypeLB->GetSelectedEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
     {
@@ -369,7 +369,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
             }
 
             m_pTypeLB->SelectEntry(sName);
-            SetTypeSel(m_pTypeLB->GetSelectEntryPos());
+            SetTypeSel(m_pTypeLB->GetSelectedEntryPos());
         }
         else
         {
@@ -402,7 +402,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
             case TYP_GETREFFLD:
                 if (REFFLDFLAG & (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld)))
                     // the old one stays
-                    nFieldDlgFormatSel = m_pFormatLB->GetSelectEntryPos();
+                    nFieldDlgFormatSel = m_pFormatLB->GetSelectedEntryPos();
                 bName = true;
                 break;
 
@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
                     const sal_uInt16 nOldId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld));
                     if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
                         // then the old one stays
-                        nFieldDlgFormatSel = m_pFormatLB->GetSelectEntryPos();
+                        nFieldDlgFormatSel = m_pFormatLB->GetSelectedEntryPos();
                 }
                 break;
         }
@@ -504,7 +504,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
     // #i83479#
     if ( m_pSelectionLB->IsVisible() )
     {
-        const sal_Int32 nSelectionSel = m_pSelectionLB->GetSelectEntryPos();
+        const sal_Int32 nSelectionSel = m_pSelectionLB->GetSelectedEntryPos();
         if (nSelectionSel != LISTBOX_ENTRY_NOTFOUND)
         {
             sOldSel = m_pSelectionLB->GetEntry(nSelectionSel);
@@ -773,7 +773,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
 {
     OUString sOldSel;
 
-    sal_Int32 nFormatSel = m_pFormatLB->GetSelectEntryPos();
+    sal_Int32 nFormatSel = m_pFormatLB->GetSelectedEntryPos();
     if (nFormatSel != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = m_pFormatLB->GetEntry(nFormatSel);
 
@@ -879,7 +879,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
     sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     sal_uInt16 nSubType = 0;
-    const sal_Int32 nEntryPos = m_pFormatLB->GetSelectEntryPos();
+    const sal_Int32 nEntryPos = m_pFormatLB->GetSelectedEntryPos();
     const sal_uLong nFormat = (nEntryPos == LISTBOX_ENTRY_NOTFOUND)
         ? 0 : reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(nEntryPos));
 
@@ -1067,12 +1067,12 @@ sal_uInt16 SwFieldRefPage::GetGroup()
 
 void    SwFieldRefPage::FillUserData()
 {
-    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
+    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectedEntryPos();
     const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
         ? USHRT_MAX
         : sal::static_int_cast< sal_uInt16 >
             (reinterpret_cast< sal_uIntPtr >(m_pTypeLB->GetEntryData( nEntryPos )));
-    const sal_Int32 nFormatEntryPos = m_pFormatLB->GetSelectEntryPos();
+    const sal_Int32 nFormatEntryPos = m_pFormatLB->GetSelectedEntryPos();
     const sal_uInt32 nFormatSel = LISTBOX_ENTRY_NOTFOUND == nFormatEntryPos ? USHRT_MAX : nFormatEntryPos;
     SetUserData( USER_DATA_VERSION ";" +
         OUString::number( nTypeSel ) + ";" +

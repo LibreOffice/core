@@ -395,7 +395,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl, Button*, void)
 
 IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl, ListBox&, void)
 {
-    nIndex = m_pLbFormat->GetSelectEntryPos();
+    nIndex = m_pLbFormat->GetSelectedEntryPos();
     UpdateChecks();
 
     if ( nIndex == 0 )

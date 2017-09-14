@@ -954,7 +954,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, Button *, pButton, void )
         if(pPage1_Designs->GetSelectEntryCount() == 0)
             pPage1_Designs->SelectEntryPos(0);
 
-        const sal_Int32 nPos = pPage1_Designs->GetSelectEntryPos();
+        const sal_Int32 nPos = pPage1_Designs->GetSelectedEntryPos();
         m_pDesign = &m_aDesignList[nPos];
         DBG_ASSERT(m_pDesign, "No Design? That's not allowed (CL)");
 
@@ -966,7 +966,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, Button *, pButton, void )
 // Clickhandler for the choice of one design
 IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl, ListBox&, void)
 {
-    const sal_Int32 nPos = pPage1_Designs->GetSelectEntryPos();
+    const sal_Int32 nPos = pPage1_Designs->GetSelectedEntryPos();
     m_pDesign = &m_aDesignList[nPos];
     DBG_ASSERT(m_pDesign, "No Design? That's not allowed (CL)");
 
@@ -979,7 +979,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl, ListBox&, void)
 // Clickhandler for the delete of one design
 IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl, Button*, void)
 {
-    const sal_Int32 nPos = pPage1_Designs->GetSelectEntryPos();
+    const sal_Int32 nPos = pPage1_Designs->GetSelectedEntryPos();
 
     std::vector<SdPublishingDesign>::iterator iter = m_aDesignList.begin()+nPos;
 

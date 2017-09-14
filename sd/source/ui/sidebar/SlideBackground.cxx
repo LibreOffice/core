@@ -289,7 +289,7 @@ void SlideBackground::HandleContextChange(
 
 void SlideBackground::Update()
 {
-    const eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectEntryPos();
+    const eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectedEntryPos();
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     if (!pSh)
@@ -759,7 +759,7 @@ void SlideBackground::NotifyItemUpdate(
             if (pSizeItem)
             {
                 Size aPaperSize = pSizeItem->GetSize();
-                if(mpPaperOrientation->GetSelectEntryPos() == 0)
+                if(mpPaperOrientation->GetSelectedEntryPos() == 0)
                    Swap(aPaperSize);
 
                 Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, meUnit, true);
@@ -877,7 +877,7 @@ void SlideBackground::SetMetricFieldMaxValues( const Size& rPageSize )
 
 IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 {
-    const eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectEntryPos();
+    const eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectedEntryPos();
     Update();
 
     switch (nPos)
@@ -929,10 +929,10 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
     Paper ePaper =  mpPaperSizeBox->GetSelection();
     Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, meUnit));
 
-    if(mpPaperOrientation->GetSelectEntryPos() == 0)
+    if(mpPaperOrientation->GetSelectedEntryPos() == 0)
         Swap(aSize);
 
-    mpPageItem->SetLandscape(mpPaperOrientation->GetSelectEntryPos() == 0);
+    mpPageItem->SetLandscape(mpPaperOrientation->GetSelectedEntryPos() == 0);
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
     // Page/slide properties dialog (FuPage::ExecuteDialog and ::ApplyItemSet) misuses
     // SID_ATTR_PAGE_EXT1 to distinguish between Impress and Draw, as for whether to fit
@@ -944,7 +944,7 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectEntryPos();
+    const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectedEntryPos();
     switch(eXFS)
     {
         case drawing::FillStyle_SOLID:
@@ -972,7 +972,7 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
 
 IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
 {
-    const eFillStyle nFillPos = (eFillStyle)mpFillStyle->GetSelectEntryPos();
+    const eFillStyle nFillPos = (eFillStyle)mpFillStyle->GetSelectedEntryPos();
     SfxObjectShell* pSh = SfxObjectShell::Current();
     switch(nFillPos)
     {
@@ -980,7 +980,7 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
         case HATCH:
         {
             const SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
-            sal_uInt16 nPos = mpFillAttr->GetSelectEntryPos();
+            sal_uInt16 nPos = mpFillAttr->GetSelectedEntryPos();
             XHatch aHatch = aHatchListItem.GetHatchList()->GetHatch(nPos)->GetHatch();
             const OUString aHatchName = aHatchListItem.GetHatchList()->GetHatch(nPos)->GetName();
 
@@ -992,7 +992,7 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
         case BITMAP:
         case PATTERN:
         {
-            sal_Int16 nPos = mpFillAttr->GetSelectEntryPos();
+            sal_Int16 nPos = mpFillAttr->GetSelectedEntryPos();
             GraphicObject aBitmap;
             OUString aName;
             if( nFillPos == BITMAP )

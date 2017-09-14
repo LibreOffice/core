@@ -215,7 +215,7 @@ const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
         aStrCurSelTable = m_pLbTables->GetSelectedEntry();
         pStr = &aStrCurSelTable;
         if ( pN )
-            *pN = m_pLbTables->GetSelectEntryPos();
+            *pN = m_pLbTables->GetSelectedEntryPos();
         nSelTabIndex = 1;
     }
 
@@ -231,7 +231,7 @@ const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
         aStrCurSelTable = m_pLbTables->GetSelectedEntry( nSelTabIndex );
         pStr = &aStrCurSelTable;
         if ( pN )
-            *pN = m_pLbTables->GetSelectEntryPos( nSelTabIndex );
+            *pN = m_pLbTables->GetSelectedEntryPos( nSelTabIndex );
         nSelTabIndex++;
     }
 

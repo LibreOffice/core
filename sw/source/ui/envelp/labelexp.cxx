@@ -76,7 +76,7 @@ void SwVisitingCardPage::InitFrameControl()
     }
     if(m_pAutoTextGroupLB->GetEntryCount())
     {
-        if(LISTBOX_ENTRY_NOTFOUND == m_pAutoTextGroupLB->GetSelectEntryPos())
+        if(LISTBOX_ENTRY_NOTFOUND == m_pAutoTextGroupLB->GetSelectedEntryPos())
             m_pAutoTextGroupLB->SelectEntryPos(0);
         const OUString *pCurGroupName(
             static_cast<const OUString*>(m_pAutoTextGroupLB->GetSelectEntryData()));
@@ -110,7 +110,7 @@ IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl, SwOneExampleFram
     uno::Reference< text::XTextCursor > & xCursor = pExampleFrame->GetTextCursor();
     OUString uEntry(sEntry);
 
-    if(LISTBOX_ENTRY_NOTFOUND != m_pAutoTextGroupLB->GetSelectEntryPos())
+    if(LISTBOX_ENTRY_NOTFOUND != m_pAutoTextGroupLB->GetSelectedEntryPos())
     {
         const OUString *pGroup( static_cast<const OUString*>(m_pAutoTextGroupLB->GetSelectEntryData()) );
         uno::Any aGroup = m_xAutoText->getByName(*pGroup);

@@ -385,7 +385,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl, Button*, void)
             theOutParam.nCol            = aDestAddress.Col();
             theOutParam.nRow            = aDestAddress.Row();
             theOutParam.nTab            = aDestAddress.Tab();
-            theOutParam.eFunction       = LbPosToFunc( pLbFunc->GetSelectEntryPos() );
+            theOutParam.eFunction       = LbPosToFunc( pLbFunc->GetSelectedEntryPos() );
             theOutParam.bByCol          = pBtnByCol->IsChecked();
             theOutParam.bByRow          = pBtnByRow->IsChecked();
             theOutParam.bReferenceData  = pBtnRefs->IsChecked();
@@ -473,7 +473,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
     else if ( pBtn == pBtnRemove )
     {
         while ( pLbConsAreas->GetSelectEntryCount() )
-            pLbConsAreas->RemoveEntry( pLbConsAreas->GetSelectEntryPos() );
+            pLbConsAreas->RemoveEntry( pLbConsAreas->GetSelectedEntryPos() );
         pBtnRemove->Disable();
     }
 }
@@ -490,7 +490,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox&, rLb, void )
     else if ( (&rLb == pLbDataArea) || (&rLb == pLbDestArea) )
     {
         Edit*   pEd = (&rLb == pLbDataArea) ? pEdDataArea : pEdDestArea;
-        const sal_Int32 nSelPos = rLb.GetSelectEntryPos();
+        const sal_Int32 nSelPos = rLb.GetSelectedEntryPos();
 
         if (    pRangeUtil
             && (nSelPos > 0)

@@ -1447,7 +1447,7 @@ namespace svxform
     }
     void DataNavigatorWindow::ModelSelectHdl(ListBox const * pBox)
     {
-        sal_Int32 nPos = m_pModelsBox->GetSelectEntryPos();
+        sal_Int32 nPos = m_pModelsBox->GetSelectedEntryPos();
         // pBox == NULL, if you want to force a new fill.
         if ( nPos != m_nLastSelectedPos || !pBox )
         {
@@ -1462,7 +1462,7 @@ namespace svxform
     {
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
-        sal_Int32 nSelectedPos = m_pModelsBox->GetSelectEntryPos();
+        sal_Int32 nSelectedPos = m_pModelsBox->GetSelectedEntryPos();
         OUString sSelectedModel( m_pModelsBox->GetEntry( nSelectedPos ) );
         Reference< css::xforms::XModel > xModel;
         try

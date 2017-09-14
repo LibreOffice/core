@@ -1529,14 +1529,14 @@ bool SvxConfigPage::FillItemSet( SfxItemSet* )
 IMPL_LINK_NOARG( SvxConfigPage, SelectSaveInLocation, ListBox&, void )
 {
     pCurrentSaveInData = static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData(
-            m_pSaveInListBox->GetSelectEntryPos()));
+            m_pSaveInListBox->GetSelectedEntryPos()));
 
     Init();
 }
 
 void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry const * pToSelect )
 {
-    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
+    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectedEntryPos();
     m_pTopLevelListBox->Clear();
 
     if ( GetSaveInData() && GetSaveInData()->GetEntries() )

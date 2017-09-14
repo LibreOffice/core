@@ -465,9 +465,9 @@ bool ScTPValidationValue::FillItemSet( SfxItemSet* rArgSet )
         ValidListType::INVISIBLE;
 
     rArgSet->Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>(
-                    lclGetValModeFromPos( m_pLbAllow->GetSelectEntryPos() ) ) ) );
+                    lclGetValModeFromPos( m_pLbAllow->GetSelectedEntryPos() ) ) ) );
     rArgSet->Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>(
-                    lclGetCondModeFromPos( m_pLbValue->GetSelectEntryPos() ) ) ) );
+                    lclGetCondModeFromPos( m_pLbValue->GetSelectedEntryPos() ) ) ) );
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
     rArgSet->Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
     rArgSet->Put( SfxBoolItem( FID_VALID_BLANK, m_pCbAllow->IsChecked() ) );
@@ -478,7 +478,7 @@ bool ScTPValidationValue::FillItemSet( SfxItemSet* rArgSet )
 OUString ScTPValidationValue::GetFirstFormula() const
 {
     OUString aFmlaStr;
-    if( m_pLbAllow->GetSelectEntryPos() == SC_VALIDDLG_ALLOW_LIST )
+    if( m_pLbAllow->GetSelectedEntryPos() == SC_VALIDDLG_ALLOW_LIST )
         lclGetFormulaFromStringList( aFmlaStr, m_pEdList->GetText(), mcFmlaSep );
     else
         aFmlaStr = m_pEdMin->GetText();
@@ -494,7 +494,7 @@ void ScTPValidationValue::SetFirstFormula( const OUString& rFmlaStr )
 {
     // try if formula is a string list, validation mode must already be set
     OUString aStringList;
-    if( (m_pLbAllow->GetSelectEntryPos() == SC_VALIDDLG_ALLOW_RANGE) &&
+    if( (m_pLbAllow->GetSelectedEntryPos() == SC_VALIDDLG_ALLOW_RANGE) &&
         lclGetStringListFromFormula( aStringList, rFmlaStr, mcFmlaSep ) )
     {
         m_pEdList->SetText( aStringList );
@@ -583,7 +583,7 @@ void ScTPValidationValue::RemoveRefDlg()
 
 IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl, Control&, void)
 {
-    const sal_Int32 nPos = m_pLbAllow->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLbAllow->GetSelectedEntryPos();
 
     if ( nPos == SC_VALIDDLG_ALLOW_RANGE )
     {
@@ -605,7 +605,7 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, Control&, rControl, void )
 
 IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, ListBox&, void)
 {
-    const sal_Int32 nLbPos = m_pLbAllow->GetSelectEntryPos();
+    const sal_Int32 nLbPos = m_pLbAllow->GetSelectedEntryPos();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
     bool bRange = (nLbPos == SC_VALIDDLG_ALLOW_RANGE);
     bool bList = (nLbPos == SC_VALIDDLG_ALLOW_LIST);
@@ -626,7 +626,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl, ListBox&, void)
         m_pFtMin->SetText( maStrList );
     else
     {
-        switch( m_pLbValue->GetSelectEntryPos() )
+        switch( m_pLbValue->GetSelectedEntryPos() )
         {
             case SC_VALIDDLG_DATA_EQUAL:
             case SC_VALIDDLG_DATA_NOTEQUAL:     m_pFtMin->SetText( maStrValue );  break;
@@ -823,7 +823,7 @@ void ScTPValidationError::Reset( const SfxItemSet* rArgSet )
 bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
 {
     rArgSet->Put( SfxBoolItem( FID_VALID_SHOWERR, m_pTsbShow->GetState() == TRISTATE_TRUE ) );
-    rArgSet->Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_pLbAction->GetSelectEntryPos() ) );
+    rArgSet->Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_pLbAction->GetSelectedEntryPos() ) );
     rArgSet->Put( SfxStringItem( FID_VALID_ERRTITLE, m_pEdtTitle->GetText() ) );
     rArgSet->Put( SfxStringItem( FID_VALID_ERRTEXT, m_pEdError->GetText() ) );
 
@@ -832,7 +832,7 @@ bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
 
 IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl, ListBox&, void)
 {
-    ScValidErrorStyle eStyle = (ScValidErrorStyle) m_pLbAction->GetSelectEntryPos();
+    ScValidErrorStyle eStyle = (ScValidErrorStyle) m_pLbAction->GetSelectedEntryPos();
     bool bMacro = ( eStyle == SC_VALERR_MACRO );
 
     m_pBtnSearch->Enable( bMacro );

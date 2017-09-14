@@ -49,7 +49,7 @@ IMPL_STATIC_LINK(ScNumberFormat, NumFormatSelectHdl, ListBox&, rBox, void)
         SfxDispatcher* pDisp = SfxViewFrame::Current()->GetBindings().GetDispatcher();
         if(pDisp)
         {
-            const sal_Int32 nVal = rBox.GetSelectEntryPos();
+            const sal_Int32 nVal = rBox.GetSelectedEntryPos();
             SfxUInt16Item aItem(SID_NUMBER_TYPE_FORMAT, nVal);
             pDisp->ExecuteList(SID_NUMBER_TYPE_FORMAT,
                     SfxCallMode::RECORD, {&aItem});

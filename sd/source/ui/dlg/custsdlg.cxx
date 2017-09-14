@@ -104,7 +104,7 @@ void SdCustomShowDlg::dispose()
 
 void SdCustomShowDlg::CheckState()
 {
-    sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbCustomShows->GetSelectedEntryPos();
 
     bool bEnable = nPos != LISTBOX_ENTRY_NOTFOUND;
     m_pBtnEdit->Enable( bEnable );
@@ -155,7 +155,7 @@ void SdCustomShowDlg::SelectHdl(void const *p)
     // edit CustomShow
     else if( p == m_pBtnEdit )
     {
-        sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbCustomShows->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             DBG_ASSERT( pCustomShowList, "pCustomShowList does not exist" );
@@ -180,7 +180,7 @@ void SdCustomShowDlg::SelectHdl(void const *p)
     // delete CustomShow
     else if( p == m_pBtnRemove )
     {
-        sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbCustomShows->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             delete (*pCustomShowList)[nPos];
@@ -193,7 +193,7 @@ void SdCustomShowDlg::SelectHdl(void const *p)
     // copy CustomShow
     else if( p == m_pBtnCopy )
     {
-        sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbCustomShows->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             SdCustomShow* pShow = new SdCustomShow( *(*pCustomShowList)[nPos] );
@@ -251,7 +251,7 @@ void SdCustomShowDlg::SelectHdl(void const *p)
     }
     else if( p == m_pLbCustomShows )
     {
-        sal_Int32 nPos = m_pLbCustomShows->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbCustomShows->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
             pCustomShowList->Seek( nPos );
 
@@ -372,8 +372,8 @@ void SdDefineCustomShowDlg::dispose()
 // CheckState
 void SdDefineCustomShowDlg::CheckState()
 {
-    bool bPages = m_pLbPages->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    //sal_Bool bCSPages = aLbCustomPages.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    bool bPages = m_pLbPages->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    //sal_Bool bCSPages = aLbCustomPages.GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND;
     bool bCSPages = m_pLbCustomPages->FirstSelected() != nullptr;
     bool bCount = m_pLbCustomPages->GetEntryCount() > 0;
 
@@ -419,7 +419,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
 
                 m_pLbCustomPages->Select( pEntry );
                 SdPage* pPage = rDoc.GetSdPage( (sal_uInt16) m_pLbPages->
-                                    GetSelectEntryPos( i ), PageKind::Standard );
+                                    GetSelectedEntryPos( i ), PageKind::Standard );
                 pEntry->SetUserData( pPage );
 
                 if( nPosCP != TREELIST_APPEND )

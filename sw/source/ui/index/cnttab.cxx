@@ -1140,7 +1140,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
     CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
     rDesc.SetTitle(m_pTitleED->GetText());
-    rDesc.SetFromChapter(1 == m_pAreaLB->GetSelectEntryPos());
+    rDesc.SetFromChapter(1 == m_pAreaLB->GetSelectedEntryPos());
     SwTOXElement nContentOptions = SwTOXElement::NONE;
     if(m_pTOXMarksCB->IsVisible() && m_pTOXMarksCB->IsChecked())
         nContentOptions |= SwTOXElement::Mark;
@@ -1192,7 +1192,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         case TOX_TABLES :
             rDesc.SetCreateFromObjectNames(m_pFromObjectNamesRB->IsChecked());
             rDesc.SetSequenceName(m_pCaptionSequenceLB->GetSelectedEntry());
-            rDesc.SetCaptionDisplay((SwCaptionDisplay)m_pDisplayTypeLB->GetSelectEntryPos());
+            rDesc.SetCaptionDisplay((SwCaptionDisplay)m_pDisplayTypeLB->GetSelectedEntryPos());
         break;
         case TOX_OBJECTS:
         {
@@ -1211,7 +1211,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         case TOX_AUTHORITIES:
         case TOX_BIBLIOGRAPHY :
         {
-            if(m_pBracketLB->GetSelectEntryPos())
+            if(m_pBracketLB->GetSelectedEntryPos())
                 rDesc.SetAuthBrackets(m_pBracketLB->GetSelectedEntry());
             else
                 rDesc.SetAuthBrackets(aEmptyOUStr);
@@ -1460,7 +1460,7 @@ void SwTOXSelectTabPage::LanguageHdl( ListBox const * pBox )
             m_pSortAlgorithmLB->SelectEntryPos( nInsPos );
     }
 
-    if( LISTBOX_ENTRY_NOTFOUND == m_pSortAlgorithmLB->GetSelectEntryPos() )
+    if( LISTBOX_ENTRY_NOTFOUND == m_pSortAlgorithmLB->GetSelectedEntryPos() )
         m_pSortAlgorithmLB->SelectEntryPos( 0 );
 
     if(pBox)
@@ -2248,7 +2248,7 @@ VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( vcl::Window* pParent,     const Sf
 
 IMPL_LINK_NOARG(SwTOXEntryTabPage, EditStyleHdl, Button*, void)
 {
-    if( LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
+    if( LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectedEntryPos())
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pCharStyleLB->GetSelectedEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)SfxStyleFamily::Char);
@@ -2264,7 +2264,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, Button*, pButton, void)
     bool bInsert = pButton == m_pAuthInsertPB;
     if(bInsert)
     {
-        sal_Int32 nSelPos = m_pAuthFieldsLB->GetSelectEntryPos();
+        sal_Int32 nSelPos = m_pAuthFieldsLB->GetSelectedEntryPos();
         const OUString sToInsert(m_pAuthFieldsLB->GetSelectedEntry());
         SwFormToken aInsert(TOKEN_AUTHORITY);
         aInsert.nAuthorityField = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pAuthFieldsLB->GetEntryData(nSelPos));
@@ -2585,7 +2585,7 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox&, rBox, void)
 
 IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectedEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         Control* pCtrl = m_pTokenWIN->GetActiveControl();
@@ -2611,7 +2611,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, Edit&, rEdit, void)
 
 IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox&, rBox, void)
 {
-    const sal_Int32 nPos = rBox.GetSelectEntryPos();
+    const sal_Int32 nPos = rBox.GetSelectedEntryPos();
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
@@ -3776,7 +3776,7 @@ VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( vcl::Window* pParent,
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, EditStyleHdl, Button *, void)
 {
-    if( LISTBOX_ENTRY_NOTFOUND != m_pParaLayLB->GetSelectEntryPos())
+    if( LISTBOX_ENTRY_NOTFOUND != m_pParaLayLB->GetSelectedEntryPos())
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pParaLayLB->GetSelectedEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)SfxStyleFamily::Para);
@@ -3790,8 +3790,8 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EditStyleHdl, Button *, void)
 // allocate templates
 IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl, Button*, void)
 {
-    sal_Int32 nLevPos   = m_pLevelLB->GetSelectEntryPos();
-    sal_Int32 nTemplPos = m_pParaLayLB->GetSelectEntryPos();
+    sal_Int32 nLevPos   = m_pLevelLB->GetSelectedEntryPos();
+    sal_Int32 nTemplPos = m_pParaLayLB->GetSelectedEntryPos();
     if(nLevPos   != LISTBOX_ENTRY_NOTFOUND &&
        nTemplPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -3811,7 +3811,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl, Button*, void)
 
 IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl, Button*, void)
 {
-    const sal_Int32 nPos = m_pLevelLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLevelLB->GetSelectedEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         const OUString aStr(m_pLevelLB->GetEntry(nPos).getToken(0, aDeliStart));
@@ -3828,22 +3828,22 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, DoubleClickHdl, ListBox&, void)
     const OUString aTmpName( m_pParaLayLB->GetSelectedEntry() );
     SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
 
-    if(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
-       (m_pLevelLB->GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)))
+    if(m_pParaLayLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
+       (m_pLevelLB->GetSelectedEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)))
         AssignHdl(m_pAssignBT);
 }
 
 // enable only when selected
 IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl, ListBox&, void)
 {
-    m_pStdBT->Enable(m_pLevelLB->GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
+    m_pStdBT->Enable(m_pLevelLB->GetSelectedEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
 
     SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
     const OUString aTmpName(m_pParaLayLB->GetSelectedEntry());
-    m_pAssignBT->Enable(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
-                     LISTBOX_ENTRY_NOTFOUND != m_pLevelLB->GetSelectEntryPos() &&
-       (m_pLevelLB->GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)));
-    m_pEditStyleBT->Enable(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
+    m_pAssignBT->Enable(m_pParaLayLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
+                     LISTBOX_ENTRY_NOTFOUND != m_pLevelLB->GetSelectedEntryPos() &&
+       (m_pLevelLB->GetSelectedEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)));
+    m_pEditStyleBT->Enable(m_pParaLayLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND );
 }
 
 void SwTOXStylesTabPage::Modify()

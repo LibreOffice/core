@@ -274,7 +274,7 @@ sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt
     sal_Int8 nAction = DND_ACTION_NONE;
     if ( IsEditing() )
     {
-        sal_Int32 nPos = m_pComboCell->GetSelectEntryPos();
+        sal_Int32 nPos = m_pComboCell->GetSelectedEntryPos();
         if ( COMBOBOX_ENTRY_NOTFOUND != nPos || !m_pComboCell->GetText().isEmpty() )
             SaveModified();
         DeactivateCell();
@@ -458,7 +458,7 @@ bool OFieldExpressionControl::SaveModified()
                 xGroup = m_pParent->getGroup(m_aGroupPositions[nRow]);
             if ( xGroup.is() )
             {
-                sal_Int32 nPos = m_pComboCell->GetSelectEntryPos();
+                sal_Int32 nPos = m_pComboCell->GetSelectedEntryPos();
                 OUString sExpression;
                 if ( COMBOBOX_ENTRY_NOTFOUND == nPos )
                     sExpression = m_pComboCell->GetText();
@@ -918,11 +918,11 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
 
     uno::Reference< report::XGroup> xGroup = getGroup(nGroupPos);
     if ( m_pHeaderLst->IsValueChangedFromSaved() )
-        xGroup->setHeaderOn( m_pHeaderLst->GetSelectEntryPos() == 0 );
+        xGroup->setHeaderOn( m_pHeaderLst->GetSelectedEntryPos() == 0 );
     if ( m_pFooterLst->IsValueChangedFromSaved() )
-        xGroup->setFooterOn( m_pFooterLst->GetSelectEntryPos() == 0 );
+        xGroup->setFooterOn( m_pFooterLst->GetSelectedEntryPos() == 0 );
     if ( m_pKeepTogetherLst->IsValueChangedFromSaved() )
-        xGroup->setKeepTogether( m_pKeepTogetherLst->GetSelectEntryPos() );
+        xGroup->setKeepTogether( m_pKeepTogetherLst->GetSelectedEntryPos() );
     if ( m_pGroupOnLst->IsValueChangedFromSaved() )
     {
         sal_Int16 nGroupOn = static_cast<sal_Int16>(reinterpret_cast<sal_IntPtr>(m_pGroupOnLst->GetSelectEntryData()));
@@ -934,7 +934,7 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
         m_pGroupIntervalEd->SaveValue();
     }
     if ( m_pOrderLst->IsValueChangedFromSaved() )
-        xGroup->setSortAscending( m_pOrderLst->GetSelectEntryPos() == 0 );
+        xGroup->setSortAscending( m_pOrderLst->GetSelectedEntryPos() == 0 );
 
     ListBox* pControls[] = { m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pKeepTogetherLst, m_pOrderLst};
     for (ListBox* pControl : pControls)
@@ -1057,7 +1057,7 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox&, rListBox, void )
             if ( rListBox.IsValueChangedFromSaved() )
                 SaveData(nRow);
             if ( &rListBox == m_pGroupOnLst )
-                m_pGroupIntervalEd->Enable( rListBox.GetSelectEntryPos() != 0 );
+                m_pGroupIntervalEd->Enable( rListBox.GetSelectedEntryPos() != 0 );
         }
         else if ( nGroupPos != NO_GROUP )
         {
@@ -1071,7 +1071,7 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox&, rListBox, void )
             else
                 aArgs[0].Name = PROPERTY_FOOTERON;
 
-            aArgs[0].Value <<= rListBox.GetSelectEntryPos() == 0;
+            aArgs[0].Value <<= rListBox.GetSelectedEntryPos() == 0;
             m_pController->executeChecked(m_pHeaderLst  == &rListBox ? SID_GROUPHEADER : SID_GROUPFOOTER, aArgs);
             m_pFieldExpression->InvalidateHandleColumn();
         }

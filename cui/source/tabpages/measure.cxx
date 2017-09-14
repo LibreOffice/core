@@ -507,7 +507,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
         bModified = true;
     }
 
-    sal_Int32 nPos = m_pLbUnit->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbUnit->GetSelectedEntryPos();
     if( m_pLbUnit->IsValueChangedFromSaved() )
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -735,7 +735,7 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
 
     if( p == m_pLbUnit )
     {
-        sal_Int32 nPos = m_pLbUnit->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbUnit->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pLbUnit->GetEntryData( nPos ));

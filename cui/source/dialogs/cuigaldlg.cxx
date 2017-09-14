@@ -289,7 +289,7 @@ void TakeThread::execute()
 
     for( sal_Int32 i = 0; i < nEntries && schedule(); ++i )
     {
-        const sal_Int32 nPos = mpBrowser->bTakeAll ? i : mpBrowser->m_pLbxFound->GetSelectEntryPos( i );
+        const sal_Int32 nPos = mpBrowser->bTakeAll ? i : mpBrowser->m_pLbxFound->GetSelectedEntryPos( i );
         const INetURLObject aURL( mpBrowser->aFoundList[ nPos ]);
 
         mrTakenList.push_back( (sal_uLong)nPos );

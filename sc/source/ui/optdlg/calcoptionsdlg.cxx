@@ -143,13 +143,13 @@ IMPL_LINK(ScCalcOptionsDialog, AsZeroModifiedHdl, Button*, pCheckBox, void )
 
 IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox&, rConv, void )
 {
-    maConfig.meStringConversion = (ScCalcConfig::StringConversion)rConv.GetSelectEntryPos();
+    maConfig.meStringConversion = (ScCalcConfig::StringConversion)rConv.GetSelectedEntryPos();
     CoupleEmptyAsZeroToStringConversion();
 }
 
 IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox&, rSyntax, void)
 {
-    maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.GetSelectEntryPos()));
+    maConfig.SetStringRefSyntax(toAddressConvention(rSyntax.GetSelectedEntryPos()));
 }
 
 IMPL_LINK(ScCalcOptionsDialog, CurrentDocOnlyHdl, Button*, pCheckBox, void)

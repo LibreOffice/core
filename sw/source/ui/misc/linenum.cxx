@@ -219,7 +219,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, Button*, void)
     aInf.SetNumType(aType);
 
     // position
-    aInf.SetPos((LineNumberPosition)m_pPosLB->GetSelectEntryPos());
+    aInf.SetPos((LineNumberPosition)m_pPosLB->GetSelectedEntryPos());
 
     // offset
     aInf.SetPosFromLeft((sal_uInt16)m_pOffsetMF->Denormalize(m_pOffsetMF->GetValue(FUNIT_TWIP)));

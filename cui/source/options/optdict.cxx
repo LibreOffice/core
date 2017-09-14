@@ -290,7 +290,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     if ( nCount > 0 )
     {
         pAllDictsLB->SelectEntry( aLookUpEntry );
-        sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
+        sal_Int32 nPos = pAllDictsLB->GetSelectedEntryPos();
 
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
         {
@@ -402,7 +402,7 @@ sal_uLong SvxEditDictionaryDialog::GetLBInsertPos(const OUString &rDicWord)
 
 void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 {
-    sal_Int32 nLBPos = pAllDictsLB->GetSelectEntryPos();
+    sal_Int32 nLBPos = pAllDictsLB->GetSelectedEntryPos();
 
     if ( pEntry != nullptr && nLBPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -419,7 +419,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvTreeListEntry* pEntry)
 
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, void)
 {
-    sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
+    sal_Int32 nPos = pAllDictsLB->GetSelectedEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -442,7 +442,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox&, void)
 
 IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
 {
-    sal_Int32 nDicPos = pAllDictsLB->GetSelectEntryPos();
+    sal_Int32 nDicPos = pAllDictsLB->GetSelectedEntryPos();
     LanguageType nLang = pLangLB->GetSelectLanguage();
     Reference< XDictionary >  xDic( aDics.getConstArray()[ nDicPos ], UNO_QUERY );
     LanguageType nOldLang = LanguageTag( xDic->getLocale() ).getLanguageType();
@@ -599,7 +599,7 @@ bool SvxEditDictionaryDialog::NewDelHdl(void const * pBtn)
         OUString aReplaceStr(pReplaceED->GetText());
 
         DictionaryError nAddRes = DictionaryError::UNKNOWN;
-        sal_Int32 nPos = pAllDictsLB->GetSelectEntryPos();
+        sal_Int32 nPos = pAllDictsLB->GetSelectedEntryPos();
         if ( nPos != LISTBOX_ENTRY_NOTFOUND && !aNewWord.isEmpty())
         {
             DBG_ASSERT(nPos < aDics.getLength(), "invalid dictionary index");

@@ -887,7 +887,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox&, rBox, void )
 {
     if ( !rBox.IsTravelSelect() )
     {
-        sal_Int32 selection = rBox.GetSelectEntryPos();
+        sal_Int32 selection = rBox.GetSelectedEntryPos();
         if ( selection >= 0 )
         {
             OUString sKey = ODF_FORMDROPDOWN_RESULT;

@@ -579,7 +579,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox&, rListBox, void )
         // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>
         OUString sDef = BoolStringUI(::comphelper::getString(pActFieldDescr->GetControlDefault()));
 
-        if(pRequired->GetSelectEntryPos() == 0) // Yes
+        if(pRequired->GetSelectedEntryPos() == 0) // Yes
         {
             pBoolDefault->RemoveEntry(DBA_RES(STR_VALUE_NONE));
             if (sDef != aYes && sDef != aNo)
@@ -597,7 +597,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox&, rListBox, void )
     // A special treatment only for AutoIncrement
     if (&rListBox == pAutoIncrement)
     {
-        if(rListBox.GetSelectEntryPos() == 1)
+        if(rListBox.GetSelectedEntryPos() == 1)
         { // no
             DeactivateAggregate( tpAutoIncrementValue );
             if(pActFieldDescr->IsPrimaryKey())
@@ -627,7 +627,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox&, rListBox, void )
 
     if(&rListBox == m_pType)
     {
-        TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
+        TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectedEntryPos());
         pActFieldDescr->FillFromTypeInfo(pTypeInfo,true,false); // SetType(pTypeInfo);
 
         DisplayData(pActFieldDescr);
@@ -1475,13 +1475,13 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     else
         pFieldDescr->SetControlDefault(Any());
 
-    if((pRequired && pRequired->GetSelectEntryPos() == 0) || pFieldDescr->IsPrimaryKey() || (pBoolDefault && pBoolDefault->GetEntryCount() == 2))  // yes
+    if((pRequired && pRequired->GetSelectedEntryPos() == 0) || pFieldDescr->IsPrimaryKey() || (pBoolDefault && pBoolDefault->GetEntryCount() == 2))  // yes
         pFieldDescr->SetIsNullable( ColumnValue::NO_NULLS );
     else
         pFieldDescr->SetIsNullable( ColumnValue::NULLABLE );
 
     if ( pAutoIncrement )
-        pFieldDescr->SetAutoIncrement( pAutoIncrement->GetSelectEntryPos() == 0 );
+        pFieldDescr->SetAutoIncrement( pAutoIncrement->GetSelectedEntryPos() == 0 );
 
     if( pTextLen )
         pFieldDescr->SetPrecision( static_cast<sal_Int32>(pTextLen->GetValue()) );

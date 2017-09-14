@@ -141,7 +141,7 @@ void lcl_MaybeResetAlignToDistro(
 void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const ListBox& rLB, sal_uInt16 nListPos)
 {
     SvxCellJustifyMethod eJM = SvxCellJustifyMethod::Auto;
-    if (rLB.GetSelectEntryPos() == nListPos)
+    if (rLB.GetSelectedEntryPos() == nListPos)
         eJM = SvxCellJustifyMethod::Distribute;
 
     SvxJustifyMethodItem aItem(eJM, nWhichJM);
@@ -369,7 +369,7 @@ void AlignmentTabPage::InitVsRefEgde()
 
 void AlignmentTabPage::UpdateEnableControls()
 {
-    const sal_Int32 nHorAlign = m_pLbHorAlign->GetSelectEntryPos();
+    const sal_Int32 nHorAlign = m_pLbHorAlign->GetSelectedEntryPos();
     bool bHorLeft  = (nHorAlign == ALIGNDLG_HORALIGN_LEFT);
     bool bHorBlock = (nHorAlign == ALIGNDLG_HORALIGN_BLOCK);
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);

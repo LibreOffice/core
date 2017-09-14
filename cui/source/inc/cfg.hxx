@@ -478,7 +478,7 @@ public:
     SvxConfigEntry* GetTopLevelSelection()
     {
         return static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData(
-            m_pTopLevelListBox->GetSelectEntryPos() ));
+            m_pTopLevelListBox->GetSelectedEntryPos() ));
     }
 
     /** identifies the module in the given frame. If the frame is <NULL/>, a default

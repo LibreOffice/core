@@ -417,7 +417,7 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
 
     if( m_pTextDirectionLB->IsVisible() )
     {
-        const sal_Int32 nPos = m_pTextDirectionLB->GetSelectEntryPos();
+        const sal_Int32 nPos = m_pTextDirectionLB->GetSelectedEntryPos();
         if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
             SvxFrameDirection nDirection = static_cast<SvxFrameDirection>(
@@ -1417,7 +1417,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     if(m_pVertOrientLB->IsValueChangedFromSaved())
     {
         sal_uInt16 nOrient = USHRT_MAX;
-        switch(m_pVertOrientLB->GetSelectEntryPos())
+        switch(m_pVertOrientLB->GetSelectedEntryPos())
         {
             case 0 : nOrient = text::VertOrientation::NONE; break;
             case 1 : nOrient = text::VertOrientation::CENTER; break;

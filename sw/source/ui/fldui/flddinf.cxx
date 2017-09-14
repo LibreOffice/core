@@ -214,7 +214,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 
     if (IsFieldEdit())
     {
-        nOldSel = m_pSelectionLB->GetSelectEntryPos();
+        nOldSel = m_pSelectionLB->GetSelectedEntryPos();
         nOldFormat = GetCurField()->GetFormat();
         m_pFixedCB->SaveValue();
     }
@@ -242,7 +242,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, TypeHdl, SvTreeListBox*, void)
 IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
 {
     sal_uInt16 nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(pSelEntry->GetUserData());
-    sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pSelectionLB->GetSelectedEntryPos();
     sal_uInt16 nExtSubType;
     sal_uInt16 nNewType = 0;
 
@@ -332,7 +332,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
 
     if (IsFieldEdit())
     {
-        nPos = m_pSelectionLB->GetSelectEntryPos();
+        nPos = m_pSelectionLB->GetSelectedEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             nSubType = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nPos));
@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, ListBox&, void)
 
     m_pFormat->Enable(bEnable);
 
-    if (bEnable && m_pFormatLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
+    if (bEnable && m_pFormatLB->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND)
     {
         m_pFormatLB->SelectEntryPos(0);
     }
@@ -432,7 +432,7 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
 
     sal_uInt32 nFormat = 0;
 
-    sal_Int32 nPos = m_pSelectionLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pSelectionLB->GetSelectedEntryPos();
 
     OUString aName;
     if (DI_CUSTOM == nSubType)
@@ -444,11 +444,11 @@ bool SwFieldDokInfPage::FillItemSet(SfxItemSet* )
     if (m_pFixedCB->IsChecked())
         nSubType |= DI_SUB_FIXED;
 
-    nPos = m_pFormatLB->GetSelectEntryPos();
+    nPos = m_pFormatLB->GetSelectedEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
         nFormat = m_pFormatLB->GetFormat();
 
-    if (!IsFieldEdit() || nOldSel != m_pSelectionLB->GetSelectEntryPos() ||
+    if (!IsFieldEdit() || nOldSel != m_pSelectionLB->GetSelectedEntryPos() ||
         nOldFormat != nFormat || m_pFixedCB->IsValueChangedFromSaved()
         || (DI_CUSTOM == nSubType && aName != m_sOldCustomFieldName ))
     {

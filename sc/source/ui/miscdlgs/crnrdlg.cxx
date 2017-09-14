@@ -575,7 +575,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
 {
     OUString aRangeStr = pLbRange->GetSelectedEntry();
-    sal_Int32 nSelectPos = pLbRange->GetSelectEntryPos();
+    sal_Int32 nSelectPos = pLbRange->GetSelectedEntryPos();
     bool bColName =
         (reinterpret_cast<sal_uLong>(pLbRange->GetEntryData( nSelectPos )) == nEntryDataCol);
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
@@ -633,7 +633,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
 // handler called when a row in the listbox is selected, updates form input fields
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl, ListBox&, void)
 {
-    sal_Int32 nSelectPos = pLbRange->GetSelectEntryPos();
+    sal_Int32 nSelectPos = pLbRange->GetSelectedEntryPos();
     const sal_Int32 nCnt = pLbRange->GetEntryCount();
     sal_uInt16 nMoves = 0;
     while ( nSelectPos < nCnt

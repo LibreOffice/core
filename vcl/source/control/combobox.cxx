@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
             sal_Int32 nSelectedEntries = m_pImplLB->GetEntryList()->GetSelectEntryCount();
             for ( sal_Int32 n = 0; n < nSelectedEntries; n++ )
             {
-                sal_Int32 nP = m_pImplLB->GetEntryList()->GetSelectEntryPos( n );
+                sal_Int32 nP = m_pImplLB->GetEntryList()->GetSelectedEntryPos( n );
                 if ( !aSelInText.count( nP ) )
                 {
                     if (!aText.isEmpty() && (aText[aText.getLength()-1] != m_cMultiSep))
@@ -842,7 +842,7 @@ void ComboBox::Impl::ImplUpdateFloatSelection()
         }
         else
         {
-            nSelect = m_pImplLB->GetEntryList()->GetSelectEntryPos( 0 );
+            nSelect = m_pImplLB->GetEntryList()->GetSelectedEntryPos( 0 );
             if( nSelect != LISTBOX_ENTRY_NOTFOUND )
                 m_pImplLB->SelectEntry( nSelect, false );
             m_pImplLB->ResetCurrentPos();
@@ -1347,9 +1347,9 @@ sal_Int32 ComboBox::GetSelectEntryCount() const
     return m_pImpl->m_pImplLB->GetEntryList()->GetSelectEntryCount();
 }
 
-sal_Int32 ComboBox::GetSelectEntryPos( sal_Int32 nIndex ) const
+sal_Int32 ComboBox::GetSelectedEntryPos( sal_Int32 nIndex ) const
 {
-    sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList()->GetSelectEntryPos( nIndex );
+    sal_Int32 nPos = m_pImpl->m_pImplLB->GetEntryList()->GetSelectedEntryPos( nIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if (nPos < m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount())

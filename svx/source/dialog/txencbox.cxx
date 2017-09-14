@@ -206,7 +206,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc )
 
 rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
 {
-    sal_Int32 nPos = GetSelectEntryPos();
+    sal_Int32 nPos = GetSelectedEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return rtl_TextEncoding( reinterpret_cast<sal_uIntPtr>(GetEntryData(nPos)) );

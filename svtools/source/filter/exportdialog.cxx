@@ -152,7 +152,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
 {
     if ( bUpdateConfig )
     {
-        sal_Int32 nUnit = mpLbSizeX->GetSelectEntryPos();
+        sal_Int32 nUnit = mpLbSizeX->GetSelectedEntryPos();
         if ( nUnit < 0 )
             nUnit = UNIT_CM;
 
@@ -171,7 +171,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
 
             mpOptionsItem->WriteInt32("PixelExportUnit", nUnit);
             mpOptionsItem->WriteInt32("PixelExportResolution", nResolution);
-            mpOptionsItem->WriteInt32("PixelExportResolutionUnit", mpLbResolution->GetSelectEntryPos());
+            mpOptionsItem->WriteInt32("PixelExportResolutionUnit", mpLbResolution->GetSelectedEntryPos());
         }
         else
         {
@@ -219,7 +219,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
     {
         case FORMAT_JPG :
         {
-            sal_Int32 nColor = mpLbColorDepth->GetSelectEntryPos();
+            sal_Int32 nColor = mpLbColorDepth->GetSelectedEntryPos();
             if ( nColor == 1 )
                 nColor = 0;
             else
@@ -245,7 +245,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
 
         case FORMAT_BMP :
         {
-            pFilterOptions->WriteInt32("Color", mpLbColorDepth->GetSelectEntryPos() + 1);
+            pFilterOptions->WriteInt32("Color", mpLbColorDepth->GetSelectedEntryPos() + 1);
             pFilterOptions->WriteBool("RLE_Coding", mpCbRLEEncoding->IsChecked());
         }
         break;
@@ -925,13 +925,13 @@ void ExportDialog::updateControls()
     {
         awt::Size aSize100thmm( maSize );
         Size aSize( LogicToLogic( Size( aSize100thmm.Width * 100, aSize100thmm.Height * 100 ), MapUnit::Map100thMM,
-            MapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) ) ) );
+            MapMode( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ) ) ) );
         mpMfSizeX->SetValue( aSize.Width() );
         mpMfSizeY->SetValue( aSize.Height() );
     }
     else
     {
-        MapUnit aMapUnit( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) );
+        MapUnit aMapUnit( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ) );
         if ( aMapUnit == MapUnit::MapPixel )
         {   // calculating pixel count via resolution and original graphic size
             mpMfSizeX->SetDecimalDigits( 0 );
@@ -944,7 +944,7 @@ void ExportDialog::updateControls()
             mpMfSizeX->SetDecimalDigits( 2 );
             mpMfSizeY->SetDecimalDigits( 2 );
             double fRatio;
-            switch( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) )
+            switch( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ) )
             {
                 case MapUnit::MapInch : fRatio = static_cast< double >( maResolution.Width ) * 0.0254; break;
                 case MapUnit::MapMM :   fRatio = static_cast< double >( maResolution.Width ) * 0.001; break;
@@ -957,7 +957,7 @@ void ExportDialog::updateControls()
         }
     }
     sal_Int32 nResolution = 0;
-    switch( mpLbResolution->GetSelectEntryPos() )
+    switch( mpLbResolution->GetSelectedEntryPos() )
     {
         case 0 : nResolution = maResolution.Width / 100; break;     // pixels / cm
         case 2 : nResolution = maResolution.Width; break;           // pixels / meter
@@ -1082,7 +1082,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
 
     if ( mbIsPixelFormat )
     {
-        switch( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) )
+        switch( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ) )
         {
             case MapUnit::MapInch :     maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
             case MapUnit::MapCM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.01 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
@@ -1099,7 +1099,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, Edit&, void)
         sal_Int32 nWidth = mpMfSizeX->GetValue();
         sal_Int32 nHeight= static_cast< sal_Int32 >( nWidth * fRatio );
         const Size aSource( nWidth, nHeight );
-        MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ),Point(), aFract, aFract );
+        MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ),Point(), aFract, aFract );
         Size aDest( LogicToLogic( aSource, aSourceMapMode, MapUnit::Map100thMM ) );
 
         maSize.Width = aDest.Width();
@@ -1114,7 +1114,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
 
     if ( mbIsPixelFormat )
     {
-        switch( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) )
+        switch( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ) )
         {
             case MapUnit::MapInch :     maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
             case MapUnit::MapCM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.01 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
@@ -1131,7 +1131,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
         sal_Int32 nHeight= mpMfSizeY->GetValue();
         sal_Int32 nWidth = static_cast< sal_Int32 >( nHeight * fRatio );
         const Size aSource( nWidth, nHeight );
-        MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ),Point(), aFract, aFract );
+        MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectedEntryPos() ),Point(), aFract, aFract );
         Size aDest( LogicToLogic( aSource, aSourceMapMode, MapUnit::Map100thMM ) );
 
         maSize.Height = aDest.Height();
@@ -1143,9 +1143,9 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, Edit&, void)
 IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution, Edit&, void)
 {
     sal_Int32 nResolution = mpNfResolution->GetValue();
-    if ( mpLbResolution->GetSelectEntryPos() == 0 )      // pixels / cm
+    if ( mpLbResolution->GetSelectedEntryPos() == 0 )      // pixels / cm
         nResolution *= 100;
-    else if ( mpLbResolution->GetSelectEntryPos() == 1 ) // pixels / inch
+    else if ( mpLbResolution->GetSelectedEntryPos() == 1 ) // pixels / inch
         nResolution = static_cast< sal_Int32 >( ( ( static_cast< double >( nResolution ) + 0.5 ) / 0.0254 ) );
     maResolution.Width = nResolution;
     maResolution.Height= nResolution;

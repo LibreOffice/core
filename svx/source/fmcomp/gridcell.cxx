@@ -2641,7 +2641,7 @@ bool DbListBox::commitControl()
     if (static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryCount())
     {
         aSelectSeq.realloc(1);
-        *aSelectSeq.getArray() = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryPos();
+        *aSelectSeq.getArray() = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryPos();
     }
     aVal <<= aSelectSeq;
     m_rColumn.getModel()->setPropertyValue(FM_PROP_SELECT_SEQ, aVal);
@@ -2852,7 +2852,7 @@ bool DbFilterField::commitControl()
             aText.clear();
             if (static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryCount())
             {
-                sal_Int16 nPos = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryPos();
+                sal_Int16 nPos = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryPos();
                 if ( ( nPos >= 0 ) && ( nPos < m_aValueList.getLength() ) )
                     aText = m_aValueList.getConstArray()[nPos];
             }
@@ -4137,7 +4137,7 @@ sal_Int16 SAL_CALL FmXListBoxCell::getSelectedItemPos()
     if (m_pBox)
     {
         UpdateFromColumn();
-        sal_Int32 nPos = m_pBox->GetSelectEntryPos();
+        sal_Int32 nPos = m_pBox->GetSelectedEntryPos();
         if (nPos > SHRT_MAX || nPos < SHRT_MIN)
             throw std::out_of_range("awt::XListBox::getSelectedItemPos can only return a short");
         return nPos;
@@ -4157,7 +4157,7 @@ Sequence< sal_Int16 > SAL_CALL FmXListBoxCell::getSelectedItemsPos()
         const sal_Int32 nSelEntries = m_pBox->GetSelectEntryCount();
         aSeq = Sequence<sal_Int16>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
-            aSeq.getArray()[n] = m_pBox->GetSelectEntryPos( n );
+            aSeq.getArray()[n] = m_pBox->GetSelectedEntryPos( n );
     }
     return aSeq;
 }
@@ -4290,7 +4290,7 @@ void FmXListBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Windo
 
         // with multiple selection 0xFFFF, otherwise the ID
         aEvent.Selected = (m_pBox->GetSelectEntryCount() == 1 )
-            ? m_pBox->GetSelectEntryPos() : 0xFFFF;
+            ? m_pBox->GetSelectedEntryPos() : 0xFFFF;
 
         m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
         return;
@@ -4490,7 +4490,7 @@ void FmXComboBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Wind
 
         // with multiple selection 0xFFFF, otherwise the ID
         aEvent.Selected =   ( m_pComboBox->GetSelectEntryCount() == 1 )
-                        ?   m_pComboBox->GetSelectEntryPos()
+                        ?   m_pComboBox->GetSelectedEntryPos()
                         :   0xFFFF;
         m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
     }

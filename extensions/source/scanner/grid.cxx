@@ -706,7 +706,7 @@ IMPL_LINK( GridDialog, ClickButtonHdl, Button*, pButton, void )
 {
     if (pButton == m_pResetButton)
     {
-        int nType = m_pResetTypeBox->GetSelectEntryPos();
+        int nType = m_pResetTypeBox->GetSelectedEntryPos();
         m_pGridWindow->ChangeMode((ResetType)nType);
     }
 }

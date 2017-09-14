@@ -1388,7 +1388,7 @@ void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocati
 
 void LibPage::SetCurLib()
 {
-    const sal_Int32 nSelPos = m_pBasicsBox->GetSelectEntryPos();
+    const sal_Int32 nSelPos = m_pBasicsBox->GetSelectedEntryPos();
     DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( nSelPos ));
     if ( pEntry )
     {

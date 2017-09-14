@@ -689,7 +689,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
 
 void OTableEditorCtrl::resetType()
 {
-    sal_Int32 nPos = pTypeCell->GetSelectEntryPos();
+    sal_Int32 nPos = pTypeCell->GetSelectedEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
         SwitchType( GetView()->getController().getTypeInfo(nPos) );
     else
@@ -1574,7 +1574,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
     pRow->SetFieldType( _pType, true );
     if ( _pType.get() )
     {
-        const sal_Int32 nCurrentlySelected = pTypeCell->GetSelectEntryPos();
+        const sal_Int32 nCurrentlySelected = pTypeCell->GetSelectedEntryPos();
 
         if  (   ( LISTBOX_ENTRY_NOTFOUND == nCurrentlySelected )
             ||  ( GetView()->getController().getTypeInfo( nCurrentlySelected ) != _pType )

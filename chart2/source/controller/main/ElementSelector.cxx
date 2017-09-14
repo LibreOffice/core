@@ -187,7 +187,7 @@ void SelectorListBox::Select()
 
     if ( !IsTravelSelect() )
     {
-        const sal_Int32 nPos = GetSelectEntryPos();
+        const sal_Int32 nPos = GetSelectedEntryPos();
         if( static_cast<size_t>(nPos) < m_aEntries.size() )
         {
             ObjectIdentifier aOID = m_aEntries[nPos].OID;

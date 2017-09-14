@@ -579,7 +579,7 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, Button*, pButton, void)
 
 IMPL_LINK_NOARG(ChartElementsPanel, LegendPosHdl, ListBox&, void)
 {
-    sal_Int32 nPos = mpLBLegendPosition->GetSelectEntryPos();
+    sal_Int32 nPos = mpLBLegendPosition->GetSelectedEntryPos();
     setLegendPos(mxModel, nPos);
 }
 

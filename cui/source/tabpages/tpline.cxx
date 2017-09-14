@@ -519,19 +519,19 @@ void SvxLineTabPage::SymbolSelected(MenuButton const * pButton)
 void SvxLineTabPage::FillListboxes()
 {
     // Line styles
-    sal_Int32 nOldSelect = m_pLbLineStyle->GetSelectEntryPos();
+    sal_Int32 nOldSelect = m_pLbLineStyle->GetSelectedEntryPos();
     // aLbLineStyle.FillStyles();
     m_pLbLineStyle->Fill( m_pDashList );
     m_pLbLineStyle->SelectEntryPos( nOldSelect );
 
     // Line end style
     OUString sNone( SvxResId( RID_SVXSTR_NONE ) );
-    nOldSelect = m_pLbStartStyle->GetSelectEntryPos();
+    nOldSelect = m_pLbStartStyle->GetSelectedEntryPos();
     m_pLbStartStyle->Clear();
     m_pLbStartStyle->InsertEntry( sNone );
     m_pLbStartStyle->Fill( m_pLineEndList );
     m_pLbStartStyle->SelectEntryPos( nOldSelect );
-    nOldSelect = m_pLbEndStyle->GetSelectEntryPos();
+    nOldSelect = m_pLbEndStyle->GetSelectedEntryPos();
     m_pLbEndStyle->Clear();
     m_pLbEndStyle->InsertEntry( sNone );
     m_pLbEndStyle->Fill( m_pLineEndList, false );
@@ -559,7 +559,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             *m_pnDashListState = ChangeType::NONE;
 
             // Style list
-            nPos = m_pLbLineStyle->GetSelectEntryPos();
+            nPos = m_pLbLineStyle->GetSelectedEntryPos();
 
             m_pLbLineStyle->Clear();
             m_pLbLineStyle->InsertEntry( SvxResId( RID_SVXSTR_INVISIBLE ) );
@@ -588,7 +588,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
             *m_pnLineEndListState = ChangeType::NONE;
 
-            nPos = m_pLbLineStyle->GetSelectEntryPos();
+            nPos = m_pLbLineStyle->GetSelectedEntryPos();
             OUString sNone( SvxResId( RID_SVXSTR_NONE ) );
             m_pLbStartStyle->Clear();
             m_pLbStartStyle->InsertEntry( sNone );
@@ -620,7 +620,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         aLineURL.Append( m_pLineEndList->GetName() );
         DBG_ASSERT( aLineURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
         // Evaluate if another TabPage set another fill type
-        if( m_pLbLineStyle->GetSelectEntryPos() != 0 )
+        if( m_pLbLineStyle->GetSelectedEntryPos() != 0 )
         {
             if( m_nPageType == PageType::Hatch ) // 1
             {
@@ -661,8 +661,8 @@ DeactivateRC SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( m_nDlgType == 0 ) // Line dialog
     {
         m_nPageType = PageType::Gradient; // possibly for extensions
-        *m_pPosDashLb = m_pLbLineStyle->GetSelectEntryPos() - 2;// First entry SOLID!!!
-        sal_Int32 nPos = m_pLbStartStyle->GetSelectEntryPos();
+        *m_pPosDashLb = m_pLbLineStyle->GetSelectedEntryPos() - 2;// First entry SOLID!!!
+        sal_Int32 nPos = m_pLbStartStyle->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
             nPos--;
         *m_pPosLineEndLb = nPos;
@@ -684,7 +684,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     // To prevent modifications to the list, we do not set other page's items.
     if( m_nDlgType != 0 || m_nPageType != PageType::Hatch )
     {
-        nPos = m_pLbLineStyle->GetSelectEntryPos();
+        nPos = m_pLbLineStyle->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
             m_pLbLineStyle->IsValueChangedFromSaved() )
         {
@@ -769,7 +769,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     if( m_nDlgType != 0 || m_nPageType != PageType::Bitmap )
     {
         // Line start
-        nPos = m_pLbStartStyle->GetSelectEntryPos();
+        nPos = m_pLbStartStyle->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND && m_pLbStartStyle->IsValueChangedFromSaved() )
         {
             std::unique_ptr<XLineStartItem> pItem;
@@ -785,7 +785,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             }
         }
         // Line end
-        nPos = m_pLbEndStyle->GetSelectEntryPos();
+        nPos = m_pLbEndStyle->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND && m_pLbEndStyle->IsValueChangedFromSaved() )
         {
             std::unique_ptr<XLineEndItem> pItem;
@@ -840,7 +840,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
-    nPos = m_pLBEdgeStyle->GetSelectEntryPos();
+    nPos = m_pLBEdgeStyle->GetSelectedEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nPos && m_pLBEdgeStyle->IsValueChangedFromSaved() )
     {
         std::unique_ptr<XLineJointItem> pNew;
@@ -882,7 +882,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     }
 
     // LineCaps
-    nPos = m_pLBCapStyle->GetSelectEntryPos();
+    nPos = m_pLBCapStyle->GetSelectedEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nPos && m_pLBCapStyle->IsValueChangedFromSaved() )
     {
         std::unique_ptr<XLineCapItem> pNew;
@@ -963,7 +963,7 @@ void SvxLineTabPage::FillXLSet_Impl()
 {
     sal_Int32 nPos;
 
-    if( m_pLbLineStyle->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
+    if( m_pLbLineStyle->GetSelectedEntryPos() == LISTBOX_ENTRY_NOTFOUND )
     {
         m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     }
@@ -975,7 +975,7 @@ void SvxLineTabPage::FillXLSet_Impl()
     {
         m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
 
-        nPos = m_pLbLineStyle->GetSelectEntryPos();
+        nPos = m_pLbLineStyle->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             m_rXLSet.Put( XLineDashItem( m_pLbLineStyle->GetSelectedEntry(),
@@ -983,7 +983,7 @@ void SvxLineTabPage::FillXLSet_Impl()
         }
     }
 
-    nPos = m_pLbStartStyle->GetSelectEntryPos();
+    nPos = m_pLbStartStyle->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if( nPos == 0 )
@@ -992,7 +992,7 @@ void SvxLineTabPage::FillXLSet_Impl()
             m_rXLSet.Put( XLineStartItem( m_pLbStartStyle->GetSelectedEntry(),
                         m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
-    nPos = m_pLbEndStyle->GetSelectEntryPos();
+    nPos = m_pLbEndStyle->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if( nPos == 0 )
@@ -1002,7 +1002,7 @@ void SvxLineTabPage::FillXLSet_Impl()
                         m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
 
-    nPos = m_pLBEdgeStyle->GetSelectEntryPos();
+    nPos = m_pLBEdgeStyle->GetSelectedEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         switch(nPos)
@@ -1031,7 +1031,7 @@ void SvxLineTabPage::FillXLSet_Impl()
     }
 
     // LineCaps
-    nPos = m_pLBCapStyle->GetSelectEntryPos();
+    nPos = m_pLBCapStyle->GetSelectedEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         switch(nPos)
@@ -1531,7 +1531,7 @@ void SvxLineTabPage::ChangePreviewHdl_Impl(void const * pCntrl )
     m_pCtlPreview->Invalidate();
 
     // Make transparency accessible accordingly
-    if( m_pLbLineStyle->GetSelectEntryPos() == 0 ) // invisible
+    if( m_pLbLineStyle->GetSelectedEntryPos() == 0 ) // invisible
     {
         m_pBoxTransparency->Disable();
     }
@@ -1540,12 +1540,12 @@ void SvxLineTabPage::ChangePreviewHdl_Impl(void const * pCntrl )
         m_pBoxTransparency->Enable();
     }
 
-    const bool bHasLineStyle = m_pLbLineStyle->GetSelectEntryPos() !=0;
-    const bool bHasLineStart = m_pLbStartStyle->GetSelectEntryPos() != 0;
+    const bool bHasLineStyle = m_pLbLineStyle->GetSelectedEntryPos() !=0;
+    const bool bHasLineStart = m_pLbStartStyle->GetSelectedEntryPos() != 0;
 
     m_pBoxStart->Enable(bHasLineStart && bHasLineStyle);
 
-    const bool bHasLineEnd = m_pLbEndStyle->GetSelectEntryPos() != 0;
+    const bool bHasLineEnd = m_pLbEndStyle->GetSelectedEntryPos() != 0;
 
     m_pBoxEnd->Enable(bHasLineEnd && bHasLineStyle);
 }
@@ -1570,7 +1570,7 @@ void SvxLineTabPage::ChangeStartHdl_Impl( void const * p )
         if( p == m_pMtrStartWidth )
             m_pMtrEndWidth->SetValue( m_pMtrStartWidth->GetValue() );
         if( p == m_pLbStartStyle )
-            m_pLbEndStyle->SelectEntryPos( m_pLbStartStyle->GetSelectEntryPos() );
+            m_pLbEndStyle->SelectEntryPos( m_pLbStartStyle->GetSelectedEntryPos() );
         if( p == m_pTsbCenterStart )
             m_pTsbCenterEnd->SetState( m_pTsbCenterStart->GetState() );
     }
@@ -1595,7 +1595,7 @@ IMPL_LINK_NOARG( SvxLineTabPage, ChangeCapStyleHdl_Impl, ListBox&, void )
 
 IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl, ListBox&, void)
 {
-    if( m_pLbLineStyle->GetSelectEntryPos() == 0 ) // invisible
+    if( m_pLbLineStyle->GetSelectedEntryPos() == 0 ) // invisible
     {
         if(!m_bSymbols)
             m_pBoxColor->Disable();
@@ -1645,7 +1645,7 @@ void SvxLineTabPage::ChangeEndHdl_Impl( void const * p )
         if( p == m_pMtrEndWidth )
             m_pMtrStartWidth->SetValue( m_pMtrEndWidth->GetValue() );
         if( p == m_pLbEndStyle )
-            m_pLbStartStyle->SelectEntryPos( m_pLbEndStyle->GetSelectEntryPos() );
+            m_pLbStartStyle->SelectEntryPos( m_pLbEndStyle->GetSelectedEntryPos() );
         if( p == m_pTsbCenterEnd )
             m_pTsbCenterStart->SetState( m_pTsbCenterEnd->GetState() );
     }

@@ -194,7 +194,7 @@ void SvxToolbarConfigPage::dispose()
 
 void SvxToolbarConfigPage::DeleteSelectedTopLevel()
 {
-    const sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
+    const sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectedEntryPos();
     ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
     pSaveInData->RemoveToolbar( GetTopLevelSelection() );
 
@@ -361,14 +361,14 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, AddToolbarHdl, Button *, void )
     }
 
     pNameDialog->m_pSaveInListBox->SelectEntryPos(
-        m_pSaveInListBox->GetSelectEntryPos() );
+        m_pSaveInListBox->GetSelectedEntryPos() );
 
     if ( pNameDialog->Execute() == RET_OK )
     {
         aNewName = pNameDialog->GetName();
 
         // Where to save the new toolbar? (i.e. Modulewise or documentwise)
-        sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectEntryPos();
+        sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectedEntryPos();
 
         ToolbarSaveInData* pData =
             static_cast<ToolbarSaveInData*>(
@@ -678,7 +678,7 @@ IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetToolbarHdl, Button *, void )
 {
-    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
+    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectedEntryPos();
 
     SvxConfigEntry* pToolbar =
         static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
@@ -719,7 +719,7 @@ short SvxToolbarConfigPage::QueryReset()
     OUString msg = CuiResId( RID_SVXSTR_CONFIRM_TOOLBAR_RESET );
 
     OUString saveInName = m_pSaveInListBox->GetEntry(
-        m_pSaveInListBox->GetSelectEntryPos() );
+        m_pSaveInListBox->GetSelectedEntryPos() );
 
     OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 

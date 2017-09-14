@@ -219,7 +219,7 @@ void SvxColorTabPage::FillPaletteLB()
     }
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
     m_pSelectPalette->SelectEntry(aPaletteName);
-    if (m_pSelectPalette->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+    if (m_pSelectPalette->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {
         SelectPaletteLBHdl( *m_pSelectPalette );
     }
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
 {
     sal_uInt16 nId = m_pValSetColorList->GetSelectItemId();
     size_t nPos = m_pValSetColorList->GetSelectItemPos();
-    if(m_pSelectPalette->GetSelectEntryPos() == 0 && nPos != VALUESET_ITEM_NOTFOUND )
+    if(m_pSelectPalette->GetSelectedEntryPos() == 0 && nPos != VALUESET_ITEM_NOTFOUND )
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
         css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
@@ -475,7 +475,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
 IMPL_LINK_NOARG(SvxColorTabPage, SelectPaletteLBHdl, ListBox&, void)
 {
     m_pValSetColorList->Clear();
-    sal_Int32 nPos = m_pSelectPalette->GetSelectEntryPos();
+    sal_Int32 nPos = m_pSelectPalette->GetSelectedEntryPos();
     maPaletteManager.SetPalette( nPos );
     maPaletteManager.ReloadColorSet( *m_pValSetColorList );
 
@@ -521,7 +521,7 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
         if(pValSet == m_pValSetColorList)
         {
             m_pValSetRecentList->SetNoSelection();
-            if(m_pSelectPalette->GetSelectEntryPos() == 0 && m_pValSetColorList->GetSelectItemId() != 0)
+            if(m_pSelectPalette->GetSelectedEntryPos() == 0 && m_pValSetColorList->GetSelectItemId() != 0)
                 m_pBtnDelete->Enable();
             else
                 m_pBtnDelete->Disable();

@@ -491,7 +491,7 @@ namespace svx
         m_bInSelectionUpdate = true;
         if( pControl == m_aListBox.get() )
         {
-            sal_uInt16 nPos = m_aListBox->GetSelectEntryPos();
+            sal_uInt16 nPos = m_aListBox->GetSelectedEntryPos();
             m_aValueSet->SelectItem( nPos+1 ); //itemid == pos+1 (id 0 has special meaning)
         }
         else
@@ -1058,14 +1058,14 @@ namespace svx
         DBG_ASSERT( pEntry, "+HangulHanjaEditDictDialog::EditDictHdl(): call of edit should not be possible with no selection!" );
         if( pEntry )
         {
-            ScopedVclPtrInstance< HangulHanjaEditDictDialog > aEdDlg(this, m_aDictList, m_pDictsLB->GetSelectEntryPos());
+            ScopedVclPtrInstance< HangulHanjaEditDictDialog > aEdDlg(this, m_aDictList, m_pDictsLB->GetSelectedEntryPos());
             aEdDlg->Execute();
         }
     }
 
     IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DeleteDictHdl, Button*, void)
     {
-        sal_uLong nSelPos = m_pDictsLB->GetSelectEntryPos();
+        sal_uLong nSelPos = m_pDictsLB->GetSelectedEntryPos();
         if( nSelPos != TREELIST_ENTRY_NOTFOUND )
         {
             Reference< XConversionDictionary >  xDic( m_aDictList[ nSelPos ] );
@@ -1518,7 +1518,7 @@ namespace svx
 
     IMPL_LINK_NOARG( HangulHanjaEditDictDialog, BookLBSelectHdl, ListBox&, void )
     {
-        InitEditDictDialog( m_aBookLB->GetSelectEntryPos() );
+        InitEditDictDialog( m_aBookLB->GetSelectedEntryPos() );
     }
 
     IMPL_LINK_NOARG( HangulHanjaEditDictDialog, NewPBPushHdl, Button*, void )

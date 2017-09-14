@@ -263,7 +263,7 @@ namespace dbaui
         {
             if (sal_Int32 nCount = m_pAllParams->GetEntryCount())
             {
-                sal_Int32 nCurrent = m_pAllParams->GetSelectEntryPos();
+                sal_Int32 nCurrent = m_pAllParams->GetSelectedEntryPos();
                 OSL_ENSURE(static_cast<size_t>(nCount) == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
 
                 // search the next entry in list we haven't visited yet
@@ -311,7 +311,7 @@ namespace dbaui
         }
 
         // initialize the controls with the new values
-        sal_Int32 nSelected = m_pAllParams->GetSelectEntryPos();
+        sal_Int32 nSelected = m_pAllParams->GetSelectedEntryPos();
         OSL_ENSURE(nSelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnEntrySelected : no current entry !");
 
         m_pParam->SetText(::comphelper::getString(m_aFinalValues[nSelected].Value));

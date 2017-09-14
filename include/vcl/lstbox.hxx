@@ -166,7 +166,7 @@ public:
 
     sal_Int32           GetSelectEntryCount() const;
     OUString            GetSelectedEntry( sal_Int32  nSelIndex = 0 ) const;
-    sal_Int32           GetSelectEntryPos( sal_Int32  nSelIndex = 0 ) const;
+    sal_Int32           GetSelectedEntryPos( sal_Int32  nSelIndex = 0 ) const;
 
     bool                IsEntrySelected(const OUString& rStr) const;
     bool                IsEntryPosSelected( sal_Int32  nPos ) const;
@@ -174,7 +174,7 @@ public:
 
     void                SetEntryData( sal_Int32  nPos, void* pNewData );
     void*               GetEntryData( sal_Int32  nPos ) const;
-    void*               GetSelectEntryData() const { return GetEntryData(GetSelectEntryPos()); }
+    void*               GetSelectEntryData() const { return GetEntryData(GetSelectedEntryPos()); }
 
     /** this methods stores a combination of flags from the
         ListBoxEntryFlags::* defines at the given entry.
@@ -196,9 +196,9 @@ public:
     void                SetTopEntry( sal_Int32  nPos );
     sal_Int32           GetTopEntry() const;
 
-    void                SaveValue() { mnSaveValue = GetSelectEntryPos(); }
+    void                SaveValue() { mnSaveValue = GetSelectedEntryPos(); }
     sal_Int32           GetSavedValue() const { return mnSaveValue; }
-    bool                IsValueChangedFromSaved() const { return mnSaveValue != GetSelectEntryPos(); }
+    bool                IsValueChangedFromSaved() const { return mnSaveValue != GetSelectedEntryPos(); }
 
     void                SetSeparatorPos( sal_Int32 n );
     sal_Int32           GetSeparatorPos() const;

@@ -1337,8 +1337,8 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
 
         if ( !bWriter )
         {
-            if ( m_pCalcSearchInLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
-                pSearchItem->SetCellType( static_cast<SvxSearchCellType>(m_pCalcSearchInLB->GetSelectEntryPos()) );
+            if ( m_pCalcSearchInLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+                pSearchItem->SetCellType( static_cast<SvxSearchCellType>(m_pCalcSearchInLB->GetSelectedEntryPos()) );
 
             pSearchItem->SetRowDirection( m_pRowsBtn->IsChecked() );
             pSearchItem->SetAllTables( m_pAllSheetsCB->IsChecked() );
@@ -2303,8 +2303,8 @@ void SvxSearchDialog::SaveToModule_Impl()
 
     if ( !bWriter )
     {
-        if ( m_pCalcSearchInLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
-            pSearchItem->SetCellType( static_cast<SvxSearchCellType>(m_pCalcSearchInLB->GetSelectEntryPos()) );
+        if ( m_pCalcSearchInLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+            pSearchItem->SetCellType( static_cast<SvxSearchCellType>(m_pCalcSearchInLB->GetSelectedEntryPos()) );
 
         pSearchItem->SetRowDirection( m_pRowsBtn->IsChecked() );
         pSearchItem->SetAllTables( m_pAllSheetsCB->IsChecked() );

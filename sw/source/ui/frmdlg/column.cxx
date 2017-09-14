@@ -650,7 +650,7 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
     }
     if( m_pTextDirectionLB->IsVisible())
     {
-        const sal_Int32 nPos = m_pTextDirectionLB->GetSelectEntryPos();
+        const sal_Int32 nPos = m_pTextDirectionLB->GetSelectedEntryPos();
         if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
             SvxFrameDirection eDirection = static_cast<SvxFrameDirection>(
@@ -736,7 +736,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, Edit&, void )
                     nLineWidth,
                     m_pLineColorDLB->GetSelectEntryColor() );
             m_pColMgr->SetAdjust( SwColLineAdj(
-                                    m_pLinePosDLB->GetSelectEntryPos() + 1) );
+                                    m_pLinePosDLB->GetSelectedEntryPos() + 1) );
             m_pColMgr->SetLineHeightPercent((short)m_pLineHeightEdit->GetValue());
             bEnable = m_pColMgr->GetLineHeightPercent() != 100;
         }
@@ -841,7 +841,7 @@ void SwColumnPage::Init()
 bool SwColumnPage::isLineNotNone() const
 {
     // nothing is turned off
-    const sal_Int32 nPos = m_pLineTypeDLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLineTypeDLB->GetSelectedEntryPos();
     return nPos != LISTBOX_ENTRY_NOTFOUND && nPos != 0;
 }
 

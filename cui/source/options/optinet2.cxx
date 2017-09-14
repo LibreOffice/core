@@ -400,7 +400,7 @@ void SvxProxyTabPage::Reset(const SfxItemSet*)
     m_pFtpPortED->SaveValue();
     m_pNoProxyForED->SaveValue();
 
-    EnableControls_Impl( m_pProxyModeLB->GetSelectEntryPos() == 2 );
+    EnableControls_Impl( m_pProxyModeLB->GetSelectedEntryPos() == 2 );
 }
 
 bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
@@ -410,7 +410,7 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
     try {
         Reference< beans::XPropertySet > xPropertySet(m_xConfigurationUpdateAccess, UNO_QUERY_THROW );
 
-        sal_Int32 nSelPos = m_pProxyModeLB->GetSelectEntryPos();
+        sal_Int32 nSelPos = m_pProxyModeLB->GetSelectedEntryPos();
         if(m_pProxyModeLB->IsValueChangedFromSaved())
         {
             if( nSelPos == 1 )
@@ -512,7 +512,7 @@ void SvxProxyTabPage::EnableControls_Impl(bool bEnable)
 
 IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox&, rBox, void )
 {
-    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectedEntryPos();
 
     // Restore original system values
     if( nPos == 1 )

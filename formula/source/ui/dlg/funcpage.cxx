@@ -121,7 +121,7 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
     m_pLbFunction->Clear();
     m_pLbFunction->SetUpdateMode( false );
 
-    const sal_Int32 nSelPos = m_pLbCategory->GetSelectEntryPos();
+    const sal_Int32 nSelPos = m_pLbCategory->GetSelectedEntryPos();
 
     if (aStr.isEmpty() || nSelPos == 0)
     {
@@ -269,12 +269,12 @@ void FuncPage::SetFocus()
 
 sal_Int32 FuncPage::GetCategory()
 {
-    return m_pLbCategory->GetSelectEntryPos();
+    return m_pLbCategory->GetSelectedEntryPos();
 }
 
 sal_Int32 FuncPage::GetFunction()
 {
-    return m_pLbFunction->GetSelectEntryPos();
+    return m_pLbFunction->GetSelectedEntryPos();
 }
 
 sal_Int32 FuncPage::GetFunctionEntryCount()

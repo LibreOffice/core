@@ -114,7 +114,7 @@ bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )
 
     if ( m_pNumeralsLB->IsValueChangedFromSaved() )
     {
-        const sal_Int32 nPos = m_pNumeralsLB->GetSelectEntryPos();
+        const sal_Int32 nPos = m_pNumeralsLB->GetSelectedEntryPos();
         aCTLOptions.SetCTLTextNumerals( (SvtCTLOptions::TextNumerals)nPos );
         bModified = true;
     }

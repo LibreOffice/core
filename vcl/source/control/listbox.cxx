@@ -185,11 +185,11 @@ IMPL_LINK_NOARG(ListBox, ImplSelectHdl, LinkParamNone*, void)
             mpImplWin->GrabFocus();
         }
 
-        mpImplWin->SetItemPos( GetSelectEntryPos() );
+        mpImplWin->SetItemPos( GetSelectedEntryPos() );
         mpImplWin->SetString( GetSelectedEntry() );
         if( mpImplLB->GetEntryList()->HasImages() )
         {
-            Image aImage = mpImplLB->GetEntryList()->GetEntryImage( GetSelectEntryPos() );
+            Image aImage = mpImplLB->GetEntryList()->GetEntryImage( GetSelectedEntryPos() );
             mpImplWin->SetImage( aImage );
         }
         mpImplWin->Invalidate();
@@ -1018,7 +1018,7 @@ sal_Int32 ListBox::GetEntryCount() const
 
 OUString ListBox::GetSelectedEntry(sal_Int32 nIndex) const
 {
-    return GetEntry( GetSelectEntryPos( nIndex ) );
+    return GetEntry( GetSelectedEntryPos( nIndex ) );
 }
 
 sal_Int32 ListBox::GetSelectEntryCount() const
@@ -1028,12 +1028,12 @@ sal_Int32 ListBox::GetSelectEntryCount() const
     return mpImplLB->GetEntryList()->GetSelectEntryCount();
 }
 
-sal_Int32 ListBox::GetSelectEntryPos( sal_Int32 nIndex ) const
+sal_Int32 ListBox::GetSelectedEntryPos( sal_Int32 nIndex ) const
 {
     if (!mpImplLB || !mpImplLB->GetEntryList())
         return LISTBOX_ENTRY_NOTFOUND;
 
-    sal_Int32 nPos = mpImplLB->GetEntryList()->GetSelectEntryPos( nIndex );
+    sal_Int32 nPos = mpImplLB->GetEntryList()->GetSelectedEntryPos( nIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )

@@ -188,7 +188,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update, Timer*, void)
     if (m_pMoreBt->get_expanded() && (nFlags == SfxNewFileDialogMode::Preview))
     {
 
-        OUString aFileName = aTemplates.GetPath(m_pRegionLb->GetSelectEntryPos(), nEntry - 1);
+        OUString aFileName = aTemplates.GetPath(m_pRegionLb->GetSelectedEntryPos(), nEntry - 1);
         INetURLObject aTestObj(aFileName);
         if (aTestObj.GetProtocol() == INetProtocol::NotValid)
         {
@@ -238,7 +238,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox&, rBox, void )
     if (xDocShell.Is() && xDocShell->GetProgress())
         return;
 
-    const sal_uInt16 nRegion = rBox.GetSelectEntryPos();
+    const sal_uInt16 nRegion = rBox.GetSelectedEntryPos();
     const sal_uInt16 nCount = aTemplates.GetRegionCount()? aTemplates.GetCount(nRegion): 0;
     m_pTemplateLb->SetUpdateMode(false);
     m_pTemplateLb->Clear();
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, LoadFile, Button*, void)
 
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {
-    sal_uInt16 nEntry = m_pTemplateLb->GetSelectEntryPos();
+    sal_uInt16 nEntry = m_pTemplateLb->GetSelectedEntryPos();
     OUString aSel = m_pRegionLb->GetSelectedEntry();
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
@@ -311,7 +311,7 @@ OUString SfxNewFileDialog_Impl::GetTemplateFileName() const
 {
     if(!IsTemplate() || !aTemplates.GetRegionCount())
         return OUString();
-    return aTemplates.GetPath(m_pRegionLb->GetSelectEntryPos(),
+    return aTemplates.GetPath(m_pRegionLb->GetSelectedEntryPos(),
                               GetSelectedTemplatePos()-1);
 }
 

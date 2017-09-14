@@ -44,7 +44,7 @@ bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)
     {
         rCoreAttrs->Put(
             SfxUInt16Item(
-                SID_SC_OPT_KEY_BINDING_COMPAT, m_pLbKeyBindings->GetSelectEntryPos()));
+                SID_SC_OPT_KEY_BINDING_COMPAT, m_pLbKeyBindings->GetSelectedEntryPos()));
         bRet = true;
     }
     return bRet;

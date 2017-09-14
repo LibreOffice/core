@@ -282,7 +282,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox&, rBox, void )
     }
     else if( &rBox == m_pOrientBox )
     {
-        m_pParent->m_aJobData.m_eOrientation = m_pOrientBox->GetSelectEntryPos() == 0 ? orientation::Portrait : orientation::Landscape;
+        m_pParent->m_aJobData.m_eOrientation = m_pOrientBox->GetSelectedEntryPos() == 0 ? orientation::Portrait : orientation::Landscape;
     }
     if( pKey )
     {
@@ -408,7 +408,7 @@ void RTSDevicePage::dispose()
 
 sal_uLong RTSDevicePage::getDepth()
 {
-    sal_uInt16 nSelectPos = m_pDepthBox->GetSelectEntryPos();
+    sal_uInt16 nSelectPos = m_pDepthBox->GetSelectedEntryPos();
     if (nSelectPos == 0)
         return 8;
     else
@@ -417,7 +417,7 @@ sal_uLong RTSDevicePage::getDepth()
 
 sal_uLong RTSDevicePage::getColorDevice()
 {
-    sal_uInt16 nSelectPos = m_pSpaceBox->GetSelectEntryPos();
+    sal_uInt16 nSelectPos = m_pSpaceBox->GetSelectedEntryPos();
     switch (nSelectPos)
     {
         case 0:

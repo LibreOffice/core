@@ -95,7 +95,7 @@ IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl, ListBox&, void)
 {
-    m_pOk->Enable(LISTBOX_ENTRY_NOTFOUND != m_pListLB->GetSelectEntryPos());
+    m_pOk->Enable(LISTBOX_ENTRY_NOTFOUND != m_pListLB->GetSelectedEntryPos());
 }
 
 SwGlossaryList::SwGlossaryList() :
@@ -166,9 +166,9 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
 
         rLB.SelectEntryPos(0);
         if(RET_OK == aDlg->Execute() &&
-            LISTBOX_ENTRY_NOTFOUND != rLB.GetSelectEntryPos())
+            LISTBOX_ENTRY_NOTFOUND != rLB.GetSelectedEntryPos())
         {
-            const TripleString& rTriple(aTripleStrings[rLB.GetSelectEntryPos()]);
+            const TripleString& rTriple(aTripleStrings[rLB.GetSelectedEntryPos()]);
             rShortName = rTriple.sShort;
             rGroupName = rTriple.sGroup;
             bRet = true;

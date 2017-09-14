@@ -570,9 +570,9 @@ void    AbstractScShowTabDlg_Impl::SetDescription(
     pDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
 }
 
-sal_Int32 AbstractScShowTabDlg_Impl::GetSelectEntryPos(sal_Int32 nPos) const
+sal_Int32 AbstractScShowTabDlg_Impl::GetSelectedEntryPos(sal_Int32 nPos) const
 {
-    return pDlg->GetSelectEntryPos( nPos);
+    return pDlg->GetSelectedEntryPos( nPos);
 }
 
 OUString AbstractScShowTabDlg_Impl::GetSelectedEntry(sal_Int32 nPos) const

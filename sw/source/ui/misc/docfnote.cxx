@@ -271,7 +271,7 @@ void SwEndNoteOptionPage::SelectNumbering(SwFootnoteNum const eNum)
 
 SwFootnoteNum SwEndNoteOptionPage::GetNumbering() const
 {
-    const sal_Int32 nPos = m_pNumCountBox->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pNumCountBox->GetSelectedEntryPos();
     return static_cast<SwFootnoteNum>((bPosDoc) ? nPos + 2 : nPos);
 }
 
@@ -307,7 +307,7 @@ IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl, Button*, void)
 IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl, ListBox&, void)
 {
     bool bEnable = true;
-    if( m_pNumCountBox->GetEntryCount() - 1 != m_pNumCountBox->GetSelectEntryPos() )
+    if( m_pNumCountBox->GetEntryCount() - 1 != m_pNumCountBox->GetSelectedEntryPos() )
     {
         bEnable = false;
         m_pOffsetField->SetValue(1);
@@ -370,7 +370,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
                         m_pFootnoteCharAnchorTemplBox->GetSelectedEntry() ) );
 
     // paragraph template
-    sal_Int32 nPos = m_pParaTemplBox->GetSelectEntryPos();
+    sal_Int32 nPos = m_pParaTemplBox->GetSelectedEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         const OUString aFormatName( m_pParaTemplBox->GetSelectedEntry() );

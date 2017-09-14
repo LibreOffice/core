@@ -173,7 +173,7 @@ PivotFunc ScDPFunctionListBox::GetSelection() const
 {
     PivotFunc nFuncMask = PivotFunc::NONE;
     for( sal_Int32 nSel = 0, nCount = GetSelectEntryCount(); nSel < nCount; ++nSel )
-        nFuncMask |= spnFunctions[ GetSelectEntryPos( nSel ) ];
+        nFuncMask |= spnFunctions[ GetSelectedEntryPos( nSel ) ];
     return nFuncMask;
 }
 
@@ -239,7 +239,7 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
     aRef.ReferenceType = mxLbTypeWrp->GetControlValue();
     aRef.ReferenceField = GetBaseFieldName(mpLbBaseField->GetSelectedEntry());
 
-    sal_Int32 nBaseItemPos = mpLbBaseItem->GetSelectEntryPos();
+    sal_Int32 nBaseItemPos = mpLbBaseItem->GetSelectedEntryPos();
     switch( nBaseItemPos )
     {
         case SC_BASEITEM_PREV_POS:
@@ -292,7 +292,7 @@ void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
 
     // select base field
     mpLbBaseField->SelectEntry(aSelectedEntry);
-    if( mpLbBaseField->GetSelectEntryPos() >= mpLbBaseField->GetEntryCount() )
+    if( mpLbBaseField->GetSelectedEntryPos() >= mpLbBaseField->GetEntryCount() )
         mpLbBaseField->SelectEntryPos( 0 );
     SelectHdl( *mpLbBaseField.get() );    // fills base item list, selects base item
 
@@ -393,7 +393,7 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox&, rLBox, void )
 
         // update item list for current base field
         mbEmptyItem = false;
-        size_t nBasePos = mpLbBaseField->GetSelectEntryPos();
+        size_t nBasePos = mpLbBaseField->GetSelectedEntryPos();
         if( nBasePos < mrLabelVec.size() )
         {
             const vector<ScDPLabelData::Member>& rMembers = mrLabelVec[nBasePos]->maMembers;
@@ -605,7 +605,7 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     if( m_pRbSortMan->IsChecked() )
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::MANUAL;
-    else if( m_pLbSortBy->GetSelectEntryPos() == SC_SORTNAME_POS )
+    else if( m_pLbSortBy->GetSelectedEntryPos() == SC_SORTNAME_POS )
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::NAME;
     else
         rLabelData.maSortInfo.Mode = DataPilotFieldSortMode::DATA;
@@ -645,7 +645,7 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     // *** HIERARCHY ***
 
-    rLabelData.mnUsedHier = m_pLbHierarchy->GetSelectEntryCount() ? m_pLbHierarchy->GetSelectEntryPos() : 0;
+    rLabelData.mnUsedHier = m_pLbHierarchy->GetSelectEntryCount() ? m_pLbHierarchy->GetSelectedEntryPos() : 0;
 }
 
 void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayout )
@@ -720,7 +720,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
 
     // m_pLbShowUsing already filled above
     m_pLbShowUsing->SelectEntry( maLabelData.maShowInfo.DataField );
-    if( m_pLbShowUsing->GetSelectEntryPos() >= m_pLbShowUsing->GetEntryCount() )
+    if( m_pLbShowUsing->GetSelectedEntryPos() >= m_pLbShowUsing->GetEntryCount() )
         m_pLbShowUsing->SelectEntryPos( 0 );
 
     CheckHdl(m_pCbShow);      // enable/disable dependent controls
@@ -808,7 +808,7 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox&, rLBox, void )
 {
     if (&rLBox == m_pLbHierarchy)
     {
-        mrDPObj.GetMembers(maLabelData.mnCol, m_pLbHierarchy->GetSelectEntryPos(), maLabelData.maMembers);
+        mrDPObj.GetMembers(maLabelData.mnCol, m_pLbHierarchy->GetSelectedEntryPos(), maLabelData.maMembers);
         InitHideListBox();
     }
 }

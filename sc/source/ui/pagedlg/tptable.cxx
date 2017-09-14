@@ -384,13 +384,13 @@ IMPL_LINK( ScTablePage, PageNoHdl, Button*, pBtn, void )
 IMPL_LINK_NOARG(ScTablePage, ScaleHdl, ListBox&, void)
 {
     // controls for Box "Reduce/enlarge"
-    m_pBxScaleAll->Show(m_pLbScaleMode->GetSelectEntryPos() == SC_TPTABLE_SCALE_PERCENT);
+    m_pBxScaleAll->Show(m_pLbScaleMode->GetSelectedEntryPos() == SC_TPTABLE_SCALE_PERCENT);
 
     // controls for Grid "Scale to width/height"
-    m_pGrHeightWidth->Show(m_pLbScaleMode->GetSelectEntryPos() == SC_TPTABLE_SCALE_TO);
+    m_pGrHeightWidth->Show(m_pLbScaleMode->GetSelectedEntryPos() == SC_TPTABLE_SCALE_TO);
 
     // controls for Box "Scale to pages"
-    m_pBxScalePageNum->Show(m_pLbScaleMode->GetSelectEntryPos() == SC_TPTABLE_SCALE_TO_PAGES);
+    m_pBxScalePageNum->Show(m_pLbScaleMode->GetSelectedEntryPos() == SC_TPTABLE_SCALE_TO_PAGES);
 }
 
 // Helper functions for FillItemSet:
@@ -439,7 +439,7 @@ static bool lcl_PutScaleItem( sal_uInt16               nWhich,
                       const SpinField&      rEd,
                       sal_uInt16                nValue )
 {
-    bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
+    bool bIsSel = (rListBox.GetSelectedEntryPos() == nLBEntry);
     bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
                         rEd.IsValueChangedFromSaved() ||
                         !WAS_DEFAULT( nWhich, rOldSet );
@@ -462,7 +462,7 @@ static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
 {
     sal_uInt16 nValue1 = (sal_uInt16)rEd1.GetValue();
     sal_uInt16 nValue2 = (sal_uInt16)rEd2.GetValue();
-    bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
+    bool bIsSel = (rListBox.GetSelectedEntryPos() == nLBEntry);
     bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
                         rEd1.IsValueChangedFromSaved() ||
                         rEd2.IsValueChangedFromSaved() ||

@@ -1922,7 +1922,7 @@ public:
 
 IMPL_LINK_NOARG(DemoWidgets, GLTestClick, Button*, void)
 {
-    sal_Int32 nSelected = mpGLCombo->GetSelectEntryPos();
+    sal_Int32 nSelected = mpGLCombo->GetSelectedEntryPos();
 
     TimeValue aDelay;
     aDelay.Seconds = 0;

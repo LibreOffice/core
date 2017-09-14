@@ -362,7 +362,7 @@ bool SvxConnectionPage::FillItemSet( SfxItemSet* rAttrs)
     }
 
 
-    sal_Int32 nPos = m_pLbType->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbType->GetSelectedEntryPos();
     if( m_pLbType->IsValueChangedFromSaved() )
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -450,7 +450,7 @@ void SvxConnectionPage::ChangeAttrHdl_Impl(void const * p)
 
     if( p == m_pLbType )
     {
-        sal_Int32 nPos = m_pLbType->GetSelectEntryPos();
+        sal_Int32 nPos = m_pLbType->GetSelectedEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             aAttrSet.Put( SdrEdgeKindItem( (SdrEdgeKind) nPos ) );

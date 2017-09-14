@@ -790,7 +790,7 @@ void PrintDialog::storeToSettings()
 
 bool PrintDialog::isPrintToFile()
 {
-    return ( maJobPage.mpPrinters->GetSelectEntryPos() == 0 );
+    return ( maJobPage.mpPrinters->GetSelectedEntryPos() == 0 );
 }
 
 bool PrintDialog::isCollate()
@@ -1487,9 +1487,9 @@ void PrintDialog::updateNup()
 
     aMPS.bDrawBorder        = maNUpPage.mpBorderCB->IsChecked();
 
-    aMPS.nOrder = (NupOrderType)maNUpPage.mpNupOrderBox->GetSelectEntryPos();
+    aMPS.nOrder = (NupOrderType)maNUpPage.mpNupOrderBox->GetSelectedEntryPos();
 
-    int nOrientationMode = maNUpPage.mpNupOrientationBox->GetSelectEntryPos();
+    int nOrientationMode = maNUpPage.mpNupOrientationBox->GetSelectedEntryPos();
     if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE )
         aMPS.aPaperSize = maNupLandscapeSize;
     else if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT )
@@ -1519,7 +1519,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
     if(  &rBox == maJobPage.mpPrinters )
     {
 
-        if ( rBox.GetSelectEntryPos() != 0)
+        if ( rBox.GetSelectedEntryPos() != 0)
         {
             OUString aNewPrinter( rBox.GetSelectedEntry() );
             // set new printer
@@ -1804,7 +1804,7 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox&, i_rBox, void )
     {
         makeEnabled( &i_rBox );
 
-        sal_Int32 nVal( i_rBox.GetSelectEntryPos() );
+        sal_Int32 nVal( i_rBox.GetSelectedEntryPos() );
         pVal->Value <<= nVal;
 
         //If we are in impress we start in print slides mode and get a

@@ -1863,7 +1863,7 @@ void SvxNumOptionsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
 
 IMPL_LINK( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox&, rBox, void )
 {
-    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectedEntryPos();
     nPos ++; // no VERT_NONE
 
     sal_uInt16 nMask = 1;
@@ -2212,7 +2212,7 @@ IMPL_LINK( SvxNumOptionsTabPage, RatioHdl_Impl, Button*, pBox, void )
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl, ListBox&, void)
 {
     bAutomaticCharStyles = false;
-    sal_Int32 nEntryPos = m_pCharFmtLB->GetSelectEntryPos();
+    sal_Int32 nEntryPos = m_pCharFmtLB->GetSelectedEntryPos();
     OUString sEntry = m_pCharFmtLB->GetSelectedEntry();
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -2261,7 +2261,7 @@ void SvxNumOptionsTabPage::EditModifyHdl_Impl( Edit* pEdit )
                 aNumFmt.SetStart( (sal_uInt16)m_pStartED->GetValue() );
             else //align
             {
-                sal_Int32 nPos = m_pAlignLB->GetSelectEntryPos();
+                sal_Int32 nPos = m_pAlignLB->GetSelectedEntryPos();
                 SvxAdjust eAdjust = SvxAdjust::Center;
                 if(nPos == 0)
                     eAdjust = SvxAdjust::Left;
@@ -3190,8 +3190,8 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, EditModifyHdl_Impl, ListBox&, void)
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
 
             const sal_Int32 nPos = m_pAlignLB->IsVisible()
-                                ? m_pAlignLB->GetSelectEntryPos()
-                                : m_pAlign2LB->GetSelectEntryPos();
+                                ? m_pAlignLB->GetSelectedEntryPos()
+                                : m_pAlign2LB->GetSelectedEntryPos();
             SvxAdjust eAdjust = SvxAdjust::Center;
             if(nPos == 0)
                 eAdjust = SvxAdjust::Left;
@@ -3360,7 +3360,7 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox&, void)
     // determine value to be set at the chosen list levels
     SvxNumberFormat::LabelFollowedBy eLabelFollowedBy = SvxNumberFormat::LISTTAB;
     {
-        const sal_Int32 nPos = m_pLabelFollowedByLB->GetSelectEntryPos();
+        const sal_Int32 nPos = m_pLabelFollowedByLB->GetSelectedEntryPos();
         if ( nPos == 1 )
         {
             eLabelFollowedBy = SvxNumberFormat::SPACE;

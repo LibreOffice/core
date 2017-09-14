@@ -240,7 +240,7 @@ IMPL_LINK( SwEnvFormatPage, ModifyHdl, SpinField&, rEdit, void )
                 m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
 
         // remember user size
-        if (aIDs[m_pSizeFormatBox->GetSelectEntryPos()] == (sal_uInt16)PAPER_USER)
+        if (aIDs[m_pSizeFormatBox->GetSelectedEntryPos()] == (sal_uInt16)PAPER_USER)
         {
             lUserW = lWidth ;
             lUserH = lHeight;
@@ -391,7 +391,7 @@ IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl, ListBox&, void)
     long lAddrFromLeft;
     long lAddrFromTop;
 
-    const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectEntryPos()];
+    const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectedEntryPos()];
     if (nPaper != (sal_uInt16)PAPER_USER)
     {
         Size aSz = SvxPaperInfo::GetPaperSize((Paper)nPaper);
@@ -486,7 +486,7 @@ void SwEnvFormatPage::FillItem(SwEnvItem& rItem)
     rItem.lSendFromLeft = static_cast< sal_Int32 >(GetFieldVal(*m_pSendLeftField));
     rItem.lSendFromTop  = static_cast< sal_Int32 >(GetFieldVal(*m_pSendTopField ));
 
-    const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectEntryPos()];
+    const sal_uInt16 nPaper = aIDs[m_pSizeFormatBox->GetSelectedEntryPos()];
     if (nPaper == (sal_uInt16)PAPER_USER)
     {
         long lWVal = static_cast< long >(GetFieldVal(*m_pSizeWidthField ));

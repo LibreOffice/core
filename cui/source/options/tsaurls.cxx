@@ -123,7 +123,7 @@ IMPL_LINK_NOARG(TSAURLsDialog, SelectHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(TSAURLsDialog, DeleteHdl_Impl, Button*, void)
 {
-    sal_Int32 nSel = m_pURLListBox->GetSelectEntryPos();
+    sal_Int32 nSel = m_pURLListBox->GetSelectedEntryPos();
 
     if (nSel == LISTBOX_ENTRY_NOTFOUND)
         return;

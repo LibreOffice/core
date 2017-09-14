@@ -73,7 +73,7 @@ public:
     void SetApplyBorderAndShadow( bool bSet )  { m_pApplyBorderAndShadowCB->Check(bSet); }
 
     //#i61007# order of captions
-    bool IsOrderNumberingFirst() const {return m_pLbCaptionOrder->GetSelectEntryPos() == 1;}
+    bool IsOrderNumberingFirst() const {return m_pLbCaptionOrder->GetSelectedEntryPos() == 1;}
     void SetOrderNumberingFirst(bool bSet) { m_pLbCaptionOrder->SelectEntryPos( bSet ? 1 : 0 ); }
 
     void      SetCharacterStyle(const OUString& rStyle);
@@ -269,7 +269,7 @@ void SwCaptionDialog::Apply()
     aOpt.SetNumType( (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetSelectEntryData()) );
     aOpt.SetSeparator( m_pSepEdit->IsEnabled() ? m_pSepEdit->GetText() : OUString() );
     aOpt.SetCaption( m_pTextEdit->GetText() );
-    aOpt.SetPos( m_pPosBox->GetSelectEntryPos() );
+    aOpt.SetPos( m_pPosBox->GetSelectedEntryPos() );
     aOpt.IgnoreSeqOpts() = true;
     aOpt.CopyAttributes() = bCopyAttributes;
     aOpt.SetCharacterStyle( sCharacterStyle );
@@ -486,7 +486,7 @@ void SwSequenceOptionDialog::Apply()
     SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(rSh.GetFieldType(
                                         SwFieldIds::SetExp, aFieldTypeName ));
 
-    sal_Int8 nLvl = (sal_Int8)( m_pLbLevel->GetSelectEntryPos() - 1);
+    sal_Int8 nLvl = (sal_Int8)( m_pLbLevel->GetSelectedEntryPos() - 1);
     sal_Unicode cDelim = m_pEdDelim->GetText()[0];
 
     bool bUpdate = true;
@@ -512,7 +512,7 @@ void SwSequenceOptionDialog::Apply()
 
 OUString  SwSequenceOptionDialog::GetCharacterStyle() const
 {
-    if(m_pLbCharStyle->GetSelectEntryPos())
+    if(m_pLbCharStyle->GetSelectedEntryPos())
         return m_pLbCharStyle->GetSelectedEntry();
     return OUString();
 }

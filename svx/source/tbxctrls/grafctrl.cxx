@@ -349,7 +349,7 @@ void ImplGrafModeControl::Select()
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = "GrafMode";
-        aArgs[0].Value <<= sal_Int16( GetSelectEntryPos() );
+        aArgs[0].Value <<= sal_Int16( GetSelectedEntryPos() );
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
             This instance may be deleted in the meantime (i.e. when a dialog is opened
@@ -368,7 +368,7 @@ bool ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
     MouseNotifyEvent nType = rNEvt.GetType();
 
     if( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
-        mnCurPos = GetSelectEntryPos();
+        mnCurPos = GetSelectedEntryPos();
 
     return ListBox::PreNotify( rNEvt );
 }

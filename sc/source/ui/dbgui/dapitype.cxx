@@ -83,7 +83,7 @@ bool ScDataPilotSourceTypeDlg::IsNamedRange() const
 
 OUString ScDataPilotSourceTypeDlg::GetSelectedNamedRange() const
 {
-    const sal_Int32 nPos = m_pLbNamedRange->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLbNamedRange->GetSelectedEntryPos();
     return m_pLbNamedRange->GetEntry(nPos);
 }
 

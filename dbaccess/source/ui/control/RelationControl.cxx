@@ -527,7 +527,7 @@ namespace dbaui
                 pOther = m_pRightTable;
             else
                 pOther = m_pLeftTable;
-            pOther->SelectEntryPos(1 - pOther->GetSelectEntryPos());
+            pOther->SelectEntryPos(1 - pOther->GetSelectedEntryPos());
 
             OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableMap->begin();
             OTableWindow* pFirst = aIter->second;

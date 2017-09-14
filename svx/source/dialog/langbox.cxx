@@ -611,12 +611,12 @@ void SvxLanguageComboBox::ImplSetEntryData( sal_Int32 nPos, void* pData )
 
 sal_Int32 SvxLanguageBox::ImplGetSelectEntryPos() const
 {
-    return GetSelectEntryPos();
+    return GetSelectedEntryPos();
 }
 
 sal_Int32 SvxLanguageComboBox::ImplGetSelectEntryPos() const
 {
-    return GetSelectEntryPos();
+    return GetSelectedEntryPos();
 }
 
 
@@ -705,7 +705,7 @@ void SvxLanguageBox::ImplSaveValue()
 void SvxLanguageComboBox::ImplSaveValue()
 {
     // Emulate the ListBox behavior.
-    mnSavedValuePos = GetSelectEntryPos();
+    mnSavedValuePos = GetSelectedEntryPos();
 }
 
 

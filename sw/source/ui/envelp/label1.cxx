@@ -709,7 +709,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
     }
     if(bFound)
     {
-        if(m_pAutoTextGroupLB->GetSelectEntryPos() != i)
+        if(m_pAutoTextGroupLB->GetSelectedEntryPos() != i)
         {
             m_pAutoTextGroupLB->SelectEntryPos(i);
             AutoTextSelectHdl(*m_pAutoTextGroupLB);

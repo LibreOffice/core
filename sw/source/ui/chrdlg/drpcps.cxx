@@ -273,7 +273,7 @@ void SwDropCapsPict::UpdatePaintSettings()
     vcl::Font aFont;
     if (mpPage)
     {
-        if (!mpPage->m_pTemplateBox->GetSelectEntryPos())
+        if (!mpPage->m_pTemplateBox->GetSelectedEntryPos())
         {
             // query the Font at paragraph's beginning
             mpPage->rSh.Push();
@@ -787,7 +787,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
             aFormat.GetWholeWord() = m_pWholeWordCB->IsChecked();
 
             // template
-            if (m_pTemplateBox->GetSelectEntryPos())
+            if (m_pTemplateBox->GetSelectedEntryPos())
                 aFormat.SetCharFormat(rSh.GetCharStyle(m_pTemplateBox->GetSelectedEntry()));
         }
         else

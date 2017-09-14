@@ -51,7 +51,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl, SvTreeListBox*, void)
 IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl, ListBox&, void)
 {
     sal_uLong nCount = m_pPathLB->GetEntryCount();
-    bool bIsSelected = m_pPathLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    bool bIsSelected = m_pPathLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND;
     bool bEnable = nCount > 1;
     m_pDelBtn->Enable(bEnable && bIsSelected);
 }
@@ -156,7 +156,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxPathSelectDialog, DelHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pPathLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pPathLB->GetSelectedEntryPos();
     m_pPathLB->RemoveEntry( nPos );
     sal_Int32 nCnt = m_pPathLB->GetEntryCount();
 

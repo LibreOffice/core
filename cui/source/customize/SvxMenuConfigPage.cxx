@@ -282,7 +282,7 @@ short SvxMenuConfigPage::QueryReset()
     OUString msg = CuiResId( RID_SVXSTR_CONFIRM_MENU_RESET );
 
     OUString saveInName = m_pSaveInListBox->GetEntry(
-        m_pSaveInListBox->GetSelectEntryPos() );
+        m_pSaveInListBox->GetSelectedEntryPos() );
 
     OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
 
@@ -457,7 +457,7 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, ResetMenuHdl, Button *, void )
     // So we are resetting only if it is a context menu
     if (!m_bIsMenuBar && qbox->Execute() == RET_YES)
     {
-        sal_Int32 nPos = m_pTopLevelListBox->GetSelectEntryPos();
+        sal_Int32 nPos = m_pTopLevelListBox->GetSelectedEntryPos();
         ContextMenuSaveInData* pSaveInData = static_cast< ContextMenuSaveInData* >(GetSaveInData());
 
         pSaveInData->ResetContextMenu(pMenuData);

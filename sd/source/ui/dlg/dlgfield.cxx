@@ -91,7 +91,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             else
                 eType = SvxDateType::Var;
 
-            eFormat = (SvxDateFormat) ( m_pLbFormat->GetSelectEntryPos() + 2 );
+            eFormat = (SvxDateFormat) ( m_pLbFormat->GetSelectedEntryPos() + 2 );
 
             pNewField = new SvxDateField( *pDateField );
             static_cast<SvxDateField*>( pNewField )->SetType( eType );
@@ -108,7 +108,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             else
                 eType = SvxTimeType::Var;
 
-            eFormat = (SvxTimeFormat) ( m_pLbFormat->GetSelectEntryPos() + 2 );
+            eFormat = (SvxTimeFormat) ( m_pLbFormat->GetSelectedEntryPos() + 2 );
 
             pNewField = new SvxExtTimeField( *pTimeField );
             static_cast<SvxExtTimeField*>( pNewField )->SetType( eType );
@@ -125,7 +125,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             else
                 eType = SvxFileType::Var;
 
-            eFormat = (SvxFileFormat) ( m_pLbFormat->GetSelectEntryPos() );
+            eFormat = (SvxFileFormat) ( m_pLbFormat->GetSelectedEntryPos() );
 
             ::sd::DrawDocShell* pDocSh = dynamic_cast< ::sd::DrawDocShell* >(SfxObjectShell::Current() );
 
@@ -153,7 +153,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             else
                 eType = SvxAuthorType::Var;
 
-            eFormat = (SvxAuthorFormat) ( m_pLbFormat->GetSelectEntryPos() );
+            eFormat = (SvxAuthorFormat) ( m_pLbFormat->GetSelectedEntryPos() );
 
             // Get current state of address, not the old one
             SvtUserOptions aUserOptions;

@@ -225,7 +225,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
     const sal_Int32 nOld = GetTypeSel();
 
     // current ListBoxPos
-    SetTypeSel(m_pTypeLB->GetSelectEntryPos());
+    SetTypeSel(m_pTypeLB->GetSelectedEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
     {
@@ -446,7 +446,7 @@ void SwFieldFuncPage::ListModifyHdl(Control const * pControl)
     }
     else if(m_pListItemsLB->GetSelectEntryCount())
     {
-        sal_Int32 nSelPos = m_pListItemsLB->GetSelectEntryPos();
+        sal_Int32 nSelPos = m_pListItemsLB->GetSelectedEntryPos();
         if(pControl == m_pListRemovePB)
         {
             m_pListItemsLB->RemoveEntry(nSelPos);
@@ -491,9 +491,9 @@ IMPL_LINK_NOARG(SwFieldFuncPage, ListEnableHdl, Edit&, void)
                 LISTBOX_ENTRY_NOTFOUND == m_pListItemsLB->GetEntryPos(m_pListItemED->GetText()));
     bool bEnableButtons = m_pListItemsLB->GetSelectEntryCount() > 0;
     m_pListRemovePB->Enable(bEnableButtons);
-    m_pListUpPB->Enable(bEnableButtons && (m_pListItemsLB->GetSelectEntryPos() > 0));
+    m_pListUpPB->Enable(bEnableButtons && (m_pListItemsLB->GetSelectedEntryPos() > 0));
     m_pListDownPB->Enable(bEnableButtons &&
-                (m_pListItemsLB->GetSelectEntryPos() < (m_pListItemsLB->GetEntryCount() - 1)));
+                (m_pListItemsLB->GetSelectedEntryPos() < (m_pListItemsLB->GetEntryCount() - 1)));
 }
 
 // renew types in SelectionBox
@@ -552,7 +552,7 @@ bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
 
     sal_uInt16 nSubType = 0;
 
-    const sal_Int32 nEntryPos = m_pFormatLB->GetSelectEntryPos();
+    const sal_Int32 nEntryPos = m_pFormatLB->GetSelectedEntryPos();
     const sal_uLong nFormat = (nEntryPos == LISTBOX_ENTRY_NOTFOUND)
         ? 0 : reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(nEntryPos));
 
@@ -622,7 +622,7 @@ sal_uInt16 SwFieldFuncPage::GetGroup()
 
 void    SwFieldFuncPage::FillUserData()
 {
-    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
+    const sal_Int32 nEntryPos = m_pTypeLB->GetSelectedEntryPos();
     const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
         ? USHRT_MAX
         : sal::static_int_cast< sal_uInt16 >

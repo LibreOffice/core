@@ -1135,7 +1135,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, void )
         if(RET_YES == aQuery->Execute())
         {
             OUString sDeleteScheme(m_pColorSchemeLB->GetSelectedEntry());
-            m_pColorSchemeLB->RemoveEntry(m_pColorSchemeLB->GetSelectEntryPos());
+            m_pColorSchemeLB->RemoveEntry(m_pColorSchemeLB->GetSelectedEntryPos());
             m_pColorSchemeLB->SelectEntryPos(0);
             m_pColorSchemeLB->GetSelectHdl().Call(*m_pColorSchemeLB);
             //first select the new scheme and then delete the old one

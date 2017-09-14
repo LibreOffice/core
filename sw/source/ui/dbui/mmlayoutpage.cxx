@@ -665,7 +665,7 @@ IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox&, rBox, void)
     {
         sal_Int16 eType = DocumentZoomType::BY_VALUE;
         short nZoom = 50;
-        switch(rBox.GetSelectEntryPos())
+        switch(rBox.GetSelectedEntryPos())
         {
             case 0 : eType = DocumentZoomType::ENTIRE_PAGE; break;
             case 1 : nZoom = 50; break;

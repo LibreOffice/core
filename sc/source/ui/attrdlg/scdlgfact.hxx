@@ -337,7 +337,7 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg
     virtual sal_Int32 GetSelectEntryCount() const override;
     virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId ) override;
     virtual OUString  GetSelectedEntry(sal_Int32 nPos) const override;
-    virtual sal_Int32 GetSelectEntryPos(sal_Int32 nPos) const override;
+    virtual sal_Int32 GetSelectedEntryPos(sal_Int32 nPos) const override;
 };
 
 class AbstractScSortWarningDlg_Impl : public AbstractScSortWarningDlg

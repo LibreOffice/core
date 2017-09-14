@@ -714,7 +714,7 @@ void SvxTPFilter::SetDateMode(sal_uInt16 nMode)
 
 SvxRedlinDateMode SvxTPFilter::GetDateMode()
 {
-    return static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectEntryPos());
+    return static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectedEntryPos());
 }
 void SvxTPFilter::ClearAuthors()
 {
@@ -739,7 +739,7 @@ void SvxTPFilter::SelectedAuthorPos(sal_Int32 nPos)
 sal_Int32 SvxTPFilter::SelectAuthor(const OUString& aString)
 {
     m_pLbAuthor->SelectEntry(aString);
-    return m_pLbAuthor->GetSelectEntryPos();
+    return m_pLbAuthor->GetSelectedEntryPos();
 }
 
 void SvxTPFilter::SetRange(const OUString& rString)
@@ -862,7 +862,7 @@ void SvxTPFilter::ShowAction(bool bShow)
 
 IMPL_LINK_NOARG( SvxTPFilter, SelDateHdl, ListBox&, void )
 {
-    SvxRedlinDateMode nKind = static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectEntryPos());
+    SvxRedlinDateMode nKind = static_cast<SvxRedlinDateMode>(m_pLbDate->GetSelectedEntryPos());
     switch(nKind)
     {
         case SvxRedlinDateMode::BEFORE:

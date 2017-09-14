@@ -79,7 +79,7 @@ public:
 
     /** Returns the position of the entry currently selected or TREELIST_APPEND.
     */
-    sal_uLong                   GetSelectEntryPos() const;
+    sal_uLong                   GetSelectedEntryPos() const;
 
 protected:
     /** Initializes a new SvLBoxFontString entry.

@@ -214,7 +214,7 @@ void DlgFilterCrit::dispose()
 }
 
 #define LbText(x)       ((x).GetSelectedEntry())
-#define LbPos(x)        ((x).GetSelectEntryPos())
+#define LbPos(x)        ((x).GetSelectedEntryPos())
 
 sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const
 {
@@ -735,7 +735,7 @@ void DlgFilterCrit::BuildWherePart()
         if ( getCondition(*m_pLB_WHEREFIELD2,*m_pLB_WHERECOMP2,*m_pET_WHEREVALUE2,aValue) )
             _rValues = aHaving;
         PropertyValue* pPos = nullptr;
-        if ( m_pLB_WHERECOND2->GetSelectEntryPos() )
+        if ( m_pLB_WHERECOND2->GetSelectedEntryPos() )
         {
             sal_Int32 nPos = _rValues.getLength();
             _rValues.realloc( nPos + 1);
@@ -759,7 +759,7 @@ void DlgFilterCrit::BuildWherePart()
         if ( getCondition(*m_pLB_WHEREFIELD3,*m_pLB_WHERECOMP3,*m_pET_WHEREVALUE3,aValue) )
             _rValues = aHaving;
         PropertyValue* pPos = nullptr;
-        if ( m_pLB_WHERECOND3->GetSelectEntryPos() )
+        if ( m_pLB_WHERECOND3->GetSelectedEntryPos() )
         {
             sal_Int32 nPos = _rValues.getLength();
             _rValues.realloc( nPos + 1);

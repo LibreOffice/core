@@ -570,7 +570,7 @@ void FillControl::dispose()
 
 IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
+    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectedEntryPos();
 
     if((drawing::FillStyle)meLastXFS != eXFS)
     {
@@ -745,7 +745,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillTypeHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
+    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectedEntryPos();
     const XFillStyleItem aXFillStyleItem(eXFS);
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
@@ -768,7 +768,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
         }
         case drawing::FillStyle_GRADIENT:
         {
-            sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
+            sal_Int32 nPos = mpLbFillAttr->GetSelectedEntryPos();
 
             if(LISTBOX_ENTRY_NOTFOUND == nPos)
             {
@@ -801,7 +801,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
         }
         case drawing::FillStyle_HATCH:
         {
-            sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
+            sal_Int32 nPos = mpLbFillAttr->GetSelectedEntryPos();
 
             if(LISTBOX_ENTRY_NOTFOUND == nPos)
             {
@@ -834,7 +834,7 @@ IMPL_LINK_NOARG(SvxFillToolBoxControl, SelectFillAttrHdl, ListBox&, void)
         }
         case drawing::FillStyle_BITMAP:
         {
-            sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
+            sal_Int32 nPos = mpLbFillAttr->GetSelectedEntryPos();
 
             if(LISTBOX_ENTRY_NOTFOUND == nPos)
             {

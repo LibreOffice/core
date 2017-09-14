@@ -138,13 +138,13 @@ private:
 
     void             EnableRemoveButton()
                                 { m_pRemoveBtn->Enable(
-                                    m_pAssignedList->GetSelectEntryPos()
+                                    m_pAssignedList->GetSelectedEntryPos()
                                     != LISTBOX_ENTRY_NOTFOUND ); }
 
 
     void             EnableEditButton()
                                 { m_pEditBtn->Enable(
-                                    m_pAssignedList->GetSelectEntryPos()
+                                    m_pAssignedList->GetSelectedEntryPos()
                                     != LISTBOX_ENTRY_NOTFOUND ); }
 
     void             DisableAssignButton()
@@ -190,7 +190,7 @@ private:
     bool                    IsPathDuplicate( const OUString& _rPath );
     void             EnableRemoveButton()
                                 { m_pRemoveBtn->Enable(
-                                    m_pPathList->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
+                                    m_pPathList->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND ); }
 
 
 public:

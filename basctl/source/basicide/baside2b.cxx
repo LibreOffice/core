@@ -2696,7 +2696,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 OUString sTypedText = pCodeCompleteWindow->pParent->GetEditEngine()->GetText(aTextSelection);
                 if( !aFuncBuffer.isEmpty() )
                 {
-                    sal_Int32 nInd = GetSelectEntryPos();
+                    sal_Int32 nInd = GetSelectedEntryPos();
                     if( nInd != LISTBOX_ENTRY_NOTFOUND )
                     {//if there is something selected
                         bool bFound = false;

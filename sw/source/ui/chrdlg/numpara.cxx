@@ -72,7 +72,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItem
     get(m_pRestartBX,              "boxRESTART_NO");
     get(m_pRestartNF,              "spinNF_RESTART_PARA");
 
-    sal_Int32 numSelectPos = m_pNumberStyleLB->GetSelectEntryPos();
+    sal_Int32 numSelectPos = m_pNumberStyleLB->GetSelectedEntryPos();
     if ( numSelectPos == 0 )
         m_pEditNumStyleBtn->Disable();
     else
@@ -133,7 +133,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( m_pOutlineLvLB->IsValueChangedFromSaved())
     {
-        const sal_uInt16 aOutlineLv = m_pOutlineLvLB->GetSelectEntryPos();
+        const sal_uInt16 aOutlineLv = m_pOutlineLvLB->GetSelectedEntryPos();
         const SfxUInt16Item* pOldOutlineLv = static_cast<const SfxUInt16Item*>(GetOldItem( *rSet, SID_ATTR_PARA_OUTLINE_LEVEL));
         if (pOldOutlineLv)
         {
@@ -148,7 +148,7 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
     if( m_pNumberStyleLB->IsValueChangedFromSaved())
     {
         OUString aStyle;
-        if(m_pNumberStyleLB->GetSelectEntryPos())
+        if(m_pNumberStyleLB->GetSelectedEntryPos())
             aStyle = m_pNumberStyleLB->GetSelectedEntry();
         const SfxStringItem* pOldRule = static_cast<const SfxStringItem*>(GetOldItem( *rSet, SID_ATTR_PARA_NUMRULE));
         SfxStringItem* pRule = pOldRule ? static_cast<SfxStringItem*>(pOldRule->Clone()) : nullptr;
@@ -330,7 +330,7 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG( SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl, ListBox&, void )
 {
-    sal_Int32 numSelectPos = m_pNumberStyleLB->GetSelectEntryPos();
+    sal_Int32 numSelectPos = m_pNumberStyleLB->GetSelectedEntryPos();
     if ( numSelectPos == 0 )
         m_pEditNumStyleBtn->Disable();
     else
@@ -376,7 +376,7 @@ bool SwParagraphNumTabPage::ExecuteEditNumStyle_Impl(
 
 IMPL_LINK( SwParagraphNumTabPage, StyleHdl_Impl, ListBox&, rBox, void )
 {
-    bool bEnable = bCurNumrule || rBox.GetSelectEntryPos() > 0;
+    bool bEnable = bCurNumrule || rBox.GetSelectedEntryPos() > 0;
     m_pNewStartCB->Enable(bEnable);
     NewStartHdl_Impl(m_pNewStartCB);
 }

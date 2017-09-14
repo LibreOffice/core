@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsDoubleClickHdl, SvTreeListBox*, b
 
 IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl, ListBox&, void)
 {
-    const sal_Int32 nSelectPos = m_pLbEngine->GetSelectEntryPos();
+    const sal_Int32 nSelectPos = m_pLbEngine->GetSelectedEntryPos();
     if ( nSelectPos < maImplNames.getLength() )
     {
         OUString aNewEngine( maImplNames[nSelectPos] );

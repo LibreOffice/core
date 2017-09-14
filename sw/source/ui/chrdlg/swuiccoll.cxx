@@ -281,7 +281,7 @@ void SwCondCollPage::SelectHdl(void const * pBox)
     if (pBox == m_pFilterLB)
     {
         m_pStyleLB->Clear();
-        const sal_Int32 nSelPos = static_cast<ListBox const *>(pBox)->GetSelectEntryPos();
+        const sal_Int32 nSelPos = static_cast<ListBox const *>(pBox)->GetSelectedEntryPos();
         const sal_uInt16 nSearchFlags = *static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(nSelPos));
         SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SfxStyleFamily::Para, nSearchFlags);

@@ -338,7 +338,7 @@ namespace dbaui
             {
                 OSL_ENSURE(!isNewField(), "IndexFieldsControl::SaveModified: why the hell ...!!!");
                 // selected entry
-                sal_Int32 nPos = m_pSortingCell->GetSelectEntryPos();
+                sal_Int32 nPos = m_pSortingCell->GetSelectedEntryPos();
                 OSL_ENSURE(LISTBOX_ENTRY_NOTFOUND != nPos, "IndexFieldsControl::SaveModified: how did you get this selection??");
                 // adjust the sort flag in the index field description
                 OIndexField& rCurrentField = m_aFields[GetCurRow()];

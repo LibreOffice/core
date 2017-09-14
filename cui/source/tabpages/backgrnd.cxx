@@ -522,7 +522,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     {
         if(m_pTblLBox->IsVisible())
         {
-            sal_Int32 nValue = m_pTblLBox->GetSelectEntryPos();
+            sal_Int32 nValue = m_pTblLBox->GetSelectedEntryPos();
 
             if ( pTableBck_Impl )
             {
@@ -610,7 +610,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
     if ( m_pTblLBox->IsVisible() )
     {
-        switch( m_pTblLBox->GetSelectEntryPos() )
+        switch( m_pTblLBox->GetSelectedEntryPos() )
         {
             case TBL_DEST_CELL:
                 nSlot = SID_ATTR_BRUSH;
@@ -806,7 +806,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
         if( m_pTblLBox->IsValueChangedFromSaved() )
         {
             rCoreSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
-                                         m_pTblLBox->GetSelectEntryPos() ) );
+                                         m_pTblLBox->GetSelectedEntryPos() ) );
             bModified = true;
         }
     }
@@ -1225,7 +1225,7 @@ void SvxBackgroundTabPage::ShowTblControl()
 
 IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox&, rBox, void )
 {
-    sal_Int32 nSelPos = rBox.GetSelectEntryPos();
+    sal_Int32 nSelPos = rBox.GetSelectedEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
     {
         std::unique_ptr<SvxBrushItem> xItemHolder;

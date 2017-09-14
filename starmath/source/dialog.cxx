@@ -1785,7 +1785,7 @@ IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox&, rListBox, void )
 
 IMPL_LINK_NOARG( SmSymDefineDialog, SubsetChangeHdl, ListBox&, void )
 {
-    sal_Int32 nPos = pFontsSubsetLB->GetSelectEntryPos();
+    sal_Int32 nPos = pFontsSubsetLB->GetSelectedEntryPos();
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
     {
         const Subset* pSubset = static_cast<const Subset*> (pFontsSubsetLB->GetEntryData( nPos ));

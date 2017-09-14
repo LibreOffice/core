@@ -157,7 +157,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyTransHdl, Edit&, void )
 
 IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl, ListBox&, void )
 {
-    const sal_Int16 nTrans = mpLBColorMode->GetSelectEntryPos();
+    const sal_Int16 nTrans = mpLBColorMode->GetSelectedEntryPos();
     const SfxInt16Item aTransItem( SID_ATTR_GRAF_MODE, nTrans );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_MODE,
             SfxCallMode::RECORD, { &aTransItem });

@@ -83,7 +83,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl, ListBox&, v
 IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButton, void)
 {
     bool bRename = pButton == m_pRenamePB;
-    sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pFieldsLB->GetSelectedEntryPos();
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 
@@ -107,7 +107,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButton, voi
         }
         else
         {
-            if ( m_pFieldsLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+            if ( m_pFieldsLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND )
                 ++nPos; // append the new entry behind the selected
             //add the new column
             m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nPos, sNew);
@@ -126,8 +126,8 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButton, voi
 
 IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl, Button*, void)
 {
-    sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
-    m_pFieldsLB->RemoveEntry(m_pFieldsLB->GetSelectEntryPos());
+    sal_Int32 nPos = m_pFieldsLB->GetSelectedEntryPos();
+    m_pFieldsLB->RemoveEntry(m_pFieldsLB->GetSelectedEntryPos());
     m_pFieldsLB->SelectEntryPos(nPos > m_pFieldsLB->GetEntryCount() - 1 ? nPos - 1 : nPos);
 
     //remove the column
@@ -143,7 +143,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl, Button*, void)
 IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, Button*, pButton, void)
 {
     sal_Int32 nPos;
-    sal_Int32 nOldPos = nPos = m_pFieldsLB->GetSelectEntryPos();
+    sal_Int32 nOldPos = nPos = m_pFieldsLB->GetSelectedEntryPos();
     OUString aTemp = m_pFieldsLB->GetEntry(nPos);
     m_pFieldsLB->RemoveEntry( nPos );
     if(pButton == m_pUpPB)
@@ -169,7 +169,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, Button*, pButton, void)
 
 void SwCustomizeAddressListDialog::UpdateButtons()
 {
-    sal_Int32 nPos = m_pFieldsLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pFieldsLB->GetSelectedEntryPos();
     sal_Int32 nEntries = m_pFieldsLB->GetEntryCount();
     m_pUpPB->Enable(nPos > 0 && nEntries > 0);
     m_pDownPB->Enable(nPos < nEntries -1);

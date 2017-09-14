@@ -1477,7 +1477,7 @@ IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox, void 
     if (pBox == m_pLinguModulesCLB)
     {
         DBG_ASSERT( pLinguData, "NULL pointer, LinguData missing" );
-        sal_uLong nPos = m_pLinguModulesCLB->GetSelectEntryPos();
+        sal_uLong nPos = m_pLinguModulesCLB->GetSelectedEntryPos();
         if (nPos != TREELIST_ENTRY_NOTFOUND  &&  pLinguData)
         {
             pLinguData->Reconfigure( m_pLinguModulesCLB->GetText( nPos ),
@@ -1486,7 +1486,7 @@ IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox, void 
     }
     else if (pBox == m_pLinguDicsCLB)
     {
-        sal_uLong nPos = m_pLinguDicsCLB->GetSelectEntryPos();
+        sal_uLong nPos = m_pLinguDicsCLB->GetSelectedEntryPos();
         if (nPos != TREELIST_ENTRY_NOTFOUND)
         {
             const uno::Reference< XDictionary > &rDic = aDics.getConstArray()[ nPos ];
@@ -1865,7 +1865,7 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvTreeListBox*, pBox, void )
             ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
             if(!pData->IsParent() && pData->GetType() != TYPE_HYPH)
             {
-                sal_uLong  nCurPos = static_cast<SvxCheckListBox*>(pBox)->GetSelectEntryPos();
+                sal_uLong  nCurPos = static_cast<SvxCheckListBox*>(pBox)->GetSelectedEntryPos();
                 if(nCurPos < pBox->GetEntryCount() - 1)
                 {
                     bDisableDown = static_cast<ModuleUserData_Impl*>(pBox->
@@ -2181,7 +2181,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(ListBox const * pBox)
 IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, Button *, pBtn, void )
 {
     bool bUp = m_pPrioUpPB == pBtn;
-    sal_uLong  nCurPos = m_pModulesCLB->GetSelectEntryPos();
+    sal_uLong  nCurPos = m_pModulesCLB->GetSelectedEntryPos();
     SvTreeListEntry* pEntry;
     if (nCurPos != TREELIST_ENTRY_NOTFOUND  &&
         nullptr != (pEntry = m_pModulesCLB->GetEntry(nCurPos)))

@@ -106,7 +106,7 @@ IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, TemplateNameEditHdl, Edit&, void)
 
 IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, SelectCategoryHdl, ListBox&, void)
 {
-    if(mpLBCategory->GetSelectEntryPos() == 0)
+    if(mpLBCategory->GetSelectedEntryPos() == 0)
     {
         msSelectedCategory = OUString();
         mpOKButton->Disable();

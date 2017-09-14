@@ -367,7 +367,7 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
     TriState eState;
 
     // animation type
-    nPos = m_pLbEffect->GetSelectEntryPos();
+    nPos = m_pLbEffect->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
         m_pLbEffect->IsValueChangedFromSaved() )
     {
@@ -482,7 +482,7 @@ VclPtr<SfxTabPage> SvxTextAnimationPage::Create( vcl::Window* pWindow,
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl, ListBox&, void)
 {
-    sal_Int32 nPos = m_pLbEffect->GetSelectEntryPos();
+    sal_Int32 nPos = m_pLbEffect->GetSelectedEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         eAniKind = (SdrTextAniKind) nPos;

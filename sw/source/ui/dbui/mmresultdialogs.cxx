@@ -762,7 +762,7 @@ IMPL_LINK(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, void)
     SwView* pView = ::GetActiveView();
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
-    if (rBox.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+    if (rBox.GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {
         const QueueInfo* pInfo = Printer::GetQueueInfo( rBox.GetSelectedEntry(), false );
 

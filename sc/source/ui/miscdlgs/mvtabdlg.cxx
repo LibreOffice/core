@@ -160,7 +160,7 @@ void ScMoveTableDlg::CheckNewTabName()
         return;
     }
 
-    bool bMoveInCurrentDoc = pBtnMove->IsChecked() && pLbDoc->GetSelectEntryPos() == mnCurrentDocPos;
+    bool bMoveInCurrentDoc = pBtnMove->IsChecked() && pLbDoc->GetSelectedEntryPos() == mnCurrentDocPos;
     bool bFound = false;
     const sal_Int32 nLast = pLbTable->GetEntryCount();
     for ( sal_Int32 i=0; i<nLast && !bFound; ++i )
@@ -191,7 +191,7 @@ void ScMoveTableDlg::CheckNewTabName()
 
 ScDocument* ScMoveTableDlg::GetSelectedDoc()
 {
-    sal_Int32 nPos = pLbDoc->GetSelectEntryPos();
+    sal_Int32 nPos = pLbDoc->GetSelectedEntryPos();
     return static_cast<ScDocument*>(pLbDoc->GetEntryData(nPos));
 }
 
@@ -258,9 +258,9 @@ IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, RadioButton&, rBtn, void )
 
 IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl, Button*, void)
 {
-    const sal_Int32 nDocSel  = pLbDoc->GetSelectEntryPos();
+    const sal_Int32 nDocSel  = pLbDoc->GetSelectedEntryPos();
     const sal_Int32 nDocLast = pLbDoc->GetEntryCount()-1;
-    const sal_Int32 nTabSel  = pLbTable->GetSelectEntryPos();
+    const sal_Int32 nTabSel  = pLbTable->GetSelectedEntryPos();
     const sal_Int32 nTabLast = pLbTable->GetEntryCount()-1;
 
     nDocument   = (nDocSel != nDocLast) ? nDocSel : SC_DOC_NEW;

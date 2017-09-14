@@ -141,7 +141,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
             OUString sEntry = m_pLbFilters->GetSelectedEntry();
             if( !sEntry.isEmpty() )
             {
-                int nPos = m_pLbFilters->GetSelectEntryPos();
+                int nPos = m_pLbFilters->GetSelectedEntryPos();
                 if( nPos < (int)(m_pFilterNames->size()) )
                 {
                     pSelectedItem  = m_pFilterNames->begin();

@@ -349,7 +349,7 @@ public:
     virtual sal_Int32 GetSelectEntryCount() const = 0;
     virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& nDlgHelpId, const OString& nLbHelpId ) = 0;
     virtual OUString  GetSelectedEntry(sal_Int32 nPos) const = 0;
-    virtual sal_Int32 GetSelectEntryPos(sal_Int32 nPos) const = 0;
+    virtual sal_Int32 GetSelectedEntryPos(sal_Int32 nPos) const = 0;
 };
 
 class AbstractScSortWarningDlg : public VclAbstractDialog

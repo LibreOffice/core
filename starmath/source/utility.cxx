@@ -133,7 +133,7 @@ IMPL_LINK_NOARG( SmFontPickListBox, SelectHdl, ListBox&, void )
 {
     OUString aString;
 
-    const sal_Int32 nPos = GetSelectEntryPos();
+    const sal_Int32 nPos = GetSelectedEntryPos();
 
     if (nPos != 0)
     {

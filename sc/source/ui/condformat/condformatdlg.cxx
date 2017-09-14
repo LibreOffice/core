@@ -261,7 +261,7 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
     if(itr == maEntries.end())
         return;
 
-    sal_Int32 nPos = rBox.GetSelectEntryPos();
+    sal_Int32 nPos = rBox.GetSelectedEntryPos();
     switch(nPos)
     {
         case 0:
@@ -326,7 +326,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
     if(itr == maEntries.end())
         return;
 
-    sal_Int32 nPos = pBox->GetSelectEntryPos();
+    sal_Int32 nPos = pBox->GetSelectedEntryPos();
     switch(nPos)
     {
         case 0:
