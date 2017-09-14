@@ -822,11 +822,11 @@ gb_ExternalProject__use_libxml2:=
 else # !SYSTEM_LIBXML
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
-	xml2 \
+	libxml2 \
 ))
 
 define gb_LinkTarget__use_libxml2
-$(call gb_LinkTarget_use_package,$(1),xml2)
+$(call gb_LinkTarget_use_package,$(1),libxml2)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(LIBXML_CFLAGS) \
@@ -842,7 +842,7 @@ endif
 
 endef
 define gb_ExternalProject__use_libxml2
-$(call gb_ExternalProject_use_package,$(1),xml2)
+$(call gb_ExternalProject_use_package,$(1),libxml2)
 
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_use_external_project,$(1),icu)
@@ -3908,10 +3908,10 @@ gb_ExternalExecutable__register_xmllint :=
 else # ! SYSTEM_LIBXML_FOR_BUILD
 
 define gb_ExternalExecutable__register_xmllint
-$(call gb_ExternalExecutable_set_internal,xmllint,$(WORKDIR_FOR_BUILD)/UnpackedTarball/xml2/$(if $(filter MSC,$(COM)),win32/bin.msvc)/xmllint$(gb_Executable_EXT_for_build),xml2)
+$(call gb_ExternalExecutable_set_internal,xmllint,$(WORKDIR_FOR_BUILD)/UnpackedTarball/libxml2/$(if $(filter MSC,$(COM)),win32/bin.msvc)/xmllint$(gb_Executable_EXT_for_build),libxml2)
 $(call gb_ExternalExecutable_add_dependencies,xmllint,\
 	$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,icu_ure)) \
-	$(call gb_Package_get_target,xml2) \
+	$(call gb_Package_get_target,libxml2) \
 )
 
 endef
@@ -3928,7 +3928,7 @@ define gb_ExternalExecutable__register_xsltproc
 $(call gb_ExternalExecutable_set_internal,xsltproc,$(WORKDIR_FOR_BUILD)/UnpackedTarball/xslt/$(if $(filter MSC,$(COM)),win32/bin.msvc,xsltproc)/xsltproc$(gb_Executable_EXT_for_build),xslt)
 $(call gb_ExternalExecutable_add_dependencies,xsltproc,\
 	$(if $(filter WNT,$(OS)),$(call gb_Package_get_target,icu_ure)) \
-	$(call gb_Package_get_target,xml2) \
+	$(call gb_Package_get_target,libxml2) \
 	$(call gb_Package_get_target,xslt) \
 )
 

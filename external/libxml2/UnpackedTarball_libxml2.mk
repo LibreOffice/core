@@ -7,11 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,xml2))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libxml2))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,xml2,$(LIBXML_TARBALL),,libxml2))
+$(eval $(call gb_UnpackedTarball_set_tarball,libxml2,$(LIBXML_TARBALL),,libxml2))
 
-$(eval $(call gb_UnpackedTarball_add_patches,xml2,\
+$(eval $(call gb_UnpackedTarball_add_patches,libxml2,\
 	external/libxml2/libxml2-config.patch.1 \
 	external/libxml2/libxml2-global-symbols.patch \
 	external/libxml2/libxml2-vc10.patch \
