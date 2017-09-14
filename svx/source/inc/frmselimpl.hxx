@@ -36,6 +36,7 @@ class FrameBorder
 {
 public:
     explicit FrameBorder(FrameBorderType eType);
+    static double GetDefaultPatternScale() { return 0.05; }
 
     FrameBorderType GetType() const
     {

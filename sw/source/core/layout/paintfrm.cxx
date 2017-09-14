@@ -2758,20 +2758,11 @@ void SwTabFramePainter::Insert( const SwFrame& rFrame, const SvxBoxItem& rBoxIte
     bool const bVert = mrTabFrame.IsVertical();
     bool const bR2L  = mrTabFrame.IsRightToLeft();
 
-    SwViewShell* pViewShell = mrTabFrame.getRootFrame()->GetCurrShell();
-    OutputDevice* pOutDev = pViewShell->GetOut();
-    const MapMode& rMapMode = pOutDev->GetMapMode();
-    const Fraction& rFracX = rMapMode.GetScaleX();
-    const Fraction& rFracY = rMapMode.GetScaleY();
-
-    svx::frame::Style aL(rBoxItem.GetLeft(), rFracY);
-//    aL.SetPatternScale(rFracY);
-    svx::frame::Style aR(rBoxItem.GetRight(), rFracY);
-//    aR.SetPatternScale(rFracY);
-    svx::frame::Style aT(rBoxItem.GetTop(), rFracX);
-//    aT.SetPatternScale(rFracX);
-    svx::frame::Style aB(rBoxItem.GetBottom(), rFracX);
-//    aB.SetPatternScale(rFracX);
+    // no scaling needed, it's all in the primitives and the target device
+    svx::frame::Style aL(rBoxItem.GetLeft(), 1.0);
+    svx::frame::Style aR(rBoxItem.GetRight(), 1.0);
+    svx::frame::Style aT(rBoxItem.GetTop(), 1.0);
+    svx::frame::Style aB(rBoxItem.GetBottom(), 1.0);
 
     aR.MirrorSelf();
     aB.MirrorSelf();

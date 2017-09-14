@@ -56,19 +56,21 @@ Style::Style() :
 {
 }
 
-Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType ) :
+Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale ) :
     maImplStyle(new implStyle()),
     mpUsingCell(nullptr)
 {
     maImplStyle->mnType = nType;
+    maImplStyle->mfPatternScale = fScale;
     Set( nP, nD, nS );
 }
 
-Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType ) :
+Style::Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale ) :
     maImplStyle(new implStyle()),
     mpUsingCell(nullptr)
 {
     maImplStyle->mnType = nType;
+    maImplStyle->mfPatternScale = fScale;
     Set( rColorPrim, rColorSecn, rColorGap, bUseGapColor, nP, nD, nS );
 }
 
@@ -154,6 +156,7 @@ void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWid
     const sal_uInt16 nSecn(pBorder->GetInWidth());
 
     pTarget->mnType = pBorder->GetBorderLineStyle();
+    pTarget->mfPatternScale = fScale;
 
     if( !nSecn )    // no or single frame border
     {

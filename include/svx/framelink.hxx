@@ -159,11 +159,11 @@ public:
     /** Constructs an invisible frame style. */
     explicit Style();
     /** Constructs a frame style with passed line widths. */
-    explicit Style( double nP, double nD, double nS, SvxBorderLineStyle nType );
+    explicit Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale );
     /** Constructs a frame style with passed color and line widths. */
-    explicit Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType );
+    explicit Style( const Color& rColorPrim, const Color& rColorSecn, const Color& rColorGap, bool bUseGapColor, double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale );
     /** Constructs a frame style from the passed SvxBorderLine struct. */
-    explicit Style( const editeng::SvxBorderLine* pBorder, double fScale = 1.0 );
+    explicit Style( const editeng::SvxBorderLine* pBorder, double fScale );
 
     RefMode GetRefMode() const { if(!maImplStyle) return RefMode::Centered; return maImplStyle->meRefMode; }
     const Color GetColorPrim() const { if(!maImplStyle) return Color(); return maImplStyle->maColorPrim; }
