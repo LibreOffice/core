@@ -7,11 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,xslt))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libxslt))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,xslt,$(LIBXSLT_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,libxslt,$(LIBXSLT_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_add_patches,xslt,\
+$(eval $(call gb_UnpackedTarball_add_patches,libxslt,\
 	external/libxslt/libxslt-config.patch.1 \
 	external/libxslt/libxslt-internal-symbols.patch.1 \
 	external/libxslt/libxslt-msvc.patch.2 \

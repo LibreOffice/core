@@ -82,4 +82,4 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $WORKDIR/UnpackedTarball/rasqal/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/redland/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/libxml2/.libs/*.a \
-     $WORKDIR/UnpackedTarball/xslt/libxslt/.libs/*.a
+     $WORKDIR/UnpackedTarball/libxslt/libxslt/.libs/*.a
