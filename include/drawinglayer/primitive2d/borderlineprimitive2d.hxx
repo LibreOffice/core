@@ -79,10 +79,6 @@ namespace drawinglayer
             /// helper to get adapted width (maximum)
             double getAdaptedWidth(double fMinWidth) const;
 
-            /// helper to get average values Start/End
-            double getStartAverage() const { return 0.5 * (mfStartLeft + mfStartRight); }
-            double getEndAverage() const { return 0.5 * (mfEndLeft + mfEndRight); }
-
             /// compare operator
             bool operator==(const BorderLine& rBorderLine) const;
         };

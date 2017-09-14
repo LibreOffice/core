@@ -149,15 +149,118 @@ namespace drawinglayer
                     if(!candidate.isGap())
                     {
                         const basegfx::B2DVector aDeltaY(aPerpendicular * (fOffset + (fWidth * 0.5)));
-                        const basegfx::B2DPoint aStart(getStart() - (aVector * candidate.getStartAverage()) + aDeltaY);
-                        const basegfx::B2DPoint aEnd(getEnd() + (aVector * candidate.getEndAverage()) + aDeltaY);
+                        const basegfx::B2DPoint aStart(getStart() + aDeltaY);
+                        const basegfx::B2DPoint aEnd(getEnd() + aDeltaY);
+                        const bool bStartPerpendicular(rtl::math::approxEqual(candidate.getStartLeft(), candidate.getStartRight()));
+                        const bool bEndPerpendicular(rtl::math::approxEqual(candidate.getEndLeft(), candidate.getEndRight()));
 
-                        addPolygonStrokePrimitive2D(
-                            rContainer,
-                            aStart,
-                            aEnd,
-                            candidate.getLineAttribute(),
-                            getStrokeAttribute());
+                        if(bStartPerpendicular && bEndPerpendicular)
+                        {
+                            // start and end extends lead to an edge perpendicular to the line, so we can just use
+                            // a PolygonStrokePrimitive2D for representation
+                            addPolygonStrokePrimitive2D(
+                                rContainer,
+                                aStart - (aVector * candidate.getStartLeft()),
+                                aEnd + (aVector * candidate.getEndLeft()),
+                                candidate.getLineAttribute(),
+                                getStrokeAttribute());
+                        }
+                        else
+                        {
+                            // start and/or end extensions lead to a lineStart/End that is *not*
+                            // perpendicular to the line itself
+                            if(getStrokeAttribute().isDefault() || 0.0 == getStrokeAttribute().getFullDotDashLen())
+                            {
+                                // without stroke, we can simply represent that using a filled polygon
+                                const basegfx::B2DVector aHalfLineOffset(aPerpendicular * (candidate.getLineAttribute().getWidth() * 0.5));
+                                basegfx::B2DPolygon aPolygon;
+
+                                aPolygon.append(aStart - aHalfLineOffset - (aVector * candidate.getStartLeft()));
+                                aPolygon.append(aEnd - aHalfLineOffset + (aVector * candidate.getEndLeft()));
+                                aPolygon.append(aEnd + aHalfLineOffset + (aVector * candidate.getEndRight()));
+                                aPolygon.append(aStart + aHalfLineOffset - (aVector * candidate.getStartRight()));
+
+                                rContainer.push_back(
+                                    new PolyPolygonColorPrimitive2D(
+                                        basegfx::B2DPolyPolygon(aPolygon),
+                                        candidate.getLineAttribute().getColor()));
+                            }
+                            else
+                            {
+                                // with stroke, we have a problem - a filled polygon would lose the
+                                // stroke. Let's represent the start and/or end as triangles, the main
+                                // line still as PolygonStrokePrimitive2D.
+                                // Fill default line Start/End for stroke, so we need no adaptions in else pathes
+                                basegfx::B2DPoint aStrokeStart(aStart - (aVector * candidate.getStartLeft()));
+                                basegfx::B2DPoint aStrokeEnd(aEnd + (aVector * candidate.getEndLeft()));
+                                const basegfx::B2DVector aHalfLineOffset(aPerpendicular * (candidate.getLineAttribute().getWidth() * 0.5));
+
+                                if(!bStartPerpendicular)
+                                {
+                                    const double fMin(std::min(candidate.getStartLeft(), candidate.getStartRight()));
+                                    const double fMax(std::max(candidate.getStartLeft(), candidate.getStartRight()));
+                                    basegfx::B2DPolygon aPolygon;
+
+                                    // create a triangle with min/max values for LineStart and add
+                                    if(rtl::math::approxEqual(candidate.getStartLeft(), fMax))
+                                    {
+                                        aPolygon.append(aStart - aHalfLineOffset - (aVector * candidate.getStartLeft()));
+                                    }
+
+                                    aPolygon.append(aStart - aHalfLineOffset - (aVector * fMin));
+                                    aPolygon.append(aStart + aHalfLineOffset - (aVector * fMin));
+
+                                    if(rtl::math::approxEqual(candidate.getStartRight(), fMax))
+                                    {
+                                        aPolygon.append(aStart + aHalfLineOffset - (aVector * candidate.getStartRight()));
+                                    }
+
+                                    rContainer.push_back(
+                                        new PolyPolygonColorPrimitive2D(
+                                            basegfx::B2DPolyPolygon(aPolygon),
+                                            candidate.getLineAttribute().getColor()));
+
+                                    // Adapt StrokeStart accordingly
+                                    aStrokeStart = aStart - (aVector * fMin);
+                                }
+
+                                if(!bEndPerpendicular)
+                                {
+                                    const double fMin(std::min(candidate.getEndLeft(), candidate.getEndRight()));
+                                    const double fMax(std::max(candidate.getEndLeft(), candidate.getEndRight()));
+                                    basegfx::B2DPolygon aPolygon;
+
+                                    // create a triangle with min/max values for LineEnd and add
+                                    if(rtl::math::approxEqual(candidate.getEndLeft(), fMax))
+                                    {
+                                        aPolygon.append(aEnd - aHalfLineOffset + (aVector * candidate.getEndLeft()));
+                                    }
+
+                                    if(rtl::math::approxEqual(candidate.getEndRight(), fMax))
+                                    {
+                                        aPolygon.append(aEnd + aHalfLineOffset + (aVector * candidate.getEndRight()));
+                                    }
+
+                                    aPolygon.append(aEnd + aHalfLineOffset + (aVector * fMin));
+                                    aPolygon.append(aEnd - aHalfLineOffset + (aVector * fMin));
+
+                                    rContainer.push_back(
+                                        new PolyPolygonColorPrimitive2D(
+                                            basegfx::B2DPolyPolygon(aPolygon),
+                                            candidate.getLineAttribute().getColor()));
+
+                                    // Adapt StrokeEnd accordingly
+                                    aStrokeEnd = aEnd + (aVector * fMin);
+                                }
+
+                                addPolygonStrokePrimitive2D(
+                                    rContainer,
+                                    aStrokeStart,
+                                    aStrokeEnd,
+                                    candidate.getLineAttribute(),
+                                    getStrokeAttribute());
+                            }
+                        }
                     }
 
                     fOffset += fWidth;

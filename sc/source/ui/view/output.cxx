@@ -660,7 +660,7 @@ void ScOutputData::SetCellRotations()
                         const double fOrient((bLayoutRTL ? -1.0 : 1.0) * nAttrRotate * F_PI18000); // 1/100th degrees -> [0..2PI]
                         svx::frame::Array& rArray = mrTabInfo.maArray;
 
-                        rArray.SetCellRotation(nY+1, nX+1, eRotMode, fOrient);
+                        rArray.SetCellRotation(nX+1, nY+1, eRotMode, fOrient);
                     }
                 }
             }
