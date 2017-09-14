@@ -19,6 +19,8 @@
 
 #include "sal/config.h"
 
+#include <cassert>
+
 #include "rtl/textcvt.h"
 
 #include "gettextencodingdata.hxx"
@@ -157,6 +159,24 @@ sal_Size SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverte
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                                             sal_Size* pSrcCvtBytes )
 {
+    assert(
+        (nFlags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK)
+        <= RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT);
+    assert(
+        (nFlags & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK)
+        <= RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT);
+    assert(
+        (nFlags & RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK)
+        <= RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT);
+    assert(
+        (nFlags
+         & ~(RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK
+             | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK
+             | RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK
+             | RTL_TEXTTOUNICODE_FLAGS_FLUSH
+             | RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE))
+        == 0);
+
     const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
 
     /* Only temporary, because we don't want die, if we don't have a
@@ -233,6 +253,27 @@ sal_Size SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverte
                                             sal_uInt32 nFlags, sal_uInt32* pInfo,
                                             sal_Size* pSrcCvtChars )
 {
+    assert(
+        (nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK)
+        <= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT);
+    assert(
+        (nFlags & RTL_UNICODETOTEXT_FLAGS_INVALID_MASK)
+        <= RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT);
+    assert(
+        (nFlags
+         & ~(RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK
+             | RTL_UNICODETOTEXT_FLAGS_INVALID_MASK
+             | RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
+             | RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR
+             | RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0
+             | RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE
+             | RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE
+             | RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE
+             | RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE
+             | RTL_UNICODETOTEXT_FLAGS_FLUSH
+             | RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE))
+        == 0);
+
     const ImplTextConverter* pConverter = static_cast<const ImplTextConverter*>(hConverter);
 
     /* Only temporary, because we don't want die, if we don't have a

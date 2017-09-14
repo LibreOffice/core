@@ -645,7 +645,7 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
         {
             if (pSHGetSpecialFolderPathA(GetActiveWindow(), PathA, nFolder, TRUE))
             {
-                rtl_string2UString( strPath, PathA, (sal_Int32) strlen(PathA), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
+                rtl_string2UString( strPath, PathA, (sal_Int32) strlen(PathA), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
                 OSL_ASSERT(*strPath != nullptr);
                 bRet = true;
             }
