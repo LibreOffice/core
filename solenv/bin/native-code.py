@@ -23,7 +23,6 @@ import xml.etree.ElementTree as ET
 core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libevtattlo.a", "evtatt_component_getFactory"),
-    ("libreflectionlo.a", "reflection_component_getFactory"),
     ("libcomphelper.a", "comphelp_component_getFactory"),
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
     ("libdrawinglayerlo.a", "drawinglayer_component_getFactory"),
@@ -190,6 +189,8 @@ core_constructor_list = [
     "com_sun_star_comp_embed_OLESimpleStorage",
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
+# stoc/source/corereflection/reflection.component
+    "com_sun_star_comp_stoc_CoreReflection_get_implementation",
 # stoc/util/stocservices.component
     "com_sun_star_comp_stoc_OServiceManagerWrapper_get_implementation",
     "com_sun_star_comp_stoc_TypeConverter_get_implementation",

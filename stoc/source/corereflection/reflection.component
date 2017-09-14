@@ -18,8 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="reflection" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.stoc.CoreReflection">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.stoc.CoreReflection"
+      constructor="com_sun_star_comp_stoc_CoreReflection_get_implementation">
     <service name="com.sun.star.reflection.CoreReflection"/>
     <singleton name="com.sun.star.reflection.theCoreReflection"/>
   </implementation>
