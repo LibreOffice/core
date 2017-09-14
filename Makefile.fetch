@@ -161,7 +161,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,LIBPNG,LIBPNG_TARBALL) \
 		$(call fetch_Optional,LIBTOMMATH,LIBTOMMATH_TARBALL) \
 		$(call fetch_Optional,LIBXML2,LIBXML_TARBALL) \
-		LIBXMLSEC_TARBALL \
+		XMLSEC_TARBALL \
 		$(call fetch_Optional,LIBXSLT,LIBXSLT_TARBALL) \
 		$(call fetch_Optional,LPSOLVE,LPSOLVE_TARBALL) \
 		$(call fetch_Optional,MARIADB_CONNECTOR_C,MARIADB_CONNECTOR_C_TARBALL) \
