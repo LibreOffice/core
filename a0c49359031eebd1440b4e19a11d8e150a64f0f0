@@ -189,6 +189,23 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_e7467422",
+        "filename": "sw/uiconfig/swriter/ui/dropdownfielddialog.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-09-14T08:56:03Z",
+      "side": 1,
+      "message": "Maybe it makes sense to move the \"next\" and \"previous\" buttons out of the bottom area?\nThere are five buttons now, and they might grow large depending on translation.\n\nI\u0027d move them one row up.",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_a4362a01",
         "filename": "vcl/inc/strings.hrc",
         "patchSetId": 2
