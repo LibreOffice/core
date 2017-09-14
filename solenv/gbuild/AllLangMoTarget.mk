@@ -32,18 +32,19 @@ $(call gb_MoTarget_get_clean_target,%) :
 			$(call gb_MoTarget_get_target,$*) \
 			$(call gb_MoTarget_get_install_target,$*))
 
+#to-do, remove missing .po support when writerfilter .po files exist
 $(call gb_MoTarget_get_target,%) : \
 		$(gb_Helper_MISCDUMMY) \
 		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$*,$(true),MO,2)
-#	 after translate should look like this
-#        $(call gb_Helper_abbreviate_dirs,\
-#                mkdir -p $(dir $@) && \
-#                $(MSGUNIQ) $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
-		$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/solenv/bin/interim-update-module-for-gettext $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION) $@.po && \
-		$(MSGUNIQ) --force-po $@.po | $(MSGFMT) - -o $@)
+		if test -e $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po; then \
+			$(MSGUNIQ) --force-po $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po | $(MSGFMT) - -o $@; \
+		else \
+			echo missing $(gb_POLOCATION)/$(LANGUAGE)/$(POLOCATION)/messages.po && \
+			$(MSGUNIQ) --force-po $(SRCDIR)/solenv/bin/dummy.po | $(MSGFMT) - -o $@; \
+	        fi)
 
 #$(info $(call gb_MoTarget_get_target,$(1)))
 define gb_MoTarget_MoTarget
