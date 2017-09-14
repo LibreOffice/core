@@ -45,6 +45,7 @@ public:
     void testJoin_Case1();
     void testJoin_Case2();
     void testJoin_Case3();
+    void testJoin_Case4();
     void testGetIntersectedRange();
 
     void testUpdateReference_DeleteRow();
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testJoin_Case1);
     CPPUNIT_TEST(testJoin_Case2);
     CPPUNIT_TEST(testJoin_Case3);
+    CPPUNIT_TEST(testJoin_Case4);
     CPPUNIT_TEST(testUpdateReference_DeleteRow);
     CPPUNIT_TEST(testUpdateReference_DeleteLastRow);
     CPPUNIT_TEST(testUpdateReference_DeleteCol);
@@ -445,6 +447,38 @@ void Test::testJoin_Case3()
     CPPUNIT_ASSERT_EQUAL(ScRange(1,1,0,6,6,0), *aList[0]);
     // Ditto for the second one
     CPPUNIT_ASSERT_EQUAL(ScRange(8,8,0,9,9,0), *aList[1]);
+}
+
+void Test::testJoin_Case4()
+{
+    ScRangeList aList;
+    aList.Join(ScRange(1,1,0,2,6,0));
+    // Join a range that overlaps it and extends it vertically
+    aList.Join(ScRange(1,4,0,2,8,0));
+
+    // The one range in the list should have been extended
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(1,1,0,2,8,0), *aList[0]);
+
+    // Join a range that overlaps it and extends it horizontally
+    aList.Join(ScRange(2,1,0,4,8,0));
+
+    // Again, should have just been extended
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(1,1,0,4,8,0), *aList[0]);
+
+    // And then the same but on top / to the left of existing range
+    ScRangeList aList2;
+    aList2.Join(ScRange(4,4,0,8,8,0));
+    aList2.Join(ScRange(4,1,0,8,6,0));
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList2.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(4,1,0,8,8,0), *aList2[0]);
+
+    aList2.Join(ScRange(1,1,0,6,8,0));
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList2.size());
+    CPPUNIT_ASSERT_EQUAL(ScRange(1,1,0,8,8,0), *aList2[0]);
 }
 
 void Test::testUpdateReference_DeleteRow()
