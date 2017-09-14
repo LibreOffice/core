@@ -2,14 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <shellapi.h>
 
-#include <cstddef>
 #include <cstring>
-#include <cwchar>
-
-#include <comphelper/windowsStart.hxx>
+#include <wchar.h>
 
 // Needed for CreateEnvironmentBlock
 #include <userenv.h>
@@ -244,15 +241,15 @@ WinLaunchChild(const wchar_t *exePath,
     else
     {
         LPVOID lpMsgBuf = nullptr;
-        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                      FORMAT_MESSAGE_FROM_SYSTEM |
-                      FORMAT_MESSAGE_IGNORE_INSERTS,
-                      nullptr,
-                      GetLastError(),
-                      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                      reinterpret_cast<LPTSTR>(&lpMsgBuf),
-                      0,
-                      nullptr);
+        FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                       FORMAT_MESSAGE_FROM_SYSTEM |
+                       FORMAT_MESSAGE_IGNORE_INSERTS,
+                       nullptr,
+                       GetLastError(),
+                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                       reinterpret_cast<LPWSTR>(&lpMsgBuf),
+                       0,
+                       nullptr);
         wprintf(L"Error restarting: %s\n", lpMsgBuf ? lpMsgBuf : L"(null)");
         if (lpMsgBuf)
             LocalFree(lpMsgBuf);
