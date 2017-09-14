@@ -655,7 +655,7 @@ public:
      *
      * @see LibreOfficeKitOptionalFeatures
      */
-    void setOptionalFeatures(uint64_t features)
+    void setOptionalFeatures(unsigned long long features)
     {
         return mpThis->pClass->setOptionalFeatures(mpThis, features);
     }

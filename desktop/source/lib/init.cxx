@@ -1286,7 +1286,7 @@ static void doc_destroy(LibreOfficeKitDocument *pThis)
 static void                    lo_destroy       (LibreOfficeKit* pThis);
 static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
-static bool                    lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
+static int                     lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
 static void                    lo_freeError     (char* pFree);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
@@ -1296,7 +1296,7 @@ static void                    lo_registerCallback (LibreOfficeKit* pThis,
                                                     LibreOfficeKitCallback pCallback,
                                                     void* pData);
 static char* lo_getFilterTypes(LibreOfficeKit* pThis);
-static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t features);
+static void                    lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long features);
 static void                    lo_setDocumentPassword(LibreOfficeKit* pThis,
                                                        const char* pURL,
                                                        const char* pPassword);
@@ -1465,7 +1465,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     return nullptr;
 }
 
-static bool lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
+static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
 {
     SolarMutexGuard aGuard;
 
@@ -3367,7 +3367,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
     return strdup(aStream.str().c_str());
 }
 
-static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t const features)
+static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)
 {
     SolarMutexGuard aGuard;
 
