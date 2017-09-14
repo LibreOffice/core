@@ -17,10 +17,10 @@ xmlsec_patches += xmlsec1-mscrypto-fix-signing-regression.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(LIBXMLSEC_TARBALL),,libxmlsec))
+$(eval $(call gb_UnpackedTarball_set_tarball,xmlsec,$(XMLSEC_TARBALL),,xmlsec))
 
 $(eval $(call gb_UnpackedTarball_add_patches,xmlsec,\
-	$(foreach patch,$(xmlsec_patches),external/libxmlsec/$(patch)) \
+	$(foreach patch,$(xmlsec_patches),external/xmlsec/$(patch)) \
 ))
 
 # vim: set noet sw=4 ts=4:
