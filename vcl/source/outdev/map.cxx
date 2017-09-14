@@ -681,6 +681,10 @@ void OutputDevice::SetMapMode()
 void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
 {
 
+    // do nothing if MapMode was not changed
+    if ( maMapMode == rNewMapMode )
+        return;
+
     bool bRelMap = (rNewMapMode.GetMapUnit() == MapUnit::MapRelative);
 
     if ( mpMetaFile )
@@ -691,10 +695,6 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
             SAL_WARN_IF( !bRelMap, "vcl.gdi", "Please record only relative MapModes!" );
 #endif
     }
-
-    // do nothing if MapMode was not changed
-    if ( maMapMode == rNewMapMode )
-        return;
 
     if( mpAlphaVDev )
         mpAlphaVDev->SetMapMode( rNewMapMode );
