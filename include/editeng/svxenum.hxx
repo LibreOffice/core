@@ -121,12 +121,12 @@ enum SvxCellVerJustify
     SVX_VER_JUSTIFY_BLOCK
 };
 
-enum SvxCellOrientation
+enum class SvxCellOrientation
 {
-    SVX_ORIENTATION_STANDARD,
-    SVX_ORIENTATION_TOPBOTTOM,
-    SVX_ORIENTATION_BOTTOMTOP,
-    SVX_ORIENTATION_STACKED
+    Standard,
+    TopBottom,
+    BottomUp,
+    Stacked
 };
 
 enum class SvxSpellArea

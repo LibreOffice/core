@@ -1354,7 +1354,7 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
     }
     if ( nMask & HasAttrFlags::NeedHeight )
     {
-        if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
+        if (pPattern->GetCellOrientation() != SvxCellOrientation::Standard)
             bFound = true;
         else if (static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
             bFound = true;

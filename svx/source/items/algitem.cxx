@@ -51,17 +51,17 @@ SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
 }
 
 SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, bool bStacked, const sal_uInt16 nId ) :
-    SfxEnumItem( nId, SvxCellOrientation::SVX_ORIENTATION_STANDARD )
+    SfxEnumItem( nId, SvxCellOrientation::Standard )
 {
     if( bStacked )
     {
-        SetValue( SVX_ORIENTATION_STACKED );
+        SetValue( SvxCellOrientation::Stacked );
     }
     else switch( nRotation )
     {
-        case 9000:  SetValue( SVX_ORIENTATION_BOTTOMTOP );  break;
-        case 27000: SetValue( SVX_ORIENTATION_TOPBOTTOM );  break;
-        default:    SetValue( SVX_ORIENTATION_STANDARD );
+        case 9000:  SetValue( SvxCellOrientation::BottomUp );  break;
+        case 27000: SetValue( SvxCellOrientation::TopBottom );  break;
+        default:    SetValue( SvxCellOrientation::Standard );
     }
 }
 
@@ -71,7 +71,8 @@ bool SvxOrientationItem::GetPresentation
     SfxItemPresentation /*ePres*/,
     MapUnit             /*eCoreUnit*/,
     MapUnit             /*ePresUnit*/,
-    OUString&           rText, const IntlWrapper& ) const
+    OUString&           rText,
+    const IntlWrapper& ) const
 {
     rText = GetValueText( GetValue() );
     return true;
@@ -83,10 +84,10 @@ bool SvxOrientationItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) c
     table::CellOrientation eUno = table::CellOrientation_STANDARD;
     switch ( (SvxCellOrientation)GetValue() )
     {
-    case SVX_ORIENTATION_STANDARD:  eUno = table::CellOrientation_STANDARD;  break;
-    case SVX_ORIENTATION_TOPBOTTOM: eUno = table::CellOrientation_TOPBOTTOM; break;
-    case SVX_ORIENTATION_BOTTOMTOP: eUno = table::CellOrientation_BOTTOMTOP; break;
-    case SVX_ORIENTATION_STACKED:   eUno = table::CellOrientation_STACKED;    break;
+        case SvxCellOrientation::Standard:  eUno = table::CellOrientation_STANDARD;  break;
+        case SvxCellOrientation::TopBottom: eUno = table::CellOrientation_TOPBOTTOM; break;
+        case SvxCellOrientation::BottomUp:  eUno = table::CellOrientation_BOTTOMTOP; break;
+        case SvxCellOrientation::Stacked:   eUno = table::CellOrientation_STACKED;   break;
     }
     rVal <<= eUno;
     return true;
@@ -102,13 +103,13 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
             return false;
         eOrient = (table::CellOrientation)nValue;
     }
-    SvxCellOrientation eSvx = SVX_ORIENTATION_STANDARD;
+    SvxCellOrientation eSvx = SvxCellOrientation::Standard;
     switch (eOrient)
     {
-        case table::CellOrientation_STANDARD:   eSvx = SVX_ORIENTATION_STANDARD;  break;
-        case table::CellOrientation_TOPBOTTOM:  eSvx = SVX_ORIENTATION_TOPBOTTOM; break;
-        case table::CellOrientation_BOTTOMTOP:  eSvx = SVX_ORIENTATION_BOTTOMTOP; break;
-        case table::CellOrientation_STACKED:    eSvx = SVX_ORIENTATION_STACKED;   break;
+        case table::CellOrientation_STANDARD:   eSvx = SvxCellOrientation::Standard;  break;
+        case table::CellOrientation_TOPBOTTOM:  eSvx = SvxCellOrientation::TopBottom; break;
+        case table::CellOrientation_BOTTOMTOP:  eSvx = SvxCellOrientation::BottomUp; break;
+        case table::CellOrientation_STACKED:    eSvx = SvxCellOrientation::Stacked;   break;
         default: ; //prevent warning
     }
     SetValue( eSvx );
@@ -116,10 +117,9 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 }
 
 
-OUString SvxOrientationItem::GetValueText( sal_uInt16 nVal )
+OUString SvxOrientationItem::GetValueText( SvxCellOrientation nVal )
 {
-    DBG_ASSERT( nVal <= SVX_ORIENTATION_STACKED, "enum overflow!" );
-    return SvxResId(RID_SVXITEMS_ORI_STANDARD + nVal);
+    return SvxResId(RID_SVXITEMS_ORI_STANDARD + static_cast<int>(nVal));
 }
 
 
@@ -139,13 +139,13 @@ SfxPoolItem* SvxOrientationItem::Create( SvStream& rStream, sal_uInt16 ) const
 
 sal_uInt16 SvxOrientationItem::GetValueCount() const
 {
-    return SVX_ORIENTATION_STACKED + 1; // last enum value + 1
+    return static_cast<sal_uInt16>(SvxCellOrientation::Stacked) + 1; // last enum value + 1
 }
 
 
 bool SvxOrientationItem::IsStacked() const
 {
-    return GetValue() == SVX_ORIENTATION_STACKED;
+    return GetValue() == SvxCellOrientation::Stacked;
 }
 
 sal_Int32 SvxOrientationItem::GetRotation( sal_Int32 nStdAngle ) const
@@ -153,8 +153,8 @@ sal_Int32 SvxOrientationItem::GetRotation( sal_Int32 nStdAngle ) const
     sal_Int32 nAngle = nStdAngle;
     switch( GetValue() )
     {
-        case SVX_ORIENTATION_BOTTOMTOP: nAngle = 9000;break;
-        case SVX_ORIENTATION_TOPBOTTOM: nAngle = 27000;break;
+        case SvxCellOrientation::BottomUp: nAngle = 9000;break;
+        case SvxCellOrientation::TopBottom: nAngle = 27000;break;
         default: ; //prevent warning
     }
     return nAngle;

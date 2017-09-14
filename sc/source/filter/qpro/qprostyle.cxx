@@ -110,11 +110,11 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     rItemSet.Put(SvxVerJustifyItem( eVerJustify, ATTR_VER_JUSTIFY ) );
 
     // Orientation
-    SvxCellOrientation eOrient = SVX_ORIENTATION_STANDARD;
+    SvxCellOrientation eOrient = SvxCellOrientation::Standard;
     switch( nOrient )
     {
         case 0x20:
-            eOrient = SVX_ORIENTATION_TOPBOTTOM;
+            eOrient = SvxCellOrientation::TopBottom;
             break;
 
     }

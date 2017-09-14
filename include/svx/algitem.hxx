@@ -35,7 +35,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem<SvxCe
 {
 public:
     SvxOrientationItem(
-        const SvxCellOrientation eOrientation /*= SVX_ORIENTATION_STANDARD*/,
+        const SvxCellOrientation eOrientation,
         const sal_uInt16 nId );
 
     SvxOrientationItem(
@@ -51,7 +51,7 @@ public:
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual sal_uInt16      GetValueCount() const override;
-    static OUString         GetValueText( sal_uInt16 nVal );
+    static OUString         GetValueText( SvxCellOrientation nVal );
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
