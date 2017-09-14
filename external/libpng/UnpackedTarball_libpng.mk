@@ -7,11 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,png))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,libpng))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,png,$(PNG_TARBALL)))
+$(eval $(call gb_UnpackedTarball_set_tarball,libpng,$(LIBPNG_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_add_files,png,.,\
+$(eval $(call gb_UnpackedTarball_add_files,libpng,.,\
 	external/libpng/configs/pnglibconf.h \
 ))
 

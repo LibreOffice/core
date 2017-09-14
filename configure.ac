@@ -11266,7 +11266,7 @@ dnl ===================================================================
 dnl Test whether to build libpng or rely on the system version
 dnl ===================================================================
 
-libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng],["-I${WORKDIR}/UnpackedTarball/png"],["-L${WORKDIR}/LinkTarget/StaticLibrary -lpng"])
+libo_CHECK_SYSTEM_MODULE([libpng],[LIBPNG],[libpng],["-I${WORKDIR}/UnpackedTarball/libpng"],["-L${WORKDIR}/LinkTarget/StaticLibrary -llibpng"])
 
 dnl ===================================================================
 dnl Check for runtime JVM search path

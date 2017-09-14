@@ -48,7 +48,7 @@ $(eval $(call gb_Executable_add_defs,oosplash,\
 ))
 
 $(eval $(call gb_Executable_use_externals,oosplash,\
-    png \
+    libpng \
 ))
 
 endif
