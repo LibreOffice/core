@@ -72,3 +72,40 @@
  /* This magic gets the windows compiler to give us a deprecation
   * warning */
  #pragma deprecated(CKT_NSS_UNTRUSTED, CKT_NSS_MUST_VERIFY, CKT_NSS_VALID)
+
+# While MSVC uses
+#  #pragma warning(disable : 4103)
+# in the inner pkcs11p.h, clang-cl wants
+#  #pragma clang diagnostic ignored "-Wpragma-pack"
+# in the outer pkcs11t.h:
+--- nss/lib/util/pkcs11t.h
++++ nss/lib/util/pkcs11t.h
+@@ -72,7 +72,14 @@
+ #define CK_INVALID_HANDLE 0
+ 
+ /* pack */
++#if defined __clang__ && defined _MSC_VER
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wpragma-pack"
++#endif
+ #include "pkcs11p.h"
++#if defined __clang__ && defined _MSC_VER
++#pragma clang diagnostic pop
++#endif
+ 
+ typedef struct CK_VERSION {
+     CK_BYTE major; /* integer portion of version number */
+@@ -1795,6 +1802,13 @@
+ #include "pkcs11n.h"
+ 
+ /* undo packing */
++#if defined __clang__ && defined _MSC_VER
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wpragma-pack"
++#endif
+ #include "pkcs11u.h"
++#if defined __clang__ && defined _MSC_VER
++#pragma clang diagnostic pop
++#endif
+ 
+ #endif
