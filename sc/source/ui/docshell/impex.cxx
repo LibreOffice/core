@@ -1751,15 +1751,35 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     {
                         case 'X':
                             nCol = static_cast<SCCOL>(OUString(p).toInt32()) + nStartCol - 1;
+                            if (nCol < 0 || MAXCOL < nCol)
+                            {
+                                SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
+                                nCol = std::max<SCCOL>( 0, std::min<SCCOL>( nCol, MAXCOL));
+                            }
                             break;
                         case 'Y':
                             nRow = OUString(p).toInt32() + nStartRow - 1;
+                            if (nRow < 0 || MAXROW < nRow)
+                            {
+                                SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
+                                nRow = std::max<SCROW>( 0, std::min<SCROW>( nRow, MAXROW));
+                            }
                             break;
                         case 'C':
                             nRefCol = static_cast<SCCOL>(OUString(p).toInt32()) + nStartCol - 1;
+                            if (nRefCol < 0 || MAXCOL < nRefCol)
+                            {
+                                SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;C invalid nRefCol=" << nRefCol);
+                                nRefCol = std::max<SCCOL>( 0, std::min<SCCOL>( nRefCol, MAXCOL));
+                            }
                             break;
                         case 'R':
                             nRefRow = OUString(p).toInt32() + nStartRow - 1;
+                            if (nRefRow < 0 || MAXROW < nRefRow)
+                            {
+                                SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;R invalid nRefRow=" << nRefRow);
+                                nRefRow = std::max<SCROW>( 0, std::min<SCROW>( nRefRow, MAXROW));
+                            }
                             break;
                         case 'K':
                         {
