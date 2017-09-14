@@ -296,7 +296,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
         aSel = aSel.replaceAt(nc-1, 1, "");
     if ( aSel.compareToIgnoreAsciiCase(SfxResId(STR_STANDARD)) != 0 )
         nEntry++;
-    if (!m_pTemplateLb->GetSelectEntryCount())
+    if (!m_pTemplateLb->GetSelectedEntryCount())
         nEntry = 0;
     return nEntry;
 }

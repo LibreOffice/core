@@ -214,7 +214,7 @@ void LibBox::FillBox()
     SetUpdateMode(true);
 
     SelectEntry( aCurText );
-    if ( !GetSelectEntryCount() )
+    if ( !GetSelectedEntryCount() )
     {
         SelectEntryPos( GetEntryCount() );
         aCurText = GetSelectedEntry();

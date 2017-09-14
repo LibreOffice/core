@@ -286,7 +286,7 @@ IMPL_LINK_NOARG( OWizTypeSelect, ColumnSelectHdl, ListBox&, void )
     if(pField)
         m_pTypeControl->DisplayData(pField);
 
-    m_pTypeControl->Enable(m_pColumnNames->GetSelectEntryCount() == 1 );
+    m_pTypeControl->Enable(m_pColumnNames->GetSelectedEntryCount() == 1 );
 }
 
 void OWizTypeSelect::Reset()
@@ -376,7 +376,7 @@ void OWizTypeSelectList::dispose()
 
 bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
-    const sal_Int32 nCount = GetSelectEntryCount();
+    const sal_Int32 nCount = GetSelectedEntryCount();
 
     for( sal_Int32 j = 0; m_bPKey && j < nCount; ++j )
     {

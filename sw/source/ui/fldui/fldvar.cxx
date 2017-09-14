@@ -687,7 +687,7 @@ void SwFieldVarPage::UpdateSubType()
     if (bEnable)
     {
         m_pSelectionLB->SelectEntry(sOldSel);
-        if (!m_pSelectionLB->GetSelectEntryCount())
+        if (!m_pSelectionLB->GetSelectedEntryCount())
         {
             m_pSelectionLB->SelectEntryPos(0);
             pLB = m_pSelectionLB;    // newly initialise all controls
@@ -811,17 +811,17 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             m_pFormatLB->SelectEntryPos( nPos );
     }
 
-    if (nSize && (!IsFieldEdit() || !m_pFormatLB->GetSelectEntryCount()))
+    if (nSize && (!IsFieldEdit() || !m_pFormatLB->GetSelectedEntryCount()))
     {
         m_pFormatLB->SelectEntry(sOldSel);
 
-        if (!m_pFormatLB->GetSelectEntryCount())
+        if (!m_pFormatLB->GetSelectedEntryCount())
         {
             m_pFormatLB->SelectEntry(SwResId(FMT_NUM_PAGEDESC));
-            if (!m_pFormatLB->GetSelectEntryCount())
+            if (!m_pFormatLB->GetSelectedEntryCount())
             {
                 m_pFormatLB->SelectEntry(SwResId(FMT_NUM_ARABIC));
-                if (!m_pFormatLB->GetSelectEntryCount())
+                if (!m_pFormatLB->GetSelectedEntryCount())
                     m_pFormatLB->SelectEntryPos(0);
             }
         }

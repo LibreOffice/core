@@ -62,7 +62,7 @@ bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     m_aLegendPositionResources.writeToItemSet(*rOutAttrs);
 
-    if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
+    if( m_pLbTextDirection->GetSelectedEntryCount() > 0 )
         rOutAttrs->Put( SvxFrameDirectionItem( m_pLbTextDirection->GetSelectEntryValue(), EE_PARA_WRITINGDIR ) );
 
     return true;

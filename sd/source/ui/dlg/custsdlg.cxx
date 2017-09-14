@@ -403,7 +403,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
 {
     if( p == m_pBtnAdd )
     {
-        sal_Int32 nCount = m_pLbPages->GetSelectEntryCount();
+        sal_Int32 nCount = m_pLbPages->GetSelectedEntryCount();
         if( nCount > 0 )
         {
             sal_uLong nPosCP = TREELIST_APPEND;

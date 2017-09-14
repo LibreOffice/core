@@ -1300,7 +1300,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox&, rLB, void )
     RangeModifyHdl( *m_pWidthMF );
 
     short nRel = 0;
-    if (rLB.GetSelectEntryCount())
+    if (rLB.GetSelectedEntryCount())
     {
 
         if (pRelLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)
@@ -1703,7 +1703,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
             {
                 rLB.SelectEntry(sOldEntry);
 
-                if (!rLB.GetSelectEntryCount())
+                if (!rLB.GetSelectedEntryCount())
                 {
                     for (sal_Int32 i = 0; i < rLB.GetEntryCount(); i++)
                     {
@@ -1788,7 +1788,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
                     }
                 }
 
-                if (!rLB.GetSelectEntryCount())
+                if (!rLB.GetSelectedEntryCount())
                     rLB.SelectEntryPos(0);
             }
         }
@@ -1842,10 +1842,10 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
     }
 
     _rLB.SelectEntry(sSelEntry);
-    if (!_rLB.GetSelectEntryCount())
+    if (!_rLB.GetSelectedEntryCount())
         _rLB.SelectEntry(sOldEntry);
 
-    if (!_rLB.GetSelectEntryCount())
+    if (!_rLB.GetSelectedEntryCount())
         _rLB.SelectEntryPos(0);
 
     PosHdl(_rLB);

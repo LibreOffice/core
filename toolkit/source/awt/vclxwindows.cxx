@@ -1634,7 +1634,7 @@ css::uno::Sequence<sal_Int16> VCLXListBox::getSelectedItemsPos()
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
-        const sal_Int32 nSelEntries = pBox->GetSelectEntryCount();
+        const sal_Int32 nSelEntries = pBox->GetSelectedEntryCount();
         aSeq = css::uno::Sequence<sal_Int16>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
             aSeq.getArray()[n] = pBox->GetSelectedEntryPos( n );
@@ -1661,7 +1661,7 @@ css::uno::Sequence< OUString> VCLXListBox::getSelectedItems()
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
-        const sal_Int32 nSelEntries = pBox->GetSelectEntryCount();
+        const sal_Int32 nSelEntries = pBox->GetSelectedEntryCount();
         aSeq = css::uno::Sequence< OUString>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
             aSeq.getArray()[n] = pBox->GetSelectedEntry( n );
@@ -1893,7 +1893,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
                     else
                         pListBox->SetNoSelection();
 
-                    if ( !pListBox->GetSelectEntryCount() )
+                    if ( !pListBox->GetSelectedEntryCount() )
                         pListBox->SetTopEntry( 0 );
                 }
             }
@@ -2027,7 +2027,7 @@ void VCLXListBox::ImplCallItemListeners()
         aEvent.Highlighted = 0;
 
         // Set to 0xFFFF on multiple selection, selected entry ID otherwise
-        aEvent.Selected = (pListBox->GetSelectEntryCount() == 1 ) ? pListBox->GetSelectedEntryPos() : 0xFFFF;
+        aEvent.Selected = (pListBox->GetSelectedEntryCount() == 1 ) ? pListBox->GetSelectedEntryPos() : 0xFFFF;
 
         maItemListeners.itemStateChanged( aEvent );
     }

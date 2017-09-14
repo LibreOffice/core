@@ -1021,11 +1021,11 @@ OUString ListBox::GetSelectedEntry(sal_Int32 nIndex) const
     return GetEntry( GetSelectedEntryPos( nIndex ) );
 }
 
-sal_Int32 ListBox::GetSelectEntryCount() const
+sal_Int32 ListBox::GetSelectedEntryCount() const
 {
     if (!mpImplLB)
         return 0;
-    return mpImplLB->GetEntryList()->GetSelectEntryCount();
+    return mpImplLB->GetEntryList()->GetSelectedEntryCount();
 }
 
 sal_Int32 ListBox::GetSelectedEntryPos( sal_Int32 nIndex ) const
@@ -1065,9 +1065,9 @@ void ListBox::SelectEntryPos( sal_Int32 nPos, bool bSelect )
 
     if ( 0 <= nPos && nPos < mpImplLB->GetEntryList()->GetEntryCount() )
     {
-        sal_Int32 oldSelectCount = GetSelectEntryCount(), newSelectCount = 0, nCurrentPos = mpImplLB->GetCurrentPos();
+        sal_Int32 oldSelectCount = GetSelectedEntryCount(), newSelectCount = 0, nCurrentPos = mpImplLB->GetCurrentPos();
         mpImplLB->SelectEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), bSelect );
-        newSelectCount = GetSelectEntryCount();
+        newSelectCount = GetSelectedEntryCount();
         if (oldSelectCount == 0 && newSelectCount > 0)
             CallEventListeners(VclEventId::ListboxStateUpdate);
         //Only when bSelect == true, send both Selection & Focus events

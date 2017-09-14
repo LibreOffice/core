@@ -44,9 +44,9 @@ void BarGeometryResources::Enable( bool bEnable )
     m_pLB_Geometry->Enable( bEnable );
 }
 
-sal_Int32 BarGeometryResources::GetSelectEntryCount() const
+sal_Int32 BarGeometryResources::GetSelectedEntryCount() const
 {
-    return m_pLB_Geometry->GetSelectEntryCount();
+    return m_pLB_Geometry->GetSelectedEntryCount();
 }
 
 sal_Int32 BarGeometryResources::GetSelectedEntryPos() const

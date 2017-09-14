@@ -543,7 +543,7 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
     rSettings.mbHeaderVisible = mpCBHeader->IsChecked();
     rSettings.maHeaderText = mpTBHeader->GetText();
 
-    if( mpCBDateTimeFormat->GetSelectEntryCount() == 1 )
+    if( mpCBDateTimeFormat->GetSelectedEntryCount() == 1 )
         rSettings.meDateTimeFormat = (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetSelectEntryData());
 
     LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectLanguage();

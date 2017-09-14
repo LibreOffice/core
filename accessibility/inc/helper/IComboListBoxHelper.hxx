@@ -53,7 +53,7 @@ namespace accessibility
         virtual sal_Int32       GetEntryCount() const = 0;
         virtual void            Select() = 0;
         virtual void            SelectEntryPos( sal_Int32  nPos, bool bSelect = true ) = 0;
-        virtual sal_Int32       GetSelectEntryCount() const = 0;
+        virtual sal_Int32       GetSelectedEntryCount() const = 0;
         virtual void            SetNoSelection() = 0;
         virtual sal_Int32       GetSelectedEntryPos( sal_Int32  nSelIndex ) const = 0;
         virtual bool            IsInDropDown() const = 0;

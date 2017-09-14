@@ -722,7 +722,7 @@ void ScImportAsciiDlg::SeparatorHdl( const Control* pCtrl )
 IMPL_LINK( ScImportAsciiDlg, CharSetHdl, ListBox&, rListBox, void )
 {
     SvxTextEncodingBox* pCharSetBox = static_cast<SvxTextEncodingBox*>(&rListBox);
-    if( (pCharSetBox == pLbCharSet) && (pCharSetBox->GetSelectEntryCount() == 1) )
+    if( (pCharSetBox == pLbCharSet) && (pCharSetBox->GetSelectedEntryCount() == 1) )
     {
         SetPointer( Pointer( PointerStyle::Wait ) );
         rtl_TextEncoding eOldCharSet = meCharSet;

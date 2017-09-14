@@ -199,7 +199,7 @@ void SwNumPositionTabPage::InitControls()
     bInInintControl = true;
     const bool bRelative = !bLabelAlignmentPosAndSpaceModeActive &&
                            m_pRelativeCB->IsEnabled() && m_pRelativeCB->IsChecked();
-    const bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 &&
+    const bool bSingleSelection = m_pLevelLB->GetSelectedEntryCount() == 1 &&
                                   USHRT_MAX != nActNumLvl;
 
     m_pDistBorderMF->Enable( !bLabelAlignmentPosAndSpaceModeActive &&
@@ -616,7 +616,7 @@ IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox&, rBox, void )
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
     if(rBox.IsEntryPosSelected( MAXLEVEL ) &&
-            (rBox.GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
+            (rBox.GetSelectedEntryCount() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
         rBox.SetUpdateMode(false);
@@ -624,7 +624,7 @@ IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox&, rBox, void )
             rBox.SelectEntryPos( i, false );
         rBox.SetUpdateMode(true);
     }
-    else if(rBox.GetSelectEntryCount())
+    else if(rBox.GetSelectedEntryCount())
     {
         sal_uInt16 nMask = 1;
         for( sal_uInt16 i = 0; i < MAXLEVEL; i++ )
@@ -722,7 +722,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, SpinField&, rSpin, void )
 IMPL_LINK( SwNumPositionTabPage, RelativeHdl, Button *, pBox, void )
 {
     bool bOn = static_cast<CheckBox*>(pBox)->IsChecked();
-    bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 && USHRT_MAX != nActNumLvl;
+    bool bSingleSelection = m_pLevelLB->GetSelectedEntryCount() == 1 && USHRT_MAX != nActNumLvl;
     bool bSetValue = false;
     long nValue = 0;
     if(bOn || bSingleSelection)

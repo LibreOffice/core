@@ -379,7 +379,7 @@ ListBoxEntryFlags ImplEntryList::GetEntryFlags( sal_Int32 nPos ) const
     return pImplEntry ? pImplEntry->mnFlags : ListBoxEntryFlags::NONE;
 }
 
-sal_Int32 ImplEntryList::GetSelectEntryCount() const
+sal_Int32 ImplEntryList::GetSelectedEntryCount() const
 {
     sal_Int32 nSelCount = 0;
     for ( sal_Int32 n = GetEntryCount(); n; )
@@ -836,7 +836,7 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
             sal_Int32 nSelect = GetEntryPosForPoint( rMEvt.GetPosPixel() );
             if( nSelect != LISTBOX_ENTRY_NOTFOUND )
             {
-                if ( !mbMulti && GetEntryList()->GetSelectEntryCount() )
+                if ( !mbMulti && GetEntryList()->GetSelectedEntryCount() )
                     mnTrackingSaveSelection = GetEntryList()->GetSelectedEntryPos( 0 );
                 else
                     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
@@ -901,7 +901,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 // Select only visible Entries with MouseMove, otherwise Tracking...
                 if ( IsVisible( nSelect ) &&
                     mpEntryList->IsEntrySelectable( nSelect ) &&
-                    ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectedEntryPos( 0 ) ) ) )
+                    ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectedEntryCount() || ( nSelect != GetEntryList()->GetSelectedEntryPos( 0 ) ) ) )
                 {
                     mbTrackingSelect = true;
                     if ( SelectEntries( nSelect, LET_TRACKING ) )
@@ -928,7 +928,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
             // with the mouse button pressed...
             if ( rMEvt.IsLeft() && !rMEvt.IsSynthetic() )
             {
-                if ( !mbMulti && GetEntryList()->GetSelectEntryCount() )
+                if ( !mbMulti && GetEntryList()->GetSelectedEntryCount() )
                     mnTrackingSaveSelection = GetEntryList()->GetSelectedEntryPos( 0 );
                 else
                     mnTrackingSaveSelection = LISTBOX_ENTRY_NOTFOUND;
@@ -944,7 +944,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
 
 void ImplListBoxWindow::DeselectAll()
 {
-    while ( GetEntryList()->GetSelectEntryCount() )
+    while ( GetEntryList()->GetSelectedEntryCount() )
     {
         sal_Int32 nS = GetEntryList()->GetSelectedEntryPos( 0 );
         SelectEntry( nS, false );
@@ -1074,9 +1074,9 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
                 bFocusChanged = true;
 
                 sal_Int32 nAnchor = mpEntryList->GetSelectionAnchor();
-                if( ( nAnchor == LISTBOX_ENTRY_NOTFOUND ) && ( mpEntryList->GetSelectEntryCount() || mbStackMode ) )
+                if( ( nAnchor == LISTBOX_ENTRY_NOTFOUND ) && ( mpEntryList->GetSelectedEntryCount() || mbStackMode ) )
                 {
-                    nAnchor = mbStackMode ? 0 : mpEntryList->GetSelectedEntryPos( mpEntryList->GetSelectEntryCount() - 1 );
+                    nAnchor = mbStackMode ? 0 : mpEntryList->GetSelectedEntryPos( mpEntryList->GetSelectedEntryCount() - 1 );
                 }
                 if( nAnchor != LISTBOX_ENTRY_NOTFOUND )
                 {
@@ -1244,7 +1244,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
 
             if ( bInside )
             {
-                if ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() )
+                if ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectedEntryCount() )
                 {
                     mbTrackingSelect = true;
                     if ( SelectEntries( nSelect, LET_TRACKING, bShift, bCtrl ) )
@@ -1262,7 +1262,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
             }
             else
             {
-                if ( !mbMulti && GetEntryList()->GetSelectEntryCount() )
+                if ( !mbMulti && GetEntryList()->GetSelectedEntryCount() )
                 {
                     mbTrackingSelect = true;
                     SelectEntry( GetEntryList()->GetSelectedEntryPos( 0 ), false );
@@ -2260,7 +2260,7 @@ void ImplListBox::ImplCheckScrollBars()
         mbVScroll = true;
 
         // check of the scrolled-out region
-        if( GetEntryList()->GetSelectEntryCount() == 1 &&
+        if( GetEntryList()->GetSelectedEntryCount() == 1 &&
             GetEntryList()->GetSelectedEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
             ShowProminentEntry( GetEntryList()->GetSelectedEntryPos( 0 ) );
         else
@@ -2297,7 +2297,7 @@ void ImplListBox::ImplCheckScrollBars()
                     mbVScroll = true;
 
                     // check of the scrolled-out region
-                    if( GetEntryList()->GetSelectEntryCount() == 1 &&
+                    if( GetEntryList()->GetSelectedEntryCount() == 1 &&
                         GetEntryList()->GetSelectedEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
                         ShowProminentEntry( GetEntryList()->GetSelectedEntryPos( 0 ) );
                     else

@@ -305,7 +305,7 @@ bool DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
         rOutAttrs->Put( SfxInt32Item( SCHATTR_DATADESCR_PLACEMENT, nValue ) );
     }
 
-    if( m_pLB_TextDirection->GetSelectEntryCount() > 0 )
+    if( m_pLB_TextDirection->GetSelectedEntryCount() > 0 )
         rOutAttrs->Put( SvxFrameDirectionItem( m_pLB_TextDirection->GetSelectEntryValue(), EE_PARA_WRITINGDIR ) );
 
     if( m_pDC_Dial->IsVisible() )

@@ -344,7 +344,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         pLbCond2->Disable();
         pEdVal2->Disable();
     }
-    else if ( pLbConnect2->GetSelectEntryCount() == 0 )
+    else if ( pLbConnect2->GetSelectedEntryCount() == 0 )
     {
         pLbField2->Disable();
         pLbCond2->Disable();
@@ -358,7 +358,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         pLbCond3->Disable();
         pEdVal3->Disable();
     }
-    else if ( pLbConnect3->GetSelectEntryCount() == 0 )
+    else if ( pLbConnect3->GetSelectedEntryCount() == 0 )
     {
         pLbField3->Disable();
         pLbCond3->Disable();
@@ -371,7 +371,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         pLbCond4->Disable();
         pEdVal4->Disable();
     }
-    else if ( pLbConnect4->GetSelectEntryCount() == 0 )
+    else if ( pLbConnect4->GetSelectedEntryCount() == 0 )
     {
         pLbField4->Disable();
         pLbCond4->Disable();

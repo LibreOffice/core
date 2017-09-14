@@ -412,7 +412,7 @@ sal_Int32 SwFieldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 
     if (nSize)
     {
-        if (!m_pSelectionLB->GetSelectEntryCount())
+        if (!m_pSelectionLB->GetSelectedEntryCount())
             m_pSelectionLB->SelectEntryPos(nSelPos == USHRT_MAX ? 0 : nSelPos);
 
         bEnable = true;

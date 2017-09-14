@@ -2638,7 +2638,7 @@ bool DbListBox::commitControl()
 {
     Any aVal;
     Sequence<sal_Int16> aSelectSeq;
-    if (static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryCount())
+    if (static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryCount())
     {
         aSelectSeq.realloc(1);
         *aSelectSeq.getArray() = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryPos();
@@ -2850,7 +2850,7 @@ bool DbFilterField::commitControl()
             return true;
         case css::form::FormComponentType::LISTBOX:
             aText.clear();
-            if (static_cast<ListBox*>(m_pWindow.get())->GetSelectEntryCount())
+            if (static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryCount())
             {
                 sal_Int16 nPos = (sal_Int16)static_cast<ListBox*>(m_pWindow.get())->GetSelectedEntryPos();
                 if ( ( nPos >= 0 ) && ( nPos < m_aValueList.getLength() ) )
@@ -4154,7 +4154,7 @@ Sequence< sal_Int16 > SAL_CALL FmXListBoxCell::getSelectedItemsPos()
     if (m_pBox)
     {
         UpdateFromColumn();
-        const sal_Int32 nSelEntries = m_pBox->GetSelectEntryCount();
+        const sal_Int32 nSelEntries = m_pBox->GetSelectedEntryCount();
         aSeq = Sequence<sal_Int16>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
             aSeq.getArray()[n] = m_pBox->GetSelectedEntryPos( n );
@@ -4187,7 +4187,7 @@ css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
     if (m_pBox)
     {
         UpdateFromColumn();
-        const sal_Int32 nSelEntries = m_pBox->GetSelectEntryCount();
+        const sal_Int32 nSelEntries = m_pBox->GetSelectedEntryCount();
         aSeq = css::uno::Sequence<OUString>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
             aSeq.getArray()[n] = m_pBox->GetSelectedEntry( n );
@@ -4289,7 +4289,7 @@ void FmXListBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Windo
         aEvent.Highlighted = 0;
 
         // with multiple selection 0xFFFF, otherwise the ID
-        aEvent.Selected = (m_pBox->GetSelectEntryCount() == 1 )
+        aEvent.Selected = (m_pBox->GetSelectedEntryCount() == 1 )
             ? m_pBox->GetSelectedEntryPos() : 0xFFFF;
 
         m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );
@@ -4489,7 +4489,7 @@ void FmXComboBoxCell::onWindowEvent( const VclEventId _nEventId, const vcl::Wind
         aEvent.Highlighted = 0;
 
         // with multiple selection 0xFFFF, otherwise the ID
-        aEvent.Selected =   ( m_pComboBox->GetSelectEntryCount() == 1 )
+        aEvent.Selected =   ( m_pComboBox->GetSelectedEntryCount() == 1 )
                         ?   m_pComboBox->GetSelectedEntryPos()
                         :   0xFFFF;
         m_aItemListeners.notifyEach( &awt::XItemListener::itemStateChanged, aEvent );

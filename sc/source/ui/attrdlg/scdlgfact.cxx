@@ -558,9 +558,9 @@ void AbstractScShowTabDlg_Impl::Insert( const OUString& rString, bool bSelected 
     pDlg->Insert( rString, bSelected);
 }
 
-sal_Int32 AbstractScShowTabDlg_Impl::GetSelectEntryCount() const
+sal_Int32 AbstractScShowTabDlg_Impl::GetSelectedEntryCount() const
 {
-    return pDlg->GetSelectEntryCount();
+    return pDlg->GetSelectedEntryCount();
 }
 
 void    AbstractScShowTabDlg_Impl::SetDescription(

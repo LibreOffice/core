@@ -34,7 +34,7 @@ public:
     void Show( bool bShow );
     void Enable( bool bEnable );
 
-    sal_Int32 GetSelectEntryCount() const;
+    sal_Int32 GetSelectedEntryCount() const;
     sal_Int32 GetSelectedEntryPos() const;
     void SelectEntryPos(sal_Int32 nPos);
 
