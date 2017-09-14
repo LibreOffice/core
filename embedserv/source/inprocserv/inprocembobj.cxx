@@ -391,7 +391,7 @@ STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::Release()
 
 STDMETHODIMP InprocEmbedDocument_Impl::GetClassID( CLSID* pClassId )
 {
-    *pClassId = *&m_guid;
+    *pClassId = m_guid;
     return S_OK;
 }
 
