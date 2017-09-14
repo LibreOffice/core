@@ -1709,7 +1709,7 @@ IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox&, rBox, void )
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
     if(rBox.IsEntryPosSelected( pActNum->GetLevelCount() ) &&
-        (rBox.GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
+        (rBox.GetSelectedEntryCount() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
         rBox.SetUpdateMode(false);
@@ -1717,7 +1717,7 @@ IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox&, rBox, void )
             rBox.SelectEntryPos( i, false );
         rBox.SetUpdateMode(true);
     }
-    else if(rBox.GetSelectEntryCount())
+    else if(rBox.GetSelectedEntryCount())
     {
         sal_uInt16 nMask = 1;
         for( sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++ )
@@ -2775,7 +2775,7 @@ void SvxNumPositionTabPage::InitControls()
     bInInintControl = true;
     const bool bRelative = !bLabelAlignmentPosAndSpaceModeActive &&
                      m_pRelativeCB->IsEnabled() && m_pRelativeCB->IsChecked();
-    const bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 &&
+    const bool bSingleSelection = m_pLevelLB->GetSelectedEntryCount() == 1 &&
                             SAL_MAX_UINT16 != nActNumLvl;
 
     m_pDistBorderMF->Enable( !bLabelAlignmentPosAndSpaceModeActive &&
@@ -3210,7 +3210,7 @@ IMPL_LINK( SvxNumPositionTabPage, LevelHdl_Impl, ListBox&, rBox, void )
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
     if(rBox.IsEntryPosSelected( pActNum->GetLevelCount() ) &&
-            (rBox.GetSelectEntryCount() == 1 || nSaveNumLvl != 0xffff))
+            (rBox.GetSelectedEntryCount() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
         rBox.SetUpdateMode(false);
@@ -3218,7 +3218,7 @@ IMPL_LINK( SvxNumPositionTabPage, LevelHdl_Impl, ListBox&, rBox, void )
             rBox.SelectEntryPos( i, false );
         rBox.SetUpdateMode(true);
     }
-    else if(rBox.GetSelectEntryCount())
+    else if(rBox.GetSelectedEntryCount())
     {
         sal_uInt16 nMask = 1;
         for( sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++ )
@@ -3317,7 +3317,7 @@ IMPL_LINK( SvxNumPositionTabPage, DistanceHdl_Impl, SpinField&, rFld, void )
 IMPL_LINK( SvxNumPositionTabPage, RelativeHdl_Impl, Button*, pBox, void )
 {
     bool bOn = static_cast<CheckBox*>(pBox)->IsChecked();
-    bool bSingleSelection = m_pLevelLB->GetSelectEntryCount() == 1 && SAL_MAX_UINT16 != nActNumLvl;
+    bool bSingleSelection = m_pLevelLB->GetSelectedEntryCount() == 1 && SAL_MAX_UINT16 != nActNumLvl;
     bool bSetValue = false;
     long nValue = 0;
     if(bOn || bSingleSelection)

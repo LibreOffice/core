@@ -1442,10 +1442,10 @@ sal_Int32 SwFramePage::FillPosLB(const FrameMap* _pMap,
     }
 
     _rLB.SelectEntry(sSelEntry);
-    if (!_rLB.GetSelectEntryCount())
+    if (!_rLB.GetSelectedEntryCount())
         _rLB.SelectEntry(sOldEntry);
 
-    if (!_rLB.GetSelectEntryCount())
+    if (!_rLB.GetSelectedEntryCount())
         _rLB.SelectEntryPos(0);
 
     PosHdl(_rLB);
@@ -1506,7 +1506,7 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
             {
                 _rLB.SelectEntry(sOldEntry);
 
-                if (!_rLB.GetSelectEntryCount())
+                if (!_rLB.GetSelectedEntryCount())
                 {
                     for (sal_Int32 i = 0; i < _rLB.GetEntryCount(); i++)
                     {
@@ -1614,7 +1614,7 @@ void SwFramePage::FillRelLB( const FrameMap* _pMap,
                     }
                 }
 
-                if (!_rLB.GetSelectEntryCount())
+                if (!_rLB.GetSelectedEntryCount())
                     _rLB.SelectEntryPos(0);
             }
         }
@@ -1975,7 +1975,7 @@ IMPL_LINK( SwFramePage, PosHdl, ListBox&, rLB, void )
     RangeModifyHdl();
 
     sal_Int16 nRel = 0;
-    if (rLB.GetSelectEntryCount())
+    if (rLB.GetSelectedEntryCount())
     {
 
         if (pRelLB->GetSelectedEntryPos() != LISTBOX_ENTRY_NOTFOUND)

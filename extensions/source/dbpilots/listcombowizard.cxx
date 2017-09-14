@@ -294,7 +294,7 @@ namespace dbp
         if (!OLCPage::canAdvance())
             return false;
 
-        return 0 != m_pSelectTable->GetSelectEntryCount();
+        return 0 != m_pSelectTable->GetSelectedEntryCount();
     }
 
 
@@ -306,7 +306,7 @@ namespace dbp
 
     IMPL_LINK( OContentTableSelection, OnTableDoubleClicked, ListBox&, _rListBox, void )
     {
-        if (_rListBox.GetSelectEntryCount())
+        if (_rListBox.GetSelectedEntryCount())
             getDialog()->travelNext();
     }
 
@@ -390,13 +390,13 @@ namespace dbp
         if (!OLCPage::canAdvance())
             return false;
 
-        return 0 != m_pSelectTableField->GetSelectEntryCount();
+        return 0 != m_pSelectTableField->GetSelectedEntryCount();
     }
 
 
     IMPL_LINK_NOARG( OContentFieldSelection, OnTableDoubleClicked, ListBox&, void )
     {
-        if (m_pSelectTableField->GetSelectEntryCount())
+        if (m_pSelectTableField->GetSelectedEntryCount())
             getDialog()->travelNext();
     }
 

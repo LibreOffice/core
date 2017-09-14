@@ -360,7 +360,7 @@ IMPL_LINK_NOARG( ErrorBarResources, CategoryChosen, Button*, void )
         m_eErrorKind = SvxChartKindError::Range;
     else if( m_pRbFunction->IsChecked())
     {
-        if( m_pLbFunction->GetSelectEntryCount() == 1 )
+        if( m_pLbFunction->GetSelectedEntryCount() == 1 )
         {
             switch( m_pLbFunction->GetSelectedEntryPos())
             {
