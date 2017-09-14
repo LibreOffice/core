@@ -50,7 +50,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	mwaw \
 	odfgen \
 	zmf \
-	png \
+	libpng \
 	pagemaker \
 	qxp \
 	revenge \

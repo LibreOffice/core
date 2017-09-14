@@ -13,7 +13,7 @@ $(eval $(call gb_StaticLibrary_use_unpacked,collada2gltf,collada2gltf))
 
 $(eval $(call gb_StaticLibrary_use_externals,collada2gltf, \
 	opencollada_parser \
-	png \
+	libpng \
 ))
 
 $(eval $(call gb_StaticLibrary_set_warnings_not_errors,collada2gltf))

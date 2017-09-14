@@ -10,8 +10,8 @@
 $(eval $(call gb_Module_Module,libpng))
 
 $(eval $(call gb_Module_add_targets,libpng,\
-	StaticLibrary_png \
-	UnpackedTarball_png \
+	StaticLibrary_libpng \
+	UnpackedTarball_libpng \
 ))
 
 # vim: set noet sw=4 ts=4:

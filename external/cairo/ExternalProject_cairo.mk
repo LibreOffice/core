@@ -13,13 +13,13 @@ $(eval $(call gb_ExternalProject_use_external_project,cairo,pixman))
 
 $(eval $(call gb_ExternalProject_use_externals,cairo,\
 	freetype \
-	png \
+	libpng \
 	zlib \
 ))
 
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_ExternalProject_use_unpacked,cairo,fontconfig))
-$(eval $(call gb_ExternalProject_use_unpacked,cairo,png))
+$(eval $(call gb_ExternalProject_use_unpacked,cairo,libpng))
 endif
 
 $(eval $(call gb_ExternalProject_register_targets,cairo,\
