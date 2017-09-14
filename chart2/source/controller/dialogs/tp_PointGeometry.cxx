@@ -58,7 +58,7 @@ VclPtr<SfxTabPage> SchLayoutTabPage::Create(vcl::Window* pWindow,
 bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
 
-    if(m_pGeometryResources && m_pGeometryResources->GetSelectEntryCount())
+    if(m_pGeometryResources && m_pGeometryResources->GetSelectedEntryCount())
     {
         long nSegs=32;
 

@@ -1907,7 +1907,7 @@ void CustomAnimationPane::remove( CustomAnimationEffectPtr const & pEffect )
 
 void CustomAnimationPane::onChangeStart()
 {
-    if( mpLBStart->GetSelectEntryCount() == 1 )
+    if( mpLBStart->GetSelectedEntryCount() == 1 )
     {
         sal_Int16 nNodeType;
         switch( mpLBStart->GetSelectedEntryPos() )
@@ -1993,7 +1993,7 @@ PathKind CustomAnimationPane::getCreatePathKind() const
 {
     PathKind eKind = PathKind::NONE;
 
-    if( ( mpLBAnimation->GetSelectEntryCount() == 1 ) &&
+    if( ( mpLBAnimation->GetSelectedEntryCount() == 1 ) &&
         ( mpLBCategory->GetSelectedEntryPos() == mnMotionPathPos ) )
     {
         const sal_Int32 nPos = mpLBAnimation->GetSelectedEntryPos();

@@ -225,10 +225,10 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
 
     if(!bAll)
     {
-        for(sal_Int32 i=0; i < pLeft->GetSelectEntryCount(); ++i)
+        for(sal_Int32 i=0; i < pLeft->GetSelectedEntryCount(); ++i)
             moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectedEntry(i),sExtraChars,nMaxNameLen,aCase);
 
-        for(sal_Int32 j=pLeft->GetSelectEntryCount(); j ; --j)
+        for(sal_Int32 j=pLeft->GetSelectedEntryCount(); j ; --j)
             pLeft->RemoveEntry(pLeft->GetSelectedEntry(j-1));
     }
     else
@@ -269,9 +269,9 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox&, rListBox, void )
     std::vector< OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
-    for(sal_Int32 i=0; i < pLeft->GetSelectEntryCount(); ++i)
+    for(sal_Int32 i=0; i < pLeft->GetSelectedEntryCount(); ++i)
         moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectedEntry(i),sExtraChars,nMaxNameLen,aCase);
-    for(sal_Int32 j=pLeft->GetSelectEntryCount(); j ; )
+    for(sal_Int32 j=pLeft->GetSelectedEntryCount(); j ; )
         pLeft->RemoveEntry(pLeft->GetSelectedEntry(--j));
 
     enableButtons();

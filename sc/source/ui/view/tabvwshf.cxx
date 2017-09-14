@@ -151,7 +151,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        const sal_Int32 nCount = pDlg->GetSelectEntryCount();
+                        const sal_Int32 nCount = pDlg->GetSelectedEntryCount();
                         for (sal_Int32 nPos=0; nPos<nCount; ++nPos)
                         {
                             aName = pDlg->GetSelectedEntry(nPos);

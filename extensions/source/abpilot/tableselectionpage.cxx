@@ -82,7 +82,7 @@ namespace abp
 
     IMPL_LINK_NOARG( TableSelectionPage, OnTableDoubleClicked, ListBox&, void )
     {
-        if ( 1 == m_pTableList->GetSelectEntryCount() )
+        if ( 1 == m_pTableList->GetSelectedEntryCount() )
             getDialog()->travelNext();
     }
 
@@ -108,7 +108,7 @@ namespace abp
     bool TableSelectionPage::canAdvance() const
     {
         return  AddressBookSourcePage::canAdvance()
-            &&  ( 0 < m_pTableList->GetSelectEntryCount() );
+            &&  ( 0 < m_pTableList->GetSelectedEntryCount() );
     }
 
 

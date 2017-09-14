@@ -210,7 +210,7 @@ const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
         aStrCurSelTable = m_pEdName->GetText();
         pStr = &aStrCurSelTable;
     }
-    else if ( nSelTabIndex < m_pLbTables->GetSelectEntryCount() )
+    else if ( nSelTabIndex < m_pLbTables->GetSelectedEntryCount() )
     {
         aStrCurSelTable = m_pLbTables->GetSelectedEntry();
         pStr = &aStrCurSelTable;
@@ -226,7 +226,7 @@ const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 {
     const OUString* pStr = nullptr;
 
-    if ( !m_pBtnNew->IsChecked() && nSelTabIndex < m_pLbTables->GetSelectEntryCount() )
+    if ( !m_pBtnNew->IsChecked() && nSelTabIndex < m_pLbTables->GetSelectedEntryCount() )
     {
         aStrCurSelTable = m_pLbTables->GetSelectedEntry( nSelTabIndex );
         pStr = &aStrCurSelTable;
@@ -285,7 +285,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl, ListBox&, void)
 
 void ScInsertTableDlg::DoEnable_Impl()
 {
-    if ( m_pBtnNew->IsChecked() || ( pDocShTables && m_pLbTables->GetSelectEntryCount() ) )
+    if ( m_pBtnNew->IsChecked() || ( pDocShTables && m_pLbTables->GetSelectedEntryCount() ) )
         m_pBtnOk->Enable();
     else
         m_pBtnOk->Disable();

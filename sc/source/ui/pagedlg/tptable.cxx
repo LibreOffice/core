@@ -224,7 +224,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
         m_pEdScalePageNum->SetValue( (nPages > 0) ? nPages : 1 );
     }
 
-    if( m_pLbScaleMode->GetSelectEntryCount() == 0 )
+    if( m_pLbScaleMode->GetSelectedEntryCount() == 0 )
     {
         // fall back to 100%
         OSL_FAIL( "ScTablePage::Reset - missing scaling item" );

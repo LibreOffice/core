@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, ListBox&, void)
 
         bool bEnable = nCount != 0;
 
-        if (bEnable && !m_pSelectionLB->GetSelectEntryCount())
+        if (bEnable && !m_pSelectionLB->GetSelectedEntryCount())
             m_pSelectionLB->SelectEntryPos(0);
 
         m_pSelection->Enable( bEnable );
@@ -507,13 +507,13 @@ sal_Int32 SwFieldDokPage::FillFormatLB(sal_uInt16 nTypeId)
             m_pFormatLB->SelectEntryPos( nPos );
     }
 
-    if( nSize && !m_pFormatLB->GetSelectEntryCount() )
+    if( nSize && !m_pFormatLB->GetSelectedEntryCount() )
     {
         m_pFormatLB->SelectEntry( SwResId(FMT_NUM_PAGEDESC) );
-        if( !m_pFormatLB->GetSelectEntryCount() )
+        if( !m_pFormatLB->GetSelectedEntryCount() )
         {
             m_pFormatLB->SelectEntry( SwResId(FMT_NUM_ARABIC) );
-            if( !m_pFormatLB->GetSelectEntryCount() )
+            if( !m_pFormatLB->GetSelectedEntryCount() )
                 m_pFormatLB->SelectEntryPos( 0 );
         }
     }

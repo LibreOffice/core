@@ -176,7 +176,7 @@ void SwIndexMarkPane::InitControls()
     const SwTOXType* pType = pTOXMgr->GetTOXType(TOX_CONTENT);
     OSL_ENSURE(pType, "No directory type !!");
     OUString sTmpTypeSelection;
-    if(m_pTypeDCB->GetSelectEntryCount())
+    if(m_pTypeDCB->GetSelectedEntryCount())
         sTmpTypeSelection = m_pTypeDCB->GetSelectedEntry();
     m_pTypeDCB->Clear();
     m_pTypeDCB->InsertEntry(pType->GetTypeName());
@@ -1646,13 +1646,13 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit&, rEdit, void)
     {
         bool bEnable = aShortNameCheckLink.Call(&rEdit);
         m_bNameAllowed |= bEnable;
-        m_pOKBT->Enable(pTypeListBox->GetSelectEntryCount() && bEnable);
+        m_pOKBT->Enable(pTypeListBox->GetSelectedEntryCount() && bEnable);
     }
 }
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox&, rBox, void)
 {
-    m_pOKBT->Enable(m_bNameAllowed && rBox.GetSelectEntryCount());
+    m_pOKBT->Enable(m_bNameAllowed && rBox.GetSelectedEntryCount());
 };
 
 SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,

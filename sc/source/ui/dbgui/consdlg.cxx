@@ -472,7 +472,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, Button*, pBtn, void )
     }
     else if ( pBtn == pBtnRemove )
     {
-        while ( pLbConsAreas->GetSelectEntryCount() )
+        while ( pLbConsAreas->GetSelectedEntryCount() )
             pLbConsAreas->RemoveEntry( pLbConsAreas->GetSelectedEntryPos() );
         pBtnRemove->Disable();
     }
@@ -482,7 +482,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox&, rLb, void )
 {
     if ( &rLb == pLbConsAreas )
     {
-        if ( pLbConsAreas->GetSelectEntryCount() > 0 )
+        if ( pLbConsAreas->GetSelectedEntryCount() > 0 )
             pBtnRemove->Enable();
         else
             pBtnRemove->Disable();

@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
             if (IsFieldEdit() && nTypeId == TYP_JUMPEDITFLD)
                 m_pFormatLB->SelectEntry(SwResId(FMT_MARK_ARY[GetCurField()->GetFormat()]));
 
-            if (!m_pFormatLB->GetSelectEntryCount())
+            if (!m_pFormatLB->GetSelectedEntryCount())
                 m_pFormatLB->SelectEntryPos(0);
         }
 
@@ -444,7 +444,7 @@ void SwFieldFuncPage::ListModifyHdl(Control const * pControl)
         m_pListItemsLB->InsertEntry(sEntry);
         m_pListItemsLB->SelectEntry(sEntry);
     }
-    else if(m_pListItemsLB->GetSelectEntryCount())
+    else if(m_pListItemsLB->GetSelectedEntryCount())
     {
         sal_Int32 nSelPos = m_pListItemsLB->GetSelectedEntryPos();
         if(pControl == m_pListRemovePB)
@@ -489,7 +489,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, ListEnableHdl, Edit&, void)
     //enable "Add" button when text is in the Edit that's not already member of the box
     m_pListAddPB->Enable(!m_pListItemED->GetText().isEmpty() &&
                 LISTBOX_ENTRY_NOTFOUND == m_pListItemsLB->GetEntryPos(m_pListItemED->GetText()));
-    bool bEnableButtons = m_pListItemsLB->GetSelectEntryCount() > 0;
+    bool bEnableButtons = m_pListItemsLB->GetSelectedEntryCount() > 0;
     m_pListRemovePB->Enable(bEnableButtons);
     m_pListUpPB->Enable(bEnableButtons && (m_pListItemsLB->GetSelectedEntryPos() > 0));
     m_pListDownPB->Enable(bEnableButtons &&

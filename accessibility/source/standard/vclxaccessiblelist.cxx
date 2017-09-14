@@ -45,7 +45,7 @@ namespace
     /// @throws css::lang::IndexOutOfBoundsException
     void checkSelection_Impl( sal_Int32 _nIndex, const IComboListBoxHelper& _rListBox, bool bSelected )
     {
-        sal_Int32 nCount = bSelected ? _rListBox.GetSelectEntryCount()
+        sal_Int32 nCount = bSelected ? _rListBox.GetSelectedEntryCount()
                                      : _rListBox.GetEntryCount();
         if ( _nIndex < 0 || _nIndex >= nCount )
             throw css::lang::IndexOutOfBoundsException();
@@ -819,7 +819,7 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getSelectedAccessibleChildCount(  )
 
     sal_Int32 nCount = 0;
     if ( m_pListBoxHelper )
-           nCount = m_pListBoxHelper->GetSelectEntryCount();
+           nCount = m_pListBoxHelper->GetSelectedEntryCount();
     return nCount;
 }
 

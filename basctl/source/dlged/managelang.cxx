@@ -166,7 +166,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl, Button*, void)
     ScopedVclPtrInstance< MessageDialog > aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelangdialog.ui");
     if ( aQBox->Execute() == RET_OK )
     {
-        sal_Int32 nCount = m_pLanguageLB->GetSelectEntryCount();
+        sal_Int32 nCount = m_pLanguageLB->GetSelectedEntryCount();
         sal_Int32 nPos = m_pLanguageLB->GetSelectedEntryPos();
         // remove locales
         Sequence< Locale > aLocaleSeq( nCount );
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl, ListBox&, void)
     bool bEnable = !bEmpty && bSelect;
 
     m_pDeletePB->Enable(bEnable);
-    m_pMakeDefPB->Enable(bEnable && nCount > 1 && m_pLanguageLB->GetSelectEntryCount() == 1);
+    m_pMakeDefPB->Enable(bEnable && nCount > 1 && m_pLanguageLB->GetSelectedEntryCount() == 1);
 }
 
 // class SetDefaultLanguageDialog -----------------------------------------------

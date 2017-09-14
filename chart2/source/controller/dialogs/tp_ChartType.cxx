@@ -649,7 +649,7 @@ void GeometryResourceGroup::fillControls( const ChartTypeParameter& rParameter )
 void GeometryResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.nGeometry3D = 1;
-    if( m_aGeometryResources.GetSelectEntryCount() )
+    if( m_aGeometryResources.GetSelectedEntryCount() )
         rParameter.nGeometry3D = m_aGeometryResources.GetSelectedEntryPos();
 }
 

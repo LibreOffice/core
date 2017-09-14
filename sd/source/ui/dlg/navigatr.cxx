@@ -188,7 +188,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
         maLbDocs->SelectEntry( aDocShName );
 
 // commented in order to fix 30246
-//        if( maLbDocs->GetSelectEntryCount() == 0 )
+//        if( maLbDocs->GetSelectedEntryCount() == 0 )
         {
             RefreshDocumentLB();
             maLbDocs->SelectEntry( aDocShName );

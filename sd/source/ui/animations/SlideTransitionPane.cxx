@@ -301,7 +301,7 @@ OUString lcl_getSoundFileURL(
     const ::std::vector< OUString > & rSoundList,
     const ListBox* rListBox )
 {
-    if( rListBox->GetSelectEntryCount() > 0 )
+    if( rListBox->GetSelectedEntryCount() > 0 )
     {
         sal_Int32 nPos = rListBox->GetSelectedEntryPos();
         // the first three entries are no actual sounds
@@ -875,7 +875,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     if( mpLB_SOUND->IsEnabled())
     {
         maCurrentSoundFile.clear();
-        if( mpLB_SOUND->GetSelectEntryCount() > 0 )
+        if( mpLB_SOUND->GetSelectedEntryCount() > 0 )
         {
             sal_Int32 nPos = mpLB_SOUND->GetSelectedEntryPos();
             aResult.mbStopSound = nPos == 1;
@@ -1117,7 +1117,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, DurationLoseFocusHdl, Control&, void)
 
 IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected, ListBox&, void)
 {
-    if( mpLB_SOUND->GetSelectEntryCount() )
+    if( mpLB_SOUND->GetSelectedEntryCount() )
     {
         sal_Int32 nPos = mpLB_SOUND->GetSelectedEntryPos();
         if( nPos == 2 )

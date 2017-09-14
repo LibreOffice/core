@@ -912,7 +912,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
     aDlg.SetTitle( CuiResId( RID_SVXSTR_ARCHIVE_TITLE ) );
     aDlg.AddFilter( CuiResId( RID_SVXSTR_ARCHIVE_HEADLINE ), "*.jar;*.zip" );
     OUString sFolder;
-    if ( m_pPathList->GetSelectEntryCount() > 0 )
+    if ( m_pPathList->GetSelectedEntryCount() > 0 )
     {
         INetURLObject aObj( m_pPathList->GetSelectedEntry(), FSysStyle::Detect );
         sFolder = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
@@ -947,7 +947,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
     Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
 
     OUString sOldFolder;
-    if ( m_pPathList->GetSelectEntryCount() > 0 )
+    if ( m_pPathList->GetSelectedEntryCount() > 0 )
     {
         INetURLObject aObj( m_pPathList->GetSelectedEntry(), FSysStyle::Detect );
         sOldFolder = aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );

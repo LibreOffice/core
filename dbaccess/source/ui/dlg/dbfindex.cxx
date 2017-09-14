@@ -110,10 +110,10 @@ bool ODbaseIndexDialog::GetTable(const OUString& _rName, TableInfoList::iterator
 
 void ODbaseIndexDialog::checkButtons()
 {
-    m_pAdd->Enable(0 != m_pLB_FreeIndexes->GetSelectEntryCount());
+    m_pAdd->Enable(0 != m_pLB_FreeIndexes->GetSelectedEntryCount());
     m_pAddAll->Enable(0 != m_pLB_FreeIndexes->GetEntryCount());
 
-    m_pRemove->Enable(0 != m_pLB_TableIndexes->GetSelectEntryCount());
+    m_pRemove->Enable(0 != m_pLB_TableIndexes->GetSelectedEntryCount());
     m_pRemoveAll->Enable(0 != m_pLB_TableIndexes->GetEntryCount());
 }
 

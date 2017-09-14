@@ -835,7 +835,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     }
     else
     {
-        if( m_pLbShademode->GetSelectEntryCount() != 0 )
+        if( m_pLbShademode->GetSelectedEntryCount() != 0 )
         {
             m_pLbShademode->SetNoSelection();
             bUpdate = true;
@@ -1796,7 +1796,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 // Representation
     // Shade mode
-    if( m_pLbShademode->GetSelectEntryCount() )
+    if( m_pLbShademode->GetSelectedEntryCount() )
     {
         nValue = m_pLbShademode->GetSelectedEntryPos();
         rAttrs.Put(Svx3DShadeModeItem(nValue));

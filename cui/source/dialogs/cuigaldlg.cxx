@@ -283,7 +283,7 @@ void TakeThread::execute()
     {
         SolarMutexGuard aGuard;
         pStatusProgress = new GalleryProgress;
-        nEntries = mpBrowser->bTakeAll ? mpBrowser->m_pLbxFound->GetEntryCount() : mpBrowser->m_pLbxFound->GetSelectEntryCount();
+        nEntries = mpBrowser->bTakeAll ? mpBrowser->m_pLbxFound->GetEntryCount() : mpBrowser->m_pLbxFound->GetSelectedEntryCount();
         pThm->LockBroadcaster();
     }
 
@@ -1019,7 +1019,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, Button*, void)
 
 void TPGalleryThemeProperties::TakeFiles()
 {
-    if( m_pLbxFound->GetSelectEntryCount() || ( bTakeAll && bEntriesFound ) )
+    if( m_pLbxFound->GetSelectedEntryCount() || ( bTakeAll && bEntriesFound ) )
     {
         VclPtrInstance<TakeProgress> pTakeProgress( this );
         pTakeProgress->Update();
@@ -1084,7 +1084,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl, Button*, void)
     {
         aPreviewTimer.Stop();
 
-        if( !m_pLbxFound->GetSelectEntryCount() || !bEntriesFound )
+        if( !m_pLbxFound->GetSelectedEntryCount() || !bEntriesFound )
         {
             SvxOpenGraphicDialog aDlg("Gallery", this);
             aDlg.EnableLink(false);
@@ -1123,7 +1123,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl, ListBox&, void)
 
         if( bEntriesFound )
         {
-            if( m_pLbxFound->GetSelectEntryCount() == 1 )
+            if( m_pLbxFound->GetSelectedEntryCount() == 1 )
             {
                 m_pCbxPreview->Enable();
                 bPreviewPossible = true;
@@ -1149,7 +1149,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl, ListBox&, void)
     {
         aPreviewTimer.Stop();
 
-        if (m_pLbxFound->GetSelectEntryCount() == 1 && bEntriesFound)
+        if (m_pLbxFound->GetSelectedEntryCount() == 1 && bEntriesFound)
             ClickTakeHdl(nullptr);
     }
 }

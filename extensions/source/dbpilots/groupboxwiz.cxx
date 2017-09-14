@@ -258,7 +258,7 @@ namespace dbp
         bool bMoveLeft = (m_pMoveLeft == _pButton);
         if (bMoveLeft)
         {
-            while (m_pExistingRadios->GetSelectEntryCount())
+            while (m_pExistingRadios->GetSelectedEntryCount())
                 m_pExistingRadios->RemoveEntry(m_pExistingRadios->GetSelectedEntryPos());
         }
         else
@@ -298,7 +298,7 @@ namespace dbp
     void ORadioSelectionPage::implCheckMoveButtons()
     {
         bool bHaveSome = (0 != m_pExistingRadios->GetEntryCount());
-        bool bSelectedSome = (0 != m_pExistingRadios->GetSelectEntryCount());
+        bool bSelectedSome = (0 != m_pExistingRadios->GetSelectedEntryCount());
         bool bUnfinishedInput = (!m_pRadioName->GetText().isEmpty());
 
         m_pMoveLeft->Enable(bSelectedSome);

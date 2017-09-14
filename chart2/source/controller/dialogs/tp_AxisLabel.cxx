@@ -148,7 +148,7 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     if( m_pCbShowDescription->GetState() != TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_pCbShowDescription->IsChecked() ) );
 
-    if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
+    if( m_pLbTextDirection->GetSelectedEntryCount() > 0 )
         rOutAttrs->Put( SvxFrameDirectionItem( m_pLbTextDirection->GetSelectEntryValue(), EE_PARA_WRITINGDIR ) );
 
     return true;

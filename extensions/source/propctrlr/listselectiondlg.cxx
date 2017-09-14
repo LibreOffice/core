@@ -131,7 +131,7 @@ namespace pcr
 
     void ListSelectionDialog::collectSelection( std::vector< sal_Int16 >& /* [out] */ _rSelection )
     {
-        const sal_Int32 nSelectedCount = m_pEntries->GetSelectEntryCount( );
+        const sal_Int32 nSelectedCount = m_pEntries->GetSelectedEntryCount( );
         _rSelection.resize( nSelectedCount );
         for ( sal_Int32 selected = 0; selected < nSelectedCount; ++selected )
             _rSelection[selected] = static_cast< sal_Int16 >( m_pEntries->GetSelectedEntryPos( selected ) );

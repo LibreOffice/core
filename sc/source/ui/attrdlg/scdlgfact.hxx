@@ -334,7 +334,7 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg
 {
     DECL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl,ScShowTabDlg)
     virtual void    Insert( const OUString& rString, bool bSelected ) override;
-    virtual sal_Int32 GetSelectEntryCount() const override;
+    virtual sal_Int32 GetSelectedEntryCount() const override;
     virtual void SetDescription(const OUString& rTitle, const OUString& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId ) override;
     virtual OUString  GetSelectedEntry(sal_Int32 nPos) const override;
     virtual sal_Int32 GetSelectedEntryPos(sal_Int32 nPos) const override;

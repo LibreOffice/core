@@ -86,7 +86,7 @@ FrameDirListBoxWrapper::FrameDirListBoxWrapper( FrameDirListBox& rListBox ) :
 
 bool FrameDirListBoxWrapper::IsControlDontKnow() const
 {
-    return GetControl().GetSelectEntryCount() == 0;
+    return GetControl().GetSelectedEntryCount() == 0;
 }
 
 void FrameDirListBoxWrapper::SetControlDontKnow( bool bSet )

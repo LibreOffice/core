@@ -804,10 +804,10 @@ Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OU
 
 void SdPhotoAlbumDialog::EnableDisableButtons()
 {
-    pRemoveBtn->Enable(pImagesLst->GetSelectEntryCount() > 0);
-    pUpBtn->Enable(pImagesLst->GetSelectEntryCount() > 0 &&
+    pRemoveBtn->Enable(pImagesLst->GetSelectedEntryCount() > 0);
+    pUpBtn->Enable(pImagesLst->GetSelectedEntryCount() > 0 &&
                    pImagesLst->GetSelectedEntryPos() != 0);
-    pDownBtn->Enable(pImagesLst->GetSelectEntryCount() > 0 &&
+    pDownBtn->Enable(pImagesLst->GetSelectedEntryCount() > 0 &&
                      pImagesLst->GetSelectedEntryPos() < pImagesLst->GetEntryCount()-1);
 }
 

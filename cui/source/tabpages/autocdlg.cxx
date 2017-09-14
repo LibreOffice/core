@@ -2357,7 +2357,7 @@ void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
 IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl, Button*, void)
 {
     sal_Int32 nSelCnt =
-        (m_pAutoCompleteList) ? m_pLBEntries->GetSelectEntryCount() : 0;
+        (m_pAutoCompleteList) ? m_pLBEntries->GetSelectedEntryCount() : 0;
     while( nSelCnt )
     {
         sal_Int32 nPos = m_pLBEntries->GetSelectedEntryPos( --nSelCnt );
@@ -2384,7 +2384,7 @@ IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox&, rBox, void )
 
 void OfaAutoCompleteTabPage::CopyToClipboard() const
 {
-    sal_Int32 nSelCnt = m_pLBEntries->GetSelectEntryCount();
+    sal_Int32 nSelCnt = m_pLBEntries->GetSelectedEntryCount();
     if (m_pAutoCompleteList && nSelCnt)
     {
         rtl::Reference<TransferDataContainer> pCntnr = new TransferDataContainer;

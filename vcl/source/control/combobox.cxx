@@ -381,7 +381,7 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
             // attach missing entries
             ::std::set< sal_Int32 > aSelInText;
             lcl_GetSelectedEntries( aSelInText, aText, m_cMultiSep, m_pImplLB->GetEntryList() );
-            sal_Int32 nSelectedEntries = m_pImplLB->GetEntryList()->GetSelectEntryCount();
+            sal_Int32 nSelectedEntries = m_pImplLB->GetEntryList()->GetSelectedEntryCount();
             for ( sal_Int32 n = 0; n < nSelectedEntries; n++ )
             {
                 sal_Int32 nP = m_pImplLB->GetEntryList()->GetSelectedEntryPos( n );
@@ -1342,9 +1342,9 @@ const Wallpaper& ComboBox::GetDisplayBackground() const
     return rBack;
 }
 
-sal_Int32 ComboBox::GetSelectEntryCount() const
+sal_Int32 ComboBox::GetSelectedEntryCount() const
 {
-    return m_pImpl->m_pImplLB->GetEntryList()->GetSelectEntryCount();
+    return m_pImpl->m_pImplLB->GetEntryList()->GetSelectedEntryCount();
 }
 
 sal_Int32 ComboBox::GetSelectedEntryPos( sal_Int32 nIndex ) const
