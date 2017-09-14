@@ -271,6 +271,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         SAL_WARN("sc", "ScDocument::InsertMatrixFormula: No table marked");
         return;
     }
+    assert( ValidColRow( nCol1, nRow1) && ValidColRow( nCol2, nRow2));
 
     SCTAB nTab1 = *rMark.begin();
 
@@ -353,6 +354,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
 {
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
+    assert( ValidColRow( nCol1, nRow1) && ValidColRow( nCol2, nRow2));
     SCTAB i, nTab1;
     SCCOL j;
     SCROW k;
