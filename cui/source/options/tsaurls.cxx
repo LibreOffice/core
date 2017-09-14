@@ -29,9 +29,15 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
     m_pURLListBox->set_width_request(m_pURLListBox->approximate_char_width() * 32);
     m_pOKBtn->Disable();
 
-    m_pAddBtn->SetClickHdl( LINK( this, TSAURLsDialog, AddHdl_Impl ) );
-    m_pDeleteBtn->SetClickHdl( LINK( this, TSAURLsDialog, DeleteHdl_Impl ) );
-    m_pOKBtn->SetClickHdl( LINK( this, TSAURLsDialog, OKHdl_Impl ) );
+    OUString text = m_pURLListBox->GetDisplayText();
+    if (text.isEmpty()) {
+        m_pDeleteBtn->Disable();
+    }
+
+    m_pAddBtn->SetClickHdl(LINK(this, TSAURLsDialog, AddHdl_Impl));
+    m_pDeleteBtn->SetClickHdl(LINK(this, TSAURLsDialog, DeleteHdl_Impl));
+    m_pOKBtn->SetClickHdl(LINK(this, TSAURLsDialog, OKHdl_Impl));
+    m_pURLListBox->SetSelectHdl(LINK(this, TSAURLsDialog, SelectHdl));
 
     try
     {
@@ -94,19 +100,28 @@ void TSAURLsDialog::AddTSAURL(const OUString& rURL)
 IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, Button*, void)
 {
     OUString aURL;
-    OUString aDesc( get<FixedText>("enteraurl")->GetText() );
+    OUString aDesc(get<FixedText>("enteraurl")->GetText());
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( m_pAddBtn, aURL, aDesc));
+    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(m_pAddBtn, aURL, aDesc));
 
-    if ( pDlg->Execute() == RET_OK )
+    if (pDlg->Execute() == RET_OK)
     {
-        pDlg->GetName( aURL );
+        pDlg->GetName(aURL);
 
         AddTSAURL(aURL);
         m_pOKBtn->Enable();
     }
+    // After operations in a ListBox we have nothing selected
+    m_pDeleteBtn->Disable();
 }
+
+
+IMPL_LINK_NOARG(TSAURLsDialog, SelectHdl, ListBox&, void)
+{
+    m_pDeleteBtn->Enable();
+}
+
 
 IMPL_LINK_NOARG(TSAURLsDialog, DeleteHdl_Impl, Button*, void)
 {
@@ -117,6 +132,8 @@ IMPL_LINK_NOARG(TSAURLsDialog, DeleteHdl_Impl, Button*, void)
 
     m_aURLs.erase(m_pURLListBox->GetEntry(nSel));
     m_pURLListBox->RemoveEntry(nSel);
+    // After operations in a ListBox we have nothing selected
+    m_pDeleteBtn->Disable();
     m_pOKBtn->Enable();
 }
 
