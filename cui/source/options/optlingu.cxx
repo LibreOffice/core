@@ -1823,6 +1823,8 @@ void SvxEditModulesDlg::dispose()
     delete pDefaultLinguData;
     pDefaultLinguData = nullptr;
     m_pLanguageLB.clear();
+    for(sal_uLong i = 0; i < m_pModulesCLB->GetEntryCount(); i++)
+        delete static_cast<ModuleUserData_Impl*>(m_pModulesCLB->GetEntry(i)->GetUserData());
     m_pModulesCLB.clear();
     m_pPrioUpPB.clear();
     m_pPrioDownPB.clear();
