@@ -550,12 +550,15 @@ void getAllCutSets(
 
             for(const auto& rOtherOffset : otherOffsets)
             {
-                const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (rOtherOffset.mfOffset - rOtherOffset.mfHalfWidth)));
-                const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (rOtherOffset.mfOffset + rOtherOffset.mfHalfWidth)));
-                CutSet aCutSet;
+                if(0xff != rOtherOffset.maColor.GetTransparency())
+                {
+                    const basegfx::B2DPoint aOtherLeft(rOrigin + (aOtherPerpend * (rOtherOffset.mfOffset - rOtherOffset.mfHalfWidth)));
+                    const basegfx::B2DPoint aOtherRight(rOrigin + (aOtherPerpend * (rOtherOffset.mfOffset + rOtherOffset.mfHalfWidth)));
+                    CutSet aCutSet;
 
-                getCutSet(aCutSet, rLeft, rRight, rX, aOtherLeft, aOtherRight, rStyleVectorCombination.getB2DVector());
-                rCutSets.push_back(aCutSet);
+                    getCutSet(aCutSet, rLeft, rRight, rX, aOtherLeft, aOtherRight, rStyleVectorCombination.getB2DVector());
+                    rCutSets.push_back(aCutSet);
+                }
             }
         }
     }
@@ -586,22 +589,42 @@ CutSet getMinMaxCutSet(
     {
         const CutSet& rCandidate(rCutSets[a]);
         const double fCandidate(rCandidate.mfOLML + rCandidate.mfORML + rCandidate.mfOLMR + rCandidate.mfORMR);
+        bool bCopy(false);
 
-        if(bMin)
+        if(basegfx::fTools::equalZero(fCandidate - fRetval))
         {
-            if(fCandidate < fRetval)
+            // both are equal (use basegfx::fTools::equalZero and *not* rtl::math::approxEqual here, that is too precise)
+            const bool bPerpendR(rtl::math::approxEqual(aRetval.mfOLML, aRetval.mfOLMR) || rtl::math::approxEqual(aRetval.mfORML, aRetval.mfORMR));
+            const bool bPerpendC(rtl::math::approxEqual(rCandidate.mfOLML, rCandidate.mfOLMR) || rtl::math::approxEqual(rCandidate.mfORML, rCandidate.mfORMR));
+
+            if(!bPerpendR && !bPerpendC)
             {
-                fRetval = fCandidate;
-                aRetval = rCandidate;
+                // when both are not perpend, create medium cut
+                const double fNewOLML(std::max(std::min(rCandidate.mfOLML, rCandidate.mfORML), std::min(aRetval.mfOLML, aRetval.mfORML)));
+                const double fNewORML(std::min(std::max(rCandidate.mfOLML, rCandidate.mfORML), std::max(aRetval.mfOLML, aRetval.mfORML)));
+                const double fNewOLMR(std::max(std::min(rCandidate.mfOLMR, rCandidate.mfORMR), std::min(aRetval.mfOLMR, aRetval.mfORMR)));
+                const double fNewORMR(std::min(std::max(rCandidate.mfOLMR, rCandidate.mfORMR), std::max(aRetval.mfOLMR, aRetval.mfORMR)));
+                aRetval.mfOLML = fNewOLML;
+                aRetval.mfORML = fNewORML;
+                aRetval.mfOLMR = fNewOLMR;
+                aRetval.mfORMR = fNewORMR;
+                fRetval = aRetval.mfOLML + aRetval.mfORML + aRetval.mfOLMR + aRetval.mfORMR;
+            }
+            else
+            {
+                // if equal and perpend differs, perpend one is assumed smaller
+                bCopy = ((bMin && bPerpendC && !bPerpendR) || (!bMin && !bPerpendC && bPerpendR));
             }
         }
         else
         {
-            if(fCandidate > fRetval)
-            {
-                fRetval = fCandidate;
-                aRetval = rCandidate;
-            }
+            bCopy = ((bMin && fCandidate < fRetval) || (!bMin && fCandidate > fRetval));
+        }
+
+        if(bCopy)
+        {
+            fRetval = fCandidate;
+            aRetval = rCandidate;
         }
     }
 
