@@ -359,7 +359,7 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
             if ( pNTOIIter != m_aPreDefVarMap.end() )
             {
                 // Fixed/Predefined variable found
-                PreDefVariable nIndex = (PreDefVariable)pNTOIIter->second;
+                PreDefVariable nIndex = pNTOIIter->second;
 
                 // Determine variable value and length from array/table
                 if ( nIndex == PREDEFVAR_WORK && !bWorkRetrieved )
@@ -592,7 +592,7 @@ OUString const & SubstitutePathVariables::impl_getSubstituteVariableValue( const
     // Fixed/Predefined variable
     if ( pNTOIIter != m_aPreDefVarMap.end() )
     {
-        PreDefVariable nIndex = (PreDefVariable)pNTOIIter->second;
+        PreDefVariable nIndex = pNTOIIter->second;
         return m_aPreDefVars.m_FixedVar[(sal_Int32)nIndex];
     }
     else

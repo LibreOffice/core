@@ -1020,7 +1020,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 {
     const SwAttrSet& rSet = GetSwAttrSet();
 
-    rGA.SetDrawMode( (GraphicDrawMode)rSet.GetDrawModeGrf().GetValue() );
+    rGA.SetDrawMode( rSet.GetDrawModeGrf().GetValue() );
 
     const SwMirrorGrf & rMirror = rSet.GetMirrorGrf();
     BmpMirrorFlags nMirror = BmpMirrorFlags::NONE;

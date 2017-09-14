@@ -909,7 +909,7 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 
     const SfxItemSet& rMySet = GetItemSet();
 
-    SvxCellHorJustify eHorJust = (SvxCellHorJustify)
+    SvxCellHorJustify eHorJust =
         static_cast<const SvxHorJustifyItem&>(rMySet.Get(ATTR_HOR_JUSTIFY)).GetValue();
 
     SvxAdjust eSvxAdjust;

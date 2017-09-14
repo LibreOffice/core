@@ -290,11 +290,23 @@ void testCStyleCast() {
     (void)e;
 }
 
+template<typename T>
+struct EnumItemInterface {
+    T GetValue() { return static_cast<T>(0); }
+};
+class Enum1Item : public EnumItemInterface<Enum1> {
+};
+bool testCStyleCastOfTemplateMethodResult(Enum1Item* item) {
+    return (Enum1)item->GetValue() == Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
+}
+
+
 int main() {
     testConstCast();
     testStaticCast();
     testFunctionalCast();
     testCStyleCast();
+    testCStyleCastOfTemplateMethodResult(nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

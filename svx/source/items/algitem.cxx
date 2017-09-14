@@ -82,7 +82,7 @@ bool SvxOrientationItem::GetPresentation
 bool SvxOrientationItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     table::CellOrientation eUno = table::CellOrientation_STANDARD;
-    switch ( (SvxCellOrientation)GetValue() )
+    switch ( GetValue() )
     {
         case SvxCellOrientation::Standard:  eUno = table::CellOrientation_STANDARD;  break;
         case SvxCellOrientation::TopBottom: eUno = table::CellOrientation_TOPBOTTOM; break;

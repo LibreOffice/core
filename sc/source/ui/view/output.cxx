@@ -656,7 +656,7 @@ void ScOutputData::SetCellRotations()
 
                         // add rotation info to Array information
                         const long nAttrRotate(pPattern->GetRotateVal(pCondSet));
-                        const SvxRotateMode eRotMode((SvxRotateMode)static_cast<const SvxRotateModeItem&>(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue());
+                        const SvxRotateMode eRotMode(static_cast<const SvxRotateModeItem&>(pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue());
                         const double fOrient((bLayoutRTL ? -1.0 : 1.0) * nAttrRotate * F_PI18000); // 1/100th degrees -> [0..2PI]
                         svx::frame::Array& rArray = mrTabInfo.maArray;
 
@@ -678,7 +678,7 @@ static ScRotateDir lcl_GetRotateDir( const ScDocument* pDoc, SCCOL nCol, SCROW n
     long nAttrRotate = pPattern->GetRotateVal( pCondSet );
     if ( nAttrRotate )
     {
-        SvxRotateMode eRotMode = (SvxRotateMode)static_cast<const SvxRotateModeItem&>(
+        SvxRotateMode eRotMode = static_cast<const SvxRotateModeItem&>(
                     pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
         if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
@@ -1548,7 +1548,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                     //! LastPattern etc.
 
                     long nAttrRotate = pPattern->GetRotateVal( pCondSet );
-                    SvxRotateMode eRotMode = (SvxRotateMode)static_cast<const SvxRotateModeItem&>(
+                    SvxRotateMode eRotMode = static_cast<const SvxRotateModeItem&>(
                                     pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
                     if (nAttrRotate)

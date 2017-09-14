@@ -2069,7 +2069,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
         if ( bFixedWidth )
         {
-            SvxCellHorJustify eHorJust = (SvxCellHorJustify)
+            SvxCellHorJustify eHorJust =
                 static_cast<const SvxHorJustifyItem*>( aDocument.GetAttr( nCol, nRow,
                 nTab, ATTR_HOR_JUSTIFY ))->GetValue();
             lcl_ScDocShell_GetFixedWidthString( aString, aDocument, nTab, nCol,

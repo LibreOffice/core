@@ -1922,7 +1922,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         const ScPatternAttr* pPattern = GetPattern( rCol, nRow );
         const SfxItemSet* pCondSet = pDocument->GetCondResult( rCol, nRow, nTab );
 
-        SvxCellHorJustify eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
+        SvxCellHorJustify eHorJust = static_cast<const SvxHorJustifyItem&>(
                         pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
         if ( eHorJust == SvxCellHorJustify::Center )
             nMissing /= 2;                          // distributed into both directions

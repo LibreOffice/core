@@ -1347,14 +1347,14 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 
                         case SID_H_ALIGNCELL:
                         {
-                            SvxCellHorJustify eJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem*>(pItem)->GetValue();
+                            SvxCellHorJustify eJust = static_cast<const SvxHorJustifyItem*>(pItem)->GetValue();
                             // #i78476# update alignment of text in cell edit mode
                             pTabViewShell->UpdateInputHandlerCellAdjust( eJust );
                             pTabViewShell->ApplyAttr( SvxHorJustifyItem( eJust, ATTR_HOR_JUSTIFY ) );
                         }
                         break;
                         case SID_V_ALIGNCELL:
-                            pTabViewShell->ApplyAttr( SvxVerJustifyItem( (SvxCellVerJustify)static_cast<const SvxVerJustifyItem*>(pItem)->GetValue(), ATTR_VER_JUSTIFY ) );
+                            pTabViewShell->ApplyAttr( SvxVerJustifyItem( static_cast<const SvxVerJustifyItem*>(pItem)->GetValue(), ATTR_VER_JUSTIFY ) );
                         break;
                         default:
                             OSL_FAIL( "ExecuteAlignment: invalid slot" );
@@ -2443,12 +2443,12 @@ void ScFormatShell::GetAlignState( SfxItemSet& rSet )
     SvxCellHorJustify eHAlign = SvxCellHorJustify::Standard;
     bool bHasHAlign = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY ) != SfxItemState::DONTCARE;
     if( bHasHAlign )
-        eHAlign = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(rAttrSet.Get( ATTR_HOR_JUSTIFY )).GetValue();
+        eHAlign = static_cast<const SvxHorJustifyItem&>(rAttrSet.Get( ATTR_HOR_JUSTIFY )).GetValue();
 
     SvxCellVerJustify eVAlign = SVX_VER_JUSTIFY_STANDARD;
     bool bHasVAlign = rAttrSet.GetItemState( ATTR_VER_JUSTIFY ) != SfxItemState::DONTCARE;
     if( bHasVAlign )
-        eVAlign = (SvxCellVerJustify)static_cast<const SvxVerJustifyItem&>(rAttrSet.Get( ATTR_VER_JUSTIFY )).GetValue();
+        eVAlign = static_cast<const SvxVerJustifyItem&>(rAttrSet.Get( ATTR_VER_JUSTIFY )).GetValue();
 
     while ( nWhich )
     {

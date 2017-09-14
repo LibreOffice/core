@@ -1358,7 +1358,7 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
             bFound = true;
         else if (static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
             bFound = true;
-        else if ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
+        else if (static_cast<const SvxHorJustifyItem&>(pPattern->
                     GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SvxCellHorJustify::Block)
             bFound = true;
 
@@ -1382,7 +1382,7 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
     if ( nMask & HasAttrFlags::RightOrCenter )
     {
         //  called only if the sheet is LTR, so physical=logical alignment can be assumed
-        SvxCellHorJustify eHorJust = (SvxCellHorJustify)
+        SvxCellHorJustify eHorJust =
             static_cast<const SvxHorJustifyItem&>( pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
         if ( eHorJust == SvxCellHorJustify::Right || eHorJust == SvxCellHorJustify::Center )
             bFound = true;

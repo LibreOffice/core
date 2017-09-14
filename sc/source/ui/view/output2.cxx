@@ -323,9 +323,9 @@ void ScDrawStringsVars::SetPattern(
 
     //  alignment
 
-    eAttrHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
+    eAttrHorJust = static_cast<const SvxHorJustifyItem&>(pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
 
-    eAttrVerJust = (SvxCellVerJustify)static_cast<const SvxVerJustifyItem&>(pPattern->GetItem( ATTR_VER_JUSTIFY, pCondSet )).GetValue();
+    eAttrVerJust = static_cast<const SvxVerJustifyItem&>(pPattern->GetItem( ATTR_VER_JUSTIFY, pCondSet )).GetValue();
     if ( eAttrVerJust == SVX_VER_JUSTIFY_STANDARD )
         eAttrVerJust = SVX_VER_JUSTIFY_BOTTOM;
 
@@ -4721,7 +4721,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                         long nCellWidth = (long) pRowInfo[0].pCellInfo[nX+1].nWidth;
 
-                        SvxCellHorJustify eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
+                        SvxCellHorJustify eHorJust = static_cast<const SvxHorJustifyItem&>(
                                             pPattern->GetItem(ATTR_HOR_JUSTIFY, pCondSet)).GetValue();
                         bool bBreak = ( eHorJust == SvxCellHorJustify::Block ) ||
                                     static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK, pCondSet)).GetValue();
@@ -4769,7 +4769,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 nOutHeight += (long) mpDoc->GetScaledRowHeight( nY+1, nY+nCountY-1, nTab, mnPPTY);
                             }
 
-                            SvxCellVerJustify eVerJust = (SvxCellVerJustify)static_cast<const SvxVerJustifyItem&>(
+                            SvxCellVerJustify eVerJust = static_cast<const SvxVerJustifyItem&>(
                                                 pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet)).GetValue();
 
                             // syntax mode is ignored here...
@@ -4848,7 +4848,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                                     GetItem(ATTR_ROTATE_VALUE, pCondSet)).GetValue();
                                 if ( nAttrRotate )
                                 {
-                                    eRotMode = (SvxRotateMode)static_cast<const SvxRotateModeItem&>(
+                                    eRotMode = static_cast<const SvxRotateModeItem&>(
                                                 pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
                                     if ( nAttrRotate == 18000 )

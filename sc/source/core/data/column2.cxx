@@ -144,9 +144,9 @@ long ScColumn::GetNeededSize(
     SvxCellHorJustify eHorJust;
     if (pCondSet &&
             pCondSet->GetItemState(ATTR_HOR_JUSTIFY, true, &pCondItem) == SfxItemState::SET)
-        eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem*>(pCondItem)->GetValue();
+        eHorJust = static_cast<const SvxHorJustifyItem*>(pCondItem)->GetValue();
     else
-        eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
+        eHorJust = static_cast<const SvxHorJustifyItem&>(
                                         pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
     bool bBreak;
     if ( eHorJust == SvxCellHorJustify::Block )
@@ -212,9 +212,9 @@ long ScColumn::GetNeededSize(
         {
             if (pCondSet &&
                     pCondSet->GetItemState(ATTR_ROTATE_MODE, true, &pCondItem) == SfxItemState::SET)
-                eRotMode = (SvxRotateMode)static_cast<const SvxRotateModeItem*>(pCondItem)->GetValue();
+                eRotMode = static_cast<const SvxRotateModeItem*>(pCondItem)->GetValue();
             else
-                eRotMode = (SvxRotateMode)static_cast<const SvxRotateModeItem&>(
+                eRotMode = static_cast<const SvxRotateModeItem&>(
                                             pPattern->GetItem(ATTR_ROTATE_MODE)).GetValue();
 
             if ( nRotate == 18000 )
@@ -814,7 +814,7 @@ void ScColumn::GetOptimalHeight(
             if (bStdAllowed)
             {
                 bool bBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
-                                ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
+                                (static_cast<const SvxHorJustifyItem&>(pPattern->
                                     GetItem( ATTR_HOR_JUSTIFY )).GetValue() ==
                                     SvxCellHorJustify::Block);
                 bStdOnly = !bBreak;

@@ -2122,7 +2122,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 mpEditEngine->SetBackgroundColor( aBackCol );
 
                 // Adjustment
-                eAttrAdjust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
+                eAttrAdjust = static_cast<const SvxHorJustifyItem&>(pPattern->
                                 GetItem(ATTR_HOR_JUSTIFY)).GetValue();
                 if ( eAttrAdjust == SvxCellHorJustify::Repeat &&
                      static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() )
