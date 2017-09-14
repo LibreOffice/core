@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c7fed86a",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-14T12:51:19Z",
+      "side": 1,
+      "message": "\"static\" feels overkill here; and you only need the value at runtime, not compile time, so I\u0027d stick with \"const\" rather than \"constexpr\" for clarity (though for the latter YMMV)",
+      "revId": "2be39045ed52e3f8adef0e9cc6a1336291d67070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_07f9c080",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-14T12:51:19Z",
+      "side": 1,
+      "message": "don\u0027t introduce new C-style casts, please",
+      "revId": "2be39045ed52e3f8adef0e9cc6a1336291d67070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_47f3c89e",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-14T12:51:19Z",
+      "side": 1,
+      "message": "I\u0027m having a hard time parsing that comment (and still don\u0027t know whether I get what you want to say there)",
+      "revId": "2be39045ed52e3f8adef0e9cc6a1336291d67070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_67f0c491",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-14T12:51:19Z",
+      "side": 1,
+      "message": "the check against zero already happens below anyway",
+      "revId": "2be39045ed52e3f8adef0e9cc6a1336291d67070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c735f846",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-14T12:51:19Z",
+      "side": 1,
+      "message": "it\u0027s std::abort, declared in \u003ccstdlib\u003e (which should better be included explicitly)",
+      "revId": "2be39045ed52e3f8adef0e9cc6a1336291d67070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_872bf0ea",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-14T12:51:19Z",
+      "side": 1,
+      "message": "why pervert this existing line?",
+      "revId": "2be39045ed52e3f8adef0e9cc6a1336291d67070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a730ec57",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-14T12:51:19Z",
+      "side": 1,
+      "message": "I\u0027d strongly urge you to write this in a more readable way,\n\n  pEntry-\u003eIdent \u003d\u003d 0",
+      "revId": "2be39045ed52e3f8adef0e9cc6a1336291d67070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
