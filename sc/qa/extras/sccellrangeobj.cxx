@@ -13,6 +13,7 @@
 #include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
+#include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
 
@@ -28,11 +29,12 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 18
+#define NUMBER_OF_TESTS 20
 
 class ScCellRangeObj : public CalcUnoApiTest, public apitest::XCellRangesQuery, public apitest::CellProperties,
                         public apitest::XSearchable, public apitest::XReplaceable, public apitest::XCellRangeData,
-                        public apitest::XCellSeries, public apitest::XUniqueCellFormatRangesSupplier
+                        public apitest::XCellSeries, public apitest::XUniqueCellFormatRangesSupplier,
+                        public apitest::XSubTotalCalculatable
 {
 public:
     ScCellRangeObj();
@@ -41,6 +43,7 @@ public:
     virtual void tearDown() override;
     virtual uno::Reference< uno::XInterface > init() override;
     virtual uno::Reference< uno::XInterface > getXCellRangeData() override;
+    virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
     void testSortOOB();
 
     CPPUNIT_TEST_SUITE(ScCellRangeObj);
@@ -80,6 +83,10 @@ public:
     // XUniqueCellFormatRangesSupplier
     CPPUNIT_TEST(testGetUniqueCellFormatRanges);
 
+    // XSubTotalCalculatable
+    CPPUNIT_TEST(testCreateSubTotalDescriptor);
+    CPPUNIT_TEST(testApplyRemoveSubTotals);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -116,6 +123,21 @@ uno::Reference< uno::XInterface > ScCellRangeObj::init()
 
     CPPUNIT_ASSERT_MESSAGE("Could not create object of type XCellRangesQuery", xReturn.is());
     return xReturn;
+}
+
+uno::Reference< uno::XInterface > ScCellRangeObj::getXSpreadsheet()
+{
+    OUString aFileURL;
+    const OUString aFileBase("xcellrangesquery.ods");
+    createFileURL(aFileBase, aFileURL);
+    std::cout << OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    if( !mxComponent.is())
+        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+
+    return xSheet;
 }
 
 uno::Reference< uno::XInterface > ScCellRangeObj::getXCellRangeData()
