@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_27707c72",
+        "filename": "sw/inc/swabstdlg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-14T09:32:18Z",
+      "side": 1,
+      "message": "So what about going with some direction enum then? None, Forwards, Backwards or sth like that? That would also solve the problem of magic constants mentioned elsewhere in this review",
+      "parentUuid": "1a430d35_2475daca",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_4482e695",
         "filename": "sw/source/ui/fldui/DropDownFieldDialog.cxx",
         "patchSetId": 2
@@ -30,6 +48,40 @@
       "writtenOn": "2017-09-13T23:04:37Z",
       "side": 1,
       "message": "like here - magic numbers are not ideal when having to understand the code...",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_27f79cd4",
+        "filename": "sw/source/ui/fldui/DropDownFieldDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-14T09:32:18Z",
+      "side": 1,
+      "message": "since the handler is now linked to Previous button in ctor, this will never return anything else than RET_OK",
+      "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4704a8bf",
+        "filename": "sw/source/ui/fldui/DropDownFieldDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-14T09:32:18Z",
+      "side": 1,
+      "message": "same here with Next button",
       "revId": "a0c49359031eebd1440b4e19a11d8e150a64f0f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
