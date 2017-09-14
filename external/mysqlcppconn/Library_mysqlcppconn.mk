@@ -13,7 +13,7 @@ $(eval $(call gb_Library_use_unpacked,mysqlcppconn,mysqlcppconn))
 
 $(eval $(call gb_Library_use_externals,mysqlcppconn, \
 	boost_headers \
-	mariadb \
+	mariadb-connector-c \
 ))
 
 ifneq ($(OS),WNT)
@@ -25,7 +25,7 @@ $(eval $(call gb_Library_add_libs,mysqlcppconn,\
 endif
 
 ifeq ($(OS),MACOSX)
-ifeq ($(SYSTEM_MARIADB),)
+ifeq ($(SYSTEM_MARIADB_CONNECTOR_C),)
 $(eval $(call gb_Library_use_externals,mysqlcppconn,\
 	    iconv \
 ))

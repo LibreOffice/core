@@ -7,11 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,libmariadb))
+$(eval $(call gb_Module_Module,mariadb-connector-c))
 
-$(eval $(call gb_Module_add_targets,libmariadb,\
-	StaticLibrary_mariadb \
-	UnpackedTarball_mariadb \
+$(eval $(call gb_Module_add_targets,mariadb-connector-c,\
+	StaticLibrary_mariadb-connector-c \
+	UnpackedTarball_mariadb-connector-c \
 ))
 
 # vim: set noet sw=4 ts=4:
