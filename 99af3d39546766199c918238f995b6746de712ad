@@ -104,6 +104,24 @@
       "revId": "99af3d39546766199c918238f995b6746de712ad",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a7170ca2",
+        "filename": "tools/source/datetime/ttime.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-14T13:03:48Z",
+      "side": 1,
+      "message": "\"Why do you think it\u0027s not thread-safe?\"\n\nGetSystemTicks has always had a MT-issue wrt writing vs. reading nTicksPerSecond.  (And, in a sense, the new code here is even worse, as it sets bTicksPerSecondInitialized to true before initializing nTicksPerSecond.)",
+      "parentUuid": "1a430d35_e7b594cd",
+      "revId": "99af3d39546766199c918238f995b6746de712ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
