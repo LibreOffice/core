@@ -117,7 +117,7 @@ public:
         if ( aFract.GetDenominator() == 1 )
         {
             aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aRet.Value <<= (sal_Int32)aFract.GetNumerator();
+            aRet.Value <<= aFract.GetNumerator();
         }
         else
         {

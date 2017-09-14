@@ -25,8 +25,6 @@
 
 class SvStream;
 
-// This class uses the platform defined type 'long' as valid values but do all
-// calculations using sal_Int64 with checks for 'long' overflows.
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Fraction final
 {
     struct Impl;
@@ -39,16 +37,19 @@ public:
                     Fraction();
                     Fraction( const Fraction & rFrac );
                     Fraction( Fraction && rFrac );
-                    Fraction( long nNum, long nDen );
+                    Fraction( sal_Int64 nNum, sal_Int64 nDen );
     explicit        Fraction( double dVal );
                     ~Fraction();
 
     bool            IsValid() const;
 
-    long            GetNumerator() const;
-    long            GetDenominator() const;
+    sal_Int32       GetNumerator() const;
+    sal_Int32       GetDenominator() const;
 
-    explicit operator long() const;
+    explicit operator sal_Int32() const;
+#if SAL_TYPES_SIZEOFLONG == 8
+    explicit operator long() const { return sal_Int32(*this); }
+#endif
     explicit operator double() const;
 
     Fraction&       operator=( const Fraction& rfrFrac );

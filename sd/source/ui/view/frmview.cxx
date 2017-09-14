@@ -437,10 +437,10 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     aUserData.addValue( sUNO_View_GridCoarseHeight, makeAny( (sal_Int32)GetGridCoarse().Height() ) );
     aUserData.addValue( sUNO_View_GridFineWidth, makeAny( (sal_Int32)GetGridFine().Width() ) );
     aUserData.addValue( sUNO_View_GridFineHeight, makeAny( (sal_Int32)GetGridFine().Height() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthXNumerator, makeAny( (sal_Int32)GetSnapGridWidthX().GetNumerator() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( (sal_Int32)GetSnapGridWidthX().GetDenominator() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( (sal_Int32)GetSnapGridWidthY().GetNumerator() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthYDenominator, makeAny( (sal_Int32)GetSnapGridWidthY().GetDenominator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthXNumerator, makeAny( GetSnapGridWidthX().GetNumerator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( GetSnapGridWidthX().GetDenominator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( GetSnapGridWidthY().GetNumerator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthYDenominator, makeAny( GetSnapGridWidthY().GetDenominator() ) );
     aUserData.addValue( sUNO_View_IsAngleSnapEnabled, makeAny( IsAngleSnapEnabled() ) );
     aUserData.addValue( sUNO_View_SnapAngle, makeAny( (sal_Int32)GetSnapAngle() ) );
 
