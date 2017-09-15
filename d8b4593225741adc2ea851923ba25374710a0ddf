@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0a2625ce",
+        "filename": "cui/source/options/tsaurls.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-15T09:45:35Z",
+      "side": 1,
+      "message": "GetEntryCount is a better method to decide whether there are some entries in m_pURLListBox",
+      "revId": "d8b4593225741adc2ea851923ba25374710a0ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2a5cc14a",
+        "filename": "cui/source/options/tsaurls.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-15T09:45:35Z",
+      "side": 1,
+      "message": "It is perhaps not ideal to decide whether to disable the button here, because the box is always empty at this point of time ...",
+      "revId": "d8b4593225741adc2ea851923ba25374710a0ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8a4a1582",
+        "filename": "cui/source/options/tsaurls.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-15T09:45:35Z",
+      "side": 1,
+      "message": "Please don\u0027t make white space changes unless you absolutely have to",
+      "revId": "d8b4593225741adc2ea851923ba25374710a0ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2a23e1be",
+        "filename": "cui/source/options/tsaurls.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-15T09:45:35Z",
+      "side": 1,
+      "message": "... because it is only now that we insert some entries into the box (if any available in user\u0027s configuration)",
+      "revId": "d8b4593225741adc2ea851923ba25374710a0ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_6a2de9a6",
+        "filename": "cui/source/options/tsaurls.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-15T09:45:35Z",
+      "side": 1,
+      "message": "So it might be better to make the decision whether to disable the button here",
+      "revId": "d8b4593225741adc2ea851923ba25374710a0ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ea40f958",
+        "filename": "cui/source/options/tsaurls.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-15T09:45:35Z",
+      "side": 1,
+      "message": "really? :)",
+      "revId": "d8b4593225741adc2ea851923ba25374710a0ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
