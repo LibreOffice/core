@@ -44,6 +44,7 @@
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
+#include <unotools/configmgr.hxx>
 #include <xmlenums.hxx>
 
 using namespace com::sun::star;
@@ -380,7 +381,7 @@ void XMLDocumentSettingsContext::EndElement()
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if ( m_pData->aConfigProps >>= aSeqConfigProps )
     {
-        if (!officecfg::Office::Common::Save::Document::LoadPrinter::get())
+        if (!utl::ConfigManager::IsAvoidConfig() && !officecfg::Office::Common::Save::Document::LoadPrinter::get())
         {
             sal_Int32 i = aSeqConfigProps.getLength() - 1;
             int nFound = 0;
