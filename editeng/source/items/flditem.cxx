@@ -105,9 +105,10 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     xPropSet->getPropertyValue(UNO_TC_PROP_URL_TARGET) >>= aTarget;
                     xPropSet->getPropertyValue(UNO_TC_PROP_URL) >>= aURL;
                     xPropSet->getPropertyValue(UNO_TC_PROP_URL_FORMAT) >>= nFmt;
-                    SvxURLField* pData = new SvxURLField(aURL, aRep, aRep.isEmpty() ? SVXURLFORMAT_URL : SVXURLFORMAT_REPR);
+                    SvxURLField* pData = new SvxURLField(aURL, aRep, aRep.isEmpty() ? SvxURLFormat::Url : SvxURLFormat::Repr);
                     pData->SetTargetFrame(aTarget);
-                    if (nFmt >= SVXURLFORMAT_APPDEFAULT && nFmt <= SVXURLFORMAT_REPR)
+                    if (static_cast<SvxURLFormat>(nFmt) >= SvxURLFormat::AppDefault &&
+                        static_cast<SvxURLFormat>(nFmt) <= SvxURLFormat::Repr)
                         pData->SetFormat(static_cast<SvxURLFormat>(nFmt));
 
                     return pData;
@@ -424,7 +425,7 @@ SV_IMPL_PERSIST1( SvxURLField );
 
 SvxURLField::SvxURLField()
 {
-    eFormat = SVXURLFORMAT_URL;
+    eFormat = SvxURLFormat::Url;
 }
 
 

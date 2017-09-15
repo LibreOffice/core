@@ -442,14 +442,14 @@ IMPL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
         OUString aURL = pURLField->GetURL();
         switch ( pURLField->GetFormat() )
         {
-            case SVXURLFORMAT_APPDEFAULT:
-            case SVXURLFORMAT_REPR:
+            case SvxURLFormat::AppDefault:
+            case SvxURLFormat::Repr:
             {
                 pInfo->SetRepresentation( pURLField->GetRepresentation() );
             }
             break;
 
-            case SVXURLFORMAT_URL:
+            case SvxURLFormat::Url:
             {
                 pInfo->SetRepresentation( aURL );
             }
@@ -484,12 +484,12 @@ void Test::testHyperlinkCopyPaste()
     // URL 1
     OUString aURL1 = "mailto:///user@example.com";
     OUString aRepres1 = "user@example.com";
-    SvxURLField aURLField1( aURL1, aRepres1, SVXURLFORMAT_REPR );
+    SvxURLField aURLField1( aURL1, aRepres1, SvxURLFormat::Repr );
     SvxFieldItem aField1( aURLField1, EE_FEATURE_FIELD );
     // URL 2
     OUString aURL2 = "mailto:///example@domain.com";
     OUString aRepres2 = "example@domain.com";
-    SvxURLField aURLField2( aURL2, aRepres2, SVXURLFORMAT_REPR );
+    SvxURLField aURLField2( aURL2, aRepres2, SvxURLFormat::Repr );
     SvxFieldItem aField2( aURLField2, EE_FEATURE_FIELD );
 
     // Insert initial text
@@ -741,7 +741,7 @@ void Test::testHyperlinkSearch()
     ContentNode *pNode = rDoc.GetObject(0);
     EditSelection aSel(EditPaM(pNode, 22), EditPaM(pNode, 22));
     SvxURLField aURLField("mailto:///jim@bob.com", "jim@bob.com",
-                          SVXURLFORMAT_REPR);
+                          SvxURLFormat::Repr);
     SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
 
     aEngine.InsertField(aSel, aField);

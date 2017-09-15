@@ -2144,14 +2144,14 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
 
         switch ( pURLField->GetFormat() )
         {
-            case SVXURLFORMAT_APPDEFAULT: //TODO: Settable in the App?
-            case SVXURLFORMAT_REPR:
+            case SvxURLFormat::AppDefault: //TODO: Settable in the App?
+            case SvxURLFormat::Repr:
             {
                 pInfo->SetRepresentation( pURLField->GetRepresentation() );
             }
             break;
 
-            case SVXURLFORMAT_URL:
+            case SvxURLFormat::Url:
             {
                 pInfo->SetRepresentation( aURL );
             }

@@ -628,7 +628,7 @@ bool EdtAutoCorrDoc::SetINetAttr(sal_Int32 nStt, sal_Int32 nEnd,
     SAL_WARN_IF(nCursor < nEnd, "editeng",
             "Cursor in the heart of the action?!");
     nCursor -= ( nEnd-nStt );
-    SvxFieldItem aField( SvxURLField( rURL, aText, SVXURLFORMAT_REPR ),
+    SvxFieldItem aField( SvxURLField( rURL, aText, SvxURLFormat::Repr ),
                                       EE_FEATURE_FIELD  );
     mpEditEngine->InsertField(aSel, aField);
     nCursor++;

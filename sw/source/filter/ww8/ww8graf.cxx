@@ -741,8 +741,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
         sal_Int32 nChanged;
         if (!aIter->GetURL().isEmpty())
         {
-            SvxURLField aURL(aIter->GetURL(), aString,
-                SVXURLFORMAT_APPDEFAULT);
+            SvxURLField aURL(aIter->GetURL(), aString, SvxURLFormat::AppDefault);
             m_pDrawEditEngine->QuickInsertField(SvxFieldItem(aURL, EE_FEATURE_FIELD), aSel);
             nChanged = nOrigLen - 1;
         }

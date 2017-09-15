@@ -575,7 +575,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                             // insert new field
 
-                            SvxURLField aURLField( rURL, rName, SVXURLFORMAT_REPR );
+                            SvxURLField aURLField( rURL, rName, SvxURLFormat::Repr );
                             aURLField.SetTargetFrame( rTarget );
                             SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
                             pTableView->InsertField( aURLItem );

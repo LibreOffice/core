@@ -517,15 +517,15 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         // URL field
         switch ( static_cast<const SvxURLField*>( pField)->GetFormat() )
         {
-            case SVXURLFORMAT_APPDEFAULT: //!!! Can be set in App???
-            case SVXURLFORMAT_REPR:
+            case SvxURLFormat::AppDefault: //!!! Can be set in App???
+            case SvxURLFormat::Repr:
             {
                 pInfo->SetRepresentation(
                     static_cast<const SvxURLField*>(pField)->GetRepresentation());
             }
             break;
 
-            case SVXURLFORMAT_URL:
+            case SvxURLFormat::Url:
             {
                 pInfo->SetRepresentation(
                     static_cast<const SvxURLField*>(pField)->GetURL());

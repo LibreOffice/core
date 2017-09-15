@@ -619,7 +619,7 @@ SvxFieldData* ScEditFieldObj::getData()
             break;
             case text::textfield::Type::URL:
                 mpData.reset(
-                    new SvxURLField(OUString(), OUString(), SVXURLFORMAT_APPDEFAULT));
+                    new SvxURLField(OUString(), OUString(), SvxURLFormat::AppDefault));
             break;
             default:
                 mpData.reset(new SvxFieldData);

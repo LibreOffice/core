@@ -568,7 +568,7 @@ void EditRTFParser::ReadField()
             if ( aFldRslt.isEmpty() )
                 aFldRslt = aFldInst;
 
-            SvxFieldItem aField( SvxURLField( aFldInst, aFldRslt, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );
+            SvxFieldItem aField( SvxURLField( aFldInst, aFldRslt, SvxURLFormat::Repr ), EE_FEATURE_FIELD  );
             aCurSel = mpEditEngine->InsertField(aCurSel, aField);
             mpEditEngine->UpdateFieldsOnly();
             bLastActionInsertParaBreak = false;

@@ -133,7 +133,7 @@ OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocumen
 
 EditTextObject* ScEditUtil::CreateURLObjectFromURL( ScDocument& rDoc, const OUString& rURL, const OUString& rText )
 {
-    SvxURLField aUrlField( rURL, rText, SVXURLFORMAT_APPDEFAULT);
+    SvxURLField aUrlField( rURL, rText, SvxURLFormat::AppDefault);
     EditEngine& rEE = rDoc.GetEditEngine();
     rEE.SetText( EMPTY_OUSTRING );
     rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ),
@@ -202,11 +202,11 @@ OUString ScEditUtil::GetCellFieldValue(
 
             switch (rField.GetFormat())
             {
-                case SVXURLFORMAT_APPDEFAULT: //TODO: configurable with App???
-                case SVXURLFORMAT_REPR:
+                case SvxURLFormat::AppDefault: //TODO: configurable with App???
+                case SvxURLFormat::Repr:
                     aRet = rField.GetRepresentation();
                 break;
-                case SVXURLFORMAT_URL:
+                case SvxURLFormat::Url:
                     aRet = aURL;
                 break;
                 default:

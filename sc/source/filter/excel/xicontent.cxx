@@ -182,7 +182,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
                 aDisplText = rUrl;
 
             ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
-            SvxURLField aUrlField( rUrl, aDisplText, SVXURLFORMAT_APPDEFAULT );
+            SvxURLField aUrlField( rUrl, aDisplText, SvxURLFormat::AppDefault );
 
             if( aCell.meType == CELLTYPE_EDIT )
             {
