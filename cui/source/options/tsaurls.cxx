@@ -32,6 +32,7 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
     m_pAddBtn->SetClickHdl( LINK( this, TSAURLsDialog, AddHdl_Impl ) );
     m_pDeleteBtn->SetClickHdl( LINK( this, TSAURLsDialog, DeleteHdl_Impl ) );
     m_pOKBtn->SetClickHdl( LINK( this, TSAURLsDialog, OKHdl_Impl ) );
+    m_pURLListBox->SetSelectHdl( LINK( this, TSAURLsDialog, SelectHdl ) );
 
     try
     {
@@ -48,6 +49,11 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
     catch (const uno::Exception &e)
     {
         SAL_WARN("cui.options", "TSAURLsDialog::TSAURLsDialog(): caught exception" << e.Message);
+    }
+
+    if ( m_pURLListBox->GetSelectEntryCount() == 0 )
+    {
+        m_pDeleteBtn->Disable();
     }
 }
 
@@ -106,6 +112,13 @@ IMPL_LINK_NOARG(TSAURLsDialog, AddHdl_Impl, Button*, void)
         AddTSAURL(aURL);
         m_pOKBtn->Enable();
     }
+    // After operations in a ListBox we have nothing selected
+    m_pDeleteBtn->Disable();
+}
+
+IMPL_LINK_NOARG(TSAURLsDialog, SelectHdl, ListBox&, void)
+{
+    m_pDeleteBtn->Enable();
 }
 
 IMPL_LINK_NOARG(TSAURLsDialog, DeleteHdl_Impl, Button*, void)
@@ -117,6 +130,8 @@ IMPL_LINK_NOARG(TSAURLsDialog, DeleteHdl_Impl, Button*, void)
 
     m_aURLs.erase(m_pURLListBox->GetEntry(nSel));
     m_pURLListBox->RemoveEntry(nSel);
+    // After operations in a ListBox we have nothing selected
+    m_pDeleteBtn->Disable();
     m_pOKBtn->Enable();
 }
 

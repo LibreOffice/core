@@ -24,6 +24,9 @@ private:
     DECL_LINK(AddHdl_Impl, Button*, void);
     DECL_LINK(DeleteHdl_Impl, Button*, void);
     DECL_LINK(OKHdl_Impl, Button*, void);
+    // After operations in a ListBox we have nothing selected
+    // Is Selected element handler for the ListBox
+    DECL_LINK(SelectHdl, ListBox&, void);
 
     std::set<OUString> m_aURLs;
 
