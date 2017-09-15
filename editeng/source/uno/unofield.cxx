@@ -333,7 +333,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
             case text::textfield::Type::EXTENDED_TIME:
                 mpImpl->mbBoolean2 = false;
                 mpImpl->maDateTime = getTime( static_cast<const SvxExtTimeField*>(pData)->GetFixTime() );
-                mpImpl->mbBoolean1 = static_cast<const SvxExtTimeField*>(pData)->GetType() == SVXTIMETYPE_FIX;
+                mpImpl->mbBoolean1 = static_cast<const SvxExtTimeField*>(pData)->GetType() == SvxTimeType::Fix;
                 mpImpl->mnInt32 = static_cast<const SvxExtTimeField*>(pData)->GetFormat();
                 break;
 
@@ -400,7 +400,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
             if( mnServiceId != text::textfield::Type::TIME && mnServiceId != text::textfield::Type::DATE )
             {
                 tools::Time aTime( setTime( mpImpl->maDateTime ) );
-                pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
+                pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SvxTimeType::Fix:SvxTimeType::Var );
 
                 if( mpImpl->mnInt32 >= SVXTIMEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXTIMEFORMAT_AM_HMSH )
                     static_cast<SvxExtTimeField*>(pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInt32 );

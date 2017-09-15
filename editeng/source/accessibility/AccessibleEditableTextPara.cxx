@@ -890,9 +890,9 @@ namespace
                 const SvxExtTimeField* pTimeField = static_cast< const SvxExtTimeField* >(ree.pFieldItem->GetField());
                 if (pTimeField)
                 {
-                    if (pTimeField->GetType() == SVXTIMETYPE_FIX)
+                    if (pTimeField->GetType() == SvxTimeType::Fix)
                         strFldType = "time (fixed)";
-                    else if (pTimeField->GetType() == SVXTIMETYPE_VAR)
+                    else if (pTimeField->GetType() == SvxTimeType::Var)
                         strFldType = "time (variable)";
                 }
                 break;

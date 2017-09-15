@@ -85,7 +85,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                         bool bIsFixed = false;
                         xPropSet->getPropertyValue(UNO_TC_PROP_IS_FIXED) >>= bIsFixed;
 
-                        SvxExtTimeField* pData = new SvxExtTimeField(aTime, bIsFixed ? SVXTIMETYPE_FIX : SVXTIMETYPE_VAR);
+                        SvxExtTimeField* pData = new SvxExtTimeField(aTime, bIsFixed ? SvxTimeType::Fix : SvxTimeType::Var);
 
                         sal_Int32 nNumFmt = -1;
                         xPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
@@ -594,7 +594,7 @@ SV_IMPL_PERSIST1( SvxExtTimeField );
 SvxExtTimeField::SvxExtTimeField()
     : m_nFixTime( tools::Time(tools::Time::SYSTEM).GetTime() )
 {
-    eType = SVXTIMETYPE_VAR;
+    eType = SvxTimeType::Var;
     eFormat = SVXTIMEFORMAT_STANDARD;
 }
 
@@ -628,7 +628,7 @@ bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
 OUString SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
     tools::Time aTime( tools::Time::EMPTY );
-    if ( eType == SVXTIMETYPE_FIX )
+    if ( eType == SvxTimeType::Fix )
         aTime.SetTime(m_nFixTime);
     else
         aTime = tools::Time( tools::Time::SYSTEM ); // current time

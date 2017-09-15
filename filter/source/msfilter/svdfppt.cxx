@@ -6459,7 +6459,7 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
         xField1.reset(new SvxFieldItem(SvxDateField( Date( Date::SYSTEM ), SvxDateType::Var, eDateFormat ), EE_FEATURE_FIELD));
     if ( eTimeFormat != SVXTIMEFORMAT_APPDEFAULT )
     {
-        std::unique_ptr<SvxFieldItem> xFieldItem(new SvxFieldItem(SvxExtTimeField( tools::Time( tools::Time::SYSTEM ), SVXTIMETYPE_VAR, eTimeFormat ), EE_FEATURE_FIELD));
+        std::unique_ptr<SvxFieldItem> xFieldItem(new SvxFieldItem(SvxExtTimeField( tools::Time( tools::Time::SYSTEM ), SvxTimeType::Var, eTimeFormat ), EE_FEATURE_FIELD));
         if (xField1)
             xField2 = std::move(xFieldItem);
         else
