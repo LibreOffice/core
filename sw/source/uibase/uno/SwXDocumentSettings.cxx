@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <utility>
@@ -506,9 +508,11 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_EMBEDDED_DATABASE_NAME:
         {
+#if HAVE_FEATURE_DBCONNECTIVITY
             OUString sEmbeddedName;
             if (rValue >>= sEmbeddedName)
                 mpDoc->GetDBManager()->setEmbeddedName(sEmbeddedName, *mpDocSh);
+#endif
         }
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
@@ -998,7 +1002,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_EMBEDDED_DATABASE_NAME:
         {
+#if HAVE_FEATURE_DBCONNECTIVITY
             rValue <<= mpDoc->GetDBManager()->getEmbeddedName();
+#else
+            rValue = uno::Any();
+#endif
         }
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
