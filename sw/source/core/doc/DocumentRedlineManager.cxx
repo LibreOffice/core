@@ -27,6 +27,7 @@
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <comcore.hrc>
+#include <unocrsr.hxx>
 #include <swmodule.hxx>
 #include <editsh.hxx>
 #include <vcl/layout.hxx>
@@ -575,6 +576,32 @@ namespace
             }
         }
     }
+
+    /// in case some text is deleted, ensure that the not-yet-inserted
+    /// SwRangeRedline has its positions corrected not to point to deleted node
+    class TemporaryRedlineUpdater
+    {
+    private:
+        SwRangeRedline & m_rRedline;
+        std::shared_ptr<SwUnoCursor> m_pCursor;
+    public:
+        TemporaryRedlineUpdater(SwDoc & rDoc, SwRangeRedline & rRedline)
+            : m_rRedline(rRedline)
+            , m_pCursor(rDoc.CreateUnoCursor(*rRedline.GetPoint(), false))
+        {
+            if (m_rRedline.HasMark())
+            {
+                m_pCursor->SetMark();
+                *m_pCursor->GetMark() = *m_rRedline.GetMark();
+                *m_rRedline.GetMark() = SwPosition(rDoc.GetNodes().GetEndOfContent());
+            }
+            *m_rRedline.GetPoint() = SwPosition(rDoc.GetNodes().GetEndOfContent());
+        }
+        ~TemporaryRedlineUpdater()
+        {
+            static_cast<SwPaM&>(m_rRedline) = *m_pCursor;
+        }
+    };
 }
 
 namespace sw
@@ -1223,20 +1250,11 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             {
                                 mpRedlineTable->Remove( n );
                                 bDec = true;
-                                // We insert temporarily so that pNew is
-                                // also dealt with when moving the indices.
                                 if( bCallDelete )
                                 {
-                                    ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
-                                    //Insert may delete pNewRedl, in which case it sets pNewRedl to nullptr
-                                    mpRedlineTable->Insert( pNewRedl );
+                                    TemporaryRedlineUpdater const u(m_rDoc, *pNewRedl);
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pRedl );
-                                    if (pNewRedl && !mpRedlineTable->Remove(pNewRedl))
-                                    {
-                                        assert(false); // can't happen
-                                        pNewRedl = nullptr;
-                                    }
-                                    bCompress = true; // delayed compress
+                                    n = 0;      // re-initialize
                                 }
                                 delete pRedl;
                             }
@@ -1258,18 +1276,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
 
                                 if( bCallDelete )
                                 {
-                                    // We insert temporarily so that pNew is
-                                    // also dealt with when moving the indices.
-                                    ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
-                                    //Insert may delete pNewRedl, in which case it sets pNewRedl to nullptr
-                                    mpRedlineTable->Insert( pNewRedl );
+                                    TemporaryRedlineUpdater const u(m_rDoc, *pNewRedl);
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                                    if (pNewRedl && !mpRedlineTable->Remove(pNewRedl))
-                                    {
-                                        assert(false); // can't happen
-                                        pNewRedl = nullptr;
-                                    }
-                                    bCompress = true; // delayed compress
                                     n = 0;      // re-initialize
                                 }
                                 bDec = true;
@@ -1290,18 +1298,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
 
                                 if( bCallDelete )
                                 {
-                                    // We insert temporarily so that pNew is
-                                    // also dealt with when moving the indices.
-                                    ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
-                                    //Insert may delete pNewRedl, in which case it sets pNewRedl to nullptr
-                                    mpRedlineTable->Insert( pNewRedl );
+                                    TemporaryRedlineUpdater const u(m_rDoc, *pNewRedl);
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                                    if (pNewRedl && !mpRedlineTable->Remove(pNewRedl))
-                                    {
-                                        assert(false); // can't happen
-                                        pNewRedl = nullptr;
-                                    }
-                                    bCompress = true; // delayed compress
                                     n = 0;      // re-initialize
                                     bDec = true;
                                 }
@@ -1796,11 +1794,6 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
 
 void DocumentRedlineManager::CompressRedlines()
 {
-    if (m_isForbidCompressRedlines)
-    {
-        return;
-    }
-
     CHECK_REDLINE( *this )
 
     void (SwRangeRedline::*pFnc)(sal_uInt16, size_t) = nullptr;
