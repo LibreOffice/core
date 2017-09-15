@@ -1289,7 +1289,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         }
         break;
     case WID_PAGE_DATETIMEFORMAT:
-        aAny <<= (sal_Int32)GetPage()->getHeaderFooterSettings().meDateTimeFormat;
+        aAny <<= GetPage()->getHeaderFooterSettings().meDateTimeFormat.GetCombined();
         break;
 
     case WID_TRANSITION_TYPE:

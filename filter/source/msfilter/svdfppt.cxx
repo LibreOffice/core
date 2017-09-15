@@ -6409,34 +6409,34 @@ PPTFieldEntry::~PPTFieldEntry()
 
 void PPTFieldEntry::GetDateTime( const sal_uInt32 nVal, SvxDateFormat& eDateFormat, SvxTimeFormat& eTimeFormat )
 {
-    eDateFormat = SVXDATEFORMAT_APPDEFAULT;
+    eDateFormat = SvxDateFormat::AppDefault;
     eTimeFormat = SvxTimeFormat::AppDefault;
     // evaluate ID
     switch( nVal )
     {
         case 0:
         case 6:
-            eDateFormat = SVXDATEFORMAT_A;
+            eDateFormat = SvxDateFormat::A;
         break;
         case 1:
-            eDateFormat = SVXDATEFORMAT_F;
+            eDateFormat = SvxDateFormat::F;
         break;
         case 2:
         case 3:
-            eDateFormat = SVXDATEFORMAT_D;
+            eDateFormat = SvxDateFormat::D;
         break;
         case 4:
         case 5:
-            eDateFormat = SVXDATEFORMAT_C;
+            eDateFormat = SvxDateFormat::C;
         break;
         case 7:
-            eDateFormat = SVXDATEFORMAT_A;
+            eDateFormat = SvxDateFormat::A;
             SAL_FALLTHROUGH;
         case 9:
             eTimeFormat = SvxTimeFormat::HH24_MM;
         break;
         case 8:
-            eDateFormat = SVXDATEFORMAT_A;
+            eDateFormat = SvxDateFormat::A;
             SAL_FALLTHROUGH;
         case 11:
             eTimeFormat = SvxTimeFormat::HH12_MM;
@@ -6455,7 +6455,7 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
     SvxDateFormat eDateFormat;
     SvxTimeFormat eTimeFormat;
     GetDateTime( nVal, eDateFormat, eTimeFormat );
-    if ( eDateFormat != SVXDATEFORMAT_APPDEFAULT )
+    if ( eDateFormat != SvxDateFormat::AppDefault )
         xField1.reset(new SvxFieldItem(SvxDateField( Date( Date::SYSTEM ), SvxDateType::Var, eDateFormat ), EE_FEATURE_FIELD));
     if ( eTimeFormat != SvxTimeFormat::AppDefault )
     {

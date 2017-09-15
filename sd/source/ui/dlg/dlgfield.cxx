@@ -177,26 +177,26 @@ void SdModifyFieldDlg::FillFormatList()
         const SvxDateField* pDateField = static_cast<const SvxDateField*>( pField );
         SvxDateField aDateField( *pDateField );
 
-        //SVXDATEFORMAT_APPDEFAULT,     // not used
-        //SVXDATEFORMAT_SYSTEM,         // not used
+        //SvxDateFormat::AppDefault,     // not used
+        //SvxDateFormat::System,         // not used
         m_pLbFormat->InsertEntry( SdResId( STR_STANDARD_SMALL ) );
         m_pLbFormat->InsertEntry( SdResId( STR_STANDARD_BIG ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
+        aDateField.SetFormat( SvxDateFormat::A );    // 13.02.96
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_B );    // 13.02.1996
+        aDateField.SetFormat( SvxDateFormat::B );    // 13.02.1996
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_C );    // 13.Feb 1996
+        aDateField.SetFormat( SvxDateFormat::C );    // 13.Feb 1996
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_D );    // 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::D );    // 13.Februar 1996
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_E );    // Die, 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::E );    // Die, 13.Februar 1996
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::F );    // Dienstag, 13.Februar 1996
         m_pLbFormat->InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
 
-        m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pDateField->GetFormat() - 2 ) );
+        m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(pDateField->GetFormat()) - 2 );
     }
     else if( dynamic_cast< const SvxExtTimeField *>( pField ) !=  nullptr )
     {

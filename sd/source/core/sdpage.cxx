@@ -3126,7 +3126,7 @@ HeaderFooterSettings::HeaderFooterSettings()
     mbSlideNumberVisible = false;
     mbDateTimeVisible = true;
     mbDateTimeIsFixed = true;
-    meDateTimeFormat = SVXDATEFORMAT_A;
+    meDateTimeFormat = SvxDateAndTimeFormat(SvxDateFormat::A, SvxTimeFormat::AppDefault);
 }
 
 bool HeaderFooterSettings::operator==( const HeaderFooterSettings& rSettings ) const

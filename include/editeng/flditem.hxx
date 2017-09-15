@@ -83,17 +83,18 @@ public:
 
 
 enum class SvxDateType { Fix, Var };
-enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT = 0,   // Set as in App
-                        SVXDATEFORMAT_SYSTEM,       // Set as in System
-                        SVXDATEFORMAT_STDSMALL,
-                        SVXDATEFORMAT_STDBIG,
-                        SVXDATEFORMAT_A,    // 13.02.96
-                        SVXDATEFORMAT_B,    // 13.02.1996
-                        SVXDATEFORMAT_C,    // 13.Feb 1996
-                        SVXDATEFORMAT_D,    // 13.February 1996
-                        SVXDATEFORMAT_E,    // Tue, 13.February 1996
-                        SVXDATEFORMAT_F     // Tuesday, 13.February 1996
-                    };
+enum class SvxDateFormat {
+    AppDefault = 0, // Set as in App
+    System,         // Set as in System
+    StdSmall,
+    StdBig,
+    A,              // 13.02.96
+    B,              // 13.02.1996
+    C,              // 13.Feb 1996
+    D,              // 13.February 1996
+    E,              // Tue, 13.February 1996
+    F               // Tuesday, 13.February 1996
+};
 
 class EDITENG_DLLPUBLIC SvxDateField : public SvxFieldData
 {
@@ -107,7 +108,7 @@ public:
                             SvxDateField();
     explicit                SvxDateField( const Date& rDate,
                                 SvxDateType eType,
-                                SvxDateFormat eFormat = SVXDATEFORMAT_STDSMALL );
+                                SvxDateFormat eFormat = SvxDateFormat::StdSmall );
 
     sal_Int32               GetFixDate() const { return nFixDate; }
     void                    SetFixDate( const Date& rDate ) { nFixDate = rDate.GetDate(); }
@@ -399,6 +400,32 @@ public:
     virtual bool            operator==( const SvxFieldData& ) const override;
 };
 
+/** Some places want to combine and store and forward through slots a combined date and time value,
+    so wrap it up in a single class */
+class SvxDateAndTimeFormat final
+{
+    sal_Int32 value;
+public:
+    SvxDateAndTimeFormat() : value(0) {}
+    SvxDateAndTimeFormat(SvxDateFormat eDate, SvxTimeFormat eTime)
+        : value(static_cast<sal_Int32>(eDate) & (static_cast<sal_Int32>(eTime) << 4))
+    {
+    }
+    SvxDateAndTimeFormat(sal_Int32 nCombined)
+        : value(nCombined)
+    {
+    }
+    SvxDateAndTimeFormat& operator=(SvxDateAndTimeFormat const & other)
+    {
+        value = other.value;
+        return *this;
+    }
+    SvxDateFormat GetDateFormat() const { return static_cast<SvxDateFormat>(value & 0x0f); }
+    SvxTimeFormat GetTimeFormat() const { return static_cast<SvxTimeFormat>((value >> 4) & 0x0f); }
+    sal_Int32 GetCombined() const { return value; }
+    bool operator==(const SvxDateAndTimeFormat & other) const { return value == other.value; }
+};
+
 /** this field is used as a placeholder for a header&footer in impress. The actual
     value is stored at the page */
 class EDITENG_DLLPUBLIC SvxDateTimeField final: public SvxFieldData
@@ -407,7 +434,7 @@ public:
     SV_DECL_PERSIST1( SvxDateTimeField, css::text::textfield::Type::PRESENTATION_DATE_TIME )
     SvxDateTimeField();
 
-    static OUString    GetFormatted( Date const & rDate, tools::Time const & rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    static OUString    GetFormatted( Date const & rDate, tools::Time const & rTime, SvxDateAndTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
