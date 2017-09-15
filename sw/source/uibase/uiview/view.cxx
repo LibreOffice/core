@@ -29,6 +29,7 @@
 #include <vcl/inputctx.hxx>
 #include <basic/sbxobj.hxx>
 #include <svl/eitem.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/app.hxx>
@@ -903,7 +904,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     SAL_WARN_IF(
         officecfg::Office::Common::Undo::Steps::get() <= 0,
         "sw.ui", "/org.openoffice.Office.Common/Undo/Steps <= 0");
-    if (0 < officecfg::Office::Common::Undo::Steps::get())
+    if (!utl::ConfigManager::IsAvoidConfig() && 0 < officecfg::Office::Common::Undo::Steps::get())
     {
         m_pWrtShell->DoUndo();
     }

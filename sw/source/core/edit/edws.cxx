@@ -18,7 +18,7 @@
  */
 
 #include <officecfg/Office/Common.hxx>
-
+#include <unotools/configmgr.hxx>
 #include <vcl/window.hxx>
 
 #include <editsh.hxx>
@@ -46,7 +46,7 @@ SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption 
     , m_bNbspRunNext(false)
     , m_bIsValidatingParagraphSignature(false)
 {
-    if (0 < officecfg::Office::Common::Undo::Steps::get())
+    if (!utl::ConfigManager::IsAvoidConfig() && 0 < officecfg::Office::Common::Undo::Steps::get())
     {
         GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
     }
