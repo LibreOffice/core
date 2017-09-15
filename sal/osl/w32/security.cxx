@@ -510,7 +510,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
     RegCloseKey(HKEY_CURRENT_USER);
 
-    if (Privilege(L"SeRestorePrivilege", TRUE))
+    if (Privilege(L"SetRestorePrivilege", TRUE))
     {
         HMODULE                 hUserEnvLib         = nullptr;
         LPFNLOADUSERPROFILE     fLoadUserProfile    = nullptr;

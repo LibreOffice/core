@@ -419,7 +419,7 @@ namespace emfplushelper
                                                                 lineJoin,
                                                                 lineCap);
 
-            if (pen->penDataFlags & 0x00000020 && pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predifined line style
+            if (pen->penDataFlags & 0x00000020 && pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predefined line style
             {
                 // taken from the old cppcanvas implementation
                 const std::vector<double> dash = { 3, 3 };
