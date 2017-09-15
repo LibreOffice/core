@@ -3370,7 +3370,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     pVFrame->GetBindings().Execute(FN_EDIT_AUTH_ENTRY_DLG);
                                 break;
                                 default:
-                                    pVFrame->GetBindings().Execute(FN_EDIT_FIELD);
+                                    pVFrame->GetBindings().Execute(FN_UPDATE_INPUTFIELDS);
                                 }
                             }
                             return;

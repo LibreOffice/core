@@ -359,6 +359,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     enum DoType { UNDO, REDO, REPEAT };
 
+    enum FieldDialogPressedButton { BTN_NONE, BTN_EDIT, BTN_PREV, BTN_NEXT };
+
     void    Do( DoType eDoType, sal_uInt16 nCnt = 1 );
     OUString  GetDoString( DoType eDoType ) const;
     OUString  GetRepeatString() const;
@@ -390,9 +392,9 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void    MoveCursor( bool bWithSelect = false );
 
     // update input fields
-    bool    StartInputFieldDlg(SwField*, bool bNextButton, vcl::Window* pParentWin = nullptr, OString* pWindowState = nullptr);
+    bool    StartInputFieldDlg(SwField*, bool bPrevButton, bool bNextButton, vcl::Window* pParentWin = nullptr, OString* pWindowState = nullptr, FieldDialogPressedButton* pPressedButton = nullptr);
     // update DropDown fields
-    bool    StartDropDownFieldDlg(SwField*, bool bNextButton, OString* pWindowState = nullptr);
+    bool    StartDropDownFieldDlg(SwField*, bool bPrevButton, bool bNextButton, OString* pWindowState = nullptr, FieldDialogPressedButton* pPressedButton = nullptr);
 
     //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( ) override;
