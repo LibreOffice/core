@@ -143,7 +143,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>(pField);
         SvxAuthorField aAuthorField( *pAuthorField );
 
-        if( pAuthorField->GetType() == SVXAUTHORTYPE_FIX )
+        if( pAuthorField->GetType() == SvxAuthorType::Fix )
             CheckItem( 1 );
         else
             CheckItem( 2 );
@@ -280,9 +280,9 @@ SvxFieldData* SdFieldPopup::GetField()
         sal_uInt16 i;
 
         if( IsItemChecked( 1 ) )
-            eType = SVXAUTHORTYPE_FIX;
+            eType = SvxAuthorType::Fix;
         else
-            eType = SVXAUTHORTYPE_VAR;
+            eType = SvxAuthorType::Var;
 
         for( i = 3; i <= nCount; i++ )
         {

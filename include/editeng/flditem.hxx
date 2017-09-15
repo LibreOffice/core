@@ -327,7 +327,9 @@ public:
 };
 
 
-enum SvxAuthorType { SVXAUTHORTYPE_FIX, SVXAUTHORTYPE_VAR };
+enum class SvxAuthorType {
+    Fix, Var
+};
 enum class SvxAuthorFormat {
     FullName,   // full name
     LastName,   // Only Last name
@@ -350,7 +352,7 @@ public:
                                 const OUString& rFirstName,
                                 const OUString& rLastName,
                                 const OUString& rShortName,
-                                SvxAuthorType eType = SVXAUTHORTYPE_VAR,
+                                SvxAuthorType eType = SvxAuthorType::Var,
                                 SvxAuthorFormat eFormat = SvxAuthorFormat::FullName );
 
     SvxAuthorType           GetType() const { return eType; }
