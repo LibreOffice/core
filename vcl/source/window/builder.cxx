@@ -754,6 +754,8 @@ namespace
             return (VclResId(SV_BUTTONTEXT_PASTE).toString());
         else if (rType == "gtk-media-next")
             return (VclResId(SV_BUTTONTEXT_NEXT).toString());
+        else if (rType == "gtk-media-previous")
+            return (VclResId(SV_BUTTONTEXT_PREV).toString());
         else if (rType == "gtk-go-up")
             return (VclResId(SV_BUTTONTEXT_GO_UP).toString());
         else if (rType == "gtk-go-down")

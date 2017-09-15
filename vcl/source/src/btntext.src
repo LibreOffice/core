@@ -186,4 +186,9 @@ String SV_BUTTONTEXT_CONNECT
     Text [ en-US ] = "C~onnect" ;
 };
 
+String SV_BUTTONTEXT_PREV
+{
+    Text [ en-US ] = "~Previous" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
