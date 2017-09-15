@@ -356,7 +356,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
                 mpImpl->msString2  = static_cast<const SvxAuthorField*>(pData)->GetFormatted();
                 mpImpl->mnInt16    = sal::static_int_cast< sal_Int16 >(
                     static_cast<const SvxAuthorField*>(pData)->GetFormat());
-                mpImpl->mbBoolean1 = static_cast<const SvxAuthorField*>(pData)->GetType() == SVXAUTHORTYPE_FIX;
+                mpImpl->mbBoolean1 = static_cast<const SvxAuthorField*>(pData)->GetType() == SvxAuthorType::Fix;
                 mpImpl->mbBoolean2 = static_cast<const SvxAuthorField*>(pData)->GetFormat() != SvxAuthorFormat::ShortName;
                 break;
 
@@ -474,7 +474,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
         // #92009# pass fixed attribute to constructor
         pData = new SvxAuthorField( aFirstName, aLastName, "",
-                                    mpImpl->mbBoolean1 ? SVXAUTHORTYPE_FIX : SVXAUTHORTYPE_VAR );
+                                    mpImpl->mbBoolean1 ? SvxAuthorType::Fix : SvxAuthorType::Var );
 
         if( !mpImpl->mbBoolean2 )
         {

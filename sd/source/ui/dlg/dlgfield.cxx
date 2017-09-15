@@ -149,9 +149,9 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             SvxAuthorFormat eFormat;
 
             if( m_pRbtFix->IsChecked() )
-                eType = SVXAUTHORTYPE_FIX;
+                eType = SvxAuthorType::Fix;
             else
-                eType = SVXAUTHORTYPE_VAR;
+                eType = SvxAuthorType::Var;
 
             eFormat = (SvxAuthorFormat) ( m_pLbFormat->GetSelectEntryPos() );
 
@@ -294,7 +294,7 @@ void SdModifyFieldDlg::FillControls()
         const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>(pField);
         SvxAuthorField aAuthorField( *pAuthorField );
 
-        if( pAuthorField->GetType() == SVXAUTHORTYPE_FIX )
+        if( pAuthorField->GetType() == SvxAuthorType::Fix )
             m_pRbtFix->Check();
         else
             m_pRbtVar->Check();

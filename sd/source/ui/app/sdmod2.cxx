@@ -202,7 +202,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     }
     else if( (pAuthorField = dynamic_cast< const SvxAuthorField* >( pField )) != nullptr  )
     {
-        if( pAuthorField->GetType() != SVXAUTHORTYPE_FIX )
+        if( pAuthorField->GetType() != SvxAuthorType::Fix )
         {
             SvtUserOptions aUserOptions;
             SvxAuthorField aAuthorField(

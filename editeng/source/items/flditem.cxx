@@ -179,7 +179,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
 
                     // #92009# pass fixed attribute to constructor
                     SvxAuthorField* pData = new SvxAuthorField(
-                            aFirstName, aLastName, OUString(), bIsFixed ? SVXAUTHORTYPE_FIX : SVXAUTHORTYPE_VAR);
+                            aFirstName, aLastName, OUString(), bIsFixed ? SvxAuthorType::Fix : SvxAuthorType::Var);
 
                     if (!bIsFixed)
                     {
