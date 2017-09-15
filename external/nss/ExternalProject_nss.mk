@@ -58,7 +58,8 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		$(MAKE) AR="$(AR)" \
 			RANLIB="$(RANLIB)" \
 			NMEDIT="$(NM)edit" \
-			CCC="$(CXX)" \
+			COMMA=$(COMMA) \
+			CC="$(CC)" CCC="$(CXX)" \
 			$(if $(CROSS_COMPILING),NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 			nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
