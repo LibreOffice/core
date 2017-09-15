@@ -1,0 +1,28 @@
+diff -ur epoxy.org/src/dispatch_common.c epoxy/src/dispatch_common.c
+--- epoxy.org/src/dispatch_common.c	2017-09-15 14:59:07.458635939 +0200
++++ epoxy/src/dispatch_common.c	2017-09-15 15:03:16.978088807 +0200
+@@ -660,10 +660,13 @@
+ #elif defined(__APPLE__)
+     return epoxy_gl_dlsym(name);
+ #else
++#if PLATFORM_HAS_GLX
+     if (epoxy_current_context_is_glx()) {
+         return glXGetProcAddressARB((const GLubyte *)name);
+-    } else {
++    } else
++#endif
+ #if PLATFORM_HAS_EGL
++    {
+         GLenum egl_api = epoxy_egl_get_current_gl_context_api();
+ 
+         switch (egl_api) {
+@@ -673,8 +676,8 @@
+         case EGL_NONE:
+             break;
+         }
+-#endif
+     }
++#endif
+     errx(1, "Couldn't find current GLX or EGL context.\n");
+ #endif
+ }
