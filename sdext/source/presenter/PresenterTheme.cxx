@@ -557,6 +557,9 @@ double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
     geometry::RealRectangle2D aBox (PresenterCanvasHelper::GetTextBoundingBox (xFont, "X"));
 
     const double nAscent (-aBox.Y1);
+    //tdf#112408
+    if (nAscent == 0)
+        return nDesignSize;
     const double nDescent (aBox.Y2);
     const double nScale = (nAscent+nDescent) / nAscent;
     return nDesignSize * nScale;
