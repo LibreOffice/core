@@ -42,7 +42,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
 
     if ( !hModule )
     {
-        hModule = GetModuleHandleA( "Kernel32.dll" );
+        hModule = GetModuleHandleW( L"Kernel32.dll" );
         if ( hModule )
             pGetSystemTimePreciseAsFileTime = reinterpret_cast<GetSystemTimePreciseAsFileTime_PROC>(
                 GetProcAddress(hModule, "GetSystemTimePreciseAsFileTime"));

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
 #include "system.h"
 #include <string.h>
 #ifdef _MSC_VER
@@ -31,19 +30,13 @@
 #include <cassert>
 #include <memory>
 
-#include <osl/security.h>
 #include <osl/nlsupport.h>
-#include <osl/mutex.h>
-#include <osl/thread.h>
-#include <sal/log.hxx>
 
 #include <filetime.hxx>
 #include <nlsupport.hxx>
 #include "procimpl.hxx"
-#include "sockimpl.hxx"
 #include "file_url.hxx"
 #include "path_helper.hxx"
-#include <rtl/ustrbuf.h>
 #include <rtl/alloc.h>
 
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
@@ -112,7 +105,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
         // immediately, doesn't call any termination handlers and doesn't notify any dlls
         // that it is detaching from them
 
-        HINSTANCE hKernel = GetModuleHandleA("kernel32.dll");
+        HINSTANCE hKernel = GetModuleHandleW(L"kernel32.dll");
         FARPROC pfnExitProc = GetProcAddress(hKernel, "ExitProcess");
         hRemoteThread = CreateRemoteThread(
                             hProcess,           /* process handle */
@@ -351,7 +344,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
             ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
             DWORD dwResult = 0;
 
-            dwResult = SearchPath (
+            dwResult = SearchPathW (
                 nullptr, reinterpret_cast<LPCWSTR>(ppArgs[0]->buffer), L".exe", aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), nullptr);
             if ((0 < dwResult) && (dwResult < aBuffer.getBufSizeInSymbols()))
             {
@@ -501,7 +494,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
     DWORD   dwLen = 0;
 
     osl_acquireMutex( g_CurrentDirectoryMutex );
-    dwLen = GetCurrentDirectory( aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer) );
+    dwLen = GetCurrentDirectoryW( aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer) );
     osl_releaseMutex( g_CurrentDirectoryMutex );
 
     if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )

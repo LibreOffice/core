@@ -17,26 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
-#define _UNICODE
 #include "systools/win32/uwinapi.h"
-
-#include "osl/file.h"
 
 #include "file_url.hxx"
 #include <filetime.hxx>
-#include <sal/macros.h>
 #include "file_error.hxx"
 
 #include "path_helper.hxx"
 
-#include "osl/diagnose.h"
-#include "osl/time.h"
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
-#include <rtl/character.hxx>
-
-#include <tchar.h>
 
 static const wchar_t UNC_PREFIX[] = L"\\\\";
 static const wchar_t BACKSLASH = '\\';
@@ -232,8 +222,8 @@ struct DirectoryItem_Impl
 {
     UINT uType;
     union {
-        WIN32_FIND_DATA FindData;
-        WCHAR           cDriveString[MAX_PATH];
+        WIN32_FIND_DATAW FindData;
+        WCHAR            cDriveString[MAX_PATH];
     };
     rtl_uString*    m_pFullPath;
     BOOL            bFullPathNormalized;
@@ -266,7 +256,7 @@ static HANDLE WINAPI OpenLogicalDrivesEnum()
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(HeapAlloc( GetProcessHeap(), 0, sizeof(DRIVEENUM) ));
     if ( pEnum )
     {
-        DWORD dwNumCopied = GetLogicalDriveStrings( (sizeof(pEnum->cBuffer) - 1) / sizeof(WCHAR), pEnum->cBuffer );
+        DWORD dwNumCopied = GetLogicalDriveStringsW( (sizeof(pEnum->cBuffer) - 1) / sizeof(WCHAR), pEnum->cBuffer );
 
         if ( dwNumCopied && dwNumCopied < sizeof(pEnum->cBuffer) / sizeof(WCHAR) )
         {
@@ -289,7 +279,7 @@ static BOOL WINAPI EnumLogicalDrives(HANDLE hEnum, LPWSTR lpBuffer)
 
     if ( pEnum )
     {
-        int nLen = _tcslen( pEnum->lpCurrent );
+        int nLen = wcslen( pEnum->lpCurrent );
 
         if ( nLen )
         {
@@ -324,8 +314,8 @@ static BOOL WINAPI CloseLogicalDrivesEnum(HANDLE hEnum)
 
 typedef struct tagDIRECTORY
 {
-    HANDLE          hFind;
-    WIN32_FIND_DATA aFirstData;
+    HANDLE           hFind;
+    WIN32_FIND_DATAW aFirstData;
 } DIRECTORY, *PDIRECTORY, FAR *LPDIRECTORY;
 
 static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
@@ -353,11 +343,11 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
 
             WCHAR* szFileMask = static_cast< WCHAR* >( rtl_allocateMemory( sizeof( WCHAR ) * ( nLen + nSuffLen + 1 ) ) );
 
-            _tcscpy( szFileMask, SAL_W(rtl_uString_getStr( pPath )) );
-            _tcscat( szFileMask, pSuffix );
+            wcscpy( szFileMask, SAL_W(rtl_uString_getStr( pPath )) );
+            wcscat( szFileMask, pSuffix );
 
             pDirectory = static_cast<LPDIRECTORY>(HeapAlloc(GetProcessHeap(), 0, sizeof(DIRECTORY)));
-            pDirectory->hFind = FindFirstFile(szFileMask, &pDirectory->aFirstData);
+            pDirectory->hFind = FindFirstFileW(szFileMask, &pDirectory->aFirstData);
 
             if (!IsValidHandle(pDirectory->hFind))
             {
@@ -374,7 +364,7 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
     return static_cast<HANDLE>(pDirectory);
 }
 
-BOOL WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATA pFindData)
+BOOL WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
 {
     BOOL        fSuccess = FALSE;
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(hDirectory);
@@ -392,14 +382,14 @@ BOOL WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATA pFindData)
                 pDirectory->aFirstData.cFileName[0] = 0;
             }
             else if ( IsValidHandle( pDirectory->hFind ) )
-                fSuccess = FindNextFile( pDirectory->hFind, pFindData );
+                fSuccess = FindNextFileW( pDirectory->hFind, pFindData );
             else
             {
                 fSuccess = FALSE;
                 SetLastError( ERROR_NO_MORE_FILES );
             }
 
-            fValid = fSuccess && _tcscmp( TEXT("."), pFindData->cFileName ) != 0 && _tcscmp( TEXT(".."), pFindData->cFileName ) != 0;
+            fValid = fSuccess && wcscmp( L".", pFindData->cFileName ) != 0 && wcscmp( L"..", pFindData->cFileName ) != 0;
 
         } while( fSuccess && !fValid );
     }
@@ -725,7 +715,7 @@ oslFileError SAL_CALL osl_removeDirectory(rtl_uString* strPath)
 
     if ( osl_File_E_None == error )
     {
-        if ( RemoveDirectory( SAL_W(rtl_uString_getStr( strSysPath ) )) )
+        if ( RemoveDirectoryW( SAL_W(rtl_uString_getStr( strSysPath ) )) )
             error = osl_File_E_None;
         else
             error = oslTranslateFileError( GetLastError() );
@@ -783,7 +773,7 @@ static oslFileError SAL_CALL osl_getNextNetResource(
 
     dwCount = 1;
     dwBufSize = sizeof(buffer);
-    dwError = WNetEnumResource( pDirImpl->hDirectory, &dwCount, lpNetResource, &dwBufSize );
+    dwError = WNetEnumResourceW( pDirImpl->hDirectory, &dwCount, lpNetResource, &dwBufSize );
 
     switch ( dwError )
     {
@@ -1049,11 +1039,11 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
 
                 osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
 
-                _tcscpy( pItemImpl->cDriveString, SAL_W(strSysFilePath->buffer) );
+                wcscpy( pItemImpl->cDriveString, SAL_W(strSysFilePath->buffer) );
                 pItemImpl->cDriveString[0] = rtl::toAsciiUpperCase( pItemImpl->cDriveString[0] );
 
-                if ( pItemImpl->cDriveString[_tcslen(pItemImpl->cDriveString) - 1] != '\\' )
-                    _tcscat( pItemImpl->cDriveString, TEXT( "\\" ) );
+                if ( pItemImpl->cDriveString[wcslen(pItemImpl->cDriveString) - 1] != '\\' )
+                    wcscat( pItemImpl->cDriveString, L"\\" );
 
                 *pItem = pItemImpl;
             }
@@ -1064,12 +1054,12 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     case PATHTYPE_FILE:
         {
             HANDLE              hFind;
-            WIN32_FIND_DATA     aFindData;
+            WIN32_FIND_DATAW     aFindData;
 
             if ( strSysFilePath->length > 0 && strSysFilePath->buffer[strSysFilePath->length - 1] == '\\' )
                 rtl_uString_newFromStr_WithLength( &strSysFilePath, strSysFilePath->buffer, strSysFilePath->length - 1 );
 
-            hFind = FindFirstFile( SAL_W(rtl_uString_getStr(strSysFilePath)), &aFindData );
+            hFind = FindFirstFileW( SAL_W(rtl_uString_getStr(strSysFilePath)), &aFindData );
 
             if ( hFind != INVALID_HANDLE_VALUE )
             {
@@ -1079,7 +1069,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                 ZeroMemory( pItemImpl, sizeof(DirectoryItem_Impl) );
                 osl_acquireDirectoryItem( static_cast<oslDirectoryItem>(pItemImpl) );
 
-                CopyMemory( &pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATA) );
+                CopyMemory( &pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATAW) );
                 rtl_uString_newFromString( &pItemImpl->m_pFullPath, strSysFilePath );
 
                 // MT: This costs 600ms startup time on fast v60x!
@@ -1167,16 +1157,16 @@ bool is_floppy_volume_mount_point(const rtl::OUString& path)
     osl::systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPoint(SAL_W(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
+    if (GetVolumeNameForVolumeMountPointW(SAL_W(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
     {
         WCHAR vnfloppy[51];
         if (is_floppy_A_present() &&
-            GetVolumeNameForVolumeMountPoint(FLOPPY_A, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPointW(FLOPPY_A, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
 
         if (is_floppy_B_present() &&
-            GetVolumeNameForVolumeMountPoint(FLOPPY_B, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
+            GetVolumeNameForVolumeMountPointW(FLOPPY_B, vnfloppy, SAL_N_ELEMENTS(vnfloppy)) &&
             (0 == wcscmp(vn, vnfloppy)))
             return true;
     }
@@ -1185,7 +1175,7 @@ bool is_floppy_volume_mount_point(const rtl::OUString& path)
 
 static bool is_floppy_drive(const rtl::OUString& path)
 {
-    static const LPCWSTR FLOPPY_DRV_LETTERS = TEXT("AaBb");
+    static const LPCWSTR FLOPPY_DRV_LETTERS = L"AaBb";
 
     // we must take into account that even a floppy
     // drive may be mounted to a directory so checking
@@ -1206,13 +1196,13 @@ static bool is_volume_mount_point(const rtl::OUString& path)
 
     if (!is_floppy_drive(p))
     {
-        DWORD fattr = GetFileAttributes(SAL_W(p.getStr()));
+        DWORD fattr = GetFileAttributesW(SAL_W(p.getStr()));
 
         if ((INVALID_FILE_ATTRIBUTES != fattr) &&
             (FILE_ATTRIBUTE_REPARSE_POINT & fattr))
         {
-            WIN32_FIND_DATA find_data;
-            HANDLE h_find = FindFirstFile(SAL_W(p.getStr()), &find_data);
+            WIN32_FIND_DATAW find_data;
+            HANDLE h_find = FindFirstFileW(SAL_W(p.getStr()), &find_data);
 
             if (IsValidHandle(h_find) &&
                 (FILE_ATTRIBUTE_REPARSE_POINT & find_data.dwFileAttributes) &&
@@ -1230,14 +1220,14 @@ static bool is_volume_mount_point(const rtl::OUString& path)
 static UINT get_volume_mount_point_drive_type(const rtl::OUString& path)
 {
     if (0 == path.getLength())
-        return GetDriveType(nullptr);
+        return GetDriveTypeW(nullptr);
 
     rtl::OUString p(path);
     osl::systemPathEnsureSeparator(p);
 
     WCHAR vn[51];
-    if (GetVolumeNameForVolumeMountPoint(SAL_W(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
-        return GetDriveType(vn);
+    if (GetVolumeNameForVolumeMountPointW(SAL_W(p.getStr()), vn, SAL_N_ELEMENTS(vn)))
+        return GetDriveTypeW(vn);
 
     return DRIVE_NO_ROOT_DIR;
 }
@@ -1256,7 +1246,7 @@ static oslFileError osl_get_drive_type(
     if (is_volume_mount_point(path))
         drive_type = get_volume_mount_point_drive_type(path);
     else
-        drive_type = GetDriveType(SAL_W(path.getStr()));
+        drive_type = GetDriveTypeW(SAL_W(path.getStr()));
 
     if (DRIVE_NO_ROOT_DIR == drive_type)
         return oslTranslateFileError(ERROR_INVALID_DRIVE);
@@ -1304,7 +1294,7 @@ static inline bool is_volume_space_info_request(sal_uInt32 field_mask)
 static void get_volume_space_information(
     const rtl::OUString& path, oslVolumeInfo *pInfo)
 {
-    BOOL ret = GetDiskFreeSpaceEx(
+    BOOL ret = GetDiskFreeSpaceExW(
         SAL_W(path.getStr()),
         reinterpret_cast<PULARGE_INTEGER>(&pInfo->uFreeSpace),
         reinterpret_cast<PULARGE_INTEGER>(&pInfo->uTotalSpace),
@@ -1353,7 +1343,7 @@ static oslFileError get_filesystem_attributes(
         DWORD flags;
 
         LPCWSTR pszPath = SAL_W(path.getStr());
-        if (GetVolumeInformation(pszPath, vn, MAX_PATH+1, &serial, &mcl, &flags, fsn, MAX_PATH+1))
+        if (GetVolumeInformationW(pszPath, vn, MAX_PATH+1, &serial, &mcl, &flags, fsn, MAX_PATH+1))
         {
             // Currently sal does not use this value, instead MAX_PATH is used
             pInfo->uValidFields   |= osl_VolumeInfo_Mask_MaxNameLength;
@@ -1446,8 +1436,8 @@ static oslFileError SAL_CALL osl_getDriveInfo(
     oslDirectoryItem Item, oslFileStatus *pStatus, sal_uInt32 uFieldMask)
 {
     DirectoryItem_Impl  *pItemImpl = static_cast<DirectoryItem_Impl *>(Item);
-    WCHAR               cDrive[3] = TEXT("A:");
-    WCHAR               cRoot[4] = TEXT("A:\\");
+    WCHAR               cDrive[3] = L"A:";
+    WCHAR               cRoot[4] = L"A:\\";
 
     if ( !pItemImpl )
         return osl_File_E_INVAL;
@@ -1474,7 +1464,7 @@ static oslFileError SAL_CALL osl_getDriveInfo(
                 pStatus->uValidFields |= osl_FileStatus_Mask_FileName;
             }
         }
-        else switch ( GetDriveType( cRoot ) )
+        else switch ( GetDriveTypeW( cRoot ) )
         {
             case DRIVE_REMOTE:
             {
@@ -1482,7 +1472,7 @@ static oslFileError SAL_CALL osl_getDriveInfo(
                 DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szBuffer);
                 DWORD dwBufsize = dwBufsizeConst;
 
-                DWORD dwResult = WNetGetConnection( cDrive, szBuffer, &dwBufsize );
+                DWORD dwResult = WNetGetConnectionW( cDrive, szBuffer, &dwBufsize );
                 if ( NO_ERROR == dwResult )
                 {
                     WCHAR szFileName[dwBufsizeConst + 16];
@@ -1500,7 +1490,7 @@ static oslFileError SAL_CALL osl_getDriveInfo(
                 WCHAR szVolumeNameBuffer[1024];
                 DWORD const dwBufsizeConst = SAL_N_ELEMENTS(szVolumeNameBuffer);
 
-                if ( GetVolumeInformation( cRoot, szVolumeNameBuffer, dwBufsizeConst, nullptr, nullptr, nullptr, nullptr, 0 ) )
+                if ( GetVolumeInformationW( cRoot, szVolumeNameBuffer, dwBufsizeConst, nullptr, nullptr, nullptr, nullptr, 0 ) )
                 {
                     WCHAR   szFileName[dwBufsizeConst + 16];
 
@@ -1583,7 +1573,7 @@ oslFileError SAL_CALL osl_getFileStatus(
 
     if ( uFieldMask & osl_FileStatus_Mask_Validate )
     {
-        HANDLE  hFind = FindFirstFile( SAL_W(rtl_uString_getStr( pItemImpl->m_pFullPath )), &pItemImpl->FindData );
+        HANDLE  hFind = FindFirstFileW( SAL_W(rtl_uString_getStr( pItemImpl->m_pFullPath )), &pItemImpl->FindData );
 
         if ( hFind != INVALID_HANDLE_VALUE )
             FindClose( hFind );
@@ -1691,7 +1681,7 @@ oslFileError SAL_CALL osl_setFileAttributes(
     if ( osl_File_E_None != error )
         return error;
 
-    dwFileAttributes = GetFileAttributes( SAL_W(rtl_uString_getStr(ustrSysPath)) );
+    dwFileAttributes = GetFileAttributesW( SAL_W(rtl_uString_getStr(ustrSysPath)) );
 
     if ( (DWORD)-1 != dwFileAttributes )
     {
@@ -1703,7 +1693,7 @@ oslFileError SAL_CALL osl_setFileAttributes(
         if ( uAttributes & osl_File_Attribute_Hidden )
             dwFileAttributes |= FILE_ATTRIBUTE_HIDDEN;
 
-        fSuccess = SetFileAttributes( SAL_W(rtl_uString_getStr(ustrSysPath)), dwFileAttributes );
+        fSuccess = SetFileAttributesW( SAL_W(rtl_uString_getStr(ustrSysPath)), dwFileAttributes );
     }
     else
     {

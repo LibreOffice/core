@@ -17,24 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
-#define _UNICODE
 #include "systools/win32/uwinapi.h"
 
 #include "file_url.hxx"
-#include <sal/macros.h>
 #include "file_error.hxx"
 
 #include "rtl/alloc.h"
 #include <rtl/ustring.hxx>
-#include "osl/diagnose.h"
-#include "osl/file.h"
 #include "osl/mutex.h"
 
 #include "path_helper.hxx"
-
-#include <stdio.h>
-#include <tchar.h>
 
 #define WSTR_SYSTEM_ROOT_PATH               L"\\\\.\\"
 #define WSTR_LONG_PATH_PREFIX               L"\\\\?\\"
@@ -184,7 +176,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
             /* This is long path */
             lpComponent = lpszPath + SAL_N_ELEMENTS(WSTR_LONG_PATH_PREFIX) - 1;
 
-            if ( _istalpha( lpComponent[0] ) && ':' == lpComponent[1] )
+            if ( iswalpha( lpComponent[0] ) && ':' == lpComponent[1] )
             {
                 lpComponent += 2;
                 dwCandidatPathType = PATHTYPE_ABSOLUTE_LOCAL | PATHTYPE_IS_LONGPATH;
@@ -196,7 +188,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
             lpComponent = lpszPath + 2;
             dwCandidatPathType = PATHTYPE_ABSOLUTE_UNC;
         }
-        else if ( _istalpha( lpszPath[0] ) && ':' == lpszPath[1] )
+        else if ( iswalpha( lpszPath[0] ) && ':' == lpszPath[1] )
         {
             /* Local path verification. Must start with <drive>: */
             lpComponent = lpszPath + 2;
@@ -317,13 +309,13 @@ static sal_Int32 PathRemoveFileSpec(LPWSTR lpPath, LPWSTR lpFileName, sal_Int32 
     if ( nFileBufLen )
     {
         lpFileName[0] = 0;
-        LPWSTR  lpLastBkSlash = _tcsrchr( lpPath, '\\' );
-        LPWSTR  lpLastSlash = _tcsrchr( lpPath, '/' );
+        LPWSTR  lpLastBkSlash = wcsrchr( lpPath, '\\' );
+        LPWSTR  lpLastSlash = wcsrchr( lpPath, '/' );
         LPWSTR  lpLastDelimiter = lpLastSlash > lpLastBkSlash ? lpLastSlash : lpLastBkSlash;
 
         if ( lpLastDelimiter )
         {
-                sal_Int32 nDelLen = _tcslen( lpLastDelimiter );
+                sal_Int32 nDelLen = wcslen( lpLastDelimiter );
                 if ( 1 == nDelLen )
                 {
                     if ( lpLastDelimiter > lpPath && *(lpLastDelimiter - 1) != ':' )
@@ -335,7 +327,7 @@ static sal_Int32 PathRemoveFileSpec(LPWSTR lpPath, LPWSTR lpFileName, sal_Int32 
                 }
                 else if ( nDelLen && nDelLen - 1 < nFileBufLen )
                 {
-                    _tcscpy( lpFileName, lpLastDelimiter + 1 );
+                    wcscpy( lpFileName, lpLastDelimiter + 1 );
                     *(++lpLastDelimiter) = 0;
                     nRemoved = nDelLen - 1;
                 }
@@ -352,7 +344,7 @@ static LPWSTR PathAddBackslash(LPWSTR lpPath, sal_uInt32 nBufLen)
 
     if ( lpPath )
     {
-            std::size_t nLen = _tcslen(lpPath);
+            std::size_t nLen = wcslen(lpPath);
 
             if ( !nLen || ( lpPath[nLen-1] != '\\' && lpPath[nLen-1] != '/' && nLen < nBufLen - 1 ) )
             {
@@ -385,12 +377,12 @@ static DWORD GetCaseCorrectPathNameEx(
         {
             bool bSkipThis = false;
 
-            if ( 0 == _tcscmp( szFile, TEXT("..") ) )
+            if ( 0 == wcscmp( szFile, L".." ) )
             {
                 bSkipThis = true;
                 nSkipLevels += 1;
             }
-            else if ( 0 == _tcscmp( szFile, TEXT(".") ) )
+            else if ( 0 == wcscmp( szFile, L"." ) )
             {
                 bSkipThis = true;
             }
@@ -413,15 +405,15 @@ static DWORD GetCaseCorrectPathNameEx(
                 if ( bCheckExistence )
                 {
                     ::osl::LongPathBuffer< WCHAR > aShortPath( MAX_LONG_PATH );
-                    _tcscpy( aShortPath, lpszPath );
-                    _tcscat( aShortPath, szFile );
+                    wcscpy( aShortPath, lpszPath );
+                    wcscat( aShortPath, szFile );
 
-                    WIN32_FIND_DATA aFindFileData;
-                    HANDLE  hFind = FindFirstFile( aShortPath, &aFindFileData );
+                    WIN32_FIND_DATAW aFindFileData;
+                    HANDLE  hFind = FindFirstFileW( aShortPath, &aFindFileData );
 
                     if ( IsValidHandle(hFind) )
                     {
-                        _tcscat( lpszPath, aFindFileData.cFileName[0] ? aFindFileData.cFileName : aFindFileData.cAlternateFileName );
+                        wcscat( lpszPath, aFindFileData.cFileName[0] ? aFindFileData.cFileName : aFindFileData.cAlternateFileName );
 
                         FindClose( hFind );
                     }
@@ -431,7 +423,7 @@ static DWORD GetCaseCorrectPathNameEx(
                 else
                 {
                     /* add the segment name back */
-                    _tcscat( lpszPath, szFile );
+                    wcscat( lpszPath, szFile );
                 }
             }
         }
@@ -443,10 +435,10 @@ static DWORD GetCaseCorrectPathNameEx(
             if ( nSkipLevels )
                     lpszPath[0] = 0;
             else
-                _tcsupr( lpszPath );
+                _wcsupr( lpszPath );
         }
 
-        return _tcslen( lpszPath );
+        return wcslen( lpszPath );
 }
 
 DWORD GetCaseCorrectPathName(
@@ -471,9 +463,9 @@ DWORD GetCaseCorrectPathName(
     }
     else if ( lpszShortPath )
     {
-        if ( _tcslen( lpszShortPath ) <= cchBuffer )
+        if ( wcslen( lpszShortPath ) <= cchBuffer )
         {
-            _tcscpy( lpszLongPath, lpszShortPath );
+            wcscpy( lpszLongPath, lpszShortPath );
             return GetCaseCorrectPathNameEx( lpszLongPath, cchBuffer, 0, bCheckExistence );
         }
     }
@@ -493,7 +485,7 @@ static bool osl_decodeURL_( rtl_String* strUTF8, rtl_uString** pstrDecodedURL )
     /* The resulting decoded string length is shorter or equal to the source length */
 
     nSrcLen = rtl_string_getLength(strUTF8);
-    pBuffer = static_cast<sal_Char*>(rtl_allocateMemory(nSrcLen + 1));
+    pBuffer = static_cast<sal_Char*>(rtl_allocateMemory((nSrcLen + 1) * sizeof(sal_Char)));
 
     pDest = pBuffer;
     pSrc = rtl_string_getStr(strUTF8);
@@ -906,7 +898,7 @@ oslFileError SAL_CALL osl_searchFileURL(
                 static_cast<LPWSTR>(rtl_reallocateMemory(lpBuffer, nBufferLength * sizeof(WCHAR))) :
                 static_cast<LPWSTR>(rtl_allocateMemory(nBufferLength * sizeof(WCHAR)));
 
-            dwResult = SearchPath( lpszSearchPath, lpszSearchFile, nullptr, nBufferLength, lpBuffer, &lpszFilePart );
+            dwResult = SearchPathW( lpszSearchPath, lpszSearchFile, nullptr, nBufferLength, lpBuffer, &lpszFilePart );
         } while ( dwResult && dwResult >= nBufferLength );
 
         /*  ... until an error occurs or buffer is large enough.
@@ -919,13 +911,13 @@ oslFileError SAL_CALL osl_searchFileURL(
         }
         else
         {
-            WIN32_FIND_DATA aFindFileData;
+            WIN32_FIND_DATAW aFindFileData;
             HANDLE  hFind;
 
             /* something went wrong, perhaps the path was absolute */
             error = oslTranslateFileError( GetLastError() );
 
-            hFind = FindFirstFile( SAL_W(ustrSysPath->buffer), &aFindFileData );
+            hFind = FindFirstFileW( SAL_W(ustrSysPath->buffer), &aFindFileData );
 
             if ( IsValidHandle(hFind) )
             {

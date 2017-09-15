@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
+#define WIN32_LEAN_AND_MEAN
 #ifdef _MSC_VER
 #pragma warning(push,1) /* disable warnings within system headers */
 #endif
@@ -59,39 +59,25 @@ static DWORD g_dwTLSLocaleEncId = (DWORD) -1;
 
 /*****************************************************************************
  * callback function test
- *
- * osl_getTextEncodingFromLocale calls EnumSystemLocalesA, so that we don't
- * need to provide a unicode wrapper for this function under Win9x
- * that means the callback function has an ansi prototype and receives
- * the locale strings as ansi strings
  *****************************************************************************/
 
-BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
+BOOL CALLBACK EnumLocalesProcW( LPWSTR lpLocaleStringW )
 {
-    struct EnumLocalesParams * params;
-
-    LCID  localeId;
-    LPSTR pszEndA;
-
-    WCHAR langCode[ELP_LANGUAGE_FIELD_LENGTH];
-
-    /* convert hex-string to LCID */
-    localeId = strtol( lpLocaleStringA, &pszEndA, 16 );
-
     /* check params received via TLS */
-    params = static_cast<struct EnumLocalesParams *>(TlsGetValue( g_dwTLSLocaleEncId ));
+    EnumLocalesParams * params = static_cast<EnumLocalesParams *>(TlsGetValue( g_dwTLSLocaleEncId ));
     if( nullptr == params || '\0' == params->Language[0] )
         return FALSE;
 
+    LPWSTR pszEnd;
+    WCHAR langCode[ELP_LANGUAGE_FIELD_LENGTH];
+
+    /* convert hex-string to LCID */
+    LCID localeId = wcstol(lpLocaleStringW, &pszEnd, 16);
+
     /*
         get the ISO language code for this locale
-
-        remember: we call the GetLocaleInfoW function
-        because the ansi version of this function returns
-        an error under WinNT/2000 when called with an
-        unicode only lcid
     */
-    if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH ) )
+    if( GetLocaleInfoW( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH ) )
     {
         WCHAR ctryCode[ELP_COUNTRY_FIELD_LENGTH];
 
@@ -100,10 +86,10 @@ BOOL CALLBACK EnumLocalesProcA( LPSTR lpLocaleStringA )
             return TRUE;
 
         /* check if country code is set and equals the current locale */
-        if( '\0' != params->Country[0] && GetLocaleInfo( localeId,
+        if( '\0' != params->Country[0] && GetLocaleInfoW( localeId,
                     LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
         {
-            /* save return value in TLS and break if  found desired locale */
+            /* save return value in TLS and break if found desired locale */
             if( 0 == wcscmp( ctryCode, params->Country ) )
             {
                 params->Locale = localeId;
@@ -135,7 +121,7 @@ rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
     WCHAR ansiCP[6];
 
     /* query ansi codepage for given locale */
-    if( localeId && GetLocaleInfo( localeId, LOCALE_IDEFAULTANSICODEPAGE, ansiCP, 6 ) )
+    if( localeId && GetLocaleInfoW( localeId, LOCALE_IDEFAULTANSICODEPAGE, ansiCP, 6 ) )
     {
         /* if GetLocaleInfo returns "0", it is a UNICODE only locale */
         if( 0 != wcscmp( ansiCP, L"0" ) )
@@ -190,7 +176,7 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         TlsSetValue( g_dwTLSLocaleEncId, &params );
 
         /* enum all locales known to Windows */
-        EnumSystemLocalesA( EnumLocalesProcA, LCID_SUPPORTED );
+        EnumSystemLocalesW( EnumLocalesProcW, LCID_SUPPORTED );
 
         /* use the LCID found in iteration */
         return GetTextEncodingFromLCID( params.Locale );
@@ -211,8 +197,8 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     localeId = GetUserDefaultLCID();
 
     /* call GetLocaleInfo to retrieve the iso codes */
-    if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH )  &&
-        GetLocaleInfo( localeId, LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
+    if( GetLocaleInfoW( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH )  &&
+        GetLocaleInfoW( localeId, LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
     {
         *ppLocale = rtl_locale_register( SAL_U(langCode), SAL_U(ctryCode), u"" );
     }
