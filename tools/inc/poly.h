@@ -30,17 +30,29 @@ public:
     Point*          mpPointAry;
     PolyFlags*      mpFlagAry;
     sal_uInt16      mnPoints;
-    sal_uInt32      mnRefCount;
 };
 
 class SAL_WARN_UNUSED ImplPolygon  : public ImplPolygonData
 {
 public:
+                    ImplPolygon() { mpPointAry = nullptr; mpFlagAry = nullptr; mnPoints = 0;};
                     ImplPolygon( sal_uInt16 nInitSize, bool bFlags = false );
                     ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pInitFlags );
                     ImplPolygon( const ImplPolygon& rImplPoly );
+                    ImplPolygon( const tools::Rectangle& rRect );
+                    ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVertRound);
+                    ImplPolygon( const Point& rCenter, long nRadX, long nRadY );
+                    ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
+                                    PolyStyle eStyle, bool bFullCircle );
+                    ImplPolygon( const Point& rBezPt1, const Point& rCtrlPt1, const Point& rBezPt2,
+                                    const Point& rCtrlPt2, sal_uInt16 nPoints );
+                    ImplPolygon(const basegfx::B2DPolygon& rPolygon);
                     ~ImplPolygon();
 
+    bool            operator==( const ImplPolygon& rCandidate ) const;
+
+    void            ImplInitDefault();
+    void            ImplInitSize(sal_uInt16 nInitSize, bool bFlags = false);
     void            ImplSetSize( sal_uInt16 nSize, bool bResize = true );
     void            ImplCreateFlagArray();
     bool            ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon const * pInitPoly = nullptr );
