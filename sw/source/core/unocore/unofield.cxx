@@ -779,9 +779,6 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
 
 SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
 {
-#if !HAVE_FEATURE_DBCONNECTIVITY
-    (void) bDontCreate;
-#else
     if (!bDontCreate && SwFieldIds::Database == m_pImpl->m_nResTypeId
         && m_pImpl->m_bIsDescriptor && m_pImpl->m_pDoc)
     {
@@ -797,12 +794,12 @@ SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
 
         aData.sCommand = m_pImpl->m_sParam2;
         aData.nCommandType = m_pImpl->m_nParam2;
+
         SwDBFieldType aType(m_pImpl->m_pDoc, m_pImpl->m_sParam3, aData);
         SwFieldType *const pType = m_pImpl->m_pDoc->getIDocumentFieldsAccess().InsertFieldType(aType);
         pType->Add(m_pImpl.get());
         const_cast<SwXFieldMaster*>(this)->m_pImpl->m_bIsDescriptor = false;
     }
-#endif
     if (m_pImpl->m_bIsDescriptor)
         return nullptr;
     else
@@ -1614,7 +1611,6 @@ void SAL_CALL SwXTextField::attach(
         }
         break;
         case SwServiceType::FieldTypeDatabaseName:
-#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DatabaseName);
             SwDBData aData;
@@ -1629,10 +1625,8 @@ void SAL_CALL SwXTextField::attach(
                 nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
             pField->SetSubType(nSubType);
         }
-#endif
         break;
         case SwServiceType::FieldTypeDatabaseNextSet:
-#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwDBData aData;
             aData.sDataSource = m_pImpl->m_pProps->sPar1;
@@ -1642,10 +1636,8 @@ void SAL_CALL SwXTextField::attach(
             pField = new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(pFieldType),
                     m_pImpl->m_pProps->sPar3, aData);
         }
-#endif
         break;
         case SwServiceType::FieldTypeDatabaseNumSet:
-#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwDBData aData;
             aData.sDataSource = m_pImpl->m_pProps->sPar1;
@@ -1657,10 +1649,8 @@ void SAL_CALL SwXTextField::attach(
                 OUString::number(m_pImpl->m_pProps->nFormat),
                 aData );
         }
-#endif
         break;
         case SwServiceType::FieldTypeDatabaseSetNum:
-#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwDBData aData;
             aData.sDataSource = m_pImpl->m_pProps->sPar1;
@@ -1679,10 +1669,8 @@ void SAL_CALL SwXTextField::attach(
                 nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
             pField->SetSubType(nSubType);
         }
-#endif
         break;
         case SwServiceType::FieldTypeDatabase:
-#if HAVE_FEATURE_DBCONNECTIVITY
         {
             SwFieldType* pFieldType =
                 pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Database, m_pImpl->m_sTypeName, false);
@@ -1698,7 +1686,6 @@ void SAL_CALL SwXTextField::attach(
                 nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
             pField->SetSubType(nSubType);
         }
-#endif
         break;
         case SwServiceType::FieldTypeSetExp:
         {
