@@ -156,8 +156,10 @@ class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPil
 class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog
 {
     DECL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl, sw::DropDownFieldDialog)
-    virtual OString GetWindowState() const override; //this method inherit from SystemWindow
-    virtual void    SetWindowState( const OString& rStr ) override; //this method inherit from SystemWindow
+    virtual OString       GetWindowState() const override; //this method inherit from SystemWindow
+    virtual void          SetWindowState( const OString& rStr ) override; //this method inherit from SystemWindow
+    virtual bool          PrevButtonPressed() const override;
+    virtual bool          NextButtonPressed() const override;
 };
 
 class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
@@ -236,9 +238,11 @@ class AbstractFieldInputDlg_Impl : public AbstractFieldInputDlg
 {
     DECL_ABSTDLG_BASE(AbstractFieldInputDlg_Impl,SwFieldInputDlg)
     //from class SalFrame
-    virtual void     SetWindowState( const OString & rStr ) override;
-    virtual OString  GetWindowState() const override;
-    virtual void     EndDialog(sal_Int32) override;
+    virtual void          SetWindowState( const OString & rStr ) override;
+    virtual OString       GetWindowState() const override;
+    virtual void          EndDialog(sal_Int32) override;
+    virtual bool          PrevButtonPressed() const override;
+    virtual bool          NextButtonPressed() const override;
 };
 
 class SwInsFootNoteDlg;
@@ -393,7 +397,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateSwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rSh) override;
 
     virtual VclPtr<AbstractDropDownFieldDialog> CreateDropDownFieldDialog(SwWrtShell &rSh,
-        SwField* pField, bool bNextButton) override;
+        SwField* pField, bool bPrevButton, bool bNextButton) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwEnvDlg ( vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert ) override;
     virtual VclPtr<AbstractSwLabDlg> CreateSwLabDlg(const SfxItemSet& rSet,
                                                      SwDBManager* pDBManager, bool bLabel) override;
@@ -445,7 +449,7 @@ public:
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) override;
     virtual VclPtr<AbstractFieldInputDlg>        CreateFieldInputDlg(vcl::Window *pParent,
-        SwWrtShell &rSh, SwField* pField, bool bNextButton) override;
+        SwWrtShell &rSh, SwField* pField, bool bPrevButton, bool bNextButton) override;
     virtual VclPtr<AbstractInsFootNoteDlg>     CreateInsFootNoteDlg(
         vcl::Window * pParent, SwWrtShell &rSh, bool bEd = false) override;
     virtual VclPtr<VclAbstractDialog>         CreateTitlePageDlg ( vcl::Window * pParent ) override;
