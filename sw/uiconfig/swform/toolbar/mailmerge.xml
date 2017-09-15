@@ -22,4 +22,7 @@
   <toolbar:toolbaritem xlink:href=".uno:MailMergeSaveDocuments"/>
   <toolbar:toolbaritem xlink:href=".uno:MailMergePrintDocuments"/>
   <toolbar:toolbaritem xlink:href=".uno:MailMergeEmailDocuments"/>
+  <toolbar:toolbarseparator/>
+  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser"/>
+  <toolbar:toolbaritem xlink:href=".uno:AddressBookSource"/>
 </toolbar:toolbar>
