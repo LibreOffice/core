@@ -17,23 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
-#include <config_features.h>
-
 #include <signalshared.hxx>
 
-/* system headers */
-#include "system.h"
-#include <tchar.h>
-
-#include "file_url.hxx"
-#include "path_helper.hxx"
-
-#include <osl/signal.h>
-#include <DbgHelp.h>
-#include <errorrep.h>
 #include <systools/win32/uwinapi.h>
-#include <sal/macros.h>
+#include <errorrep.h>
 
 namespace
 {
@@ -46,7 +33,7 @@ bool onInitSignal()
 {
     pPreviousHandler = SetUnhandledExceptionFilter(signalHandlerFunction);
 
-    HMODULE hFaultRep = LoadLibrary( "faultrep.dll" );
+    HMODULE hFaultRep = LoadLibraryW( L"faultrep.dll" );
     if ( hFaultRep )
     {
         pfn_ADDEREXCLUDEDAPPLICATIONW pfn = reinterpret_cast<pfn_ADDEREXCLUDEDAPPLICATIONW>(GetProcAddress( hFaultRep, "AddERExcludedApplicationW" ));

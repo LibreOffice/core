@@ -96,9 +96,9 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 )
     SAL_INFO( "sal.osl", "osl_loadModule: " << pModuleName );
     OSL_ASSERT(pModuleName);
 
-    h = LoadLibrary(pModuleName);
+    h = LoadLibraryA(pModuleName);
     if (h == nullptr)
-        h = LoadLibraryEx(pModuleName, nullptr,
+        h = LoadLibraryExA(pModuleName, nullptr,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
 
     ret = static_cast<oslModule>(h);
@@ -236,10 +236,10 @@ static bool SAL_CALL osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustr
         the root when calling SymInitialize(), so we preferr DBGHELP.DLL
         which exports the same symbols and is shipped with OOo */
 
-    HMODULE     hModImageHelp = LoadLibrary( "DBGHELP.DLL" );
+    HMODULE     hModImageHelp = LoadLibraryW( L"DBGHELP.DLL" );
 
     if ( !hModImageHelp )
-        hModImageHelp = LoadLibrary( "IMAGEHLP.DLL" );
+        hModImageHelp = LoadLibraryW( L"IMAGEHLP.DLL" );
 
     if ( hModImageHelp )
     {
@@ -337,7 +337,7 @@ static bool SAL_CALL osl_addressGetModuleURL_NT_( void *pv, rtl_uString **pustrU
     static HMODULE      hModPsapi = nullptr;
 
     if ( !hModPsapi )
-        hModPsapi = LoadLibrary( "PSAPI.DLL" );
+        hModPsapi = LoadLibraryW( L"PSAPI.DLL" );
 
     if ( hModPsapi )
     {

@@ -17,25 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
-#define _UNICODE
 #include <systools/win32/uwinapi.h>
 
-#include <osl/file.hxx>
-#include <osl/diagnose.h>
-#include <rtl/alloc.h>
-#include <rtl/byteseq.h>
-#include <rtl/ustring.hxx>
-
-#include "file-impl.hxx"
 #include "file_url.hxx"
 #include "file_error.hxx"
-
-#include <cassert>
-#include <cstdio>
-#include <algorithm>
-#include <limits>
-#include <tchar.h>
 
 #ifdef max /* conflict w/ std::numeric_limits<T>::max() */
 #undef max
@@ -811,7 +796,7 @@ oslFileError SAL_CALL osl_mapFile(
         return osl_File_E_OVERFLOW;
     SIZE_T const nLength = sal::static_int_cast< SIZE_T >(uLength);
 
-    FileMapping aMap(::CreateFileMapping(pImpl->m_hFile, nullptr, SEC_COMMIT | PAGE_READONLY, 0, 0, nullptr));
+    FileMapping aMap(::CreateFileMappingW(pImpl->m_hFile, nullptr, SEC_COMMIT | PAGE_READONLY, 0, 0, nullptr));
     if (!IsValidHandle(aMap.m_handle))
         return oslTranslateFileError(GetLastError());
 
@@ -1080,7 +1065,7 @@ oslFileError SAL_CALL osl_removeFile(rtl_uString* strPath)
 
     if (error == osl_File_E_None)
     {
-        if (DeleteFile(SAL_W(rtl_uString_getStr(strSysPath))))
+        if (DeleteFileW(SAL_W(rtl_uString_getStr(strSysPath))))
             error = osl_File_E_None;
         else
             error = oslTranslateFileError(GetLastError());
@@ -1130,7 +1115,7 @@ oslFileError SAL_CALL osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPat
         LPCWSTR src = SAL_W(rtl_uString_getStr(strSysPath));
         LPCWSTR dst = SAL_W(rtl_uString_getStr(strSysDestPath));
 
-        if (MoveFileEx(src, dst, MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH | MOVEFILE_REPLACE_EXISTING))
+        if (MoveFileExW(src, dst, MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH | MOVEFILE_REPLACE_EXISTING))
             error = osl_File_E_None;
         else
             error = oslTranslateFileError(GetLastError());
