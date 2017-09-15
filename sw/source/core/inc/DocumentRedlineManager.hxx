@@ -138,7 +138,6 @@ private:
     sal_uInt16 mnAutoFormatRedlnCommentNo;  /**< SeqNo for conjoining of AutoFormat-Redlines.
                                          by the UI. Managed by SwAutoFormat! */
     css::uno::Sequence <sal_Int8 > maRedlinePasswd;
-    bool m_isForbidCompressRedlines = false;
 };
 
 }
