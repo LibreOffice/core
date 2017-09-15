@@ -39,6 +39,7 @@
 #   pragma warning (disable: 4005)
 #endif
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #ifdef _MSC_VER
