@@ -236,6 +236,11 @@ core_constructor_list = [
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
 # xmloff/util/xo.component
     "XMLVersionListPersistence_get_implementation",
+# xmlscript/util/xmlscript.component
+    "com_sun_star_comp_xmlscript_XMLBasicExporter",
+    "com_sun_star_comp_xmlscript_XMLBasicImporter",
+    "com_sun_star_comp_xmlscript_XMLOasisBasicExporter",
+    "com_sun_star_comp_xmlscript_XMLOasisBasicImporter",
     ]
 
 # edit group for apps, where you can edit documents
