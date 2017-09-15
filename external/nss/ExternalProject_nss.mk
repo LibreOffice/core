@@ -48,6 +48,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 		$(MAKE) -j1 AR="$(AR)" \
 			RANLIB="$(RANLIB)" \
 			NMEDIT="$(NM)edit" \
+			COMMA=$(COMMA) \
 			CC="$(CC)" CCC="$(CXX)" \
 			$(if $(CROSS_COMPILING),NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 			$(if $(filter ANDROID,$(OS)),OS_TARGET=Android OS_TARGET_RELEASE=14 ARCHFLAG="" DEFAULT_COMPILER=clang ANDROID_NDK=$(ANDROID_NDK_HOME) ANDROID_TOOLCHAIN_VERSION=$(ANDROID_GCC_TOOLCHAIN_VERSION)) \
