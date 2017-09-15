@@ -5124,9 +5124,15 @@ find_al()
         fi
     done
 
-    # We need this additional check to detect 4.6.2 or above.
-    for ver in 4.7 4.6.2; do
+    # We need this additional check to detect 4.6.1 or above.
+    for ver in 4.7 4.6.2 4.6.1; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
+        if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
+            altest=$regvalue
+            return
+        fi
+
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/WOW6432Node/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools"
         if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
             altest=$regvalue
             return
