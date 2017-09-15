@@ -2457,23 +2457,8 @@ bool TextEngine::Write( SvStream& rOutput )
         const sal_Int32 nEndPos = nPara == aSel.GetEnd().GetPara()
             ? aSel.GetEnd().GetIndex() : pNode->GetText().getLength();
 
-        OUStringBuffer aText;
-        aText = "<P STYLE=\"margin-bottom: 0cm\">";
-
-        if ( nStartPos == nEndPos )
-        {
-            // Empty lines will be removed by Writer
-            aText.append( "<BR>" );
-        }
-        else
-        {
-            // Text before Attribute
-            aText.append( pNode->GetText().copy( nStartPos, nEndPos-nStartPos ) );
-        }
-
-        aText.append( "</P>" );
-        rOutput.WriteLine(OUStringToOString(aText.makeStringAndClear(),
-            rOutput.GetStreamCharSet()));
+        const OUString aText = pNode->GetText().copy( nStartPos, nEndPos-nStartPos );
+        rOutput.WriteLine(OUStringToOString(aText, rOutput.GetStreamCharSet()));
     }
 
     return rOutput.GetError() == ERRCODE_NONE;
