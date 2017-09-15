@@ -3694,7 +3694,7 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
                 default:
                     return false;
             }
-            return aPath2.startsWith(aPath1);
+            return aPath1.compareTo(aPath2, nLength) == 0;
         }
 
         default:
