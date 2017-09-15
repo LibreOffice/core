@@ -6704,7 +6704,7 @@
                       <class name="context-Cell"/>
                       <class name="context-Default"/>
                       <class name="context-Empty"/>
-                      <class name="context-Any"/>
+                      <class name="context-EditCell"/>
                     </style>
                   </object>
                   <packing>
