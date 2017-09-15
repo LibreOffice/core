@@ -89,7 +89,8 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
 
                         sal_Int32 nNumFmt = -1;
                         xPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
-                        if (nNumFmt >= SVXTIMEFORMAT_APPDEFAULT && nNumFmt <= SVXTIMEFORMAT_AM_HMSH)
+                        if (static_cast<SvxTimeFormat>(nNumFmt) >= SvxTimeFormat::AppDefault &&
+                            static_cast<SvxTimeFormat>(nNumFmt) <= SvxTimeFormat::HH12_MM_SS_00_AMPM)
                             pData->SetFormat(static_cast<SvxTimeFormat>(nNumFmt));
 
                         return pData;
@@ -595,7 +596,7 @@ SvxExtTimeField::SvxExtTimeField()
     : m_nFixTime( tools::Time(tools::Time::SYSTEM).GetTime() )
 {
     eType = SvxTimeType::Var;
-    eFormat = SVXTIMEFORMAT_STANDARD;
+    eFormat = SvxTimeFormat::Standard;
 }
 
 
@@ -639,13 +640,13 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
 {
     switch( eFormat )
     {
-        case SVXTIMEFORMAT_SYSTEM :
-            OSL_FAIL( "SVXTIMEFORMAT_SYSTEM: not implemented" );
-            eFormat = SVXTIMEFORMAT_STANDARD;
+        case SvxTimeFormat::System :
+            OSL_FAIL( "SvxTimeFormat::System: not implemented" );
+            eFormat = SvxTimeFormat::Standard;
         break;
-        case SVXTIMEFORMAT_APPDEFAULT :
-            OSL_FAIL( "SVXTIMEFORMAT_APPDEFAULT: not implemented" );
-            eFormat = SVXTIMEFORMAT_STANDARD;
+        case SvxTimeFormat::AppDefault :
+            OSL_FAIL( "SvxTimeFormat::AppDefault: not implemented" );
+            eFormat = SvxTimeFormat::Standard;
         break;
         default: ;//prevent warning
     }
@@ -654,10 +655,10 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
 
     switch( eFormat )
     {
-        case SVXTIMEFORMAT_12_HM:
+        case SvxTimeFormat::HH12_MM:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMAMPM, eLang );
             break;
-        case SVXTIMEFORMAT_12_HMSH:
+        case SvxTimeFormat::HH12_MM_SS_00:
         {
             // no builtin format available, try to insert or reuse
             OUString aFormatCode( "HH:MM:SS.00 AM/PM" );
@@ -665,26 +666,26 @@ OUString SvxExtTimeField::GetFormatted( tools::Time const & aTime, SvxTimeFormat
             short nType;
             rFormatter.PutandConvertEntry( aFormatCode, nCheckPos, nType,
                                            nFormatKey, LANGUAGE_ENGLISH_US, eLang );
-            DBG_ASSERT( nCheckPos == 0, "SVXTIMEFORMAT_12_HMSH: could not insert format code" );
+            DBG_ASSERT( nCheckPos == 0, "SvxTimeFormat::HH12_MM_SS_00: could not insert format code" );
             if ( nCheckPos )
             {
                 nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HH_MMSS00, eLang );
             }
             break;
         }
-        case SVXTIMEFORMAT_24_HM:
+        case SvxTimeFormat::HH24_MM:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMM, eLang );
             break;
-        case SVXTIMEFORMAT_24_HMSH:
+        case SvxTimeFormat::HH24_MM_SS_00:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HH_MMSS00, eLang );
             break;
-        case SVXTIMEFORMAT_12_HMS:
+        case SvxTimeFormat::HH12_MM_SS:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMSSAMPM, eLang );
             break;
-        case SVXTIMEFORMAT_24_HMS:
+        case SvxTimeFormat::HH24_MM_SS:
             nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMSS, eLang );
             break;
-        case SVXTIMEFORMAT_STANDARD:
+        case SvxTimeFormat::Standard:
         default:
             nFormatKey = rFormatter.GetStandardFormat( css::util::NumberFormat::TIME, eLang );
     }
@@ -937,7 +938,7 @@ OUString SvxDateTimeField::GetFormatted(
 
     SvxTimeFormat eTimeFormat = (SvxTimeFormat)((eFormat >> 4) & 0x0f);
 
-    if(eTimeFormat)
+    if(eTimeFormat != SvxTimeFormat::AppDefault)
     {
         OUStringBuffer aBuf(aRet);
 

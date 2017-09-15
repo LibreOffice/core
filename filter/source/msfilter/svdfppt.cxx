@@ -6410,7 +6410,7 @@ PPTFieldEntry::~PPTFieldEntry()
 void PPTFieldEntry::GetDateTime( const sal_uInt32 nVal, SvxDateFormat& eDateFormat, SvxTimeFormat& eTimeFormat )
 {
     eDateFormat = SVXDATEFORMAT_APPDEFAULT;
-    eTimeFormat = SVXTIMEFORMAT_APPDEFAULT;
+    eTimeFormat = SvxTimeFormat::AppDefault;
     // evaluate ID
     switch( nVal )
     {
@@ -6433,19 +6433,19 @@ void PPTFieldEntry::GetDateTime( const sal_uInt32 nVal, SvxDateFormat& eDateForm
             eDateFormat = SVXDATEFORMAT_A;
             SAL_FALLTHROUGH;
         case 9:
-            eTimeFormat = SVXTIMEFORMAT_24_HM;
+            eTimeFormat = SvxTimeFormat::HH24_MM;
         break;
         case 8:
             eDateFormat = SVXDATEFORMAT_A;
             SAL_FALLTHROUGH;
         case 11:
-            eTimeFormat = SVXTIMEFORMAT_12_HM;
+            eTimeFormat = SvxTimeFormat::HH12_MM;
         break;
         case 10:
-            eTimeFormat = SVXTIMEFORMAT_24_HMS;
+            eTimeFormat = SvxTimeFormat::HH24_MM_SS;
         break;
         case 12:
-            eTimeFormat = SVXTIMEFORMAT_12_HMS;
+            eTimeFormat = SvxTimeFormat::HH12_MM_SS;
         break;
     }
 }
@@ -6457,7 +6457,7 @@ void PPTFieldEntry::SetDateTime( sal_uInt32 nVal )
     GetDateTime( nVal, eDateFormat, eTimeFormat );
     if ( eDateFormat != SVXDATEFORMAT_APPDEFAULT )
         xField1.reset(new SvxFieldItem(SvxDateField( Date( Date::SYSTEM ), SvxDateType::Var, eDateFormat ), EE_FEATURE_FIELD));
-    if ( eTimeFormat != SVXTIMEFORMAT_APPDEFAULT )
+    if ( eTimeFormat != SvxTimeFormat::AppDefault )
     {
         std::unique_ptr<SvxFieldItem> xFieldItem(new SvxFieldItem(SvxExtTimeField( tools::Time( tools::Time::SYSTEM ), SvxTimeType::Var, eTimeFormat ), EE_FEATURE_FIELD));
         if (xField1)

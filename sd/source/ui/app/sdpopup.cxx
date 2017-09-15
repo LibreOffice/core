@@ -97,27 +97,27 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        //SVXTIMEFORMAT_APPDEFAULT,     // is not used
-        //SVXTIMEFORMAT_SYSTEM,         // is not used
+        //SvxTimeFormat::AppDefault,     // is not used
+        //SvxTimeFormat::System,         // is not used
         InsertItem( nID++, SdResId( STR_STANDARD_NORMAL ), nStyle );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
+        aTimeField.SetFormat( SvxTimeFormat::HH24_MM );    // 13:49
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   // 13:49:38
+        aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS );   // 13:49:38
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  // 13:49:38.78
+        aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS_00 );  // 13:49:38.78
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
 
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    // 01:49
+        aTimeField.SetFormat( SvxTimeFormat::HH12_MM );    // 01:49
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   // 01:49:38
+        aTimeField.SetFormat( SvxTimeFormat::HH12_MM_SS );   // 01:49:38
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  // 01:49:38.78
+        aTimeField.SetFormat( SvxTimeFormat::HH12_MM_SS_00 );  // 01:49:38.78
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        //SVXTIMEFORMAT_AM_HM,  // 01:49 PM
-        //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
-        //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM
+        //SvxTimeFormat::HH12_MM_AMPM,  // 01:49 PM
+        //SvxTimeFormat::HH12_MM_SS_AMPM, // 01:49:38 PM
+        //SvxTimeFormat::HH12_MM_SS_00_AMPM // 01:49:38.78 PM
 
         CheckItem( (sal_uInt16) ( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
     }

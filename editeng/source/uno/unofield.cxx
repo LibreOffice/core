@@ -259,7 +259,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
     case text::textfield::Type::TIME:
         mpImpl->mbBoolean2 = false;
         mpImpl->mbBoolean1 = false;
-        mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
+        mpImpl->mnInt32 = static_cast<sal_Int32>(SvxTimeFormat::Standard);
         break;
 
     case text::textfield::Type::URL:
@@ -327,14 +327,14 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
             case text::textfield::Type::TIME:
                 mpImpl->mbBoolean2 = false;
                 mpImpl->mbBoolean1 = false;
-                mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
+                mpImpl->mnInt32 = static_cast<sal_Int32>(SvxTimeFormat::Standard);
                 break;
 
             case text::textfield::Type::EXTENDED_TIME:
                 mpImpl->mbBoolean2 = false;
                 mpImpl->maDateTime = getTime( static_cast<const SvxExtTimeField*>(pData)->GetFixTime() );
                 mpImpl->mbBoolean1 = static_cast<const SvxExtTimeField*>(pData)->GetType() == SvxTimeType::Fix;
-                mpImpl->mnInt32 = static_cast<const SvxExtTimeField*>(pData)->GetFormat();
+                mpImpl->mnInt32 = static_cast<sal_Int32>(static_cast<const SvxExtTimeField*>(pData)->GetFormat());
                 break;
 
             case text::textfield::Type::URL:
@@ -402,7 +402,8 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
                 tools::Time aTime( setTime( mpImpl->maDateTime ) );
                 pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SvxTimeType::Fix:SvxTimeType::Var );
 
-                if( mpImpl->mnInt32 >= SVXTIMEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXTIMEFORMAT_AM_HMSH )
+                if( static_cast<SvxTimeFormat>(mpImpl->mnInt32) >= SvxTimeFormat::AppDefault &&
+                    static_cast<SvxTimeFormat>(mpImpl->mnInt32) <= SvxTimeFormat::HH12_MM_SS_00_AMPM )
                     static_cast<SvxExtTimeField*>(pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInt32 );
             }
             else

@@ -634,16 +634,16 @@ void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPrope
             }
             switch( eTimeFormat )
             {
-                case SVXTIMEFORMAT_24_HM :
+                case SvxTimeFormat::HH24_MM :
                     nFormat = 9;
                 break;
-                case SVXTIMEFORMAT_12_HM :
+                case SvxTimeFormat::HH12_MM :
                     nFormat = 11;
                 break;
-                case SVXTIMEFORMAT_24_HMS :
+                case SvxTimeFormat::HH24_MM_SS :
                     nFormat = 10;
                 break;
-                case SVXTIMEFORMAT_12_HMS :
+                case SvxTimeFormat::HH12_MM_SS :
                     nFormat = 12;
                 break;
                 default:
