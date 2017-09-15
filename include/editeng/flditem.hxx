@@ -290,11 +290,12 @@ public:
 
 
 enum SvxFileType { SVXFILETYPE_FIX, SVXFILETYPE_VAR };
-enum SvxFileFormat {    SVXFILEFORMAT_NAME_EXT = 0, // File name with Extension
-                        SVXFILEFORMAT_FULLPATH, // full path
-                        SVXFILEFORMAT_PATH,     // only path
-                        SVXFILEFORMAT_NAME      // only file name
-                   };
+enum class SvxFileFormat {
+    NameAndExt = 0, // File name with Extension
+    PathFull,       // full path
+    PathOnly,       // only path
+    NameOnly        // only file name
+};
 
 
 class EDITENG_DLLPUBLIC SvxExtFileField : public SvxFieldData
@@ -309,7 +310,7 @@ public:
                             SvxExtFileField();
     explicit                SvxExtFileField( const OUString& rString,
                                 SvxFileType eType = SVXFILETYPE_VAR,
-                                SvxFileFormat eFormat = SVXFILEFORMAT_FULLPATH );
+                                SvxFileFormat eFormat = SvxFileFormat::PathFull );
 
     const OUString&         GetFile() const { return aFile; }
     void                    SetFile( const OUString& rString ) { aFile = rString; }

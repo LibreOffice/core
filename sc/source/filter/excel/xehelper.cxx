@@ -822,14 +822,14 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                         {
                             switch( pFileField->GetFormat() )
                             {
-                                case SVXFILEFORMAT_NAME_EXT:
-                                case SVXFILEFORMAT_NAME:
+                                case SvxFileFormat::NameAndExt:
+                                case SvxFileFormat::NameOnly:
                                     aParaText += "&F";
                                 break;
-                                case SVXFILEFORMAT_PATH:
+                                case SvxFileFormat::PathOnly:
                                     aParaText += "&Z";
                                 break;
-                                case SVXFILEFORMAT_FULLPATH:
+                                case SvxFileFormat::PathFull:
                                     aParaText += "&Z&F";
                                 break;
                                 default:

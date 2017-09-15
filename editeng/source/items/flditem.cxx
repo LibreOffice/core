@@ -135,12 +135,12 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     xPropSet->getPropertyValue(UNO_TC_PROP_CURRENT_PRESENTATION) >>= aPresentation;
                     xPropSet->getPropertyValue(UNO_TC_PROP_FILE_FORMAT) >>= nFmt;
 
-                    SvxFileFormat eFmt = SVXFILEFORMAT_NAME_EXT;
+                    SvxFileFormat eFmt = SvxFileFormat::NameAndExt;
                     switch (nFmt)
                     {
-                        case text::FilenameDisplayFormat::FULL: eFmt = SVXFILEFORMAT_FULLPATH; break;
-                        case text::FilenameDisplayFormat::PATH: eFmt = SVXFILEFORMAT_PATH;     break;
-                        case text::FilenameDisplayFormat::NAME: eFmt = SVXFILEFORMAT_NAME;     break;
+                        case text::FilenameDisplayFormat::FULL: eFmt = SvxFileFormat::PathFull; break;
+                        case text::FilenameDisplayFormat::PATH: eFmt = SvxFileFormat::PathOnly;     break;
+                        case text::FilenameDisplayFormat::NAME: eFmt = SvxFileFormat::NameOnly;     break;
                         default:;
                     }
 
@@ -710,7 +710,7 @@ SV_IMPL_PERSIST1( SvxExtFileField );
 SvxExtFileField::SvxExtFileField()
 {
     eType = SVXFILETYPE_VAR;
-    eFormat = SVXFILEFORMAT_FULLPATH;
+    eFormat = SvxFileFormat::PathFull;
 }
 
 
@@ -767,22 +767,22 @@ OUString SvxExtFileField::GetFormatted() const
     {
         switch( eFormat )
         {
-            case SVXFILEFORMAT_FULLPATH:
+            case SvxFileFormat::PathFull:
                 aString = aURLObj.getFSysPath(FSysStyle::Detect);
             break;
 
-            case SVXFILEFORMAT_PATH:
+            case SvxFileFormat::PathOnly:
                 aURLObj.removeSegment(INetURLObject::LAST_SEGMENT, false);
                 // #101742# Leave trailing slash at the pathname
                 aURLObj.setFinalSlash();
                 aString = aURLObj.getFSysPath(FSysStyle::Detect);
             break;
 
-            case SVXFILEFORMAT_NAME:
+            case SvxFileFormat::NameOnly:
                 aString = aURLObj.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DecodeMechanism::Unambiguous);
             break;
 
-            case SVXFILEFORMAT_NAME_EXT:
+            case SvxFileFormat::NameAndExt:
                 aString = aURLObj.getName(INetURLObject::LAST_SEGMENT,true,INetURLObject::DecodeMechanism::Unambiguous);
             break;
         }
@@ -791,22 +791,22 @@ OUString SvxExtFileField::GetFormatted() const
     {
         switch( eFormat )
         {
-            case SVXFILEFORMAT_FULLPATH:
+            case SvxFileFormat::PathFull:
                 aString = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             break;
 
-            case SVXFILEFORMAT_PATH:
+            case SvxFileFormat::PathOnly:
                 aURLObj.removeSegment(INetURLObject::LAST_SEGMENT, false);
                 // #101742# Leave trailing slash at the pathname
                 aURLObj.setFinalSlash();
                 aString = aURLObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri );
             break;
 
-            case SVXFILEFORMAT_NAME:
+            case SvxFileFormat::NameOnly:
                 aString = aURLObj.getBase();
             break;
 
-            case SVXFILEFORMAT_NAME_EXT:
+            case SvxFileFormat::NameAndExt:
                 aString = aURLObj.getName();
             break;
         }
