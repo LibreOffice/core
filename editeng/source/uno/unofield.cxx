@@ -272,7 +272,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
         break;
 
     case text::textfield::Type::AUTHOR:
-        mpImpl->mnInt16 = SVXAUTHORFORMAT_FULLNAME;
+        mpImpl->mnInt16 = static_cast<sal_uInt16>(SvxAuthorFormat::FullName);
         mpImpl->mbBoolean1 = false;
         mpImpl->mbBoolean2 = true;
         break;
@@ -357,7 +357,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
                 mpImpl->mnInt16    = sal::static_int_cast< sal_Int16 >(
                     static_cast<const SvxAuthorField*>(pData)->GetFormat());
                 mpImpl->mbBoolean1 = static_cast<const SvxAuthorField*>(pData)->GetType() == SVXAUTHORTYPE_FIX;
-                mpImpl->mbBoolean2 = static_cast<const SvxAuthorField*>(pData)->GetFormat() != SVXAUTHORFORMAT_SHORTNAME;
+                mpImpl->mbBoolean2 = static_cast<const SvxAuthorField*>(pData)->GetFormat() != SvxAuthorFormat::ShortName;
                 break;
 
             case text::textfield::Type::MEASURE:
@@ -478,9 +478,10 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
         if( !mpImpl->mbBoolean2 )
         {
-            static_cast<SvxAuthorField*>(pData)->SetFormat( SVXAUTHORFORMAT_SHORTNAME );
+            static_cast<SvxAuthorField*>(pData)->SetFormat( SvxAuthorFormat::ShortName );
         }
-        else if( mpImpl->mnInt16 >= SVXAUTHORFORMAT_FULLNAME && mpImpl->mnInt16 <= SVXAUTHORFORMAT_SHORTNAME )
+        else if( static_cast<SvxAuthorFormat>(mpImpl->mnInt16) >= SvxAuthorFormat::FullName &&
+                 static_cast<SvxAuthorFormat>(mpImpl->mnInt16) <= SvxAuthorFormat::ShortName )
         {
             static_cast<SvxAuthorField*>(pData)->SetFormat( (SvxAuthorFormat) mpImpl->mnInt16 );
         }

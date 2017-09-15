@@ -185,9 +185,10 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                     {
                         if (!bFullName)
                         {
-                            pData->SetFormat(SVXAUTHORFORMAT_SHORTNAME);
+                            pData->SetFormat(SvxAuthorFormat::ShortName);
                         }
-                        else if (nFmt >= SVXAUTHORFORMAT_FULLNAME && nFmt <= SVXAUTHORFORMAT_SHORTNAME)
+                        else if (static_cast<SvxAuthorFormat>(nFmt) >= SvxAuthorFormat::FullName &&
+                                 static_cast<SvxAuthorFormat>(nFmt) <= SvxAuthorFormat::ShortName)
                         {
                             pData->SetFormat(static_cast<SvxAuthorFormat>(nFmt));
                         }
@@ -860,18 +861,18 @@ OUString SvxAuthorField::GetFormatted() const
 
     switch( eFormat )
     {
-        case SVXAUTHORFORMAT_FULLNAME:
+        case SvxAuthorFormat::FullName:
             aString = aFirstName + " " + aName;
         break;
-        case SVXAUTHORFORMAT_NAME:
+        case SvxAuthorFormat::LastName:
             aString = aName;
         break;
 
-        case SVXAUTHORFORMAT_FIRSTNAME:
+        case SvxAuthorFormat::FirstName:
             aString = aFirstName;
         break;
 
-        case SVXAUTHORFORMAT_SHORTNAME:
+        case SvxAuthorFormat::ShortName:
             aString = aShortName;
         break;
     }
