@@ -545,6 +545,11 @@ void DocumentHandlerImpl::startElement(
     else
     {
         ++m_nSkipElements;
+
+        // pop prefixes
+        for (sal_Int32 nPos = elementEntry->m_prefixes.size(); nPos--;)
+            popPrefix(elementEntry->m_prefixes[nPos]);
+
         SAL_INFO("xmlscript.xmlhelper", " no context given on createChildElement() => ignoring element \"" << rQElementName << "\" ...");
     }
     }
