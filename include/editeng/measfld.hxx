@@ -35,7 +35,7 @@
 
 class SdrMeasureObj;
 
-enum SdrMeasureFieldKind {SDRMEASUREFIELD_VALUE,SDRMEASUREFIELD_UNIT,SDRMEASUREFIELD_ROTA90BLANCS};
+enum class SdrMeasureFieldKind { Value, Unit, Rotate90Blanks };
 
 class EDITENG_DLLPUBLIC SdrMeasureField: public SvxFieldData {
     SdrMeasureFieldKind eMeasureFieldKind;

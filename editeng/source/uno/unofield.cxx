@@ -278,7 +278,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
         break;
 
     case text::textfield::Type::MEASURE:
-        mpImpl->mnInt16 = SDRMEASUREFIELD_VALUE;
+        mpImpl->mnInt16 = static_cast<sal_uInt16>(SdrMeasureFieldKind::Value);
         break;
 
     default:
@@ -490,8 +490,8 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
     case text::textfield::Type::MEASURE:
     {
-        SdrMeasureFieldKind eKind = SDRMEASUREFIELD_VALUE;
-        if( mpImpl->mnInt16 == (sal_Int16)SDRMEASUREFIELD_UNIT || mpImpl->mnInt16 == (sal_Int16)SDRMEASUREFIELD_ROTA90BLANCS )
+        SdrMeasureFieldKind eKind = SdrMeasureFieldKind::Value;
+        if( mpImpl->mnInt16 == (sal_Int16)SdrMeasureFieldKind::Unit || mpImpl->mnInt16 == (sal_Int16)SdrMeasureFieldKind::Rotate90Blanks )
             eKind = (SdrMeasureFieldKind) mpImpl->mnInt16;
         pData = new SdrMeasureField( eKind);
         break;
