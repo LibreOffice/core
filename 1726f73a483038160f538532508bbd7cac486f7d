@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b583b2cb",
+        "filename": "sal/osl/w32/security.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001666
+      },
+      "writtenOn": "2017-09-15T15:51:45Z",
+      "side": 1,
+      "message": "This change is incorrect. The property is named SE_RESTORE_NAME.  See \nhttps://msdn.microsoft.com/en-us/library/windows/desktop/bb530716(v\u003dvs.85).aspx",
+      "revId": "1726f73a483038160f538532508bbd7cac486f7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
