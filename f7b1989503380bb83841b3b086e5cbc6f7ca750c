@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f5029a3d",
+        "filename": "sc/source/filter/inc/xistyle.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-09-15T16:46:59Z",
+      "side": 0,
+      "message": "Please split out this change into a separate commit, with its own commit message. It is unrelated to the typo fixing.",
+      "revId": "f7b1989503380bb83841b3b086e5cbc6f7ca750c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
