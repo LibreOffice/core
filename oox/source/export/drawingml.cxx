@@ -1670,17 +1670,22 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
                 {
                     sal_Int32 nNumFmt = -1;
                     rXPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
-                    switch(nNumFmt)
+                    switch(static_cast<SvxTimeFormat>(nNumFmt))
                     {
-                        case SVXTIMEFORMAT_STANDARD:
-                        case SVXTIMEFORMAT_24_HMS:  aFieldValue = "datetime11"; // 13:49:38
-                                                    break;
-                        case SVXTIMEFORMAT_24_HM:   aFieldValue = "datetime10"; // 13:49
-                                                    break;
-                        case SVXTIMEFORMAT_12_HM:   aFieldValue = "datetime12"; // 01:49 PM
-                                                    break;
-                        case SVXTIMEFORMAT_12_HMS:  aFieldValue = "datetime13"; // 01:49:38 PM
-                                                    break;
+                        case SvxTimeFormat::Standard:
+                        case SvxTimeFormat::HH24_MM_SS:
+                            aFieldValue = "datetime11"; // 13:49:38
+                            break;
+                        case SvxTimeFormat::HH24_MM:
+                            aFieldValue = "datetime10"; // 13:49
+                            break;
+                        case SvxTimeFormat::HH12_MM:
+                            aFieldValue = "datetime12"; // 01:49 PM
+                            break;
+                        case SvxTimeFormat::HH12_MM_SS:
+                            aFieldValue = "datetime13"; // 01:49:38 PM
+                            break;
+                        default: break;
                     }
                 }
                 else if(aFieldKind == "ExtFile")

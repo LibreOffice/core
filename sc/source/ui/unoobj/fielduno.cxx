@@ -991,7 +991,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
                 }
 
                 if (rName == SC_UNONAME_NUMFMT)
-                    return uno::makeAny<sal_Int32>(p->GetFormat());
+                    return uno::makeAny<sal_Int32>(static_cast<sal_Int32>(p->GetFormat()));
             }
             break;
             default:

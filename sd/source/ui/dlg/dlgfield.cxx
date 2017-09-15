@@ -203,28 +203,28 @@ void SdModifyFieldDlg::FillFormatList()
         const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( pField );
         SvxExtTimeField aTimeField( *pTimeField );
 
-        //SVXTIMEFORMAT_APPDEFAULT,     // not used
-        //SVXTIMEFORMAT_SYSTEM,         // not used
+        //SvxTimeFormat::AppDefault,     // not used
+        //SvxTimeFormat::System,         // not used
         m_pLbFormat->InsertEntry( SdResId( STR_STANDARD_NORMAL ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
+        aTimeField.SetFormat( SvxTimeFormat::HH24_MM );    // 13:49
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   // 13:49:38
+        aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS );   // 13:49:38
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  // 13:49:38.78
+        aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS_00 );  // 13:49:38.78
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    // 01:49
+        aTimeField.SetFormat( SvxTimeFormat::HH12_MM );    // 01:49
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   // 01:49:38
+        aTimeField.SetFormat( SvxTimeFormat::HH12_MM_SS );   // 01:49:38
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  // 01:49:38.78
+        aTimeField.SetFormat( SvxTimeFormat::HH12_MM_SS_00 );  // 01:49:38.78
         m_pLbFormat->InsertEntry( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
-        //SVXTIMEFORMAT_AM_HM,  // 01:49 PM
-        //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
-        //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM
+        //SvxTimeFormat::HH12_MM_AMPM,  // 01:49 PM
+        //SvxTimeFormat::HH12_MM_SS_AMPM, // 01:49:38 PM
+        //SvxTimeFormat::HH12_MM_SS_00_AMPM // 01:49:38.78 PM
 
-        m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pTimeField->GetFormat() - 2 ) );
+        m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(pTimeField->GetFormat()) - 2 );
     }
     else if( dynamic_cast< const SvxExtFileField *>( pField ) !=  nullptr )
     {

@@ -100,14 +100,14 @@ int const nDateTimeFormats[nDateTimeFormatsCount] =
     SVXDATEFORMAT_E,
     SVXDATEFORMAT_F,
 
-    SVXDATEFORMAT_A | (SVXTIMEFORMAT_24_HM << 4),
-    SVXDATEFORMAT_A | (SVXTIMEFORMAT_12_HM << 4),
+    SVXDATEFORMAT_A | (static_cast<int>(SvxTimeFormat::HH24_MM) << 4),
+    SVXDATEFORMAT_A | (static_cast<int>(SvxTimeFormat::HH12_MM) << 4),
 
-    (SVXTIMEFORMAT_24_HM << 4),
-    (SVXTIMEFORMAT_24_HMS <<4),
+    static_cast<int>(SvxTimeFormat::HH24_MM) << 4,
+    static_cast<int>(SvxTimeFormat::HH24_MM_SS) << 4,
 
-    (SVXTIMEFORMAT_12_HM << 4 ),
-    (SVXTIMEFORMAT_12_HMS << 4 )
+    static_cast<int>(SvxTimeFormat::HH12_MM) << 4,
+    static_cast<int>(SvxTimeFormat::HH12_MM_SS) << 4
 };
 
 class HeaderFooterTabPage : public TabPage

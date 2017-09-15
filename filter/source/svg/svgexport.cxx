@@ -251,23 +251,23 @@ public:
         }
 
         SvxTimeFormat eTimeFormat = (SvxTimeFormat)( ( format >> 4 ) & 0x0f );
-        if( eTimeFormat )
+        if( eTimeFormat != SvxTimeFormat::AppDefault )
         {
             switch( eTimeFormat )
             {
-                case SVXTIMEFORMAT_24_HMS:      // 13:49:38
+                case SvxTimeFormat::HH24_MM_SS:      // 13:49:38
                     sTimeFormat.clear();
                     break;
-                case SVXTIMEFORMAT_AM_HM:      // 01:49 PM
-                case SVXTIMEFORMAT_12_HM:
+                case SvxTimeFormat::HH12_MM_AMPM:      // 01:49 PM
+                case SvxTimeFormat::HH12_MM:
                     sTimeFormat.clear();
                     break;
-                case SVXTIMEFORMAT_AM_HMS:     // 01:49:38 PM
-                case SVXTIMEFORMAT_12_HMS:
+                case SvxTimeFormat::HH12_MM_SS_AMPM:     // 01:49:38 PM
+                case SvxTimeFormat::HH12_MM_SS:
                     sTimeFormat.clear();
                     break;
                 // default case
-                case SVXTIMEFORMAT_24_HM:     // 13:49
+                case SvxTimeFormat::HH24_MM:     // 13:49
                 default:
                     sTimeFormat.clear();
                     break;

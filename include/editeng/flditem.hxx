@@ -244,19 +244,20 @@ enum class SvxTimeType {
     Fix,
     Var
 };
-enum SvxTimeFormat {    SVXTIMEFORMAT_APPDEFAULT = 0,   // Set as in App
-                        SVXTIMEFORMAT_SYSTEM,       // Set as in System
-                        SVXTIMEFORMAT_STANDARD,
-                        SVXTIMEFORMAT_24_HM,    // 13:49
-                        SVXTIMEFORMAT_24_HMS,   // 13:49:38
-                        SVXTIMEFORMAT_24_HMSH,  // 13:49:38.78
-                        SVXTIMEFORMAT_12_HM,    // 01:49
-                        SVXTIMEFORMAT_12_HMS,   // 01:49:38
-                        SVXTIMEFORMAT_12_HMSH,  // 01:49:38.78
-                        SVXTIMEFORMAT_AM_HM,    // 01:49 PM
-                        SVXTIMEFORMAT_AM_HMS,   // 01:49:38 PM
-                        SVXTIMEFORMAT_AM_HMSH   // 01:49:38.78 PM
-                    };
+enum class SvxTimeFormat {
+    AppDefault = 0,    // Set as in App
+    System,            // Set as in System
+    Standard,
+    HH24_MM,           // 13:49
+    HH24_MM_SS,        // 13:49:38
+    HH24_MM_SS_00,     // 13:49:38.78
+    HH12_MM,           // 01:49
+    HH12_MM_SS,        // 01:49:38
+    HH12_MM_SS_00,     // 01:49:38.78
+    HH12_MM_AMPM,      // 01:49 PM
+    HH12_MM_SS_AMPM,   // 01:49:38 PM
+    HH12_MM_SS_00_AMPM // 01:49:38.78 PM
+};
 
 class EDITENG_DLLPUBLIC SvxExtTimeField : public SvxFieldData
 {
@@ -270,7 +271,7 @@ public:
                             SvxExtTimeField();
     explicit                SvxExtTimeField( const tools::Time& rTime,
                                 SvxTimeType eType,
-                                SvxTimeFormat eFormat = SVXTIMEFORMAT_STANDARD );
+                                SvxTimeFormat eFormat = SvxTimeFormat::Standard );
 
     sal_Int64               GetFixTime() const { return m_nFixTime; }
     void                    SetFixTime( const tools::Time& rTime ) { m_nFixTime = rTime.GetTime(); }
