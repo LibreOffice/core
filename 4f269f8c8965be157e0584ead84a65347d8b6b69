@@ -16,6 +16,24 @@
       "revId": "4f269f8c8965be157e0584ead84a65347d8b6b69",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_55b7ee38",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3236,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-15T10:58:54Z",
+      "side": 0,
+      "message": "yeah, I don\u0027t know why this works, but Julien tested and someone else confirmed, that it fixed the leak.\n\nI suspect that there is some kind of reference-count-cycle hiding here, which not even VclPtr can deal with.",
+      "parentUuid": "1a430d35_15ad66e9",
+      "revId": "4f269f8c8965be157e0584ead84a65347d8b6b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
