@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4aabcd1d",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-15T09:05:36Z",
+      "side": 1,
+      "message": "deprected -\u003e deprecated",
+      "revId": "a59a9fa0b5690a4448ef1bbd2ee8b599426e5afd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
