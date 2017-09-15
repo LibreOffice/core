@@ -1654,16 +1654,17 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
                 {
                     sal_Int32 nNumFmt = -1;
                     rXPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
-                    switch(nNumFmt)
+                    switch(static_cast<SvxDateFormat>(nNumFmt))
                     {
-                        case SVXDATEFORMAT_STDSMALL:
-                        case SVXDATEFORMAT_A: aFieldValue = "datetime"; // 13/02/96
+                        case SvxDateFormat::StdSmall:
+                        case SvxDateFormat::A: aFieldValue = "datetime"; // 13/02/96
                                               break;
-                        case SVXDATEFORMAT_B: aFieldValue = "datetime1"; // 13/02/1996
+                        case SvxDateFormat::B: aFieldValue = "datetime1"; // 13/02/1996
                                               break;
-                        case SVXDATEFORMAT_STDBIG:
-                        case SVXDATEFORMAT_D: aFieldValue = "datetime3"; // 13 February 1996
+                        case SvxDateFormat::StdBig:
+                        case SvxDateFormat::D: aFieldValue = "datetime3"; // 13 February 1996
                                               break;
+                        default: break;
                     }
                 }
                 else if(aFieldKind == "ExtTime")

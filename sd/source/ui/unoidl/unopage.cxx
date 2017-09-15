@@ -922,7 +922,8 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 if( ! ( aValue >>= nValue ) )
                     throw lang::IllegalArgumentException();
 
-                aHeaderFooterSettings.meDateTimeFormat = nValue;
+                aHeaderFooterSettings.meDateFormat = static_cast<SvxDateFormat>(nValue & 0x0f);
+                aHeaderFooterSettings.meTimeFormat = static_cast<SvxTimeFormat>((nValue >> 4) & 0x0f);
                 break;
             }
             }
@@ -1289,7 +1290,11 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         }
         break;
     case WID_PAGE_DATETIMEFORMAT:
-        aAny <<= (sal_Int32)GetPage()->getHeaderFooterSettings().meDateTimeFormat;
+        {
+            auto const & rSettings = GetPage()->getHeaderFooterSettings();
+            sal_Int32 x = static_cast<sal_Int32>(rSettings.meDateFormat) & (static_cast<sal_Int32>(rSettings.meTimeFormat) << 4);
+            aAny <<= x;
+        }
         break;
 
     case WID_TRANSITION_TYPE:

@@ -1460,7 +1460,8 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
                     SvxDateFormat eDateFormat;
                     SvxTimeFormat eTimeFormat;
                     PPTFieldEntry::GetDateTime( pHFE->nAtom & 0xff, eDateFormat, eTimeFormat );
-                    rHeaderFooterSettings.meDateTimeFormat = eDateFormat | ( static_cast<int>(eTimeFormat) << 4 );
+                    rHeaderFooterSettings.meDateFormat = eDateFormat;
+                    rHeaderFooterSettings.meTimeFormat = eTimeFormat;
                 }
                 break;
                 case 1 :

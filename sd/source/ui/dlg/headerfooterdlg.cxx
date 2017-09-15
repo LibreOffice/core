@@ -91,23 +91,27 @@ namespace sd
 {
 
 const int nDateTimeFormatsCount = 12;
-int const nDateTimeFormats[nDateTimeFormatsCount] =
+struct DateAndTimeFormat {
+    SvxDateFormat meDateFormat;
+    SvxTimeFormat meTimeFormat;
+};
+DateAndTimeFormat const nDateTimeFormats[nDateTimeFormatsCount] =
 {
-    SVXDATEFORMAT_A,
-    SVXDATEFORMAT_B,
-    SVXDATEFORMAT_C,
-    SVXDATEFORMAT_D,
-    SVXDATEFORMAT_E,
-    SVXDATEFORMAT_F,
+    { SvxDateFormat::A, SvxTimeFormat::AppDefault },
+    { SvxDateFormat::B, SvxTimeFormat::AppDefault },
+    { SvxDateFormat::C, SvxTimeFormat::AppDefault },
+    { SvxDateFormat::D, SvxTimeFormat::AppDefault },
+    { SvxDateFormat::E, SvxTimeFormat::AppDefault },
+    { SvxDateFormat::F, SvxTimeFormat::AppDefault },
 
-    SVXDATEFORMAT_A | (static_cast<int>(SvxTimeFormat::HH24_MM) << 4),
-    SVXDATEFORMAT_A | (static_cast<int>(SvxTimeFormat::HH12_MM) << 4),
+    { SvxDateFormat::A, SvxTimeFormat::HH24_MM },
+    { SvxDateFormat::A, SvxTimeFormat::HH12_MM },
 
-    static_cast<int>(SvxTimeFormat::HH24_MM) << 4,
-    static_cast<int>(SvxTimeFormat::HH24_MM_SS) << 4,
+    { SvxDateFormat::AppDefault, SvxTimeFormat::HH24_MM },
+    { SvxDateFormat::AppDefault, SvxTimeFormat::HH24_MM_SS },
 
-    static_cast<int>(SvxTimeFormat::HH12_MM) << 4,
-    static_cast<int>(SvxTimeFormat::HH12_MM_SS) << 4
+    { SvxDateFormat::AppDefault, SvxTimeFormat::HH12_MM },
+    { SvxDateFormat::AppDefault, SvxTimeFormat::HH12_MM_SS },
 };
 
 class HeaderFooterTabPage : public TabPage
@@ -146,7 +150,7 @@ private:
     DECL_LINK( UpdateOnClickHdl, Button*, void );
     DECL_LINK( LanguageChangeHdl, ListBox&, void );
 
-    void FillFormatList(int eFormat);
+    void FillFormatList(sal_Int32 nSelectedPos);
     void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet );
     void GetOrSetDateTimeLanguage( LanguageType &rLanguage, bool bSet, SdPage* pPage );
 
@@ -439,7 +443,7 @@ HeaderFooterTabPage::HeaderFooterTabPage( vcl::Window* pWindow, SdDrawDocument* 
     meOldLanguage = MsLangId::getRealLanguage( meOldLanguage );
     mpCBDateTimeLanguage->SelectLanguage( meOldLanguage );
 
-    FillFormatList(SVXDATEFORMAT_A);
+    FillFormatList(0);
 }
 
 HeaderFooterTabPage::~HeaderFooterTabPage()
@@ -471,10 +475,10 @@ void HeaderFooterTabPage::dispose()
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl, ListBox&, void)
 {
-    FillFormatList( (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetSelectEntryData()) );
+    FillFormatList( mpCBDateTimeFormat->GetSelectEntryPos() );
 }
 
-void HeaderFooterTabPage::FillFormatList( int eFormat )
+void HeaderFooterTabPage::FillFormatList( sal_Int32 nSelectedPos )
 {
     LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectLanguage();
 
@@ -483,15 +487,14 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
     Date aDate( Date::SYSTEM );
     tools::Time aTime( tools::Time::SYSTEM );
 
-    int nFormat;
-    for( nFormat = 0; nFormat < nDateTimeFormatsCount; nFormat++ )
+    for( int nFormat = 0; nFormat < nDateTimeFormatsCount; nFormat++ )
     {
         OUString aStr( SvxDateTimeField::GetFormatted(
-                aDate, aTime, nDateTimeFormats[nFormat],
+                aDate, aTime,
+                nDateTimeFormats[nFormat].meDateFormat, nDateTimeFormats[nFormat].meTimeFormat,
                 *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
         const sal_Int32 nEntry = mpCBDateTimeFormat->InsertEntry( aStr );
-        mpCBDateTimeFormat->SetEntryData( nEntry, reinterpret_cast<void*>((sal_IntPtr)nDateTimeFormats[nFormat] ));
-        if( nDateTimeFormats[nFormat] == eFormat )
+        if( nFormat == nSelectedPos )
         {
             mpCBDateTimeFormat->SelectEntryPos( nEntry );
             mpCBDateTimeFormat->SetText( aStr );
@@ -520,8 +523,7 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
 
     for( sal_Int32 nPos = 0; nPos < mpCBDateTimeFormat->GetEntryCount(); nPos++ )
     {
-        int nFormat = (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetEntryData( nPos ));
-        if( nFormat == rSettings.meDateTimeFormat )
+        if( nDateTimeFormats[nPos].meDateFormat == rSettings.meDateFormat && nDateTimeFormats[nPos].meTimeFormat == rSettings.meTimeFormat )
         {
             mpCBDateTimeFormat->SelectEntryPos( nPos );
             mpCBDateTimeFormat->SetText( mpCBDateTimeFormat->GetEntry(nPos) );
@@ -544,7 +546,11 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
     rSettings.maHeaderText = mpTBHeader->GetText();
 
     if( mpCBDateTimeFormat->GetSelectEntryCount() == 1 )
-        rSettings.meDateTimeFormat = (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetSelectEntryData());
+    {
+        sal_Int32 nPos = mpCBDateTimeFormat->GetSelectEntryPos();
+        rSettings.meDateFormat = nDateTimeFormats[nPos].meDateFormat;
+        rSettings.meTimeFormat = nDateTimeFormats[nPos].meTimeFormat;
+    }
 
     LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectLanguage();
     if( eLanguage != meOldLanguage )

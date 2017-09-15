@@ -28,6 +28,7 @@
 #include <list>
 #include <memory>
 #include <vector>
+#include <editeng/flditem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
 #include <xmloff/autolayout.hxx>
@@ -71,7 +72,8 @@ namespace sd {
         bool mbDateTimeVisible;
         bool mbDateTimeIsFixed;
         OUString maDateTimeText;
-        int meDateTimeFormat;
+        SvxDateFormat meDateFormat;
+        SvxTimeFormat meTimeFormat;
 
         HeaderFooterSettings();
 

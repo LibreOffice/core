@@ -221,29 +221,29 @@ public:
         VariableTextField::elementExport( pSVGExport );
         OUString sDateFormat, sTimeFormat;
         SvxDateFormat eDateFormat = (SvxDateFormat)( format & 0x0f );
-        if( eDateFormat )
+        if( eDateFormat != SvxDateFormat::AppDefault )
         {
             switch( eDateFormat )
             {
-                case SVXDATEFORMAT_STDSMALL:
-                case SVXDATEFORMAT_A:       // 13.02.96
+                case SvxDateFormat::StdSmall:
+                case SvxDateFormat::A:       // 13.02.96
                     sDateFormat.clear();
                     break;
-                case SVXDATEFORMAT_C:       // 13.Feb 1996
+                case SvxDateFormat::C:       // 13.Feb 1996
                     sDateFormat.clear();
                     break;
-                case SVXDATEFORMAT_D:       // 13.February 1996
+                case SvxDateFormat::D:       // 13.February 1996
                     sDateFormat.clear();
                     break;
-                case SVXDATEFORMAT_E:       // Tue, 13.February 1996
+                case SvxDateFormat::E:       // Tue, 13.February 1996
                     sDateFormat.clear();
                     break;
-                case SVXDATEFORMAT_STDBIG:
-                case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                case SvxDateFormat::StdBig:
+                case SvxDateFormat::F:       // Tuesday, 13.February 1996
                     sDateFormat.clear();
                     break;
                 // default case
-                case SVXDATEFORMAT_B:      // 13.02.1996
+                case SvxDateFormat::B:      // 13.02.1996
                 default:
                     sDateFormat.clear();
                     break;
@@ -1359,7 +1359,7 @@ void SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
     mVisiblePagePropSet.bIsFooterFieldVisible               = true;
     mVisiblePagePropSet.bIsDateTimeFieldVisible             = true;
     mVisiblePagePropSet.bIsDateTimeFieldFixed               = true;
-    mVisiblePagePropSet.nDateTimeFormat                     = SVXDATEFORMAT_B;
+    mVisiblePagePropSet.nDateTimeFormat                     = SvxDateFormat::B;
     mVisiblePagePropSet.nPageNumberingType                  = css::style::NumberingType::ARABIC;
 
     //  We collect info on master page elements visibility, and placeholder text shape content.
@@ -1377,7 +1377,9 @@ void SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
             implSafeGetPagePropSet( "IsDateTimeVisible", xPropSet, xPropSetInfo )            >>= mVisiblePagePropSet.bIsDateTimeFieldVisible;
 
             implSafeGetPagePropSet( "IsDateTimeFixed", xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsDateTimeFieldFixed;
-            implSafeGetPagePropSet( "DateTimeFormat", xPropSet, xPropSetInfo )               >>= mVisiblePagePropSet.nDateTimeFormat;
+            sal_Int32 nTmp;
+            if (implSafeGetPagePropSet( "DateTimeFormat", xPropSet, xPropSetInfo ) >>= nTmp)
+                mVisiblePagePropSet.nDateTimeFormat = static_cast<SvxDateFormat>(nTmp);
 
             if( mVisiblePagePropSet.bIsPageNumberFieldVisible )
             {
@@ -2161,7 +2163,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                 }
                 if( bHasCharSetMap && ( pCharSetMap->find( aVariableDateTimeId ) != pCharSetMap->end() ) && !(*pCharSetMap)[ aVariableDateTimeId ].empty() )
                 {
-                    SvxDateFormat eDateFormat = SVXDATEFORMAT_B, eCurDateFormat;
+                    SvxDateFormat eDateFormat = SvxDateFormat::B, eCurDateFormat;
                     const UCharSet & aCharSet = (*pCharSetMap)[ aVariableDateTimeId ];
                     UCharSet::const_iterator aChar = aCharSet.begin();
                     // we look for the most verbose date format
@@ -2170,29 +2172,29 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                         eCurDateFormat = (SvxDateFormat)( (int)( *aChar ) & 0x0f );
                         switch( eDateFormat )
                         {
-                            case SVXDATEFORMAT_STDSMALL:
-                            case SVXDATEFORMAT_A:       // 13.02.96
-                            case SVXDATEFORMAT_B:       // 13.02.1996
+                            case SvxDateFormat::StdSmall:
+                            case SvxDateFormat::A:       // 13.02.96
+                            case SvxDateFormat::B:       // 13.02.1996
                                 switch( eCurDateFormat )
                                 {
-                                    case SVXDATEFORMAT_C:       // 13.Feb 1996
-                                    case SVXDATEFORMAT_D:       // 13.February 1996
-                                    case SVXDATEFORMAT_E:       // Tue, 13.February 1996
-                                    case SVXDATEFORMAT_STDBIG:
-                                    case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                                    case SvxDateFormat::C:       // 13.Feb 1996
+                                    case SvxDateFormat::D:       // 13.February 1996
+                                    case SvxDateFormat::E:       // Tue, 13.February 1996
+                                    case SvxDateFormat::StdBig:
+                                    case SvxDateFormat::F:       // Tuesday, 13.February 1996
                                         eDateFormat = eCurDateFormat;
                                         break;
                                     default:
                                         break;
                                 }
                                 break;
-                            case SVXDATEFORMAT_C:       // 13.Feb 1996
-                            case SVXDATEFORMAT_D:       // 13.February 1996
+                            case SvxDateFormat::C:       // 13.Feb 1996
+                            case SvxDateFormat::D:       // 13.February 1996
                                 switch( eCurDateFormat )
                                 {
-                                    case SVXDATEFORMAT_E:       // Tue, 13.February 1996
-                                    case SVXDATEFORMAT_STDBIG:
-                                    case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                                    case SvxDateFormat::E:       // Tue, 13.February 1996
+                                    case SvxDateFormat::StdBig:
+                                    case SvxDateFormat::F:       // Tuesday, 13.February 1996
                                         eDateFormat = eCurDateFormat;
                                         break;
                                     default:
@@ -2207,28 +2209,28 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                     // They should be enough to cover every time format.
                     aRepresentation += "0123456789.:/-APM";
 
-                    if( eDateFormat )
+                    if( eDateFormat != SvxDateFormat::AppDefault )
                     {
                         OUString sDate;
                         LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
                         SvNumberFormatter * pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM );
-                        // We always collect the characters obtained by using the SVXDATEFORMAT_B (as: 13.02.1996)
+                        // We always collect the characters obtained by using the SvxDateFormat::B (as: 13.02.1996)
                         // so we are sure to include any unusual day|month|year separator.
                         Date aDate( 1, 1, 1996 );
-                        sDate += SvxDateField::GetFormatted( aDate, SVXDATEFORMAT_B, *pNumberFormatter, eLang );
+                        sDate += SvxDateField::GetFormatted( aDate, SvxDateFormat::B, *pNumberFormatter, eLang );
                         switch( eDateFormat )
                         {
-                            case SVXDATEFORMAT_E:       // Tue, 13.February 1996
-                            case SVXDATEFORMAT_STDBIG:
-                            case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                            case SvxDateFormat::E:       // Tue, 13.February 1996
+                            case SvxDateFormat::StdBig:
+                            case SvxDateFormat::F:       // Tuesday, 13.February 1996
                                 for( sal_uInt16 i = 1; i <= 7; ++i )  // we get all days in a week
                                 {
                                     aDate.SetDay( i );
                                     sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
                                 }
                                 SAL_FALLTHROUGH; // We need months too!
-                            case SVXDATEFORMAT_C:       // 13.Feb 1996
-                            case SVXDATEFORMAT_D:       // 13.February 1996
+                            case SvxDateFormat::C:       // 13.Feb 1996
+                            case SvxDateFormat::D:       // 13.February 1996
                                 for( sal_uInt16 i = 1; i <= 12; ++i ) // we get all months in a year
                                 {
                                     aDate.SetMonth( i );
@@ -2236,9 +2238,9 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                                 }
                                 break;
                             // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
-                            case SVXDATEFORMAT_STDSMALL:
-                            case SVXDATEFORMAT_A:       // 13.02.96
-                            case SVXDATEFORMAT_B:       // 13.02.1996
+                            case SvxDateFormat::StdSmall:
+                            case SvxDateFormat::A:       // 13.02.96
+                            case SvxDateFormat::B:       // 13.02.1996
                             default:
                                 // nothing to do here, we always collect the characters needed for these cases.
                                 break;

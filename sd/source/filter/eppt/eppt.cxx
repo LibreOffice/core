@@ -619,17 +619,17 @@ void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPrope
             SvxTimeFormat eTimeFormat = (SvxTimeFormat)( ( nFormat >> 4 ) & 0xf );
             switch( eDateFormat )
             {
-                case SVXDATEFORMAT_F :
+                case SvxDateFormat::F :
                     nFormat = 1;
                 break;
-                case SVXDATEFORMAT_D :
+                case SvxDateFormat::D :
                     nFormat = 2;
                 break;
-                case SVXDATEFORMAT_C :
+                case SvxDateFormat::C :
                     nFormat = 4;
                 break;
                 default:
-                case SVXDATEFORMAT_A :
+                case SvxDateFormat::A :
                     nFormat = 0;
             }
             switch( eTimeFormat )
