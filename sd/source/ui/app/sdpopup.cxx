@@ -92,7 +92,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( pField );
         SvxExtTimeField aTimeField( *pTimeField );
 
-        if( pTimeField->GetType() == SVXTIMETYPE_FIX )
+        if( pTimeField->GetType() == SvxTimeType::Fix )
             CheckItem( 1 );
         else
             CheckItem( 2 );
@@ -207,9 +207,9 @@ SvxFieldData* SdFieldPopup::GetField()
         sal_uInt16 i;
 
         if( IsItemChecked( 1 ) )
-            eType = SVXTIMETYPE_FIX;
+            eType = SvxTimeType::Fix;
         else
-            eType = SVXTIMETYPE_VAR;
+            eType = SvxTimeType::Var;
 
         for( i = 3; i <= nCount; i++ )
         {
@@ -225,7 +225,7 @@ SvxFieldData* SdFieldPopup::GetField()
             static_cast<SvxExtTimeField*>( pNewField )->SetType( eType );
             static_cast<SvxExtTimeField*>( pNewField )->SetFormat( eFormat );
 
-            if( (pTimeField->GetType() == SVXTIMETYPE_VAR) && (eType == SVXTIMETYPE_FIX) )
+            if( (pTimeField->GetType() == SvxTimeType::Var) && (eType == SvxTimeType::Fix) )
             {
                 tools::Time aTime( tools::Time::SYSTEM );
                 static_cast<SvxExtTimeField*>( pNewField )->SetFixTime( aTime );

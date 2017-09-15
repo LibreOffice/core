@@ -240,7 +240,10 @@ public:
 };
 
 
-enum SvxTimeType { SVXTIMETYPE_FIX, SVXTIMETYPE_VAR };
+enum class SvxTimeType {
+    Fix,
+    Var
+};
 enum SvxTimeFormat {    SVXTIMEFORMAT_APPDEFAULT = 0,   // Set as in App
                         SVXTIMEFORMAT_SYSTEM,       // Set as in System
                         SVXTIMEFORMAT_STANDARD,

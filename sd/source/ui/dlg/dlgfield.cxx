@@ -104,9 +104,9 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             SvxTimeFormat eFormat;
 
             if( m_pRbtFix->IsChecked() )
-                eType = SVXTIMETYPE_FIX;
+                eType = SvxTimeType::Fix;
             else
-                eType = SVXTIMETYPE_VAR;
+                eType = SvxTimeType::Var;
 
             eFormat = (SvxTimeFormat) ( m_pLbFormat->GetSelectEntryPos() + 2 );
 
@@ -274,7 +274,7 @@ void SdModifyFieldDlg::FillControls()
         const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>(pField);
         SvxExtTimeField aTimeField( *pTimeField );
 
-        if( pTimeField->GetType() == SVXTIMETYPE_FIX )
+        if( pTimeField->GetType() == SvxTimeType::Fix )
             m_pRbtFix->Check();
         else
             m_pRbtVar->Check();
