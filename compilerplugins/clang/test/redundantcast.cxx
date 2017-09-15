@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <utility>
+
 #include "redundantcast.hxx"
 
 void f1(char *) {}
@@ -296,8 +298,14 @@ struct EnumItemInterface {
 };
 class Enum1Item : public EnumItemInterface<Enum1> {
 };
-bool testCStyleCastOfTemplateMethodResult(Enum1Item* item) {
+bool testCStyleCastOfTemplateMethodResult1(Enum1Item* item) {
     return (Enum1)item->GetValue() == Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
+}
+bool testCStyleCastOfTemplateMethodResult2(EnumItemInterface<Enum1>* item) {
+    return (Enum1)item->GetValue() == Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
+}
+bool testCStyleCastOfTemplateMethodResult3(std::pair<Enum1, int>* item) {
+    return (Enum1)std::get<0>(*item) == Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
 }
 
 
@@ -306,7 +314,9 @@ int main() {
     testStaticCast();
     testFunctionalCast();
     testCStyleCast();
-    testCStyleCastOfTemplateMethodResult(nullptr);
+    testCStyleCastOfTemplateMethodResult1(nullptr);
+    testCStyleCastOfTemplateMethodResult2(nullptr);
+    testCStyleCastOfTemplateMethodResult3(nullptr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
