@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/cow_wrapper.hxx>
 
 #include <vector>
 
@@ -72,10 +73,10 @@ namespace tools {
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Polygon
 {
+public:
+    typedef             o3tl::cow_wrapper<ImplPolygon> ImplType;
 private:
-    ImplPolygon*        mpImplPolygon;
-
-    TOOLS_DLLPRIVATE inline void ImplMakeUnique();
+    ImplType            mpImplPolygon;
 
 public:
     static void         ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
@@ -101,6 +102,7 @@ public:
                                  sal_uInt16 nPoints );
 
                         Polygon( const tools::Polygon& rPoly );
+                        Polygon( tools::Polygon&& rPoly);
                         ~Polygon();
 
     void                SetPoint( const Point& rPt, sal_uInt16 nPos );
