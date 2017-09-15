@@ -20,6 +20,7 @@
 #include <cstddef>
 
 #include <systools/win32/uwinapi.h>
+#include <stdlib.h>
 #include <desktop/exithelper.h>
 
 #include "../loader.hxx"

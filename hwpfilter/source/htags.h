@@ -21,6 +21,9 @@
 #define INCLUDED_HWPFILTER_SOURCE_HTAGS_H
 
 #include <memory>
+#ifdef _WIN32
+#  include <objidl.h>
+#endif
 
 class HWPFile;
 /**

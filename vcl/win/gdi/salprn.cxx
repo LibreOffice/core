@@ -49,6 +49,14 @@
 
 #include <malloc.h>
 
+#include <winspool.h>
+#if defined GetDefaultPrinter
+#  undef GetDefaultPrinter
+#endif
+#if defined SetPrinterData
+#  undef SetPrinterData
+#endif
+
 #define CATCH_DRIVER_EX_BEGIN                                               \
     __try                                                                   \
     {
