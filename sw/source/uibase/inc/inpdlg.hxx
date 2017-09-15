@@ -30,6 +30,7 @@ class SwSetExpField;
 class SwUserFieldType;
 class SwField;
 class SwWrtShell;
+class SwFieldMgr;
 
 // insert fields
 class SwFieldInputDlg: public SvxStandardDialog
@@ -48,13 +49,19 @@ class SwFieldInputDlg: public SvxStandardDialog
 
     VclPtr<OKButton>         m_pOKBT;
     VclPtr<PushButton>       m_pNextBT;
+    VclPtr<PushButton>       m_pPrevBT;
+
+    VclPtr<PushButton>       m_pPressedButton;
 
     DECL_LINK_TYPED(NextHdl, Button*, void);
+    DECL_LINK_TYPED(PrevHdl, Button*, void);
 public:
     SwFieldInputDlg(  vcl::Window *pParent, SwWrtShell &rSh,
-                    SwField* pField, bool bNextButton = false );
+                    SwField* pField, bool bPrevButton = false, bool bNextButton = false );
     virtual ~SwFieldInputDlg();
     virtual void dispose() override;
+    bool PrevButtonPressed() const;
+    bool NextButtonPressed() const;
 };
 
 #endif
