@@ -197,11 +197,11 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                 }
             case text::textfield::Type::MEASURE:
                 {
-                    SdrMeasureFieldKind eKind = SDRMEASUREFIELD_VALUE;
+                    SdrMeasureFieldKind eKind = SdrMeasureFieldKind::Value;
                     sal_Int16 nTmp = -1;
                     xPropSet->getPropertyValue(UNO_TC_PROP_MEASURE_KIND) >>= nTmp;
-                    if (nTmp == static_cast<sal_Int16>(SDRMEASUREFIELD_UNIT) ||
-                            nTmp == static_cast<sal_Int16>(SDRMEASUREFIELD_ROTA90BLANCS))
+                    if (nTmp == static_cast<sal_Int16>(SdrMeasureFieldKind::Unit) ||
+                            nTmp == static_cast<sal_Int16>(SdrMeasureFieldKind::Rotate90Blanks))
                         eKind = static_cast<SdrMeasureFieldKind>(nTmp);
 
                     return new SdrMeasureField(eKind);

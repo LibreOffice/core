@@ -92,7 +92,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 
     switch(eMeasureFieldKind)
     {
-        case SDRMEASUREFIELD_VALUE:
+        case SdrMeasureFieldKind::Value:
         {
             if(pModel)
             {
@@ -160,7 +160,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 
             break;
         }
-        case SDRMEASUREFIELD_UNIT:
+        case SdrMeasureFieldKind::Unit:
         {
             if(bShowUnit)
             {
@@ -178,7 +178,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 
             break;
         }
-        case SDRMEASUREFIELD_ROTA90BLANCS:
+        case SdrMeasureFieldKind::Rotate90Blanks:
         {
             if(bTextRota90)
             {
@@ -580,11 +580,11 @@ void SdrMeasureObj::UndirtyText() const
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
         if(pOutlinerParaObject==nullptr)
         {
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS), EE_FEATURE_FIELD), ESelection(0,0));
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_VALUE), EE_FEATURE_FIELD),ESelection(0,1));
+            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Rotate90Blanks), EE_FEATURE_FIELD), ESelection(0,0));
+            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Value), EE_FEATURE_FIELD),ESelection(0,1));
             rOutliner.QuickInsertText(" ", ESelection(0,2));
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_UNIT), EE_FEATURE_FIELD),ESelection(0,3));
-            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS), EE_FEATURE_FIELD),ESelection(0,4));
+            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Unit), EE_FEATURE_FIELD),ESelection(0,3));
+            rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SdrMeasureFieldKind::Rotate90Blanks), EE_FEATURE_FIELD),ESelection(0,4));
 
             if(GetStyleSheet())
                 rOutliner.SetStyleSheet(0, GetStyleSheet());
