@@ -128,6 +128,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">sfx2/res/placeholder.png</property>
   </object>
+  <object class="GtkImage" id="SignatureImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_signature.png</property>
+  </object>
   <object class="GtkImage" id="PrintImg">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -357,7 +362,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:Signature</property>
-                        <property name="image">PlaceholderImg</property>
+                        <property name="image">SignatureImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
