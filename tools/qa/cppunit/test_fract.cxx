@@ -49,7 +49,7 @@ public:
                                 aFract3.GetNumerator() == 0x7AAAAAAA &&
                                 aFract3.GetDenominator() == 0x35555555 );
         aFract3.ReduceInaccurate(30);
-        CPPUNIT_ASSERT_MESSAGE( "Fraction #3 ReduceInaccurate errorneously cut precision",
+        CPPUNIT_ASSERT_MESSAGE( "Fraction #3 ReduceInaccurate erroneously cut precision",
                                 aFract3.GetNumerator() == 0x7AAAAAAA &&
                                 aFract3.GetDenominator() == 0x35555555 );
 

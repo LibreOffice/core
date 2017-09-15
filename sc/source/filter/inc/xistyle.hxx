@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <memory>
-#include <vector>
 #include <tools/mempool.hxx>
 #include "rangelst.hxx"
 #include "patattr.hxx"

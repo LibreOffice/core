@@ -134,7 +134,7 @@ namespace canvas
         // TODO(F3): If somebody uses the XIntegerBitmap methods to
         // clear pixel (setting alpha != 1.0 there), or a compositing
         // mode results in similar alpha, maSpriteHelper might
-        // errorneously report fully opaque sprites. Effectively, all
+        // erroneously report fully opaque sprites. Effectively, all
         // render methods must be overridden here; or better,
         // functionality provided at the baseclass.
 
