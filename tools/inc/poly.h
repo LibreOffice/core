@@ -30,16 +30,18 @@ public:
     Point*          mpPointAry;
     PolyFlags*      mpFlagAry;
     sal_uInt16      mnPoints;
-    sal_uInt32      mnRefCount;
 };
 
 class SAL_WARN_UNUSED ImplPolygon  : public ImplPolygonData
 {
 public:
+                    ImplPolygon() { mpPointAry = nullptr; mpFlagAry = nullptr; mnPoints = 0;};
                     ImplPolygon( sal_uInt16 nInitSize, bool bFlags = false );
                     ImplPolygon( sal_uInt16 nPoints, const Point* pPtAry, const PolyFlags* pInitFlags );
                     ImplPolygon( const ImplPolygon& rImplPoly );
                     ~ImplPolygon();
+
+    bool            operator==( const ImplPolygon& rCandidate ) const;
 
     void            ImplSetSize( sal_uInt16 nSize, bool bResize = true );
     void            ImplCreateFlagArray();
