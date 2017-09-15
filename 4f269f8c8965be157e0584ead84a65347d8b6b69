@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_15ad66e9",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3236,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-15T10:51:19Z",
+      "side": 0,
+      "message": "Are you sure? Three lines below the call to createColorWindow() allocates a new VclPtr\u003cSvxColorWindow\u003e to m_xColorWindow, which was not disposes. (Note I\u0027m an illiterate idiot when it comes to when exactly a VclPtr has to be disposed ;-)",
+      "revId": "4f269f8c8965be157e0584ead84a65347d8b6b69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
