@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f5c45a93",
+        "filename": "stoc/source/corereflection/reflection.component",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-15T12:18:02Z",
+      "side": 1,
+      "message": "prefix\u003d can go now",
+      "revId": "3a2a4bf9281edb728253815c83e5faa0b8ab89a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
