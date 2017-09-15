@@ -289,7 +289,10 @@ public:
 };
 
 
-enum SvxFileType { SVXFILETYPE_FIX, SVXFILETYPE_VAR };
+enum class SvxFileType {
+    Fix,
+    Var
+};
 enum class SvxFileFormat {
     NameAndExt = 0, // File name with Extension
     PathFull,       // full path
@@ -309,7 +312,7 @@ public:
     SV_DECL_PERSIST1( SvxExtFileField, css::text::textfield::Type::EXTENDED_FILE )
                             SvxExtFileField();
     explicit                SvxExtFileField( const OUString& rString,
-                                SvxFileType eType = SVXFILETYPE_VAR,
+                                SvxFileType eType = SvxFileType::Var,
                                 SvxFileFormat eFormat = SvxFileFormat::PathFull );
 
     const OUString&         GetFile() const { return aFile; }

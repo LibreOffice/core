@@ -187,7 +187,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     }
     else if( (pExtFileField = dynamic_cast< const SvxExtFileField * >(pField)) != nullptr )
     {
-        if( pDocShell && (pExtFileField->GetType() != SVXFILETYPE_FIX) )
+        if( pDocShell && (pExtFileField->GetType() != SvxFileType::Fix) )
         {
             OUString aName;
             if( pDocShell->HasName() )
