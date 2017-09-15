@@ -130,10 +130,11 @@ public:
 };
 
 
-enum SvxURLFormat   {   SVXURLFORMAT_APPDEFAULT = 0,    // Set as in App
-                        SVXURLFORMAT_URL,           // Represent URL
-                        SVXURLFORMAT_REPR           // Constitute representation
-                    };
+enum class SvxURLFormat {
+    AppDefault = 0, // Set as in App
+    Url,            // Represent URL
+    Repr            // Constitute representation
+};
 
 class EDITENG_DLLPUBLIC SvxURLField : public SvxFieldData
 {
@@ -147,7 +148,7 @@ public:
     SV_DECL_PERSIST1( SvxURLField, css::text::textfield::Type::URL )
 
                             SvxURLField();
-                            SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLFormat eFmt = SVXURLFORMAT_URL );
+                            SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLFormat eFmt = SvxURLFormat::Url );
 
     const OUString&         GetURL() const { return aURL; }
     void                    SetURL( const OUString& rURL ) { aURL = rURL; }

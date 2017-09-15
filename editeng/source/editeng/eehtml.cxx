@@ -779,7 +779,7 @@ void EditHTMLParser::AnchorEnd()
     if ( pCurAnchor )
     {
         // Insert as URL-Field...
-        SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );
+        SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SvxURLFormat::Repr ), EE_FEATURE_FIELD  );
         aCurSel = mpEditEngine->InsertField(aCurSel, aFld);
         bFieldsInserted = true;
         pCurAnchor.reset();

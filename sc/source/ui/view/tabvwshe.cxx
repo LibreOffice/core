@@ -164,7 +164,7 @@ static void lcl_SelectFieldAfterInsert( EditView& rView )
 
 void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget )
 {
-    SvxURLField aURLField( rURL, rName, SVXURLFORMAT_REPR );
+    SvxURLField aURLField( rURL, rName, SvxURLFormat::Repr );
     aURLField.SetTargetFrame( rTarget );
     SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
 

@@ -746,7 +746,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
         aInsSel = ESelection( 0, 0, 0, 1 );     // replace first character (field)
     }
 
-    SvxURLField aField( rURL, rDescription, SVXURLFORMAT_APPDEFAULT );
+    SvxURLField aField( rURL, rDescription, SvxURLFormat::AppDefault );
     if (pTarget)
         aField.SetTargetFrame(*pTarget);
     aEngine.QuickInsertField( SvxFieldItem( aField, EE_FEATURE_FIELD ), aInsSel );

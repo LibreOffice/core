@@ -374,7 +374,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
                 SvxFieldItem aURLItem(SvxURLField(pHLItem->GetURL(),
                                                   pHLItem->GetName(),
-                                                  SVXURLFORMAT_REPR), EE_FEATURE_FIELD);
+                                                  SvxURLFormat::Repr), EE_FEATURE_FIELD);
                 ESelection aSel( pOutlinerView->GetSelection() );
                 pOutlinerView->InsertField(aURLItem);
                 if ( aSel.nStartPos <= aSel.nEndPos )

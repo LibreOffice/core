@@ -263,7 +263,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
         break;
 
     case text::textfield::Type::URL:
-        mpImpl->mnInt16 = SVXURLFORMAT_REPR;
+        mpImpl->mnInt16 = static_cast<sal_uInt16>(SvxURLFormat::Repr);
         break;
 
     case text::textfield::Type::EXTENDED_FILE:
@@ -415,9 +415,10 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         break;
 
     case text::textfield::Type::URL:
-        pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1, !mpImpl->msString1.isEmpty() ? SVXURLFORMAT_REPR : SVXURLFORMAT_URL );
+        pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1, !mpImpl->msString1.isEmpty() ? SvxURLFormat::Repr : SvxURLFormat::Url );
         static_cast<SvxURLField*>(pData)->SetTargetFrame( mpImpl->msString2 );
-        if( mpImpl->mnInt16 >= SVXURLFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXURLFORMAT_REPR )
+        if( static_cast<SvxURLFormat>(mpImpl->mnInt16) >= SvxURLFormat::AppDefault &&
+            static_cast<SvxURLFormat>(mpImpl->mnInt16) <= SvxURLFormat::Repr )
             static_cast<SvxURLField*>(pData)->SetFormat( (SvxURLFormat)mpImpl->mnInt16 );
         break;
 

@@ -324,12 +324,12 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     {
         switch ( pURLField->GetFormat() )
         {
-            case SVXURLFORMAT_APPDEFAULT: //!!! adjustable at App???
-            case SVXURLFORMAT_REPR:
+            case SvxURLFormat::AppDefault: //!!! adjustable at App???
+            case SvxURLFormat::Repr:
                 pInfo->SetRepresentation( pURLField->GetRepresentation() );
                 break;
 
-            case SVXURLFORMAT_URL:
+            case SvxURLFormat::Url:
                 pInfo->SetRepresentation( pURLField->GetURL() );
                 break;
         }

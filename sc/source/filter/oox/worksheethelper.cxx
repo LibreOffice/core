@@ -1005,7 +1005,7 @@ void WorksheetGlobals::insertHyperlink( const ScAddress& rAddress, const OUStrin
         ScFieldEditEngine& rEE = rDoc.getDoc().GetEditEngine();
         rEE.Clear();
 
-        SvxURLField aURLField(rUrl, aStr, SVXURLFORMAT_REPR);
+        SvxURLField aURLField(rUrl, aStr, SvxURLFormat::Repr);
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         rEE.QuickInsertField(aURLItem, ESelection());
 

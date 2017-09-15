@@ -1425,7 +1425,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
     if (pOLV)
     {
         ESelection aSel( pOLV->GetSelection() );
-        SvxFieldItem aURLItem( SvxURLField( rURL, rText, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
+        SvxFieldItem aURLItem( SvxURLField( rURL, rText, SvxURLFormat::Repr ), EE_FEATURE_FIELD );
         pOLV->InsertField( aURLItem );
         if ( aSel.nStartPos <= aSel.nEndPos )
             aSel.nEndPos = aSel.nStartPos + 1;
@@ -1439,7 +1439,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         pOutl->Init( OutlinerMode::TextObject );
         OutlinerMode nOutlMode = pOutl->GetMode();
 
-        SvxURLField aURLField(rURL, rText, SVXURLFORMAT_REPR);
+        SvxURLField aURLField(rURL, rText, SvxURLFormat::Repr);
         aURLField.SetTargetFrame(rTarget);
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         pOutl->QuickInsertField( aURLItem, ESelection() );

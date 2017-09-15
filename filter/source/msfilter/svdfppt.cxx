@@ -6898,7 +6898,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                 aTarget += "#";
                                                                 aTarget += pHyperlink->aConvSubString;
                                                             }
-                                                            xEntry->xField1.reset(new SvxFieldItem( SvxURLField( aTarget, OUString(), SVXURLFORMAT_REPR ), EE_FEATURE_FIELD ));
+                                                            xEntry->xField1.reset(new SvxFieldItem( SvxURLField( aTarget, OUString(), SvxURLFormat::Repr ), EE_FEATURE_FIELD ));
                                                         }
                                                     }
                                                     break;
@@ -7030,7 +7030,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             {
                                                                 if ( nNextStringLen <= nHyperLenLeft )
                                                                 {
-                                                                    pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), pCurrent->maString, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD ) );
+                                                                    pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), pCurrent->maString, SvxURLFormat::Repr ), EE_FEATURE_FIELD ) );
                                                                     nHyperLenLeft -= nNextStringLen;
 
                                                                     if ( nHyperLenLeft )
@@ -7051,7 +7051,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                     pNewCPS->maString = pCurrent->maString.copy( nHyperLenLeft,( nNextStringLen - nHyperLenLeft ) );
                                                                     aCharPropList.insert( aCharPropList.begin() + nIdx + 1, pNewCPS );
                                                                     OUString aRepresentation = pCurrent->maString.copy( 0, nHyperLenLeft );
-                                                                    pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD ) );
+                                                                    pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SvxURLFormat::Repr ), EE_FEATURE_FIELD ) );
                                                                     nHyperLenLeft = 0;
                                                                 }
                                                                 (pCurrent->maString).clear();

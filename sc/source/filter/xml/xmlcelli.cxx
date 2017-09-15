@@ -604,7 +604,7 @@ void ScXMLTableRowCellContext::PushParagraphFieldURL(
     const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame)
 {
     OUString aAbsURL = GetScImport().GetAbsoluteReference(rURL);
-    SvxURLField* pURLField = new SvxURLField(aAbsURL, rRep, SVXURLFORMAT_REPR);
+    SvxURLField* pURLField = new SvxURLField(aAbsURL, rRep, SvxURLFormat::Repr);
     pURLField->SetTargetFrame(rTargetFrame);
     PushParagraphField(pURLField, rStyleName);
 }
