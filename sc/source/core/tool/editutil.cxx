@@ -824,7 +824,7 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         {
             switch (static_cast<const SvxExtFileField*>(pFieldData)->GetFormat())
             {
-                case SVXFILEFORMAT_FULLPATH :
+                case SvxFileFormat::PathFull :
                     aRet = aData.aLongDocName;
                 break;
                 default:

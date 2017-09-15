@@ -649,7 +649,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
         case eExtFileNameEntry:
             ClearTextAreas();
             m_pWndCenter->InsertField( SvxFieldItem( SvxExtFileField(
-                EMPTY_OUSTRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ), EE_FEATURE_FIELD ) );
+                EMPTY_OUSTRING, SVXFILETYPE_VAR, SvxFileFormat::PathFull ), EE_FEATURE_FIELD ) );
             if(!bTravelling)
                 m_pWndCenter->GrabFocus();
         break;
@@ -702,7 +702,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             m_pWndCenter->GetEditEngine()->SetText(aPageEntry);
             m_pWndCenter->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             m_pWndRight->InsertField( SvxFieldItem( SvxExtFileField(
-                EMPTY_OUSTRING, SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ), EE_FEATURE_FIELD ) );
+                EMPTY_OUSTRING, SVXFILETYPE_VAR, SvxFileFormat::PathFull ), EE_FEATURE_FIELD ) );
             if(!bTravelling)
                 m_pWndRight->GrabFocus();
         }
@@ -820,12 +820,12 @@ IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton&, rBtn, void )
     else if (sSelectedId == "filename")
     {
         m_pEditFocus->InsertField( SvxFieldItem( SvxExtFileField(
-            OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
+            OUString(), SVXFILETYPE_VAR, SvxFileFormat::NameAndExt ), EE_FEATURE_FIELD ) );
     }
     else if (sSelectedId == "pathname")
     {
         m_pEditFocus->InsertField( SvxFieldItem( SvxExtFileField(
-            OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ), EE_FEATURE_FIELD ) );
+            OUString(), SVXFILETYPE_VAR, SvxFileFormat::PathFull ), EE_FEATURE_FIELD ) );
     }
 }
 

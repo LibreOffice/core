@@ -154,10 +154,10 @@ static sal_Int16 getFileNameDisplayFormat( SvxFileFormat nFormat )
 {
     switch( nFormat )
     {
-    case SVXFILEFORMAT_NAME_EXT:    return text::FilenameDisplayFormat::NAME_AND_EXT;
-    case SVXFILEFORMAT_FULLPATH:    return text::FilenameDisplayFormat::FULL;
-    case SVXFILEFORMAT_PATH:    return text::FilenameDisplayFormat::PATH;
-//  case SVXFILEFORMAT_NAME:
+    case SvxFileFormat::NameAndExt:    return text::FilenameDisplayFormat::NAME_AND_EXT;
+    case SvxFileFormat::PathFull:    return text::FilenameDisplayFormat::FULL;
+    case SvxFileFormat::PathOnly:    return text::FilenameDisplayFormat::PATH;
+//  case SvxFileFormat::NameOnly:
     default: return text::FilenameDisplayFormat::NAME;
     }
 }
@@ -166,12 +166,12 @@ static SvxFileFormat setFileNameDisplayFormat( sal_Int16 nFormat )
 {
     switch( nFormat )
     {
-    case text::FilenameDisplayFormat::FULL: return SVXFILEFORMAT_FULLPATH;
-    case text::FilenameDisplayFormat::PATH: return SVXFILEFORMAT_PATH;
-    case text::FilenameDisplayFormat::NAME: return SVXFILEFORMAT_NAME;
+    case text::FilenameDisplayFormat::FULL: return SvxFileFormat::PathFull;
+    case text::FilenameDisplayFormat::PATH: return SvxFileFormat::PathOnly;
+    case text::FilenameDisplayFormat::NAME: return SvxFileFormat::NameOnly;
 //  case text::FilenameDisplayFormat::NAME_AND_EXT:
     default:
-        return SVXFILEFORMAT_NAME_EXT;
+        return SvxFileFormat::NameAndExt;
     }
 }
 

@@ -354,7 +354,7 @@ void XclImpHFConverter::ParseString( const OUString& rHFString )
                         }
                     break;
                     case 'F':           // file name
-                        InsertField( SvxFieldItem( SvxExtFileField( EMPTY_OUSTRING, SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
+                        InsertField( SvxFieldItem( SvxExtFileField( EMPTY_OUSTRING, SVXFILETYPE_VAR, SvxFileFormat::NameAndExt ), EE_FEATURE_FIELD ) );
                     break;
 
                     case 'U':           // underline

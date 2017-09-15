@@ -124,11 +124,11 @@ SvxFileFormat lcl_UnoToSvxFileFormat( sal_Int16 nUnoValue )
 {
     switch( nUnoValue )
     {
-        case text::FilenameDisplayFormat::FULL: return SVXFILEFORMAT_FULLPATH;
-        case text::FilenameDisplayFormat::PATH: return SVXFILEFORMAT_PATH;
-        case text::FilenameDisplayFormat::NAME: return SVXFILEFORMAT_NAME;
+        case text::FilenameDisplayFormat::FULL: return SvxFileFormat::PathFull;
+        case text::FilenameDisplayFormat::PATH: return SvxFileFormat::PathOnly;
+        case text::FilenameDisplayFormat::NAME: return SvxFileFormat::NameOnly;
         default:
-            return SVXFILEFORMAT_NAME_EXT;
+            return SvxFileFormat::NameAndExt;
     }
 }
 
@@ -136,9 +136,9 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 {
     switch( nSvxValue )
     {
-        case SVXFILEFORMAT_NAME_EXT:    return text::FilenameDisplayFormat::NAME_AND_EXT;
-        case SVXFILEFORMAT_FULLPATH:    return text::FilenameDisplayFormat::FULL;
-        case SVXFILEFORMAT_PATH:        return text::FilenameDisplayFormat::PATH;
+        case SvxFileFormat::NameAndExt:    return text::FilenameDisplayFormat::NAME_AND_EXT;
+        case SvxFileFormat::PathFull:    return text::FilenameDisplayFormat::FULL;
+        case SvxFileFormat::PathOnly:        return text::FilenameDisplayFormat::PATH;
         default:
             return text::FilenameDisplayFormat::NAME;
     }
@@ -592,7 +592,7 @@ SvxFieldData* ScEditFieldObj::getData()
             break;
             case text::textfield::Type::EXTENDED_FILE:
                 mpData.reset(
-                    new SvxExtFileField(OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT));
+                    new SvxExtFileField(OUString(), SVXFILETYPE_VAR, SvxFileFormat::NameAndExt));
             break;
             case text::textfield::Type::PAGE:
                 mpData.reset(new SvxPageField);
@@ -790,7 +790,7 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const OUString& rName)
     uno::Any aRet;
     if (rName == SC_UNONAME_FILEFORM)
     {
-        SvxFileFormat eFormat = SVXFILEFORMAT_NAME_EXT;
+        SvxFileFormat eFormat = SvxFileFormat::NameAndExt;
         const SvxFieldData* pField = nullptr;
         if (mpEditSource)
         {
