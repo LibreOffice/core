@@ -26,6 +26,7 @@
 #include <vcl/settings.hxx>
 
 #include <unotools/fontcfg.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -236,7 +237,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
 
     // auto detect HC mode; if the system already set it to "yes"
     // (see above) then accept that
-    if( !rSettings.GetStyleSettings().GetHighContrastMode() )
+    if (!rSettings.GetStyleSettings().GetHighContrastMode() && !utl::ConfigManager::IsAvoidConfig())
     {
         bool bAutoHCMode = true;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
