@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_95795696",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-15T10:37:22Z",
+      "side": 1,
+      "message": "What you want here is that the SYS_gettid result, which is of type pid_t (which SUSv4 guarantees is a signed integer type; no idea whether or not LINUX guarantees that SYS_gettid will never return a negative pid_t value) has a value that fits into sal_uInt32.  So do something like\n\n\u003e  pid_t lin_tid \u003d static_cast\u003cpid_t\u003e(syscall(...));\n\u003e  if (static_cast\u003ctypename std::make_unsigned\u003cpid_t\u003e::type\u003e(lin_tid) \u003e SAL_MAX_UINT32)\n\u003e    ...",
+      "revId": "4fb2e45930da3b88a43127b367bf97d871baf1bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
