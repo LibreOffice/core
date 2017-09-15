@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
-#define _UNICODE
 #include "systools/win32/uwinapi.h"
 
 #include "osl/file.h"
@@ -28,10 +26,7 @@
 #include "file_url.hxx"
 #include "path_helper.hxx"
 
-#include "osl/diagnose.h"
-
 #include <malloc.h>
-#include <tchar.h>
 #include <cassert>
 
 // Allocate n number of t's on the stack return a pointer to it in p

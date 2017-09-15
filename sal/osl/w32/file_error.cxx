@@ -17,13 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
-#include "systools/win32/uwinapi.h"
-
 #include "file_error.hxx"
-
-#include "osl/thread.hxx"
-#include <sal/macros.h>
+#include "winerror.h"
 
 /* OS error to oslFileError values mapping table */
 struct osl_file_error_entry

@@ -17,20 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
-#define _UNICODE
-
 #ifndef WIN32_LEAN_AND_MEAN
-#   define WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
 # ifdef _MSC_VER
 #   pragma warning(push,1) /* disable warnings within system headers */
 # endif
-#   include <windows.h>
+# include <windows.h>
 # ifdef _MSC_VER
 #   pragma warning(pop)
 # endif
-#   include <tchar.h>
-#   undef WIN32_LEAN_AND_MEAN
+# undef WIN32_LEAN_AND_MEAN
 #endif
 
 #include <file-impl.hxx>
@@ -38,17 +34,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "secimpl.hxx"
-#include <osl/file.hxx>
 
 #include <vector>
-#include <algorithm>
-#include <string>
-#include <string.h>
-
-const sal_Unicode NAME_VALUE_SEPARATOR = TEXT('=');
-const sal_Char SPACE[] = " ";
-const rtl::OUString ENV_COMSPEC ("COMSPEC");
-const rtl::OUString QUOTE("\"");
 
 namespace /* private */
 {
@@ -68,17 +55,17 @@ namespace /* private */
     {
         bool operator() (const rtl::OUString& lhs, const rtl::OUString& rhs) const
         {
-            OSL_ENSURE((lhs.indexOf(NAME_VALUE_SEPARATOR) > -1) &&
-                        (rhs.indexOf(NAME_VALUE_SEPARATOR) > -1),
+            OSL_ENSURE((lhs.indexOf(L'=') > -1) &&
+                        (rhs.indexOf(L'=') > -1),
                         "Malformed environment variable");
 
             // Windows compares environment variables uppercase
             // so we do it, too
             return (rtl_ustr_compare_WithLength(
                 lhs.toAsciiUpperCase().pData->buffer,
-                lhs.indexOf(NAME_VALUE_SEPARATOR),
+                lhs.indexOf(L'='),
                 rhs.toAsciiUpperCase().pData->buffer,
-                rhs.indexOf(NAME_VALUE_SEPARATOR)) < 0);
+                rhs.indexOf(L'=')) < 0);
         }
     };
 
@@ -118,15 +105,15 @@ namespace /* private */
     {
         // GetEnvironmentStrings returns a sorted list, Windows
         // sorts environment variables upper case
-        LPWSTR env = GetEnvironmentStrings();
+        LPWSTR env = GetEnvironmentStringsW();
         LPWSTR p   = env;
 
-        while (size_t l = _tcslen(p))
+        while (size_t l = wcslen(p))
         {
             environment->push_back(SAL_U(p));
             p += l + 1;
         }
-        FreeEnvironmentStrings(env);
+        FreeEnvironmentStringsW(env);
 
         // it is apparently possible that the environment is not completely
         // sorted; Cygwin may append entries, which breaks the equal_range
@@ -160,7 +147,7 @@ namespace /* private */
                 env_var,
                 less_environment_variable());
 
-            if (env_var.indexOf(NAME_VALUE_SEPARATOR) == -1)
+            if (env_var.indexOf(L'=') == -1)
             {
                 merged_env->erase(iter_pair.first, iter_pair.second);
             }
@@ -265,13 +252,13 @@ namespace /* private */
     rtl::OUString quote_string(const rtl::OUString& string)
     {
         rtl::OUStringBuffer quoted;
-        if (string.indexOf(QUOTE) != 0)
-            quoted.append(QUOTE);
+        if (string.indexOf(L'"') != 0)
+            quoted.append('"');
 
         quoted.append(string);
 
-        if (string.lastIndexOf(QUOTE) != (string.getLength() - 1))
-            quoted.append(QUOTE);
+        if (string.lastIndexOf(L'"') != (string.getLength() - 1))
+            quoted.append('"');
 
         return quoted.makeStringAndClear();
     }
@@ -360,6 +347,7 @@ namespace /* private */
                 ext.equalsIgnoreAsciiCase("btm"));
     }
 
+    const rtl::OUString ENV_COMSPEC ("COMSPEC");
     rtl::OUString get_batch_processor()
     {
         rtl::OUString comspec;
@@ -452,7 +440,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
        start at 1 instead of 0 */
     for (sal_uInt32 n = (nullptr != ustrImageName) ? 0 : 1; n < nArguments; n++)
     {
-        command_line.append(SPACE);
+        command_line.append(" ");
 
         /* Quote arguments containing blanks */
         if (rtl::OUString(ustrArguments[n]).indexOf(' ') != -1)
@@ -483,7 +471,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     if ((Options & osl_Process_DETACHED) && !(flags & CREATE_NEW_CONSOLE))
         flags |= DETACHED_PROCESS;
 
-    STARTUPINFO startup_info;
+    STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(STARTUPINFO));
 
     startup_info.cb        = sizeof(STARTUPINFO);
@@ -541,7 +529,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     if ((Security != nullptr) && (static_cast<oslSecurityImpl*>(Security)->m_hToken != nullptr))
     {
-        bRet = CreateProcessAsUser(
+        bRet = CreateProcessAsUserW(
             static_cast<oslSecurityImpl*>(Security)->m_hToken,
             nullptr, const_cast<LPWSTR>(SAL_W(cmdline.getStr())), nullptr,  nullptr,
             b_inherit_handles, flags, p_environment, p_cwd,
@@ -549,7 +537,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     }
     else
     {
-        bRet = CreateProcess(
+        bRet = CreateProcessW(
             nullptr, const_cast<LPWSTR>(SAL_W(cmdline.getStr())), nullptr,  nullptr,
             b_inherit_handles, flags, p_environment, p_cwd,
             &startup_info, &process_info);
