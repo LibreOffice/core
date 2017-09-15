@@ -113,7 +113,6 @@
 #include <svx/drawitem.hxx>
 #include <numrule.hxx>
 #include <memory>
-#include <IDocumentUndoRedo.hxx>
 
 using namespace ::com::sun::star;
 using namespace svx::sidebar;
