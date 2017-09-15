@@ -300,6 +300,23 @@ bool testCStyleCastOfTemplateMethodResult(Enum1Item* item) {
     return (Enum1)item->GetValue() == Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
 }
 
+using T1 = int;
+T1 nt1r() { return 0; }
+void testArithmeticTypedefs() {
+    (void) static_cast<T1>(nir());
+    (void) T1(nir());
+    (void) (T1) nir();
+    (void) static_cast<int>(nt1r());
+    (void) int(nt1r());
+    (void) (int) nt1r();
+    using T2 = T1;
+    (void) static_cast<T2>(nt1r());
+    (void) T2(nt1r());
+    (void) (T2) nt1r();
+    (void) static_cast<T1>(nt1r()); // expected-error {{redundant}}
+    (void) T1(nt1r()); // expected-error {{redundant}}
+    (void) (T1) nt1r(); // expected-error {{redundant}}
+}
 
 int main() {
     testConstCast();

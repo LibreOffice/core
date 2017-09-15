@@ -1040,7 +1040,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 aFrameProperties.push_back(comphelper::makePropertyValue("VertOrientRelation", sal_Int16(rAppendContext.pLastParagraphProperties->GetvAnchor())));
 
             if( rAppendContext.pLastParagraphProperties->GetWrap() >= text::WrapTextMode_NONE )
-                aFrameProperties.push_back(comphelper::makePropertyValue("Surround", text::WrapTextMode(rAppendContext.pLastParagraphProperties->GetWrap())));
+                aFrameProperties.push_back(comphelper::makePropertyValue("Surround", rAppendContext.pLastParagraphProperties->GetWrap()));
 
             lcl_MoveBorderPropertiesToFrame(aFrameProperties,
                 rAppendContext.pLastParagraphProperties->GetStartingRange(),

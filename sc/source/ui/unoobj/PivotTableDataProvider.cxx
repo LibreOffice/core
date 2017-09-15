@@ -358,9 +358,9 @@ void PivotTableDataProvider::collectPivotTableData()
         if (!xDimProp.is() || !xDimSupp.is())
             continue;
 
-        sheet::DataPilotFieldOrientation eDimOrient = sheet::DataPilotFieldOrientation(
+        sheet::DataPilotFieldOrientation eDimOrient =
             ScUnoHelpFunctions::GetEnumProperty(xDimProp, SC_UNO_DP_ORIENTATION,
-                                                sheet::DataPilotFieldOrientation_HIDDEN));
+                                                sheet::DataPilotFieldOrientation_HIDDEN);
 
         if (eDimOrient == sheet::DataPilotFieldOrientation_HIDDEN)
             continue;

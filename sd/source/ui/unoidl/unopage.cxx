@@ -1046,7 +1046,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             : view::PaperOrientation_LANDSCAPE);
         break;
     case WID_PAGE_EFFECT:
-        aAny <<= presentation::FadeEffect(GetPage()->GetFadeEffect());
+        aAny <<= GetPage()->GetFadeEffect();
         break;
     case WID_PAGE_CHANGE:
         aAny <<= (sal_Int32)( GetPage()->GetPresChange() );
