@@ -65,24 +65,24 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        //SVXDATEFORMAT_APPDEFAULT,     // is not used
-        //SVXDATEFORMAT_SYSTEM,         // is not used
+        //SvxDateFormat::AppDefault,     // is not used
+        //SvxDateFormat::System,         // is not used
         InsertItem( nID++, SdResId( STR_STANDARD_SMALL ), nStyle );
         InsertItem( nID++, SdResId( STR_STANDARD_BIG ), nStyle );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
+        aDateField.SetFormat( SvxDateFormat::A );    // 13.02.96
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_B );    // 13.02.1996
+        aDateField.SetFormat( SvxDateFormat::B );    // 13.02.1996
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_C );    // 13.Feb 1996
+        aDateField.SetFormat( SvxDateFormat::C );    // 13.Feb 1996
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
 
-        aDateField.SetFormat( SVXDATEFORMAT_D );    // 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::D );    // 13.Februar 1996
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_E );    // Die, 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::E );    // Die, 13.Februar 1996
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
+        aDateField.SetFormat( SvxDateFormat::F );    // Dienstag, 13.Februar 1996
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
 
         CheckItem( (sal_uInt16) ( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !

@@ -71,7 +71,8 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
                         SvxDateField* pData = new SvxDateField(aDate, bIsFixed ? SvxDateType::Fix : SvxDateType::Var);
                         sal_Int32 nNumFmt = -1;
                         xPropSet->getPropertyValue(UNO_TC_PROP_NUMFORMAT) >>= nNumFmt;
-                        if (nNumFmt >= SVXDATEFORMAT_APPDEFAULT && nNumFmt <= SVXDATEFORMAT_F)
+                        if (static_cast<SvxDateFormat>(nNumFmt) >= SvxDateFormat::AppDefault &&
+                            static_cast<SvxDateFormat>(nNumFmt) <= SvxDateFormat::F)
                             pData->SetFormat(static_cast<SvxDateFormat>(nNumFmt));
 
                         return pData;
@@ -314,7 +315,7 @@ SvxDateField::SvxDateField()
 {
     nFixDate = Date( Date::SYSTEM ).GetDate();
     eType = SvxDateType::Var;
-    eFormat = SVXDATEFORMAT_STDSMALL;
+    eFormat = SvxDateFormat::StdSmall;
 }
 
 
@@ -358,50 +359,50 @@ OUString SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType
 
 OUString SvxDateField::GetFormatted( Date const & aDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLang )
 {
-    if ( eFormat == SVXDATEFORMAT_SYSTEM )
+    if ( eFormat == SvxDateFormat::System )
     {
-        OSL_FAIL( "SVXDATEFORMAT_SYSTEM not implemented!" );
-        eFormat = SVXDATEFORMAT_STDSMALL;
+        OSL_FAIL( "SvxDateFormat::System not implemented!" );
+        eFormat = SvxDateFormat::StdSmall;
     }
-    else if ( eFormat == SVXDATEFORMAT_APPDEFAULT )
+    else if ( eFormat == SvxDateFormat::AppDefault )
     {
-        OSL_FAIL( "SVXDATEFORMAT_APPDEFAULT: take them from where? ");
-        eFormat = SVXDATEFORMAT_STDSMALL;
+        OSL_FAIL( "SvxDateFormat::AppDefault: take them from where? ");
+        eFormat = SvxDateFormat::StdSmall;
     }
 
     sal_uInt32 nFormatKey;
 
     switch( eFormat )
     {
-        case SVXDATEFORMAT_STDSMALL:
+        case SvxDateFormat::StdSmall:
             // short
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLang );
         break;
-        case SVXDATEFORMAT_STDBIG:
+        case SvxDateFormat::StdBig:
             // long
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYSTEM_LONG, eLang );
         break;
-        case SVXDATEFORMAT_A:
+        case SvxDateFormat::A:
             // 13.02.96
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DDMMYY, eLang );
         break;
-        case SVXDATEFORMAT_B:
+        case SvxDateFormat::B:
             // 13.02.1996
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
         break;
-        case SVXDATEFORMAT_C:
+        case SvxDateFormat::C:
             // 13. Feb 1996
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DMMMYYYY, eLang );
         break;
-        case SVXDATEFORMAT_D:
+        case SvxDateFormat::D:
             // 13. February 1996
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DMMMMYYYY, eLang );
         break;
-        case SVXDATEFORMAT_E:
+        case SvxDateFormat::E:
             // The, 13. February 1996
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_NNDMMMMYYYY, eLang );
         break;
-        case SVXDATEFORMAT_F:
+        case SvxDateFormat::F:
             // Tuesday, 13. February 1996
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, eLang );
         break;
@@ -925,18 +926,16 @@ bool SvxDateTimeField::operator==( const SvxFieldData& rCmp ) const
 SvxDateTimeField::SvxDateTimeField() {}
 
 OUString SvxDateTimeField::GetFormatted(
-    Date const & rDate, tools::Time const & rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage )
+    Date const & rDate, tools::Time const & rTime,
+    SvxDateFormat eDateFormat, SvxTimeFormat eTimeFormat,
+    SvNumberFormatter& rFormatter, LanguageType eLanguage )
 {
     OUString aRet;
 
-    SvxDateFormat eDateFormat = (SvxDateFormat)(eFormat & 0x0f);
-
-    if(eDateFormat)
+    if(eDateFormat != SvxDateFormat::AppDefault)
     {
         aRet = SvxDateField::GetFormatted( rDate, eDateFormat, rFormatter, eLanguage );
     }
-
-    SvxTimeFormat eTimeFormat = (SvxTimeFormat)((eFormat >> 4) & 0x0f);
 
     if(eTimeFormat != SvxTimeFormat::AppDefault)
     {

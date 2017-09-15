@@ -38,6 +38,7 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <comphelper/processfactory.hxx>
+#include <editeng/flditem.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -132,7 +133,7 @@ struct PagePropertySet
     bool               bIsHeaderFieldVisible;
     sal_Int32          nPageNumberingType;
     bool               bIsDateTimeFieldFixed;
-    sal_Int32          nDateTimeFormat;
+    SvxDateFormat      nDateTimeFormat;
     PagePropertySet()
         : bIsBackgroundVisible(false)
         , bAreBackgroundObjectsVisible(false)
@@ -142,7 +143,7 @@ struct PagePropertySet
         , bIsHeaderFieldVisible(false)
         , nPageNumberingType(0)
         , bIsDateTimeFieldFixed(false)
-        , nDateTimeFormat(0)
+        , nDateTimeFormat(SvxDateFormat::AppDefault)
     {
     }
 };

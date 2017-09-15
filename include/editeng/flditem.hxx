@@ -83,17 +83,18 @@ public:
 
 
 enum class SvxDateType { Fix, Var };
-enum SvxDateFormat {    SVXDATEFORMAT_APPDEFAULT = 0,   // Set as in App
-                        SVXDATEFORMAT_SYSTEM,       // Set as in System
-                        SVXDATEFORMAT_STDSMALL,
-                        SVXDATEFORMAT_STDBIG,
-                        SVXDATEFORMAT_A,    // 13.02.96
-                        SVXDATEFORMAT_B,    // 13.02.1996
-                        SVXDATEFORMAT_C,    // 13.Feb 1996
-                        SVXDATEFORMAT_D,    // 13.February 1996
-                        SVXDATEFORMAT_E,    // Tue, 13.February 1996
-                        SVXDATEFORMAT_F     // Tuesday, 13.February 1996
-                    };
+enum class SvxDateFormat {
+    AppDefault = 0, // Set as in App
+    System,         // Set as in System
+    StdSmall,
+    StdBig,
+    A,              // 13.02.96
+    B,              // 13.02.1996
+    C,              // 13.Feb 1996
+    D,              // 13.February 1996
+    E,              // Tue, 13.February 1996
+    F               // Tuesday, 13.February 1996
+};
 
 class EDITENG_DLLPUBLIC SvxDateField : public SvxFieldData
 {
@@ -107,7 +108,7 @@ public:
                             SvxDateField();
     explicit                SvxDateField( const Date& rDate,
                                 SvxDateType eType,
-                                SvxDateFormat eFormat = SVXDATEFORMAT_STDSMALL );
+                                SvxDateFormat eFormat = SvxDateFormat::StdSmall );
 
     sal_Int32               GetFixDate() const { return nFixDate; }
     void                    SetFixDate( const Date& rDate ) { nFixDate = rDate.GetDate(); }
@@ -407,7 +408,9 @@ public:
     SV_DECL_PERSIST1( SvxDateTimeField, css::text::textfield::Type::PRESENTATION_DATE_TIME )
     SvxDateTimeField();
 
-    static OUString    GetFormatted( Date const & rDate, tools::Time const & rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    static OUString    GetFormatted( Date const & rDate, tools::Time const & rTime,
+                                     SvxDateFormat eDateFormat, SvxTimeFormat eTimeFormat,
+                                     SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;

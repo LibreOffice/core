@@ -251,7 +251,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
     {
     case text::textfield::Type::DATE:
         mpImpl->mbBoolean2 = true;
-        mpImpl->mnInt32 = SVXDATEFORMAT_STDSMALL;
+        mpImpl->mnInt32 = static_cast<sal_Int32>(SvxDateFormat::StdSmall);
         mpImpl->mbBoolean1 = false;
         break;
 
@@ -319,7 +319,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
                     mpImpl->maDateTime = getDate( bFixed ?
                                             static_cast<const SvxDateField*>(pData)->GetFixDate() :
                                             Date( Date::SYSTEM ).GetDate() );
-                    mpImpl->mnInt32 = static_cast<const SvxDateField*>(pData)->GetFormat();
+                    mpImpl->mnInt32 = static_cast<sal_Int32>(static_cast<const SvxDateField*>(pData)->GetFormat());
                     mpImpl->mbBoolean1 = bFixed;
                 }
                 break;
@@ -392,7 +392,8 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         {
             Date aDate( setDate( mpImpl->maDateTime ) );
             pData = new SvxDateField( aDate, mpImpl->mbBoolean1?SvxDateType::Fix:SvxDateType::Var );
-            if( mpImpl->mnInt32 >= SVXDATEFORMAT_APPDEFAULT && mpImpl->mnInt32 <= SVXDATEFORMAT_F )
+            if( mpImpl->mnInt32 >= static_cast<sal_Int32>(SvxDateFormat::AppDefault) &&
+                mpImpl->mnInt32 <= static_cast<sal_Int32>(SvxDateFormat::F) )
                 static_cast<SvxDateField*>(pData)->SetFormat( (SvxDateFormat)mpImpl->mnInt32 );
         }
         else
