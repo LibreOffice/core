@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
 <interface domain="sw">
-  <requires lib="gtk+" version="3.0"/>
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="InputFieldDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -47,6 +46,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="prev">
+                <property name="label">gtk-media-previous</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="no_show_all">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="next">
                 <property name="label">gtk-media-next</property>
                 <property name="can_focus">True</property>
@@ -57,7 +70,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -71,7 +84,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
                 <property name="secondary">True</property>
               </packing>
             </child>
@@ -102,6 +115,8 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -117,6 +132,8 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -140,6 +157,7 @@
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
                 <property name="width">2</property>
+                <property name="height">1</property>
               </packing>
             </child>
           </object>
@@ -154,6 +172,7 @@
     <action-widgets>
       <action-widget response="0">ok</action-widget>
       <action-widget response="0">cancel</action-widget>
+      <action-widget response="0">prev</action-widget>
       <action-widget response="0">next</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>

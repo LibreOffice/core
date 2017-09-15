@@ -30,17 +30,19 @@
 
 // edit field-insert
 SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
-                              SwField* pField, bool bNextButton )
+                              SwField* pField, bool bPrevButton, bool bNextButton )
     : SvxStandardDialog( pParent, "InputFieldDialog",
         "modules/swriter/ui/inputfielddialog.ui")
     , rSh( rS )
     , pInpField(nullptr)
     , pSetField(nullptr)
     , pUsrType(nullptr)
+    , m_pPressedButton(nullptr)
 {
     get(m_pLabelED, "name");
     get(m_pEditED, "text");
     m_pEditED->set_height_request(m_pEditED->GetTextHeight() * 9);
+    get(m_pPrevBT, "prev");
     get(m_pNextBT, "next");
     get(m_pOKBT, "ok");
     // switch font for Edit
@@ -48,10 +50,15 @@ SwFieldInputDlg::SwFieldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
     aFont.SetWeight(WEIGHT_LIGHT);
     m_pEditED->SetFont(aFont);
 
-    if( bNextButton )
+    if( bPrevButton || bNextButton )
     {
+        m_pPrevBT->Show();
+        m_pPrevBT->SetClickHdl(LINK(this, SwFieldInputDlg, PrevHdl));
+        m_pPrevBT->Enable(bPrevButton);
+
         m_pNextBT->Show();
         m_pNextBT->SetClickHdl(LINK(this, SwFieldInputDlg, NextHdl));
+        m_pNextBT->Enable(bNextButton);
     }
 
     // evaluation here
@@ -114,7 +121,9 @@ void SwFieldInputDlg::dispose()
     m_pLabelED.clear();
     m_pEditED.clear();
     m_pOKBT.clear();
+    m_pPrevBT.clear();
     m_pNextBT.clear();
+    m_pPressedButton.clear();
     SvxStandardDialog::dispose();
 }
 
@@ -162,9 +171,27 @@ void SwFieldInputDlg::Apply()
     rSh.EndAllAction();
 }
 
-IMPL_LINK_NOARG(SwFieldInputDlg, NextHdl, Button*, void)
+bool SwFieldInputDlg::PrevButtonPressed() const
 {
+    return m_pPressedButton == m_pPrevBT;
+}
+
+bool SwFieldInputDlg::NextButtonPressed() const
+{
+    return m_pPressedButton == m_pNextBT;
+}
+
+IMPL_LINK_NOARG(SwFieldInputDlg, PrevHdl, Button*, void)
+{
+    m_pPressedButton = m_pPrevBT;
     EndDialog(RET_OK);
 }
+
+IMPL_LINK_NOARG(SwFieldInputDlg, NextHdl, Button*, void)
+{
+    m_pPressedButton = m_pNextBT;
+    EndDialog(RET_OK);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
