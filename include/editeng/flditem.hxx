@@ -328,11 +328,12 @@ public:
 
 
 enum SvxAuthorType { SVXAUTHORTYPE_FIX, SVXAUTHORTYPE_VAR };
-enum SvxAuthorFormat {  SVXAUTHORFORMAT_FULLNAME = 0, // full name
-                        SVXAUTHORFORMAT_NAME,       // Only Last name
-                        SVXAUTHORFORMAT_FIRSTNAME,  // Only first name
-                        SVXAUTHORFORMAT_SHORTNAME   // Initials
-                    };
+enum class SvxAuthorFormat {
+    FullName,   // full name
+    LastName,   // Only Last name
+    FirstName,  // Only first name
+    ShortName   // Initials
+};
 
 class EDITENG_DLLPUBLIC SvxAuthorField : public SvxFieldData
 {
@@ -350,7 +351,7 @@ public:
                                 const OUString& rLastName,
                                 const OUString& rShortName,
                                 SvxAuthorType eType = SVXAUTHORTYPE_VAR,
-                                SvxAuthorFormat eFormat = SVXAUTHORFORMAT_FULLNAME );
+                                SvxAuthorFormat eFormat = SvxAuthorFormat::FullName );
 
     SvxAuthorType           GetType() const { return eType; }
     void                    SetType( SvxAuthorType eTp ) { eType = eTp; }
