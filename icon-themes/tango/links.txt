@@ -604,3 +604,7 @@ cmd/sc_rowoperations.png cmd/sc_entirerow.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/lc_cellprotection.png cmd/lc_protect.png
+
+# formtting style toolbar
+cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
+cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
