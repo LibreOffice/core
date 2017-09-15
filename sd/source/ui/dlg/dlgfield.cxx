@@ -121,9 +121,9 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             SvxFileFormat eFormat;
 
             if( m_pRbtFix->IsChecked() )
-                eType = SVXFILETYPE_FIX;
+                eType = SvxFileType::Fix;
             else
-                eType = SVXFILETYPE_VAR;
+                eType = SvxFileType::Var;
 
             eFormat = (SvxFileFormat) ( m_pLbFormat->GetSelectEntryPos() );
 
@@ -284,7 +284,7 @@ void SdModifyFieldDlg::FillControls()
         const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>(pField);
         SvxExtFileField aFileField( *pFileField );
 
-        if( pFileField->GetType() == SVXFILETYPE_FIX )
+        if( pFileField->GetType() == SvxFileType::Fix )
             m_pRbtFix->Check();
         else
             m_pRbtVar->Check();

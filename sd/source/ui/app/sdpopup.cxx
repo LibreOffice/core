@@ -126,7 +126,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>(pField);
         //SvxExtFileField aFileField( *pFileField );
 
-        if( pFileField->GetType() == SVXFILETYPE_FIX )
+        if( pFileField->GetType() == SvxFileType::Fix )
             CheckItem( 1 );
         else
             CheckItem( 2 );
@@ -241,9 +241,9 @@ SvxFieldData* SdFieldPopup::GetField()
         sal_uInt16 i;
 
         if( IsItemChecked( 1 ) )
-            eType = SVXFILETYPE_FIX;
+            eType = SvxFileType::Fix;
         else
-            eType = SVXFILETYPE_VAR;
+            eType = SvxFileType::Var;
 
         for( i = 3; i <= nCount; i++ )
         {

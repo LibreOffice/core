@@ -347,7 +347,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > const & xAn
 
             case text::textfield::Type::EXTENDED_FILE:
                 mpImpl->msString1 = static_cast<const SvxExtFileField*>(pData)->GetFile();
-                mpImpl->mbBoolean1 = static_cast<const SvxExtFileField*>(pData)->GetType() == SVXFILETYPE_FIX;
+                mpImpl->mbBoolean1 = static_cast<const SvxExtFileField*>(pData)->GetType() == SvxFileType::Fix;
                 mpImpl->mnInt16 = getFileNameDisplayFormat(static_cast<const SvxExtFileField*>(pData)->GetFormat());
                 break;
 
@@ -441,7 +441,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     {
         // #92009# pass fixed attribute to constructor
         pData = new SvxExtFileField( mpImpl->msString1,
-                                     mpImpl->mbBoolean1 ? SVXFILETYPE_FIX : SVXFILETYPE_VAR,
+                                     mpImpl->mbBoolean1 ? SvxFileType::Fix : SvxFileType::Var,
                                      setFileNameDisplayFormat(mpImpl->mnInt16 ) );
         break;
     }

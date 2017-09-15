@@ -146,7 +146,7 @@ SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTe
 
                     // pass fixed attribute to constructor
                     return new SvxExtFileField(
-                            aPresentation, bIsFixed ? SVXFILETYPE_FIX : SVXFILETYPE_VAR, eFmt);
+                            aPresentation, bIsFixed ? SvxFileType::Fix : SvxFileType::Var, eFmt);
                 }
             case text::textfield::Type::AUTHOR:
                 {
@@ -709,7 +709,7 @@ SV_IMPL_PERSIST1( SvxExtFileField );
 
 SvxExtFileField::SvxExtFileField()
 {
-    eType = SVXFILETYPE_VAR;
+    eType = SvxFileType::Var;
     eFormat = SvxFileFormat::PathFull;
 }
 

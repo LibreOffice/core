@@ -592,7 +592,7 @@ SvxFieldData* ScEditFieldObj::getData()
             break;
             case text::textfield::Type::EXTENDED_FILE:
                 mpData.reset(
-                    new SvxExtFileField(OUString(), SVXFILETYPE_VAR, SvxFileFormat::NameAndExt));
+                    new SvxExtFileField(OUString(), SvxFileType::Var, SvxFileFormat::NameAndExt));
             break;
             case text::textfield::Type::PAGE:
                 mpData.reset(new SvxPageField);
