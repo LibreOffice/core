@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_75d30a39",
+        "filename": "sal/osl/unx/thread.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-15T14:08:07Z",
+      "side": 1,
+      "message": "I don\u0027t understand at all what you want to say with that comment.  (Also, if you make a comment end in a colon, it becomes obvious that it pertains to the code following it.  With a comment as obscure as this, one\u0027s not even sure if it shall pertain to the preceding or the following code.)",
+      "revId": "29effd0fd872e1534b85841e54ac080c8cdb081b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
