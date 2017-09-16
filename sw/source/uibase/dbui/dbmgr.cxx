@@ -2517,6 +2517,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
     //prefer merge data if available
     if(pImpl->pMergeData && rDataSource == pImpl->pMergeData->sDataSource )
     {
+        SetAsUsed(rDataSource);
          return pImpl->pMergeData;
     }
     SwDSParam* pFound = nullptr;
@@ -2524,6 +2525,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
     {
         if(rDataSource == pParam->sDataSource)
         {
+            SetAsUsed(rDataSource);
             pFound = pParam.get();
             break;
         }
@@ -2533,6 +2535,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
         SwDBData aData;
         aData.sDataSource = rDataSource;
         pFound = new SwDSParam(aData);
+        SetAsUsed(rDataSource);
         m_DataSourceParams.push_back(std::unique_ptr<SwDSParam>(pFound));
         try
         {
@@ -3221,12 +3224,32 @@ void SwDBManager::RevokeLastRegistrations()
 
 void SwDBManager::CommitLastRegistrations()
 {
-    auto predicate = [this](const std::pair<SwDocShell*, OUString>& x)
-        { return x.first == this->m_pDoc->GetDocShell(); };
+    for (auto aIt = m_aUncommitedRegistrations.begin(); aIt != m_aUncommitedRegistrations.end();)
+    {
+        if (aIt->first == m_pDoc->GetDocShell())
+        {
+            m_aNotUsedConnections.push_back(aIt->second);
+            aIt = m_aUncommitedRegistrations.erase(aIt);
+        }
+        else
+            aIt++;
+    }
+}
 
-    m_aUncommitedRegistrations.erase(
-        std::remove_if(m_aUncommitedRegistrations.begin(), m_aUncommitedRegistrations.end(), predicate),
-        m_aUncommitedRegistrations.end());
+void SwDBManager::SetAsUsed(const OUString& rName)
+{
+    auto aFound = std::find(m_aNotUsedConnections.begin(), m_aNotUsedConnections.end(), rName);
+    if (aFound != m_aNotUsedConnections.end())
+        m_aNotUsedConnections.erase(aFound);
+}
+
+void SwDBManager::RevokeNotUsedConnections()
+{
+    for (auto aIt = m_aNotUsedConnections.begin(); aIt != m_aNotUsedConnections.end();)
+    {
+        RevokeDataSource(*aIt);
+        aIt = m_aNotUsedConnections.erase(aIt);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
