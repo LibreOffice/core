@@ -525,6 +525,13 @@ SwDoc::~SwDoc()
         mpDBManager->releaseRevokeListener();
         SwDBManager::RevokeDataSource(maDBData.sDataSource);
     }
+    else if (!mpDBManager->getEmbeddedName().isEmpty())
+    {
+        // Remove the revoke listener here first, so that we don't remove the data source from the document.
+        mpDBManager->releaseRevokeListener();
+        // Remove connections which was committed but not used.
+        mpDBManager->RevokeNotUsedConnections();
+    }
 
     DELETEZ( mpDBManager );
 #endif
