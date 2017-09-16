@@ -42,7 +42,7 @@ import com.sun.star.sdbcx.comp.postgresql.sdbcx.SqlTableHelper.ColumnDescription
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors.SdbcxTableDescriptor;
 
 public class PostgresqlTable extends OTable {
-    private PostgresqlTable(XConnection connection, OContainer tables, String name,
+    public PostgresqlTable(XConnection connection, OContainer tables, String name,
             String catalogName, String schemaName, String description, String type) {
         super(name, true, connection, tables);
         super.catalogName = catalogName;
@@ -51,14 +51,9 @@ public class PostgresqlTable extends OTable {
         super.type = type;
     }
 
-    public static PostgresqlTable create(XConnection connection, OContainer tables, String name,
-            String catalogName, String schemaName, String description, String type) {
-        return new PostgresqlTable(connection, tables, name, catalogName, schemaName, description, type);
-    }
-
     @Override
     public XPropertySet createDataDescriptor() {
-        SdbcxTableDescriptor descriptor = SdbcxTableDescriptor.create(true);
+        SdbcxTableDescriptor descriptor = new SdbcxTableDescriptor(true);
         synchronized (this) {
             CompHelper.copyProperties(this, descriptor);
         }
@@ -118,7 +113,7 @@ public class PostgresqlTable extends OTable {
         try {
             Map<String, OKey> keys = new SqlTableHelper().readKeys(
                     getConnection().getMetaData(), catalogName, schemaName, getName(), isCaseSensitive(), this);
-            return OKeyContainer.create(isCaseSensitive(), keys, this);
+            return new OKeyContainer(this, isCaseSensitive(), keys, this);
         } catch (ElementExistException elementExistException) {
             return null;
         } catch (SQLException sqlException) {

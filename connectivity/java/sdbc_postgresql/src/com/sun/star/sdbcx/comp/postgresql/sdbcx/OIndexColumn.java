@@ -32,7 +32,7 @@ import com.sun.star.uno.Type;
 public class OIndexColumn extends OColumn {
     protected boolean isAscending;
 
-    protected OIndexColumn(
+    public OIndexColumn(
             final boolean isAscending,
             final String name,
             final String typeName,
@@ -52,24 +52,6 @@ public class OIndexColumn extends OColumn {
         registerProperties();
     }
 
-    public static OIndexColumn create(
-            final boolean isAscending,
-            final String name,
-            final String typeName,
-            final String defaultValue,
-            final int isNullable,
-            final int precision,
-            final int scale,
-            final int type,
-            final boolean isAutoIncrement,
-            final boolean isRowVersion,
-            final boolean isCurrency,
-            final boolean isCaseSensitive) {
-        return new OIndexColumn(isAscending, name, typeName,
-                defaultValue, "", isNullable, precision, scale,
-                type, isAutoIncrement, isRowVersion, isCurrency, isCaseSensitive);
-    }
-
     private void registerProperties() {
         registerProperty(PropertyIds.ISASCENDING.name, PropertyIds.ISASCENDING.id, Type.BOOLEAN, PropertyAttribute.READONLY,
                 new PropertyGetter() {
@@ -85,7 +67,7 @@ public class OIndexColumn extends OColumn {
 
     @Override
     public XPropertySet createDataDescriptor() {
-        SdbcxIndexColumnDescriptor descriptor = SdbcxIndexColumnDescriptor.create(isCaseSensitive());
+        SdbcxIndexColumnDescriptor descriptor = new SdbcxIndexColumnDescriptor(isCaseSensitive());
         synchronized (this) {
             CompHelper.copyProperties(this, descriptor);
         }

@@ -53,7 +53,7 @@ public class OKey extends ODescriptor
         registerProperties();
     }
 
-    protected OKey(String name, boolean isCaseSensitive, String referencedTable, int type,
+    public OKey(String name, boolean isCaseSensitive, String referencedTable, int type,
             int updateRule, int deleteRule, List<String> columnNames, OTable table) throws ElementExistException {
         super(name, isCaseSensitive);
         this.referencedTable = referencedTable;
@@ -63,11 +63,6 @@ public class OKey extends ODescriptor
         this.table = table;
         registerProperties();
         columns = new OKeyColumnContainer(this, this, columnNames);
-    }
-
-    public static OKey create(String name, boolean isCaseSensitive, String referencedTable, int type,
-            int updateRule, int deleteRule, List<String> columnNames, OTable table) throws ElementExistException {
-        return new OKey(name, isCaseSensitive, referencedTable, type, updateRule, deleteRule, columnNames, table);
     }
 
     private void registerProperties() {
@@ -116,7 +111,7 @@ public class OKey extends ODescriptor
     // XDataDescriptionFactory
 
     public XPropertySet createDataDescriptor() {
-        SdbcxKeyDescriptor descriptor = SdbcxKeyDescriptor.create(isCaseSensitive());
+        SdbcxKeyDescriptor descriptor = new SdbcxKeyDescriptor(isCaseSensitive());
         CompHelper.copyProperties(this, descriptor);
         try {
             DbTools.cloneDescriptorColumns(this, descriptor);

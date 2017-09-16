@@ -45,7 +45,7 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
     private boolean isRowVersion;
     private boolean isCurrency;
 
-    protected OColumn(final boolean isCaseSensitive) {
+    public OColumn(final boolean isCaseSensitive) {
         super("", isCaseSensitive);
         this.isNullable = ColumnValue.NULLABLE;
         this.precision = 0;
@@ -57,11 +57,7 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
         registerProperties();
     }
 
-    public static OColumn create(final boolean isCaseSensitive) {
-        return new OColumn(isCaseSensitive);
-    }
-
-    protected OColumn(
+    public OColumn(
             final String name,
             final String typeName,
             final String defaultValue,
@@ -86,24 +82,6 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
         this.isRowVersion = isRowVersion;
         this.isCurrency = isCurrency;
         registerProperties();
-    }
-
-    public static OColumn create(
-            final String name,
-            final String typeName,
-            final String defaultValue,
-            final String description,
-            final int isNullable,
-            final int precision,
-            final int scale,
-            final int type,
-            final boolean isAutoIncrement,
-            final boolean isRowVersion,
-            final boolean isCurrency,
-            final boolean isCaseSensitive) {
-        return new OColumn(name, typeName, defaultValue, description,
-                isNullable, precision, scale, type, isAutoIncrement, isRowVersion,
-                isCurrency, isCaseSensitive);
     }
 
     private void registerProperties() {
@@ -260,7 +238,7 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
 
     @Override
     public XPropertySet createDataDescriptor() {
-        SdbcxColumnDescriptor descriptor = SdbcxColumnDescriptor.create(isCaseSensitive());
+        SdbcxColumnDescriptor descriptor = new SdbcxColumnDescriptor(isCaseSensitive());
         synchronized (this) {
             CompHelper.copyProperties(this, descriptor);
         }

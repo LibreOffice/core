@@ -164,7 +164,7 @@ public class SqlTableHelper {
                         pkName = row.getString(6);
                     }
                 }
-                key = OKey.create(pkName, isCaseSensitive, "", KeyType.PRIMARY, 0, 0, columns, table);
+                key = new OKey(pkName, isCaseSensitive, "", KeyType.PRIMARY, 0, 0, columns, table);
             }
             return key;
         } catch (ElementExistException elementExistException) {
@@ -203,7 +203,7 @@ public class SqlTableHelper {
                     if (!row.wasNull() && !fkName.isEmpty()) {
                         if (!oldFkName.equals(fkName)) {
                             if (keyProperties != null) {
-                                OKey key = OKey.create(oldFkName, isCaseSensitive, keyProperties.referencedTable, keyProperties.type,
+                                OKey key = new OKey(oldFkName, isCaseSensitive, keyProperties.referencedTable, keyProperties.type,
                                         keyProperties.updateRule, keyProperties.deleteRule, keyProperties.columnNames, table);
                                 keys.put(oldFkName, key);
                             }
@@ -220,7 +220,7 @@ public class SqlTableHelper {
                     }
                 }
                 if (keyProperties != null) {
-                    OKey key = OKey.create(oldFkName, isCaseSensitive, keyProperties.referencedTable, keyProperties.type,
+                    OKey key = new OKey(oldFkName, isCaseSensitive, keyProperties.referencedTable, keyProperties.type,
                             keyProperties.updateRule, keyProperties.deleteRule, keyProperties.columnNames, table);
                     keys.put(oldFkName, key);
                 }

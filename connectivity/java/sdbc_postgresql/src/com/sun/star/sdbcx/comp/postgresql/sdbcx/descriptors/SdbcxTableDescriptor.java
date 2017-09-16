@@ -40,15 +40,11 @@ public class SdbcxTableDescriptor extends ODescriptor implements XColumnsSupplie
     private OContainer columns;
     private OContainer keys;
 
-    protected SdbcxTableDescriptor(boolean isCaseSensitive) {
+    public SdbcxTableDescriptor(boolean isCaseSensitive) {
         super("", isCaseSensitive, false);
         columns = new SdbcxColumnDescriptorContainer(this, isCaseSensitive());
         keys = new SdbcxKeyDescriptorContainer(this, isCaseSensitive());
         registerProperties();
-    }
-
-    public static SdbcxTableDescriptor create(boolean isCaseSensitive) {
-        return new SdbcxTableDescriptor(isCaseSensitive);
     }
 
     private void registerProperties() {

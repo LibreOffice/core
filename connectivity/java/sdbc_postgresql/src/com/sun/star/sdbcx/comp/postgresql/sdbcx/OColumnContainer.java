@@ -94,7 +94,7 @@ public class OColumnContainer extends OContainer {
             if (nullable != ColumnValue.NO_NULLS && primaryKeyColumns != null && primaryKeyColumns.hasByName(name)) {
                 nullable = ColumnValue.NO_NULLS;
             }
-            return OColumn.create(name, columnDescription.typeName, columnDescription.defaultValue, columnDescription.remarks,
+            return new OColumn(name, columnDescription.typeName, columnDescription.defaultValue, columnDescription.remarks,
                     nullable, columnDescription.columnSize, columnDescription.decimalDigits, columnDescription.type,
                     isAutoIncrement, false, isCurrency, isCaseSensitive());
         } else {
@@ -105,7 +105,7 @@ public class OColumnContainer extends OContainer {
 
     @Override
     protected XPropertySet createDescriptor() {
-        return SdbcxColumnDescriptor.create(isCaseSensitive());
+        return new SdbcxColumnDescriptor(isCaseSensitive());
     }
 
     @Override

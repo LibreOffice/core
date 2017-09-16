@@ -45,7 +45,7 @@ public class OIndex extends ODescriptor implements XColumnsSupplier, XDataDescri
     private OTable table;
     private OContainer columns;
 
-    protected OIndex(String name, boolean isCaseSensitive, String catalogName,
+    public OIndex(String name, boolean isCaseSensitive, String catalogName,
             boolean isUnique, boolean isPrimaryKeyIndex, boolean isClustered, List<String> columnNames, OTable table) throws ElementExistException {
         super(name, isCaseSensitive);
         this.catalogName = catalogName;
@@ -55,11 +55,6 @@ public class OIndex extends ODescriptor implements XColumnsSupplier, XDataDescri
         this.table = table;
         columns = new OIndexColumnContainer(this, this, columnNames);
         registerProperties();
-    }
-
-    public static OIndex create(String name, boolean isCaseSensitive, String catalogName,
-            boolean isUnique, boolean isPrimaryKeyIndex, boolean isClustered, List<String> columnNames, OTable table) throws ElementExistException {
-        return new OIndex(name, isCaseSensitive, catalogName, isUnique, isPrimaryKeyIndex, isClustered, columnNames, table);
     }
 
     private void registerProperties() {
@@ -95,7 +90,7 @@ public class OIndex extends ODescriptor implements XColumnsSupplier, XDataDescri
 
     @Override
     public XPropertySet createDataDescriptor() {
-        SdbcxIndexDescriptor descriptor = SdbcxIndexDescriptor.create(isCaseSensitive());
+        SdbcxIndexDescriptor descriptor = new SdbcxIndexDescriptor(isCaseSensitive());
         CompHelper.copyProperties(this, descriptor);
         try {
             DbTools.cloneDescriptorColumns(this, descriptor);

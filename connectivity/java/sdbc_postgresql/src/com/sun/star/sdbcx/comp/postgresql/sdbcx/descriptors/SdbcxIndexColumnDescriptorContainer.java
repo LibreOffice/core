@@ -30,6 +30,6 @@ public class SdbcxIndexColumnDescriptorContainer extends SdbcxDescriptorContaine
 
     @Override
     protected XPropertySet createDescriptor() {
-        return SdbcxIndexColumnDescriptor.create(isCaseSensitive());
+        return new SdbcxIndexColumnDescriptor(isCaseSensitive());
     }
 }

@@ -39,13 +39,9 @@ public class SdbcxColumnDescriptor extends ODescriptor {
     protected String defaultValue;
     protected boolean isCurrency;
 
-    protected SdbcxColumnDescriptor(boolean isCaseSensitive) {
+    public SdbcxColumnDescriptor(boolean isCaseSensitive) {
         super("", isCaseSensitive, false);
         registerProperties();
-    }
-
-    public static SdbcxColumnDescriptor create(boolean isCaseSensitive) {
-        return new SdbcxColumnDescriptor(isCaseSensitive);
     }
 
     private void registerProperties() {

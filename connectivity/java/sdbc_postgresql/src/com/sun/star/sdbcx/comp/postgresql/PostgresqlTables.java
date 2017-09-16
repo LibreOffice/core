@@ -69,7 +69,7 @@ public class PostgresqlTables extends OContainer {
                 if (results.next()) {
                     String type = row.getString(4);
                     String remarks = row.getString(5);
-                    ret = PostgresqlTable.create(metadata.getConnection(), this, nameComponents.getTable(),
+                    ret = new PostgresqlTable(metadata.getConnection(), this, nameComponents.getTable(),
                             nameComponents.getCatalog(), nameComponents.getSchema(), remarks, type);
                 }
             }
@@ -117,7 +117,7 @@ public class PostgresqlTables extends OContainer {
 
     @Override
     public XPropertySet createDescriptor() {
-        return SdbcxTableDescriptor.create(true);
+        return new SdbcxTableDescriptor(true);
     }
 
     @Override

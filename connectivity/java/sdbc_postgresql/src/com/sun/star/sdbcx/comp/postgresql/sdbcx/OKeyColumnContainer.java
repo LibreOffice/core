@@ -47,7 +47,7 @@ public class OKeyColumnContainer extends OContainer {
 
     @Override
     protected XPropertySet createDescriptor() {
-        return SdbcxKeyColumnDescriptor.create(isCaseSensitive());
+        return new SdbcxKeyColumnDescriptor(isCaseSensitive());
     }
 
     @Override
@@ -88,8 +88,8 @@ public class OKeyColumnContainer extends OContainer {
                         } catch (SQLException sqlException) {
                             // sometimes we get an error when asking for this param
                         }
-                        ret = OKeyColumn.create(refColumnName, name, typeName,
-                                columnDef, nul, size, dec, dataType, false, false, false, isCaseSensitive());
+                        ret = new OKeyColumn(refColumnName, name, typeName,
+                                "", columnDef, nul, size, dec, dataType, false, false, false, isCaseSensitive());
 
                     }
                 }

@@ -29,13 +29,9 @@ import com.sun.star.uno.Type;
 public class SdbcxIndexColumnDescriptor extends SdbcxColumnDescriptor {
     protected boolean isAscending;
 
-    protected SdbcxIndexColumnDescriptor(boolean isCaseSensitive) {
+    public SdbcxIndexColumnDescriptor(boolean isCaseSensitive) {
         super(isCaseSensitive);
         registerProperties();
-    }
-
-    public static SdbcxIndexColumnDescriptor create(boolean isCaseSensitive) {
-        return new SdbcxIndexColumnDescriptor(isCaseSensitive);
     }
 
     private void registerProperties() {

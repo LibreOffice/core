@@ -37,7 +37,7 @@ public class OKeyColumn extends OColumn {
         registerProperties();
     }
 
-    protected OKeyColumn(
+    public OKeyColumn(
             final String referencedColumn,
             final String name,
             final String typeName,
@@ -57,24 +57,6 @@ public class OKeyColumn extends OColumn {
         registerProperties();
     }
 
-    public static OKeyColumn create(
-            final String referencedColumn,
-            final String name,
-            final String typeName,
-            final String defaultValue,
-            final int isNullable,
-            final int precision,
-            final int scale,
-            final int type,
-            final boolean isAutoIncrement,
-            final boolean isRowVersion,
-            final boolean isCurrency,
-            final boolean isCaseSensitive) {
-        return new OKeyColumn(referencedColumn, name, typeName,
-                defaultValue, "", isNullable, precision, scale,
-                type, isAutoIncrement, isRowVersion, isCurrency, isCaseSensitive);
-    }
-
     private void registerProperties() {
         registerProperty(PropertyIds.RELATEDCOLUMN.name, PropertyIds.RELATEDCOLUMN.id, Type.STRING, PropertyAttribute.READONLY,
                 new PropertyGetter() {
@@ -90,7 +72,7 @@ public class OKeyColumn extends OColumn {
 
     @Override
     public XPropertySet createDataDescriptor() {
-        SdbcxKeyColumnDescriptor descriptor = SdbcxKeyColumnDescriptor.create(isCaseSensitive());
+        SdbcxKeyColumnDescriptor descriptor = new SdbcxKeyColumnDescriptor(isCaseSensitive());
         synchronized (this) {
             CompHelper.copyProperties(this, descriptor);
         }

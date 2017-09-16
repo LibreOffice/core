@@ -48,7 +48,7 @@ public class OIndexColumnContainer extends OContainer {
 
     @Override
     protected XPropertySet createDescriptor() {
-        return SdbcxIndexColumnDescriptor.create(isCaseSensitive());
+        return new SdbcxIndexColumnDescriptor(isCaseSensitive());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class OIndexColumnContainer extends OContainer {
                             int nul = row.getInt(11);
                             String columnDef = row.getString(13);
 
-                            ret = OIndexColumn.create(isAscending, name, typeName, columnDef,
+                            ret = new OIndexColumn(isAscending, name, typeName, columnDef, "",
                                     nul, size, dec, dataType, false, false, false, isCaseSensitive());
                             break;
                         }

@@ -23,7 +23,6 @@ package com.sun.star.sdbcx.comp.postgresql.sdbcx;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import com.sun.star.beans.PropertyVetoException;
@@ -55,8 +54,8 @@ public class OKeyContainer extends OContainer {
     private OTable table;
     private Map<String,OKey> keys;
 
-    protected OKeyContainer(Object lock, boolean isCaseSensitive, List<String> names, Map<String,OKey> keys, OTable table) throws ElementExistException {
-        super(lock, isCaseSensitive, names);
+    public OKeyContainer(Object lock, boolean isCaseSensitive, Map<String,OKey> keys, OTable table) throws ElementExistException {
+        super(lock, isCaseSensitive, Arrays.asList(keys.keySet().toArray(new String[keys.size()])));
         System.out.println("Keys.size()=" + keys.size());
         for (Map.Entry<String,OKey> entry : keys.entrySet()) {
             System.out.println(entry.getKey() + " => " + entry.getValue().referencedTable);
@@ -78,16 +77,9 @@ public class OKeyContainer extends OContainer {
         this.table = table;
     }
 
-    public static OKeyContainer create(boolean isCaseSensitive, Map<String,OKey> keys, OTable table) throws ElementExistException {
-        final Object lock = new Object();
-        String[] names = new String[keys.size()];
-        keys.keySet().toArray(names);
-        return new OKeyContainer(lock, isCaseSensitive, Arrays.asList(names), keys, table);
-    }
-
     @Override
     protected XPropertySet createDescriptor() {
-        return SdbcxKeyDescriptor.create(isCaseSensitive());
+        return new SdbcxKeyDescriptor(isCaseSensitive());
     }
 
     @Override
@@ -205,7 +197,7 @@ public class OKeyContainer extends OContainer {
                 }
             } catch (SQLException sqlException) {
             }
-            keys.put(newName, OKey.create(newName, isCaseSensitive(), referencedName, keyType, updateRule, deleteRule, new ArrayList<String>(), table));
+            keys.put(newName, new OKey(newName, isCaseSensitive(), referencedName, keyType, updateRule, deleteRule, new ArrayList<String>(), table));
             return createObject(newName);
         } catch (WrappedTargetException wrappedTargetException) {
         } catch (UnknownPropertyException unknownPropertyException) {

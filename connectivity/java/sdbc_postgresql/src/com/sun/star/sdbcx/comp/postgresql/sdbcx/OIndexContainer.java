@@ -58,7 +58,7 @@ public class OIndexContainer extends OContainer {
 
     @Override
     protected XPropertySet createDescriptor() {
-        return SdbcxIndexDescriptor.create(isCaseSensitive());
+        return new SdbcxIndexDescriptor(isCaseSensitive());
     }
 
     @Override
@@ -106,7 +106,7 @@ public class OIndexContainer extends OContainer {
                         }
                     }
                     if (found) {
-                        ret = OIndex.create(subname, isCaseSensitive(), qualifier, isUnique, isPrimaryKeyIndex, clustered == IndexType.CLUSTERED,
+                        ret = new OIndex(subname, isCaseSensitive(), qualifier, isUnique, isPrimaryKeyIndex, clustered == IndexType.CLUSTERED,
                                 columnNames, table);
                     }
                 }
