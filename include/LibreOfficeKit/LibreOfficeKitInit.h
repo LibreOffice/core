@@ -57,6 +57,12 @@ extern "C"
         return dlerror();
     }
 
+    // This function must be called to release memory allocated by lok_dlerror()
+    static void lok_dlerror_free(char * /*pErrMessage*/)
+    {
+        // Do nothing for return of dlerror()
+    }
+
     static void extendUnoPath(const char *pPath)
     {
         (void)pPath;
@@ -92,6 +98,12 @@ extern "C"
         LPSTR buf = NULL;
         FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 0, reinterpret_cast<LPSTR>(&buf), 0, NULL);
         return buf;
+    }
+
+    // This function must be called to release memory allocated by lok_dlerror()
+    static void lok_dlerror_free(char *pErrMessage)
+    {
+        HeapFree(GetProcessHeap(), 0, pErrMessage);
     }
 
     static void *lok_dlsym(void *Hnd, const char *pName)
@@ -195,8 +207,10 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
         struct stat st;
         if (stat(imp_lib, &st) == 0 && st.st_size > 100)
         {
+            char *pErrMessage = lok_dlerror();
             fprintf(stderr, "failed to open library '%s': %s\n",
-                    imp_lib, lok_dlerror());
+                    imp_lib, pErrMessage);
+            lok_dlerror_free(pErrMessage);
             free(imp_lib);
             return NULL;
         }
@@ -206,8 +220,10 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
         dlhandle = lok_loadlib(imp_lib);
         if (!dlhandle)
         {
+            char *pErrMessage = lok_dlerror();
             fprintf(stderr, "failed to open library '%s': %s\n",
-                    imp_lib, lok_dlerror());
+                    imp_lib, pErrMessage);
+            lok_dlerror_free(pErrMessage);
             free(imp_lib);
             return NULL;
         }
