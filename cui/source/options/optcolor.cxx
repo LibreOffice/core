@@ -90,18 +90,16 @@ struct
     const char *pText;
     //color listbox
     const char *pColor;
-    //preview box
-    const char *pPreview;
     // has checkbox?
     bool bCheckBox;
 }
 const vEntryInfo[] =
 {
     #define IDS(Name) \
-        SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), SAL_STRINGIFY(Name##_wn), false
+        SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), false
 
     #define IDS_CB(Name) \
-        SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), SAL_STRINGIFY(Name##_wn), true
+        SAL_STRINGIFY(Name), SAL_STRINGIFY(Name##_lb), true
 
     // The list of these entries (enum ColorConfigEntry) are in colorcfg.hxx.
 
@@ -203,7 +201,7 @@ private:
     };
 
     // Entry -- a color config entry:
-    // text (checkbox) + color list box + preview box
+    // text (checkbox) + color list box
     class Entry
     {
     public:
@@ -218,12 +216,12 @@ private:
         void SetTextColor (Color C) { m_pText->SetTextColor(C); }
     public:
         void SetLinks (Link<Button*,void> const&, Link<SvxColorListBox&,void> const&, Link<Control&,void> const&);
-        void Update (ColorConfigEntry, ColorConfigValue const&);
+        void Update (ColorConfigValue const&);
         void Update (ExtendedColorConfigValue const&);
-        void ColorChanged (ColorConfigEntry, ColorConfigValue&);
+        void ColorChanged (ColorConfigValue&);
         void ColorChanged (ExtendedColorConfigValue&);
     public:
-        long GetTop () const { return m_pPreview->GetPosPixel().Y(); }
+        long GetTop () const { return m_pColorList->GetPosPixel().Y(); }
         unsigned GetHeight () const { return m_pColorList->GetSizePixel().Height(); }
     public:
         bool Is (CheckBox const * pBox) const { return m_pText.get() == pBox; }
@@ -232,7 +230,6 @@ private:
         {
             m_pText.disposeAndClear();
             m_pColorList.disposeAndClear();
-            m_pPreview.disposeAndClear();
         }
     private:
         bool m_bOwnsWidgets;
@@ -240,12 +237,8 @@ private:
         VclPtr<Control> m_pText;
         // color list box
         VclPtr<SvxColorListBox> m_pColorList;
-        // color preview box
-        VclPtr<vcl::Window> m_pPreview;
         // default color
         Color m_aDefaultColor;
-    private:
-        void SetColor (Color);
     };
 
     // vChapters -- groups (group headers)
@@ -331,7 +324,6 @@ ColorConfigWindow_Impl::Entry::Entry(ColorConfigWindow_Impl& rParent, unsigned i
             nCheckBoxLabelOffset);
     }
     rParent.get(m_pColorList, vEntryInfo[iEntry].pColor);
-    rParent.get(m_pPreview, vEntryInfo[iEntry].pPreview);
 
     if (!bShow)
         Hide();
@@ -353,11 +345,6 @@ ColorConfigWindow_Impl::Entry::Entry( vcl::Window *pGrid, unsigned nYPos,
     m_pColorList->set_grid_left_attach(1);
     m_pColorList->set_grid_top_attach(nYPos);
 
-    m_pPreview = VclPtr<vcl::Window>::Create(pGrid, WB_BORDER);
-    m_pPreview->set_grid_left_attach(2);
-    m_pPreview->set_grid_top_attach(nYPos);
-    m_pPreview->set_margin_right(6);
-
     Show();
 }
 
@@ -367,7 +354,6 @@ ColorConfigWindow_Impl::Entry::~Entry()
     {
         m_pText.disposeAndClear();
         m_pColorList.disposeAndClear();
-        m_pPreview.disposeAndClear();
     }
 }
 
@@ -375,14 +361,12 @@ void ColorConfigWindow_Impl::Entry::Show()
 {
     m_pText->Show();
     m_pColorList->Show();
-    m_pPreview->Show();
 }
 
 void ColorConfigWindow_Impl::Entry::Hide()
 {
     m_pText->Hide();
     m_pColorList->Hide();
-    m_pPreview->Hide();
 }
 
 // SetAppearance()
@@ -393,8 +377,6 @@ void ColorConfigWindow_Impl::Entry::SetAppearance(Wallpaper const& rTextWall)
 {
     // text (and optionally checkbox)
     m_pText->SetBackground(rTextWall);
-    // preview
-    m_pPreview->SetBorderStyle(WindowBorderStyle::MONO);
     // color list
     m_pColorList->SetSlotId(SID_ATTR_CHAR_COLOR);
     m_pColorList->SetAutoDisplayColor(m_aDefaultColor);
@@ -416,13 +398,10 @@ void ColorConfigWindow_Impl::Entry::SetLinks(
 
 // updates a default color config entry
 void ColorConfigWindow_Impl::Entry::Update (
-    ColorConfigEntry aColorEntry, ColorConfigValue const& rValue
+    ColorConfigValue const& rValue
 ) {
     Color aColor(rValue.nColor);
     m_pColorList->SelectEntry(aColor);
-    if (aColor.GetColor() == COL_AUTO)
-        aColor = ColorConfig::GetDefaultColor(aColorEntry);
-    m_pPreview->SetBackground(Wallpaper(aColor));
     if (CheckBox* pCheckBox = dynamic_cast<CheckBox*>(m_pText.get()))
         pCheckBox->Check(rValue.bIsVisible);
 }
@@ -436,19 +415,14 @@ void ColorConfigWindow_Impl::Entry::Update (
         m_pColorList->SelectEntry(Color(COL_AUTO));
     else
         m_pColorList->SelectEntry(aColor);
-    SetColor(aColor);
 }
 
 // color of a default entry has changed
 void ColorConfigWindow_Impl::Entry::ColorChanged (
-    ColorConfigEntry aColorEntry,
     ColorConfigValue& rValue
 ) {
     Color aColor = m_pColorList->GetSelectEntryColor();
     rValue.nColor = aColor.GetColor();
-    if (aColor.GetColor() == COL_AUTO)
-        aColor = ColorConfig::GetDefaultColor(aColorEntry);
-    SetColor(aColor);
 }
 
 // color of an extended entry has changed
@@ -460,15 +434,7 @@ void ColorConfigWindow_Impl::Entry::ColorChanged (
     if (aColor.GetColor() == COL_AUTO)
     {
         rValue.setColor(rValue.getDefaultColor());
-        aColor.SetColor(rValue.getColor());
     }
-    SetColor(aColor);
-}
-
-void ColorConfigWindow_Impl::Entry::SetColor (Color aColor)
-{
-    m_pPreview->SetBackground(Wallpaper(aColor));
-    m_pPreview->Invalidate();
 }
 
 
@@ -622,12 +588,10 @@ void ColorConfigWindow_Impl::AdjustHeaderBar()
     unsigned const nX0 = 0;
     unsigned const nX1 = get<vcl::Window>("doccolor")->GetPosPixel().X();
     unsigned const nX2 = get<vcl::Window>("doccolor_lb")->GetPosPixel().X();
-    unsigned const nX3 = get<vcl::Window>("doccolor_wn")->GetPosPixel().X();
-    unsigned const nX4 = m_pHeaderHB->GetSizePixel().Width();
+    unsigned const nX3 = m_pHeaderHB->GetSizePixel().Width();
     m_pHeaderHB->SetItemSize(1, nX1 - nX0);
     m_pHeaderHB->SetItemSize(2, nX2 - nX1);
     m_pHeaderHB->SetItemSize(3, nX3 - nX2);
-    m_pHeaderHB->SetItemSize(4, nX4 - nX3);
 }
 
 void ColorConfigWindow_Impl::AdjustScrollBar()
@@ -666,7 +630,7 @@ void ColorConfigWindow_Impl::Update (
     {
         ColorConfigEntry const aColorEntry = static_cast<ColorConfigEntry>(i);
         vEntries[i]->Update(
-            aColorEntry, pConfig->GetColorValue(aColorEntry)
+            pConfig->GetColorValue(aColorEntry)
         );
     }
 
@@ -724,7 +688,7 @@ void ColorConfigWindow_Impl::ColorHdl(
         {
             ColorConfigEntry const aColorEntry = static_cast<ColorConfigEntry>(i);
             ColorConfigValue aValue = pConfig->GetColorValue(aColorEntry);
-            vEntries[i]->ColorChanged(aColorEntry, aValue);
+            vEntries[i]->ColorChanged(aValue);
             pConfig->SetColorValue(aColorEntry, aValue);
             break;
         }
@@ -819,7 +783,7 @@ public:
     virtual void dispose() override;
 
     void InitHeaderBar(const OUString &rOn, const OUString &rUIElems,
-        const OUString &rColorSetting, const OUString &rPreview);
+        const OUString &rColorSetting);
     void SetConfig (EditableColorConfig& rConfig) { pColorConfig = &rConfig; }
     void SetExtendedConfig (EditableExtendedColorConfig& rConfig) { pExtColorConfig = &rConfig; }
     void Update ();
@@ -872,14 +836,13 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
 }
 
 void ColorConfigCtrl_Impl::InitHeaderBar(const OUString &rOn, const OUString &rUIElems,
-    const OUString &rColorSetting, const OUString &rPreview)
+    const OUString &rColorSetting)
 {
     // filling
     const HeaderBarItemBits nHeadBits = HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXED | HeaderBarItemBits::FIXEDPOS;
     m_pHeaderHB->InsertItem(1, rOn, 0, nHeadBits | HeaderBarItemBits::CENTER);
     m_pHeaderHB->InsertItem(2, rUIElems, 0, nHeadBits | HeaderBarItemBits::LEFT);
     m_pHeaderHB->InsertItem(3, rColorSetting, 0, nHeadBits | HeaderBarItemBits::LEFT);
-    m_pHeaderHB->InsertItem(4, rPreview, 0, nHeadBits | HeaderBarItemBits::LEFT);
     m_pHeaderHB->set_height_request(GetTextHeight() + 6);
 }
 
@@ -1020,8 +983,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     m_pColorConfigCT->InitHeaderBar(
         get<vcl::Window>("on")->GetText(),
         get<vcl::Window>("uielements")->GetText(),
-        get<vcl::Window>("colorsetting")->GetText(),
-        get<vcl::Window>("preview")->GetText());
+        get<vcl::Window>("colorsetting")->GetText());
 
     m_pColorSchemeLB->SetSelectHdl(LINK(this, SvxColorOptionsTabPage, SchemeChangedHdl_Impl));
     Link<Button*,void> aLk = LINK(this, SvxColorOptionsTabPage, SaveDeleteHdl_Impl );
