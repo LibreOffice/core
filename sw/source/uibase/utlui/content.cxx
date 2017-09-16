@@ -862,6 +862,13 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
 {
     SetHelpId(HID_NAVIGATOR_TREELIST);
 
+    // Used for correct positioning of focus rectangle
+    Image aImage(BitmapEx(RID_BMP_NAVI_OUTLINE));
+    Bitmap aBitmap(aImage.GetSizePixel(), 8);
+    aBitmap.Erase(COL_TRANSPARENT);
+    SetDefaultExpandedEntryBmp(Image(aBitmap));
+    SetDefaultCollapsedEntryBmp(Image(aBitmap));
+
     SetNodeDefaultImages();
     SetDoubleClickHdl(LINK(this, SwContentTree, ContentDoubleClickHdl));
     SetDragDropMode(DragDropMode::APP_COPY);
