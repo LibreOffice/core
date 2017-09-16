@@ -48,30 +48,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="doccolor_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="docboundaries_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">2</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="docboundaries_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -104,18 +80,6 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="appback_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">3</property>
       </packing>
     </child>
@@ -158,18 +122,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="objboundaries_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">4</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkCheckButton" id="tblboundaries">
         <property name="label" translatable="yes" context="colorconfigwin|tblboundaries">Table boundaries</property>
         <property name="visible">True</property>
@@ -195,18 +147,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="tblboundaries_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">5</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkLabel" id="font">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -226,18 +166,6 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">6</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="font_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">6</property>
       </packing>
     </child>
@@ -267,18 +195,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="unvisitedlinks_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">7</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkCheckButton" id="visitedlinks">
         <property name="label" translatable="yes" context="colorconfigwin|visitedlinks">Visited links</property>
         <property name="visible">True</property>
@@ -300,18 +216,6 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">8</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="visitedlinks_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">8</property>
       </packing>
     </child>
@@ -339,18 +243,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">10</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="autospellcheck_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">9</property>
       </packing>
     </child>
     <child>
@@ -423,18 +315,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="writergrid_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">13</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="field_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -445,36 +325,12 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="field_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">14</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="index_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">15</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="index_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">15</property>
       </packing>
     </child>
@@ -498,18 +354,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">16</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="script_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">16</property>
       </packing>
     </child>
@@ -569,18 +413,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="section_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">17</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="hdft_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -600,18 +432,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">18</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="hdft_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">18</property>
       </packing>
     </child>
@@ -639,18 +459,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="pagebreak_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">19</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="direct_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -670,18 +478,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">20</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="direct_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">20</property>
       </packing>
     </child>
@@ -725,18 +521,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="sgml_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">22</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="htmlcomment_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -756,18 +540,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">23</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="htmlcomment_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">23</property>
       </packing>
     </child>
@@ -795,18 +567,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="htmlkeyword_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">24</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="unknown_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -826,18 +586,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">25</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="unknown_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">25</property>
       </packing>
     </child>
@@ -881,18 +629,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="calcgrid_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">27</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="brk_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -912,18 +648,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">28</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="brk_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">28</property>
       </packing>
     </child>
@@ -951,18 +675,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="brkmanual_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">29</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="brkauto_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -982,18 +694,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">30</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="brkauto_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">30</property>
       </packing>
     </child>
@@ -1021,18 +721,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="det_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">31</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="deterror_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1052,18 +740,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">32</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="deterror_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">32</property>
       </packing>
     </child>
@@ -1091,18 +767,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="ref_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">33</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="notes_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1122,18 +786,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">34</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="notes_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">34</property>
       </packing>
     </child>
@@ -1177,18 +829,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="drawgrid_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">36</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkLabel" id="basic">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1228,18 +868,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="basicid_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">38</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="basiccomment_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1259,18 +887,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">39</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="basiccomment_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">39</property>
       </packing>
     </child>
@@ -1298,18 +914,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="basicnumber_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">40</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="basicstring_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1329,18 +933,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">41</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="basicstring_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">41</property>
       </packing>
     </child>
@@ -1368,18 +960,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="basicop_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">42</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="basickeyword_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1403,18 +983,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="basickeyword_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">43</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="error_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1434,18 +1002,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">44</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="error_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">44</property>
       </packing>
     </child>
@@ -1489,18 +1045,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="sqlid_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">46</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="sqlnumber_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1520,18 +1064,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">47</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="sqlnumber_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">47</property>
       </packing>
     </child>
@@ -1559,18 +1091,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="sqlstring_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">48</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="sqlop_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1590,18 +1110,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">49</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="sqlop_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">49</property>
       </packing>
     </child>
@@ -1629,18 +1137,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkDrawingArea" id="sqlkeyword_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">50</property>
-      </packing>
-    </child>
-    <child>
       <object class="svxcorelo-SvxColorListBox" id="sqlparam_lb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1660,18 +1156,6 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">51</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="sqlparam_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
         <property name="top_attach">51</property>
       </packing>
     </child>
@@ -1696,42 +1180,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">52</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="sqlcomment_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">52</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="smarttags_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">10</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkDrawingArea" id="shadows_wn:border">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_right">6</property>
-        <property name="hexpand">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">11</property>
       </packing>
     </child>
     <child>
