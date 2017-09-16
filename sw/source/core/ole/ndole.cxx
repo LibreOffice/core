@@ -906,7 +906,7 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
             OUString aTmpName;
             xObj = p->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_DUMMY_CLASSID ).GetByteSequence(), aTmpName );
         }
-        // else
+        if (xObj.is())
         {
             m_xOLERef.Assign( xObj, m_xOLERef.GetViewAspect() );
             m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), m_aName );
