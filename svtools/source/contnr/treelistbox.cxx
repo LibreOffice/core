@@ -2992,6 +2992,8 @@ void SvTreeListBox::PreparePaint(vcl::RenderContext& /*rRenderContext*/, SvTreeL
 
 tools::Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
 {
+    pImpl->UpdateContextBmpWidthMax( pEntry );
+
     Size aSize;
     tools::Rectangle aRect;
     aRect.Top() = nLine;
