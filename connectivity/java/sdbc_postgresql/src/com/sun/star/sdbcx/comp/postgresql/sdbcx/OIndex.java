@@ -45,22 +45,21 @@ public class OIndex extends ODescriptor implements XColumnsSupplier, XDataDescri
     private OTable table;
     private OContainer columns;
 
-    protected OIndex(Object lock, String name, boolean isCaseSensitive, String catalogName,
+    protected OIndex(String name, boolean isCaseSensitive, String catalogName,
             boolean isUnique, boolean isPrimaryKeyIndex, boolean isClustered, List<String> columnNames, OTable table) throws ElementExistException {
-        super(lock, name, isCaseSensitive);
+        super(name, isCaseSensitive);
         this.catalogName = catalogName;
         this.isUnique = isUnique;
         this.isPrimaryKeyIndex = isPrimaryKeyIndex;
         this.isClustered = isClustered;
         this.table = table;
-        columns = new OIndexColumnContainer(lock, this, columnNames);
+        columns = new OIndexColumnContainer(this, this, columnNames);
         registerProperties();
     }
 
     public static OIndex create(String name, boolean isCaseSensitive, String catalogName,
             boolean isUnique, boolean isPrimaryKeyIndex, boolean isClustered, List<String> columnNames, OTable table) throws ElementExistException {
-        final Object lock = new Object();
-        return new OIndex(lock, name, isCaseSensitive, catalogName, isUnique, isPrimaryKeyIndex, isClustered, columnNames, table);
+        return new OIndex(name, isCaseSensitive, catalogName, isUnique, isPrimaryKeyIndex, isClustered, columnNames, table);
     }
 
     private void registerProperties() {

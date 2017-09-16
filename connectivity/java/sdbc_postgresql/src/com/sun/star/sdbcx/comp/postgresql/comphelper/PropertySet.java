@@ -30,7 +30,6 @@ import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.XVetoableChangeListener;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lib.uno.helper.ComponentBase;
@@ -41,8 +40,8 @@ import com.sun.star.uno.Type;
 public class PropertySet extends ComponentBase implements XPropertySet, XFastPropertySet, XMultiPropertySet {
     private final PropertySetAdapter impl;
 
-    protected PropertySet(Object lock) {
-        impl = new PropertySetAdapter(lock, this);
+    protected PropertySet() {
+        impl = new PropertySetAdapter(this, this);
     }
 
     @Override
@@ -58,23 +57,25 @@ public class PropertySet extends ComponentBase implements XPropertySet, XFastPro
         impl.registerProperty(propertyName, type, attributes, getter, setter);
     }
 
-    public void addPropertyChangeListener(String propertyName, XPropertyChangeListener listener) throws UnknownPropertyException, WrappedTargetException {
+    public synchronized void addPropertyChangeListener(String propertyName, XPropertyChangeListener listener)
+            throws UnknownPropertyException, WrappedTargetException {
         // only add listeners if you are not disposed
-        if (!bInDispose && !bDisposed) {
+        if (!isDisposed()) {
             impl.addPropertyChangeListener(propertyName, listener);
         }
     }
 
-    public void addVetoableChangeListener(String propertyName, XVetoableChangeListener listener) throws UnknownPropertyException, WrappedTargetException {
+    public synchronized void addVetoableChangeListener(String propertyName, XVetoableChangeListener listener)
+            throws UnknownPropertyException, WrappedTargetException {
         // only add listeners if you are not disposed
-        if (!bInDispose && !bDisposed) {
+        if (!isDisposed()) {
             impl.addVetoableChangeListener(propertyName, listener);
         }
     }
 
-    public void addPropertiesChangeListener(String[] propertyNames, XPropertiesChangeListener listener) {
+    public synchronized void addPropertiesChangeListener(String[] propertyNames, XPropertiesChangeListener listener) {
         // only add listeners if you are not disposed
-        if (!bInDispose && !bDisposed) {
+        if (!isDisposed()) {
             impl.addPropertiesChangeListener(propertyNames, listener);
         }
     }
@@ -83,78 +84,65 @@ public class PropertySet extends ComponentBase implements XPropertySet, XFastPro
         return impl.getPropertySetInfo();
     }
 
-    public Object getPropertyValue(String propertyName) throws UnknownPropertyException, WrappedTargetException {
-        if (bInDispose || bDisposed) {
-            throw new DisposedException("Component is already disposed");
-        }
+    public synchronized Object getPropertyValue(String propertyName) throws UnknownPropertyException, WrappedTargetException {
+        checkDisposed();
         return impl.getPropertyValue(propertyName);
     }
 
     @Override
-    public Object getFastPropertyValue(int handle) throws UnknownPropertyException, WrappedTargetException {
-        if (bInDispose || bDisposed) {
-            throw new DisposedException("Component is already disposed");
-        }
+    public synchronized Object getFastPropertyValue(int handle) throws UnknownPropertyException, WrappedTargetException {
+        checkDisposed();
         return impl.getFastPropertyValue(handle);
     }
 
-    public Object[] getPropertyValues(String[] propertyNames) {
-        if (bInDispose || bDisposed) {
-            throw new DisposedException("Component is already disposed");
-        }
+    public synchronized Object[] getPropertyValues(String[] propertyNames) {
+        checkDisposed();
         return impl.getPropertyValues(propertyNames);
     }
 
-    public void removePropertyChangeListener(String propertyName, XPropertyChangeListener listener) throws UnknownPropertyException, WrappedTargetException {
+    public synchronized void removePropertyChangeListener(String propertyName, XPropertyChangeListener listener)
+            throws UnknownPropertyException, WrappedTargetException {
         // all listeners are automatically released in a dispose call
-        if (!bInDispose && !bDisposed) {
+        if (!isDisposed()) {
             impl.removePropertyChangeListener(propertyName, listener);
         }
     }
 
-    public void removeVetoableChangeListener(String propertyName, XVetoableChangeListener listener) throws UnknownPropertyException, WrappedTargetException {
+    public synchronized void removeVetoableChangeListener(String propertyName, XVetoableChangeListener listener)
+            throws UnknownPropertyException, WrappedTargetException {
         // all listeners are automatically released in a dispose call
-        if (!bInDispose && !bDisposed) {
+        if (!isDisposed()) {
             impl.removeVetoableChangeListener(propertyName, listener);
         }
     }
 
-    public void removePropertiesChangeListener(XPropertiesChangeListener listener) {
+    public synchronized void removePropertiesChangeListener(XPropertiesChangeListener listener) {
         // all listeners are automatically released in a dispose call
-        if (!bInDispose && !bDisposed) {
+        if (!isDisposed()) {
             impl.removePropertiesChangeListener(listener);
         }
     }
 
-    public void setPropertyValue(String propertyName, Object value)
+    public synchronized void setPropertyValue(String propertyName, Object value)
             throws UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException {
-        if (bInDispose || bDisposed) {
-            throw new DisposedException("Component is already disposed");
-        }
+        checkDisposed();
         impl.setPropertyValue(propertyName, value);
     }
 
-    public void setFastPropertyValue(int handle, Object value)
+    public synchronized void setFastPropertyValue(int handle, Object value)
             throws UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException {
-        if (bInDispose || bDisposed) {
-            throw new DisposedException("Component is already disposed");
-        }
+        checkDisposed();
         impl.setFastPropertyValue(handle, value);
     }
 
-    public void setPropertyValues(String[] propertyNames, Object[] values) throws PropertyVetoException, IllegalArgumentException, WrappedTargetException {
-        if (bInDispose || bDisposed) {
-            throw new DisposedException("Component is already disposed");
-        }
+    public synchronized void setPropertyValues(String[] propertyNames, Object[] values)
+            throws PropertyVetoException, IllegalArgumentException, WrappedTargetException {
+        checkDisposed();
         impl.setPropertyValues(propertyNames, values);
     }
 
-    public void firePropertiesChangeEvent(String[] propertyNames, XPropertiesChangeListener listener) {
-        if (bInDispose || bDisposed) {
-            throw new DisposedException("Component is already disposed");
-        }
+    public synchronized void firePropertiesChangeEvent(String[] propertyNames, XPropertiesChangeListener listener) {
+        checkDisposed();
         impl.firePropertiesChangeEvent(propertyNames, listener);
     }
-
-
 }

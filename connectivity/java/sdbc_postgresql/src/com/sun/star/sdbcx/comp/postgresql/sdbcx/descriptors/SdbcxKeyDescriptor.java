@@ -37,15 +37,14 @@ public class SdbcxKeyDescriptor extends ODescriptor implements XColumnsSupplier 
 
     private SdbcxKeyColumnDescriptorContainer columns;
 
-    protected SdbcxKeyDescriptor(Object lock, boolean isCaseSensitive) {
-        super(lock, "", isCaseSensitive, false);
+    protected SdbcxKeyDescriptor(boolean isCaseSensitive) {
+        super("", isCaseSensitive, false);
         registerProperties();
-        columns = new SdbcxKeyColumnDescriptorContainer(this.lock, isCaseSensitive());
+        columns = new SdbcxKeyColumnDescriptorContainer(this, isCaseSensitive());
     }
 
     public static SdbcxKeyDescriptor create(boolean isCaseSensitive) {
-        final Object lock = new Object();
-        return new SdbcxKeyDescriptor(lock, isCaseSensitive);
+        return new SdbcxKeyDescriptor(isCaseSensitive);
     }
 
     private void registerProperties() {

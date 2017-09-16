@@ -21,15 +21,12 @@
 
 package com.sun.star.sdbcx.comp.postgresql;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.XVetoableChangeListener;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lib.uno.helper.ComponentBase;
@@ -53,7 +50,6 @@ public class PostgresqlStatement extends ComponentBase
     private XWarningsSupplier implWarningsSupplier;
     private XMultipleResults implMultipleResults;
     private XConnection connection;
-    private AtomicBoolean isDisposed = new AtomicBoolean(false);
 
     public PostgresqlStatement(XStatement impl, XConnection connection) {
         this.impl = impl;
@@ -69,40 +65,29 @@ public class PostgresqlStatement extends ComponentBase
 
     @Override
     protected void postDisposing() {
-        isDisposed.set(true);
         try {
             implCloseable.close();
         } catch (SQLException sqlException) {
         }
     }
 
-    private void checkDisposed() throws DisposedException {
-        if (isDisposed.get()) {
-            throw new DisposedException();
-        }
-    }
-
     // XStatement:
 
     public boolean execute(String arg0) throws SQLException {
-        checkDisposed();
         System.out.println(arg0);
         return impl.execute(arg0);
     }
 
     public XResultSet executeQuery(String arg0) throws SQLException {
-        checkDisposed();
         XResultSet results = impl.executeQuery(arg0);
         return new PostgresqlResultSet(results, this);
     }
 
     public int executeUpdate(String arg0) throws SQLException {
-        checkDisposed();
         return impl.executeUpdate(arg0);
     }
 
     public XConnection getConnection() throws SQLException {
-        checkDisposed();
         return connection;
     }
 
@@ -115,74 +100,61 @@ public class PostgresqlStatement extends ComponentBase
     // XPropertySet:
 
     public void addPropertyChangeListener(String arg0, XPropertyChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
         implPropertySet.addPropertyChangeListener(arg0, arg1);
     }
 
     public void addVetoableChangeListener(String arg0, XVetoableChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
         implPropertySet.addVetoableChangeListener(arg0, arg1);
     }
 
     public XPropertySetInfo getPropertySetInfo() {
-        checkDisposed();
         return implPropertySet.getPropertySetInfo();
     }
 
     public Object getPropertyValue(String arg0) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
         return implPropertySet.getPropertyValue(arg0);
     }
 
     public void removePropertyChangeListener(String arg0, XPropertyChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
         implPropertySet.removePropertyChangeListener(arg0, arg1);
     }
 
     public void removeVetoableChangeListener(String arg0, XVetoableChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
-        checkDisposed();
         implPropertySet.removeVetoableChangeListener(arg0, arg1);
     }
 
     public void setPropertyValue(String arg0, Object arg1)
             throws UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException {
-        checkDisposed();
         implPropertySet.setPropertyValue(arg0, arg1);
     }
 
     // XCancellable:
 
     public void cancel() {
-        checkDisposed();
         implCancellable.cancel();
     }
 
     // XWarningsSupplier:
 
     public void clearWarnings() throws SQLException {
-        checkDisposed();
         implWarningsSupplier.clearWarnings();
     }
 
     public Object getWarnings() throws SQLException {
-        checkDisposed();
         return implWarningsSupplier.getWarnings();
     }
 
     // XMultipleResults:
 
     public boolean getMoreResults() throws SQLException {
-        checkDisposed();
         return implMultipleResults.getMoreResults();
     }
 
     public XResultSet getResultSet() throws SQLException {
-        checkDisposed();
         return new PostgresqlResultSet(implMultipleResults.getResultSet(), this);
     }
 
     public int getUpdateCount() throws SQLException {
-        checkDisposed();
         return implMultipleResults.getUpdateCount();
     }
 }

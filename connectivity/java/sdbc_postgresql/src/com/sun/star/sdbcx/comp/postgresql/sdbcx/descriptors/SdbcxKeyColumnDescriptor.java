@@ -29,14 +29,13 @@ import com.sun.star.uno.Type;
 public class SdbcxKeyColumnDescriptor extends SdbcxColumnDescriptor {
     protected String relatedColumn;
 
-    protected SdbcxKeyColumnDescriptor(Object lock, boolean isCaseSensitive) {
-        super(lock, isCaseSensitive);
+    protected SdbcxKeyColumnDescriptor(boolean isCaseSensitive) {
+        super(isCaseSensitive);
         registerProperties();
     }
 
     public static SdbcxKeyColumnDescriptor create(boolean isCaseSensitive) {
-        final Object lock = new Object();
-        return new SdbcxKeyColumnDescriptor(lock, isCaseSensitive);
+        return new SdbcxKeyColumnDescriptor(isCaseSensitive);
     }
 
     private void registerProperties() {

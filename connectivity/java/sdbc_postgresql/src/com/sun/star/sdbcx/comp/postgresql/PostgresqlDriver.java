@@ -22,10 +22,8 @@
 package com.sun.star.sdbcx.comp.postgresql;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.ComponentBase;
@@ -37,6 +35,7 @@ import com.sun.star.sdbc.XDriver;
 import com.sun.star.sdbc.XDriverManager;
 import com.sun.star.sdbcx.XDataDefinitionSupplier;
 import com.sun.star.sdbcx.XTablesSupplier;
+import com.sun.star.sdbcx.comp.postgresql.util.Resources;
 import com.sun.star.sdbcx.comp.postgresql.util.SharedResources;
 import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
 import com.sun.star.uno.Exception;
@@ -49,7 +48,6 @@ public class PostgresqlDriver extends ComponentBase implements XServiceInfo, XDr
             "com.sun.star.sdbcx.Driver"
     };
     private XComponentContext componentContext;
-    private AtomicBoolean isDisposed = new AtomicBoolean(false);
 
     public static XSingleComponentFactory __getComponentFactory(String implName) {
         XSingleComponentFactory xSingleComponentFactory = null;
@@ -72,16 +70,9 @@ public class PostgresqlDriver extends ComponentBase implements XServiceInfo, XDr
     // XComponent:
 
     @Override
-    protected void postDisposing() {
-        isDisposed.set(true);
+    protected synchronized void postDisposing() {
         componentContext = null;
         SharedResources.revokeClient();
-    }
-
-    private void checkDisposed() throws DisposedException {
-        if (isDisposed.get()) {
-            throw new DisposedException();
-        }
     }
 
     // XServiceInfo:
@@ -114,7 +105,7 @@ public class PostgresqlDriver extends ComponentBase implements XServiceInfo, XDr
     }
 
     @Override
-    public XConnection connect(String url, PropertyValue[] info) throws SQLException {
+    public synchronized XConnection connect(String url, PropertyValue[] info) throws SQLException {
         checkDisposed();
         XConnection connection = null;
         if (acceptsURL(url)) {
@@ -184,15 +175,16 @@ public class PostgresqlDriver extends ComponentBase implements XServiceInfo, XDr
 
     // XDataDefinitionSupplier:
 
-    public XTablesSupplier getDataDefinitionByConnection(XConnection connection) throws SQLException {
+    public synchronized XTablesSupplier getDataDefinitionByConnection(XConnection connection) throws SQLException {
         checkDisposed();
         return new PostgresqlCatalog((PostgresqlConnection)connection);
     }
 
-    public XTablesSupplier getDataDefinitionByURL(String url, PropertyValue[] info) throws SQLException {
+    public synchronized XTablesSupplier getDataDefinitionByURL(String url, PropertyValue[] info) throws SQLException {
         checkDisposed();
         if (!acceptsURL(url)) {
-            throw new SQLException(); // FIXME
+            String error = SharedResources.getInstance().getResourceString(Resources.STR_URI_SYNTAX_ERROR);
+            throw new SQLException(error, this, StandardSQLState.SQL_UNABLE_TO_CONNECT.text(), 0, null);
         }
         return getDataDefinitionByConnection(connect(url, info));
     }

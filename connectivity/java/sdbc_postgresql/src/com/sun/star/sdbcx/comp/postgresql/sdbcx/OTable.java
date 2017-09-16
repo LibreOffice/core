@@ -25,7 +25,6 @@ import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbcx.XAlterTable;
@@ -57,8 +56,8 @@ public abstract class OTable extends ODescriptor
     protected OContainer indexes;
     protected OContainer tables;
 
-    protected OTable(Object lock, String name, boolean isCaseSensitive, XConnection connection, OContainer tables) {
-        super(lock, name, isCaseSensitive);
+    protected OTable(String name, boolean isCaseSensitive, XConnection connection, OContainer tables) {
+        super(name, isCaseSensitive);
         this.tables = tables;
         this.connection = connection;
         registerProperties();
@@ -114,12 +113,6 @@ public abstract class OTable extends ODescriptor
         tables = null;
     }
 
-    private void checkDisposed() {
-        if (bInDispose || bDisposed) {
-            throw new DisposedException();
-        }
-    }
-
     // XServiceInfo
 
     @Override
@@ -145,36 +138,29 @@ public abstract class OTable extends ODescriptor
     // XColumnsSupplier
 
     @Override
-    public XNameAccess getColumns() {
-        checkDisposed();
-        synchronized (lock) {
-            if (columns == null) {
-                columns = refreshColumns();
-            }
-            return columns;
+    public synchronized XNameAccess getColumns() {
+        if (columns == null) {
+            columns = refreshColumns();
         }
+        return columns;
     }
 
     @Override
-    public XNameAccess getIndexes() {
+    public synchronized XNameAccess getIndexes() {
         checkDisposed();
-        synchronized (lock) {
-            if (indexes == null) {
-                indexes = refreshIndexes();
-            }
-            return indexes;
+        if (indexes == null) {
+            indexes = refreshIndexes();
         }
+        return indexes;
     }
 
     @Override
-    public XIndexAccess getKeys() {
+    public synchronized XIndexAccess getKeys() {
         checkDisposed();
-        synchronized (lock) {
-            if (keys == null) {
-                keys = refreshKeys();
-            }
-            return keys;
+        if (keys == null) {
+            keys = refreshKeys();
         }
+        return keys;
     }
 
     public XConnection getConnection() {

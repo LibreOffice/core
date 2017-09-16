@@ -33,7 +33,6 @@ public class OIndexColumn extends OColumn {
     protected boolean isAscending;
 
     protected OIndexColumn(
-            final Object lock,
             final boolean isAscending,
             final String name,
             final String typeName,
@@ -47,7 +46,7 @@ public class OIndexColumn extends OColumn {
             final boolean isRowVersion,
             final boolean isCurrency,
             final boolean isCaseSensitive) {
-        super(lock, name, typeName, defaultValue, description, isNullable,
+        super(name, typeName, defaultValue, description, isNullable,
                 precision, scale, type, isAutoIncrement, isRowVersion, isCurrency, isCaseSensitive);
         this.isAscending = isAscending;
         registerProperties();
@@ -66,8 +65,7 @@ public class OIndexColumn extends OColumn {
             final boolean isRowVersion,
             final boolean isCurrency,
             final boolean isCaseSensitive) {
-        final Object lock = new Object();
-        return new OIndexColumn(lock, isAscending, name, typeName,
+        return new OIndexColumn(isAscending, name, typeName,
                 defaultValue, "", isNullable, precision, scale,
                 type, isAutoIncrement, isRowVersion, isCurrency, isCaseSensitive);
     }
@@ -88,7 +86,7 @@ public class OIndexColumn extends OColumn {
     @Override
     public XPropertySet createDataDescriptor() {
         SdbcxIndexColumnDescriptor descriptor = SdbcxIndexColumnDescriptor.create(isCaseSensitive());
-        synchronized (lock) {
+        synchronized (this) {
             CompHelper.copyProperties(this, descriptor);
         }
         return descriptor;

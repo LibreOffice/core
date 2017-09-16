@@ -22,7 +22,6 @@
 package com.sun.star.sdbcx.comp.postgresql;
 
 import java.util.HashSet;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.DisposedException;
@@ -43,7 +42,6 @@ public class PostgresqlConnection extends ComponentBase implements XConnection, 
     private XComponent implComponent;
     private XWarningsSupplier implWarningsSupplier;
     private String url;
-    private AtomicBoolean isDisposed = new AtomicBoolean(false);
     private HashSet<XComponent> statements = new HashSet<>();
 
     public PostgresqlConnection(XConnection impl, String url) {
@@ -57,7 +55,6 @@ public class PostgresqlConnection extends ComponentBase implements XConnection, 
 
     @Override
     protected synchronized void postDisposing() {
-        isDisposed.set(true);
         implComponent.dispose();
         for (XComponent pgStatement : statements) {
             try {
@@ -67,12 +64,6 @@ public class PostgresqlConnection extends ComponentBase implements XConnection, 
         }
     };
 
-    private void checkDisposed() throws DisposedException {
-        if (isDisposed.get()) {
-            throw new DisposedException();
-        }
-    }
-
     // XEventListener:
 
     public synchronized void disposing(EventObject source) {
@@ -81,12 +72,12 @@ public class PostgresqlConnection extends ComponentBase implements XConnection, 
 
     // XWarningsSupplier:
 
-    public void clearWarnings() throws SQLException {
+    public synchronized void clearWarnings() throws SQLException {
         checkDisposed();
         implWarningsSupplier.clearWarnings();
     }
 
-    public Object getWarnings() throws SQLException {
+    public synchronized Object getWarnings() throws SQLException {
         checkDisposed();
         return implWarningsSupplier.getWarnings();
     }
@@ -97,7 +88,7 @@ public class PostgresqlConnection extends ComponentBase implements XConnection, 
         dispose();
     }
 
-    public void commit() throws SQLException {
+    public synchronized void commit() throws SQLException {
         checkDisposed();
         impl.commit();
     }
@@ -110,42 +101,42 @@ public class PostgresqlConnection extends ComponentBase implements XConnection, 
         return pgStatement;
     }
 
-    public boolean getAutoCommit() throws SQLException {
+    public synchronized boolean getAutoCommit() throws SQLException {
         checkDisposed();
         return impl.getAutoCommit();
     }
 
-    public String getCatalog() throws SQLException {
+    public synchronized String getCatalog() throws SQLException {
         checkDisposed();
         return impl.getCatalog();
     }
 
-    public XDatabaseMetaData getMetaData() throws SQLException {
+    public synchronized XDatabaseMetaData getMetaData() throws SQLException {
         checkDisposed();
         return new PostgresqlDatabaseMetadata(impl.getMetaData(), this, url);
     }
 
-    public int getTransactionIsolation() throws SQLException {
+    public synchronized int getTransactionIsolation() throws SQLException {
         checkDisposed();
         return impl.getTransactionIsolation();
     }
 
-    public XNameAccess getTypeMap() throws SQLException {
+    public synchronized XNameAccess getTypeMap() throws SQLException {
         checkDisposed();
         return impl.getTypeMap();
     }
 
-    public boolean isClosed() throws SQLException {
+    public synchronized boolean isClosed() throws SQLException {
         checkDisposed();
         return impl.isClosed();
     }
 
-    public boolean isReadOnly() throws SQLException {
+    public synchronized boolean isReadOnly() throws SQLException {
         checkDisposed();
         return impl.isReadOnly();
     }
 
-    public String nativeSQL(String arg0) throws SQLException {
+    public synchronized String nativeSQL(String arg0) throws SQLException {
         checkDisposed();
         return impl.nativeSQL(arg0);
     }
@@ -166,32 +157,32 @@ public class PostgresqlConnection extends ComponentBase implements XConnection, 
         return pgStatement;
     }
 
-    public void rollback() throws SQLException {
+    public synchronized void rollback() throws SQLException {
         checkDisposed();
         impl.rollback();
     }
 
-    public void setAutoCommit(boolean arg0) throws SQLException {
+    public synchronized void setAutoCommit(boolean arg0) throws SQLException {
         checkDisposed();
         impl.setAutoCommit(arg0);
     }
 
-    public void setCatalog(String arg0) throws SQLException {
+    public synchronized void setCatalog(String arg0) throws SQLException {
         checkDisposed();
         impl.setCatalog(arg0);
     }
 
-    public void setReadOnly(boolean arg0) throws SQLException {
+    public synchronized void setReadOnly(boolean arg0) throws SQLException {
         checkDisposed();
         impl.setReadOnly(arg0);
     }
 
-    public void setTransactionIsolation(int arg0) throws SQLException {
+    public synchronized void setTransactionIsolation(int arg0) throws SQLException {
         checkDisposed();
         impl.setTransactionIsolation(arg0);
     }
 
-    public void setTypeMap(XNameAccess arg0) throws SQLException {
+    public synchronized void setTypeMap(XNameAccess arg0) throws SQLException {
         checkDisposed();
         impl.setTypeMap(arg0);
     }

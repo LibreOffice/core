@@ -31,18 +31,15 @@ import com.sun.star.uno.Type;
 public class ODescriptor extends PropertySet {
     private String name;
     private final boolean isCaseSensitive;
-    protected final Object lock;
 
-    public ODescriptor(Object lock, String name, boolean isCaseSensitive, boolean isReadOnly) {
-        super(lock);
-        this.lock = lock;
+    public ODescriptor(String name, boolean isCaseSensitive, boolean isReadOnly) {
         this.name = name;
         this.isCaseSensitive = isCaseSensitive;
         registerProperties(isReadOnly);
     }
 
-    public ODescriptor(Object lock, String name, boolean isCaseSensitive) {
-        this(lock, name, isCaseSensitive, true);
+    public ODescriptor(String name, boolean isCaseSensitive) {
+        this(name, isCaseSensitive, true);
     }
 
     private void registerProperties(boolean isReadOnly) {

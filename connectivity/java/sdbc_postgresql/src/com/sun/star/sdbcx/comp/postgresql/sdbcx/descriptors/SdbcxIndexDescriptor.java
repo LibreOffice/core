@@ -35,15 +35,14 @@ public class SdbcxIndexDescriptor extends ODescriptor implements XColumnsSupplie
 
     private SdbcxIndexColumnDescriptorContainer columns;
 
-    protected SdbcxIndexDescriptor(Object lock, boolean isCaseSensitive) {
-        super(lock, "", isCaseSensitive, false);
-        columns = new SdbcxIndexColumnDescriptorContainer(this.lock, isCaseSensitive());
+    protected SdbcxIndexDescriptor(boolean isCaseSensitive) {
+        super("", isCaseSensitive, false);
+        columns = new SdbcxIndexColumnDescriptorContainer(this, isCaseSensitive());
         registerProperties();
     }
 
     public static SdbcxIndexDescriptor create(boolean isCaseSensitive) {
-        final Object lock = new Object();
-        return new SdbcxIndexDescriptor(lock, isCaseSensitive);
+        return new SdbcxIndexDescriptor(isCaseSensitive);
     }
 
     private void registerProperties() {

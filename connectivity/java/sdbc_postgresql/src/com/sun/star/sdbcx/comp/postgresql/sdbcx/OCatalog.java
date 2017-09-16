@@ -22,7 +22,6 @@
 package com.sun.star.sdbcx.comp.postgresql.sdbcx;
 
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lib.uno.helper.ComponentBase;
 import com.sun.star.sdbc.SQLException;
@@ -42,7 +41,6 @@ public abstract class OCatalog extends ComponentBase
             "com.sun.star.sdbcx.DatabaseDefinition"
     };
 
-    protected final Object lock = new Object();
     // Deleted on destruction, weakly held by caller:
     protected OContainer tables;
     protected OContainer views;
@@ -54,27 +52,19 @@ public abstract class OCatalog extends ComponentBase
         this.metadata = metadata;
     }
 
-    private void checkDisposed() throws DisposedException {
-        if (bInDispose || bDisposed) {
-            throw new DisposedException();
-        }
-    }
-
     @Override
-    protected void postDisposing() {
-        synchronized (lock) {
-            if (tables != null) {
-                tables.dispose();
-            }
-            if (views != null) {
-                views.dispose();
-            }
-            if (groups != null) {
-                groups.dispose();
-            }
-            if (users != null) {
-                users.dispose();
-            }
+    protected synchronized void postDisposing() {
+        if (tables != null) {
+            tables.dispose();
+        }
+        if (views != null) {
+            views.dispose();
+        }
+        if (groups != null) {
+            groups.dispose();
+        }
+        if (users != null) {
+            users.dispose();
         }
     }
 
@@ -103,47 +93,39 @@ public abstract class OCatalog extends ComponentBase
     // X(Tables/Views/Groups/Users)Supplier
 
     @Override
-    public XNameAccess getTables() {
+    public synchronized XNameAccess getTables() {
         checkDisposed();
-        synchronized (lock) {
-            if (tables == null) {
-                tables = refreshTables();
-            }
-            return tables;
+        if (tables == null) {
+            tables = refreshTables();
         }
+        return tables;
     }
 
     @Override
-    public XNameAccess getViews() {
+    public synchronized XNameAccess getViews() {
         checkDisposed();
-        synchronized (lock) {
-            if (views == null) {
-                views = refreshViews();
-            }
-            return views;
+        if (views == null) {
+            views = refreshViews();
         }
+        return views;
     }
 
     @Override
-    public XNameAccess getGroups() {
+    public synchronized XNameAccess getGroups() {
         checkDisposed();
-        synchronized (lock) {
-            if (groups == null) {
-                groups = refreshGroups();
-            }
-            return groups;
+        if (groups == null) {
+            groups = refreshGroups();
         }
+        return groups;
     }
 
     @Override
-    public XNameAccess getUsers() {
+    public synchronized XNameAccess getUsers() {
         checkDisposed();
-        synchronized (lock) {
-            if (users == null) {
-                users = refreshUsers();
-            }
-            return users;
+        if (users == null) {
+            users = refreshUsers();
         }
+        return users;
     }
 
     protected String buildName(XRow row) throws SQLException {

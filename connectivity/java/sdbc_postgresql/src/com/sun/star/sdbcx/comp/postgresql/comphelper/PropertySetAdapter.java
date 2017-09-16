@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
@@ -56,7 +57,7 @@ public class PropertySetAdapter implements XPropertySet, XFastPropertySet, XMult
     // after registerListeners(), these are read-only:
     private final Map<String,PropertyData> propertiesByName = new HashMap<String,PropertyData>();
     private final Map<Integer,PropertyData> propertiesByHandle = new HashMap<Integer,PropertyData>();
-    private int nextHandle = 1;
+    private AtomicInteger nextHandle = new AtomicInteger(1);
     // interface containers are locked internally:
     protected final MultiTypeInterfaceContainer boundListeners = new MultiTypeInterfaceContainer();
     protected final MultiTypeInterfaceContainer vetoableListeners = new MultiTypeInterfaceContainer();
@@ -145,9 +146,7 @@ public class PropertySetAdapter implements XPropertySet, XFastPropertySet, XMult
             PropertyGetter getter, PropertySetter setter) {
         int handle;
         // registerProperty() should only be called from one thread, but just in case:
-        synchronized (lock) {
-            handle = nextHandle++;
-        }
+        handle = nextHandle.getAndIncrement();
         registerProperty(propertyName, handle, type, attributes, getter, setter);
     }
 

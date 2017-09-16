@@ -22,6 +22,7 @@
 
 
 package com.sun.star.lib.uno.helper;
+import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.EventObject;
@@ -44,6 +45,20 @@ public class ComponentBase extends WeakBase implements XComponent
     {
         super();
         listenerContainer= new MultiTypeInterfaceContainer();
+    }
+
+    /** Checks whether this component (which you should have locked, prior to this call, and until you are done using) is disposed.
+      * @return whether this component is disposed
+      */
+    protected synchronized final boolean isDisposed() {
+        return bInDispose || bDisposed;
+    }
+
+    /** Checks whether this component (which you should have locked, prior to this call, and until you are done using) is disposed, throwing DisposedException if it is. */
+    protected synchronized final void checkDisposed() {
+        if (bInDispose || bDisposed) {
+            throw new DisposedException();
+        }
     }
 
     /** Override to perform extra clean-up work. Provided for subclasses. It is

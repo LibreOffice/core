@@ -24,7 +24,6 @@ package com.sun.star.sdbcx.comp.postgresql.sdbcx;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNamed;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbcx.XDataDescriptorFactory;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
@@ -46,8 +45,8 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
     private boolean isRowVersion;
     private boolean isCurrency;
 
-    protected OColumn(final Object lock, final boolean isCaseSensitive) {
-        super(lock, "", isCaseSensitive);
+    protected OColumn(final boolean isCaseSensitive) {
+        super("", isCaseSensitive);
         this.isNullable = ColumnValue.NULLABLE;
         this.precision = 0;
         this.scale = 0;
@@ -59,12 +58,10 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
     }
 
     public static OColumn create(final boolean isCaseSensitive) {
-        final Object lock = new Object();
-        return new OColumn(lock, isCaseSensitive);
+        return new OColumn(isCaseSensitive);
     }
 
     protected OColumn(
-            final Object lock,
             final String name,
             final String typeName,
             final String defaultValue,
@@ -77,7 +74,7 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
             final boolean isRowVersion,
             final boolean isCurrency,
             final boolean isCaseSensitive) {
-        super(lock, name, isCaseSensitive);
+        super(name, isCaseSensitive);
         this.typeName = typeName;
         this.description = description;
         this.defaultValue = defaultValue;
@@ -104,8 +101,7 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
             final boolean isRowVersion,
             final boolean isCurrency,
             final boolean isCaseSensitive) {
-        final Object lock = new Object();
-        return new OColumn(lock, name, typeName, defaultValue, description,
+        return new OColumn(name, typeName, defaultValue, description,
                 isNullable, precision, scale, type, isAutoIncrement, isRowVersion,
                 isCurrency, isCaseSensitive);
     }
@@ -260,18 +256,12 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
         super.postDisposing();
     }
 
-    private void checkDisposed() {
-        if (bDisposed) {
-            throw new DisposedException();
-        }
-    }
-
     // XDataDescriptorFactory
 
     @Override
     public XPropertySet createDataDescriptor() {
         SdbcxColumnDescriptor descriptor = SdbcxColumnDescriptor.create(isCaseSensitive());
-        synchronized (lock) {
+        synchronized (this) {
             CompHelper.copyProperties(this, descriptor);
         }
         return descriptor;

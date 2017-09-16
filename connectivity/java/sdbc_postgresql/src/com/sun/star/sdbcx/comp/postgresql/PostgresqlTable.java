@@ -42,9 +42,9 @@ import com.sun.star.sdbcx.comp.postgresql.sdbcx.SqlTableHelper.ColumnDescription
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors.SdbcxTableDescriptor;
 
 public class PostgresqlTable extends OTable {
-    private PostgresqlTable(Object lock, XConnection connection, OContainer tables, String name,
+    private PostgresqlTable(XConnection connection, OContainer tables, String name,
             String catalogName, String schemaName, String description, String type) {
-        super(lock, name, true, connection, tables);
+        super(name, true, connection, tables);
         super.catalogName = catalogName;
         super.schemaName = schemaName;
         super.description = description;
@@ -53,14 +53,13 @@ public class PostgresqlTable extends OTable {
 
     public static PostgresqlTable create(XConnection connection, OContainer tables, String name,
             String catalogName, String schemaName, String description, String type) {
-        Object lock = new Object();
-        return new PostgresqlTable(lock, connection, tables, name, catalogName, schemaName, description, type);
+        return new PostgresqlTable(connection, tables, name, catalogName, schemaName, description, type);
     }
 
     @Override
     public XPropertySet createDataDescriptor() {
         SdbcxTableDescriptor descriptor = SdbcxTableDescriptor.create(true);
-        synchronized (lock) {
+        synchronized (this) {
             CompHelper.copyProperties(this, descriptor);
         }
         return descriptor;
@@ -94,7 +93,7 @@ public class PostgresqlTable extends OTable {
     protected OContainer refreshColumns() {
         try {
             List<ColumnDescription> columns = new SqlTableHelper().readColumns(getConnection().getMetaData(), catalogName, schemaName, getName());
-            return new OColumnContainer(lock, isCaseSensitive(), columns, this, getConnection().getMetaData());
+            return new OColumnContainer(this, isCaseSensitive(), columns, this, getConnection().getMetaData());
         } catch (ElementExistException elementExistException) {
             return null;
         } catch (SQLException sqlException) {
@@ -106,7 +105,7 @@ public class PostgresqlTable extends OTable {
     protected OContainer refreshIndexes() {
         try {
             List<String> indexes = new SqlTableHelper().readIndexes(getConnection().getMetaData(), catalogName, schemaName, getName(), this);
-            return new OIndexContainer(lock, indexes, isCaseSensitive(), this);
+            return new OIndexContainer(this, indexes, isCaseSensitive(), this);
         } catch (ElementExistException elementExistException) {
             return null;
         } catch (SQLException sqlException) {

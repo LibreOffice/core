@@ -32,13 +32,12 @@ import com.sun.star.uno.Type;
 public class OKeyColumn extends OColumn {
     protected String referencedColumn;
 
-    protected OKeyColumn(Object lock, boolean isCaseSensitive) {
-        super(lock, isCaseSensitive);
+    protected OKeyColumn(boolean isCaseSensitive) {
+        super(isCaseSensitive);
         registerProperties();
     }
 
     protected OKeyColumn(
-            final Object lock,
             final String referencedColumn,
             final String name,
             final String typeName,
@@ -52,7 +51,7 @@ public class OKeyColumn extends OColumn {
             final boolean isRowVersion,
             final boolean isCurrency,
             final boolean isCaseSensitive) {
-        super(lock, name, typeName, defaultValue, description, isNullable,
+        super(name, typeName, defaultValue, description, isNullable,
                 precision, scale, type, isAutoIncrement, isRowVersion, isCurrency, isCaseSensitive);
         this.referencedColumn = referencedColumn;
         registerProperties();
@@ -71,8 +70,7 @@ public class OKeyColumn extends OColumn {
             final boolean isRowVersion,
             final boolean isCurrency,
             final boolean isCaseSensitive) {
-        final Object lock = new Object();
-        return new OKeyColumn(lock, referencedColumn, name, typeName,
+        return new OKeyColumn(referencedColumn, name, typeName,
                 defaultValue, "", isNullable, precision, scale,
                 type, isAutoIncrement, isRowVersion, isCurrency, isCaseSensitive);
     }
@@ -93,7 +91,7 @@ public class OKeyColumn extends OColumn {
     @Override
     public XPropertySet createDataDescriptor() {
         SdbcxKeyColumnDescriptor descriptor = SdbcxKeyColumnDescriptor.create(isCaseSensitive());
-        synchronized (lock) {
+        synchronized (this) {
             CompHelper.copyProperties(this, descriptor);
         }
         return descriptor;

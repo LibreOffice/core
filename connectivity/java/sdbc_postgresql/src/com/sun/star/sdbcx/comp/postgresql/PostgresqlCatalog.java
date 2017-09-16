@@ -52,13 +52,12 @@ public class PostgresqlCatalog extends OCatalog {
                 System.out.println("Table " + name);
                 names.add(name);
             }
-            return new PostgresqlTables(lock, metadata, this, names);
-        } catch (ElementExistException elementExistException) {
-        } catch (SQLException sqlException) {
+            return new PostgresqlTables(this, metadata, this, names);
+        } catch (ElementExistException | SQLException exception) {
+            throw new com.sun.star.uno.RuntimeException("Error", exception);
         } finally {
             CompHelper.disposeComponent(results);
         }
-        return null;
     }
 
     @Override
@@ -72,13 +71,12 @@ public class PostgresqlCatalog extends OCatalog {
                 String name = buildName(row);
                 names.add(name);
             }
-            return new PostgresqlTables(lock, metadata, this, names);
-        } catch (ElementExistException elementExistException) {
-        } catch (SQLException sqlException) {
+            return new PostgresqlTables(this, metadata, this, names);
+        } catch (ElementExistException | SQLException exception) {
+            throw new com.sun.star.uno.RuntimeException("Error", exception);
         } finally {
             CompHelper.disposeComponent(results);
         }
-        return null;
     }
 
     @Override

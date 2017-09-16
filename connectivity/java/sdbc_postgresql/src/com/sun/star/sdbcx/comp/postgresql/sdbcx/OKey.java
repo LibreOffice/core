@@ -27,7 +27,6 @@ import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XDataDescriptorFactory;
@@ -49,27 +48,26 @@ public class OKey extends ODescriptor
 
     private OContainer columns;
 
-    protected OKey(Object lock, boolean isCaseSensitive) {
-        super(lock, "", isCaseSensitive);
+    protected OKey(boolean isCaseSensitive) {
+        super("", isCaseSensitive);
         registerProperties();
     }
 
-    protected OKey(Object lock, String name, boolean isCaseSensitive, String referencedTable, int type,
+    protected OKey(String name, boolean isCaseSensitive, String referencedTable, int type,
             int updateRule, int deleteRule, List<String> columnNames, OTable table) throws ElementExistException {
-        super(lock, name, isCaseSensitive);
+        super(name, isCaseSensitive);
         this.referencedTable = referencedTable;
         this.type = type;
         this.updateRule = updateRule;
         this.deleteRule = deleteRule;
         this.table = table;
         registerProperties();
-        columns = new OKeyColumnContainer(lock, this, columnNames);
+        columns = new OKeyColumnContainer(this, this, columnNames);
     }
 
     public static OKey create(String name, boolean isCaseSensitive, String referencedTable, int type,
             int updateRule, int deleteRule, List<String> columnNames, OTable table) throws ElementExistException {
-        final Object lock = new Object();
-        return new OKey(lock, name, isCaseSensitive, referencedTable, type, updateRule, deleteRule, columnNames, table);
+        return new OKey(name, isCaseSensitive, referencedTable, type, updateRule, deleteRule, columnNames, table);
     }
 
     private void registerProperties() {
@@ -107,22 +105,12 @@ public class OKey extends ODescriptor
                 }, null);
     }
 
-    // XComponent
-
-    private void checkDisposed() {
-        if (bDisposed) {
-            throw new DisposedException();
-        }
-    }
-
     // XColumnsSupplier
 
     @Override
-    public XNameAccess getColumns() {
-        synchronized (lock) {
-            checkDisposed();
-            return columns;
-        }
+    public synchronized XNameAccess getColumns() {
+        checkDisposed();
+        return columns;
     }
 
     // XDataDescriptionFactory

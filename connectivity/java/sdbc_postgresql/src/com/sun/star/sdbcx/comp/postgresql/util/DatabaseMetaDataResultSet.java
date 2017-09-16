@@ -22,7 +22,6 @@
 package com.sun.star.sdbcx.comp.postgresql.util;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
@@ -32,7 +31,6 @@ import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.io.XInputStream;
-import com.sun.star.lang.DisposedException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lib.uno.helper.ComponentBase;
@@ -66,7 +64,6 @@ public class DatabaseMetaDataResultSet extends ComponentBase
     private XPropertySet implPropertySet;
     private XColumnsSupplier implColumnSupplier;
     private ArrayList<ORowSetValue[]> rows;
-    private AtomicBoolean isDisposed = new AtomicBoolean(false);
     /// 0-based:
     private int currentRow = -1;
     /// 1-based:
@@ -84,16 +81,9 @@ public class DatabaseMetaDataResultSet extends ComponentBase
     // XComponent:
     @Override
     protected void postDisposing() {
-        isDisposed.set(true);
         try {
             implCloseable.close();
         } catch (SQLException sqlException) {
-        }
-    }
-
-    private void checkDisposed() throws DisposedException {
-        if (isDisposed.get()) {
-            throw new DisposedException();
         }
     }
 
@@ -156,7 +146,7 @@ public class DatabaseMetaDataResultSet extends ComponentBase
         return currentRow + 1;
     }
 
-    public Object getStatement() throws SQLException {
+    public synchronized Object getStatement() throws SQLException {
         checkDisposed();
         return null;
     }
@@ -203,7 +193,7 @@ public class DatabaseMetaDataResultSet extends ComponentBase
         return currentRow > -1;
     }
 
-    public void refreshRow() throws SQLException {
+    public synchronized void refreshRow() throws SQLException {
         checkDisposed();
     }
 
@@ -221,41 +211,41 @@ public class DatabaseMetaDataResultSet extends ComponentBase
         return true;
     }
 
-    public boolean rowDeleted() throws SQLException {
+    public synchronized boolean rowDeleted() throws SQLException {
         checkDisposed();
         return false;
     }
 
-    public boolean rowInserted() throws SQLException {
+    public synchronized boolean rowInserted() throws SQLException {
         checkDisposed();
         return false;
     }
 
-    public boolean rowUpdated() throws SQLException {
+    public synchronized boolean rowUpdated() throws SQLException {
         checkDisposed();
         return false;
     }
 
     // XResultSetMetaDataSupplier:
 
-    public XResultSetMetaData getMetaData() throws SQLException {
+    public synchronized XResultSetMetaData getMetaData() throws SQLException {
         checkDisposed();
         return new PostgresqlResultSetMetaData(implResultSetMetaDataSupplier.getMetaData());
     }
 
     // XRow:
 
-    public XArray getArray(int columnIndex) throws SQLException {
+    public synchronized XArray getArray(int columnIndex) throws SQLException {
         checkDisposed();
         return null;
     }
 
-    public XInputStream getBinaryStream(int columnIndex) throws SQLException {
+    public synchronized XInputStream getBinaryStream(int columnIndex) throws SQLException {
         checkDisposed();
         return null;
     }
 
-    public XBlob getBlob(int columnIndex) throws SQLException {
+    public synchronized XBlob getBlob(int columnIndex) throws SQLException {
         checkDisposed();
         return null;
     }
@@ -278,12 +268,12 @@ public class DatabaseMetaDataResultSet extends ComponentBase
         return field.getSequence();
     }
 
-    public XInputStream getCharacterStream(int columnIndex) throws SQLException {
+    public synchronized XInputStream getCharacterStream(int columnIndex) throws SQLException {
         checkDisposed();
         return null;
     }
 
-    public XClob getClob(int columnIndex) throws SQLException {
+    public synchronized XClob getClob(int columnIndex) throws SQLException {
         checkDisposed();
         return null;
     }
@@ -324,7 +314,7 @@ public class DatabaseMetaDataResultSet extends ComponentBase
         return field.makeAny();
     }
 
-    public XRef getRef(int columnIndex) throws SQLException {
+    public synchronized XRef getRef(int columnIndex) throws SQLException {
         checkDisposed();
         return null;
     }
@@ -361,44 +351,44 @@ public class DatabaseMetaDataResultSet extends ComponentBase
 
     // XColumnLocate:
 
-    public int findColumn(String arg0) throws SQLException {
+    public synchronized int findColumn(String arg0) throws SQLException {
         checkDisposed();
         return implColumnLocate.findColumn(arg0);
     }
 
     // XPropertySet:
 
-    public void addPropertyChangeListener(String arg0, XPropertyChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
+    public synchronized void addPropertyChangeListener(String arg0, XPropertyChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
         checkDisposed();
         implPropertySet.addPropertyChangeListener(arg0, arg1);
     }
 
-    public void addVetoableChangeListener(String arg0, XVetoableChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
+    public synchronized void addVetoableChangeListener(String arg0, XVetoableChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
         checkDisposed();
         implPropertySet.addVetoableChangeListener(arg0, arg1);
     }
 
-    public XPropertySetInfo getPropertySetInfo() {
+    public synchronized XPropertySetInfo getPropertySetInfo() {
         checkDisposed();
         return implPropertySet.getPropertySetInfo();
     }
 
-    public Object getPropertyValue(String arg0) throws UnknownPropertyException, WrappedTargetException {
+    public synchronized Object getPropertyValue(String arg0) throws UnknownPropertyException, WrappedTargetException {
         checkDisposed();
         return implPropertySet.getPropertyValue(arg0);
     }
 
-    public void removePropertyChangeListener(String arg0, XPropertyChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
+    public synchronized void removePropertyChangeListener(String arg0, XPropertyChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
         checkDisposed();
         implPropertySet.removePropertyChangeListener(arg0, arg1);
     }
 
-    public void removeVetoableChangeListener(String arg0, XVetoableChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
+    public synchronized void removeVetoableChangeListener(String arg0, XVetoableChangeListener arg1) throws UnknownPropertyException, WrappedTargetException {
         checkDisposed();
         implPropertySet.removeVetoableChangeListener(arg0, arg1);
     }
 
-    public void setPropertyValue(String arg0, Object arg1)
+    public synchronized void setPropertyValue(String arg0, Object arg1)
             throws UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException {
         checkDisposed();
         implPropertySet.setPropertyValue(arg0, arg1);
@@ -406,7 +396,7 @@ public class DatabaseMetaDataResultSet extends ComponentBase
 
     // XRowLocate:
 
-    public int compareBookmarks(Object arg0, Object arg1) throws SQLException {
+    public synchronized int compareBookmarks(Object arg0, Object arg1) throws SQLException {
         checkDisposed();
 
         int bookmark1, bookmark2;
@@ -426,17 +416,17 @@ public class DatabaseMetaDataResultSet extends ComponentBase
         }
     }
 
-    public Object getBookmark() throws SQLException {
+    public synchronized Object getBookmark() throws SQLException {
         checkDisposed();
         return currentRow;
     }
 
-    public boolean hasOrderedBookmarks() throws SQLException {
+    public synchronized boolean hasOrderedBookmarks() throws SQLException {
         checkDisposed();
         return true;
     }
 
-    public int hashBookmark(Object arg0) throws SQLException {
+    public synchronized int hashBookmark(Object arg0) throws SQLException {
         checkDisposed();
         int bookmark;
         try {
@@ -447,7 +437,7 @@ public class DatabaseMetaDataResultSet extends ComponentBase
         return bookmark;
     }
 
-    public boolean moveRelativeToBookmark(Object arg0, int arg1) throws SQLException {
+    public synchronized boolean moveRelativeToBookmark(Object arg0, int arg1) throws SQLException {
         checkDisposed();
         int bookmark;
         boolean moved = false;
@@ -465,7 +455,7 @@ public class DatabaseMetaDataResultSet extends ComponentBase
         return moved;
     }
 
-    public boolean moveToBookmark(Object arg0) throws SQLException {
+    public synchronized boolean moveToBookmark(Object arg0) throws SQLException {
         checkDisposed();
         int bookmark;
         boolean moved = false;
@@ -482,7 +472,7 @@ public class DatabaseMetaDataResultSet extends ComponentBase
 
     // XColumnSupplier:
 
-    public XNameAccess getColumns() {
+    public synchronized XNameAccess getColumns() {
         checkDisposed();
         return implColumnSupplier.getColumns();
     }
