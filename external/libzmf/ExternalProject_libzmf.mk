@@ -31,16 +31,15 @@ $(call gb_ExternalProject_get_state_target,libzmf,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
+			--disable-tests \
 			--disable-tools \
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(CXXFLAGS) $(CXXFLAGS_CXX11) $(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
-			REVENGE_GENERATORS_CFLAGS=' ' REVENGE_GENERATORS_LIBS=' ' REVENGE_STREAM_CFLAGS=' ' REVENGE_STREAM_LIBS=' ' \
-			ax_cv_cxx_compile_cxx11=yes \
+			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-		&& $(MAKE) -C src/lib \
+		&& $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:
