@@ -416,6 +416,7 @@ SvXMLImport::~SvXMLImport() throw ()
     // class dtors are full of application logic
     while (!maFastContexts.empty()) { maFastContexts.pop(); }
     while (!maContexts.empty()) { maContexts.pop(); }
+    DisposingModel();
 }
 
 namespace
