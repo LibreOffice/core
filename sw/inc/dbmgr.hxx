@@ -261,6 +261,12 @@ friend class SwConnectionDisposedListener_Impl;
     /// Store last registrations to revoke or commit
     static std::vector<std::pair<SwDocShell*, OUString>> m_aUncommitedRegistrations;
 
+    /// Not used connections.
+    std::vector<OUString> m_aNotUsedConnections;
+
+    /// Set connection as used.
+    void SetAsUsed(const OUString& rName);
+
     /// The document that owns this manager.
     SwDoc* m_pDoc;
 
@@ -487,6 +493,9 @@ public:
 
     /// Accept not commited registrations
     void CommitLastRegistrations();
+
+    /// Remove not used connections.
+    void RevokeNotUsedConnections();
 };
 
 #endif
