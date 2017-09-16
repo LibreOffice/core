@@ -148,11 +148,11 @@ struct Entity : public ParserData
 
     // unique for each Entity instance:
 
-    // Number of valid events in mpProducedEvents:
+    // Number of valid events in mxProducedEvents:
     size_t mnProducedEventsSize;
-    EventList *mpProducedEvents;
-    std::queue< EventList * > maPendingEvents;
-    std::queue< EventList * > maUsedEvents;
+    std::unique_ptr<EventList> mxProducedEvents;
+    std::queue<std::unique_ptr<EventList>> maPendingEvents;
+    std::queue<std::unique_ptr<EventList>> maUsedEvents;
     osl::Mutex maEventProtector;
 
     static const size_t mnEventLowWater = 4;
@@ -194,7 +194,7 @@ struct Entity : public ParserData
     void characters( const OUString& sChars );
     void endElement();
     void processingInstruction( const OUString& rTarget, const OUString& rData );
-    EventList* getEventList();
+    EventList& getEventList();
     Event& getEvent( CallbackType aType );
 };
 
@@ -247,7 +247,7 @@ public:
     bool m_bIgnoreMissingNSDecl;
 
 private:
-    bool consume(EventList *);
+    bool consume(EventList&);
     void deleteUsedEvents();
     void sendPendingCharacters();
 
@@ -376,7 +376,7 @@ ParserData::ParserData()
 Entity::Entity(const ParserData& rData)
     : ParserData(rData)
     , mnProducedEventsSize(0)
-    , mpProducedEvents(nullptr)
+    , mxProducedEvents()
     , mbEnableThreads(false)
     , mpParser(nullptr)
 {
@@ -385,7 +385,7 @@ Entity::Entity(const ParserData& rData)
 Entity::Entity(const Entity& e)
     : ParserData(e)
     , mnProducedEventsSize(0)
-    , mpProducedEvents(nullptr)
+    , mxProducedEvents()
     , mbEnableThreads(e.mbEnableThreads)
     , maStructSource(e.maStructSource)
     , mpParser(e.mpParser)
@@ -521,27 +521,27 @@ void Entity::processingInstruction( const OUString& rTarget, const OUString& rDa
     }
 }
 
-EventList* Entity::getEventList()
+EventList& Entity::getEventList()
 {
-    if (!mpProducedEvents)
+    if (!mxProducedEvents)
     {
         osl::ResettableMutexGuard aGuard(maEventProtector);
         if (!maUsedEvents.empty())
         {
-            mpProducedEvents = maUsedEvents.front();
+            mxProducedEvents = std::move(maUsedEvents.front());
             maUsedEvents.pop();
             aGuard.clear(); // unlock
             mnProducedEventsSize = 0;
         }
-        if (!mpProducedEvents)
+        if (!mxProducedEvents)
         {
-            mpProducedEvents = new EventList;
-            mpProducedEvents->maEvents.resize(mnEventListSize);
-            mpProducedEvents->mbIsAttributesEmpty = false;
+            mxProducedEvents.reset(new EventList);
+            mxProducedEvents->maEvents.resize(mnEventListSize);
+            mxProducedEvents->mbIsAttributesEmpty = false;
             mnProducedEventsSize = 0;
         }
     }
-    return mpProducedEvents;
+    return *mxProducedEvents;
 }
 
 Event& Entity::getEvent( CallbackType aType )
@@ -549,8 +549,8 @@ Event& Entity::getEvent( CallbackType aType )
     if (!mbEnableThreads)
         return maSharedEvent;
 
-    EventList* pEventList = getEventList();
-    Event& rEvent = pEventList->maEvents[mnProducedEventsSize++];
+    EventList& rEventList = getEventList();
+    Event& rEvent = rEventList.maEvents[mnProducedEventsSize++];
     rEvent.maType = aType;
     return rEvent;
 }
@@ -778,11 +778,11 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
                     if (rEntity.maPendingEvents.size() <= Entity::mnEventLowWater)
                         rEntity.maProduceResume.set(); // start producer again
 
-                    EventList *pEventList = rEntity.maPendingEvents.front();
+                    std::unique_ptr<EventList> xEventList = std::move(rEntity.maPendingEvents.front());
                     rEntity.maPendingEvents.pop();
                     aGuard.clear(); // unlock
 
-                    if (!consume(pEventList))
+                    if (!consume(*xEventList))
                         done = true;
 
                     aGuard.reset(); // lock
@@ -790,8 +790,8 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
                     if ( rEntity.maPendingEvents.size() <= Entity::mnEventLowWater )
                     {
                         aGuard.clear();
-                        for (auto aEventIt = pEventList->maEvents.begin();
-                            aEventIt != pEventList->maEvents.end(); ++aEventIt)
+                        for (auto aEventIt = xEventList->maEvents.begin();
+                            aEventIt != xEventList->maEvents.end(); ++aEventIt)
                         {
                             if (aEventIt->mxAttributes.is())
                             {
@@ -799,12 +799,12 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
                                 if( rEntity.mxNamespaceHandler.is() )
                                     aEventIt->mxDeclAttributes->clear();
                             }
-                            pEventList->mbIsAttributesEmpty = true;
+                            xEventList->mbIsAttributesEmpty = true;
                         }
                         aGuard.reset();
                     }
 
-                    rEntity.maUsedEvents.push(pEventList);
+                    rEntity.maUsedEvents.push(std::move(xEventList));
                 }
             } while (!done);
             xParser->join();
@@ -912,12 +912,12 @@ void FastSaxParserImpl::deleteUsedEvents()
 
     while (!rEntity.maUsedEvents.empty())
     {
-        EventList *pEventList = rEntity.maUsedEvents.front();
+        std::unique_ptr<EventList> xEventList = std::move(rEntity.maUsedEvents.front());
         rEntity.maUsedEvents.pop();
 
         aGuard.clear(); // unlock
 
-        delete pEventList;
+        xEventList.reset();
 
         aGuard.reset(); // lock
     }
@@ -939,8 +939,8 @@ void FastSaxParserImpl::produce( bool bForceFlush )
             aGuard.reset(); // lock
         }
 
-        rEntity.maPendingEvents.push(rEntity.mpProducedEvents);
-        rEntity.mpProducedEvents = nullptr;
+        rEntity.maPendingEvents.push(std::move(rEntity.mxProducedEvents));
+        assert(rEntity.mxProducedEvents.get() == nullptr);
 
         aGuard.clear(); // unlock
 
@@ -948,12 +948,12 @@ void FastSaxParserImpl::produce( bool bForceFlush )
     }
 }
 
-bool FastSaxParserImpl::consume(EventList *pEventList)
+bool FastSaxParserImpl::consume(EventList& rEventList)
 {
     Entity& rEntity = getEntity();
-    pEventList->mbIsAttributesEmpty = false;
-    for (auto aEventIt = pEventList->maEvents.begin();
-         aEventIt != pEventList->maEvents.end(); ++aEventIt)
+    rEventList.mbIsAttributesEmpty = false;
+    for (auto aEventIt = rEventList.maEvents.begin();
+         aEventIt != rEventList.maEvents.end(); ++aEventIt)
     {
         switch ((*aEventIt).maType)
         {
@@ -1072,7 +1072,7 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
     Event& rEvent = rEntity.getEvent( START_ELEMENT );
     bool bIsAttributesEmpty = false;
     if ( rEntity.mbEnableThreads )
-        bIsAttributesEmpty = rEntity.getEventList()->mbIsAttributesEmpty;
+        bIsAttributesEmpty = rEntity.getEventList().mbIsAttributesEmpty;
 
     if (rEvent.mxAttributes.is())
     {
