@@ -435,16 +435,32 @@ sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& r
     return 0;
 }
 
+namespace
+{
+    class setFastDocumentHandlerGuard
+    {
+    private:
+        css::uno::Reference<css::xml::sax::XFastParser> mxParser;
+    public:
+        setFastDocumentHandlerGuard(const css::uno::Reference<css::xml::sax::XFastParser>& Parser,
+                                    const css::uno::Reference<css::xml::sax::XFastDocumentHandler>& Handler)
+            : mxParser(Parser)
+        {
+            mxParser->setFastDocumentHandler(Handler);
+        }
+        //guarantee restoration of null document handler
+        ~setFastDocumentHandlerGuard()
+        {
+            mxParser->setFastDocumentHandler(nullptr);
+        }
+    };
+}
+
 // XFastParser
 void SAL_CALL SvXMLImport::parseStream( const xml::sax::InputSource& aInputSource )
 {
-    if ( mxFastDocumentHandler.is() )
-        mxParser->setFastDocumentHandler( mxFastDocumentHandler );
-    else
-        mxParser->setFastDocumentHandler( this );
-
-    mxParser->parseStream( aInputSource );
-    mxParser->setFastDocumentHandler( nullptr );
+    setFastDocumentHandlerGuard aDocumentHandlerGuard(mxParser, mxFastDocumentHandler.is() ? mxFastDocumentHandler : this);
+    mxParser->parseStream(aInputSource);
 }
 
 void SAL_CALL SvXMLImport::setFastDocumentHandler( const uno::Reference< xml::sax::XFastDocumentHandler >& Handler )
