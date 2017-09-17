@@ -72,6 +72,10 @@ interface BaseTextEditView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    FN_GO2PAGE
+    [
+        ExecMethod = Execute ;
+    ]
     FN_SCROLL_NAVIGATION
     [
         ExecMethod = NoExec ;

@@ -30,6 +30,10 @@
       constructor="lo_writer_NextScrollToolboxController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="lo.writer.Go2PageToolBoxController"
+      constructor="lo_writer_Go2PageToolBoxController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="SwXAutoTextContainer"
       constructor="SwXAutoTextContainer_get_implementation">
     <service name="com.sun.star.text.AutoTextContainer"/>
