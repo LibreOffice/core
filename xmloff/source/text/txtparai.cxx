@@ -1773,7 +1773,6 @@ XMLParaContext::XMLParaContext(
     xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
     m_bHaveAbout(false),
     nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
-    pHints( nullptr ),
     // Lost outline numbering in master document (#i73509#)
     mbOutlineLevelAttrFound( false ),
     bIgnoreLeadingSpace( true ),
@@ -2009,9 +2008,9 @@ void XMLParaContext::EndElement()
         }
     }
 
-    if (pHints && !pHints->GetHints().empty())
+    if (m_xHints && !m_xHints->GetHints().empty())
     {
-        for (const auto & i : pHints->GetHints())
+        for (const auto & i : m_xHints->GetHints())
         {
             XMLHint_Impl *const pHint = i.get();
             xAttrCursor->gotoRange( pHint->GetStart(), false );
@@ -2153,7 +2152,7 @@ void XMLParaContext::EndElement()
             }
         }
     }
-    delete pHints;
+    m_xHints.reset();
 }
 
 SvXMLImportContext *XMLParaContext::CreateChildContext(
@@ -2163,13 +2162,12 @@ SvXMLImportContext *XMLParaContext::CreateChildContext(
     const SvXMLTokenMap& rTokenMap =
         GetImport().GetTextImport()->GetTextPElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
-    if( !pHints )
-        pHints = new XMLHints_Impl;
+    if (!m_xHints)
+        m_xHints.reset(new XMLHints_Impl);
     return XMLImpSpanContext_Impl::CreateChildContext(
                                 GetImport(), nPrefix, rLocalName, xAttrList,
-                                   nToken, *pHints, bIgnoreLeadingSpace
-                                , nStarFontsConvFlags
-                                                     );
+                                nToken, *m_xHints, bIgnoreLeadingSpace,
+                                nStarFontsConvFlags);
 }
 
 void XMLParaContext::Characters( const OUString& rChars )
