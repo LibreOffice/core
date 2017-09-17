@@ -28,7 +28,7 @@
 
 #include <vector>
 #include <map>
-#include <list>
+#include <vector>
 #include <algorithm>
 
 namespace dbmm
@@ -73,7 +73,7 @@ namespace dbmm
     typedef std::map< DocumentID, DocumentEntry > DocumentLogs;
 
     // ErrorLog
-    typedef std::list< MigrationError >   ErrorLog;
+    typedef std::vector< MigrationError >   ErrorLog;
 
     // MigrationLog_Data
     struct MigrationLog_Data

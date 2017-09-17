@@ -67,7 +67,7 @@
 #include <unotools/confignode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <list>
+#include <vector>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
@@ -99,16 +99,21 @@ namespace dbaccess
         {
         private:
             Reference< XDesktop2 >               m_xDesktop;
-            std::list< const ODatabaseModelImpl* >  m_aDatabaseDocuments;
+            std::vector< const ODatabaseModelImpl* >  m_aDatabaseDocuments;
 
         public:
             explicit DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext);
 
             void append(const ODatabaseModelImpl& _rModelImpl )
             {
-                m_aDatabaseDocuments.push_back(&_rModelImpl);
+                m_aDatabaseDocuments.emplace_back(&_rModelImpl);
             }
-            void remove(const ODatabaseModelImpl& _rModelImpl) { m_aDatabaseDocuments.remove(&_rModelImpl); }
+
+            void remove(const ODatabaseModelImpl& _rModelImpl)
+            {
+                m_aDatabaseDocuments.erase(std::find(m_aDatabaseDocuments.begin(), m_aDatabaseDocuments.end(), &_rModelImpl));
+            }
+
 
         private:
             // XTerminateListener
@@ -134,7 +139,7 @@ namespace dbaccess
 
         void SAL_CALL DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ )
         {
-            std::list< const ODatabaseModelImpl* > aCpy(m_aDatabaseDocuments);
+            std::vector< const ODatabaseModelImpl* > aCpy(m_aDatabaseDocuments);
             for( const auto& pCopy : aCpy )
             {
                 try

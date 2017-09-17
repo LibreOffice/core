@@ -35,8 +35,7 @@
 #include "helpids.h"
 #include <osl/diagnose.h>
 
-#include <list>
-using std::list;
+#include <vector>
 #include <utility>
 using std::pair;
 using std::make_pair;
@@ -65,7 +64,7 @@ namespace dbaui
         Reference< XPropertySet>                m_xSourceDef;
         Reference< XPropertySet>                m_xDestDef;
         enum opcode { DELETE, INSERT, MODIFY };
-        typedef list< pair < opcode, pair < OConnectionLineDataVec::size_type, OConnectionLineDataVec::size_type> > > ops_type;
+        typedef std::vector< pair < opcode, pair < OConnectionLineDataVec::size_type, OConnectionLineDataVec::size_type> > > ops_type;
         ops_type                                m_ops;
 
         void fillListBox(const Reference< XPropertySet>& _xDest);
