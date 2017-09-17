@@ -10,7 +10,6 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkWindow" id="DockingColorReplace">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>

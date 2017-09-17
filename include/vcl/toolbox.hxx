@@ -299,6 +299,7 @@ public:
     virtual void        Resizing( Size& rSize ) override;
     virtual Size        GetOptimalSize() const override;
     virtual void        doDeferredInit(WinBits nBits) override;
+    virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
     /// Insert a command (like '.uno:Save').
     virtual void        InsertItem( const OUString& rCommand,
