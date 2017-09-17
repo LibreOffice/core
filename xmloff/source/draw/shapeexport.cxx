@@ -132,7 +132,9 @@ namespace {
 bool supportsText(XmlShapeType eShapeType)
 {
         return eShapeType != XmlShapeTypePresChartShape &&
+        eShapeType != XmlShapeTypeDrawChartShape &&
         eShapeType != XmlShapeTypePresOLE2Shape &&
+        eShapeType != XmlShapeTypeDrawOLE2Shape &&
         eShapeType != XmlShapeTypeDrawSheetShape &&
         eShapeType != XmlShapeTypePresSheetShape &&
         eShapeType != XmlShapeTypeDraw3DSceneObject &&
