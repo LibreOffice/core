@@ -33,3 +33,9 @@ popd
 
 #starting corpuses
 cp $SRC/*_seed_corpus.zip $OUT
+#fuzzing dictionaries
+cp $SRC/gif.dict $OUT/giffuzzer.dict
+cp $SRC/jpeg.dict $OUT/jpgfuzzer.dict
+cp $SRC/png.dict $OUT/pngfuzzer.dict
+cp $SRC/tiff.dict $OUT/tiffuzzer.dict
+cp $SRC/xml.dict $OUT/fodtfuzzer.dict
