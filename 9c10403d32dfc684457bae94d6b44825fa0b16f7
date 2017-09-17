@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_70c79812",
+        "filename": "tools/inc/poly.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "that guy might need explicit initialisation of the 3 members",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_90cc0437",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "Hmm, so rtl::Static is really only needed for non-trivial classes.\n\nIf this initializer list for ImplPolygon didn\u0027t compile, perhaps make it a plain struct so member access is free?",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b0d100d0",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "why not assign the global default by default?\n\nanother option is to push the body of this function to ImplPolygon (except for the empty check), so avoid some churn with the heap (default constructed mpImplPolygon allocates one object from the heap, that you\u0027re killing anyway (either with the global static, or the new alloc size 5 down below)",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d0d68cc4",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "same here, push body to Impl class, except for initial empty check",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f0db88eb",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_10d9f4f3",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_30e6f0b4",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_50e37ca3",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "make this an independent patch - but wow, this should really be a hard assert() - trying to access beyond valid pos index",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_70eeb88c",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "same here (and more below I won\u0027t bother to flag individually)",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_90f32473",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 854,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "I just like how this suddenly self-documents itself! ;)",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b0e8207e",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "Just curious - from your understanding of the code, does the new version equally delay making the impl object unique?",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d0edac8c",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "usually, we don\u0027t like mixing several, disjunct aspects into one patch (in this case whitespace changes \u0026 re-architecting). One line is prolly ok though...",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f002a83d",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "that\u0027s not sufficient.\n\nif they are not the same object, they might still compare equal (e.g. being constructed from the same rectangle)\n\nSee basegfx/source/polygon/b2dpolygon.cxx for some inspiration",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_10001434",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "also here: push body down into Impl class",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_30fd103b",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-17T00:54:57Z",
+      "side": 1,
+      "message": "that would then not work anymore - but checking size of mpImplPolygon being 0 serves the same purpose",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
