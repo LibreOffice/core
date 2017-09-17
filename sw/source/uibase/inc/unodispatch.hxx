@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <list>
+#include <vector>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
@@ -96,7 +96,6 @@ struct StatusStruct_Impl
     css::uno::Reference< css::frame::XStatusListener> xListener;
     css::util::URL                                    aURL;
 };
-typedef std::list< StatusStruct_Impl > StatusListenerList;
 class SwXDispatch : public cppu::WeakImplHelper
 <
     css::frame::XDispatch,
@@ -104,7 +103,7 @@ class SwXDispatch : public cppu::WeakImplHelper
 >
 {
     SwView*             m_pView;
-    StatusListenerList  m_aListenerList;
+    std::vector< StatusStruct_Impl > m_aStatusListenerVector;
     bool            m_bOldEnable;
     bool            m_bListenerAdded;
 public:
