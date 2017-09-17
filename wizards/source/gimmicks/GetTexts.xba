@@ -19,7 +19,7 @@
 -->
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="GetTexts" script:language="StarBasic">Option Explicit
 &apos; Macro-Description:
-&apos; This Macro extracts the Strings out of the currently activated document und inserts them into a logdocument
+&apos; This Macro extracts the strings out of the currently activated document and inserts them into a log document.
 &apos; The aim of the macro is to provide the programmer an insight into the StarOffice API
 &apos; It focusses on how document-Objects are accessed.
 &apos; Therefore not only texts of the document-body are retrieved but also Texts of general

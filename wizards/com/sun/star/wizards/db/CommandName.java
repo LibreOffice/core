@@ -87,7 +87,7 @@ public class CommandName
             this.DisplayName = _DisplayName;
             int iIndex;
             if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation())
-            { // ...dann Catalog mit in TableName
+            { // ...then Catalog also in TableName
                 iIndex = _DisplayName.indexOf(sCatalogSep);
                 if (iIndex >= 0)
                 {

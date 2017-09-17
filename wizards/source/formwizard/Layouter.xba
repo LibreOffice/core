@@ -100,7 +100,7 @@ Public FieldMetaValues(MaxFieldIndex, 8)
 &apos; Description of this List:
 &apos;	CurFieldType = FieldMetaValues(Index,0)
 &apos;	CurFieldLength = FieldMetaValues(Index,1)
-&apos;	CurControlType = FieldMetaValues(Index,2)	(ControlType eg. cLabel, cTextbox usw.)
+&apos;	CurControlType = FieldMetaValues(Index,2)	(ControlType, e.g., cLabel, cTextbox, etc.)
 &apos;	CurControlName = FieldMetaValues(Index,3)
 &apos;	CurFormatKey = FieldMetaValues(Index,4)
 &apos;	CurDefaultValue = FieldMetaValues(Index,5)

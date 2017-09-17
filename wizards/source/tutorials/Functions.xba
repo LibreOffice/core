@@ -148,7 +148,7 @@ Sub Destroy()
 	wait 1000				
     ShowInfoDialog.DisposeIDialog()
     
-    &apos; HIER WIRD DAS DOCUMENT GESCHLOSSEN!!!!!!!! GPF
+    &apos; THE DOCUMENT GETS CLOSED HERE!!!!!!!! GPF
     thisComponent.CurrentController.Frame.close(True)    
 	
 End Sub

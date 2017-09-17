@@ -266,7 +266,7 @@ public class FieldColumn
                     bIsNumberFormat = true;
                     break;
 
-                case DataType.DECIMAL: // ==   3;  [mit Nachkommastellen]
+                case DataType.DECIMAL: // ==   3;  [with fractional part]
                 case DataType.FLOAT: // ==   6;
                 case DataType.REAL: // ==   7;
                 case DataType.DOUBLE: // ==   8;
@@ -369,7 +369,7 @@ public class FieldColumn
                 break;
 
             case DataType.NUMERIC: // ==   2;
-            case DataType.DECIMAL: // ==   3;  [mit Nachkommastellen]
+            case DataType.DECIMAL: // ==   3;  [with fractional part]
             case DataType.FLOAT: // ==   6;
             case DataType.REAL: // ==   7;
             case DataType.DOUBLE: // ==   8;

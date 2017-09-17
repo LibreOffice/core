@@ -1329,7 +1329,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if ( rDM_Impl.IsNewDoc() )
             ApplyProperties_( xFollowPageStyle );
 
-        //todo: creating a "First Page" style depends on HasTitlePage und _fFacingPage_
+        //todo: creating a "First Page" style depends on HasTitlePage and _fFacingPage_
         if ( m_bTitlePage )
         {
             CopyLastHeaderFooter( true, rDM_Impl );

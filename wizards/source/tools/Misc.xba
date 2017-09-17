@@ -235,8 +235,8 @@ End Function
 
 &apos; Gets the fully qualified path to a subdirectory of the
 &apos; Template Directory, e. g. with the parameter &quot;wizard/bitmap&quot;
-&apos; The parameter must be passed over in Url-scription
-&apos; The return-Value is in Urlscription
+&apos; The parameter must be passed in Url notation
+&apos; The return-Value is in Url notation
 Function GetOfficeSubPath(sOfficePath as String, ByVal sSubDir as String)
 Dim sOfficeString as String
 Dim sOfficeList() as String
@@ -373,7 +373,7 @@ Dim oRange as Object
 End Sub
 
 
-&apos; Inserts a certain String to all cells of a Range that ist passed over
+&apos; Inserts a certain string to all cells of a range that is passed
 &apos; either as an object or as the RangeName
 Sub ChangeValueofRange(oSheet as Object, Range, ReplaceValue, Optional StyleName as String)
 Dim oCellRange as Object
@@ -381,7 +381,7 @@ Dim oCellRange as Object
 		&apos; Get the Range out of the Rangename
 		oCellRange = oSheet.GetCellRangeByName(Range)
 	Else
-		&apos; The range is passed over as an object
+		&apos; The range is passed as an object
 		Set oCellRange = Range
 	End If
 	If IsMissing(StyleName) Then
