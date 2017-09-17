@@ -236,7 +236,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 
         sal_uInt16 nSystem = 0;
         rIStream.ReadUInt16( nSystem );
-        const size_t nRead = nLen - sizeof(nLen) - sizeof(nSystem);
+        size_t nRead = nLen - sizeof(nLen) - sizeof(nSystem);
         if (nRead > rIStream.remainingSize())
         {
             SAL_WARN("vcl", "Parsing error: " << rIStream.remainingSize() <<
@@ -245,7 +245,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
         }
         sal_uInt64 const nFirstPos = rIStream.Tell();
         std::unique_ptr<char[]> pTempBuf(new char[nRead]);
-        rIStream.ReadBytes(pTempBuf.get(), nRead);
+        nRead = rIStream.ReadBytes(pTempBuf.get(), nRead);
         if (nRead >= sizeof(ImplOldJobSetupData))
         {
             ImplOldJobSetupData* pData = reinterpret_cast<ImplOldJobSetupData*>(pTempBuf.get());
@@ -275,11 +275,19 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 rJobData.SetPaperHeight( (long)SVBT32ToUInt32( pOldJobData->nPaperHeight ) );
                 if ( rJobData.GetDriverDataLen() )
                 {
-                    const sal_uInt8* pDriverData = reinterpret_cast<sal_uInt8*>(pOldJobData) + nOldJobDataSize;
-                    sal_uInt8* pNewDriverData = static_cast<sal_uInt8*>(
-                        rtl_allocateMemory( rJobData.GetDriverDataLen() ));
-                    memcpy( pNewDriverData, pDriverData, rJobData.GetDriverDataLen() );
-                    rJobData.SetDriverData( pNewDriverData );
+                    const char* pDriverData = reinterpret_cast<const char*>(pOldJobData) + nOldJobDataSize;
+                    const char* pDriverDataEnd = pDriverData + rJobData.GetDriverDataLen();
+                    if (pDriverDataEnd > pTempBuf.get() + nRead)
+                    {
+                        SAL_WARN("vcl", "corrupted job setup");
+                    }
+                    else
+                    {
+                        sal_uInt8* pNewDriverData = static_cast<sal_uInt8*>(
+                            rtl_allocateMemory( rJobData.GetDriverDataLen() ));
+                        memcpy( pNewDriverData, pDriverData, rJobData.GetDriverDataLen() );
+                        rJobData.SetDriverData( pNewDriverData );
+                    }
                 }
                 if( nSystem == JOBSET_FILE605_SYSTEM )
                 {
