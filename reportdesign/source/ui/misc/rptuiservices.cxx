@@ -19,7 +19,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include "ReportController.hxx"
-#include "toolboxcontroller.hxx"
 #include "statusbarcontroller.hxx"
 #include "DefaultInspection.hxx"
 #include "ReportComponentHandler.hxx"
@@ -40,8 +39,6 @@ namespace
 
 cppu::ImplementationEntry entries[] = {
     { &OReportController::create, &OReportController::getImplementationName_Static, &OReportController::getSupportedServiceNames_Static,
-        &cppu::createSingleComponentFactory, nullptr, 0 },
-    { &OToolboxController::create, &OToolboxController::getImplementationName_Static, &OToolboxController::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OStatusbarController::create, &OStatusbarController::getImplementationName_Static, &OStatusbarController::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, nullptr, 0 },

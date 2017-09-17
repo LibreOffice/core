@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
 
 #include <sfx2/tbxctrl.hxx>
+#include <svtools/toolbarmenu.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ustring.hxx>
@@ -48,7 +49,7 @@ typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunct
 
 #define COL_NONE_COLOR    TRGB_COLORDATA(0x80, 0xFF, 0xFF, 0xFF)
 
-class SVX_DLLPUBLIC SvxColorWindow : public SfxPopupWindow
+class SVX_DLLPUBLIC SvxColorWindow : public svtools::ToolbarPopup
 {
 private:
     const sal_uInt16    theSlotId;

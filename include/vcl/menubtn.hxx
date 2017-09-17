@@ -36,7 +36,7 @@ private:
 
     Timer*          mpMenuTimer;
     VclPtr<PopupMenu> mpMenu;
-    VclPtr<FloatingWindow> mpFloatingWindow;
+    VclPtr<Window>  mpFloatingWindow;
     sal_uInt16      mnCurItemId;
     bool            mbDelayMenu;
     Link<MenuButton*,void> maActivateHdl;
@@ -75,7 +75,7 @@ public:
     void            SetPopupMenu(PopupMenu* pNewMenu);
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
 
-    void            SetPopover(FloatingWindow* pFloatingWindow);
+    void            SetPopover(Window* pWindow);
 
     sal_uInt16      GetCurItemId() const { return mnCurItemId; }
     OString         GetCurItemIdent() const;

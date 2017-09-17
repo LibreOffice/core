@@ -44,6 +44,10 @@
     constructor="com_sun_star_comp_svx_FrameToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.ColorToolBoxControl"
+    constructor="com_sun_star_comp_svx_ColorToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.comp.svx.CurrencyToolBoxControl"
     constructor="com_sun_star_comp_svx_CurrencyToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>

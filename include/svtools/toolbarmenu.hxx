@@ -50,6 +50,9 @@ public:
     ToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
                  vcl::Window* pParentWindow,
                  WinBits nBits );
+    ToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+                 vcl::Window* pParentWindow,
+                 const OString& rID, const OUString& rUIXMLDescription );
     virtual ~ToolbarPopup() override;
     virtual void dispose() override;
 
@@ -64,6 +67,8 @@ protected:
     virtual void statusChanged(const css::frame::FeatureStateEvent& Event );
 
 private:
+    void init();
+
     css::uno::Reference< css::frame::XFrame >  mxFrame;
     rtl::Reference< svt::FrameStatusListener > mxStatusListener;
 };
