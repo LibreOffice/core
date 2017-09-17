@@ -215,8 +215,8 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
     const sal_uInt8 *pSource = reinterpret_cast<const sal_uInt8*>( seq.getConstArray() );
     bool bReturn = true;
 
-    if( seq.getLength() < 4 ) {
-        // no recognition possible, when less than 4 bytes are available
+    if( seq.getLength() < 5 ) {
+        // no recognition possible, when less than 5 bytes are available
         return false;
     }
 
