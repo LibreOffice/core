@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bbaba188",
+        "filename": "sax/source/expatwrap/xml2utf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-17T17:04:15Z",
+      "side": 1,
+      "message": "no,  have a look further down this routine.\n\nIt seems like 2 bytes is the actual min, but that would require changing some of the conditions to verify the length",
+      "revId": "775633a863bdad282b4dc94c685a6c11ee7c7fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
