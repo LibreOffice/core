@@ -257,14 +257,12 @@ void SwXDispatch::dispatch(const util::URL& aURL,
         aEvent.State <<= aDescriptor.createPropertyValueSequence();
         aEvent.IsEnabled = !rData.sDataSource.isEmpty();
 
-        StatusListenerList::iterator aListIter = m_aListenerList.begin();
-        for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
+        for ( auto & status : m_aStatusListenerVector )
         {
-            StatusStruct_Impl aStatus = *aListIter;
-            if(aStatus.aURL.Complete == cURLDocumentDataSource)
+            if(status.aURL.Complete == cURLDocumentDataSource)
             {
-                aEvent.FeatureURL = aStatus.aURL;
-                aStatus.xListener->statusChanged( aEvent );
+                aEvent.FeatureURL = status.aURL;
+                status.xListener->statusChanged( aEvent );
             }
         }
     }
@@ -306,11 +304,10 @@ void SwXDispatch::addStatusListener(
 
     xControl->statusChanged( aEvent );
 
-    StatusListenerList::iterator aListIter = m_aListenerList.begin();
     StatusStruct_Impl aStatus;
     aStatus.xListener = xControl;
     aStatus.aURL = aURL;
-    m_aListenerList.insert(aListIter, aStatus);
+    m_aStatusListenerVector.emplace_back(aStatus);
 
     if(!m_bListenerAdded)
     {
@@ -324,17 +321,11 @@ void SwXDispatch::addStatusListener(
 void SwXDispatch::removeStatusListener(
     const uno::Reference< frame::XStatusListener >& xControl, const util::URL&  )
 {
-    StatusListenerList::iterator aListIter = m_aListenerList.begin();
-    for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
-    {
-        StatusStruct_Impl aStatus = *aListIter;
-        if(aStatus.xListener.get() == xControl.get())
-        {
-            m_aListenerList.erase(aListIter);
-            break;
-        }
-    }
-    if(m_aListenerList.empty() && m_pView)
+    m_aStatusListenerVector.erase(
+        std::remove_if(m_aStatusListenerVector.begin(), m_aStatusListenerVector.end(),
+            [&](const StatusStruct_Impl& status) { return status.xListener.get() == xControl.get(); }),
+        m_aStatusListenerVector.end());
+    if(m_aStatusListenerVector.empty() && m_pView)
     {
         uno::Reference<view::XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
         uno::Reference<view::XSelectionChangeListener> xThis = this;
@@ -357,14 +348,12 @@ void SwXDispatch::selectionChanged( const lang::EventObject&  )
         aEvent.IsEnabled = bEnable;
         aEvent.Source = *static_cast<cppu::OWeakObject*>(this);
 
-        StatusListenerList::iterator aListIter = m_aListenerList.begin();
-        for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
+        for ( auto & status : m_aStatusListenerVector )
         {
-            StatusStruct_Impl aStatus = *aListIter;
-            aEvent.FeatureURL = aStatus.aURL;
-            if (aStatus.aURL.Complete != cURLDocumentDataSource)
+            aEvent.FeatureURL = status.aURL;
+            if (status.aURL.Complete != cURLDocumentDataSource)
                 // the document's data source does not depend on the selection, so it's state does not change here
-                aStatus.xListener->statusChanged( aEvent );
+                status.xListener->statusChanged( aEvent );
         }
     }
 }
@@ -378,11 +367,9 @@ void SwXDispatch::disposing( const lang::EventObject& rSource )
 
     lang::EventObject aObject;
     aObject.Source = static_cast<cppu::OWeakObject*>(this);
-    StatusListenerList::iterator aListIter = m_aListenerList.begin();
-    for(; aListIter != m_aListenerList.end(); ++aListIter)
+    for ( auto & status : m_aStatusListenerVector )
     {
-        StatusStruct_Impl aStatus = *aListIter;
-        aStatus.xListener->disposing(aObject);
+        status.xListener->disposing(aObject);
     }
     m_pView = nullptr;
 }
