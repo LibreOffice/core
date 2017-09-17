@@ -458,7 +458,7 @@ void ControlModelContainerBase::removeContainerListener( const Reference< XConta
     maContainerListeners.removeInterface( l );
 }
 
-// XElementAcces
+// XElementAccess
 Type ControlModelContainerBase::getElementType()
 {
     Type aType = cppu::UnoType<XControlModel>::get();
