@@ -1094,4 +1094,282 @@ lo_writer_NextScrollToolboxController_get_implementation(
     return cppu::acquire( new PrevNextScrollToolboxController( context, PrevNextScrollToolboxController::NEXT ) );
 }
 
+class Go2PageBox_Impl;
+class Go2PageToolBoxControl : public svt::ToolboxController,
+                              public lang::XServiceInfo
+{
+    public:
+        explicit Go2PageToolBoxControl(
+            const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+
+        // XInterface
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+        virtual void SAL_CALL acquire() throw () override;
+        virtual void SAL_CALL release() throw () override;
+
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+        // XComponent
+        virtual void SAL_CALL dispose() override;
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+
+        // XToolbarController
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
+        virtual void SAL_CALL click() override;
+        virtual void SAL_CALL doubleClick() override;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+
+        void dispatchCommand( const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
+        using svt::ToolboxController::dispatchCommand;
+
+    private:
+        VclPtr<Go2PageBox_Impl>           m_pBox;
+};
+
+class Go2PageBox_Impl : public NumericField
+{
+public:
+                        Go2PageBox_Impl( vcl::Window* pParent,
+                                             const uno::Reference< frame::XFrame >& _xFrame,
+                                             Go2PageToolBoxControl& rCtrl );
+
+   virtual bool        EventNotify( NotifyEvent& rNEvt ) override;
+   virtual void        Up() override;
+   virtual void        Down() override;
+
+protected:
+    void        Select();
+
+private:
+    Go2PageToolBoxControl*                   m_pCtrl;
+    bool                                     m_bRelease;
+    uno::Reference< frame::XFrame >          m_xFrame;
+
+    void                ReleaseFocus_Impl();
+};
+
+Go2PageBox_Impl::Go2PageBox_Impl(
+    vcl::Window*                                      _pParent,
+    const uno::Reference< frame::XFrame >&            _xFrame,
+    Go2PageToolBoxControl&                         _rCtrl ) :
+    NumericField( _pParent, WinBits( WB_BORDER | WB_LEFT |WB_REPEAT | WB_SPIN ) ),
+
+    m_pCtrl             ( &_rCtrl ),
+    m_bRelease          ( true ),
+    m_xFrame            ( _xFrame )
+{
+    SetSizePixel( get_preferred_size() );
+    SetValue( 1 );
+}
+
+void Go2PageBox_Impl::ReleaseFocus_Impl()
+{
+    if ( !m_bRelease )
+    {
+        m_bRelease = true;
+        return;
+    }
+
+    if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
+        m_xFrame->getContainerWindow()->setFocus();
+}
+
+void Go2PageBox_Impl::Select()
+{
+    OUString sEntry( GetText() );
+
+    uno::Sequence< beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name  = "Go2Page";
+    aArgs[0].Value <<= (sal_uInt16)sEntry.toInt32();
+
+    m_pCtrl->dispatchCommand( aArgs );
+}
+
+bool Go2PageBox_Impl::EventNotify( NotifyEvent& rNEvt )
+{
+    bool bHandled = false;
+
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+    {
+        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+
+        switch ( nCode )
+        {
+            case KEY_RETURN:
+            case KEY_TAB:
+            {
+                if ( KEY_TAB == nCode )
+                    m_bRelease = false;
+                else
+                    bHandled = true;
+                Select();
+                break;
+            }
+
+            case KEY_ESCAPE:
+                ReleaseFocus_Impl();
+                bHandled = true;
+                break;
+        }
+    }
+
+    return bHandled || NumericField::EventNotify( rNEvt );
+}
+
+void Go2PageBox_Impl::Up()
+{
+    NumericField::Up();
+    Select();
+}
+
+void Go2PageBox_Impl::Down()
+{
+    sal_Int64 nValue = GetValue();
+    if ( nValue > 1 )
+    {
+        NumericField::Down();
+        Select();
+    }
+}
+
+Go2PageToolBoxControl::Go2PageToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
+ : svt::ToolboxController( rxContext,
+                           uno::Reference< frame::XFrame >(),
+                           ".uno:Go2Page" ),
+   m_pBox( nullptr )
+{
+}
+
+// XInterface
+css::uno::Any SAL_CALL Go2PageToolBoxControl::queryInterface( const css::uno::Type& aType )
+{
+    uno::Any a = ToolboxController::queryInterface( aType );
+    if ( a.hasValue() )
+        return a;
+
+    return ::cppu::queryInterface( aType, static_cast< lang::XServiceInfo* >( this ) );
+}
+
+void SAL_CALL Go2PageToolBoxControl::acquire() throw ()
+{
+    ToolboxController::acquire();
+}
+
+void SAL_CALL Go2PageToolBoxControl::release() throw ()
+{
+    ToolboxController::release();
+}
+
+// XServiceInfo
+sal_Bool SAL_CALL Go2PageToolBoxControl::supportsService( const OUString& ServiceName )
+{
+    return cppu::supportsService( this, ServiceName );
+}
+
+OUString SAL_CALL Go2PageToolBoxControl::getImplementationName()
+{
+    return OUString("lo.writer.Go2PageToolBoxController");
+}
+
+uno::Sequence< OUString > SAL_CALL Go2PageToolBoxControl::getSupportedServiceNames()
+{
+    uno::Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
+    return aSNS;
+}
+
+// XComponent
+void SAL_CALL Go2PageToolBoxControl::dispose()
+{
+    svt::ToolboxController::dispose();
+
+    SolarMutexGuard aSolarMutexGuard;
+    m_pBox.disposeAndClear();
+}
+
+// XStatusListener
+void SAL_CALL Go2PageToolBoxControl::statusChanged( const frame::FeatureStateEvent& rEvent )
+{
+    if ( m_pBox )
+    {
+        SolarMutexGuard aSolarMutexGuard;
+        if ( rEvent.FeatureURL.Path == "Go2Page" )
+        {
+            if ( rEvent.IsEnabled )
+            {
+                m_pBox->Enable();
+            }
+            else
+                m_pBox->Disable();
+        }
+    }
+}
+
+// XToolbarController
+void SAL_CALL Go2PageToolBoxControl::execute( sal_Int16 /*KeyModifier*/ )
+{
+}
+
+void SAL_CALL Go2PageToolBoxControl::click()
+{
+}
+
+void SAL_CALL Go2PageToolBoxControl::doubleClick()
+{
+}
+
+uno::Reference< awt::XWindow > SAL_CALL Go2PageToolBoxControl::createPopupWindow()
+{
+    return uno::Reference< awt::XWindow >();
+}
+
+uno::Reference< awt::XWindow > SAL_CALL Go2PageToolBoxControl::createItemWindow(
+    const uno::Reference< awt::XWindow >& xParent )
+{
+    uno::Reference< awt::XWindow > xItemWindow;
+
+    VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow( xParent );
+    if ( pParent )
+    {
+        SolarMutexGuard aSolarMutexGuard;
+        m_pBox = VclPtr<Go2PageBox_Impl>::Create( pParent, m_xFrame, *this );
+        xItemWindow = VCLUnoHelper::GetInterface( m_pBox );
+    }
+
+    uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
+
+    return xItemWindow;
+}
+
+void Go2PageToolBoxControl::dispatchCommand(
+    const uno::Sequence< beans::PropertyValue >& rArgs )
+{
+    uno::Reference< frame::XDispatchProvider > xDispatchProvider( m_xFrame, uno::UNO_QUERY );
+    if ( xDispatchProvider.is() )
+    {
+        util::URL                               aURL;
+        uno::Reference< frame::XDispatch >      xDispatch;
+        uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
+
+        aURL.Complete = ".uno:Go2Page";
+        xURLTransformer->parseStrict( aURL );
+        xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
+        if ( xDispatch.is() )
+            xDispatch->dispatch( aURL, rArgs );
+    }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+lo_writer_Go2PageToolBoxController_get_implementation(
+    css::uno::XComponentContext *rxContext,
+    css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire( new Go2PageToolBoxControl( rxContext ) );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

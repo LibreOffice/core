@@ -2739,6 +2739,11 @@
             <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:Go2Page" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Go To Page</value>
+        </prop>
+      </node>
       <node oor:name=".uno:NavigateBack" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Back</value>

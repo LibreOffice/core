@@ -474,6 +474,17 @@
           <value>lo.writer.NavElementToolBoxController</value>
         </prop>
       </node>
+      <node oor:name="lo.writer.Go2Page" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Go2Page</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>lo.writer.Go2PageToolBoxController</value>
+        </prop>
+      </node>
       <node oor:name="ZoomToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ZoomToolBox</value>

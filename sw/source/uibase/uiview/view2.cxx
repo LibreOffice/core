@@ -1027,6 +1027,15 @@ void SwView::Execute(SfxRequest &rReq)
             Application::PostUserEvent( LINK(this, SwView, MoveNavigationHdl), pbNext );
         }
         break;
+        case FN_GO2PAGE:
+        {
+            if( pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem ))
+            {
+                sal_uInt16 value = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                GetWrtShell().GotoPage(value, true);
+            }
+        }
+        break;
         case SID_JUMPTOMARK:
             if( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_JUMPTOMARK, false, &pItem))
                 JumpToSwMark( static_cast<const SfxStringItem*>(pItem)->GetValue() );
