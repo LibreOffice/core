@@ -221,8 +221,7 @@ bool XMLFile2UTFConverter::scanForEncoding( Sequence< sal_Int8 > &seq )
     }
 
     // first level : detect possible file formats
-    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 5 ) ) {
-
+    if (seq.getLength() >= 5 && !strncmp(reinterpret_cast<const char *>(pSource), "<?xml", 5)) {
         // scan for encoding
         OString str( reinterpret_cast<const char *>(pSource), seq.getLength() );
 
