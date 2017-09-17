@@ -125,7 +125,7 @@ XMLFile2UTFConverter::~XMLFile2UTFConverter()
 void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
 {
     const sal_Int8 *pSource = seq.getArray();
-    if( ! strncmp( reinterpret_cast<const char *>(pSource), "<?xml", 5 ) )
+    if (seq.getLength() >= 5 && !strncmp(reinterpret_cast<const char *>(pSource), "<?xml", 5))
     {
 
         // scan for encoding
@@ -160,7 +160,6 @@ void XMLFile2UTFConverter::removeEncoding( Sequence<sal_Int8> &seq )
                                 &( seq.getArray()[nStop+1]) ,
                                 seq.getLength() - nStop -1);
                 seq.realloc( seq.getLength() - ( nStop+1 - nFound ) );
-//              str = String( (char * ) seq.getArray() , seq.getLen() );
             }
         }
     }
