@@ -44,7 +44,7 @@ class XMLParaContext : public SvXMLImportContext
     OUString             m_sDatatype;
     bool                 m_bHaveAbout;
     sal_Int8             nOutlineLevel;
-    XMLHints_Impl       *pHints;
+    std::unique_ptr<XMLHints_Impl> m_xHints;
     // Lost outline numbering in master document (#i73509#)
     bool                 mbOutlineLevelAttrFound;
     bool                 bIgnoreLeadingSpace;
