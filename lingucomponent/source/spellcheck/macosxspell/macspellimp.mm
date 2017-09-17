@@ -331,13 +331,12 @@ Reference< XSpellAlternatives >
     if (n)
     {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        NSString* aNSStr = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(nWord.getStr()) length: nWord.getLength()];
-        NSString* aLang = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Language.getStr()) length: rLocale.Language.getLength() ];
+        NSString* aNSStr = [[[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(nWord.getStr()) length: nWord.getLength()]autorelease];
+        NSString* aLang = [[[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Language.getStr()) length: rLocale.Language.getLength()]autorelease];
         if(rLocale.Country.getLength()>0)
         {
-            NSString* aCountry = [[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Country.getStr()) length: rLocale.Country.getLength() ];
+            NSString* aCountry = [[[NSString alloc] initWithCharacters: reinterpret_cast<unichar const *>(rLocale.Country.getStr()) length: rLocale.Country.getLength()]autorelease];
             NSString* aTaggedCountry = [@"_" stringByAppendingString:aCountry];
-            [aLang autorelease];
             aLang = [aLang  stringByAppendingString:aTaggedCountry];
         }
         [macSpell setLanguage:aLang];
