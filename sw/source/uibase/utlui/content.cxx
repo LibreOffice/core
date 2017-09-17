@@ -3467,6 +3467,14 @@ void SwContentTree::GotoContent(SwContent* pCnt)
     rView.StopShellTimer();
     rView.GetPostItMgr()->SetActiveSidebarWin(nullptr);
     rView.GetEditWin().GrabFocus();
+
+    // force scroll to cursor position when navigating to inactive document
+    if(!bSel)
+    {
+        Point rPoint = m_pActiveShell->GetCursorDocPos();
+        rPoint.setX(0);
+        rView.SetVisArea(rPoint);
+    }
 }
 
 // Now even the matching text::Bookmark
