@@ -157,13 +157,7 @@ void ScDLL::Init()
     SvxFillToolBoxControl           ::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl      ::RegisterControl(0, pMod);
     SvxLineWidthToolBoxControl      ::RegisterControl(0, pMod);
-    SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_LINE_COLOR,      pMod);
-    SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_FILL_COLOR,      pMod);
     SvxStyleToolBoxControl          ::RegisterControl(SID_STYLE_APPLY,          pMod);
-    SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_CHAR_COLOR,      pMod);
-    SvxColorToolBoxControl          ::RegisterControl(SID_BACKGROUND_COLOR,     pMod);
-    SvxColorToolBoxControl          ::RegisterControl(SID_ATTR_CHAR_BACK_COLOR, pMod);
-    SvxColorToolBoxControl          ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
     SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_UNDO,                 pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_REDO,                 pMod );
@@ -207,9 +201,6 @@ void ScDLL::Init()
     XmlSecStatusBarControl          ::RegisterControl( SID_SIGNATURE,       pMod );
 
     SvxPosSizeStatusBarControl      ::RegisterControl(SID_ATTR_SIZE,        pMod);
-
-    // CustomShape extrusion controller
-    SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 
     // Child Windows
 
