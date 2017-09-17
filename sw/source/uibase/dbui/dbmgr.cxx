@@ -3217,7 +3217,7 @@ void SwDBManager::RevokeLastRegistrations()
                 it = m_aUncommitedRegistrations.erase(it);
             }
             else
-                it++;
+                ++it;
         }
     }
 }
