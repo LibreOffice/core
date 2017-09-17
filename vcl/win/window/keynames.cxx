@@ -23,6 +23,9 @@
 
 #include <win/salframe.h>
 
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 
 // Use unique ;) names to avoid clashes with the KEY_* (especially

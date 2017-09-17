@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SVL_SOURCE_SVDDE_DDEIMP_HXX
 #define INCLUDED_SVL_SOURCE_SVDDE_DDEIMP_HXX
 
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #include <ddeml.h>
 

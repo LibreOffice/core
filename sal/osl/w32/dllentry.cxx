@@ -17,19 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#pragma warning(push,1) /* disable warnings within system headers */
-#endif
-#include <windows.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
+#include <systools/win32/uwinapi.h>
+#include <tlhelp32.h>
+#include <rpc.h>
+#include <winsock.h>
 #ifdef _DEBUG
 #include <crtdbg.h>
 #endif
-#endif
-#include <tlhelp32.h>
-#include <systools/win32/uwinapi.h>
-#include <winsock.h>
 #include <osl/diagnose.h>
 #include <sal/types.h>
 #include <float.h>

@@ -12,7 +12,11 @@
 #include "opengl/win/blocklist_parser.hxx"
 #include <config_folders.h>
 
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
+#include <objbase.h>
 #include <setupapi.h>
 #include <algorithm>
 #include <cstdint>
