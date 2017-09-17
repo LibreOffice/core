@@ -18,6 +18,7 @@
  */
 
 #include <vcl/decoview.hxx>
+#include <vcl/dockwin.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/menu.hxx>
@@ -55,7 +56,14 @@ void MenuButton::ExecuteMenu()
     {
         Point aPos(GetParent()->OutputToScreenPixel(GetPosPixel()));
         tools::Rectangle aRect(aPos, aSize );
-        mpFloatingWindow->StartPopupMode(aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus);
+        FloatWinPopupFlags nFlags = FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus;
+        if (mpFloatingWindow->GetType() == WindowType::FLOATINGWINDOW)
+            static_cast<FloatingWindow*>(mpFloatingWindow.get())->StartPopupMode(aRect, nFlags);
+        else
+        {
+            mpFloatingWindow->EnableDocking();
+            vcl::Window::GetDockingManager()->StartPopupMode(mpFloatingWindow, aRect, nFlags);
+        }
     }
     SetPressed(false);
     if (mnCurItemId)
@@ -170,12 +178,12 @@ void MenuButton::SetPopupMenu(PopupMenu* pNewMenu)
     mpMenu = pNewMenu;
 }
 
-void MenuButton::SetPopover(FloatingWindow* pFloatingWindow)
+void MenuButton::SetPopover(Window* pWindow)
 {
-    if (pFloatingWindow == mpFloatingWindow)
+    if (pWindow == mpFloatingWindow)
         return;
 
-    mpFloatingWindow = pFloatingWindow;
+    mpFloatingWindow = pWindow;
 }
 
 //class MenuToggleButton ----------------------------------------------------

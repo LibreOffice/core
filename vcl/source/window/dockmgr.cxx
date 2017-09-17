@@ -332,6 +332,13 @@ void DockingManager::SetFloatingMode( const vcl::Window *pWindow, bool bFloating
         pWrapper->SetFloatingMode( bFloating );
 }
 
+void DockingManager::StartPopupMode( const vcl::Window *pWindow, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags )
+{
+    ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
+    if( pWrapper )
+        pWrapper->StartPopupMode( rRect, nFlags );
+}
+
 void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWindow, FloatWinPopupFlags nFlags )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
@@ -915,15 +922,12 @@ void ImplDockingWindowWrapper::ShowTitleButton( TitleButton nButton, bool bVisib
     }
 }
 
-void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWinPopupFlags nFlags )
+void ImplDockingWindowWrapper::ImplPreparePopupMode( FloatWinPopupFlags nFlags )
 {
-    // do nothing if window is floating
-    if( IsFloatingMode() )
-        return;
-
     GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
     // prepare reparenting
+    sal_Int32 nBorderWidth = GetWindow()->get_border_width();
     vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent );
     mpOldBorderWin = GetWindow()->GetWindow( GetWindowType::Border );
     if( mpOldBorderWin.get() == GetWindow() )
@@ -962,10 +966,20 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     GetWindow()->mpWindowImpl->mpBorderWindow = pWin;
     pWin->mpWindowImpl->mpClientWindow = GetWindow();
     GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
+    GetWindow()->set_border_width( nBorderWidth );
 
     // set mpFloatWin not until all window positioning is done !!!
     // (SetPosPixel etc. check for valid mpFloatWin pointer)
     mpFloatWin = pWin;
+}
+
+void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWinPopupFlags nFlags )
+{
+    // do nothing if window is floating
+    if( IsFloatingMode() )
+        return;
+
+    ImplPreparePopupMode( nFlags );
 
     // if the subtoolbar was opened via keyboard make sure that key events
     // will go into subtoolbar
@@ -981,6 +995,17 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
         KeyEvent aEvent( 0, vcl::KeyCode( KEY_HOME ) );
         GetWindow()->KeyInput(aEvent);
     }
+}
+
+void ImplDockingWindowWrapper::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopupFlags nFlags )
+{
+    // do nothing if window is floating
+    if( IsFloatingMode() )
+        return;
+
+    ImplPreparePopupMode( nFlags );
+    mpFloatWin->StartPopupMode( rRect, nFlags );
+    GetWindow()->Show();
 }
 
 IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
@@ -1037,6 +1062,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
 
                 maDockPos = GetWindow()->GetPosPixel();
 
+                sal_Int32 nBorderWidth = GetWindow()->get_border_width();
                 vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent );
                 mpOldBorderWin = GetWindow()->GetWindow( GetWindowType::Border );
                 if( mpOldBorderWin == mpDockingWindow )
@@ -1065,6 +1091,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 GetWindow()->mpWindowImpl->mpBorderWindow = pWin;
                 pWin->mpWindowImpl->mpClientWindow = mpDockingWindow;
                 GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
+                GetWindow()->set_border_width( nBorderWidth );
 
                 pWin->SetText( GetWindow()->GetText() );
                 pWin->SetOutputSizePixel( GetWindow()->GetSizePixel() );
@@ -1100,6 +1127,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
                 maMaxOutSize    = mpFloatWin->GetMaxOutputSizePixel();
 
+                sal_Int32 nBorderWidth = GetWindow()->get_border_width();
                 vcl::Window* pRealParent = GetWindow()->GetWindow( GetWindowType::Parent ); //mpWindowImpl->mpRealParent;
                 GetWindow()->mpWindowImpl->mpBorderWindow = nullptr;
                 if ( mpOldBorderWin )
@@ -1113,6 +1141,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 GetWindow()->mpWindowImpl->mpBorderWindow = mpOldBorderWin;
                 GetWindow()->SetParent( pRealParent );
                 GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
+                GetWindow()->set_border_width( nBorderWidth );
 
                 mpFloatWin.disposeAndClear();
                 GetWindow()->SetPosPixel( maDockPos );
