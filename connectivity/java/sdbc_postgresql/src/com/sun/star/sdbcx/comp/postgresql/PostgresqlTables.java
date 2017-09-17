@@ -41,7 +41,6 @@ import com.sun.star.sdbcx.comp.postgresql.util.DbTools;
 import com.sun.star.sdbcx.comp.postgresql.util.DbTools.NameComponents;
 import com.sun.star.sdbcx.comp.postgresql.util.PropertyIds;
 import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 
@@ -58,7 +57,7 @@ public class PostgresqlTables extends OContainer {
     @Override
     public XPropertySet createObject(String name) throws SQLException {
         NameComponents nameComponents = DbTools.qualifiedNameComponents(metadata, name, ComposeRule.InDataManipulation);
-        Object queryCatalog = nameComponents.getCatalog().isEmpty() ? Any.VOID : nameComponents.getCatalog();
+        Object queryCatalog = nameComponents.getCatalog().isEmpty() ? null : nameComponents.getCatalog();
         XPropertySet ret = null;
         XResultSet results = null;
         try {

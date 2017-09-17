@@ -55,7 +55,6 @@ import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.OColumnContainer.ExtraColumnInfo;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 
@@ -302,7 +301,7 @@ public class DbTools {
             }
             return nameComponents;
         } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException exception) {
-            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+            throw new SQLException("Error", null, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
     }
 
@@ -444,7 +443,7 @@ public class DbTools {
 
             return String.format("CREATE TABLE %s (%s", composedName, columnText.toString());
         } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException | IndexOutOfBoundsException exception) {
-            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+            throw new SQLException("Error", null, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
     }
 
@@ -567,7 +566,7 @@ public class DbTools {
 
             return sql.toString();
         } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException exception) {
-            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+            throw new SQLException("Error", null, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
     }
 
@@ -646,7 +645,7 @@ public class DbTools {
             }
             return sql.toString();
         } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException | IndexOutOfBoundsException exception) {
-            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+            throw new SQLException("Error", null, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
     }
 
@@ -706,7 +705,7 @@ public class DbTools {
             }
             return columns;
         } catch (IllegalArgumentException | WrappedTargetException | UnknownPropertyException | PropertyVetoException exception) {
-            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+            throw new SQLException("Error", null, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         } finally {
             CompHelper.disposeComponent(statement);
         }
@@ -738,7 +737,7 @@ public class DbTools {
             }
             return keyColumns;
         } catch (IndexOutOfBoundsException | IllegalArgumentException | WrappedTargetException | UnknownPropertyException exception) {
-            throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+            throw new SQLException("Error", null, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
         }
     }
 
@@ -755,7 +754,7 @@ public class DbTools {
                 XPropertySet columnProperties = AnyConverter.toObject(XPropertySet.class, sourceColumns.getByIndex(i));
                 destinationAppend.appendByDescriptor(columnProperties);
             } catch (WrappedTargetException | IndexOutOfBoundsException | IllegalArgumentException | ElementExistException exception) {
-                throw new SQLException("Error", Any.VOID, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
+                throw new SQLException("Error", null, StandardSQLState.SQL_GENERAL_ERROR.text(), 0, exception);
             }
         }
     }

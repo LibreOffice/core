@@ -39,7 +39,6 @@ import com.sun.star.sdbcx.comp.postgresql.util.ComposeRule;
 import com.sun.star.sdbcx.comp.postgresql.util.DbTools;
 import com.sun.star.sdbcx.comp.postgresql.util.Osl;
 import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 
 public class SqlTableHelper {
@@ -143,7 +142,7 @@ public class SqlTableHelper {
 
     private OKey readPrimaryKey(XDatabaseMetaData metadata,
             String catalogName, String schemaName, String tableName, boolean isCaseSensitive, OTable table) throws SQLException {
-        Object catalog = Any.VOID;
+        Object catalog = null;
         if (!catalogName.isEmpty()) {
             catalog = catalogName;
         }
@@ -176,7 +175,7 @@ public class SqlTableHelper {
 
     private void readForeignKeys(XDatabaseMetaData metadata,
             String catalogName, String schemaName, String tableName, boolean isCaseSensitive, Map<String, OKey> keys, OTable table) throws SQLException {
-        Object catalog = Any.VOID;
+        Object catalog = null;
         if (!catalogName.isEmpty()) {
             catalog = catalogName;
         }
@@ -233,7 +232,7 @@ public class SqlTableHelper {
     }
 
     public ArrayList<String> readIndexes(XDatabaseMetaData metadata, String catalogName, String schemaName, String tableName, OTable table) throws SQLException {
-        Object catalog = Any.VOID;
+        Object catalog = null;
         if (!catalogName.isEmpty()) {
             catalog = catalogName;
         }
