@@ -1970,10 +1970,18 @@ lcl_ApplyRowProperties(
     }
 }
 
+static sal_Int32 lcl_GetLeftPos(sal_Int32 nCell, TableColumnSeparators const& rRowSeparators)
+{
+    if(!nCell)
+        return 0;
+    if (rRowSeparators.getLength() < nCell)
+        return -1;
+    return rRowSeparators[nCell - 1].Position;
+}
+
 static void
 lcl_ApplyCellProperties(
-    const sal_Int32 nCell,
-    TableColumnSeparators const& rRowSeparators,
+    const sal_Int32 nLeftPos,
     const uno::Sequence< beans::PropertyValue >& rCellProperties,
     const uno::Reference< uno::XInterface >& xCell,
     std::vector<VerticallyMergedCell> & rMergedCells)
@@ -1990,17 +1998,6 @@ lcl_ApplyCellProperties(
             // add the cell to a queue of merged cells
             bool bMerge = false;
             rValue >>= bMerge;
-            sal_Int32 nLeftPos = -1;
-            if (!nCell)
-            {
-                nLeftPos = 0;
-            }
-            else if (rRowSeparators.getLength() >= nCell)
-            {
-                const text::TableColumnSeparator* pSeparators =
-                    rRowSeparators.getConstArray();
-                nLeftPos = pSeparators[nCell - 1].Position;
-            }
             if (bMerge)
             {
                 // 'close' all the cell with the same left position
@@ -2168,53 +2165,43 @@ SwXText::convertToTable(
     try
     {
         //apply table properties
-        const beans::PropertyValue* pTableProperties =
-            rTableProperties.getConstArray();
-        for (sal_Int32 nProperty = 0; nProperty < rTableProperties.getLength();
-             ++nProperty)
+        for(const auto& rTableProperty : rTableProperties)
         {
             try
             {
-                xPrSet->setPropertyValue( pTableProperties[nProperty].Name,
-                        pTableProperties[nProperty].Value );
+                xPrSet->setPropertyValue(rTableProperty.Name, rTableProperty.Value);
             }
             catch (const uno::Exception& e)
             {
                 SAL_WARN( "sw.uno", "Exception when setting property: "
-                    + pTableProperties[nProperty].Name + ". Message: " + e.Message );
+                    + rTableProperty.Name + ". Message: " + e.Message );
             }
         }
 
         //apply row properties
-        const uno::Reference< table::XTableRows >  xRows = xRet->getRows();
-
-        const beans::PropertyValues* pRowProperties =
-            rRowProperties.getConstArray();
-        for (sal_Int32 nRow = 0; nRow < xRows->getCount(); ++nRow)
-        {
-            if( nRow >= rRowProperties.getLength())
-            {
-                break;
-            }
-            lcl_ApplyRowProperties(pRowProperties[nRow],
-                xRows->getByIndex(nRow), aRowSeparators[nRow]);
-        }
+        const auto xRows = xRet->getRows();
+        const sal_Int32 nLast = std::min(xRows->getCount(), rRowProperties.getLength());
+        SAL_WARN_IF(nLast != rRowProperties.getLength(), "sw.uno", "not enough rows for properties");
+        for(sal_Int32 nCnt = 0; nCnt < nLast; ++nCnt)
+            lcl_ApplyRowProperties(rRowProperties[nCnt], xRows->getByIndex(nCnt), aRowSeparators[nCnt]);
 
         uno::Reference<table::XCellRange> const xCR(xRet, uno::UNO_QUERY_THROW);
         //apply cell properties
-        for (sal_Int32 nRow = 0; nRow < rCellProperties.getLength(); ++nRow)
+        sal_Int32 nRow = 0;
+        for(const auto& rCellPropertiesForRow : rCellProperties)
         {
-            const uno::Sequence< beans::PropertyValues > aCurrentRow =
-                rCellProperties[nRow];
-            sal_Int32 nCells = aCurrentRow.getLength();
-            for (sal_Int32  nCell = 0; nCell < nCells; ++nCell)
+            sal_Int32 nCell = 0;
+            for(const auto& rCellProps : rCellPropertiesForRow)
             {
-                lcl_ApplyCellProperties(nCell,
-                    aRowSeparators[nRow], aCurrentRow[nCell],
+                lcl_ApplyCellProperties(lcl_GetLeftPos(nCell, aRowSeparators[nRow]),
+                    rCellProps,
                     xCR->getCellByPosition(nCell, nRow),
                     aMergedCells);
+                ++nCell;
             }
+            ++nRow;
         }
+
         // now that the cell properties are set the vertical merge values
         // have to be applied
         lcl_MergeCells(aMergedCells);
