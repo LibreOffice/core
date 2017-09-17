@@ -2070,35 +2070,21 @@ lcl_ApplyCellProperties(
 static void
 lcl_MergeCells(std::vector<VerticallyMergedCell> & rMergedCells)
 {
-    if (rMergedCells.size())
+    for(auto& aMergedCell : rMergedCells)
     {
-        std::vector<VerticallyMergedCell>::iterator aMergedIter =
-            rMergedCells.begin();
-        while (aMergedIter != rMergedCells.end())
+        // the first of the cells gets the number of cells set as RowSpan
+        // the others get the inverted number of remaining merged cells
+        // (3,-2,-1)
+        sal_Int32 nCellCount = static_cast<sal_Int32>(aMergedCell.aCells.size());
+        if(nCellCount<2)
         {
-            sal_Int32 nCellCount =
-                static_cast<sal_Int32>(aMergedIter->aCells.size());
-            std::vector<uno::Reference< beans::XPropertySet > >::iterator
-                aCellIter = aMergedIter->aCells.begin();
-            bool bFirstCell = true;
-            // the first of the cells gets the number of cells set as RowSpan
-            // the others get the inverted number of remaining merged cells
-            // (3,-2,-1)
-            while (aCellIter != aMergedIter->aCells.end())
-            {
-                (*aCellIter)->setPropertyValue(
-                    UNO_NAME_ROW_SPAN,
-                    uno::makeAny(nCellCount));
-                if (bFirstCell)
-                {
-                    nCellCount *= -1;
-                    bFirstCell = false;
-                }
-                ++nCellCount;
-                ++aCellIter;
-            }
-            ++aMergedIter;
+            SAL_WARN("sw.uno", "incomplete vertical cell merge");
+            continue;
         }
+        aMergedCell.aCells.front()->setPropertyValue(UNO_NAME_ROW_SPAN, uno::makeAny(nCellCount--));
+        nCellCount*=-1;
+        for(auto pxPSet = aMergedCell.aCells.begin()+1; nCellCount<0; ++pxPSet, ++nCellCount)
+            (*pxPSet)->setPropertyValue(UNO_NAME_ROW_SPAN, uno::makeAny(nCellCount));
     }
 }
 
