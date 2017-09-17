@@ -1433,6 +1433,16 @@ ToolbarPopup::ToolbarPopup( const css::uno::Reference<css::frame::XFrame>& rFram
         static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
+ToolbarPopup::ToolbarPopup( const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow,
+                            const OString& rID, const OUString& rUIXMLDescription )
+    : DockingWindow(pParentWindow, rID, rUIXMLDescription, rFrame)
+    , mxFrame( rFrame )
+{
+    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
+    if ( pWindow )
+        static_cast<SystemWindow*>(pWindow)->GetTaskPaneList()->AddWindow( this );
+}
+
 ToolbarPopup::~ToolbarPopup()
 {
     disposeOnce();

@@ -71,7 +71,6 @@ $(eval $(call gb_Library_add_exception_objects,rptui,\
     reportdesign/source/ui/misc/rptuiservices \
     reportdesign/source/ui/misc/RptUndo \
     reportdesign/source/ui/misc/statusbarcontroller \
-    reportdesign/source/ui/misc/toolboxcontroller \
     reportdesign/source/ui/misc/UITools \
     reportdesign/source/ui/report/DesignView \
     reportdesign/source/ui/report/dlgedclip \

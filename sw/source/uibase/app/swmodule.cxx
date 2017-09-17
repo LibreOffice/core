@@ -305,7 +305,6 @@ void SwDLL::RegisterControls()
     PageOrientationPopup::RegisterControl(SID_ATTR_PAGE_ORIENTATION, pMod);
     PageColumnPopup::RegisterControl(SID_ATTR_PAGE_COLUMN, pMod);
     PageSizePopup::RegisterControl(SID_ATTR_PAGE_SIZE, pMod);
-    SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
     SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );
@@ -315,16 +314,8 @@ void SwDLL::RegisterControls()
     SvxFillToolBoxControl::RegisterControl(SID_ATTR_FILL_STYLE, pMod );
     SvxLineStyleToolBoxControl::RegisterControl(SID_ATTR_LINE_STYLE, pMod );
     SvxLineWidthToolBoxControl::RegisterControl(SID_ATTR_LINE_WIDTH, pMod );
-    SvxColorToolBoxControl::RegisterControl(SID_ATTR_LINE_COLOR, pMod );
-    SvxColorToolBoxControl::RegisterControl(SID_ATTR_FILL_COLOR, pMod);
-    SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_BACK_COLOR, pMod);
 
-    SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR, pMod );
-    SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2, pMod );
-    SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND, pMod );
     SvxStyleToolBoxControl::RegisterControl(SID_STYLE_APPLY, pMod );
-    SvxColorToolBoxControl::RegisterControl( SID_BACKGROUND_COLOR, pMod );
-    SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
 
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME_INTERACT, pMod );
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME, pMod );
