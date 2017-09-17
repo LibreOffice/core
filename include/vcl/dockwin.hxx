@@ -244,7 +244,7 @@ protected:
 private:
 
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
-    SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
+    SAL_DLLPRIVATE void    setPosSizeOnContainee();
     DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, Timer*, void );
 
                            DockingWindow (const DockingWindow &) = delete;

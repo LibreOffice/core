@@ -707,9 +707,12 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
 
             if ( bFloatMode )
             {
-                Show( false, ShowFlags::NoFocusChange );
+                // set deferred properties early, so border width will end up
+                // in our mpWindowImpl->mnBorderWidth, not in mpBorderWindow.
+                // (see its usage in setPosSizeOnContainee and GetOptimalSize.)
+                setDeferredProperties();
 
-                sal_Int32 nBorderWidth = get_border_width();
+                Show( false, ShowFlags::NoFocusChange );
 
                 maDockPos = Window::GetPosPixel();
 
@@ -757,18 +760,12 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
 
                 ToggleFloatingMode();
 
-                set_border_width(nBorderWidth);
-
                 if ( bVisible )
                     Show();
-
-                mpFloatWin->queue_resize();
             }
             else
             {
                 Show( false, ShowFlags::NoFocusChange );
-
-                sal_Int32 nBorderWidth = get_border_width();
 
                 // store FloatingData in FloatingWindow
                 maFloatPos      = mpFloatWin->GetPosPixel();
@@ -794,8 +791,6 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 SetPosPixel( maDockPos );
 
                 ToggleFloatingMode();
-
-                set_border_width(nBorderWidth);
 
                 if ( bVisible )
                     Show();
@@ -844,19 +839,7 @@ void DockingWindow::setPosSizePixel( long nX, long nY,
     }
 
     if (::isLayoutEnabled(this))
-    {
-        Size aSize(GetSizePixel());
-
-        sal_Int32 nBorderWidth = get_border_width();
-
-        aSize.Width() -= 2 * nBorderWidth;
-        aSize.Height() -= 2 * nBorderWidth;
-
-        Point aPos(nBorderWidth, nBorderWidth);
-        Window *pBox = GetWindow(GetWindowType::FirstChild);
-        assert(pBox);
-        VclContainer::setLayoutAllocation(*pBox, aPos, aSize);
-    }
+        setPosSizeOnContainee();
 }
 
 Point DockingWindow::GetPosPixel() const
@@ -998,8 +981,6 @@ void DockingWindow::setOptimalLayoutSize()
     maLayoutIdle.Stop();
 
     //resize DockingWindow to fit requisition on initial show
-    Window *pBox = GetWindow(GetWindowType::FirstChild);
-
     Size aSize = get_preferred_size();
 
     Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
@@ -1008,19 +989,23 @@ void DockingWindow::setOptimalLayoutSize()
     aSize.Height() = std::min(aMax.Height(), aSize.Height());
 
     SetMinOutputSizePixel(aSize);
-    SetSizePixel(aSize);
-    setPosSizeOnContainee(aSize, *pBox);
+    setPosSizeOnContainee();
 }
 
-void DockingWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
+void DockingWindow::setPosSizeOnContainee()
 {
-    sal_Int32 nBorderWidth = get_border_width();
+    Size aSize = GetOutputSizePixel();
+
+    // Can't use get_border_width() here, because we don't want
+    // the border to be also visible to the floating window.
+    sal_Int32 nBorderWidth = mpWindowImpl->mnBorderWidth;
 
     aSize.Width() -= 2 * nBorderWidth;
     aSize.Height() -= 2 * nBorderWidth;
 
-    Point aPos(nBorderWidth, nBorderWidth);
-    VclContainer::setLayoutAllocation(rBox, aPos, aSize);
+    Window* pBox = GetWindow(GetWindowType::FirstChild);
+    assert(pBox);
+    VclContainer::setLayoutAllocation(*pBox, Point(nBorderWidth, nBorderWidth), aSize);
 }
 
 Size DockingWindow::GetOptimalSize() const
@@ -1030,12 +1015,14 @@ Size DockingWindow::GetOptimalSize() const
 
     Size aSize = VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 
-    sal_Int32 nBorderWidth = get_border_width();
+    // Can't use get_border_width() here, because we don't want
+    // the border to be also visible to the floating window.
+    sal_Int32 nBorderWidth = mpWindowImpl->mnBorderWidth;
 
     aSize.Height() += 2 * nBorderWidth;
     aSize.Width()  += 2 * nBorderWidth;
 
-    return Window::CalcWindowSize(aSize);
+    return aSize;
 }
 
 void DockingWindow::queue_resize(StateChangedType eReason)
@@ -1064,10 +1051,7 @@ IMPL_LINK_NOARG(DockingWindow, ImplHandleLayoutTimerHdl, Timer*, void)
         SAL_WARN("vcl.layout", "DockingWindow has become non-layout because extra children have been added directly to it.");
         return;
     }
-
-    Window *pBox = GetWindow(GetWindowType::FirstChild);
-    assert(pBox);
-    setPosSizeOnContainee(GetSizePixel(), *pBox);
+    setPosSizeOnContainee();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
