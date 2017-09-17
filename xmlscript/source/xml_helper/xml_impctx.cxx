@@ -68,7 +68,7 @@ struct PrefixEntry
 };
 
 typedef std::unordered_map<
-    OUString, PrefixEntry *, OUStringHash > t_OUString2PrefixMap;
+    OUString, std::unique_ptr<PrefixEntry>, OUStringHash > t_OUString2PrefixMap;
 
 struct ElementEntry
 {
@@ -258,13 +258,13 @@ inline void DocumentHandlerImpl::pushPrefix(
     {
         PrefixEntry * pEntry = new PrefixEntry();
         pEntry->m_Uids.push_back( nUid ); // latest id for prefix
-        m_prefixes[ rPrefix ] = pEntry;
+        m_prefixes[rPrefix].reset(pEntry);
     }
     else
     {
-        PrefixEntry * pEntry = iFind->second;
-        SAL_WARN_IF( pEntry->m_Uids.empty(), "xmlscript.xmlhelper", "pEntry->m_Uids is empty" );
-        pEntry->m_Uids.push_back( nUid );
+        PrefixEntry& rEntry = *iFind->second;
+        SAL_WARN_IF(rEntry.m_Uids.empty(), "xmlscript.xmlhelper", "pEntry->m_Uids is empty");
+        rEntry.m_Uids.push_back(nUid);
     }
 
     m_aLastPrefix_lookup = rPrefix;
@@ -277,12 +277,11 @@ inline void DocumentHandlerImpl::popPrefix(
     t_OUString2PrefixMap::iterator iFind( m_prefixes.find( rPrefix ) );
     if (iFind != m_prefixes.end()) // unused prefix
     {
-        PrefixEntry * pEntry = iFind->second;
-        pEntry->m_Uids.pop_back(); // pop last id for prefix
-        if (pEntry->m_Uids.empty()) // erase prefix key
+        PrefixEntry& rEntry = *iFind->second;
+        rEntry.m_Uids.pop_back(); // pop last id for prefix
+        if (rEntry.m_Uids.empty()) // erase prefix key
         {
-            m_prefixes.erase( iFind );
-            delete pEntry;
+            m_prefixes.erase(iFind);
         }
     }
 
