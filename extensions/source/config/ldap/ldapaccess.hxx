@@ -25,6 +25,9 @@
 #include <map>
 
 #ifdef _WIN32
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #include <winldap.h>
 #else // !defined WNT

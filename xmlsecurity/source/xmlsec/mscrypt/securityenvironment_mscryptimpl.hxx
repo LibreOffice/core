@@ -23,6 +23,9 @@
 #ifdef _MSC_VER
 #pragma warning(push,1)
 #endif
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #include <wincrypt.h>
 #ifdef _MSC_VER

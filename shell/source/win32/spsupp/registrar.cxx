@@ -9,6 +9,7 @@
 
 #include "registrar.hpp"
 #include "wchar.h"
+#include "objbase.h"
 
 namespace {
 

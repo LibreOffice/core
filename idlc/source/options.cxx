@@ -28,23 +28,11 @@
 #include "osl/file.hxx"
 
 #ifdef _WIN32
+#   if !defined WIN32_LEAN_AND_MEAN
+#      define WIN32_LEAN_AND_MEAN
+#   endif
 #   include <windows.h>
 #endif
-
-/*
-#ifndef WIN32_LEAN_AND_MEAN
-#   define WIN32_LEAN_AND_MEAN
-# ifdef _MSC_VER
-#   pragma warning(push,1)
-# endif
-#   include <windows.h>
-# ifdef _MSC_VER
-#   pragma warning(pop)
-# endif
-#   include <tchar.h>
-#   undef WIN32_LEAN_AND_MEAN
-#endif
-*/
 
 #include <stdio.h>
 #include <string.h>
