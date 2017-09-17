@@ -21,4 +21,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libzmf, \
 endif
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,libzmf, \
+    external/libzmf/android-workaround.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:

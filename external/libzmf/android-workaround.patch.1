@@ -1,0 +1,14 @@
+--- libzmf.orig/src/lib/ZMFTypes.cpp	2017-09-17 12:14:41.987990622 +0100
++++ libzmf/src/lib/ZMFTypes.cpp	2017-09-17 12:16:32.636850391 +0100
+@@ -38,10 +38,9 @@
+ 
+ double Point::distance(const Point &p2) const
+ {
+-  return std::hypot(p2.x - x, p2.y - y);
++  return ::hypot(p2.x - x, p2.y - y);
+ }
+ 
+-
+ BoundingBox::BoundingBox(const std::vector<Point> &points_)
+   : m_points(points_)
+   , m_width(0.0)
