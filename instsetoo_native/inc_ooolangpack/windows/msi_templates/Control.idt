@@ -4,17 +4,17 @@ WINDOWSENCODINGTEMPLATE	Control	Dialog_	Control
 AdminChangeFolder	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 AdminChangeFolder	BannerLine	Line	0	44	376	0	1				
 AdminChangeFolder	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_3	ComboText	
-AdminChangeFolder	Combo	DirectoryCombo	21	64	277	80	458755	TARGETDIR		Up	
-AdminChangeFolder	ComboText	Text	21	50	99	14	3		OOO_CONTROL_5	Combo	
+AdminChangeFolder	Combo	DirectoryCombo	21	64	292	80	458755	TARGETDIR		Up	
+AdminChangeFolder	ComboText	Text	21	51	99	14	3		OOO_CONTROL_5	Combo	
 AdminChangeFolder	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_6		
 AdminChangeFolder	DlgLine	Line	0	234	376	0	1				
 AdminChangeFolder	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_7		
-AdminChangeFolder	List	DirectoryList	21	90	332	97	7	TARGETDIR		TailText	
-AdminChangeFolder	NewFolder	PushButton	335	64	19	19	3670019		NewFolderIco	List	OOO_CONTROL_9
+AdminChangeFolder	List	DirectoryList	21	90	345	97	3	TARGETDIR		TailText	
+AdminChangeFolder	NewFolder	PushButton	348	64	19	19	3670019		NewFolderIco	List	OOO_CONTROL_9
 AdminChangeFolder	OK	PushButton	230	243	66	17	3		OOO_CONTROL_10	Cancel	
-AdminChangeFolder	Tail	PathEdit	21	207	332	17	3	TARGETDIR		OK	
+AdminChangeFolder	Tail	PathEdit	21	207	345	17	3	TARGETDIR		OK	
 AdminChangeFolder	TailText	Text	21	193	99	13	3		OOO_CONTROL_12	Tail	
-AdminChangeFolder	Up	PushButton	310	64	19	19	3670019		UpIco	NewFolder	OOO_CONTROL_13
+AdminChangeFolder	Up	PushButton	322	64	19	19	3670019		UpIco	NewFolder	OOO_CONTROL_13
 AdminNetworkLocation	Back	PushButton	164	243	66	17	3		OOO_CONTROL_14	InstallNow	
 AdminNetworkLocation	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 AdminNetworkLocation	BannerLine	Line	0	44	376	0	1				
