@@ -2005,18 +2005,11 @@ lcl_ApplyCellProperties(
             {
                 // 'close' all the cell with the same left position
                 // if separate vertical merges in the same column exist
-                if (rMergedCells.size())
+                for(auto& aMergedCell : rMergedCells)
                 {
-                    std::vector<VerticallyMergedCell>::iterator aMergedIter =
-                        rMergedCells.begin();
-                    while (aMergedIter != rMergedCells.end())
+                    if(lcl_SimilarPosition(aMergedCell.nLeftPosition, nLeftPos))
                     {
-                        if (lcl_SimilarPosition(aMergedIter->nLeftPosition,
-                                    nLeftPos))
-                        {
-                            aMergedIter->bOpen = false;
-                        }
-                        ++aMergedIter;
+                        aMergedCell.bOpen = false;
                     }
                 }
                 // add the new group of merged cells
@@ -2024,34 +2017,17 @@ lcl_ApplyCellProperties(
             }
             else
             {
-                // find the cell that
-                OSL_ENSURE(rMergedCells.size(),
-                        "the first merged cell is missing");
-                if (rMergedCells.size())
+                bool bFound = false;
+                SAL_WARN_IF(rMergedCells.empty(), "sw.uno", "the first merged cell is missing");
+                for(auto& aMergedCell : rMergedCells)
                 {
-                    std::vector<VerticallyMergedCell>::iterator aMergedIter =
-                        rMergedCells.begin();
-#if OSL_DEBUG_LEVEL > 0
-                    bool bDbgFound = false;
-#endif
-                    while (aMergedIter != rMergedCells.end())
+                    if (aMergedCell.bOpen && lcl_SimilarPosition(aMergedCell.nLeftPosition, nLeftPos))
                     {
-                        if (aMergedIter->bOpen &&
-                            lcl_SimilarPosition(aMergedIter->nLeftPosition,
-                                nLeftPos))
-                        {
-                            aMergedIter->aCells.push_back( xCellPS );
-#if OSL_DEBUG_LEVEL > 0
-                            bDbgFound = true;
-#endif
-                        }
-                        ++aMergedIter;
+                        aMergedCell.aCells.push_back( xCellPS );
+                        bFound = true;
                     }
-#if OSL_DEBUG_LEVEL > 0
-                    OSL_ENSURE( bDbgFound,
-                            "couldn't find first vertically merged cell" );
-#endif
                 }
+                SAL_WARN_IF(!bFound, "sw.uno", "couldn't find first vertically merged cell" );
             }
         }
         else
