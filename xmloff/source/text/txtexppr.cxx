@@ -935,7 +935,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pHeightMinAbsState->mnIndex = -1;
         }
 
-        // export SizeType::VARIABLE als min-width="0"
+        // export SizeType::VARIABLE as min-width="0"
         if( SizeType::VARIABLE == nSizeType )
             pHeightMinAbsState->maValue <<= static_cast<sal_Int32>( 0 );
     }
@@ -964,7 +964,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pWidthMinAbsState->mnIndex = -1;
         }
 
-        // export SizeType::VARIABLE als min-width="0"
+        // export SizeType::VARIABLE as min-width="0"
         if( SizeType::VARIABLE == nSizeType )
             pWidthMinAbsState->maValue <<= static_cast<sal_Int32>( 0 );
     }

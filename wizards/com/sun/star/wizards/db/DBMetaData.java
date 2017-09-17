@@ -351,7 +351,7 @@ public class DBMetaData
         WidthList[4][0] = DataType.LONGVARCHAR; // ==  -1;
         WidthList[5][0] = DataType.CHAR; // ==   1;
         WidthList[6][0] = DataType.NUMERIC; // ==   2;
-        WidthList[7][0] = DataType.DECIMAL; // ==   3;  [mit Nachkommastellen]
+        WidthList[7][0] = DataType.DECIMAL; // ==   3;  [with fractional part]
         WidthList[8][0] = DataType.INTEGER; // ==   4;
         WidthList[9][0] = DataType.SMALLINT; // ==   5;
         WidthList[10][0] = DataType.FLOAT; // ==   6;

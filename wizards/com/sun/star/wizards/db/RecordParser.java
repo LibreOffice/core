@@ -127,7 +127,7 @@ public class RecordParser extends QueryMetaData
             case DataType.NUMERIC: // ==   2;
             case DataType.INTEGER: // ==   4;
             case DataType.SMALLINT: // ==   5;
-            case DataType.DECIMAL: // ==   3;  [mit Nachkommastellen]
+            case DataType.DECIMAL: // ==   3;  [with fractional part]
             case DataType.FLOAT: // ==   6;
             case DataType.REAL: // ==   7;
             case DataType.DOUBLE: // ==   8;

@@ -130,7 +130,7 @@ public class FieldDescription
             if (propertyexists("DefaultValue"))
             {
                 aPropertyValues.add(Properties.createProperty("DefaultValue", xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
-            //Type =  4; // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
+            //Type =  4; // TODO where is the error?(Integer) xPropertySet.getPropertyValue("Type");
             }
         }
         catch (Exception e)
