@@ -1786,7 +1786,7 @@ void ODatabaseDocument::disposing()
     // case they will be deleted - if they're C++ implementations, that is :).
     // Some of those implementations are offending enough to require the SolarMutex, which
     // means we should not release the last reference while our own mutex is locked ...
-    std::list< Reference< XInterface > > aKeepAlive;
+    std::vector< Reference< XInterface > > aKeepAlive;
 
     // SYNCHRONIZED ->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );

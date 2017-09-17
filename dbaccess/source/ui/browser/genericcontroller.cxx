@@ -1261,7 +1261,7 @@ namespace
 
 Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup )
 {
-    std::list< DispatchInformation > aInformationList;
+    std::vector< DispatchInformation > aInformationVector;
     DispatchInformation aDispatchInfo;
     for (   SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
             aIter != m_aSupportedFeatures.end();
@@ -1271,13 +1271,13 @@ Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableD
         if ( sal_Int16( aIter->second.GroupId ) == CommandGroup )
         {
             aDispatchInfo = aIter->second;
-            aInformationList.push_back( aDispatchInfo );
+            aInformationVector.push_back( aDispatchInfo );
         }
     }
 
-    Sequence< DispatchInformation > aInformation( aInformationList.size() );
-    std::transform( aInformationList.begin(),
-        aInformationList.end(),
+    Sequence< DispatchInformation > aInformation( aInformationVector.size() );
+    std::transform( aInformationVector.begin(),
+        aInformationVector.end(),
         aInformation.getArray(),
         SGI_identity< DispatchInformation >()
     );
