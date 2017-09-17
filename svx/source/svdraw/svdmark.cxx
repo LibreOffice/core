@@ -36,6 +36,8 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svdoedge.hxx>
 
+#include <cassert>
+
 void SdrMark::setTime()
 {
     TimeValue aNow;
@@ -183,7 +185,8 @@ void SdrMarkList::ImpForceSort()
                 {
                     size_t i = count - 1;
                     SdrMark* pCmp = maList[i];
-                    if(pAkt->GetMarkedSdrObj() == pCmp->GetMarkedSdrObj() && pAkt->GetMarkedSdrObj())
+                    assert(pAkt->GetMarkedSdrObj());
+                    if(pAkt->GetMarkedSdrObj() == pCmp->GetMarkedSdrObj())
                     {
                         // Con1/Con2 Merging
                         if(pCmp->IsCon1())
