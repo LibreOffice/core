@@ -3374,6 +3374,7 @@ void SvxColorListBox::SelectEntry(const NamedColor& rColor)
     xColorWindow->SelectEntry(rColor);
     m_aSelectedColor = xColorWindow->GetSelectEntryColor();
     ShowPreview(m_aSelectedColor);
+    xColorWindow.disposeAndClear();
 }
 
 void SvxColorListBox::SelectEntry(const Color& rColor)
@@ -3382,6 +3383,7 @@ void SvxColorListBox::SelectEntry(const Color& rColor)
     xColorWindow->SelectEntry(rColor);
     m_aSelectedColor = xColorWindow->GetSelectEntryColor();
     ShowPreview(m_aSelectedColor);
+    xColorWindow.disposeAndClear();
 }
 
 SvxColorListBoxWrapper::SvxColorListBoxWrapper(SvxColorListBox& rListBox)
