@@ -91,12 +91,12 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         // stuff I hope?
         static const sal_uInt16 nBufferSize = 200;
         char aBuffer[nBufferSize+1];
-        aBuffer[nBufferSize] = 0;
         pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
         pInStrm->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW ); // avoid BOM marker
         auto nBytesRead = pInStrm->ReadBytes( aBuffer, nBufferSize );
         if (nBytesRead >= 6)
         {
+            aBuffer[nBytesRead] = 0;
             bool bIsMathType = false;
             if (0 == strncmp( "<?xml", aBuffer, 5))
                 bIsMathType = (strstr( aBuffer, "<math>" ) ||
