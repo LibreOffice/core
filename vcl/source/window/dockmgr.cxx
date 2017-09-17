@@ -332,6 +332,13 @@ void DockingManager::SetFloatingMode( const vcl::Window *pWindow, bool bFloating
         pWrapper->SetFloatingMode( bFloating );
 }
 
+void DockingManager::StartPopupMode( const vcl::Window *pWindow, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags )
+{
+    ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
+    if( pWrapper )
+        pWrapper->StartPopupMode( rRect, nFlags );
+}
+
 void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWindow, FloatWinPopupFlags nFlags )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
@@ -915,12 +922,8 @@ void ImplDockingWindowWrapper::ShowTitleButton( TitleButton nButton, bool bVisib
     }
 }
 
-void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWinPopupFlags nFlags )
+void ImplDockingWindowWrapper::ImplPreparePopupMode( FloatWinPopupFlags nFlags )
 {
-    // do nothing if window is floating
-    if( IsFloatingMode() )
-        return;
-
     GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
     // prepare reparenting
@@ -966,6 +969,15 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     // set mpFloatWin not until all window positioning is done !!!
     // (SetPosPixel etc. check for valid mpFloatWin pointer)
     mpFloatWin = pWin;
+}
+
+void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWinPopupFlags nFlags )
+{
+    // do nothing if window is floating
+    if( IsFloatingMode() )
+        return;
+
+    ImplPreparePopupMode( nFlags );
 
     // if the subtoolbar was opened via keyboard make sure that key events
     // will go into subtoolbar
@@ -981,6 +993,17 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
         KeyEvent aEvent( 0, vcl::KeyCode( KEY_HOME ) );
         GetWindow()->KeyInput(aEvent);
     }
+}
+
+void ImplDockingWindowWrapper::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopupFlags nFlags )
+{
+    // do nothing if window is floating
+    if( IsFloatingMode() )
+        return;
+
+    ImplPreparePopupMode( nFlags );
+    mpFloatWin->StartPopupMode( rRect, nFlags );
+    GetWindow()->Show();
 }
 
 IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)

@@ -1221,37 +1221,103 @@
           <value>com.sun.star.comp.svx.CurrencyToolBoxControl</value>
         </prop>
       </node>
-      <node oor:name="c4" oor:op="replace" install:module="reportbuilder">
+      <node oor:name="FontColorToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:FontColor</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
         </prop>
       </node>
-      <node oor:name="c5" oor:op="replace" install:module="reportbuilder">
+      <node oor:name="BackgroundColorToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:BackgroundColor</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
         </prop>
       </node>
-      <node oor:name="c6" oor:op="replace" install:module="reportbuilder">
+      <node oor:name="ColorToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:Color</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="BackColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:BackColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="CharBackColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CharBackColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="Extrusion3DColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Extrusion3DColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="XLineColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:XLineColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="FillColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FillColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="FrameLineColorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FrameLineColor</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.ColorToolBoxControl</value>
         </prop>
       </node>
       <node oor:name="FontNameToolBox" oor:op="replace">

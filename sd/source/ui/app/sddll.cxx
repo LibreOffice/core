@@ -181,12 +181,8 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxFillToolBoxControl::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl::RegisterControl(0, pMod);
     SvxLineWidthToolBoxControl::RegisterControl(0, pMod);
-    SvxColorToolBoxControl::RegisterControl(SID_ATTR_LINE_COLOR, pMod);
-    SvxColorToolBoxControl::RegisterControl(SID_ATTR_FILL_COLOR, pMod);
 
     SvxStyleToolBoxControl::RegisterControl(0, pMod);
-    SvxColorToolBoxControl::RegisterControl( SID_ATTR_CHAR_COLOR, pMod );
-    SvxColorToolBoxControl::RegisterControl( SID_ATTR_CHAR_BACK_COLOR, pMod );
 
     SvxGrafModeToolBoxControl::RegisterControl( SID_ATTR_GRAF_MODE, pMod );
     SvxGrafRedToolBoxControl::RegisterControl( SID_ATTR_GRAF_RED, pMod );
@@ -221,7 +217,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
     SvxClipBoardControl::RegisterControl( SID_PASTE_UNFORMATTED, pMod );
 
-    SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
     svx::TextCharacterSpacingPopup::RegisterControl(SID_ATTR_CHAR_KERNING, pMod);
     svx::TextUnderlinePopup::RegisterControl(SID_ATTR_CHAR_UNDERLINE, pMod);
@@ -230,7 +225,6 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
     SdTemplateControl::RegisterControl( SID_STATUS_LAYOUT, pMod );
     SvxTableToolBoxControl::RegisterControl(SID_INSERT_TABLE, pMod );
-    SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
 
     EmojiPopup::RegisterControl(SID_EMOJI_CONTROL, pMod );

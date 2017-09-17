@@ -34,9 +34,6 @@
   <implementation name="com.sun.star.report.comp.ReportDesign">
     <service name="com.sun.star.sdb.ReportDesign"/>
   </implementation>
-  <implementation name="com.sun.star.report.comp.ReportToolboxController">
-    <service name="com.sun.star.report.ReportToolboxController"/>
-  </implementation>
   <implementation name="com.sun.star.report.comp.StatusbarController">
     <service name="com.sun.star.frame.StatusbarController"/>
   </implementation>
