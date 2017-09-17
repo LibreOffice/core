@@ -238,7 +238,8 @@ IMPL_LINK(Condition, DropdownClick, ToolBox*, pToolBox, void)
                            pToolBox,
                            m_aColorWrapper);
 
-    m_pColorFloat->StartPopupMode(pToolBox, FloatWinPopupFlags::GrabFocus);
+    m_pColorFloat->EnableDocking();
+    vcl::Window::GetDockingManager()->StartPopupMode(pToolBox, m_pColorFloat, FloatWinPopupFlags::GrabFocus);
 }
 
 IMPL_LINK_NOARG( Condition, OnFormatAction, ToolBox*, void )

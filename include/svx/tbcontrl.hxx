@@ -205,31 +205,44 @@ friend class SfxStyleControllerItem_Impl;
 
 typedef std::function<void(const OUString&, const NamedColor&)> ColorSelectFunction;
 
-class SVX_DLLPUBLIC SvxColorToolBoxControl : public cppu::ImplInheritanceHelper< SfxToolBoxControl,
+class SVX_DLLPUBLIC SvxColorToolBoxControl : public cppu::ImplInheritanceHelper< svt::PopupWindowController,
                                                                                  css::frame::XSubToolbarController >
 {
     std::unique_ptr<svx::ToolboxButtonColorUpdater> m_xBtnUpdater;
     std::unique_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
     bool m_bSplitButton;
+    sal_uInt16 m_nSlotId;
     ColorSelectFunction m_aColorSelectFunction;
     DECL_LINK(SelectedHdl, const NamedColor&, void);
 public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    SvxColorToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);
+    explicit SvxColorToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
     virtual ~SvxColorToolBoxControl() override;
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) override;
+
+    // XUpdatable
+    virtual void SAL_CALL update() override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
-    virtual void Select(sal_uInt16 nSelectModifier) override;
+    // XToolbarController
+    virtual void SAL_CALL execute( sal_Int16 nSelectModifier ) override;
+
+    using svt::ToolboxController::createPopupWindow;
+    virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
     // XSubToolbarController
     virtual sal_Bool SAL_CALL opensSubToolbar() override;
     virtual OUString SAL_CALL getSubToolbarName() override;
     virtual void SAL_CALL functionSelected( const OUString& rCommand ) override;
     virtual void SAL_CALL updateImage() override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);
     void EnsurePaletteManager();

@@ -33,7 +33,6 @@
 #include <vcl/vclptr.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <svtools/toolbarmenu.hxx>
 #include <svl/style.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/borderhelper.hxx>
@@ -1251,9 +1250,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
                                vcl::Window*               pParentWindow,
                                std::function<void(const OUString&, const NamedColor&)> const & aFunction):
 
-    SfxPopupWindow( nSlotId, pParentWindow,
-                    "palette_popup_window", "svx/ui/colorwindow.ui",
-                    rFrame ),
+    ToolbarPopup( rFrame, pParentWindow, "palette_popup_window", "svx/ui/colorwindow.ui" ),
     theSlotId( nSlotId ),
     maCommand( rCommand ),
     mrPaletteManager( rPaletteManager ),
@@ -1374,11 +1371,12 @@ void SvxColorWindow::dispose()
     mpButtonNoneColor.clear();
     mpButtonPicker.clear();
     mpAutomaticSeparator.clear();
-    SfxPopupWindow::dispose();
+    ToolbarPopup::dispose();
 }
 
 void SvxColorWindow::KeyInput( const KeyEvent& rKEvt )
 {
+    mpColorSet->GrabFocus();
     mpColorSet->KeyInput(rKEvt);
 }
 
@@ -1510,6 +1508,7 @@ IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
 void SvxColorWindow::StartSelection()
 {
     mpColorSet->StartSelection();
+    mpRecentColorSet->StartSelection();
 }
 
 void SvxColorWindow::SetNoSelection()
@@ -2756,28 +2755,77 @@ com_sun_star_comp_svx_FontNameToolBoxControl_get_implementation(
     return cppu::acquire( new SvxFontNameToolBoxControl() );
 }
 
-SvxColorToolBoxControl::SvxColorToolBoxControl(
-    sal_uInt16 nSlotId,
-    sal_uInt16 nId,
-    ToolBox& rTbx ):
-    ImplInheritanceHelper( nSlotId, nId, rTbx ),
-    m_bSplitButton(typeid(rTbx) != typeid(sfx2::sidebar::SidebarToolBox)),
+SvxColorToolBoxControl::SvxColorToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext ) :
+    ImplInheritanceHelper( rContext, nullptr, OUString() ),
+    m_bSplitButton(true),
+    m_nSlotId(0),
     m_aColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
-    switch( nSlotId )
+}
+
+namespace {
+
+sal_uInt16 MapCommandToSlotId(const OUString& rCommand)
+{
+    if (rCommand == ".uno:Color")
+        return SID_ATTR_CHAR_COLOR;
+    else if (rCommand == ".uno:FontColor")
+        return SID_ATTR_CHAR_COLOR2;
+    else if (rCommand == ".uno:BackColor")
+        return SID_ATTR_CHAR_COLOR_BACKGROUND;
+    else if (rCommand == ".uno:CharBackColor")
+        return SID_ATTR_CHAR_BACK_COLOR;
+    else if (rCommand == ".uno:BackgroundColor")
+        return SID_BACKGROUND_COLOR;
+    else if (rCommand == ".uno:Extrusion3DColor")
+        return SID_EXTRUSION_3D_COLOR;
+    else if (rCommand == ".uno:XLineColor")
+        return SID_ATTR_LINE_COLOR;
+    else if (rCommand == ".uno:FillColor")
+        return SID_ATTR_FILL_COLOR;
+    else if (rCommand == ".uno:FrameLineColor")
+        return SID_FRAME_LINECOLOR;
+
+    SAL_WARN("svx.tbxcrtls", "Unknown color command: " << rCommand);
+    return 0;
+}
+
+}
+
+void SvxColorToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>& rArguments )
+{
+    PopupWindowController::initialize( rArguments );
+
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( !getToolboxId( nId, &pToolBox ) )
+    {
+        SAL_WARN("svx.tbxcrtls", "ToolBox not found!");
+        return;
+    }
+
+    m_nSlotId = MapCommandToSlotId( m_aCommandURL );
+    if ( m_nSlotId == SID_ATTR_LINE_COLOR || m_nSlotId == SID_ATTR_FILL_COLOR ||
+         m_nSlotId == SID_FRAME_LINECOLOR || m_nSlotId == SID_BACKGROUND_COLOR )
+        // Sidebar uses wide buttons for those.
+        m_bSplitButton = typeid( *pToolBox ) != typeid( sfx2::sidebar::SidebarToolBox );
+
+    m_xBtnUpdater.reset( new svx::ToolboxButtonColorUpdater( m_nSlotId, nId, pToolBox ) );
+    pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ( m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
+}
+
+void SvxColorToolBoxControl::update()
+{
+    PopupWindowController::update();
+
+    switch( m_nSlotId )
     {
         case SID_ATTR_CHAR_COLOR2:
             addStatusListener( ".uno:CharColorExt");
-            SAL_FALLTHROUGH;
-
-        case SID_ATTR_CHAR_COLOR:
-        case SID_ATTR_CHAR_BACK_COLOR:
-            m_bSplitButton = true;
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             addStatusListener( ".uno:CharBackgroundExt");
-            m_bSplitButton = true;
             break;
 
         case SID_FRAME_LINECOLOR:
@@ -2785,9 +2833,6 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
             addStatusListener( ".uno:BorderBLTR");
             break;
     }
-
-    rTbx.SetItemBits( nId, rTbx.GetItemBits( nId ) | ( m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
-    m_xBtnUpdater.reset( new svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
 }
 
 void SvxColorToolBoxControl::EnsurePaletteManager()
@@ -2811,7 +2856,7 @@ void SvxColorToolBoxControl::setColorSelectFunction(const ColorSelectFunction& a
         m_xPaletteManager->SetColorSelectFunction(aColorSelectFunction);
 }
 
-VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
+VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
     EnsurePaletteManager();
 
@@ -2819,16 +2864,14 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
                             m_aCommandURL,
                             *m_xPaletteManager,
                             m_aBorderColorStatus,
-                            GetSlotId(),
+                            m_nSlotId,
                             m_xFrame,
-                            &GetToolBox(),
+                            pParent,
                             m_aColorSelectFunction);
 
     OUString aWindowTitle = vcl::CommandInfoProvider::GetLabelForCommand( m_aCommandURL, m_sModuleName );
     pColorWin->SetText( aWindowTitle );
-    pColorWin->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
     pColorWin->StartSelection();
-    SetPopupWindow(pColorWin);
     if ( m_bSplitButton )
         pColorWin->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
     return pColorWin;
@@ -2843,8 +2886,13 @@ IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( !getToolboxId( nId, &pToolBox ) )
+        return;
+
     if ( rEvent.FeatureURL.Complete == m_aCommandURL )
-        GetToolBox().EnableItem( GetId(), rEvent.IsEnabled );
+        pToolBox->EnableItem( nId, rEvent.IsEnabled );
 
     bool bValue;
     if ( !m_bSplitButton )
@@ -2866,23 +2914,21 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
             m_xPaletteManager->SetLastColor(aColor);
     }
     else if ( rEvent.State >>= bValue )
-        GetToolBox().CheckItem( GetId(), bValue );
+        pToolBox->CheckItem( nId, bValue );
 }
 
-void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
+void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
 {
     if ( !m_bSplitButton )
     {
         // Open the popup also when Enter key is pressed.
-        css::uno::Reference< css::awt::XWindow > xWin = createPopupWindow();
-        if ( xWin.is() )
-            xWin->setFocus();
+        createPopupWindow();
         return;
     }
 
     OUString aCommand = m_aCommandURL;
 
-    switch( GetSlotId() )
+    switch( m_nSlotId )
     {
         case SID_ATTR_CHAR_COLOR2 :
             aCommand    = ".uno:CharColorExt";
@@ -2899,7 +2945,7 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
     auto aArgs( comphelper::InitPropertySequence( {
         { m_aCommandURL.copy(5), css::uno::makeAny( m_xPaletteManager->GetLastColor().GetColor() ) }
     } ) );
-    Dispatch( aCommand, aArgs );
+    dispatchCommand( aCommand, aArgs );
 
     OUString sColorName = ("#" + aColor.AsRGBHexString().toAsciiUpperCase());
     m_xPaletteManager->AddRecentColor(aColor, sColorName);
@@ -2915,10 +2961,15 @@ sal_Bool SvxColorToolBoxControl::opensSubToolbar()
 
 void SvxColorToolBoxControl::updateImage()
 {
-    Image aImage = vcl::CommandInfoProvider::GetImageForCommand(m_aCommandURL, m_xFrame, GetToolBox().GetImageSize());
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( !getToolboxId( nId, &pToolBox ) )
+        return;
+
+    Image aImage = vcl::CommandInfoProvider::GetImageForCommand(m_aCommandURL, m_xFrame, pToolBox->GetImageSize());
     if ( !!aImage )
     {
-        GetToolBox().SetItemImage( GetId(), aImage );
+        pToolBox->SetItemImage( nId, aImage );
         EnsurePaletteManager();
         m_xBtnUpdater->Update(m_xPaletteManager->GetLastColor(), true);
     }
@@ -2933,21 +2984,22 @@ void SvxColorToolBoxControl::functionSelected( const OUString& /*rCommand*/ )
 {
 }
 
-SfxToolBoxControl* SvxColorToolBoxControl::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )
+OUString SvxColorToolBoxControl::getImplementationName()
 {
-    return new SvxColorToolBoxControl( nSlotId, nId, rTbx );
+    return OUString( "com.sun.star.comp.svx.ColorToolBoxControl" );
 }
 
-void SvxColorToolBoxControl::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod)
+css::uno::Sequence<OUString> SvxColorToolBoxControl::getSupportedServiceNames()
 {
-    if ( nSlotId == SID_ATTR_LINE_COLOR )
-        SfxToolBoxControl::RegisterToolBoxControl( pMod, SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, typeid(XLineColorItem), nSlotId ) );
-    else if ( nSlotId == SID_ATTR_FILL_COLOR )
-        SfxToolBoxControl::RegisterToolBoxControl( pMod, SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, typeid(XFillColorItem), nSlotId ) );
-    else if ( nSlotId == SID_ATTR_CHAR_BACK_COLOR )
-        SfxToolBoxControl::RegisterToolBoxControl( pMod, SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, typeid(SvxBackgroundColorItem), nSlotId ) );
-    else
-        SfxToolBoxControl::RegisterToolBoxControl( pMod, SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, typeid(SvxColorItem), nSlotId ) );
+    return { "com.sun.star.frame.ToolbarController" };
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_svx_ColorToolBoxControl_get_implementation(
+    css::uno::XComponentContext* rContext,
+    css::uno::Sequence<css::uno::Any> const & )
+{
+    return cppu::acquire( new SvxColorToolBoxControl( rContext ) );
 }
 
 // class SvxFrameToolBoxControl --------------------------------------------
