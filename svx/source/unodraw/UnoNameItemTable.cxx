@@ -82,11 +82,11 @@ void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, cons
 {
     maItemSetVector.push_back( o3tl::make_unique< SfxItemSet >( *mpModelPool, std::initializer_list<SfxItemSet::Pair>{{mnWhich, mnWhich}} ) );
 
-    std::unique_ptr<NameOrIndex> pNewItem(createItem());
-    pNewItem->SetName( aName );
-    pNewItem->PutValue( aElement, mnMemberId );
-    pNewItem->SetWhich(mnWhich);
-    maItemSetVector.back()->Put( *pNewItem );
+    std::unique_ptr<NameOrIndex> xNewItem(createItem());
+    xNewItem->SetName(aName);
+    xNewItem->PutValue(aElement, mnMemberId);
+    xNewItem->SetWhich(mnWhich);
+    maItemSetVector.back()->Put(*xNewItem);
 }
 
 // XNameContainer
@@ -153,12 +153,11 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
         const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
         if (aName == pItem->GetName())
         {
-            NameOrIndex* pNewItem = createItem();
-            pNewItem->SetName(aName);
-            if( !pNewItem->PutValue( aElement, mnMemberId ) || !isValid( pNewItem ) )
+            std::unique_ptr<NameOrIndex> xNewItem(createItem());
+            xNewItem->SetName(aName);
+            if (!xNewItem->PutValue(aElement, mnMemberId) || !isValid(xNewItem.get()))
                 throw lang::IllegalArgumentException();
-
-            (*aIter)->Put( *pNewItem );
+            (*aIter)->Put(*xNewItem);
             return;
         }
         ++aIter;
