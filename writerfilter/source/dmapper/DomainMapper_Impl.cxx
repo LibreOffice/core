@@ -2176,6 +2176,7 @@ void DomainMapper_Impl::PopShapeContext()
             // this is normal: the shape is already attached
         }
 
+        const uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
         // Remove the shape if required (most likely replacement shape for OLE object)
         // or anchored to a discarded header or footer
         if ( m_aAnchoredStack.top().bToRemove || m_bDiscardHeaderFooter )
@@ -2185,15 +2186,23 @@ void DomainMapper_Impl::PopShapeContext()
                 uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(m_xTextDocument, uno::UNO_QUERY_THROW);
                 uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
                 if ( xDrawPage.is() )
-                {
-                    uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
                     xDrawPage->remove( xShape );
-                }
             }
             catch( const uno::Exception& )
             {
             }
         }
+
+        // Relative width calculations deferred until section's margins are defined.
+        // Being cautious: only deferring undefined/minimum-width shapes in order to avoid causing potential regressions
+        if( xShape->getSize().Width <= 2 )
+        {
+            const uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );
+            SectionPropertyMap* pSectionContext = GetSectionContext();
+            if ( pSectionContext && !getTableManager().isInTable() && xShapePropertySet->getPropertySetInfo()->hasPropertyByName(getPropertyName(PROP_RELATIVE_WIDTH)) )
+                pSectionContext->addRelativeWidthShape(xShape);
+        }
+
         m_aAnchoredStack.pop();
     }
     m_bFrameBtLr = false;
