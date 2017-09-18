@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_76d07054",
+        "filename": "sw/source/uibase/inc/wrtsh.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-18T13:29:02Z",
+      "side": 1,
+      "message": "Q: what\u0027s the rationale of this being a pointer in contrast to ordinary enum?",
+      "range": {
+        "startLine": 395,
+        "startChar": 143,
+        "endLine": 395,
+        "endChar": 145
+      },
+      "revId": "254720712c0049a743b858bd83d0cd363d6dcf2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
