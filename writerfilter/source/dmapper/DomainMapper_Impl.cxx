@@ -5231,10 +5231,6 @@ void DomainMapper_Impl::ApplySettingsTable()
                     aViewProps.emplace_back("VisibleBottom", -1, uno::makeAny(sal_Int32(0)), beans::PropertyState_DIRECT_VALUE);
                     aViewProps.emplace_back("ZoomType", -1, uno::makeAny(sal_Int16(0)), beans::PropertyState_DIRECT_VALUE);
                 }
-                if (m_pSettingsTable->GetView())
-                {
-                    aViewProps.emplace_back("ShowOnlineLayout", -1, uno::makeAny(m_pSettingsTable->GetView() == NS_ooxml::LN_Value_doc_ST_View_web), beans::PropertyState_DIRECT_VALUE);
-                }
                 uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(m_xComponentContext);
                 xBox->insertByIndex(sal_Int32(0), uno::makeAny(comphelper::containerToSequence(aViewProps)));
                 uno::Reference<container::XIndexAccess> xIndexAccess(xBox, uno::UNO_QUERY);
