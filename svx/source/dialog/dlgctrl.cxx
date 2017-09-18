@@ -806,7 +806,7 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
     if (bPaintable)
     {
         // Draw lines
-        rRenderContext.SetLineColor(aLineColor);
+        rRenderContext.SetLineColor(Color());
         for (i = 1; i < nLines; i++)
         {
             // horizontal

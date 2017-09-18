@@ -153,7 +153,6 @@ protected:
     sal_uInt16      nLines, nSquares;
     Color       aPixelColor;
     Color       aBackgroundColor;
-    Color       aLineColor;
     Size        aRectSize;
     sal_uInt16* pPixel;
     bool        bPaintable;
