@@ -2471,7 +2471,7 @@ SwDSParam* SwDBManager::FindDSData(const SwDBData& rData, bool bCreate)
         (rData.nCommandType == -1 || rData.nCommandType == pImpl->pMergeData->nCommandType ||
         (bCreate && pImpl->pMergeData->nCommandType == -1)))
     {
-         return pImpl->pMergeData;
+        return pImpl->pMergeData;
     }
 
     SwDSParam* pFound = nullptr;
@@ -2518,7 +2518,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
     if(pImpl->pMergeData && rDataSource == pImpl->pMergeData->sDataSource )
     {
         SetAsUsed(rDataSource);
-         return pImpl->pMergeData;
+        return pImpl->pMergeData;
     }
     SwDSParam* pFound = nullptr;
     for (auto & pParam : m_DataSourceParams)
