@@ -18,6 +18,9 @@
  */
 
 
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #pragma warning(push,1) // disable warnings within system headers
 #include <windows.h>
 #pragma warning(pop)

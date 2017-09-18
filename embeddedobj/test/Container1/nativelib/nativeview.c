@@ -19,6 +19,9 @@
 
 #ifdef _WIN32
 
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 // property name to register own window procedure on hwnd
 #define OLD_PROC_KEY "oldwindowproc"

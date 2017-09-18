@@ -19,6 +19,9 @@
 
 
 #pragma warning (disable: 4917)
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #include <comdef.h>
 #include <tchar.h>

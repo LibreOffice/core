@@ -25,9 +25,13 @@
 #include "intercept.hxx"
 #include "syswinwrapper.hxx"
 #include "iipaobj.hxx"
-
 #include "common.h"
+
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
+
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XView.hpp>

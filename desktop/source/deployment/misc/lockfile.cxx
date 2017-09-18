@@ -26,6 +26,9 @@
 #ifndef _WIN32
 #include <unistd.h>
 #else
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #endif
 #include <comphelper/random.hxx>
