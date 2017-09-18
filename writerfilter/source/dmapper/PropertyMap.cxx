@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -1405,6 +1406,37 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             OSL_FAIL( "Exception in SectionPropertyMap::CloseSectionGroup" );
         }
     }
+
+    // Now that the margins are known, resize relative width shapes because some shapes in LO do not support percentage-sizes
+    sal_Int32 nParagraphWidth = GetPageWidth() - m_nLeftMargin - m_nRightMargin;
+    if ( m_nColumnCount > 0 )
+    {
+        // skip custom-width columns since we don't know what column the shape is in.
+        if ( m_aColWidth.size() )
+            nParagraphWidth = 0;
+        else
+            nParagraphWidth = (nParagraphWidth - (m_nColumnDistance * m_nColumnCount)) / (m_nColumnCount + 1);
+    }
+    if ( nParagraphWidth > 0 )
+    {
+        const OUString sPropRelativeWidth = getPropertyName(PROP_RELATIVE_WIDTH);
+        for ( const auto& xShape : m_xRelativeWidthShapes )
+        {
+            const uno::Reference<beans::XPropertySet> xShapePropertySet( xShape, uno::UNO_QUERY );
+            if ( xShapePropertySet->getPropertySetInfo()->hasPropertyByName(sPropRelativeWidth) )
+            {
+                sal_uInt16 nPercent = 0;
+                xShapePropertySet->getPropertyValue( sPropRelativeWidth ) >>= nPercent;
+                if ( nPercent )
+                {
+                    const sal_Int32 nWidth = nParagraphWidth * nPercent / 100;
+                    xShape->setSize( awt::Size( nWidth, xShape->getSize().Height ) );
+                }
+            }
+        }
+    }
+    m_xRelativeWidthShapes.clear();
+
     rDM_Impl.SetIsLastSectionGroup( false );
     rDM_Impl.SetIsFirstParagraphInSection( true );
 
