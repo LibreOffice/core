@@ -1,15 +1,7 @@
 :
 #
-# This script checks various configure parameters and uses three files:
-#   * autogen.input (ro)
-#   * autogen.lastrun (rw)
-#   * autogen.lastrun.bak (rw)
-#
 # If _no_ parameters:
-#   Read args from autogen.input or autogen.lastrun
-# Else
-#   Backup autogen.lastrun as autogen.lastrun.bak
-#   Write autogen.lastrun with new commandline args
+#   Read args from autogen.input
 #
 # Run configure with checked args
 #
@@ -186,7 +178,7 @@ unlink ("configure");
 system ("autoconf -I ${src_path}") && die "Failed to run autoconf";
 die "Failed to generate the configure script" if (! -f "configure");
 
-# Handle help arguments first, so we don't clobber autogen.lastrun
+# Handle help arguments first
 for my $arg (@ARGV) {
     if ($arg =~ /^(--help|-h|-\?)$/) {
         print STDOUT "autogen.sh - libreoffice configuration helper\n";
@@ -201,24 +193,10 @@ for my $arg (@ARGV) {
 my @cmdline_args = ();
 
 my $input = "autogen.input";
-my $lastrun = "autogen.lastrun";
 
 if (!@ARGV) {
     if (-f $input) {
-        if (-f $lastrun) {
-            print STDERR <<WARNING;
-********************************************************************
-*
-*   Reading $input and ignoring $lastrun!
-*   Consider removing $lastrun to get rid of this warning.
-*
-********************************************************************
-WARNING
-        }
         @cmdline_args = read_args ($input);
-    } elsif (-f $lastrun) {
-        print STDERR "Reading $lastrun. Please rename it to $input to avoid this message.\n";
-        @cmdline_args = read_args ($lastrun);
     }
 } else {
     if (-f $input) {
@@ -265,27 +243,6 @@ for my $arg (@args) {
 if (defined $ENV{NOCONFIGURE}) {
     print "Skipping configure process.";
 } else {
-    # Save autogen.lastrun only if we did get some arguments on the command-line
-    if (! -f $input && @ARGV) {
-        if (scalar(@cmdline_args) > 0) {
-            # if there's already an autogen.lastrun, make a backup first
-            if (-e $lastrun) {
-                open (my $fh, $lastrun) || warn "Can't open $lastrun.\n";
-                open (BAK, ">$lastrun.bak") || warn "Can't create backup file $lastrun.bak.\n";
-                while (<$fh>) {
-                    print BAK;
-                }
-                close (BAK) && close ($fh);
-            }
-            # print "Saving command-line args to $lastrun\n";
-            my $fh;
-            open ($fh, ">autogen.lastrun") || die "Can't open autogen.lastrun: $!";
-            for my $arg (@cmdline_args) {
-                print $fh "$arg\n";
-            }
-            close ($fh);
-        }
-    }
     push @args, "--srcdir=$src_path";
     push @args, "--enable-option-checking=$option_checking";
 
