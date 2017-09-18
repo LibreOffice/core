@@ -57,24 +57,6 @@ struct ResultSetColumnData
     /** @see ResultSetMetaData::getColumnDisplaySize */
     sal_Int32       columnDisplaySize;
 
-    /** @see ResultSetMetaData::getColumnLabel */
-    OUString columnLabel;
-
-    /** @see ResultSetMetaData::getSchemaName */
-    OUString schemaName;
-
-    /** @see ResultSetMetaData::getTableName */
-    OUString tableName;
-
-    /** @see ResultSetMetaData::getCatalogName */
-    OUString catalogName;
-
-    /** @see ResultSetMetaData::getColumnTypeName */
-    OUString columnTypeName;
-
-    /** @see ResultSetMetaData::getColumnServiceName */
-    OUString columnServiceName;
-
     inline ResultSetColumnData();
 };
 

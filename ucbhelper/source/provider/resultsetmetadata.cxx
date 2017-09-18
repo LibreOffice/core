@@ -219,10 +219,6 @@ OUString SAL_CALL ResultSetMetaData::getColumnLabel( sal_Int32 column )
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
         return OUString();
 
-    OUString aLabel = m_pImpl->m_aColumnData[ column - 1 ].columnLabel;
-    if ( !aLabel.isEmpty() )
-        return aLabel;
-
     return m_aProps.getConstArray()[ column - 1 ].Name;
 }
 
@@ -242,7 +238,7 @@ OUString SAL_CALL ResultSetMetaData::getColumnName( sal_Int32 column )
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 column )
+OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
 {
     /*
         Gets the schema name for the table from which column of this
@@ -250,11 +246,7 @@ OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 column )
         Because this feature is not widely supported, the return value
         for many DBMSs will be an empty string.
      */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return OUString();
-
-    return m_pImpl->m_aColumnData[ column - 1 ].schemaName;
+    return OUString();
 }
 
 
@@ -273,7 +265,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getScale( sal_Int32 /*column*/ )
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getTableName( sal_Int32 column )
+OUString SAL_CALL ResultSetMetaData::getTableName( sal_Int32 /*column*/ )
 {
     /*
         Gets the name of the table from which column of this result set
@@ -281,16 +273,12 @@ OUString SAL_CALL ResultSetMetaData::getTableName( sal_Int32 column )
         Because this feature is not widely supported, the return value
         for many DBMSs will be an empty string.
      */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return OUString();
-
-    return m_pImpl->m_aColumnData[ column - 1 ].tableName;
+    return OUString();
 }
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getCatalogName( sal_Int32 column )
+OUString SAL_CALL ResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
 {
     /*
         Gets the catalog name for the table from which column of this
@@ -298,11 +286,7 @@ OUString SAL_CALL ResultSetMetaData::getCatalogName( sal_Int32 column )
         Because this feature is not widely supported, the return value
         for many DBMSs will be an empty string.
      */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return OUString();
-
-    return m_pImpl->m_aColumnData[ column - 1 ].catalogName;
+    return OUString();
 }
 
 
@@ -414,7 +398,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 column )
+OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ )
 {
     /*
         Gets the type name used by this particular data source for the
@@ -422,11 +406,7 @@ OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 column )
         stored in column is STRUCT, DISTINCT or JAVA_OBJECT, this method
         returns a fully-qualified SQL type name.
      */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return OUString();
-
-    return m_pImpl->m_aColumnData[ column - 1 ].columnTypeName;
+    return OUString();
 }
 
 
@@ -452,18 +432,14 @@ sal_Bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 /*column*/ 
 
 
 // virtual
-OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 column )
+OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
 {
     /*
           Returns the fully-qualified name of the service whose instances
          are manufactured if XResultSet::getObject is called to retrieve
         a value from the column.
      */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return OUString();
-
-    return m_pImpl->m_aColumnData[ column - 1 ].columnServiceName;
+    return OUString();
 }
 
 } // namespace ucbhelper
