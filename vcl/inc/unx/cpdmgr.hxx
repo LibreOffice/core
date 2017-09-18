@@ -25,6 +25,9 @@
 
 #if ENABLE_DBUS && ENABLE_GIO
 #include <gio/gio.h>
+#else
+typedef struct _GDBusProxy GDBusProxy;
+typedef struct _GDBusConnection GDBusConnection;
 #endif
 
 #include "printerinfomanager.hxx"
@@ -33,9 +36,6 @@
 #define BACKEND_DIR "/usr/share/print-backends"
 #define FRONTEND_INTERFACE "/usr/share/dbus-1/interfaces/org.openprinting.Frontend.xml"
 #define BACKEND_INTERFACE "/usr/share/dbus-1/interfaces/org.openprinting.Backend.xml"
-
-typedef struct _GDBusProxy GDBusProxy;
-typedef struct _GDBusConnection GDBusConnection;
 
 namespace psp
 {
