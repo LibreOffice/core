@@ -895,7 +895,7 @@ void WorksheetFragment::importControl( SequenceInputStream& rStrm )
     getVmlDrawing().registerControl( aInfo );
 }
 
-void WorksheetFragment::importEmbeddedOleData( const StreamDataSequence& orEmbeddedData, const OUString& rRelId )
+void WorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const OUString& rRelId )
 {
     OUString aFragmentPath = getFragmentPathFromRelId( rRelId );
     if( !aFragmentPath.isEmpty() )

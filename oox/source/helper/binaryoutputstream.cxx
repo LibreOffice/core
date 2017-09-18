@@ -130,9 +130,10 @@ void BinaryOutputStream::writeCompressedUnicodeArray( const OUString& rString, b
         writeUnicodeArray( rString );
 }
 
-SequenceOutputStream::SequenceOutputStream( StreamDataSequence const & rData ) :
+SequenceOutputStream::SequenceOutputStream( StreamDataSequence & rData ) :
     BinaryStreamBase( true ),
-    SequenceSeekableStream( rData )
+    mpData( &rData ),
+    mnPos( 0 )
 {
 }
 
@@ -147,11 +148,37 @@ void SequenceOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size
     if( mpData && (nBytes > 0) )
     {
         if( mpData->getLength() - mnPos < nBytes )
-            const_cast< StreamDataSequence* >( mpData )->realloc( mnPos + nBytes );
-        memcpy( const_cast< StreamDataSequence* >( mpData )->getArray() + mnPos, pMem, static_cast< size_t >( nBytes ) );
+            mpData->realloc( mnPos + nBytes );
+        memcpy( mpData->getArray() + mnPos, pMem, static_cast< size_t >( nBytes ) );
         mnPos += nBytes;
     }
 }
+
+sal_Int64 SequenceOutputStream::size() const
+{
+    return mpData ? mpData->getLength() : -1;
+}
+
+sal_Int64 SequenceOutputStream::tell() const
+{
+    return mpData ? mnPos : -1;
+}
+
+void SequenceOutputStream::seek( sal_Int64 nPos )
+{
+    if( mpData )
+    {
+        mnPos = getLimitedValue< sal_Int32, sal_Int64 >( nPos, 0, mpData->getLength() );
+        mbEof = mnPos != nPos;
+    }
+}
+
+void SequenceOutputStream::close()
+{
+    mpData = nullptr;
+    mbEof = true;
+}
+
 
 } // namespace oox
 

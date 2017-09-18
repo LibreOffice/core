@@ -176,7 +176,7 @@ private:
     void                importControl( SequenceInputStream& rStrm );
 
     /** Imports the binary data of an embedded OLE object from the fragment with the passed ID. */
-    void                importEmbeddedOleData( const StreamDataSequence& orEmbeddedData, const OUString& rRelId );
+    void                importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const OUString& rRelId );
 };
 
 } // namespace xls

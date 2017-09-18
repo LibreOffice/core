@@ -379,7 +379,7 @@ VbaProject& FilterBase::getVbaProject() const
     return *mxImpl->mxVbaProject;
 }
 
-bool FilterBase::importBinaryData( StreamDataSequence const & orDataSeq, const OUString& rStreamName )
+bool FilterBase::importBinaryData( StreamDataSequence & orDataSeq, const OUString& rStreamName )
 {
     OSL_ENSURE( !rStreamName.isEmpty(), "FilterBase::importBinaryData - empty stream name" );
     if( rStreamName.isEmpty() )
