@@ -550,6 +550,13 @@ Event& Entity::getEvent( CallbackType aType )
         return maSharedEvent;
 
     EventList& rEventList = getEventList();
+    if (mnProducedEventsSize == rEventList.maEvents.size())
+    {
+        SAL_WARN_IF(!maSavedException.hasValue(), "sax",
+            "Event vector should only exceed " << mnEventListSize <<
+            " temporarily while an exception is pending");
+        rEventList.maEvents.resize(mnProducedEventsSize + 1);
+    }
     Event& rEvent = rEventList.maEvents[mnProducedEventsSize++];
     rEvent.maType = aType;
     return rEvent;
@@ -927,7 +934,7 @@ void FastSaxParserImpl::produce( bool bForceFlush )
 {
     Entity& rEntity = getEntity();
     if (bForceFlush ||
-        rEntity.mnProducedEventsSize == Entity::mnEventListSize)
+        rEntity.mnProducedEventsSize >= Entity::mnEventListSize)
     {
         osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
 
