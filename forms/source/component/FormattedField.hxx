@@ -42,7 +42,6 @@ class OFormattedModel
         css::util::Date        m_aNullDate;
         css::uno::Any          m_aSaveValue;
 
-        sal_Int32                           m_nFieldType;
         sal_Int16                           m_nKeyType;
         bool                                m_bOriginalNumeric      : 1,
                                             m_bNumeric              : 1;    // analogous for the TreatAsNumeric-property

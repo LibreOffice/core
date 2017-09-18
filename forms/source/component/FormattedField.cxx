@@ -261,7 +261,6 @@ void OFormattedModel::implConstruct()
     m_xOriginalFormatter = nullptr;
     m_nKeyType = NumberFormat::UNDEFINED;
     m_aNullDate = DBTypeConversion::getStandardDate();
-    m_nFieldType =  DataType::OTHER;
     // default our formats supplier
     osl_atomic_increment(&m_refCount);
     setPropertyToDefaultByHandle(PROPERTY_ID_FORMATSSUPPLIER);
@@ -529,10 +528,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
 {
     m_xOriginalFormatter = nullptr;
     // get some properties of the field
-    m_nFieldType = DataType::OTHER;
     Reference<XPropertySet> xField = getField();
-    if ( xField.is() )
-        xField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= m_nFieldType;
     sal_Int32 nFormatKey = 0;
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::onConnectedDbColumn : have no aggregate !");
     if (m_xAggregateSet.is())
@@ -619,7 +615,6 @@ void OFormattedModel::onDisconnectedDbColumn()
         setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny(m_bOriginalNumeric));
         m_xOriginalFormatter = nullptr;
     }
-    m_nFieldType = DataType::OTHER;
     m_nKeyType   = NumberFormat::UNDEFINED;
     m_aNullDate  = DBTypeConversion::getStandardDate();
 }
