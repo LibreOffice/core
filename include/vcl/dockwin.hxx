@@ -111,6 +111,7 @@ private:
                     DECL_LINK( PopupModeEnd, FloatingWindow*, void );
     void            ImplEnableStartDocking()  { mbStartDockingEnabled = true; }
     bool            ImplStartDockingEnabled() { return mbStartDockingEnabled; }
+    void            ImplPreparePopupMode( FloatWinPopupFlags nFlags );
 
 public:
     ImplDockingWindowWrapper( const vcl::Window *pWindow );
@@ -133,6 +134,7 @@ public:
     void            Unlock();
     bool            IsLocked() const { return mbLocked;}
 
+    void            StartPopupMode( const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags );
     void            StartPopupMode( ToolBox* pParentToolBox, FloatWinPopupFlags nPopupModeFlags );
     bool            IsInPopupMode() const;
 
@@ -187,6 +189,7 @@ public:
     void Unlock( const vcl::Window *pWin );
     bool IsLocked( const vcl::Window *pWin );
 
+    void    StartPopupMode( const vcl::Window *pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags );
     void    StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWin );
     void    StartPopupMode( ToolBox *pParentToolBox, const vcl::Window *pWin, FloatWinPopupFlags nPopupModeFlags );
 
