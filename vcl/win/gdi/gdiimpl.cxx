@@ -1670,12 +1670,12 @@ void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
         WIN_Rectangle( mrParent.getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 }
 
-void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry )
 {
     // for NT, we can handover the array directly
     static_assert( sizeof( POINT ) == sizeof( SalPoint ), "must be the same size" );
 
-    POINT* pWinPtAry = reinterpret_cast<POINT*>(const_cast<SalPoint *>(pPtAry));
+    POINT* pWinPtAry = reinterpret_cast<POINT*>(pPtAry);
 
     // we assume there are at least 2 points (Polyline requires at least 2 point, see MSDN)
     // we must paint the endpoint for last line

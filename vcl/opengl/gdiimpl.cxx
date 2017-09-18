@@ -1547,7 +1547,7 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
     PostBatchDraw();
 }
 
-void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry )
 {
     VCL_GL_INFO("::drawPolyLine legacy -> redirecting to drawPolyLine");
     basegfx::B2DPolygon aPoly;

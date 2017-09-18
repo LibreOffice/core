@@ -796,6 +796,11 @@ Polygon::~Polygon()
     }
 }
 
+Point * Polygon::GetPointAry()
+{
+    return mpImplPolygon->mpPointAry;
+}
+
 const Point* Polygon::GetConstPointAry() const
 {
     return mpImplPolygon->mpPointAry;

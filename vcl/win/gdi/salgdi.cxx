@@ -788,7 +788,7 @@ void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     mpImpl->drawRect( nX, nY, nWidth, nHeight );
 }
 
-void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry )
 {
     mpImpl->drawPolyLine( nPoints, pPtAry );
 }

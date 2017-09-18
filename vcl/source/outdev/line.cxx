@@ -255,8 +255,8 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
             if(!bDone)
             {
-                const tools::Polygon aPolygon(aCandidate);
-                mpGraphics->DrawPolyLine(aPolygon.GetSize(), reinterpret_cast<const SalPoint*>(aPolygon.GetConstPointAry()), this);
+                tools::Polygon aPolygon(aCandidate);
+                mpGraphics->DrawPolyLine(aPolygon.GetSize(), reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()), this);
             }
         }
     }

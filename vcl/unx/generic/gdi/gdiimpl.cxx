@@ -1267,7 +1267,7 @@ void X11SalGraphicsImpl::drawRect( long nX, long nY, long nDX, long nDY )
                         nX, nY, nDX-1, nDY-1 );
 }
 
-void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
+void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, SalPoint *pPtAry )
 {
     drawPolyLine( nPoints, pPtAry, false );
 }

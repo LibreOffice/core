@@ -248,7 +248,7 @@ public:
 
     void                        DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
 
-    void                        DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
+    void                        DrawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry, const OutputDevice *pOutDev );
 
     void                        DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
 
@@ -454,7 +454,7 @@ protected:
 
     virtual void                drawRect( long nX, long nY, long nWidth, long nHeight ) = 0;
 
-    virtual void                drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void                drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry ) = 0;
 
     virtual void                drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
 

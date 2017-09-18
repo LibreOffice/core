@@ -173,6 +173,7 @@ public:
     void                Read( SvStream& rIStream );
     void                Write( SvStream& rOStream ) const;
 
+    Point *             GetPointAry();
     const Point*        GetConstPointAry() const;
     const PolyFlags*    GetConstFlagAry() const;
 

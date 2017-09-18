@@ -162,7 +162,7 @@ public:
     virtual void                    drawPixel( long nX, long nY, SalColor nSalColor ) override;
     virtual void                    drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
     virtual void                    drawRect( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual void                    drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
+    virtual void                    drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry ) override;
     virtual void                    drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
 
     virtual void                    drawPolyPolygon(
