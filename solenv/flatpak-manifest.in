@@ -184,10 +184,10 @@
                     "dest-filename": "external/tarballs/libabw-0.1.1.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libcdr-0.1.3.tar.bz2",
-                    "sha256": "5160bbbfefe52bd4880840fad2b07a512813e37bfaf8ccac062fca238f230f4d",
+                    "url": "https://dev-www.libreoffice.org/src/libcdr-0.1.4.tar.xz",
+                    "sha256": "e7a7e8b00a3df5798110024d7061fe9d1c3330277d2e4fa9213294f966a4a66d",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libcdr-0.1.3.tar.bz2"
+                    "dest-filename": "external/tarballs/libcdr-0.1.4.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libcmis-0.5.1.tar.gz",
@@ -214,10 +214,10 @@
                     "dest-filename": "external/tarballs/10d61fbaa6a06348823651b1bd7940fe-libexttextcat-3.4.4.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libfreehand-0.1.1.tar.bz2",
-                    "sha256": "45dab0e5d632eb51eeb00847972ca03835d6791149e9e714f093a9df2b445877",
+                    "url": "https://dev-www.libreoffice.org/src/libfreehand-0.1.2.tar.xz",
+                    "sha256": "0e422d1564a6dbf22a9af598535425271e583514c0f7ba7d9091676420de34ac",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libfreehand-0.1.1.tar.bz2"
+                    "dest-filename": "external/tarballs/libfreehand-0.1.2.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libgltf/libgltf-0.1.0.tar.gz",
@@ -286,10 +286,10 @@
                     "dest-filename": "external/tarballs/libvisio-0.1.5.tar.bz2"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libwpd-0.10.1.tar.bz2",
-                    "sha256": "efc20361d6e43f9ff74de5f4d86c2ce9c677693f5da08b0a88d603b7475a508d",
+                    "url": "https://dev-www.libreoffice.org/src/libwpd-0.10.2.tar.xz",
+                    "sha256": "323f68beaf4f35e5a4d7daffb4703d0566698280109210fa4eaa90dea27d6610",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libwpd-0.10.1.tar.bz2"
+                    "dest-filename": "external/tarballs/libwpd-0.10.2.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/libwpg-0.3.2.tar.xz",
@@ -304,10 +304,10 @@
                     "dest-filename": "external/tarballs/libwps-0.4.7.tar.xz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libzmf-0.0.1.tar.bz2",
-                    "sha256": "b69f7f6e94cf695c4b672ca65def4825490a1e7dee34c2126309b96d21a19e6b",
+                    "url": "https://dev-www.libreoffice.org/src/libzmf-0.0.2.tar.xz",
+                    "sha256": "27051a30cb057fdb5d5de65a1f165c7153dc76e27fe62251cbb86639eb2caf22",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libzmf-0.0.1.tar.bz2"
+                    "dest-filename": "external/tarballs/libzmf-0.0.2.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz",
