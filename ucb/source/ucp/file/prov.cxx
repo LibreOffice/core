@@ -398,8 +398,7 @@ FileProvider::setPropertyValue( const OUString& aPropertyName,
         aPropertyName == "HomeDirectory"      ||
         aPropertyName == "HostName" )
         return;
-    else
-        throw UnknownPropertyException( THROW_WHERE );
+    throw UnknownPropertyException( THROW_WHERE );
 }
 
 

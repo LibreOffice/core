@@ -277,14 +277,12 @@ Any SAL_CALL MenuBarWrapper::getByName(
     fillPopupControllerCache();
 
     PopupControllerCache::const_iterator pIter = m_aPopupControllerCache.find( aName );
-    if ( pIter != m_aPopupControllerCache.end() )
-    {
-        uno::Reference< frame::XDispatchProvider > xDispatchProvider;
-        xDispatchProvider = pIter->second.m_xDispatchProvider;
-        return uno::makeAny( xDispatchProvider );
-    }
-    else
+    if ( pIter == m_aPopupControllerCache.end() )
         throw container::NoSuchElementException();
+
+    uno::Reference< frame::XDispatchProvider > xDispatchProvider;
+    xDispatchProvider = pIter->second.m_xDispatchProvider;
+    return uno::makeAny( xDispatchProvider );
 }
 
 Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()

@@ -1408,17 +1408,9 @@ void globalTransfer_(
                             case NEW_NAME:
                             {
                                 // set new name -> set "Title" property...
-                                if ( setTitle( xCommandProcessorN,
+                                if ( !setTitle( xCommandProcessorN,
                                                rContext.xEnv,
                                                aNewTitle ) )
-                                {
-                                    // remember suggested title...
-                                    aDesiredName = aNewTitle;
-
-                                    // ... and try again.
-                                    bRetry = true;
-                                }
-                                else
                                 {
                                     // error setting title. Abort.
                                     throw ucb::CommandFailedException(
@@ -1426,6 +1418,11 @@ void globalTransfer_(
                                         uno::Reference< uno::XInterface >(),
                                         aExc );
                                 }
+                                // remember suggested title...
+                                aDesiredName = aNewTitle;
+
+                                // ... and try again.
+                                bRetry = true;
                                 break;
                             }
                         }
@@ -1757,7 +1754,6 @@ void UniversalContentBroker::globalTransfer(
                                     "handler",
                                     uno::Reference< uno::XInterface >(),
                                     aExc );
-//                                break;
 
                             case OVERWRITE:
                                 aTransferArg.NameClash

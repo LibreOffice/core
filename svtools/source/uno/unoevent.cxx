@@ -196,38 +196,34 @@ void getMacroFromAny(
         // else: unknown PropertyValue -> ignore
     }
 
-    if (bTypeOK)
+    if (!bTypeOK)
+        // no valid type: abort
+        throw IllegalArgumentException();
+
+    if (bNone)
     {
-        if (bNone)
-        {
-            // return empty macro
-            rMacro = SvxMacro( "", "" );
-        }
-        else
-        {
-            if (eType == STARBASIC)
-            {
-                // create macro and return
-                SvxMacro aMacro(sMacroVal, sLibVal, eType);
-                rMacro = aMacro;
-            }
-            else if (eType == EXTENDED_STYPE)
-            {
-                SvxMacro aMacro(sScriptVal, sScript);
-                rMacro = aMacro;
-            }
-            else
-            {
-                // we can't process type: abort
-                // TODO: JavaScript macros
-                throw IllegalArgumentException();
-            }
-        }
+        // return empty macro
+        rMacro = SvxMacro( "", "" );
     }
     else
     {
-        // no valid type: abort
-        throw IllegalArgumentException();
+        if (eType == STARBASIC)
+        {
+            // create macro and return
+            SvxMacro aMacro(sMacroVal, sLibVal, eType);
+            rMacro = aMacro;
+        }
+        else if (eType == EXTENDED_STYPE)
+        {
+            SvxMacro aMacro(sScriptVal, sScript);
+            rMacro = aMacro;
+        }
+        else
+        {
+            // we can't process type: abort
+            // TODO: JavaScript macros
+            throw IllegalArgumentException();
+        }
     }
 }
 

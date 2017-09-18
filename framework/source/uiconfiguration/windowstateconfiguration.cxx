@@ -444,15 +444,13 @@ void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rR
             Reference< XNameAccess > xNameAccess;
             Any a( m_xConfigAccess->getByName( rResourceURL ));
 
-            if ( a >>= xNameAccess )
-            {
-                WindowStateInfo& rWinStateInfo( impl_insertCacheAndReturnWinState( rResourceURL, xNameAccess ));
-                impl_fillStructFromSequence( rWinStateInfo, aPropSet );
-                m_bModified = true;
-                pIter = m_aResourceURLToInfoCache.find( rResourceURL );
-            }
-            else
+            if ( !(a >>= xNameAccess) )
                 throw NoSuchElementException();
+
+            WindowStateInfo& rWinStateInfo( impl_insertCacheAndReturnWinState( rResourceURL, xNameAccess ));
+            impl_fillStructFromSequence( rWinStateInfo, aPropSet );
+            m_bModified = true;
+            pIter = m_aResourceURLToInfoCache.find( rResourceURL );
         }
 
         if ( m_bModified && pIter != m_aResourceURLToInfoCache.end() )

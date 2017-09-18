@@ -98,16 +98,12 @@ OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const
     int index;
     if (( index = aName.indexOf( ':' )) > 0 )
     {
-        if ( aName.getLength() > index+1 )
-        {
-            OUString aAttributeName = getNamespaceValue( aName.copy( 0, index )) + "^" + aName.copy( index+1);
-            return aAttributeName;
-        }
-        else
-        {
+        if ( aName.getLength() < index )
             // attribute with namespace but without name "namespace:" is not allowed!!
             throw SAXException( "Attribute has no name only preceding namespace!", Reference< XInterface >(), Any() );
-        }
+
+        OUString aAttributeName = getNamespaceValue( aName.copy( 0, index )) + "^" + aName.copy( index+1);
+        return aAttributeName;
     }
 
     return aName;
@@ -135,13 +131,11 @@ OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const
 
     if ( index > 0 )
     {
-        if ( aName.getLength() > index+1 )
-            aElementName += aName.copy( index+1 );
-        else
-        {
+        if ( aName.getLength() < index )
             // attribute with namespace but without a name is not allowed (e.g. "cfg:" )
             throw SAXException( "Attribute has no name only preceding namespace!", Reference< XInterface >(), Any() );
-        }
+
+        aElementName += aName.copy( index+1 );
     }
     else
         aElementName += aName;
@@ -155,15 +149,11 @@ OUString XMLNamespaces::getNamespaceValue( const OUString& aNamespace ) const
         return m_aDefaultNamespace;
     else
     {
-        NamespaceMap::const_iterator p;
-        p = m_aNamespaceMap.find( aNamespace );
-        if ( p != m_aNamespaceMap.end() )
-            return p->second;
-        else
-        {
+        auto p = m_aNamespaceMap.find( aNamespace );
+        if ( p == m_aNamespaceMap.end() )
             // namespace not defined => throw exception!
             throw SAXException( "XML namespace used but not defined!", Reference< XInterface >(), Any() );
-        }
+        return p->second;
     }
 }
 

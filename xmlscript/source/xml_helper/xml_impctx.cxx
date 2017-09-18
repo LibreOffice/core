@@ -374,18 +374,13 @@ Sequence< OUString > DocumentHandlerImpl::getSupportedServiceNames()
 void DocumentHandlerImpl::initialize(
     Sequence< Any > const & arguments )
 {
-    MGuard guard( m_pMutex );
     Reference< xml::input::XRoot > xRoot;
-    if (arguments.getLength() == 1 &&
-        (arguments[ 0 ] >>= xRoot) &&
-        xRoot.is())
-    {
-        m_xRoot = xRoot;
-    }
-    else
-    {
+    if (arguments.getLength() != 1 ||
+        !(arguments[ 0 ] >>= xRoot) ||
+        !xRoot.is())
         throw RuntimeException( "missing root instance!" );
-    }
+    MGuard guard( m_pMutex );
+    m_xRoot = xRoot;
 }
 
 // XNamespaceMapping

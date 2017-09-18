@@ -74,14 +74,9 @@ namespace vcl { namespace unohelper {
         uno::Any aAny;
 
         SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
-        if ( nT == SotClipboardFormatId::STRING )
-        {
-            aAny <<= maText;
-        }
-        else
-        {
+        if ( nT != SotClipboardFormatId::STRING )
             throw datatransfer::UnsupportedFlavorException();
-        }
+        aAny <<= maText;
         return aAny;
     }
 

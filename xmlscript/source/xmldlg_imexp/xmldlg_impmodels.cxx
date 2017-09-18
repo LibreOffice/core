@@ -216,15 +216,10 @@ Reference< xml::input::XElement > ProgressBarElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement(
-            nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement(
+            nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void ProgressBarElement::endElement()
 {
@@ -258,14 +253,9 @@ Reference< xml::input::XElement > ScrollBarElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void ScrollBarElement::endElement()
 {
@@ -308,14 +298,9 @@ Reference< xml::input::XElement > SpinButtonElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void SpinButtonElement::endElement()
@@ -356,14 +341,9 @@ Reference< xml::input::XElement > FixedLineElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void FixedLineElement::endElement()
 {
@@ -396,14 +376,9 @@ Reference< xml::input::XElement > PatternFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void PatternFieldElement::endElement()
 {
@@ -444,14 +419,9 @@ Reference< xml::input::XElement > FormattedFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void FormattedFieldElement::endElement()
@@ -572,14 +542,9 @@ Reference< xml::input::XElement > TimeFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void TimeFieldElement::endElement()
 {
@@ -626,14 +591,9 @@ Reference< xml::input::XElement > NumericFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void NumericFieldElement::endElement()
 {
@@ -682,14 +642,9 @@ Reference< xml::input::XElement > DateFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void DateFieldElement::endElement()
 {
@@ -737,14 +692,9 @@ Reference< xml::input::XElement > CurrencyFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void CurrencyFieldElement::endElement()
 {
@@ -793,14 +743,9 @@ Reference< xml::input::XElement > FileControlElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void FileControlElement::endElement()
 {
@@ -837,14 +782,9 @@ Reference< xml::input::XElement > TreeControlElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void TreeControlElement::endElement()
 {
@@ -883,14 +823,9 @@ Reference< xml::input::XElement > ImageControlElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void ImageControlElement::endElement()
@@ -925,14 +860,9 @@ Reference< xml::input::XElement > TextElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void TextElement::endElement()
@@ -972,14 +902,9 @@ Reference< xml::input::XElement > FixedHyperLinkElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void FixedHyperLinkElement::endElement()
 {
@@ -1021,14 +946,9 @@ Reference< xml::input::XElement > TextFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void TextFieldElement::endElement()
 {
@@ -1203,14 +1123,9 @@ Reference< xml::input::XElement > RadioElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 // radiogroup
@@ -1484,14 +1399,9 @@ Reference< xml::input::XElement > CheckBoxElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 void CheckBoxElement::endElement()
 {
@@ -1550,14 +1460,9 @@ Reference< xml::input::XElement > ButtonElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
-    {
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
         throw xml::sax::SAXException( "expected event element!",  Reference< XInterface >(), Any() );
-    }
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void ButtonElement::endElement()
@@ -1777,14 +1682,9 @@ Reference< xml::input::XElement > StyleElement::startChildElement(
 void StyleElement::endElement()
 {
     OUString aStyleId( _xAttributes->getValueByUidName( m_xImport->XMLNS_DIALOGS_UID, "style-id" ) );
-    if (!aStyleId.isEmpty())
-    {
-        m_xImport->addStyle( aStyleId, this );
-    }
-    else
-    {
+    if (aStyleId.isEmpty())
         throw xml::sax::SAXException( "missing style-id attribute!", Reference< XInterface >(), Any() );
-    }
+    m_xImport->addStyle( aStyleId, this );
 }
 
 // styles
