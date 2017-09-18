@@ -68,55 +68,37 @@ public:
     css::uno::Sequence< css::beans::PropertyValue >
                         m_aModelProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
 
-    //@todo define this for debug only, except URL
-    bool            AsTemplate; //document is a template.
+    css::uno::Any       ComponentData;
+    css::uno::Any       FilterData;
+    OUString            FilterName; //internal filter name.
+    bool                ISSET_FilterName;
 
-    css::uno::Any
-                        ComponentData;
-    css::uno::Any
-                        FilterData;
-    OUString     FilterName; //internal filter name.
-    bool            ISSET_FilterName;
-    bool            Hidden; //load document, invisible.
-
-    OUString     HierarchicalDocumentName;
+    OUString            HierarchicalDocumentName;
 
     css::uno::Reference< css::io::XOutputStream >
                         OutputStream; //a stream to receive the document data for saving
-    bool            ISSET_OutputStream;
+    bool                ISSET_OutputStream;
     css::uno::Reference< css::io::XInputStream >
                         InputStream; //content of document.
-    bool            ISSET_InputStream;
+    bool                ISSET_InputStream;
 
-    bool            OpenNewView; //opens a new view for an already loaded document.
-    bool            Overwrite; //opens a new view for an already loaded document.
+    bool                ReadOnly; //open document readonly.
 
-    bool            Preview; //show preview.
-    bool            ReadOnly; //open document readonly.
+    OUString            URL;// FileName, URL of the document.
+    bool                ISSET_URL;
 
-        //not documented ... @todo remove?
-    bool            Silent; //prevents dialogs to query for more information.
-    bool            Unpacked;
-    OUString     URL;// FileName, URL of the document.
-    bool            ISSET_URL;
-    sal_Int16           Version; //storage version.
-
-    css::uno::Any
-                        ViewData;
-    sal_Int16           ViewId; //id of the initial view.
+    css::uno::Any       ViewData;
 
     // new framework objects
     css::uno::Reference< css::embed::XStorage >
                         Storage;
-    bool            ISSET_Storage;
+    bool                ISSET_Storage;
     css::uno::Reference< css::io::XStream >
                         Stream;
-    bool            ISSET_Stream;
-
-    bool            SetEmbedded;
+    bool                ISSET_Stream;
 
 protected:
-SAL_DLLPRIVATE void impl_init();
+    SAL_DLLPRIVATE void impl_init();
 };
 
 }
