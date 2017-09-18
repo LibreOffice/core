@@ -103,6 +103,8 @@ public:
     static const OUString GetSubStorageName( const SfxFilter& rFltr );
 };
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODT(SvStream &rStream);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

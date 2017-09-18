@@ -122,6 +122,7 @@ public:
     //EDITING: undo search&replace corrupt text when searching backward
     void testReplaceBackward();
     void testRedlineFrame();
+    void testThreadedException();
     void testBookmarkCopy();
     void testFdo69893();
     void testFdo70807();
@@ -276,6 +277,7 @@ public:
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
     CPPUNIT_TEST(testRedlineFrame);
+    CPPUNIT_TEST(testThreadedException);
     CPPUNIT_TEST(testBookmarkCopy);
     CPPUNIT_TEST(testFdo69893);
     CPPUNIT_TEST(testFdo70807);
@@ -518,6 +520,17 @@ void SwUiWriterTest::testRedlineFrame()
 
     // there is still exactly one frame
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+}
+
+void SwUiWriterTest::testThreadedException()
+{
+    SvFileStream aFileStream(m_directories.getURLFromSrc(DATA_DIRECTORY) + "threadedException.fodt", StreamMode::READ);
+
+    //threaded reading only kicks in if there is sufficient buffer to make it worthwhile, so read
+    //from a SvFileStream to ensure that
+    bool bRes = TestImportFODT(aFileStream);
+
+    CPPUNIT_ASSERT(!bRes);
 }
 
 void SwUiWriterTest::testBookmarkCopy()
