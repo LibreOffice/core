@@ -675,8 +675,6 @@ using namespace ::com::sun::star;
         catch(css::uno::Exception&)
         {
         }
-#else
-        (void) bSuccess;
 #endif
         const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         ScopedVclPtrInstance<OSQLMessageBox> aMsg(this, DBA_RES(pMessage), OUString());
