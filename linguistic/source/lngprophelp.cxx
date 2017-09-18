@@ -342,8 +342,6 @@ PropertyHelper_Spell::PropertyHelper_Spell(
     AddPropNames( aSP, SAL_N_ELEMENTS(aSP) );
     SetDefaultValues();
     GetCurrentValues();
-
-    nResMaxNumberOfSuggestions = GetDefaultNumberOfSuggestions();
 }
 
 
@@ -474,7 +472,6 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
 
     // return value is default value unless there is an explicitly supplied
     // temporary value
-    nResMaxNumberOfSuggestions  = GetDefaultNumberOfSuggestions();
     bResIsSpellWithDigits       = bIsSpellWithDigits;
     bResIsSpellCapitalization   = bIsSpellCapitalization;
     bResIsSpellUpperCase        = bIsSpellUpperCase;
@@ -487,7 +484,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
         {
             if ( pVal[i].Name == UPN_MAX_NUMBER_OF_SUGGESTIONS )
             {
-                pVal[i].Value >>= nResMaxNumberOfSuggestions;
+                // special value that is not part of the property set and thus needs to be handled differently
             }
             else
             {

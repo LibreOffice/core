@@ -175,7 +175,6 @@ class LNG_DLLPUBLIC PropertyHelper_Spell :
     bool        bIsSpellCapitalization;
 
     // return values, will be set to default value or current temporary value
-    sal_Int16   nResMaxNumberOfSuggestions; // special value that is not part of the property set and thus needs to be handled differently
     bool        bResIsSpellUpperCase;
     bool        bResIsSpellWithDigits;
     bool        bResIsSpellCapitalization;
@@ -201,8 +200,6 @@ public:
     // XPropertyChangeListener
     virtual void SAL_CALL
         propertyChange( const css::beans::PropertyChangeEvent& rEvt ) override;
-
-    static sal_Int16 GetDefaultNumberOfSuggestions() { return 16; }
 
     bool        IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
     bool        IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
