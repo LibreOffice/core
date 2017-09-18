@@ -62,11 +62,6 @@ namespace drawinglayer
             basegfx::B3DPoint                               maPlanePoint;
             double                                          mfLightPlaneScalar;
 
-            /*  the shadow color used for sub-primitives. Can stay at black since
-                the encapsulating 2d shadow primitive will contain the color
-             */
-            basegfx::BColor                                 maPrimitiveColor;
-
             /// flag if shadow plane projection preparation leaded to valid results
             bool                                            mbShadowProjectionIsValid : 1;
 

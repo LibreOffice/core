@@ -156,7 +156,7 @@ namespace drawinglayer
                             mpPrimitive2DSequence->push_back(
                                 new primitive2d::PolygonHairlinePrimitive2D(
                                     a2DHairline,
-                                    maPrimitiveColor));
+                                    basegfx::BColor()));
                         }
                     }
                     break;
@@ -187,7 +187,7 @@ namespace drawinglayer
                             mpPrimitive2DSequence->push_back(
                                 new primitive2d::PolyPolygonColorPrimitive2D(
                                     a2DFill,
-                                    maPrimitiveColor));
+                                    basegfx::BColor()));
                         }
                     }
                     break;
@@ -217,7 +217,6 @@ namespace drawinglayer
             maShadowPlaneNormal(),
             maPlanePoint(),
             mfLightPlaneScalar(0.0),
-            maPrimitiveColor(),
             mbShadowProjectionIsValid(false),
             mbConvert(false),
             mbUseProjection(false)
