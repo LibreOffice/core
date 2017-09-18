@@ -165,7 +165,6 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
         ,   m_xFramesHelper         (                                               )
         ,   m_xDispatchHelper       (                                               )
         ,   m_eLoadState            ( E_NOTSET                                      )
-        ,   m_xLastFrame            (                                               )
         ,   m_aInteractionRequest   (                                               )
         ,   m_bSuspendQuickstartVeto( false                                     )
         ,   m_sName                 (                                               )
@@ -1104,7 +1103,6 @@ void SAL_CALL Desktop::disposing()
     // At least clean up other member references.
     m_xDispatchHelper.clear();
     m_xFramesHelper.clear();
-    m_xLastFrame.clear();
     m_xContext.clear();
 
     m_xPipeTerminator.clear();
@@ -1185,11 +1183,11 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
     SolarMutexGuard g;
     if( m_eLoadState != E_INTERACTION )
     {
-        m_xLastFrame.clear();
         m_eLoadState = E_FAILED;
         if( aEvent.State == css::frame::DispatchResultState::SUCCESS )
         {
-            if ( aEvent.Result >>= m_xLastFrame )
+            css::uno::Reference< css::frame::XFrame > xLastFrame; /// last target of "loadComponentFromURL()"!
+            if ( aEvent.Result >>= xLastFrame )
                 m_eLoadState = E_SUCCESSFUL;
         }
     }
