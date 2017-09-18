@@ -38,6 +38,7 @@ namespace oox { namespace ppt {
             { MS_FILLCOLOR,         "fillColor",                    "FillColor" },
             { MS_FILLCOLOR,         "fillcolor",                    "FillColor" },
             { MS_FILLTYPE,          "fill.type",                    "FillStyle" },
+            { MS_FILLTYPE,          "fill.on",                      "FillOn" },
             { MS_STROKECOLOR,       "stroke.color",                 "LineColor" },
             { MS_STROKEON,          "stroke.on",                    "LineStyle" },
             { MS_STYLECOLOR,        "style.color",                  "CharColor" },

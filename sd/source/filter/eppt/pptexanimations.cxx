@@ -1451,6 +1451,17 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
                 aDest += "solid";
         }
     }
+    else if (rAttributeName == "FillOn")
+    {
+        bool bFillOn;
+        if ( rSourceValue >>= bFillOn )
+        {
+            if ( bFillOn )
+                aDest += "true";
+            else
+                aDest += "false";
+        }
+    }
     else if ( rAttributeName == "LineStyle" )
     {
         css::drawing::LineStyle eLineStyle;

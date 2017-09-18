@@ -23,6 +23,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <rtl/ustring.hxx>
 
 #include "oox/helper/attributelist.hxx"
@@ -139,6 +140,22 @@ namespace oox { namespace ppt {
         return bRet;
     }
 
+    bool convertFillStyle( const OUString& rString, css::drawing::FillStyle& rValue )
+    {
+        if( rString == "solid" )
+        {
+            rValue = css::drawing::FillStyle::FillStyle_SOLID;
+            return true;
+        }
+        else if( rString == "none" )
+        {
+            rValue = css::drawing::FillStyle::FillStyle_NONE;
+            return true;
+        }
+        else
+            return false;
+    }
+
     AnimVariantContext::AnimVariantContext( FragmentHandler2 const & rParent, sal_Int32 aElement, Any & aValue )
         : FragmentHandler2( rParent )
             , mnElement( aElement )
@@ -186,8 +203,18 @@ namespace oox { namespace ppt {
         case PPT_TOKEN( strVal ):
         {
             OUString val = rAttribs.getString( XML_val, OUString() );
-            convertMeasure( val ); // ignore success or failure if it fails, use as is
-            maValue <<= val;
+            if( convertMeasure( val ) )
+            {
+                maValue <<= val;
+            }
+            else
+            {
+                css::drawing::FillStyle eFillStyle;
+                if( convertFillStyle( val, eFillStyle ) )
+                    maValue <<= eFillStyle;
+                else
+                    maValue <<= val;
+            }
             return this;
         }
         default:
