@@ -236,6 +236,8 @@ private:
     sal_Int32                                       m_ndxaLnn;
     sal_Int32                                       m_nLnnMin;
 
+    std::vector<css::uno::Reference<css::drawing::XShape>>    m_xRelativeWidthShapes;
+
     // The "Link To Previous" flag indicates whether the header/footer
     // content should be taken from the previous section
     bool                                            m_bDefaultHeaderLinkToPrevious;
@@ -346,6 +348,8 @@ public:
     void SetLnc( sal_Int32 nValue )    { m_nLnc = nValue; }
     void SetdxaLnn( sal_Int32 nValue ) { m_ndxaLnn = nValue; }
     void SetLnnMin( sal_Int32 nValue ) { m_nLnnMin = nValue; }
+
+    void addRelativeWidthShape( css::uno::Reference<css::drawing::XShape> xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
 
     // determine which style gets the borders
     void ApplyBorderToPageStyles( const css::uno::Reference< css::container::XNameContainer >& xStyles,
