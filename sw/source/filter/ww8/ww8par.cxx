@@ -4656,7 +4656,9 @@ void SwWW8ImplReader::StoreMacroCmds()
 {
     if (m_xWwFib->m_lcbCmds)
     {
-        m_pTableStream->Seek(m_xWwFib->m_fcCmds);
+        bool bValidPos = checkSeek(*m_pTableStream, m_xWwFib->m_fcCmds);
+        if (!bValidPos)
+            return;
 
         uno::Reference < embed::XStorage > xRoot(m_pDocShell->GetStorage());
 
