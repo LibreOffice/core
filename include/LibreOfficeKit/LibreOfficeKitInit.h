@@ -76,6 +76,9 @@ extern "C"
 
 #else
     #pragma warning(disable:4996)
+    #if !defined WIN32_LEAN_AND_MEAN
+        #define WIN32_LEAN_AND_MEAN
+    #endif
     #include  <windows.h>
     #define TARGET_LIB        "sofficeapp" ".dll"
     #define TARGET_MERGED_LIB "mergedlo" ".dll"

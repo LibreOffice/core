@@ -31,14 +31,6 @@
 
 #include <vector>
 
-#if defined _MSC_VER
-#pragma warning(push,1)
-#endif
-#include <windows.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-
 class CDataFormatTranslatorUNO : public
     cppu::WeakImplHelper< css::datatransfer::XDataFormatTranslator,
                           css::lang::XServiceInfo >

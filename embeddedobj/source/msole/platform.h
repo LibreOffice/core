@@ -28,7 +28,11 @@
 #pragma warning(disable: 4548 4555 4917)
 #endif
 
+#if !defined WIN32_LEAN_AND_MEAN
+# define WIN32_LEAN_AND_MEAN
+#endif
 #include "windows.h"
+#include <ole2.h>
 
 #if defined _MSC_VER
 #pragma warning(pop)
