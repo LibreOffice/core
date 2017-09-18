@@ -1108,9 +1108,10 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
         auto& pFormat = vFormatsToConnect.front();
         const bool bAlreadyConnected(lcl_ObjConnected(pFormat, pSib));
         if(!bAlreadyConnected || lcl_InHeaderOrFooter(*pFormat))
+        {
             pFormat->MakeFrames();
-        if(bAlreadyConnected || lcl_ObjConnected(pFormat, pSib))
             pFirstRequeued = nullptr;
+        }
         else
         {
             if(pFirstRequeued == pFormat)
