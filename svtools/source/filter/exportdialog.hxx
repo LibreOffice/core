@@ -126,6 +126,7 @@ private:
 
     bool                mbIsPixelFormat;
     bool                mbExportSelection;
+    bool                mbGraphicsSource;   // whether source document is graphics (Draw, Impress) or not (Calc, Writer)
 
     sal_Int32           mnInitialResolutionUnit;
 
@@ -173,7 +174,7 @@ public:
                         ExportDialog( FltCallDialogParameter& rPara,
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                             const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
-                            bool bExportSelection, bool bIsExportVectorFormat,
+                            bool bExportSelection, bool bIsExportVectorFormat, bool bGraphicsSource,
                             const css::uno::Reference< css::graphic::XGraphic >& rxGraphic = nullptr);
                         virtual ~ExportDialog() override;
                         virtual void dispose() override;
