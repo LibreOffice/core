@@ -37,28 +37,28 @@
 
 SwFormatFlyCnt::SwFormatFlyCnt( SwFrameFormat *pFrameFormat )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),
-    pTextAttr( nullptr ),
-    pFormat( pFrameFormat )
+    m_pTextAttr( nullptr ),
+    m_pFormat( pFrameFormat )
 {
 }
 
 bool SwFormatFlyCnt::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return( pTextAttr && static_cast<const SwFormatFlyCnt&>(rAttr).pTextAttr &&
-            pTextAttr->GetStart() == static_cast<const SwFormatFlyCnt&>(rAttr).pTextAttr->GetStart() &&
-            pFormat == static_cast<const SwFormatFlyCnt&>(rAttr).GetFrameFormat() );
+    return( m_pTextAttr && static_cast<const SwFormatFlyCnt&>(rAttr).m_pTextAttr &&
+            m_pTextAttr->GetStart() == static_cast<const SwFormatFlyCnt&>(rAttr).m_pTextAttr->GetStart() &&
+            m_pFormat == static_cast<const SwFormatFlyCnt&>(rAttr).GetFrameFormat() );
 }
 
 SfxPoolItem* SwFormatFlyCnt::Clone( SfxItemPool* ) const
 {
-    return new SwFormatFlyCnt( pFormat );
+    return new SwFormatFlyCnt( m_pFormat );
 }
 
 SwTextFlyCnt::SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStartPos )
     : SwTextAttr( rAttr, nStartPos )
 {
-    rAttr.pTextAttr = this;
+    rAttr.m_pTextAttr = this;
     SetHasDummyChar(true);
 }
 
@@ -214,7 +214,7 @@ SwFlyInContentFrame *SwTextFlyCnt::GetFlyFrame_( const SwFrame *pCurrFrame )
         return nullptr;
     }
 
-    SwIterator<SwFlyFrame,SwFormat> aIter( *GetFlyCnt().pFormat );
+    SwIterator<SwFlyFrame,SwFormat> aIter( *GetFlyCnt().m_pFormat );
     assert(pCurrFrame->IsTextFrame());
     SwFrame* pFrame = aIter.First();
     if ( pFrame )

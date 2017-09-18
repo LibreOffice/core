@@ -32,8 +32,8 @@ class SwTextFlyCnt;
 class SwFormatFlyCnt : public SfxPoolItem
 {
     friend class SwTextFlyCnt;
-    SwTextFlyCnt* pTextAttr;
-    SwFrameFormat* pFormat; ///< My Fly/DrawFrame-format.
+    SwTextFlyCnt* m_pTextAttr;
+    SwFrameFormat* m_pFormat; ///< My Fly/DrawFrame-format.
     SwFormatFlyCnt& operator=(const SwFormatFlyCnt& rFlyCnt) = delete;
 
 public:
@@ -42,11 +42,11 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    SwFrameFormat *GetFrameFormat() const { return pFormat; }
+    SwFrameFormat *GetFrameFormat() const { return m_pFormat; }
     /// For Undo: delete the FlyFrameFormat "logically"; it is kept in Undo-object.
-    void SetFlyFormat( SwFrameFormat* pNew = nullptr )   { pFormat = pNew; }
+    void SetFlyFormat( SwFrameFormat* pNew = nullptr )   { m_pFormat = pNew; }
 
-    const SwTextFlyCnt *GetTextFlyCnt() const { return pTextAttr; }
+    const SwTextFlyCnt *GetTextFlyCnt() const { return m_pTextAttr; }
 };
 
 #endif
