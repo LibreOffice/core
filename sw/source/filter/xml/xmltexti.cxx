@@ -158,7 +158,7 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
 SwXMLTextImportHelper::~SwXMLTextImportHelper()
 {
     // the redline helper destructor sets properties on the document
-    // and may through an exception while doing so... catch this
+    // and may throw an exception while doing so... catch this
     try
     {
         delete pRedlineHelper;
