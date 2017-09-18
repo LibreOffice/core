@@ -393,7 +393,7 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 {
-    const double fLocalEPS = 700.1;
+    const double fLocalEPS = 1000.1;
     const std::vector<OUString> aTestFiles =
     {
         "legend_on_right_side.odp",
