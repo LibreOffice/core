@@ -61,7 +61,6 @@ SvxHatchTabPage::SvxHatchTabPage
     m_pnHatchingListState ( nullptr ),
     m_pnColorListState    ( nullptr ),
 
-    m_aXFStyleItem        ( drawing::FillStyle_HATCH ),
     m_aXHatchItem         ( OUString(), XHatch() ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
@@ -106,7 +105,7 @@ SvxHatchTabPage::SvxHatchTabPage
     m_ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // setting the output device
-    m_rXFSet.Put( m_aXFStyleItem );
+    m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_HATCH) );
     m_rXFSet.Put( m_aXHatchItem );
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pHatchLB->SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl ) );

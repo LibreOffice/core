@@ -93,7 +93,6 @@ SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& r
 
     m_pnPatternListState  ( nullptr ),
     m_pnColorListState    ( nullptr ),
-    m_aXFStyleItem        ( drawing::FillStyle_BITMAP ),
     m_aXPatternItem       ( OUString(), Graphic() ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
@@ -119,7 +118,7 @@ SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& r
     SetExchangeSupport();
 
     // setting the output device
-    m_rXFSet.Put( m_aXFStyleItem );
+    m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );
     m_rXFSet.Put( m_aXPatternItem );
 
     m_pBtnAdd->SetClickHdl( LINK( this, SvxPatternTabPage, ClickAddHdl_Impl ) );

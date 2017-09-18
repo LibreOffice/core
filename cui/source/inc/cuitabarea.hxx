@@ -378,7 +378,6 @@ private:
     ChangeType*         m_pnGradientListState;
     ChangeType*         m_pnColorListState;
 
-    XFillStyleItem      m_aXFStyleItem;
     XFillGradientItem   m_aXGradientItem;
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
@@ -448,7 +447,6 @@ private:
     ChangeType*         m_pnHatchingListState;
     ChangeType*         m_pnColorListState;
 
-    XFillStyleItem      m_aXFStyleItem;
     XFillHatchItem      m_aXHatchItem;
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
@@ -527,7 +525,6 @@ private:
 
     XBitmapListRef             m_pBitmapList;
     ChangeType*                m_pnBitmapListState;
-    XFillStyleItem             m_aXFStyleItem;
     XFillBitmapItem            m_aXBitmapItem;
 
     double                     m_fObjectWidth;
@@ -603,7 +600,6 @@ private:
     ChangeType*         m_pnPatternListState;
     ChangeType*         m_pnColorListState;
 
-    XFillStyleItem      m_aXFStyleItem;
     XFillBitmapItem     m_aXPatternItem;
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
@@ -699,7 +695,6 @@ private:
 
     ChangeType*         pnColorListState;
 
-    XFillStyleItem      aXFStyleItem;
     XFillColorItem      aXFillColorItem;
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;

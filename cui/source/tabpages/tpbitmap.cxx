@@ -80,7 +80,6 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_pBitmapList( nullptr ),
 
     m_pnBitmapListState( nullptr ),
-    m_aXFStyleItem( drawing::FillStyle_BITMAP ),
     m_aXBitmapItem( OUString(), Graphic() ),
     m_fObjectWidth(0.0),
     m_fObjectHeight(0.0),
@@ -111,7 +110,7 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     get(m_pBtnImport, "BTN_IMPORT");
 
     // setting the output device
-    m_rXFSet.Put( m_aXFStyleItem );
+    m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );
     m_rXFSet.Put( m_aXBitmapItem );
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 

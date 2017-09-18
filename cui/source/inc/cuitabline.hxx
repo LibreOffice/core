@@ -263,8 +263,6 @@ private:
     const SfxItemSet&   rOutAttrs;
     XDash               aDash;
 
-    XLineStyleItem      aXLStyle;
-    XLineWidthItem      aXWidth;
     XLineDashItem       aXDash;
     XLineColorItem      aXColor;
     XLineAttrSetItem    aXLineAttr;
@@ -344,8 +342,6 @@ private:
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;
 
-    XLineStyleItem      aXLStyle;
-    XLineWidthItem      aXWidth;
     XLineColorItem      aXColor;
     XLineAttrSetItem    aXLineAttr;
     SfxItemSet&         rXLSet;

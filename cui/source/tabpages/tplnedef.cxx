@@ -63,8 +63,6 @@ SvxLineDefTabPage::SvxLineDefTabPage
               , &rInAttrs ),
     rOutAttrs       ( rInAttrs ),
 
-    aXLStyle            ( drawing::LineStyle_DASH ),
-    aXWidth             ( XOUT_WIDTH ),
     aXDash              ( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ),
     aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( rInAttrs.GetPool() ),
@@ -117,8 +115,8 @@ SvxLineDefTabPage::SvxLineDefTabPage
     DBG_ASSERT( pPool, "Where is the pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
-    rXLSet.Put( aXLStyle );
-    rXLSet.Put( aXWidth );
+    rXLSet.Put( XLineStyleItem(drawing::LineStyle_DASH) );
+    rXLSet.Put( XLineWidthItem(XOUT_WIDTH) );
     rXLSet.Put( aXDash );
     rXLSet.Put( aXColor );
 

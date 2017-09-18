@@ -61,7 +61,6 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pnGradientListState ( nullptr ),
     m_pnColorListState    ( nullptr ),
 
-    m_aXFStyleItem        ( drawing::FillStyle_GRADIENT ),
     m_aXGradientItem      ( OUString(), XGradient( COL_BLACK, COL_WHITE ) ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() )
@@ -101,7 +100,7 @@ SvxGradientTabPage::SvxGradientTabPage
     m_pSliderBorder->SetRange(Range(0,100));
 
     // setting the output device
-    m_rXFSet.Put( m_aXFStyleItem );
+    m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_GRADIENT) );
     m_rXFSet.Put( m_aXGradientItem );
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
