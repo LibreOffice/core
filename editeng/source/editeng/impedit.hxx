@@ -520,8 +520,6 @@ private:
     Link<EditView*,void>           maBeginDropHdl;
     Link<EditView*,void>           maEndDropHdl;
 
-    std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenCharsTable;
-
     bool            bKernAsianPunctuation:1;
     bool            bAddExtLeading:1;
     bool            bIsFormatting:1;
@@ -1036,7 +1034,7 @@ public:
     void                SetAddExtLeading( bool b );
     bool                IsAddExtLeading() const { return bAddExtLeading; }
 
-    std::shared_ptr<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
+    static std::shared_ptr<SvxForbiddenCharactersTable> GetForbiddenCharsTable();
     static void         SetForbiddenCharsTable( const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */

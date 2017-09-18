@@ -4339,12 +4339,9 @@ void ImpEditEngine::IndentBlock( EditView* pEditView, bool bRight )
     }
 }
 
-std::shared_ptr<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTable() const
+std::shared_ptr<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTable()
 {
-    std::shared_ptr<SvxForbiddenCharactersTable> xF = xForbiddenCharsTable;
-    if (!xF)
-        xF = EditDLL::Get().GetGlobalData()->GetForbiddenCharsTable();
-    return xF;
+    return EditDLL::Get().GetGlobalData()->GetForbiddenCharsTable();
 }
 
 void ImpEditEngine::SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars)
