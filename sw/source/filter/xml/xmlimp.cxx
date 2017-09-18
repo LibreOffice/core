@@ -1588,9 +1588,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODT(SvStream &rStream)
     //by the xml filter and during the init, while its considered uninitialized,
     //setting a property will inform the document its modified, which attempts
     //to update the properties, which throws cause the properties are uninitialized
-//    xDocSh->SetLoading(SfxLoadedFlags::NONE);
+    xDocSh->SetLoading(SfxLoadedFlags::NONE);
     bool ret = xFilter->filter(aArgs);
-//    xDocSh->SetLoading(SfxLoadedFlags::ALL);
+    xDocSh->SetLoading(SfxLoadedFlags::ALL);
 
     return ret;
 }
