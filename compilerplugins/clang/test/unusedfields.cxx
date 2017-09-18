@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <ostream>
+#include <com/sun/star/uno/Any.hxx>
 
 struct Foo
 // expected-error@-1 {{read m_foo1 [loplugin:unusedfields]}}
@@ -23,13 +24,15 @@ struct Bar
 // expected-error@-4 {{read m_bar6 [loplugin:unusedfields]}}
 // expected-error@-5 {{read m_barfunctionpointer [loplugin:unusedfields]}}
 // expected-error@-6 {{read m_bar8 [loplugin:unusedfields]}}
-// expected-error@-7 {{write m_bar1 [loplugin:unusedfields]}}
-// expected-error@-8 {{write m_bar2 [loplugin:unusedfields]}}
-// expected-error@-9 {{write m_bar3 [loplugin:unusedfields]}}
-// expected-error@-10 {{write m_bar3b [loplugin:unusedfields]}}
-// expected-error@-11 {{write m_bar4 [loplugin:unusedfields]}}
-// expected-error@-12 {{write m_bar7 [loplugin:unusedfields]}}
-// expected-error@-13 {{write m_barfunctionpointer [loplugin:unusedfields]}}
+// expected-error@-7 {{read m_bar10 [loplugin:unusedfields]}}
+// expected-error@-8 {{write m_bar1 [loplugin:unusedfields]}}
+// expected-error@-9 {{write m_bar2 [loplugin:unusedfields]}}
+// expected-error@-10 {{write m_bar3 [loplugin:unusedfields]}}
+// expected-error@-11 {{write m_bar3b [loplugin:unusedfields]}}
+// expected-error@-12 {{write m_bar4 [loplugin:unusedfields]}}
+// expected-error@-13 {{write m_bar7 [loplugin:unusedfields]}}
+// expected-error@-14 {{write m_barfunctionpointer [loplugin:unusedfields]}}
+// expected-error@-15 {{write m_bar9 [loplugin:unusedfields]}}
 {
     int  m_bar1;
     int  m_bar2 = 1;
@@ -42,6 +45,8 @@ struct Bar
     int m_bar7[5];
     int m_bar8;
     int m_barstream;
+    int m_bar9;
+    int m_bar10;
 
     // check that we see reads of fields like m_foo1 when referred to via constructor initializer
     Bar(Foo const & foo) : m_bar1(foo.m_foo1) {}
@@ -80,6 +85,20 @@ struct Bar
     {
         char tmp[5];
         return tmp[m_bar8];
+    }
+
+    // check that we don't see reads when calling operator>>=
+    void bar9()
+    {
+        css::uno::Any any;
+        any >>= m_bar9;
+    }
+
+    // check that we see don't see writes when calling operator<<=
+    void bar10()
+    {
+        css::uno::Any any;
+        any <<= m_bar10;
     }
 };
 

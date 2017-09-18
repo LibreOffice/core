@@ -493,11 +493,16 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
         {
             // check for calls to ReadXXX() type methods and the operator>>= methods on Any.
             const FunctionDecl * calleeFunctionDecl = callExpr->getDirectCallee();
-            if (calleeFunctionDecl && calleeFunctionDecl->getIdentifier())
+            if (calleeFunctionDecl)
             {
+                // FIXME perhaps a better solution here would be some kind of SAL_PARAM_WRITEONLY attribute
+                // which we could scatter around.
                 std::string name = calleeFunctionDecl->getNameAsString();
                 std::transform(name.begin(), name.end(), name.begin(), easytolower);
-                if (startswith(name, "read") || name.find(">>=") != std::string::npos)
+                if (startswith(name, "read"))
+                    // this is a write-only call
+                    ;
+                else if (name.find(">>=") != std::string::npos && callExpr->getArg(1) == child)
                     // this is a write-only call
                     ;
                 else if (name == "clear" || name == "dispose" || name == "disposeAndClear" || name == "swap")
@@ -650,7 +655,9 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
                     bPotentiallyWrittenTo = true;
                 }
                 else if (IsPassedByNonConst(fieldDecl, child, operatorCallExpr, calleeFunctionDecl))
+                {
                     bPotentiallyWrittenTo = true;
+                }
             }
             else
                 bPotentiallyWrittenTo = true; // conservative, could improve
@@ -787,14 +794,14 @@ bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * c
     {
         for (unsigned i = 0; i < len; ++i)
             if (callExpr.getArg(i) == child)
-                if (loplugin::TypeCheck(calleeFunctionDecl.getParamDecl(i)->getType()).NonConst().Pointer())
+                if (loplugin::TypeCheck(calleeFunctionDecl.getParamDecl(i)->getType()).Pointer().NonConst())
                     return true;
     }
     else
     {
         for (unsigned i = 0; i < len; ++i)
             if (callExpr.getArg(i) == child)
-                if (loplugin::TypeCheck(calleeFunctionDecl.getParamDecl(i)->getType()).NonConst().LvalueReference())
+                if (loplugin::TypeCheck(calleeFunctionDecl.getParamDecl(i)->getType()).LvalueReference().NonConst())
                     return true;
     }
     return false;

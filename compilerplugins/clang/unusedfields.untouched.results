@@ -24,14 +24,6 @@ connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
-connectivity/source/inc/OTypeInfo.hxx:31
-    connectivity::OTypeInfo aTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:32
-    connectivity::OTypeInfo aLocalTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:34
-    connectivity::OTypeInfo nPrecision sal_Int32
-connectivity/source/inc/OTypeInfo.hxx:36
-    connectivity::OTypeInfo nMaximumScale sal_Int16
 cppu/source/threadpool/threadpool.cxx:377
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
@@ -52,6 +44,8 @@ include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
+include/oox/vml/vmlshapecontext.hxx:116
+    oox::vml::ShapeTypeContext m_pShapeType std::shared_ptr<ShapeType>
 include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
@@ -169,7 +163,7 @@ svl/source/crypto/cryptosign.cxx:280
 svl/source/crypto/cryptosign.cxx:281
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo2/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
@@ -192,6 +186,14 @@ unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
+vcl/inc/unx/cpdmgr.hxx:60
+    psp::CPDPrinterOption name class rtl::OUString
+vcl/inc/unx/cpdmgr.hxx:61
+    psp::CPDPrinterOption default_value class rtl::OUString
+vcl/inc/unx/cpdmgr.hxx:62
+    psp::CPDPrinterOption num_supported_values int
+vcl/inc/unx/cpdmgr.hxx:63
+    psp::CPDPrinterOption supported_values std::vector<OUString>
 vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:35

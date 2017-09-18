@@ -69,6 +69,7 @@ for k, definitions in sourceLocationToDefinitionMap.iteritems():
 
 # Calculate untouched or untouched-except-for-in-constructor
 untouchedSet = set()
+untouchedSetD = set()
 for d in definitionSet:
     if d in touchedFromOutsideSet or d in touchedFromInsideSet:
         continue
@@ -100,11 +101,12 @@ for d in definitionSet:
     if "::sfx2::sidebar::ControllerItem" in fieldType:
         continue
     untouchedSet.add((d[0] + " " + d[1] + " " + fieldType, srcLoc))
+    untouchedSetD.add(d)
 
 writeonlySet = set()
 for d in definitionSet:
     parentClazz = d[0];
-    if d in readFromSet:
+    if d in readFromSet or d in untouchedSetD:
         continue
     srcLoc = definitionToSourceLocationMap[d];
     # this is all representations of on-disk data structures
@@ -138,9 +140,12 @@ for d in definitionSet:
     if "Guard" in fieldType:
         continue
     # these are just all model classes
-    if (srcLoc.startswith("oox/") or srcLoc.startswith("lotuswordpro/")
-        or srcLoc.startswith("include/oox/") or srcLoc.startswith("include/filter/")
-        or srcLoc.startswith("hwpfilter/") or srcLoc.startswith("filter/")):
+    if (srcLoc.startswith("oox/")
+        or srcLoc.startswith("lotuswordpro/")
+        or srcLoc.startswith("include/oox/")
+        or srcLoc.startswith("include/filter/")
+        or srcLoc.startswith("hwpfilter/")
+        or srcLoc.startswith("filter/")):
         continue
 
     writeonlySet.add((d[0] + " " + d[1] + " " + definitionToTypeMap[d], srcLoc))
@@ -149,7 +154,7 @@ for d in definitionSet:
 readonlySet = set()
 for d in definitionSet:
     parentClazz = d[0];
-    if d in writeToSet:
+    if d in writeToSet or d in untouchedSetD:
         continue
     fieldType = definitionToTypeMap[d]
     srcLoc = definitionToSourceLocationMap[d];
