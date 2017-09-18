@@ -298,7 +298,7 @@ namespace svt
     {
         Control::Paint(rRenderContext, rClientRect);
         if (HasFocus())
-            ShowFocus(aFocusRect);
+            ShowFocus(tools::Rectangle());
     }
 
 
@@ -307,7 +307,7 @@ namespace svt
         switch (rEvt.GetType())
         {
             case MouseNotifyEvent::GETFOCUS:
-                ShowFocus(aFocusRect);
+                ShowFocus(tools::Rectangle());
                 break;
             case MouseNotifyEvent::LOSEFOCUS:
                 HideFocus();

@@ -279,7 +279,6 @@ namespace svt
     class SVT_DLLPUBLIC CheckBoxControl : public Control
     {
         VclPtr<CheckBox>             pBox;
-        tools::Rectangle                    aFocusRect;
         Link<VclPtr<CheckBox>,void>  m_aClickLink;
         Link<LinkParamNone*,void>    m_aModifyLink;
 
