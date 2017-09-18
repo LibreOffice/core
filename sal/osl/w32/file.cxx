@@ -19,8 +19,16 @@
 
 #include <systools/win32/uwinapi.h>
 
+#include <osl/file.hxx>
+#include <rtl/alloc.h>
+#include <rtl/byteseq.h>
+
 #include "file_url.hxx"
 #include "file_error.hxx"
+
+#include <cassert>
+#include <algorithm>
+#include <limits>
 
 #ifdef max /* conflict w/ std::numeric_limits<T>::max() */
 #undef max

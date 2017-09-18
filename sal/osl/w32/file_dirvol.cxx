@@ -27,6 +27,7 @@
 
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
+#include <rtl/character.hxx>
 
 static const wchar_t UNC_PREFIX[] = L"\\\\";
 static const wchar_t BACKSLASH = '\\';
