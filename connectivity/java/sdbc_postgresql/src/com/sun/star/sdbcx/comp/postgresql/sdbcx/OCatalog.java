@@ -72,7 +72,7 @@ public abstract class OCatalog extends ComponentBase
 
     @Override
     public String getImplementationName() {
-        return "com.sun.star.comp.connectivity.OCatalog";
+        return getClass().getName();
     }
 
     @Override
@@ -128,6 +128,11 @@ public abstract class OCatalog extends ComponentBase
         return users;
     }
 
+    /**
+     * Builds the name which should be used to access the object later on in the collection.
+     * Will only be called in fillNames.
+     * @param  row The current row from the resultset
+     */
     protected String buildName(XRow row) throws SQLException {
         String catalog = row.getString(1);
         if (row.wasNull()) {
@@ -135,7 +140,7 @@ public abstract class OCatalog extends ComponentBase
         }
         String schema = row.getString(2);
         if (row.wasNull()) {
-            schema = null;
+            schema = "";
         }
         String table = row.getString(3);
         if (row.wasNull()) {
