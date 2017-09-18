@@ -1592,11 +1592,15 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
 
 void SvXMLImport::SetFontDecls( XMLFontStylesContext *pFontDecls )
 {
+    if (mxFontDecls.is())
+        static_cast<SvXMLStylesContext*>(mxFontDecls.get())->Clear();
     mxFontDecls = pFontDecls;
 }
 
 void SvXMLImport::SetStyles( SvXMLStylesContext *pStyles )
 {
+    if (mxStyles.is())
+        static_cast<SvXMLStylesContext*>(mxStyles.get())->Clear();
     mxStyles = pStyles;
 }
 
@@ -1628,6 +1632,8 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
             }
         }
     }
+    if (mxAutoStyles.is())
+        static_cast<SvXMLStylesContext*>(mxAutoStyles.get())->Clear();
     mxAutoStyles = pAutoStyles;
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );
@@ -1637,6 +1643,8 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
 
 void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )
 {
+    if (mxMasterStyles.is())
+        static_cast<SvXMLStylesContext*>(mxMasterStyles.get())->Clear();
     mxMasterStyles = pMasterStyles;
 }
 
