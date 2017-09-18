@@ -182,11 +182,6 @@ protected:
     void ThrowExceptionIfNotAlive();
 
 private:
-    /** Description of this object.  This is not a constant because it can
-        be set from the outside.
-    */
-    ::rtl::OUString                     msDescription;
-
     /** Name of this object.
     */
     ::rtl::OUString                     msName;

@@ -181,8 +181,7 @@ sal_Int16 SAL_CALL SvtRulerAccessible::getAccessibleRole()
 
 OUString SAL_CALL SvtRulerAccessible::getAccessibleDescription()
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-    return msDescription;
+    return OUString();
 }
 
 OUString SAL_CALL SvtRulerAccessible::getAccessibleName()
