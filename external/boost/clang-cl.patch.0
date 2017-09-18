@@ -101,14 +101,3 @@
        //For compilers supporting auto-tss cleanup
              //with Boost.Threads lib, use Boost.Threads lib
  #           define BOOST_THREAD_USE_LIB
---- boost/typeof/typeof.hpp
-+++ boost/typeof/typeof.hpp
-@@ -49,7 +49,7 @@
- #       endif
- #   endif
- 
--#elif defined(__GNUC__)
-+#elif defined(__GNUC__) || defined __clang__
- #   ifndef BOOST_TYPEOF_EMULATION
- #       ifndef BOOST_TYPEOF_NATIVE
- #           define BOOST_TYPEOF_NATIVE
