@@ -214,29 +214,87 @@ public:
 inline bool operator>( const Style& rL, const Style& rR ) { return rR.operator<(rL); }
 
 // Drawing functions
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC StyleVectorCombination
 {
 private:
-    const Style&                mrStyle;
-    const basegfx::B2DVector    maB2DVector;
-    const bool                  mbMirrored;
+    struct OffsetAndHalfWidthAndColor
+    {
+        double          mfOffset;
+        double          mfHalfWidth;
+        Color           maColor;
 
+        OffsetAndHalfWidthAndColor(double offset, double halfWidth, Color color) :
+            mfOffset(offset),
+            mfHalfWidth(halfWidth),
+            maColor(color)
+        {}
+    };
+
+    double                                      mfRefModeOffset;
+    basegfx::B2DVector                          maB2DVector;
+    std::vector< OffsetAndHalfWidthAndColor >   maOffsets;
 
 public:
-    StyleVectorCombination(const Style& rStyle, const basegfx::B2DVector& rB2DVector, bool bMirrored) :
-        mrStyle(rStyle),
-        maB2DVector(rB2DVector),
-        mbMirrored(bMirrored)
+    StyleVectorCombination(
+        const Style& rStyle,
+        const basegfx::B2DVector& rB2DVector,
+        bool bMirrored,
+        const Color* pForceColor = nullptr);
+
+    double getRefModeOffset() const { return mfRefModeOffset; }
+    const basegfx::B2DVector& getB2DVector() const { return maB2DVector; }
+
+    bool empty() const { return maOffsets.empty(); }
+    size_t size() const { return maOffsets.size(); }
+
+    void getColorAndOffsetAndHalfWidth(size_t nIndex, Color& rColor, double& rfOffset, double& rfHalfWidth) const
+    {
+        if(nIndex >= maOffsets.size())
+            return;
+        const OffsetAndHalfWidthAndColor& rCandidate(maOffsets[nIndex]);
+        rfOffset = rCandidate.mfOffset;
+        rfHalfWidth = rCandidate.mfHalfWidth;
+        rColor = rCandidate.maColor;
+    }
+
+    bool operator<(const StyleVectorCombination& rOther) const
+    {
+        return getB2DVector().cross(rOther.getB2DVector()) < 0.0;
+    }
+};
+
+class SAL_WARN_UNUSED SVX_DLLPUBLIC StyleVectorTable
+{
+private:
+    std::vector< StyleVectorCombination >       maEntries;
+
+public:
+    StyleVectorTable()
+    :   maEntries()
     {
     }
 
-    const Style& getStyle() const { return mrStyle; }
-    const basegfx::B2DVector& getB2DVector() const { return maB2DVector; }
-    bool isMirrored() const { return mbMirrored; }
-};
+    void add(
+        const Style& rStyle,
+        const basegfx::B2DVector& rMyVector,
+        const basegfx::B2DVector& rOtherVector,
+        bool bMirrored)
+    {
+        if(rStyle.IsUsed() && !basegfx::areParallel(rMyVector, rOtherVector))
+        {
+            maEntries.emplace_back(rStyle, rOtherVector, bMirrored);
+        }
+    }
 
-typedef std::vector< StyleVectorCombination > StyleVectorTable;
+    void sort()
+    {
+        std::sort(maEntries.begin(), maEntries.end());
+    }
+
+    bool empty() const { return maEntries.empty(); }
+    size_t size() const { return maEntries.size(); }
+    const std::vector< StyleVectorCombination >& getEntries() const{ return maEntries; }
+};
 
 SVX_DLLPUBLIC void CreateBorderPrimitives(
     drawinglayer::primitive2d::Primitive2DContainer&    rTarget,        /// target for created primitives
