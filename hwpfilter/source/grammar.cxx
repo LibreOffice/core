@@ -572,15 +572,12 @@ yynewstate:
     yystacksize = YYMAXDEPTH;
       yyfree_stacks = 1;
       yyss = static_cast<short *>(malloc (yystacksize * sizeof (*yyssp)));
-      memcpy (yyss, yyss1,
-           size * (unsigned int) sizeof (*yyssp));
+      memcpy (yyss, yyss1, size * sizeof (*yyssp));
       yyvs = static_cast<YYSTYPE *>(malloc (yystacksize * sizeof (*yyvsp)));
-      memcpy (yyvs, yyvs1,
-           size * (unsigned int) sizeof (*yyvsp));
+      memcpy (yyvs, yyvs1, size * sizeof (*yyvsp));
 #ifdef YYLSP_NEEDED
       yyls = (YYLTYPE *) malloc (yystacksize * sizeof (*yylsp));
-      memcpy ((char *)yyls, (char *)yyls1,
-           size * (unsigned int) sizeof (*yylsp));
+      memcpy ((char *)yyls, (char *)yyls1, size * sizeof (*yylsp));
 #endif
 #endif /* no yyoverflow */
 
