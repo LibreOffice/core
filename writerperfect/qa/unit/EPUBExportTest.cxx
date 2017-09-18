@@ -236,7 +236,12 @@ void EPUBExportTest::testPageBreakSplit()
 
 void EPUBExportTest::testSpanAutostyle()
 {
-    createDoc("span-autostyle.fodt", {});
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request in-CSS styles.
+        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
+    }));
+    createDoc("span-autostyle.fodt", aFilterData);
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:span[1]", "class", "span0");
@@ -248,7 +253,12 @@ void EPUBExportTest::testSpanAutostyle()
 
 void EPUBExportTest::testParaAutostyleCharProps()
 {
-    createDoc("para-autostyle-char-props.fodt", {});
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request in-CSS styles.
+        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
+    }));
+    createDoc("para-autostyle-char-props.fodt", aFilterData);
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // This failed, para-level char props were not exported.
@@ -268,7 +278,12 @@ void EPUBExportTest::testMeta()
 
 void EPUBExportTest::testParaNamedstyle()
 {
-    createDoc("para-namedstyle.fodt", {});
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request in-CSS styles.
+        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
+    }));
+    createDoc("para-namedstyle.fodt", aFilterData);
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPath(mpXmlDoc, "//xhtml:p[1]", "class", "para0");
@@ -283,7 +298,12 @@ void EPUBExportTest::testParaNamedstyle()
 
 void EPUBExportTest::testCharNamedstyle()
 {
-    createDoc("char-namedstyle.fodt", {});
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request in-CSS styles.
+        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
+    }));
+    createDoc("char-namedstyle.fodt", aFilterData);
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
 
@@ -295,7 +315,12 @@ void EPUBExportTest::testCharNamedstyle()
 
 void EPUBExportTest::testNamedStyleInheritance()
 {
-    createDoc("named-style-inheritance.fodt", {});
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request in-CSS styles.
+        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
+    }));
+    createDoc("named-style-inheritance.fodt", aFilterData);
 
     // Find the CSS rule for the blue text.
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
@@ -311,7 +336,12 @@ void EPUBExportTest::testNamedStyleInheritance()
 
 void EPUBExportTest::testNestedSpan()
 {
-    createDoc("nested-span.fodt", {});
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request in-CSS styles.
+        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
+    }));
+    createDoc("nested-span.fodt", aFilterData);
 
     // Check textural content of nested span.
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
@@ -353,7 +383,12 @@ void EPUBExportTest::testEscape()
 
 void EPUBExportTest::testParaCharProps()
 {
-    createDoc("para-char-props.fodt", {});
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    {
+        // Explicitly request in-CSS styles.
+        {"EPUBStylesMethod", uno::makeAny(static_cast<sal_Int32>(0))}
+    }));
+    createDoc("para-char-props.fodt", aFilterData);
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // Check formatting of the middle span.
