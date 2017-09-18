@@ -112,11 +112,11 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
     }
     else
     {
-        const tools::Polygon aRoundRectPoly( aRect, nHorzRound, nVertRound );
+        tools::Polygon aRoundRectPoly( aRect, nHorzRound, nVertRound );
 
         if ( aRoundRectPoly.GetSize() >= 2 )
         {
-            const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aRoundRectPoly.GetConstPointAry());
+            SalPoint* pPtAry = reinterpret_cast<SalPoint*>(aRoundRectPoly.GetPointAry());
 
             if ( !mbFillColor )
                 mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );

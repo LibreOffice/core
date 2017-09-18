@@ -185,7 +185,7 @@ public:
                                           basegfx::B2DLineJoin,
                                           css::drawing::LineCap,
                                           double fMiterMinimumAngle) override;
-    virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
+    virtual void            drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,

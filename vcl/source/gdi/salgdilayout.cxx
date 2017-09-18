@@ -390,7 +390,7 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, const O
     drawRect( nX, nY, nWidth, nHeight );
 }
 
-void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
+void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {

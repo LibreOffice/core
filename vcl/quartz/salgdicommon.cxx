@@ -1406,7 +1406,7 @@ void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     DBG_DRAW_OPERATION_EXIT("drawRect");
 }
 
-void AquaSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
+void AquaSalGraphics::drawPolyLine( sal_uInt32 nPoints, SalPoint *pPtAry )
 {
     DBG_DRAW_OPERATION("drawPolyLine",);
 

@@ -431,7 +431,7 @@ void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
     mxImpl->drawRect( nX, nY, nDX, nDY );
 }
 
-void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
+void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, SalPoint *pPtAry )
 {
     mxImpl->drawPolyLine( nPoints, pPtAry );
 }

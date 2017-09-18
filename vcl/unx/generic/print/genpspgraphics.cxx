@@ -417,9 +417,9 @@ void GenPspGraphics::drawRect( long nX, long nY, long nDX, long nDY )
     m_pPrinterGfx->DrawRect (Rectangle(Point(nX, nY), Size(nDX, nDY)));
 }
 
-void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
+void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, SalPoint *pPtAry )
 {
-    m_pPrinterGfx->DrawPolyLine (nPoints, reinterpret_cast<Point const *>(pPtAry));
+    m_pPrinterGfx->DrawPolyLine (nPoints, reinterpret_cast<Point *>(pPtAry));
 }
 
 void GenPspGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )

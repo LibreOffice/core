@@ -99,7 +99,7 @@ public:
 
     virtual void drawRect( long nX, long nY, long nWidth, long nHeight ) override;
 
-    virtual void drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
+    virtual void drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry ) override;
 
     virtual void drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
 
