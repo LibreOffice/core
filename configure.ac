@@ -8872,23 +8872,14 @@ if test "$with_system_icu" = "yes"; then
     AC_LANG_POP([C++])
 
     if test "$cross_compiling" != "yes"; then
-        AC_PATH_PROG(ICUCONFIG,icu-config)
-
-        AC_MSG_CHECKING([ICU version])
-        ICU_VERSION=`$ICUCONFIG --noverify --version 2>/dev/null || $ICUCONFIG --version`
+        PKG_CHECK_MODULES(ICU, icu-i18n >= 4.6)
+        ICU_VERSION=`$PKG_CONFIG --modversion icu-i18n 2>/dev/null`
         ICU_MAJOR=`echo $ICU_VERSION | cut -d"." -f1`
         ICU_MINOR=`echo $ICU_VERSION | cut -d"." -f2`
-
-        if test "$ICU_MAJOR" -ge "49" -o \( "$ICU_MAJOR" = "4" -a "$ICU_MINOR" -ge "6" \); then
-            AC_MSG_RESULT([OK, $ICU_VERSION])
-        else
-            AC_MSG_ERROR([not suitable, only >= 4.6 supported currently])
-        fi
     fi
 
     if test "$cross_compiling" = "yes" -a \( "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" \); then
-        AC_PATH_PROG([ICUCONFIG_FOR_BUILD], [icu-config], [], [$PATH:/usr/sbin:/sbin])
-        ICU_VERSION_FOR_BUILD=`$ICUCONFIG_FOR_BUILD --noverify --version 2>/dev/null || $ICUCONFIG_FOR_BUILD --version`
+        ICU_VERSION_FOR_BUILD=`$PKG_CONFIG --modversion icu-i18n 2>/dev/null`
         ICU_MAJOR_FOR_BUILD=`echo $ICU_VERSION_FOR_BUILD | cut -d"." -f1`
         ICU_MINOR_FOR_BUILD=`echo $ICU_VERSION_FOR_BUILD | cut -d"." -f2`
         AC_MSG_CHECKING([if MinGW and system versions of ICU are compatible])
