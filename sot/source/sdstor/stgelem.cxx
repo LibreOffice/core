@@ -424,6 +424,18 @@ bool StgEntry::Load(const void* pFrom, sal_uInt32 nBufSize, sal_uInt64 nUnderlyi
             //bad pageid
             return false;
         }
+        if (m_cType == STG_EMPTY)
+        {
+            /*
+             tdf#112399 opens fine in MSOffice 2013 despite a massive m_nSize field
+
+             Free (unused) directory entries are marked with Object Type 0x0
+             (unknown or unallocated). The entire directory entry must consist of
+             all zeroes except for the child, right sibling, and left sibling
+             pointers, which must be initialized to NOSTREAM (0xFFFFFFFF).
+            */
+            m_nSize = 0;
+        }
         if (m_nSize < 0)
         {
             // the size makes no sense for the substorage
