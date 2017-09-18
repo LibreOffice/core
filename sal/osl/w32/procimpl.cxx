@@ -34,8 +34,10 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "secimpl.hxx"
+#include <osl/file.hxx>
 
 #include <vector>
+#include <algorithm>
 
 namespace /* private */
 {
