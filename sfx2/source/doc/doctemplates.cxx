@@ -161,7 +161,6 @@ typedef vector< GroupData_Impl* > GroupList_Impl;
 class TplTaskEnvironment : public ::cppu::WeakImplHelper< ucb::XCommandEnvironment >
 {
     uno::Reference< task::XInteractionHandler >               m_xInteractionHandler;
-    uno::Reference< ucb::XProgressHandler >                   m_xProgressHandler;
 
 public:
     explicit TplTaskEnvironment( const uno::Reference< task::XInteractionHandler>& rxInteractionHandler )
@@ -172,7 +171,7 @@ public:
     { return m_xInteractionHandler; }
 
     virtual uno::Reference<ucb::XProgressHandler> SAL_CALL    getProgressHandler() override
-    { return m_xProgressHandler; }
+    { return uno::Reference<ucb::XProgressHandler>(); }
 };
 
 class SfxDocTplService_Impl
