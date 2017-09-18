@@ -106,6 +106,7 @@ public:
     void testRotateFlip();
     void testTdf106867();
     void testTdf112280();
+    void testTdf112333();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -139,6 +140,7 @@ public:
     CPPUNIT_TEST(testRotateFlip);
     CPPUNIT_TEST(testTdf106867);
     CPPUNIT_TEST(testTdf112280);
+    CPPUNIT_TEST(testTdf112333);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1037,6 +1039,28 @@ void SdOOXMLExportTest2::testTdf112280()
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animRot",
             "by", "21600000");
+}
+
+void SdOOXMLExportTest2::testTdf112333()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf112333.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    OUString sTo = getXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set[1]/p:to/p:strVal", "val");
+    CPPUNIT_ASSERT_EQUAL(OUString("solid"), sTo);
+
+    OUString sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set[1]/p:cBhvr/p:attrNameLst/p:attrName");
+    CPPUNIT_ASSERT_EQUAL(OUString("fill.type"), sAttributeName);
+
+    sTo = getXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set[2]/p:to/p:strVal", "val");
+    CPPUNIT_ASSERT_EQUAL(OUString("true"), sTo);
+
+    sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set[2]/p:cBhvr/p:attrNameLst/p:attrName");
+    CPPUNIT_ASSERT_EQUAL(OUString("fill.on"), sAttributeName);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);

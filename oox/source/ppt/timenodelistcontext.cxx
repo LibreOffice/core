@@ -180,9 +180,16 @@ namespace oox { namespace ppt {
                     OUString aString;
                     if( maTo >>= aString )
                     {
-                        maTo <<= aString == "visible";
-                        if( !maTo.has<sal_Bool>() )
-                            SAL_WARN("oox.ppt", "conversion failed" );
+                        if( aString == "visible" || aString == "true" )
+                            maTo <<= true;
+                        else if( aString == "false" )
+                            maTo <<= false;
+
+                        if (!maTo.has<sal_Bool>())
+                        {
+                            SAL_WARN("oox.ppt", "conversion failed");
+                            maTo <<= false;
+                        }
                     }
                     mpNode->setTo( maTo );
                 }
