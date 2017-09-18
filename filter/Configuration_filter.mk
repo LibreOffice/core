@@ -801,6 +801,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calcgraphics_typ
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calcgraphics_filters.xcu,filter/source/config/fragments/filters,\
+	calc_jpg_Export \
 	calc_png_Export \
 ))
 
