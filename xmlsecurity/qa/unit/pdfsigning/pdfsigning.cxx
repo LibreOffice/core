@@ -19,6 +19,11 @@
 #include <documentsignaturemanager.hxx>
 #include <pdfio/pdfdocument.hxx>
 
+#ifdef _WIN32
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
+#endif
+
 using namespace com::sun::star;
 
 namespace
@@ -162,24 +167,51 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_
         CPPUNIT_ASSERT_EQUAL(nOriginalSignatureCount, aSignatures.size());
     }
 
+    bool bSignSuccessful = false;
     // Sign it and write out the result.
     {
         uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
         uno::Sequence<uno::Reference<security::XCertificate>> aCertificates = xSecurityEnvironment->getPersonalCertificates();
-        if (!aCertificates.hasElements())
+        DateTime now(DateTime::SYSTEM);
+        for (auto& cert : aCertificates)
         {
-            // NSS failed to parse it's own profile or Windows has no certificates installed.
-            return false;
+            css::util::DateTime aNotValidAfter = cert->getNotValidAfter();
+            css::util::DateTime aNotValidBefore = cert->getNotValidBefore();
+
+            // Only try certificates that are already active and not expired
+            if ((now > aNotValidAfter) || (now < aNotValidBefore))
+            {
+                SAL_WARN("xmlsecurity.pdfio.test", "Skipping a certificate that is not yet valid or already not valid");
+            }
+            else
+            {
+                bool bSignResult = aDocument.Sign(cert, "test", /*bAdES=*/true);
+#ifdef _WIN32
+                if (!bSignResult)
+                {
+                    DWORD dwErr = GetLastError();
+                    if (dwErr == CRYPT_E_NO_KEY_PROPERTY)
+                    {
+                        SAL_WARN("xmlsecurity.pdfio.test", "Skipping a certificate without a private key");
+                        continue; // The certificate does not have a private key - not a valid certificate
+                    }
+                }
+#endif
+                CPPUNIT_ASSERT(bSignResult);
+                SvFileStream aOutStream(rOutURL, StreamMode::WRITE | StreamMode::TRUNC);
+                CPPUNIT_ASSERT(aDocument.Write(aOutStream));
+                bSignSuccessful = true;
+                break;
+            }
         }
-        CPPUNIT_ASSERT(aDocument.Sign(aCertificates[0], "test", /*bAdES=*/true));
-        SvFileStream aOutStream(rOutURL, StreamMode::WRITE | StreamMode::TRUNC);
-        CPPUNIT_ASSERT(aDocument.Write(aOutStream));
     }
 
     // This was nOriginalSignatureCount when PDFDocument::Sign() silently returned success, without doing anything.
-    verify(rOutURL, nOriginalSignatureCount + 1, /*rExpectedSubFilter=*/OString());
+    if (bSignSuccessful)
+        verify(rOutURL, nOriginalSignatureCount + 1, /*rExpectedSubFilter=*/OString());
 
-    return true;
+    // May return false if NSS failed to parse it's own profile or Windows has no valid certificates installed.
+    return bSignSuccessful;
 }
 
 void PDFSigningTest::testPDFAdd()
