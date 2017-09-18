@@ -39,36 +39,6 @@ struct MediaTypeEntry
     INetContentType m_eTypeID;
 };
 
-struct TypeIDMapEntry
-{
-    OUString m_aTypeName;
-};
-
-class Registration
-{
-    typedef std::map<INetContentType, TypeIDMapEntry*>   TypeIDMap;
-
-    TypeIDMap    m_aTypeIDMap;    // map ContentType to TypeID
-
-public:
-    Registration() {}
-
-    ~Registration();
-public:
-
-    static INetContentType GetContentType(OUString const & rTypeName);
-
-    static OUString GetContentType(INetContentType eTypeID);
-
-    static INetContentType GetContentType4Extension(OUString const & rExtension);
-
-};
-
-namespace
-{
-    struct theRegistration
-        : public rtl::Static< Registration, theRegistration > {};
-}
 
 MediaTypeEntry const * seekEntry(OUString const & rTypeName,
                                  MediaTypeEntry const * pMap, std::size_t nSize);
@@ -252,39 +222,6 @@ MediaTypeEntry const aStaticExtensionMap[]
 }
 
 
-//  Registration
-
-
-Registration::~Registration()
-{
-    for ( TypeIDMap::iterator it = m_aTypeIDMap.begin(); it != m_aTypeIDMap.end(); ++it )
-        delete it->second;
-}
-
-// static
-INetContentType Registration::GetContentType(OUString const &)
-{
-    return CONTENT_TYPE_UNKNOWN;
-}
-
-// static
-OUString Registration::GetContentType(INetContentType eTypeID)
-{
-    Registration &rRegistration = theRegistration::get();
-
-    TypeIDMap::const_iterator pEntry = rRegistration.m_aTypeIDMap.find( eTypeID );
-    if( pEntry != rRegistration.m_aTypeIDMap.end() )
-        return pEntry->second->m_aTypeName;
-    return OUString();
-}
-
-// static
-INetContentType Registration::GetContentType4Extension(OUString const & )
-{
-    return CONTENT_TYPE_UNKNOWN;
-}
-
-
 //  seekEntry
 
 
@@ -333,7 +270,7 @@ INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
         aType += aSubType;
         MediaTypeEntry const * pEntry = seekEntry(aType, aStaticTypeNameMap,
                                                   CONTENT_TYPE_LAST + 1);
-        return pEntry ? pEntry->m_eTypeID : Registration::GetContentType(aType);
+        return pEntry ? pEntry->m_eTypeID : CONTENT_TYPE_UNKNOWN;
     }
     else
         return rTypeName.equalsIgnoreAsciiCase(CONTENT_TYPE_STR_X_STARMAIL) ?
@@ -357,7 +294,7 @@ OUString INetContentTypes::GetContentType(INetContentType eTypeID)
     }
 
     OUString aTypeName = eTypeID <= CONTENT_TYPE_LAST ? OUString::createFromAscii(aMap[eTypeID])
-                                                      : Registration::GetContentType(eTypeID);
+                                                      : OUString();
     if (aTypeName.isEmpty())
     {
         OSL_FAIL("INetContentTypes::GetContentType(): Bad ID");
@@ -373,9 +310,7 @@ INetContentType INetContentTypes::GetContentType4Extension(OUString const & rExt
                                               SAL_N_ELEMENTS(aStaticExtensionMap));
     if (pEntry)
         return pEntry->m_eTypeID;
-    INetContentType eTypeID = Registration::GetContentType4Extension(rExtension);
-    return eTypeID == CONTENT_TYPE_UNKNOWN ? CONTENT_TYPE_APP_OCTSTREAM
-                                           : eTypeID;
+    return CONTENT_TYPE_APP_OCTSTREAM;
 }
 
 //static
