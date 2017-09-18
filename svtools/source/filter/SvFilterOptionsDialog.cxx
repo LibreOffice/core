@@ -72,7 +72,8 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper
 
     OUString        maDialogTitle;
     FieldUnit       meFieldUnit;
-    bool        mbExportSelection;
+    bool            mbExportSelection;
+    bool            mbGraphicsSource;
 
 public:
 
@@ -106,7 +107,8 @@ public:
 SvFilterOptionsDialog::SvFilterOptionsDialog( const uno::Reference< uno::XComponentContext >& rxContext ) :
     mxContext           ( rxContext ),
     meFieldUnit         ( FUNIT_CM ),
-    mbExportSelection   ( false )
+    mbExportSelection   ( false ),
+    mbGraphicsSource    ( true )
 {
 }
 
@@ -198,8 +200,9 @@ sal_Int16 SvFilterOptionsDialog::execute()
             OUString aStr;
             maMediaDescriptor[ j ].Value >>= aStr;
             aInternalFilterName = aStr;
-            aInternalFilterName = aInternalFilterName.replaceAll( "draw_", "" );
-            aInternalFilterName = aInternalFilterName.replaceAll( "impress_", "" );
+            aInternalFilterName = aInternalFilterName.replaceFirst( "draw_", "" );
+            aInternalFilterName = aInternalFilterName.replaceFirst( "impress_", "" );
+            aInternalFilterName = aInternalFilterName.replaceFirst( "calc_", "" );
             break;
        }
         else if ( rName == "Graphic" )
@@ -223,7 +226,8 @@ sal_Int16 SvFilterOptionsDialog::execute()
             aFltCallDlgPara.aFilterData = maFilterDataSequence;
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
             bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
-            if ( ScopedVclPtrInstance<ExportDialog>( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection, bIsPixelFormat, xGraphic )->Execute() == RET_OK )
+            if ( ScopedVclPtrInstance<ExportDialog>( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection,
+                        bIsPixelFormat, mbGraphicsSource, xGraphic )->Execute() == RET_OK )
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
 
             // taking the out parameter from the dialog
@@ -238,6 +242,8 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
 {
     mxSourceDocument = xDoc;
 
+    mbGraphicsSource = true;    // default Draw and Impress like it was before
+
     // try to set the corresponding metric unit
     OUString aConfigPath;
     uno::Reference< lang::XServiceInfo > xServiceInfo
@@ -248,6 +254,12 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
             aConfigPath = "Office.Impress/Layout/Other/MeasureUnit";
         else if ( xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
             aConfigPath = "Office.Draw/Layout/Other/MeasureUnit";
+        else
+        {
+            mbGraphicsSource = false;
+            if ( xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument") )
+                aConfigPath = "Office.Calc/Layout/Other/MeasureUnit";
+        }
         if ( !aConfigPath.isEmpty() )
         {
             FilterConfigItem aConfigItem( aConfigPath );

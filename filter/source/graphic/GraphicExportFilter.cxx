@@ -73,6 +73,22 @@ void GraphicExportFilter::gatherProperties( const Sequence<PropertyValue>& rProp
         {
             mFilterDataSequence[i].Value >>= mTargetHeight;
         }
+        else if ( mFilterDataSequence[i].Name == "Compression" )
+        {
+            maCompression = mFilterDataSequence[i].Value;
+        }
+        else if ( mFilterDataSequence[i].Name == "Interlaced" )
+        {
+            maInterlaced = mFilterDataSequence[i].Value;
+        }
+        else if ( mFilterDataSequence[i].Name == "Translucent" )
+        {
+            maTranslucent = mFilterDataSequence[i].Value;
+        }
+        else if ( mFilterDataSequence[i].Name == "Quality" )
+        {
+            maQuality = mFilterDataSequence[i].Value;
+        }
     }
 
     if ( !aInternalFilterName.isEmpty() )
@@ -111,13 +127,46 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    Sequence< PropertyValue > aFilterData( 3 );
-    aFilterData[ 0 ].Name = "Interlaced";
-    aFilterData[ 0 ].Value <<= (sal_Int32) 0;
-    aFilterData[ 1 ].Name = "Compression";
-    aFilterData[ 1 ].Value <<= (sal_Int32) 9;
-    aFilterData[ 2 ].Name = "Quality";
-    aFilterData[ 2 ].Value <<= (sal_Int32) 99;
+    Sequence< PropertyValue > aFilterData( mFilterDataSequence );
+    sal_Int32 nAdd = 0;
+    if (!maCompression.hasValue())
+        ++nAdd;
+    if (!maInterlaced.hasValue())
+        ++nAdd;
+    if (!maTranslucent.hasValue())
+        ++nAdd;
+    if (!maQuality.hasValue())
+        ++nAdd;
+    if (nAdd)
+    {
+        sal_Int32 nLen = aFilterData.getLength();
+        aFilterData.realloc( nLen + nAdd);
+        if (!maCompression.hasValue())
+        {   // PNG,JPG
+            aFilterData[ nLen ].Name = "Compression";
+            aFilterData[ nLen ].Value <<= (sal_Int32) 9;
+            ++nLen;
+        }
+        if (!maInterlaced.hasValue())
+        {   // PNG,JPG
+            aFilterData[ nLen ].Name = "Interlaced";
+            aFilterData[ nLen ].Value <<= (sal_Int32) 0;
+            ++nLen;
+        }
+        if (!maTranslucent.hasValue())
+        {   // PNG
+            aFilterData[ nLen ].Name = "Translucent";
+            aFilterData[ nLen ].Value <<= (sal_Int32) 0;
+            ++nLen;
+        }
+        if (!maQuality.hasValue())
+        {   // JPG
+            aFilterData[ nLen ].Name = "Quality";
+            aFilterData[ nLen ].Value <<= (sal_Int32) 99;
+            ++nLen;
+        }
+        assert( nLen == aFilterData.getLength());
+    }
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( mFilterExtension );
 

@@ -24,6 +24,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
+#include <svtools/DocumentToGraphicRenderer.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -316,7 +317,7 @@ awt::Size ExportDialog::GetOriginalSize()
             aShapesRange = basegfx::B2DRange( 0, 0, nWidth, nHeight );
         }
     }
-    else
+    else if (mxShapes.is() || mxShape.is())
     {
         uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory = graphic::PrimitiveFactory2D::create( mxContext );
 
@@ -347,6 +348,13 @@ awt::Size ExportDialog::GetOriginalSize()
             }
         }
     }
+    else if (!mbGraphicsSource)
+    {
+        DocumentToGraphicRenderer aRenderer( mxSourceDocument, mbExportSelection);
+        const sal_Int32 nCurrentPage = aRenderer.getCurrentPageWriter();
+        const Size aSize = aRenderer.getDocumentSizeIn100mm( nCurrentPage);
+        return awt::Size( aSize.Width(), aSize.Height());
+    }
     return awt::Size( static_cast<sal_Int32>(aShapesRange.getWidth()), static_cast<sal_Int32>(aShapesRange.getHeight()) );
 }
 
@@ -369,11 +377,13 @@ void ExportDialog::GetGraphicSource()
                     if ( xSelectionSupplier.is() )
                     {
                         uno::Any aAny( xSelectionSupplier->getSelection() );
-                        if ( ! ( aAny >>= mxShapes ) )
-                            aAny >>= mxShape;
+                        if ( aAny >>= mxShapes )
+                            mbGraphicsSource = true;
+                        else if ( aAny >>= mxShape )
+                            mbGraphicsSource = true;
                     }
                 }
-                if ( !mxShape.is() && !mxShapes.is() )
+                if ( !mxShape.is() && !mxShapes.is() && mbGraphicsSource )
                 {
                     uno::Reference< drawing::XDrawView > xDrawView( xController, uno::UNO_QUERY );
                     if ( xDrawView.is() )
@@ -385,6 +395,9 @@ void ExportDialog::GetGraphicSource()
                         }
                     }
                 }
+                // For !mbGraphicsSource the mxSourceDocument is used, from
+                // which XRenderable can query XController and
+                // XSelectionSupplier the same.
             }
         }
     }
@@ -417,9 +430,26 @@ void ExportDialog::GetGraphicStream()
             mpTempStream = new SvMemoryStream();
             maBitmap = Bitmap();
 
-            if ( mxGraphic.is() )
+            uno::Reference< graphic::XGraphic > xGraphic;
+            if (!mbGraphicsSource && !mxGraphic.is())
             {
-                Graphic aGraphic( mxGraphic );
+                // Create a Graphic to be used below.
+                DocumentToGraphicRenderer aRenderer( mxSourceDocument, mbExportSelection);
+                const sal_Int32 nCurrentPage = aRenderer.getCurrentPageWriter();
+                const Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels( nCurrentPage);
+
+                const Size aTargetSizePixel( mbIsPixelFormat ?
+                        Size( maSize.Width, maSize.Height) :
+                        aDocumentSizePixel );
+
+                Graphic aGraphic( aRenderer.renderToGraphic( nCurrentPage,
+                            aDocumentSizePixel, aTargetSizePixel, COL_WHITE));
+                xGraphic = aGraphic.GetXGraphic();
+            }
+
+            if ( mxGraphic.is() || xGraphic.is() )
+            {
+                Graphic aGraphic( mxGraphic.is() ? mxGraphic : xGraphic );
 
                 if ( aGraphic.GetType() == GraphicType::Bitmap )
                 {
@@ -554,7 +584,7 @@ bool ExportDialog::IsTempExportAvailable() const
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     const css::uno::Reference< css::uno::XComponentContext >& rxContext,
     const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
-    bool bExportSelection, bool bIsPixelFormat,
+    bool bExportSelection, bool bIsPixelFormat, bool bGraphicsSource,
     const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
     : ModalDialog(rPara.pWindow, "GraphicExportDialog", "svt/ui/graphicexport.ui")
     , mrFltCallPara(rPara)
@@ -580,6 +610,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     , maOriginalSize(awt::Size(0, 0))
     , mbIsPixelFormat(bIsPixelFormat)
     , mbExportSelection(bExportSelection)
+    , mbGraphicsSource(bGraphicsSource)
 {
     get(mpMfSizeX, "widthmf-nospin");
     get(mpMfSizeY, "heightmf-nospin");

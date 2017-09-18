@@ -50,6 +50,11 @@ class GraphicExportFilter :
     sal_Int32 mTargetHeight;
     bool      mbSelectionOnly;
 
+    css::uno::Any   maCompression;
+    css::uno::Any   maInterlaced;
+    css::uno::Any   maTranslucent;
+    css::uno::Any   maQuality;
+
 public:
     explicit GraphicExportFilter( const Reference<XComponentContext>& rxContext );
     virtual ~GraphicExportFilter() override;
