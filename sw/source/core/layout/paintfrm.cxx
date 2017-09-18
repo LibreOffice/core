@@ -2549,24 +2549,27 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     if(!aX.equalZero())
                     {
                         const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
-                        svx::frame::StyleVectorTable aStartTable;
-                        svx::frame::StyleVectorTable aEndTable;
+                        svx::frame::StyleVectorTable aStart;
 
-                        if(aStyles[ 1 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], -aY, true)); // aLFromT
-                        if(aStyles[ 2 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX, true)); // aLFromL
-                        if(aStyles[ 3 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], aY, false)); // aLFromB
+                        aStart.add(aStyles[ 1 ], aX, -aY, true); // aLFromT
+                        aStart.add(aStyles[ 2 ], aX, -aX, true); // aLFromL
+                        aStart.add(aStyles[ 3 ], aX, aY, false); // aLFromB
+                        aStart.sort();
 
-                        if(aStyles[ 4 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], -aY, true)); // aRFromT
-                        if(aStyles[ 5 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX, false)); // aRFromR
-                        if(aStyles[ 6 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], aY, false)); // aRFromB
+                        svx::frame::StyleVectorTable aEnd;
+
+                        aEnd.add(aStyles[ 4 ], -aX, -aY, true); // aRFromT
+                        aEnd.add(aStyles[ 5 ], -aX, aX, false); // aRFromR
+                        aEnd.add(aStyles[ 6 ], -aX, aY, false); // aRFromB
+                        aEnd.sort();
 
                         CreateBorderPrimitives(
                             aHorizontalSequence,
                             aOrigin,
                             aX,
                             aStyles[ 0 ],
-                            aStartTable,
-                            aEndTable,
+                            aStart,
+                            aEnd,
                             pTmpColor
                         );
                     }
@@ -2579,24 +2582,27 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                     if(!aX.equalZero())
                     {
                         const basegfx::B2DVector aY(basegfx::getNormalizedPerpendicular(aX));
-                        svx::frame::StyleVectorTable aStartTable;
-                        svx::frame::StyleVectorTable aEndTable;
+                        svx::frame::StyleVectorTable aStart;
 
-                        if(aStyles[ 3 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 3 ], -aY, false)); // aTFromR
-                        if(aStyles[ 2 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 2 ], -aX, true)); // aTFromT
-                        if(aStyles[ 1 ].IsUsed()) aStartTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 1 ], aY, true)); // aTFromL
+                        aStart.add(aStyles[ 3 ], aX, -aY, false); // aTFromR
+                        aStart.add(aStyles[ 2 ], aX, -aX, true); // aTFromT
+                        aStart.add(aStyles[ 1 ], aX, aY, true); // aTFromL
+                        aStart.sort();
 
-                        if(aStyles[ 6 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 6 ], -aY, false)); // aBFromR
-                        if(aStyles[ 5 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 5 ], aX, false)); // aBFromB
-                        if(aStyles[ 4 ].IsUsed()) aEndTable.push_back(svx::frame::StyleVectorCombination(aStyles[ 4 ], aY, true)); // aBFromL
+                        svx::frame::StyleVectorTable aEnd;
+
+                        aEnd.add(aStyles[ 6 ], -aX, -aY, false); // aBFromR
+                        aEnd.add(aStyles[ 5 ], -aX, aX, false); // aBFromB
+                        aEnd.add(aStyles[ 4 ], -aX, aY, true); // aBFromL
+                        aEnd.sort();
 
                         CreateBorderPrimitives(
                             aVerticalSequence,
                             aOrigin,
                             aX,
                             aStyles[ 0 ],
-                            aStartTable,
-                            aEndTable,
+                            aStart,
+                            aEnd,
                             pTmpColor
                         );
                     }
