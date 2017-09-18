@@ -142,7 +142,7 @@ string processccargs(vector<string> rawargs) {
         else if(!(*i).compare(0,2,"-L")) {
             linkargs.append(" -LIBPATH:"+(*i).substr(2));
         }
-        else if(!(*i).compare(0,2,"-l")) {
+        else if(!(*i).compare(0,2,"-l") && (*i).compare(0,5,"-link")) {
             linkargs.append(" "+(*i).substr(2)+".lib");
         }
         else if(!(*i).compare(0,5,"-def:") || !(*i).compare(0,5,"/def:")) {
