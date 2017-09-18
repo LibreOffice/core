@@ -367,8 +367,6 @@ namespace accessibility
         /// Our listeners (guarded by maMutex)
         int mnNotifierClientId;
 private:
-        css::uno::Reference< css::accessibility::XAccessible > m_xAccInfo;
-
         // Text paragraphs should provide FLOWS_TO and FLOWS_FROM relations (#i27138#)
         // the paragraph manager, which created this instance - is NULL, if
         // instance isn't created by AccessibleParaManager.

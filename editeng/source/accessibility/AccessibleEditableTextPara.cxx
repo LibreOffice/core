@@ -1481,15 +1481,7 @@ namespace accessibility
                 sal_uInt32 crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
                 if (COL_AUTO == crChar )
                 {
-                    uno::Reference< css::accessibility::XAccessibleComponent > xComponent;
-                    if (mxParent.is())
-                    {
-                        xComponent.set(mxParent,uno::UNO_QUERY);
-                    }
-                    else
-                    {
-                        xComponent.set(m_xAccInfo,uno::UNO_QUERY);
-                    }
+                    uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);
                     if (xComponent.is())
                     {
                         uno::Reference< css::accessibility::XAccessibleContext > xContext(xComponent,uno::UNO_QUERY);
@@ -1520,15 +1512,7 @@ namespace accessibility
                 sal_uInt32 crCharUnderLine = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>( anyCharUnderLine.pReserved));
                 if (COL_AUTO == crCharUnderLine )
                 {
-                    uno::Reference< css::accessibility::XAccessibleComponent > xComponent;
-                    if (mxParent.is())
-                    {
-                        xComponent.set(mxParent,uno::UNO_QUERY);
-                    }
-                    else
-                    {
-                        xComponent.set(m_xAccInfo,uno::UNO_QUERY);
-                    }
+                    uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);
                     if (xComponent.is())
                     {
                         uno::Reference< css::accessibility::XAccessibleContext > xContext(xComponent,uno::UNO_QUERY);
