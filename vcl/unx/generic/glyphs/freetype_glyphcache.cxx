@@ -947,7 +947,9 @@ void ServerFont::InitGlyphData( sal_GlyphId aGlyphId, GlyphData& rGD ) const
     rGD.SetCharWidth( nCharWidth );
 
     FT_Glyph pGlyphFT;
-    FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
+    rc = FT_Get_Glyph(maFaceFT->glyph, &pGlyphFT);
+    if (rc != FT_Err_Ok)
+        return;
 
     ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
     rGD.SetDelta( (pGlyphFT->advance.x + 0x8000) >> 16, -((pGlyphFT->advance.y + 0x8000) >> 16) );
