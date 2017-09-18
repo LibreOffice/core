@@ -248,7 +248,6 @@ class EDITENG_DLLPUBLIC SvxNumRule final
     bool                aFmtsSet[SVX_MAX_NUM]; // Flags indicating valid levels
 
     static sal_Int32    nRefCount;
-    css::lang::Locale aLocale;
 public:
     SvxNumRule( SvxNumRuleFlags nFeatures,
                 sal_uInt16 nLevels,

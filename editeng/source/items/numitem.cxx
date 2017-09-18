@@ -604,7 +604,6 @@ SvxNumRule::SvxNumRule( SvxNumRuleFlags nFeatures,
 SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
 {
     ++nRefCount;
-    aLocale             = rCopy.aLocale;
     nLevelCount          = rCopy.nLevelCount         ;
     nFeatureFlags        = rCopy.nFeatureFlags       ;
     bContinuousNumbering = rCopy.bContinuousNumbering;
@@ -853,7 +852,10 @@ OUString SvxNumRule::MakeNumString( const SvxNodeNum& rNum ) const
                 if( rNum.GetLevelVal()[ i ] )
                 {
                     if(SVX_NUM_BITMAP != rNFmt.GetNumberingType())
-                        aStr += rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], aLocale );
+                    {
+                        const LanguageTag& rLang = Application::GetSettings().GetLanguageTag();
+                        aStr += rNFmt.GetNumStr( rNum.GetLevelVal()[ i ], rLang.getLocale()  );
+                    }
                     else
                         bDot = false;
                 }
