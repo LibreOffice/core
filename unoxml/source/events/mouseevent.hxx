@@ -45,7 +45,6 @@ protected:
     bool m_altKey;
     bool m_metaKey;
     sal_Int16 m_button;
-    css::uno::Reference< css::xml::dom::events::XEventTarget > m_relatedTarget;
 
 public:
     explicit CMouseEvent();

@@ -86,8 +86,7 @@ namespace DOM { namespace events
     }
     Reference< XEventTarget > SAL_CALL CMouseEvent::getRelatedTarget()
     {
-        ::osl::MutexGuard const g(m_Mutex);
-        return m_relatedTarget;
+        return Reference< XEventTarget >();
     }
 
     void SAL_CALL CMouseEvent::initMouseEvent(
