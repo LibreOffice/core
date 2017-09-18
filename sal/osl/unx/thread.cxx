@@ -625,7 +625,7 @@ static oslThreadIdentifier insertThreadId (pthread_t hThread)
 
 #if defined LINUX && ! defined __FreeBSD_kernel__
         long lin_tid = syscall(SYS_gettid);
-        if (lin_tid <= 0 || SAL_MAX_UINT32 < static_cast<unsigned long>(lin_tid))
+        if (SAL_MAX_UINT32 < static_cast<unsigned long>(lin_tid))
             std::abort();
         pEntry->Ident = static_cast<pid_t>(lin_tid);
 #elif defined MACOSX || defined IOS
