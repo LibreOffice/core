@@ -1335,48 +1335,13 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
 
     sal_uInt16 nCount = pEntry->ItemCount();
     sal_uInt16 nCur = 0;
-    sal_uInt16 nHeaderCur = 0;
     while( nCur < nCount )
     {
         SvLBoxItem& rItem = pEntry->GetItem( nCur );
         if ( (rItem.GetType() == SvLBoxItemType::String) &&
              !static_cast<SvLBoxString&>( rItem ).GetText().isEmpty() )
         {
-            //want the column header
-            if (!headString.isEmpty())
-            {
-                sal_Int32 nEnd = headString.indexOf('\t');
-                if( nEnd == -1 )
-                {
-                    if (!sRet.isEmpty())
-                    {
-                        sRet += ",";
-                    }
-                    if (!headString.isEmpty())
-                    {
-                        sRet += headString + ":";
-                    }
-                }
-                else
-                {
-                    OUString  aString=headString.getToken(nHeaderCur, '\t');
-                    if (!sRet.isEmpty())
-                    {
-                        sRet += ",";
-                    }
-                    if (!aString.isEmpty())
-                    {
-                        sRet += aString + ":";
-                    }
-                    nHeaderCur++;
-                }
-                sRet += static_cast<SvLBoxString&>( rItem ).GetText();
-            }
-            else
-            {
-                sRet += static_cast<SvLBoxString&>( rItem ).GetText() + ",";
-            }
-            //end want to the column header
+            sRet += static_cast<SvLBoxString&>( rItem ).GetText() + ",";
         }
         nCur++;
     }

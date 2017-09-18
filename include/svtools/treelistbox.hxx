@@ -515,8 +515,7 @@ public:
 
     SvTreeFlags         GetTreeFlags() const {return nTreeFlags;}
 
-    OUString            headString;
-    OUString            SearchEntryTextWithHeadTitle(SvTreeListEntry* pEntry);
+    static OUString     SearchEntryTextWithHeadTitle(SvTreeListEntry* pEntry);
     virtual OUString    GetEntryAltText(SvTreeListEntry* pEntry) const;
     virtual OUString    GetEntryLongDescription(SvTreeListEntry* pEntry) const;
 

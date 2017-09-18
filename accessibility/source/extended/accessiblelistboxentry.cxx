@@ -194,7 +194,7 @@ namespace accessibility
         OUString sRet;
         SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
         if ( pEntry )
-            sRet = getListBox()->SearchEntryTextWithHeadTitle( pEntry );
+            sRet = SvTreeListBox::SearchEntryTextWithHeadTitle( pEntry );
         return sRet;
     }
 
@@ -459,7 +459,7 @@ namespace accessibility
         }
         else
         {
-            return getListBox()->SearchEntryTextWithHeadTitle( pEntry );
+            return SvTreeListBox::SearchEntryTextWithHeadTitle( pEntry );
         }
     }
 
