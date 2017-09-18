@@ -621,14 +621,16 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
 
     FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId, mnLoadFlags);
 
-    if( rc != FT_Err_Ok )
+    if (rc != FT_Err_Ok)
         return;
 
     if (mbArtBold)
         FT_GlyphSlot_Embolden(maFaceFT->glyph);
 
     FT_Glyph pGlyphFT;
-    FT_Get_Glyph( maFaceFT->glyph, &pGlyphFT );
+    rc = FT_Get_Glyph(maFaceFT->glyph, &pGlyphFT);
+    if (rc != FT_Err_Ok)
+        return;
 
     ApplyGlyphTransform(rGlyph.IsVertical(), pGlyphFT);
 
