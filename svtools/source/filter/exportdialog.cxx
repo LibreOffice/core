@@ -453,21 +453,6 @@ void ExportDialog::GetGraphicStream()
             }
             else
             {
-                uno::Reference < io::XStream > xStream( new utl::OStreamWrapper( *mpTempStream ) );
-                uno::Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
-
-                uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter =
-                    drawing::GraphicExportFilter::create( mxContext );
-
-                OUString sFormat( maExt );
-                uno::Sequence< beans::PropertyValue > aDescriptor( 3 );
-                aDescriptor[0].Name = "OutputStream";
-                aDescriptor[0].Value <<= xOutputStream;
-                aDescriptor[1].Name = "FilterName";
-                aDescriptor[1].Value <<= sFormat;
-                aDescriptor[2].Name = "FilterData";
-                aDescriptor[2].Value <<= aNewFilterData;
-
                 uno::Reference< lang::XComponent > xSourceDoc;
                 if ( mxPage.is() )
                     xSourceDoc.set( mxPage, uno::UNO_QUERY_THROW );
@@ -477,6 +462,21 @@ void ExportDialog::GetGraphicStream()
                     xSourceDoc.set( mxShape, uno::UNO_QUERY_THROW );
                 if ( xSourceDoc.is() )
                 {
+                    uno::Reference < io::XStream > xStream( new utl::OStreamWrapper( *mpTempStream ) );
+                    uno::Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
+
+                    OUString sFormat( maExt );
+                    uno::Sequence< beans::PropertyValue > aDescriptor( 3 );
+                    aDescriptor[0].Name = "OutputStream";
+                    aDescriptor[0].Value <<= xOutputStream;
+                    aDescriptor[1].Name = "FilterName";
+                    aDescriptor[1].Value <<= sFormat;
+                    aDescriptor[2].Name = "FilterData";
+                    aDescriptor[2].Value <<= aNewFilterData;
+
+                    uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter =
+                        drawing::GraphicExportFilter::create( mxContext );
+
                     xGraphicExporter->setSourceDocument( xSourceDoc );
                     xGraphicExporter->filter( aDescriptor );
 
