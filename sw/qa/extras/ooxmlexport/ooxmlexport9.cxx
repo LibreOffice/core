@@ -735,8 +735,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99074, "tdf99074.docx")
         xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> const xViewSettings(
         xController->getViewSettings());
-    // This was false, Web Layout was ignored on import.
-    CPPUNIT_ASSERT(getProperty<bool>(xViewSettings, "ShowOnlineLayout"));
+
+    // The behavior changed - Word 2013 and 2016 ignore this setting on
+    // import, and instead honor the user's setting.
+    // Let's ignore the <w:view w:val="web"/> too.
+    CPPUNIT_ASSERT(!getProperty<bool>(xViewSettings, "ShowOnlineLayout"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDefaultSectBreakCols, "default-sect-break-cols.docx")
