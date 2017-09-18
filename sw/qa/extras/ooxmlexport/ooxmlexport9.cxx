@@ -29,6 +29,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 
 #include <ftninfo.hxx>
@@ -211,9 +212,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth,"tdf97648_relativeWidth.docx
     CPPUNIT_ASSERT_EQUAL( sal_Int32(7616/10), getShape(1)->getSize().Width/10);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(8001/10), getShape(2)->getSize().Width/10);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(4001/10), getShape(3)->getSize().Width/10);
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(6), "ParaAdjust")) );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1600/10), getShape(4)->getSize().Width/10);
+    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(8), "ParaAdjust")) );
 
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), getProperty<sal_Int32>(getShape(1), "LeftMargin") );
+    if (!mbExported)
+    {
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Text should wrap above/below the line", text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
+        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(getShape(2), "HoriOrient"));
+        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT, getProperty<sal_Int16>(getShape(3), "HoriOrient"));
+        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT, getProperty<sal_Int16>(getShape(4), "HoriOrient"));
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSectionColumns.docx")

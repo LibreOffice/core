@@ -368,7 +368,6 @@ DECLARE_RTFIMPORT_TEST(testFdo79319, "fdo79319.rtf")
     //divide everything by 10 to avoid rounding errors etc
     CPPUNIT_ASSERT_EQUAL(sal_Int32(15240/10), xShape->getSize().Width/10);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(53/10), xShape->getSize().Height/10);
-    // FIXME horizontal rule can be centered etc in MSO.
 #if 0
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xShape, "VertOrient"));
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xShape, "HoriOrient"));

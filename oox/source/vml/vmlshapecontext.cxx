@@ -310,6 +310,8 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
             mrTypeModel.maWidthPercent = OUString::number( hrpct.toInt32() );
         mrTypeModel.maWrapDistanceLeft = "0";
         mrTypeModel.maWrapDistanceRight = "0";
+        mrTypeModel.maPositionHorizontal = rAttribs.getString( O_TOKEN( hralign ), "left" );
+        mrTypeModel.moWrapType = "topAndBottom";
     }
 
     // stroke settings (may be overridden by v:stroke element later)
