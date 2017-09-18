@@ -94,7 +94,7 @@ public:
 
     virtual void drawRect( long nX, long nY, long nWidth, long nHeight ) = 0;
 
-    virtual void drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
+    virtual void drawPolyLine( sal_uInt32 nPoints, SalPoint* pPtAry ) = 0;
 
     virtual void drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
 
