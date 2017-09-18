@@ -24,7 +24,6 @@
 #include <framework/addonsoptions.hxx>
 #include <classes/fwkresid.hxx>
 #include <helper/mischelper.hxx>
-#include <framework/menuextensionsupplier.hxx>
 #include <strings.hrc>
 #include <services.h>
 
@@ -585,35 +584,6 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source )
         m_xModuleImageManager.clear();
 }
 
-void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
-{
-
-    // retrieve menu extension item
-    MenuExtensionItem aMenuItem( GetMenuExtension() );
-    if (( !aMenuItem.aURL.isEmpty() ) &&
-        ( !aMenuItem.aLabel.isEmpty() ))
-    {
-        // remove all old window list entries from menu
-        sal_uInt16 nNewItemId( 0 );
-        sal_uInt16 nInsertPos( MENU_APPEND );
-        sal_uInt16 nBeforePos( MENU_APPEND );
-        for ( sal_uInt16 n = 0; n < pMenu->GetItemCount(); n++ )
-        {
-            sal_uInt16 nItemId = pMenu->GetItemId( n );
-            nNewItemId = std::max( nItemId, nNewItemId );
-            if ( pMenu->GetItemCommand( nItemId ) == ".uno:About" )
-                nBeforePos = n;
-        }
-        ++nNewItemId;
-
-        if ( nBeforePos != MENU_APPEND )
-            nInsertPos = nBeforePos;
-
-        pMenu->InsertItem(nNewItemId, aMenuItem.aLabel, MenuItemBits::NONE, OString(), nInsertPos);
-        pMenu->SetItemCommand( nNewItemId, aMenuItem.aURL );
-    }
-}
-
 static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
 {
     if (PopupMenu* pThisPopup = pMenu->GetPopupMenu( nItemId ))
@@ -1170,8 +1140,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 // Check if this is the help menu. Add menu item if needed
                 if ( aItemCommand == aCmdHelpMenu )
                 {
-                    // Check if this is the help menu. Add menu item if needed
-                    CheckAndAddMenuExtension( pPopup );
                 }
                 else if ( aItemCommand == aCmdToolsMenu && AddonMenuManager::HasAddonMenuElements() )
                 {
