@@ -460,6 +460,7 @@ public:
     virtual void                SetFormatSpecificCompatibilityOptions( const OUString& /*rFilterTypeName*/ ) { /* Do not do anything here; Derived classes must overload to do actual work */ };
 
     void                        TemplateDisconnectionAfterLoad();
+    void                        SetLoading(SfxLoadedFlags nFlags);
     bool                        IsLoading() const;
     bool                        IsLoadingFinished() const;
     void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, bool bReload );
