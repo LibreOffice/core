@@ -189,9 +189,17 @@ namespace oox { namespace ppt {
                     if( maTo >>= aString )
                     {
                         OSL_TRACE( "Magic conversion %s", OUSTRING_TO_CSTR( aString ) );
-                        maTo = makeAny( aString == "visible" );
-                        if( !maTo.has<sal_Bool>() )
-                            OSL_TRACE( "conversion failed" );
+
+                        if( aString == "visible" || aString == "true" )
+                            maTo <<= true;
+                        else if( aString == "false" )
+                            maTo <<= false;
+
+                        if (!maTo.has<sal_Bool>())
+                        {
+                            SAL_WARN("oox.ppt", "conversion failed");
+                            maTo <<= false;
+                        }
                     }
                     mpNode->setTo( maTo );
                 }
