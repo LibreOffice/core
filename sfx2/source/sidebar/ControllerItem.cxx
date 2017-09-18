@@ -41,8 +41,7 @@ ControllerItem::ControllerItem (
     ItemUpdateReceiverInterface& rItemUpdateReceiver)
     : SfxControllerItem(nSlotId, rBindings),
       mrItemUpdateReceiver(rItemUpdateReceiver),
-      mxFrameActionListener(),
-      msCommandName()
+      mxFrameActionListener()
 {
 }
 
@@ -68,7 +67,7 @@ void ControllerItem::StateChanged (
     mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState, IsEnabled(eState));
 }
 
-bool ControllerItem::IsEnabled (SfxItemState eState) const
+bool ControllerItem::IsEnabled (SfxItemState eState)
 {
     if (eState == SfxItemState::DISABLED)
         return false;
@@ -77,19 +76,12 @@ bool ControllerItem::IsEnabled (SfxItemState eState) const
         // There are no disabled commands.
         return true;
     }
-    else if (msCommandName.getLength() == 0)
+    else
     {
         // We were not given a command name at construction and can
         // not check the state now.  Assume the best and return true.
         return true;
     }
-    else if (SvtCommandOptions().Lookup(SvtCommandOptions::CMDOPTION_DISABLED, msCommandName))
-    {
-        // The command is part of a list of disabled commands.
-        return false;
-    }
-    else
-        return true;
 }
 
 void ControllerItem::RequestUpdate()

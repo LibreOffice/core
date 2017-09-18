@@ -67,7 +67,7 @@ public:
         Changes of this state are notified via the
         ItemUpdateReceiverInterface::NotifyContextChang() method.
     */
-    bool IsEnabled (const SfxItemState eState) const;
+    static bool IsEnabled (const SfxItemState eState);
 
     /** Force the controller item to call its NotifyItemUpdate
         callback with up-to-date data.
@@ -81,7 +81,6 @@ protected:
 private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;
     css::uno::Reference<css::lang::XComponent> mxFrameActionListener;
-    const ::rtl::OUString msCommandName;
 };
 
 } } // end of namespace sfx2::sidebar
