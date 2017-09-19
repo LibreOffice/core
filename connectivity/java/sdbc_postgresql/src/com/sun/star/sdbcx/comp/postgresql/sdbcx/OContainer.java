@@ -128,7 +128,7 @@ public abstract class OContainer extends WeakBase implements
     // XServiceInfo
 
     public String getImplementationName() {
-        return "com.sun.star.sdbcx.VContainer";
+        return getClass().getName();
     }
 
     @Override
@@ -138,7 +138,7 @@ public abstract class OContainer extends WeakBase implements
 
     @Override
     public boolean supportsService(String serviceName) {
-        for (String service : services) {
+        for (String service : getSupportedServiceNames()) {
             if (service.equals(serviceName)) {
                 return true;
             }

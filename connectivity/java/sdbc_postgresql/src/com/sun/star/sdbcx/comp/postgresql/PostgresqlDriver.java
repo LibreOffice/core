@@ -89,7 +89,7 @@ public class PostgresqlDriver extends ComponentBase implements XServiceInfo, XDr
 
     @Override
     public boolean supportsService(String serviceName) {
-        for (String service : services) {
+        for (String service : getSupportedServiceNames()) {
             if (service.equals(serviceName)) {
                 return true;
             }

@@ -24,6 +24,7 @@ package com.sun.star.sdbcx.comp.postgresql.sdbcx;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNamed;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbcx.XDataDescriptorFactory;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
@@ -33,7 +34,12 @@ import com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors.SdbcxColumnDescripto
 import com.sun.star.sdbcx.comp.postgresql.util.PropertyIds;
 import com.sun.star.uno.Type;
 
-public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFactory {
+public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFactory, XServiceInfo {
+
+    private static final String[] services = {
+            "com.sun.star.sdbcx.Column"
+    };
+
     private String typeName;
     private String description;
     private String defaultValue;
@@ -232,6 +238,27 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
     @Override
     protected void postDisposing() {
         super.postDisposing();
+    }
+
+    // XServiceInfo
+
+    public String getImplementationName() {
+        return getClass().getName();
+    }
+
+    @Override
+    public String[] getSupportedServiceNames() {
+        return services.clone();
+    }
+
+    @Override
+    public boolean supportsService(String serviceName) {
+        for (String service : getSupportedServiceNames()) {
+            if (service.equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // XDataDescriptorFactory

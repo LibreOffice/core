@@ -21,13 +21,18 @@
 
 package com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors;
 
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.PropertySetAdapter.PropertyGetter;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.PropertySetAdapter.PropertySetter;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.ODescriptor;
 import com.sun.star.sdbcx.comp.postgresql.util.PropertyIds;
 import com.sun.star.uno.Type;
 
-public class SdbcxColumnDescriptor extends ODescriptor {
+public class SdbcxColumnDescriptor extends ODescriptor implements XServiceInfo {
+    private static final String[] services = {
+            "com.sun.star.sdbcx.ColumnDescriptor"
+    };
+
     protected int type;
     protected String typeName;
     protected int precision;
@@ -185,5 +190,27 @@ public class SdbcxColumnDescriptor extends ODescriptor {
                         isCurrency = (Boolean) value;
                     }
                 });
+    }
+
+    // XServiceInfo
+
+    @Override
+    public String getImplementationName() {
+        return getClass().getName();
+    }
+
+    @Override
+    public String[] getSupportedServiceNames() {
+        return services.clone();
+    }
+
+    @Override
+    public boolean supportsService(String serviceName) {
+        for (String service : getSupportedServiceNames()) {
+            if (service.equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

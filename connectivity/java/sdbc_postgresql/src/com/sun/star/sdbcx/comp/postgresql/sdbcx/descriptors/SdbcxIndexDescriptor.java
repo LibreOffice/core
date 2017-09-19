@@ -21,6 +21,7 @@
 
 package com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors;
 
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.PropertySetAdapter.PropertyGetter;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.PropertySetAdapter.PropertySetter;
@@ -28,7 +29,11 @@ import com.sun.star.sdbcx.comp.postgresql.sdbcx.ODescriptor;
 import com.sun.star.sdbcx.comp.postgresql.util.PropertyIds;
 import com.sun.star.uno.Type;
 
-public class SdbcxIndexDescriptor extends ODescriptor implements XColumnsSupplier {
+public class SdbcxIndexDescriptor extends ODescriptor implements XColumnsSupplier, XServiceInfo {
+    private static final String[] services = {
+            "com.sun.star.sdbcx.IndexDescriptor"
+    };
+
     protected String catalog = "";
     protected boolean isUnique;
     protected boolean isClustered;
@@ -85,5 +90,27 @@ public class SdbcxIndexDescriptor extends ODescriptor implements XColumnsSupplie
 
     public SdbcxIndexColumnDescriptorContainer getColumns() {
         return columns;
+    }
+
+    // XServiceInfo
+
+    @Override
+    public String getImplementationName() {
+        return getClass().getName();
+    }
+
+    @Override
+    public String[] getSupportedServiceNames() {
+        return services.clone();
+    }
+
+    @Override
+    public boolean supportsService(String serviceName) {
+        for (String service : getSupportedServiceNames()) {
+            if (service.equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

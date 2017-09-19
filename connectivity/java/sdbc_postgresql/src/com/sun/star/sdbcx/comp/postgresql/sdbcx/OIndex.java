@@ -27,6 +27,7 @@ import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XDataDescriptorFactory;
@@ -37,7 +38,12 @@ import com.sun.star.sdbcx.comp.postgresql.util.DbTools;
 import com.sun.star.sdbcx.comp.postgresql.util.PropertyIds;
 import com.sun.star.uno.Type;
 
-public class OIndex extends ODescriptor implements XColumnsSupplier, XDataDescriptorFactory {
+public class OIndex extends ODescriptor implements XColumnsSupplier, XDataDescriptorFactory, XServiceInfo {
+
+    private static final String[] services = {
+            "com.sun.star.sdbcx.Index"
+    };
+
     protected String catalogName;
     protected boolean isUnique;
     protected boolean isPrimaryKeyIndex;
@@ -87,6 +93,29 @@ public class OIndex extends ODescriptor implements XColumnsSupplier, XDataDescri
                     }
                 }, null);
     }
+
+    // XServiceInfo
+
+    public String getImplementationName() {
+        return getClass().getName();
+    }
+
+    @Override
+    public String[] getSupportedServiceNames() {
+        return services.clone();
+    }
+
+    @Override
+    public boolean supportsService(String serviceName) {
+        for (String service : getSupportedServiceNames()) {
+            if (service.equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // XDataDescriptorFactory
 
     @Override
     public XPropertySet createDataDescriptor() {

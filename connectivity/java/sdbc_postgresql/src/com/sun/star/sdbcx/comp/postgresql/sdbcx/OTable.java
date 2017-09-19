@@ -117,7 +117,7 @@ public abstract class OTable extends ODescriptor
 
     @Override
     public String getImplementationName() {
-        return "com.sun.star.sdbcx.Table";
+        return getClass().getName();
     }
 
     @Override
@@ -127,7 +127,7 @@ public abstract class OTable extends ODescriptor
 
     @Override
     public boolean supportsService(String serviceName) {
-        for (String service : services) {
+        for (String service : getSupportedServiceNames()) {
             if (serviceName.equals(service)) {
                 return true;
             }

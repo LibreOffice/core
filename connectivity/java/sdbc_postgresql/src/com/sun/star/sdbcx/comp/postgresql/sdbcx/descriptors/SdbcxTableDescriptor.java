@@ -23,6 +23,7 @@ package com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors;
 
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.PropertySetAdapter.PropertyGetter;
@@ -32,7 +33,12 @@ import com.sun.star.sdbcx.comp.postgresql.sdbcx.ODescriptor;
 import com.sun.star.sdbcx.comp.postgresql.util.PropertyIds;
 import com.sun.star.uno.Type;
 
-public class SdbcxTableDescriptor extends ODescriptor implements XColumnsSupplier, XKeysSupplier {
+public class SdbcxTableDescriptor extends ODescriptor implements XColumnsSupplier, XKeysSupplier, XServiceInfo {
+
+    private static final String[] services = {
+            "com.sun.star.sdbcx.TableDescriptor"
+    };
+
     protected String catalogName;
     protected String schemaName;
     protected String description;
@@ -100,5 +106,26 @@ public class SdbcxTableDescriptor extends ODescriptor implements XColumnsSupplie
     @Override
     public XIndexAccess getKeys() {
         return keys;
+    }
+
+    // XServiceInfo
+
+    public String getImplementationName() {
+        return getClass().getName();
+    }
+
+    @Override
+    public String[] getSupportedServiceNames() {
+        return services.clone();
+    }
+
+    @Override
+    public boolean supportsService(String serviceName) {
+        for (String service : getSupportedServiceNames()) {
+            if (service.equals(serviceName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
