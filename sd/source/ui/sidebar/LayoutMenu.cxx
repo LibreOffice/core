@@ -129,7 +129,6 @@ LayoutMenu::LayoutMenu (
       DropTargetHelper(this),
       mrBase(rViewShellBase),
       mxListener(nullptr),
-      mbSelectionUpdatePending(true),
       mbIsMainViewChangePending(false),
       mxSidebar(rxSidebar),
       mbIsDisposed(false)
@@ -253,16 +252,6 @@ ui::LayoutSize LayoutMenu::GetHeightForWidth (const sal_Int32 nWidth)
     return ui::LayoutSize(nPreferredHeight,nPreferredHeight,nPreferredHeight);
 }
 
-void LayoutMenu::Paint (vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
-{
-    if (mbSelectionUpdatePending)
-    {
-        mbSelectionUpdatePending = false;
-        UpdateSelection();
-    }
-    ValueSet::Paint(rRenderContext, rRect);
-}
-
 void LayoutMenu::Resize()
 {
     Size aWindowSize = GetOutputSizePixel();
@@ -342,6 +331,9 @@ void LayoutMenu::InvalidateContent()
 
     if (mxSidebar.is())
         mxSidebar->requestLayout();
+
+    // set selection inside the control during Impress start up
+    UpdateSelection();
 }
 
 int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
@@ -547,8 +539,6 @@ void LayoutMenu::Fill()
             SetItemData (i, new AutoLayout(pInfo->maAutoLayout));
         }
     }
-
-    mbSelectionUpdatePending = true;
 }
 
 void LayoutMenu::Clear()
@@ -653,6 +643,11 @@ IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu, bool)
     return false;
 }
 
+// Selects an appropriate layout of the slide inside control.
+//
+// Method may be called several times with the same item-id to be selected -
+// only once the actually state of the control will be changed.
+//
 void LayoutMenu::UpdateSelection()
 {
     bool bItemSelected = false;
@@ -674,14 +669,19 @@ void LayoutMenu::UpdateSelection()
             break;
 
         // Find the entry of the menu for to the layout.
-        SetNoSelection();
-        sal_uInt16 nItemCount (GetItemCount());
+        const sal_uInt16 nItemCount = GetItemCount();
         for (sal_uInt16 nId=1; nId<=nItemCount; nId++)
         {
             if (*static_cast<AutoLayout*>(GetItemData(nId)) == aLayout)
             {
-                SelectItem(nId);
-                bItemSelected = true;
+                // do not set selection twice to the same item
+                if (GetSelectItemId() != nId)
+                {
+                    SetNoSelection();
+                    SelectItem(nId);
+                }
+
+                bItemSelected = true; // no need to call SetNoSelection()
                 break;
             }
         }
@@ -696,10 +696,18 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
 {
     switch (rEvent.meEventId)
     {
+        // tdf#89890 During changes of the Layout of the slide when focus is not set inside main area
+        // we do not receive notification EventMultiplexerEventId::CurrentPageChanged, but we receive the following 3 notification types.
+        // => let's make UpdateSelection() also when some shape is changed (during Layout changes)
+        case EventMultiplexerEventId::ShapeChanged:
+        case EventMultiplexerEventId::ShapeInserted:
+        case EventMultiplexerEventId::ShapeRemoved:
+            UpdateSelection();
+            break;
+
         case EventMultiplexerEventId::CurrentPageChanged:
         case EventMultiplexerEventId::SlideSortedSelection:
-            if ( ! mbSelectionUpdatePending)
-                UpdateSelection();
+            UpdateSelection();
             break;
 
         case EventMultiplexerEventId::MainViewAdded:
