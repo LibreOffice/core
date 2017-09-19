@@ -1556,6 +1556,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:RowColSelCount"),
         OUString(".uno:StatusPageStyle"),
         OUString(".uno:InsertMode"),
+        OUString(".uno:SpellOnline"),
         OUString(".uno:StatusSelectionMode"),
         OUString(".uno:StateTableCell"),
         OUString(".uno:StatusBarFunc"),
