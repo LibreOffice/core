@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6a824454",
+        "filename": "vcl/README.scheduler",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-19T08:26:30Z",
+      "side": 1,
+      "message": "neigher-\u003eneither",
+      "revId": "4201dfc3746dd41ca499c77906d6fdacb1a7213e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8a877060",
+        "filename": "vcl/README.scheduler",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-19T08:26:30Z",
+      "side": 1,
+      "message": "not sure what this means? what part of LO is \"the LO application\" ? thanks",
+      "revId": "4201dfc3746dd41ca499c77906d6fdacb1a7213e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
