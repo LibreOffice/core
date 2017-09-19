@@ -4373,6 +4373,23 @@ SfxVoidItem CompressGraphic SID_COMPRESS_GRAPHIC
     GroupId = SfxGroupId::Modify;
 ]
 
+SfxVoidItem ClassificationDialog SID_CLASSIFICATION_DIALOG
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Document;
+]
 
 SfxBoolItem Init3D SID_3D_INIT
 

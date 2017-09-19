@@ -122,6 +122,7 @@
 #include <officecfg/Office/Security.hxx>
 
 #include <sfx2/fcontnr.hxx>
+#include <svx/ClassificationDialog.hxx>
 
 #include "swabstdlg.hxx"
 #include "watermarkdialog.hxx"
@@ -1161,6 +1162,20 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             else
                 SAL_WARN("sw.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
+        }
+        break;
+        case SID_CLASSIFICATION_DIALOG:
+        {
+            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr));
+
+            SwWrtShell* pShell = GetWrtShell();
+            std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
+            pDialog->setupValues(aInput);
+
+            if (RET_OK == pDialog->Execute())
+                pShell->ApplyAdvancedClassification(pDialog->getResult());
+
+            pDialog.disposeAndClear();
         }
         break;
         case SID_WATERMARK:
