@@ -1,16 +1,16 @@
-diff -ur boost.orig/boost/detail/workaround.hpp boost/boost/detail/workaround.hpp
---- a/b/boost.orig/boost/detail/workaround.hpp	2015-12-13 13:49:42.000000000 +0100
-+++ a/b/boost/boost/detail/workaround.hpp	2016-01-29 15:07:43.427781248 +0100
-@@ -5,6 +5,12 @@
- #ifndef WORKAROUND_DWA2002126_HPP
- #define WORKAROUND_DWA2002126_HPP
- 
+--- a/b/boost/boost/config/workaround.hpp
++++ a/b/boost/boost/config/workaround.hpp
+@@ -237,6 +237,13 @@
+ #else
+ #define BOOST_INTEL_WORKAROUND_GUARD 0
+ #endif
++
 +#ifndef BOOST_GCC_VERSION
 +#define BOOST_GCC_VERSION_WORKAROUND_GUARD 1
 +#else
 +#define BOOST_GCC_VERSION_WORKAROUND_GUARD 0
 +#endif
 +
- #include <boost/config/workaround.hpp>
+ // Always define to zero, if it's used it'll be defined my MPL:
+ #define BOOST_MPL_CFG_GCC_WORKAROUND_GUARD 0
  
- #endif // WORKAROUND_DWA2002126_HPP
