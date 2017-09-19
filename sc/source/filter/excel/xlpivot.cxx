@@ -1019,4 +1019,22 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo )
         << XclExpString(rInfo.maGrandTotalName, EXC_STR_DEFAULT, EXC_PT_MAXSTRLEN);
 }
 
+XclPTAddl::XclPTAddl() :
+    mbCompactMode(false)
+{
+}
+
+XclImpStream& operator>>(XclImpStream& rStrm, XclPTAddl& rInfo)
+{
+    rStrm.Ignore(4);
+    sal_uInt8 sxc = rStrm.ReaduInt8();
+    sal_uInt8 sxd = rStrm.ReaduInt8();
+    if(sxc == 0x00 && sxd == 0x19) // SxcView / sxdVer12Info
+    {
+        sal_uInt32 nFlags = rStrm.ReaduInt32();
+        rInfo.mbCompactMode = ((nFlags & 0x00000008) != 0);
+    }
+    return rStrm;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
