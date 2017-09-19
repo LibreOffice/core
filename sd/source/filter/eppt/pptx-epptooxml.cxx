@@ -827,8 +827,16 @@ void PowerPointExport::WriteAnimationProperty(const FSHelperPtr& pFS, const Any&
     if (!rAny.hasValue())
         return;
 
+    sal_uInt32 nRgb;
+
     switch (rAny.getValueType().getTypeClass())
     {
+    case TypeClass_LONG:
+        rAny >>= nRgb;
+        pFS->singleElementNS(XML_a, XML_srgbClr,
+                             XML_val, I32SHEX(nRgb),
+                             FSEND);
+        break;
     case TypeClass_STRING:
         pFS->singleElementNS(XML_p, XML_strVal,
                              XML_val, USS(*o3tl::doAccess<OUString>(rAny)),
@@ -888,7 +896,14 @@ void PowerPointExport::WriteAnimateTo(const FSHelperPtr& pFS, const Any& rValue,
 
     pFS->startElementNS(XML_p, XML_to, FSEND);
 
-    WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName));
+    sal_uInt32 nColor;
+    if (rValue >>= nColor)
+    {
+        // RGB color
+        WriteAnimationProperty(pFS, rValue);
+    }
+    else
+        WriteAnimationProperty(pFS, AnimationExporter::convertAnimateValue(rValue, rAttributeName));
 
     pFS->endElementNS(XML_p, XML_to);
 }
@@ -946,6 +961,12 @@ void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS, const
     {
         pFS->startElementNS(XML_p, XML_attrName, FSEND);
         pFS->writeEscaped("fill.on");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+    else if (rAttributeName == "FillColor")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("fillcolor");
         pFS->endElementNS(XML_p, XML_attrName);
     }
     else
@@ -1083,6 +1104,14 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
                             XML_from, pFrom,
                             XML_to, pTo,
                             FSEND);
+    }
+    else if (nXmlNodeType == XML_animClr)
+    {
+        pFS->startElementNS(XML_p, nXmlNodeType,
+            XML_clrSpc, "rgb",
+            XML_calcmode, pCalcMode,
+            XML_valueType, pValueType,
+            FSEND);
     }
     else
     {
@@ -1580,6 +1609,10 @@ void PowerPointExport::WriteAnimationNode(const FSHelperPtr& pFS, const Referenc
                 }
             }
         }
+        break;
+    case AnimationNodeType::ANIMATECOLOR:
+        xmlNodeType = XML_animClr;
+        pMethod = &PowerPointExport::WriteAnimationNodeAnimate;
         break;
     case AnimationNodeType::SET:
         xmlNodeType = XML_set;
