@@ -30,7 +30,7 @@ OUString SAL_CALL OIndexColumn::getImplementationName(  )
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VIndexColumnDescription");
-    return OUString("com.sun.star.sdbcx.VIndex");
+    return OUString("com.sun.star.sdbcx.VIndexColumn");
 }
 
 css::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  )
@@ -39,8 +39,7 @@ css::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames( 
     if(isNew())
         aSupported[0] = "com.sun.star.sdbcx.IndexDescription";
     else
-        aSupported[0] = "com.sun.star.sdbcx.Index";
-
+        aSupported[0] = "com.sun.star.sdbcx.IndexColumn";
     return aSupported;
 }
 
