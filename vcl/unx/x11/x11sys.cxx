@@ -42,28 +42,28 @@ X11SalSystem::~X11SalSystem()
 // for the moment only handle xinerama case
 unsigned int X11SalSystem::GetDisplayScreenCount()
 {
-    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
+    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     return pSalDisp->IsXinerama() ? pSalDisp->GetXineramaScreens().size() :
            pSalDisp->GetXScreenCount();
 }
 
 bool X11SalSystem::IsUnifiedDisplay()
 {
-    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
+    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     unsigned int nScreenCount = pSalDisp->GetXScreenCount();
     return pSalDisp->IsXinerama() || (nScreenCount == 1);
 }
 
 unsigned int X11SalSystem::GetDisplayBuiltInScreen()
 {
-    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
+    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     return pSalDisp->GetDefaultXScreen().getXScreen();
 }
 
 tools::Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
     tools::Rectangle aRet;
-    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
+    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     if( pSalDisp->IsXinerama() )
     {
         const std::vector< tools::Rectangle >& rScreens = pSalDisp->GetXineramaScreens();

@@ -33,7 +33,7 @@ X11GlyphCache::~X11GlyphCache()
         return;
 
     //Why do this here, move into dtor/shutdown of display?
-    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
+    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     Display* const pX11Disp = pSalDisp->GetDisplay();
     int nMaxScreens = pSalDisp->GetXScreenCount();
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();

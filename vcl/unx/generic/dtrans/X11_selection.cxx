@@ -3216,10 +3216,10 @@ void SelectionManager::startDrag(
             comphelper::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
             if( rSolarMutex.tryToAcquire() )
             {
-                pCaptureFrame = vcl_sal::getSalDisplay(GetGenericData())->GetCaptureFrame();
+                pCaptureFrame = vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetCaptureFrame();
                 if( pCaptureFrame )
                 {
-                    vcl_sal::getSalDisplay(GetGenericData())->CaptureMouse( nullptr );
+                    vcl_sal::getSalDisplay(GetGenericUnixSalData())->CaptureMouse( nullptr );
                     nPointerGrabSuccess =
                                 XGrabPointer( m_pDisplay, it->second.m_aRootWindow, True,
                                               DRAG_EVENT_MASK,
@@ -3256,7 +3256,7 @@ void SelectionManager::startDrag(
             {
                 comphelper::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
                 if( rSolarMutex.tryToAcquire() )
-                    vcl_sal::getSalDisplay(GetGenericData())->CaptureMouse( pCaptureFrame );
+                    vcl_sal::getSalDisplay(GetGenericUnixSalData())->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0
                 else
                     OSL_FAIL( "failed to acquire SolarMutex to reset capture frame" );
@@ -3345,7 +3345,7 @@ void SelectionManager::startDrag(
         {
             comphelper::SolarMutex& rSolarMutex( Application::GetSolarMutex() );
             if( rSolarMutex.tryToAcquire() )
-                vcl_sal::getSalDisplay(GetGenericData())->CaptureMouse( pCaptureFrame );
+                vcl_sal::getSalDisplay(GetGenericUnixSalData())->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0
             else
                 OSL_FAIL( "failed to acquire SolarMutex to reset capture frame" );

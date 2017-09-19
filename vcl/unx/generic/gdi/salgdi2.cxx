@@ -55,7 +55,7 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
                        src_x, src_y, w, h, dest_x, dest_y );
         else
         {
-            GetGenericData()->ErrorTrapPush();
+            GetGenericUnixSalData()->ErrorTrapPush();
             XImage* pImage = XGetImage( pDisplay, aSrc, src_x, src_y, w, h,
                                         AllPlanes, ZPixmap );
             if( pImage )
@@ -65,7 +65,7 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
                                0, 0, dest_x, dest_y, w, h );
                 XDestroyImage( pImage );
             }
-            GetGenericData()->ErrorTrapPop();
+            GetGenericUnixSalData()->ErrorTrapPop();
         }
     }
     else
@@ -127,7 +127,7 @@ void X11SalGraphics::YieldGraphicsExpose()
     ::Window aWindow = GetDrawable();
     if( ! pFrame )
     {
-        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericData())->getFrames();
+        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end() && ! pFrame; ++it )
         {
             const SystemEnvData* pEnvData = (*it)->GetSystemData();

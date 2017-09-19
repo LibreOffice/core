@@ -51,7 +51,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
 
         // system data
         m_aSystemData.nSize         = sizeof( SystemEnvData );
-        SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
+        SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
         m_aSystemData.pDisplay      = pDisp->GetDisplay();
         m_aSystemData.pVisual       = pDisp->GetVisual(pParent->getXScreenNumber()).GetVisual();
         m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pSocket));

@@ -110,7 +110,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
 
     }
 
-    pDisplay_               = vcl_sal::getSalDisplay(GetGenericData());
+    pDisplay_               = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     nDepth_                 = nBitCount;
 
     if( pData && pData->hDrawable != None )
@@ -141,7 +141,7 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
         nDX_ = nDX;
         nDY_ = nDY;
         m_nXScreen = pGraphics ? static_cast<X11SalGraphics const *>(pGraphics)->GetScreenNumber() :
-                                 vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen();
+                                 vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDefaultXScreen();
         hDrawable_ = limitXCreatePixmap( GetXDisplay(),
                                          pDisplay_->GetDrawable( m_nXScreen ),
                                          nDX_, nDY_,

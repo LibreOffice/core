@@ -45,9 +45,9 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics const * pGraph
     // TODO Check where a VirtualDevice is created from SystemGraphicsData
     assert( pData == nullptr ); (void)pData;
 
-    mpDisplay  = vcl_sal::getSalDisplay(GetGenericData());
+    mpDisplay  = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     mnXScreen  = pGraphics ? static_cast<X11SalGraphics const *>(pGraphics)->GetScreenNumber() :
-                             vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen();
+                             vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDefaultXScreen();
     mnWidth    = nDX;
     mnHeight   = nDY;
     mpGraphics->Init( this );

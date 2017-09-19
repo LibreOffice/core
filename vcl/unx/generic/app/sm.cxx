@@ -293,7 +293,7 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pStateVal, void 
           task of the quick-starter)
         */
         *pSmRestartHint = SmRestartNever;
-        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericData())->getFrames();
+        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
             vcl::Window *pWindow = (*it)->GetWindow();
@@ -394,7 +394,7 @@ IMPL_STATIC_LINK_NOARG( SessionManagerClient, ShutDownHdl, void*, void )
         m_pSession->CallCallback( &aEvent );
     }
 
-    const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericData())->getFrames();
+    const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames();
 
     SAL_INFO("vcl.sm.debug", "  rFrames.empty() = " << (rFrames.empty() ? "true" : "false"));
     if( !rFrames.empty() )
@@ -516,7 +516,7 @@ void SessionManagerClient::open(SalSession * pSession)
             pClientID = nullptr;
         }
 
-        SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
+        SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
         if( pDisp->GetDrawable(pDisp->GetDefaultXScreen()) && !m_aClientID.isEmpty() )
         {
             SAL_INFO("vcl.sm.debug", "  SmcOpenConnection open: pDisp->GetDrawable = true");
@@ -851,7 +851,7 @@ void ICEWatchProc(
     }
 
     SAL_INFO( "vcl.sm.debug", "  ICE connection     on " << IceConnectionNumber( ice_conn ) );
-    SAL_INFO( "vcl.sm.debug", "  Display connection is " << ConnectionNumber( vcl_sal::getSalDisplay(GetGenericData())->GetDisplay() ) );
+    SAL_INFO( "vcl.sm.debug", "  Display connection is " << ConnectionNumber( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDisplay() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

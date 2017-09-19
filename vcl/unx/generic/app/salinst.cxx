@@ -83,7 +83,7 @@ X11SalInstance::~X11SalInstance()
     // dispose SalDisplay list from SalData
     // would be done in a static destructor else which is
     // a little late
-    GetGenericData()->Dispose();
+    GetGenericUnixSalData()->Dispose();
 }
 
 SalX11Display* X11SalInstance::CreateDisplay() const
@@ -141,7 +141,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 
 bool X11SalInstance::AnyInput(VclInputFlags nType)
 {
-    GenericUnixSalData *pData = GetGenericData();
+    GenericUnixSalData *pData = GetGenericUnixSalData();
     Display *pDisplay  = vcl_sal::getSalDisplay(pData)->GetDisplay();
     bool bRet = false;
 
@@ -226,7 +226,7 @@ void X11SalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 
 void X11SalInstance::PostPrintersChanged()
 {
-    SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
+    SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     const std::list< SalFrame* >& rList = pDisp->getFrames();
     for( std::list< SalFrame* >::const_iterator it = rList.begin();
          it != rList.end(); ++it )

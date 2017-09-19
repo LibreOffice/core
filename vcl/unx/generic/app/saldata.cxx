@@ -535,7 +535,7 @@ void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
             )
             return;
 
-        if( pDisplay != vcl_sal::getSalDisplay(GetGenericData())->GetDisplay() )
+        if( pDisplay != vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDisplay() )
             return;
 
         PrintXError( pDisplay, pEvent );

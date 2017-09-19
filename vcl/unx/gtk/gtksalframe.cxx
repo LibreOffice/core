@@ -468,7 +468,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
 {
     getDisplay()->registerFrame( this );
     // permanently ignore errors from our unruly children ...
-    GetGenericData()->ErrorTrapPush();
+    GetGenericUnixSalData()->ErrorTrapPush();
     m_bDefaultPos       = true;
     m_bDefaultSize      = true;
     Init( pSysData );
@@ -1342,11 +1342,11 @@ void GtkSalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
     aEvent.xclient.data.l[3] = 0;
     aEvent.xclient.data.l[4] = 0;
 
-    GetGenericData()->ErrorTrapPush();
+    GetGenericUnixSalData()->ErrorTrapPush();
     XSendEvent( getDisplay()->GetDisplay(),
                 m_aForeignParentWindow,
                 False, NoEventMask, &aEvent );
-    GetGenericData()->ErrorTrapPop();
+    GetGenericUnixSalData()->ErrorTrapPop();
 }
 
 void GtkSalFrame::SetExtendedFrameStyle(SalExtStyle)
@@ -2134,11 +2134,11 @@ void GtkSalFrame::ToTop( SalFrameToTop nFlags )
             {
                 // sad but true: this can cause an XError, we need to catch that
                 // to do this we need to synchronize with the XServer
-                GetGenericData()->ErrorTrapPush();
+                GetGenericUnixSalData()->ErrorTrapPush();
                 XSetInputFocus( getDisplay()->GetDisplay(), widget_get_xid(m_pWindow), RevertToParent, CurrentTime );
                 // fdo#46687 - an XSync should not be necessary - but for some reason it is.
                 XSync( getDisplay()->GetDisplay(), False );
-                GetGenericData()->ErrorTrapPop();
+                GetGenericUnixSalData()->ErrorTrapPop();
             }
         }
         else
@@ -2576,7 +2576,7 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
 
 bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 {
-    GetGenericData()->ErrorTrapPush(); // permanantly ignore unruly children's errors
+    GetGenericUnixSalData()->ErrorTrapPush(); // permanantly ignore unruly children's errors
     createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) && pSysParent->bXEmbedSupport, m_nXScreen );
     return true;
 }
@@ -3044,12 +3044,12 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
 
     if( bSetFocus )
     {
-        GetGenericData()->ErrorTrapPush();
+        GetGenericUnixSalData()->ErrorTrapPush();
         XSetInputFocus( GtkSalFrame::getDisplay()->GetDisplay(),
                         widget_get_xid(pWidget),
                         RevertToParent, CurrentTime );
         XSync( GtkSalFrame::getDisplay()->GetDisplay(), False );
-        GetGenericData()->ErrorTrapPop();
+        GetGenericUnixSalData()->ErrorTrapPop();
     }
 
     pThis->CallCallback( SalEvent::Resize, nullptr );
@@ -3318,10 +3318,10 @@ void GtkSalFrame::IMHandler::createIMContext()
         g_signal_connect( m_pIMContext, "preedit_end",
                           G_CALLBACK (signalIMPreeditEnd), this );
 
-        GetGenericData()->ErrorTrapPush();
+        GetGenericUnixSalData()->ErrorTrapPush();
         gtk_im_context_set_client_window( m_pIMContext, widget_get_window(GTK_WIDGET(m_pFrame->m_pWindow)) );
         gtk_im_context_focus_in( m_pIMContext );
-        GetGenericData()->ErrorTrapPop();
+        GetGenericUnixSalData()->ErrorTrapPop();
         m_bFocused = true;
    }
 }
@@ -3331,9 +3331,9 @@ void GtkSalFrame::IMHandler::deleteIMContext()
     if( m_pIMContext )
     {
         // first give IC a chance to deinitialize
-        GetGenericData()->ErrorTrapPush();
+        GetGenericUnixSalData()->ErrorTrapPush();
         gtk_im_context_set_client_window( m_pIMContext, nullptr );
-        GetGenericData()->ErrorTrapPop();
+        GetGenericUnixSalData()->ErrorTrapPop();
         // destroy old IC
         g_object_unref( m_pIMContext );
         m_pIMContext = nullptr;
@@ -3355,9 +3355,9 @@ void GtkSalFrame::IMHandler::updateIMSpotLocation()
     aArea.y = aPosEvent.mnY;
     aArea.width = aPosEvent.mnWidth;
     aArea.height = aPosEvent.mnHeight;
-    GetGenericData()->ErrorTrapPush();
+    GetGenericUnixSalData()->ErrorTrapPush();
     gtk_im_context_set_cursor_location( m_pIMContext, &aArea );
-    GetGenericData()->ErrorTrapPop();
+    GetGenericUnixSalData()->ErrorTrapPop();
 }
 
 void GtkSalFrame::IMHandler::sendEmptyCommit()
@@ -3401,9 +3401,9 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
     m_bFocused = bFocusIn;
     if( bFocusIn )
     {
-        GetGenericData()->ErrorTrapPush();
+        GetGenericUnixSalData()->ErrorTrapPush();
         gtk_im_context_focus_in( m_pIMContext );
-        GetGenericData()->ErrorTrapPop();
+        GetGenericUnixSalData()->ErrorTrapPop();
         if( m_aInputEvent.mpTextAttr )
         {
             sendEmptyCommit();
@@ -3413,9 +3413,9 @@ void GtkSalFrame::IMHandler::focusChanged( bool bFocusIn )
     }
     else
     {
-        GetGenericData()->ErrorTrapPush();
+        GetGenericUnixSalData()->ErrorTrapPush();
         gtk_im_context_focus_out( m_pIMContext );
-        GetGenericData()->ErrorTrapPop();
+        GetGenericUnixSalData()->ErrorTrapPop();
         // cancel an eventual event posted to begin preedit again
         GtkSalFrame::getDisplay()->CancelInternalEvent( m_pFrame, &m_aInputEvent, SalEvent::ExtTextInput );
     }

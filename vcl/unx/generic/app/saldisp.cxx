@@ -294,7 +294,7 @@ SalDisplay::SalDisplay( Display *display ) :
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
 #endif
-    GenericUnixSalData *pData = GetGenericData();
+    GenericUnixSalData *pData = GetGenericUnixSalData();
 
     SAL_WARN_IF(  pData->GetDisplay(), "vcl", "Second SalDisplay created !!!" );
     pData->SetDisplay( this );
@@ -322,7 +322,7 @@ SalDisplay::~SalDisplay()
 
 void SalDisplay::doDestruct()
 {
-    GenericUnixSalData *pData = GetGenericData();
+    GenericUnixSalData *pData = GetGenericUnixSalData();
 
     delete m_pWMAdaptor;
     m_pWMAdaptor = nullptr;
@@ -645,14 +645,14 @@ void SalDisplay::Init()
 
 void SalX11Display::SetupInput()
 {
-    GetGenericData()->ErrorTrapPush();
+    GetGenericUnixSalData()->ErrorTrapPush();
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp_ );
     XSync( pDisp_, False );
 
-    bool bError = GetGenericData()->ErrorTrapPop( false );
-    GetGenericData()->ErrorTrapPush();
+    bool bError = GetGenericUnixSalData()->ErrorTrapPop( false );
+    GetGenericUnixSalData()->ErrorTrapPush();
     pKbdExtension->UseExtension( ! bError );
-    GetGenericData()->ErrorTrapPop();
+    GetGenericUnixSalData()->ErrorTrapPop();
 
     SetKbdExtension( pKbdExtension );
 }
@@ -2580,7 +2580,7 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap,
 
 // MonoChrome
 SalColormap::SalColormap()
-    : m_pDisplay( vcl_sal::getSalDisplay(GetGenericData()) ),
+    : m_pDisplay( vcl_sal::getSalDisplay(GetGenericUnixSalData()) ),
       m_hColormap( None ),
       m_nWhitePixel( 1 ),
       m_nBlackPixel( 0 ),
@@ -2595,12 +2595,12 @@ SalColormap::SalColormap()
 
 // TrueColor
 SalColormap::SalColormap( sal_uInt16 nDepth )
-    : m_pDisplay( vcl_sal::getSalDisplay(GetGenericData()) ),
+    : m_pDisplay( vcl_sal::getSalDisplay(GetGenericUnixSalData()) ),
       m_hColormap( None ),
       m_nWhitePixel( (1 << nDepth) - 1 ),
       m_nBlackPixel( 0x00000000 ),
       m_nUsed( 1 << nDepth ),
-      m_nXScreen( vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen() )
+      m_nXScreen( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDefaultXScreen() )
 {
     const SalVisual *pVisual = &m_pDisplay->GetVisual( m_nXScreen );
 
