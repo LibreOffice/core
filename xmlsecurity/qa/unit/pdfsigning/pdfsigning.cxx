@@ -20,8 +20,8 @@
 #include <pdfio/pdfdocument.hxx>
 
 #ifdef _WIN32
- #define WIN32_LEAN_AND_MEAN
- #include <windows.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #endif
 
 using namespace com::sun::star;
