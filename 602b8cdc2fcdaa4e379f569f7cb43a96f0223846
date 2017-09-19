@@ -34,6 +34,24 @@
       "revId": "602b8cdc2fcdaa4e379f569f7cb43a96f0223846",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ca7258e5",
+        "filename": "filter/source/graphicfilter/icgm/actimpr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-09-19T13:51:16Z",
+      "side": 1,
+      "message": "http://en.cppreference.com/w/cpp/container/array\n\n\"..default initialization may result in indeterminate values for non-class T...\", which is the before fix state.\n\nThe original code had new sal_uInt32[foo]() which meant that all entries were 0, and not sal_uInt32[foo] where the entries would have had indeterminate values.\n\nsticking member() explicitly in the member init list is...\n\nhttp://en.cppreference.com/w/cpp/language/value_initialization\n\ncase (3) Class::Class(...) : member() { ... }\n\n\"if T is an array type, each element of the array is value-initialized\"",
+      "parentUuid": "1a430d35_6a95e4e2",
+      "revId": "602b8cdc2fcdaa4e379f569f7cb43a96f0223846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
