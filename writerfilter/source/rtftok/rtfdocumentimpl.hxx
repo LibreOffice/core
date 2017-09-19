@@ -551,7 +551,6 @@ private:
     /// The settings table sprms.
     RTFSprms m_aSettingsTableSprms;
 
-    oox::StorageRef m_xStorage;
     std::shared_ptr<oox::GraphicHelper> m_pGraphicHelper;
 
     /// cell props buffer for nested tables, reset by \nestrow

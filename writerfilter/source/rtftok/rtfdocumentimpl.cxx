@@ -301,7 +301,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     if (xDocumentPropertiesSupplier.is())
         m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
 
-    m_pGraphicHelper.reset(new oox::GraphicHelper(m_xContext, xFrame, m_xStorage));
+    m_pGraphicHelper.reset(new oox::GraphicHelper(m_xContext, xFrame, oox::StorageRef()));
 
     m_pTokenizer.reset(new RTFTokenizer(*this, m_pInStream.get(), m_xStatusIndicator));
     m_pSdrImport.reset(new RTFSdrImport(*this, m_xDstDoc));
