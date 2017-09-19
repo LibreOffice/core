@@ -1284,7 +1284,7 @@ void OQueryController::executeQuery()
                         { PROPERTY_ACTIVE_CONNECTION, makeAny(getConnection()) },
                         { PROPERTY_UPDATE_CATALOGNAME, makeAny(m_sUpdateCatalogName) },
                         { PROPERTY_UPDATE_SCHEMANAME, makeAny(m_sUpdateSchemaName) },
-                        { PROPERTY_UPDATE_TABLENAME, makeAny(m_sUpdateTableName) },
+                        { PROPERTY_UPDATE_TABLENAME, makeAny(OUString()) },
                         { PROPERTY_ESCAPE_PROCESSING, makeAny(m_bEscapeProcessing) }
                     }));
 
@@ -1461,7 +1461,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
 
             if ( editingQuery() )
             {
-                xQuery->setPropertyValue( PROPERTY_UPDATE_TABLENAME, makeAny( m_sUpdateTableName ) );
+                xQuery->setPropertyValue( PROPERTY_UPDATE_TABLENAME, makeAny( OUString() ) );
                 xQuery->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, css::uno::makeAny( m_bEscapeProcessing ) );
 
                 xQuery->setPropertyValue( PROPERTY_LAYOUTINFORMATION, getViewData() );

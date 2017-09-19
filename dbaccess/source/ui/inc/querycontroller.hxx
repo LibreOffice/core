@@ -72,7 +72,6 @@ namespace dbaui
         OUString        m_sStatement;           // contains the current sql statement
         OUString        m_sUpdateCatalogName;   // catalog for update data
         OUString        m_sUpdateSchemaName;    // schema for update data
-        OUString        m_sUpdateTableName;     // table for update data
         mutable OUString
                         m_sName;                // name of the query
 
