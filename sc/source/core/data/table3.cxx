@@ -665,30 +665,6 @@ public:
     }
 };
 
-class StartListeningNotifier
-{
-    sc::RefStartListeningHint maHint;
-public:
-    StartListeningNotifier() {}
-
-    void operator() ( SvtListener* p )
-    {
-        p->Notify(maHint);
-    }
-};
-
-class StopListeningNotifier
-{
-    sc::RefStopListeningHint maHint;
-public:
-    StopListeningNotifier() {}
-
-    void operator() ( SvtListener* p )
-    {
-        p->Notify(maHint);
-    }
-};
-
 class FormulaGroupPosCollector
 {
     sc::RefQueryFormulaGroup& mrQuery;
@@ -933,8 +909,9 @@ void ScTable::SortReorderByColumn(
         /* TODO: for performance this could be enhanced to stop and later
          * restart only listening to within the reordered range and keep
          * listening to everything outside untouched. */
-        StopListeningNotifier aFunc;
-        std::for_each(aCellListeners.begin(), aCellListeners.end(), aFunc);
+        sc::RefStopListeningHint aHint;
+        for (auto const & l : aCellListeners)
+            l->Notify(aHint);
     }
 
     // table to keep track of column index to position in the index table.
@@ -1024,8 +1001,9 @@ void ScTable::SortReorderByColumn(
     else    // !(pArray->IsUpdateRefs())
     {
         // Notify the cells' listeners to (re-)start listening.
-        StartListeningNotifier aFunc;
-        std::for_each(aCellListeners.begin(), aCellListeners.end(), aFunc);
+        sc::RefStartListeningHint aHint;
+        for (auto const & l : aCellListeners)
+            l->Notify(aHint);
     }
 
     // Re-join formulas at row boundaries now that all the references have
@@ -1079,8 +1057,9 @@ void ScTable::SortReorderByRow(
      * restart only listening to within the reordered range and keep
      * listening to everything outside untouched. */
     {
-        StopListeningNotifier aFunc;
-        std::for_each(aCellListeners.begin(), aCellListeners.end(), aFunc);
+        sc::RefStopListeningHint aHint;
+        for (auto const & l : aCellListeners)
+            l->Notify(aHint);
     }
 
     // Split formula groups at the sort range boundaries (if applicable).
@@ -1172,8 +1151,9 @@ void ScTable::SortReorderByRow(
 
     // Notify the cells' listeners to (re-)start listening.
     {
-        StartListeningNotifier aFunc;
-        std::for_each(aCellListeners.begin(), aCellListeners.end(), aFunc);
+        sc::RefStartListeningHint aHint;
+        for (auto const & l : aCellListeners)
+            l->Notify(aHint);
     }
 
     // Re-group columns in the sorted range too.
