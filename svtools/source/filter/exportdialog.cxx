@@ -351,7 +351,7 @@ awt::Size ExportDialog::GetOriginalSize()
     else if (!mbGraphicsSource)
     {
         DocumentToGraphicRenderer aRenderer( mxSourceDocument, mbExportSelection);
-        const sal_Int32 nCurrentPage = aRenderer.getCurrentPageWriter();
+        const sal_Int32 nCurrentPage = aRenderer.getCurrentPage();
         const Size aSize = aRenderer.getDocumentSizeIn100mm( nCurrentPage);
         return awt::Size( aSize.Width(), aSize.Height());
     }
@@ -435,7 +435,7 @@ void ExportDialog::GetGraphicStream()
             {
                 // Create a Graphic to be used below.
                 DocumentToGraphicRenderer aRenderer( mxSourceDocument, mbExportSelection);
-                const sal_Int32 nCurrentPage = aRenderer.getCurrentPageWriter();
+                const sal_Int32 nCurrentPage = aRenderer.getCurrentPage();
                 const Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels( nCurrentPage);
 
                 const Size aTargetSizePixel( mbIsPixelFormat ?
