@@ -281,6 +281,8 @@ public:
         OUString const & implementationName,
         SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL );
 
+    void cleanup() throw();
+
     virtual ~SvXMLImport() throw() override;
 
     // css::xml::sax::XDocumentHandler

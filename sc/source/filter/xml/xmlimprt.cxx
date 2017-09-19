@@ -788,6 +788,11 @@ ScXMLImport::~ScXMLImport() throw()
     delete pMyLabelRanges;
     delete pValidations;
     delete pDetectiveOpArray;
+
+    //call SvXMLImport dtor contents before deleting pSolarMutexGuard
+    cleanup();
+
+    delete pSolarMutexGuard;
 }
 
 void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
