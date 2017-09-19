@@ -57,7 +57,7 @@ public:
     /// Wrapper around CheckPaste(): informs the user if necessary and finds out if the paste can be continued or not.
     static bool ShowPasteInfo(SfxClassificationCheckPasteResult eResult);
 
-    SfxClassificationHelper(const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties);
+    SfxClassificationHelper(const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties, bool bUseLocalizedPolicy = true);
     ~SfxClassificationHelper();
     /// Get the currently selected category for eType.
     const OUString& GetBACName(SfxClassificationPolicyType eType);
@@ -78,6 +78,11 @@ public:
     /// The selected category has some content for the document footer.
     bool HasDocumentFooter();
     void UpdateInfobar(SfxViewFrame& rViewFrame);
+
+    const std::vector<OUString> GetMarkings();
+    const std::vector<OUString> GetIntellectualPropertyParts();
+    const std::vector<OUString> GetIntellectualPropertyPartNumbers();
+
     /// Does a best-effort conversion of rType to SfxClassificationPolicyType.
     static SfxClassificationPolicyType stringToPolicyType(const OUString& rType);
     /// Returns the string representation of a SfxClassificationPolicyType element.
