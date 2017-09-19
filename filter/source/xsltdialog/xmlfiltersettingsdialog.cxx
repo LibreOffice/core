@@ -1511,7 +1511,6 @@ bool filter_info_impl::operator==( const filter_info_impl& r ) const
     return maFilterName == r.maFilterName &&
         maType == r.maType &&
         maDocumentService == r.maDocumentService &&
-        maFilterService == r.maFilterService &&
         maInterfaceName == r.maInterfaceName &&
         maComment == r.maComment &&
         maExtension == r.maExtension &&

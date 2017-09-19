@@ -42,7 +42,6 @@ public:
     OUString   maFilterName;
     OUString   maType;
     OUString   maDocumentService;
-    OUString   maFilterService;
     OUString   maInterfaceName;
     OUString   maComment;
     OUString   maExtension;
