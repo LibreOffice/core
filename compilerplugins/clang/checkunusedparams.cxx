@@ -391,7 +391,6 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
         || fqn == "textconversiondlgs::ChineseTranslation_UnoDialog::create"
         || fqn == "pcr::DefaultHelpProvider::Create"
         || fqn == "pcr::DefaultFormComponentInspectorModel::Create"
-        || fqn == "GraphicExportDialog::GraphicExportDialog"
         || fqn == "pcr::ObjectInspectorModel::Create"
         || fqn == "GraphicExportFilter::GraphicExportFilter"
         || fqn == "CertificateContainer::CertificateContainer"

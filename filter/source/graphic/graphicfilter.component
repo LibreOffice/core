@@ -22,7 +22,4 @@
   <implementation name="com.sun.star.comp.GraphicExportFilter">
     <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.GraphicExportDialog">
-    <service name="com.sun.star.ui.dialog.FilterOptionsDialog"/>
-  </implementation>
 </component>
