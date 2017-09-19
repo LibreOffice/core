@@ -195,19 +195,15 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
                         INetURLObject(aBaseURL),
                         aGrfNm,
                         URIHelper::GetMaybeFileHdl());
-                if ( HasCId() )
-                    MakeCIdURL( rLinkName );
             }
         }
     }
     else
     {
         // Linked graphic - figure out the URL for the IMG tag
-        if( bCopyLocalFileToINet || HasCId() )
+        if( bCopyLocalFileToINet )
         {
             CopyLocalFileToINet( rLinkName, aStreamPath );
-            if ( HasCId() )
-                MakeCIdURL( rLinkName );
         }
         else
             rLinkName = URIHelper::SmartRel2Abs(

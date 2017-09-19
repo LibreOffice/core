@@ -593,8 +593,6 @@ void ScHTMLExport::WriteBody()
                             aGrfNm = URIHelper::SmartRel2Abs(
                                     INetURLObject(aBaseURL),
                                     aGrfNm, URIHelper::GetMaybeFileHdl());
-                            if ( HasCId() )
-                                MakeCIdURL( aGrfNm );
                             aLink = aGrfNm;
                         }
                     }
@@ -602,11 +600,9 @@ void ScHTMLExport::WriteBody()
                 else
                 {
                     aGrfNm = aLink;
-                    if( bCopyLocalFileToINet || HasCId() )
+                    if( bCopyLocalFileToINet )
                     {
                         CopyLocalFileToINet( aGrfNm, aStreamPath );
-                        if ( HasCId() )
-                            MakeCIdURL( aGrfNm );
                     }
                     else
                         aGrfNm = URIHelper::SmartRel2Abs(
@@ -1317,21 +1313,6 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
             rFileNm = aDest;
         }
     }
-}
-
-void ScHTMLExport::MakeCIdURL( OUString& rURL )
-{
-    if( aCId.isEmpty() )
-        return;
-
-    INetURLObject aURLObj( rURL );
-    if( INetProtocol::File != aURLObj.GetProtocol() )
-        return;
-
-    OUString aLastName( aURLObj.GetLastName().toAsciiLowerCase() );
-    OSL_ENSURE( !aLastName.isEmpty(), "filename without length!" );
-
-    rURL = "cid:" + aLastName + "." + aCId;
 }
 
 void ScHTMLExport::IncIndent( short nVal )

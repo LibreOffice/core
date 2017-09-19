@@ -108,7 +108,6 @@ class ScHTMLExport : public ScExportBase
     ScHTMLStyle      aHTMLStyle;
     OUString         aBaseURL;
     OUString         aStreamPath;
-    OUString         aCId;           // Content-Id for Mail-Export
     VclPtr<OutputDevice> pAppWin;        // for Pixel-work
     FileNameMapPtr   pFileNameMap;        // for CopyLocalFileToINet
     OUString         aNonConvertibleChars;   // collect nonconvertible characters
@@ -144,11 +143,6 @@ class ScHTMLExport : public ScExportBase
 
     // copy a local file to internet if needed
     void CopyLocalFileToINet( OUString& rFileNm, const OUString& rTargetNm );
-    bool HasCId()
-    {
-        return !aCId.isEmpty();
-    }
-    void MakeCIdURL( OUString& rURL );
 
     void PrepareGraphics( ScDrawLayer*, SCTAB nTab,
                           SCCOL nStartCol, SCROW nStartRow,
