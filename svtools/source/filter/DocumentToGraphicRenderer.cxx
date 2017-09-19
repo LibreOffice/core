@@ -211,7 +211,11 @@ sal_Int32 DocumentToGraphicRenderer::getCurrentPage()
     if (hasSelection())
         return 1;
 
-    return getCurrentPageWriter();
+    if (mbIsWriter)
+        return getCurrentPageWriter();
+
+    /* TODO: other application specific page detection? */
+    return 1;
 }
 
 sal_Int32 DocumentToGraphicRenderer::getCurrentPageWriter()
