@@ -1235,6 +1235,7 @@ ErrCode ImportExcel8::Read()
                     case EXC_ID_SXEX:           rPTableMgr.ReadSxex( maStrm );      break;
                     case EXC_ID_SHEETEXT:       rTabViewSett.ReadTabBgColor( maStrm, rPal );    break;
                     case EXC_ID_SXVIEWEX9:      rPTableMgr.ReadSxViewEx9( maStrm ); break;
+                    case EXC_ID_SXADDL:         rPTableMgr.ReadSxAddl( maStrm ); break;
                 }
             }
             break;
