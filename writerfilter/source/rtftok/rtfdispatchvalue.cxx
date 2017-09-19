@@ -1370,8 +1370,16 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     break;
     case RTF_FI:
-        putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine, pIntValue);
+    {
+        if (m_aStates.top().eDestination == Destination::LISTLEVEL)
+        {
+            if (m_aStates.top().bLevelNumbersValid)
+                putNestedAttribute(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine, pIntValue);
+        }
+        else
+            putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine, pIntValue);
         break;
+    }
     case RTF_LI:
     {
         putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_left, pIntValue);

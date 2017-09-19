@@ -846,6 +846,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44986, "tdf44986.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106953, "tdf106953.docx")
+{
+    uno::Reference<container::XIndexAccess> xRules = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
+    // This was -635, so the tab of the numbering expanded to a small value instead of matching Word's larger value.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), comphelper::SequenceAsHashMap(xRules->getByIndex(0))["FirstLineIndent"].get<sal_Int32>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

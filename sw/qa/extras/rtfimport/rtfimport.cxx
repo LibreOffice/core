@@ -1373,11 +1373,10 @@ DECLARE_RTFIMPORT_TEST(testN825305, "n825305.rtf")
 
 DECLARE_RTFIMPORT_TEST(testTdf106953, "tdf106953.rtf")
 {
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
-    uno::Reference<beans::XPropertyState> xPropertyState(getParagraph(1), uno::UNO_QUERY);
-    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("ParaLeftMargin");
-    // Was beans::PropertyState_DEFAULT_VALUE.
-    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
+    auto xRules = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
+    comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), aRule["IndentAt"].get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aRule["FirstLineIndent"].get<sal_Int32>());
 }
 
 DECLARE_RTFIMPORT_TEST(testParaBottomMargin, "para-bottom-margin.rtf")
@@ -2826,9 +2825,10 @@ DECLARE_RTFIMPORT_TEST(testTdf104317, "tdf104317.rtf")
 
 DECLARE_RTFIMPORT_TEST(testTdf104744, "tdf104744.rtf")
 {
-    // This was 0, as an unexpected "left margin is 0" token was created during
-    // import.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    auto xRules = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
+    comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
+    // This was 0.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), aRule["IndentAt"].get<sal_Int32>());
 }
 
 DECLARE_RTFIMPORT_TEST(testTdf105852, "tdf105852.rtf")
