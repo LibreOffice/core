@@ -60,7 +60,7 @@ void GraphicExportOptionsDialog::dispose()
 
 void GraphicExportOptionsDialog::initialize()
 {
-    mCurrentPage = mRenderer.getCurrentPageWriter();
+    mCurrentPage = mRenderer.getCurrentPage();
     mSize100mm = mRenderer.getDocumentSizeIn100mm(mCurrentPage);
     // Init DPI with screen resolution, taking width. This may lead to unusual
     // DPI values but ensures a size in pixels that matches the actual screen

@@ -181,6 +181,11 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     return Graphic(aMtf);
 }
 
+sal_Int32 DocumentToGraphicRenderer::getCurrentPage()
+{
+    return getCurrentPageWriter();
+}
+
 sal_Int32 DocumentToGraphicRenderer::getCurrentPageWriter()
 {
     Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(mxModel->getCurrentController(), UNO_QUERY);

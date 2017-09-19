@@ -115,7 +115,7 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
     gatherProperties(rDescriptor);
 
     DocumentToGraphicRenderer aRenderer( mxDocument, mbSelectionOnly );
-    sal_Int32 nCurrentPage = aRenderer.getCurrentPageWriter();
+    sal_Int32 nCurrentPage = aRenderer.getCurrentPage();
     Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nCurrentPage);
 
     Size aTargetSizePixel(mTargetWidth, mTargetHeight);

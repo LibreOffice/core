@@ -42,11 +42,13 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
 
     css::uno::Any getSelection() const;
 
+    sal_Int32 getCurrentPageWriter();
+
 public:
     DocumentToGraphicRenderer(const css::uno::Reference<css::lang::XComponent>& xDocument, bool bSelectionOnly);
     ~DocumentToGraphicRenderer();
 
-    sal_Int32 getCurrentPageWriter( );
+    sal_Int32 getCurrentPage();
 
     Size getDocumentSizeInPixels( sal_Int32 nCurrentPage );
 
