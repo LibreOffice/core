@@ -464,6 +464,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99227, "tdf99227.docx")
     assertXPath(pXmlDoc, "//w:footnote[3]/w:p/w:r[5]/w:drawing", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf112446_frameStyle, "tdf112446_frameStyle.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::NONE, getProperty<sal_Int16>(getShape(1), "HoriOrient"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
 {
     // This crashed: the comment field contained a table with a <w:hideMark/>.
