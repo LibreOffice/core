@@ -1272,6 +1272,14 @@ DECLARE_RTFEXPORT_TEST(testTdf109790, "tdf109790.rtf")
     CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), "CharHeight"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf112211, "tdf112211.rtf")
+{
+    // This was 0, \fi in a list level definition was not imported.
+    auto xRules = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
+    comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-635), aRule["FirstLineIndent"].get<sal_Int32>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

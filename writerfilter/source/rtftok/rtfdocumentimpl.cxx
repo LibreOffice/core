@@ -2964,9 +2964,9 @@ RTFError RTFDocumentImpl::popState()
         if (!m_aStates.empty())
         {
             m_aStates.top().aTableSprms = aState.aTableSprms;
-            if (aState.eDestination == Destination::LEVELNUMBERS)
-                // Both current and parent state is levelnumbers: mark parent
-                // as invalid as well if necessary.
+            if (m_aStates.top().eDestination == Destination::LEVELNUMBERS || m_aStates.top().eDestination == Destination::LISTLEVEL)
+                // Parent state is level number or list level, current state is
+                // level numbers: mark parent as invalid as well if necessary.
                 m_aStates.top().bLevelNumbersValid = aState.bLevelNumbersValid;
         }
         break;
