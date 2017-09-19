@@ -5874,19 +5874,23 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
     sal_uLong nLenBStoreCont = 0, nLenFBSE = 0, nRead = 0;
 
     // search for a  BStore Container
+    bool bOk = true;
     do
     {
-        if(!ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
+        if (!ReadCommonRecordHeader(rSt, nVer, nInst, nFbt, nLength))
+            return;
         nRead += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
-        if( DFF_msofbtBstoreContainer == nFbt )
+        if (DFF_msofbtBstoreContainer == nFbt)
         {
-            nLenBStoreCont = nLength;       break;
+            nLenBStoreCont = nLength;
+            break;
         }
-        rSt.SeekRel( nLength );
+        bOk = checkSeek(rSt, rSt.Tell() + nLength);
     }
-    while( nRead < nLenDgg );
+    while (bOk && nRead < nLenDgg);
 
-    if( !nLenBStoreCont ) return;
+    if (!bOk || !nLenBStoreCont)
+        return;
 
     // Read all atoms of the containers from the BStore container and store all
     // relevant data of all contained FBSEs in out pointer array.
@@ -5906,9 +5910,9 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
         {
             nLenFBSE = nLength;
             // is FBSE big enough for our data
-            bool bOk = ( nSkipBLIPLen + 4 + nSkipBLIPPos + 4 <= nLenFBSE );
+            bOk = ( nSkipBLIPLen + 4 + nSkipBLIPPos + 4 <= nLenFBSE );
 
-            if( bOk )
+            if (bOk)
             {
                 rSt.SeekRel( nSkipBLIPLen );
                 rSt.ReadUInt32( nBLIPLen );
@@ -5919,7 +5923,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                 nLength -= nSkipBLIPLen+ 4 + nSkipBLIPPos + 4;
             }
 
-            if( bOk )
+            if (bOk)
             {
                 // specialty:
                 // If nBLIPLen is less than nLenFBSE AND nBLIPPos is NULL,
