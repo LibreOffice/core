@@ -2745,7 +2745,7 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([what Mac OS X SDK to use])
 
-    for _macosx_sdk in $with_macosx_sdk 10.8 10.9 10.10 10.11 10.12; do
+    for _macosx_sdk in $with_macosx_sdk 10.8 10.9 10.10 10.11 10.12 10.13; do
         MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
         if test -d "$MACOSX_SDK_PATH"; then
             with_macosx_sdk="${_macosx_sdk}"
@@ -2779,8 +2779,11 @@ if test $_os = Darwin; then
     10.12)
         MACOSX_SDK_VERSION=101200
         ;;
+    10.13)
+        MACOSX_SDK_VERSION=101300
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.8--12])
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.8--13])
         ;;
     esac
 
@@ -2815,8 +2818,11 @@ if test $_os = Darwin; then
     10.12)
         MAC_OS_X_VERSION_MIN_REQUIRED="101200"
         ;;
+    10.13)
+        MAC_OS_X_VERSION_MIN_REQUIRED="101300"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.8--12])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.8--13])
         ;;
     esac
 
@@ -2855,8 +2861,11 @@ if test $_os = Darwin; then
     10.12)
         MAC_OS_X_VERSION_MAX_ALLOWED="101200"
         ;;
+    10.13)
+        MAC_OS_X_VERSION_MAX_ALLOWED="101300"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.8--12])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.8--13])
         ;;
     esac
 
