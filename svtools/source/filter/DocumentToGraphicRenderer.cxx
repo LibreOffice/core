@@ -46,6 +46,22 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
     mxToolkit( VCLUnoHelper::CreateToolkit() ),
     mbSelectionOnly( bSelectionOnly )
 {
+    if (mbSelectionOnly && mxController.is())
+    {
+        try
+        {
+            uno::Reference< view::XSelectionSupplier > xSelSup( mxController, uno::UNO_QUERY);
+            if (xSelSup.is())
+            {
+                uno::Any aViewSelection( xSelSup->getSelection());
+                if (aViewSelection.hasValue())
+                    maSelection = aViewSelection;
+            }
+        }
+        catch (const uno::Exception&)
+        {
+        }
+    }
 }
 
 DocumentToGraphicRenderer::~DocumentToGraphicRenderer()
@@ -58,26 +74,18 @@ Size DocumentToGraphicRenderer::getDocumentSizeInPixels(sal_Int32 nCurrentPage)
     return Application::GetDefaultDevice()->LogicToPixel( aSize100mm, MapUnit::Map100thMM );
 }
 
+bool DocumentToGraphicRenderer::hasSelection() const
+{
+    return maSelection.hasValue();
+}
+
 uno::Any DocumentToGraphicRenderer::getSelection() const
 {
     uno::Any aSelection;
-    aSelection <<= mxDocument;  // default: render whole document
-    if (mbSelectionOnly && mxController.is())
-    {
-        try
-        {
-            uno::Reference< view::XSelectionSupplier > xSelSup( mxController, uno::UNO_QUERY);
-            if (xSelSup.is())
-            {
-                uno::Any aViewSelection( xSelSup->getSelection());
-                if (aViewSelection.hasValue())
-                    aSelection = aViewSelection;
-            }
-        }
-        catch (const uno::Exception&)
-        {
-        }
-    }
+    if (hasSelection())
+        aSelection <<= maSelection;
+    else
+        aSelection <<= mxDocument;  // default: render whole document
     return aSelection;
 }
 

@@ -38,8 +38,14 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
     css::uno::Reference<css::frame::XController>   mxController;
     css::uno::Reference<css::view::XRenderable>    mxRenderable;
     css::uno::Reference<css::awt::XToolkit>        mxToolkit;
+    css::uno::Any                                  maSelection;
     bool                                           mbSelectionOnly;
 
+    bool hasSelection() const;
+
+    /** Always something even if hasSelection() is false (in which case the
+        selection is mxDocument).
+     */
     css::uno::Any getSelection() const;
 
     sal_Int32 getCurrentPageWriter();
