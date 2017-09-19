@@ -46,4 +46,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3, \
 ))
 endif
 
+ifeq ($(OS),MACOSX)
+ifneq ($(filter 1090 101000 101100 101200,$(MAC_OS_X_VERSION_MIN_REQUIRED)),)
+$(eval $(call gb_UnpackedTarball_add_patches,python3,\
+	external/python3/python3-osx-avoid-new-10.13.patch.1 \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:

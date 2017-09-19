@@ -1,0 +1,61 @@
+-*- Mode: Diff -*-
+
+--- python3/Modules/posixmodule.c
++++ python3/Modules/posixmodule.c
+@@ -4565,12 +4565,12 @@
+     } \
+ 
+ 
+-#if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
++#if defined(HAVE_FUTIMESAT)
+ 
+ static int
+ utime_dir_fd(utime_t *ut, int dir_fd, char *path, int follow_symlinks)
+ {
+-#ifdef HAVE_UTIMENSAT
++#if 0
+     int flags = follow_symlinks ? 0 : AT_SYMLINK_NOFOLLOW;
+     UTIME_TO_TIMESPEC;
+     return utimensat(dir_fd, path, time, flags);
+@@ -4591,12 +4591,12 @@
+     #define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_unavailable
+ #endif
+ 
+-#if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
++#if defined(HAVE_FUTIMES)
+ 
+ static int
+ utime_fd(utime_t *ut, int fd)
+ {
+-#ifdef HAVE_FUTIMENS
++#if 0
+     UTIME_TO_TIMESPEC;
+     return futimens(fd, time);
+ #else
+@@ -4619,7 +4619,7 @@
+ static int
+ utime_nofollow_symlinks(utime_t *ut, char *path)
+ {
+-#ifdef HAVE_UTIMENSAT
++#if 0
+     UTIME_TO_TIMESPEC;
+     return utimensat(DEFAULT_DIR_FD, path, time, AT_SYMLINK_NOFOLLOW);
+ #else
+@@ -4635,7 +4635,7 @@
+ static int
+ utime_default(utime_t *ut, char *path)
+ {
+-#ifdef HAVE_UTIMENSAT
++#if 0
+     UTIME_TO_TIMESPEC;
+     return utimensat(DEFAULT_DIR_FD, path, time, 0);
+ #elif defined(HAVE_UTIMES)
+@@ -4836,7 +4836,7 @@
+     else
+ #endif
+ 
+-#if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
++#if defined(HAVE_FUTIMESAT)
+     if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks))
+         result = utime_dir_fd(&utime, dir_fd, path->narrow, follow_symlinks);
+     else
