@@ -393,6 +393,20 @@ try_again:
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream);
             }
+            else if (strcmp(argv[2], "fods") == 0)
+            {
+                static FFilterCall pfnImport(nullptr);
+                if (!pfnImport)
+                {
+                    osl::Module aLibrary;
+                    aLibrary.loadRelative(&thisModule, "libsclo.so", SAL_LOADMODULE_LAZY);
+                    pfnImport = reinterpret_cast<FFilterCall>(
+                        aLibrary.getFunctionSymbol("TestImportFODS"));
+                    aLibrary.release();
+                }
+                SvFileStream aFileStream(out, StreamMode::READ);
+                ret = (int) (*pfnImport)(aFileStream);
+            }
             else if (strcmp(argv[2], "xls") == 0)
             {
                 static WFilterCall pfnImport(nullptr);
