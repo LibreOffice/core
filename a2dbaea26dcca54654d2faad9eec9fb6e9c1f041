@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_cae25803",
+        "filename": "external/libgpg-error/w32-build-fixes-3.patch.1",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-19T10:10:57Z",
+      "side": 1,
+      "message": "Quite the contrary. according to my research those _str.* functions (i.e. starting w/ underscore) are NOT portable. They are Windows-specific.\n\nOne could try to do some #ifdef WIN ... #else ... #endif but with that, the most likely outcome is that upstream will reject the patch (independent of gender of the submitter)",
+      "parentUuid": "1a430d35_a7ee2c20",
+      "revId": "a2dbaea26dcca54654d2faad9eec9fb6e9c1f041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_e781144c",
         "filename": "solenv/gcc-wrappers/wrapper.cxx",
         "patchSetId": 5
