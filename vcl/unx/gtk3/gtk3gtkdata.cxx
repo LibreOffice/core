@@ -81,7 +81,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
     gdk_window_add_filter( nullptr, call_filterGdkEvent, this );
 
     if ( getenv( "SAL_IGNOREXERRORS" ) )
-        GetGenericData()->ErrorTrapPush(); // and leak the trap
+        GetGenericUnixSalData()->ErrorTrapPush(); // and leak the trap
 
     m_bX11Display = GDK_IS_X11_DISPLAY( m_pGdkDisplay );
 
@@ -781,7 +781,7 @@ gboolean GtkSalData::userEventFn( gpointer data )
 {
     gboolean bContinue = FALSE;
     GtkSalData *pThis = static_cast<GtkSalData *>(data);
-    GenericUnixSalData *pData = GetGenericData();
+    GenericUnixSalData *pData = GetGenericUnixSalData();
     SolarMutexGuard aGuard;
     const SalGenericDisplay *pDisplay = pData->GetDisplay();
     if (pDisplay)

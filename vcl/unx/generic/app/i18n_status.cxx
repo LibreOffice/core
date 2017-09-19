@@ -170,7 +170,7 @@ bool XIMStatusWindow::checkLastParent() const
 {
     if( m_pLastParent )
     {
-        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericData())->getFrames();
+        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
             if( *it == m_pLastParent )
@@ -199,7 +199,7 @@ Point XIMStatusWindow::updatePosition()
         ::Window aChild;
         XTranslateCoordinates( static_cast<Display*>(pParentEnvData->pDisplay),
                                (::Window)pParentEnvData->aShellWindow,
-                               vcl_sal::getSalDisplay(GetGenericData())->GetRootWindow( vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen() ),
+                               vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetRootWindow( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDefaultXScreen() ),
                                0, 0,
                                &x, &y,
                                &aChild );

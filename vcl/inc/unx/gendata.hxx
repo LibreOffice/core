@@ -58,7 +58,7 @@ class VCL_DLLPUBLIC GenericUnixSalData : public SalData
     virtual bool ErrorTrapPop( bool bIgnoreError = true ) = 0; // true on error
 };
 
-inline GenericUnixSalData * GetGenericData()
+inline GenericUnixSalData * GetGenericUnixSalData()
 {
     return static_cast<GenericUnixSalData *>(ImplGetSVData()->mpSalData);
 }

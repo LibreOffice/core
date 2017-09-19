@@ -547,7 +547,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             XFree( pProperty );
             pProperty = nullptr;
             ::Window aCheckWindow = None;
-            GetGenericData()->ErrorTrapPush();
+            GetGenericUnixSalData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
                                     m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ],
@@ -563,9 +563,9 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 && nFormat == 32
                 && nItems != 0 )
             {
-                if (! GetGenericData()->ErrorTrapPop( false ) )
+                if (! GetGenericUnixSalData()->ErrorTrapPop( false ) )
                 {
-                    GetGenericData()->ErrorTrapPush();
+                    GetGenericUnixSalData()->ErrorTrapPush();
 
                     aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
                     XFree( pProperty );
@@ -583,9 +583,9 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                     }
                 }
                 else
-                    GetGenericData()->ErrorTrapPush();
+                    GetGenericUnixSalData()->ErrorTrapPush();
             }
-            GetGenericData()->ErrorTrapPop();
+            GetGenericUnixSalData()->ErrorTrapPop();
         }
         else if( pProperty )
         {
@@ -745,7 +745,7 @@ bool WMAdaptor::getNetWmName()
             XFree( pProperty );
             pProperty = nullptr;
             ::Window aCheckWindow = None;
-            GetGenericData()->ErrorTrapPush();
+            GetGenericUnixSalData()->ErrorTrapPush();
             if( XGetWindowProperty( m_pDisplay,
                                     aWMChild,
                                     m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ],
@@ -761,9 +761,9 @@ bool WMAdaptor::getNetWmName()
                 && nFormat == 32
                 && nItems != 0 )
                 {
-                    if ( ! GetGenericData()->ErrorTrapPop( false ) )
+                    if ( ! GetGenericUnixSalData()->ErrorTrapPop( false ) )
                     {
-                        GetGenericData()->ErrorTrapPush();
+                        GetGenericUnixSalData()->ErrorTrapPush();
                         aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
                         XFree( pProperty );
                         pProperty = nullptr;
@@ -843,11 +843,11 @@ bool WMAdaptor::getNetWmName()
                             XFree( pProperty );
                             pProperty = nullptr;
                         }
-                        GetGenericData()->ErrorTrapPush();
+                        GetGenericUnixSalData()->ErrorTrapPush();
                     }
                 }
 
-            GetGenericData()->ErrorTrapPop();
+            GetGenericUnixSalData()->ErrorTrapPop();
         }
         else if( pProperty )
         {
@@ -2250,7 +2250,7 @@ void WMAdaptor::setPID( X11SalFrame const * i_pFrame ) const
 */
 void WMAdaptor::setClientMachine( X11SalFrame const * i_pFrame ) const
 {
-    OString aWmClient( OUStringToOString( GetGenericData()->GetHostname(), RTL_TEXTENCODING_ASCII_US ) );
+    OString aWmClient( OUStringToOString( GetGenericUnixSalData()->GetHostname(), RTL_TEXTENCODING_ASCII_US ) );
     XTextProperty aClientProp = { reinterpret_cast<unsigned char *>(const_cast<char *>(aWmClient.getStr())), XA_STRING, 8, sal::static_int_cast<unsigned long>( aWmClient.getLength() ) };
     XSetWMClientMachine( m_pDisplay, i_pFrame->GetShellWindow(), &aClientProp );
 }
