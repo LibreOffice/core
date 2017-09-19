@@ -294,7 +294,7 @@ SalDisplay::SalDisplay( Display *display ) :
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
 #endif
-    SalGenericData *pData = GetGenericData();
+    GenericUnixSalData *pData = GetGenericData();
 
     SAL_WARN_IF(  pData->GetDisplay(), "vcl", "Second SalDisplay created !!!" );
     pData->SetDisplay( this );
@@ -322,7 +322,7 @@ SalDisplay::~SalDisplay()
 
 void SalDisplay::doDestruct()
 {
-    SalGenericData *pData = GetGenericData();
+    GenericUnixSalData *pData = GetGenericData();
 
     delete m_pWMAdaptor;
     m_pWMAdaptor = nullptr;

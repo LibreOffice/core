@@ -385,7 +385,7 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
  **********************************************************************/
 
 GtkSalData::GtkSalData( SalInstance *pInstance )
-    : SalGenericData( SAL_DATA_GTK3, pInstance )
+    : GenericUnixSalData( SAL_DATA_GTK3, pInstance )
     , m_aDispatchMutex()
     , m_aDispatchCondition()
 {
@@ -781,7 +781,7 @@ gboolean GtkSalData::userEventFn( gpointer data )
 {
     gboolean bContinue = FALSE;
     GtkSalData *pThis = static_cast<GtkSalData *>(data);
-    SalGenericData *pData = GetGenericData();
+    GenericUnixSalData *pData = GetGenericData();
     SolarMutexGuard aGuard;
     const SalGenericDisplay *pDisplay = pData->GetDisplay();
     if (pDisplay)

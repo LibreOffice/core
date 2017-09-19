@@ -402,7 +402,7 @@ namespace vcl_sal {
         const OUString& pLang,
         KeySym nSymbol );
 
-    inline SalDisplay *getSalDisplay(SalGenericData const * data)
+    inline SalDisplay *getSalDisplay(GenericUnixSalData const * data)
     {
         assert(data != nullptr);
         assert(data->GetType() != SAL_DATA_GTK3);
