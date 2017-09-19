@@ -18,7 +18,7 @@ $(eval $(call gb_Module_add_targets,bridges,\
 	) \
 	$(if $(filter ARM,$(CPUNAME)),\
 		$(if $(filter IOS,$(OS)),\
-			CustomTarget_gcc3_ios_arm) \
+			CustomTarget_gcc3_ios) \
 		$(if $(filter ANDROID LINUX,$(OS)),\
 			CustomTarget_gcc3_linux_arm) \
 	) \

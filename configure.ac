@@ -620,7 +620,7 @@ darwin*) # Mac OS X or iOS
     test_freetype=no
     test_fontconfig=no
     test_dbus=no
-    if test "$host_cpu" = "arm" -o "$host_cpu" = "arm64"; then
+    if test "$host_cpu" = "arm64"; then
         _os=iOS
         test_gtk=no
         test_cups=no
@@ -2391,8 +2391,9 @@ if test -z "$enable_database_connectivity"; then
     # --disable-database-connectivity is unfinished work in progress
     # and the iOS test app doesn't link if we actually try to use it.
     # if test $_os != iOS -a $_os != Android; then
+    if test $_os != iOS; then
         enable_database_connectivity=yes
-    # fi
+    fi
 fi
 
 if test "$enable_database_connectivity" = yes; then
@@ -3066,7 +3067,7 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 if test "$_os" = "iOS"; then
-    if test "$host_cpu" = "arm" -o "$host_cpu" = "arm64" ; then
+    if test "$host_cpu" = "arm64" ; then
         cross_compiling="yes"
     fi
 fi
@@ -3936,16 +3937,7 @@ darwin*)
 
     case "$host_cpu" in
     arm)
-        OS=IOS
-        if test "$enable_ios_simulator" = "yes"; then
-            CPUNAME=I386
-            RTL_ARCH=x86
-            PLATFORMID=macosx_x86
-        else
-            RTL_ARCH=ARM_EABI
-            CPUNAME=ARM
-            PLATFORMID=ios_arm
-        fi
+        AC_MSG_ERROR([Can't build 32-bit code for iOS])
         ;;
     arm64)
         OS=IOS
@@ -5577,14 +5569,7 @@ dnl ===================================================================
 if test "$_os" != "WINNT"; then
 
 if test "$_os" == "iOS"; then
-if test "$host_cpu" == "arm"; then
-  ac_cv_sizeof_long=4
-  ac_cv_sizeof_short=2
-  ac_cv_sizeof_int=4
-  ac_cv_sizeof_long_long=8
-  ac_cv_sizeof_double=8
-  ac_cv_sizeof_voidp=4
-else
+if test "$host_cpu" == "arm64"; then
   ac_cv_sizeof_long=8
   ac_cv_sizeof_short=2
   ac_cv_sizeof_int=4

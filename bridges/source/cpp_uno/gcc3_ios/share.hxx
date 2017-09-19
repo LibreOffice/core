@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_IOS_ARM_SHARE_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_IOS_ARM_SHARE_HXX
+#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_IOS_SHARE_HXX
+#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_IOS_SHARE_HXX
 
 #include "uno/mapping.h"
 
