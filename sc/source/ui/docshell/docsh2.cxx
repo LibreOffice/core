@@ -122,7 +122,7 @@ void ScDocShell::InitItems()
         //  get settings from SvxAsianConfig
         SvxAsianConfig aAsian;
 
-        if (!aDocument.GetForbiddenCharacters())
+        if (!aDocument.GetForbiddenCharacters() && !utl::ConfigManager::IsAvoidConfig())
         {
             // set forbidden characters if necessary
             uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
