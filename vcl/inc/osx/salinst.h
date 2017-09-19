@@ -45,7 +45,7 @@ protected:
 
 public:
     SalYieldMutex();
-    virtual ~SalYieldMutex();
+    virtual ~SalYieldMutex() override;
 };
 
 class AquaSalInstance : public SalInstance
