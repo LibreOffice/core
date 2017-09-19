@@ -52,16 +52,14 @@
 
 using namespace ::com::sun::star;
 
-
-CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XModel > & rModel ) :
-        nFinalTextCount ( 0 )
+CGMImpressOutAct::CGMImpressOutAct(CGM& rCGM, const uno::Reference< frame::XModel > & rModel)
+    : mnCurrentPage(0)
+    , mnGroupActCount(0)
+    , mnGroupLevel(0)
+    , maGroupLevel()
+    , mpCGM(&rCGM)
+    , nFinalTextCount(0)
 {
-    mpCGM = &rCGM;
-    mnCurrentPage = 0;
-    mnGroupActCount = mnGroupLevel = 0;
-
-    mpGradient = nullptr;
-
     if ( mpCGM->mbStatus )
     {
         bool bStatRet = false;
@@ -386,7 +384,7 @@ void CGMImpressOutAct::BeginGroup()
 {
     if ( mnGroupLevel < CGM_OUTACT_MAX_GROUP_LEVEL )
     {
-        mpGroupLevel[ mnGroupLevel ] = maXShapes->getCount();
+        maGroupLevel[mnGroupLevel] = maXShapes->getCount();
     }
     mnGroupLevel++;
     mnGroupActCount = mpCGM->mnActCount;
@@ -398,7 +396,7 @@ void CGMImpressOutAct::EndGroup()
         mnGroupLevel--;
     if ( mnGroupLevel < CGM_OUTACT_MAX_GROUP_LEVEL )
     {
-        sal_uInt32 nFirstIndex = mpGroupLevel[ mnGroupLevel ];
+        sal_uInt32 nFirstIndex = maGroupLevel[mnGroupLevel];
         if ( nFirstIndex == 0xffffffff )
             nFirstIndex = 0;
         sal_uInt32 nCurrentCount = maXShapes->getCount();
