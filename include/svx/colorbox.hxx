@@ -74,6 +74,8 @@ public:
 
     void SaveValue() { m_aSaveColor = GetSelectEntryColor(); }
     bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
+
+    DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 };
 
 /** A wrapper for SvxColorListBox. */

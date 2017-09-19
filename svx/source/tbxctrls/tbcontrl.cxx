@@ -3351,6 +3351,15 @@ void SvxColorListBox::ShowPreview(const NamedColor &rColor)
     SetText(rColor.second);
 }
 
+IMPL_LINK(SvxColorListBox, WindowEventListener, VclWindowEvent&, rWindowEvent, void)
+{
+    if (rWindowEvent.GetId() == VclEventId::WindowEndPopupMode)
+    {
+        m_xColorWindow.disposeAndClear();
+        SetPopover(nullptr);
+    }
+}
+
 IMPL_LINK_NOARG(SvxColorListBox, MenuActivateHdl, MenuButton *, void)
 {
     if (!m_xColorWindow || m_xColorWindow->isDisposed())
@@ -3373,6 +3382,9 @@ void SvxColorListBox::createColorWindow()
                             xFrame,
                             this,
                             m_aColorWrapper);
+
+    m_xColorWindow->AddEventListener(LINK(this, SvxColorListBox, WindowEventListener));
+
     SetNoSelection();
     if (m_bShowNoneButton)
         m_xColorWindow->ShowNoneButton();
