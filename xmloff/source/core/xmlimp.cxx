@@ -408,7 +408,7 @@ SvXMLImport::SvXMLImport(
     registerNamespaces();
 }
 
-SvXMLImport::~SvXMLImport() throw ()
+void SvXMLImport::cleanup() throw ()
 {
     if (mxEventListener.is() && mxModel.is())
         mxModel->removeEventListener(mxEventListener);
@@ -417,6 +417,11 @@ SvXMLImport::~SvXMLImport() throw ()
     while (!maFastContexts.empty()) { maFastContexts.pop(); }
     while (!maContexts.empty()) { maContexts.pop(); }
     DisposingModel();
+}
+
+SvXMLImport::~SvXMLImport() throw ()
+{
+    cleanup();
 }
 
 namespace
