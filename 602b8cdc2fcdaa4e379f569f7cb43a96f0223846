@@ -16,6 +16,24 @@
       "revId": "602b8cdc2fcdaa4e379f569f7cb43a96f0223846",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2aabdc1e",
+        "filename": "filter/source/graphicfilter/icgm/actimpr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-19T13:45:10Z",
+      "side": 1,
+      "message": "perhaps you meant\n  maGroupLevel {0}\n?",
+      "parentUuid": "1a430d35_6a95e4e2",
+      "revId": "602b8cdc2fcdaa4e379f569f7cb43a96f0223846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
