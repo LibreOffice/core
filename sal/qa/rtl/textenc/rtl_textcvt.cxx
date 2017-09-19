@@ -3088,6 +3088,7 @@ void Test::testWindows() {
         bool reverse;
     };
     static Data const data[] = {
+        { 42, RTL_TEXTENCODING_SYMBOL, true },
         { 437, RTL_TEXTENCODING_IBM_437, true },
         { 708, RTL_TEXTENCODING_ISO_8859_6, false },
         { 737, RTL_TEXTENCODING_IBM_737, true },
