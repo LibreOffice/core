@@ -1795,24 +1795,6 @@ ScTokenArray::ScTokenArray() :
 {
 }
 
-ScTokenArray::ScTokenArray( const ScTokenArray& rArr ) :
-    FormulaTokenArray(rArr),
-    mnHashValue(rArr.mnHashValue),
-    meVectorState(rArr.meVectorState)
-{
-}
-
-ScTokenArray::~ScTokenArray()
-{
-}
-
-ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
-{
-    Clear();
-    Assign( rArr );
-    return *this;
-}
-
 void ScTokenArray::ClearScTokenArray()
 {
     Clear();
