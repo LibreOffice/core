@@ -79,7 +79,6 @@ namespace connectivity
             css::uno::Reference< css::sdbc::XResultSetMetaData>   m_xMetaData;
             sal_uInt32                                  m_nRowPos;
             bool                                        m_bWasNull;
-            sal_Int32                                   m_nFetchSize;
             sal_Int32                                   m_nResultSetType;
             sal_Int32                                   m_nFetchDirection;
 

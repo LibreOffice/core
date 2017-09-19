@@ -71,7 +71,6 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,m_xMetaData(nullptr)
     ,m_nRowPos(0)
     ,m_bWasNull(false)
-    ,m_nFetchSize(0)
     ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_pSQLIterator( _pSQLIterator )
@@ -607,7 +606,7 @@ void OResultSet::getFastPropertyValue(
             rValue <<= m_nFetchDirection;
             break;
         case PROPERTY_ID_FETCHSIZE:
-            rValue <<= m_nFetchSize;
+            rValue <<= (sal_Int32)0;
             break;
         case PROPERTY_ID_ISBOOKMARKABLE:
             const_cast< OResultSet* >( this )->determineReadOnly();
