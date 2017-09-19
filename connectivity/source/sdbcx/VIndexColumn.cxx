@@ -35,16 +35,16 @@ using namespace ::com::sun::star::uno;
 {
     if(isNew())
         return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndexColumnDescription");
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndex");
+    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndexColumn");
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexDescription");
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexColumnDescription");
     else
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Index");
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexColumn");
 
     return aSupported;
 }
