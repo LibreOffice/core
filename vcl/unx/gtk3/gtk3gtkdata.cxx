@@ -381,10 +381,10 @@ int GtkSalDisplay::CaptureMouse( SalFrame* pSFrame )
 }
 
 /**********************************************************************
- * class GtkData                                                      *
+ * class GtkSalData                                                   *
  **********************************************************************/
 
-GtkData::GtkData( SalInstance *pInstance )
+GtkSalData::GtkSalData( SalInstance *pInstance )
     : SalGenericData( SAL_DATA_GTK3, pInstance )
     , m_aDispatchMutex()
     , m_aDispatchCondition()
@@ -408,7 +408,7 @@ static int XIOErrorHdl(Display *)
 }
 #endif
 
-GtkData::~GtkData()
+GtkSalData::~GtkSalData()
 {
     Yield( true, true );
     g_warning ("TESTME: We used to have a stop-timer here, but the central code should do this");
@@ -430,13 +430,13 @@ GtkData::~GtkData()
 #endif
 }
 
-void GtkData::Dispose()
+void GtkSalData::Dispose()
 {
     deInitNWF();
 }
 
 /// Allows events to be processed, returns true if we processed an event.
-bool GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
+bool GtkSalData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     /* #i33212# only enter g_main_context_iteration in one thread at any one
      * time, else one of them potentially will never end as long as there is
@@ -490,7 +490,7 @@ bool GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
     return bWasEvent;
 }
 
-void GtkData::Init()
+void GtkSalData::Init()
 {
     SAL_INFO( "vcl.gtk", "GtkMainloop::Init()" );
 
@@ -599,12 +599,12 @@ void GtkData::Init()
     }
 }
 
-void GtkData::ErrorTrapPush()
+void GtkSalData::ErrorTrapPush()
 {
     gdk_error_trap_push ();
 }
 
-bool GtkData::ErrorTrapPop( bool bIgnoreError )
+bool GtkSalData::ErrorTrapPop( bool bIgnoreError )
 {
     if (bIgnoreError)
     {
@@ -777,10 +777,10 @@ void GtkSalTimer::Stop()
     }
 }
 
-gboolean GtkData::userEventFn( gpointer data )
+gboolean GtkSalData::userEventFn( gpointer data )
 {
     gboolean bContinue = FALSE;
-    GtkData *pThis = static_cast<GtkData *>(data);
+    GtkSalData *pThis = static_cast<GtkSalData *>(data);
     SalGenericData *pData = GetGenericData();
     SolarMutexGuard aGuard;
     const SalGenericDisplay *pDisplay = pData->GetDisplay();
@@ -812,12 +812,12 @@ extern "C" {
     static gboolean call_userEventFn( void *data )
     {
         SolarMutexGuard aGuard;
-        return GtkData::userEventFn( data );
+        return GtkSalData::userEventFn( data );
     }
 }
 
 // hEventGuard_ held during this invocation
-void GtkData::PostUserEvent()
+void GtkSalData::PostUserEvent()
 {
     if (m_pUserEvent)
         g_main_context_wakeup (nullptr); // really needed ?

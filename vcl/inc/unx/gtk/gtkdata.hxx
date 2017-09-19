@@ -92,7 +92,7 @@ public:
     sal_uLong    m_nTimeoutMS;
 };
 
-class GtkData : public SalGenericData
+class GtkSalData : public SalGenericData
 {
     GSource*        m_pUserEvent;
     osl::Mutex      m_aDispatchMutex;
@@ -100,8 +100,8 @@ class GtkData : public SalGenericData
     css::uno::Any   m_aException;
 
 public:
-    GtkData( SalInstance *pInstance );
-    virtual ~GtkData() override;
+    GtkSalData( SalInstance *pInstance );
+    virtual ~GtkSalData() override;
 
     void Init();
     virtual void Dispose() override;
@@ -182,16 +182,16 @@ public:
 #endif
 };
 
-inline GtkData* GetGtkSalData()
+inline GtkSalData* GetGtkSalData()
 {
-    return static_cast<GtkData*>(ImplGetSVData()->mpSalData);
+    return static_cast<GtkSalData*>(ImplGetSVData()->mpSalData);
 }
-inline GdkDisplay *GtkData::GetGdkDisplay()
+inline GdkDisplay *GtkSalData::GetGdkDisplay()
 {
     return GetGtkDisplay()->GetGdkDisplay();
 }
 
-GtkSalDisplay *GtkData::GetGtkDisplay() const
+GtkSalDisplay *GtkSalData::GetGtkDisplay() const
 {
     return static_cast<GtkSalDisplay *>(GetDisplay());
 }

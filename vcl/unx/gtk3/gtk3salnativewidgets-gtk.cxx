@@ -3324,7 +3324,7 @@ void getStyleContext(GtkStyleContext** style, GtkWidget* widget)
 
 }
 
-void GtkData::initNWF()
+void GtkSalData::initNWF()
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maNWFData.mbFlatMenu = true;
@@ -3345,7 +3345,7 @@ void GtkData::initNWF()
 #endif
 }
 
-void GtkData::deInitNWF()
+void GtkSalData::deInitNWF()
 {
     if (gCacheWindow)
         gtk_widget_destroy(gCacheWindow);
