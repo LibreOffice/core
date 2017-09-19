@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xal="urn:oasis:names:tc:ciq:xal:3" xmlns:xnl="urn:oasis:names:tc:ciq:xnl:3" xmlns="urn:tscp:names:baf:1.1" targetNamespace="urn:tscp:names:baf:1.1">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:xal="urn:oasis:names:tc:ciq:xal:3" xmlns:xnl="urn:oasis:names:tc:ciq:xnl:3" xmlns="urn:tscp:names:baf:1.1" targetNamespace="urn:tscp:names:baf:1.1">
   <xs:import namespace="urn:oasis:names:tc:ciq:xal:3" schemaLocation="xAL.xsd"/>
   <xs:import namespace="urn:oasis:names:tc:ciq:xnl:3" schemaLocation="xNL.xsd"/>
-  <!--
-Business Authorization
--->
+  <xs:import namespace="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" schemaLocation="baf_loext.xsd"/>
+
+  <!-- Business Authorization -->
   <xs:complexType name="BusinessAuthorization">
     <xs:sequence>
       <xs:element ref="PolicyAuthorityName"/>
@@ -31,6 +31,9 @@ Business Authorization
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="BusinessAuthorizationCategory" maxOccurs="unbounded"/>
+        <xs:element ref="loext:Marking" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPart" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPartNumber" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -38,6 +41,9 @@ Business Authorization
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="BusinessAuthorizationCategory" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:Marking" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPart" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element ref="loext:IntellectualPropertyPartNumber" minOccurs="0" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -51,24 +57,20 @@ Business Authorization
       <xs:restriction base="xs:date"/>
     </xs:simpleType>
   </xs:element>
-  <!--
-Business Authorization Category
--->
+  <!-- Business Authorization Category -->
   <xs:element name="BusinessAuthorizationCategory">
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="AccessRules" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="HandlingRules" minOccurs="0" maxOccurs="1"/>
-	<xs:element ref="LabelingRules"/>
-	<xs:element ref="ImpactLevel"/>
+        <xs:element ref="LabelingRules"/>
+        <xs:element ref="ImpactLevel"/>
       </xs:sequence>
       <xs:attribute name="Identifier" type="xs:anyURI" use="required"/>
       <xs:attribute name="Name" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
-  <!--
-Impact Level
--->
+  <!-- Impact Level -->
   <xs:element name="ImpactLevel">
     <xs:complexType>
       <xs:sequence>
@@ -83,9 +85,7 @@ Impact Level
   <xs:element name="ConfidentalityValue" type="xs:string"/>
   <xs:element name="IntegrityValue" type="xs:string"/>
   <xs:element name="AvailabilityValue" type="xs:string"/>
-  <!--
-Handling Rule
--->
+  <!-- Handling Rule -->
   <xs:complexType name="HandlingRule" abstract="true"/>
   <xs:complexType name="SecureWEBTransmission">
     <xs:complexContent>
@@ -127,9 +127,7 @@ Handling Rule
       <xs:extension base="HandlingRule"/>
     </xs:complexContent>
   </xs:complexType>
-  <!--
-Labeling Rule
--->
+  <!-- Labeling Rule -->
   <xs:element name="VisualMarkingPart">
     <xs:complexType>
       <xs:sequence>
@@ -141,9 +139,7 @@ Labeling Rule
   </xs:element>
   <xs:element name="Identifier"/>
   <xs:element name="Value"/>
-  <!--
-Others
--->
+  <!-- Others -->
   <xs:element name="WorkEffortsScope">
     <xs:complexType>
       <xs:sequence>

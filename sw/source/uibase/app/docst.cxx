@@ -272,6 +272,9 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 // Just trigger ClassificationCategoriesController::statusChanged().
                 rSet.InvalidateItem(nWhich);
                 break;
+            case SID_CLASSIFICATION_DIALOG:
+                rSet.InvalidateItem(nWhich);
+                break;
             case SID_STYLE_EDIT:
                 break;
             case SID_WATERMARK:

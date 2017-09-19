@@ -33,7 +33,7 @@
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Footer</baf:Identifier>
-                    <baf:Value>Ta vsebina ima oznako zaupno. Ne razširjajte je zunaj brez  poslovne odobritve.</baf:Value>
+                    <baf:Value>Ta vsebina ima oznako zaupno. Ne razširjajte je zunaj brez poslovne odobritve.</baf:Value>
                 </baf:VisualMarkingPart>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Watermark</baf:Identifier>
@@ -65,6 +65,11 @@
                 <baf:ConfidentalityValue>3</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
+        <loext:Marking Name="Primer oznake" />
+        <loext:IntellectualPropertyPart Name="Primer - del intelektualne lastnine ena" />
+        <loext:IntellectualPropertyPart Name="Primer - del intelektualne lastnine dve" />
+        <loext:IntellectualPropertyPartNumber Name="1" />
+        <loext:IntellectualPropertyPartNumber Name="2" />
     </baf:Included>
 </baf:BusinessAuthorization>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab:
