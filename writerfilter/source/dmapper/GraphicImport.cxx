@@ -225,9 +225,6 @@ public:
 
     bool            bIsGraphic;
 
-    bool            bHoriFlip;
-    bool            bVertFlip;
-
     bool            bSizeProtected;
     bool            bPositionProtected;
 
@@ -284,8 +281,6 @@ public:
         ,eColorMode( drawing::ColorMode_STANDARD )
         ,nCurrentBorderLine(BORDER_TOP)
         ,bIsGraphic(false)
-        ,bHoriFlip(false)
-        ,bVertFlip(false)
         ,bSizeProtected(false)
         ,bPositionProtected(false)
         ,nShapeOptionType(0)
@@ -1293,17 +1288,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             if(m_pImpl->fGamma > 0. )
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_GAMMA ),
                     uno::makeAny(m_pImpl->fGamma ));
-            if(m_pImpl->bHoriFlip)
-            {
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_MIRRORED_ON_EVEN_PAGES ),
-                uno::makeAny( m_pImpl->bHoriFlip ));
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_MIRRORED_ON_ODD_PAGES ),
-                uno::makeAny( m_pImpl->bHoriFlip ));
-            }
 
-            if( m_pImpl->bVertFlip )
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_MIRRORED ),
-                    uno::makeAny( m_pImpl->bVertFlip ));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BACK_COLOR ),
                 uno::makeAny( m_pImpl->nFillColor ));
 
