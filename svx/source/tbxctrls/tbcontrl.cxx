@@ -3347,6 +3347,11 @@ SvxColorListBox::~SvxColorListBox()
 
 void SvxColorListBox::dispose()
 {
+    // TODO: reset should be made automatically but...
+    // tdf#111894: avoid memory leak with PaletteManager with SvxColorListBox
+    // m_xColorWindow is made with m_xPaletteManager
+    // so reset this last one before disposeAndClear first one
+    m_xPaletteManager.reset();
     m_xColorWindow.disposeAndClear();
     m_aColorWrapper.dispose();
     MenuButton::dispose();
