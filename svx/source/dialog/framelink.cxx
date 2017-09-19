@@ -522,8 +522,8 @@ CutSet getMinMaxCutSet(
 void getExtends(
     std::vector<ExtendSet>& rExtendSet,                     // target Left/Right values to fill
     const basegfx::B2DPoint& rOrigin,                       // own vector start
-    const StyleVectorCombination& rCombination,             // own vector and offstets for lines
-    const basegfx::B2DVector& rPerpendX,                     // normalized perpendicular to own vector
+    const StyleVectorCombination& rCombination,             // own vector and offsets for lines
+    const basegfx::B2DVector& rPerpendX,                    // normalized perpendicular to own vector
     const StyleVectorTable& rStyleVectorTable)              // other vectors emerging in this point
 {
     if(!rCombination.empty() && rCombination.size() == rExtendSet.size())
