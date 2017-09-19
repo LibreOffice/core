@@ -28,10 +28,10 @@
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
 
-class AndroidSalData : public SalGenericData
+class AndroidSalData : public GenericUnixSalData
 {
 public:
-    explicit AndroidSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_ANDROID, pInstance ) {}
+    explicit AndroidSalData( SalInstance *pInstance ) : GenericUnixSalData( SAL_DATA_ANDROID, pInstance ) {}
     virtual void ErrorTrapPush() {}
     virtual bool ErrorTrapPop( bool ) { return false; }
 };

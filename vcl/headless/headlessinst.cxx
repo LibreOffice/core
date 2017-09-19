@@ -43,10 +43,10 @@ SalSystem *HeadlessSalInstance::CreateSalSystem()
     return new HeadlessSalSystem();
 }
 
-class HeadlessSalData : public SalGenericData
+class HeadlessSalData : public GenericUnixSalData
 {
 public:
-    explicit HeadlessSalData( SalInstance *pInstance ) : SalGenericData( SAL_DATA_HEADLESS, pInstance ) {}
+    explicit HeadlessSalData( SalInstance *pInstance ) : GenericUnixSalData( SAL_DATA_HEADLESS, pInstance ) {}
     virtual void ErrorTrapPush() override {}
     virtual bool ErrorTrapPop( bool ) override { return false; }
 };

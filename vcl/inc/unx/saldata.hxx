@@ -44,7 +44,7 @@ class SalPrinter;
 typedef unsigned int pthread_t;
 #endif
 
-class VCLPLUG_GEN_PUBLIC X11SalData : public SalGenericData
+class VCLPLUG_GEN_PUBLIC X11SalData : public GenericUnixSalData
 {
     struct XErrorStackEntry
     {
@@ -59,7 +59,7 @@ protected:
     SalXLib      *pXLib_;
 
 public:
-             X11SalData( SalGenericDataType t, SalInstance *pInstance );
+             X11SalData( GenericUnixSalDataType t, SalInstance *pInstance );
     virtual ~X11SalData() override;
 
     virtual void            Init();

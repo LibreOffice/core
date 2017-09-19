@@ -812,7 +812,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
                           SystemParentData* pSystemParent ) :
     m_nXScreen( 0 )
 {
-    SalGenericData *pData = GetGenericData();
+    GenericUnixSalData *pData = GetGenericData();
 
     // initialize frame geometry
     memset( &maGeometry, 0, sizeof(maGeometry) );

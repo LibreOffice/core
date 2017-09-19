@@ -31,11 +31,11 @@
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
 
-class IosSalData : public SalGenericData
+class IosSalData : public GenericUnixSalData
 {
 public:
     explicit IosSalData(SalInstance *pInstance)
-        : SalGenericData(SAL_DATA_IOS, pInstance)
+        : GenericUnixSalData(SAL_DATA_IOS, pInstance)
     {
     }
     virtual void ErrorTrapPush() {}
