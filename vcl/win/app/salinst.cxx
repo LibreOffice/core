@@ -175,7 +175,7 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
     return nCount;
 }
 
-void ImplSalYieldMutexAcquireWithWait( sal_uLong nCount )
+void ImplSalYieldMutexAcquireWithWait( sal_uInt32 nCount )
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst )
