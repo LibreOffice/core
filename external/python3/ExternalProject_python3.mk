@@ -57,7 +57,7 @@ endif
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter MACOSX,$(OS)), \
-			$(if $(filter 10.8 10.9 10.10 10.11,$(MACOSX_DEPLOYMENT_TARGET)), \
+			$(if $(filter 10.12 10.13,$(MACOSX_DEPLOYMENT_TARGET)), \
 				ac_cv_func_getentropy=no \
 				ac_cv_func_clock_gettime=no \
 			) \
