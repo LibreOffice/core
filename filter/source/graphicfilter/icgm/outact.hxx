@@ -46,7 +46,7 @@ class CGMImpressOutAct
     sal_uInt32                  mnGroupActCount;        // grouping
     sal_uInt32                  mnGroupLevel;
     std::array<sal_uInt32, CGM_OUTACT_MAX_GROUP_LEVEL>
-                                mpGroupLevel;
+                                maGroupLevel;
 
     std::vector<PolyFlags>      maFlags;
     std::vector<Point>          maPoints;
