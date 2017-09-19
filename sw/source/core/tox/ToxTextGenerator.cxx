@@ -200,9 +200,8 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
                 {
                     // for TOC numbering
                     rText += GetNumStringOfFirstNode( rBase, true, MAXLEVEL );
-                    SwIndex aIdx( pTOXNd, rText.getLength() );
-                    ToxWhitespaceStripper stripper(rBase.GetText().sText);
-                    pTOXNd->InsertText(stripper.GetStrippedString(), aIdx);
+                    HandledTextToken htt = HandleTextToken(rBase, pDoc->GetAttrPool() );
+                    ApplyHandledTextToken(htt, *pTOXNd);
                 }
                 break;
 
@@ -316,8 +315,19 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
         clone->SetStyleHandle(attributesToClone);
 
         result.autoFormats.push_back(clone);
-        result.startPositions.push_back(stripper.GetPositionInStrippedString(hint->GetStart()));
-        result.endPositions.push_back(stripper.GetPositionInStrippedString(*hint->GetAnyEnd()));
+
+        // This is a hack: The text of the node containing the hints may differ
+        // from the result text before the '-' sign (e.g. page number missing)
+        const sal_Int32 nHintOffset = pSrc->GetText().indexOf("-");
+        const sal_Int32 nTextOffset = result.text.indexOf("-");
+        sal_Int32 nOffset = 0;
+        if( nHintOffset >= 0 && nTextOffset >= 0)
+            nOffset = nHintOffset - nTextOffset;
+
+        result.startPositions.push_back(
+                stripper.GetPositionInStrippedString(hint->GetStart() - nOffset ));
+        result.endPositions.push_back(
+                stripper.GetPositionInStrippedString(*hint->GetAnyEnd() - nOffset));
     }
     return result;
 }
