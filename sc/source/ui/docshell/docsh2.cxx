@@ -27,6 +27,7 @@
 #include <orcus/orcus_import_ods.hpp>
 #include <orcusfiltersimpl.hxx>
 #include <config_folders.h>
+#include <unotools/configmgr.hxx>
 
 #include "drwlayer.hxx"
 #include "stlpool.hxx"
@@ -109,7 +110,7 @@ void ScDocShell::InitItems()
         // Other modifications after creation of the DrawLayer
         pDrawLayer->SetNotifyUndoActionHdl( LINK( pDocFunc, ScDocFunc, NotifyDrawUndo ) );
     }
-    else
+    else if (!utl::ConfigManager::IsAvoidConfig())
     {
         //  always use global color table instead of local copy
         PutItem( SvxColorListItem( XColorList::GetStdColorList(), SID_COLOR_TABLE ) );
