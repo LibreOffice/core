@@ -281,7 +281,7 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< css::container::XI
 OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 {
     DBG_ASSERT((sal_uInt32)nWhich < m_aControlTexts.size(), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
-    DBG_ASSERT(m_aControlTexts[nWhich] != nullptr, "FmSearchEngine::FormatField(sal_Int32) : invalid object in array !");
+    DBG_ASSERT(m_aControlTexts[nWhich], "FmSearchEngine::FormatField(sal_Int32) : invalid object in array !");
     DBG_ASSERT(m_aControlTexts[nWhich]->getControl().is(), "FmSearchEngine::FormatField : invalid control !");
 
     if (m_nCurrentFieldIndex != -1)
@@ -592,13 +592,6 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
 }
 
 
-FmSearchEngine::~FmSearchEngine()
-{
-    clearControlTexts();
-
-}
-
-
 void FmSearchEngine::SetIgnoreWidthCJK(bool bSet)
 {
     if (bSet)
@@ -631,14 +624,6 @@ bool FmSearchEngine::GetCaseSensitive() const
 
 void FmSearchEngine::clearControlTexts()
 {
-    ControlTextSuppliers::const_iterator aEnd = m_aControlTexts.end();
-    for (   ControlTextSuppliers::iterator aIter = m_aControlTexts.begin();
-            aIter != aEnd;
-            ++aIter
-        )
-    {
-        delete *aIter;
-    }
     m_aControlTexts.clear();
 }
 
@@ -655,21 +640,21 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
         Reference< css::awt::XTextComponent >  xAsText(xCurrent, UNO_QUERY);
         if (xAsText.is())
         {
-            m_aControlTexts.insert(m_aControlTexts.end(), new SimpleTextWrapper(xAsText));
+            m_aControlTexts.emplace_back(new SimpleTextWrapper(xAsText));
             continue;
         }
 
         Reference< css::awt::XListBox >  xAsListBox(xCurrent, UNO_QUERY);
         if (xAsListBox.is())
         {
-            m_aControlTexts.insert(m_aControlTexts.end(), new ListBoxWrapper(xAsListBox));
+            m_aControlTexts.emplace_back(new ListBoxWrapper(xAsListBox));
             continue;
         }
 
         Reference< css::awt::XCheckBox >  xAsCheckBox(xCurrent, UNO_QUERY);
         DBG_ASSERT(xAsCheckBox.is(), "FmSearchEngine::fillControlTexts : invalid field interface (no supported type) !");
             // we don't have any more options ...
-        m_aControlTexts.insert(m_aControlTexts.end(), new CheckBoxWrapper(xAsCheckBox));
+        m_aControlTexts.emplace_back(new CheckBoxWrapper(xAsCheckBox));
     }
 }
 
