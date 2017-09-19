@@ -117,6 +117,8 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
 		svx/source/dialog/crashreportdlg \
 		svx/source/dialog/crashreportui) \
     svx/source/dialog/ctredlin \
+    svx/source/dialog/ClassificationDialog \
+    svx/source/dialog/ClassificationEditView \
     svx/source/dialog/databaseregistrationui \
     svx/source/dialog/dialcontrol \
     svx/source/dialog/dlgctl3d \

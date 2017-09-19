@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<baf:BusinessAuthorization xmlns:baf="urn:tscp:names:baf:1.1">
+<baf:BusinessAuthorization xmlns:baf="urn:tscp:names:baf:1.1" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0">
     <!-- Translators: this string can be localized -->
     <baf:PolicyAuthorityName>TSCP Example Policy Authority</baf:PolicyAuthorityName>
     <!-- Translators: this string can be localized -->
@@ -78,6 +78,11 @@
                 <baf:ConfidentalityValue>3</baf:ConfidentalityValue>
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
+        <loext:Marking Name="Example Marking" />
+        <loext:IntellectualPropertyPart Name="Example First IP Part" />
+        <loext:IntellectualPropertyPart Name="Example Second IP Part" />
+        <loext:IntellectualPropertyPartNumber Name="1" />
+        <loext:IntellectualPropertyPartNumber Name="2" />
     </baf:Included>
 </baf:BusinessAuthorization>
 <!-- vim:set shiftwidth=4 softtabstop=4 expandtab:
