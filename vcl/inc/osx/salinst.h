@@ -39,10 +39,6 @@ enum class SalEvent;
 
 class SalYieldMutex : public comphelper::GenericSolarMutex
 {
-protected:
-    virtual void            doAcquire( sal_uInt32 nLockCount ) override;
-    virtual sal_uInt32      doRelease( bool bUnlockAll ) override;
-
 public:
     SalYieldMutex();
     virtual ~SalYieldMutex() override;

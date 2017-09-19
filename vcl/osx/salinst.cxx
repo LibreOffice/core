@@ -265,16 +265,6 @@ SalYieldMutex::~SalYieldMutex()
 {
 }
 
-void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
-{
-    comphelper::GenericSolarMutex::doAcquire( nLockCount );
-}
-
-sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
-{
-    return comphelper::GenericSolarMutex::doRelease( bUnlockAll );
-}
-
 // some convenience functions regarding the yield mutex, aka solar mutex
 
 bool ImplSalYieldMutexTryToAcquire()
