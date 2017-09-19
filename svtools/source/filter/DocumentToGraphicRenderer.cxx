@@ -83,7 +83,7 @@ uno::Any DocumentToGraphicRenderer::getSelection() const
 {
     uno::Any aSelection;
     if (hasSelection())
-        aSelection <<= maSelection;
+        aSelection = maSelection;
     else
         aSelection <<= mxDocument;  // default: render whole document
     return aSelection;
