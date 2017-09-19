@@ -3684,7 +3684,8 @@ OUString XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
 void XclImpDffConverter::ProcessDgContainer( SvStream& rDffStrm, const DffRecordHeader& rDgHeader )
 {
     std::size_t nEndPos = rDgHeader.GetRecEndFilePos();
-    while( rDffStrm.Tell() < nEndPos )
+    bool isBreak(false);
+    while (!isBreak && rDffStrm.good() && rDffStrm.Tell() < nEndPos)
     {
         DffRecordHeader aHeader;
         ReadDffRecordHeader( rDffStrm, aHeader );
@@ -3697,7 +3698,7 @@ void XclImpDffConverter::ProcessDgContainer( SvStream& rDffStrm, const DffRecord
                 ProcessShGrContainer( rDffStrm, aHeader );
             break;
             default:
-                aHeader.SeekToEndOfRecord( rDffStrm );
+                isBreak = !aHeader.SeekToEndOfRecord( rDffStrm );
         }
     }
     // seek to end of drawing page container
@@ -3713,7 +3714,8 @@ void XclImpDffConverter::ProcessDgContainer( SvStream& rDffStrm, const DffRecord
 void XclImpDffConverter::ProcessShGrContainer( SvStream& rDffStrm, const DffRecordHeader& rShGrHeader )
 {
     std::size_t nEndPos = rShGrHeader.GetRecEndFilePos();
-    while( rDffStrm.Tell() < nEndPos )
+    bool isBreak(false);
+    while (!isBreak && rDffStrm.good() && rDffStrm.Tell() < nEndPos)
     {
         DffRecordHeader aHeader;
         ReadDffRecordHeader( rDffStrm, aHeader );
@@ -3724,7 +3726,7 @@ void XclImpDffConverter::ProcessShGrContainer( SvStream& rDffStrm, const DffReco
                 ProcessShContainer( rDffStrm, aHeader );
             break;
             default:
-                aHeader.SeekToEndOfRecord( rDffStrm );
+                isBreak = !aHeader.SeekToEndOfRecord( rDffStrm );
         }
     }
     // seek to end of shape group container
