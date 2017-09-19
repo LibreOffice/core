@@ -8,6 +8,8 @@
 #include <cstring>
 #include <wchar.h>
 
+#include <comphelper/windowsStart.hxx>
+
 // Needed for CreateEnvironmentBlock
 #include <userenv.h>
 #pragma comment(lib, "userenv.lib")
