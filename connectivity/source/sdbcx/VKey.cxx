@@ -39,7 +39,7 @@ using namespace ::com::sun::star::lang;
 OUString SAL_CALL OKey::getImplementationName(  )
 {
     if(isNew())
-        return OUString("com.sun.star.sdbcx.VKeyDescription");
+        return OUString("com.sun.star.sdbcx.VKeyDescriptor");
     return OUString("com.sun.star.sdbcx.VKey");
 }
 
@@ -47,7 +47,7 @@ css::uno::Sequence< OUString > SAL_CALL OKey::getSupportedServiceNames(  )
 {
     css::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = "com.sun.star.sdbcx.KeyDescription";
+        aSupported[0] = "com.sun.star.sdbcx.KeyDescriptor";
     else
         aSupported[0] = "com.sun.star.sdbcx.Key";
 
