@@ -3224,7 +3224,7 @@ void SvxColorListBox::EnsurePaletteManager()
     if (!m_xPaletteManager)
     {
         m_xPaletteManager.reset(new PaletteManager);
-        m_xPaletteManager->SetColorSelectFunction(m_aColorWrapper);
+        m_xPaletteManager->SetColorSelectFunction(std::ref(m_aColorWrapper));
         m_xPaletteManager->SetLastColor(m_aSelectedColor.first);
     }
 }
