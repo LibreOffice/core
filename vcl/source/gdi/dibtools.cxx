@@ -872,6 +872,11 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
         pIStm = &rIStm;
     }
 
+    if (nOffset)
+    {
+        pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
+    }
+
     const sal_Int64 nBitsPerLine (static_cast<sal_Int64>(aHeader.nWidth) * static_cast<sal_Int64>(aHeader.nBitCount));
     if (nBitsPerLine > SAL_MAX_UINT32)
         return false;
@@ -880,13 +885,30 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     switch (aHeader.nCompression)
     {
         case RLE_8:
+        {
             if (aHeader.nBitCount != 8)
                 return false;
-            break;
-        case RLE_4:
-            if (aHeader.nBitCount != 4)
+            // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
+            sal_uInt64 nMaxWidth = pIStm->remainingSize();
+            nMaxWidth *= 256;   //assume generous compression ratio
+            if (aHeader.nHeight != 0)
+                nMaxWidth /= aHeader.nHeight;
+            if (nMaxWidth < static_cast<sal_uInt64>(aHeader.nWidth))
                 return false;
             break;
+        }
+        case RLE_4:
+        {
+            if (aHeader.nBitCount != 4)
+                return false;
+            sal_uInt64 nMaxWidth = pIStm->remainingSize();
+            nMaxWidth *= 512;   //assume generous compression ratio
+            if (aHeader.nHeight != 0)
+                nMaxWidth /= aHeader.nHeight;
+            if (nMaxWidth < static_cast<sal_uInt64>(aHeader.nWidth))
+                return false;
+            break;
+        }
         case BITFIELDS:
             break;
         case ZCOMPRESS:
@@ -962,11 +984,6 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
     if (pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
     {
         return false;
-    }
-
-    if(nOffset)
-    {
-        pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
     }
 
     // read bits
