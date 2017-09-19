@@ -40,12 +40,12 @@ OUString SAL_CALL XFormsEventConcrete::getType()
 
 css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getTarget()
 {
-    return m_target;
+    return css::uno::Reference< css::xml::dom::events::XEventTarget >();
 }
 
 css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getCurrentTarget()
 {
-    return m_currentTarget;
+    return css::uno::Reference< css::xml::dom::events::XEventTarget >();
 }
 
 css::xml::dom::events::PhaseType SAL_CALL XFormsEventConcrete::getEventPhase()
@@ -65,7 +65,7 @@ sal_Bool SAL_CALL XFormsEventConcrete::getCancelable()
 
 css::util::Time SAL_CALL XFormsEventConcrete::getTimeStamp()
 {
-    return m_time;
+    return css::util::Time();
 }
 
 void SAL_CALL XFormsEventConcrete::stopPropagation()

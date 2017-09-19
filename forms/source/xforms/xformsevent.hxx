@@ -63,11 +63,8 @@ class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
     protected:
 
         OUString m_eventType;
-        css::uno::Reference< css::xml::dom::events::XEventTarget > m_target;
-        css::uno::Reference< css::xml::dom::events::XEventTarget > m_currentTarget;
         bool m_bubbles;
         bool m_cancelable;
-        css::util::Time m_time;
 };
 
 } } } }
