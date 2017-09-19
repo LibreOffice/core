@@ -13,13 +13,14 @@
 
 #include <sal/config.h>
 #include <svx/svxdllapi.h>
+#include <editeng/flditem.hxx>
 
 namespace svx {
 
 enum class ClassificationType
 {
-    CLASSIFICATION,
-    MARKINGS,
+    CATEGORY,
+    MARKING,
     TEXT,
     INTELLECTUAL_PROPERTY_PART
 };
@@ -47,8 +48,8 @@ public:
             return false;
 
         const ClassificationField& rOtherField = static_cast<const ClassificationField&>(rOther);
-        return (meType == rOtherField.meType) &&
-               (msDescription == rOtherField.msDescription);
+        return (meType == rOtherField.meType &&
+                msDescription == rOtherField.msDescription);
     }
 };
 

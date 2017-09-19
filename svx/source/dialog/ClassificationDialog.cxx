@@ -84,6 +84,50 @@ short ClassificationDialog::Execute()
     return ModalDialog::Execute();
 }
 
+void ClassificationDialog::insertField(ClassificationType eType, OUString const & rString)
+{
+    ClassificationField aField(eType, rString);
+    m_pEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
+}
+
+void ClassificationDialog::setupValues(std::vector<ClassificationResult> const & rInput)
+{
+    for (ClassificationResult const & rClassificationResult : rInput)
+    {
+        switch (rClassificationResult.meType)
+        {
+            case svx::ClassificationType::TEXT:
+            {
+                m_pEditWindow->pEdView->InsertText(rClassificationResult.msString);
+            }
+            break;
+
+            case svx::ClassificationType::CATEGORY:
+            {
+                m_pClassificationListBox->SelectEntry(rClassificationResult.msString);
+                insertField(rClassificationResult.meType, rClassificationResult.msString);
+            }
+            break;
+
+            case svx::ClassificationType::MARKING:
+            {
+                m_pMarkingListBox->SelectEntry(rClassificationResult.msString);
+                insertField(rClassificationResult.meType, rClassificationResult.msString);
+            }
+            break;
+
+            case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
+            {
+                insertField(rClassificationResult.meType, rClassificationResult.msString);
+            }
+            break;
+
+            default:
+            break;
+        }
+    }
+}
+
 std::vector<ClassificationResult> ClassificationDialog::getResult()
 {
     std::vector<ClassificationResult> aClassificationResults;
@@ -95,14 +139,18 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
     for (editeng::Section const & rSection : aSections)
     {
-        const SvxFieldItem* rField = findField(rSection);
-        if (rField)
+        const SvxFieldItem* pFieldItem = findField(rSection);
+
+        ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd);
+        OUString sString = m_pEditWindow->pEdEngine->GetText(aSelection);
+
+        if (pFieldItem)
         {
+            const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(pFieldItem->GetField());
+            aClassificationResults.push_back({ pClassificationField->meType , sString, rSection.mnParagraph });
         }
         else
         {
-            ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd);
-            OUString sString = m_pEditWindow->pEdEngine->GetText(aSelection);
             aClassificationResults.push_back({ ClassificationType::TEXT, sString, rSection.mnParagraph });
         }
     }
@@ -124,7 +172,7 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
             if (pFieldItem)
             {
                 const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(pFieldItem->GetField());
-                if (pClassificationField && pClassificationField->meType == ClassificationType::CLASSIFICATION)
+                if (pClassificationField && pClassificationField->meType == ClassificationType::CATEGORY)
                 {
                     m_pEditWindow->pEdView->SetSelection(ESelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd));
                 }
@@ -132,8 +180,7 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
         }
 
         OUString aString = maHelper.GetBACNames()[nSelected];
-        ClassificationField aField(ClassificationType::CLASSIFICATION, aString);
-        m_pEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
+        insertField(ClassificationType::CATEGORY, aString);
     }
 }
 
@@ -152,7 +199,7 @@ IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
             if (pFieldItem)
             {
                 const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(pFieldItem->GetField());
-                if (pClassificationField && pClassificationField->meType == ClassificationType::MARKINGS)
+                if (pClassificationField && pClassificationField->meType == ClassificationType::MARKING)
                 {
                     m_pEditWindow->pEdView->SetSelection(ESelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd));
                 }
@@ -160,8 +207,7 @@ IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
         }
 
         OUString aString = maHelper.GetMarkings()[nSelected];
-        ClassificationField aField(ClassificationType::MARKINGS, aString);
-        m_pEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
+        insertField(ClassificationType::MARKING, aString);
     }
 }
 
@@ -193,8 +239,7 @@ IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
     }
     else if (pButton == m_pIntellectualPropertyPartAddButton)
     {
-        ClassificationField aField(ClassificationType::INTELLECTUAL_PROPERTY_PART, m_pIntellectualPropertyPartEdit->GetText());
-        m_pEditWindow->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
+        insertField(ClassificationType::INTELLECTUAL_PROPERTY_PART, m_pIntellectualPropertyPartEdit->GetText());
     }
 }
 

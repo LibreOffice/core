@@ -1167,17 +1167,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case SID_CLASSIFICATION_DIALOG:
         {
             ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr));
+
+            SwWrtShell* pShell = GetWrtShell();
+            std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
+            pDialog->setupValues(aInput);
+
             if (RET_OK == pDialog->Execute())
-            {
-                SwDocShell* pDocShell = GetDoc()->GetDocShell();
-                if (!pDocShell)
-                    return;
+                pShell->ApplyAdvancedClassification(pDialog->getResult());
 
-                for (svx::ClassificationResult const & rResult : pDialog->getResult())
-                {
-
-                }
-            }
             pDialog.disposeAndClear();
         }
         break;

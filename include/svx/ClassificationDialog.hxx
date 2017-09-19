@@ -44,13 +44,17 @@ private:
     DECL_LINK(SelectIPPartNumbersHdl, ListBox&, void);
     DECL_LINK(DoubleClickIPPartHdl, ListBox&, void);
 
+    void insertField(ClassificationType eType, OUString const & rString);
+
 public:
-    virtual short Execute() override;
     ClassificationDialog(vcl::Window* pParent);
     virtual ~ClassificationDialog() override;
+
+    virtual short Execute() override;
     virtual void dispose() override;
 
     std::vector<ClassificationResult> getResult();
+    void setupValues(std::vector<ClassificationResult> const & rInput);
 };
 
 } // end svx namespace
