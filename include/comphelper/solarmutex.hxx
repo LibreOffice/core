@@ -84,7 +84,7 @@ inline sal_uInt32 SolarMutex::release( bool bUnlockAll )
  * Treat this as a singleton, as its constructor calls
  * setSolarMutex( this )!
  *
- * Kept separated from SolarMutex, so others can implement cascades.
+ * Kept separated from SolarMutex, so others can implement facades.
  */
 class COMPHELPER_DLLPUBLIC GenericSolarMutex
     : public SolarMutex
