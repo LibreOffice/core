@@ -9,3 +9,12 @@
 /// \mainpage
 ///
 /// This is a reference documentation for the UNO IDL API.
+///
+/// \remark
+/// UNO IDL has no concept of "public" or "protected".
+/// "Protected Member" or "Protected Attribute" in the context
+/// of this IDL documentation actually means
+/// "members inherited from optional service or interface",
+/// i.e., not every implementation supports these members
+/// or attributes.
+
