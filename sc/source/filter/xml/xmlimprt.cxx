@@ -29,6 +29,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <sfx2/objsh.hxx>
+#include <unotools/streamwrap.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmlscripti.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
@@ -77,6 +78,7 @@
 #include <numformat.hxx>
 
 #include <comphelper/extract.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -2049,6 +2051,53 @@ ScMyImpDetectiveOpArray* ScXMLImport::GetDetectiveOpArray()
     if (!pDetectiveOpArray)
         pDetectiveOpArray = new ScMyImpDetectiveOpArray();
     return pDetectiveOpArray;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODS(SvStream &rStream)
+{
+    ScDLL::Init();
+
+    SfxObjectShellLock xDocSh(new ScDocShell);
+    xDocSh->DoInitNew();
+    uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
+
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.XmlFilterAdaptor"), uno::UNO_QUERY_THROW);
+
+    css::uno::Sequence<OUString> aUserData(7);
+    aUserData[0] = "com.sun.star.comp.filter.OdfFlatXml";
+    aUserData[2] = "com.sun.star.comp.Calc.XMLOasisImporter";
+    aUserData[3] = "com.sun.star.comp.Calc.XMLOasisExporter";
+    aUserData[6] = "true";
+    uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
+    {
+        { "UserData", uno::Any(aUserData) },
+    }));
+    css::uno::Sequence<uno::Any> aOuterArgs(1);
+    aOuterArgs[0] <<= aAdaptorArgs;
+
+    uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
+    xInit->initialize(aOuterArgs);
+
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    {
+        { "InputStream", uno::Any(xStream) },
+        { "URL", uno::Any(OUString("private:stream")) },
+    }));
+    xImporter->setTargetDocument(xModel);
+
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+    //SetLoading hack because the document properties will be re-initted
+    //by the xml filter and during the init, while its considered uninitialized,
+    //setting a property will inform the document its modified, which attempts
+    //to update the properties, which throws cause the properties are uninitialized
+    xDocSh->SetLoading(SfxLoadedFlags::NONE);
+    bool ret = xFilter->filter(aArgs);
+    xDocSh->SetLoading(SfxLoadedFlags::ALL);
+
+    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
