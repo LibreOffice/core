@@ -32,4 +32,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 ))
 endif
 
+ifeq ($(OS),MACOSX)
+ifneq ($(filter 1080 1090 101000,$(MAC_OS_X_VERSION_MIN_REQUIRED)),)
+$(eval $(call gb_UnpackedTarball_add_patches,curl,\
+	external/curl/curl-osx.patch.1 \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:

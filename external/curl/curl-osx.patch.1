@@ -1,0 +1,285 @@
+From efebf4d4f882a57a98a0653d21d543cd4132d23d Mon Sep 17 00:00:00 2001
+From: Palo Markovic <pavol.markovic@kompiler.info>
+Date: Sat, 18 Mar 2017 16:37:02 +1300
+Subject: [PATCH] macOS: Fixed crash on 10.8 caused by missing connectx()
+ function
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The connectx() function call appeared in Darwin 15.0.0
+That covers OS X 10.11, iOS 9 and tvOS 9.
+
+Because connectx is not declared with weak_import attribute it’s not possible
+to build libcurl on OS X 10.11 and later and target systems which don’t have
+_connectx symbol declared in libsystem_kernel.dylib (i.e. OS 10.8 and earlier).
+
+Solution is to use connectx only on platforms that officially support it
+i.e. by defining CFLAGS="-mmacosx-version-min=10.11" in configure step.
+
+Note: It is possible to conditionally use connectx() in libcurl targeting
+range of systems based on availability determined during runtime using dlsym().
+
+[Bug: https://github.com/curl/curl/issues/1330]
+---
+ lib/connect.c    |  2 +-
+ lib/curl_setup.h | 16 ++++++++++++++++
+ lib/url.c        |  2 +-
+ 3 files changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/lib/connect.c b/lib/connect.c
+index 197eff242f..33251914b8 100644
+--- a/lib/connect.c
++++ b/lib/connect.c
+@@ -1075,7 +1075,7 @@ static CURLcode singleipconnect(struct connectdata *conn,
+   /* Connect TCP sockets, bind UDP */
+   if(!isconnected && (conn->socktype == SOCK_STREAM)) {
+     if(conn->bits.tcp_fastopen) {
+-#if defined(CONNECT_DATA_IDEMPOTENT) /* OS X */
++#if defined(HAVE_DARWIN_CONNECTX) /* Darwin */
+       sa_endpoints_t endpoints;
+       endpoints.sae_srcif = 0;
+       endpoints.sae_srcaddr = NULL;
+diff --git a/lib/curl_setup.h b/lib/curl_setup.h
+index 0fe3633ec7..8643e1fd28 100644
+--- a/lib/curl_setup.h
++++ b/lib/curl_setup.h
+@@ -762,4 +762,20 @@ endings either CRLF or LF so 't' is appropriate.
+ #  endif
+ # endif
+ 
++/* Detect Darwin connectx() function availability.
++ * The connectx() function call appeared in Darwin 15.0.0
++ * but it's not declared using availability attribute.
++ */
++#if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
++#  if (__MAC_OS_X_VERSION_MIN_REQUIRED >= 101100)
++#    define HAVE_DARWIN_CONNECTX 1
++#  endif
++#elif defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
++#  if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 90000)
++#    define HAVE_DARWIN_CONNECTX 1
++#  endif
++#elif defined(CONNECT_DATA_IDEMPOTENT)  /* Fallback for other Darwin OS */
++#  define HAVE_DARWIN_CONNECTX 1
++#endif
++
+ #endif /* HEADER_CURL_SETUP_H */
+diff --git a/lib/url.c b/lib/url.c
+index 03feaa20f7..08fbe5132b 100644
+--- a/lib/url.c
++++ b/lib/url.c
+@@ -2834,7 +2834,7 @@ CURLcode Curl_setopt(struct Curl_easy *data, CURLoption option,
+     data->set.tcp_keepintvl = va_arg(param, long);
+     break;
+   case CURLOPT_TCP_FASTOPEN:
+-#if defined(CONNECT_DATA_IDEMPOTENT) || defined(MSG_FASTOPEN)
++#if defined(HAVE_DARWIN_CONNECTX) || defined(MSG_FASTOPEN)
+     data->set.tcp_fastopen = (0 != va_arg(param, long))?TRUE:FALSE;
+ #else
+     result = CURLE_NOT_BUILT_IN;
+From 45756a8a23967570da1390f9b1475c1db38a52d1 Mon Sep 17 00:00:00 2001
+From: Palo Markovic <pavol.markovic@kompiler.info>
+Date: Sat, 25 Mar 2017 13:20:51 +1300
+Subject: [PATCH] macOS: moved connectx check to configuration phase
+
+---
+ acinclude.m4     | 40 ++++++++++++++++++++++++++++++++++++++++
+ configure.ac     |  1 +
+ lib/connect.c    |  2 +-
+ lib/curl_setup.h | 16 ----------------
+ lib/url.c        |  2 +-
+ 5 files changed, 43 insertions(+), 18 deletions(-)
+
+diff --git a/acinclude.m4 b/acinclude.m4
+index 2abae8d8ad..769e67c510 100644
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -3243,3 +3243,43 @@ AC_DEFUN([CURL_MAC_CFLAGS], [
+   fi
+ 
+ ])
++
++
++dnl CURL_CHECK_FUNC_CONNECTX
++dnl
++dnl Check if connectx() function is present.
++dnl The connectx() function call appeared in Darwin 15.0.0
++dnl but it's not declared using availability attribute.
++dnl Additionally _connectx symbol is part of OS X 10.9/10.10
++dnl system lib but does not have specified functionality.
++dnl
++
++AC_DEFUN([CURL_CHECK_FUNC_CONNECTX], [
++  AC_REQUIRE([CURL_MAC_CFLAGS])dnl
++  AC_CHECK_FUNCS([connectx])
++  AC_MSG_CHECKING([if connectx is available in deployment target])
++  AC_COMPILE_IFELSE(
++    [AC_LANG_PROGRAM([[
++#if defined(HAVE_CONNECTX)
++#  include <Availability.h>
++#  if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
++#    if (__MAC_OS_X_VERSION_MIN_REQUIRED < 101100)
++#      error Function requires deployment target OS X 10.11 or later
++#    endif
++#  elif defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
++#    if (__IPHONE_OS_VERSION_MIN_REQUIRED < 90000)
++#      error Function requires deployment target iOS 9.0 or later
++#    endif
++#  endif
++#else
++#  error Function not present in the headers
++#endif
++    ]])],
++    [
++      AC_DEFINE(HAVE_VALID_CONNECTX, 1,
++        [Set to 1 if connectx() function have specified functionality.])
++      AC_MSG_RESULT([yes])
++    ],
++    [AC_MSG_RESULT([no])]
++  )
++])
+diff --git a/configure.ac b/configure.ac
+index abd0def369..a3930447c3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3226,6 +3226,7 @@ CURL_CHECK_FUNC_BASENAME
+ CURL_CHECK_FUNC_CLOSESOCKET
+ CURL_CHECK_FUNC_CLOSESOCKET_CAMEL
+ CURL_CHECK_FUNC_CONNECT
++CURL_CHECK_FUNC_CONNECTX
+ CURL_CHECK_FUNC_FCNTL
+ CURL_CHECK_FUNC_FDOPEN
+ CURL_CHECK_FUNC_FREEADDRINFO
+diff --git a/lib/connect.c b/lib/connect.c
+index 33251914b8..8c5e45aea5 100644
+--- a/lib/connect.c
++++ b/lib/connect.c
+@@ -1075,7 +1075,7 @@ static CURLcode singleipconnect(struct connectdata *conn,
+   /* Connect TCP sockets, bind UDP */
+   if(!isconnected && (conn->socktype == SOCK_STREAM)) {
+     if(conn->bits.tcp_fastopen) {
+-#if defined(HAVE_DARWIN_CONNECTX) /* Darwin */
++#if defined(HAVE_VALID_CONNECTX) /* Darwin */
+       sa_endpoints_t endpoints;
+       endpoints.sae_srcif = 0;
+       endpoints.sae_srcaddr = NULL;
+diff --git a/lib/curl_setup.h b/lib/curl_setup.h
+index 8643e1fd28..0fe3633ec7 100644
+--- a/lib/curl_setup.h
++++ b/lib/curl_setup.h
+@@ -762,20 +762,4 @@ endings either CRLF or LF so 't' is appropriate.
+ #  endif
+ # endif
+ 
+-/* Detect Darwin connectx() function availability.
+- * The connectx() function call appeared in Darwin 15.0.0
+- * but it's not declared using availability attribute.
+- */
+-#if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
+-#  if (__MAC_OS_X_VERSION_MIN_REQUIRED >= 101100)
+-#    define HAVE_DARWIN_CONNECTX 1
+-#  endif
+-#elif defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+-#  if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 90000)
+-#    define HAVE_DARWIN_CONNECTX 1
+-#  endif
+-#elif defined(CONNECT_DATA_IDEMPOTENT)  /* Fallback for other Darwin OS */
+-#  define HAVE_DARWIN_CONNECTX 1
+-#endif
+-
+ #endif /* HEADER_CURL_SETUP_H */
+diff --git a/lib/url.c b/lib/url.c
+index 08fbe5132b..7160ae041d 100644
+--- a/lib/url.c
++++ b/lib/url.c
+@@ -2834,7 +2834,7 @@ CURLcode Curl_setopt(struct Curl_easy *data, CURLoption option,
+     data->set.tcp_keepintvl = va_arg(param, long);
+     break;
+   case CURLOPT_TCP_FASTOPEN:
+-#if defined(HAVE_DARWIN_CONNECTX) || defined(MSG_FASTOPEN)
++#if defined(HAVE_VALID_CONNECTX) || defined(MSG_FASTOPEN)
+     data->set.tcp_fastopen = (0 != va_arg(param, long))?TRUE:FALSE;
+ #else
+     result = CURLE_NOT_BUILT_IN;
+From 113088ac81edbb9d51582a114d006bf60e3e6a87 Mon Sep 17 00:00:00 2001
+From: Palo Markovic <pavol.markovic@kompiler.info>
+Date: Wed, 5 Apr 2017 06:04:42 +1200
+Subject: [PATCH] macOS: added connectx check for cmake
+
+---
+ CMake/CurlTests.c       | 18 ++++++++++++++++++
+ CMakeLists.txt          |  9 +++++++++
+ lib/curl_config.h.cmake |  6 ++++++
+ 3 files changed, 33 insertions(+)
+
+diff --git a/CMake/CurlTests.c b/CMake/CurlTests.c
+index bc36c8ef7d..7077059f9c 100644
+--- a/CMake/CurlTests.c
++++ b/CMake/CurlTests.c
+@@ -533,3 +533,21 @@ main() {
+     return 0;
+ }
+ #endif
++#ifdef HAVE_VALID_CONNECTX
++#  include <Availability.h>
++#  include <sys/socket.h>
++#  if defined(__MAC_OS_X_VERSION_MIN_REQUIRED)
++#    if (__MAC_OS_X_VERSION_MIN_REQUIRED < 101100)
++#      error Function requires deployment target OS X 10.11 or later
++#    endif
++#  elif defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
++#    if (__IPHONE_OS_VERSION_MIN_REQUIRED < 90000)
++#      error Function requires deployment target iOS 9.0 or later
++#    endif
++#  endif
++
++main() {
++  connectx(0, 0, 0, 0, 0, 0, 0, 0);
++  return 0;
++}
++#endif
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8390c38c99..ab8be51ebc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -849,6 +849,15 @@ check_symbol_exists(fcntl          "${CURL_INCLUDES}" HAVE_FCNTL)
+ check_symbol_exists(ioctl          "${CURL_INCLUDES}" HAVE_IOCTL)
+ check_symbol_exists(setsockopt     "${CURL_INCLUDES}" HAVE_SETSOCKOPT)
+ 
++# The connectx() function call appeared in Darwin 15.0.0
++# but it's not declared using availability attribute.
++# Additionally _connectx symbol is part of OS X 10.9/10.10
++# system lib but does not have specified functionality.
++check_symbol_exists(connectx       "${CURL_INCLUDES}" HAVE_CONNECTX)
++if(HAVE_CONNECTX)
++  curl_internal_test_run(HAVE_VALID_CONNECTX)
++endif(HAVE_CONNECTX)
++
+ # symbol exists in win32, but function does not.
+ check_function_exists(inet_pton HAVE_INET_PTON)
+ 
+diff --git a/lib/curl_config.h.cmake b/lib/curl_config.h.cmake
+index 9fcdd97f98..6fc4415a8d 100644
+--- a/lib/curl_config.h.cmake
++++ b/lib/curl_config.h.cmake
+@@ -130,6 +130,9 @@
+ /* Define to 1 if bool is an available type. */
+ #cmakedefine HAVE_BOOL_T 1
+ 
++/* Define to 1 if you have the connectx function. */
++#cmakedefine HAVE_CONNECTX 1
++
+ /* Define to 1 if you have the clock_gettime function and monotonic timer. */
+ #cmakedefine HAVE_CLOCK_GETTIME_MONOTONIC 1
+ 
+@@ -719,6 +722,9 @@
+ /* Define to 1 if you have the <utime.h> header file. */
+ #cmakedefine HAVE_UTIME_H 1
+ 
++/* Define to 1 if you have valid connectx function. */
++#cmakedefine HAVE_VALID_CONNECTX 1
++
+ /* Define to 1 if compiler supports C99 variadic macro style. */
+ #cmakedefine HAVE_VARIADIC_MACROS_C99 1
+ 
