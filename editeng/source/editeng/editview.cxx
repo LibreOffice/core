@@ -1155,6 +1155,16 @@ void EditView::SelectCurrentWord( sal_Int16 nWordType )
     ShowCursor( true, false );
 }
 
+void EditView::InsertParaBreak()
+{
+    pImpEditView->pEditEngine->UndoActionStart(EDITUNDO_INSERT);
+    pImpEditView->DeleteSelected();
+    EditPaM aPaM(pImpEditView->pEditEngine->InsertParaBreak(pImpEditView->GetEditSelection()));
+    pImpEditView->pEditEngine->UndoActionEnd();
+    pImpEditView->SetEditSelection(EditSelection(aPaM, aPaM));
+    pImpEditView->pEditEngine->FormatAndUpdate(this);
+}
+
 void EditView::InsertField( const SvxFieldItem& rFld )
 {
     EditEngine* pEE = pImpEditView->pEditEngine;
