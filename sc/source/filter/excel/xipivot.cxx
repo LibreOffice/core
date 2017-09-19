@@ -1396,6 +1396,11 @@ void XclImpPivotTable::ReadSxViewEx9( XclImpStream& rStrm )
     rStrm >> maPTViewEx9Info;
 }
 
+void XclImpPivotTable::ReadSxAddl( XclImpStream& rStrm )
+{
+    rStrm >> maPTAddlInfo;
+}
+
 void XclImpPivotTable::Convert()
 {
     if( !mxPCache || !mxPCache->IsValid() )
@@ -1514,6 +1519,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
         mpDPObj->SetHeaderLayout( maPTInfo.mnFirstHeadRow - 2 == static_cast<sal_uInt16>(aGeometry.getRowFieldHeaderRow()) );
     }
     aGeometry.setHeaderLayout(mpDPObj->GetHeaderLayout());
+    aGeometry.setCompactMode(maPTAddlInfo.mbCompactMode);
 
     ScDocument& rDoc = GetDoc();
 
@@ -1555,7 +1561,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
 
     aGeometry.getRowFieldPositions(aFieldBtns);
     rSaveData.GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aFieldDims);
-    if (aFieldBtns.size() == aFieldDims.size())
+    if ((aFieldBtns.size() == aFieldDims.size()) || (maPTAddlInfo.mbCompactMode && aFieldBtns.size() == 1))
     {
         itr    = aFieldBtns.begin();
         itrEnd = aFieldBtns.end();
@@ -1700,6 +1706,12 @@ void XclImpPivotTableManager::ReadSxViewEx9( XclImpStream& rStrm )
 {
     if( !maPTables.empty() )
         maPTables.back()->ReadSxViewEx9( rStrm );
+}
+
+void XclImpPivotTableManager::ReadSxAddl( XclImpStream& rStrm )
+{
+    if( !maPTables.empty() )
+        maPTables.back()->ReadSxAddl( rStrm );
 }
 
 void XclImpPivotTableManager::ReadPivotCaches( const XclImpStream& rStrm )

@@ -43,6 +43,7 @@ public:
     void setDataFieldCount(sal_uInt32 nCount);
     void setDataLayoutType(FieldType eType);
     void setHeaderLayout(bool bHeaderLayout);
+    void setCompactMode(bool bCompactMode);
 
     void getColumnFieldPositions(::std::vector<ScAddress>& rAddrs) const;
     void getRowFieldPositions(::std::vector<ScAddress>& rAddrs) const;
@@ -64,6 +65,7 @@ private:
     FieldType   meDataLayoutType;
     bool        mbShowFilter;
     bool        mbHeaderLayout;
+    bool        mbCompactMode; // MSO only setting
 };
 
 #endif
