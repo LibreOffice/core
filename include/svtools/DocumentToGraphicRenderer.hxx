@@ -48,11 +48,11 @@ public:
 
     sal_Int32 getCurrentPageWriter( );
 
-    Size getDocumentSizeInPixels( sal_Int32 aCurrentPage );
+    Size getDocumentSizeInPixels( sal_Int32 nCurrentPage );
 
-    Size getDocumentSizeIn100mm( sal_Int32 aCurrentPage );
+    Size getDocumentSizeIn100mm( sal_Int32 nCurrentPage );
 
-    Graphic renderToGraphic(sal_Int32 aCurrentPage, Size aDocumentSizePixel,
+    Graphic renderToGraphic( sal_Int32 nCurrentPage, Size aDocumentSizePixel,
                             Size aTargetSizePixel, Color aPageColor);
 };
 

@@ -115,15 +115,15 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
     gatherProperties(rDescriptor);
 
     DocumentToGraphicRenderer aRenderer( mxDocument, mbSelectionOnly );
-    sal_Int32 aCurrentPage = aRenderer.getCurrentPageWriter();
-    Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(aCurrentPage);
+    sal_Int32 nCurrentPage = aRenderer.getCurrentPageWriter();
+    Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nCurrentPage);
 
     Size aTargetSizePixel(mTargetWidth, mTargetHeight);
 
     if (mTargetWidth == 0 || mTargetHeight == 0)
         aTargetSizePixel = aDocumentSizePixel;
 
-    Graphic aGraphic = aRenderer.renderToGraphic(aCurrentPage, aDocumentSizePixel, aTargetSizePixel, COL_WHITE);
+    Graphic aGraphic = aRenderer.renderToGraphic(nCurrentPage, aDocumentSizePixel, aTargetSizePixel, COL_WHITE);
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
