@@ -1247,17 +1247,12 @@ namespace
         return _pFallback;
     }
 
-    OUString lcl_getBasicIDEServiceName()
-    {
-        return OUString( "com.sun.star.script.BasicIDE");
-    }
-
     SfxViewFrame* lcl_getBasicIDEViewFrame( SfxObjectShell const * i_pBasicIDE )
     {
         SfxViewFrame* pView = SfxViewFrame::GetFirst( i_pBasicIDE );
         while ( pView )
         {
-            if ( pView->GetObjectShell()->GetFactory().GetDocumentServiceName() == lcl_getBasicIDEServiceName() )
+            if ( pView->GetObjectShell()->GetFactory().GetDocumentServiceName() == "com.sun.star.script.BasicIDE" )
                 break;
             pView = SfxViewFrame::GetNext( *pView, i_pBasicIDE );
         }
@@ -1384,7 +1379,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxViewFrame* pView = lcl_getBasicIDEViewFrame( nullptr );
             if ( !pView )
             {
-                SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( lcl_getBasicIDEServiceName() );
+                SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( "com.sun.star.script.BasicIDE" );
                 pBasicIDE->DoInitNew();
                 pBasicIDE->SetModified( false );
                 try
