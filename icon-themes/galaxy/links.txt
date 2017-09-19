@@ -150,3 +150,8 @@ cmd/lc_rowoperations.png cmd/lc_entirerow.png
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
+
+# Classification
+
+cmd/lc_classificationdialog.png cmd/lc_formproperties.png
+cmd/sc_classificationdialog.png cmd/sc_formproperties.png

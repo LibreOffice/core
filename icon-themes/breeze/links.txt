@@ -889,6 +889,10 @@ cmd/sc_previousslide.png cmd/sc_prevrecord.png
 cmd/sc_nextslide.png cmd/sc_nextrecord.png
 cmd/sc_slidesetup.png cmd/sc_pagesetup.png
 
+# Classification
+cmd/lc_classificationdialog.png cmd/lc_formproperties.png
+cmd/sc_classificationdialog.png cmd/sc_formproperties.png
+
 # dbaccess
 # ==============================================
 dbaccess/res/linked_text_table.png cmd/sc_dataimport.png

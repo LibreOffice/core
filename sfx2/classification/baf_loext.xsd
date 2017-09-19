@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" targetNamespace="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0">
+  <!-- Markings -->
+  <xs:element name="Marking">
+    <xs:complexType>
+      <xs:attribute name="Name" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IntellectualPropertyPart">
+    <xs:complexType>
+      <xs:attribute name="Name" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="IntellectualPropertyPartNumber">
+    <xs:complexType>
+      <xs:attribute name="Name" type="xs:string" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
