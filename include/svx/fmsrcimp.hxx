@@ -36,6 +36,7 @@
 #include <osl/thread.hxx>
 
 #include <deque>
+#include <memory>
 #include <vector>
 
 enum class TransliterationFlags;
@@ -171,8 +172,8 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
     FieldCollection             m_arrUsedFields;
     sal_Int32                   m_nCurrentFieldIndex;   // the last parameter of RebuildUsedFields, it allows checks in FormatField
 
-    typedef std::vector<svxform::ControlTextWrapper*> ControlTextSuppliers;
-    ControlTextSuppliers    m_aControlTexts;
+    std::vector<std::unique_ptr<svxform::ControlTextWrapper>>
+                            m_aControlTexts;
 
     CursorWrapper           m_xOriginalIterator;
     CursorWrapper           m_xClonedIterator;
@@ -272,8 +273,6 @@ public:
         const css::uno::Reference< css::sdbc::XResultSet >& xCursor,
         const OUString& strVisibleFields,
         const InterfaceArray& arrFields);
-
-    ~FmSearchEngine();
 
     /** the link will be called on every record and after the completion of the search, the parameter is a pointer to
         a FmSearchProgress structure
