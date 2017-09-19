@@ -167,6 +167,10 @@ public abstract class OTable extends ODescriptor
         return connection;
     }
 
+    public String getTypeCreatePattern() {
+        return "";
+    }
+
     protected abstract OContainer refreshColumns();
     protected abstract OContainer refreshIndexes();
     protected abstract OContainer refreshKeys();

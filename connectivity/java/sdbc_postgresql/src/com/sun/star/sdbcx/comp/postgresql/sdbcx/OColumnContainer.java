@@ -33,9 +33,13 @@ import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XDatabaseMetaData;
+import com.sun.star.sdbc.XStatement;
+import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.SqlTableHelper.ColumnDescription;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.descriptors.SdbcxColumnDescriptor;
+import com.sun.star.sdbcx.comp.postgresql.util.ComposeRule;
 import com.sun.star.sdbcx.comp.postgresql.util.DbTools;
+import com.sun.star.sdbcx.comp.postgresql.util.Osl;
 import com.sun.star.uno.UnoRuntime;
 
 public class OColumnContainer extends OContainer {
@@ -116,10 +120,38 @@ public class OColumnContainer extends OContainer {
 
     @Override
     protected XPropertySet appendObject(String _rForName, XPropertySet descriptor) throws SQLException {
-        return null;
+        if (table == null) {
+            return cloneDescriptor(descriptor);
+        }
+        String sql = String.format("ALTER TABLE %s ADD %s",
+                DbTools.composeTableName(metadata, table, ComposeRule.InTableDefinitions, false, false, true),
+                DbTools.createStandardColumnPart(descriptor, table.getConnection(), null, table.getTypeCreatePattern()));
+        XStatement statement = null;
+        try {
+            statement = table.getConnection().createStatement();
+            statement.execute(sql);
+        } finally {
+            CompHelper.disposeComponent(statement);
+        }
+        return createObject(_rForName);
     }
 
     @Override
     protected void dropObject(int index, String name) throws SQLException {
+        Osl.ensure(table, "Table is null!");
+        if (table == null) {
+            return;
+        }
+        String quote = metadata.getIdentifierQuoteString();
+        String sql = String.format("ALTER TABLE %s DROP %s",
+                DbTools.composeTableName(metadata, table, ComposeRule.InTableDefinitions, false, false, true),
+                DbTools.quoteName(quote, name));
+        XStatement statement = null;
+        try {
+            statement = table.getConnection().createStatement();
+            statement.execute(sql);
+        } finally {
+            CompHelper.disposeComponent(statement);
+        }
     }
 }
