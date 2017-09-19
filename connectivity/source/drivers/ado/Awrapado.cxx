@@ -104,7 +104,7 @@ bool WpADOConnection::Execute(const OUString& CommandText,OLEVariant& RecordsAff
 {
     assert(pInterface);
     OLEString sStr1(CommandText);
-    bool bErg = SUCCEEDED(pInterface->Execute(sStr1.asBSTR(),&RecordsAffected,Options,reinterpret_cast<_ADORecordset**>(ppiRset)));
+    bool bErg = SUCCEEDED(pInterface->Execute(sStr1.asBSTR(),&RecordsAffected,Options,reinterpret_cast<ADORecordset**>(ppiRset)));
     return bErg;
 }
 
