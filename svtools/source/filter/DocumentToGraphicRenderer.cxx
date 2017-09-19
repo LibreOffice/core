@@ -101,9 +101,15 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)
 
     awt::Size aSize;
 
+    /* TODO: the whole absolute "current page" number concept is useless when
+     * it comes to selections, rework that. */
     sal_Int32 nPages = mxRenderable->getRendererCount( selection, renderProperties );
-    if (nPages >= aCurrentPage)
+    if (nPages >= aCurrentPage || (mbSelectionOnly && nPages > 0))
     {
+        if (nPages < aCurrentPage)
+            // In case of mbSelectionOnly hit.
+            aCurrentPage = 1;
+
         Sequence< beans::PropertyValue > aResult = mxRenderable->getRenderer(aCurrentPage - 1, selection, renderProperties );
         for( sal_Int32 nProperty = 0, nPropertyCount = aResult.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
