@@ -30,6 +30,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -55,7 +56,20 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
             {
                 uno::Any aViewSelection( xSelSup->getSelection());
                 if (aViewSelection.hasValue())
+                {
                     maSelection = aViewSelection;
+                    /* FIXME: Writer always has a selection even if nothing is
+                     * selected, but passing a selection to
+                     * XRenderable::render() it always renders an empty page.
+                     * So disable the selection already here. The current page
+                     * the cursor is on is rendered. */
+                    uno::Reference< lang::XServiceInfo > xServiceInfo( mxDocument, uno::UNO_QUERY);
+                    if (xServiceInfo.is())
+                    {
+                        if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
+                            maSelection = uno::Any();
+                    }
+                }
             }
         }
         catch (const uno::Exception&)
