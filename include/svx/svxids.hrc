@@ -974,9 +974,10 @@
 #define SID_AUTHOR_COLOR                                ( SID_SVX_START + 1168 )
 #define SID_BMPMASK_COLOR                               ( SID_SVX_START + 1169 )
 #define SID_PARA_SIGNATURE_ADD                          ( SID_SVX_START + 1170 )
+#define SID_CLASSIFICATION_DIALOG                       ( SID_SVX_START + 1171 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_PARA_SIGNATURE_ADD + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_CLASSIFICATION_DIALOG + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

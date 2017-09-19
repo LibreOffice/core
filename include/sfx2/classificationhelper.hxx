@@ -78,6 +78,11 @@ public:
     /// The selected category has some content for the document footer.
     bool HasDocumentFooter();
     void UpdateInfobar(SfxViewFrame& rViewFrame);
+
+    const std::vector<OUString> GetMarkings();
+    const std::vector<OUString> GetIntellectualPropertyParts();
+    const std::vector<OUString> GetIntellectualPropertyPartNumbers();
+
     /// Does a best-effort conversion of rType to SfxClassificationPolicyType.
     static SfxClassificationPolicyType stringToPolicyType(const OUString& rType);
     /// Returns the string representation of a SfxClassificationPolicyType element.
