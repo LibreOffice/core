@@ -1358,8 +1358,10 @@ bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
             {
                 if ( bVBAInterop && eOp == SbxEQ && GetError() == ERRCODE_BASIC_CONVERSION )
                 {
+#ifndef IOS
                     ResetError();
                     bRes = false;
+#endif
                 }
             }
         }
