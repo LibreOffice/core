@@ -826,6 +826,7 @@ rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage)
 {
     switch (nCodePage)
     {
+    case 42: return RTL_TEXTENCODING_SYMBOL;
     case 437: return RTL_TEXTENCODING_IBM_437;
     case 708: return RTL_TEXTENCODING_ISO_8859_6;
     case 737: return RTL_TEXTENCODING_IBM_737;
@@ -902,6 +903,7 @@ rtl_getWindowsCodePageFromTextEncoding(rtl_TextEncoding nEncoding)
 {
     switch (nEncoding)
     {
+    case RTL_TEXTENCODING_SYMBOL: return 42;
     case RTL_TEXTENCODING_IBM_437: return 437;
  /* case RTL_TEXTENCODING_ISO_8859_6: return 708; */
     case RTL_TEXTENCODING_IBM_737: return 737;
