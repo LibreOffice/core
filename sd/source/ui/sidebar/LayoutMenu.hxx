@@ -87,7 +87,6 @@ public:
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
 
     // From vcl::Window
-    virtual void Paint (vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual void Resize() override;
 
     /** Show a context menu when the right mouse button is pressed.
@@ -126,7 +125,6 @@ private:
         many columns for the calculation.
     */
     css::uno::Reference<css::frame::XStatusListener> mxListener;
-    bool mbSelectionUpdatePending;
     bool mbIsMainViewChangePending;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
     bool mbIsDisposed;
