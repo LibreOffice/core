@@ -1007,15 +1007,16 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
         try
         {
             bool bResult = pImpl->m_bLocked;
+            bool bIsTemplate = false;
             // so, this is webdav stuff...
             if ( !bResult )
             {
                 // no read-write access is necessary on loading if the document is explicitly opened as copy
                 const SfxBoolItem* pTemplateItem = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_TEMPLATE, false);
-                bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
+                bIsTemplate = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
             }
 
-            if ( !bResult && !IsReadOnly() )
+            if ( !bIsTemplate && !bResult && !IsReadOnly() )
             {
                 sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
                 do
