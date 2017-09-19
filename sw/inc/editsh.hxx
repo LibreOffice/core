@@ -34,6 +34,7 @@
 #include <svtools/embedhlp.hxx>
 
 #include <editeng/swafopt.hxx>
+#include <svx/ClassificationField.hxx>
 
 #include <vcl/font.hxx>
 
@@ -367,6 +368,8 @@ public:
         { return static_cast<SwCharFormat*>(SwEditShell::GetFormatFromPool( nId )); }
 
     void SetClassification(const OUString& rName, SfxClassificationPolicyType eType);
+    void ApplyAdvancedClassification(std::vector<svx::ClassificationResult> const & rResult);
+    std::vector<svx::ClassificationResult> CollectAdvancedClassification();
 
     SfxWatermarkItem GetWatermark();
     void SetWatermark(const SfxWatermarkItem& rText);
