@@ -187,6 +187,7 @@ public:
     vcl::Cursor*    GetCursor() const;
 
     void            InsertText( const OUString& rNew, bool bSelect = false );
+    void            InsertParaBreak();
 
     bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin = nullptr );
 
