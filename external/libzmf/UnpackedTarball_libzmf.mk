@@ -22,6 +22,7 @@ endif
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libzmf, \
+    external/libzmf/iOS.patch \
     external/libzmf/android-workaround.patch.1 \
 ))
 
