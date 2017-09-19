@@ -1284,7 +1284,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     {
         try
         {
-            ::comphelper::PropertyMapEntry const aInfoMap[] =
+            static ::comphelper::PropertyMapEntry const aInfoMap[] =
             {
                 { OUString("Class"), 0,
                     ::cppu::UnoType<OUString>::get(),
