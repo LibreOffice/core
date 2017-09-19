@@ -422,7 +422,7 @@ sal_uInt64 tools::Time::GetSystemTicks()
 #ifdef _WIN32
 static LARGE_INTEGER initPerformanceFrequency()
 {
-    LARGE_INTEGER nTicksPerSecond = { 0 };
+    LARGE_INTEGER nTicksPerSecond = { 0, 0 };
     if (!QueryPerformanceFrequency(&nTicksPerSecond))
         nTicksPerSecond.QuadPart = 0;
     return nTicksPerSecond;
