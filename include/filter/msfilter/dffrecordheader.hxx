@@ -45,16 +45,16 @@ public:
     bool SeekToEndOfRecord(SvStream& rIn) const
     {
         sal_uInt64 const nPos = nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen;
-        return nPos == rIn.Seek(nPos);
+        return checkSeek(rIn, nPos);
     }
     bool SeekToContent(SvStream& rIn) const
     {
         sal_uInt64 const nPos = nFilePos + DFF_COMMON_RECORD_HEADER_SIZE;
-        return nPos == rIn.Seek(nPos);
+        return checkSeek(rIn, nPos);
     }
     bool SeekToBegOfRecord(SvStream& rIn) const
     {
-        return nFilePos == rIn.Seek(nFilePos);
+        return checkSeek(rIn, nFilePos);
     }
 
     MSFILTER_DLLPUBLIC friend bool ReadDffRecordHeader(SvStream& rIn, DffRecordHeader& rRec);
