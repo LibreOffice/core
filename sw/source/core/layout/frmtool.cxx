@@ -1100,14 +1100,18 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
         // Formats can still remain, because we neither use character bound
         // frames nor objects which are anchored to character bounds.
         if ((rAnch.GetAnchorId() != RndStdIds::FLY_AT_PAGE) && (rAnch.GetAnchorId() != RndStdIds::FLY_AS_CHAR))
-            vFormatsToConnect.push_back(pFormat);
+        {
+            if(lcl_InHeaderOrFooter(*pFormat))
+                pFormat->MakeFrames();
+            else
+                vFormatsToConnect.push_back(pFormat);
+        }
     }
     const SwFrameFormat* pFirstRequeued(nullptr);
     while(!vFormatsToConnect.empty())
     {
         auto& pFormat = vFormatsToConnect.front();
-        const bool bAlreadyConnected(lcl_ObjConnected(pFormat, pSib));
-        if(!bAlreadyConnected || lcl_InHeaderOrFooter(*pFormat))
+        if(!lcl_ObjConnected(pFormat, pSib))
         {
             pFormat->MakeFrames();
             pFirstRequeued = nullptr;
