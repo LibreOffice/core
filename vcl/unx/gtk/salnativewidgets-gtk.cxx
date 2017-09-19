@@ -470,7 +470,7 @@ inline void NW_gtk_border_set_from_border( GtkBorder& aDst, const GtkBorder * pS
 /*********************************************************
  * Initialize GTK and local stuff
  *********************************************************/
-void GtkData::initNWF()
+void GtkSalData::initNWF()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -557,7 +557,7 @@ void GtkData::initNWF()
 /*********************************************************
  * Release GTK and local stuff
  *********************************************************/
-void GtkData::deInitNWF()
+void GtkSalData::deInitNWF()
 {
     for( size_t i = 0; i < gWidgetData.size(); i++ )
     {

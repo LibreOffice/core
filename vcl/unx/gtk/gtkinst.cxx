@@ -115,7 +115,7 @@ extern "C"
         SAL_INFO("vcl.gtk", "creating GtkInstance " << pInstance);
 
         // Create SalData, this does not leak
-        new GtkData( pInstance );
+        new GtkSalData( pInstance );
 
         return pInstance;
     }
@@ -178,9 +178,9 @@ void GtkInstance::EnsureInit()
     if (!bNeedsInit)
         return;
     // initialize SalData
-    GtkData *pSalData = GetGtkSalData();
+    GtkSalData *pSalData = GetGtkSalData();
     pSalData->Init();
-    GtkData::initNWF();
+    GtkSalData::initNWF();
 
     InitAtkBridge();
 
