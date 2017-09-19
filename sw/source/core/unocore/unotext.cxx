@@ -114,8 +114,7 @@ public:
     void ConvertCell(
             const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
             std::vector<SwNodeRange> & rRowNodes,
-            SwNodeRange *const pLastCell,
-            bool & rbExcept);
+            SwNodeRange *const pLastCell);
 
 };
 
@@ -1781,8 +1780,7 @@ static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
 void SwXText::Impl::ConvertCell(
     const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
     std::vector<SwNodeRange> & rRowNodes,
-    SwNodeRange *const pLastCell,
-    bool & rbExcept)
+    SwNodeRange *const pLastCell)
 {
     if (rCell.getLength() != 2)
     {
@@ -1848,15 +1846,13 @@ void SwXText::Impl::ConvertCell(
             }
             if (nOpenNodeBlock < 0)
             {
-                rbExcept = true;
-                break;
+                throw lang::IllegalArgumentException();
             }
             ++aCellIndex;
         }
         if (nOpenNodeBlock != 0)
         {
-            rbExcept = true;
-            return;
+            throw lang::IllegalArgumentException();
         }
     }
 
@@ -1885,7 +1881,7 @@ void SwXText::Impl::ConvertCell(
             // same node as predecessor then equal nContent?
             if (0 != aStartCellPam.Start()->nContent.GetIndex())
             {
-                rbExcept = true;
+                throw lang::IllegalArgumentException();
             }
             else
             {
@@ -1916,7 +1912,7 @@ void SwXText::Impl::ConvertCell(
         }
         else
         {
-            rbExcept = true;
+            throw lang::IllegalArgumentException();
         }
     }
     // now check if there's a need to insert another paragraph break
@@ -2113,9 +2109,7 @@ SwXText::convertToTable(
     const uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > >*
         pTableRanges = rTableRanges.getConstArray();
     std::vector< std::vector<SwNodeRange> > aTableNodes;
-    bool bExcept = false;
-    for (sal_Int32 nRow = 0; !bExcept && (nRow < rTableRanges.getLength());
-            ++nRow)
+    for (sal_Int32 nRow = 0; nRow < rTableRanges.getLength(); ++nRow)
     {
         std::vector<SwNodeRange> aRowNodes;
         const uno::Sequence< uno::Reference< text::XTextRange > >* pRow =
@@ -2124,11 +2118,10 @@ SwXText::convertToTable(
 
         if (0 == nCells) // this would lead to no pLastCell below
         {                // and make it impossible to detect node gaps
-            bExcept = true;
-            break;
+            throw lang::IllegalArgumentException();
         }
 
-        for (sal_Int32 nCell = 0; !bExcept && nCell < nCells; ++nCell)
+        for (sal_Int32 nCell = 0; nCell < nCells; ++nCell)
         {
             SwNodeRange *const pLastCell(
                 (nCell == 0)
@@ -2136,16 +2129,10 @@ SwXText::convertToTable(
                         ? nullptr
                         : &*aTableNodes.rbegin()->rbegin())
                     : &*aRowNodes.rbegin());
-            m_pImpl->ConvertCell(pRow[nCell], aRowNodes, pLastCell, bExcept);
+            m_pImpl->ConvertCell(pRow[nCell], aRowNodes, pLastCell);
         }
-        assert(bExcept || !aRowNodes.empty());
+        assert(!aRowNodes.empty());
         aTableNodes.push_back(aRowNodes);
-    }
-
-    if(bExcept)
-    {
-        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
-        throw lang::IllegalArgumentException();
     }
 
     std::vector< TableColumnSeparators >
