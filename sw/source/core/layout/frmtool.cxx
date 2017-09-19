@@ -1067,27 +1067,6 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
 #endif
 }
 
-static inline bool lcl_ObjConnected(const SwFrameFormat* pFormat, const SwFrame* pSib)
-{
-    const SwRootFrame* pRoot = pSib ? pSib->getRootFrame() : nullptr;
-    bool isConnected(false);
-    pFormat->CallSwClientNotify(sw::GetObjectConnectedHint(isConnected, pRoot));
-    return isConnected;
-}
-
-/** helper method to determine, if a <SwFrameFormat>, which has an object connected,
-    is located in header or footer.
-
-    OD 23.06.2003 #108784#
-*/
-static inline bool lcl_InHeaderOrFooter(const SwFrameFormat& rFormat)
-{
-    const SwFormatAnchor& rAnch = rFormat.GetAnchor();
-    if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
-        return false;
-    return rFormat.GetDoc()->IsInHeaderFooter(rAnch.GetContentAnchor()->nNode);
-}
-
 void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
 {
     //Connecting of all Objects, which are described in the SpzTable with the
@@ -1101,17 +1080,21 @@ void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
         // frames nor objects which are anchored to character bounds.
         if ((rAnch.GetAnchorId() != RndStdIds::FLY_AT_PAGE) && (rAnch.GetAnchorId() != RndStdIds::FLY_AS_CHAR))
         {
-            if(lcl_InHeaderOrFooter(*pFormat))
+            // formats in header/footer have no dependencies
+            if(pFormat->GetDoc()->IsInHeaderFooter(rAnch.GetContentAnchor()->nNode))
                 pFormat->MakeFrames();
             else
                 vFormatsToConnect.push_back(pFormat);
         }
     }
+    const SwRootFrame* pRoot = pSib ? pSib->getRootFrame() : nullptr;
     const SwFrameFormat* pFirstRequeued(nullptr);
     while(!vFormatsToConnect.empty())
     {
         auto& pFormat = vFormatsToConnect.front();
-        if(!lcl_ObjConnected(pFormat, pSib))
+        bool isConnected(false);
+        pFormat->CallSwClientNotify(sw::GetObjectConnectedHint(isConnected, pRoot));
+        if(!isConnected)
         {
             pFormat->MakeFrames();
             pFirstRequeued = nullptr;
