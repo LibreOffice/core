@@ -200,9 +200,8 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
                 {
                     // for TOC numbering
                     rText += GetNumStringOfFirstNode( rBase, true, MAXLEVEL );
-                    SwIndex aIdx( pTOXNd, rText.getLength() );
-                    ToxWhitespaceStripper stripper(rBase.GetText().sText);
-                    pTOXNd->InsertText(stripper.GetStrippedString(), aIdx);
+                    HandledTextToken htt = HandleTextToken(rBase, pDoc->GetAttrPool() );
+                    ApplyHandledTextToken(htt, *pTOXNd);
                 }
                 break;
 
@@ -316,8 +315,14 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
         clone->SetStyleHandle(attributesToClone);
 
         result.autoFormats.push_back(clone);
-        result.startPositions.push_back(stripper.GetPositionInStrippedString(hint->GetStart()));
-        result.endPositions.push_back(stripper.GetPositionInStrippedString(*hint->GetAnyEnd()));
+
+        ModelToViewHelper aConversionMap( *pSrc, ExpandMode::ExpandFields );
+        result.startPositions.push_back(
+                stripper.GetPositionInStrippedString(aConversionMap.ConvertToViewPosition(
+                        hint->GetStart() )));
+        result.endPositions.push_back(
+                stripper.GetPositionInStrippedString(aConversionMap.ConvertToViewPosition(
+                        *hint->GetAnyEnd() )));
     }
     return result;
 }
