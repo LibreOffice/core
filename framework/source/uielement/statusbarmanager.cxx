@@ -307,7 +307,7 @@ void StatusBarManager::CreateControllers()
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
         aPropValue.Name     = "ModuleIdentifier";
-        aPropValue.Value    <<= m_aModuleIdentifier;
+        aPropValue.Value    <<= OUString();
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
         aPropValue.Name     = "Frame";
@@ -336,7 +336,7 @@ void StatusBarManager::CreateControllers()
 
         // 1) UNO Statusbar controllers, registered in Controllers.xcu
         if ( m_xStatusbarControllerFactory.is() &&
-             m_xStatusbarControllerFactory->hasController( aCommandURL, m_aModuleIdentifier ))
+             m_xStatusbarControllerFactory->hasController( aCommandURL, "" ))
         {
             xController.set(m_xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(
                                 aCommandURL, aArgs, m_xContext ),
@@ -447,7 +447,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString( vcl::CommandInfoProvider::GetLabelForCommand(aCommandURL, m_aModuleIdentifier));
+                    OUString aString( vcl::CommandInfoProvider::GetLabelForCommand(aCommandURL, ""));
                     StatusBarItemBits nItemBits( impl_convertItemStyleToItemBits( nStyle ));
 
                     m_pStatusBar->InsertItem( nId, nWidth, nItemBits, nOffset );
@@ -474,7 +474,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
             MergeStatusbarInstruction &rInstruction = aMergeInstructions[i];
-            if ( !StatusbarMerger::IsCorrectContext( rInstruction.aMergeContext, m_aModuleIdentifier ) )
+            if ( !StatusbarMerger::IsCorrectContext( rInstruction.aMergeContext, "" ) )
                 continue;
 
             AddonStatusbarItemContainer aItems;
@@ -486,7 +486,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
                 StatusbarMerger::ProcessMergeOperation( m_pStatusBar,
                                                         nRefPos,
                                                         nItemId,
-                                                        m_aModuleIdentifier,
+                                                        "",
                                                         rInstruction.aMergeCommand,
                                                         rInstruction.aMergeCommandParameter,
                                                         aItems );
@@ -495,7 +495,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
             {
                 StatusbarMerger::ProcessMergeFallback( m_pStatusBar,
                                                        nItemId,
-                                                       m_aModuleIdentifier,
+                                                       "",
                                                        rInstruction.aMergeCommand,
                                                        rInstruction.aMergeCommandParameter,
                                                        aItems );

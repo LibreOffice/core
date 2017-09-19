@@ -95,7 +95,6 @@ class StatusBarManager final: public ::cppu::WeakImplHelper<
                                                                               m_bFrameActionRegistered : 1,
                                                                               m_bUpdateControllers : 1;
         VclPtr<StatusBar>                                                     m_pStatusBar;
-        OUString                                                              m_aModuleIdentifier;
         css::uno::Reference< css::frame::XFrame >                             m_xFrame;
         StatusBarControllerMap                                                m_aControllerMap;
         osl::Mutex                                                            m_mutex;
