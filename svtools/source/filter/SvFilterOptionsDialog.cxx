@@ -203,6 +203,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
             aInternalFilterName = aInternalFilterName.replaceFirst( "draw_", "" );
             aInternalFilterName = aInternalFilterName.replaceFirst( "impress_", "" );
             aInternalFilterName = aInternalFilterName.replaceFirst( "calc_", "" );
+            aInternalFilterName = aInternalFilterName.replaceFirst( "writer_", "" );
             break;
        }
         else if ( rName == "Graphic" )
@@ -259,6 +260,8 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
             mbGraphicsSource = false;
             if ( xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument") )
                 aConfigPath = "Office.Calc/Layout/Other/MeasureUnit";
+            else if ( xServiceInfo->supportsService("com.sun.star.text.TextDocument") )
+                aConfigPath = "Office.Writer/Layout/Other/MeasureUnit";
         }
         if ( !aConfigPath.isEmpty() )
         {
