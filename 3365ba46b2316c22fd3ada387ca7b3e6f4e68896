@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3607c81d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-09-19T01:07:53Z",
+      "side": 1,
+      "message": "I replaced the unit test with a cleaned up one which contained a zero-width, 100% line in a column, so the width is very different from the previous test.",
+      "range": {
+        "startLine": 211,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 79
+      },
+      "revId": "3365ba46b2316c22fd3ada387ca7b3e6f4e68896",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
