@@ -35,7 +35,7 @@ using namespace cppu;
 ::rtl::OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKeyColumnDescription");
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKeyColumnDescriptor");
     return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKeyColumn");
 }
 // -----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ using namespace cppu;
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.KeyColumnDescription");
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.KeyColumnDescriptor");
     else
         aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.KeyColumn");
 

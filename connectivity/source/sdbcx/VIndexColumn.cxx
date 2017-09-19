@@ -34,7 +34,7 @@ using namespace ::com::sun::star::uno;
 ::rtl::OUString SAL_CALL OIndexColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndexColumnDescription");
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndexColumnDescriptor");
     return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VIndexColumn");
 }
 // -----------------------------------------------------------------------------
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexColumnDescription");
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexColumnDescriptor");
     else
         aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.IndexColumn");
 

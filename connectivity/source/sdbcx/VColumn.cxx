@@ -42,7 +42,7 @@ using namespace ::com::sun::star::sdbc;
 ::rtl::OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VColumnDescription");
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VColumnDescriptor");
     return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VColumn");
 }
 // -----------------------------------------------------------------------------
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::sdbc;
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ColumnDescription");
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ColumnDescriptor");
     else
         aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Column");
 

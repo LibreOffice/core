@@ -46,7 +46,7 @@ using namespace ::com::sun::star::lang;
 ::rtl::OUString SAL_CALL OKey::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKeyDescription");
+        return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKeyDescriptor");
     return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.VKey");
 }
 // -----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ using namespace ::com::sun::star::lang;
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.KeyDescription");
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.KeyDescriptor");
     else
         aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Key");
 
