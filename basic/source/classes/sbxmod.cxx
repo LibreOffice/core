@@ -2221,7 +2221,6 @@ public:
     {
         if ( mxComponent.is() )
         {
-            SAL_INFO("basic", "*********** Registering the listeners");
             try
             {
                 uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->addTopWindowListener( this );
@@ -2255,7 +2254,6 @@ public:
     {
         if ( mxComponent.is() && !mbDisposed )
         {
-            SAL_INFO("basic", "*********** Removing the listeners");
             try
             {
                 uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeTopWindowListener( this );
@@ -2397,7 +2395,6 @@ public:
 
     virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) override
     {
-        SAL_INFO("basic", "** Userform/Dialog disposing");
         removeListener();
         mbDisposed = true;
         if ( mpUserForm )
@@ -2436,7 +2433,7 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun )
 
 void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< Any >& aArguments )
 {
-    SAL_INFO("basic", "*** trigger " << aMethodToRun << " ***");
+    SAL_INFO("basic", "trigger " << aMethodToRun);
     // Search method
     SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxClassType::Method );
     if( pMeth )
@@ -2477,14 +2474,11 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
 
 void SbUserFormModule::triggerActivateEvent()
 {
-    SAL_INFO("basic", "**** entering SbUserFormModule::triggerActivate");
     triggerMethod( "UserForm_Activate" );
-    SAL_INFO("basic", "**** leaving SbUserFormModule::triggerActivate");
 }
 
 void SbUserFormModule::triggerDeactivateEvent()
 {
-    SAL_INFO("basic", "**** SbUserFormModule::triggerDeactivate");
     triggerMethod( "Userform_Deactivate" );
 }
 
@@ -2492,14 +2486,12 @@ void SbUserFormModule::triggerInitializeEvent()
 {
     if ( mbInit )
         return;
-    SAL_INFO("basic", "**** SbUserFormModule::triggerInitializeEvent");
     triggerMethod("Userform_Initialize");
     mbInit = true;
 }
 
 void SbUserFormModule::triggerTerminateEvent()
 {
-    SAL_INFO("basic", "**** SbUserFormModule::triggerTerminateEvent");
     triggerMethod("Userform_Terminate");
     mbInit=false;
 }
@@ -2543,7 +2535,6 @@ SbxVariable* SbUserFormModuleInstance::Find( const OUString& rName, SbxClassType
 
 void SbUserFormModule::Load()
 {
-    SAL_INFO("basic", "** load() ");
     // forces a load
     if ( !pDocObject.is() )
         InitObject();
@@ -2552,8 +2543,6 @@ void SbUserFormModule::Load()
 
 void SbUserFormModule::Unload()
 {
-    SAL_INFO("basic", "** Unload() ");
-
     sal_Int8 nCancel = 0;
 
     Sequence< Any > aParams;
