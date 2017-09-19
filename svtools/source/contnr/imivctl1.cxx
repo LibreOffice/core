@@ -2024,7 +2024,7 @@ void SvxIconChoiceCtrl_Impl::HideDDIcon()
     {
         Size aSize( pDDDev->GetOutputSizePixel() );
         // restore pView
-        pView->DrawOutDev( aDDLastRectPos, aSize, Point(), aSize, *pDDDev );
+        pView->DrawOutDev( Point(), aSize, Point(), aSize, *pDDDev );
     }
     pDDBufDev = pDDDev;
     pDDDev = nullptr;

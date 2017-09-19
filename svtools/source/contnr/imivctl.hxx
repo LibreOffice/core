@@ -167,7 +167,6 @@ class SvxIconChoiceCtrl_Impl
     Size                    aImageSize;
     Size                    aDefaultTextSize;
     Size                    aOutputSize; // Pixel
-    Point                   aDDLastRectPos;
     VclPtr<SvtIconChoiceCtrl>  pView;
     IcnCursor_Impl*         pImpCursor;
     IcnGridMap_Impl*        pGridMap;
