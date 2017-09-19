@@ -131,6 +131,9 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     if (!xDevice.is())
         return Graphic();
 
+    assert( aDocumentSizePixel.Width() > 0 && aDocumentSizePixel.Height() > 0 &&
+            aTargetSizePixel.Width() > 0 && aTargetSizePixel.Height() > 0);
+
     double fScaleX = aTargetSizePixel.Width()  / (double) aDocumentSizePixel.Width();
     double fScaleY = aTargetSizePixel.Height() / (double) aDocumentSizePixel.Height();
 
