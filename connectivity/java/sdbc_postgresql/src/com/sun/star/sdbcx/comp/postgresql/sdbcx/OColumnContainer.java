@@ -79,6 +79,23 @@ public class OColumnContainer extends OContainer {
         boolean isAutoIncrement = false;
         boolean isCurrency = false;
         int dataType = DataType.OTHER;
+
+        ColumnDescription columnDescription = columnDescriptions.get(name);
+        if (columnDescription == null) {
+            // could be a recently added column. Refresh:
+            List<ColumnDescription> newColumns = new SqlTableHelper().readColumns(metadata, table.catalogName, table.schemaName, table.getName());
+            for (ColumnDescription newColumnDescription : newColumns) {
+                if (newColumnDescription.columnName.equals(name)) {
+                    columnDescriptions.put(name, newColumnDescription);
+                    break;
+                }
+            }
+            columnDescription = columnDescriptions.get(name);
+        }
+        if (columnDescription == null) {
+            throw new SQLException("No column " + name + " found");
+        }
+
         ExtraColumnInfo columnInfo = extraColumnInfo.get(name);
         if (columnInfo == null) {
             String composedName = DbTools.composeTableNameForSelect(metadata.getConnection(), table);
@@ -91,20 +108,15 @@ public class OColumnContainer extends OContainer {
             isCurrency = columnInfo.isCurrency;
             dataType = columnInfo.dataType;
         }
-        ColumnDescription columnDescription = columnDescriptions.get(name);
-        if (columnDescription != null) {
-            XNameAccess primaryKeyColumns = DbTools.getPrimaryKeyColumns(UnoRuntime.queryInterface(XPropertySet.class, table));
-            int nullable = columnDescription.nullable;
-            if (nullable != ColumnValue.NO_NULLS && primaryKeyColumns != null && primaryKeyColumns.hasByName(name)) {
-                nullable = ColumnValue.NO_NULLS;
-            }
-            return new OColumn(name, columnDescription.typeName, columnDescription.defaultValue, columnDescription.remarks,
-                    nullable, columnDescription.columnSize, columnDescription.decimalDigits, columnDescription.type,
-                    isAutoIncrement, false, isCurrency, isCaseSensitive());
-        } else {
-            // FIXME: do something like the C++ implementation does?
-            throw new SQLException();
+
+        XNameAccess primaryKeyColumns = DbTools.getPrimaryKeyColumns(UnoRuntime.queryInterface(XPropertySet.class, table));
+        int nullable = columnDescription.nullable;
+        if (nullable != ColumnValue.NO_NULLS && primaryKeyColumns != null && primaryKeyColumns.hasByName(name)) {
+            nullable = ColumnValue.NO_NULLS;
         }
+        return new OColumn(name, columnDescription.typeName, columnDescription.defaultValue, columnDescription.remarks,
+                nullable, columnDescription.columnSize, columnDescription.decimalDigits, columnDescription.type,
+                isAutoIncrement, false, isCurrency, isCaseSensitive());
     }
 
     @Override

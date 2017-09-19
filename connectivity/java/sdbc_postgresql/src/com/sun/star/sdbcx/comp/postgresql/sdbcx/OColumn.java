@@ -40,9 +40,9 @@ public class OColumn extends ODescriptor implements XNamed, XDataDescriptorFacto
             "com.sun.star.sdbcx.Column"
     };
 
-    private String typeName;
-    private String description;
-    private String defaultValue;
+    private String typeName = "";
+    private String description = "";
+    private String defaultValue = "";
     private int isNullable;
     private int precision;
     private int scale;

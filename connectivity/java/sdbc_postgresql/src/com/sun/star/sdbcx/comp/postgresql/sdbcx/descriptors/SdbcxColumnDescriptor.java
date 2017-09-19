@@ -34,14 +34,14 @@ public class SdbcxColumnDescriptor extends ODescriptor implements XServiceInfo {
     };
 
     protected int type;
-    protected String typeName;
+    protected String typeName = "";
     protected int precision;
     protected int scale;
     protected int isNullable;
     protected boolean isAutoIncrement;
     protected boolean isRowVersion;
-    protected String description;
-    protected String defaultValue;
+    protected String description = "";
+    protected String defaultValue = "";
     protected boolean isCurrency;
 
     public SdbcxColumnDescriptor(boolean isCaseSensitive) {
