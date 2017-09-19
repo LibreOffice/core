@@ -71,12 +71,6 @@ void SbiImage::Clear()
     bError     = false;
 }
 
-/**************************************************************************
-*
-*    Service-Routines for Load/Store
-*
-**************************************************************************/
-
 bool SbiGood( SvStream const & r )
 {
     return !r.IsEof() && r.GetError() == ERRCODE_NONE;
@@ -99,12 +93,6 @@ void SbiCloseRecord( SvStream& r, sal_uInt64 nOff )
     r.WriteInt32(nPos - nOff - 8 );
     r.Seek( nPos );
 }
-
-/**************************************************************************
-*
-*    Load/Store
-*
-**************************************************************************/
 
 bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 {
@@ -548,12 +536,6 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     return !bError;
 }
 
-/**************************************************************************
-*
-*    Routines called by the compiler
-*
-**************************************************************************/
-
 void SbiImage::MakeStrings( short nSize )
 {
     nStrings = 0;
@@ -636,13 +618,6 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
     }
     rEnums->Insert( pObject, rEnums->Count() );
 }
-
-
-/**************************************************************************
-*
-*    Accessing the image
-*
-**************************************************************************/
 
 // Note: IDs start with 1
 OUString SbiImage::GetString( short nId ) const

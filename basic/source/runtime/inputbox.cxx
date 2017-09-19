@@ -142,9 +142,6 @@ IMPL_LINK_NOARG( SvRTLInputBox, CancelHdl, Button *, void )
 }
 
 
-// *********************************************************************
-// *********************************************************************
-
 // Syntax: String InputBox( Prompt, [Title], [Default] [, nXpos, nYpos ] )
 
 void SbRtl_InputBox(StarBASIC *, SbxArray & rPar, bool)
@@ -178,6 +175,5 @@ void SbRtl_InputBox(StarBASIC *, SbxArray & rPar, bool)
         rPar.Get(0)->PutString( pDlg->GetText() );
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

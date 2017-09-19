@@ -24,12 +24,6 @@
 #include "expr.hxx"
 #include <o3tl/make_unique.hxx>
 
-/***************************************************************************
-|*
-|*      SbiExpression
-|*
-***************************************************************************/
-
 SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     SbiExprMode eMode, const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
@@ -811,12 +805,6 @@ SbiExprNode* SbiExpression::Boolean()
     return pNd;
 }
 
-/***************************************************************************
-|*
-|*      SbiConstExpression
-|*
-***************************************************************************/
-
 SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
 {
     if( pExpr->IsConstant() )
@@ -904,12 +892,6 @@ short SbiConstExpression::GetShortValue()
     }
 }
 
-
-/***************************************************************************
-|*
-|*      SbiExprList
-|*
-***************************************************************************/
 
 SbiExprList::SbiExprList( )
 {

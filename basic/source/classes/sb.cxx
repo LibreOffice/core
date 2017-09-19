@@ -1024,12 +1024,6 @@ void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
 }
 
 
-/**************************************************************************
-*
-*    Creation/Management of modules
-*
-**************************************************************************/
-
 SbModule* StarBASIC::MakeModule( const OUString& rName, const OUString& rSrc )
 {
     ModuleInfo aInfo;
@@ -1391,12 +1385,6 @@ bool StarBASIC::IsRunning()
 {
     return GetSbData()->pInst != nullptr;
 }
-
-/**************************************************************************
-*
-*    Debugging and error handling
-*
-**************************************************************************/
 
 SbMethod* StarBASIC::GetActiveMethod( sal_uInt16 nLevel )
 {
@@ -1800,12 +1788,6 @@ SbxArrayRef const & StarBASIC::getUnoListeners()
     return xUnoListeners;
 }
 
-
-/**************************************************************************
-*
-*   load and save
-*
-**************************************************************************/
 
 bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
 {

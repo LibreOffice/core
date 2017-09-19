@@ -816,13 +816,6 @@ void SbiIoSystem::CloseAll()
     }
 }
 
-/***************************************************************************
-*
-*   Console Support
-*
-***************************************************************************/
-
-
 void SbiIoSystem::ReadCon(OString& rIn)
 {
     OUString aPromptStr(OStringToOUString(aPrompt, osl_getThreadTextEncoding()));

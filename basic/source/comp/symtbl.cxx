@@ -34,12 +34,6 @@
 // The local stringpool holds all the symbols that don't move to the image
 // (labels, constant names etc.).
 
-/***************************************************************************
-|*
-|*  SbiStringPool
-|*
-***************************************************************************/
-
 SbiStringPool::SbiStringPool( )
 {}
 
@@ -81,12 +75,6 @@ short SbiStringPool::Add( double n, SbxDataType t )
     }
     return Add( OUString::createFromAscii( buf ) );
 }
-
-/***************************************************************************
-|*
-|*  SbiSymPool
-|*
-***************************************************************************/
 
 SbiSymPool::SbiSymPool( SbiStringPool& r, SbiSymScope s, SbiParser* pP ) : rStrings( r ), pParser( pP )
 {
@@ -255,12 +243,6 @@ void SbiSymPool::CheckRefs()
         }
     }
 }
-
-/***************************************************************************
-|*
-|*  symbol definitions
-|*
-***************************************************************************/
 
 SbiSymDef::SbiSymDef( const OUString& rName ) : aName( rName )
 {
