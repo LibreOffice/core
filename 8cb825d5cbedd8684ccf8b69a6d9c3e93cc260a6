@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6d4dfe71",
+        "filename": "vcl/inc/osx/salinst.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-19T15:59:20Z",
+      "side": 1,
+      "message": "the dtor needs to be marked \u0027override\u0027",
+      "revId": "8cb825d5cbedd8684ccf8b69a6d9c3e93cc260a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
