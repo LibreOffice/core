@@ -52,9 +52,9 @@ DocumentToGraphicRenderer::~DocumentToGraphicRenderer()
 {
 }
 
-Size DocumentToGraphicRenderer::getDocumentSizeInPixels(sal_Int32 aCurrentPage)
+Size DocumentToGraphicRenderer::getDocumentSizeInPixels(sal_Int32 nCurrentPage)
 {
-    Size aSize100mm = getDocumentSizeIn100mm(aCurrentPage);
+    Size aSize100mm = getDocumentSizeIn100mm(nCurrentPage);
     return Application::GetDefaultDevice()->LogicToPixel( aSize100mm, MapUnit::Map100thMM );
 }
 
@@ -81,7 +81,7 @@ uno::Any DocumentToGraphicRenderer::getSelection() const
     return aSelection;
 }
 
-Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)
+Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 nCurrentPage)
 {
     Reference< awt::XDevice > xDevice(mxToolkit->createScreenCompatibleDevice( 32, 32 ) );
 
@@ -104,13 +104,13 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)
     /* TODO: the whole absolute "current page" number concept is useless when
      * it comes to selections, rework that. */
     sal_Int32 nPages = mxRenderable->getRendererCount( selection, renderProperties );
-    if (nPages >= aCurrentPage || (mbSelectionOnly && nPages > 0))
+    if (nPages >= nCurrentPage || (mbSelectionOnly && nPages > 0))
     {
-        if (nPages < aCurrentPage)
+        if (nPages < nCurrentPage)
             // In case of mbSelectionOnly hit.
-            aCurrentPage = 1;
+            nCurrentPage = 1;
 
-        Sequence< beans::PropertyValue > aResult = mxRenderable->getRenderer(aCurrentPage - 1, selection, renderProperties );
+        Sequence< beans::PropertyValue > aResult = mxRenderable->getRenderer(nCurrentPage - 1, selection, renderProperties );
         for( sal_Int32 nProperty = 0, nPropertyCount = aResult.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
             if ( aResult[ nProperty ].Name == "PageSize" )
@@ -124,7 +124,7 @@ Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)
 }
 
 Graphic DocumentToGraphicRenderer::renderToGraphic(
-    sal_Int32 aCurrentPage,
+    sal_Int32 nCurrentPage,
     Size aDocumentSizePixel,
     Size aTargetSizePixel,
     Color aPageColor)
@@ -172,7 +172,7 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
     }
 
     uno::Any aSelection( getSelection());
-    mxRenderable->render(aCurrentPage - 1, aSelection, renderProps );
+    mxRenderable->render(nCurrentPage - 1, aSelection, renderProps );
 
     aMtf.Stop();
     aMtf.WindStart();
