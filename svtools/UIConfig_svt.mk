@@ -13,7 +13,6 @@ $(eval $(call gb_UIConfig_add_uifiles,svt,\
 	svtools/uiconfig/ui/addresstemplatedialog \
 	svtools/uiconfig/ui/fileviewmenu \
 	svtools/uiconfig/ui/graphicexport \
-	svtools/uiconfig/ui/GraphicExportOptionsDialog \
 	svtools/uiconfig/ui/javadisableddialog \
 	svtools/uiconfig/ui/placeedit \
 	svtools/uiconfig/ui/printersetupdialog \
