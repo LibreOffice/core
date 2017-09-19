@@ -434,9 +434,7 @@ void SwMMResultEmailDialog::FillInEmailSettings()
 
     if (m_pAttachmentED->GetText().isEmpty())
     {
-        OUString sAttach(m_sDefaultAttachmentST);
-        sAttach += ".";
-        sAttach += lcl_GetExtensionForDocType(
+        OUString sAttach = "." + lcl_GetExtensionForDocType(
                     reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData()));
         m_pAttachmentED->SetText(sAttach);
 
@@ -1012,10 +1010,10 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
         ScopedVclPtrInstance<SwSendQueryBox_Impl> aQuery(pButton, "SubjectDialog",
                                                          "modules/swriter/ui/subjectdialog.ui");
         aQuery->SetIsEmptyTextAllowed(true);
-        aQuery->SetValue(m_sNoSubjectST);
+        aQuery->SetValue("");
         if(RET_OK == aQuery->Execute())
         {
-            if(aQuery->GetValue() != m_sNoSubjectST)
+            if(!aQuery->GetValue().isEmpty())
                 m_pSubjectED->SetText(aQuery->GetValue());
         }
         else

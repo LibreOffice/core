@@ -125,8 +125,6 @@ class SwMMResultEmailDialog : public SfxModalDialog
 
     VclPtr<Button>         m_pOKButton;
 
-    OUString        m_sDefaultAttachmentST;
-    OUString        m_sNoSubjectST;
     OUString        m_sConfigureMail;
 
     OUString        m_sCC;
