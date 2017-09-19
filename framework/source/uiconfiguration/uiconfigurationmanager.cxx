@@ -188,7 +188,6 @@ private:
     OUString                                                  m_aXMLPostfix;
     OUString                                                  m_aPropUIName;
     OUString                                                  m_aPropResourceURL;
-    OUString                                                  m_aModuleIdentifier;
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     osl::Mutex                                                m_mutex;
     cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer;   /// container for ALL Listener
@@ -1149,7 +1148,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
         Sequence<Any> aPropSeq(comphelper::InitAnyPropertySequence(
         {
             {"UserConfigStorage", Any(m_xDocConfigStorage)},
-            {"ModuleIdentifier", Any(m_aModuleIdentifier)},
+            {"ModuleIdentifier", Any(OUString())},
         }));
 
         xInit->initialize( aPropSeq );
