@@ -27,7 +27,8 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 
-/** @file Provides simple diagnostic support.
+/** @file
+    Provides simple diagnostic support.
 
     @deprecated
     The facilities provided by this header are deprecated.  True assertions

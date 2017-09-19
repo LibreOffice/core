@@ -89,7 +89,7 @@ namespace osl
 
         /** Converts the address to a (human readable) domain-name.
 
-            @param pResult[out] value of 0 if you are not interested in errors,
+            @param[out] pResult value of 0 if you are not interested in errors,
                            otherwise *pResult contains an error code on failure
                            or osl_Socket_Ok on success
 
@@ -101,7 +101,7 @@ namespace osl
 
         /** Sets the IP address or hostname of the SocketAddress
 
-           @param sDottedIpOrHostname[in]   IP address or hostname
+           @param[in] sDottedIpOrHostname   IP address or hostname
 
            @retval true     success
            @retval false    failure
@@ -116,7 +116,7 @@ namespace osl
 
         /** Sets the port number of the address.
 
-           @param nPort[in] port number
+           @param[in] nPort port number
 
            @retval true     success
            @retval false    failure

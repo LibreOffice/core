@@ -244,7 +244,7 @@ template<typename T> inline bool isAsciiOctalDigit(T code)
     @param code  A Unicode code point.
 
     @return  True if code is an ASCII white space character as defined by C for
-    isspace in the "C" locale (ASCII ' ', '\f', '\n', '\r', '\t' '\v').
+    isspace in the "C" locale (ASCII ' ', '\\f', '\\n', '\\r', '\\t' '\\v').
 
     @since LibreOffice 5.4
 */

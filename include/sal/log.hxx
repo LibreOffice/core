@@ -346,6 +346,8 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
   This macro is meant to be used only while working on code and should never
   exist in production code.
 
+  @param stream input stream
+
   @param backtraceDepth a sal_uInt32 value indicating the maximum backtrace
   depth; zero means no backtrace
 

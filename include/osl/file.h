@@ -547,6 +547,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
 #define osl_VolumeInfo_Mask_DeviceHandle           0x00000080L
 #define osl_VolumeInfo_Mask_FileSystemCaseHandling 0x00000100L
 
+/** @} */
+
 /** Structure containing information about volumes
 
     @see    osl_getVolumeInformation()
