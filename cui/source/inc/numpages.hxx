@@ -87,15 +87,14 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    VclPtr<SvxNumValueSet>         m_pExamplesVS;
+    VclPtr<SvxNumValueSet>  m_pExamplesVS;
     SvxNumSettingsArr_Impl  aNumSettingsArr;
     SvxNumRule*             pActNum;
     SvxNumRule*             pSaveNum;
-    sal_uInt16                  nActNumLvl;
+    sal_uInt16              nActNumLvl;
     bool                    bModified   : 1;
     bool                    bPreset     : 1;
 
-    OUString              sNumCharFmtName;
     sal_uInt16              nNumItemId;
 
 protected:
@@ -209,7 +208,6 @@ class SvxBitmapPickTabPage : public SfxTabPage
     VclPtr<Button>             m_pBtBrowseFile;
 
     std::vector<OUString> aGrfNames;
-    OUString            sNumCharFmtName;
 
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;

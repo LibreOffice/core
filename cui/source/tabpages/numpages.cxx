@@ -349,7 +349,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                     aFmt.SetSuffix( "" );
                 else
                     aFmt.SetSuffix(_pSet->sSuffix);
-                aFmt.SetCharFormatName(sNumCharFmtName);
+                aFmt.SetCharFormatName("");
                 aFmt.SetBulletRelSize(100);
                 pActNum->SetLevel(i, aFmt);
             }
@@ -957,7 +957,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
                 aFmt.SetNumberingType(SVX_NUM_BITMAP);
                 aFmt.SetPrefix( "" );
                 aFmt.SetSuffix( "" );
-                aFmt.SetCharFormatName( sNumCharFmtName );
+                aFmt.SetCharFormatName( "" );
 
                 Graphic aGraphic;
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nIdx, &aGraphic))
