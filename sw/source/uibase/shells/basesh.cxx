@@ -952,6 +952,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             GetView().GetDocShell()->Execute(rReq);
         }
         break;
+        case SID_CLASSIFICATION_DIALOG:
+        {
+            GetView().GetDocShell()->Execute(rReq);
+        }
+        break;
         case SID_WATERMARK:
         {
             GetView().GetDocShell()->Execute(rReq);

@@ -377,6 +377,12 @@ interface BaseTextSelection
         StateMethod = StateStyle ;
     ]
 
+    SID_CLASSIFICATION_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+    ]
+
     SID_WATERMARK
     [
         ExecMethod = Execute ;
@@ -546,4 +552,3 @@ interface BaseTextSelection
         StateMethod = GetState;
     ]
 }
-

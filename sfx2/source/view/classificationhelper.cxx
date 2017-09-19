@@ -98,6 +98,9 @@ class SfxClassificationParser : public cppu::WeakImplHelper<xml::sax::XDocumentH
 {
 public:
     std::vector<SfxClassificationCategory> m_aCategories;
+    std::vector<OUString> m_aMarkings;
+    std::vector<OUString> m_aIPParts;
+    std::vector<OUString> m_aIPPartNumbers;
 
     OUString m_aPolicyAuthorityName;
     bool m_bInPolicyAuthorityName = false;
@@ -210,6 +213,21 @@ void SAL_CALL SfxClassificationParser::startElement(const OUString& rName, const
             m_pCategory = &rCategory;
         }
     }
+    else if (rName == "loext:Marking")
+    {
+        OUString aName = xAttribs->getValueByName("Name");
+        m_aMarkings.push_back(aName);
+    }
+    else if (rName == "loext:IntellectualPropertyPart")
+    {
+        OUString aName = xAttribs->getValueByName("Name");
+        m_aIPParts.push_back(aName);
+    }
+    else if (rName == "loext:IntellectualPropertyPartNumber")
+    {
+        OUString aName = xAttribs->getValueByName("Name");
+        m_aIPPartNumbers.push_back(aName);
+    }
     else if (rName == "baf:Scale")
     {
         m_aScale.clear();
@@ -319,9 +337,15 @@ public:
     std::map<SfxClassificationPolicyType, SfxClassificationCategory> m_aCategory;
     /// Possible categories of a policy to choose from.
     std::vector<SfxClassificationCategory> m_aCategories;
+    std::vector<OUString> m_aMarkings;
+    std::vector<OUString> m_aIPParts;
+    std::vector<OUString> m_aIPPartNumbers;
+
     uno::Reference<document::XDocumentProperties> m_xDocumentProperties;
 
-    explicit Impl(uno::Reference<document::XDocumentProperties> xDocumentProperties);
+    bool m_bUseLocalized;
+
+    explicit Impl(uno::Reference<document::XDocumentProperties> xDocumentProperties, bool bUseLocalized);
     void parsePolicy();
     /// Synchronize m_aLabels back to the document properties.
     void pushToDocumentProperties();
@@ -329,8 +353,9 @@ public:
     void setStartValidity(SfxClassificationPolicyType eType);
 };
 
-SfxClassificationHelper::Impl::Impl(uno::Reference<document::XDocumentProperties> xDocumentProperties)
+SfxClassificationHelper::Impl::Impl(uno::Reference<document::XDocumentProperties> xDocumentProperties, bool bUseLocalized)
     : m_xDocumentProperties(std::move(xDocumentProperties))
+    , m_bUseLocalized(bUseLocalized)
 {
 }
 
@@ -342,7 +367,7 @@ void SfxClassificationHelper::Impl::parsePolicy()
 
     // See if there is a localized variant next to the configured XML.
     OUString aExtension(".xml");
-    if (aPath.endsWith(aExtension))
+    if (aPath.endsWith(aExtension) && m_bUseLocalized)
     {
         OUString aBase = aPath.copy(0, aPath.getLength() - aExtension.getLength());
         const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();
@@ -370,6 +395,9 @@ void SfxClassificationHelper::Impl::parsePolicy()
         SAL_WARN("sfx.view", "parsePolicy() failed: " << rException.Message);
     }
     m_aCategories = xClassificationParser->m_aCategories;
+    m_aMarkings = xClassificationParser->m_aMarkings;
+    m_aIPParts = xClassificationParser->m_aIPParts;
+    m_aIPPartNumbers = xClassificationParser->m_aIPPartNumbers;
 }
 
 bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
@@ -503,8 +531,8 @@ bool SfxClassificationHelper::ShowPasteInfo(SfxClassificationCheckPasteResult eR
     return true;
 }
 
-SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::XDocumentProperties>& xDocumentProperties)
-    : m_pImpl(o3tl::make_unique<Impl>(xDocumentProperties))
+SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::XDocumentProperties>& xDocumentProperties, bool bUseLocalizedPolicy)
+    : m_pImpl(o3tl::make_unique<Impl>(xDocumentProperties, bUseLocalizedPolicy))
 {
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
     if (!xPropertyContainer.is())
@@ -536,6 +564,21 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
 }
 
 SfxClassificationHelper::~SfxClassificationHelper() = default;
+
+const std::vector<OUString> SfxClassificationHelper::GetMarkings()
+{
+    return m_pImpl->m_aMarkings;
+}
+
+const std::vector<OUString> SfxClassificationHelper::GetIntellectualPropertyParts()
+{
+    return m_pImpl->m_aIPParts;
+}
+
+const std::vector<OUString> SfxClassificationHelper::GetIntellectualPropertyPartNumbers()
+{
+    return m_pImpl->m_aIPPartNumbers;
+}
 
 const OUString& SfxClassificationHelper::GetBACName(SfxClassificationPolicyType eType)
 {
