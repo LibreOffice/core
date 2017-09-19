@@ -765,6 +765,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     break;
                     case NS_ooxml::LN_CT_FramePr_x:
                         pParaProperties->Setx( ConversionHelper::convertTwipToMM100(nIntValue ));
+                        pParaProperties->SetxAlign( text::HoriOrientation::NONE );
                     break;
                     case NS_ooxml::LN_CT_FramePr_xAlign:
                         switch( nIntValue )
@@ -780,6 +781,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                     break;
                     case NS_ooxml::LN_CT_FramePr_y:
                         pParaProperties->Sety( ConversionHelper::convertTwipToMM100(nIntValue ));
+                        pParaProperties->SetyAlign( text::VertOrientation::NONE );
                     break;
                     case NS_ooxml::LN_CT_FramePr_yAlign:
                         switch( nIntValue )
