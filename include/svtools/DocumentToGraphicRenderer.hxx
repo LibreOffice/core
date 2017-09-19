@@ -34,12 +34,13 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
 {
     const css::uno::Reference<css::lang::XComponent>& mxDocument;
 
-    css::uno::Reference<css::frame::XModel>        mxModel;
-    css::uno::Reference<css::frame::XController>   mxController;
-    css::uno::Reference<css::view::XRenderable>    mxRenderable;
-    css::uno::Reference<css::awt::XToolkit>        mxToolkit;
-    css::uno::Any                                  maSelection;
-    bool                                           mbSelectionOnly;
+    css::uno::Reference<css::frame::XModel>         mxModel;
+    css::uno::Reference<css::frame::XController>    mxController;
+    css::uno::Reference<css::view::XRenderable>     mxRenderable;
+    css::uno::Reference<css::awt::XToolkit>         mxToolkit;
+    css::uno::Any                                   maSelection;
+    bool                                            mbSelectionOnly;
+    bool                                            mbIsWriter;
 
     bool hasSelection() const;
 

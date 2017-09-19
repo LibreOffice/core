@@ -45,8 +45,22 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
     mxController( mxModel->getCurrentController() ),
     mxRenderable (mxDocument, uno::UNO_QUERY ),
     mxToolkit( VCLUnoHelper::CreateToolkit() ),
-    mbSelectionOnly( bSelectionOnly )
+    mbSelectionOnly( bSelectionOnly ),
+    mbIsWriter( false )
 {
+    try
+    {
+        uno::Reference< lang::XServiceInfo > xServiceInfo( mxDocument, uno::UNO_QUERY);
+        if (xServiceInfo.is())
+        {
+            if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
+                mbIsWriter = true;
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
     if (mbSelectionOnly && mxController.is())
     {
         try
@@ -57,18 +71,13 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
                 uno::Any aViewSelection( xSelSup->getSelection());
                 if (aViewSelection.hasValue())
                 {
-                    maSelection = aViewSelection;
                     /* FIXME: Writer always has a selection even if nothing is
                      * selected, but passing a selection to
                      * XRenderable::render() it always renders an empty page.
                      * So disable the selection already here. The current page
                      * the cursor is on is rendered. */
-                    uno::Reference< lang::XServiceInfo > xServiceInfo( mxDocument, uno::UNO_QUERY);
-                    if (xServiceInfo.is())
-                    {
-                        if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
-                            maSelection = uno::Any();
-                    }
+                    if (!mbIsWriter)
+                        maSelection = aViewSelection;
                 }
             }
         }
