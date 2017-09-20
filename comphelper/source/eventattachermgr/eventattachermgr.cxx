@@ -221,10 +221,9 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
     }
     else if( !rRet.getValueType().equals( rRetType ) )
     {
-        if( mxManager->xConverter.is() )
-            rRet = mxManager->xConverter->convertTo( rRet, rRetType );
-        else
+        if( !mxManager->xConverter.is() )
             throw CannotConvertException();
+        rRet = mxManager->xConverter->convertTo( rRet, rRetType );
     }
 }
 
@@ -541,14 +540,11 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
     if( static_cast< std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
     {
         // read older files
-        if( nVersion == 1 )
-        {
-            insertEntry( nIndex );
-            attach( nIndex, xObject, Helper );
-            return;
-        }
-        else
+        if( nVersion != 1 )
             throw IllegalArgumentException();
+        insertEntry( nIndex );
+        attach( nIndex, xObject, Helper );
+        return;
     }
 
     std::deque< AttacherIndex_Impl >::iterator aCurrentPosition = aIndex.begin() + nIndex;

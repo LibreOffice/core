@@ -126,7 +126,7 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
     // in adjusting the formatting I assume that "{" starts on a new line
 
     std::string conditionString = getSourceAsString(conditionRange);
-    conditionString = "(!" + conditionString + ")";
+    conditionString = "!(" + conditionString + ")";
 
     std::string thenString = getSourceAsString(thenRange);
     bool thenIsCompound = false;

@@ -3037,14 +3037,10 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
 
 Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
 {
-    Any aRet;
-    if( rPropertyName == "Resolution" )
-    {
-        aRet <<= m_aPageResolution;
-    }
-    else
+    if( rPropertyName != "Resolution" )
         throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard", nullptr );
-    return aRet;
+
+    return Any(m_aPageResolution);
 }
 
 void SAL_CALL ChartView::addPropertyChangeListener(

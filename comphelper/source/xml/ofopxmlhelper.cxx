@@ -145,18 +145,15 @@ void WriteRelationsInfoSequence(
         uno::Reference< css::xml::sax::XAttributeList > xAttrList( pAttrList );
         for( sal_Int32 nSecInd = 0; nSecInd < aSequence[nInd].getLength(); nSecInd++ )
         {
-            if ( aSequence[nInd][nSecInd].First == "Id"
-              || aSequence[nInd][nSecInd].First == "Type"
-              || aSequence[nInd][nSecInd].First == "TargetMode"
-              || aSequence[nInd][nSecInd].First == "Target" )
-            {
-                pAttrList->AddAttribute( aSequence[nInd][nSecInd].First, aCDATAString, aSequence[nInd][nSecInd].Second );
-            }
-            else
+            if ( !(aSequence[nInd][nSecInd].First == "Id"
+                  || aSequence[nInd][nSecInd].First == "Type"
+                  || aSequence[nInd][nSecInd].First == "TargetMode"
+                  || aSequence[nInd][nSecInd].First == "Target") )
             {
                 // TODO/LATER: should the extensions be allowed?
                 throw lang::IllegalArgumentException();
             }
+            pAttrList->AddAttribute( aSequence[nInd][nSecInd].First, aCDATAString, aSequence[nInd][nSecInd].Second );
         }
 
         xWriter->startElement( aRelElement, xAttrList );

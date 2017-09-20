@@ -194,20 +194,18 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< css::
                                             1 );
 
     uno::Sequence< sal_Int8 > aSeq;
-    if ( aArguments[0] >>= aSeq )
-    {
-        uno::Reference< io::XInputStream > xInputStream(
-                        static_cast< ::cppu::OWeakObject* >( new ::comphelper::SequenceInputStream( aSeq ) ),
-                        uno::UNO_QUERY_THROW );
-        uno::Reference< io::XSeekable > xSeekable( xInputStream, uno::UNO_QUERY_THROW );
-        m_xInputStream = xInputStream;
-        m_xSeekable = xSeekable;
-        m_bInitialized = true;
-    }
-    else
+    if ( !(aArguments[0] >>= aSeq) )
         throw lang::IllegalArgumentException( "Unexpected type of argument!",
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
+
+    uno::Reference< io::XInputStream > xInputStream(
+                    static_cast< ::cppu::OWeakObject* >( new ::comphelper::SequenceInputStream( aSeq ) ),
+                    uno::UNO_QUERY_THROW );
+    uno::Reference< io::XSeekable > xSeekable( xInputStream, uno::UNO_QUERY_THROW );
+    m_xInputStream = xInputStream;
+    m_xSeekable = xSeekable;
+    m_bInitialized = true;
 }
 
 } // anonymous namespace
