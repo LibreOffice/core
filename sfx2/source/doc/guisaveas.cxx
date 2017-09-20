@@ -114,6 +114,7 @@
 #define SAVEAS_REQUESTED            32
 #define SAVEACOPY_REQUESTED         64
 #define EPUBEXPORT_REQUESTED       128
+#define EPUBDIRECTEXPORT_REQUESTED 256
 #define SAVEASREMOTE_REQUESTED      -1
 
 // possible statuses of save operation
@@ -145,6 +146,8 @@ sal_uInt16 getSlotIDFromMode( sal_Int16 nStoreMode )
         nResult = SID_EXPORTDOCASEPUB;
     else if ( nStoreMode == ( EXPORT_REQUESTED | PDFEXPORT_REQUESTED | PDFDIRECTEXPORT_REQUESTED ) )
         nResult = SID_DIRECTEXPORTDOCASPDF;
+    else if ( nStoreMode == ( EXPORT_REQUESTED | EPUBEXPORT_REQUESTED | EPUBDIRECTEXPORT_REQUESTED ) )
+        nResult = SID_DIRECTEXPORTDOCASEPUB;
     else if ( nStoreMode == SAVEAS_REQUESTED || nStoreMode == ( EXPORT_REQUESTED | WIDEEXPORT_REQUESTED ) )
         nResult = SID_SAVEASDOC;
     else if ( nStoreMode == SAVEASREMOTE_REQUESTED )
@@ -168,6 +171,8 @@ sal_Int16 getStoreModeFromSlotName( const OUString& aSlotName )
         nResult = EXPORT_REQUESTED | PDFEXPORT_REQUESTED | PDFDIRECTEXPORT_REQUESTED;
     else if ( aSlotName == "ExportToEPUB" )
         nResult = EXPORT_REQUESTED | EPUBEXPORT_REQUESTED;
+    else if ( aSlotName == "ExportDirectToEPUB" )
+        nResult = EXPORT_REQUESTED | EPUBEXPORT_REQUESTED | EPUBDIRECTEXPORT_REQUESTED;
     else if ( aSlotName == "Save" )
         nResult = SAVE_REQUESTED;
     else if ( aSlotName == "SaveAs" )
@@ -1448,7 +1453,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
     const OUString sFilterFlagsString("FilterFlags");
 
     bool bPDFOptions = (nStoreMode & PDFEXPORT_REQUESTED) && !(nStoreMode & PDFDIRECTEXPORT_REQUESTED);
-    bool bEPUBOptions = (nStoreMode & EPUBEXPORT_REQUESTED);
+    bool bEPUBOptions = (nStoreMode & EPUBEXPORT_REQUESTED) && !(nStoreMode & EPUBDIRECTEXPORT_REQUESTED);
     if ( ( nStoreMode & EXPORT_REQUESTED ) && (bPDFOptions || bEPUBOptions) )
     {
         // this is PDF or EPUB export, the filter options dialog should be shown before the export

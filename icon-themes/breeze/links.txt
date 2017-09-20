@@ -1364,6 +1364,10 @@ sw/res/styfamnu.png cmd/sc_defaultbullet.png
 sw/res/zetlhor2.png svx/res/zetlhor2.png
 sw/res/zetlver2.png svx/res/zetlver2.png
 
+# writer epub export
+cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
+cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
+
 # vcl
 # ==============================================
 vcl/res/index.png cmd/sc_insertmultiindex.png
