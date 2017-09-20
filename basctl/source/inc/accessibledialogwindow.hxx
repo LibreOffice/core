@@ -64,10 +64,6 @@ private:
         css::uno::Reference< css::accessibility::XAccessible >    rxAccessible;
 
         ChildDescriptor( DlgEdObj* _pDlgEdObj );
-        ~ChildDescriptor();
-
-        ChildDescriptor( const ChildDescriptor& rDesc );
-        ChildDescriptor& operator=( const ChildDescriptor& rDesc );
 
         bool operator==( const ChildDescriptor& rDesc );
         bool operator<( const ChildDescriptor& rDesc ) const;

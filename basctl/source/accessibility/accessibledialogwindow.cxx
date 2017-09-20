@@ -53,28 +53,6 @@ AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
 {
 }
 
-
-AccessibleDialogWindow::ChildDescriptor::~ChildDescriptor()
-{
-}
-
-
-AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( const ChildDescriptor& rDesc )
-    :pDlgEdObj( rDesc.pDlgEdObj )
-    ,rxAccessible( rDesc.rxAccessible )
-{
-}
-
-
-AccessibleDialogWindow::ChildDescriptor& AccessibleDialogWindow::ChildDescriptor::operator=( const ChildDescriptor& rDesc )
-{
-    pDlgEdObj = rDesc.pDlgEdObj;
-    rxAccessible = rDesc.rxAccessible;
-
-    return *this;
-}
-
-
 bool AccessibleDialogWindow::ChildDescriptor::operator==( const ChildDescriptor& rDesc )
 {
     bool bRet = false;

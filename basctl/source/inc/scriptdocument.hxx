@@ -96,12 +96,6 @@ namespace basctl
         */
         explicit    ScriptDocument( const css::uno::Reference< css::frame::XModel >& _rxDocument );
 
-        /// copy constructor
-                    ScriptDocument( const ScriptDocument& _rSource );
-
-        /// destructor
-                    ~ScriptDocument();
-
         /** returns a reference to a shared ScriptDocument instance which
             operates on the application-wide scripts and dialogs
         */
