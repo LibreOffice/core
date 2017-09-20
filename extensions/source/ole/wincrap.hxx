@@ -34,7 +34,6 @@
 #pragma warning (disable:4005)
 #pragma warning (disable:4548)
 
-#include <tchar.h>
 #include <dispex.h>
 
 #include <prewin.h>

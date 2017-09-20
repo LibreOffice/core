@@ -18,7 +18,6 @@
  */
 
 
-#define UNICODE
 #include <string.h>
 #include <algorithm>
 #include "ddeimp.hxx"
@@ -157,12 +156,12 @@ DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic )
     pInst->nInstanceCli++;
     if ( !pInst->hDdeInstCli )
     {
-        pImp->nStatus = DdeInitialize( &pInst->hDdeInstCli,
-                                       DdeInternal::CliCallback,
-                                       APPCLASS_STANDARD | APPCMD_CLIENTONLY |
-                                       CBF_FAIL_ALLSVRXACTIONS |
-                                       CBF_SKIP_REGISTRATIONS  |
-                                       CBF_SKIP_UNREGISTRATIONS, 0L );
+        pImp->nStatus = DdeInitializeW( &pInst->hDdeInstCli,
+                                        DdeInternal::CliCallback,
+                                        APPCLASS_STANDARD | APPCMD_CLIENTONLY |
+                                        CBF_FAIL_ALLSVRXACTIONS |
+                                        CBF_SKIP_REGISTRATIONS  |
+                                        CBF_SKIP_UNREGISTRATIONS, 0L );
     }
 
     pService = new DdeString( pInst->hDdeInstCli, rService );

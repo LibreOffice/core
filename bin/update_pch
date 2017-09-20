@@ -755,16 +755,6 @@ def generate(includes, libname, filename, module):
 """
             f.write(sal_define)
 
-        # svx needs this (sendreportw32.cxx)
-        if module == 'svx' and libname == 'svx':
-            svx_define = """
-#ifdef _WIN32
-#   define UNICODE
-#   define _UNICODE
-#endif
-"""
-            f.write(svx_define)
-
         # Dump the headers.
         f.write('\n')
         for i in includes:

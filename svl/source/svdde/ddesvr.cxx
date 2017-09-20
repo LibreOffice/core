@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
 #include "ddeimp.hxx"
 #include <algorithm>
 #include <memory>
@@ -79,10 +78,10 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
         {
             int nTopics = 0;
 
-            TCHAR chTopicBuf[250];
+            WCHAR chTopicBuf[250];
             if( hText1 )
-                DdeQueryString( pInst->hDdeInstSvr, hText1, chTopicBuf,
-                                sizeof(chTopicBuf)/sizeof(TCHAR), CP_WINUNICODE );
+                DdeQueryStringW( pInst->hDdeInstSvr, hText1, chTopicBuf,
+                                SAL_N_ELEMENTS(chTopicBuf), CP_WINUNICODE );
 
             for (DdeServices::iterator aI = rAll.begin(); aI != rAll.end(); ++aI)
             {
@@ -98,7 +97,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
                             while( -1 != n )
                             {
                                 OUString s( sTopics.getToken( 0, '\t', n ));
-                                if( s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
+                                if( s == SAL_U(chTopicBuf) )
                                     ++nTopics;
                             }
                         }
@@ -125,7 +124,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
                     {
                         OUString s( sTopics.getToken( 0, '\t', n ));
                         s = s.replaceAll("\n", "").replaceAll("\r", "");
-                        if( !hText1 || s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
+                        if( !hText1 || s == SAL_U(chTopicBuf) )
                         {
                             DdeString aDStr( pInst->hDdeInstSvr, s );
                             pTopic = FindTopic( *pService, aDStr.getHSZ() );
@@ -233,15 +232,15 @@ found:
             OUString aRes; // Must be free not until the end!
             if ( pTopic->IsSystemTopic() )
             {
-                if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_TOPICS) )
+                if ( pTopic->aItem == SZDDESYS_ITEM_TOPICS )
                     aRes = pService->Topics();
-                else if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_SYSITEMS) )
+                else if ( pTopic->aItem == SZDDESYS_ITEM_SYSITEMS )
                     aRes = pService->SysItems();
-                else if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_STATUS) )
+                else if ( pTopic->aItem == SZDDESYS_ITEM_STATUS )
                     aRes = pService->Status();
-                else if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_FORMATS) )
+                else if ( pTopic->aItem == SZDDESYS_ITEM_FORMATS )
                     aRes = pService->Formats();
-                else if ( pTopic->aItem ==  reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_HELP) )
+                else if ( pTopic->aItem == SZDDESYS_ITEM_HELP )
                     aRes = OUString();
                 else
                     aRes = OUString();
@@ -392,8 +391,8 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
             break;
 
         // Let's query our subclass
-        TCHAR chBuf[250];
-        DdeQueryString(pInst->hDdeInstSvr,hTopic,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
+        WCHAR chBuf[250];
+        DdeQueryStringW(pInst->hDdeInstSvr,hTopic,chBuf,SAL_N_ELEMENTS(chBuf),CP_WINUNICODE );
         bContinue = false;
         // We need to search again
     }
@@ -422,9 +421,9 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
             break;
 
         // Let's query our subclass
-        TCHAR chBuf[250];
-        DdeQueryString(pInst->hDdeInstSvr,hItem,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
-        bContinue = rTopic.MakeItem( reinterpret_cast<const sal_Unicode*>(chBuf) );
+        WCHAR chBuf[250];
+        DdeQueryStringW(pInst->hDdeInstSvr,hItem,chBuf,SAL_N_ELEMENTS(chBuf),CP_WINUNICODE );
+        bContinue = rTopic.MakeItem( SAL_U(chBuf) );
         // We need to search again
     }
     while( bContinue );
@@ -443,11 +442,11 @@ DdeService::DdeService( const OUString& rService )
     if ( !pInst->hDdeInstSvr )
     {
         nStatus = sal::static_int_cast< short >(
-            DdeInitialize( &pInst->hDdeInstSvr,
-                           DdeInternal::SvrCallback,
-                           APPCLASS_STANDARD |
-                           CBF_SKIP_REGISTRATIONS |
-                           CBF_SKIP_UNREGISTRATIONS, 0L ) );
+            DdeInitializeW( &pInst->hDdeInstSvr,
+                            DdeInternal::SvrCallback,
+                            APPCLASS_STANDARD |
+                            CBF_SKIP_REGISTRATIONS |
+                            CBF_SKIP_UNREGISTRATIONS, 0L ) );
         pInst->pServicesSvr = new DdeServices;
     }
     else
@@ -468,12 +467,12 @@ DdeService::DdeService( const OUString& rService )
         }
     }
     AddFormat( SotClipboardFormatId::STRING );
-    pSysTopic = new DdeTopic( reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) );
-    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_TOPICS) ) );
-    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_SYSITEMS) ) );
-    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_STATUS) ) );
-    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_FORMATS) ) );
-    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_HELP) ) );
+    pSysTopic = new DdeTopic( SZDDESYS_TOPIC );
+    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_TOPICS ) );
+    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_SYSITEMS ) );
+    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_STATUS ) );
+    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_FORMATS ) );
+    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_HELP ) );
     AddTopic( *pSysTopic );
 }
 
@@ -608,7 +607,7 @@ const OUString DdeTopic::GetName() const
 
 bool DdeTopic::IsSystemTopic()
 {
-    return GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC);
+    return GetName() == SZDDESYS_TOPIC;
 }
 
 DdeItem* DdeTopic::AddItem( const DdeItem& r )
@@ -859,7 +858,7 @@ OUString DdeService::SysItems()
     std::vector<DdeItem*>::iterator iterItem;
     for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter )
     {
-        if ( (*iter)->GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) )
+        if ( (*iter)->GetName() == SZDDESYS_TOPIC )
         {
             short n = 0;
             for ( iterItem = (*iter)->aItems.begin(); iterItem != (*iter)->aItems.end(); ++iterItem, n++ )
@@ -913,9 +912,9 @@ OUString DdeService::Formats()
             break;
         default:
             {
-                TCHAR buf[128];
-                GetClipboardFormatName( (UINT)f, buf, sizeof(buf) / sizeof(TCHAR) );
-                s += OUString(reinterpret_cast<sal_Unicode*>(buf));
+                WCHAR buf[128];
+                GetClipboardFormatNameW( (UINT)f, buf, SAL_N_ELEMENTS(buf) );
+                s += SAL_U(buf);
             }
             break;
         }
