@@ -73,7 +73,7 @@ namespace drawinglayer
             if(!xRetval.empty())
             {
                 // get target size
-                const tools::Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
+                const ::tools::Rectangle aMtfTarget(getMetaFile().GetPrefMapMode().GetOrigin(), getMetaFile().GetPrefSize());
 
                 // create transformation
                 basegfx::B2DHomMatrix aAdaptedTransform;
