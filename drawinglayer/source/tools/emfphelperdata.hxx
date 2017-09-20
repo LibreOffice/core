@@ -37,7 +37,7 @@ namespace emfplushelper
     // EMF+ commands
     #define EmfPlusRecordTypeHeader 0x4001
     #define EmfPlusRecordTypeEndOfFile 0x4002
-    //TODO EmfPlusRecordTypeComment 0x4003
+    #define EmfPlusRecordTypeComment 0x4003
     #define EmfPlusRecordTypeGetDC 0x4004
     //TODO EmfPlusRecordTypeMultiFormatStart 0x4005
     //TODO EmfPlusRecordTypeMultiFormatSection 0x4006
