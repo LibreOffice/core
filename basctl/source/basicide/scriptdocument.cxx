@@ -1044,17 +1044,6 @@ namespace basctl
     }
 
 
-    ScriptDocument::ScriptDocument( const ScriptDocument& _rSource )
-        :m_pImpl( _rSource.m_pImpl )
-    {
-    }
-
-
-    ScriptDocument::~ScriptDocument()
-    {
-    }
-
-
     const ScriptDocument& ScriptDocument::getApplicationScriptDocument()
     {
         static ScriptDocument s_aApplicationScripts;
