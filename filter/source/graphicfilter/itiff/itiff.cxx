@@ -91,7 +91,7 @@ private:
     sal_uInt32              nGroup4Options;
     sal_uInt32              nResolutionUnit;            // unit of fX/YResolution: 1=unknown, 2(default)=inch, 3=cm
     sal_uInt32              nPredictor;
-    std::unique_ptr<sal_uInt32[]> xColorMap;            // color palette
+    std::vector<sal_uInt32> aColorMap;                  // color palette
     sal_uInt32              nNumColors;                 // number of colors within the color palette
 
     sal_uInt32              nPlanes;                    // number of layers within the Tiff file
@@ -466,23 +466,23 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             nNumColors = ((sal_uInt32)1 << nBitsPerSample);
             if ( nDataType == 3 && nNumColors <= 256)
             {
-                xColorMap.reset(new sal_uInt32[256]);
+                aColorMap.resize(256);
                 for (sal_uInt32 i = 0; i < nNumColors; ++i)
-                    xColorMap[i] = 0;
+                    aColorMap[i] = 0;
                 for (sal_uInt32 i = 0; i < nNumColors; ++i)
                 {
                     pTIFF->ReadUInt16( nVal );
-                    xColorMap[i] |= ( ( (sal_uInt32)nVal ) << 8 ) & 0x00ff0000;
+                    aColorMap[i] |= ( ( (sal_uInt32)nVal ) << 8 ) & 0x00ff0000;
                 }
                 for (sal_uInt32 i = 0; i < nNumColors; ++i)
                 {
                     pTIFF->ReadUInt16( nVal );
-                    xColorMap[i] |= ( (sal_uInt32)nVal ) & 0x0000ff00;
+                    aColorMap[i] |= ( (sal_uInt32)nVal ) & 0x0000ff00;
                 }
                 for (sal_uInt32 i = 0; i < nNumColors; ++i)
                 {
                     pTIFF->ReadUInt16( nVal );
-                    xColorMap[i] |= ( ( (sal_uInt32)nVal ) >> 8 ) & 0x000000ff;
+                    aColorMap[i] |= ( ( (sal_uInt32)nVal ) >> 8 ) & 0x000000ff;
                 }
             }
             else
@@ -1063,7 +1063,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         }
     }
     else if ( ( nSamplesPerPixel == 2 ) && ( nBitsPerSample == 8 ) &&
-        ( nPlanarConfiguration == 1 ) && !xColorMap )               // grayscale
+        ( nPlanarConfiguration == 1 ) && aColorMap.empty() )               // grayscale
     {
         if ( nMaxSampleValue > nMinSampleValue )
         {
@@ -1085,8 +1085,7 @@ void TIFFReader::MakePalCol()
 {
     if ( nDstBitsPerPixel <= 8 )
     {
-        if  (!xColorMap)
-            xColorMap.reset(new sal_uInt32[256]);
+        aColorMap.resize(256);
         if ( nPhotometricInterpretation <= 1 )
         {
             nNumColors = (sal_uInt32)1 << nBitsPerSample;
@@ -1104,16 +1103,16 @@ void TIFFReader::MakePalCol()
                 sal_uInt32 nVal = ( i * 255 / ( nNumColors - 1 ) ) & 0xff;
                 sal_uInt32 n0RGB = nVal | ( nVal << 8 ) | ( nVal << 16 );
                 if ( nPhotometricInterpretation == 1 )
-                    xColorMap[i] = n0RGB;
+                    aColorMap[i] = n0RGB;
                 else
-                    xColorMap[nNumColors - i - 1] = n0RGB;
+                    aColorMap[nNumColors - i - 1] = n0RGB;
             }
         }
         xAcc->SetPaletteEntryCount(std::max<sal_uInt16>(nNumColors, xAcc->GetPaletteEntryCount()));
         for (sal_uInt32 i = 0; i < nNumColors; ++i)
         {
-            xAcc->SetPaletteColor(i, BitmapColor( (sal_uInt8)( xColorMap[ i ] >> 16 ),
-                (sal_uInt8)( xColorMap[ i ] >> 8 ), (sal_uInt8)xColorMap[ i ] ) );
+            xAcc->SetPaletteColor(i, BitmapColor( (sal_uInt8)( aColorMap[ i ] >> 16 ),
+                (sal_uInt8)( aColorMap[ i ] >> 8 ), (sal_uInt8)aColorMap[ i ] ) );
         }
     }
 
@@ -1427,7 +1426,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             // Clean up:
             for (auto& j : aMap)
                 j.clear();
-            xColorMap.reset();
+            aColorMap.clear();
             aStripOffsets.clear();
             aStripByteCounts.clear();
         }
