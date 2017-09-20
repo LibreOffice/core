@@ -1,4 +1,4 @@
-From 082e7399e0396bef9de46ddf8180d253d594a826 Mon Sep 17 00:00:00 2001
+From 57f9146c45b1819afdd79a96a77ea55fb84ddb50 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:19:12 +0100
 Subject: [PATCH] xmlsec1-customkeymanage.patch
@@ -14,24 +14,24 @@ Conflicts:
 	src/nss/x509.c
 	src/nss/x509vfy.c
 ---
- include/xmlsec/nss/Makefile.am      |   3 +
- include/xmlsec/nss/Makefile.in      |   3 +
- include/xmlsec/nss/akmngr.h         |  56 +++
- include/xmlsec/nss/app.h            |   5 +
- include/xmlsec/nss/ciphers.h        |  35 ++
- include/xmlsec/nss/keysstore.h      |   4 +
- include/xmlsec/nss/tokens.h         | 182 +++++++++
- src/nss/Makefile.am                 |   2 +
- src/nss/Makefile.in                 |  20 +
- src/nss/akmngr.c                    | 384 ++++++++++++++++++
- src/nss/hmac.c                      |   6 +-
- src/nss/keysstore.c                 | 772 ++++++++++++++++++++++++++----------
- src/nss/pkikeys.c                   |  81 ++--
- src/nss/symkeys.c                   | 705 ++++++++++++++++++++++++++++++--
- src/nss/tokens.c                    | 544 +++++++++++++++++++++++++
- src/nss/x509.c                      | 491 ++++++-----------------
- src/nss/x509vfy.c                   | 248 ++++--------
- 22 files changed, 2971 insertions(+), 838 deletions(-)
+ include/xmlsec/nss/Makefile.am |   3 +
+ include/xmlsec/nss/Makefile.in |   3 +
+ include/xmlsec/nss/akmngr.h    |  56 +++
+ include/xmlsec/nss/app.h       |   5 +
+ include/xmlsec/nss/ciphers.h   |  35 ++
+ include/xmlsec/nss/keysstore.h |   4 +
+ include/xmlsec/nss/tokens.h    | 182 ++++++++++
+ src/nss/Makefile.am            |   2 +
+ src/nss/Makefile.in            |  20 ++
+ src/nss/akmngr.c               | 384 ++++++++++++++++++++
+ src/nss/hmac.c                 |   6 +-
+ src/nss/keysstore.c            | 772 +++++++++++++++++++++++++++++------------
+ src/nss/pkikeys.c              |  81 ++---
+ src/nss/symkeys.c              | 705 +++++++++++++++++++++++++++++++++++--
+ src/nss/tokens.c               | 544 +++++++++++++++++++++++++++++
+ src/nss/x509.c                 | 491 ++++++--------------------
+ src/nss/x509vfy.c              | 248 +++++--------
+ 17 files changed, 2703 insertions(+), 838 deletions(-)
  create mode 100644 include/xmlsec/nss/akmngr.h
  create mode 100644 include/xmlsec/nss/ciphers.h
  create mode 100644 include/xmlsec/nss/tokens.h
@@ -53,7 +53,7 @@ index e3521622..997ca7fd 100644
  
  install-exec-hook:
 diff --git a/include/xmlsec/nss/Makefile.in b/include/xmlsec/nss/Makefile.in
-index ee5c02e3..6d18158c 100644
+index 6fecb4f5..672d10e7 100644
 --- a/include/xmlsec/nss/Makefile.in
 +++ b/include/xmlsec/nss/Makefile.in
 @@ -407,6 +407,9 @@ bignum.h \
@@ -416,7 +416,7 @@ index e666f33c..ec9e7896 100644
  
  libxmlsec1_nss_la_LIBADD = \
 diff --git a/src/nss/Makefile.in b/src/nss/Makefile.in
-index 51836f3a..35acec13 100644
+index 2861e3ce..7532d90e 100644
 --- a/src/nss/Makefile.in
 +++ b/src/nss/Makefile.in
 @@ -140,6 +140,8 @@ am_libxmlsec1_nss_la_OBJECTS = libxmlsec1_nss_la-app.lo \
@@ -858,7 +858,7 @@ index 00000000..65b94ac5
 +}
 +
 diff --git a/src/nss/hmac.c b/src/nss/hmac.c
-index f5158da6..7c294240 100644
+index 558d4b93..2ef668c1 100644
 --- a/src/nss/hmac.c
 +++ b/src/nss/hmac.c
 @@ -23,8 +23,8 @@
@@ -871,7 +871,7 @@ index f5158da6..7c294240 100644
  
  /* sizes in bits */
  #define XMLSEC_NSS_MIN_HMAC_SIZE                80
-@@ -343,9 +343,9 @@ xmlSecNssHmacSetKey(xmlSecTransformPtr transform, xmlSecKeyPtr key) {
+@@ -355,9 +355,9 @@ xmlSecNssHmacSetKey(xmlSecTransformPtr transform, xmlSecKeyPtr key) {
      keyItem.data = xmlSecBufferGetData(buffer);
      keyItem.len  = xmlSecBufferGetSize(buffer);
  
@@ -3353,7 +3353,7 @@ index 00000000..40ad9bbe
 +}
 +
 diff --git a/src/nss/x509.c b/src/nss/x509.c
-index ef61d6b3..ae443717 100644
+index 9c6c46f1..c95522d6 100644
 --- a/src/nss/x509.c
 +++ b/src/nss/x509.c
 @@ -61,33 +61,18 @@ static int              xmlSecNssX509DataNodeRead               (xmlSecKeyDataPt
@@ -3468,7 +3468,7 @@ index ef61d6b3..ae443717 100644
          }
 +       /* todo: add \n around base64 data - from context */
 +       /* todo: add errors check */
-+       xmlNodeSetContent(cur, xmlSecStringCR);
++       xmlNodeSetContent(cur, xmlSecGetDefaultLineFeed());
 +       xmlNodeSetContent(cur, buf);
 +       xmlFree(buf);
 +    }
@@ -3542,7 +3542,7 @@ index ef61d6b3..ae443717 100644
          }
 +        /* todo: add \n around base64 data - from context */
 +        /* todo: add errors check */
-+        xmlNodeSetContent(cur, xmlSecStringCR);
++        xmlNodeSetContent(cur, xmlSecGetDefaultLineFeed());
 +        xmlNodeSetContent(cur, buf);
      }
  
@@ -3575,7 +3575,7 @@ index ef61d6b3..ae443717 100644
 -
 -    /* todo: add \n around base64 data - from context */
 -    /* todo: add errors check */
--    xmlNodeSetContent(cur, xmlSecStringCR);
+-    xmlNodeSetContent(cur, xmlSecGetDefaultLineFeed());
 -    xmlNodeSetContent(cur, buf);
 -    xmlFree(buf);
 -    return(0);
@@ -3833,7 +3833,7 @@ index ef61d6b3..ae443717 100644
 -    }
 -    /* todo: add \n around base64 data - from context */
 -    /* todo: add errors check */
--    xmlNodeSetContent(cur, xmlSecStringCR);
+-    xmlNodeSetContent(cur, xmlSecGetDefaultLineFeed());
 -    xmlNodeSetContent(cur, buf);
 -    xmlFree(buf);
 -
@@ -4011,7 +4011,7 @@ index ef61d6b3..ae443717 100644
  xmlSecNssX509CertDebugDump(CERTCertificate* cert, FILE* output) {
      SECItem *sn;
 diff --git a/src/nss/x509vfy.c b/src/nss/x509vfy.c
-index b28a37e1..39574fdd 100644
+index cd328fea..9f2aca41 100644
 --- a/src/nss/x509vfy.c
 +++ b/src/nss/x509vfy.c
 @@ -30,6 +30,7 @@
@@ -4042,7 +4042,7 @@ index b28a37e1..39574fdd 100644
  
  static xmlSecKeyDataStoreKlass xmlSecNssX509StoreKlass = {
      sizeof(xmlSecKeyDataStoreKlass),
-@@ -355,7 +345,7 @@ xmlSecNssX509StoreFinalize(xmlSecKeyDataStorePtr store) {
+@@ -359,7 +349,7 @@ xmlSecNssX509StoreFinalize(xmlSecKeyDataStorePtr store) {
   *****************************************************************************/
  static CERTName *
  xmlSecNssGetCertName(const xmlChar * name) {
@@ -4051,7 +4051,7 @@ index b28a37e1..39574fdd 100644
      xmlChar *p;
      CERTName *res;
  
-@@ -375,24 +365,14 @@ xmlSecNssGetCertName(const xmlChar * name) {
+@@ -379,24 +369,14 @@ xmlSecNssGetCertName(const xmlChar * name) {
          memcpy(p, "           E=", 13);
      }
  
@@ -4079,7 +4079,7 @@ index b28a37e1..39574fdd 100644
      return(res);
  }
  
-@@ -468,15 +448,8 @@ xmlSecNssX509FindCert(CERTCertList* certsList, const xmlChar *subjectName,
+@@ -472,15 +452,8 @@ xmlSecNssX509FindCert(CERTCertList* certsList, const xmlChar *subjectName,
          issuerAndSN.derIssuer.data = nameitem->data;
          issuerAndSN.derIssuer.len = nameitem->len;
  
@@ -4097,7 +4097,7 @@ index b28a37e1..39574fdd 100644
              xmlSecInternalError("xmlSecNssNumToItem(serialNumber)", NULL);
              SECITEM_FreeItem(&issuerAndSN.serialNumber, PR_FALSE);
              goto done;
-@@ -547,140 +520,6 @@ done:
+@@ -551,140 +524,6 @@ done:
      return(cert);
  }
  
@@ -4238,7 +4238,7 @@ index b28a37e1..39574fdd 100644
  /* code lifted from NSS */
  static int
  xmlSecNssNumToItem(SECItem *it, PRUint64 ui)
-@@ -717,6 +556,77 @@ xmlSecNssNumToItem(SECItem *it, PRUint64 ui)
+@@ -721,6 +560,77 @@ xmlSecNssNumToItem(SECItem *it, PRUint64 ui)
      PORT_Memcpy(it->data, bb + (zeros_len - 1), it->len);
      return(it->len);
  }
@@ -4317,5 +4317,5 @@ index b28a37e1..39574fdd 100644
  
  
 -- 
-2.12.0
+2.13.5
 
