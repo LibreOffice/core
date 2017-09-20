@@ -331,7 +331,7 @@ bool ImplSdPPTImport::Import()
                                         break;
                                     }
                                     auto nPos = aPropItem.Tell() + nTemp;
-                                    if (nPos != aPropItem.Seek(nPos))
+                                    if (!checkSeek(aPropItem, nPos))
                                     {
                                         bVecOk = false;
                                         break;
