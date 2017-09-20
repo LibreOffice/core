@@ -54,6 +54,10 @@ $(eval $(call gb_Module_add_screenshot_targets,sd, \
     CppunitTest_sd_dialogs_test \
 ))
 
+$(eval $(call gb_Module_add_uicheck_targets,sd,\
+	UITest_tdf98980 \
+))
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
     JunitTest_sd_unoapi \
     CppunitTest_sd_activex_controls_tests \
