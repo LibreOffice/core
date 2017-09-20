@@ -307,17 +307,14 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
                 if ( aObjPropNames[nInd] == "ObjectVerbs" )
                 {
                     uno::Sequence< OUString > aVerbShortcuts;
-                    if ( xObjectProps->getByName( aObjPropNames[nInd] ) >>= aVerbShortcuts )
-                    {
-                        uno::Sequence< embed::VerbDescriptor > aVerbDescriptors( aVerbShortcuts.getLength() );
-                        for ( sal_Int32 nVerbI = 0; nVerbI < aVerbShortcuts.getLength(); nVerbI++ )
-                            if ( !GetVerbByShortcut( aVerbShortcuts[nVerbI], aVerbDescriptors[nVerbI] ) )
-                                throw uno::RuntimeException();
-
-                        aResult[nInd+1].Value <<= aVerbDescriptors;
-                    }
-                    else
+                    if ( !(xObjectProps->getByName( aObjPropNames[nInd] ) >>= aVerbShortcuts) )
                         throw uno::RuntimeException();
+                    uno::Sequence< embed::VerbDescriptor > aVerbDescriptors( aVerbShortcuts.getLength() );
+                    for ( sal_Int32 nVerbI = 0; nVerbI < aVerbShortcuts.getLength(); nVerbI++ )
+                        if ( !GetVerbByShortcut( aVerbShortcuts[nVerbI], aVerbDescriptors[nVerbI] ) )
+                            throw uno::RuntimeException();
+
+                    aResult[nInd+1].Value <<= aVerbDescriptors;
                 }
                 else
                     aResult[nInd+1].Value = xObjectProps->getByName( aObjPropNames[nInd] );

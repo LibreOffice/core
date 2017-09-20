@@ -93,42 +93,39 @@ bool XcuParser::startElement(
     } else if (state_.top().ignore) {
         state_.push(State::Ignore(false));
     } else if (!state_.top().node.is()) {
-        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE && name.equals("item"))
+        if (nsId != xmlreader::XmlReader::NAMESPACE_NONE || !name.equals("item"))
         {
-            handleItem(reader);
-        } else {
             throw css::uno::RuntimeException(
                 "bad items node member <" + name.convertFromUtf8() + "> in " +
                 reader.getUrl());
         }
+        handleItem(reader);
     } else {
         switch (state_.top().node->kind()) {
         case Node::KIND_PROPERTY:
-            if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                name.equals("value"))
+            if (nsId != xmlreader::XmlReader::NAMESPACE_NONE ||
+                !name.equals("value"))
             {
-                handlePropValue(
-                    reader,
-                    static_cast< PropertyNode * >(state_.top().node.get()));
-            } else {
                 throw css::uno::RuntimeException(
                     "bad property node member <" + name.convertFromUtf8() +
                     "> in " + reader.getUrl());
             }
+            handlePropValue(
+                reader,
+                static_cast< PropertyNode * >(state_.top().node.get()));
             break;
         case Node::KIND_LOCALIZED_PROPERTY:
-            if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                name.equals("value"))
+            if (nsId != xmlreader::XmlReader::NAMESPACE_NONE ||
+                !name.equals("value"))
             {
-                handleLocpropValue(
-                    reader,
-                    static_cast< LocalizedPropertyNode * >(
-                        state_.top().node.get()));
-            } else {
                 throw css::uno::RuntimeException(
                     "bad localized property node member <" +
                     name.convertFromUtf8() + "> in " + reader.getUrl());
             }
+            handleLocpropValue(
+                reader,
+                static_cast< LocalizedPropertyNode * >(
+                    state_.top().node.get()));
             break;
         case Node::KIND_LOCALIZED_VALUE:
             throw css::uno::RuntimeException(

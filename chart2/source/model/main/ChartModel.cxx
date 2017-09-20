@@ -1071,28 +1071,24 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 uno::Any SAL_CALL ChartModel::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
     uno::Any aResult;
-    if( isDataFlavorSupported( aFlavor ))
-    {
-        try
-        {
-            //get view from old api wrapper
-            Reference< datatransfer::XTransferable > xTransferable(
-                createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
-            if( xTransferable.is() &&
-                xTransferable->isDataFlavorSupported( aFlavor ))
-            {
-                aResult = xTransferable->getTransferData( aFlavor );
-            }
-        }
-        catch (const uno::Exception& ex)
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-    else
-    {
+    if( !isDataFlavorSupported( aFlavor ) )
         throw datatransfer::UnsupportedFlavorException(
             aFlavor.MimeType, static_cast< ::cppu::OWeakObject* >( this ));
+
+    try
+    {
+        //get view from old api wrapper
+        Reference< datatransfer::XTransferable > xTransferable(
+            createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+        if( xTransferable.is() &&
+            xTransferable->isDataFlavorSupported( aFlavor ))
+        {
+            aResult = xTransferable->getTransferData( aFlavor );
+        }
+    }
+    catch (const uno::Exception& ex)
+    {
+        ASSERT_EXCEPTION( ex );
     }
 
     return aResult;

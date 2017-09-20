@@ -70,47 +70,15 @@ IndexedPropertyValuesContainer::IndexedPropertyValuesContainer() throw()
 void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )
 {
     sal_Int32 nSize(maProperties.size());
-    if ((nSize >= nIndex) && (nIndex >= 0))
-    {
-        uno::Sequence<beans::PropertyValue> aProps;
-        if (!(aElement >>= aProps))
-            throw lang::IllegalArgumentException();
-        if (nSize == nIndex)
-            maProperties.push_back(aProps);
-        else
-        {
-            IndexedPropertyValues::iterator aItr;
-            if ((nIndex * 2) < nSize)
-            {
-                aItr = maProperties.begin();
-                sal_Int32 i(0);
-                while(i < nIndex)
-                {
-                    ++i;
-                    ++aItr;
-                }
-            }
-            else
-            {
-                aItr = maProperties.end();
-                sal_Int32 i(nSize);
-                while(i > nIndex)
-                {
-                    --i;
-                    --aItr;
-                }
-            }
-            maProperties.insert(aItr, aProps);
-        }
-    }
-    else
+    if ((nSize < nIndex) || (nIndex < 0))
         throw lang::IndexOutOfBoundsException();
-}
 
-void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
-{
-    sal_Int32 nSize(maProperties.size());
-    if ((nIndex < nSize) && (nIndex >= 0))
+    uno::Sequence<beans::PropertyValue> aProps;
+    if (!(aElement >>= aProps))
+        throw lang::IllegalArgumentException();
+    if (nSize == nIndex)
+        maProperties.push_back(aProps);
+    else
     {
         IndexedPropertyValues::iterator aItr;
         if ((nIndex * 2) < nSize)
@@ -133,25 +101,51 @@ void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
                 --aItr;
             }
         }
-        maProperties.erase(aItr);
+        maProperties.insert(aItr, aProps);
+    }
+}
+
+void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
+{
+    sal_Int32 nSize(maProperties.size());
+    if ((nIndex >= nSize) || (nIndex < 0))
+        throw lang::IndexOutOfBoundsException();
+
+    IndexedPropertyValues::iterator aItr;
+    if ((nIndex * 2) < nSize)
+    {
+        aItr = maProperties.begin();
+        sal_Int32 i(0);
+        while(i < nIndex)
+        {
+            ++i;
+            ++aItr;
+        }
     }
     else
-        throw lang::IndexOutOfBoundsException();
+    {
+        aItr = maProperties.end();
+        sal_Int32 i(nSize);
+        while(i > nIndex)
+        {
+            --i;
+            --aItr;
+        }
+    }
+    maProperties.erase(aItr);
 }
 
 // XIndexReplace
 void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, const css::uno::Any& aElement )
 {
     sal_Int32 nSize(maProperties.size());
-    if ((nIndex < nSize) && (nIndex >= 0))
-    {
-        uno::Sequence<beans::PropertyValue> aProps;
-        if (!(aElement >>= aProps))
-            throw lang::IllegalArgumentException();
-        maProperties[nIndex] = aProps;
-    }
-    else
+    if ((nIndex >= nSize) || (nIndex < 0))
         throw lang::IndexOutOfBoundsException();
+
+    uno::Sequence<beans::PropertyValue> aProps;
+    if (!(aElement >>= aProps))
+        throw lang::IllegalArgumentException();
+    maProperties[nIndex] = aProps;
 }
 
 // XIndexAccess
