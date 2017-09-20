@@ -559,7 +559,7 @@ bool SdrEscherImport::ReadString( OUString& rStr ) const
         bRet = true;
         sal_uLong nBytes = aStrHd.nRecLen;
         rStr = MSDFFReadZString( rStCtrl, nBytes, bUniCode );
-        aStrHd.SeekToEndOfRecord( rStCtrl );
+        bRet = aStrHd.SeekToEndOfRecord( rStCtrl );
     }
     else
         aStrHd.SeekToBegOfRecord( rStCtrl );
@@ -2393,7 +2393,10 @@ bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStream& 
                     sal_Int32 nV = aSuf.toInt32();
                     if ( ( nV == nVersion ) && ( aPre == "___PPT" ) )
                     {
-                        rContentHd.SeekToEndOfRecord( rSt );
+                        if (!rContentHd.SeekToEndOfRecord(rSt))
+                        {
+                            break;
+                        }
                         ReadDffRecordHeader( rSt, rContentHd );
                         if ( rContentHd.nRecType == PPT_PST_BinaryTagData )
                         {
@@ -2857,7 +2860,10 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                     DffRecordHeader aShapeHd;
                                     if ( SeekToRec( rStCtrl, DFF_msofbtSpContainer, aEscherObjListHd.GetRecEndFilePos(), &aShapeHd ) )
                                     {
-                                        aShapeHd.SeekToEndOfRecord( rStCtrl );
+                                        if (!aShapeHd.SeekToEndOfRecord(rStCtrl))
+                                        {
+                                            break;
+                                        }
                                         auto nListEndRecPos = SanitizeEndPos(rStCtrl, aEscherObjListHd.GetRecEndFilePos());
                                         while ( ( rStCtrl.GetError() == ERRCODE_NONE ) && ( rStCtrl.Tell() < nListEndRecPos ) )
                                         {
@@ -6875,7 +6881,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             {
                                                 if ( pHyperlink->nIndex == aInteractiveInfoAtom.nExHyperlinkId )
                                                 {
-                                                    aTextHd.SeekToEndOfRecord( rIn );
+                                                    if (!aTextHd.SeekToEndOfRecord(rIn))
+                                                    {
+                                                        break;
+                                                    }
                                                     ReadDffRecordHeader( rIn, aTextHd );
                                                     if ( aTextHd.nRecType != PPT_PST_TxInteractiveInfoAtom )
                                                     {

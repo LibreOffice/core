@@ -3681,7 +3681,7 @@ OUString XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
     return aString;
 }
 
-void XclImpDffConverter::ProcessDgContainer( SvStream& rDffStrm, const DffRecordHeader& rDgHeader )
+bool XclImpDffConverter::ProcessDgContainer( SvStream& rDffStrm, const DffRecordHeader& rDgHeader )
 {
     std::size_t nEndPos = rDgHeader.GetRecEndFilePos();
     bool isBreak(false);
@@ -3692,26 +3692,27 @@ void XclImpDffConverter::ProcessDgContainer( SvStream& rDffStrm, const DffRecord
         switch( aHeader.nRecType )
         {
             case DFF_msofbtSolverContainer:
-                ProcessSolverContainer( rDffStrm, aHeader );
+                isBreak = !ProcessSolverContainer( rDffStrm, aHeader );
             break;
             case DFF_msofbtSpgrContainer:
-                ProcessShGrContainer( rDffStrm, aHeader );
+                isBreak = !ProcessShGrContainer( rDffStrm, aHeader );
             break;
             default:
                 isBreak = !aHeader.SeekToEndOfRecord( rDffStrm );
         }
     }
     // seek to end of drawing page container
-    rDgHeader.SeekToEndOfRecord( rDffStrm );
+    isBreak = !rDgHeader.SeekToEndOfRecord( rDffStrm );
 
     // #i12638# #i37900# connector rules
     XclImpSolverContainer& rSolverCont = GetConvData().maSolverCont;
     rSolverCont.UpdateConnectorRules();
     SolveSolver( rSolverCont );
     rSolverCont.RemoveConnectorRules();
+    return !isBreak;
 }
 
-void XclImpDffConverter::ProcessShGrContainer( SvStream& rDffStrm, const DffRecordHeader& rShGrHeader )
+bool XclImpDffConverter::ProcessShGrContainer( SvStream& rDffStrm, const DffRecordHeader& rShGrHeader )
 {
     std::size_t nEndPos = rShGrHeader.GetRecEndFilePos();
     bool isBreak(false);
@@ -3723,27 +3724,27 @@ void XclImpDffConverter::ProcessShGrContainer( SvStream& rDffStrm, const DffReco
         {
             case DFF_msofbtSpgrContainer:
             case DFF_msofbtSpContainer:
-                ProcessShContainer( rDffStrm, aHeader );
+                isBreak = !ProcessShContainer( rDffStrm, aHeader );
             break;
             default:
                 isBreak = !aHeader.SeekToEndOfRecord( rDffStrm );
         }
     }
     // seek to end of shape group container
-    rShGrHeader.SeekToEndOfRecord( rDffStrm );
+    return rShGrHeader.SeekToEndOfRecord( rDffStrm ) && !isBreak;
 }
 
-void XclImpDffConverter::ProcessSolverContainer( SvStream& rDffStrm, const DffRecordHeader& rSolverHeader )
+bool XclImpDffConverter::ProcessSolverContainer( SvStream& rDffStrm, const DffRecordHeader& rSolverHeader )
 {
     // solver container wants to read the solver container header again
     rSolverHeader.SeekToBegOfRecord( rDffStrm );
     // read the entire solver container
     ReadSvxMSDffSolverContainer( rDffStrm, GetConvData().maSolverCont );
     // seek to end of solver container
-    rSolverHeader.SeekToEndOfRecord( rDffStrm );
+    return rSolverHeader.SeekToEndOfRecord( rDffStrm );
 }
 
-void XclImpDffConverter::ProcessShContainer( SvStream& rDffStrm, const DffRecordHeader& rShHeader )
+bool XclImpDffConverter::ProcessShContainer( SvStream& rDffStrm, const DffRecordHeader& rShHeader )
 {
     rShHeader.SeekToBegOfRecord( rDffStrm );
     tools::Rectangle aDummy;
@@ -3757,7 +3758,7 @@ void XclImpDffConverter::ProcessShContainer( SvStream& rDffStrm, const DffRecord
     SdrObjectPtr xSdrObj( ImportObj( rDffStrm, &pDrawObj, aDummy, aDummy ) );
     if( pDrawObj && xSdrObj )
         InsertSdrObject( GetConvData().mrSdrPage, *pDrawObj, xSdrObj.release() );
-    rShHeader.SeekToEndOfRecord( rDffStrm );
+    return rShHeader.SeekToEndOfRecord( rDffStrm );
 }
 
 void XclImpDffConverter::InsertSdrObject( SdrObjList& rObjList, const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj )

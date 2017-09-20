@@ -1023,13 +1023,13 @@ private:
     OUString            ReadHlinkProperty( SvStream& rDffStrm ) const;
 
     /** Processes a drawing container (all drawing data of a sheet). */
-    void                ProcessDgContainer( SvStream& rDffStrm, const DffRecordHeader& rDgHeader );
+    bool                ProcessDgContainer( SvStream& rDffStrm, const DffRecordHeader& rDgHeader );
     /** Processes the global shape group container (all shapes of a sheet). */
-    void                ProcessShGrContainer( SvStream& rDffStrm, const DffRecordHeader& rShGrHeader );
+    bool                ProcessShGrContainer( SvStream& rDffStrm, const DffRecordHeader& rShGrHeader );
     /** Processes the solver container (connectors of a sheet). */
-    void                ProcessSolverContainer( SvStream& rDffStrm, const DffRecordHeader& rSolverHeader );
+    bool                ProcessSolverContainer( SvStream& rDffStrm, const DffRecordHeader& rSolverHeader );
     /** Processes a shape or shape group container (one top-level shape). */
-    void                ProcessShContainer( SvStream& rDffStrm, const DffRecordHeader& rShHeader );
+    bool                ProcessShContainer( SvStream& rDffStrm, const DffRecordHeader& rShHeader );
 
     /** Inserts the passed SdrObject into the document. This function takes ownership of pSdrObj! */
     void                InsertSdrObject( SdrObjList& rObjList, const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj );

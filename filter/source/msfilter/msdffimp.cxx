@@ -3210,7 +3210,11 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, sal_u
                     if (!ReadDffRecordHeader(rSt, aEscherObjListHd))
                         break;
                     if ( aEscherObjListHd.nRecVer != 0xf )
-                        aEscherObjListHd.SeekToEndOfRecord( rSt );
+                    {
+                        bool bSeekSuccess = aEscherObjListHd.SeekToEndOfRecord(rSt);
+                        if (!bSeekSuccess)
+                            break;
+                    }
                     else if ( aEscherObjListHd.nRecType == DFF_msofbtSpContainer )
                     {
                         DffRecordHeader aShapeHd;
@@ -3225,7 +3229,9 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, sal_u
                                 break;
                             }
                         }
-                        aEscherObjListHd.SeekToEndOfRecord( rSt );
+                        bool bSeekSuccess = aEscherObjListHd.SeekToEndOfRecord(rSt);
+                        if (!bSeekSuccess)
+                            break;
                     }
                 }
             }
@@ -3596,7 +3602,9 @@ void SvxMSDffManager::ReadObjText( SvStream& rStream, SdrObject* pObj )
                 default:
                     break;
             }
-            aHd.SeekToEndOfRecord( rStream );
+            bool bSeekSuccess = aHd.SeekToEndOfRecord(rStream);
+            if (!bSeekSuccess)
+                break;
         }
     }
 }
@@ -3782,9 +3790,12 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 Still no luck, lets look at the end of this record for a FBSE pool,
                 this fallback is a specific case for how word does it sometimes
                 */
-                rObjData.rSpHd.SeekToEndOfRecord( rSt );
+                bool bOk = rObjData.rSpHd.SeekToEndOfRecord( rSt );
                 DffRecordHeader aHd;
-                bool bOk = ReadDffRecordHeader(rSt, aHd);
+                if (bOk)
+                {
+                    bOk = ReadDffRecordHeader(rSt, aHd);
+                }
                 if (bOk && DFF_msofbtBSE == aHd.nRecType)
                 {
                     const sal_uLong nSkipBLIPLen = 20;
