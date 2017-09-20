@@ -86,7 +86,7 @@ def check_title_labels(root):
     for title in titles:
         if title is None:
             continue
-        words = re.split(r'[^a-zA-Z0-9_-]', title.text)
+        words = re.split(r'[^a-zA-Z0-9:_-]', title.text)
         first = True
         for word in words:
             if word[0].islower() and (word not in IGNORED_WORDS or first):
