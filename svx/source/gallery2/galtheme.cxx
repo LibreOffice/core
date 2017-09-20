@@ -1378,7 +1378,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
         rIStm.ReadUInt16( nTmp16 );
     }
 
-    if( nCount <= ( 1L << 14 ) )
+    if( nCount <= ( 1 << 14 ) )
     {
         GalleryObject*  pObj;
         INetURLObject   aRelURL1( GetParent()->GetRelativeURL() );
