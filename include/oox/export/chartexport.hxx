@@ -211,10 +211,9 @@ public:
                  ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType );
     virtual ~ChartExport() {}
 
-    sal_Int32           GetChartID( );
     const css::uno::Reference< css::frame::XModel >& getModel(){ return mxChartModel; }
 
-    void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nChartCount );
+    void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nID, sal_Int32 nChartCount );
 
     void ExportContent();
     void InitRangeSegmentationProperties(

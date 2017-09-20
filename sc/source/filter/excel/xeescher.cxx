@@ -1140,7 +1140,8 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
         ChartExport aChartExport(XML_xdr, pDrawing, xModel, &rStrm, drawingml::DOCUMENT_XLSX);
         static sal_Int32 nChartCount = 0;
         nChartCount++;
-        aChartExport.WriteChartObj( mxShape, nChartCount );
+        sal_Int32 nID = rStrm.GetUniqueId();
+        aChartExport.WriteChartObj( mxShape, nID, nChartCount );
         // TODO: get the correcto chart number
     }
 
