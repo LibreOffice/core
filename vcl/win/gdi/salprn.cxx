@@ -397,7 +397,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
 
     // Release mutex, in the other case we don't get paints and so on
     sal_uInt32 nMutexCount = 0;
-    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+    WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst && pVisibleDlgParent )
         nMutexCount = pInst->ReleaseYieldMutex( true );
 
@@ -1466,7 +1466,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     // As the Telecom Balloon Fax driver tends to send messages repeatedly
     // we try to process first all, and then insert a dummy message
     while ( Application::Reschedule( true ) );
-    BOOL const ret = PostMessageW(GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0);
+    BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0);
     SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
 
     // bring up a file chooser if printing to file port but no file name given

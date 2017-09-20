@@ -135,7 +135,7 @@ void SalYieldMutex::BeforeReleaseHandler()
 /// this function to avoid deadlock
 void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 {
-    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+    WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst && pInst->IsMainThread() )
     {
         // tdf#96887 If this is the main thread, then we must wait for two things:
@@ -177,14 +177,14 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 
 void ImplSalYieldMutexAcquireWithWait( sal_uInt32 nCount )
 {
-    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+    WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst )
         pInst->mpSalYieldMutex->acquire( nCount );
 }
 
 bool ImplSalYieldMutexTryToAcquire()
 {
-    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+    WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst )
         return pInst->mpSalYieldMutex->tryToAcquire();
     else
@@ -193,7 +193,7 @@ bool ImplSalYieldMutexTryToAcquire()
 
 void ImplSalYieldMutexRelease()
 {
-    WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+    WinSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst )
     {
         GdiFlush();
@@ -252,7 +252,7 @@ SalData::SalData()
     mhSalObjMsgHook = nullptr;  // hook to get interesting msg for SalObject
     mhWantLeaveMsg = nullptr;   // window handle, that want a MOUSELEAVE message
     mpMouseLeaveTimer = nullptr; // Timer for MouseLeave Test
-    mpFirstInstance = nullptr;  // pointer of first instance
+    mpInstance = nullptr;  // pointer of first instance
     mpFirstFrame = nullptr;     // pointer of first frame
     mpFirstObject = nullptr;    // pointer of first object window
     mpFirstVD = nullptr;        // first VirDev
@@ -418,7 +418,7 @@ SalInstance* CreateSalInstance()
     WinSalInstance* pInst = new WinSalInstance;
 
     // init instance (only one instance in this version !!!)
-    pSalData->mpFirstInstance   = pInst;
+    pSalData->mpInstance   = pInst;
     pInst->mhInst    = pSalData->mhInst;
     pInst->mhComWnd  = hComWnd;
 
@@ -437,8 +437,8 @@ void DestroySalInstance( SalInstance* pInst )
     ImplFreeSalGDI();
 
     // reset instance
-    if ( pSalData->mpFirstInstance == pInst )
-        pSalData->mpFirstInstance = nullptr;
+    if ( pSalData->mpInstance == pInst )
+        pSalData->mpInstance = nullptr;
 
     delete pInst;
 }
@@ -595,7 +595,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             ImplSalStopTimer();
             break;
         case SAL_MSG_CREATEFRAME:
-            nRet = reinterpret_cast<LRESULT>(ImplSalCreateFrame( GetSalData()->mpFirstInstance, reinterpret_cast<HWND>(lParam), (SalFrameStyleFlags)wParam ));
+            nRet = reinterpret_cast<LRESULT>(ImplSalCreateFrame( GetSalData()->mpInstance, reinterpret_cast<HWND>(lParam), (SalFrameStyleFlags)wParam ));
             rDef = FALSE;
             break;
         case SAL_MSG_RECREATEHWND:
@@ -623,7 +623,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             rDef = FALSE;
             break;
         case SAL_MSG_CREATEOBJECT:
-            nRet = reinterpret_cast<LRESULT>(ImplSalCreateObject( GetSalData()->mpFirstInstance, reinterpret_cast<WinSalFrame*>(lParam) ));
+            nRet = reinterpret_cast<LRESULT>(ImplSalCreateObject( GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam) ));
             rDef = FALSE;
             break;
         case SAL_MSG_DESTROYOBJECT:
