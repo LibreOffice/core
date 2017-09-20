@@ -693,6 +693,12 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
         }
     }
 
+    // no key events if native menus
+    if (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar())
+    {
+        return false;
+    }
+
     if ( nCode == KEY_MENU && !rKEvent.GetKeyCode().IsShift() ) // only F10, not Shift-F10
     {
         mbAutoPopup = ImplGetSVData()->maNWFData.mbOpenMenuOnF10;
