@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:29 using:
+ Generated on 2017-09-20 22:52:22 using:
  ./bin/update_pch desktop deploymentgui --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentgui.hxx "/opt/lo/bin/make desktop.build" --find-conflicts
+ ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentgui.hxx "make desktop.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -31,7 +31,7 @@
 #include <new>
 #include <ostream>
 #include <stddef.h>
-#include <string.h>
+#include <utility>
 #include <vector>
 #include <boost/optional.hpp>
 #include <osl/conditn.hxx>
@@ -40,8 +40,8 @@
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
+#include <osl/time.h>
 #include <rtl/alloc.h>
-#include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/ustrbuf.hxx>
@@ -66,6 +66,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/mnemonicengine.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/seleng.hxx>
@@ -75,7 +76,8 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/DependencyException.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
-#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -84,6 +86,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -96,9 +99,8 @@
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <i18nlangtag/i18nlangtagdllapi.h>
-#include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <svtools/controldims.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/transfer.hxx>
 #include <svtools/treelist.hxx>

@@ -13,15 +13,16 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:51:44 using:
  ./bin/update_pch chart2 chartcore --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartcore.hxx "/opt/lo/bin/make chart2.build" --find-conflicts
+ ./bin/update_pch_bisect ./chart2/inc/pch/precompiled_chartcore.hxx "make chart2.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
+#include <config_features.h>
 #include <cstddef>
 #include <exception>
 #include <functional>
@@ -32,11 +33,10 @@
 #include <new>
 #include <ostream>
 #include <set>
+#include <stdlib.h>
 #include <string.h>
-#include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
@@ -46,8 +46,8 @@
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <rtl/character.hxx>
-#include <rtl/crc.h>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -63,15 +63,13 @@
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <vcl/bitmap.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/fntstyle.hxx>
-#include <vcl/font.hxx>
+#include <vcl/errcode.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vclenum.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/wall.hxx>
 #include <ChartModel.hxx>
+#include <SpecialCharacters.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -114,6 +112,7 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
+#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -133,12 +132,9 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/i18n/LocaleItem.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
-#include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -160,6 +156,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -167,32 +164,28 @@
 #include <cppuhelper/weak.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/unoprnms.hxx>
-#include <epoxy/gl.h>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/cenumitm.hxx>
-#include <svl/cintitem.hxx>
 #include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
+#include <svl/zformat.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/unoshape.hxx>
 #include <svx/xpoly.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
-#include <vcl/errcode.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
+#include <tools/stream.hxx>
 #include <unonames.hxx>
 #include <unotools/configitem.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
-#include <unotools/readwritemutexguard.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/unotoolsdllapi.h>
 

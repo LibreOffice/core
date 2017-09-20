@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2017-09-20 22:53:38 using:
  ./bin/update_pch sc vbaobj --cutoff=1 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sc/inc/pch/precompiled_vbaobj.hxx "/opt/lo/bin/make sc.build" --find-conflicts
+ ./bin/update_pch_bisect ./sc/inc/pch/precompiled_vbaobj.hxx "make sc.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -31,12 +31,14 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/config.h>
 #include <sal/macros.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <attrib.hxx>
+#include <basic/basmgr.hxx>
 #include <basic/sberrors.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
@@ -95,21 +97,18 @@
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XControllerBorder.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
@@ -117,6 +116,7 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
@@ -199,9 +199,11 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uri/XUriReference.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/PathSettings.hpp>
@@ -224,6 +226,7 @@
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/unwrapargs.hxx>
@@ -248,6 +251,7 @@
 #include <markdata.hxx>
 #include <miscuno.hxx>
 #include <nameuno.hxx>
+#include <o3tl/any.hxx>
 #include <olinetab.hxx>
 #include <ooo/vba/XCommandBarControls.hpp>
 #include <ooo/vba/XControlProvider.hpp>
@@ -320,8 +324,11 @@
 #include <ooo/vba/excel/XlYesNoGuess.hpp>
 #include <ooo/vba/msforms/XShape.hpp>
 #include <ooo/vba/office/MsoAnimationType.hpp>
+#include <ooo/vba/office/MsoAutoShapeType.hpp>
 #include <ooo/vba/office/MsoControlType.hpp>
+#include <ooo/vba/office/MsoFileDialogType.hpp>
 #include <ooo/vba/office/MsoHyperlinkType.hpp>
+#include <ooo/vba/office/MsoShapeType.hpp>
 #include <patattr.hxx>
 #include <queryentry.hxx>
 #include <rangelst.hxx>
@@ -359,6 +366,7 @@
 #include <unonames.hxx>
 #include <unotools/eventcfg.hxx>
 #include <vbahelper/helperdecl.hxx>
+#include <vbahelper/vbaaccesshelper.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbashape.hxx>

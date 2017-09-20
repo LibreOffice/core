@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:51:54 using:
  ./bin/update_pch connectivity dbtools --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_dbtools.hxx "/opt/lo/bin/make connectivity.build" --find-conflicts
+ ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_dbtools.hxx "make connectivity.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -42,8 +42,10 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
+#include <rtl/character.hxx>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
@@ -72,6 +74,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -101,7 +104,6 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -116,7 +118,6 @@
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -140,6 +141,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
@@ -152,9 +154,11 @@
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
+#include <o3tl/any.hxx>
 #include <o3tl/functional.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/toolsdllapi.h>
+#include <unotools/resmgr.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <connectivity/CommonTools.hxx>

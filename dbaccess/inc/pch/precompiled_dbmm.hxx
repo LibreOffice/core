@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-02-06 12:33:59 using:
+ Generated on 2017-09-20 22:52:17 using:
  ./bin/update_pch dbaccess dbmm --cutoff=10 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,12 +28,13 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
+#include <deque>
 #include <float.h>
 #include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
-#include <list>
+#include <map>
 #include <math.h>
 #include <memory>
 #include <new>
@@ -46,12 +47,9 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.h>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/module.hxx>
 #include <osl/mutex.h>
@@ -65,17 +63,19 @@
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>
 #include <rtl/character.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
+#include <rtl/unload.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
@@ -96,9 +96,11 @@
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -122,16 +124,19 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/vectorgraphicdata.hxx>
+#include <vcl/task.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -145,26 +150,28 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -175,7 +182,6 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
@@ -191,10 +197,11 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errinf.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
@@ -216,7 +223,6 @@
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/readwritemutexguard.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
 

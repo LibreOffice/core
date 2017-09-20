@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:36 using:
+ Generated on 2017-09-20 22:52:39 using:
  ./bin/update_pch framework fwk --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./framework/inc/pch/precompiled_fwk.hxx "/opt/lo/bin/make framework.build" --find-conflicts
+ ./bin/update_pch_bisect ./framework/inc/pch/precompiled_fwk.hxx "make framework.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -28,12 +28,12 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
+#include <deque>
 #include <float.h>
 #include <functional>
 #include <fwidllapi.h>
 #include <general.h>
 #include <iomanip>
-#include <iterator>
 #include <limits.h>
 #include <limits>
 #include <map>
@@ -52,7 +52,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
@@ -71,17 +70,18 @@
 #include <osl/security.h>
 #include <osl/security.hxx>
 #include <osl/socket.h>
-#include <osl/socket.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/byteseq.h>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -111,11 +111,13 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/evntpost.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -124,12 +126,9 @@
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/hatch.hxx>
-#include <vcl/idle.hxx>
-#include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>
@@ -140,19 +139,21 @@
 #include <vcl/outdevstate.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/task.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -166,13 +167,13 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <classes/fwkresid.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XAdjustmentListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
@@ -190,7 +191,6 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XVclContainerListener.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
 #include <com/sun/star/awt/tab/XTabPageContainerListener.hpp>
@@ -203,6 +203,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -216,24 +217,16 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
-#include <com/sun/star/frame/status/ItemStatus.hpp>
-#include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -246,22 +239,19 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationListener.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -276,19 +266,18 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
-#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
+#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -297,34 +286,24 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase_ex.hxx>
-#include <cppuhelper/implbase_ex_post.hxx>
-#include <cppuhelper/implbase_ex_pre.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <helper/mischelper.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <svl/svldllapi.h>
 #include <svtools/miscopt.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
 #include <threadhelp/gate.hxx>
-#include <threadhelp/transactionbase.hxx>
 #include <threadhelp/transactionmanager.hxx>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/listenermultiplexer.hxx>
@@ -332,9 +311,8 @@
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
-#include <tools/date.hxx>
+#include <tools/colordata.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errinf.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
@@ -344,7 +322,6 @@
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
-#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <typelib/typeclass.h>
@@ -354,14 +331,11 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/options.hxx>
-#include <unotools/resmgr.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <framework/addonsoptions.hxx>
 #include <framework/fwedllapi.h>
-#include <framework/menuconfiguration.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

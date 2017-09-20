@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-02-06 12:33:06 using:
+ Generated on 2017-09-20 22:52:32 using:
  ./bin/update_pch forms frm --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -47,6 +47,7 @@
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -61,9 +62,11 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
+#include <vcl/button.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
@@ -78,6 +81,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/uitest/factory.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
@@ -89,7 +94,6 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -97,7 +101,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -105,6 +108,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/form/XSubmit.hpp>
+#include <com/sun/star/form/binding/IncompatibleTypesException.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -123,11 +127,9 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -139,6 +141,7 @@
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -147,14 +150,12 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -166,6 +167,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -178,8 +180,6 @@
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
-#include <com/sun/star/xml/dom/events/XEventListener.hpp>
-#include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
@@ -189,7 +189,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/listenernotification.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
@@ -206,8 +205,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -227,6 +224,7 @@
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/any.hxx>
 #include <o3tl/functional.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
@@ -248,8 +246,6 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/errcode.hxx>
-#include <vcl/errinf.hxx>
 #include <tools/gen.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/lineend.hxx>
@@ -263,10 +259,12 @@
 #include <tools/urlobj.hxx>
 #include <tools/wintypes.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/charclass.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>

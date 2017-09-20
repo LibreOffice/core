@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-02-06 12:32:57 using:
+ Generated on 2017-09-20 22:52:27 using:
  ./bin/update_pch desktop sofficeapp --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,18 +23,21 @@
 #include <algorithm>
 #include <cassert>
 #include <climits>
+#include <config_features.h>
 #include <config_global.h>
 #include <config_typesizes.h>
 #include <config_vcl.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
+#include <deque>
 #include <float.h>
 #include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
 #include <list>
+#include <locale>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -49,7 +52,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
@@ -82,6 +84,7 @@
 #include <rtl/math.hxx>
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -104,6 +107,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <salhelper/singletonref.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
@@ -119,6 +123,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/errcode.hxx>
+#include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -127,8 +133,6 @@
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/hatch.hxx>
-#include <vcl/idle.hxx>
-#include <vcl/image.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/inputtypes.hxx>
 #include <vcl/keycod.hxx>
@@ -145,17 +149,19 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/vectorgraphicdata.hxx>
-#include <vcl/syswin.hxx>
+#include <vcl/task.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <app.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
@@ -170,6 +176,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -179,6 +186,7 @@
 #include <basic/sbxvar.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
@@ -188,17 +196,20 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -228,16 +239,19 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
+#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svtools/svtdllapi.h>
+#include <svtools/svtresid.hxx>
 #include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errinf.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>

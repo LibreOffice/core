@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:31 using:
+ Generated on 2017-09-20 22:52:23 using:
  ./bin/update_pch desktop deploymentmisc --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentmisc.hxx "/opt/lo/bin/make desktop.build" --find-conflicts
+ ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deploymentmisc.hxx "make desktop.build" --find-conflicts
 */
 
 #include <cassert>
@@ -47,6 +47,7 @@
 #include <rtl/byteseq.hxx>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
@@ -77,8 +78,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
-#include <tools/toolsdllapi.h>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
+#include <unotools/unotoolsdllapi.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

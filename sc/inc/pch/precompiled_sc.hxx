@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-02-06 12:30:53 using:
+ Generated on 2017-09-20 22:53:27 using:
  ./bin/update_pch sc sc --cutoff=12 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -34,9 +34,11 @@
 #include <float.h>
 #include <functional>
 #include <iomanip>
+#include <iterator>
 #include <limits.h>
 #include <limits>
 #include <list>
+#include <locale>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -57,7 +59,7 @@
 #include <utility>
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/math/special_functions/log1p.hpp>
+#include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <osl/conditn.h>
@@ -112,6 +114,8 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
 #include <salhelper/thread.hxx>
+#include <vcl/EnumContext.hxx>
+#include <vcl/IContext.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
@@ -119,14 +123,16 @@
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
+#include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
@@ -148,27 +154,34 @@
 #include <vcl/menu.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/notebookbar.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/spinfld.hxx>
+#include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/task.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/vclstatuslistener.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <appoptio.hxx>
 #include <attrib.hxx>
 #include <autoform.hxx>
@@ -186,6 +199,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -211,6 +225,7 @@
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -226,6 +241,7 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
@@ -237,8 +253,8 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -246,14 +262,17 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
+#include <com/sun/star/i18n/LocaleItem.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -264,11 +283,11 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
-#include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
-#include <com/sun/star/sheet/XFormulaParser.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -285,10 +304,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
+#include <com/sun/star/uno/genfunc.h>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/XAccounting.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -297,12 +320,14 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/extract.hxx>
 #include <comphelper/fileformat.h>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/propertycontainerhelper.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/propstate.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -315,15 +340,12 @@
 #include <convuno.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
@@ -370,6 +392,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/scripttypeitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/wghtitem.hxx>
@@ -378,6 +401,7 @@
 #include <externalrefmgr.hxx>
 #include <fillinfo.hxx>
 #include <formula/IFunctionDescription.hxx>
+#include <formula/compiler.hxx>
 #include <formula/errorcodes.hxx>
 #include <formula/formuladllapi.h>
 #include <formula/opcode.hxx>
@@ -395,7 +419,10 @@
 #include <markdata.hxx>
 #include <miscuno.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/enumarray.hxx>
 #include <o3tl/make_unique.hxx>
+#include <o3tl/sorted_vector.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <olinetab.hxx>
 #include <patattr.hxx>
@@ -419,11 +446,14 @@
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/chalign.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
@@ -434,7 +464,9 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sheetdata.hxx>
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <sot/sotdllapi.h>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <stringutil.hxx>
@@ -452,6 +484,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/style.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svl/undo.hxx>
@@ -464,6 +497,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
+#include <svtools/valueset.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/algitem.hxx>
 #include <svx/grfcrop.hxx>
@@ -544,13 +578,13 @@
 #include <textuno.hxx>
 #include <tokenarray.hxx>
 #include <tokenstringcontext.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errcode.hxx>
-#include <vcl/errinf.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
@@ -580,8 +614,11 @@
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
+#include <unotools/readwritemutexguard.hxx>
 #include <unotools/resmgr.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <userdat.hxx>

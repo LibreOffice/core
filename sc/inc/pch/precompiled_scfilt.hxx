@@ -13,20 +13,23 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:40 using:
+ Generated on 2017-09-20 22:53:35 using:
  ./bin/update_pch sc scfilt --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sc/inc/pch/precompiled_scfilt.hxx "/opt/lo/bin/make sc.build" --find-conflicts
+ ./bin/update_pch_bisect ./sc/inc/pch/precompiled_scfilt.hxx "make sc.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
 #include <climits>
+#include <config_global.h>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <deque>
 #include <exception>
+#include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -43,6 +46,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <string>
+#include <type_traits>
 #include <typeinfo>
 #include <unordered_map>
 #include <unordered_set>
@@ -52,12 +56,16 @@
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
+#include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
+#include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
+#include <rtl/cipher.h>
+#include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
@@ -70,7 +78,6 @@
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
 #include <sal/config.h>
@@ -85,23 +92,27 @@
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
 #include <vcl/field.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/image.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vectorgraphicdata.hxx>
+#include <vcl/task.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <attrib.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <basegfx/vector/b2dsize.hxx>
+#include <cellvalue.hxx>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -109,33 +120,34 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
+#include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
-#include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
-#include <com/sun/star/sheet/ReferenceFlags.hpp>
-#include <com/sun/star/sheet/SingleReference.hpp>
-#include <com/sun/star/sheet/XDatabaseRange.hpp>
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -143,13 +155,14 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/XReference.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
+#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/weak.hxx>
 #include <compiler.hxx>
 #include <conditio.hxx>
 #include <convuno.hxx>
@@ -182,6 +195,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/lineitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/postitem.hxx>
@@ -192,29 +206,33 @@
 #include <editeng/wghtitem.hxx>
 #include <editutil.hxx>
 #include <externalrefmgr.hxx>
-#include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
+#include <formula/errorcodes.hxx>
+#include <formula/formuladllapi.h>
 #include <formulacell.hxx>
 #include <global.hxx>
+#include <globalnames.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/make_unique.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <oox/core/contexthandler.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/helper/attributelist.hxx>
-#include <oox/helper/binarystreambase.hxx>
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/containerhelper.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/helper/propertyset.hxx>
-#include <oox/helper/storagebase.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/token/tokens.hxx>
 #include <patattr.hxx>
 #include <postit.hxx>
@@ -234,10 +252,12 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sot/exchange.hxx>
+#include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <stringutil.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/eitem.hxx>
 #include <svl/hint.hxx>
 #include <svl/intitem.hxx>
@@ -247,11 +267,14 @@
 #include <svl/poolitem.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/stritem.hxx>
+#include <svl/style.hxx>
+#include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svtools/svtdllapi.h>
+#include <svtools/transfer.hxx>
 #include <svx/algitem.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
@@ -279,11 +302,12 @@
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
 #include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errinf.hxx>
 #include <tools/gen.hxx>
+#include <tools/globname.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
@@ -298,6 +322,7 @@
 #include <unotools/configitem.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <unotools/options.hxx>
+#include <unotools/textsearch.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <userdat.hxx>
 #include <viewopti.hxx>

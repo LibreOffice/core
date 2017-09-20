@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:51:30 using:
  ./bin/update_pch accessibility acc --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./accessibility/inc/pch/precompiled_acc.hxx "/opt/lo/bin/make accessibility.build" --find-conflicts
+ ./bin/update_pch_bisect ./accessibility/inc/pch/precompiled_acc.hxx "make accessibility.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -52,7 +52,6 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
-#include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
@@ -67,14 +66,18 @@
 #include <osl/process.h>
 #include <osl/security.h>
 #include <osl/socket.h>
+#include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -96,23 +99,25 @@
 #include <sal/typesizes.h>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
-#include <vcl/commandevent.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/controllayout.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
+#include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
@@ -133,25 +138,30 @@
 #include <vcl/metaact.hxx>
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/mnemonicengine.hxx>
+#include <vcl/notebookbar.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/outdevmap.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/quickselectionengine.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/syswin.hxx>
+#include <vcl/task.hxx>
+#include <vcl/textdata.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/vclstatuslistener.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -165,6 +175,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
@@ -194,8 +205,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
@@ -210,21 +221,37 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/FeatureStateEvent.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <com/sun/star/i18n/KCharacterType.hpp>
+#include <com/sun/star/i18n/KParseTokens.hpp>
+#include <com/sun/star/i18n/KParseType.hpp>
+#include <com/sun/star/i18n/LocaleItem.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -241,23 +268,26 @@
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/accimplaccess.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/solarmutex.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/compbase_ex.hxx>
@@ -278,12 +308,33 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <extended/AccessibleBrowseBoxBase.hxx>
+#include <extended/AccessibleBrowseBoxTableBase.hxx>
+#include <extended/AccessibleGridControlBase.hxx>
+#include <extended/AccessibleGridControlTableBase.hxx>
+#include <extended/AccessibleGridControlTableCell.hxx>
+#include <extended/accessibletabbarbase.hxx>
+#include <helper/accresmgr.hxx>
+#include <helper/characterattributeshelper.hxx>
+#include <helper/listboxhelper.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
+#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <sot/sotdllapi.h>
+#include <standard/accessiblemenubasecomponent.hxx>
+#include <standard/accessiblemenuitemcomponent.hxx>
+#include <standard/vclxaccessiblebox.hxx>
+#include <standard/vclxaccessibleedit.hxx>
+#include <standard/vclxaccessiblelist.hxx>
+#include <standard/vclxaccessibletextcomponent.hxx>
+#include <strings.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
@@ -304,9 +355,9 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/contnr.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errinf.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
@@ -328,25 +379,13 @@
 #include <uno/sequence2.h>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <unotools/charclass.hxx>
 #include <unotools/fontdefs.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/options.hxx>
+#include <unotools/readwritemutexguard.hxx>
 #include <unotools/resmgr.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <extended/AccessibleBrowseBox.hxx>
-#include <extended/AccessibleBrowseBoxBase.hxx>
-#include <extended/AccessibleBrowseBoxTableBase.hxx>
-#include <extended/AccessibleGridControl.hxx>
-#include <extended/AccessibleGridControlBase.hxx>
-#include <extended/AccessibleGridControlTableCell.hxx>
-#include <extended/accessibletabbarbase.hxx>
-#include <helper/accresmgr.hxx>
-#include <helper/characterattributeshelper.hxx>
-#include <helper/listboxhelper.hxx>
-#include <standard/accessiblemenubasecomponent.hxx>
-#include <standard/accessiblemenuitemcomponent.hxx>
-#include <standard/vclxaccessiblebox.hxx>
-#include <standard/vclxaccessibleedit.hxx>
-#include <standard/vclxaccessiblelist.hxx>
-#include <standard/vclxaccessibletextcomponent.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

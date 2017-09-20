@@ -13,15 +13,18 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2017-09-20 22:55:49 using:
  ./bin/update_pch xmlscript xmlscript --cutoff=4 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./xmlscript/inc/pch/precompiled_xmlscript.hxx "/opt/lo/bin/make xmlscript.build" --find-conflicts
+ ./bin/update_pch_bisect ./xmlscript/inc/pch/precompiled_xmlscript.hxx "make xmlscript.build" --find-conflicts
 */
 
+#include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
+#include <rtl/ref.hxx>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -35,8 +38,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmlns.h>

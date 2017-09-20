@@ -13,29 +13,34 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:52:19 using:
  ./bin/update_pch dbaccess dbu --cutoff=12 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbu.hxx "/opt/lo/bin/make dbaccess.build" --find-conflicts
+ ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbu.hxx "make dbaccess.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
-#include <config_features.h>
 #include <cstddef>
+#include <cstring>
+#include <exception>
 #include <functional>
+#include <list>
+#include <map>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <stdlib.h>
 #include <string.h>
+#include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
+#include <osl/module.hxx>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.hxx>
@@ -56,39 +61,52 @@
 #include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <salhelper/singletonref.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/cairo.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/idle.hxx>
+#include <vcl/font.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/outdevmap.hxx>
+#include <vcl/outdevstate.hxx>
+#include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/timer.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
 #include <vcl/waitobj.hxx>
+#include <vcl/wall.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
+#include <basegfx/numeric/ftools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -103,8 +121,10 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
@@ -118,14 +138,16 @@
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase_ex.hxx>
+#include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sfx2/dllapi.h>
 #include <sot/formats.hxx>
 #include <svl/eitem.hxx>
 #include <svl/filenotation.hxx>
-#include <svl/hint.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
@@ -134,15 +156,18 @@
 #include <svtools/treelistentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
+#include <tools/poly.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
+#include <unotools/fontdefs.hxx>
 #include <unotools/unotoolsdllapi.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

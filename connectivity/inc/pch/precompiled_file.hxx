@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:51:56 using:
  ./bin/update_pch connectivity file --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_file.hxx "/opt/lo/bin/make connectivity.build" --find-conflicts
+ ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_file.hxx "make connectivity.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -28,7 +28,6 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
-#include <float.h>
 #include <functional>
 #include <iomanip>
 #include <limits>
@@ -63,9 +62,9 @@
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
-#include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/string.h>
@@ -81,13 +80,12 @@
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
-#include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <salhelper/salhelperdllapi.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
+#include <vcl/errcode.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -95,13 +93,33 @@
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/i18n/Calendar2.hpp>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
+#include <com/sun/star/i18n/KCharacterType.hpp>
+#include <com/sun/star/i18n/KParseTokens.hpp>
+#include <com/sun/star/i18n/KParseType.hpp>
+#include <com/sun/star/i18n/LocaleItem.hpp>
+#include <com/sun/star/i18n/NumberFormatCode.hpp>
+#include <com/sun/star/i18n/NumberFormatMapper.hpp>
+#include <com/sun/star/i18n/ParseResult.hpp>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/i18n/XCollator.hpp>
+#include <com/sun/star/i18n/XExtendedTransliteration.hpp>
+#include <com/sun/star/i18n/XLocaleData4.hpp>
+#include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
+#include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -109,12 +127,14 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -125,7 +145,6 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -134,6 +153,7 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <comphelper/broadcasthelper.hxx>
@@ -154,8 +174,7 @@
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/proptypehlp.h>
-#include <cppuhelper/proptypehlp.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
@@ -163,11 +182,17 @@
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nutil/transliteration.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <svl/nfkeytab.hxx>
+#include <svl/ondemand.hxx>
+#include <svl/svldllapi.h>
 #include <tools/date.hxx>
+#include <tools/datetime.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errinf.hxx>
 #include <tools/lineend.hxx>
+#include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
@@ -181,7 +206,15 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
+#include <unotools/calendarwrapper.hxx>
+#include <unotools/charclass.hxx>
+#include <unotools/collatorwrapper.hxx>
+#include <unotools/localedatawrapper.hxx>
+#include <unotools/nativenumberwrapper.hxx>
 #include <unotools/options.hxx>
+#include <unotools/readwritemutexguard.hxx>
+#include <unotools/syslocale.hxx>
+#include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbconversion.hxx>

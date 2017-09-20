@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-02-06 12:32:49 using:
+ Generated on 2017-09-20 22:54:00 using:
  ./bin/update_pch slideshow slideshow --cutoff=4 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,13 +29,14 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
+#include <deque>
+#include <exception>
 #include <float.h>
 #include <functional>
 #include <iomanip>
 #include <iterator>
 #include <limits.h>
 #include <limits>
-#include <list>
 #include <map>
 #include <math.h>
 #include <memory>
@@ -68,12 +69,12 @@
 #include <osl/process.h>
 #include <osl/security.h>
 #include <osl/socket.h>
+#include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>
 #include <rtl/character.hxx>
-#include <rtl/crc.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
@@ -96,17 +97,21 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <vcl/EnumContext.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
@@ -127,16 +132,19 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/vectorgraphicdata.hxx>
+#include <vcl/task.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/uitest/factory.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/window.hxx>
+#include <vcl/wmfexternal.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -144,48 +152,57 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/basicrange.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <canvas/canvastools.hxx>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
-#include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -228,11 +245,13 @@
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 #include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/errinf.hxx>
 #include <tools/fldunit.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>

@@ -13,45 +13,54 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:51:47 using:
  ./bin/update_pch comphelper comphelper --cutoff=4 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./comphelper/inc/pch/precompiled_comphelper.hxx "/opt/lo/bin/make comphelper.build" --find-conflicts
+ ./bin/update_pch_bisect ./comphelper/inc/pch/precompiled_comphelper.hxx "make comphelper.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
+#include <config_global.h>
 #include <config_typesizes.h>
 #include <cstddef>
 #include <cstring>
 #include <exception>
 #include <functional>
+#include <initializer_list>
 #include <iomanip>
+#include <limits>
 #include <map>
 #include <math.h>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <stddef.h>
+#include <stdio.h>
 #include <string.h>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 #include <boost/optional.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
+#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
+#include <rtl/bootstrap.hxx>
 #include <rtl/byteseq.h>
+#include <rtl/byteseq.hxx>
 #include <rtl/character.hxx>
+#include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
@@ -80,6 +89,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -90,6 +100,8 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -104,6 +116,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -116,7 +129,6 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -125,6 +137,7 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -137,13 +150,12 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/proptypehlp.h>
-#include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
