@@ -210,10 +210,9 @@ public:
     ChartExport( sal_Int32 nXmlNamespace, ::sax_fastparser::FSHelperPtr pFS, css::uno::Reference< css::frame::XModel >& xModel, ::oox::core::XmlFilterBase* pFB = nullptr, DocumentType eDocumentType = DOCUMENT_PPTX );
     virtual ~ChartExport() {}
 
-    sal_Int32           GetChartID( );
     const css::uno::Reference< css::frame::XModel >& getModel(){ return mxChartModel; }
 
-    void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nChartCount );
+    void WriteChartObj( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nID, sal_Int32 nChartCount );
 
     void ExportContent();
     void InitRangeSegmentationProperties(

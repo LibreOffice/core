@@ -111,6 +111,7 @@ public:
     void testTdf112557();
     void testTdf112088();
     void testTdf112333();
+    void testTdf112089();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -145,6 +146,7 @@ public:
     CPPUNIT_TEST(testTdf112557);
     CPPUNIT_TEST(testTdf112088);
     CPPUNIT_TEST(testTdf112333);
+    CPPUNIT_TEST(testTdf112089);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -928,6 +930,20 @@ void SdOOXMLExportTest2::testTdf112333()
 
     sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:animClr/p:cBhvr/p:attrNameLst/p:attrName");
     CPPUNIT_ASSERT_EQUAL(OUString("fillcolor"), sAttributeName);
+}
+
+void SdOOXMLExportTest2::testTdf112089()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf112089.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    OUString sID = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "id");
+    OUString sTarget = getXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set/p:cBhvr/p:tgtEl/p:spTgt", "spid");
+    CPPUNIT_ASSERT_EQUAL(sID, sTarget);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
