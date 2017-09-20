@@ -2279,18 +2279,18 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
         SvxBorderLineStyle mnStyle;
         long mnWidth;
     } aChecks[] = {
-        {  1, SvxBorderLineStyle::SOLID,         1L }, // hair
-        {  3, SvxBorderLineStyle::DOTTED,       15L }, // dotted
-        {  5, SvxBorderLineStyle::DASH_DOT_DOT, 15L }, // dash dot dot
-        {  7, SvxBorderLineStyle::DASH_DOT,     15L }, // dash dot
-        {  9, SvxBorderLineStyle::FINE_DASHED,  15L }, // dashed
-        { 11, SvxBorderLineStyle::SOLID,        15L }, // thin
-        { 13, SvxBorderLineStyle::DASH_DOT_DOT, 35L }, // medium dash dot dot
-        { 17, SvxBorderLineStyle::DASH_DOT,     35L }, // medium dash dot
-        { 19, SvxBorderLineStyle::DASHED,       35L }, // medium dashed
-        { 21, SvxBorderLineStyle::SOLID,        35L }, // medium
-        { 23, SvxBorderLineStyle::SOLID,        50L }, // thick
-        { 25, SvxBorderLineStyle::DOUBLE_THIN,  -1L }, // double (don't check width)
+        {  1, SvxBorderLineStyle::SOLID,         1 }, // hair
+        {  3, SvxBorderLineStyle::DOTTED,       15 }, // dotted
+        {  5, SvxBorderLineStyle::DASH_DOT_DOT, 15 }, // dash dot dot
+        {  7, SvxBorderLineStyle::DASH_DOT,     15 }, // dash dot
+        {  9, SvxBorderLineStyle::FINE_DASHED,  15 }, // dashed
+        { 11, SvxBorderLineStyle::SOLID,        15 }, // thin
+        { 13, SvxBorderLineStyle::DASH_DOT_DOT, 35 }, // medium dash dot dot
+        { 17, SvxBorderLineStyle::DASH_DOT,     35 }, // medium dash dot
+        { 19, SvxBorderLineStyle::DASHED,       35 }, // medium dashed
+        { 21, SvxBorderLineStyle::SOLID,        35 }, // medium
+        { 23, SvxBorderLineStyle::SOLID,        50 }, // thick
+        { 25, SvxBorderLineStyle::DOUBLE_THIN,  -1 }, // double (don't check width)
     };
 
     ScDocShellRef xDocSh = loadDoc("cell-borders.", nFormatType);
