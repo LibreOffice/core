@@ -739,7 +739,10 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
         return 0;                   // empty is always 0
 
     if (!pValidationList)
+    {
+        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
         pValidationList = new ScValidationDataList;
+    }
 
     sal_uLong nMax = 0;
     for( ScValidationDataList::iterator it = pValidationList->begin(); it != pValidationList->end(); ++it )
@@ -757,6 +760,7 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
     sal_uLong nNewKey = nMax + 1;
     ScValidationData* pInsert = rNew.Clone(this);
     pInsert->SetKey( nNewKey );
+    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
     pValidationList->InsertNew( pInsert );
     return nNewKey;
 }
