@@ -38,7 +38,7 @@ static void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
 void WinSalTimer::ImplStop()
 {
     SalData *const pSalData = GetSalData();
-    const WinSalInstance *pInst = pSalData->mpFirstInstance;
+    const WinSalInstance *pInst = pSalData->mpInstance;
     assert( !pInst || pSalData->mnAppThreadId == GetCurrentThreadId() );
 
     const HANDLE hTimer = m_nTimerId;
@@ -60,7 +60,7 @@ void WinSalTimer::ImplStop()
 void WinSalTimer::ImplStart( sal_uLong nMS )
 {
     SalData* pSalData = GetSalData();
-    assert( !pSalData->mpFirstInstance || pSalData->mnAppThreadId == GetCurrentThreadId() );
+    assert( !pSalData->mpInstance || pSalData->mnAppThreadId == GetCurrentThreadId() );
 
     // DueTime parameter is a DWORD, which is always an unsigned 32bit
     if (nMS > SAL_MAX_UINT32)
@@ -95,7 +95,7 @@ WinSalTimer::~WinSalTimer()
 
 void WinSalTimer::Start( sal_uLong nMS )
 {
-    WinSalInstance *pInst = GetSalData()->mpFirstInstance;
+    WinSalInstance *pInst = GetSalData()->mpInstance;
     if ( pInst && !pInst->IsMainThread() )
     {
         BOOL const ret = PostMessageW(pInst->mhComWnd,
@@ -108,7 +108,7 @@ void WinSalTimer::Start( sal_uLong nMS )
 
 void WinSalTimer::Stop()
 {
-    WinSalInstance *pInst = GetSalData()->mpFirstInstance;
+    WinSalInstance *pInst = GetSalData()->mpInstance;
     if ( pInst && !pInst->IsMainThread() )
     {
         BOOL const ret = PostMessageW(pInst->mhComWnd,
@@ -131,7 +131,7 @@ static void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
         // always post message when the timer fires, we will remove the ones
         // that happened during execution of the callback later directly from
         // the message queue
-        BOOL const ret = PostMessageW(GetSalData()->mpFirstInstance->mhComWnd,
+        BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd,
                                       SAL_MSG_TIMER_CALLBACK,
                                       reinterpret_cast<WPARAM>(data), 0);
 #if OSL_DEBUG_LEVEL > 0

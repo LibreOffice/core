@@ -999,7 +999,7 @@ SalGraphics* WinSalFrame::AcquireGraphics()
             mpGraphics2->setHDC(nullptr);
         }
 
-        HDC hDC = reinterpret_cast<HDC>((sal_IntPtr)SendMessageW( pSalData->mpFirstInstance->mhComWnd,
+        HDC hDC = reinterpret_cast<HDC>((sal_IntPtr)SendMessageW( pSalData->mpInstance->mhComWnd,
                                         SAL_MSG_GETDC,
                                         reinterpret_cast<WPARAM>(mhWnd), 0 ));
         if ( hDC )
@@ -1056,8 +1056,8 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
             mpGraphics2->DeInitGraphics();
             // we don't want to run the WinProc in the main thread directly
             // so we don't hit the mbNoYieldLock assert
-            if ( !pSalData->mpFirstInstance->IsMainThread() )
-                SendMessageW( pSalData->mpFirstInstance->mhComWnd,
+            if ( !pSalData->mpInstance->IsMainThread() )
+                SendMessageW( pSalData->mpInstance->mhComWnd,
                               SAL_MSG_RELEASEDC,
                               reinterpret_cast<WPARAM>(mhWnd),
                               reinterpret_cast<LPARAM>(mpGraphics2->getHDC()) );
@@ -1519,7 +1519,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     // create a new hwnd with the same styles
     HWND hWndParent = hNewParentWnd;
     // forward to main thread
-    HWND hWnd = reinterpret_cast<HWND>((sal_IntPtr) SendMessageW( pSalData->mpFirstInstance->mhComWnd,
+    HWND hWnd = reinterpret_cast<HWND>((sal_IntPtr) SendMessageW( pSalData->mpInstance->mhComWnd,
                                         bAsChild ? SAL_MSG_RECREATECHILDHWND : SAL_MSG_RECREATEHWND,
                                         reinterpret_cast<WPARAM>(hWndParent), reinterpret_cast<LPARAM>(pThis->mhWnd) ));
 
@@ -1536,7 +1536,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
             if( bNeedCacheDC )
             {
                 // re-create cached DC
-                HDC hDC = reinterpret_cast<HDC>((sal_IntPtr)SendMessageW( pSalData->mpFirstInstance->mhComWnd,
+                HDC hDC = reinterpret_cast<HDC>((sal_IntPtr)SendMessageW( pSalData->mpInstance->mhComWnd,
                                                 SAL_MSG_GETDC,
                                                 reinterpret_cast<WPARAM>(hWnd), 0 ));
                 if ( hDC )
@@ -1592,7 +1592,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     systemChildren.clear();
 
     // Now destroy original HWND in the thread where it was created.
-    SendMessageW( GetSalData()->mpFirstInstance->mhComWnd,
+    SendMessageW( GetSalData()->mpInstance->mhComWnd,
                      SAL_MSG_DESTROYHWND, (WPARAM) 0, reinterpret_cast<LPARAM>(hWndOld));
 }
 
