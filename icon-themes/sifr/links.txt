@@ -205,3 +205,7 @@ cmd/lc_objectforwardone.png cmd/lc_forward.png
 cmd/sc_objectforwardone.png cmd/sc_forward.png
 cmd/lc_objectbackone.png cmd/lc_backward.png
 cmd/sc_objectbackone.png cmd/sc_backward.png
+
+# writer epub export
+cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
+cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png

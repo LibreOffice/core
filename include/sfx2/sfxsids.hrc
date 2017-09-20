@@ -126,6 +126,7 @@
 #define SID_EXPORTDOCASPDF                  (SID_SFX_START + 1673)
 #define SID_DIRECTEXPORTDOCASPDF            (SID_SFX_START + 1674)
 #define SID_EXPORTDOCASEPUB                 (SID_SFX_START + 1677)
+#define SID_DIRECTEXPORTDOCASEPUB           (SID_SFX_START + 1678)
 #define SID_UPDATEDOCMODE                   (SID_SFX_START + 1668)
 #define SID_CHECKOUT                        (SID_SFX_START + 512)
 #define SID_CANCELCHECKOUT                  (SID_SFX_START + 513)
