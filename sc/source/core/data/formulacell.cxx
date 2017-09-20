@@ -1744,7 +1744,6 @@ class StackCleaner
 
 void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 {
-    bool bSingleThreaded = (osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier());
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
     nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
     if( !pCode->GetCodeLen() && pCode->GetCodeError() == FormulaError::NONE )
@@ -2090,7 +2089,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             // a changed result must still reset the stream flag
             pDocument->SetStreamValid(aPos.Tab(), false, true);
         }
-        if ( bSingleThreaded && !pCode->IsRecalcModeAlways() )
+        if ( !pDocument->mbThreadedGroupCalcInProgress && !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 
         //  FORCED cells also immediately tested for validity (start macro possibly)
@@ -2109,7 +2108,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
 
         // Reschedule slows the whole thing down considerably, thus only execute on percent change
-        if (bSingleThreaded)
+        if (!pDocument->mbThreadedGroupCalcInProgress)
         {
             ScProgress *pProgress = ScProgress::GetInterpretProgress();
             if (pProgress && pProgress->Enabled())
@@ -2577,7 +2576,7 @@ void ScFormulaCell::MaybeInterpret()
 {
     if (NeedsInterpret())
     {
-        assert(osl::Thread::getCurrentIdentifier() == Application::GetMainThreadIdentifier());
+        assert(!pDocument->mbThreadedGroupCalcInProgress);
         Interpret();
     }
 }
@@ -4396,6 +4395,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
         SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
 
         {
+            assert(!pDocument->mbThreadedGroupCalcInProgress);
+            pDocument->mbThreadedGroupCalcInProgress = true;
+
             ScMutationGuard aGuard(pDocument, ScMutationGuardFlags::CORE);
 
             // Start nThreadCount new threads
@@ -4407,6 +4409,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
             SAL_INFO("sc.threaded", "Joining threads");
             rThreadPool.waitUntilDone(aTag);
+
+            pDocument->mbThreadedGroupCalcInProgress = false;
+
             SAL_INFO("sc.threaded", "Done");
         }
 
