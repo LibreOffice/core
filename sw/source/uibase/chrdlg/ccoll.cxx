@@ -41,6 +41,8 @@
 //!! order of entries has to be the same as in
 //!! CommandStruct SwCondCollItem::aCmds[]
 
+// note: also keep this in sync with the list of conditions in xmloff/source/style/prstylecond.cxx
+
 const char * const aCommandContext[COND_COMMAND_COUNT] =
 {
     "TableHeader",

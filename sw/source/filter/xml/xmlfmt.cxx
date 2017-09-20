@@ -311,36 +311,40 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 
     if( pConditions && XML_STYLE_FAMILY_TEXT_PARAGRAPH == GetFamily() && xNewStyle.is() )
     {
-        CommandStruct const *aCommands = SwCondCollItem::GetCmds();
+        CommandStruct const*const pCommands = SwCondCollItem::GetCmds();
 
         Reference< XPropertySet > xPropSet( xNewStyle, UNO_QUERY );
 
         uno::Sequence< beans::NamedValue > aSeq( pConditions->size() );
 
-        std::vector<rtl::Reference<SwXMLConditionContext_Impl>>::size_type i;
-        unsigned j;
-
-        for( i = 0; i < pConditions->size(); ++i )
+        for (std::vector<rtl::Reference<SwXMLConditionContext_Impl>>::size_type i = 0;
+            i < pConditions->size(); ++i)
         {
-            if( (*pConditions)[i]->IsValid() )
-            {
-                Master_CollCondition nCond = (*pConditions)[i]->getCondition();
-                sal_uInt32 nSubCond = (*pConditions)[i]->getSubCondition();
+            assert((*pConditions)[i]->IsValid()); // checked before inserting
+            Master_CollCondition nCond = (*pConditions)[i]->getCondition();
+            sal_uInt32 nSubCond = (*pConditions)[i]->getSubCondition();
 
-                for( j = 0; j < COND_COMMAND_COUNT; ++j )
+            for (size_t j = 0; j < COND_COMMAND_COUNT; ++j)
+            {
+                if (pCommands[j].nCnd == nCond &&
+                    pCommands[j].nSubCond == nSubCond)
                 {
-                    if( aCommands[j].nCnd == nCond &&
-                        aCommands[j].nSubCond == nSubCond )
-                    {
-                            aSeq[i].Name = GetCommandContextByIndex( j );
-                            aSeq[i].Value <<= GetImport().GetStyleDisplayName( GetFamily(), (*pConditions)[i]->getApplyStyle() );
-                            break;
-                    }
+                    aSeq[i].Name = GetCommandContextByIndex( j );
+                    aSeq[i].Value <<= GetImport().GetStyleDisplayName(
+                            GetFamily(), (*pConditions)[i]->getApplyStyle() );
+                    break;
                 }
             }
         }
 
-        xPropSet->setPropertyValue( UNO_NAME_PARA_STYLE_CONDITIONS, uno::makeAny( aSeq )  );
+        try
+        {
+            xPropSet->setPropertyValue(UNO_NAME_PARA_STYLE_CONDITIONS, uno::makeAny(aSeq));
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_WARN("sw.xml", "exception when setting ParaStyleConditions: " << e.Message);
+        }
     }
     XMLTextStyleContext::Finish( bOverwrite );
 }

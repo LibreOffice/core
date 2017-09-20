@@ -80,30 +80,29 @@ void XMLStyleExport::exportStyleAttributes( const Reference< XStyle >& )
 void XMLStyleExport::exportStyleContent( const Reference< XStyle >& rStyle )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
+    assert(xPropSet.is());
 
     try
     {
         uno::Any aProperty = xPropSet->getPropertyValue( "ParaStyleConditions" );
         uno::Sequence< beans::NamedValue > aSeq;
-        int i;
 
         aProperty >>= aSeq;
 
-        for(i = 0; i < aSeq.getLength(); ++i)
+        for (sal_Int32 i = 0; i < aSeq.getLength(); ++i)
         {
-            beans::NamedValue const& aNamedCond = aSeq[i];
+            beans::NamedValue const& rNamedCond = aSeq[i];
             OUString aStyleName;
 
-            if ( aNamedCond.Value >>= aStyleName )
+            if (rNamedCond.Value >>= aStyleName)
             {
-                if ( aStyleName.getLength() > 0 )
+                if (!aStyleName.isEmpty())
                 {
-                    OUString aExternal = GetParaStyleCondExternal( aNamedCond.Name );
+                    OUString aExternal = GetParaStyleCondExternal(rNamedCond.Name);
 
-                    if (aExternal.getLength() > 0)
+                    if (!aExternal.isEmpty())
                     {
-                        bool    bEncoded;
-
+                        bool bEncoded;
 
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                             XML_CONDITION,
