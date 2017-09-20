@@ -385,7 +385,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
                 PopupMenu* pVCLPopupMenu = pXPopupMenu ? static_cast<PopupMenu *>(pXPopupMenu->GetMenu()) : nullptr;
                 assert(pVCLPopupMenu);
                 if (pVCLPopupMenu)
-                    pVCLPopupMenu->SetUserValue( nIndex, sal_uLong( aSortedTbs[i].bContextSensitive ? 1L : 0L ));
+                    pVCLPopupMenu->SetUserValue( nIndex, sal_uLong( aSortedTbs[i].bContextSensitive ? 1 : 0 ));
             }
 
             // use VCL popup menu pointer to set vital information that are not part of the awt implementation
