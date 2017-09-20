@@ -63,12 +63,6 @@ endef
 
 # PrecompiledHeader class
 
-# Note: MSVC has a race condition when dealing with .pdb files, that can result in error C1033 when
-# the .pdb file already exists and two cl.exe invocations try to modify it at the same time (which
-# is apparently most likely when generating both .pch files). The no-exceptions variant should be
-# rarely needed now, but in case this turns out to be a problem in practice, this will need to
-# be handled somehow (such as order-dependency of one on another).
-
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
 	-FI$(1).hxx \
 	-Fp$(call gb_PrecompiledHeader_get_target,$(1)) \
