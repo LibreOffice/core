@@ -230,6 +230,7 @@ IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
         xColorList = mpDrawLayer->GetColorList();
     else
     {
+        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
         if (!pColorList.is())
             pColorList = XColorList::CreateStdColorList();
         xColorList = pColorList;
