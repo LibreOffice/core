@@ -58,6 +58,8 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(ENABLE_DEBUG),--enable-debug) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(if $(filter MACOSX,$(OS)),CFLAGS='$(CFLAGS) \
+				-mmacosx-version-min=$(MAC_OS_X_VERSION_MIN_REQUIRED_DOTS)') \
 			CPPFLAGS='$(curl_CPPFLAGS)' \
 			LDFLAGS='$(curl_LDFLAGS)' \
 			ZLIB_CFLAGS='$(ZLIB_CFLAGS)' ZLIB_LIBS='$(ZLIB_LIBS)' \

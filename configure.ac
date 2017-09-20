@@ -2706,6 +2706,7 @@ if test $_os = Darwin -o $_os = iOS; then
         AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.9--13])
         ;;
     esac
+    MAC_OS_X_VERSION_MIN_REQUIRED_DOTS=$with_macosx_version_min_required
 
     LIBTOOL=/usr/bin/libtool
     INSTALL_NAME_TOOL=install_name_tool
@@ -2842,6 +2843,7 @@ AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_SDK_VERSION)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
+AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED_DOTS)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(INSTALL_NAME_TOOL)
 AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libtool
