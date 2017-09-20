@@ -834,6 +834,10 @@ void PowerPointExport::WriteAnimationProperty(const FSHelperPtr& pFS, const Any&
                              XML_val, USS(*o3tl::doAccess<OUString>(rAny)),
                              FSEND);
         break;
+    case TypeClass_DOUBLE:
+        pFS->singleElementNS(XML_p, XML_fltVal,
+                             XML_val, OString::number(*o3tl::doAccess<double>(rAny)).getStr(),
+                             FSEND);
     default:
         break;
     }
@@ -928,6 +932,18 @@ void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS, const
 
         pFS->startElementNS(XML_p, XML_attrName, FSEND);
         pFS->writeEscaped("ppt_y");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+    else if (rAttributeName == "Width")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_w");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+    else if (rAttributeName == "Height")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_h");
         pFS->endElementNS(XML_p, XML_attrName);
     }
     else if (rAttributeName == "Rotate")

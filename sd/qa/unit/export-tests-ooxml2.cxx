@@ -97,6 +97,7 @@ public:
     void testTdf92076();
     void testTdf59046();
     void testTdf105739();
+    void testTdf112086();
     void testPageBitmapWithTransparency();
     void testPptmContentType();
     void testTdf111798();
@@ -130,6 +131,7 @@ public:
     CPPUNIT_TEST(testTdf92076);
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
+    CPPUNIT_TEST(testTdf112086);
     CPPUNIT_TEST(testPageBitmapWithTransparency);
     CPPUNIT_TEST(testPptmContentType);
     CPPUNIT_TEST(testTdf111798);
@@ -794,6 +796,22 @@ void SdOOXMLExportTest2::testTdf105739()
     }
 
     xShell->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf112086()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf112086.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    // check that the val element in tavLst's tav element at tm="0" is not empty, but has this: <p:fltVal val="0"/>
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[1]/p:tavLst/p:tav[1]/p:val/p:fltVal",
+        "val", "0");
+    // and that attrNameLst isn't empty
+    assertXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[1]/p:cBhvr/p:attrNameLst/p:attrName",
+        "ppt_w");
 }
 
 void SdOOXMLExportTest2::testPageBitmapWithTransparency()
