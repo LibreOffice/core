@@ -368,8 +368,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             break;
 
         case 0x0111: { // Strip Offset(s)
-            sal_uInt64* pOldSO = pStripOffsets;
-            if ( pOldSO == nullptr )
+            if (pStripOffsets == nullptr)
                 nNumStripOffsets = 0;
             sal_uInt32 nOldNumSO = nNumStripOffsets;
             nDataLen += nOldNumSO;
@@ -378,6 +377,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             if (nDataLen > nOldNumSO && nDataLen < nMaxAllocAllowed &&
                 (nDataLen - nOldNumSO) <= nMaxRecordsAvailable)
             {
+                sal_uInt64* pOldSO = pStripOffsets;
                 nNumStripOffsets = nDataLen;
                 try
                 {
