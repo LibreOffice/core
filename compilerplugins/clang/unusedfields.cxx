@@ -611,6 +611,19 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
     {
         if (!parent)
         {
+            // check if we have an expression like
+            //    int& r = m_field;
+            auto parentsRange = compiler.getASTContext().getParents(*child);
+            if (parentsRange.begin() != parentsRange.end())
+            {
+                auto varDecl = dyn_cast_or_null<VarDecl>(parentsRange.begin()->get<Decl>());
+                // The isImplicit() call is to avoid triggering when we see the vardecl which is part of a for-range statement,
+                // which is of type 'T&&' and also an l-value-ref ?
+                if (varDecl && !varDecl->isImplicit() && loplugin::TypeCheck(varDecl->getType()).LvalueReference().NonConst())
+                {
+                    bPotentiallyWrittenTo = true;
+                }
+            }
             break;
         }
         if (isa<CXXReinterpretCastExpr>(parent))

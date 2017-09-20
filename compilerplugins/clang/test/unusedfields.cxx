@@ -116,16 +116,19 @@ struct ReadOnlyAnalysis
 // expected-error@-2 {{read m_f3 [loplugin:unusedfields]}}
 // expected-error@-3 {{read m_f4 [loplugin:unusedfields]}}
 // expected-error@-4 {{read m_f5 [loplugin:unusedfields]}}
-// expected-error@-5 {{write m_f2 [loplugin:unusedfields]}}
-// expected-error@-6 {{write m_f3 [loplugin:unusedfields]}}
-// expected-error@-7 {{write m_f4 [loplugin:unusedfields]}}
-// expected-error@-8 {{write m_f5 [loplugin:unusedfields]}}
+// expected-error@-5 {{read m_f6 [loplugin:unusedfields]}}
+// expected-error@-6 {{write m_f2 [loplugin:unusedfields]}}
+// expected-error@-7 {{write m_f3 [loplugin:unusedfields]}}
+// expected-error@-8 {{write m_f4 [loplugin:unusedfields]}}
+// expected-error@-9 {{write m_f5 [loplugin:unusedfields]}}
+// expected-error@-10 {{write m_f6 [loplugin:unusedfields]}}
 {
     int m_f1;
     int m_f2;
     int m_f3;
     std::vector<int> m_f4;
     int m_f5;
+    int m_f6;
 
     // check that we dont see a write of m_f1
     ReadOnlyAnalysis() : m_f1(0) {}
@@ -141,6 +144,13 @@ struct ReadOnlyAnalysis
 
     // check that we see a write when we pass by non-const ref
     void method5() { ReadOnly1 a(m_f5); }
+
+    // check that we see a write when we pass by non-const ref
+    void method6()
+    {
+        int& r = m_f6;
+        r = 1;
+    }
 };
 
 struct ReadOnlyAnalysis2
