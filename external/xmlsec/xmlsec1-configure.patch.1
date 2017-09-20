@@ -1,4 +1,4 @@
-From 49f9bed356b307d7700f429851f1509639956b20 Mon Sep 17 00:00:00 2001
+From 633ee29e9b15eb2b9d7dc3adb76dfea50ce31221 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:06:19 +0100
 Subject: [PATCH] xmlsec1-configure.patch
@@ -9,46 +9,15 @@ Conflicts:
 	configure.ac
 	win32/Makefile.msvc
 ---
- Makefile.am         |  4 ++--
- Makefile.in         |  4 ++--
- configure.ac        | 50 +++++++++++++++++++++++++++++++++++++++-----------
+ configure.ac        | 42 +++++++++++++++++++++++++++++++++---------
  win32/Makefile.msvc |  2 +-
- 4 files changed, 44 insertions(+), 16 deletions(-)
+ 2 files changed, 34 insertions(+), 10 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index c100f92e..6e5c387b 100644
+index 32782002..1c19c223 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -226,8 +226,8 @@ dnl find libxml
- dnl ==========================================================================
- LIBXML_MIN_VERSION="2.7.4"
- LIBXML_CONFIG="xml2-config"
--LIBXML_CFLAGS=""
--LIBXML_LIBS=""
-+LIBXML_CFLAGS="$LIBXML_CFLAGS"
-+LIBXML_LIBS="$LIBXML_LIBS"
- LIBXML_FOUND="no"
- AC_ARG_WITH(libxml, 
-     [  --with-libxml=[PFX]       libxml2 location]
-@@ -236,6 +236,8 @@ AC_ARG_WITH(libxml-src,
-     [  --with-libxml-src=[PFX]   not installed yet libxml2 location]
- )
- 
-+if test "z$LIBXML_CFLAGS" = "z" -o "z$LIBXML_LIBS" = "z"; then
-+
- if test "z$with_libxml" = "zno" -o "z$with_libxml_src" = "zno"; then 
-     AC_MSG_CHECKING(for libxml2 libraries >= $LIBXML_MIN_VERSION) 
-     AC_MSG_ERROR(libxml2 >= $LIBXML_MIN_VERSION is required for $XMLSEC_PACKAGE)
-@@ -284,6 +286,8 @@ if test "z$LIBXML_FOUND" = "zno" ; then
-     fi
- fi
- 
-+fi
-+
- AC_SUBST(LIBXML_CFLAGS)
- AC_SUBST(LIBXML_LIBS)
- AC_SUBST(LIBXML_CONFIG)
-@@ -586,12 +590,26 @@ dnl ==========================================================================
+@@ -570,12 +570,26 @@ dnl ==========================================================================
  XMLSEC_NO_NSS="1"
  SEAMONKEY_MIN_VERSION="1.0"
  MOZILLA_MIN_VERSION="1.4"
@@ -77,7 +46,7 @@ index c100f92e..6e5c387b 100644
  NSS_CRYPTO_LIB="$XMLSEC_PACKAGE-nss"
  NSS_FOUND="no"
  NSPR_PACKAGE=mozilla-nspr
-@@ -618,6 +636,16 @@ elif test "z$with_nss" = "z" -a "z$with_nspr" = "z" -a "z$with_mozilla_ver" = "z
+@@ -602,6 +616,16 @@ elif test "z$with_nss" = "z" -a "z$with_nspr" = "z" -a "z$with_mozilla_ver" = "z
      dnl We are going to try all options
      dnl
      if test "z$NSS_FOUND" = "zno" ; then
@@ -94,7 +63,7 @@ index c100f92e..6e5c387b 100644
          PKG_CHECK_MODULES(NSS, seamonkey-nspr >= $NSPR_MIN_VERSION seamonkey-nss >= $SEAMONKEY_MIN_VERSION,
      	    [NSS_FOUND=yes NSPR_PACKAGE=seamonkey-nspr NSS_PACKAGE=seamonkey-nss],
  	    [NSS_FOUND=no])
-@@ -649,8 +677,8 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -633,8 +657,8 @@ if test "z$NSS_FOUND" = "zno" ; then
          ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
      fi
  
@@ -105,7 +74,7 @@ index c100f92e..6e5c387b 100644
  
      AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
      NSPR_INCLUDES_FOUND="no"
-@@ -671,21 +699,21 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -655,21 +679,21 @@ if test "z$NSS_FOUND" = "zno" ; then
  	NSPR_PRINIT_H="$with_nspr/include/prinit.h"
      else
  	for dir in $ac_nss_inc_dir ; do
@@ -131,7 +100,7 @@ index c100f92e..6e5c387b 100644
  		dnl do not add -L/usr/lib because compiler does it anyway
          	if test "z$dir" = "z/usr/lib" ; then
              	    NSPR_LIBS="$NSPR_LIBS_LIST"
-@@ -756,7 +784,7 @@ if test "z$NSS_FOUND" = "zno" ; then
+@@ -740,7 +764,7 @@ if test "z$NSS_FOUND" = "zno" ; then
          done
         
          for dir in $ac_nss_lib_dir ; do
@@ -141,12 +110,12 @@ index c100f92e..6e5c387b 100644
      		if test "z$dir" = "z/usr/lib" ; then
          	    NSS_LIBS="$NSS_LIBS_LIST"
 diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index c1eea253..8156caa7 100644
+index 5a7e2d13..e34c3e9f 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
-@@ -393,7 +393,7 @@ APP_LIBS  		= $(SOLIBS) $(XMLSEC_CRYPTO_SOLIBS)
- XMLSEC_OPENSSL_SOLIBS   = libcrypto.lib wsock32.lib kernel32.lib user32.lib gdi32.lib crypt32.lib advapi32.lib ws2_32.lib
- XMLSEC_OPENSSL_ALIBS    = libcrypto.lib wsock32.lib kernel32.lib user32.lib gdi32.lib crypt32.lib advapi32.lib ws2_32.lib
+@@ -399,7 +399,7 @@ XMLSEC_OPENSSL_SOLIBS   = libeay32.lib wsock32.lib kernel32.lib user32.lib gdi32
+ XMLSEC_OPENSSL_ALIBS    = libeay32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib crypt32.lib advapi32.lib
+ !endif
  
 -XMLSEC_NSS_SOLIBS       = smime3.lib ssl3.lib nss3.lib libnspr4.lib libplds4.lib libplc4.lib kernel32.lib user32.lib gdi32.lib
 +XMLSEC_NSS_SOLIBS       = smime3.lib nss3.lib nspr4.lib kernel32.lib user32.lib gdi32.lib
@@ -154,5 +123,5 @@ index c1eea253..8156caa7 100644
  
  XMLSEC_MSCRYPTO_SOLIBS  = kernel32.lib user32.lib gdi32.lib Crypt32.lib Advapi32.lib
 -- 
-2.12.0
+2.13.5
 
