@@ -2767,6 +2767,14 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
         if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
         {
+            // tdf#112005 export text *before* adding any attributes
+            if (supportsText(eShapeType))
+            {
+                // #i118485# Add text export, the draw OLE shape allows text now
+                // fdo#58571 chart objects don't allow text:p
+                ImpExportText( xShape, TextPNS::EXTENSION );
+            }
+
             if (pAttrList)
             {
                 mrExport.AddAttributeList(pAttrList);
@@ -2801,13 +2809,6 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
                 if( !sClassId.isEmpty() )
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CLASS_ID, sClassId );
-
-                if(supportsText(eShapeType))
-                {
-                    // #i118485# Add text export, the draw OLE shape allows text now
-                    // fdo#58571 chart objects don't allow text:p
-                    ImpExportText( xShape, TextPNS::EXTENSION );
-                }
 
                 if(!bExportEmbedded)
                 {
