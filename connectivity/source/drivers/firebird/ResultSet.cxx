@@ -614,10 +614,10 @@ template <>
 ISC_QUAD* OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT nType)
 {
     // TODO: this is probably wrong
-    if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) == nType)
-        return reinterpret_cast<ISC_QUAD*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
-    else
+    if ((m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1) != nType)
         throw SQLException(); // TODO: better exception (can't convert Blob)
+
+    return reinterpret_cast<ISC_QUAD*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata);
 }
 
 template <typename T>

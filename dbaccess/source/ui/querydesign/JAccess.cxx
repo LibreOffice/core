@@ -62,22 +62,19 @@ namespace dbaui
     {
         Reference< XAccessible > aRet;
         ::osl::MutexGuard aGuard( m_aMutex  );
-        if(i >= 0 && i < getAccessibleChildCount() && m_pTableView )
-        {
-            // check if we should return a table window or a connection
-            sal_Int32 nTableWindowCount = m_pTableView->GetTabWinCount();
-            if( i < nTableWindowCount )
-            {
-                OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableView->GetTabWinMap().begin();
-                for (sal_Int32 j=i; j; ++aIter,--j)
-                    ;
-                aRet = aIter->second->GetAccessible();
-            }
-            else if( size_t(i - nTableWindowCount) < m_pTableView->getTableConnections().size() )
-                aRet = m_pTableView->getTableConnections()[i - nTableWindowCount]->GetAccessible();
-        }
-        else
+        if(i < 0 || i >= getAccessibleChildCount() || !m_pTableView)
             throw IndexOutOfBoundsException();
+        // check if we should return a table window or a connection
+        sal_Int32 nTableWindowCount = m_pTableView->GetTabWinCount();
+        if( i < nTableWindowCount )
+        {
+            OJoinTableView::OTableWindowMap::const_iterator aIter = m_pTableView->GetTabWinMap().begin();
+            for (sal_Int32 j=i; j; ++aIter,--j)
+                ;
+            aRet = aIter->second->GetAccessible();
+        }
+        else if( size_t(i - nTableWindowCount) < m_pTableView->getTableConnections().size() )
+            aRet = m_pTableView->getTableConnections()[i - nTableWindowCount]->GetAccessible();
         return aRet;
     }
     sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  )

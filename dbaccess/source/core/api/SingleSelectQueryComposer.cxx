@@ -1632,24 +1632,21 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             case DataType::LONGVARBINARY:
                 {
                     Sequence<sal_Int8> aSeq;
-                    if(aValue >>= aSeq)
-                    {
-                        if(nSearchable == ColumnSearch::CHAR)
-                        {
-                            aSQL.append( "\'" );
-                        }
-                        aSQL.append( "0x" );
-                        const sal_Int8* pBegin  = aSeq.getConstArray();
-                        const sal_Int8* pEnd    = pBegin + aSeq.getLength();
-                        for(;pBegin != pEnd;++pBegin)
-                        {
-                            aSQL.append( (sal_Int32)*pBegin, 16 );
-                        }
-                        if(nSearchable == ColumnSearch::CHAR)
-                            aSQL.append( "\'" );
-                    }
-                    else
+                    if(!(aValue >>= aSeq))
                         throw SQLException(DBA_RES(RID_STR_NOT_SEQUENCE_INT8),*this,SQLSTATE_GENERAL,1000,Any() );
+                    if(nSearchable == ColumnSearch::CHAR)
+                    {
+                        aSQL.append( "\'" );
+                    }
+                    aSQL.append( "0x" );
+                    const sal_Int8* pBegin  = aSeq.getConstArray();
+                    const sal_Int8* pEnd    = pBegin + aSeq.getLength();
+                    for(;pBegin != pEnd;++pBegin)
+                    {
+                        aSQL.append( (sal_Int32)*pBegin, 16 );
+                    }
+                    if(nSearchable == ColumnSearch::CHAR)
+                        aSQL.append( "\'" );
                 }
                 break;
             case DataType::BIT:

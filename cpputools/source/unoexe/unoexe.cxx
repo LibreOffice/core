@@ -165,66 +165,64 @@ static Reference< XInterface > loadComponent(
 {
     // determine loader to be used
     sal_Int32 nDot = rLocation.lastIndexOf( '.' );
-    if (nDot > 0 && nDot < rLocation.getLength())
-    {
-        Reference< XImplementationLoader > xLoader;
-
-        OUString aExt( rLocation.copy( nDot +1 ) );
-
-        if (aExt == "dll" || aExt == "exe" || aExt == "dylib" || aExt == "so")
-        {
-            createInstance(
-                xLoader, xContext, "com.sun.star.loader.SharedLibrary" );
-        }
-        else if (aExt == "jar" || aExt == "class")
-        {
-            createInstance(
-                xLoader, xContext, "com.sun.star.loader.Java" );
-        }
-        else
-        {
-            throw RuntimeException(
-                "unknown extension of \"" + rLocation + "\"!  No loader available!" );
-        }
-
-        Reference< XInterface > xInstance;
-
-        // activate
-        Reference< XInterface > xFactory( xLoader->activate(
-            rImplName, OUString(), rLocation, Reference< XRegistryKey >() ) );
-        if (xFactory.is())
-        {
-            Reference< XSingleComponentFactory > xCFac( xFactory, UNO_QUERY );
-            if (xCFac.is())
-            {
-                xInstance = xCFac->createInstanceWithContext( xContext );
-            }
-            else
-            {
-                Reference< XSingleServiceFactory > xSFac( xFactory, UNO_QUERY );
-                if (xSFac.is())
-                {
-                    out( "\n> warning: ignoring context for implementation \"" );
-                    out( rImplName );
-                    out( "\"!" );
-                    xInstance = xSFac->createInstance();
-                }
-            }
-        }
-
-        if (! xInstance.is())
-        {
-            throw RuntimeException(
-                "activating component \"" + rImplName + "\" from location \"" + rLocation + "\" failed!" );
-        }
-
-        return xInstance;
-    }
-    else
+    if (nDot <= 0 || nDot >= rLocation.getLength())
     {
         throw RuntimeException(
             "location \"" + rLocation + "\" has no extension!  Cannot determine loader to be used!" );
     }
+
+    Reference< XImplementationLoader > xLoader;
+
+    OUString aExt( rLocation.copy( nDot +1 ) );
+
+    if (aExt == "dll" || aExt == "exe" || aExt == "dylib" || aExt == "so")
+    {
+        createInstance(
+            xLoader, xContext, "com.sun.star.loader.SharedLibrary" );
+    }
+    else if (aExt == "jar" || aExt == "class")
+    {
+        createInstance(
+            xLoader, xContext, "com.sun.star.loader.Java" );
+    }
+    else
+    {
+        throw RuntimeException(
+            "unknown extension of \"" + rLocation + "\"!  No loader available!" );
+    }
+
+    Reference< XInterface > xInstance;
+
+    // activate
+    Reference< XInterface > xFactory( xLoader->activate(
+        rImplName, OUString(), rLocation, Reference< XRegistryKey >() ) );
+    if (xFactory.is())
+    {
+        Reference< XSingleComponentFactory > xCFac( xFactory, UNO_QUERY );
+        if (xCFac.is())
+        {
+            xInstance = xCFac->createInstanceWithContext( xContext );
+        }
+        else
+        {
+            Reference< XSingleServiceFactory > xSFac( xFactory, UNO_QUERY );
+            if (xSFac.is())
+            {
+                out( "\n> warning: ignoring context for implementation \"" );
+                out( rImplName );
+                out( "\"!" );
+                xInstance = xSFac->createInstance();
+            }
+        }
+    }
+
+    if (! xInstance.is())
+    {
+        throw RuntimeException(
+            "activating component \"" + rImplName + "\" from location \"" + rLocation + "\" failed!" );
+    }
+
+    return xInstance;
 }
 
 class OInstanceProvider

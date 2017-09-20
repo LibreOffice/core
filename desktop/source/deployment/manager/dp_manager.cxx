@@ -1499,26 +1499,23 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
 
         ActivePackages::Data dbData;
         OUString id = dp_misc::getIdentifier(extension);
-        if (m_activePackagesDB->get( &dbData, id, OUString()))
-        {
-            //If the license was already displayed, then do not show it again
-            Reference<ucb::XCommandEnvironment> _xCmdEnv = xCmdEnv;
-            sal_Int32 prereq = dbData.failedPrerequisites.toInt32();
-            if ( !(prereq & deployment::Prerequisites::LICENSE))
-                _xCmdEnv = new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler());
-
-            sal_Int32 failedPrereq = extension->checkPrerequisites(
-                xAbortChannel, _xCmdEnv, false);
-            dbData.failedPrerequisites = OUString::number(failedPrereq);
-            insertToActivationLayerDB(id, dbData);
-        }
-        else
+        if (!m_activePackagesDB->get( &dbData, id, OUString()))
         {
             throw lang::IllegalArgumentException(
                 "PackageManagerImpl::checkPrerequisites: unknown extension",
                 nullptr, 0);
 
         }
+        //If the license was already displayed, then do not show it again
+        Reference<ucb::XCommandEnvironment> _xCmdEnv = xCmdEnv;
+        sal_Int32 prereq = dbData.failedPrerequisites.toInt32();
+        if ( !(prereq & deployment::Prerequisites::LICENSE))
+            _xCmdEnv = new NoLicenseCommandEnv(xCmdEnv->getInteractionHandler());
+
+        sal_Int32 failedPrereq = extension->checkPrerequisites(
+            xAbortChannel, _xCmdEnv, false);
+        dbData.failedPrerequisites = OUString::number(failedPrereq);
+        insertToActivationLayerDB(id, dbData);
         return 0;
     }
     catch ( const deployment::DeploymentException& ) {

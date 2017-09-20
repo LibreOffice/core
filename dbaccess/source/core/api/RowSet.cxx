@@ -2391,40 +2391,37 @@ bool ORowSet::impl_buildActiveCommand_throw()
         case CommandType::QUERY:
         {
             Reference< XQueriesSupplier >  xQueriesAccess(m_xActiveConnection, UNO_QUERY);
-            if (xQueriesAccess.is())
+            if (!xQueriesAccess.is())
+                throw SQLException(DBA_RES(RID_STR_NO_XQUERIESSUPPLIER),*this,OUString(),0,Any());
+            Reference< css::container::XNameAccess >  xQueries(xQueriesAccess->getQueries());
+            if (xQueries->hasByName(m_aCommand))
             {
-                Reference< css::container::XNameAccess >  xQueries(xQueriesAccess->getQueries());
-                if (xQueries->hasByName(m_aCommand))
+                Reference< XPropertySet > xQuery(xQueries->getByName(m_aCommand),UNO_QUERY);
+                OSL_ENSURE(xQuery.is(),"ORowSet::impl_buildActiveCommand_throw: Query is NULL!");
+                if ( xQuery.is() )
                 {
-                    Reference< XPropertySet > xQuery(xQueries->getByName(m_aCommand),UNO_QUERY);
-                    OSL_ENSURE(xQuery.is(),"ORowSet::impl_buildActiveCommand_throw: Query is NULL!");
-                    if ( xQuery.is() )
+                    xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
+                    xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING) >>= bDoEscapeProcessing;
+                    if ( bDoEscapeProcessing != m_bUseEscapeProcessing )
                     {
-                        xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
-                        xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING) >>= bDoEscapeProcessing;
-                        if ( bDoEscapeProcessing != m_bUseEscapeProcessing )
-                        {
-                            bool bOldValue = m_bUseEscapeProcessing;
-                            m_bUseEscapeProcessing = bDoEscapeProcessing;
-                            fireProperty(PROPERTY_ID_ESCAPE_PROCESSING,bOldValue,bDoEscapeProcessing);
-                        }
-
-                        OUString aCatalog,aSchema,aTable;
-                        xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;
-                        xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)    >>= aSchema;
-                        xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
-                        if(!aTable.isEmpty())
-                            m_aUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), aCatalog, aSchema, aTable, false, ::dbtools::EComposeRule::InDataManipulation );
+                        bool bOldValue = m_bUseEscapeProcessing;
+                        m_bUseEscapeProcessing = bDoEscapeProcessing;
+                        fireProperty(PROPERTY_ID_ESCAPE_PROCESSING,bOldValue,bDoEscapeProcessing);
                     }
-                }
-                else
-                {
-                    OUString sMessage( DBA_RES( RID_STR_QUERY_DOES_NOT_EXIST ) );
-                    throwGenericSQLException(sMessage.replaceAll( "$table$", m_aCommand ),*this);
+
+                    OUString aCatalog,aSchema,aTable;
+                    xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;
+                    xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)    >>= aSchema;
+                    xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
+                    if(!aTable.isEmpty())
+                        m_aUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), aCatalog, aSchema, aTable, false, ::dbtools::EComposeRule::InDataManipulation );
                 }
             }
             else
-                throw SQLException(DBA_RES(RID_STR_NO_XQUERIESSUPPLIER),*this,OUString(),0,Any());
+            {
+                OUString sMessage( DBA_RES( RID_STR_QUERY_DOES_NOT_EXIST ) );
+                throwGenericSQLException(sMessage.replaceAll( "$table$", m_aCommand ),*this);
+            }
         }
         break;
 
@@ -2626,14 +2623,11 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
 
 void SAL_CALL ORowSet::setObject( sal_Int32 parameterIndex, const Any& x )
 {
-    if ( ::dbtools::implSetObject( this, parameterIndex, x ) )
-    {
-        m_bParametersDirty = true;
-    }
-    else
+    if ( !::dbtools::implSetObject( this, parameterIndex, x ) )
     {   // there is no other setXXX call which can handle the value in x
         throw SQLException();
     }
+    m_bParametersDirty = true;
 }
 
 void SAL_CALL ORowSet::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 /*scale*/ )
