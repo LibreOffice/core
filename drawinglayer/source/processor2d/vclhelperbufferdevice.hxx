@@ -38,7 +38,7 @@ namespace drawinglayer
         VclPtr<VirtualDevice>               mpContent;
         VclPtr<VirtualDevice>               mpMask;
         VclPtr<VirtualDevice>               mpAlpha;
-        tools::Rectangle                           maDestPixel;
+        ::tools::Rectangle                  maDestPixel;
 
     public:
         impBufferDevice(

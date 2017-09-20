@@ -234,7 +234,7 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        tools::Rectangle VclMetafileProcessor2D::impDumpToMetaFile(
+        ::tools::Rectangle VclMetafileProcessor2D::impDumpToMetaFile(
             const primitive2d::Primitive2DContainer& rContent,
             GDIMetaFile& o_rContentMetafile)
         {
@@ -246,7 +246,7 @@ namespace drawinglayer
             // transform primitive range with current transformation (e.g shadow offset)
             aPrimitiveRange.transform(maCurrentTransformation);
 
-            const tools::Rectangle aPrimitiveRectangle(
+            const ::tools::Rectangle aPrimitiveRectangle(
                 basegfx::fround(aPrimitiveRange.getMinX()), basegfx::fround(aPrimitiveRange.getMinY()),
                 basegfx::fround(aPrimitiveRange.getMaxX()), basegfx::fround(aPrimitiveRange.getMaxY()));
             ScopedVclPtrInstance< VirtualDevice > aContentVDev;
@@ -801,12 +801,12 @@ namespace drawinglayer
                         const basegfx::B2DRange aCurrentRange(
                             aTranslate.getX(), aTranslate.getY(),
                             aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
-                        const tools::Rectangle aCurrentRect(
+                        const ::tools::Rectangle aCurrentRect(
                             sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
                             sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
                         const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
                         // fdo#72530 don't pass empty Rectangle to EndGroup
-                        tools::Rectangle aCropRect(aCurrentRect);
+                        ::tools::Rectangle aCropRect(aCurrentRect);
 
                         if(rAttr.IsCropped())
                         {
@@ -839,7 +839,7 @@ namespace drawinglayer
                             aCropRange.expand(aCurrentRange.getMinimum() - basegfx::B2DPoint(rAttr.GetLeftCrop() * fFactorX, rAttr.GetTopCrop() * fFactorY));
                             aCropRange.expand(aCurrentRange.getMaximum() + basegfx::B2DPoint(rAttr.GetRightCrop() * fFactorX, rAttr.GetBottomCrop() * fFactorY));
 
-                            aCropRect = tools::Rectangle(
+                            aCropRect = ::tools::Rectangle(
                                 sal_Int32(floor(aCropRange.getMinX())), sal_Int32(floor(aCropRange.getMinY())),
                                 sal_Int32(ceil(aCropRange.getMaxX())), sal_Int32(ceil(aCropRange.getMaxY())));
                         }
@@ -901,7 +901,7 @@ namespace drawinglayer
                             {
                                 // still need to fill in the location (is a class Rectangle)
                                 const basegfx::B2DRange aRangeLogic(rControlPrimitive.getB2DRange(getViewInformation2D()));
-                                const tools::Rectangle aRectLogic(
+                                const ::tools::Rectangle aRectLogic(
                                     (sal_Int32)floor(aRangeLogic.getMinX()), (sal_Int32)floor(aRangeLogic.getMinY()),
                                     (sal_Int32)ceil(aRangeLogic.getMaxX()), (sal_Int32)ceil(aRangeLogic.getMaxY()));
                                 pPDFControl->Location = aRectLogic;
@@ -1016,7 +1016,7 @@ namespace drawinglayer
                     {
                         // emulate data handling from ImpEditEngine::Paint
                         const basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
-                        const tools::Rectangle aRectLogic(
+                        const ::tools::Rectangle aRectLogic(
                             (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
                             (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
@@ -1892,7 +1892,7 @@ namespace drawinglayer
 
                                 // various content, create content-metafile
                                 GDIMetaFile aContentMetafile;
-                                const tools::Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
+                                const ::tools::Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
 
                                 // restore mfCurrentUnifiedTransparence; it may have been used
                                 // while processing the sub-content in impDumpToMetaFile
@@ -1955,7 +1955,7 @@ namespace drawinglayer
                         {
                             // various content, create content-metafile
                             GDIMetaFile aContentMetafile;
-                            const tools::Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
+                            const ::tools::Rectangle aPrimitiveRectangle(impDumpToMetaFile(rContent, aContentMetafile));
 
                             // re-create a VCL-gradient from FillGradientPrimitive2D
                             Gradient aVCLGradient;
@@ -1983,10 +1983,10 @@ namespace drawinglayer
 
                             basegfx::B2DRange aViewRange(rContent.getB2DRange(getViewInformation2D()));
                             aViewRange.transform(maCurrentTransformation);
-                            const tools::Rectangle aRectLogic(
+                            const ::tools::Rectangle aRectLogic(
                                 (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
                                 (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
-                            const tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
+                            const ::tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(aRectLogic));
                             Size aSizePixel(aRectPixel.GetSize());
                             const Point aEmptyPoint;
                             ScopedVclPtrInstance< VirtualDevice > aBufferDevice;

@@ -237,7 +237,7 @@ namespace drawinglayer
                                 if (aMask.IsEmpty())
                                 {
                                     const Point aEmpty;
-                                    const tools::Rectangle aRect(aEmpty, maVirtualDeviceMask->GetOutputSizePixel());
+                                    const ::tools::Rectangle aRect(aEmpty, maVirtualDeviceMask->GetOutputSizePixel());
                                     const Wallpaper aWallpaper(COL_BLACK);
                                     maVirtualDeviceMask->DrawWallpaper(aRect, aWallpaper);
                                 }
@@ -260,7 +260,7 @@ namespace drawinglayer
 
                                 if (aMask.IsEmpty())
                                 {
-                                    const tools::Rectangle aRect(rAnimBitmap.aPosPix, aContent.GetSizePixel());
+                                    const ::tools::Rectangle aRect(rAnimBitmap.aPosPix, aContent.GetSizePixel());
                                     maVirtualDeviceMask->SetFillColor(COL_BLACK);
                                     maVirtualDeviceMask->SetLineColor();
                                     maVirtualDeviceMask->DrawRect(aRect);
