@@ -1400,25 +1400,22 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     else
                         bStatus = false;
 
-                    if (xAcc)
+                    xAcc.reset();
+                    xMaskAcc.reset();
+
+                    if ( bStatus )
                     {
-                        xAcc.reset();
-                        xMaskAcc.reset();
+                        BitmapEx aImage;
 
-                        if ( bStatus )
-                        {
-                            BitmapEx aImage;
+                        if (pAlphaMask)
+                            aImage = BitmapEx( aBitmap, *pAlphaMask );
+                        else
+                            aImage = aBitmap;
 
-                            if (pAlphaMask)
-                                aImage = BitmapEx( aBitmap, *pAlphaMask );
-                            else
-                                aImage = aBitmap;
+                        AnimationBitmap aAnimationBitmap( aImage, Point( 0, 0 ), aBitmap.GetSizePixel(),
+                                                          ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back );
 
-                            AnimationBitmap aAnimationBitmap( aImage, Point( 0, 0 ), aBitmap.GetSizePixel(),
-                                                              ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back );
-
-                            aAnimation.Insert( aAnimationBitmap );
-                        }
+                        aAnimation.Insert( aAnimationBitmap );
                     }
                 }
             }
