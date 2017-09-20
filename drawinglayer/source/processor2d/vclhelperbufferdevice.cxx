@@ -176,7 +176,7 @@ namespace
                 {
                     if (bClear)
                     {
-                        pRetval->Erase(tools::Rectangle(0, 0, rSizePixel.getWidth(), rSizePixel.getHeight()));
+                        pRetval->Erase(::tools::Rectangle(0, 0, rSizePixel.getWidth(), rSizePixel.getHeight()));
                     }
                 }
                 else
@@ -258,11 +258,11 @@ namespace drawinglayer
     {
         basegfx::B2DRange aRangePixel(rRange);
         aRangePixel.transform(mrOutDev.GetViewTransformation());
-        const tools::Rectangle aRectPixel(
+        const ::tools::Rectangle aRectPixel(
             (sal_Int32)floor(aRangePixel.getMinX()), (sal_Int32)floor(aRangePixel.getMinY()),
             (sal_Int32)ceil(aRangePixel.getMaxX()), (sal_Int32)ceil(aRangePixel.getMaxY()));
         const Point aEmptyPoint;
-        maDestPixel = tools::Rectangle(aEmptyPoint, mrOutDev.GetOutputSizePixel());
+        maDestPixel = ::tools::Rectangle(aEmptyPoint, mrOutDev.GetOutputSizePixel());
         maDestPixel.Intersection(aRectPixel);
 
         if(isVisible())

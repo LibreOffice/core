@@ -78,7 +78,7 @@ typedef ::cppu::WeakAggComponentImplHelper7<
 
 class SvxGraphCtrlAccessibleContext:
     private cppu::BaseMutex, public SvxGraphCtrlAccessibleContext_Base,
-    public SfxListener, public accessibility::IAccessibleViewForwarder
+    public SfxListener, public ::accessibility::IAccessibleViewForwarder
 {
 public:
     friend class GraphCtrl;
@@ -194,7 +194,7 @@ private:
 
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessible( const SdrObject* pObj );
 
-    accessibility::AccessibleShapeTreeInfo maTreeInfo;
+    ::accessibility::AccessibleShapeTreeInfo maTreeInfo;
 
     /// Reference to the parent object.
     css::uno::Reference<css::accessibility::XAccessible> mxParent;
@@ -209,7 +209,7 @@ private:
     OUString msName;
 
     /// map of accessible shapes
-    typedef ::std::map< const SdrObject*, rtl::Reference<accessibility::AccessibleShape> > ShapesMapType;
+    typedef ::std::map< const SdrObject*, rtl::Reference<::accessibility::AccessibleShape> > ShapesMapType;
     ShapesMapType mxShapes;
 
     VclPtr<GraphCtrl>  mpControl;
