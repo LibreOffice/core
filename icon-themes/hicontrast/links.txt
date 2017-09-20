@@ -52,3 +52,7 @@ cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
 cmd/lc_rowoperations.png cmd/lc_entirerow.png 
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
+
+# writer epub export
+cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
+cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
