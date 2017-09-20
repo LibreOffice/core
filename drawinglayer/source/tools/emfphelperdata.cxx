@@ -46,6 +46,7 @@ namespace emfplushelper
         {
             case EmfPlusRecordTypeHeader: return "EmfPlusRecordTypeHeader";
             case EmfPlusRecordTypeEndOfFile: return "EmfPlusRecordTypeEndOfFile";
+            case EmfPlusRecordTypeComment: return "EmfPlusRecordTypeComment";
             case EmfPlusRecordTypeGetDC: return "EmfPlusRecordTypeGetDC";
             case EmfPlusRecordTypeObject: return "EmfPlusRecordTypeObject";
             case EmfPlusRecordTypeFillRects: return "EmfPlusRecordTypeFillRects";
@@ -815,6 +816,31 @@ namespace emfplushelper
                     case EmfPlusRecordTypeEndOfFile:
                     {
                         SAL_INFO("cppcanvas.emf", "EMF+ EndOfFile");
+                        break;
+                    }
+                    case EmfPlusRecordTypeComment:
+                    {
+                        unsigned char data;
+                        OUString hexdata;
+
+                        SAL_INFO("cppcanvas.emf", "EMF+ Comment");
+                        SAL_INFO("cppcanvas.emf", "\tdatasize: 0x" << std::hex << dataSize << std::dec);
+
+                        for (sal_uInt32 i=0; i<dataSize; i++)
+                        {
+                            rMS.ReadUChar(data);
+
+                            if (i % 16 == 0)
+                                hexdata += "\n";
+
+                            OUString padding;
+                            if ((data & 0xF0) == 0)
+                                padding = "0";
+
+                            hexdata += "0x" + padding + OUString::number(data, 16) + " ";
+                        }
+
+                        SAL_INFO("cppcanvas.emf", "\t" << hexdata);
                         break;
                     }
                     case EmfPlusRecordTypeGetDC:
