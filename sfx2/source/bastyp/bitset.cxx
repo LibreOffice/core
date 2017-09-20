@@ -29,7 +29,7 @@
 IndexBitSet& IndexBitSet::operator-=(sal_uInt16 nBit)
 {
     sal_uInt16 nBlock = nBit / 32;
-    sal_uInt32 nBitVal = 1L << (nBit % 32);
+    sal_uInt32 nBitVal = 1 << (nBit % 32);
 
     if ( nBlock >= nBlocks )
       return *this;
@@ -48,7 +48,7 @@ IndexBitSet& IndexBitSet::operator-=(sal_uInt16 nBit)
 IndexBitSet& IndexBitSet::operator|=( sal_uInt16 nBit )
 {
     sal_uInt16 nBlock = nBit / 32;
-    sal_uInt32 nBitVal = 1L << (nBit % 32);
+    sal_uInt32 nBitVal = 1 << (nBit % 32);
 
     if ( nBlock >= nBlocks )
     {
@@ -78,7 +78,7 @@ IndexBitSet& IndexBitSet::operator|=( sal_uInt16 nBit )
 bool IndexBitSet::Contains( sal_uInt16 nBit ) const
 {
     sal_uInt16 nBlock = nBit / 32;
-    sal_uInt32 nBitVal = 1L << (nBit % 32);
+    sal_uInt32 nBitVal = 1 << (nBit % 32);
 
     if ( nBlock >= nBlocks )
         return false;

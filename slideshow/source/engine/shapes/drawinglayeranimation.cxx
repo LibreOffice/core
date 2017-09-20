@@ -435,7 +435,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 
             // init loop
             ScrollTextAnimNode aInitNode(
-                nLoopTime, 1L,
+                nLoopTime, 1,
                 fRelativeStartValue, fRelativeEndValue,
                 mnFrequency, false);
             maVector.push_back(aInitNode);
@@ -468,7 +468,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
                 {
                     // endless main loop
                     ScrollTextAnimNode aMainNode(
-                        nLoopTime, 0L,
+                        nLoopTime, 0,
                         fRelativeStartValue, fRelativeEndValue,
                         mnFrequency, DoAlternate());
                     maVector.push_back(aMainNode);
@@ -513,7 +513,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
 
             // exit loop
             ScrollTextAnimNode aExitNode(
-                nLoopTime, 1L,
+                nLoopTime, 1,
                 fRelativeStartValue, fRelativeEndValue, mnFrequency, false);
             maVector.push_back(aExitNode);
         }
@@ -816,7 +816,7 @@ ActivityImpl::ActivityImpl(
     mnFrequency = (nDelay ? nDelay :
                    // default:
                    meAnimKind == drawing::TextAnimationKind_BLINK
-                   ? 250L : 50L );
+                   ? 250 : 50 );
 
     // adopted from in AInfoScrollText::ImplInit():
 

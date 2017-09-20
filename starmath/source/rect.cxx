@@ -190,8 +190,8 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     bHasAlignInfo = true;
     bHasBaseline  = true;
     nBaseline     = aFM.GetAscent();
-    nAlignT       = nBaseline - nFontHeight * 750L / 1000L;
-    nAlignM       = nBaseline - nFontHeight * 121L / 422L;
+    nAlignT       = nBaseline - nFontHeight * 750 / 1000;
+    nAlignM       = nBaseline - nFontHeight * 121 / 422;
         // that's where the horizontal bars of '+', '-', ... are
         // (1/3 of ascent over baseline)
         // (121 = 1/3 of 12pt ascent, 422 = 12pt fontheight)
@@ -212,7 +212,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
         if (nDelta == 0)
         {   // this value approx. fits a Leading of 80 at a
             // Fontheight of 422 (12pt)
-            nDelta = nFontHeight * 8L / 43;
+            nDelta = nFontHeight * 8 / 43;
         }
         SetTop(GetTop() - nDelta);
 
@@ -235,7 +235,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     long  nDist = 0;
     if (pFormat)
         nDist = (rDev.GetFont().GetFontSize().Height()
-                * pFormat->GetDistance(DIS_ORNAMENTSIZE)) / 100L;
+                * pFormat->GetDistance(DIS_ORNAMENTSIZE)) / 100;
 
     nHiAttrFence = aGlyphRect.TopLeft().Y() - 1 - nBorderWidth - nDist;
     nLoAttrFence = SmFromTo(GetAlignB(), GetBottom(), 0.0);
