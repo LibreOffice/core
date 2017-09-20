@@ -24,8 +24,6 @@
 #pragma warning (disable : 4786 4503 4917)
 #endif
 
-#include <tchar.h>
-
 #ifdef _AMD64_
 #define MODULE_NAME L"shlxthdl_x64.dll"
 #else

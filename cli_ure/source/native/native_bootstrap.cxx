@@ -17,23 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// Use UNICODE Windows and C API.
-#define _UNICODE
-#define UNICODE
-
-#ifdef _MSC_VER
-#pragma warning(push, 1)
-#endif
-#if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
-#include <tchar.h>
-
 #include "native_share.h"
 
 #include "rtl/bootstrap.hxx"

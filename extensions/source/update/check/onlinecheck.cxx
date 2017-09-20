@@ -30,19 +30,14 @@
 #include <windows.h>
 #include <wininet.h>
 
-#ifdef UNICODE
-#define _UNICODE
-#endif
-#include <tchar.h>
-
 // #i71984
 extern "C" bool SAL_CALL WNT_hasInternetConnection()
 {
     DWORD   dwFlags;
-    TCHAR   szConnectionName[1024];
+    WCHAR   szConnectionName[1024];
 
     __try {
-    BOOL fIsConnected = InternetGetConnectedStateEx(
+    BOOL fIsConnected = InternetGetConnectedStateExW(
         &dwFlags,
         szConnectionName,
         SAL_N_ELEMENTS(szConnectionName),

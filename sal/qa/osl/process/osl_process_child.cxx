@@ -18,11 +18,8 @@
  */
 
 #if defined(_WIN32)                     // Windows
-#   define UNICODE
-#   define _UNICODE
 #   define WIN32_LEAN_AND_MEAN
 #   include <windows.h>
-#   include <tchar.h>
 #else
 #   include <unistd.h>
 #endif
@@ -55,28 +52,26 @@ void wait_for_seconds(char* time)
 
 #ifdef _WIN32
 
-void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
+void w_to_a(LPCWSTR strW, LPSTR strA, DWORD size)
 {
-    LPCWSTR strW = reinterpret_cast<LPCWSTR>(_strW);
     WideCharToMultiByte(CP_ACP, 0, strW, -1, strA, size, nullptr, nullptr);
 }
 
     void dump_env(char* file_path)
     {
-        LPTSTR env = reinterpret_cast<LPTSTR>(
-            GetEnvironmentStrings());
-        LPTSTR p   = env;
+        LPWSTR env = GetEnvironmentStringsW();
+        LPWSTR p   = env;
 
         std::ofstream file(file_path);
 
         char buffer[32767];
-        while (size_t l = _tcslen(reinterpret_cast<wchar_t*>(p)))
+        while (size_t l = wcslen(p))
         {
             w_to_a(p, buffer, sizeof(buffer));
             file << buffer << '\0';
             p += l + 1;
         }
-        FreeEnvironmentStrings(env);
+        FreeEnvironmentStringsW(env);
     }
 #else
     void dump_env(char* file_path)

@@ -28,8 +28,23 @@
 #include "config.hxx"
 
 #include <commctrl.h>
-#include <tchar.h>
 #include "resource.h"
+
+// Unicode-only defines to break dependance on UNICODE define
+#if !defined ListView_InsertColumnW
+#define ListView_InsertColumnW(hwnd, iCol, pcol) \
+    (int)SNDMSG((hwnd), LVM_INSERTCOLUMNW, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMNW *)(pcol))
+#endif
+
+#if !defined ListView_InsertItemW
+#define ListView_InsertItemW(hwnd, pitem)   \
+    (int)SNDMSG((hwnd), LVM_INSERTITEMW, 0, (LPARAM)(const LV_ITEMW *)(pitem))
+#endif
+
+#if !defined ListView_SetItemW
+#define ListView_SetItemW(hwnd, pitem) \
+    (BOOL)SNDMSG((hwnd), LVM_SETITEMW, 0, (LPARAM)(const LV_ITEMW *)(pitem))
+#endif
 
 
 list_view_builder_ptr create_list_view_builder(
@@ -83,17 +98,17 @@ void list_view_builder::build(statistic_group_list_t& gl)
 void list_view_builder::setup_list_view()
 {
     HIMAGELIST h_ils = ImageList_Create(16,15,ILC_MASK, 7, 0);
-    HBITMAP    h_bmp = LoadBitmap(GetModuleHandle(MODULE_NAME), MAKEINTRESOURCE(IDB_PROPERTY_IMAGES));
+    HBITMAP    h_bmp = LoadBitmapW(GetModuleHandleW(MODULE_NAME), MAKEINTRESOURCEW(IDB_PROPERTY_IMAGES));
     ImageList_AddMasked(h_ils, h_bmp, RGB(255, 0, 255));
 
     (void) ListView_SetImageList(hwnd_list_view_, h_ils, LVSIL_SMALL);
 
     std::wstring header = GetResString(IDS_PROPERTY);
 
-    LVCOLUMN lvc;
+    LVCOLUMNW lvc;
     lvc.mask = LVCF_FMT |
                LVCF_WIDTH |
-                LVCF_TEXT |
+               LVCF_TEXT |
                LVCF_SUBITEM;
 
     lvc.iSubItem = 0;
@@ -101,11 +116,11 @@ void list_view_builder::setup_list_view()
     lvc.cx       = 120;
     lvc.fmt      = LVCFMT_LEFT;
 
-    ListView_InsertColumn(hwnd_list_view_, 0, &lvc);
+    ListView_InsertColumnW(hwnd_list_view_, 0, &lvc);
     lvc.iSubItem = 1;
     header = GetResString(IDS_PROPERTY_VALUE);
     lvc.pszText = const_cast<wchar_t*>(header.c_str());
-    ListView_InsertColumn(hwnd_list_view_, 1, &lvc);
+    ListView_InsertColumnW(hwnd_list_view_, 1, &lvc);
 }
 
 
@@ -117,7 +132,7 @@ void list_view_builder::insert_group(const std::wstring& /*title*/)
 
 void list_view_builder::insert_item(const std::wstring& title, const std::wstring& value, bool is_editable)
 {
-    LVITEM lvi;
+    LVITEMW lvi;
 
     lvi.iItem      = ++row_index_;
     lvi.iSubItem   = 0;
@@ -137,13 +152,13 @@ void list_view_builder::insert_item(const std::wstring& title, const std::wstrin
             lvi.iImage = 3;
     }
 
-    ListView_InsertItem(hwnd_list_view_, &lvi);
+    ListView_InsertItemW(hwnd_list_view_, &lvi);
 
     lvi.mask     = LVIF_TEXT;
     lvi.iSubItem = 1;
     lvi.pszText  = const_cast<wchar_t*>(value.c_str());
 
-    ListView_SetItem(hwnd_list_view_, &lvi);
+    ListView_SetItemW(hwnd_list_view_, &lvi);
 }
 
 
@@ -193,7 +208,7 @@ void winxp_list_view_builder::insert_group(const std::wstring& name)
 void winxp_list_view_builder::insert_item(
     const std::wstring& title, const std::wstring& value, bool is_editable)
 {
-    LVITEM lvi;
+    LVITEMW lvi;
 
     lvi.iItem      = ++row_index_;
     lvi.iSubItem   = 0;
@@ -213,13 +228,13 @@ void winxp_list_view_builder::insert_item(
             lvi.iImage = 3;
     }
 
-    ListView_InsertItem(get_list_view(), &lvi);
+    ListView_InsertItemW(get_list_view(), &lvi);
 
     lvi.mask     = LVIF_TEXT;
     lvi.iSubItem = 1;
     lvi.pszText  = const_cast<wchar_t*>(value.c_str());
 
-    ListView_SetItem(get_list_view(), &lvi);
+    ListView_SetItemW(get_list_view(), &lvi);
 
     row_count_++;
 }

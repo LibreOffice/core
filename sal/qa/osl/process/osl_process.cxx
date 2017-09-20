@@ -43,13 +43,7 @@
 #define RUNNING_ON_VALGRIND false
 #endif
 
-#if defined(_WIN32)                     // Windows
-#if !defined WIN32_LEAN_AND_MEAN
-# define WIN32_LEAN_AND_MEAN
-#endif
-#   include <windows.h>
-#   include <tchar.h>
-#else
+#if !defined(_WIN32)                     // Windows
 #include <unistd.h>
 #endif
 
