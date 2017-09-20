@@ -13,17 +13,33 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2017-06-09 17:33:30 using:
- bin/update_pch emfio emfio --cutoff=8 --exclude:system --exclude:module --include:local
+ Generated on 2017-09-20 22:52:31 using:
+ ./bin/update_pch emfio emfio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./emfio/inc/pch/precompiled_emfio.hxx "make emfio.build" --find-conflicts
 */
 
+#include <memory>
+#include <stddef.h>
+#include <stdlib.h>
+#include <boost/optional.hpp>
 #include <osl/diagnose.h>
+#include <osl/endian.h>
+#include <osl/mutex.hxx>
+#include <osl/process.h>
+#include <osl/thread.h>
+#include <osl/thread.hxx>
+#include <rtl/crc.h>
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/tencinfo.h>
 #include <rtl/unload.h>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/macros.h>
 #include <sal/types.h>
+#include <sal/typesizes.h>
+#include <basegfx/basegfxdllapi.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,18 +13,17 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:37 using:
+ Generated on 2017-09-20 22:52:36 using:
  ./bin/update_pch framework fwi --cutoff=9 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./framework/inc/pch/precompiled_fwi.hxx "/opt/lo/bin/make framework.build" --find-conflicts
+ ./bin/update_pch_bisect ./framework/inc/pch/precompiled_fwi.hxx "make framework.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
 #include <config_global.h>
 #include <config_typesizes.h>
-#include <config_vcl.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
@@ -44,17 +43,13 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
-#include <osl/file.h>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
-#include <osl/pipe.h>
 #include <osl/process.h>
 #include <osl/security.h>
-#include <osl/socket.h>
 #include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
@@ -64,6 +59,8 @@
 #include <rtl/math.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
+#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
@@ -84,25 +81,16 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <vcl/alpha.hxx>
-#include <vcl/animate.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/fntstyle.hxx>
-#include <vcl/font.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/gfxlink.hxx>
-#include <vcl/keycodes.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/vectorgraphicdata.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/wall.hxx>
+#include <vcl/vclreferencebase.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
@@ -119,10 +107,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <com/sun/star/awt/Key.hpp>
-#include <com/sun/star/awt/KeyGroup.hpp>
-#include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -140,24 +124,20 @@
 #include <comphelper/fileformat.h>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/cppuhelperdllapi.h>
-#include <cppuhelper/weakref.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errinf.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/gen.hxx>
-#include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
-#include <tools/ref.hxx>
 #include <tools/solar.h>
-#include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
@@ -165,7 +145,6 @@
 #include <uno/any2.h>
 #include <uno/data.h>
 #include <uno/sequence2.h>
-#include <unotools/resmgr.hxx>
 #include <unotools/unotoolsdllapi.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

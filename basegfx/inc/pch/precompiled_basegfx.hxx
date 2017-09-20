@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:51:33 using:
  ./bin/update_pch basegfx basegfx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./basegfx/inc/pch/precompiled_basegfx.hxx "/opt/lo/bin/make basegfx.build" --find-conflicts
+ ./bin/update_pch_bisect ./basegfx/inc/pch/precompiled_basegfx.hxx "make basegfx.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -25,6 +25,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <limits>
+#include <memory>
 #include <numeric>
 #include <ostream>
 #include <sstream>
@@ -34,13 +35,16 @@
 #include <osl/interlck.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <sal/detail/log.h>
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/genfunc.hxx>

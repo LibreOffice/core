@@ -13,23 +13,23 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:37 using:
+ Generated on 2017-09-20 22:52:55 using:
  ./bin/update_pch reportdesign rptxml --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./reportdesign/inc/pch/precompiled_rptxml.hxx "/opt/lo/bin/make reportdesign.build" --find-conflicts
+ ./bin/update_pch_bisect ./reportdesign/inc/pch/precompiled_rptxml.hxx "make reportdesign.build" --find-conflicts
 */
 
 #include <cassert>
 #include <cstddef>
+#include <cstring>
 #include <memory>
-#include <string.h>
 #include <unordered_set>
 #include <vector>
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -40,9 +40,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
+#include <sal/detail/log.h>
 #include <sal/macros.h>
+#include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
 #include <vcl/svapp.hxx>
 #include <RptDef.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -72,8 +76,6 @@
 #include <com/sun/star/report/ReportPrintOption.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
-#include <com/sun/star/report/XReportControlFormat.hpp>
-#include <com/sun/star/report/XReportControlModel.hpp>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
@@ -82,7 +84,6 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -101,8 +102,9 @@
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <sax/tools/converter.hxx>
-#include <tools/debug.hxx>
+#include <strings.hxx>
 #include <tools/toolsdllapi.h>
 #include <ucbhelper/content.hxx>
 #include <unotools/options.hxx>

@@ -13,22 +13,22 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:33 using:
+ Generated on 2017-09-20 22:52:43 using:
  ./bin/update_pch hwpfilter hwp --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./hwpfilter/inc/pch/precompiled_hwp.hxx "/opt/lo/bin/make hwpfilter.build" --find-conflicts
+ ./bin/update_pch_bisect ./hwpfilter/inc/pch/precompiled_hwp.hxx "make hwpfilter.build" --find-conflicts
 */
 
+#include <assert.h>
 #include <cassert>
 #include <config_global.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
-#include <ctype.h>
 #include <errno.h>
-#include <list>
 #include <math.h>
+#include <memory>
 #include <new>
 #include <ostream>
 #include <sstream>
@@ -36,7 +36,9 @@
 #include <stdlib.h>
 #include <string>
 #include <type_traits>
+#include <utility>
 #include <osl/diagnose.h>
+#include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/interlck.h>
 #include <osl/pipe.h>
@@ -46,6 +48,7 @@
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>
+#include <rtl/character.hxx>
 #include <rtl/locale.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -61,7 +64,9 @@
 #include <sal/macros.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <comphelper/fileformat.h>
 #include <comphelper/newarray.hxx>
+#include <tools/solar.h>
 #include <tools/toolsdllapi.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

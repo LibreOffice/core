@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:38 using:
+ Generated on 2017-09-20 22:53:56 using:
  ./bin/update_pch sdext PresenterScreen --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresenterScreen.hxx "/opt/lo/bin/make sdext.build" --find-conflicts
+ ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresenterScreen.hxx "make sdext.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <exception>
+#include <initializer_list>
 #include <iomanip>
 #include <map>
 #include <math.h>
@@ -40,10 +41,13 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <osl/conditn.h>
+#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
@@ -80,6 +84,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -106,8 +111,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#include <com/sun/star/presentation/XSlideShow.hpp>
-#include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>

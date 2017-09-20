@@ -13,18 +13,23 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:37 using:
+ Generated on 2017-09-20 22:53:55 using:
  ./bin/update_pch sdext PresentationMinimizer --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresentationMinimizer.hxx "/opt/lo/bin/make sdext.build" --find-conflicts
+ ./bin/update_pch_bisect ./sdext/inc/pch/precompiled_PresentationMinimizer.hxx "make sdext.build" --find-conflicts
 */
 
+#include <algorithm>
 #include <cassert>
+#include <config_global.h>
 #include <config_typesizes.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
+#include <initializer_list>
+#include <iomanip>
+#include <memory>
 #include <new>
 #include <ostream>
 #include <sstream>
@@ -33,10 +38,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <type_traits>
+#include <utility>
 #include <osl/diagnose.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
@@ -60,6 +68,7 @@
 #include <sal/types.h>
 #include <sal/typesizes.h>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -68,7 +77,7 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/TempFile.hpp>
@@ -80,11 +89,34 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.h>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/TypeClass.hdl>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/genfunc.h>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
+#include <cppu/cppudllapi.h>
+#include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
+#include <tools/toolsdllapi.h>
+#include <typelib/typeclass.h>
+#include <typelib/typedescription.h>
+#include <typelib/uik.h>
+#include <uno/any2.h>
+#include <uno/data.h>
+#include <uno/sequence2.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
