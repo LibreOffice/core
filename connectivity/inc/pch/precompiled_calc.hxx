@@ -13,18 +13,18 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:51:50 using:
  ./bin/update_pch connectivity calc --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_calc.hxx "/opt/lo/bin/make connectivity.build" --find-conflicts
+ ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_calc.hxx "make connectivity.build" --find-conflicts
 */
 
 #include <cassert>
 #include <cstddef>
-#include <memory>
+#include <cstring>
 #include <stdlib.h>
-#include <string.h>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/math.hxx>
 #include <rtl/string.h>
@@ -52,12 +52,10 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <svl/svldllapi.h>
-#include <unotools/unotoolsdllapi.h>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/sdbcx/VColumn.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

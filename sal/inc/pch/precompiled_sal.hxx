@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-10 12:04:24 using:
+ Generated on 2017-09-20 22:52:56 using:
  ./bin/update_pch sal sal --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -35,12 +35,14 @@
 #include <list>
 #include <math.h>
 #include <new>
+#include <oslmemory.h>
+#include <oslrandom.h>
+#include <rtllifecycle.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
-#include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
@@ -53,6 +55,7 @@
 #include <osl/process.h>
 #include <osl/profile.hxx>
 #include <osl/security.hxx>
+#include <osl/signal.h>
 #include <osl/socket.h>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
@@ -96,6 +99,6 @@
 #include <sal/mathconf.h>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
-#include <rtllifecycle.h>
+#include <salusesyslog.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

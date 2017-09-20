@@ -13,18 +13,21 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:39 using:
+ Generated on 2017-09-20 22:54:03 using:
  ./bin/update_pch svgio svgio --cutoff=8 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./svgio/inc/pch/precompiled_svgio.hxx "/opt/lo/bin/make svgio.build" --find-conflicts
+ ./bin/update_pch_bisect ./svgio/inc/pch/precompiled_svgio.hxx "make svgio.build" --find-conflicts
 */
 
+#include <memory>
+#include <ostream>
 #include <set>
 #include <stddef.h>
 #include <stdlib.h>
 #include <vector>
 #include <boost/optional/optional.hpp>
+#include <osl/diagnose.h>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/instance.hxx>

@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:36 using:
+ Generated on 2017-09-20 22:52:47 using:
  ./bin/update_pch package package2 --cutoff=3 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./package/inc/pch/precompiled_package2.hxx "/opt/lo/bin/make package.build" --find-conflicts
+ ./bin/update_pch_bisect ./package/inc/pch/precompiled_package2.hxx "make package.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -30,11 +30,11 @@
 #include <exception>
 #include <functional>
 #include <iomanip>
+#include <memory>
 #include <new>
 #include <ostream>
 #include <sstream>
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <type_traits>
@@ -44,9 +44,12 @@
 #include <boost/optional/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
+#include <osl/doublecheckedlocking.h>
+#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
+#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/cipher.h>
@@ -72,6 +75,8 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <CRC32.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <EncryptionData.hxx>
@@ -98,6 +103,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -118,6 +124,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
@@ -133,6 +140,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <o3tl/make_unique.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>

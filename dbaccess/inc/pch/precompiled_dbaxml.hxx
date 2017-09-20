@@ -13,20 +13,22 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-02-06 12:34:08 using:
+ Generated on 2017-09-20 22:52:14 using:
  ./bin/update_pch dbaccess dbaxml --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./dbaccess/inc/pch/precompiled_dbaxml.hxx "make dbaccess.build" --find-conflicts
 */
 
+#include <cassert>
 #include <cstddef>
+#include <exception>
 #include <memory>
+#include <utility>
 #include <vector>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ref.hxx>
@@ -40,6 +42,7 @@
 #include <salhelper/singletonref.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/inputtypes.hxx>
@@ -49,6 +52,8 @@
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/uitest/factory.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/awt/TextAlign.hpp>
@@ -65,6 +70,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
@@ -75,6 +81,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -83,11 +90,14 @@
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <o3tl/typed_flags_set.hxx>

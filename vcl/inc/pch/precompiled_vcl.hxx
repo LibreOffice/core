@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-01-25 19:34:08 using:
+ Generated on 2017-09-20 22:55:44 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <cassert>
 #include <climits>
-#include <cmath>
 #include <config_features.h>
 #include <config_folders.h>
 #include <config_global.h>
@@ -35,6 +34,8 @@
 #include <functional>
 #include <iomanip>
 #include <limits.h>
+#include <limits>
+#include <map>
 #include <math.h>
 #include <memory>
 #include <new>
@@ -42,6 +43,7 @@
 #include <outdev.h>
 #include <set>
 #include <sstream>
+#include <stack>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,32 +52,31 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/functional/hash.hpp>
+#include <window.h>
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>
-#ifndef LIBO_HEADLESS
-#include <epoxy/gl.h>
-#endif
+#include <boost/optional/optional.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
-#include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/module.hxx>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/pipe.h>
 #include <osl/signal.h>
 #include <osl/socket.h>
 #include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
+#include <rtl/cipher.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
@@ -110,7 +111,6 @@
 #include <salframe.hxx>
 #include <salgdi.hxx>
 #include <salgdiimpl.hxx>
-#include <salgeom.hxx>
 #include <salglyphid.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <salhelper/thread.hxx>
@@ -123,12 +123,14 @@
 #include <salsys.hxx>
 #include <saltimer.hxx>
 #include <salvd.hxx>
-#include <vcl/alpha.hxx>
+#include <salwtype.hxx>
+#include <vcl/ImageTree.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/button.hxx>
-#include <vcl/canvastools.hxx>
+#include <vcl/combobox.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
@@ -140,20 +142,19 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/event.hxx>
+#include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fntstyle.hxx>
 #include <vcl/font.hxx>
-#include <vcl/fontcharmap.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/image.hxx>
-#include <vcl/ImageTree.hxx>
-#include <vcl/keycod.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lazydelete.hxx>
@@ -167,10 +168,11 @@
 #include <vcl/outdev.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salbtype.hxx>
-#include <vcl/salgtype.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/spinfld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/tabctrl.hxx>
@@ -178,16 +180,17 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/uitest/uiobject.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/vclreferencebase.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <PhysicalFontCollection.hxx>
 #include <PhysicalFontFace.hxx>
-#include <PhysicalFontFamily.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -198,7 +201,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
@@ -209,6 +211,7 @@
 #include <brdwin.hxx>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/KeyGroup.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
@@ -238,13 +241,17 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/fileformat.h>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <controldata.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase_ex.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase_ex.hxx>
 #include <cppuhelper/implbase_ex_post.hxx>
 #include <cppuhelper/implbase_ex_pre.hxx>
@@ -253,7 +260,6 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <dndlistenercontainer.hxx>
-#include <fontattributes.hxx>
 #include <fontinstance.hxx>
 #include <helpwin.hxx>
 #include <i18nlangtag/i18nlangtagdllapi.h>
@@ -261,15 +267,18 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <impbmp.hxx>
-#include <impfont.hxx>
+#include <o3tl/cow_wrapper.hxx>
+#include <o3tl/make_unique.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <opengl/texture.hxx>
-#include <opengl/zone.hxx>
 #include <outdata.hxx>
+#include <sax/saxdllapi.h>
 #include <svdata.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
+#include <test/outputdevice.hxx>
 #include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -287,6 +296,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/zcodec.hxx>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
@@ -295,7 +305,7 @@
 #include <uno/sequence2.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <window.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

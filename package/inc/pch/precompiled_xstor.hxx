@@ -13,28 +13,31 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:40 using:
+ Generated on 2017-09-20 22:52:48 using:
  ./bin/update_pch package xstor --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./package/inc/pch/precompiled_xstor.hxx "/opt/lo/bin/make package.build" --find-conflicts
+ ./bin/update_pch_bisect ./package/inc/pch/precompiled_xstor.hxx "make package.build" --find-conflicts
 */
 
+#include <algorithm>
 #include <cassert>
 #include <config_typesizes.h>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <iomanip>
+#include <memory>
 #include <new>
 #include <ostream>
 #include <sstream>
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
+#include <osl/mutex.h>
+#include <osl/mutex.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
@@ -54,9 +57,14 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
+#include <salhelper/salhelperdllapi.h>
+#include <salhelper/simplereferenceobject.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
+#include <com/sun/star/embed/StorageWrappedTargetException.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -64,6 +72,7 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -77,6 +86,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <comphelper/comphelperdllapi.h>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>

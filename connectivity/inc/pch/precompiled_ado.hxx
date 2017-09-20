@@ -13,18 +13,18 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-12-02 12:47:53 using:
+ Generated on 2017-09-20 22:51:49 using:
  ./bin/update_pch connectivity ado --cutoff=2 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_ado.hxx "/opt/lo/bin/make connectivity.build" --find-conflicts
+ ./bin/update_pch_bisect ./connectivity/inc/pch/precompiled_ado.hxx "make connectivity.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <memory>
 #include <oledb.h>
-#include <string.h>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -52,7 +52,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <comphelper/extract.hxx>
@@ -70,7 +69,7 @@
 #include <connectivity/sdbcx/IRefreshable.hxx>
 
 // Cleanup windows header macro pollution.
-#ifdef _WIN32
+#if defined(_WIN32) && defined(WINAPI)
 #   include <postwin.h>
 #   undef RGB
 #endif

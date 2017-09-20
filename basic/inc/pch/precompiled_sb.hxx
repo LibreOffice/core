@@ -13,22 +13,18 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:51:34 using:
  ./bin/update_pch basic sb --cutoff=2 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./basic/inc/pch/precompiled_sb.hxx "/opt/lo/bin/make basic.build" --find-conflicts
+ ./bin/update_pch_bisect ./basic/inc/pch/precompiled_sb.hxx "make basic.build" --find-conflicts
 */
 
-#include <cassert>
 #include <config_features.h>
 #include <cstddef>
 #include <cstdlib>
-#include <ctype.h>
 #include <math.h>
 #include <memory>
-#include <new>
-#include <ostream>
 #include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,9 +39,7 @@
 #include <rtl/character.hxx>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/string.h>
 #include <rtl/string.hxx>
-#include <rtl/stringutils.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -55,15 +49,18 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -72,20 +69,23 @@
 #include <comphelper/string.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/cow_wrapper.hxx>
+#include <o3tl/make_unique.hxx>
 #include <sbobjmod.hxx>
 #include <sbxbase.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errcode.hxx>
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <basic/basicdllapi.h>
+#include <basic/sberrors.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxfac.hxx>

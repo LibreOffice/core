@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2017-09-20 22:55:36 using:
  ./bin/update_pch unoxml unoxml --cutoff=1 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./unoxml/inc/pch/precompiled_unoxml.hxx "/opt/lo/bin/make unoxml.build" --find-conflicts
+ ./bin/update_pch_bisect ./unoxml/inc/pch/precompiled_unoxml.hxx "make unoxml.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -47,6 +47,7 @@
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <comphelper/attributelist.hxx>
