@@ -2045,14 +2045,33 @@ bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const char**
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
     sal_Int32 nLength = rString.getLength();
-    while( nLength > 0 )
+    //Does the string start with a number like in the Tonal palette?
+    sal_Bool bStartNum = ( rString[0] >= '0' ) && ( rString[0] <= '9' );
+    OUString sStr;
+    sal_Int16 iStartNum = 0;
+    if ( bStartNum )
     {
-        const sal_Unicode nChar = rString[nLength-1];
-        if (nChar != '%' && (nChar < '0' || nChar > '9'))
-            break;
-        nLength--;
+    //Count number and percentage sign characters at the beginning of the original string
+        while ( iStartNum < nLength )
+        {
+            if (rString[iStartNum] != '%' && (rString[iStartNum] < '0' || rString[iStartNum] > '9'))
+                break;
+            iStartNum++;
+        }
+        sStr = rString.copy(iStartNum+1).trim();
     }
-    OUString sStr = rString.copy(0, nLength).trim();
+    //Does not start with a number, but it might end with one
+    else
+    {
+        while( nLength > 0 )
+        {
+            const sal_Unicode nChar = rString[nLength-1];
+            if (nChar != '%' && (nChar < '0' || nChar > '9'))
+                break;
+            nLength--;
+        }
+        sStr = rString.copy(0, nLength).trim();
+    }
 
     for(int i = 0; i < nCount; ++i )
     {
@@ -2060,7 +2079,7 @@ bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const char**
         if( sStr == aStrDefName )
         {
             OUString aReplace = bToApi ? OUString::createFromAscii(pDestResIds[i]) : SvxResId(pDestResIds[i]);
-            rString = rString.replaceAt( 0, aStrDefName.getLength(), aReplace );
+            rString = rString.replaceAt( bStartNum ? iStartNum+1 : 0, aStrDefName.getLength(), aReplace );
             return true;
         }
     }
