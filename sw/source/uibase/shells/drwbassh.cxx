@@ -678,7 +678,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
 
             case FN_NAME_SHAPE :
                 {
-                    if(1L != pSdrView->GetMarkedObjectCount())
+                    if(1 != pSdrView->GetMarkedObjectCount())
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -690,7 +690,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 {
                     const bool bIsWebView(nullptr != dynamic_cast<SwWebView*>(&GetView()));
 
-                    if(!bIsWebView && 1L != pSdrView->GetMarkedObjectCount())
+                    if(!bIsWebView && 1 != pSdrView->GetMarkedObjectCount())
                     {
                         rSet.DisableItem( nWhich );
                     }
