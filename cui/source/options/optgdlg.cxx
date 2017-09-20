@@ -665,10 +665,6 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
     mInstalledIconThemes = aStyleSettings.GetInstalledIconThemes();
 
-    //Removing "Helpimg" from the list, as it is not a real iconset (see tdf#108406)
-    mInstalledIconThemes.erase(std::remove_if(mInstalledIconThemes.begin(), mInstalledIconThemes.end(),
-                                [](vcl::IconThemeInfo theme) { return theme.GetDisplayName() == "Helpimg";}), mInstalledIconThemes.end());
-
     // Start with the automatically chosen icon theme
     OUString autoThemeId = aStyleSettings.GetAutomaticallyChosenIconTheme();
     const vcl::IconThemeInfo& autoIconTheme = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
