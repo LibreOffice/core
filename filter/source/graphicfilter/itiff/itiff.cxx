@@ -359,7 +359,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             break;
 
         case 0x0111: { // Strip Offset(s)
-            sal_uInt32 nOldNumSO = aStripOffsets.size();
+            size_t nOldNumSO = aStripOffsets.size();
             nDataLen += nOldNumSO;
             size_t const nMaxAllocAllowed = SAL_MAX_UINT32 / sizeof(sal_uInt32);
             size_t nMaxRecordsAvailable = pTIFF->remainingSize() / DataTypeSize();
@@ -369,9 +369,9 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 try
                 {
                     aStripOffsets.resize(nDataLen);
-                    for (sal_uInt32 i = 0; i < nOldNumSO; ++i)
+                    for (size_t i = 0; i < nOldNumSO; ++i)
                         aStripOffsets[i] += nOrigPos;
-                    for (sal_uInt32 i = nOldNumSO; i < aStripOffsets.size(); ++i)
+                    for (size_t i = nOldNumSO; i < aStripOffsets.size(); ++i)
                         aStripOffsets[i] = ReadIntData() + nOrigPos;
                 }
                 catch (const std::bad_alloc &)
@@ -398,7 +398,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             break;
 
         case 0x0117: { // Strip Byte Counts
-            sal_uInt32 nOldNumSBC = aStripByteCounts.size();
+            size_t nOldNumSBC = aStripByteCounts.size();
             nDataLen += nOldNumSBC;
             size_t const nMaxAllocAllowed = SAL_MAX_UINT32 / sizeof(sal_uInt32);
             size_t nMaxRecordsAvailable = pTIFF->remainingSize() / DataTypeSize();
@@ -408,7 +408,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 try
                 {
                     aStripByteCounts.resize(nDataLen);
-                    for (sal_uInt32 i = nOldNumSBC; i < aStripByteCounts.size(); ++i)
+                    for (size_t i = nOldNumSBC; i < aStripByteCounts.size(); ++i)
                         aStripByteCounts[i] = ReadIntData();
                 }
                 catch (const std::bad_alloc &)
@@ -508,7 +508,7 @@ bool TIFFReader::ReadMap()
 {
     if ( nCompression == 1 || nCompression == 32771 )
     {
-        sal_uInt32 nStrip, nStripBytesPerRow;
+        sal_uInt32 nStripBytesPerRow;
 
         if ( nCompression == 1 )
             nStripBytesPerRow = nBytesPerRow;
@@ -518,7 +518,7 @@ bool TIFFReader::ReadMap()
         {
             for (sal_uInt32 np = 0; np < nPlanes; ++np)
             {
-                nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
+                sal_uInt32 nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
                 if ( nStrip >= aStripOffsets.size())
                     return false;
                 pTIFF->Seek( aStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
@@ -534,7 +534,7 @@ bool TIFFReader::ReadMap()
     }
     else if ( nCompression == 2 || nCompression == 3 || nCompression == 4 )
     {
-        sal_uInt32 nStrip, nOptions;
+        sal_uInt32 nOptions;
         if ( nCompression == 2 )
         {
             nOptions = CCI_OPTION_BYTEALIGNROW;
@@ -560,7 +560,7 @@ bool TIFFReader::ReadMap()
             nOptions |= CCI_OPTION_INVERSEBITORDER;
             bByteSwap = false;
         }
-        nStrip = 0;
+        sal_uInt32 nStrip = 0;
         if (nStrip >= aStripOffsets.size())
             return false;
         sal_uInt64 nOffset = aStripOffsets[nStrip];
