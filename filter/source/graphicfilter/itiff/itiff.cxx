@@ -77,7 +77,7 @@ private:
     sal_uInt32              nCellWidth;
     sal_uInt32              nCellLength;
     sal_uInt32              nFillOrder;
-    sal_uInt64*             pStripOffsets;              // field of offsets to the Bitmap-Data-"Strips"
+    std::vector<sal_uInt64> aStripOffsets;              // field of offsets to the Bitmap-Data-"Strips"
     sal_uInt32              nNumStripOffsets;           // size of the field above
     sal_uInt32              nOrientation;
     sal_uInt32              nSamplesPerPixel;           // number of layers
@@ -149,7 +149,6 @@ public:
         , nCellWidth(1)
         , nCellLength(1)
         , nFillOrder(1)
-        , pStripOffsets(nullptr)
         , nNumStripOffsets(0)
         , nOrientation(1)
         , nSamplesPerPixel(1)
@@ -366,7 +365,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             break;
 
         case 0x0111: { // Strip Offset(s)
-            if (pStripOffsets == nullptr)
+            if (aStripOffsets.empty())
                 nNumStripOffsets = 0;
             sal_uInt32 nOldNumSO = nNumStripOffsets;
             nDataLen += nOldNumSO;
@@ -375,25 +374,23 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             if (nDataLen > nOldNumSO && nDataLen < nMaxAllocAllowed &&
                 (nDataLen - nOldNumSO) <= nMaxRecordsAvailable)
             {
-                sal_uInt64* pOldSO = pStripOffsets;
                 nNumStripOffsets = nDataLen;
                 try
                 {
-                    pStripOffsets = new sal_uInt64[nNumStripOffsets];
+                    aStripOffsets.resize(nNumStripOffsets);
                 }
                 catch (const std::bad_alloc &)
                 {
-                    pStripOffsets = nullptr;
+                    aStripOffsets.clear();
                     nNumStripOffsets = 0;
                 }
-                if ( pStripOffsets )
+                if (nNumStripOffsets)
                 {
                     for (sal_uInt32 i = 0; i < nOldNumSO; ++i)
-                        pStripOffsets[ i ] = pOldSO[ i ] + nOrigPos;
+                        aStripOffsets[i] += nOrigPos;
                     for (sal_uInt32 i = nOldNumSO; i < nNumStripOffsets; ++i)
-                        pStripOffsets[ i ] = ReadIntData() + nOrigPos;
+                        aStripOffsets[i] = ReadIntData() + nOrigPos;
                 }
-                delete[] pOldSO;
             }
             SAL_INFO("filter.tiff","StripOffsets (Number:) " << nDataLen);
             break;
@@ -548,7 +545,7 @@ bool TIFFReader::ReadMap()
                 nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
                 if ( nStrip >= nNumStripOffsets )
                     return false;
-                pTIFF->Seek( pStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
+                pTIFF->Seek( aStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
                 if (np >= SAL_N_ELEMENTS(pMap))
                     return false;
                 pTIFF->ReadBytes(pMap[ np ], nBytesPerRow);
@@ -590,10 +587,10 @@ bool TIFFReader::ReadMap()
         nStrip = 0;
         if ( nStrip >= nNumStripOffsets )
             return false;
-        sal_uInt64 nOffset = pStripOffsets[nStrip];
+        sal_uInt64 nOffset = aStripOffsets[nStrip];
         if (nOffset > nEndOfFile)
             return false;
-        pTIFF->Seek(pStripOffsets[nStrip]);
+        pTIFF->Seek(aStripOffsets[nStrip]);
 
         CCIDecompressor aCCIDecom( nOptions, nImageWidth );
 
@@ -610,7 +607,7 @@ bool TIFFReader::ReadMap()
                     nStrip=ny/GetRowsPerStrip()+np*nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
                         return false;
-                    nOffset = pStripOffsets[nStrip];
+                    nOffset = aStripOffsets[nStrip];
                     if (nOffset > nEndOfFile)
                         return false;
                     pTIFF->Seek(nOffset);
@@ -647,7 +644,7 @@ bool TIFFReader::ReadMap()
         sal_uInt32 nStrip(0);
         if ( nStrip >= nNumStripOffsets )
             return false;
-        pTIFF->Seek(pStripOffsets[nStrip]);
+        pTIFF->Seek(aStripOffsets[nStrip]);
         aLZWDecom.StartDecompression(*pTIFF);
         for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
@@ -658,7 +655,7 @@ bool TIFFReader::ReadMap()
                     nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
                         return false;
-                    pTIFF->Seek(pStripOffsets[nStrip]);
+                    pTIFF->Seek(aStripOffsets[nStrip]);
                     aLZWDecom.StartDecompression(*pTIFF);
                 }
                 if (np >= SAL_N_ELEMENTS(pMap))
@@ -675,7 +672,7 @@ bool TIFFReader::ReadMap()
         sal_uInt32 nStrip(0);
         if (nStrip >= nNumStripOffsets)
             return false;
-        pTIFF->Seek(pStripOffsets[nStrip]);
+        pTIFF->Seek(aStripOffsets[nStrip]);
         for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
             for (sal_uInt32 np = 0; np < nPlanes; ++np)
@@ -685,7 +682,7 @@ bool TIFFReader::ReadMap()
                     nStrip=ny/GetRowsPerStrip()+np*nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
                         return false;
-                    pTIFF->Seek(pStripOffsets[nStrip]);
+                    pTIFF->Seek(aStripOffsets[nStrip]);
                 }
                 sal_uInt32 nRowBytesLeft = nBytesPerRow;
                 if (np >= SAL_N_ELEMENTS(pMap))
@@ -1308,7 +1305,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 nNumColors = 0;
 
                 xAcc.reset();
-                pStripOffsets = nullptr;
+                aStripOffsets.clear();
                 pStripByteCounts = nullptr;
                 pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = nullptr;
 
@@ -1456,7 +1453,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             for ( i = 0; i < 4; i++ )
                 delete[] pMap[ i ];
             xColorMap.reset();
-            delete[] pStripOffsets;
+            aStripOffsets.clear();
             delete[] pStripByteCounts;
         }
     }
