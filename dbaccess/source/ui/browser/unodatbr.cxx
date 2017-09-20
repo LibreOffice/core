@@ -2687,6 +2687,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
+            bSuccess = false;
         }
         catch(WrappedTargetException& e)
         {
@@ -2698,12 +2699,14 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
+            bSuccess = false;
         }
         catch(const Exception&)
         {
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
+            bSuccess = false;
         }
     }
     return bSuccess;
