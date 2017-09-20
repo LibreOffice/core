@@ -410,22 +410,21 @@ rtl::OUString Parser::getNameAttribute() {
     xmlreader::Span name;
     int nsId;
     while (reader_.nextAttribute(&nsId, &name)) {
-        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE
-            && name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        if (nsId != xmlreader::XmlReader::NAMESPACE_NONE
+            || !name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
-            if (!attrName.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
-                    reader_.getUrl()
-                     + ": element has multiple \"name\" attributes");
-            }
-            attrName = reader_.getAttributeValue(false).convertFromUtf8();
-            if (attrName.isEmpty()) {
-                throw css::registry::InvalidRegistryException(
-                    reader_.getUrl() + ": element has empty \"name\" attribute");
-            }
-        } else {
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": expected element attribute \"name\"");
+        }
+        if (!attrName.isEmpty()) {
+            throw css::registry::InvalidRegistryException(
+                reader_.getUrl()
+                 + ": element has multiple \"name\" attributes");
+        }
+        attrName = reader_.getAttributeValue(false).convertFromUtf8();
+        if (attrName.isEmpty()) {
+            throw css::registry::InvalidRegistryException(
+                reader_.getUrl() + ": element has empty \"name\" attribute");
         }
     }
     if (attrName.isEmpty()) {
@@ -910,15 +909,14 @@ void cppuhelper::ServiceManager::initialize(
     css::uno::Sequence<css::uno::Any> const & aArguments)
 {
     OUString arg;
-    if (aArguments.getLength() == 1 && (aArguments[0] >>= arg)
-        && arg == "preload")
+    if (aArguments.getLength() != 1 || !(aArguments[0] >>= arg)
+        || arg != "preload")
     {
-        preloadImplementations();
-    } else {
         throw css::lang::IllegalArgumentException(
             "invalid ServiceManager::initialize argument",
             css::uno::Reference<css::uno::XInterface>(), 0);
     }
+    preloadImplementations();
 }
 
 rtl::OUString cppuhelper::ServiceManager::getImplementationName()
@@ -1106,19 +1104,17 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
     if (aElement >>= args) {
         std::vector< rtl::OUString > uris;
         for (sal_Int32 i = 0; i < args.getLength(); ++i) {
-            if (args[i].Name == "uri") {
-                rtl::OUString uri;
-                if (!(args[i].Value >>= uri)) {
-                    throw css::lang::IllegalArgumentException(
-                        "Bad uri argument",
-                        static_cast< cppu::OWeakObject * >(this), 0);
-                }
-                uris.push_back(uri);
-            } else {
+            if (args[i].Name != "uri") {
                 throw css::lang::IllegalArgumentException(
                     "Bad argument " + args[i].Name,
                     static_cast< cppu::OWeakObject * >(this), 0);
+            }              rtl::OUString uri;
+            if (!(args[i].Value >>= uri)) {
+                throw css::lang::IllegalArgumentException(
+                    "Bad uri argument",
+                    static_cast< cppu::OWeakObject * >(this), 0);
             }
+            uris.push_back(uri);
         }
         removeRdbFiles(uris);
         return;

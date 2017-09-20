@@ -600,18 +600,15 @@ void PreparedStatement::setObjectWithInfo(
         {
             x >>= myString;
         }
-        if( !myString.isEmpty() )
-        {
-//              printf( "setObjectWithInfo %s\n", OUStringToOString(myString,RTL_TEXTENCODING_ASCII_US).getStr());
-            setString( parameterIndex, myString );
-        }
-        else
+        if( myString.isEmpty() )
         {
             throw SQLException(
                 "pq_preparedstatement::setObjectWithInfo: can't convert value of type "
                 +  x.getValueTypeName() + " to type DECIMAL or NUMERIC",
                 *this, OUString(), 1, Any () );
         }
+
+        setString( parameterIndex, myString );
     }
     else
     {

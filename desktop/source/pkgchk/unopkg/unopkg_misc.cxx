@@ -198,15 +198,12 @@ OUString makeAbsoluteFileUrl(
     oslFileError rc = osl_getFileURLFromSystemPath( sys_path.pData, &file_url.pData );
     if ( rc != osl_File_E_None) {
         OUString tempPath;
-        if ( osl_getSystemPathFromFileURL( sys_path.pData, &tempPath.pData) == osl_File_E_None )
-        {
-            file_url = sys_path;
-        }
-        else
+        if ( osl_getSystemPathFromFileURL( sys_path.pData, &tempPath.pData) != osl_File_E_None )
         {
             throw RuntimeException("cannot get file url from system path: " +
                 sys_path );
         }
+        file_url = sys_path;
     }
 
     OUString abs;

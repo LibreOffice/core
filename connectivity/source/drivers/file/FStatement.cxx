@@ -372,74 +372,72 @@ void OStatement_Base::construct(const OUString& sql)
 {
     OUString aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);
-    if(m_pParseTree)
-    {
-        m_aSQLIterator.setParseTree(m_pParseTree);
-        m_aSQLIterator.traverseAll();
-        const OSQLTables& rTabs = m_aSQLIterator.getTables();
-
-        // sanity checks
-        if ( rTabs.empty() )
-            // no tables -> nothing to operate on -> error
-            m_pConnection->throwGenericSQLException(STR_QUERY_NO_TABLE,*this);
-
-        if ( rTabs.size() > 1 || m_aSQLIterator.hasErrors() )
-            // more than one table -> can't operate on them -> error
-            m_pConnection->throwGenericSQLException(STR_QUERY_MORE_TABLES,*this);
-
-        if ( (m_aSQLIterator.getStatementType() == OSQLStatementType::Select) && m_aSQLIterator.getSelectColumns()->get().empty() )
-            // SELECT statement without columns -> error
-            m_pConnection->throwGenericSQLException(STR_QUERY_NO_COLUMN,*this);
-
-        switch(m_aSQLIterator.getStatementType())
-        {
-            case OSQLStatementType::CreateTable:
-            case OSQLStatementType::OdbcCall:
-            case OSQLStatementType::Unknown:
-                m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
-                break;
-            default:
-                break;
-        }
-
-        // at this moment we support only one table per select statement
-        Reference< css::lang::XUnoTunnel> xTunnel(rTabs.begin()->second,UNO_QUERY);
-        if(xTunnel.is())
-        {
-            m_pTable = reinterpret_cast<OFileTable*>(xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()));
-        }
-        OSL_ENSURE(m_pTable.is(),"No table!");
-        if ( m_pTable.is() )
-            m_xColNames     = m_pTable->getColumns();
-        Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
-        // set the binding of the resultrow
-        m_aRow          = new OValueRefVector(xNames->getCount());
-        (m_aRow->get())[0]->setBound(true);
-        std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetRefBound(false));
-
-        // set the binding of the resultrow
-        m_aEvaluateRow  = new OValueRefVector(xNames->getCount());
-
-        (m_aEvaluateRow->get())[0]->setBound(true);
-        std::for_each(m_aEvaluateRow->get().begin()+1,m_aEvaluateRow->get().end(),TSetRefBound(false));
-
-        // set the select row
-        m_aSelectRow = new OValueRefVector(m_aSQLIterator.getSelectColumns()->get().size());
-        std::for_each(m_aSelectRow->get().begin(),m_aSelectRow->get().end(),TSetRefBound(true));
-
-        // create the column mapping
-        createColumnMapping();
-
-        m_pSQLAnalyzer = new OSQLAnalyzer(m_pConnection.get());
-
-        Reference<XIndexesSupplier> xIndexSup(xTunnel,UNO_QUERY);
-        if(xIndexSup.is())
-            m_pSQLAnalyzer->setIndexes(xIndexSup->getIndexes());
-
-        anylizeSQL();
-    }
-    else
+    if(!m_pParseTree)
         throw SQLException(aErr,*this,OUString(),0,Any());
+
+    m_aSQLIterator.setParseTree(m_pParseTree);
+    m_aSQLIterator.traverseAll();
+    const OSQLTables& rTabs = m_aSQLIterator.getTables();
+
+    // sanity checks
+    if ( rTabs.empty() )
+        // no tables -> nothing to operate on -> error
+        m_pConnection->throwGenericSQLException(STR_QUERY_NO_TABLE,*this);
+
+    if ( rTabs.size() > 1 || m_aSQLIterator.hasErrors() )
+        // more than one table -> can't operate on them -> error
+        m_pConnection->throwGenericSQLException(STR_QUERY_MORE_TABLES,*this);
+
+    if ( (m_aSQLIterator.getStatementType() == OSQLStatementType::Select) && m_aSQLIterator.getSelectColumns()->get().empty() )
+        // SELECT statement without columns -> error
+        m_pConnection->throwGenericSQLException(STR_QUERY_NO_COLUMN,*this);
+
+    switch(m_aSQLIterator.getStatementType())
+    {
+        case OSQLStatementType::CreateTable:
+        case OSQLStatementType::OdbcCall:
+        case OSQLStatementType::Unknown:
+            m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
+            break;
+        default:
+            break;
+    }
+
+    // at this moment we support only one table per select statement
+    Reference< css::lang::XUnoTunnel> xTunnel(rTabs.begin()->second,UNO_QUERY);
+    if(xTunnel.is())
+    {
+        m_pTable = reinterpret_cast<OFileTable*>(xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()));
+    }
+    OSL_ENSURE(m_pTable.is(),"No table!");
+    if ( m_pTable.is() )
+        m_xColNames     = m_pTable->getColumns();
+    Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
+    // set the binding of the resultrow
+    m_aRow          = new OValueRefVector(xNames->getCount());
+    (m_aRow->get())[0]->setBound(true);
+    std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetRefBound(false));
+
+    // set the binding of the resultrow
+    m_aEvaluateRow  = new OValueRefVector(xNames->getCount());
+
+    (m_aEvaluateRow->get())[0]->setBound(true);
+    std::for_each(m_aEvaluateRow->get().begin()+1,m_aEvaluateRow->get().end(),TSetRefBound(false));
+
+    // set the select row
+    m_aSelectRow = new OValueRefVector(m_aSQLIterator.getSelectColumns()->get().size());
+    std::for_each(m_aSelectRow->get().begin(),m_aSelectRow->get().end(),TSetRefBound(true));
+
+    // create the column mapping
+    createColumnMapping();
+
+    m_pSQLAnalyzer = new OSQLAnalyzer(m_pConnection.get());
+
+    Reference<XIndexesSupplier> xIndexSup(xTunnel,UNO_QUERY);
+    if(xIndexSup.is())
+        m_pSQLAnalyzer->setIndexes(xIndexSup->getIndexes());
+
+    anylizeSQL();
 }
 
 void OStatement_Base::createColumnMapping()

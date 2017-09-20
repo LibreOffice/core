@@ -475,16 +475,12 @@ extern "C" int unopkg_main()
                         }
                     }
 
-                    if (extension.is())
-                    {
-                        allExtensions.push_back(extension);
-                        vecUnaccepted.push_back(bUnacceptedLic);
-                    }
-
-                    else
+                    if (!extension.is())
                         throw lang::IllegalArgumentException(
                             "There is no such extension deployed: " +
                             cmdPackage,nullptr,-1);
+                    allExtensions.push_back(extension);
+                    vecUnaccepted.push_back(bUnacceptedLic);
                 }
 
             }

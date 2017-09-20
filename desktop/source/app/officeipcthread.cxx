@@ -162,19 +162,17 @@ private:
                 }
                 ++m_index;
                 if (c == '\\') {
-                    if (m_index < m_input.getLength()) {
-                        c = m_input[m_index++];
-                        switch (c) {
-                        case '0':
-                            c = '\0';
-                            break;
-                        case ',':
-                        case '\\':
-                            break;
-                        default:
-                            throw CommandLineArgs::Supplier::Exception();
-                        }
-                    } else {
+                    if (m_index >= m_input.getLength())
+                        throw CommandLineArgs::Supplier::Exception();
+                    c = m_input[m_index++];
+                    switch (c) {
+                    case '0':
+                        c = '\0';
+                        break;
+                    case ',':
+                    case '\\':
+                        break;
+                    default:
                         throw CommandLineArgs::Supplier::Exception();
                     }
                 }

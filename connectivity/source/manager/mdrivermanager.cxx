@@ -566,16 +566,13 @@ void SAL_CALL OSDBCDriverManager::registerObject( const OUString& _rName, const 
     );
 
     DriverCollection::const_iterator aSearch = m_aDriversRT.find(_rName);
-    if (aSearch == m_aDriversRT.end())
-    {
-        Reference< XDriver > xNewDriver(_rxObject, UNO_QUERY);
-        if (xNewDriver.is())
-            m_aDriversRT.emplace(_rName, xNewDriver);
-        else
-            throw IllegalArgumentException();
-    }
-    else
+    if (aSearch != m_aDriversRT.end())
         throw ElementExistException();
+    Reference< XDriver > xNewDriver(_rxObject, UNO_QUERY);
+    if (!xNewDriver.is())
+        throw IllegalArgumentException();
+
+    m_aDriversRT.emplace(_rName, xNewDriver);
 
     m_aEventLogger.log( LogLevel::INFO,
         "new driver registered for name $1$",

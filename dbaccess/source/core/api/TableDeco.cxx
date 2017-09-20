@@ -387,12 +387,10 @@ void SAL_CALL ODBTableDecorator::rename( const OUString& _rNewName )
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XRename> xRename(m_xTable,UNO_QUERY);
-    if(xRename.is())
-    {
-        xRename->rename(_rNewName);
-    }
-    else // not supported
+    if(!xRename.is())
         throw SQLException(DBA_RES(RID_STR_NO_TABLE_RENAME),*this,SQLSTATE_GENERAL,1000,Any() );
+    // not supported
+    xRename->rename(_rNewName);
 }
 
 // XAlterTable,
@@ -401,12 +399,9 @@ void SAL_CALL ODBTableDecorator::alterColumnByName( const OUString& _rName, cons
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
-    if(xAlter.is())
-    {
-        xAlter->alterColumnByName(_rName,_rxDescriptor);
-    }
-    else
+    if(!xAlter.is())
         throw SQLException(DBA_RES(RID_STR_COLUMN_ALTER_BY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
+    xAlter->alterColumnByName(_rName,_rxDescriptor);
     if(m_pColumns)
         m_pColumns->refresh();
 }
@@ -416,14 +411,12 @@ void SAL_CALL ODBTableDecorator::alterColumnByIndex( sal_Int32 _nIndex, const Re
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
-    if(xAlter.is())
-    {
-        xAlter->alterColumnByIndex(_nIndex,_rxDescriptor);
-        if(m_pColumns)
-            m_pColumns->refresh();
-    }
-    else // not supported
+    if(!xAlter.is())
         throw SQLException(DBA_RES(RID_STR_COLUMN_ALTER_BY_INDEX),*this,SQLSTATE_GENERAL,1000,Any() );
+    // not supported
+    xAlter->alterColumnByIndex(_nIndex,_rxDescriptor);
+    if(m_pColumns)
+        m_pColumns->refresh();
 }
 
 Reference< XNameAccess> ODBTableDecorator::getIndexes()
