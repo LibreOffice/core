@@ -210,10 +210,28 @@ public abstract class OContainer extends WeakBase implements
 
             iterator = refreshListeners.iterator();
         }
+        if (iterator == null) {
+            // early disposal
+            return;
+        }
         EventObject event = new EventObject(this);
         while (iterator.hasNext()) {
             XRefreshListener listener = (XRefreshListener) iterator.next();
             listener.refreshed(event);
+        }
+    }
+
+    @Override
+    public void addRefreshListener(XRefreshListener listener) {
+        synchronized (lock) {
+            refreshListeners.add(listener);
+        }
+    }
+
+    @Override
+    public void removeRefreshListener(XRefreshListener listener) {
+        synchronized (lock) {
+            refreshListeners.remove(listener);
         }
     }
 
@@ -344,20 +362,6 @@ public abstract class OContainer extends WeakBase implements
     public boolean hasElements() {
         synchronized (lock) {
             return !entriesByName.isEmpty();
-        }
-    }
-
-    @Override
-    public void addRefreshListener(XRefreshListener listener) {
-        synchronized (lock) {
-            refreshListeners.add(listener);
-        }
-    }
-
-    @Override
-    public void removeRefreshListener(XRefreshListener listener) {
-        synchronized (lock) {
-            refreshListeners.remove(listener);
         }
     }
 

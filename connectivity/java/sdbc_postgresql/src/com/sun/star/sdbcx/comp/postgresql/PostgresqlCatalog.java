@@ -31,6 +31,7 @@ import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbcx.comp.postgresql.comphelper.CompHelper;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.OCatalog;
 import com.sun.star.sdbcx.comp.postgresql.sdbcx.OContainer;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 
 public class PostgresqlCatalog extends OCatalog {
@@ -43,7 +44,7 @@ public class PostgresqlCatalog extends OCatalog {
         XResultSet results = null;
         try {
             // Using { "VIEW", "TABLE", "%" } shows INFORMATION_SCHEMA and others, but it also shows indexes :-(
-            results = metadata.getTables(null, "%", "%", new String[] { "VIEW", "TABLE" });
+            results = metadata.getTables(Any.VOID, "%", "%", new String[] { "VIEW", "TABLE" });
             XRow row = UnoRuntime.queryInterface(XRow.class, results);
             List<String> names = new ArrayList<>();
             while (results.next()) {
@@ -63,7 +64,7 @@ public class PostgresqlCatalog extends OCatalog {
     public OContainer refreshViews() {
         XResultSet results = null;
         try {
-            results = metadata.getTables(null, "%", "%", new String[] { "VIEW" });
+            results = metadata.getTables(Any.VOID, "%", "%", new String[] { "VIEW" });
             XRow row = UnoRuntime.queryInterface(XRow.class, results);
             List<String> names = new ArrayList<>();
             while (results.next()) {

@@ -127,6 +127,7 @@ public class OColumnContainer extends OContainer {
     @Override
     protected void impl_refresh() {
         extraColumnInfo.clear();
+        // FIXME: won't help
         table.refreshColumns();
     }
 

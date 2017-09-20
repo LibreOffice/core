@@ -39,6 +39,7 @@ import com.sun.star.sdbcx.comp.postgresql.util.ComposeRule;
 import com.sun.star.sdbcx.comp.postgresql.util.DbTools;
 import com.sun.star.sdbcx.comp.postgresql.util.Osl;
 import com.sun.star.sdbcx.comp.postgresql.util.StandardSQLState;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 
 public class SqlTableHelper {
@@ -69,13 +70,13 @@ public class SqlTableHelper {
         }
     }
 
-    public List<ColumnDescription> readColumns(XDatabaseMetaData metadata, String catalog, String schema, String table) throws SQLException {
-        String catalogName = catalog;
-        if (catalog.isEmpty()) {
-            catalogName = null;
+    public List<ColumnDescription> readColumns(XDatabaseMetaData metadata, String catalogName, String schema, String table) throws SQLException {
+        Object catalog = Any.VOID;
+        if (!catalogName.isEmpty()) {
+            catalog = catalogName;
         }
 
-        XResultSet results = metadata.getColumns(catalogName, schema, table, "%");
+        XResultSet results = metadata.getColumns(catalog, schema, table, "%");
         List<ColumnDescription> columnDescriptions = collectColumnDescriptions(results);
         sanitizeColumnDescriptions(columnDescriptions);
 
@@ -142,7 +143,7 @@ public class SqlTableHelper {
 
     private OKey readPrimaryKey(XDatabaseMetaData metadata,
             String catalogName, String schemaName, String tableName, boolean isCaseSensitive, OTable table) throws SQLException {
-        Object catalog = null;
+        Object catalog = Any.VOID;
         if (!catalogName.isEmpty()) {
             catalog = catalogName;
         }
@@ -175,7 +176,7 @@ public class SqlTableHelper {
 
     private void readForeignKeys(XDatabaseMetaData metadata,
             String catalogName, String schemaName, String tableName, boolean isCaseSensitive, Map<String, OKey> keys, OTable table) throws SQLException {
-        Object catalog = null;
+        Object catalog = Any.VOID;
         if (!catalogName.isEmpty()) {
             catalog = catalogName;
         }
@@ -232,7 +233,7 @@ public class SqlTableHelper {
     }
 
     public ArrayList<String> readIndexes(XDatabaseMetaData metadata, String catalogName, String schemaName, String tableName, OTable table) throws SQLException {
-        Object catalog = null;
+        Object catalog = Any.VOID;
         if (!catalogName.isEmpty()) {
             catalog = catalogName;
         }

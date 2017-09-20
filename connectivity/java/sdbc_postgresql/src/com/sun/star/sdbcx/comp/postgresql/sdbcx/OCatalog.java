@@ -128,6 +128,26 @@ public abstract class OCatalog extends ComponentBase
         return users;
     }
 
+    public synchronized void refreshObjects() {
+        checkDisposed();
+        if (tables != null) {
+            tables.dispose();
+            tables = null;
+        }
+        if (views != null) {
+            views.dispose();
+            views = null;
+        }
+        if (groups != null) {
+            groups.dispose();
+            groups = null;
+        }
+        if (users != null) {
+            users.dispose();
+            users = null;
+        }
+    }
+
     /**
      * Builds the name which should be used to access the object later on in the collection.
      * Will only be called in fillNames.

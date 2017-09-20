@@ -48,8 +48,8 @@ public abstract class OTable extends ODescriptor
     private XConnection connection;
     protected String catalogName;
     protected String schemaName;
-    protected String description;
-    protected String type;
+    protected String description = "";
+    protected String type = "";
 
     protected OContainer keys;
     protected OContainer columns;
