@@ -18,15 +18,13 @@
  */
 
 
-#define UNICODE
-
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
 
 DdeString::DdeString( DWORD hDdeInst, const OUString& r)
     : m_aString(r)
 {
-    hString = DdeCreateStringHandle( hDdeInst, reinterpret_cast<wchar_t const *>(r.getStr()), CP_WINUNICODE );
+    hString = DdeCreateStringHandleW( hDdeInst, SAL_W(r.getStr()), CP_WINUNICODE );
     hInst = hDdeInst;
 }
 

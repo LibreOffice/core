@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:30 using:
+ Generated on 2017-09-20 08:43:55 using:
  ./bin/update_pch desktop deployment --cutoff=3 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deployment.hxx "/opt/lo/bin/make desktop.build" --find-conflicts
+ ./bin/update_pch_bisect ./desktop/inc/pch/precompiled_deployment.hxx "make desktop.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -25,6 +25,7 @@
 #include <cstddef>
 #include <list>
 #include <memory>
+#include <ostream>
 #include <unordered_map>
 #include <vector>
 #include <boost/optional.hpp>
@@ -32,8 +33,8 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.h>
+#include <osl/thread.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -46,19 +47,26 @@
 #include <sal/log.hxx>
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <com/sun/star/deployment/InstallException.hpp>
 #include <com/sun/star/deployment/LicenseException.hpp>
 #include <com/sun/star/deployment/VersionException.hpp>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
@@ -67,6 +75,7 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicedecl.hxx>
+#include <cppu/cppudllapi.h>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>

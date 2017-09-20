@@ -25,7 +25,6 @@
 #include "fileextensions.hxx"
 #include "utilities.hxx"
 
-#include <tchar.h>
 #include <string>
 #include <shlobj.h>
 

@@ -518,7 +518,7 @@ namespace drawinglayer
 
                                     // prepare OutDev
                                     const Point aEmptyPoint(0, 0);
-                                    const tools::Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
+                                    const ::tools::Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
                                     const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
                                     mpOutputDevice->EnableMapMode(false);
 
@@ -533,7 +533,7 @@ namespace drawinglayer
                                             for(sal_Int32 nXPos((nPosY % 2) ? nBLeft - nBWidth + nOffsetX : nBLeft);
                                                 nXPos < nOLeft + nOWidth; nXPos += nBWidth)
                                             {
-                                                const tools::Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+                                                const ::tools::Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
 
                                                 if(aOutRectPixel.IsOver(aVisiblePixel))
                                                 {
@@ -560,7 +560,7 @@ namespace drawinglayer
                                             for(sal_Int32 nYPos((nPosX % 2) ? nBTop - nBHeight + nOffsetY : nBTop);
                                                 nYPos < nOTop + nOHeight; nYPos += nBHeight)
                                             {
-                                                const tools::Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+                                                const ::tools::Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
 
                                                 if(aOutRectPixel.IsOver(aVisiblePixel))
                                                 {
@@ -1177,7 +1177,7 @@ namespace drawinglayer
 
             if(!aRange.isEmpty())
             {
-                const tools::Rectangle aRectangle(
+                const ::tools::Rectangle aRectangle(
                     (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
                     (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
 

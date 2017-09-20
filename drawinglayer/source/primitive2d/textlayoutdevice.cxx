@@ -290,7 +290,7 @@ namespace drawinglayer
 
             if(nTextLength)
             {
-                tools::Rectangle aRect;
+                ::tools::Rectangle aRect;
 
                 mrDevice.GetTextBoundRect(
                     aRect,
@@ -324,7 +324,7 @@ namespace drawinglayer
         }
 
         void TextLayouterDevice::addTextRectActions(
-            const tools::Rectangle& rRectangle,
+            const ::tools::Rectangle& rRectangle,
             const OUString& rText,
             DrawTextFlags nStyle,
             GDIMetaFile& rGDIMetaFile) const
