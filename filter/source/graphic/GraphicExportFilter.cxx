@@ -142,19 +142,19 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
         sal_Int32 nLen = aFilterData.getLength();
         aFilterData.realloc( nLen + nAdd);
         if (!maCompression.hasValue())
-        {   // PNG,JPG
+        {   // PNG
             aFilterData[ nLen ].Name = "Compression";
             aFilterData[ nLen ].Value <<= (sal_Int32) 9;
             ++nLen;
         }
         if (!maInterlaced.hasValue())
-        {   // PNG,JPG
+        {   // PNG,GIF
             aFilterData[ nLen ].Name = "Interlaced";
             aFilterData[ nLen ].Value <<= (sal_Int32) 0;
             ++nLen;
         }
         if (!maTranslucent.hasValue())
-        {   // PNG
+        {   // PNG,GIF
             aFilterData[ nLen ].Name = "Translucent";
             aFilterData[ nLen ].Value <<= (sal_Int32) 0;
             ++nLen;
