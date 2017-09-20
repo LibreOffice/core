@@ -1935,7 +1935,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         Reference< XModel > xModel( xChartDoc, UNO_QUERY );
         ChartExport aChartExport( mnXmlNamespace, GetFS(), xModel, GetFB(), GetDocumentType() );
         static sal_Int32 nChartCount = 0;
-        aChartExport.WriteChartObj( xShape, ++nChartCount );
+        aChartExport.WriteChartObj( xShape, GetNewShapeID( xShape ), ++nChartCount );
         return *this;
     }
 
