@@ -18,10 +18,6 @@
  */
 
 
-#define UNICODE
-#define _UNICODE
-#include <tchar.h>
-
 #ifdef _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable:4005)
@@ -31,7 +27,6 @@
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#include <shellapi.h>
 #include <sqlext.h>
 
 #ifdef _MSC_VER
@@ -50,19 +45,19 @@ int displayLastError()
     DWORD   dwError = GetLastError();
 
     LPVOID lpMsgBuf;
-    FormatMessage(
+    FormatMessageW(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM,
         nullptr,
         dwError,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        reinterpret_cast<LPTSTR>(&lpMsgBuf),
+        reinterpret_cast<LPWSTR>(&lpMsgBuf),
         0,
         nullptr
     );
 
     // Display the string.
-    MessageBox( nullptr, static_cast<LPCTSTR>(lpMsgBuf), nullptr, MB_OK | MB_ICONERROR );
+    MessageBoxW( nullptr, static_cast<LPCWSTR>(lpMsgBuf), nullptr, MB_OK | MB_ICONERROR );
 
     // Free the buffer.
     LocalFree( lpMsgBuf );
@@ -74,11 +69,11 @@ int displayLastError()
 */
 BOOL registerWindowClass( HINSTANCE _hAppInstance )
 {
-    WNDCLASSEX wcx;
+    WNDCLASSEXW wcx;
 
     wcx.cbSize = sizeof(wcx);                   // size of structure
     wcx.style = CS_HREDRAW | CS_VREDRAW;        // redraw if size changes
-    wcx.lpfnWndProc = DefWindowProc;            // points to window procedure
+    wcx.lpfnWndProc = DefWindowProcW;           // points to window procedure
     wcx.cbClsExtra = 0;                         // no extra class memory
     wcx.cbWndExtra = 0;                         // no extra window memory
     wcx.hInstance = _hAppInstance;              // handle to instance
@@ -89,13 +84,13 @@ BOOL registerWindowClass( HINSTANCE _hAppInstance )
     wcx.lpszClassName = L"ODBCConfigMainClass"; // name of window class
     wcx.hIconSm = nullptr;                      // small class icon
 
-    return ( !!RegisterClassEx( &wcx ) );
+    return ( !!RegisterClassExW( &wcx ) );
 }
 
 /// initializes the application instances
 HWND initInstance( HINSTANCE _hAppInstance )
 {
-    HWND hWindow = CreateWindow(
+    HWND hWindow = CreateWindowW(
         L"ODBCConfigMainClass", // name of window class
         L"ODBC Config Wrapper", // title-bar string
         WS_OVERLAPPEDWINDOW,    // top-level window
@@ -114,7 +109,7 @@ HWND initInstance( HINSTANCE _hAppInstance )
 }
 
 // main window function
-extern "C" int APIENTRY _tWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPTSTR, int )
+extern "C" int APIENTRY wWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPWSTR, int )
 {
     if ( !registerWindowClass( _hAppInstance ) )
         return FALSE;
