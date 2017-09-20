@@ -6,9 +6,6 @@
 
 #ifdef _WIN32
 #include <stdio.h>
-#ifndef UNICODE
-#define UNICODE
-#endif
 #include <windows.h>
 #include <commctrl.h>
 #include <process.h>
@@ -67,7 +64,7 @@ UpdateDialog(HWND hDlg)
 {
     int pos = int(sProgress + 0.5f);
     HWND hWndPro = GetDlgItem(hDlg, IDC_PROGRESS);
-    SendMessage(hWndPro, PBM_SETPOS, pos, 0L);
+    SendMessageW(hWndPro, PBM_SETPOS, pos, 0L);
 }
 
 // The code in this function is from MSDN:
@@ -119,18 +116,18 @@ InitDialog(HWND hDlg)
     SetWindowTextW(GetDlgItem(hDlg, IDC_INFO), szwInfo);
 
     // Set dialog icon
-    HICON hIcon = LoadIcon(GetModuleHandle(nullptr),
-                           MAKEINTRESOURCE(IDI_DIALOG));
+    HICON hIcon = LoadIconW(GetModuleHandleW(nullptr),
+                            MAKEINTRESOURCEW(IDI_DIALOG));
     if (hIcon)
-        SendMessage(hDlg, WM_SETICON, ICON_BIG, (LPARAM) hIcon);
+        SendMessageW(hDlg, WM_SETICON, ICON_BIG, (LPARAM) hIcon);
 
     HWND hWndPro = GetDlgItem(hDlg, IDC_PROGRESS);
-    SendMessage(hWndPro, PBM_SETRANGE, 0, MAKELPARAM(0, 100));
+    SendMessageW(hWndPro, PBM_SETRANGE, 0, MAKELPARAM(0, 100));
     if (sIndeterminate)
     {
-        LONG_PTR val = GetWindowLongPtr(hWndPro, GWL_STYLE);
-        SetWindowLongPtr(hWndPro, GWL_STYLE, val|PBS_MARQUEE);
-        SendMessage(hWndPro,(UINT) PBM_SETMARQUEE,(WPARAM) TRUE,(LPARAM)50 );
+        LONG_PTR val = GetWindowLongPtrW(hWndPro, GWL_STYLE);
+        SetWindowLongPtrW(hWndPro, GWL_STYLE, val|PBS_MARQUEE);
+        SendMessageW(hWndPro,(UINT) PBM_SETMARQUEE,(WPARAM) TRUE,(LPARAM)50 );
     }
 
     // Resize the dialog to fit all of the text if necessary.
@@ -141,15 +138,15 @@ InitDialog(HWND hDlg)
     HDC hDCInfo = GetDC(hWndInfo);
     HFONT hInfoFont;
     HFONT hOldFont = 0;
-    hInfoFont = (HFONT)SendMessage(hWndInfo, WM_GETFONT, 0, 0);
+    hInfoFont = (HFONT)SendMessageW(hWndInfo, WM_GETFONT, 0, 0);
 
     if (hInfoFont)
         hOldFont = (HFONT)SelectObject(hDCInfo, hInfoFont);
 
     // Measure the space needed for the text on a single line. DT_CALCRECT means
     // nothing is drawn.
-    if (DrawText(hDCInfo, szwInfo, -1, &textSize,
-                 DT_CALCRECT | DT_NOCLIP | DT_SINGLELINE))
+    if (DrawTextW(hDCInfo, szwInfo, -1, &textSize,
+                  DT_CALCRECT | DT_NOCLIP | DT_SINGLELINE))
     {
         GetClientRect(hWndInfo, &infoSize);
         SIZE extra;
@@ -300,11 +297,11 @@ ShowProgressUI(bool indeterminate, bool initUIStrings)
     ACTCTXW actx = {0};
     actx.cbSize = sizeof(ACTCTXW);
     actx.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID | ACTCTX_FLAG_HMODULE_VALID;
-    actx.hModule = GetModuleHandle(NULL); // Use the embedded manifest
+    actx.hModule = GetModuleHandleW(NULL); // Use the embedded manifest
     // This is needed only for Win XP but doesn't cause a problem with other
     // versions of Windows.
     actx.lpSource = appPath;
-    actx.lpResourceName = MAKEINTRESOURCE(IDR_COMCTL32_MANIFEST);
+    actx.lpResourceName = MAKEINTRESOURCEW(IDR_COMCTL32_MANIFEST);
 
     HANDLE hactx = CreateActCtxW(&actx);
     ULONG_PTR actxCookie = NULL;
@@ -321,9 +318,9 @@ ShowProgressUI(bool indeterminate, bool initUIStrings)
     };
     InitCommonControlsEx(&icc);
 
-    DialogBox(GetModuleHandle(nullptr),
-              MAKEINTRESOURCE(IDD_DIALOG), nullptr,
-              (DLGPROC) DialogProc);
+    DialogBoxW(GetModuleHandleW(nullptr),
+               MAKEINTRESOURCEW(IDD_DIALOG), nullptr,
+               (DLGPROC) DialogProc);
 
     if (hactx != INVALID_HANDLE_VALUE)
     {

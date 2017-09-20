@@ -29,6 +29,9 @@
 #pragma warning (push, 1)
 #pragma warning (disable: 4005)
 #endif
+#if !defined WINVER
+# define WINVER 0x0400
+#endif
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
@@ -36,7 +39,6 @@
 #if defined _MSC_VER
 #pragma warning (pop)
 #endif
-#include <tchar.h>
 #endif
 
 using namespace ::ooo::vba;
@@ -97,7 +99,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
     }
     else
     {
-        // get key/value from windows register
+        // get key/value from Windows registry
 #ifdef _WIN32
         HKEY hBaseKey = nullptr;
         OString sSubKey;
@@ -105,21 +107,23 @@ uno::Any PrivateProfileStringListener::getValueEvent()
         if( hBaseKey != nullptr )
         {
             HKEY hKey = nullptr;
-            LONG lResult;
-            LPCTSTR lpSubKey = TEXT( sSubKey.getStr());
-            TCHAR szBuffer[1024];
-            DWORD cbData = sizeof( szBuffer );
-            lResult = RegOpenKeyEx( hBaseKey, lpSubKey, 0, KEY_QUERY_VALUE, &hKey );
+            LPCSTR lpSubKey = sSubKey.getStr();
+            // We use RegOpenKeyExA here for convenience, because we already have subkey name as 8-bit string
+            LONG lResult = RegOpenKeyExA( hBaseKey, lpSubKey, 0, KEY_QUERY_VALUE, &hKey );
             if( ERROR_SUCCESS == lResult )
             {
-                LPCTSTR lpValueName = TEXT(maKey.getStr());
-                lResult = RegQueryValueEx( hKey, lpValueName, nullptr, nullptr, reinterpret_cast<LPBYTE>(szBuffer), &cbData );
+                OUString sUValName = OStringToOUString(maKey, RTL_TEXTENCODING_DONTKNOW);
+                LPCWSTR lpValueName = SAL_W(sUValName.getStr());
+                WCHAR szBuffer[1024];
+                DWORD cbData = sizeof(szBuffer);
+                lResult = RegQueryValueExW( hKey, lpValueName, nullptr, nullptr, reinterpret_cast<LPBYTE>(szBuffer), &cbData );
                 RegCloseKey( hKey );
-                sValue = OUString::createFromAscii(szBuffer);
+                // https://msdn.microsoft.com/en-us/ms724911 mentions that
+                // "the string may not have been stored with the proper terminating null characters"
+                szBuffer[std::min(size_t(cbData / sizeof(szBuffer[0])), SAL_N_ELEMENTS(szBuffer)-1)] = 0;
+                sValue = SAL_U(szBuffer);
             }
         }
-
-        return uno::makeAny( sValue );
 #else
         throw uno::RuntimeException("Only support on Windows" );
 #endif
@@ -142,7 +146,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
     }
     else
     {
-        //set value into windows register
+        //set value into Windows registry
 #ifdef _WIN32
         HKEY hBaseKey = nullptr;
         OString sSubKey;
@@ -150,15 +154,15 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
         if( hBaseKey != nullptr )
         {
             HKEY hKey = nullptr;
-            LONG lResult;
-            LPCTSTR lpSubKey = TEXT( sSubKey.getStr());
-            lResult = RegCreateKeyEx( hBaseKey, lpSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, nullptr, &hKey, nullptr );
+            LPCSTR lpSubKey = sSubKey.getStr();
+            // We use RegCreateKeyExA here for convenience, because we already have subkey name as 8-bit string
+            LONG lResult = RegCreateKeyExA( hBaseKey, lpSubKey, 0, nullptr, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, nullptr, &hKey, nullptr );
             if( ERROR_SUCCESS == lResult )
             {
-                OString aUTF8Value = OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 );
-                DWORD cbData = sizeof(TCHAR) * (_tcslen(aUTF8Value.getStr()) + 1);
-                LPCTSTR lpValueName = TEXT(maKey.getStr());
-                lResult = RegSetValueEx( hKey, lpValueName, 0 /* Reserved */, REG_SZ, reinterpret_cast<BYTE const *>(aUTF8Value.getStr()), cbData );
+                DWORD cbData = sizeof(WCHAR) * (aValue.getLength() + 1);
+                OUString sUValName = OStringToOUString(maKey, RTL_TEXTENCODING_DONTKNOW);
+                LPCWSTR lpValueName = SAL_W(sUValName.getStr());
+                lResult = RegSetValueExW( hKey, lpValueName, 0 /* Reserved */, REG_SZ, reinterpret_cast<BYTE const *>(aValue.getStr()), cbData );
                 RegCloseKey( hKey );
             }
         }

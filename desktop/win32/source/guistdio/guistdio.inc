@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
 #define WIN32_LEAN_AND_MEAN
 #ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
@@ -26,9 +25,6 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#define _UNICODE
-#include <tchar.h>
 
 #include <string.h>
 #include <stdlib.h>
@@ -250,7 +246,7 @@ DWORD WINAPI WaitForUIThread( LPVOID pParam )
 #ifndef UNOPKG
     HANDLE  hProcess = (HANDLE)pParam;
 
-    if ( !_tgetenv( TEXT("UNOPKG") ) )
+    if ( !wgetenv( L"UNOPKG" ) )
         WaitForInputIdle( hProcess, INFINITE );
 #else
     (void) pParam;
@@ -274,10 +270,10 @@ BOOL WINAPI CtrlBreakHandler(
     return TRUE;
 }
 
-int _tmain( int, _TCHAR ** )
+int wmain( int, wchar_t** )
 {
-    TCHAR               szTargetFileName[MAX_PATH] = TEXT("");
-    STARTUPINFO         aStartupInfo;
+    WCHAR               szTargetFileName[MAX_PATH] = L"";
+    STARTUPINFOW        aStartupInfo;
     PROCESS_INFORMATION aProcessInfo;
 
     ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
@@ -331,23 +327,23 @@ int _tmain( int, _TCHAR ** )
 
     // Get image path with same name but with .exe extension
 
-    TCHAR               szModuleFileName[MAX_PATH];
+    WCHAR szModuleFileName[MAX_PATH];
 
-    GetModuleFileName( nullptr, szModuleFileName, MAX_PATH );
-    _TCHAR  *lpLastDot = _tcsrchr( szModuleFileName, '.' );
-    if ( lpLastDot && 0 == _tcsicmp( lpLastDot, _T(".COM") ) )
+    GetModuleFileNameW( nullptr, szModuleFileName, MAX_PATH );
+    WCHAR  *lpLastDot = wcsrchr( szModuleFileName, '.' );
+    if ( lpLastDot && 0 == wcsicmp( lpLastDot, L".COM" ) )
     {
         size_t len = lpLastDot - szModuleFileName;
-        _tcsncpy( szTargetFileName, szModuleFileName, len );
-        _tcsncpy( szTargetFileName + len, _T(".EXE"), SAL_N_ELEMENTS(szTargetFileName) - len );
+        wcsncpy( szTargetFileName, szModuleFileName, len );
+        wcsncpy( szTargetFileName + len, L".EXE", SAL_N_ELEMENTS(szTargetFileName) - len );
     }
 
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
 
-    BOOL    fSuccess = CreateProcess(
+    BOOL fSuccess = CreateProcessW(
         szTargetFileName,
-        GetCommandLine(),
+        GetCommandLineW(),
         nullptr,
         nullptr,
         TRUE,

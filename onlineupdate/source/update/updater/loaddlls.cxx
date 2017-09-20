@@ -5,9 +5,6 @@
 
 
 #ifdef _WIN32
-#ifndef UNICODE
-#define UNICODE
-#endif
 #include <windows.h>
 
 // Delayed load libraries are loaded when the first symbol is used.
@@ -19,7 +16,7 @@ struct AutoLoadSystemDependencies
     {
         // Remove the current directory from the search path for dynamically loaded
         // DLLs as a precaution.  This call has no effect for delay load DLLs.
-        SetDllDirectory(L"");
+        SetDllDirectoryW(L"");
 
         HMODULE module = ::GetModuleHandleW(L"kernel32.dll");
         if (module)

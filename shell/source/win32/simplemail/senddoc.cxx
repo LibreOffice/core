@@ -26,8 +26,6 @@
 
 #include "simplemapi.hxx"
 
-#include <tchar.h>
-
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -340,7 +338,7 @@ int main(int argc, char* argv[])
         if (gMapiFlags & MAPI_LOGON_UI)
             oss << "--mapi-logon-ui" << std::endl;
 
-        MessageBox(nullptr, oss.str().c_str(), "Arguments", MB_OK | MB_ICONINFORMATION);
+        MessageBoxA(nullptr, oss.str().c_str(), "Arguments", MB_OK | MB_ICONINFORMATION);
     }
 #endif
 
