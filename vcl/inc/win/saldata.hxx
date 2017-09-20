@@ -87,7 +87,7 @@ public:
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
-    WinSalInstance*         mpFirstInstance;        // pointer of first instance
+    WinSalInstance*         mpInstance;
     WinSalFrame*            mpFirstFrame;           // pointer of first frame
     WinSalObject*           mpFirstObject;          // pointer of first object window
     WinSalVirtualDevice*    mpFirstVD;              // first VirDev
