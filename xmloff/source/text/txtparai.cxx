@@ -540,7 +540,7 @@ public:
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace );
 
-    virtual ~XMLImpRubyContext_Impl() override;
+    virtual void EndElement() override;
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
@@ -633,7 +633,7 @@ XMLImpRubyContext_Impl::XMLImpRubyContext_Impl(
     }
 }
 
-XMLImpRubyContext_Impl::~XMLImpRubyContext_Impl()
+void XMLImpRubyContext_Impl::EndElement()
 {
     const rtl::Reference < XMLTextImportHelper > xTextImport(
         GetImport().GetTextImport());
