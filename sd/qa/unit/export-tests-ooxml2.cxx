@@ -113,6 +113,7 @@ public:
     void testTdf112557();
     void testTdf112334();
     void testTdf112089();
+    void testTdf112086();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -153,6 +154,7 @@ public:
     CPPUNIT_TEST(testTdf112557);
     CPPUNIT_TEST(testTdf112334);
     CPPUNIT_TEST(testTdf112089);
+    CPPUNIT_TEST(testTdf112086);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1158,6 +1160,28 @@ void SdOOXMLExportTest2::testTdf112089()
     OUString sID = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "id");
     OUString sTarget = getXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:set/p:cBhvr/p:tgtEl/p:spTgt", "spid");
     CPPUNIT_ASSERT_EQUAL(sID, sTarget);
+}
+
+void SdOOXMLExportTest2::testTdf112086()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf112086.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+
+    OUString sVal = getXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[2]/p:tavLst/p:tav/p:val/p:fltVal", "val");
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), sVal);
+
+    OUString sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[1]/p:cBhvr/p:attrNameLst/p:attrName");
+    CPPUNIT_ASSERT_EQUAL(OUString("ppt_w"), sAttributeName);
+
+    sVal = getXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[2]/p:tavLst/p:tav/p:val/p:fltVal", "val");
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), sVal);
+
+    sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[2]/p:cBhvr/p:attrNameLst/p:attrName");
+    CPPUNIT_ASSERT_EQUAL(OUString("ppt_h"), sAttributeName);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
