@@ -563,7 +563,10 @@ bool ScDocument::InsertTab(
                 StartAllListeners();
 
                 if (pValidationList)
+                {
+                    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
                     pValidationList->UpdateInsertTab(aCxt);
+                }
 
                 // sheet names of references are not valid until sheet is inserted
                 if ( pChartListenerCollection )
@@ -660,7 +663,10 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                 StartAllListeners();
 
                 if (pValidationList)
+                {
+                    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
                     pValidationList->UpdateInsertTab(aCxt);
+                }
 
                 // sheet names of references are not valid until sheet is inserted
                 if ( pChartListenerCollection )
@@ -726,7 +732,10 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 UpdateChartRef( URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1 );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1 );
                 if (pValidationList)
+                {
+                    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
                     pValidationList->UpdateDeleteTab(aCxt);
+                }
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1 ) );
 
@@ -831,7 +840,10 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 UpdateChartRef( URM_INSDEL, 0,0,nTab, MAXCOL,MAXROW,MAXTAB, 0,0,-1*nSheets );
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1*nSheets );
                 if (pValidationList)
+                {
+                    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
                     pValidationList->UpdateDeleteTab(aCxt);
+                }
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1*nSheets ) );
 
@@ -3983,7 +3995,10 @@ void ScDocument::CompileXML()
     DELETEZ( pAutoNameCache );  // valid only during CompileXML, where cell contents don't change
 
     if ( pValidationList )
+    {
+        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
         pValidationList->CompileXML();
+    }
 
     // Track all formula cells that were appended to the FormulaTrack during
     // import or CompileXML().

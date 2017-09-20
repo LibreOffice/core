@@ -1023,7 +1023,10 @@ void ScDocument::UpdateReference(
         UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
         UpdateRefAreaLinks( eUpdateRefMode, aRange, nDx, nDy, nDz );
         if ( pValidationList )
+        {
+            ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
             pValidationList->UpdateReference(rCxt);
+        }
         if ( pDetOpList )
             pDetOpList->UpdateReference( this, eUpdateRefMode, aRange, nDx, nDy, nDz );
         if ( pUnoBroadcaster )
