@@ -51,12 +51,12 @@ private:
 
     SvStream*               pTIFF;                      // the TIFF file that should be read
     Bitmap                  aBitmap;
-    BitmapWriteAccess*      pAcc;
+    Bitmap::ScopedWriteAccess xAcc;
     sal_uInt16              nDstBitsPerPixel;
     int                     nLargestPixelIndex;
     std::unique_ptr<AlphaMask>
                             pAlphaMask;
-    BitmapWriteAccess*      pMaskAcc;
+    AlphaMask::ScopedWriteAccess xMaskAcc;
 
     sal_uInt64              nOrigPos;                   // start position in pTIFF
     sal_uInt64              nEndOfFile;                 // end of file position in pTIFF
@@ -131,11 +131,9 @@ public:
     TIFFReader()
         : bStatus(false)
         , pTIFF(nullptr)
-        , pAcc(nullptr)
         , nDstBitsPerPixel(0)
         , nLargestPixelIndex(-1)
         , pAlphaMask(nullptr)
-        , pMaskAcc(nullptr)
         , nOrigPos(0)
         , nEndOfFile(0)
         , nDataType(0)
@@ -632,9 +630,9 @@ bool TIFFReader::ReadMap()
                 //if the buffer for this line didn't change, then just copy the
                 //previous scanline instead of painfully decoding and setting
                 //each pixel one by one again
-                Scanline pScanline = pAcc->GetScanline(ny);
-                Scanline pPrevline = pAcc->GetScanline(ny-1);
-                memcpy(pScanline, pPrevline, pAcc->GetScanlineSize());
+                Scanline pScanline = xAcc->GetScanline(ny);
+                Scanline pPrevline = xAcc->GetScanline(ny-1);
+                memcpy(pScanline, pPrevline, xAcc->GetScanlineSize());
             }
             else
             {
@@ -821,11 +819,11 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     nLRed = nLRed + pt[ 0 ];
                     nLGreen = nLGreen + pt[ 1 ];
                     nLBlue = nLBlue + pt[ 2 ];
-                    pAcc->SetPixel( nY, nx, Color( nLRed, nLGreen, nLBlue ) );
-                    if (nSamplesPerPixel >= 4 && pMaskAcc)
+                    xAcc->SetPixel( nY, nx, Color( nLRed, nLGreen, nLBlue ) );
+                    if (nSamplesPerPixel >= 4 && xMaskAcc)
                     {
                         nLAlpha = nLAlpha + pt[ 3 ];
-                        pMaskAcc->SetPixel( nY, nx, BitmapColor(~nLAlpha) );
+                        xMaskAcc->SetPixel( nY, nx, BitmapColor(~nLAlpha) );
                     }
                 }
             }
@@ -833,11 +831,11 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
             {
                 for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel)
                 {
-                    pAcc->SetPixel( nY, nx, Color( pt[0], pt[1], pt[2] ) );
-                    if (nSamplesPerPixel >= 4 && pMaskAcc)
+                    xAcc->SetPixel( nY, nx, Color( pt[0], pt[1], pt[2] ) );
+                    if (nSamplesPerPixel >= 4 && xMaskAcc)
                     {
                         sal_uInt8 nAlpha = pt[3];
-                        pMaskAcc->SetPixel( nY, nx, BitmapColor(~nAlpha) );
+                        xMaskAcc->SetPixel( nY, nx, BitmapColor(~nAlpha) );
                     }
                 }
             }
@@ -861,7 +859,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         nGreen = GetBits( pMap[ 1 ], nx * nBitsPerSample, nBitsPerSample );
                         nBlue = GetBits( pMap[ 2 ], nx * nBitsPerSample, nBitsPerSample );
                     }
-                    pAcc->SetPixel( nY, nx, Color( (sal_uInt8)( nRed - nMinMax ), (sal_uInt8)( nGreen - nMinMax ), (sal_uInt8)(nBlue - nMinMax) ) );
+                    xAcc->SetPixel( nY, nx, Color( (sal_uInt8)( nRed - nMinMax ), (sal_uInt8)( nGreen - nMinMax ), (sal_uInt8)(nBlue - nMinMax) ) );
                 }
             }
         }
@@ -887,7 +885,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     nRed = 255 - (sal_uInt8)( nRed - nMinMax );
                     nGreen = 255 - (sal_uInt8)( nGreen - nMinMax );
                     nBlue = 255 - (sal_uInt8)( nBlue - nMinMax );
-                    pAcc->SetPixel( nY, nx, Color( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue ) );
+                    xAcc->SetPixel( nY, nx, Color( (sal_uInt8) nRed, (sal_uInt8) nGreen, (sal_uInt8) nBlue ) );
                 }
             }
         }
@@ -929,7 +927,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                                 255L/(sal_Int32)(nMaxSampleValue-nMinSampleValue) ) );
                     nBlue = (sal_uInt8) std::max( 0L, 255L - ( ( (sal_Int32) nSamp[ 2 ] + nBlack - ( ( (sal_Int32) nMinSampleValue ) << 1 ) ) *
                                 255L/(sal_Int32)(nMaxSampleValue-nMinSampleValue) ) );
-                    pAcc->SetPixel( nY, nx, Color ( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
+                    xAcc->SetPixel( nY, nx, Color ( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
                 }
             }
         }
@@ -958,7 +956,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                             for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 nLast += nx == 0 ? BYTESWAP( *pt++ ) : *pt++;
-                                SetPixelIndex(pAcc, nY, nx, nLast);
+                                SetPixelIndex(xAcc.get(), nY, nx, nLast);
                             }
                         }
                         else
@@ -966,7 +964,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                             for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 sal_uInt8 nLast = *pt++;
-                                SetPixelIndex(pAcc, nY, nx, static_cast<sal_uInt8>( (BYTESWAP((sal_uInt32)nLast) - nMinSampleValue) * nMinMax ));
+                                SetPixelIndex(xAcc.get(), nY, nx, static_cast<sal_uInt8>( (BYTESWAP((sal_uInt32)nLast) - nMinSampleValue) * nMinMax ));
                             }
                         }
                     }
@@ -978,14 +976,14 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                             for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 nLast += *pt++;
-                                SetPixelIndex(pAcc, nY, nx, nLast);
+                                SetPixelIndex(xAcc.get(), nY, nx, nLast);
                             }
                         }
                         else
                         {
                             for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
-                                SetPixelIndex(pAcc, nY, nx, static_cast<sal_uInt8>( ((sal_uInt32)*pt++ - nMinSampleValue) * nMinMax ));
+                                SetPixelIndex(xAcc.get(), nY, nx, static_cast<sal_uInt8>( ((sal_uInt32)*pt++ - nMinSampleValue) * nMinMax ));
                             }
                         }
                     }
@@ -1002,7 +1000,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                     {
                         nVal = ( GetBits( pt, nx * nBitsPerSample, nBitsPerSample ) - nMinSampleValue ) * nMinMax;
-                        SetPixelIndex(pAcc, nY, nx, static_cast<sal_uInt8>(nVal));
+                        SetPixelIndex(xAcc.get(), nY, nx, static_cast<sal_uInt8>(nVal));
                     }
                 }
                 break;
@@ -1023,28 +1021,28 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         while (nByteCount--)
                         {
                             nByteVal = *pt++;
-                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, nx++, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, nx++, nByteVal);
+                            SetPixelIndex(xAcc.get(), nY, nx++, nByteVal);
                         }
                         if ( nImageWidth & 7 )
                         {
                             nByteVal = *pt++;
                             while ( nx < nImageWidth )
                             {
-                                SetPixelIndex(pAcc, nY, nx++, nByteVal & 1);
+                                SetPixelIndex(xAcc.get(), nY, nx++, nByteVal & 1);
                                 nByteVal >>= 1;
                             }
                         }
@@ -1055,21 +1053,21 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         while (nByteCount--)
                         {
                             nByteVal = *pt++;
-                            SetPixelIndex(pAcc, nY, nx, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, --nx, nByteVal & 1);
+                            SetPixelIndex(xAcc.get(), nY, --nx, nByteVal & 1);
                             nByteVal >>= 1;
-                            SetPixelIndex(pAcc, nY, --nx, nByteVal);
+                            SetPixelIndex(xAcc.get(), nY, --nx, nByteVal);
                             nx += 15;
                         }
                         if ( nImageWidth & 7 )
@@ -1079,7 +1077,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                             nShift = 7;
                             while ( nx < nImageWidth )
                             {
-                                SetPixelIndex(pAcc, nY, nx++, ( nByteVal >> nShift ) & 1);
+                                SetPixelIndex(xAcc.get(), nY, nx++, ( nByteVal >> nShift ) & 1);
                             }
                         }
                     }
@@ -1100,7 +1098,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
             sal_uInt8*  pt = pMap[ 0 ];
             for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += 2 )
             {
-                SetPixelIndex(pAcc, nY, nx, static_cast<sal_uInt8>( ((sal_uInt32)*pt - nMinSampleValue) * nMinMax));
+                SetPixelIndex(xAcc.get(), nY, nx, static_cast<sal_uInt8>( ((sal_uInt32)*pt - nMinSampleValue) * nMinMax));
             }
         }
     }
@@ -1138,10 +1136,10 @@ void TIFFReader::MakePalCol()
                     xColorMap[nNumColors - i - 1] = n0RGB;
             }
         }
-        pAcc->SetPaletteEntryCount(std::max<sal_uInt16>(nNumColors, pAcc->GetPaletteEntryCount()));
+        xAcc->SetPaletteEntryCount(std::max<sal_uInt16>(nNumColors, xAcc->GetPaletteEntryCount()));
         for (sal_uInt32 i = 0; i < nNumColors; ++i)
         {
-            pAcc->SetPaletteColor(i, BitmapColor( (sal_uInt8)( xColorMap[ i ] >> 16 ),
+            xAcc->SetPaletteColor(i, BitmapColor( (sal_uInt8)( xColorMap[ i ] >> 16 ),
                 (sal_uInt8)( xColorMap[ i ] >> 8 ), (sal_uInt8)xColorMap[ i ] ) );
         }
     }
@@ -1309,7 +1307,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 nPredictor = 1;
                 nNumColors = 0;
 
-                pAcc = nullptr;
+                xAcc.reset();
                 pStripOffsets = nullptr;
                 pStripByteCounts = nullptr;
                 pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = nullptr;
@@ -1373,8 +1371,8 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
                 Size aTargetSize( nImageWidth, nImageLength );
                 aBitmap = Bitmap( aTargetSize, nDstBitsPerPixel );
-                pAcc = aBitmap.AcquireWriteAccess();
-                if (pAcc && pAcc->Width() == nImageWidth && pAcc->Height() == nImageLength)
+                xAcc = Bitmap::ScopedWriteAccess(aBitmap);
+                if (xAcc && xAcc->Width() == nImageWidth && xAcc->Height() == nImageLength)
                 {
                     if ( nPlanarConfiguration == 1 )
                         nPlanes = 1;
@@ -1419,7 +1417,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     if (bStatus && HasAlphaChannel())
                     {
                         pAlphaMask.reset( new AlphaMask( aTargetSize ) );
-                        pMaskAcc = pAlphaMask->AcquireWriteAccess();
+                        xMaskAcc = AlphaMask::ScopedWriteAccess(*pAlphaMask);
                     }
 
                     if (bStatus && ReadMap())
@@ -1431,16 +1429,10 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     else
                         bStatus = false;
 
-                    if( pAcc )
+                    if (xAcc)
                     {
-                        Bitmap::ReleaseAccess( pAcc );
-
-                        if ( pMaskAcc )
-                        {
-                            if ( pAlphaMask )
-                                pAlphaMask->ReleaseAccess( pMaskAcc );
-                            pMaskAcc = nullptr;
-                        }
+                        xAcc.reset();
+                        xMaskAcc.reset();
 
                         if ( bStatus )
                         {
