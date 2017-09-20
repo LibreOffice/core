@@ -820,6 +820,7 @@ void PowerPointExport::WriteAnimationProperty( const FSHelperPtr& pFS, const Any
         return;
 
     sal_uInt32 nRgb;
+    double fDouble;
 
     switch( rAny.getValueType().getTypeClass() ) {
     case TypeClass_LONG:
@@ -827,6 +828,12 @@ void PowerPointExport::WriteAnimationProperty( const FSHelperPtr& pFS, const Any
         pFS->singleElementNS(XML_a, XML_srgbClr,
                              XML_val, I32SHEX(nRgb),
                              FSEND);
+        break;
+    case TypeClass_DOUBLE:
+        rAny >>= fDouble;
+        pFS->singleElementNS(XML_p, XML_fltVal,
+            XML_val, DS(fDouble),
+            FSEND);
         break;
     case TypeClass_STRING:
         pFS->singleElementNS( XML_p, XML_strVal,
@@ -930,6 +937,18 @@ void PowerPointExport::WriteAnimationAttributeName( const FSHelperPtr& pFS, cons
 
         pFS->startElementNS(XML_p, XML_attrName, FSEND);
         pFS->writeEscaped("ppt_y");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+    else if (rAttributeName == "Width")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_w");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
+    else if (rAttributeName == "Height")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("ppt_h");
         pFS->endElementNS(XML_p, XML_attrName);
     }
     else if (rAttributeName == "Rotate")
