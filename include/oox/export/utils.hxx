@@ -36,6 +36,7 @@ inline OString I32SHEX_(sal_Int32 x)
 }
 #define I32SHEX(x) I32SHEX_(x).getStr()
 
+#define DS(x) OString::number( (double) x ).getStr()
 #define IS(x) OString::number( x ).getStr()
 #define BS(x) (x ? "1":"0")
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
