@@ -173,6 +173,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MAXCOL,0,0),
+        mbThreadedGroupCalcInProgress( false ),
         nFormulaCodeInTree(0),
         nXMLImportedFormulaCount( 0 ),
         nInterpretLevel(0),

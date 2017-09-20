@@ -412,6 +412,8 @@ private:
     css::uno::Reference< css::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
 public:
+    bool                mbThreadedGroupCalcInProgress;
+
     /// list of ScInterpreterTableOpParams currently in use
     std::vector<std::unique_ptr<ScInterpreterTableOpParams>> m_TableOpList;
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
