@@ -239,6 +239,11 @@ shell SfxObjectShell
         ExecMethod = ExecFile_Impl ;
         StateMethod = GetState_Impl ;
     ]
+    SID_DIRECTEXPORTDOCASEPUB
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
     SID_SIGNATURE
     [
         ExecMethod = ExecFile_Impl;

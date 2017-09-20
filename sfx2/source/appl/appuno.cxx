@@ -170,7 +170,7 @@ static bool isMediaDescriptor( sal_uInt16 nSlotId )
              nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVEDOC ||
              nSlotId == SID_SAVETO || nSlotId == SID_SAVEACOPY ||
              nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF ||
-             nSlotId == SID_EXPORTDOCASEPUB ||
+             nSlotId == SID_EXPORTDOCASEPUB || nSlotId == SID_DIRECTEXPORTDOCASEPUB ||
              nSlotId == SID_SAVEACOPYITEM);
 }
 
@@ -1331,7 +1331,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
 
     if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC ||  nSlotId == SID_SAVEDOC ||
          nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF ||
-         nSlotId == SID_EXPORTDOCASEPUB ||
+         nSlotId == SID_EXPORTDOCASEPUB || nSlotId == SID_DIRECTEXPORTDOCASEPUB ||
          nSlotId == SID_SAVEACOPY )
     {
         const SfxPoolItem *pItem=nullptr;

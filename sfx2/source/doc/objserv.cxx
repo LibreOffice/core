@@ -500,6 +500,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             bIsPDFExport = true;
             SAL_FALLTHROUGH;
         case SID_EXPORTDOCASEPUB:
+        case SID_DIRECTEXPORTDOCASEPUB:
         case SID_EXPORTDOC:
         case SID_SAVEASDOC:
         case SID_SAVEASREMOTE:
@@ -979,6 +980,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_EXPORTDOCASPDF:
             case SID_DIRECTEXPORTDOCASPDF:
             case SID_EXPORTDOCASEPUB:
+            case SID_DIRECTEXPORTDOCASEPUB:
             {
                 break;
             }
