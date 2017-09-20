@@ -20,11 +20,6 @@
  ./bin/update_pch_bisect ./svx/inc/pch/precompiled_svx.hxx "/opt/lo/bin/make svx.build" --find-conflicts
 */
 
-#ifdef _WIN32
-#define UNICODE
-#define _UNICODE
-#endif
-
 #include <algorithm>
 #include <cassert>
 #include <climits>

@@ -16,6 +16,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#if !defined WINVER
+#define WINVER 0x0400
+#endif
+
 #include <sal/macros.h>
 
 // necessary to include system headers without warnings
@@ -45,8 +49,8 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
 
 
-#define EXECUTER_WINDOWCLASS    "SO Executer Class"
-#define EXECUTER_WINDOWNAME     "SO Executer Window"
+#define EXECUTER_WINDOWCLASS    L"SO Executer Class"
+#define EXECUTER_WINDOWNAME     L"SO Executer Window"
 
 
 #define ID_QUICKSTART               1
@@ -121,7 +125,7 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
             mi.fType=MFT_STRING;
             mi.fState=MFS_ENABLED;
             mi.wID = id;
-            mi.dwTypeData = reinterpret_cast<wchar_t *>(
+            mi.dwTypeData = SAL_W(
                 const_cast<sal_Unicode *>(text.getStr()));
             mi.cch = text.getLength();
         }
@@ -244,11 +248,11 @@ static void addTaskbarIcon( HWND hWnd )
 
     // add taskbar icon
     NOTIFYICONDATAW nid;
-    nid.hIcon = static_cast<HICON>(LoadImageA( GetModuleHandle( nullptr ), MAKEINTRESOURCE( ICON_LO_DEFAULT ),
+    nid.hIcon = static_cast<HICON>(LoadImageW( GetModuleHandleW( nullptr ), MAKEINTRESOURCEW( ICON_LO_DEFAULT ),
         IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
         LR_DEFAULTCOLOR | LR_SHARED ));
 
-    wcsncpy( nid.szTip, reinterpret_cast<LPCWSTR>(strTip.getStr()), 64 );
+    wcsncpy( nid.szTip, SAL_W(strTip.getStr()), 64 );
 
     nid.cbSize              = sizeof(nid);
     nid.hWnd                = hWnd;
@@ -273,8 +277,8 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             {
                 // request notification when taskbar is recreated
                 // we then have to add our icon again
-                s_uTaskbarRestart = RegisterWindowMessage(TEXT("TaskbarCreated"));
-                s_uMsgKillTray = RegisterWindowMessage( SHUTDOWN_QUICKSTART_MESSAGE );
+                s_uTaskbarRestart = RegisterWindowMessageW(L"TaskbarCreated");
+                s_uMsgKillTray = RegisterWindowMessageW( SHUTDOWN_QUICKSTART_MESSAGE );
 
                 // create the menu
                 if( !popupMenu )
@@ -303,7 +307,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             {
                 case WM_LBUTTONDBLCLK:
                 {
-                    BOOL const ret = PostMessage(aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, reinterpret_cast<LPARAM>(hWnd));
+                    BOOL const ret = PostMessageW(aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, reinterpret_cast<LPARAM>(hWnd));
                     SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
                     break;
                 }
@@ -348,7 +352,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                             break;
                     }
 
-                    BOOL const ret2 = PostMessage(aExecuterWindow, WM_COMMAND, m, reinterpret_cast<LPARAM>(hWnd));
+                    BOOL const ret2 = PostMessageW(aExecuterWindow, WM_COMMAND, m, reinterpret_cast<LPARAM>(hWnd));
                     SAL_WARN_IF(0 == ret2, "sfx.appl", "ERROR: PostMessage() failed!");
                 }
                 break;
@@ -358,7 +362,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             deleteSystrayMenu( popupMenu );
             // We don't need the Systray Thread anymore
             PostQuitMessage( 0 );
-            return DefWindowProc(hWnd, uMsg, wParam, lParam);
+            return DefWindowProcW(hWnd, uMsg, wParam, lParam);
         default:
             if( uMsg == s_uTaskbarRestart )
             {
@@ -374,11 +378,11 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 nid.uID = ID_QUICKSTART;
                 Shell_NotifyIconA(NIM_DELETE, &nid);
 
-                BOOL const ret = PostMessage(aExecuterWindow, WM_COMMAND, IDM_EXIT, reinterpret_cast<LPARAM>(hWnd));
+                BOOL const ret = PostMessageW(aExecuterWindow, WM_COMMAND, IDM_EXIT, reinterpret_cast<LPARAM>(hWnd));
                 SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
             }
             else
-                return DefWindowProc(hWnd, uMsg, wParam, lParam);
+                return DefWindowProcW(hWnd, uMsg, wParam, lParam);
     }
     return 0;
 }
@@ -435,7 +439,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             break;
         case WM_DESTROY:
         default:
-            return DefWindowProc(hWnd, uMsg, wParam, lParam);
+            return DefWindowProcW(hWnd, uMsg, wParam, lParam);
     }
     return 0;
 }
@@ -445,26 +449,26 @@ DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
 {
     osl_setThreadName("SystrayThread");
 
-    aListenerWindow = CreateWindowExA(0,
-        QUICKSTART_CLASSNAME,       // registered class name
-        QUICKSTART_WINDOWNAME,        // window name
-        0,                          // window style
-        CW_USEDEFAULT,              // horizontal position of window
-        CW_USEDEFAULT,              // vertical position of window
-        CW_USEDEFAULT,              // window width
-        CW_USEDEFAULT,              // window height
-        nullptr,                    // handle to parent or owner window
-        nullptr,                    // menu handle or child identifier
-        GetModuleHandle( nullptr ), // handle to application instance
-        nullptr                     // window-creation data
+    aListenerWindow = CreateWindowExW(0,
+        QUICKSTART_CLASSNAME,        // registered class name
+        QUICKSTART_WINDOWNAME,       // window name
+        0,                           // window style
+        CW_USEDEFAULT,               // horizontal position of window
+        CW_USEDEFAULT,               // vertical position of window
+        CW_USEDEFAULT,               // window width
+        CW_USEDEFAULT,               // window height
+        nullptr,                     // handle to parent or owner window
+        nullptr,                     // menu handle or child identifier
+        GetModuleHandleW( nullptr ), // handle to application instance
+        nullptr                      // window-creation data
         );
 
     MSG msg;
 
-    while ( GetMessage( &msg, nullptr, 0, 0 ) )
+    while ( GetMessageW( &msg, nullptr, 0, 0 ) )
     {
         TranslateMessage( &msg );
-        DispatchMessage( &msg );
+        DispatchMessageW( &msg );
     }
 
     return msg.wParam; // Exit code of WM_QUIT
@@ -475,13 +479,13 @@ void win32_init_sys_tray()
 {
     if ( ShutdownIcon::IsQuickstarterInstalled() )
     {
-        WNDCLASSEXA listenerClass;
-        listenerClass.cbSize        = sizeof(WNDCLASSEX);
+        WNDCLASSEXW listenerClass;
+        listenerClass.cbSize        = sizeof(listenerClass);
         listenerClass.style         = 0;
         listenerClass.lpfnWndProc   = listenerWndProc;
         listenerClass.cbClsExtra    = 0;
         listenerClass.cbWndExtra    = 0;
-        listenerClass.hInstance     = GetModuleHandle( nullptr );
+        listenerClass.hInstance     = GetModuleHandleW( nullptr );
         listenerClass.hIcon         = nullptr;
         listenerClass.hCursor       = nullptr;
         listenerClass.hbrBackground = nullptr;
@@ -489,15 +493,15 @@ void win32_init_sys_tray()
         listenerClass.lpszClassName = QUICKSTART_CLASSNAME;
         listenerClass.hIconSm       = nullptr;
 
-        RegisterClassExA(&listenerClass);
+        RegisterClassExW(&listenerClass);
 
-        WNDCLASSEXA executerClass;
-        executerClass.cbSize        = sizeof(WNDCLASSEX);
+        WNDCLASSEXW executerClass;
+        executerClass.cbSize        = sizeof(executerClass);
         executerClass.style         = 0;
         executerClass.lpfnWndProc   = executerWndProc;
         executerClass.cbClsExtra    = 0;
         executerClass.cbWndExtra    = 0;
-        executerClass.hInstance     = GetModuleHandle( nullptr );
+        executerClass.hInstance     = GetModuleHandleW( nullptr );
         executerClass.hIcon         = nullptr;
         executerClass.hCursor       = nullptr;
         executerClass.hbrBackground = nullptr;
@@ -505,20 +509,20 @@ void win32_init_sys_tray()
         executerClass.lpszClassName = EXECUTER_WINDOWCLASS;
         executerClass.hIconSm       = nullptr;
 
-        RegisterClassExA( &executerClass );
+        RegisterClassExW( &executerClass );
 
-        aExecuterWindow = CreateWindowExA(0,
-            EXECUTER_WINDOWCLASS,       // registered class name
-            EXECUTER_WINDOWNAME,        // window name
-            0,                          // window style
-            CW_USEDEFAULT,              // horizontal position of window
-            CW_USEDEFAULT,              // vertical position of window
-            CW_USEDEFAULT,              // window width
-            CW_USEDEFAULT,              // window height
-            nullptr,                    // handle to parent or owner window
-            nullptr,                    // menu handle or child identifier
-            GetModuleHandle( nullptr ), // handle to application instance
-            nullptr                     // window-creation data
+        aExecuterWindow = CreateWindowExW(0,
+            EXECUTER_WINDOWCLASS,        // registered class name
+            EXECUTER_WINDOWNAME,         // window name
+            0,                           // window style
+            CW_USEDEFAULT,               // horizontal position of window
+            CW_USEDEFAULT,               // vertical position of window
+            CW_USEDEFAULT,               // window width
+            CW_USEDEFAULT,               // window height
+            nullptr,                     // handle to parent or owner window
+            nullptr,                     // menu handle or child identifier
+            GetModuleHandleW( nullptr ), // handle to application instance
+            nullptr                      // window-creation data
             );
 
         DWORD   dwThreadId;
@@ -538,8 +542,8 @@ void win32_shutdown_sys_tray()
             DestroyWindow( aExecuterWindow );
             aExecuterWindow = nullptr;
         }
-        UnregisterClassA( QUICKSTART_CLASSNAME, GetModuleHandle( nullptr ) );
-        UnregisterClassA( EXECUTER_WINDOWCLASS, GetModuleHandle( nullptr ) );
+        UnregisterClassW( QUICKSTART_CLASSNAME, GetModuleHandleW( nullptr ) );
+        UnregisterClassW( EXECUTER_WINDOWCLASS, GetModuleHandleW( nullptr ) );
     }
 }
 
@@ -550,18 +554,18 @@ void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
     HDC hdc = GetDC(hwnd);
     SIZE size;
 
-    NONCLIENTMETRICS ncm;
+    NONCLIENTMETRICSW ncm;
     memset(&ncm, 0, sizeof(ncm));
     ncm.cbSize = sizeof(ncm);
 
-    SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
+    SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
     // Assume every menu item can be default and printed bold
     ncm.lfMenuFont.lfWeight = FW_BOLD;
 
-    HFONT hfntOld = static_cast<HFONT>(SelectObject(hdc, CreateFontIndirect( &ncm.lfMenuFont )));
+    HFONT hfntOld = static_cast<HFONT>(SelectObject(hdc, CreateFontIndirectW( &ncm.lfMenuFont )));
 
-    GetTextExtentPoint32W(hdc, reinterpret_cast<LPCWSTR>(pMyItem->text.getStr()),
+    GetTextExtentPoint32W(hdc, SAL_W(pMyItem->text.getStr()),
             pMyItem->text.getLength(), &size);
 
     lpmis->itemWidth = size.cx + 4 + GetSystemMetrics( SM_CXSMICON );
@@ -611,11 +615,11 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     int     cx = GetSystemMetrics( SM_CXSMICON );
     int     cy = GetSystemMetrics( SM_CYSMICON );
     HICON   hIcon( nullptr );
-    HMODULE hModule( GetModuleHandle( nullptr ) );
+    HMODULE hModule( GetModuleHandleW( nullptr ) );
 
     if ( pMyItem->module.getLength() > 0 )
     {
-        LPCWSTR pModuleName = reinterpret_cast<LPCWSTR>( pMyItem->module.getStr() );
+        LPCWSTR pModuleName = SAL_W( pMyItem->module.getStr() );
         hModule = GetModuleHandleW( pModuleName );
         if ( hModule == nullptr )
         {
@@ -638,21 +642,21 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
     x += cx + 4;    // space for icon
     aRect.left = x;
 
-    NONCLIENTMETRICS ncm;
+    NONCLIENTMETRICSW ncm;
     memset(&ncm, 0, sizeof(ncm));
     ncm.cbSize = sizeof(ncm);
 
-    SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
+    SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
     // Print default menu entry with bold font
     if ( lpdis->itemState & ODS_DEFAULT )
         ncm.lfMenuFont.lfWeight = FW_BOLD;
 
-    hfntOld = static_cast<HFONT>(SelectObject(lpdis->hDC, CreateFontIndirect( &ncm.lfMenuFont )));
+    hfntOld = static_cast<HFONT>(SelectObject(lpdis->hDC, CreateFontIndirectW( &ncm.lfMenuFont )));
 
 
     SIZE    size;
-    GetTextExtentPointW( lpdis->hDC, reinterpret_cast<LPCWSTR>(pMyItem->text.getStr()), pMyItem->text.getLength(), &size );
+    GetTextExtentPointW( lpdis->hDC, SAL_W(pMyItem->text.getStr()), pMyItem->text.getLength(), &size );
 
     DrawStateW( lpdis->hDC, nullptr, nullptr, reinterpret_cast<LPARAM>(pMyItem->text.getStr()), (WPARAM)0, aRect.left, aRect.top + (height - size.cy)/2, 0, 0, DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) );
 
@@ -693,7 +697,7 @@ static OUString SHGetSpecialFolder( int nFolderID )
         lpFolderA = ALLOC( WCHAR, 16000 );
 
         SHGetPathFromIDListW( pidl, lpFolderA );
-        aFolder = OUString( reinterpret_cast<const sal_Unicode*>(lpFolderA) );
+        aFolder = SAL_U( lpFolderA );
 
         FREE( lpFolderA );
         SHFree_( pidl );
@@ -709,7 +713,7 @@ OUString ShutdownIcon::GetAutostartFolderNameW32()
 static HRESULT WINAPI SHCoCreateInstance( LPVOID lpszReserved, REFCLSID clsid, LPUNKNOWN pUnkUnknown, REFIID iid, LPVOID *ppv )
 {
     HRESULT hResult = E_NOTIMPL;
-    HMODULE hModShell = GetModuleHandle( "SHELL32" );
+    HMODULE hModShell = GetModuleHandleW( L"SHELL32" );
 
     if ( hModShell != nullptr )
     {
@@ -727,9 +731,9 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
     const OUString& rAbsShortcut, const OUString& rDescription, const OUString& rParameter )
 {
     HRESULT hres;
-    IShellLink* psl;
+    IShellLinkW* psl;
     CLSID clsid_ShellLink = CLSID_ShellLink;
-    CLSID clsid_IShellLink = IID_IShellLink;
+    CLSID clsid_IShellLink = IID_IShellLinkW;
 
     hres = CoCreateInstance( clsid_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
                              clsid_IShellLink, reinterpret_cast<void**>(&psl) );
@@ -739,11 +743,11 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
     if( SUCCEEDED(hres) )
     {
         IPersistFile* ppf;
-        psl->SetPath( OUStringToOString(rAbsObject, osl_getThreadTextEncoding()).getStr() );
-        psl->SetWorkingDirectory( OUStringToOString(rAbsObjectPath, osl_getThreadTextEncoding()).getStr() );
-        psl->SetDescription( OUStringToOString(rDescription, osl_getThreadTextEncoding()).getStr() );
+        psl->SetPath( SAL_W(rAbsObject.getStr()) );
+        psl->SetWorkingDirectory( SAL_W(rAbsObjectPath.getStr()) );
+        psl->SetDescription( SAL_W(rDescription.getStr()) );
         if( rParameter.getLength() )
-            psl->SetArguments( OUStringToOString(rParameter, osl_getThreadTextEncoding()).getStr() );
+            psl->SetArguments( SAL_W(rParameter.getStr()) );
 
         CLSID clsid_IPersistFile = IID_IPersistFile;
         hres = psl->QueryInterface( clsid_IPersistFile, reinterpret_cast<void**>(&ppf) );
@@ -782,7 +786,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     wchar_t aPath[_MAX_PATH];
     GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
 
-    OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
+    OUString aOfficepath( SAL_U(aPath) );
     int i = aOfficepath.lastIndexOf('\\');
     if( i != -1 )
         aOfficepath = aOfficepath.copy(0, i);
@@ -790,7 +794,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     OUString quickstartExe(aOfficepath);
     quickstartExe += "\\quickstart.exe";
 
-    return FileExistsW( reinterpret_cast<LPCWSTR>(quickstartExe.getStr()) );
+    return FileExistsW( SAL_W(quickstartExe.getStr()) );
 }
 
 void ShutdownIcon::EnableAutostartW32( const OUString &aShortcut )
@@ -798,7 +802,7 @@ void ShutdownIcon::EnableAutostartW32( const OUString &aShortcut )
     wchar_t aPath[_MAX_PATH];
     GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
 
-    OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
+    OUString aOfficepath( SAL_U(aPath) );
     int i = aOfficepath.lastIndexOf('\\');
     if( i != -1 )
         aOfficepath = aOfficepath.copy(0, i);

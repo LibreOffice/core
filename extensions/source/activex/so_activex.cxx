@@ -64,8 +64,8 @@ END_OBJECT_MAP()
 #pragma clang diagnostic pop
 #endif
 
-#define X64_LIB_NAME "so_activex_x64.dll"
-#define X32_LIB_NAME "so_activex.dll"
+#define X64_LIB_NAME L"so_activex_x64.dll"
+#define X32_LIB_NAME L"so_activex.dll"
 
 // to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
 // in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
@@ -196,7 +196,7 @@ const char* const aLocalPrefix = "Software\\Classes\\";
 
 BOOL createKey( HKEY hkey,
                 const char* aKeyToCreate,
-        REGSAM nKeyAccess,
+                REGSAM nKeyAccess,
                 const char* aValue = nullptr,
                 const char* aChildName = nullptr,
                 const char* aChildValue = nullptr )
@@ -220,8 +220,34 @@ BOOL createKey( HKEY hkey,
 
 }
 
+BOOL createKey( HKEY hkey,
+                const wchar_t* aKeyToCreate,
+                REGSAM nKeyAccess,
+                const wchar_t* aValue = nullptr,
+                const wchar_t* aChildName = nullptr,
+                const wchar_t* aChildValue = nullptr )
+{
+    HKEY hkey1;
+
+    return ( ERROR_SUCCESS == RegCreateKeyExW( hkey, aKeyToCreate, 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey1 , nullptr )
+           && ( !aValue || ERROR_SUCCESS == RegSetValueExW( hkey1,
+                                                            L"",
+                                                            0,
+                                                            REG_SZ,
+                                                            reinterpret_cast<const BYTE*>(aValue),
+                                                            sal::static_int_cast<DWORD>(wcslen(aValue)*sizeof(wchar_t))))
+           && ( !aChildName || ERROR_SUCCESS == RegSetValueExW( hkey1,
+                                                                aChildName,
+                                                                0,
+                                                                REG_SZ,
+                                                                reinterpret_cast<const BYTE*>(aChildValue),
+                                                                sal::static_int_cast<DWORD>(wcslen(aChildValue)*sizeof(wchar_t))))
+           && ERROR_SUCCESS == RegCloseKey( hkey1 ) );
+
+}
+
 STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
-STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess, const char* pProgramPath, const char* pLibName )
+HRESULT DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess, const wchar_t* pProgramPath, const wchar_t* pLibName )
 {
     BOOL aResult = FALSE;
 
@@ -230,7 +256,7 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
     HKEY        hkey2 = nullptr;
     HKEY        hkey3 = nullptr;
     HKEY        hkey4 = nullptr;
-    char aSubKey[513];
+    char        aSubKey[513];
     int         ind;
     const char* aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
@@ -241,13 +267,13 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
     if ( bForAllUsers )
         DllUnregisterServerNative( nMode, false, false );
 
-    if ( pProgramPath && strlen( pProgramPath ) < 1024 )
+    if ( pProgramPath && wcslen( pProgramPath ) < 1024 )
     {
-        char pActiveXPath[1124];
-        char pActiveXPath101[1124];
+        wchar_t pActiveXPath[1124];
+        wchar_t pActiveXPath101[1124];
 
-        sprintf( pActiveXPath, "%s\\%s", pProgramPath, pLibName );
-        sprintf( pActiveXPath101, "%s\\%s, 101", pProgramPath, pLibName );
+        swprintf( pActiveXPath, L"%s\\%s", pProgramPath, pLibName );
+        swprintf( pActiveXPath101, L"%s\\%s, 101", pProgramPath, pLibName );
 
         {
             wsprintfA( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
@@ -256,12 +282,12 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
                     && ERROR_SUCCESS == RegSetValueExA( hkey, "", 0, REG_SZ, reinterpret_cast<const BYTE*>("SOActiveX Class"), 17 )
                     && createKey( hkey, "Control", nKeyAccess )
                     && createKey( hkey, "EnableFullPage", nKeyAccess )
-                    && createKey( hkey, "InprocServer32", nKeyAccess, pActiveXPath, "ThreadingModel", "Apartment" )
+                    && createKey( hkey, L"InprocServer32", nKeyAccess, pActiveXPath, L"ThreadingModel", L"Apartment" )
                     && createKey( hkey, "MiscStatus", nKeyAccess, "0" )
                     && createKey( hkey, "MiscStatus\\1", nKeyAccess, "131473" )
                     && createKey( hkey, "ProgID", nKeyAccess, "so_activex.SOActiveX.1" )
                     && createKey( hkey, "Programmable", nKeyAccess )
-                    && createKey( hkey, "ToolboxBitmap32", nKeyAccess, pActiveXPath101 )
+                    && createKey( hkey, L"ToolboxBitmap32", nKeyAccess, pActiveXPath101 )
                     && createKey( hkey, "TypeLib", nKeyAccess, aTypeLib )
                     && createKey( hkey, "Version", nKeyAccess, "1.0" )
                     && createKey( hkey, "VersionIndependentProgID", nKeyAccess, "so_activex.SOActiveX" )
@@ -281,10 +307,10 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
                             && createKey( hkey2, "1.0", nKeyAccess, "wrap_activex 1.0 Type Library" )
                             && ERROR_SUCCESS == RegCreateKeyExA( hkey2, "1.0", 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey3 , nullptr )
                                 && ERROR_SUCCESS == RegCreateKeyExA( hkey3, "0", 0, nullptr, REG_OPTION_NON_VOLATILE, nKeyAccess, nullptr, &hkey4 , nullptr )
-                                    && createKey( hkey4, "win32", nKeyAccess, pActiveXPath )
+                                    && createKey( hkey4, L"win32", nKeyAccess, pActiveXPath )
                                 && ERROR_SUCCESS == RegCloseKey( hkey4 )
                                 && createKey( hkey3, "FLAGS", nKeyAccess, "0" )
-                                && createKey( hkey3, "HELPDIR", nKeyAccess, pProgramPath )
+                                && createKey( hkey3, L"HELPDIR", nKeyAccess, pProgramPath )
                             && ERROR_SUCCESS == RegCloseKey( hkey3 )
                         && ERROR_SUCCESS == RegCloseKey( hkey2 )
                     && ERROR_SUCCESS == RegCloseKey( hkey1 )
@@ -363,7 +389,7 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
     return HRESULT(aResult);
 }
 
-STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, const char* pProgramPath )
+STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, const wchar_t* pProgramPath )
 {
     HRESULT hr = S_OK;
     if ( bFor64Bit )
@@ -418,10 +444,10 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
                 fErr = TRUE;
             else
             {
-                if ( ERROR_SUCCESS != RegDeleteValue( hkey, "CLSID" ) )
+                if ( ERROR_SUCCESS != RegDeleteValueA( hkey, "CLSID" ) )
                     fErr = TRUE;
 
-                if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, nullptr, nullptr, nullptr,
+                if ( ERROR_SUCCESS != RegQueryInfoKeyA(  hkey, nullptr, nullptr, nullptr,
                                                     &nSubKeys, nullptr, nullptr,
                                                     &nValues, nullptr, nullptr, nullptr, nullptr ) )
                 {
@@ -443,7 +469,7 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
                 fErr = TRUE;
             else
             {
-                   if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, nullptr, nullptr, nullptr,
+                   if ( ERROR_SUCCESS != RegQueryInfoKeyA(  hkey, nullptr, nullptr, nullptr,
                                                     &nSubKeys, nullptr, nullptr,
                                                     &nValues, nullptr, nullptr, nullptr, nullptr ) )
                 {
@@ -637,15 +663,15 @@ STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcc
                 fErr = TRUE;
             else
             {
-                   if ( ERROR_SUCCESS != RegDeleteValue( hkey, "Extension" ) )
+                   if ( ERROR_SUCCESS != RegDeleteValueA( hkey, "Extension" ) )
                     fErr = TRUE;
 
-                   if ( ERROR_SUCCESS != RegDeleteValue( hkey, "CLSID" ) )
+                   if ( ERROR_SUCCESS != RegDeleteValueA( hkey, "CLSID" ) )
                     fErr = TRUE;
 
-                if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, nullptr, nullptr, nullptr,
-                                                        &nSubKeys, nullptr, nullptr,
-                                                        &nValues, nullptr, nullptr, nullptr, nullptr ) )
+                if ( ERROR_SUCCESS != RegQueryInfoKeyA(  hkey, nullptr, nullptr, nullptr,
+                                                         &nSubKeys, nullptr, nullptr,
+                                                         &nValues, nullptr, nullptr, nullptr, nullptr ) )
                 {
                     RegCloseKey( hkey );
                     hkey = nullptr;
@@ -665,12 +691,12 @@ STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcc
                 fErr = TRUE;
             else
             {
-                   if ( ERROR_SUCCESS != RegDeleteValue( hkey, "Content Type" ) )
+                   if ( ERROR_SUCCESS != RegDeleteValueA( hkey, "Content Type" ) )
                     fErr = TRUE;
 
-                if ( ERROR_SUCCESS != RegQueryInfoKey(  hkey, nullptr, nullptr, nullptr,
-                                                        &nSubKeys, nullptr, nullptr,
-                                                        &nValues, nullptr, nullptr, nullptr, nullptr ) )
+                if ( ERROR_SUCCESS != RegQueryInfoKeyA(  hkey, nullptr, nullptr, nullptr,
+                                                         &nSubKeys, nullptr, nullptr,
+                                                         &nValues, nullptr, nullptr, nullptr, nullptr ) )
                 {
                     RegCloseKey( hkey );
                     hkey = nullptr;
@@ -709,14 +735,14 @@ STDAPI DllRegisterServer()
 {
     HRESULT aResult = E_FAIL;
 
-    HMODULE aCurModule = GetModuleHandleA( bX64 ? X64_LIB_NAME : X32_LIB_NAME );
+    HMODULE aCurModule = GetModuleHandleW( bX64 ? X64_LIB_NAME : X32_LIB_NAME );
     DWORD nLibNameLen = sal::static_int_cast<DWORD>(
-            strlen((bX64) ? X64_LIB_NAME : X32_LIB_NAME));
+            wcslen((bX64) ? X64_LIB_NAME : X32_LIB_NAME));
 
     if( aCurModule )
     {
-        char pProgramPath[1024];
-        DWORD nLen = GetModuleFileNameA( aCurModule, pProgramPath, 1024 );
+        wchar_t pProgramPath[1024];
+        DWORD nLen = GetModuleFileNameW( aCurModule, pProgramPath, 1024 );
         if ( nLen && nLen > nLibNameLen + 1 )
         {
             pProgramPath[ nLen - nLibNameLen - 1 ] = 0;

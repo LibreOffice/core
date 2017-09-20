@@ -33,7 +33,6 @@
 #include <stdio.h>
 #include <windows.h>
 #include <comdef.h>
-#include <tchar.h>
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>

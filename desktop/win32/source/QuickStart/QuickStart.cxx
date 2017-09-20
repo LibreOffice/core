@@ -39,35 +39,39 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
-#include <tchar.h>
 
 bool SofficeRuns()
 {
     // check for soffice by searching the communication window
-    return FindWindowEx( nullptr, nullptr, QUICKSTART_CLASSNAME, nullptr ) != nullptr;
+    return FindWindowExW( nullptr, nullptr, QUICKSTART_CLASSNAME, nullptr ) != nullptr;
 }
 
 bool launchSoffice( )
 {
     if ( !SofficeRuns() )
     {
-        char filename[_MAX_PATH + 1];
+        wchar_t filename[_MAX_PATH + 1];
 
         filename[_MAX_PATH] = 0;
-        GetModuleFileName( nullptr, filename, _MAX_PATH ); // soffice resides in the same dir
-        char *p = strrchr( filename, '\\' );
+        GetModuleFileNameW( nullptr, filename, _MAX_PATH ); // soffice resides in the same dir
+        wchar_t *p = wcsrchr( filename, L'\\' );
         if ( !p )
             return false;
 
-        strncpy( p+1, "soffice.exe", _MAX_PATH - (p+1 - filename) );
+        wcsncpy( p+1, L"soffice.exe", _MAX_PATH - (p+1 - filename) );
 
-        char imagename[_MAX_PATH + 1];
+        wchar_t imagename[_MAX_PATH + 1];
 
         imagename[_MAX_PATH] = 0;
-        _snprintf(imagename, _MAX_PATH, "\"%s\" --quickstart", filename );
+        _snwprintf(imagename, _MAX_PATH, L"\"%s\" --quickstart", filename );
 
-        UINT ret = WinExec( imagename, SW_SHOW );
-        if ( ret < 32 )
+        STARTUPINFOW aStartupInfo;
+        ZeroMemory(&aStartupInfo, sizeof(aStartupInfo));
+        aStartupInfo.cb = sizeof(aStartupInfo);
+        aStartupInfo.wShowWindow = SW_SHOW;
+        PROCESS_INFORMATION aProcessInfo;
+        BOOL bSuccess = CreateProcessW(filename, imagename, nullptr, nullptr, TRUE, 0, nullptr, nullptr, &aStartupInfo, &aProcessInfo);
+        if ( !bSuccess )
             return false;
 
         return true;
@@ -76,10 +80,10 @@ bool launchSoffice( )
         return true;
 }
 
-int APIENTRY WinMain(HINSTANCE /*hInstance*/,
-                     HINSTANCE /*hPrevInstance*/,
-                     LPSTR     /*lpCmdLine*/,
-                     int       /*nCmdShow*/)
+int APIENTRY wWinMain(HINSTANCE /*hInstance*/,
+                      HINSTANCE /*hPrevInstance*/,
+                      LPWSTR    /*lpCmdLine*/,
+                      int       /*nCmdShow*/)
 {
     // Look for --killtray argument
 
@@ -87,12 +91,12 @@ int APIENTRY WinMain(HINSTANCE /*hInstance*/,
     {
         if ( 0 == strcmp( __argv[i], "--killtray" ) )
         {
-            HWND hwndTray = FindWindow( QUICKSTART_CLASSNAME, nullptr );
+            HWND hwndTray = FindWindowW( QUICKSTART_CLASSNAME, nullptr );
 
             if ( hwndTray )
             {
-                UINT uMsgKillTray = RegisterWindowMessage( SHUTDOWN_QUICKSTART_MESSAGE );
-                SendMessage( hwndTray, uMsgKillTray, 0, 0 );
+                UINT uMsgKillTray = RegisterWindowMessageW( SHUTDOWN_QUICKSTART_MESSAGE );
+                SendMessageW( hwndTray, uMsgKillTray, 0, 0 );
             }
 
             return 0;
