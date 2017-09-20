@@ -23,7 +23,9 @@
 #include <sal/config.h>
 
 #include <tools/fract.hxx>
+#include <vcl/commandevent.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <list>

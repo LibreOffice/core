@@ -812,7 +812,7 @@ namespace drawinglayer
 
                     // create rectangle for fill
                     const basegfx::B2DRange& aViewport(getViewInformation2D().getDiscreteViewport());
-                    const tools::Rectangle aRectangle(
+                    const ::tools::Rectangle aRectangle(
                         (sal_Int32)floor(aViewport.getMinX()), (sal_Int32)floor(aViewport.getMinY()),
                         (sal_Int32)ceil(aViewport.getMaxX()), (sal_Int32)ceil(aViewport.getMaxY()));
                     mpOutputDevice->DrawRect(aRectangle);

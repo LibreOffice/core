@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_SVX_INC_UIOBJECT_HXX
+#define INCLUDED_SVX_INC_UIOBJECT_HXX
+
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
 
@@ -31,5 +34,7 @@ protected:
 
     OUString get_name() const override;
 };
+
+#endif // INCLUDED_SVX_INC_UIOBJECT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

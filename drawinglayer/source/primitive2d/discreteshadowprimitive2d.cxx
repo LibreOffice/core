@@ -56,7 +56,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maTopLeft = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maTopLeft.Crop(
-                    tools::Rectangle(Point(0, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
+                    ::tools::Rectangle(Point(0, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
             }
 
             return maTopLeft;
@@ -69,7 +69,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maTop = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maTop.Crop(
-                    tools::Rectangle(Point((nQuarter * 2) + 1, 0), Size(1, nQuarter)));
+                    ::tools::Rectangle(Point((nQuarter * 2) + 1, 0), Size(1, nQuarter)));
             }
 
             return maTop;
@@ -82,7 +82,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maTopRight = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maTopRight.Crop(
-                    tools::Rectangle(Point((nQuarter * 2) + 2, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
+                    ::tools::Rectangle(Point((nQuarter * 2) + 2, 0), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
             }
 
             return maTopRight;
@@ -95,7 +95,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maRight = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maRight.Crop(
-                    tools::Rectangle(Point((nQuarter * 3) + 3, (nQuarter * 2) + 1), Size(nQuarter, 1)));
+                    ::tools::Rectangle(Point((nQuarter * 3) + 3, (nQuarter * 2) + 1), Size(nQuarter, 1)));
             }
 
             return maRight;
@@ -108,7 +108,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maBottomRight = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maBottomRight.Crop(
-                    tools::Rectangle(Point((nQuarter * 2) + 2, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
+                    ::tools::Rectangle(Point((nQuarter * 2) + 2, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
             }
 
             return maBottomRight;
@@ -121,7 +121,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maBottom = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maBottom.Crop(
-                    tools::Rectangle(Point((nQuarter * 2) + 1, (nQuarter * 3) + 3), Size(1, nQuarter)));
+                    ::tools::Rectangle(Point((nQuarter * 2) + 1, (nQuarter * 3) + 3), Size(1, nQuarter)));
             }
 
             return maBottom;
@@ -134,7 +134,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maBottomLeft = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maBottomLeft.Crop(
-                    tools::Rectangle(Point(0, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
+                    ::tools::Rectangle(Point(0, (nQuarter * 2) + 2), Size((nQuarter * 2) + 1, (nQuarter * 2) + 1)));
             }
 
             return maBottomLeft;
@@ -147,7 +147,7 @@ namespace drawinglayer
                 const sal_Int32 nQuarter((getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const_cast< DiscreteShadow* >(this)->maLeft = getBitmapEx();
                 const_cast< DiscreteShadow* >(this)->maLeft.Crop(
-                    tools::Rectangle(Point(0, (nQuarter * 2) + 1), Size(nQuarter, 1)));
+                    ::tools::Rectangle(Point(0, (nQuarter * 2) + 1), Size(nQuarter, 1)));
             }
 
             return maLeft;
