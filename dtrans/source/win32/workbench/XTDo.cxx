@@ -32,7 +32,6 @@
 #pragma warning(pop)
 #endif
 #include <memory>
-#include <tchar.h>
 
 using namespace ::std;
 

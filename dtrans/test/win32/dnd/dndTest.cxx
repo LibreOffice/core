@@ -22,7 +22,6 @@
 #endif
 #include <windows.h>
 #include <comdef.h>
-#include <tchar.h>
 #include <atlbase.h>
 CComModule _Module;
 #include <atlcom.h>
@@ -61,11 +60,11 @@ int main( int argc, char *argv[ ], char *envp[ ] )
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL )))
     {
-        _tprintf(_T("CoInitialize failed \n"));
+        printf("CoInitialize failed \n");
         return -1;
     }
 
-    _Module.Init( ObjectMap, GetModuleHandle( NULL));
+    _Module.Init( ObjectMap, GetModuleHandleA( NULL));
 
     if( FAILED(hr=doTest()))
     {
@@ -84,7 +83,7 @@ HRESULT doTest()
 
     // create the MTA thread that is used to realize MTA calls to the services
     // We create the thread and wait until the thread has created its message queue
-    HANDLE evt= CreateEvent(NULL, FALSE, FALSE, NULL);
+    HANDLE evt= CreateEventA(NULL, FALSE, FALSE, NULL);
     DWORD threadIdMTA=0;
     HANDLE hMTAThread= CreateThread( NULL, 0, MTAFunc, &evt, 0, &threadIdMTA);
     WaitForSingleObject( evt, INFINITE);
@@ -92,27 +91,27 @@ HRESULT doTest()
 
     HRESULT hr= S_OK;
     RECT pos1={0,0,300,200};
-    AWindow win(_T("DnD starting in Ole STA"), threadIdMTA, pos1);
+    AWindow win("DnD starting in Ole STA", threadIdMTA, pos1);
 
     RECT pos2={ 0, 205, 300, 405};
-    AWindow win2( _T("DnD starting in MTA"), threadIdMTA, pos2, true);
+    AWindow win2("DnD starting in MTA", threadIdMTA, pos2, true);
 
     // win3 and win4 call initialize from an MTA but they are created in an STA
     RECT pos3={300,0,600,200};
-    AWindow win3(_T("DnD starting in OLE STA"), threadIdMTA, pos3, false, true);
+    AWindow win3("DnD starting in OLE STA", threadIdMTA, pos3, false, true);
 
     RECT pos4={ 300, 205, 600, 405};
-    AWindow win24( _T("DnD starting in Ole MTA"), threadIdMTA, pos4, true, true);
+    AWindow win24("DnD starting in Ole MTA", threadIdMTA, pos4, true, true);
 
     MSG msg;
-    while( GetMessage(&msg, (HWND)NULL, 0, 0) )
+    while( GetMessageA(&msg, (HWND)NULL, 0, 0) )
     {
         TranslateMessage(  &msg);
-        DispatchMessage( &msg);
+        DispatchMessageA( &msg);
     }
 
     // Shut down the MTA thread
-    PostThreadMessage( threadIdMTA, WM_QUIT, 0, 0);
+    PostThreadMessageA( threadIdMTA, WM_QUIT, 0, 0);
     WaitForSingleObject(hMTAThread, INFINITE);
     CloseHandle(hMTAThread);
 
@@ -126,13 +125,13 @@ DWORD WINAPI MTAFunc( void* threadData)
     ATLASSERT( FAILED(hr) );
     MSG msg;
     // force the creation of a message queue
-    PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
+    PeekMessageA(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
     SetEvent( *(HANDLE*)threadData );
 
     RECT pos={0, 406, 300, 605};
-    AWindow win(_T("DnD, full MTA"), GetCurrentThreadId(), pos, false, true);
+    AWindow win("DnD, full MTA", GetCurrentThreadId(), pos, false, true);
 
-    while( GetMessage(&msg, (HWND)NULL, 0, 0) )
+    while( GetMessageA(&msg, (HWND)NULL, 0, 0) )
     {
         switch( msg.message)
         {
@@ -170,7 +169,7 @@ DWORD WINAPI MTAFunc( void* threadData)
         } // end switch
 
         TranslateMessage(  &msg);
-        DispatchMessage( &msg);
+        DispatchMessageA( &msg);
     }
 
     CoUninitialize();
