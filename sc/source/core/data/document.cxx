@@ -2464,6 +2464,7 @@ ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, const ScDoc
 
 ScDocument::NumFmtMergeHandler::~NumFmtMergeHandler()
 {
+    ScMutationGuard aGuard(mpDoc, ScMutationGuardFlags::CORE);
     mpDoc->pFormatExchangeList = nullptr;
 }
 
@@ -2561,7 +2562,10 @@ void ScDocument::MergeNumberFormatter(const ScDocument* pSrcDoc)
         SvNumberFormatterIndexTable* pExchangeList =
                  pThisFormatter->MergeFormatter(*pOtherFormatter);
         if (!pExchangeList->empty())
+        {
+            ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
             pFormatExchangeList = pExchangeList;
+        }
     }
 }
 
