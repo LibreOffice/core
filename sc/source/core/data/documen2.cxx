@@ -462,6 +462,8 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 {
     OSL_ENSURE(bIsClip, "InitClipPtrs and not bIsClip");
 
+    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+
     if (pValidationList)
     {
         for(ScValidationDataList::iterator it = pValidationList->begin(); it != pValidationList->end(); ++it )
