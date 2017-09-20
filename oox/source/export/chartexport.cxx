@@ -377,12 +377,6 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
 {
 }
 
-sal_Int32 ChartExport::GetChartID( )
-{
-    sal_Int32 nID = GetFB()->GetUniqueId();
-    return nID;
-}
-
 sal_Int32 ChartExport::getChartType( )
 {
     OUString sChartType = mxDiagram->getDiagramType();
@@ -434,7 +428,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
     return aResult;
 }
 
-void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nChartCount )
+void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nID, sal_Int32 nChartCount )
 {
     FSHelperPtr pFS = GetFS();
 
@@ -447,8 +441,6 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nC
     Reference< XNamed > xNamed( xShape, UNO_QUERY );
     if (xNamed.is())
         sName = xNamed->getName();
-
-    sal_Int32 nID = GetChartID();
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     I32S( nID ),
