@@ -11,12 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libexttextcat))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libexttextcat,0))
 
-# ubsan.patch upstreamed as
-#  <https://github.com/LibreOffice/libexttextcat/pull/1> "Silence various
-#  -fsanitize=shift-base":
 $(eval $(call gb_UnpackedTarball_add_patches,libexttextcat,\
         external/libexttextcat/exttextcat-iOS.patch.1 \
-        external/libexttextcat/ubsan.patch \
 ))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libexttextcat,$(LIBEXTTEXTCAT_TARBALL)))
