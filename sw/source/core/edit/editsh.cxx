@@ -194,7 +194,7 @@ long SwEditShell::SplitNode( bool bAutoFormat, bool bCheckTableStart )
     ClearTableBoxContent();
 
     EndAllAction();
-    return 1L;
+    return 1;
 }
 
 bool SwEditShell::AppendTextNode()

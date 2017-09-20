@@ -483,7 +483,7 @@ SwDoc* Reader::GetTemplateDoc()
 
             // only one minute later check if it has changed
             aChkDateTime = aCurrDateTime;
-            aChkDateTime += tools::Time( 0L, 1L );
+            aChkDateTime += tools::Time( 0, 1 );
         }
 
         if (bLoad)

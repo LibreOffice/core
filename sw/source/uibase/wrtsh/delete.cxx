@@ -140,7 +140,7 @@ long SwWrtShell::DelLeft()
             GotoNextFly();
         }
 
-        return 1L;
+        return 1;
     }
 
     // If a selection exists, erase this
@@ -164,7 +164,7 @@ long SwWrtShell::DelLeft()
             }
             else
                 EnterStdMode();
-            return 1L;
+            return 1;
         }
         else
             EnterStdMode();
