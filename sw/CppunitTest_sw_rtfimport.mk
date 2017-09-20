@@ -86,4 +86,8 @@ $(eval $(call gb_CppunitTest_use_components,sw_rtfimport,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_rtfimport))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_rtfimport,\
+    modules/swriter \
+))
+
 # vim: set noet sw=4 ts=4:
