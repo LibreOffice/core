@@ -33,10 +33,12 @@ inline OString I32SHEX_(sal_Int32 x)
     return aStr.getStr();
 }
 inline OString I64S_(sal_Int64 x) { return OString::number(x); }
+inline OString DS_(double x) { return OString::number(x); }
 #define I32S(x) I32S_(x).getStr()
 #define I32SHEX(x) I32SHEX_(x).getStr()
 #define I64S(x) I64S_(x).getStr()
 #define IS(x) OString::number( x ).getStr()
+#define DS(x) DS_(x).getStr()
 
 /**
  * @return const char* literal "true" for true value, or literal "false"
