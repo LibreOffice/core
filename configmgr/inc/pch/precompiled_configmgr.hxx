@@ -13,17 +13,19 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:28 using:
+ Generated on 2017-09-20 22:51:48 using:
  ./bin/update_pch configmgr configmgr --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./configmgr/inc/pch/precompiled_configmgr.hxx "/opt/lo/bin/make configmgr.build" --find-conflicts
+ ./bin/update_pch_bisect ./configmgr/inc/pch/precompiled_configmgr.hxx "make configmgr.build" --find-conflicts
 */
 
 #include <cassert>
 #include <cstddef>
 #include <new>
+#include <ostream>
 #include <set>
+#include <string.h>
 #include <utility>
 #include <vector>
 #include <osl/conditn.hxx>
@@ -37,6 +39,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/byteseq.h>
 #include <rtl/character.hxx>
+#include <rtl/locale.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>

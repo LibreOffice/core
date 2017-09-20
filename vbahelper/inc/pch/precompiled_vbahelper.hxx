@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2016-02-06 12:33:42 using:
+ Generated on 2017-09-20 22:55:39 using:
  ./bin/update_pch vbahelper vbahelper --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -22,12 +22,12 @@
 
 #include <cassert>
 #include <cstddef>
+#include <cstring>
 #include <deque>
 #include <exception>
 #include <functional>
 #include <memory>
 #include <set>
-#include <string.h>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -35,7 +35,6 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
-#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>
 #include <rtl/instance.hxx>
@@ -51,8 +50,10 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
+#include <vcl/button.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
 #include <vcl/event.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/inputtypes.hxx>
@@ -62,12 +63,15 @@
 #include <vcl/pointr.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
+#include <vcl/uitest/factory.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 #include <basic/basicdllapi.h>
 #include <basic/codecompletecache.hxx>
 #include <basic/sbdef.hxx>
+#include <basic/sberrors.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxdef.hxx>
@@ -75,25 +79,20 @@
 #include <basic/sbxmeth.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxprop.hxx>
-#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/CmisVersion.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -103,7 +102,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/processfactory.hxx>
@@ -121,11 +119,11 @@
 #include <sfx2/signaturestate.hxx>
 #include <sot/formats.hxx>
 #include <sot/object.hxx>
+#include <svl/hint.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
-#include <svl/hint.hxx>
+#include <svl/style.hxx>
 #include <svl/svldllapi.h>
-#include <vcl/errcode.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
@@ -133,6 +131,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/wintypes.hxx>
 #include <vbahelper/helperdecl.hxx>
+#include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbashape.hxx>

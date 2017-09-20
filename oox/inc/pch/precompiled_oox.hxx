@@ -13,17 +13,20 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:36 using:
+ Generated on 2017-09-20 22:52:46 using:
  ./bin/update_pch oox oox --cutoff=6 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./oox/inc/pch/precompiled_oox.hxx "/opt/lo/bin/make oox.build" --find-conflicts
+ ./bin/update_pch_bisect ./oox/inc/pch/precompiled_oox.hxx "make oox.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstdlib>
+#include <exception>
+#include <functional>
 #include <iomanip>
 #include <limits.h>
 #include <limits>
@@ -34,30 +37,29 @@
 #include <ostream>
 #include <set>
 #include <sstream>
-#include <stack>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
+#include <utility>
 #include <vector>
 #include <boost/algorithm/string.hpp>
-#include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/character.hxx>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
-#include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
@@ -81,6 +83,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/dllapi.h>
+#include <vcl/errcode.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
@@ -90,12 +93,11 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
-#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -103,22 +105,19 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -130,6 +129,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -138,10 +138,13 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/xml/Attribute.hpp>
 #include <com/sun/star/xml/FastAttribute.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
@@ -149,11 +152,13 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <drawingml/chart/chartcontextbase.hxx>
 #include <drawingml/chart/chartspacemodel.hxx>
 #include <drawingml/chart/converterbase.hxx>
@@ -163,8 +168,8 @@
 #include <drawingml/customshapegeometry.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/fillproperties.hxx>
-#include <drawingml/misccontexts.hxx>
 #include <drawingml/lineproperties.hxx>
+#include <drawingml/misccontexts.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
 #include <drawingml/shapestylecontext.hxx>
 #include <drawingml/table/tablestylepart.hxx>
@@ -176,25 +181,26 @@
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textparagraphproperties.hxx>
 #include <drawingml/textspacing.hxx>
-#include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
-#include <o3tl/cow_wrapper.hxx>
+#include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
 #include <services.hxx>
-#include <svtools/grfmgr.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/msdffdef.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/errinf.hxx>
+#include <tools/color.hxx>
+#include <tools/colordata.hxx>
+#include <tools/date.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
+#include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <typelib/typedescription.h>
 #include <uno/data.h>
@@ -236,6 +242,7 @@
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/properties.hxx>
 #include <oox/token/tokenmap.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/vml/vmldrawing.hxx>

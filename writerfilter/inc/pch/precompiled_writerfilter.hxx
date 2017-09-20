@@ -13,24 +13,25 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-12-02 15:48:57 using:
- ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --include:local
+ Generated on 2017-09-20 22:55:45 using:
+ ./bin/update_pch writerfilter writerfilter --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./writerfilter/inc/pch/precompiled_writerfilter.hxx "/opt/lo/bin/make writerfilter.build" --find-conflicts
+ ./bin/update_pch_bisect ./writerfilter/inc/pch/precompiled_writerfilter.hxx "make writerfilter.build" --find-conflicts
 */
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <exception>
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <memory>
 #include <ostream>
 #include <stdlib.h>
-#include <tuple>
+#include <utility>
 #include <vector>
-#include <boost/intrusive_ptr.hpp>
 #include <boost/logic/tribool.hpp>
 #include <boost/optional.hpp>
 #include <osl/diagnose.h>
@@ -39,24 +40,30 @@
 #include <osl/getglobalmutex.hxx>
 #include <osl/mutex.hxx>
 #include <osl/process.h>
-#include <osl/thread.hxx>
+#include <rtl/character.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.hxx>
-#include <rtl/strbuf.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/strbuf.h>
 #include <rtl/string.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/tencinfo.h>
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/uuid.h>
 #include <sal/config.h>
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
+#include <vcl/svapp.hxx>
+#include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -73,20 +80,23 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/sequence.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implbase_ex.hxx>
+#include <cppuhelper/weak.hxx>
 #include <filter/msfilter/util.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <oox/dllapi.h>
 #include <oox/token/tokens.hxx>
-#include <ooxml/QNameToString.hxx>
 #include <ooxml/resourceids.hxx>
+#include <sfx2/dllapi.h>
+#include <tools/color.hxx>
+#include <tools/colordata.hxx>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <tools/toolsdllapi.h>

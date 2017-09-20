@@ -13,50 +13,52 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:41 using:
+ Generated on 2017-09-20 22:55:35 using:
  ./bin/update_pch unotools utl --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./unotools/inc/pch/precompiled_utl.hxx "/opt/lo/bin/make unotools.build" --find-conflicts
+ ./bin/update_pch_bisect ./unotools/inc/pch/precompiled_utl.hxx "make unotools.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
+#include <config_global.h>
 #include <cstddef>
 #include <iomanip>
-#include <limits>
 #include <list>
+#include <map>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include <type_traits>
 #include <unordered_map>
 #include <vector>
+#include <boost/locale.hpp>
+#include <boost/locale/gnu_gettext.hpp>
 #include <boost/optional.hpp>
 #include <osl/detail/file.h>
 #include <osl/diagnose.h>
-#include <osl/file.h>
+#include <osl/endian.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
-#include <osl/pipe.h>
 #include <osl/process.h>
-#include <osl/security.h>
-#include <osl/socket.h>
+#include <osl/signal.h>
+#include <osl/thread.h>
 #include <osl/thread.hxx>
 #include <osl/time.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
+#include <rtl/crc.h>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>
@@ -64,6 +66,7 @@
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/unload.h>
+#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -80,13 +83,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
+#include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -120,26 +123,27 @@
 #include <cppu/cppudllapi.h>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nutil/transliteration.hxx>
+#include <o3tl/any.hxx>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
-#include <vcl/errinf.hxx>
-#include <tools/lineend.hxx>
-#include <tools/ref.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
+#include <ucbhelper/interceptedinteraction.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <unotoolsservices.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>
@@ -150,8 +154,10 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/readwritemutexguard.hxx>
 #include <unotools/securityoptions.hxx>
+#include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 

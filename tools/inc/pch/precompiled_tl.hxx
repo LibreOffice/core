@@ -13,42 +13,38 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:40 using:
+ Generated on 2017-09-20 22:55:34 using:
  ./bin/update_pch tools tl --cutoff=5 --exclude:system --exclude:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./tools/inc/pch/precompiled_tl.hxx "/opt/lo/bin/make tools.build" --find-conflicts
+ ./bin/update_pch_bisect ./tools/inc/pch/precompiled_tl.hxx "make tools.build" --find-conflicts
 */
 
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
+#include <cstring>
 #include <limits.h>
-#include <memory>
 #include <new>
 #include <ostream>
 #include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <vector>
+#include <boost/math/common_factor_rt.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/rational.hpp>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
-#include <osl/mutex.hxx>
 #include <osl/process.h>
-#include <osl/signal.h>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/character.hxx>
 #include <rtl/crc.h>
 #include <rtl/math.hxx>
-#include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -57,7 +53,9 @@
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -69,13 +67,9 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2enums.hxx>
-#include <com/sun/star/lang/Locale.hpp>
-#include <i18nlangtag/i18nlangtagdllapi.h>
-#include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/toolsdllapi.h>
 

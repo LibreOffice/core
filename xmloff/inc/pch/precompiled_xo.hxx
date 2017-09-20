@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2015-11-14 14:16:43 using:
+ Generated on 2017-09-20 22:55:48 using:
  ./bin/update_pch xmloff xo --cutoff=7 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./xmloff/inc/pch/precompiled_xo.hxx "/opt/lo/bin/make xmloff.build" --find-conflicts
+ ./bin/update_pch_bisect ./xmloff/inc/pch/precompiled_xo.hxx "make xmloff.build" --find-conflicts
 */
 
 #include <algorithm>
@@ -28,7 +28,7 @@
 #include <cstdlib>
 #include <exception>
 #include <float.h>
-#include <functional>
+#include <limits>
 #include <list>
 #include <map>
 #include <memory>
@@ -36,7 +36,6 @@
 #include <ostream>
 #include <set>
 #include <sstream>
-#include <tuple>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -44,16 +43,19 @@
 #include <utility>
 #include <vector>
 #include <osl/diagnose.h>
+#include <osl/diagnose.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/instance.hxx>
+#include <rtl/locale.h>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -108,7 +110,6 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
@@ -120,6 +121,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -144,6 +146,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -158,7 +161,10 @@
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/any.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/make_unique.hxx>
+#include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sax/tools/converter.hxx>
 #include <svl/svldllapi.h>
@@ -171,8 +177,6 @@
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 #include <typelib/uik.h>
-#include <uno/data.h>
-#include <uno/sequence2.h>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/readwritemutexguard.hxx>
 #include <unotools/unotoolsdllapi.h>
