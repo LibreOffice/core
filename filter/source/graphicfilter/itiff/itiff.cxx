@@ -1340,8 +1340,9 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 else
                     nDstBitsPerPixel = 8;
 
-                Size aTargetSize( nImageWidth, nImageLength );
-                aBitmap = Bitmap( aTargetSize, nDstBitsPerPixel );
+                pAlphaMask.reset();
+                Size aTargetSize(nImageWidth, nImageLength);
+                aBitmap = Bitmap(aTargetSize, nDstBitsPerPixel);
                 xAcc = Bitmap::ScopedWriteAccess(aBitmap);
                 if (xAcc && xAcc->Width() == nImageWidth && xAcc->Height() == nImageLength)
                 {
