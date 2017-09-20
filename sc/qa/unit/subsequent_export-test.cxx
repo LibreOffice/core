@@ -126,6 +126,7 @@ public:
     void testLandscapeOrientationXLSX();
 
     void testInlineArrayXLS();
+    void testEmbeddedChartODS();
     void testEmbeddedChartXLS();
     void testCellAnchoredGroupXLS();
 
@@ -235,6 +236,7 @@ public:
     CPPUNIT_TEST(testAllRowsHiddenXLSX);
     CPPUNIT_TEST(testLandscapeOrientationXLSX);
     CPPUNIT_TEST(testInlineArrayXLS);
+    CPPUNIT_TEST(testEmbeddedChartODS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST(testCellAnchoredGroupXLS);
 
@@ -323,6 +325,8 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("office"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:office:1.0") },
         { BAD_CAST("table"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:table:1.0") },
         { BAD_CAST("text"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:text:1.0") },
+        { BAD_CAST("style"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:style:1.0") },
+        { BAD_CAST("draw"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0") },
         { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") },
         { BAD_CAST("xdr"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing") },
         { BAD_CAST("x"), BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main") },
@@ -1920,6 +1924,24 @@ void ScExportTest::testInlineArrayXLS()
     checkMatrixRange(rDoc, ScRange(1,7,0,2,9,0));
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testEmbeddedChartODS()
+{
+    ScDocShellRef xShell = loadDoc("embedded-chart.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pTempFile(
+            ScBootstrapFixture::exportTo(xShell.get(), FORMAT_ODS));
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(pTempFile, m_xSFactory, "content.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc,
+        "/office:document-content/office:body/office:spreadsheet/table:table[2]/table:table-row[7]/table:table-cell[2]/draw:frame/draw:object",
+        "notify-on-update-of-ranges",
+        "Chart1.B3:Chart1.B5 Chart1.C2:Chart1.C2 Chart1.C3:Chart1.C5");
+
+    xShell->DoClose();
 }
 
 void ScExportTest::testEmbeddedChartXLS()
