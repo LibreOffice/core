@@ -28,6 +28,8 @@ static const OUStringLiteral BREEZE_DARK_DISPLAY_NAME("Breeze Dark");
 static const OUStringLiteral SIFR_DARK_ID("sifr_dark");
 static const OUStringLiteral SIFR_DARK_DISPLAY_NAME("Sifr Dark");
 
+static const OUStringLiteral HELPIMG_FAKE_THEME("helpimg");
+
 OUString
 filename_from_url(const OUString& url)
 {
@@ -94,6 +96,10 @@ IconThemeInfo::UrlCanBeParsed(const OUString& url)
     }
 
     if (!fname.endsWithIgnoreAsciiCase(EXTENSION_FOR_ICON_PACKAGES)) {
+        return false;
+    }
+
+    if (fname.indexOf(HELPIMG_FAKE_THEME) != -1 ) {
         return false;
     }
 
