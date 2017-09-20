@@ -81,8 +81,7 @@ private:
     sal_uInt32              nOrientation;
     sal_uInt32              nSamplesPerPixel;           // number of layers
     sal_uInt32              nRowsPerStrip;              // if it's not compressed: number of rows per Strip
-    sal_uInt32*             pStripByteCounts;           // if compressed (in a certain way): size of the strips
-    sal_uInt32              nNumStripByteCounts;        // number of entries in the field above
+    std::vector<sal_uInt32> aStripByteCounts;           // if compressed (in a certain way): size of the strips
     sal_uInt32              nMinSampleValue;
     sal_uInt32              nMaxSampleValue;
     double                  fXResolution;               // X-resolution or 0.0
@@ -151,8 +150,6 @@ public:
         , nOrientation(1)
         , nSamplesPerPixel(1)
         , nRowsPerStrip(0xffffffff)
-        , pStripByteCounts(nullptr)
-        , nNumStripByteCounts(0)
         , nMinSampleValue(0)
         , nMaxSampleValue(0)
         , fXResolution(0.0)
@@ -402,34 +399,23 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             break;
 
         case 0x0117: { // Strip Byte Counts
-            sal_uInt32* pOldSBC = pStripByteCounts;
-            if (pOldSBC == nullptr)
-                nNumStripByteCounts = 0; // to be on the safe side
-            sal_uInt32 nOldNumSBC = nNumStripByteCounts;
+            sal_uInt32 nOldNumSBC = aStripByteCounts.size();
             nDataLen += nOldNumSBC;
             size_t const nMaxAllocAllowed = SAL_MAX_UINT32 / sizeof(sal_uInt32);
             size_t nMaxRecordsAvailable = pTIFF->remainingSize() / DataTypeSize();
             if (nDataLen > nOldNumSBC && nDataLen < nMaxAllocAllowed &&
                 (nDataLen - nOldNumSBC) <= nMaxRecordsAvailable)
             {
-                nNumStripByteCounts = nDataLen;
                 try
                 {
-                    pStripByteCounts = new sal_uInt32[nNumStripByteCounts];
+                    aStripByteCounts.resize(nDataLen);
+                    for (sal_uInt32 i = nOldNumSBC; i < aStripByteCounts.size(); ++i)
+                        aStripByteCounts[i] = ReadIntData();
                 }
                 catch (const std::bad_alloc &)
                 {
-                    pStripByteCounts = nullptr;
-                    nNumStripByteCounts = 0;
+                    aStripByteCounts.clear();
                 }
-                if ( pStripByteCounts )
-                {
-                    for (sal_uInt32 i = 0; i < nOldNumSBC; ++i)
-                        pStripByteCounts[ i ] = pOldSBC[ i ];
-                    for (sal_uInt32 i = nOldNumSBC; i < nNumStripByteCounts; ++i)
-                        pStripByteCounts[ i ] = ReadIntData();
-                }
-                delete[] pOldSBC;
             }
             SAL_INFO("filter.tiff","StripByteCounts (Number:) " << nDataLen);
             break;
@@ -1282,7 +1268,6 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 nOrientation = 1;
                 nSamplesPerPixel = 1;                       // default value according to the documentation
                 nRowsPerStrip = 0xffffffff;                 // default value according to the documentation
-                nNumStripByteCounts = 0;
                 nMinSampleValue = 0;                        // default value according to the documentation
                 nMaxSampleValue = 0;
                 fXResolution = 0.0;
@@ -1296,7 +1281,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
                 xAcc.reset();
                 aStripOffsets.clear();
-                pStripByteCounts = nullptr;
+                aStripByteCounts.clear();
                 pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = nullptr;
 
                 pTIFF->ReadUInt16( nNumTags );
@@ -1444,7 +1429,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 delete[] pMap[ i ];
             xColorMap.reset();
             aStripOffsets.clear();
-            delete[] pStripByteCounts;
+            aStripByteCounts.clear();
         }
     }
 
