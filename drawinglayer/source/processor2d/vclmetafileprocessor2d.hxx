@@ -72,7 +72,7 @@ namespace drawinglayer
         {
         private:
             /// local helper(s)
-            tools::Rectangle impDumpToMetaFile(
+            ::tools::Rectangle impDumpToMetaFile(
                 const primitive2d::Primitive2DContainer& rContent,
                 GDIMetaFile& o_rContentMetafile);
             void impConvertFillGradientAttributeToVCLGradient(

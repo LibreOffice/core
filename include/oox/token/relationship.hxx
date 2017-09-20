@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_OOX_TOKEN_RELATIONSHIP_HXX
+#define INCLUDED_OOX_TOKEN_RELATIONSHIP_HXX
+
 #include <oox/dllapi.h>
 
 #include <rtl/ustring.hxx>
@@ -63,5 +66,7 @@ enum class Relationship
 OUString OOX_DLLPUBLIC getRelationship(Relationship eRelationship);
 
 }
+
+#endif // INCLUDED_OOX_TOKEN_RELATIONSHIP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

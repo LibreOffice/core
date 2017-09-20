@@ -744,6 +744,17 @@ def generate(includes, libname, filename, module):
         f.write('\n If after updating build fails, use the following command to locate conflicting headers:\n ./bin/update_pch_bisect {} "make {}.build" --find-conflicts\n*/\n'.format(
                 filename, module))
 
+        # sal needs this for rand_s()
+        if module == 'sal' and libname == 'sal':
+            sal_define = """
+#if defined(_WIN32)
+#if !defined _CRT_RAND_S
+#define _CRT_RAND_S
+#endif
+#endif
+"""
+            f.write(sal_define)
+
         # svx needs this (sendreportw32.cxx)
         if module == 'svx' and libname == 'svx':
             svx_define = """
