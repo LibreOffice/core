@@ -756,6 +756,8 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         ChangeKind kind;
         PassThrough pass;
         bool simplify;
+        bool encIsAscii;
+        std::string enc;
         switch (expr->getConstructor()->getNumParams()) {
         case 1:
             if (!loplugin::TypeCheck(
@@ -846,11 +848,12 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                     return true;
                 }
                 if (!expr->getArg(2)->EvaluateAsInt(
-                        res, compiler.getASTContext())
-                    || res != 11) // RTL_TEXTENCODING_ASCII_US
+                        res, compiler.getASTContext()))
                 {
                     return true;
                 }
+                encIsAscii = res == 11; // RTL_TEXTENCODING_ASCII_US
+                enc = res.toString(10);
                 if (!expr->getArg(3)->EvaluateAsInt(
                         res, compiler.getASTContext())
                     || res != 0x333) // OSTRING_TO_OUSTRING_CVTFLAGS
@@ -1056,9 +1059,10 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         if (simplify) {
             report(
                 DiagnosticsEngine::Warning,
-                "simplify construction of %0 with %1",
+                ("simplify construction of %0 with %1%select{ (but beware, the"
+                 " given textencoding %3 is not RTL_TEXTENCODING_ASCII_US)|}2"),
                 expr->getExprLoc())
-                << classdecl << describeChangeKind(kind)
+                << classdecl << describeChangeKind(kind) << encIsAscii << enc
                 << expr->getSourceRange();
         }
         return true;
