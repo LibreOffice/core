@@ -79,60 +79,15 @@ void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, c
     if (nSize == nIndex)
         maProperties.push_back(aProps);
     else
-    {
-        IndexedPropertyValues::iterator aItr;
-        if ((nIndex * 2) < nSize)
-        {
-            aItr = maProperties.begin();
-            sal_Int32 i(0);
-            while(i < nIndex)
-            {
-                ++i;
-                ++aItr;
-            }
-        }
-        else
-        {
-            aItr = maProperties.end();
-            sal_Int32 i(nSize);
-            while(i > nIndex)
-            {
-                --i;
-                --aItr;
-            }
-        }
-        maProperties.insert(aItr, aProps);
-    }
+        maProperties.insert(maProperties.begin() + nIndex, aProps);
 }
 
 void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
 {
-    sal_Int32 nSize(maProperties.size());
-    if ((nIndex >= nSize) || (nIndex < 0))
+    if ((nIndex >= sal_Int32(maProperties.size())) || (nIndex < 0))
         throw lang::IndexOutOfBoundsException();
 
-    IndexedPropertyValues::iterator aItr;
-    if ((nIndex * 2) < nSize)
-    {
-        aItr = maProperties.begin();
-        sal_Int32 i(0);
-        while(i < nIndex)
-        {
-            ++i;
-            ++aItr;
-        }
-    }
-    else
-    {
-        aItr = maProperties.end();
-        sal_Int32 i(nSize);
-        while(i > nIndex)
-        {
-            --i;
-            --aItr;
-        }
-    }
-    maProperties.erase(aItr);
+    maProperties.erase(maProperties.begin() + nIndex);
 }
 
 // XIndexReplace
