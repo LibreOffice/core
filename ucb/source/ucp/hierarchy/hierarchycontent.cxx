@@ -717,7 +717,7 @@ HierarchyContent::makeNewIdentifier( const OUString& rTitle )
 }
 
 
-void HierarchyContent::queryChildren( HierarchyContentRefList& rChildren )
+void HierarchyContent::queryChildren( HierarchyContentRefVector& rChildren )
 {
     if ( ( m_eKind != FOLDER ) && ( m_eKind != ROOT ) )
         return;
@@ -808,13 +808,12 @@ bool HierarchyContent::exchangeIdentity(
             {
                 // Process instantiated children...
 
-                HierarchyContentRefList aChildren;
+                HierarchyContentRefVector aChildren;
                 queryChildren( aChildren );
 
-                HierarchyContentRefList::const_iterator it  = aChildren.begin();
-                HierarchyContentRefList::const_iterator end = aChildren.end();
+                HierarchyContentRefVector::const_iterator it  = aChildren.begin();
 
-                while ( it != end )
+                while ( it != aChildren.end() )
                 {
                     HierarchyContentRef xChild = (*it);
 
@@ -1488,16 +1487,12 @@ void HierarchyContent::destroy( bool bDeletePhysical,
     {
         // Process instantiated children...
 
-        HierarchyContentRefList aChildren;
+        HierarchyContentRefVector aChildren;
         queryChildren( aChildren );
 
-        HierarchyContentRefList::const_iterator it  = aChildren.begin();
-        HierarchyContentRefList::const_iterator end = aChildren.end();
-
-        while ( it != end )
+        for ( auto & child : aChildren)
         {
-            (*it)->destroy( bDeletePhysical, xEnv );
-            ++it;
+            child->destroy( bDeletePhysical, xEnv );
         }
     }
 }
