@@ -475,7 +475,7 @@ void HeaderFooterTabPage::dispose()
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl, ListBox&, void)
 {
-    FillFormatList( mpCBDateTimeFormat->GetSelectEntryPos() );
+    FillFormatList( mpCBDateTimeFormat->GetSelectedEntryPos() );
 }
 
 void HeaderFooterTabPage::FillFormatList( sal_Int32 nSelectedPos )
@@ -547,7 +547,7 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
 
     if( mpCBDateTimeFormat->GetSelectEntryCount() == 1 )
     {
-        sal_Int32 nPos = mpCBDateTimeFormat->GetSelectEntryPos();
+        sal_Int32 nPos = mpCBDateTimeFormat->GetSelectedEntryPos();
         rSettings.meDateFormat = nDateTimeFormats[nPos].meDateFormat;
         rSettings.meTimeFormat = nDateTimeFormats[nPos].meTimeFormat;
     }
