@@ -1273,7 +1273,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
 
         aHint.flags = 15; /* flags for functions, decoration, input mode and status */
         aHint.deco = 0;
-        aHint.func = 1L << 2;
+        aHint.func = 1 << 2;
         aHint.status = 0;
         aHint.input_mode = 0;
 
@@ -1286,28 +1286,28 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
         else
         {
             if( nDecorationFlags & decoration_Title )
-                aHint.deco |= 1L << 3;
+                aHint.deco |= 1 << 3;
             if( nDecorationFlags & decoration_Border )
-                aHint.deco |= 1L << 1;
+                aHint.deco |= 1 << 1;
             if( nDecorationFlags & decoration_Resize )
             {
-                aHint.deco |= 1L << 2;
-                aHint.func |= 1L << 1;
+                aHint.deco |= 1 << 2;
+                aHint.func |= 1 << 1;
             }
             if( nDecorationFlags & decoration_MinimizeBtn )
             {
-                aHint.deco |= 1L << 5;
-                aHint.func |= 1L << 3;
+                aHint.deco |= 1 << 5;
+                aHint.func |= 1 << 3;
             }
             if( nDecorationFlags & decoration_MaximizeBtn )
             {
-                aHint.deco |= 1L << 6;
-                aHint.func |= 1L << 4;
+                aHint.deco |= 1 << 6;
+                aHint.func |= 1 << 4;
             }
             if( nDecorationFlags & decoration_CloseBtn )
             {
-                aHint.deco |= 1L << 4;
-                aHint.func |= 1L << 5;
+                aHint.deco |= 1 << 4;
+                aHint.func |= 1 << 5;
             }
         }
 

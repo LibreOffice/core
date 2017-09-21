@@ -249,10 +249,10 @@ void ImplInitSalGDI()
                 pColors[ n ] = (short)( n + DITHER_MAX_SYSCOLOR );
 
             for( n = 0; n < 256; n++ )
-                pSalData->mpDitherDiff[ n ] = n % 51L;
+                pSalData->mpDitherDiff[ n ] = n % 51;
 
             for( n = 0; n < 256; n++ )
-                pSalData->mpDitherLow[ n ] = (BYTE) ( n / 51L );
+                pSalData->mpDitherLow[ n ] = (BYTE) ( n / 51 );
 
             for( n = 0; n < 256; n++ )
                 pSalData->mpDitherHigh[ n ] = (BYTE)std::min( pSalData->mpDitherLow[ n ] + 1, 5 );
