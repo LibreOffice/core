@@ -830,9 +830,9 @@ class PPTNumberFormatCreator
 protected:
 
     PPTNumberFormatCreator( PPTExtParaProv* );
-    ~PPTNumberFormatCreator();
 
 public:
+    virtual ~PPTNumberFormatCreator();
 
     std::unique_ptr<PPTExtParaProv>  pExtParaProv;
 
@@ -868,7 +868,7 @@ struct PPTStyleSheet : public PPTNumberFormatCreator
                             const PPTTextParagraphStyleAtomInterpreter&,
                             const PPTTextSpecInfo&
                         );
-                        ~PPTStyleSheet();
+                        virtual ~PPTStyleSheet() override;
 };
 
 struct ImplPPTParaPropSet : public salhelper::SimpleReferenceObject
@@ -908,7 +908,7 @@ struct PPTParaPropSet
 
                         PPTParaPropSet();
                         PPTParaPropSet( PPTParaPropSet& rParaPropSet );
-                        ~PPTParaPropSet();
+                        virtual ~PPTParaPropSet();
 
     PPTParaPropSet&     operator=( const PPTParaPropSet& rParaPropSet );
 };
@@ -962,7 +962,7 @@ struct PPTCharPropSet
                         explicit PPTCharPropSet( sal_uInt32 nParagraph );
                         PPTCharPropSet( const PPTCharPropSet& rCharPropSet );
                         PPTCharPropSet( const PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph );
-                        ~PPTCharPropSet();
+                        virtual ~PPTCharPropSet();
 
     PPTCharPropSet&     operator=( const PPTCharPropSet& rCharPropSet );
 
@@ -1006,7 +1006,7 @@ struct PPTTextRulerInterpreter
                         DffRecordHeader const & rHd,
                         SvStream& rIn
                     );
-                    ~PPTTextRulerInterpreter();
+                    virtual ~PPTTextRulerInterpreter();
 
         sal_uInt16  GetTabOffsetByIndex( sal_uInt16 nIndex ) const
                     { return mxImplRuler->pTab[ nIndex ].nOffset; };
@@ -1125,7 +1125,7 @@ public:
                         sal_uInt32 nDepth
                     );
                     PPTPortionObj( const PPTPortionObj& );
-                    ~PPTPortionObj();
+                    virtual ~PPTPortionObj() override;
 
     // the following function should be removed during next full update
     void            ApplyTo(
@@ -1180,7 +1180,7 @@ public:
                                 TSS_Type nInstance,
                                 PPTTextRulerInterpreter const & rRuler
                             );
-                            ~PPTParagraphObj();
+                            virtual ~PPTParagraphObj() override;
 
     sal_uInt32              GetTextSize();
     PPTPortionObj*          First();
