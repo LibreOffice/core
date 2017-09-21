@@ -60,6 +60,10 @@ int main() {
     (void)aFoo;
     Foo aFoo2(OUString("xxx")); // expected-error {{in call of 'Foo::Foo', replace 'OUString' constructed from a string literal directly with the string literal}}
     (void)aFoo2;
+
+    (void) OUString("xxx", 3, RTL_TEXTENCODING_ASCII_US); // expected-error {{simplify construction of 'OUString' with string constant argument [loplugin:stringconstant]}}
+    (void) OUString("xxx", 3, RTL_TEXTENCODING_ISO_8859_1); // expected-error {{simplify construction of 'OUString' with string constant argument (but beware, the given textencoding 12 is not RTL_TEXTENCODING_ASCII_US) [loplugin:stringconstant]}}
+    (void) OUString("x\xA0x", 3, RTL_TEXTENCODING_ISO_8859_1);
 }
 
 
