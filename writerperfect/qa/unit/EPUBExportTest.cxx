@@ -70,6 +70,7 @@ public:
     void testSection();
     void testList();
     void testImage();
+    void testTable();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -89,6 +90,7 @@ public:
     CPPUNIT_TEST(testSection);
     CPPUNIT_TEST(testList);
     CPPUNIT_TEST(testImage);
+    CPPUNIT_TEST(testTable);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -439,6 +441,14 @@ void EPUBExportTest::testImage()
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:img", 1);
+}
+
+void EPUBExportTest::testTable()
+{
+    createDoc("table.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    assertXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr/xhtml:td", 4);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
