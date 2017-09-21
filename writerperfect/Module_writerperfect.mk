@@ -47,4 +47,8 @@ $(eval $(call gb_Module_add_slowcheck_targets,writerperfect,\
 	Library_wpftqahelper \
 ))
 
+$(eval $(call gb_Module_add_uicheck_targets,writerperfect,\
+    UITest_writerperfect_epubexport \
+))
+
 # vim: set noet sw=4 ts=4:

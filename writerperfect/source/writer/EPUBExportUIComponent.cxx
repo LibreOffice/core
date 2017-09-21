@@ -74,6 +74,8 @@ void EPUBExportUIComponent::setTitle(const OUString &/*rTitle*/)
 
 sal_Int16 EPUBExportUIComponent::execute()
 {
+    SolarMutexGuard aGuard;
+
     ScopedVclPtrInstance<EPUBExportDialog> pDialog(Application::GetDefDialogParent(), maFilterData);
     if (pDialog->Execute() == RET_OK)
         return ui::dialogs::ExecutableDialogResults::OK;
