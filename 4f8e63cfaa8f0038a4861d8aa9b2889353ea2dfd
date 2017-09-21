@@ -33,6 +33,24 @@
       "revId": "4f8e63cfaa8f0038a4861d8aa9b2889353ea2dfd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_63c7cf12",
+        "filename": "vcl/inc/window.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-09-21T08:04:55Z",
+      "side": 1,
+      "message": "enum class ExtTextInputAttr is from vcl/commandevent.hxx, and enum class ShowTrackFlags is from vcl/window.hxx\n\nShould I remove that class forward decl in this commit?",
+      "parentUuid": "1a430d35_83175ba2",
+      "revId": "4f8e63cfaa8f0038a4861d8aa9b2889353ea2dfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
