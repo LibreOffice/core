@@ -1006,8 +1006,7 @@ public class DocumentMetadataAccess
                 i_Expected.length);
             return false;
         }
-        Statement[] expected = (Statement[])
-            java.util.Arrays.asList(i_Expected).toArray();
+        Statement[] expected = i_Expected.clone();
         java.util.Arrays.sort(i_Result, new StmtComp());
         java.util.Arrays.sort(expected, new StmtComp());
         for (int i = 0; i < expected.length; ++i)
