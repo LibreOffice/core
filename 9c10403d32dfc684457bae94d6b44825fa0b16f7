@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_83091b98",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1001697
+      },
+      "writtenOn": "2017-09-21T07:23:01Z",
+      "side": 1,
+      "message": "I\u0027d prefer the option to assign the global default by default.\n\nFurhter down we have some constructors, that, depending on some condition, need to set-up mpImplPolygon differently. I\u0027m not aware of a method to chainload multiple constructors.\nI could write some init() or set() methods to go around that, where needed, but I would think, that this might bloat up the patch in an unnecessary way.",
+      "parentUuid": "1a430d35_b0d100d0",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_d0d68cc4",
         "filename": "tools/source/generic/poly.cxx",
         "patchSetId": 1
@@ -138,6 +156,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_c3032372",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1001697
+      },
+      "writtenOn": "2017-09-21T07:23:01Z",
+      "side": 1,
+      "message": "aye sir :)",
+      "parentUuid": "1a430d35_50e37ca3",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_70eeb88c",
         "filename": "tools/source/generic/poly.cxx",
         "patchSetId": 1
@@ -217,6 +253,24 @@
       "writtenOn": "2017-09-17T00:54:57Z",
       "side": 1,
       "message": "that\u0027s not sufficient.\n\nif they are not the same object, they might still compare equal (e.g. being constructed from the same rectangle)\n\nSee basegfx/source/polygon/b2dpolygon.cxx for some inspiration",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e3f81f7f",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1001697
+      },
+      "writtenOn": "2017-09-21T07:23:01Z",
+      "side": 1,
+      "message": "I took a look at the B2DPolygon comparison-operator and, if I didn\u0027t miss anyhting, it seems to be implemented the same way like this one. So I\u0027m not really sure, how to follow up on this.",
+      "parentUuid": "1a430d35_f002a83d",
       "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
