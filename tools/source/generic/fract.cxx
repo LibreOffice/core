@@ -189,7 +189,9 @@ namespace
         bool fail = false;
         fail |= o3tl::checked_multiply(i.numerator() / gcd1, num / gcd2, num);
         fail |= o3tl::checked_multiply(i.denominator() / gcd2, den / gcd1, den);
-        i.assign(num, den);
+
+        if (!fail)
+            i.assign(num, den);
 
         return fail;
     }
