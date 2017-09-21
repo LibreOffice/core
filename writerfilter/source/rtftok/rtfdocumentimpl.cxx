@@ -1897,7 +1897,7 @@ void RTFDocumentImpl::resetAttributes()
     m_aStates.top().aParagraphAttributes.clear();
 }
 
-bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
+static bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
 {
     return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
     {

@@ -304,7 +304,7 @@ OUString lcl_getProperty(uno::Reference<beans::XPropertyContainer> const & rxPro
     return xPropertySet->getPropertyValue(rName).get<OUString>();
 }
 
-bool lcl_containsProperty(const uno::Sequence<beans::Property> & rProperties, const OUString& rName)
+static bool lcl_containsProperty(const uno::Sequence<beans::Property> & rProperties, const OUString& rName)
 {
     return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
     {
@@ -312,7 +312,7 @@ bool lcl_containsProperty(const uno::Sequence<beans::Property> & rProperties, co
     }) != rProperties.end();
 }
 
-void lcl_removeAllProperties(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer)
+static void lcl_removeAllProperties(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
     uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();

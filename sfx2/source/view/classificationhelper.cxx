@@ -400,7 +400,7 @@ void SfxClassificationHelper::Impl::parsePolicy()
     m_aIPPartNumbers = xClassificationParser->m_aIPPartNumbers;
 }
 
-bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
+static bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
 {
     return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
     {
