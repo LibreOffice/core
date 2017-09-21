@@ -116,7 +116,7 @@ void ClassificationDialog::setupValues(std::vector<ClassificationResult> const &
             case svx::ClassificationType::CATEGORY:
             {
                 m_pClassificationListBox->SelectEntry(rClassificationResult.msString);
-                m_pInternationalClassificationListBox->SelectEntryPos(m_pClassificationListBox->GetSelectEntryPos());
+                m_pInternationalClassificationListBox->SelectEntryPos(m_pClassificationListBox->GetSelectedEntryPos());
                 insertField(rClassificationResult.meType, rClassificationResult.msString);
             }
             break;
@@ -171,7 +171,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
 IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nSelected = rBox.GetSelectEntryPos();
+    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)
     {
         std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
@@ -201,7 +201,7 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
 
 IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nSelected = rBox.GetSelectEntryPos();
+    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)
     {
         std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
@@ -228,7 +228,7 @@ IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
 
 IMPL_LINK(ClassificationDialog, SelectIPPartNumbersHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nSelected = rBox.GetSelectEntryPos();
+    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)
     {
         OUString sString = maHelper.GetIntellectualPropertyPartNumbers()[nSelected];
@@ -238,7 +238,7 @@ IMPL_LINK(ClassificationDialog, SelectIPPartNumbersHdl, ListBox&, rBox, void)
 
 IMPL_LINK(ClassificationDialog, DoubleClickIPPartHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nSelected = rBox.GetSelectEntryPos();
+    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)
     {
         OUString sString = maHelper.GetIntellectualPropertyParts()[nSelected];
