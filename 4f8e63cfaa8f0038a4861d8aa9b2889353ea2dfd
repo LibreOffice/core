@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_434733bb",
+        "filename": "include/oox/token/relationship.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-21T07:47:30Z",
+      "side": 1,
+      "message": "for include files in inclued/, we\u0027ve traditionally left the \"INCLUDE\" segment out of the include guard macro names (and I only spot three occurrences with \"git grep -E \u0027\\\u003cINCLUDED_INCLUDE_\u0027 include\"), so I\u0027d leave that out here, too",
+      "revId": "4f8e63cfaa8f0038a4861d8aa9b2889353ea2dfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_83175ba2",
+        "filename": "vcl/inc/window.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-09-21T07:47:30Z",
+      "side": 1,
+      "message": "do you know why these includes become necessary now?\n\nat least if the latter /is/ necessary, the forward declaration of vcl::Window below can go now",
+      "revId": "4f8e63cfaa8f0038a4861d8aa9b2889353ea2dfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
