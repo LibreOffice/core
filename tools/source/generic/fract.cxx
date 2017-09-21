@@ -72,10 +72,10 @@ Fraction::Fraction( Fraction&& rFrac ) : mpImpl(std::move(rFrac.mpImpl))
 // in order to return the correct value.
 Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mpImpl(new Impl)
 {
-    //assert( nNum >= std::numeric_limits<sal_Int32>::min() );
-    //assert( nNum <= std::numeric_limits<sal_Int32>::max( ));
-    //assert( nDen >= std::numeric_limits<sal_Int32>::min() );
-    //assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
+    assert( nNum >= std::numeric_limits<sal_Int32>::min() );
+    assert( nNum <= std::numeric_limits<sal_Int32>::max( ));
+    assert( nDen >= std::numeric_limits<sal_Int32>::min() );
+    assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
     if ( nDen == 0 )
     {
         mpImpl->valid = false;
