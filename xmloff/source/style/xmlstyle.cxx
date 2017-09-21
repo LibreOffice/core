@@ -148,7 +148,7 @@ SvXMLStyleContext::~SvXMLStyleContext()
 {
 }
 
-SvXMLImportContext *SvXMLStyleContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef SvXMLStyleContext::CreateChildContext( sal_uInt16 nPrefix,
                                                            const OUString& rLocalName,
                                                            const uno::Reference< xml::sax::XAttributeList > & )
 {
@@ -755,7 +755,7 @@ SvXMLStylesContext::~SvXMLStylesContext()
 {
 }
 
-SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
                                                             const OUString& rLocalName,
                                                             const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {

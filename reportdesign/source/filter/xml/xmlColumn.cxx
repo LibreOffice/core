@@ -80,7 +80,7 @@ OXMLRowColumn::~OXMLRowColumn()
 {
 }
 
-SvXMLImportContext* OXMLRowColumn::CreateChildContext(
+SvXMLImportContextRef OXMLRowColumn::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

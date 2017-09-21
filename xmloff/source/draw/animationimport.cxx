@@ -1233,7 +1233,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
     }
 }
 
-SvXMLImportContext * AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
+SvXMLImportContextRef AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     if( mxNode.is())

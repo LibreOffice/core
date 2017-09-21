@@ -257,7 +257,7 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
     }
 }
 
-SvXMLImportContext* XMLLineNumberingImportContext::CreateChildContext(
+SvXMLImportContextRef XMLLineNumberingImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

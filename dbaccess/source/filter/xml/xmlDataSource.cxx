@@ -204,7 +204,7 @@ OXMLDataSource::~OXMLDataSource()
 
 }
 
-SvXMLImportContext* OXMLDataSource::CreateChildContext(
+SvXMLImportContextRef OXMLDataSource::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

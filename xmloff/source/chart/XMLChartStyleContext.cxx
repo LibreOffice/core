@@ -105,12 +105,12 @@ void XMLChartStyleContext::FillPropertySet(
     lcl_NumberFormatStyleToProperty( msPercentageDataStyleName, "PercentageNumberFormat", mrStyles, rPropSet );
 }
 
-SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
+SvXMLImportContextRef XMLChartStyleContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
     {
@@ -128,17 +128,17 @@ SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
             rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
-                pContext = new XMLChartPropertyContext(
+                xContext = new XMLChartPropertyContext(
                     GetImport(), nPrefix, rLocalName, xAttrList, nFamily,
                     GetProperties(), xImpPrMap );
         }
     }
 
-    if( !pContext )
-        pContext = XMLShapeStyleContext::CreateChildContext( nPrefix, rLocalName,
+    if (!xContext)
+        xContext = XMLShapeStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                              xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

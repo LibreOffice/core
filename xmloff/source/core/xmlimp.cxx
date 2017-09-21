@@ -703,7 +703,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     SvXMLImportContextRef xContext;
     if(!maContexts.empty())
     {
-        xContext.set(maContexts.top()->CreateChildContext(nPrefix, aLocalName, xAttrList));
+        xContext = maContexts.top()->CreateChildContext(nPrefix, aLocalName, xAttrList);
         SAL_WARN_IF( !xContext.is() || (xContext->GetPrefix() != nPrefix), "xmloff.core",
                 "SvXMLImport::startElement: created context has wrong prefix" );
     }

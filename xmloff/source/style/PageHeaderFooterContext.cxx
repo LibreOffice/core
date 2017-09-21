@@ -48,28 +48,28 @@ PageHeaderFooterContext::~PageHeaderFooterContext()
 {
 }
 
-SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLName, XML_HEADER_FOOTER_PROPERTIES ) )
     {
         PageContextType aType = Header;
         if (!bHeader)
             aType = Footer;
-        pContext = new PagePropertySetContext( GetImport(), nPrefix,
+        xContext = new PagePropertySetContext( GetImport(), nPrefix,
                                                 rLName, xAttrList,
                                                 XML_TYPE_PROP_HEADER_FOOTER,
                                                 rProperties,
                                                 rMap,  nStartIndex, nEndIndex, aType);
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+    if (!xContext)
+        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
-    return pContext;
+    return xContext;
 }
 
 void PageHeaderFooterContext::EndElement()

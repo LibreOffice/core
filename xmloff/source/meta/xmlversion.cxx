@@ -144,7 +144,7 @@ XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport,
 XMLVersionListContext::~XMLVersionListContext()
 {}
 
-SvXMLImportContext *XMLVersionListContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef XMLVersionListContext::CreateChildContext( sal_uInt16 nPrefix,
                                         const OUString& rLocalName,
                                         const Reference< XAttributeList > & xAttrList )
 {

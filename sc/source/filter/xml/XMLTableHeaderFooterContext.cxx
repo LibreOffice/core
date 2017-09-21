@@ -102,7 +102,7 @@ XMLTableHeaderFooterContext::~XMLTableHeaderFooterContext()
 {
 }
 
-SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
+SvXMLImportContextRef XMLTableHeaderFooterContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -211,7 +211,7 @@ XMLHeaderFooterRegionContext::~XMLHeaderFooterRegionContext()
 {
 }
 
-SvXMLImportContext *XMLHeaderFooterRegionContext::CreateChildContext(
+SvXMLImportContextRef XMLHeaderFooterRegionContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )

@@ -211,11 +211,11 @@ SdXMLDrawPageContext::~SdXMLDrawPageContext()
 {
 }
 
-SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetDrawPageElemTokenMap();
 
     // some special objects inside draw:page context
@@ -236,7 +236,7 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix
                         if(xNewShapes.is())
                         {
                             // presentation:notes inside draw:page context
-                            pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList, xNewShapes);
+                            xContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList, xNewShapes);
                         }
                     }
                 }
@@ -251,7 +251,7 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix
                 uno::Reference< animations::XAnimationNodeSupplier > xNodeSupplier(GetLocalShapesContext(), uno::UNO_QUERY);
                 if(xNodeSupplier.is())
                 {
-                    pContext = new xmloff::AnimationNodeContext( xNodeSupplier->getAnimationNode(), GetSdImport(), nPrefix, rLocalName, xAttrList );
+                    xContext = new xmloff::AnimationNodeContext( xNodeSupplier->getAnimationNode(), GetSdImport(), nPrefix, rLocalName, xAttrList );
                     mbHadSMILNodes = true;
                 }
             }
@@ -260,10 +260,10 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( sal_uInt16 nPrefix
     }
 
     // call parent when no own context was created
-    if(!pContext)
-        pContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+    if (!xContext)
+        xContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
-    return pContext;
+    return xContext;
 }
 
 void SdXMLDrawPageContext::EndElement()
@@ -290,12 +290,12 @@ SdXMLBodyContext::~SdXMLBodyContext()
 {
 }
 
-SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
+SvXMLImportContextRef SdXMLBodyContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetBodyElemTokenMap();
 
     switch(rTokenMap.Get(nPrefix, rLocalName))
@@ -304,7 +304,7 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
         case XML_TOK_BODY_FOOTER_DECL:
         case XML_TOK_BODY_DATE_TIME_DECL:
         {
-            pContext = new SdXMLHeaderFooterDeclContext( GetImport(), nPrefix, rLocalName, xAttrList );
+            xContext = new SdXMLHeaderFooterDeclContext( GetImport(), nPrefix, rLocalName, xAttrList );
             break;
         }
         case XML_TOK_BODY_PAGE:
@@ -340,7 +340,7 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
                     if(xNewShapes.is())
                     {
                         // draw:page inside office:body context
-                        pContext = new SdXMLDrawPageContext(GetSdImport(), nPrefix, rLocalName, xAttrList,
+                        xContext = new SdXMLDrawPageContext(GetSdImport(), nPrefix, rLocalName, xAttrList,
                             xNewShapes);
                     }
                 }
@@ -349,15 +349,15 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
         }
         case XML_TOK_BODY_SETTINGS:
         {
-            pContext = new SdXMLShowsContext( GetSdImport(), nPrefix, rLocalName, xAttrList );
+            xContext = new SdXMLShowsContext( GetSdImport(), nPrefix, rLocalName, xAttrList );
         }
     }
 
     // call parent when no own context was created
-    if(!pContext)
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+    if (!xContext)
+        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
-    return pContext;
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

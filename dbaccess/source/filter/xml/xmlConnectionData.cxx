@@ -48,7 +48,7 @@ OXMLConnectionData::~OXMLConnectionData()
 
 }
 
-SvXMLImportContext* OXMLConnectionData::CreateChildContext(
+SvXMLImportContextRef OXMLConnectionData::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

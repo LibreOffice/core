@@ -116,8 +116,7 @@ OXMLTable::~OXMLTable()
 {
 }
 
-
-SvXMLImportContext* OXMLTable::CreateChildContext(
+SvXMLImportContextRef OXMLTable::CreateChildContext(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )

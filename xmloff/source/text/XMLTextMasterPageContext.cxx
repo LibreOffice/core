@@ -167,12 +167,12 @@ XMLTextMasterPageContext::~XMLTextMasterPageContext()
 {
 }
 
-SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
+SvXMLImportContextRef XMLTextMasterPageContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     const SvXMLTokenMap& rTokenMap =
         GetImport().GetTextImport()->GetTextMasterPageElemTokenMap();
@@ -214,17 +214,17 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
 
     if( bInsert && xStyle.is() )
     {
-        pContext = CreateHeaderFooterContext( nPrefix, rLocalName,
+        xContext = CreateHeaderFooterContext( nPrefix, rLocalName,
                                                     xAttrList,
                                                     bFooter, bLeft, bFirst );
     }
     else
     {
-        pContext = SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName,
+        xContext = SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                           xAttrList );
     }
 
-    return pContext;
+    return xContext;
 }
 
 SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(

@@ -314,7 +314,7 @@ public:
 
     virtual ~XMLImpSpanContext_Impl() override;
 
-    static SvXMLImportContext *CreateChildContext(
+    static SvXMLImportContextRef CreateChildContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
@@ -322,7 +322,7 @@ public:
             bool& rIgnLeadSpace,
             sal_uInt8 nStarFontsConvFlags = 0
              );
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
@@ -349,7 +349,7 @@ public:
 
     virtual ~XMLImpHyperlinkContext_Impl() override;
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
@@ -432,7 +432,7 @@ XMLImpHyperlinkContext_Impl::~XMLImpHyperlinkContext_Impl()
                             ->GetCursorAsRange()->getStart() );
 }
 
-SvXMLImportContext *XMLImpHyperlinkContext_Impl::CreateChildContext(
+SvXMLImportContextRef XMLImpHyperlinkContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
@@ -479,7 +479,7 @@ public:
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace );
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
@@ -500,7 +500,7 @@ XMLImpRubyBaseContext_Impl::XMLImpRubyBaseContext_Impl(
 {
 }
 
-SvXMLImportContext *XMLImpRubyBaseContext_Impl::CreateChildContext(
+SvXMLImportContextRef XMLImpRubyBaseContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
@@ -542,7 +542,7 @@ public:
 
     virtual void EndElement() override;
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
@@ -645,33 +645,33 @@ void XMLImpRubyContext_Impl::EndElement()
          m_sStyleName, m_sTextStyleName, m_sText );
 }
 
-SvXMLImportContext *XMLImpRubyContext_Impl::CreateChildContext(
+SvXMLImportContextRef XMLImpRubyContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext;
+    SvXMLImportContextRef xContext;
     if( XML_NAMESPACE_TEXT == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_RUBY_BASE ) )
-            pContext = new XMLImpRubyBaseContext_Impl( GetImport(), nPrefix,
+            xContext = new XMLImpRubyBaseContext_Impl( GetImport(), nPrefix,
                                                        rLocalName,
                                                        xAttrList,
                                                        m_rHints,
                                                        rIgnoreLeadingSpace );
         else if( IsXMLToken( rLocalName, XML_RUBY_TEXT ) )
-            pContext = new XMLImpRubyTextContext_Impl( GetImport(), nPrefix,
+            xContext = new XMLImpRubyTextContext_Impl( GetImport(), nPrefix,
                                                        rLocalName,
                                                        xAttrList,
                                                        *this );
         else
-            pContext = new SvXMLImportContext(
+            xContext = new SvXMLImportContext(
                 GetImport(), nPrefix, rLocalName );
     }
     else
-        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName,
+        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName,
                                                             xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 /** for text:meta and text:meta-field
@@ -702,7 +702,7 @@ public:
 
     virtual void EndElement() override;
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
             const Reference< xml::sax::XAttributeList > & i_xAttrList) override;
 
@@ -763,7 +763,7 @@ void XMLMetaImportContextBase::EndElement()
     InsertMeta(xInsertionCursor);
 }
 
-SvXMLImportContext * XMLMetaImportContextBase::CreateChildContext(
+SvXMLImportContextRef XMLMetaImportContextBase::CreateChildContext(
             sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
             const Reference< xml::sax::XAttributeList > & i_xAttrList )
 {
@@ -1489,7 +1489,7 @@ XMLImpSpanContext_Impl::~XMLImpSpanContext_Impl()
                             ->GetCursorAsRange()->getStart() );
 }
 
-SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
+SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
@@ -1736,7 +1736,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
     return pContext;
 }
 
-SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
+SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
@@ -2155,7 +2155,7 @@ void XMLParaContext::EndElement()
     m_xHints.reset();
 }
 
-SvXMLImportContext *XMLParaContext::CreateChildContext(
+SvXMLImportContextRef XMLParaContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
@@ -2269,11 +2269,11 @@ void XMLNumberedParaContext::EndElement()
     }
 }
 
-SvXMLImportContext *XMLNumberedParaContext::CreateChildContext(
+SvXMLImportContextRef XMLNumberedParaContext::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const Reference< xml::sax::XAttributeList > & i_xAttrList )
 {
-    SvXMLImportContext *pContext( nullptr );
+    SvXMLImportContextRef xContext;
 
     if ( XML_NAMESPACE_TEXT == i_nPrefix ||
             XML_NAMESPACE_LO_EXT == i_nPrefix )
@@ -2281,18 +2281,17 @@ SvXMLImportContext *XMLNumberedParaContext::CreateChildContext(
         bool bIsHeader( IsXMLToken( i_rLocalName, XML_H ) );
         if ( bIsHeader || IsXMLToken( i_rLocalName, XML_P ) )
         {
-            pContext = new XMLParaContext( GetImport(),
+            xContext = new XMLParaContext( GetImport(),
                 i_nPrefix, i_rLocalName, i_xAttrList, bIsHeader );
-// ignore text:number       } else if (IsXMLToken( i_rLocalName, XML_NUMBER )) {
         }
     }
 
-    if (!pContext) {
-        pContext = SvXMLImportContext::CreateChildContext(
+    if (!xContext) {
+        xContext = SvXMLImportContext::CreateChildContext(
             i_nPrefix, i_rLocalName, i_xAttrList );
     }
 
-    return pContext;
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

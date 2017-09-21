@@ -126,7 +126,7 @@ void XMLIndexObjectSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
-SvXMLImportContext* XMLIndexObjectSourceContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexObjectSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

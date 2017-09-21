@@ -145,12 +145,12 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 XMLTextStyleContext::~XMLTextStyleContext()
 {}
 
-SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
+SvXMLImportContextRef XMLTextStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( XML_NAMESPACE_STYLE == nPrefix )
     {
@@ -170,7 +170,7 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
             rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
                 GetStyles()->GetImportPropertyMapper( GetFamily() );
             if( xImpPrMap.is() )
-                pContext = new XMLTextPropertySetContext( GetImport(), nPrefix,
+                xContext = new XMLTextPropertySetContext( GetImport(), nPrefix,
                                                         rLocalName, xAttrList,
                                                         nFamily,
                                                         GetProperties(),
@@ -185,14 +185,14 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
         // (for delayed processing of events)
         m_xEventContext.set(new XMLEventsImportContext( GetImport(), nPrefix,
                                                    rLocalName));
-        pContext = m_xEventContext.get();
+        xContext = m_xEventContext.get();
     }
 
-    if( !pContext )
-        pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
+    if (!xContext)
+        xContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                           xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 void XMLTextStyleContext::CreateAndInsert( bool bOverwrite )

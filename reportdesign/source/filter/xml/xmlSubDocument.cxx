@@ -50,20 +50,18 @@ OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport,
 
 }
 
-
 OXMLSubDocument::~OXMLSubDocument()
 {
 }
 
-
-SvXMLImportContext* OXMLSubDocument::CreateChildContext_(
+SvXMLImportContextRef OXMLSubDocument::CreateChildContext_(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = OXMLReportElementBase::CreateChildContext_(_nPrefix,_rLocalName,xAttrList);
-    if ( pContext )
-        return pContext;
+    SvXMLImportContextRef xContext = OXMLReportElementBase::CreateChildContext_(_nPrefix,_rLocalName,xAttrList);
+    if (xContext)
+        return xContext;
     const SvXMLTokenMap&    rTokenMap   = static_cast<ORptFilter&>(GetImport()).GetReportElemTokenMap();
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
@@ -71,7 +69,7 @@ SvXMLImportContext* OXMLSubDocument::CreateChildContext_(
         case XML_TOK_MASTER_DETAIL_FIELDS:
             {
                 GetImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLMasterFields(static_cast<ORptFilter&>(GetImport()), _nPrefix, _rLocalName,xAttrList ,this);
+                xContext = new OXMLMasterFields(static_cast<ORptFilter&>(GetImport()), _nPrefix, _rLocalName,xAttrList ,this);
             }
             break;
         case XML_TOK_SUB_FRAME:
@@ -80,7 +78,7 @@ SvXMLImportContext* OXMLSubDocument::CreateChildContext_(
                     m_nCurrentCount = m_pContainer->getSection()->getCount();
                 rtl::Reference< XMLShapeImportHelper > xShapeImportHelper = GetImport().GetShapeImport();
                 uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
-                pContext = xShapeImportHelper->CreateGroupChildContext(GetImport(),_nPrefix,_rLocalName,xAttrList,xShapes);
+                xContext = xShapeImportHelper->CreateGroupChildContext(GetImport(),_nPrefix,_rLocalName,xAttrList,xShapes);
                 m_bContainsShape = true;
                 if (m_pCellParent)
                 {
@@ -93,10 +91,10 @@ SvXMLImportContext* OXMLSubDocument::CreateChildContext_(
             break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );
+    if (!xContext)
+        xContext = new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );
 
-    return pContext;
+    return xContext;
 }
 
 void OXMLSubDocument::EndElement()

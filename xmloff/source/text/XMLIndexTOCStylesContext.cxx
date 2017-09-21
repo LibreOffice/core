@@ -107,7 +107,7 @@ void XMLIndexTOCStylesContext::EndElement()
     }
 }
 
-SvXMLImportContext *XMLIndexTOCStylesContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexTOCStylesContext::CreateChildContext(
     sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

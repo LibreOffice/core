@@ -80,7 +80,7 @@ void SchXMLParagraphContext::EndElement()
     mrText = maBuffer.makeStringAndClear();
 }
 
-SvXMLImportContext* SchXMLParagraphContext::CreateChildContext(
+SvXMLImportContextRef SchXMLParagraphContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )

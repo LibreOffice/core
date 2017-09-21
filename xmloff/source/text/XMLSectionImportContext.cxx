@@ -324,7 +324,7 @@ void XMLSectionImportContext::EndElement()
     rHelper->RedlineAdjustStartNodeCursor(false);
 }
 
-SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
+SvXMLImportContextRef XMLSectionImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

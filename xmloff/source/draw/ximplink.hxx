@@ -44,7 +44,7 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLShapeLinkContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 };

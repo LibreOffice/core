@@ -123,7 +123,7 @@ public:
 
     void EndElement() override;
 
-    SvXMLImportContext *CreateChildContext(
+    SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
@@ -204,7 +204,7 @@ void XMLImageMapObjectContext::EndElement()
     // else: not valid -> don't create and insert
 }
 
-SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
+SvXMLImportContextRef XMLImageMapObjectContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -572,36 +572,36 @@ XMLImageMapContext::~XMLImageMapContext()
 {
 }
 
-SvXMLImportContext *XMLImageMapContext::CreateChildContext(
+SvXMLImportContextRef XMLImageMapContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if ( XML_NAMESPACE_DRAW == nPrefix )
     {
         if ( IsXMLToken(rLocalName, XML_AREA_RECTANGLE) )
         {
-            pContext = new XMLImageMapRectangleContext(
+            xContext = new XMLImageMapRectangleContext(
                 GetImport(), nPrefix, rLocalName, xImageMap);
         }
         else if ( IsXMLToken(rLocalName, XML_AREA_POLYGON) )
         {
-            pContext = new XMLImageMapPolygonContext(
+            xContext = new XMLImageMapPolygonContext(
                 GetImport(), nPrefix, rLocalName, xImageMap);
         }
         else if ( IsXMLToken(rLocalName, XML_AREA_CIRCLE) )
         {
-            pContext = new XMLImageMapCircleContext(
+            xContext = new XMLImageMapCircleContext(
                 GetImport(), nPrefix, rLocalName, xImageMap);
         }
     }
     else
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
 
-    return pContext;
+    return xContext;
 }
 
 void XMLImageMapContext::EndElement()

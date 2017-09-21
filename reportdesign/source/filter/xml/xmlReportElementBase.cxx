@@ -47,18 +47,18 @@ OXMLReportElementBase::~OXMLReportElementBase()
 {
 }
 
-SvXMLImportContext* OXMLReportElementBase::CreateChildContext(
+SvXMLImportContextRef OXMLReportElementBase::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = CreateChildContext_(nPrefix,rLocalName,xAttrList);
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    return pContext;
+    SvXMLImportContextRef xContext = CreateChildContext_(nPrefix,rLocalName,xAttrList);
+    if (!xContext)
+        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    return xContext;
 }
 
-SvXMLImportContext* OXMLReportElementBase::CreateChildContext_(
+SvXMLImportContextRef OXMLReportElementBase::CreateChildContext_(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

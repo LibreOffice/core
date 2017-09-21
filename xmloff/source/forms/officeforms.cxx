@@ -48,7 +48,7 @@ namespace xmloff
     {
     }
 
-    SvXMLImportContext* OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName,
+    SvXMLImportContextRef OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const Reference< XAttributeList>& xAttrList )
     {
         SvXMLImportContext* pRet = nullptr;

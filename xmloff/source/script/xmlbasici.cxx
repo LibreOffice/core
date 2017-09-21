@@ -45,7 +45,7 @@ XMLBasicImportContext::~XMLBasicImportContext()
 {
 }
 
-SvXMLImportContext* XMLBasicImportContext::CreateChildContext(
+SvXMLImportContextRef XMLBasicImportContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& )
 {
@@ -116,7 +116,7 @@ XMLBasicImportChildContext::~XMLBasicImportChildContext()
 {
 }
 
-SvXMLImportContext* XMLBasicImportChildContext::CreateChildContext(
+SvXMLImportContextRef XMLBasicImportChildContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& )
 {

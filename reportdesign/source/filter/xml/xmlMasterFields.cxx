@@ -75,8 +75,7 @@ OXMLMasterFields::~OXMLMasterFields()
 {
 }
 
-
-SvXMLImportContext* OXMLMasterFields::CreateChildContext(
+SvXMLImportContextRef OXMLMasterFields::CreateChildContext(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )

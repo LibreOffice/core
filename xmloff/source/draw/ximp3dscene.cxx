@@ -167,44 +167,44 @@ void SdXML3DSceneShapeContext::EndElement()
     }
 }
 
-SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     // #i68101#
     if( nPrefix == XML_NAMESPACE_SVG &&
         (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
-        pContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
+        xContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
     else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
-        pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
+        xContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
     // look for local light context first
     else if(nPrefix == XML_NAMESPACE_DR3D && IsXMLToken( rLocalName, XML_LIGHT ) )
     {
         // dr3d:light inside dr3d:scene context
-        pContext = create3DLightContext( nPrefix, rLocalName, xAttrList );
+        xContext = create3DLightContext( nPrefix, rLocalName, xAttrList );
     }
 
     // call GroupChildContext function at common ShapeImport
-    if(!pContext)
+    if (!xContext)
     {
-        pContext = GetImport().GetShapeImport()->Create3DSceneChildContext(
+        xContext = GetImport().GetShapeImport()->Create3DSceneChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
-        }
+    }
 
     // call parent when no own context was created
-    if(!pContext)
+    if (!xContext)
     {
-        pContext = SvXMLImportContext::CreateChildContext(
+        xContext = SvXMLImportContext::CreateChildContext(
         nPrefix, rLocalName, xAttrList);
     }
 
-    return pContext;
+    return xContext;
 }
 
 SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImporter )

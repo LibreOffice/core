@@ -34,6 +34,10 @@
 class SvXMLNamespaceMap;
 class SvXMLImport;
 
+class SvXMLImportContext;
+
+typedef rtl::Reference<SvXMLImportContext> SvXMLImportContextRef;
+
 class XMLOFF_DLLPUBLIC SvXMLImportContext : public cppu::WeakImplHelper< css::xml::sax::XFastContextHandler >
 {
     friend class SvXMLImport;
@@ -75,7 +79,7 @@ public:
 
     /** Create a children element context. By default, the import's
      * CreateContext method is called to create a new default context. */
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
@@ -117,8 +121,6 @@ public:
     void AddNextRef();
     void ReleaseRef();
 };
-
-typedef rtl::Reference<SvXMLImportContext> SvXMLImportContextRef;
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX
 

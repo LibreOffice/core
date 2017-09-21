@@ -284,7 +284,7 @@ class XMLTableCellPropsContext : public SvXMLPropertySetContext
              ::std::vector< XMLPropertyState > &rProps,
              const rtl::Reference < SvXMLImportPropertyMapper > &rMap);
 
-        virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+        virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList >& xAttrList,
            ::std::vector< XMLPropertyState > &rProperties,
@@ -303,7 +303,7 @@ XMLTableCellPropsContext::XMLTableCellPropsContext(
 {
 }
 
-SvXMLImportContext* XMLTableCellPropsContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef XMLTableCellPropsContext::CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList >& xAttrList,
            ::std::vector< XMLPropertyState > &rProperties,
@@ -448,12 +448,12 @@ XMLTableStyleContext::~XMLTableStyleContext()
         delete mpCondFormat;
 }
 
-SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
+SvXMLImportContextRef XMLTableStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext(nullptr);
+    SvXMLImportContextRef xContext;
 
     if( (XML_NAMESPACE_STYLE == nPrefix) &&
         IsXMLToken(rLocalName, XML_MAP ) )
@@ -461,7 +461,7 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
         if(!mpCondFormat)
             mpCondFormat = new ScConditionalFormat( 0, GetScImport().GetDocument() );
         ScXMLMapContext* pMapContext = new ScXMLMapContext(GetImport(), nPrefix, rLocalName, xAttrList);
-        pContext = pMapContext;
+        xContext = pMapContext;
         mpCondFormat->AddEntry(pMapContext->CreateConditionEntry());
     }
     else if ( ( XML_NAMESPACE_STYLE == nPrefix) &&
@@ -471,17 +471,17 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
             GetStyles()->GetImportPropertyMapper(
                 GetFamily() );
         if( xImpPrMap.is() )
-            pContext = new XMLTableCellPropsContext( GetImport(), nPrefix,
+            xContext = new XMLTableCellPropsContext( GetImport(), nPrefix,
                 rLocalName, xAttrList,
                 XML_TYPE_PROP_TABLE_CELL,
                 GetProperties(),
                 xImpPrMap );
     }
 
-    if (!pContext)
-        pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
+    if (!xContext)
+        xContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                            xAttrList );
-    return pContext;
+    return xContext;
 }
 
 void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRangeAddress>& xCellRanges )

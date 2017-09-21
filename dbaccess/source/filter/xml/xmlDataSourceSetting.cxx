@@ -100,7 +100,7 @@ OXMLDataSourceSetting::~OXMLDataSourceSetting()
 {
 }
 
-SvXMLImportContext* OXMLDataSourceSetting::CreateChildContext(
+SvXMLImportContextRef OXMLDataSourceSetting::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

@@ -277,12 +277,12 @@ void XMLFootnoteConfigurationImportContext::StartElement(
     }
 }
 
-SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
+SvXMLImportContextRef XMLFootnoteConfigurationImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if (!bIsEndnote)
     {
@@ -291,14 +291,14 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
             if ( IsXMLToken( rLocalName,
                              XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD ) )
             {
-                pContext = new XMLFootnoteConfigHelper(GetImport(),
+                xContext = new XMLFootnoteConfigHelper(GetImport(),
                                                        nPrefix, rLocalName,
                                                        *this, false);
             }
             else if ( IsXMLToken( rLocalName,
                                   XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD ) )
             {
-                pContext = new XMLFootnoteConfigHelper(GetImport(),
+                xContext = new XMLFootnoteConfigHelper(GetImport(),
                                                        nPrefix, rLocalName,
                                                        *this, true);
             }
@@ -308,15 +308,15 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     }
     // else: endnote -> default context
 
-    if (pContext == nullptr)
+    if (!xContext)
     {
         // default: delegate to super class
-        pContext = SvXMLStyleContext::CreateChildContext(nPrefix,
+        xContext = SvXMLStyleContext::CreateChildContext(nPrefix,
                                                          rLocalName,
                                                          xAttrList);
     }
 
-    return pContext;
+    return xContext;
 }
 
 // Rename method <CreateAndInsertLate(..)> to <Finish(..)> (#i40597#)
