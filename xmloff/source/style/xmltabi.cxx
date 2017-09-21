@@ -65,7 +65,7 @@ public:
                                const OUString& rLName,
                                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
@@ -152,7 +152,7 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
         aTabStop.FillChar = cTextFillChar;
 }
 
-SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
+SvXMLImportContextRef SvxXMLTabStopContext_Impl::CreateChildContext(
                                    sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const uno::Reference< xml::sax::XAttributeList > & )
@@ -170,7 +170,7 @@ SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(
 {
 }
 
-SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
+SvXMLImportContextRef SvxXMLTabStopImportContext::CreateChildContext(
                                    sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const uno::Reference< xml::sax::XAttributeList > & xAttrList )

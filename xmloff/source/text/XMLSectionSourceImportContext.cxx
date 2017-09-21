@@ -130,7 +130,7 @@ void XMLSectionSourceImportContext::EndElement()
     // this space intentionally left blank.
 }
 
-SvXMLImportContext* XMLSectionSourceImportContext::CreateChildContext(
+SvXMLImportContextRef XMLSectionSourceImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & )

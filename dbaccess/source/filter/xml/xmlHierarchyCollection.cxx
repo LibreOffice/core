@@ -110,7 +110,7 @@ OXMLHierarchyCollection::~OXMLHierarchyCollection()
 
 }
 
-SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
+SvXMLImportContextRef OXMLHierarchyCollection::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

@@ -116,7 +116,7 @@ OXMLControlProperty::~OXMLControlProperty()
 {
 }
 
-SvXMLImportContext* OXMLControlProperty::CreateChildContext(
+SvXMLImportContextRef OXMLControlProperty::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

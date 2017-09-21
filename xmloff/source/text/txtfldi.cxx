@@ -1204,7 +1204,7 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
     }
 }
 
-SvXMLImportContext* XMLDatabaseFieldImportContext::CreateChildContext(
+SvXMLImportContextRef XMLDatabaseFieldImportContext::CreateChildContext(
     sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& xAttrList )
@@ -2423,29 +2423,28 @@ XMLMacroFieldImportContext::XMLMacroFieldImportContext(
 {
 }
 
-SvXMLImportContext* XMLMacroFieldImportContext::CreateChildContext(
+SvXMLImportContextRef XMLMacroFieldImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if ( (nPrefix == XML_NAMESPACE_OFFICE) &&
          IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         // create events context and remember it!
-        pContext = new XMLEventsImportContext(
+        xContext = new XMLEventsImportContext(
             GetImport(), nPrefix, rLocalName );
-        xEventContext = pContext;
+        xEventContext = xContext;
         bValid = true;
     }
     else
-        pContext = SvXMLImportContext::CreateChildContext(
+        xContext = SvXMLImportContext::CreateChildContext(
             nPrefix, rLocalName, xAttrList);
 
-    return pContext;
+    return xContext;
 }
-
 
 void XMLMacroFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
@@ -2691,7 +2690,7 @@ XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(
 {
 }
 
-SvXMLImportContext * XMLDdeFieldDeclsImportContext::CreateChildContext(
+SvXMLImportContextRef XMLDdeFieldDeclsImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
@@ -3301,7 +3300,7 @@ void XMLAnnotationImportContext::ProcessAttribute(
         aName = rValue;
 }
 
-SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
+SvXMLImportContextRef XMLAnnotationImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList >& xAttrList )
@@ -3639,7 +3638,7 @@ static bool lcl_ProcessLabel( const SvXMLImport& rImport,
     return bValid;
 }
 
-SvXMLImportContext* XMLDropDownFieldImportContext::CreateChildContext(
+SvXMLImportContextRef XMLDropDownFieldImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& xAttrList )

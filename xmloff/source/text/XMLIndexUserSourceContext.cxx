@@ -129,7 +129,6 @@ void XMLIndexUserSourceContext::ProcessAttribute(
     }
 }
 
-
 void XMLIndexUserSourceContext::EndElement()
 {
     rIndexPropertySet->setPropertyValue("CreateFromEmbeddedObjects", css::uno::Any(bUseObjects));
@@ -148,8 +147,7 @@ void XMLIndexUserSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
-
-SvXMLImportContext* XMLIndexUserSourceContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexUserSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

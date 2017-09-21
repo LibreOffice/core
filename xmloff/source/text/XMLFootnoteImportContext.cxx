@@ -167,13 +167,12 @@ void XMLFootnoteImportContext::EndElement()
     }
 }
 
-
-SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
+SvXMLImportContextRef XMLFootnoteImportContext::CreateChildContext(
     sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     SvXMLTokenMap aTokenMap(aFootnoteChildTokenMap);
 
@@ -200,25 +199,25 @@ SvXMLImportContext *XMLFootnoteImportContext::CreateChildContext(
             }
 
             // ignore content: return default context
-            pContext = new SvXMLImportContext(GetImport(),
+            xContext = new SvXMLImportContext(GetImport(),
                                               p_nPrefix, rLocalName);
             break;
         }
 
         case XML_TOK_FTN_NOTE_BODY:
             // return footnote body
-            pContext = new XMLFootnoteBodyImportContext(GetImport(),
+            xContext = new XMLFootnoteBodyImportContext(GetImport(),
                                                         p_nPrefix, rLocalName);
             break;
         default:
             // default:
-            pContext = SvXMLImportContext::CreateChildContext(p_nPrefix,
+            xContext = SvXMLImportContext::CreateChildContext(p_nPrefix,
                                                               rLocalName,
                                                               xAttrList);
             break;
     }
 
-    return pContext;
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

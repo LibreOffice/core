@@ -1292,7 +1292,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
         SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maHandles, EASGet( EAS_Handles ) );
 }
 
-SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 nPrefix,const OUString& rLocalName,
+SvXMLImportContextRef XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 nPrefix,const OUString& rLocalName,
                                                                     const uno::Reference< xml::sax::XAttributeList> & xAttrList )
 {
     EnhancedCustomShapeTokenEnum aTokenEnum = EASGet( rLocalName );

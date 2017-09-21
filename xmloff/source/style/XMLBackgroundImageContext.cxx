@@ -344,7 +344,7 @@ XMLBackgroundImageContext::~XMLBackgroundImageContext()
 {
 }
 
-SvXMLImportContext *XMLBackgroundImageContext::CreateChildContext(
+SvXMLImportContextRef XMLBackgroundImageContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {

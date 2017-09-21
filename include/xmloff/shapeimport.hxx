@@ -270,7 +270,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xFrameAttrList);
-    static SvXMLImportContext* CreateFrameChildContext(
+    static SvXMLImportContextRef CreateFrameChildContext(
         SvXMLImportContext *pThisContext, sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 

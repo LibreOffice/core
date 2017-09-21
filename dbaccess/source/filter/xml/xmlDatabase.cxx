@@ -51,7 +51,7 @@ OXMLDatabase::~OXMLDatabase()
 
 }
 
-SvXMLImportContext* OXMLDatabase::CreateChildContext(
+SvXMLImportContextRef OXMLDatabase::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

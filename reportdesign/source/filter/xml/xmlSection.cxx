@@ -101,8 +101,7 @@ OXMLSection::~OXMLSection()
 {
 }
 
-
-SvXMLImportContext* OXMLSection::CreateChildContext(
+SvXMLImportContextRef OXMLSection::CreateChildContext(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )

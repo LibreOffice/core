@@ -172,12 +172,12 @@ const OldFillStyleDefinitionSet& XMLPropStyleContext::getFooterSet()
     return theFooterSet::get();
 }
 
-SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
+SvXMLImportContextRef XMLPropStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     sal_uInt32 nFamily = 0;
     if( XML_NAMESPACE_STYLE == nPrefix || XML_NAMESPACE_LO_EXT == nPrefix )
@@ -211,18 +211,18 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
             static_cast<SvXMLStylesContext *>(mxStyles.get())->GetImportPropertyMapper(
                                                         GetFamily() );
         if( xImpPrMap.is() )
-            pContext = new SvXMLPropertySetContext( GetImport(), nPrefix,
+            xContext = new SvXMLPropertySetContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
                                                     nFamily,
                                                     maProperties,
                                                     xImpPrMap );
     }
 
-    if( !pContext )
-        pContext = SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName,
+    if (!xContext)
+        xContext = SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                           xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 void XMLPropStyleContext::FillPropertySet(

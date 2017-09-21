@@ -92,12 +92,12 @@ void XMLChangedRegionImportContext::StartElement(
     }
 }
 
-SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
+SvXMLImportContextRef XMLChangedRegionImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList)
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if (XML_NAMESPACE_TEXT == nPrefix)
     {
@@ -109,7 +109,7 @@ SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
              IsXMLToken( rLocalName, XML_FORMAT_CHANGE ) )
         {
             // create XMLChangeElementImportContext for all kinds of changes
-            pContext = new XMLChangeElementImportContext(
+            xContext = new XMLChangeElementImportContext(
                GetImport(), nPrefix, rLocalName,
                IsXMLToken( rLocalName, XML_DELETION ),
                *this);
@@ -117,23 +117,23 @@ SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
         // else: it may be a text element, see below
     }
 
-    if (nullptr == pContext)
+    if (!xContext)
     {
         // illegal element content! TODO: discard the redlines
         // for the moment -> use text
 
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
 
         // or default if text fail
-        if (nullptr == pContext)
+        if (!xContext)
         {
-            pContext = SvXMLImportContext::CreateChildContext(
+            xContext = SvXMLImportContext::CreateChildContext(
                 nPrefix, rLocalName, xAttrList);
         }
     }
 
-    return pContext;
+    return xContext;
 }
 
 void XMLChangedRegionImportContext::EndElement()

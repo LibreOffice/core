@@ -613,7 +613,7 @@ public:
 struct theAxisChildTokenMap : public rtl::Static< AxisChildTokenMap, theAxisChildTokenMap > {};
 }
 
-SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
+SvXMLImportContextRef SchXMLAxisContext::CreateChildContext(
     sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )

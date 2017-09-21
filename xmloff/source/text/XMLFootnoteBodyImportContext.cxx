@@ -38,7 +38,7 @@ XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
 {
 }
 
-SvXMLImportContext* XMLFootnoteBodyImportContext::CreateChildContext(
+SvXMLImportContextRef XMLFootnoteBodyImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

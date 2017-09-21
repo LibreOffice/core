@@ -200,7 +200,7 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
-SvXMLImportContext* XMLIndexAlphabeticalSourceContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexAlphabeticalSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

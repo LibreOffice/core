@@ -166,21 +166,21 @@ SdXMLShapeContext::~SdXMLShapeContext()
 {
 }
 
-SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
+SvXMLImportContextRef SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext * pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     // #i68101#
     if( p_nPrefix == XML_NAMESPACE_SVG &&
         (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
-        pContext = new SdXMLDescriptionContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
+        xContext = new SdXMLDescriptionContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
     }
     else if( p_nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
-        pContext = new SdXMLEventsContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
+        xContext = new SdXMLEventsContext( GetImport(), p_nPrefix, rLocalName, xAttrList, mxShape );
     }
     else if( p_nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_GLUE_POINT ) )
     {
@@ -233,17 +233,17 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
         // if we have a text cursor, lets  try to import some text
         if( mxCursor.is() )
         {
-            pContext = GetImport().GetTextImport()->CreateTextChildContext(
+            xContext = GetImport().GetTextImport()->CreateTextChildContext(
                 GetImport(), p_nPrefix, rLocalName, xAttrList,
                 ( mbTextBox ? XMLTextType::TextBox : XMLTextType::Shape ) );
         }
     }
 
     // call parent for content
-    if(!pContext)
-        pContext = SvXMLImportContext::CreateChildContext( p_nPrefix, rLocalName, xAttrList );
+    if (!xContext)
+        xContext = SvXMLImportContext::CreateChildContext( p_nPrefix, rLocalName, xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XAttributeList>& xAttrList )
@@ -2462,11 +2462,11 @@ void SdXMLGraphicObjectShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
+SvXMLImportContextRef SdXMLGraphicObjectShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( (XML_NAMESPACE_OFFICE == nPrefix) &&
              xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_BINARY_DATA ) )
@@ -2475,18 +2475,18 @@ SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
         {
             mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
             if( mxBase64Stream.is() )
-                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                xContext = new XMLBase64ImportContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
                                                     mxBase64Stream );
         }
     }
 
     // delegate to parent class if no context could be created
-    if ( nullptr == pContext )
-        pContext = SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName,
+    if (!xContext)
+        xContext = SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName,
                                                          xAttrList);
 
-    return pContext;
+    return xContext;
 }
 
 SdXMLGraphicObjectShapeContext::~SdXMLGraphicObjectShapeContext()
@@ -2582,7 +2582,7 @@ void SdXMLChartShapeContext::Characters( const OUString& rChars )
         mxChartContext->Characters( rChars );
 }
 
-SvXMLImportContext * SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
+SvXMLImportContextRef SdXMLChartShapeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     if( mxChartContext.is() )
@@ -2758,27 +2758,27 @@ void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStri
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
+SvXMLImportContextRef SdXMLObjectShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_BINARY_DATA))
     {
         mxBase64Stream = GetImport().GetStreamForEmbeddedObjectURLFromBase64();
         if( mxBase64Stream.is() )
-            pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+            xContext = new XMLBase64ImportContext( GetImport(), nPrefix,
                                                 rLocalName, xAttrList,
                                                 mxBase64Stream );
     }
     else if( ((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_DOCUMENT)) ||
                 ((XML_NAMESPACE_MATH == nPrefix) && IsXMLToken(rLocalName, XML_MATH)) )
     {
-        XMLEmbeddedObjectImportContext *pEContext =
-            new XMLEmbeddedObjectImportContext( GetImport(), nPrefix,
-                                                rLocalName, xAttrList );
-        maCLSID = pEContext->GetFilterCLSID();
+        rtl::Reference<XMLEmbeddedObjectImportContext> xEContext(
+            new XMLEmbeddedObjectImportContext(GetImport(), nPrefix,
+                                               rLocalName, xAttrList));
+        maCLSID = xEContext->GetFilterCLSID();
         if( !maCLSID.isEmpty() )
         {
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
@@ -2789,19 +2789,18 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
                 uno::Reference< lang::XComponent > xComp;
                 xPropSet->getPropertyValue("Model") >>= xComp;
                 SAL_WARN_IF( !xComp.is(), "xmloff", "no xModel for own OLE format" );
-                pEContext->SetComponent( xComp );
+                xEContext->SetComponent(xComp);
             }
         }
-        pContext = pEContext;
+        xContext = xEContext.get();
     }
 
     // delegate to parent class if no context could be created
-    if(!pContext)
-        pContext = SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+    if (!xContext)
+        xContext = SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
-    return pContext;
+    return xContext;
 }
-
 
 SdXMLAppletShapeContext::SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLocalName,
@@ -2910,7 +2909,7 @@ void SdXMLAppletShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContextRef SdXMLAppletShapeContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     if( p_nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_PARAM ) )
     {
@@ -3180,7 +3179,7 @@ void SdXMLPluginShapeContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-SvXMLImportContext * SdXMLPluginShapeContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContextRef SdXMLPluginShapeContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     if( p_nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_PARAM ) )
     {
@@ -3400,18 +3399,18 @@ OUString SdXMLFrameShapeContext::getGraphicURLFromImportContext(const SvXMLImpor
     return aRetval;
 }
 
-SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext * pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( !mxImplContext.is() )
     {
         SvXMLShapeContext* pShapeContext= GetImport().GetShapeImport()->CreateFrameChildContext(
                         GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList );
 
-        pContext = pShapeContext;
+        xContext = pShapeContext;
 
         // propagate the hyperlink to child context
         if ( !msHyperlink.isEmpty() )
@@ -3430,11 +3429,11 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
         }
 #endif
 
-        mxImplContext = pContext;
+        mxImplContext = xContext;
         mbSupportsReplacement = IsXMLToken(rLocalName, XML_OBJECT ) || IsXMLToken(rLocalName, XML_OBJECT_OLE);
         setSupportsMultipleContents(IsXMLToken(rLocalName, XML_IMAGE));
 
-        if(getSupportsMultipleContents() && dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext))
+        if(getSupportsMultipleContents() && dynamic_cast< SdXMLGraphicObjectShapeContext* >(xContext.get()))
         {
             addContent(*mxImplContext.get());
         }
@@ -3442,11 +3441,11 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
     else if(getSupportsMultipleContents() && XML_NAMESPACE_DRAW == nPrefix && IsXMLToken(rLocalName, XML_IMAGE))
     {
         // read another image
-        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+        xContext = GetImport().GetShapeImport()->CreateFrameChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList);
-        mxImplContext = pContext;
+        mxImplContext = xContext;
 
-        if(dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext))
+        if(dynamic_cast< SdXMLGraphicObjectShapeContext* >(xContext.get()))
         {
             addContent(*mxImplContext.get());
         }
@@ -3465,9 +3464,9 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
                     pSContext->getShape(), uno::UNO_QUERY );
             if( xPropSet.is() )
             {
-                pContext = new XMLReplacementImageContext( GetImport(),
+                xContext = new XMLReplacementImageContext( GetImport(),
                                     nPrefix, rLocalName, xAttrList, xPropSet );
-                mxReplImplContext = pContext;
+                mxReplImplContext = xContext;
             }
         }
     }
@@ -3484,7 +3483,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
             mxImplContext = solveMultipleImages();
         }
         SvXMLImportContext *pImplContext = mxImplContext.get();
-        pContext = dynamic_cast<SdXMLShapeContext&>(*pImplContext).CreateChildContext( nPrefix,
+        xContext = dynamic_cast<SdXMLShapeContext&>(*pImplContext).CreateChildContext( nPrefix,
                                                                         rLocalName, xAttrList );
     }
     else if ( (XML_NAMESPACE_DRAW == nPrefix) && IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
@@ -3500,15 +3499,15 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
             uno::Reference < beans::XPropertySet > xPropSet( pSContext->getShape(), uno::UNO_QUERY );
             if (xPropSet.is())
             {
-                pContext = new XMLImageMapContext(GetImport(), nPrefix, rLocalName, xPropSet);
+                xContext = new XMLImageMapContext(GetImport(), nPrefix, rLocalName, xPropSet);
             }
         }
     }
     // call parent for content
-    if(!pContext)
-        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    if (!xContext)
+        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)
@@ -3823,27 +3822,26 @@ void SdXMLCustomShapeContext::EndElement()
     }
 }
 
-SvXMLImportContext* SdXMLCustomShapeContext::CreateChildContext(
+SvXMLImportContextRef SdXMLCustomShapeContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
     if ( XML_NAMESPACE_DRAW == nPrefix )
     {
         if ( IsXMLToken( rLocalName, XML_ENHANCED_GEOMETRY ) )
         {
             uno::Reference< beans::XPropertySet > xPropSet( mxShape,uno::UNO_QUERY );
             if ( xPropSet.is() )
-                pContext = new XMLEnhancedCustomShapeContext( GetImport(), mxShape, nPrefix, rLocalName, maCustomShapeGeometry );
+                xContext = new XMLEnhancedCustomShapeContext( GetImport(), mxShape, nPrefix, rLocalName, maCustomShapeGeometry );
         }
     }
     // delegate to parent class if no context could be created
-    if ( nullptr == pContext )
-        pContext = SdXMLShapeContext::CreateChildContext( nPrefix, rLocalName,
+    if (!xContext)
+        xContext = SdXMLShapeContext::CreateChildContext( nPrefix, rLocalName,
                                                          xAttrList);
-    return pContext;
+    return xContext;
 }
-
 
 SdXMLTableShapeContext::SdXMLTableShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, css::uno::Reference< css::drawing::XShapes > const & rShapes )
 : SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, false )
@@ -3985,7 +3983,7 @@ void SdXMLTableShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStrin
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
-SvXMLImportContext* SdXMLTableShapeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContextRef SdXMLTableShapeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
     if( mxTableImportContext.is() && (nPrefix == XML_NAMESPACE_TABLE) )
         return mxTableImportContext->CreateChildContext(nPrefix, rLocalName, xAttrList);

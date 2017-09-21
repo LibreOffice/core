@@ -93,7 +93,7 @@ Reference<XDocument> DomBuilderContext::getTree()
     return mxNode->getOwnerDocument();
 }
 
-SvXMLImportContext* DomBuilderContext::CreateChildContext(
+SvXMLImportContextRef DomBuilderContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& )

@@ -62,7 +62,7 @@ public:
                 const OUString& rLName,
                 const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
@@ -74,7 +74,7 @@ SdXMLBodyContext_Impl::SdXMLBodyContext_Impl( SdXMLImport& rImport,
 {
 }
 
-SvXMLImportContext *SdXMLBodyContext_Impl::CreateChildContext(
+SvXMLImportContextRef SdXMLBodyContext_Impl::CreateChildContext(
         sal_uInt16 /*nPrefix*/,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
@@ -96,7 +96,7 @@ public:
         const OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
 
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList) override;
 };
@@ -110,26 +110,26 @@ SdXMLDocContext_Impl::SdXMLDocContext_Impl(
 {
 }
 
-SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
+SvXMLImportContextRef SdXMLDocContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetDocElemTokenMap();
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
         case XML_TOK_DOC_FONTDECLS:
         {
-            pContext = GetSdImport().CreateFontDeclsContext( rLocalName, xAttrList );
+            xContext = GetSdImport().CreateFontDeclsContext( rLocalName, xAttrList );
             break;
         }
         case XML_TOK_DOC_SETTINGS:
         {
             if( GetImport().getImportFlags() & SvXMLImportFlags::SETTINGS )
             {
-                pContext = new XMLDocumentSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList );
+                xContext = new XMLDocumentSettingsContext(GetImport(), nPrefix, rLocalName, xAttrList );
             }
             break;
         }
@@ -138,7 +138,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
             if( GetImport().getImportFlags() & SvXMLImportFlags::STYLES )
             {
                 // office:styles inside office:document
-                pContext = GetSdImport().CreateStylesContext(rLocalName, xAttrList);
+                xContext = GetSdImport().CreateStylesContext(rLocalName, xAttrList);
             }
             break;
         }
@@ -147,7 +147,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
             if( GetImport().getImportFlags() & SvXMLImportFlags::AUTOSTYLES )
             {
                 // office:automatic-styles inside office:document
-                pContext = GetSdImport().CreateAutoStylesContext(rLocalName, xAttrList);
+                xContext = GetSdImport().CreateAutoStylesContext(rLocalName, xAttrList);
             }
             break;
         }
@@ -156,7 +156,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
             if( GetImport().getImportFlags() & SvXMLImportFlags::MASTERSTYLES )
             {
                 // office:master-styles inside office:document
-                pContext = GetSdImport().CreateMasterStylesContext(rLocalName, xAttrList);
+                xContext = GetSdImport().CreateMasterStylesContext(rLocalName, xAttrList);
             }
             break;
         }
@@ -170,7 +170,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
             if( GetImport().getImportFlags() & SvXMLImportFlags::SCRIPTS )
             {
                 // office:script inside office:document
-                pContext = GetSdImport().CreateScriptContext( rLocalName );
+                xContext = GetSdImport().CreateScriptContext( rLocalName );
             }
             break;
         }
@@ -179,7 +179,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
             if( GetImport().getImportFlags() & SvXMLImportFlags::CONTENT )
             {
                 // office:body inside office:document
-                pContext = new SdXMLBodyContext_Impl(GetSdImport(),nPrefix,
+                xContext = new SdXMLBodyContext_Impl(GetSdImport(),nPrefix,
                                                      rLocalName, xAttrList);
             }
             break;
@@ -187,10 +187,10 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
     }
 
     // call parent when no own context was created
-    if(!pContext)
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+    if (!xContext)
+        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
-    return pContext;
+    return xContext;
 }
 
 // context for flat file xml format
@@ -203,7 +203,7 @@ public:
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
 };
@@ -219,7 +219,7 @@ SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
 {
 }
 
-SvXMLImportContext *SdXMLFlatDocContext_Impl::CreateChildContext(
+SvXMLImportContextRef SdXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {

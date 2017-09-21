@@ -60,9 +60,7 @@ class SvxXMLTextImportContext : public SvXMLImportContext
 public:
     SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XText >& xText );
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
-
-//  SvxXMLXTableImport& getImport() const { return *(SvxXMLXTableImport*)&GetImport(); }
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList ) override;
 
 private:
     const uno::Reference< XText > mxText;
@@ -74,7 +72,7 @@ SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt
 {
 }
 
-SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList )
+SvXMLImportContextRef SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
     if(XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_BODY ) )

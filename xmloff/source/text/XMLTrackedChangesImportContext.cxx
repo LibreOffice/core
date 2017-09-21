@@ -76,27 +76,27 @@ void XMLTrackedChangesImportContext::StartElement(
 }
 
 
-SvXMLImportContext* XMLTrackedChangesImportContext::CreateChildContext(
+SvXMLImportContextRef XMLTrackedChangesImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList)
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
          IsXMLToken( rLocalName, XML_CHANGED_REGION ) )
     {
-        pContext = new XMLChangedRegionImportContext(GetImport(),
+        xContext = new XMLChangedRegionImportContext(GetImport(),
                                                      nPrefix, rLocalName);
     }
 
-    if (nullptr == pContext)
+    if (!xContext)
     {
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
     }
 
-    return pContext;
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

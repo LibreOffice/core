@@ -215,25 +215,25 @@ void XMLIndexSourceBaseContext::EndElement()
     rIndexPropertySet->setPropertyValue("CreateFromChapter", css::uno::Any(bChapterIndex));
 }
 
-SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexSourceBaseContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if (XML_NAMESPACE_TEXT == nPrefix)
     {
         if ( IsXMLToken( rLocalName, XML_INDEX_TITLE_TEMPLATE ) )
         {
-            pContext = new XMLIndexTitleTemplateContext(GetImport(),
+            xContext = new XMLIndexTitleTemplateContext(GetImport(),
                                                         rIndexPropertySet,
                                                         nPrefix, rLocalName);
         }
         else if ( bUseLevelFormats &&
                   IsXMLToken( rLocalName, XML_INDEX_SOURCE_STYLES ) )
         {
-            pContext = new XMLIndexTOCStylesContext(GetImport(),
+            xContext = new XMLIndexTOCStylesContext(GetImport(),
                                                     rIndexPropertySet,
                                                     nPrefix, rLocalName);
         }
@@ -242,13 +242,13 @@ SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(
     // else: unknown namespace -> ignore
 
     // use default context
-    if (pContext == nullptr)
+    if (!xContext)
     {
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
     }
 
-    return pContext;
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

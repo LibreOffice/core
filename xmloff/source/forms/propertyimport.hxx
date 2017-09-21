@@ -95,7 +95,7 @@ namespace xmloff
     public:
         OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const OUString& _rName);
 
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
 
@@ -164,7 +164,7 @@ namespace xmloff
         OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
                 const OPropertyImportRef& _rPropertyImporter);
 
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
 
@@ -186,7 +186,7 @@ namespace xmloff
         OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
                 const OPropertyImportRef& _rPropertyImporter);
 
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
 
@@ -211,7 +211,7 @@ namespace xmloff
 
         virtual void EndElement() override;
 
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
     };

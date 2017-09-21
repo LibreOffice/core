@@ -65,7 +65,7 @@ OXMLDocuments::~OXMLDocuments()
 
 }
 
-SvXMLImportContext* OXMLDocuments::CreateChildContext(
+SvXMLImportContextRef OXMLDocuments::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

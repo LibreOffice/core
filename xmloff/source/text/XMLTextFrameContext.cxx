@@ -391,7 +391,7 @@ public:
 
     virtual void Characters( const OUString& rChars ) override;
 
-    SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                  const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
@@ -1052,7 +1052,7 @@ void XMLTextFrameContext_Impl::EndElement()
         GetImport().GetTextImport()->endAppletOrPlugin( xPropSet, aParamMap);
 }
 
-SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
+SvXMLImportContextRef XMLTextFrameContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
@@ -1377,12 +1377,12 @@ void XMLTextFrameContext::EndElement()
     }
 }
 
-SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
+SvXMLImportContextRef XMLTextFrameContext::CreateChildContext(
         sal_uInt16 p_nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( !m_xImplContext.is() )
     {
@@ -1413,7 +1413,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                      m_HasAutomaticStyleWithoutParentStyle )
                 {
                     Reference < XShapes > xShapes;
-                    pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+                    xContext = GetImport().GetShapeImport()->CreateFrameChildContext(
                                     GetImport(), p_nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
                 }
                 else if( XML_TEXT_FRAME_PLUGIN == nFrameType )
@@ -1439,7 +1439,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     if( bMedia )
                     {
                         Reference < XShapes > xShapes;
-                        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+                        xContext = GetImport().GetShapeImport()->CreateFrameChildContext(
                                         GetImport(), p_nPrefix, rLocalName, xAttrList, xShapes, m_xAttrList );
                     }
                 }
@@ -1453,17 +1453,16 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     setSupportsMultipleContents(IsXMLToken(rLocalName, XML_IMAGE));
                 }
 
-                if( !pContext )
+                if (!xContext)
                 {
-
-                    pContext = new XMLTextFrameContext_Impl( GetImport(), p_nPrefix,
+                    xContext = new XMLTextFrameContext_Impl( GetImport(), p_nPrefix,
                                                         rLocalName, xAttrList,
                                                         m_eDefaultAnchorType,
                                                         nFrameType,
                                                         m_xAttrList );
                 }
 
-                m_xImplContext = pContext;
+                m_xImplContext = xContext;
 
                 if(getSupportsMultipleContents() && XML_TEXT_FRAME_GRAPHIC == nFrameType)
                 {
@@ -1475,11 +1474,11 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     else if(getSupportsMultipleContents() && XML_NAMESPACE_DRAW == p_nPrefix && IsXMLToken(rLocalName, XML_IMAGE))
     {
         // read another image
-        pContext = new XMLTextFrameContext_Impl(
+        xContext = new XMLTextFrameContext_Impl(
             GetImport(), p_nPrefix, rLocalName, xAttrList,
             m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xAttrList, true);
 
-        m_xImplContext = pContext;
+        m_xImplContext = xContext;
         addContent(*m_xImplContext.get());
     }
     else if( m_bSupportsReplacement && !m_xReplImplContext.is() &&
@@ -1490,9 +1489,9 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         Reference < XPropertySet > xPropSet;
         if( CreateIfNotThere( xPropSet ) )
         {
-            pContext = new XMLReplacementImageContext( GetImport(),
+            xContext = new XMLReplacementImageContext( GetImport(),
                                 p_nPrefix, rLocalName, xAttrList, xPropSet );
-            m_xReplImplContext = pContext;
+            m_xReplImplContext = xContext;
         }
     }
     else if( nullptr != dynamic_cast< const XMLTextFrameContext_Impl*>( m_xImplContext.get() ))
@@ -1506,7 +1505,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             {
                 if ( IsXMLToken( rLocalName, XML_DESC ) )
                 {
-                    pContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
+                    xContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
                                                                         p_nPrefix,
                                                                         rLocalName,
                                                                         m_sTitle );
@@ -1520,7 +1519,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     {   // tdf#103567 ensure props are set on surviving shape
                         m_xImplContext = solveMultipleImages();
                     }
-                    pContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
+                    xContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
                                                                         p_nPrefix,
                                                                         rLocalName,
                                                                         m_sTitle );
@@ -1531,7 +1530,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     {   // tdf#103567 ensure props are set on surviving shape
                         m_xImplContext = solveMultipleImages();
                     }
-                    pContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
+                    xContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
                                                                         p_nPrefix,
                                                                         rLocalName,
                                                                         m_sDesc );
@@ -1548,7 +1547,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     m_xImplContext = solveMultipleImages();
                 }
                 if( CreateIfNotThere( xPropSet ) )
-                    pContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
+                    xContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
                                                   xAttrList, xPropSet, false );
             }
             else if( IsXMLToken( rLocalName, XML_CONTOUR_PATH ) )
@@ -1558,7 +1557,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     m_xImplContext = solveMultipleImages();
                 }
                 if( CreateIfNotThere( xPropSet ) )
-                    pContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
+                    xContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
                                                   xAttrList, xPropSet, true );
             }
             else if( IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
@@ -1568,7 +1567,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                     m_xImplContext = solveMultipleImages();
                 }
                 if( CreateIfNotThere( xPropSet ) )
-                    pContext = new XMLImageMapContext( GetImport(), p_nPrefix, rLocalName, xPropSet );
+                    xContext = new XMLImageMapContext( GetImport(), p_nPrefix, rLocalName, xPropSet );
             }
         }
         else if( (XML_NAMESPACE_OFFICE == p_nPrefix) && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
@@ -1586,7 +1585,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                 if (xEventsSupplier.is())
                 {
                     // OK, we have the events, so create the context
-                    pContext = new XMLEventsImportContext(GetImport(), p_nPrefix,
+                    xContext = new XMLEventsImportContext(GetImport(), p_nPrefix,
                                                       rLocalName, xEventsSupplier);
                 }
             }
@@ -1600,19 +1599,19 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             // note: no more draw:image can be added once we get here
             m_xImplContext = solveMultipleImages();
         }
-        pContext = m_xImplContext->CreateChildContext( p_nPrefix, rLocalName, xAttrList );
+        xContext = m_xImplContext->CreateChildContext( p_nPrefix, rLocalName, xAttrList );
     }
     else
     {
         // the child is a drawing shape
-        pContext = XMLShapeImportHelper::CreateFrameChildContext(
+        xContext = XMLShapeImportHelper::CreateFrameChildContext(
                                     m_xImplContext.get(), p_nPrefix, rLocalName, xAttrList );
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
+    if (!xContext)
+        xContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
 
-    return pContext;
+    return xContext;
 }
 
 void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,

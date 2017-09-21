@@ -124,14 +124,14 @@ OXMLFixedContent::~OXMLFixedContent()
 }
 
 
-SvXMLImportContext* OXMLFixedContent::CreateChildContext_(
+SvXMLImportContextRef OXMLFixedContent::CreateChildContext_(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = OXMLReportElementBase::CreateChildContext_(nPrefix,rLocalName,xAttrList);
-    if ( pContext )
-        return pContext;
+    SvXMLImportContextRef xContext = OXMLReportElementBase::CreateChildContext_(nPrefix,rLocalName,xAttrList);
+    if (xContext)
+        return xContext;
 
     static const char s_sStringConcat[] = " & ";
     const SvXMLTokenMap&    rTokenMap   = m_rImport.GetCellElemTokenMap();
@@ -141,22 +141,22 @@ SvXMLImportContext* OXMLFixedContent::CreateChildContext_(
     switch( nToken )
     {
         case XML_TOK_P:
-            pContext = new OXMLFixedContent(m_rImport,nPrefix, rLocalName,m_rCell,m_pContainer,this);
+            xContext = new OXMLFixedContent(m_rImport,nPrefix, rLocalName,m_rCell,m_pContainer,this);
             break;
         case XML_TOK_TEXT_TAB_STOP:
-            pContext = new OXMLCharContent( m_rImport, this,nPrefix,
+            xContext = new OXMLCharContent( m_rImport, this,nPrefix,
                                                 rLocalName, xAttrList,
                                                 0x0009, false );
             break;
 
         case XML_TOK_TEXT_LINE_BREAK:
-            pContext = new OXMLCharContent( m_rImport, this,nPrefix,
+            xContext = new OXMLCharContent( m_rImport, this,nPrefix,
                                                 rLocalName, xAttrList,
                                                 ControlCharacter::LINE_BREAK );
             break;
 
         case XML_TOK_TEXT_S:
-            pContext = new OXMLCharContent( m_rImport, this,nPrefix,
+            xContext = new OXMLCharContent( m_rImport, this,nPrefix,
                                                 rLocalName, xAttrList,
                                                 0x0020, true );
             break;
@@ -171,7 +171,7 @@ SvXMLImportContext* OXMLFixedContent::CreateChildContext_(
         default:
             ;
     }
-    return pContext;
+    return xContext;
 }
 
 void OXMLFixedContent::EndElement()

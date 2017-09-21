@@ -80,7 +80,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;
 
     /// for footnotes, also parse begin and end notices
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;

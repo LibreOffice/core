@@ -635,7 +635,7 @@ void SchXMLSeries2Context::EndElement()
     maPostponedSequences.clear();
 }
 
-SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
+SvXMLImportContextRef SchXMLSeries2Context::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >&  )

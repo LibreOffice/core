@@ -101,7 +101,7 @@ XMLTextHeaderFooterContext::~XMLTextHeaderFooterContext()
 {
 }
 
-SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
+SvXMLImportContextRef XMLTextHeaderFooterContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )

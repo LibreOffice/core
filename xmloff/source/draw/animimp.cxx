@@ -387,7 +387,7 @@ public:
 
     virtual void EndElement() override;
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< XAttributeList >& xAttrList ) override;
 };
 
@@ -521,7 +521,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
     }
 }
 
-SvXMLImportContext * XMLAnimationsEffectContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+SvXMLImportContextRef XMLAnimationsEffectContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
 {
     return new XMLAnimationsSoundContext( GetImport(), nPrefix, rLocalName, xAttrList, this );
 }
@@ -625,7 +625,7 @@ XMLAnimationsContext::XMLAnimationsContext( SvXMLImport& rImport, sal_uInt16 nPr
 {
 }
 
-SvXMLImportContext * XMLAnimationsContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
+SvXMLImportContextRef XMLAnimationsContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     return new XMLAnimationsEffectContext( GetImport(), nPrefix, rLocalName,  xAttrList, mpImpl );

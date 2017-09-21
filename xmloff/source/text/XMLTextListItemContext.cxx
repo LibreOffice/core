@@ -128,7 +128,7 @@ void XMLTextListItemContext::EndElement()
     rTxtImport.GetTextListHelper().SetListItem( nullptr );
 }
 
-SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
+SvXMLImportContextRef XMLTextListItemContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )

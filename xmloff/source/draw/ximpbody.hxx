@@ -43,7 +43,7 @@ public:
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLDrawPageContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void EndElement() override;
@@ -61,7 +61,7 @@ public:
     SdXMLBodyContext( SdXMLImport& rImport, const OUString& rLocalName );
     virtual ~SdXMLBodyContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 };

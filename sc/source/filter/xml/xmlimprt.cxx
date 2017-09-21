@@ -237,7 +237,7 @@ public:
 
     ScXMLDocContext_Impl( ScXMLImport& rImport );
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList ) override;
 
@@ -277,7 +277,7 @@ public:
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
 
@@ -309,7 +309,7 @@ SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
 {
 }
 
-SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
+SvXMLImportContextRef ScXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
@@ -369,7 +369,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     return GetScImport().CreateBodyContext( pAttribList );
 }
 
-SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
                                                              const OUString& rLocalName,
                                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {

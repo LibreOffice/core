@@ -484,7 +484,7 @@ private:
     bool mbTextual;
     bool mbDecimal02;
     OUString maText;
-    rtl::Reference< SvXMLImportContext > mxSlaveContext;
+    SvXMLImportContextRef mxSlaveContext;
 
 public:
 
@@ -493,9 +493,9 @@ public:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         SdXMLNumberFormatImportContext* pParent,
-        SvXMLImportContext* pSlaveContext );
+        const SvXMLImportContextRef& rSlaveContext );
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
@@ -507,11 +507,11 @@ public:
 };
 
 
-SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent, SvXMLImportContext* pSlaveContext )
+SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent, const SvXMLImportContextRef& rSlaveContext )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpParent( pParent ),
     maNumberStyle( rLocalName ),
-    mxSlaveContext( pSlaveContext )
+    mxSlaveContext( rSlaveContext )
 {
     mbLong = false;
     mbTextual = false;
@@ -544,7 +544,7 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXM
 
 }
 
-SvXMLImportContext *SdXMLNumberFormatMemberImportContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef SdXMLNumberFormatMemberImportContext::CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {
@@ -705,7 +705,7 @@ void SdXMLNumberFormatImportContext::EndElement()
     }
 }
 
-SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContextRef SdXMLNumberFormatImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
     return new SdXMLNumberFormatMemberImportContext( GetImport(), nPrefix, rLocalName, xAttrList, this, SvXMLNumFormatContext::CreateChildContext( nPrefix, rLocalName, xAttrList ) );
 }

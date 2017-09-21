@@ -130,7 +130,7 @@ public:
     SwXMLBodyContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName );
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
@@ -165,7 +165,7 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
     }
 }
 
-SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
+SvXMLImportContextRef SwXMLBodyContext_Impl::CreateChildContext(
         sal_uInt16 /*nPrefix*/,
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
@@ -188,7 +188,7 @@ public:
     SwXMLDocContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName );
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
@@ -199,7 +199,7 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
 {
 }
 
-SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
+SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -267,7 +267,7 @@ public:
                 const OUString& rLName,
                 const Reference< document::XDocumentProperties >& xDocProps);
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
                 sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -284,7 +284,7 @@ SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
 {
 }
 
-SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
+SvXMLImportContextRef SwXMLOfficeDocContext_Impl::CreateChildContext(
                 sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList )

@@ -86,7 +86,7 @@ void XMLEventsImportContext::EndElement()
     // nothing to be done
 }
 
-SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
+SvXMLImportContextRef XMLEventsImportContext::CreateChildContext(
     sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

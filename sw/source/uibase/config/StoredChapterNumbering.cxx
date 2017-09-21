@@ -344,7 +344,7 @@ public:
         }
     }
 
-    virtual SvXMLImportContext * CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 const nPrefix, OUString const& rLocalName,
         uno::Reference<xml::sax::XAttributeList> const& xAttrList) override
     {

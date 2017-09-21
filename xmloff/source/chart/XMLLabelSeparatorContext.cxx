@@ -47,7 +47,7 @@ void XMLLabelSeparatorContext::StartElement( const uno::Reference< xml::sax::XAt
 {
 }
 
-SvXMLImportContext* XMLLabelSeparatorContext::CreateChildContext(
+SvXMLImportContextRef XMLLabelSeparatorContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
 {

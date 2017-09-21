@@ -639,7 +639,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
     ++mnCurParagraph;
 }
 
-SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {

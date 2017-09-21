@@ -273,12 +273,12 @@ void XMLIndexTOCContext::EndElement()
     }
 }
 
-SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexTOCContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if (bValid)
     {
@@ -286,12 +286,12 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
         {
             if ( IsXMLToken( rLocalName, XML_INDEX_BODY ) )
             {
-                pContext = new XMLIndexBodyContext(GetImport(), nPrefix,
+                xContext = new XMLIndexBodyContext(GetImport(), nPrefix,
                                                    rLocalName);
                 if ( !xBodyContextRef.is() ||
                      !static_cast<XMLIndexBodyContext*>(xBodyContextRef.get())->HasContent() )
                 {
-                    xBodyContextRef = pContext;
+                    xBodyContextRef = xContext;
                 }
             }
             else if (IsXMLToken(rLocalName, aIndexSourceElementMap[eIndexType]))
@@ -300,37 +300,37 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
                 switch (eIndexType)
                 {
                     case TEXT_INDEX_TOC:
-                        pContext = new XMLIndexTOCSourceContext(
+                        xContext = new XMLIndexTOCSourceContext(
                             GetImport(), nPrefix, rLocalName, xTOCPropertySet);
                         break;
 
                     case TEXT_INDEX_OBJECT:
-                        pContext = new XMLIndexObjectSourceContext(
+                        xContext = new XMLIndexObjectSourceContext(
                             GetImport(), nPrefix, rLocalName, xTOCPropertySet);
                         break;
 
                     case TEXT_INDEX_ALPHABETICAL:
-                        pContext = new XMLIndexAlphabeticalSourceContext(
+                        xContext = new XMLIndexAlphabeticalSourceContext(
                             GetImport(), nPrefix, rLocalName, xTOCPropertySet);
                         break;
 
                     case TEXT_INDEX_USER:
-                        pContext = new XMLIndexUserSourceContext(
+                        xContext = new XMLIndexUserSourceContext(
                             GetImport(), nPrefix, rLocalName, xTOCPropertySet);
                         break;
 
                     case TEXT_INDEX_BIBLIOGRAPHY:
-                        pContext = new XMLIndexBibliographySourceContext(
+                        xContext = new XMLIndexBibliographySourceContext(
                             GetImport(), nPrefix, rLocalName, xTOCPropertySet);
                         break;
 
                     case TEXT_INDEX_TABLE:
-                        pContext = new XMLIndexTableSourceContext(
+                        xContext = new XMLIndexTableSourceContext(
                             GetImport(), nPrefix, rLocalName, xTOCPropertySet);
                         break;
 
                     case TEXT_INDEX_ILLUSTRATION:
-                        pContext = new XMLIndexIllustrationSourceContext(
+                        xContext = new XMLIndexIllustrationSourceContext(
                             GetImport(), nPrefix, rLocalName, xTOCPropertySet);
                         break;
 
@@ -346,13 +346,13 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
     // else: not valid -> ignore
 
     // default: ignore
-    if (pContext == nullptr)
+    if (!xContext)
     {
-        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
+        xContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
     }
 
-    return pContext;
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

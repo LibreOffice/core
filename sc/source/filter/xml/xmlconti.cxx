@@ -43,7 +43,7 @@ ScXMLContentContext::~ScXMLContentContext()
 {
 }
 
-SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList )
 {

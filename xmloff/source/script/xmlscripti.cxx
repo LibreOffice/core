@@ -50,7 +50,7 @@ public:
         const css::uno::Reference< css::frame::XModel>& rxModel,
         const OUString& rLanguage );
 
-    virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
@@ -65,11 +65,11 @@ XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 n
 {
 }
 
-SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
+SvXMLImportContextRef XMLScriptChildContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if ( m_xDocumentScripts.is() )
     {   // document supports embedding scripts/macros
@@ -77,13 +77,13 @@ SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
         aBasic += ":Basic";
 
         if ( m_aLanguage == aBasic && nPrefix == XML_NAMESPACE_OOO && IsXMLToken( rLocalName, XML_LIBRARIES ) )
-            pContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );
+            xContext = new XMLBasicImportContext( GetImport(), nPrefix, rLocalName, m_xModel );
     }
 
-    if ( !pContext )
-        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    if (!xContext)
+        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 void XMLScriptChildContext::EndElement()
@@ -103,18 +103,18 @@ XMLScriptContext::~XMLScriptContext()
 {
 }
 
-SvXMLImportContext* XMLScriptContext::CreateChildContext(
+SvXMLImportContextRef XMLScriptContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if ( nPrefix == XML_NAMESPACE_OFFICE )
     {
         if ( IsXMLToken( rLName, XML_EVENT_LISTENERS ) )
         {
             Reference< XEventsSupplier> xSupplier( GetImport().GetModel(), UNO_QUERY );
-            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
+            xContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
         }
         else if ( IsXMLToken( rLName, XML_SCRIPT ) )
         {
@@ -133,16 +133,16 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
                     aMedDescr[nNewLen-1].Value <<= true;
                     m_xModel->attachResource( m_xModel->getURL(), aMedDescr );
 
-                    pContext = new XMLScriptChildContext( GetImport(), nPrefix, rLName, m_xModel, aLanguage );
+                    xContext = new XMLScriptChildContext( GetImport(), nPrefix, rLName, m_xModel, aLanguage );
                 }
             }
         }
     }
 
-    if ( !pContext )
-        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLName, xAttrList);
+    if (!xContext)
+        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLName, xAttrList);
 
-    return pContext;
+    return xContext;
 }
 
 void XMLScriptContext::EndElement()

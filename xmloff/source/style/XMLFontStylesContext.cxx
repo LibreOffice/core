@@ -172,7 +172,7 @@ void XMLFontStyleContextFontFace::FillProperties(
     }
 }
 
-SvXMLImportContext * XMLFontStyleContextFontFace::CreateChildContext(
+SvXMLImportContextRef XMLFontStyleContextFontFace::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
@@ -217,7 +217,7 @@ XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc( SvXMLImport& rIm
 {
 }
 
-SvXMLImportContext * XMLFontStyleContextFontFaceSrc::CreateChildContext(
+SvXMLImportContextRef XMLFontStyleContextFontFaceSrc::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
@@ -237,7 +237,7 @@ XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri( SvXMLImport& rIm
 {
 }
 
-SvXMLImportContext * XMLFontStyleContextFontFaceUri::CreateChildContext(
+SvXMLImportContextRef XMLFontStyleContextFontFaceUri::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList )
