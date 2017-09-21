@@ -477,16 +477,13 @@ void SAL_CALL Submission::submitWithInteraction(
             *this, makeAny( e ) );
     }
 
-    if( bResult )
-    {
-        mxModel->rebuild();
-    }
-    else
+    if( !bResult )
     {
         // other failure: throw wrapped target exception, too.
         throw WrappedTargetException(
             lcl_message( sID, OUString() ), *this, Any() );
     }
+    mxModel->rebuild();
 }
 
 void SAL_CALL Submission::submit( )

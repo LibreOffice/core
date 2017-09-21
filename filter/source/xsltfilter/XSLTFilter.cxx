@@ -527,15 +527,8 @@ namespace XSLT
         // wait for the transformer to finish
         m_cTransformed.wait();
         m_tcontrol->terminate();
-        if (!m_bError && !m_bTerminated)
-            {
-                return;
-            }
-        else
-            {
-                throw RuntimeException();
-            }
-
+        if (m_bError || m_bTerminated)
+            throw RuntimeException();
     }
 
 
