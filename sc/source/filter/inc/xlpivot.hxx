@@ -364,6 +364,9 @@ const sal_uInt16 EXC_SXFDBTYPE_DEFAULT      = 0x0000;
 // (0x0810) SXVIEWEX9 ---------------------------------------------------------
 const sal_uInt16 EXC_ID_SXVIEWEX9       = 0x0810;
 
+// (0x0864) SXADDL ("Pivot Table Additional Info") ----------------------------
+const sal_uInt16 EXC_ID_SXADDL       = 0x0864;
+
 // Pivot cache
 
 /** Represents a data item of any type in a pivot cache. Supposed as base class for import and export. */
@@ -760,6 +763,15 @@ struct XclPTViewEx9Info
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTViewEx9Info& rInfo );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo );
+
+/** Additional pivot table settings (SXADDL record). */
+struct XclPTAddl
+{
+    bool          mbCompactMode;
+    explicit      XclPTAddl();
+};
+
+XclImpStream& operator>>(XclImpStream& rStrm, XclPTAddl& rInfo);
 
 #endif
 
