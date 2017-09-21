@@ -23,6 +23,8 @@
 #include <i18nutil/searchopt.hxx>
 #include "cfgutil.hxx"
 
+struct CommandCategoryListBoxResource_Impl;
+
 class CommandCategoryListBox : public ListBox
 {
     SfxGroupInfoArr_Impl m_aGroupInfo;
@@ -35,6 +37,9 @@ class CommandCategoryListBox : public ListBox
 
     // For search
     i18nutil::SearchOptions2 m_searchOptions;
+
+    SfxStylesInfo_Impl* pStylesInfo;
+    SfxStylesInfo_Impl m_aStylesInfo;
 
 public:
     CommandCategoryListBox( vcl::Window* pParent );
@@ -59,6 +64,8 @@ public:
     */
     void categorySelected(  const VclPtr<SfxConfigFunctionListBox>&  pFunctionListBox,
                             const OUString& filterTerm = OUString() );
+
+    void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_COMMANDCATEGORYLISTBOX_HXX
