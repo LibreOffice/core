@@ -190,7 +190,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL, size_
                 if (!bSignResult)
                 {
                     DWORD dwErr = GetLastError();
-                    if (dwErr == CRYPT_E_NO_KEY_PROPERTY)
+                    if (HRESULT_FROM_WIN32(dwErr) == CRYPT_E_NO_KEY_PROPERTY)
                     {
                         SAL_WARN("xmlsecurity.pdfio.test", "Skipping a certificate without a private key");
                         continue; // The certificate does not have a private key - not a valid certificate
