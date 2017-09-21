@@ -225,11 +225,14 @@ public:
                         "bad static variable causes crash on shutdown",
                         pVarDecl->getLocation())
                     << pVarDecl->getSourceRange();
-                for (auto i: ret.second) {
-                    report(DiagnosticsEngine::Note,
-                            "... due to this member of %0",
-                            i->getLocation())
-                        << i->getParent() << i->getSourceRange();
+                if (!isUnitTestMode())
+                {
+                    for (auto i: ret.second) {
+                        report(DiagnosticsEngine::Note,
+                                "... due to this member of %0",
+                                i->getLocation())
+                            << i->getParent() << i->getSourceRange();
+                    }
                 }
             }
         }
