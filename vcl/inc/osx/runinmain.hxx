@@ -77,6 +77,7 @@ union RuninmainResult
             }); \
         aMutex->m_aInMainCondition.set(); \
         osl::Condition::Result res =  aMutex->m_aResultCondition.wait(); \
+        (void) res; \
         assert(osl::Condition::Result::result_ok == res); \
         return; \
     }
@@ -96,6 +97,7 @@ union RuninmainResult
             }); \
         aMutex->m_aInMainCondition.set(); \
         osl::Condition::Result res =  aMutex->m_aResultCondition.wait(); \
+        (void) res; \
         assert(osl::Condition::Result::result_ok == res); \
         return static_cast<type>( aMutex->m_aResult.pointer ); \
     }
@@ -115,6 +117,7 @@ union RuninmainResult
             }); \
         aMutex->m_aInMainCondition.set(); \
         osl::Condition::Result res =  aMutex->m_aResultCondition.wait(); \
+        (void) res; \
         assert(osl::Condition::Result::result_ok == res); \
         return std::move( aMutex->m_aResult.member ); \
     }

@@ -292,6 +292,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
                 break;
             // wait for doRelease() or RUNINMAIN_* to set the condition
             osl::Condition::Result res =  m_aInMainCondition.wait();
+            (void) res;
             assert(osl::Condition::Result::result_ok == res);
         }
         while ( true );
