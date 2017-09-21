@@ -66,7 +66,7 @@ EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsH
       mrFilterData(rFilterData)
 {
     get(m_pVersion, "versionlb");
-    assert(PositionToVersion(m_pVersion->GetSelectEntryPos()) == EPUBExportFilter::GetDefaultVersion());
+    assert(PositionToVersion(m_pVersion->GetSelectedEntryPos()) == EPUBExportFilter::GetDefaultVersion());
 
     auto it = rFilterData.find("EPUBVersion");
     if (it != rFilterData.end())
@@ -94,14 +94,14 @@ EPUBExportDialog::EPUBExportDialog(vcl::Window *pParent, comphelper::SequenceAsH
 
 IMPL_LINK_NOARG(EPUBExportDialog, VersionSelectHdl, ListBox &, void)
 {
-    mrFilterData["EPUBVersion"] <<= PositionToVersion(m_pVersion->GetSelectEntryPos());
+    mrFilterData["EPUBVersion"] <<= PositionToVersion(m_pVersion->GetSelectedEntryPos());
 }
 
 IMPL_LINK_NOARG(EPUBExportDialog, SplitSelectHdl, ListBox &, void)
 {
     // No conversion, 1:1 mapping between entry positions and
     // libepubgen::EPUBSplitMethod.
-    mrFilterData["EPUBSplitMethod"] <<= m_pSplit->GetSelectEntryPos();
+    mrFilterData["EPUBSplitMethod"] <<= m_pSplit->GetSelectedEntryPos();
 }
 
 EPUBExportDialog::~EPUBExportDialog()
