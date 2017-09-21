@@ -125,8 +125,6 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         SAL_DLLPRIVATE Color    GetColorData( const Color& rFillColor, sal_uInt32 nIndex, double dBrightness ) const;
         SAL_DLLPRIVATE void     AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rCustomShapeSet,
                                                   sal_uInt32& nColorIndex, sal_uInt32 nColorCount);
-        SAL_DLLPRIVATE void     GetParameter( double& rParameterReturnValue,  const css::drawing::EnhancedCustomShapeParameter&,
-                                                  const bool bReplaceGeoWidth, const bool bReplaceGeoHeight ) const;
         SAL_DLLPRIVATE Point    GetPoint( const css::drawing::EnhancedCustomShapeParameterPair&,
                                                     const bool bScale = true, const bool bReplaceGeoSize = false ) const;
 
@@ -188,6 +186,8 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         SAL_DLLPRIVATE double   GetEnumFunc( const EnhancedCustomShape::ExpressionFunct eVal ) const;
 
+        void     GetParameter( double& rParameterReturnValue,  const css::drawing::EnhancedCustomShapeParameter&,
+                               const bool bReplaceGeoWidth, const bool bReplaceGeoHeight ) const;
         SAL_DLLPRIVATE double   GetAdjustValueAsDouble( const sal_Int32 nIndex ) const;
         SAL_DLLPRIVATE double   GetEquationValueAsDouble( const sal_Int32 nIndex ) const;
 
