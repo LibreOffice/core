@@ -590,15 +590,12 @@ OUString const & SubstitutePathVariables::impl_getSubstituteVariableValue( const
     VarNameToIndexMap::const_iterator pNTOIIter = m_aPreDefVarMap.find( ( nPos == -1 ) ? aVariable : rVariable );
 
     // Fixed/Predefined variable
-    if ( pNTOIIter != m_aPreDefVarMap.end() )
-    {
-        PreDefVariable nIndex = pNTOIIter->second;
-        return m_aPreDefVars.m_FixedVar[(sal_Int32)nIndex];
-    }
-    else
+    if ( pNTOIIter == m_aPreDefVarMap.end() )
     {
         throw NoSuchElementException("Unknown variable!", static_cast<cppu::OWeakObject *>(this));
     }
+    PreDefVariable nIndex = pNTOIIter->second;
+    return m_aPreDefVars.m_FixedVar[(sal_Int32)nIndex];
 }
 
 void SubstitutePathVariables::SetPredefinedPathVariables()

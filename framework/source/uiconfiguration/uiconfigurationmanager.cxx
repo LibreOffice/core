@@ -957,44 +957,41 @@ void SAL_CALL UIConfigurationManager::replaceSettings( const OUString& ResourceU
             throw DisposedException();
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
-        if ( pDataSettings && !pDataSettings->bDefault )
-        {
-            // we have a settings entry in our user-defined layer - replace
-            Reference< XIndexAccess > xOldSettings = pDataSettings->xSettings;
-
-            // Create a copy of the data if the container is not const
-            Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
-            if ( xReplace.is() )
-                pDataSettings->xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
-            else
-                pDataSettings->xSettings = aNewData;
-
-            pDataSettings->bDefault  = false;
-            pDataSettings->bModified = true;
-            m_bModified = true;
-
-            // Modify type container
-            UIElementType& rElementType = m_aUIElements[nElementType];
-            rElementType.bModified = true;
-
-            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            Reference< XInterface > xIfac( xThis, UNO_QUERY );
-
-            // Create event to notify listener about replaced element settings
-            ConfigurationEvent aEvent;
-
-            aEvent.ResourceURL = ResourceURL;
-            aEvent.Accessor <<= xThis;
-            aEvent.Source = xIfac;
-            aEvent.ReplacedElement <<= xOldSettings;
-            aEvent.Element <<= pDataSettings->xSettings;
-
-            aGuard.clear();
-
-            implts_notifyContainerListener( aEvent, NotifyOp_Replace );
-        }
-        else
+        if ( !pDataSettings || pDataSettings->bDefault )
             throw NoSuchElementException();
+        // we have a settings entry in our user-defined layer - replace
+        Reference< XIndexAccess > xOldSettings = pDataSettings->xSettings;
+
+        // Create a copy of the data if the container is not const
+        Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
+        if ( xReplace.is() )
+            pDataSettings->xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+        else
+            pDataSettings->xSettings = aNewData;
+
+        pDataSettings->bDefault  = false;
+        pDataSettings->bModified = true;
+        m_bModified = true;
+
+        // Modify type container
+        UIElementType& rElementType = m_aUIElements[nElementType];
+        rElementType.bModified = true;
+
+        Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+        Reference< XInterface > xIfac( xThis, UNO_QUERY );
+
+        // Create event to notify listener about replaced element settings
+        ConfigurationEvent aEvent;
+
+        aEvent.ResourceURL = ResourceURL;
+        aEvent.Accessor <<= xThis;
+        aEvent.Source = xIfac;
+        aEvent.ReplacedElement <<= xOldSettings;
+        aEvent.Element <<= pDataSettings->xSettings;
+
+        aGuard.clear();
+
+        implts_notifyContainerListener( aEvent, NotifyOp_Replace );
     }
 }
 
@@ -1020,44 +1017,41 @@ void SAL_CALL UIConfigurationManager::removeSettings( const OUString& ResourceUR
                                      "ResourceURL: " + ResourceURL, nullptr );
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
-        if ( pDataSettings )
-        {
-            // If element settings are default, we don't need to change anything!
-            if ( pDataSettings->bDefault )
-                return;
-            else
-            {
-                Reference< XIndexAccess > xRemovedSettings = pDataSettings->xSettings;
-                pDataSettings->bDefault = true;
-
-                // check if this is a default layer node
-                pDataSettings->bModified = true; // we have to remove this node from the user layer!
-                pDataSettings->xSettings.clear();
-                m_bModified = true; // user layer must be written
-
-                // Modify type container
-                UIElementType& rElementType = m_aUIElements[nElementType];
-                rElementType.bModified = true;
-
-                Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                Reference< XInterface > xIfac( xThis, UNO_QUERY );
-
-                // Create event to notify listener about removed element settings
-                ConfigurationEvent aEvent;
-
-                aEvent.ResourceURL = ResourceURL;
-                aEvent.Accessor <<= xThis;
-                aEvent.Source = xIfac;
-                aEvent.Element <<= xRemovedSettings;
-
-                aGuard.clear();
-
-                implts_notifyContainerListener( aEvent, NotifyOp_Remove );
-            }
-        }
-        else
+        if ( !pDataSettings )
             throw NoSuchElementException( "The settings data cannot be found. "
                                           "ResourceURL: " + ResourceURL, nullptr);
+        // If element settings are default, we don't need to change anything!
+        if ( pDataSettings->bDefault )
+            return;
+        else
+        {
+            Reference< XIndexAccess > xRemovedSettings = pDataSettings->xSettings;
+            pDataSettings->bDefault = true;
+
+            // check if this is a default layer node
+            pDataSettings->bModified = true; // we have to remove this node from the user layer!
+            pDataSettings->xSettings.clear();
+            m_bModified = true; // user layer must be written
+
+            // Modify type container
+            UIElementType& rElementType = m_aUIElements[nElementType];
+            rElementType.bModified = true;
+
+            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XInterface > xIfac( xThis, UNO_QUERY );
+
+            // Create event to notify listener about removed element settings
+            ConfigurationEvent aEvent;
+
+            aEvent.ResourceURL = ResourceURL;
+            aEvent.Accessor <<= xThis;
+            aEvent.Source = xIfac;
+            aEvent.Element <<= xRemovedSettings;
+
+            aGuard.clear();
+
+            implts_notifyContainerListener( aEvent, NotifyOp_Remove );
+        }
     }
 }
 
