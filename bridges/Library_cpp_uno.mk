@@ -11,7 +11,7 @@ $(eval $(call gb_Library_Library,$(gb_CPPU_ENV)_uno))
 
 ifeq ($(OS),IOS)
 bridges_SELECTED_BRIDGE := gcc3_ios
-bridge_noopt_objects := cpp2uno cpp2uno-arm64 cpp2uno-i386 except uno2cpp uno2cpp-arm64 uno2cpp-i386
+bridge_noopt_objects := cpp2uno except uno2cpp uno2cpp-i386
 
 else ifeq ($(CPUNAME),ARM)
 
