@@ -206,8 +206,8 @@ Any SAL_CALL ConstItemContainer::getByIndex( sal_Int32 Index )
 {
     if ( sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
-}    return makeAny( m_aItemVector[Index] );
-
+    return makeAny( m_aItemVector[Index] );
+}
 
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL ConstItemContainer::getPropertySetInfo()

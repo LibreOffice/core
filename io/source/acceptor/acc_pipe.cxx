@@ -70,35 +70,32 @@ namespace io_acceptor
 
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
     {
-        if( ! m_nStatus )
+        if( m_nStatus )
         {
-            if( aReadBytes.getLength() < nBytesToRead )
-            {
-                aReadBytes.realloc( nBytesToRead );
-            }
-            sal_Int32 n = m_pipe.read( aReadBytes.getArray(), nBytesToRead );
-            OSL_ASSERT( n >= 0 && n <= aReadBytes.getLength() );
-            if( n < aReadBytes.getLength() )
-            {
-                aReadBytes.realloc( n );
-            }
-            return n;
-        }
-        else {
             throw IOException();
         }
+        if( aReadBytes.getLength() < nBytesToRead )
+        {
+            aReadBytes.realloc( nBytesToRead );
+        }
+        sal_Int32 n = m_pipe.read( aReadBytes.getArray(), nBytesToRead );
+        OSL_ASSERT( n >= 0 && n <= aReadBytes.getLength() );
+        if( n < aReadBytes.getLength() )
+        {
+            aReadBytes.realloc( n );
+        }
+        return n;
+
     }
 
     void PipeConnection::write( const Sequence < sal_Int8 > &seq )
     {
-        if( ! m_nStatus )
+        if( m_nStatus )
         {
-            if( m_pipe.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
-            {
-                throw IOException();
-            }
+            throw IOException();
         }
-        else {
+        if( m_pipe.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
+        {
             throw IOException();
         }
     }

@@ -141,10 +141,8 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
         conditionString = "!(" + conditionString + ")";
 
     std::string thenString = getSourceAsString(thenRange);
-    bool thenIsCompound = false;
     if (auto compoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen())) {
         if (compoundStmt->getLBracLoc().isValid()) {
-            thenIsCompound = true;
             thenString = stripOpenAndCloseBrace(thenString);
         }
     }
@@ -155,7 +153,7 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
     if (!replaceText(elseRange, thenString)) {
         return false;
     }
-    if (!removeText(elseKeywordRange, RewriteOptions(RemoveLineIfEmpty))) {
+    if (!removeText(elseKeywordRange)) {
         return false;
     }
     if (!replaceText(thenRange, elseString)) {
@@ -171,22 +169,24 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
 std::string stripOpenAndCloseBrace(std::string s)
 {
     size_t i = s.find("{");
-    if (i != std::string::npos) {
+    if (i == std::string::npos)
+        throw "did not find {";
+
+    ++i;
+    // strip to line end
+    while (s[i] == ' ')
         ++i;
-        // strip to line end
-        while (s[i] == ' ')
-            ++i;
-        if (s[i] == '\n')
-            ++i;
-        s = s.substr(i);
-    }
+    if (s[i] == '\n')
+         ++i;
+    s = s.substr(i);
+
     i = s.rfind("}");
-    if (i != std::string::npos) {
+    if (i == std::string::npos)
+        throw "did not find }";
+    --i;
+    while (s[i] == ' ')
         --i;
-        while (s[i] == ' ')
-            --i;
-        s = s.substr(0,i);
-    }
+    s = s.substr(0,i);
     return s;
 }
 
@@ -274,7 +274,6 @@ SourceRange Flatten::extendOverComments(SourceRange range)
         --p1;
     startLoc = startLoc.getLocWithOffset(p1 - SM.getCharacterData( startLoc ));
 
-    p2 += Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
     // look for trailing ";"
     while (*p2 == ';')
         ++p2;

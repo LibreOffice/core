@@ -173,29 +173,27 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
     {
         uno::Reference < XUnoTunnel > xRef;
         aElement >>= xRef;
-        if ( aElement >>= xRef )
-        {
-            sal_Int64 nTest;
-            ZipPackageEntry *pEntry;
-            if ( ( nTest = xRef->getSomething ( ZipPackageFolder::static_getImplementationId() ) ) != 0 )
-            {
-                ZipPackageFolder *pFolder = reinterpret_cast < ZipPackageFolder * > ( nTest );
-                pEntry = static_cast < ZipPackageEntry * > ( pFolder );
-            }
-            else if ( ( nTest = xRef->getSomething ( ZipPackageStream::static_getImplementationId() ) ) != 0 )
-            {
-                ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream * > ( nTest );
-                pEntry = static_cast < ZipPackageEntry * > ( pStream );
-            }
-            else
-                throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+        if ( !(aElement >>= xRef) )
+            throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
-            if (pEntry->getName() != aName )
-                pEntry->setName (aName);
-            doInsertByName ( pEntry, true );
+        sal_Int64 nTest;
+        ZipPackageEntry *pEntry;
+        if ( ( nTest = xRef->getSomething ( ZipPackageFolder::static_getImplementationId() ) ) != 0 )
+        {
+            ZipPackageFolder *pFolder = reinterpret_cast < ZipPackageFolder * > ( nTest );
+            pEntry = static_cast < ZipPackageEntry * > ( pFolder );
+        }
+        else if ( ( nTest = xRef->getSomething ( ZipPackageStream::static_getImplementationId() ) ) != 0 )
+        {
+            ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream * > ( nTest );
+            pEntry = static_cast < ZipPackageEntry * > ( pStream );
         }
         else
             throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+
+        if (pEntry->getName() != aName )
+            pEntry->setName (aName);
+        doInsertByName ( pEntry, true );
     }
 }
 void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
@@ -249,10 +247,10 @@ sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
     // XNameReplace
 void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const uno::Any& aElement )
 {
-    if ( hasByName( aName ) )
-        removeByName( aName );
-    else
+    if ( !hasByName( aName ) )
         throw NoSuchElementException(THROW_WHERE );
+
+    removeByName( aName );
     insertByName(aName, aElement);
 }
 

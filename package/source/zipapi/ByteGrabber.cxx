@@ -64,35 +64,33 @@ sal_Int32 SAL_CALL ByteGrabber::readBytes( uno::Sequence< sal_Int8 >& aData,
 void SAL_CALL ByteGrabber::seek( sal_Int64 location )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (xSeek.is() )
-    {
-        sal_Int64 nLen = xSeek->getLength();
-        if ( location < 0 || location > nLen )
-            throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
-        if (location > nLen )
-            location = nLen;
-        xSeek->seek( location );
-    }
-    else
+    if (!xSeek.is() )
         throw io::IOException(THROW_WHERE );
+
+    sal_Int64 nLen = xSeek->getLength();
+    if ( location < 0 || location > nLen )
+        throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
+    if (location > nLen )
+        location = nLen;
+    xSeek->seek( location );
 }
 
 sal_Int64 SAL_CALL ByteGrabber::getPosition(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (xSeek.is() )
-        return xSeek->getPosition();
-    else
+    if (!xSeek.is() )
         throw io::IOException(THROW_WHERE );
+
+    return xSeek->getPosition();
 }
 
 sal_Int64 SAL_CALL ByteGrabber::getLength(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (xSeek.is() )
-        return xSeek->getLength();
-    else
+    if (!xSeek.is() )
         throw io::IOException(THROW_WHERE );
+
+    return xSeek->getLength();
 }
 
 sal_uInt16 ByteGrabber::ReadUInt16()

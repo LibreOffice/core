@@ -109,72 +109,46 @@ protected:
 // XInputStream
 sal_Int32 ODataInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
-     sal_Int32 nRead;
-
-     if( m_bValidStream )
-    {
-         nRead = m_input->readBytes( aData , nBytesToRead );
-     }
-     else
-    {
+     if( !m_bValidStream )
+     {
          throw NotConnectedException( );
      }
-
+     sal_Int32 nRead = m_input->readBytes( aData , nBytesToRead );
      return nRead;
 }
 
 sal_Int32 ODataInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
-     sal_Int32 nRead;
-     if( m_bValidStream ) {
-         nRead = m_input->readSomeBytes( aData , nMaxBytesToRead );
-     }
-     else {
+     if( !m_bValidStream )
          throw NotConnectedException( );
-     }
-
+     sal_Int32 nRead = m_input->readSomeBytes( aData , nMaxBytesToRead );
      return nRead;
 }
 void ODataInputStream::skipBytes(sal_Int32 nBytesToSkip)
 {
-     if( m_bValidStream ) {
-         m_input->skipBytes( nBytesToSkip );
-     }
-     else
-    {
+     if( !m_bValidStream )
          throw NotConnectedException( );
-     }
+     m_input->skipBytes( nBytesToSkip );
 }
 
 
 sal_Int32 ODataInputStream::available()
 {
-     sal_Int32 nAvail;
-
-     if( m_bValidStream )
-    {
-         nAvail = m_input->available( );
-     }
-     else
-    {
+     if( !m_bValidStream )
          throw NotConnectedException( );
-     }
+     sal_Int32 nAvail = m_input->available( );
      return nAvail;
 }
 
 void ODataInputStream::closeInput()
 {
-     if( m_bValidStream ) {
-         m_input->closeInput( );
-         setInputStream( Reference< XInputStream > () );
-         setPredecessor( Reference < XConnectable >() );
-         setSuccessor( Reference < XConnectable >() );
-         m_bValidStream = false;
-     }
-     else
-    {
+     if( !m_bValidStream )
          throw NotConnectedException( );
-     }
+     m_input->closeInput( );
+     setInputStream( Reference< XInputStream > () );
+     setPredecessor( Reference < XConnectable >() );
+     setSuccessor( Reference < XConnectable >() );
+     m_bValidStream = false;
 }
 
 
@@ -509,42 +483,27 @@ protected:
 // XOutputStream
 void ODataOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
 {
-    if( m_bValidStream )
-    {
-        m_output->writeBytes( aData );
-    }
-    else {
+    if( !m_bValidStream )
         throw NotConnectedException( );
-    }
+    m_output->writeBytes( aData );
 }
 
 void ODataOutputStream::flush()
 {
-    if( m_bValidStream )
-    {
-        m_output->flush();
-    }
-    else
-    {
+    if( !m_bValidStream )
         throw NotConnectedException();
-    }
-
+    m_output->flush();
 }
 
 
 void ODataOutputStream::closeOutput()
 {
-    if( m_bValidStream )
-    {
-        m_output->closeOutput();
-        setOutputStream( Reference< XOutputStream > () );
-        setPredecessor( Reference < XConnectable >() );
-        setSuccessor( Reference < XConnectable >() );
-    }
-    else
-    {
+    if( !m_bValidStream )
         throw NotConnectedException();
-    }
+    m_output->closeOutput();
+    setOutputStream( Reference< XOutputStream > () );
+    setPredecessor( Reference < XConnectable >() );
+    setSuccessor( Reference < XConnectable >() );
 }
 
 // XDataOutputStream

@@ -137,22 +137,21 @@ OMarkableOutputStream::OMarkableOutputStream( )
 // XOutputStream
 void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
 {
-    if( m_bValidStream ) {
-        if( m_mapMarks.empty() && ( m_pBuffer->getSize() == 0 ) ) {
-            // no mark and  buffer active, simple write through
-            m_output->writeBytes( aData );
-        }
-        else {
-            MutexGuard guard( m_mutex );
-            // new data must be buffered
-            m_pBuffer->writeAt( m_nCurrentPos , aData );
-            m_nCurrentPos += aData.getLength();
-            checkMarksAndFlush();
-        }
-    }
-    else {
+    if( !m_bValidStream ) {
         throw NotConnectedException();
     }
+    if( m_mapMarks.empty() && ( m_pBuffer->getSize() == 0 ) ) {
+        // no mark and  buffer active, simple write through
+        m_output->writeBytes( aData );
+    }
+    else {
+        MutexGuard guard( m_mutex );
+        // new data must be buffered
+        m_pBuffer->writeAt( m_nCurrentPos , aData );
+        m_nCurrentPos += aData.getLength();
+        checkMarksAndFlush();
+    }
+
 }
 
 void OMarkableOutputStream::flush()
@@ -174,26 +173,25 @@ void OMarkableOutputStream::flush()
 
 void OMarkableOutputStream::closeOutput()
 {
-    if( m_bValidStream ) {
-        MutexGuard guard( m_mutex );
-        // all marks must be cleared and all
-
-        if( ! m_mapMarks.empty() )
-        {
-            m_mapMarks.clear();
-         }
-        m_nCurrentPos = m_pBuffer->getSize();
-          checkMarksAndFlush();
-
-        m_output->closeOutput();
-
-        setOutputStream( Reference< XOutputStream > () );
-        setPredecessor( Reference < XConnectable >() );
-        setSuccessor( Reference< XConnectable > () );
-    }
-    else {
+    if( !m_bValidStream ) {
         throw NotConnectedException();
     }
+    MutexGuard guard( m_mutex );
+    // all marks must be cleared and all
+
+    if( ! m_mapMarks.empty() )
+    {
+        m_mapMarks.clear();
+     }
+    m_nCurrentPos = m_pBuffer->getSize();
+      checkMarksAndFlush();
+
+    m_output->closeOutput();
+
+    setOutputStream( Reference< XOutputStream > () );
+    setPredecessor( Reference < XConnectable >() );
+    setSuccessor( Reference< XConnectable > () );
+
 }
 
 
@@ -474,43 +472,42 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
 {
     sal_Int32 nBytesRead;
 
-    if( m_bValidStream ) {
-        MutexGuard guard( m_mutex );
-        if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
-            // normal read !
-            nBytesRead = m_input->readBytes( aData, nBytesToRead );
-        }
-        else {
-            // read from buffer
-            sal_Int32 nRead;
-
-            // read enough bytes into buffer
-            if( m_pBuffer->getSize() - m_nCurrentPos < nBytesToRead  ) {
-                sal_Int32 nToRead = nBytesToRead - ( m_pBuffer->getSize() - m_nCurrentPos );
-                nRead = m_input->readBytes( aData , nToRead );
-
-                OSL_ASSERT( aData.getLength() == nRead );
-
-                m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
-
-                if( nRead < nToRead ) {
-                    nBytesToRead = nBytesToRead - (nToRead-nRead);
-                }
-            }
-
-            OSL_ASSERT( m_pBuffer->getSize() - m_nCurrentPos >= nBytesToRead  );
-
-            m_pBuffer->readAt( m_nCurrentPos , aData , nBytesToRead );
-
-            m_nCurrentPos += nBytesToRead;
-            nBytesRead = nBytesToRead;
-        }
-    }
-    else {
+    if( !m_bValidStream ) {
         throw NotConnectedException(
             "MarkableInputStream::readBytes NotConnectedException",
             *this );
     }
+    MutexGuard guard( m_mutex );
+    if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
+        // normal read !
+        nBytesRead = m_input->readBytes( aData, nBytesToRead );
+    }
+    else {
+        // read from buffer
+        sal_Int32 nRead;
+
+        // read enough bytes into buffer
+        if( m_pBuffer->getSize() - m_nCurrentPos < nBytesToRead  ) {
+            sal_Int32 nToRead = nBytesToRead - ( m_pBuffer->getSize() - m_nCurrentPos );
+            nRead = m_input->readBytes( aData , nToRead );
+
+            OSL_ASSERT( aData.getLength() == nRead );
+
+            m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
+
+            if( nRead < nToRead ) {
+                nBytesToRead = nBytesToRead - (nToRead-nRead);
+            }
+        }
+
+        OSL_ASSERT( m_pBuffer->getSize() - m_nCurrentPos >= nBytesToRead  );
+
+        m_pBuffer->readAt( m_nCurrentPos , aData , nBytesToRead );
+
+        m_nCurrentPos += nBytesToRead;
+        nBytesRead = nBytesToRead;
+    }
+
     return nBytesRead;
 }
 
@@ -519,46 +516,45 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
 {
 
     sal_Int32 nBytesRead;
-    if( m_bValidStream ) {
-        MutexGuard guard( m_mutex );
-        if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
-            // normal read !
-            nBytesRead = m_input->readSomeBytes( aData, nMaxBytesToRead );
-        }
-        else {
-            // read from buffer
-            sal_Int32 nRead = 0;
-            sal_Int32 nInBuffer = m_pBuffer->getSize() - m_nCurrentPos;
-            sal_Int32 nAdditionalBytesToRead = Min(nMaxBytesToRead-nInBuffer,m_input->available());
-            nAdditionalBytesToRead = Max(0 , nAdditionalBytesToRead );
-
-            // read enough bytes into buffer
-            if( 0 == nInBuffer ) {
-                nRead = m_input->readSomeBytes( aData , nMaxBytesToRead );
-            }
-            else if( nAdditionalBytesToRead ) {
-                nRead = m_input->readBytes( aData , nAdditionalBytesToRead );
-            }
-
-            if( nRead ) {
-                aData.realloc( nRead );
-                m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
-            }
-
-            nBytesRead = Min( nMaxBytesToRead , nInBuffer + nRead );
-
-            // now take everything from buffer !
-            m_pBuffer->readAt( m_nCurrentPos , aData , nBytesRead );
-
-            m_nCurrentPos += nBytesRead;
-        }
-    }
-    else
-    {
+    if( !m_bValidStream )    {
         throw NotConnectedException(
             "MarkableInputStream::readSomeBytes NotConnectedException",
             *this );
     }
+
+    MutexGuard guard( m_mutex );
+    if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
+        // normal read !
+        nBytesRead = m_input->readSomeBytes( aData, nMaxBytesToRead );
+    }
+    else {
+        // read from buffer
+        sal_Int32 nRead = 0;
+        sal_Int32 nInBuffer = m_pBuffer->getSize() - m_nCurrentPos;
+        sal_Int32 nAdditionalBytesToRead = Min(nMaxBytesToRead-nInBuffer,m_input->available());
+        nAdditionalBytesToRead = Max(0 , nAdditionalBytesToRead );
+
+        // read enough bytes into buffer
+        if( 0 == nInBuffer ) {
+            nRead = m_input->readSomeBytes( aData , nMaxBytesToRead );
+        }
+        else if( nAdditionalBytesToRead ) {
+            nRead = m_input->readBytes( aData , nAdditionalBytesToRead );
+        }
+
+        if( nRead ) {
+            aData.realloc( nRead );
+            m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
+        }
+
+        nBytesRead = Min( nMaxBytesToRead , nInBuffer + nRead );
+
+        // now take everything from buffer !
+        m_pBuffer->readAt( m_nCurrentPos , aData , nBytesRead );
+
+        m_nCurrentPos += nBytesRead;
+    }
+
     return nBytesRead;
 
 
@@ -580,42 +576,36 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
 
 sal_Int32 OMarkableInputStream::available()
 {
-    sal_Int32 nAvail;
-    if( m_bValidStream ) {
-        MutexGuard guard( m_mutex );
-        nAvail = m_input->available() + ( m_pBuffer->getSize() - m_nCurrentPos );
-    }
-    else
-    {
+    if( !m_bValidStream )    {
         throw NotConnectedException(
             "MarkableInputStream::available NotConnectedException",
             *this );
     }
 
+    MutexGuard guard( m_mutex );
+    sal_Int32 nAvail = m_input->available() + ( m_pBuffer->getSize() - m_nCurrentPos );
     return nAvail;
 }
 
 
 void OMarkableInputStream::closeInput()
 {
-    if( m_bValidStream ) {
-        MutexGuard guard( m_mutex );
-
-        m_input->closeInput();
-
-        setInputStream( Reference< XInputStream > () );
-        setPredecessor( Reference< XConnectable > () );
-        setSuccessor( Reference< XConnectable >() );
-
-        m_pBuffer.reset();
-        m_nCurrentPos = 0;
-        m_nCurrentMark = 0;
-    }
-    else {
+    if( !m_bValidStream ) {
         throw NotConnectedException(
             "MarkableInputStream::closeInput NotConnectedException",
             *this );
     }
+    MutexGuard guard( m_mutex );
+
+    m_input->closeInput();
+
+    setInputStream( Reference< XInputStream > () );
+    setPredecessor( Reference< XConnectable > () );
+    setSuccessor( Reference< XConnectable >() );
+
+    m_pBuffer.reset();
+    m_nCurrentPos = 0;
+    m_nCurrentMark = 0;
 }
 
 // XMarkable

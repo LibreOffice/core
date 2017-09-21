@@ -233,45 +233,44 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     throw ZipIOException("Dictionaries are not supported!" );
 
                 sal_Int32 nDiff = static_cast< sal_Int32 >( mnZipEnd - mnZipCurrent );
-                if ( nDiff > 0 )
-                {
-                    mxZipSeek->seek ( mnZipCurrent );
-
-                    sal_Int32 nToRead = std::max( nRequestedBytes, static_cast< sal_Int32 >( 8192 ) );
-                    if ( mnBlockSize > 1 )
-                        nToRead = nToRead + mnBlockSize - nToRead % mnBlockSize;
-                    nToRead = std::min( nDiff, nToRead );
-
-                    sal_Int32 nZipRead = mxZipStream->readBytes( maCompBuffer, nToRead );
-                    if ( nZipRead < nToRead )
-                        throw ZipIOException("No expected data!" );
-
-                    mnZipCurrent += nZipRead;
-                    // maCompBuffer now has the data, check if we need to decrypt
-                    // before passing to the Inflater
-                    if ( m_xCipherContext.is() )
-                    {
-                        if ( mbCheckCRC )
-                            maCRC.update( maCompBuffer );
-
-                        maCompBuffer = m_xCipherContext->convertWithCipherContext( maCompBuffer );
-                        if ( mnZipCurrent == mnZipEnd )
-                        {
-                            uno::Sequence< sal_Int8 > aSuffix = m_xCipherContext->finalizeCipherContextAndDispose();
-                            if ( aSuffix.getLength() )
-                            {
-                                sal_Int32 nOldLen = maCompBuffer.getLength();
-                                maCompBuffer.realloc( nOldLen + aSuffix.getLength() );
-                                memcpy( maCompBuffer.getArray() + nOldLen, aSuffix.getConstArray(), aSuffix.getLength() );
-                            }
-                        }
-                    }
-                    maInflater.setInput ( maCompBuffer );
-                }
-                else
+                if ( nDiff <= 0 )
                 {
                     throw ZipIOException("The stream seems to be broken!" );
                 }
+
+                mxZipSeek->seek ( mnZipCurrent );
+
+                sal_Int32 nToRead = std::max( nRequestedBytes, static_cast< sal_Int32 >( 8192 ) );
+                if ( mnBlockSize > 1 )
+                    nToRead = nToRead + mnBlockSize - nToRead % mnBlockSize;
+                nToRead = std::min( nDiff, nToRead );
+
+                sal_Int32 nZipRead = mxZipStream->readBytes( maCompBuffer, nToRead );
+                if ( nZipRead < nToRead )
+                    throw ZipIOException("No expected data!" );
+
+                mnZipCurrent += nZipRead;
+                // maCompBuffer now has the data, check if we need to decrypt
+                // before passing to the Inflater
+                if ( m_xCipherContext.is() )
+                {
+                    if ( mbCheckCRC )
+                        maCRC.update( maCompBuffer );
+
+                    maCompBuffer = m_xCipherContext->convertWithCipherContext( maCompBuffer );
+                    if ( mnZipCurrent == mnZipEnd )
+                    {
+                        uno::Sequence< sal_Int8 > aSuffix = m_xCipherContext->finalizeCipherContextAndDispose();
+                        if ( aSuffix.getLength() )
+                        {
+                            sal_Int32 nOldLen = maCompBuffer.getLength();
+                            maCompBuffer.realloc( nOldLen + aSuffix.getLength() );
+                            memcpy( maCompBuffer.getArray() + nOldLen, aSuffix.getConstArray(), aSuffix.getLength() );
+                        }
+                    }
+                }
+                maInflater.setInput ( maCompBuffer );
+
             }
         }
 

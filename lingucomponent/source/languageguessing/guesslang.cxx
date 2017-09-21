@@ -173,17 +173,14 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
 
     EnsureInitialized();
 
-    lang::Locale aRes;
-    if (nStartPos >=0 && nLen >= 0 && nStartPos + nLen <= rText.getLength())
-    {
-        OString o( OUStringToOString( rText.copy(nStartPos, nLen), RTL_TEXTENCODING_UTF8 ) );
-        Guess g = m_aGuesser.GuessPrimaryLanguage(o.getStr());
-        aRes.Language   = OUString::createFromAscii( g.GetLanguage().c_str() );
-        aRes.Country    = OUString::createFromAscii( g.GetCountry().c_str() );
-    }
-    else
+    if (nStartPos < 0 || nLen < 0 || nStartPos + nLen > rText.getLength())
         throw lang::IllegalArgumentException();
 
+    OString o( OUStringToOString( rText.copy(nStartPos, nLen), RTL_TEXTENCODING_UTF8 ) );
+    Guess g = m_aGuesser.GuessPrimaryLanguage(o.getStr());
+    lang::Locale aRes;
+    aRes.Language   = OUString::createFromAscii( g.GetLanguage().c_str() );
+    aRes.Country    = OUString::createFromAscii( g.GetCountry().c_str() );
     return aRes;
 }
 
