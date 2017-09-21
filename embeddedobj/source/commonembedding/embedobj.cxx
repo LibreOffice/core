@@ -230,33 +230,30 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     throw embed::WrongStateException( "client site not set, yet", *this );
 
                 uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
-                if ( xInplaceClient.is() && xInplaceClient->canInplaceActivate() )
-                {
-                    xInplaceClient->activatingInplace();
-
-                    uno::Reference< embed::XWindowSupplier > xClientWindowSupplier( xInplaceClient, uno::UNO_QUERY_THROW );
-
-                    m_xClientWindow = xClientWindowSupplier->getWindow();
-                    m_aOwnRectangle = xInplaceClient->getPlacement();
-                    m_aClipRectangle = xInplaceClient->getClipRectangle();
-                    awt::Rectangle aRectangleToShow = GetRectangleInterception( m_aOwnRectangle, m_aClipRectangle );
-
-                    // create own window based on the client window
-                    // place and resize the window according to the rectangles
-                    uno::Reference< awt::XWindowPeer > xClientWindowPeer( m_xClientWindow, uno::UNO_QUERY_THROW );
-
-                    // dispatch provider may not be provided
-                    uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
-                    bool bOk = m_xDocHolder->ShowInplace( xClientWindowPeer, aRectangleToShow, xContainerDP );
-                    m_nObjectState = nNextState;
-                    if ( !bOk )
-                    {
-                        SwitchStateTo_Impl( embed::EmbedStates::RUNNING );
-                        throw embed::WrongStateException(); //TODO: can't activate inplace
-                    }
-                }
-                else
+                if ( !xInplaceClient.is() || !xInplaceClient->canInplaceActivate() )
                     throw embed::WrongStateException(); //TODO: can't activate inplace
+                xInplaceClient->activatingInplace();
+
+                uno::Reference< embed::XWindowSupplier > xClientWindowSupplier( xInplaceClient, uno::UNO_QUERY_THROW );
+
+                m_xClientWindow = xClientWindowSupplier->getWindow();
+                m_aOwnRectangle = xInplaceClient->getPlacement();
+                m_aClipRectangle = xInplaceClient->getClipRectangle();
+                awt::Rectangle aRectangleToShow = GetRectangleInterception( m_aOwnRectangle, m_aClipRectangle );
+
+                // create own window based on the client window
+                // place and resize the window according to the rectangles
+                uno::Reference< awt::XWindowPeer > xClientWindowPeer( m_xClientWindow, uno::UNO_QUERY_THROW );
+
+                // dispatch provider may not be provided
+                uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
+                bool bOk = m_xDocHolder->ShowInplace( xClientWindowPeer, aRectangleToShow, xContainerDP );
+                m_nObjectState = nNextState;
+                if ( !bOk )
+                {
+                    SwitchStateTo_Impl( embed::EmbedStates::RUNNING );
+                    throw embed::WrongStateException(); //TODO: can't activate inplace
+                }
             }
             else if ( nNextState == embed::EmbedStates::ACTIVE )
             {
@@ -296,45 +293,42 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 // TODO:
                 uno::Reference< css::frame::XLayoutManager > xContainerLM =
                             xInplaceClient->getLayoutManager();
-                if ( xContainerLM.is() )
+                if ( !xContainerLM.is() )
+                    throw embed::WrongStateException(); //TODO: can't activate UI
+                // dispatch provider may not be provided
+                uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
+
+                // get the container module name
+                OUString aModuleName;
+                try
                 {
-                    // dispatch provider may not be provided
-                    uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
+                    uno::Reference< embed::XComponentSupplier > xCompSupl( m_xClientSite, uno::UNO_QUERY_THROW );
+                    uno::Reference< uno::XInterface > xContDoc( xCompSupl->getComponent(), uno::UNO_QUERY_THROW );
 
-                    // get the container module name
-                    OUString aModuleName;
-                    try
-                    {
-                        uno::Reference< embed::XComponentSupplier > xCompSupl( m_xClientSite, uno::UNO_QUERY_THROW );
-                        uno::Reference< uno::XInterface > xContDoc( xCompSupl->getComponent(), uno::UNO_QUERY_THROW );
+                    uno::Reference< frame::XModuleManager2 > xManager( frame::ModuleManager::create( m_xContext ) );
 
-                        uno::Reference< frame::XModuleManager2 > xManager( frame::ModuleManager::create( m_xContext ) );
+                    aModuleName = xManager->identify( xContDoc );
+                }
+                catch( const uno::Exception& )
+                {}
 
-                        aModuleName = xManager->identify( xContDoc );
-                    }
-                    catch( const uno::Exception& )
-                    {}
+                // if currently another object is UIactive it will be deactivated; usually this will activate the LM of
+                // the container. Locking the LM will prevent flicker.
+                xContainerLM->lock();
+                xInplaceClient->activatingUI();
+                bool bOk = m_xDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
+                xContainerLM->unlock();
 
-                    // if currently another object is UIactive it will be deactivated; usually this will activate the LM of
-                    // the container. Locking the LM will prevent flicker.
-                    xContainerLM->lock();
-                    xInplaceClient->activatingUI();
-                    bool bOk = m_xDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
-                    xContainerLM->unlock();
-
-                    if ( bOk )
-                    {
-                        m_nObjectState = nNextState;
-                        m_xDocHolder->ResizeHatchWindow();
-                    }
-                    else
-                    {
-                        xInplaceClient->deactivatedUI();
-                        throw embed::WrongStateException(); //TODO: can't activate UI
-                    }
+                if ( bOk )
+                {
+                    m_nObjectState = nNextState;
+                    m_xDocHolder->ResizeHatchWindow();
                 }
                 else
+                {
+                    xInplaceClient->deactivatedUI();
                     throw embed::WrongStateException(); //TODO: can't activate UI
+                }
             }
         }
         else
@@ -368,14 +362,11 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             if ( xContainerLM.is() )
                 bOk = m_xDocHolder->HideUI( xContainerLM );
 
-            if ( bOk )
-            {
-                m_nObjectState = nNextState;
-                m_xDocHolder->ResizeHatchWindow();
-                xInplaceClient->deactivatedUI();
-            }
-            else
+            if ( !bOk )
                 throw embed::WrongStateException(); //TODO: can't activate UI
+            m_nObjectState = nNextState;
+            m_xDocHolder->ResizeHatchWindow();
+            xInplaceClient->deactivatedUI();
         }
     }
     else

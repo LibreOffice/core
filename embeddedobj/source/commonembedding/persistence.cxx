@@ -953,26 +953,23 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
 
     if ( m_bWaitSaveCompleted )
     {
-        if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
-        {
-            // saveCompleted is expected, handle it accordingly
-            if ( m_xNewParentStorage == xStorage && m_aNewEntryName == sEntName )
-            {
-                saveCompleted( true );
-                return;
-            }
-
-            // if a completely different entry is provided, switch first back to the old persistence in saveCompleted
-            // and then switch to the target persistence
-            bool bSwitchFurther = ( m_xParentStorage != xStorage || m_aEntryName != sEntName );
-            saveCompleted( false );
-            if ( !bSwitchFurther )
-                return;
-        }
-        else
+        if ( nEntryConnectionMode != embed::EntryInitModes::NO_INIT )
             throw embed::WrongStateException(
                         "The object waits for saveCompleted() call!",
                         static_cast< ::cppu::OWeakObject* >(this) );
+        // saveCompleted is expected, handle it accordingly
+        if ( m_xNewParentStorage == xStorage && m_aNewEntryName == sEntName )
+        {
+            saveCompleted( true );
+            return;
+        }
+
+        // if a completely different entry is provided, switch first back to the old persistence in saveCompleted
+        // and then switch to the target persistence
+        bool bSwitchFurther = ( m_xParentStorage != xStorage || m_aEntryName != sEntName );
+        saveCompleted( false );
+        if ( !bSwitchFurther )
+            return;
     }
 
     // for now support of this interface is required to allow breaking of links and converting them to normal embedded
