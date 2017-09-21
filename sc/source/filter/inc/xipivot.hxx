@@ -332,6 +332,9 @@ public:
      *  autoformat. */
     void                ReadSxViewEx9( XclImpStream& rStrm );
 
+    /** Reads an SXADDL record that specifies additional info for pivot table. */
+    void                ReadSxAddl( XclImpStream& rStrm );
+
     /** Inserts the pivot table into the Calc document. */
     void                Convert();
 
@@ -348,6 +351,7 @@ private:
     XclPTInfo           maPTInfo;           /// General info about the pivot table (SXVIEW record).
     XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
     XclPTViewEx9Info    maPTViewEx9Info;     /// (SXVIEWEX9 record)
+    XclPTAddl           maPTAddlInfo;
     XclImpPTFieldVec    maFields;           /// Vector containing all fields.
     XclImpPTFieldRef    mxCurrField;        /// Current field for importing additional info.
     ScfStringVec        maVisFieldNames;    /// Vector containing all visible field names.
@@ -408,6 +412,8 @@ public:
     /** Reads an SXVIEWEX9 record that specifies the pivot tables
      *  autoformat. */
     void                ReadSxViewEx9( XclImpStream& rStrm );
+    /** Reads an SXADDL record that specifies additional info for pivot table. */
+    void                ReadSxAddl( XclImpStream& rStrm );
 
     /** Reads all used pivot caches and creates additional sheets for external data sources. */
     void                ReadPivotCaches( const XclImpStream& rStrm );

@@ -32,7 +32,8 @@ ScDPOutputGeometry::ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilte
     mnDataFields(0),
     meDataLayoutType(None),
     mbShowFilter(bShowFilter),
-    mbHeaderLayout (false)
+    mbHeaderLayout (false),
+    mbCompactMode (false)
 {
 }
 
@@ -70,6 +71,11 @@ void ScDPOutputGeometry::setHeaderLayout(bool bHeaderLayout)
     mbHeaderLayout = bHeaderLayout;
 }
 
+void ScDPOutputGeometry::setCompactMode(bool bCompactMode)
+{
+    mbCompactMode = bCompactMode;
+}
+
 void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) const
 {
     sal_uInt32 nColumnFields, nRowFields;
@@ -96,6 +102,8 @@ void ScDPOutputGeometry::getColumnFieldPositions(vector<ScAddress>& rAddrs) cons
     SCROW nRow = nCurRow;
     SCTAB nTab = maOutRange.aStart.Tab();
     SCCOL nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + nRowFields);
+    if(mbCompactMode)
+        nColStart = static_cast<SCCOL>(maOutRange.aStart.Col() + 1); // We have only one row in compact mode
     SCCOL nColEnd = nColStart + static_cast<SCCOL>(nColumnFields-1);
 
     for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
@@ -119,6 +127,9 @@ void ScDPOutputGeometry::getRowFieldPositions(vector<ScAddress>& rAddrs) const
     SCTAB nTab = maOutRange.aStart.Tab();
     SCCOL nColStart = maOutRange.aStart.Col();
     SCCOL nColEnd = nColStart + static_cast<SCCOL>(nRowFields-1);
+
+    if(mbCompactMode)
+        nColEnd = nColStart; // We have only one row in compact mode
 
     for (SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
         aAddrs.emplace_back(nCol, nRow, nTab);
