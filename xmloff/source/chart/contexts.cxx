@@ -41,7 +41,7 @@ public:
                 SvXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName );
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
                 const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
@@ -54,7 +54,7 @@ SchXMLBodyContext_Impl::SchXMLBodyContext_Impl(
 {
 }
 
-SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
+SvXMLImportContextRef SchXMLBodyContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & )
@@ -81,12 +81,12 @@ SchXMLDocContext::~SchXMLDocContext()
 {}
 
 
-SvXMLImportContext* SchXMLDocContext::CreateChildContext(
+SvXMLImportContextRef SchXMLDocContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetDocElemTokenMap();
     SvXMLImportFlags nFlags = GetImport().getImportFlags();
 
@@ -96,30 +96,30 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
             if( nFlags & SvXMLImportFlags::AUTOSTYLES )
                 // not nice, but this is safe, as the SchXMLDocContext class can only by
                 // instantiated by the chart import class SchXMLImport (header is not exported)
-                pContext =
+                xContext =
                     static_cast< SchXMLImport& >( GetImport() ).CreateStylesContext( rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_STYLES:
             // for draw styles containing gradients/hatches/markers and dashes
             if( nFlags & SvXMLImportFlags::STYLES )
-                pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
+                xContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_META:
             // we come here in the flat ODF file format,
             // if XDocumentPropertiesSupplier is not supported at the model
-            pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+            xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_BODY:
             if( nFlags & SvXMLImportFlags::CONTENT )
-                pContext = new SchXMLBodyContext_Impl( mrImportHelper, GetImport(), nPrefix, rLocalName );
+                xContext = new SchXMLBodyContext_Impl( mrImportHelper, GetImport(), nPrefix, rLocalName );
             break;
     }
 
     // call parent when no own context was created
-    if( ! pContext )
-        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    if (!xContext)
+        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
@@ -134,7 +134,7 @@ SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
 {
 }
 
-SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
+SvXMLImportContextRef SchXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
@@ -168,18 +168,18 @@ void SchXMLBodyContext::EndElement()
 {
 }
 
-SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
+SvXMLImportContextRef SchXMLBodyContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     // <chart:chart> element
     if( nPrefix == XML_NAMESPACE_CHART &&
         IsXMLToken( rLocalName, XML_CHART ) )
     {
-        pContext = mrImportHelper.CreateChartContext( GetImport(),
+        xContext = mrImportHelper.CreateChartContext( GetImport(),
                                                       nPrefix, rLocalName,
                                                       GetImport().GetModel(),
                                                       xAttrList );
@@ -188,14 +188,14 @@ SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
             IsXMLToken( rLocalName, XML_CALCULATION_SETTINGS ))
     {
         // i99104 handle null date correctly
-        pContext = new SchXMLCalculationSettingsContext ( GetImport(), nPrefix, rLocalName, xAttrList);
+        xContext = new SchXMLCalculationSettingsContext ( GetImport(), nPrefix, rLocalName, xAttrList);
     }
     else
     {
-        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
     }
 
-    return pContext;
+    return xContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

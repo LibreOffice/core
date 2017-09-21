@@ -42,21 +42,21 @@ SdXMLGroupShapeContext::~SdXMLGroupShapeContext()
 {
 }
 
-SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     // #i68101#
     if( nPrefix == XML_NAMESPACE_SVG &&
         (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
-        pContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
+        xContext = new SdXMLDescriptionContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
     else if( nPrefix == XML_NAMESPACE_OFFICE && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
-        pContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
+        xContext = new SdXMLEventsContext( GetImport(), nPrefix, rLocalName, xAttrList, mxShape );
     }
     else if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_GLUE_POINT ) )
     {
@@ -65,16 +65,16 @@ SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPref
     else
     {
         // call GroupChildContext function at common ShapeImport
-        pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
+        xContext = GetImport().GetShapeImport()->CreateGroupChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList, mxChildren);
     }
 
     // call parent when no own context was created
-    if(!pContext)
-        pContext = SvXMLImportContext::CreateChildContext(
+    if (!xContext)
+        xContext = SvXMLImportContext::CreateChildContext(
         nPrefix, rLocalName, xAttrList);
 
-    return pContext;
+    return xContext;
 }
 
 void SdXMLGroupShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>&)

@@ -147,7 +147,7 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
     }
 }
 
-SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexBibliographyConfigurationContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

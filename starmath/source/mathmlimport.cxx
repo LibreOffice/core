@@ -540,7 +540,7 @@ public:
 
     virtual void TCharacters(const OUString & /*rChars*/);
     virtual void Characters(const OUString &rChars) override;
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/) override;
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/) override;
 };
 
 void SmXMLImportContext::TCharacters(const OUString & /*rChars*/)
@@ -561,7 +561,7 @@ void SmXMLImportContext::Characters(const OUString &rChars)
         TCharacters(rChars2/*.collapse()*/);
 }
 
-SvXMLImportContext * SmXMLImportContext::CreateChildContext(sal_uInt16 /*nPrefix*/,
+SvXMLImportContextRef SmXMLImportContext::CreateChildContext(sal_uInt16 /*nPrefix*/,
     const OUString& /*rLocalName*/,
     const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/)
 {
@@ -885,7 +885,7 @@ public:
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrfx,rLName) {}
 
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 
     void EndElement() override;
 };
@@ -903,7 +903,7 @@ public:
         : SmXMLDocContext_Impl(rImport,nPrefix,rLName)
         { nElementCount = GetSmImport().GetNodeStack().size(); }
 
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 
     SvXMLImportContext *StrictCreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName);
@@ -1802,7 +1802,7 @@ public:
         bHasPrescripts(false) {}
 
     void EndElement() override;
-    SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
+    SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 };
@@ -1848,7 +1848,7 @@ public:
         SmXMLRowContext_Impl(rImport,nPrefix,rLName)
         {}
 
-    SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
+    SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 };
@@ -1863,7 +1863,7 @@ public:
         {}
 
     void EndElement() override;
-    SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
+    SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 };
@@ -1919,10 +1919,10 @@ public:
         const OUString& rLName)
         : SvXMLImportContext(rImport,nPrfx,rLName) {}
 
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
 };
 
-SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPrefix,
+SvXMLImportContextRef SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList)
 {
@@ -1955,7 +1955,7 @@ public:
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 i_nPrefix, const OUString& i_rLocalName, const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
+    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 i_nPrefix, const OUString& i_rLocalName, const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
 };
 
 SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
@@ -1968,7 +1968,7 @@ SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
 {
 }
 
-SvXMLImportContext *SmXMLFlatDocContext_Impl::CreateChildContext(
+SvXMLImportContextRef SmXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
@@ -2186,7 +2186,7 @@ const SvXMLTokenMap& SmXMLImport::GetMspaceAttrTokenMap()
 }
 
 
-SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
+SvXMLImportContextRef SmXMLDocContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& /*xAttrList*/)
@@ -2466,8 +2466,7 @@ void SmXMLRowContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSNode));
 }
 
-
-SvXMLImportContext *SmXMLRowContext_Impl::StrictCreateChildContext(
+SvXMLImportContext* SmXMLRowContext_Impl::StrictCreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName)
 {
@@ -2513,31 +2512,30 @@ SvXMLImportContext *SmXMLRowContext_Impl::StrictCreateChildContext(
 }
 
 
-SvXMLImportContext *SmXMLRowContext_Impl::CreateChildContext(
+SvXMLImportContextRef SmXMLRowContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    SvXMLImportContext* pContext = StrictCreateChildContext(nPrefix,
+    SvXMLImportContextRef xContext = StrictCreateChildContext(nPrefix,
             rLocalName);
 
-    if (!pContext)
+    if (!xContext)
     {
         //Hmm, unrecognized for this level, check to see if its
         //an element that can have an implicit schema around it
-        pContext = SmXMLDocContext_Impl::CreateChildContext(nPrefix,
+        xContext = SmXMLDocContext_Impl::CreateChildContext(nPrefix,
             rLocalName,xAttrList);
     }
-    return pContext;
+    return xContext;
 }
 
-
-SvXMLImportContext *SmXMLMultiScriptsContext_Impl::CreateChildContext(
+SvXMLImportContextRef SmXMLMultiScriptsContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     const SvXMLTokenMap& rTokenMap = GetSmImport().
         GetPresScriptEmptyElemTokenMap();
@@ -2546,18 +2544,18 @@ SvXMLImportContext *SmXMLMultiScriptsContext_Impl::CreateChildContext(
         case XML_TOK_MPRESCRIPTS:
             bHasPrescripts = true;
             ProcessSubSupPairs(false);
-            pContext = GetSmImport().CreatePrescriptsContext(nPrefix,
+            xContext = GetSmImport().CreatePrescriptsContext(nPrefix,
                 rLocalName);
             break;
         case XML_TOK_NONE:
-            pContext = GetSmImport().CreateNoneContext(nPrefix,rLocalName);
+            xContext = GetSmImport().CreateNoneContext(nPrefix,rLocalName);
             break;
         default:
-            pContext = SmXMLRowContext_Impl::CreateChildContext(nPrefix,
+            xContext = SmXMLRowContext_Impl::CreateChildContext(nPrefix,
                 rLocalName,xAttrList);
             break;
     }
-    return pContext;
+    return xContext;
 }
 
 void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
@@ -2685,49 +2683,49 @@ void SmXMLTableContext_Impl::EndElement()
     rNodeStack.push_front(std::move(pSNode));
 }
 
-SvXMLImportContext *SmXMLTableRowContext_Impl::CreateChildContext(
+SvXMLImportContextRef SmXMLTableRowContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     const SvXMLTokenMap& rTokenMap = GetSmImport().
         GetPresTableElemTokenMap();
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
         case XML_TOK_MTD:
-            pContext = GetSmImport().CreateTableCellContext(nPrefix,
+            xContext = GetSmImport().CreateTableCellContext(nPrefix,
                 rLocalName);
             break;
         default:
-            pContext = SmXMLRowContext_Impl::CreateChildContext(nPrefix,
+            xContext = SmXMLRowContext_Impl::CreateChildContext(nPrefix,
                 rLocalName,xAttrList);
             break;
     }
-    return pContext;
+    return xContext;
 }
 
-SvXMLImportContext *SmXMLTableContext_Impl::CreateChildContext(
+SvXMLImportContextRef SmXMLTableContext_Impl::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     const SvXMLTokenMap& rTokenMap = GetSmImport().
         GetPresTableElemTokenMap();
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
         case XML_TOK_MTR:
-            pContext = GetSmImport().CreateTableRowContext(nPrefix,rLocalName);
+            xContext = GetSmImport().CreateTableRowContext(nPrefix,rLocalName);
             break;
         default:
-            pContext = SmXMLTableRowContext_Impl::CreateChildContext(nPrefix,
+            xContext = SmXMLTableRowContext_Impl::CreateChildContext(nPrefix,
                 rLocalName,xAttrList);
             break;
     }
-    return pContext;
+    return xContext;
 }
 
 void SmXMLMultiScriptsContext_Impl::EndElement()

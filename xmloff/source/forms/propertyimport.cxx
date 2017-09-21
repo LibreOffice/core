@@ -257,7 +257,7 @@ OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 
 {
 }
 
-SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
+SvXMLImportContextRef OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
     const Reference< XAttributeList >& _rxAttrList)
 {
     if( token::IsXMLToken( _rLocalName, token::XML_PROPERTIES) )
@@ -352,7 +352,7 @@ OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport, sal_uI
 {
 }
 
-SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
+SvXMLImportContextRef OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
     const Reference< XAttributeList >&)
 {
     if( token::IsXMLToken( _rLocalName, token::XML_PROPERTY ) )
@@ -395,7 +395,7 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
 {
 }
 
-SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
+SvXMLImportContextRef OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< XAttributeList >&)
 {
     OSL_FAIL(OStringBuffer("OSinglePropertyContext::CreateChildContext: unknown child element (\"").
@@ -526,7 +526,7 @@ void OListPropertyContext::EndElement()
     m_xPropertyImporter->implPushBackGenericPropertyValue( aSequenceValue );
 }
 
-SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName, const Reference< XAttributeList >& /*_rxAttrList*/ )
+SvXMLImportContextRef OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName, const Reference< XAttributeList >& /*_rxAttrList*/ )
 {
     if ( token::IsXMLToken( _rLocalName, token::XML_LIST_VALUE ) )
     {

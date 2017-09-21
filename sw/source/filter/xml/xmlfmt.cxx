@@ -275,7 +275,7 @@ public:
             sal_uInt16 nFamily,
             SvXMLStylesContext& rStyles );
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -359,12 +359,12 @@ SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
 {
 }
 
-SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
+SvXMLImportContextRef SwXMLTextStyleContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_MAP ) )
     {
@@ -377,14 +377,14 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
                pConditions = o3tl::make_unique<SwXMLConditions_Impl>();
             pConditions->push_back( xCond );
         }
-        pContext = xCond.get();
+        xContext = xCond.get();
     }
 
-    if( !pContext )
-        pContext = XMLTextStyleContext::CreateChildContext( nPrefix, rLocalName,
+    if (!xContext)
+        xContext = XMLTextStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                           xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
@@ -425,7 +425,7 @@ public:
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
@@ -537,12 +537,12 @@ void SwXMLItemSetStyleContext_Impl::CreateAndInsert( bool bOverwrite )
         pTextStyle->CreateAndInsert( bOverwrite );
 }
 
-SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
+SvXMLImportContextRef SwXMLItemSetStyleContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( XML_NAMESPACE_STYLE == nPrefix )
     {
@@ -551,7 +551,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
             IsXMLToken( rLocalName, XML_TABLE_ROW_PROPERTIES ) ||
             IsXMLToken( rLocalName, XML_TABLE_CELL_PROPERTIES ) )
         {
-            pContext = CreateItemSetContext( nPrefix, rLocalName, xAttrList );
+            xContext = CreateItemSetContext( nPrefix, rLocalName, xAttrList );
         }
         else if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) ||
                  IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ))
@@ -568,15 +568,15 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
                 pTextStyle->StartElement( xTmpAttrList );
                 rStyles.AddStyle( *pTextStyle );
             }
-            pContext = pTextStyle->CreateChildContext( nPrefix, rLocalName, xAttrList );
+            xContext = pTextStyle->CreateChildContext( nPrefix, rLocalName, xAttrList );
         }
     }
 
-    if( !pContext )
-        pContext = SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName,
+    if (!xContext)
+        xContext = SvXMLStyleContext::CreateChildContext( nPrefix, rLocalName,
                                                           xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()

@@ -50,7 +50,7 @@ public:
     virtual ~SchXMLDocContext() override;
 
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -67,7 +67,7 @@ public:
         sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const css::uno::Reference<css::document::XDocumentProperties>& i_xDocProps);
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList>& i_xAttrList) override;
 };
@@ -86,7 +86,7 @@ public:
     virtual ~SchXMLBodyContext() override;
 
     virtual void EndElement() override;
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;

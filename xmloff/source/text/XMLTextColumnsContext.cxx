@@ -283,7 +283,7 @@ XMLTextColumnsContext::XMLTextColumnsContext(
     }
 }
 
-SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
+SvXMLImportContextRef XMLTextColumnsContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )

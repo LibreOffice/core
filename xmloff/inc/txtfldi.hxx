@@ -432,7 +432,7 @@ public:
         const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 
     /// handle database-location children
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList ) override;
@@ -913,7 +913,7 @@ public:
 
 protected:
     /// for <office:events> children
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
@@ -971,7 +971,7 @@ public:
                                   sal_uInt16 nPrfx,
                                   const OUString& sLocalName);
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
@@ -1145,7 +1145,7 @@ protected:
     virtual void PrepareField(
         const css::uno::Reference< css::beans::XPropertySet > & xPropertySet) override;
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -1218,7 +1218,7 @@ public:
                                     sal_uInt16 nPrfx,
                                     const OUString& sLocalName);
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList >& xAttrList ) override;

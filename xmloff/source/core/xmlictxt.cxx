@@ -47,7 +47,7 @@ SvXMLImportContext::~SvXMLImportContext()
 {
 }
 
-SvXMLImportContext *SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef SvXMLImportContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLocalName,
                                             const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {

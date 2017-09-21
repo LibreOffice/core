@@ -108,7 +108,7 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
 
 }
 
-SvXMLImportContext *SwXMLBrushItemImportContext::CreateChildContext(
+SvXMLImportContextRef SwXMLBrushItemImportContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {

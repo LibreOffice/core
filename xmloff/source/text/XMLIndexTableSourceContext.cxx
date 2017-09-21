@@ -115,7 +115,6 @@ void XMLIndexTableSourceContext::ProcessAttribute(
     }
 }
 
-
 void XMLIndexTableSourceContext::EndElement()
 {
     rIndexPropertySet->setPropertyValue("CreateFromLabels", css::uno::Any(bUseCaption));
@@ -133,8 +132,7 @@ void XMLIndexTableSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
-
-SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexTableSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

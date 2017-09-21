@@ -628,19 +628,19 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     return pContext;
 }
 
-SvXMLImportContext *XMLShapeImportHelper::CreateFrameChildContext(
+SvXMLImportContextRef XMLShapeImportHelper::CreateFrameChildContext(
     SvXMLImportContext *pThisContext,
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext * pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     SdXMLFrameShapeContext *pFrameContext = dynamic_cast<SdXMLFrameShapeContext*>( pThisContext  );
-    if( pFrameContext )
-        pContext = pFrameContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
+    if (pFrameContext)
+        xContext = pFrameContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
 
-    return pContext;
+    return xContext;
 }
 
 /** this function is called whenever the implementation classes like to add this new

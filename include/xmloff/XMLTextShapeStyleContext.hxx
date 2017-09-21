@@ -46,7 +46,7 @@ public:
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
     virtual ~XMLTextShapeStyleContext() override;
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;

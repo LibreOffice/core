@@ -97,7 +97,7 @@ void XMLReplacementImageContext::EndElement()
         m_xPropSet->setPropertyValue( m_sGraphicURL, makeAny( sHRef ) );
 }
 
-SvXMLImportContext *XMLReplacementImageContext::CreateChildContext(
+SvXMLImportContextRef XMLReplacementImageContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )

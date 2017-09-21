@@ -47,7 +47,7 @@ PagePropertySetContext::~PagePropertySetContext()
 {
 }
 
-SvXMLImportContext *PagePropertySetContext::CreateChildContext(
+SvXMLImportContextRef PagePropertySetContext::CreateChildContext(
                    sal_uInt16 nPrefix,
                    const OUString& rLocalName,
                    const Reference< xml::sax::XAttributeList > & xAttrList,
@@ -73,7 +73,7 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
         default:
             break;
     }
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     switch( mxMapper->getPropertySetMapper()
                     ->GetEntryContextId( rProp.mnIndex ) )
@@ -87,7 +87,7 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
                     nFil  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
-        pContext =
+        xContext =
             new XMLBackgroundImageContext( GetImport(), nPrefix,
                                            rLocalName, xAttrList,
                                            rProp,
@@ -99,24 +99,24 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
         break;
 
     case CTF_PM_TEXTCOLUMNS:
-        pContext = new XMLTextColumnsContext( GetImport(), nPrefix,
+        xContext = new XMLTextColumnsContext( GetImport(), nPrefix,
                                               rLocalName, xAttrList, rProp,
                                               rProperties );
         break;
 
     case CTF_PM_FTN_LINE_WEIGHT:
-        pContext = new XMLFootnoteSeparatorImport(
+        xContext = new XMLFootnoteSeparatorImport(
             GetImport(), nPrefix, rLocalName, rProperties,
             mxMapper->getPropertySetMapper(), rProp.mnIndex);
         break;
     }
 
-    if( !pContext )
-        pContext = SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName,
+    if (!xContext)
+        xContext = SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName,
                                                             xAttrList,
                                                             rProperties, rProp );
 
-    return pContext;
+    return xContext;
 }
 
 

@@ -95,7 +95,7 @@ OXMLCell::~OXMLCell()
 {
 }
 
-SvXMLImportContext* OXMLCell::CreateChildContext(
+SvXMLImportContextRef OXMLCell::CreateChildContext(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )

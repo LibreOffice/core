@@ -68,7 +68,7 @@ void XMLIndexBibliographySourceContext::EndElement()
 }
 
 
-SvXMLImportContext* XMLIndexBibliographySourceContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexBibliographySourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

@@ -410,7 +410,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     }
 }
 
-SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
+SvXMLImportContextRef SchXMLPlotAreaContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
@@ -1148,14 +1148,12 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
     }
 }
 
-SvXMLImportContext* SchXMLStatisticsObjectContext::CreateChildContext(
+SvXMLImportContextRef SchXMLStatisticsObjectContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
-    pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
-    return pContext;
+    return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

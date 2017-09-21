@@ -79,11 +79,9 @@ OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
 
 OXMLReportElement::~OXMLReportElement()
 {
-
 }
 
-
-SvXMLImportContext* OXMLReportElement::CreateChildContext(
+SvXMLImportContextRef OXMLReportElement::CreateChildContext(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )

@@ -126,14 +126,14 @@ void OXMLReport::impl_initRuntimeDefaults() const
 }
 
 
-SvXMLImportContext* OXMLReport::CreateChildContext(
+SvXMLImportContextRef OXMLReport::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = CreateChildContext_(nPrefix,rLocalName,xAttrList);
-    if ( pContext )
-        return pContext;
+    SvXMLImportContextRef xContext = CreateChildContext_(nPrefix,rLocalName,xAttrList);
+    if (xContext)
+        return xContext;
     const SvXMLTokenMap&    rTokenMap   = m_rImport.GetReportElemTokenMap();
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
@@ -141,60 +141,59 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
         case XML_TOK_REPORT_FUNCTION:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLFunction( m_rImport, nPrefix, rLocalName,xAttrList,m_xReportDefinition.get(),true);
+                xContext = new OXMLFunction( m_rImport, nPrefix, rLocalName,xAttrList,m_xReportDefinition.get(),true);
             }
             break;
         case XML_TOK_MASTER_DETAIL_FIELDS:
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLMasterFields(m_rImport, nPrefix, rLocalName,xAttrList ,this);
+                xContext = new OXMLMasterFields(m_rImport, nPrefix, rLocalName,xAttrList ,this);
             break;
         case XML_TOK_REPORT_HEADER:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xReportDefinition->setReportHeaderOn(true);
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getReportHeader());
+                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getReportHeader());
             }
             break;
         case XML_TOK_PAGE_HEADER:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xReportDefinition->setPageHeaderOn(true);
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getPageHeader());
+                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getPageHeader());
             }
             break;
         case XML_TOK_GROUP:
             m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLGroup( m_rImport, nPrefix, rLocalName,xAttrList);
+            xContext = new OXMLGroup( m_rImport, nPrefix, rLocalName,xAttrList);
             break;
         case XML_TOK_DETAIL:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getDetail());
+                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getDetail());
             }
             break;
         case XML_TOK_PAGE_FOOTER:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xReportDefinition->setPageFooterOn(true);
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getPageFooter(),false);
+                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getPageFooter(),false);
             }
             break;
         case XML_TOK_REPORT_FOOTER:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 m_xReportDefinition->setReportFooterOn(true);
-                pContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getReportFooter());
+                xContext = new OXMLSection( m_rImport, nPrefix, rLocalName,xAttrList, m_xReportDefinition->getReportFooter());
             }
             break;
         default:
             break;
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    if (!xContext)
+        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
-
-    return pContext;
+    return xContext;
 }
 
 void OXMLReport::EndElement()

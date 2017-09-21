@@ -79,7 +79,7 @@ public:
               const Reference< xml::sax::XAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 };
@@ -214,7 +214,7 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList );
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
@@ -358,7 +358,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
     }
 }
 
-SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
+SvXMLImportContextRef SvxXMLListLevelStyleContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
@@ -887,7 +887,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     rListLevel.SetImageVertOrient( eVertOrient );
 }
 
-SvXMLImportContext* SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
+SvXMLImportContextRef SvxXMLListLevelStyleAttrContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
@@ -1014,12 +1014,12 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 
 SvxXMLListStyleContext::~SvxXMLListStyleContext() {}
 
-SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
+SvXMLImportContextRef SvxXMLListStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( XML_NAMESPACE_TEXT == nPrefix &&
         ( bOutline
@@ -1035,14 +1035,14 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
             pLevelStyles = o3tl::make_unique<SvxXMLListStyle_Impl>();
         pLevelStyles->push_back( xLevelStyle );
 
-        pContext = xLevelStyle.get();
+        xContext = xLevelStyle.get();
     }
     else
     {
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }
 
-    return pContext;
+    return xContext;
 }
 
 void SvxXMLListStyleContext::FillUnoNumRule(

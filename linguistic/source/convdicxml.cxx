@@ -96,7 +96,7 @@ public:
 
     // SvXMLImportContext
     virtual void Characters( const OUString &rChars ) override;
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList) override;
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList) override;
 };
 
 
@@ -117,7 +117,7 @@ public:
 
     // SvXMLImportContext
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) override;
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) override;
 };
 
 
@@ -136,7 +136,7 @@ public:
 
     // SvXMLImportContext
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) override;
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) override;
 
     const OUString &    GetLeftText() const { return aLeftText; }
 };
@@ -160,7 +160,7 @@ public:
 
     // SvXMLImportContext
     virtual void EndElement() override;
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) override;
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList ) override;
     virtual void Characters( const OUString &rChars ) override;
 
     const OUString &    GetRightText() const    { return aRightText; }
@@ -180,7 +180,7 @@ void ConvDicXMLImportContext::Characters(const OUString & /*rChars*/)
 
 }
 
-SvXMLImportContext * ConvDicXMLImportContext::CreateChildContext(
+SvXMLImportContextRef ConvDicXMLImportContext::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
@@ -215,7 +215,7 @@ void ConvDicXMLDictionaryContext_Impl::StartElement(
 
 }
 
-SvXMLImportContext * ConvDicXMLDictionaryContext_Impl::CreateChildContext(
+SvXMLImportContextRef ConvDicXMLDictionaryContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
@@ -228,7 +228,7 @@ SvXMLImportContext * ConvDicXMLDictionaryContext_Impl::CreateChildContext(
 }
 
 
-SvXMLImportContext * ConvDicXMLEntryTextContext_Impl::CreateChildContext(
+SvXMLImportContextRef ConvDicXMLEntryTextContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
@@ -258,7 +258,7 @@ void ConvDicXMLEntryTextContext_Impl::StartElement(
 }
 
 
-SvXMLImportContext * ConvDicXMLRightTextContext_Impl::CreateChildContext(
+SvXMLImportContextRef ConvDicXMLRightTextContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {

@@ -82,24 +82,24 @@ void SchXMLRegressionCurveObjectContext::StartElement( const uno::Reference< xml
     mrRegressionStyleList.push_back( aStyle );
 }
 
-SvXMLImportContext* SchXMLRegressionCurveObjectContext::CreateChildContext(
+SvXMLImportContextRef SchXMLRegressionCurveObjectContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    SvXMLImportContext* pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( nPrefix == XML_NAMESPACE_CHART && IsXMLToken( rLocalName, XML_EQUATION ) )
     {
-        pContext = new SchXMLEquationContext(
+        xContext = new SchXMLEquationContext(
             mrImportHelper, GetImport(), nPrefix, rLocalName, maChartSize, mrRegressionStyleList.back());
     }
     else
     {
-        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+        xContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
     }
 
-    return pContext;
+    return xContext;
 }
 
 SchXMLEquationContext::SchXMLEquationContext(

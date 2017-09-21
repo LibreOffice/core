@@ -1042,7 +1042,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
     }
 }
 
-SvXMLImportContext* SchXMLChartContext::CreateChildContext(
+SvXMLImportContextRef SchXMLChartContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
@@ -1248,7 +1248,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
     }
 }
 
-SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
+SvXMLImportContextRef SchXMLTitleContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )

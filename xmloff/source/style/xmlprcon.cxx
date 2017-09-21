@@ -50,7 +50,7 @@ SvXMLPropertySetContext::~SvXMLPropertySetContext()
 {
 }
 
-SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
+SvXMLImportContextRef SvXMLPropertySetContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
@@ -78,7 +78,7 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
     CreateChildContext if the element matches an entry in the
     SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT
 */
-SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
+SvXMLImportContextRef SvXMLPropertySetContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >&,

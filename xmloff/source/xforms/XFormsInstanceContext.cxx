@@ -65,7 +65,7 @@ XFormsInstanceContext::XFormsInstanceContext(
     SAL_WARN_IF( !mxModel.is(), "xmloff", "need model" );
 }
 
-SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
+SvXMLImportContextRef XFormsInstanceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& )

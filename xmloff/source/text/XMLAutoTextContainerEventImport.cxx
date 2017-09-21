@@ -51,7 +51,7 @@ XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport()
 {
 }
 
-SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext(
+SvXMLImportContextRef XMLAutoTextContainerEventImport::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & )

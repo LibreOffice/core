@@ -38,7 +38,7 @@ public:
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 
-    virtual SvXMLImportContext* CreateChildContext(
+    virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
@@ -64,7 +64,7 @@ void SchXMLListItemContext::EndElement()
 {
 }
 
-SvXMLImportContext* SchXMLListItemContext::CreateChildContext(
+SvXMLImportContextRef SchXMLListItemContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -103,7 +103,7 @@ void SchXMLTextListContext::EndElement()
         m_rTextList[nN]=m_aTextVector[nN];
 }
 
-SvXMLImportContext* SchXMLTextListContext::CreateChildContext(
+SvXMLImportContextRef SchXMLTextListContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {

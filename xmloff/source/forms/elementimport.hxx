@@ -116,7 +116,7 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void    EndElement() override;
@@ -441,7 +441,7 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void    EndElement() override;
@@ -491,7 +491,7 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void    EndElement() override;
@@ -572,7 +572,7 @@ namespace xmloff
         }
 
         // SvXMLImportContext overridables
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
         virtual void EndElement() SAL_OVERRIDE;
@@ -627,7 +627,7 @@ namespace xmloff
                 const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer);
 
         // SvXMLImportContext overridables
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void StartElement(
@@ -670,7 +670,7 @@ namespace xmloff
 
     protected:
         // SvXMLImportContext overridables
-        virtual SvXMLImportContext* CreateChildContext(
+        virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void    StartElement(
@@ -707,7 +707,7 @@ namespace xmloff
 
     //= OContainerImport
     template <class BASE>
-    inline SvXMLImportContext* OContainerImport< BASE >::CreateChildContext(
+    inline SvXMLImportContextRef OContainerImport< BASE >::CreateChildContext(
         sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList)
     {

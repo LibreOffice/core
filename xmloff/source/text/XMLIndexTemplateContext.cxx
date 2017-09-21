@@ -210,7 +210,7 @@ SvXMLEnumMapEntry<TemplateTokenType> const aTemplateTokenTypeMap[] =
     { XML_TOKEN_INVALID, (TemplateTokenType)0 }
 };
 
-SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
+SvXMLImportContextRef XMLIndexTemplateContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )

@@ -656,12 +656,12 @@ XMLVariableDeclsImportContext::XMLVariableDeclsImportContext(
 {
 }
 
-SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
+SvXMLImportContextRef XMLVariableDeclsImportContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference<xml::sax::XAttributeList> & xAttrList )
 {
     enum XMLTokenEnum eElementName;
-    SvXMLImportContext* pImportContext = nullptr;
+    SvXMLImportContextRef xImportContext;
 
     if( XML_NAMESPACE_TEXT == nPrefix )
     {
@@ -684,20 +684,20 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
 
         if( IsXMLToken( rLocalName, eElementName ) )
         {
-            pImportContext = new XMLVariableDeclImportContext(
+            xImportContext = new XMLVariableDeclImportContext(
                 GetImport(), rImportHelper, nPrefix, rLocalName, xAttrList,
                 eVarDeclsContextType);
         }
     }
 
     // if no context was created, use default context
-    if (nullptr == pImportContext) {
-        pImportContext = SvXMLImportContext::CreateChildContext(nPrefix,
+    if (!xImportContext) {
+        xImportContext = SvXMLImportContext::CreateChildContext(nPrefix,
                                                                 rLocalName,
                                                                 xAttrList);
     }
 
-    return pImportContext;
+    return xImportContext;
 }
 
 

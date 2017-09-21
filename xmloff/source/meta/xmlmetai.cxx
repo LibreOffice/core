@@ -46,7 +46,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
         const css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2>& rDocBuilder);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
@@ -66,7 +66,7 @@ XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
 {
 }
 
-SvXMLImportContext *
+SvXMLImportContextRef
 XMLDocumentBuilderContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& rAttrs)
@@ -178,7 +178,7 @@ SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
 {
 }
 
-SvXMLImportContext *SvXMLMetaDocumentContext::CreateChildContext(
+SvXMLImportContextRef SvXMLMetaDocumentContext::CreateChildContext(
              sal_uInt16 nPrefix, const OUString& rLocalName,
              const uno::Reference<xml::sax::XAttributeList>& rAttrs)
 {

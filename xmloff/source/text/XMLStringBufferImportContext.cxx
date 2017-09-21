@@ -42,7 +42,7 @@ XMLStringBufferImportContext::~XMLStringBufferImportContext()
 {
 }
 
-SvXMLImportContext *XMLStringBufferImportContext::CreateChildContext(
+SvXMLImportContextRef XMLStringBufferImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> &)

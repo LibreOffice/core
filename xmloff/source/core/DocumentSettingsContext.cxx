@@ -151,7 +151,7 @@ public:
                                     const OUString& rItemName,
                                     XMLConfigBaseContext* pBaseContext);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
     virtual void Characters( const OUString& rChars ) override;
@@ -169,7 +169,7 @@ public:
                                     css::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
@@ -184,7 +184,7 @@ public:
                                     css::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
@@ -204,7 +204,7 @@ public:
                                     const OUString& rConfigItemName,
                                     XMLConfigBaseContext* pBaseContext);
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
 
@@ -288,7 +288,7 @@ XMLDocumentSettingsContext::~XMLDocumentSettingsContext()
 {
 }
 
-SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p_nPrefix,
+SvXMLImportContextRef XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p_nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
@@ -441,7 +441,7 @@ XMLConfigItemSetContext::XMLConfigItemSetContext(SvXMLImport& rImport, sal_uInt1
     // here are no attributes
 }
 
-SvXMLImportContext *XMLConfigItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef XMLConfigItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
                                      const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
@@ -482,7 +482,7 @@ XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, sal_uInt16 nPrf
     }
 }
 
-SvXMLImportContext *XMLConfigItemContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef XMLConfigItemContext::CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference< css::xml::sax::XAttributeList>& )
 {
@@ -645,7 +645,7 @@ XMLConfigItemMapNamedContext::XMLConfigItemMapNamedContext(SvXMLImport& rImport,
 {
 }
 
-SvXMLImportContext *XMLConfigItemMapNamedContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef XMLConfigItemMapNamedContext::CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
@@ -675,7 +675,7 @@ XMLConfigItemMapIndexedContext::XMLConfigItemMapIndexedContext(SvXMLImport& rImp
 {
 }
 
-SvXMLImportContext *XMLConfigItemMapIndexedContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef XMLConfigItemMapIndexedContext::CreateChildContext( sal_uInt16 nPrefix,
                                                     const OUString& rLocalName,
                                                     const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {

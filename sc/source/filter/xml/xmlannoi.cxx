@@ -114,35 +114,35 @@ void ScXMLAnnotationContext::StartElement(const css::uno::Reference< css::xml::s
         pShapeContext->StartElement(xAttrList);
 }
 
-SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPrefix,
+SvXMLImportContextRef ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = nullptr;
+    SvXMLImportContextRef xContext;
 
     if( XML_NAMESPACE_DC == nPrefix )
     {
         if( IsXMLToken( rLName, XML_CREATOR ) )
-            pContext = new ScXMLContentContext(GetScImport(), nPrefix,
+            xContext = new ScXMLContentContext(GetScImport(), nPrefix,
                                             rLName, maAuthorBuffer);
         else if( IsXMLToken( rLName, XML_DATE ) )
-            pContext = new ScXMLContentContext(GetScImport(), nPrefix,
+            xContext = new ScXMLContentContext(GetScImport(), nPrefix,
                                             rLName, maCreateDateBuffer);
     }
     else if( XML_NAMESPACE_META == nPrefix )
     {
         if( IsXMLToken( rLName, XML_DATE_STRING ) )
-            pContext = new ScXMLContentContext(GetScImport(), nPrefix,
+            xContext = new ScXMLContentContext(GetScImport(), nPrefix,
                                             rLName, maCreateDateStringBuffer);
     }
 
-    if( !pContext && pShapeContext )
-        pContext = pShapeContext->CreateChildContext(nPrefix, rLName, xAttrList);
+    if( !xContext && pShapeContext )
+        xContext = pShapeContext->CreateChildContext(nPrefix, rLName, xAttrList);
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
+    if (!xContext)
+        xContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
-    return pContext;
+    return xContext;
 }
 
 void ScXMLAnnotationContext::Characters( const OUString& rChars )

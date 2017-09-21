@@ -88,7 +88,7 @@ void XMLSymbolImageContext::StartElement( const uno::Reference< xml::sax::XAttri
     }
 }
 
-SvXMLImportContext* XMLSymbolImageContext::CreateChildContext(
+SvXMLImportContextRef XMLSymbolImageContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
