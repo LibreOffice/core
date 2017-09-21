@@ -36,8 +36,48 @@
 #include <o3tl/make_unique.hxx>
 #include <i18nutil/searchopt.hxx>
 
+struct CommandCategoryListBoxResource_Impl
+{
+    //Image m_hdImage;
+    //Image m_libImage;
+    //Image m_macImage;
+    //Image m_docImage;
+    OUString m_sMyMacros;
+    OUString m_sProdMacros;
+    OUString m_sMacros;
+    OUString m_sDlgMacros;
+    OUString m_aStrGroupStyles;
+    /*Image m_collapsedImage;
+    Image m_expandedImage;*/
+
+    CommandCategoryListBoxResource_Impl();
+};
+
+CommandCategoryListBoxResource_Impl::CommandCategoryListBoxResource_Impl() :
+    //m_hdImage(BitmapEx(RID_CUIBMP_HARDDISK)),
+    //m_libImage(BitmapEx(RID_CUIBMP_LIB)),
+    //m_macImage(BitmapEx(RID_CUIBMP_MACRO)),
+    //m_docImage(BitmapEx(RID_CUIBMP_DOC)),
+    m_sMyMacros(CuiResId(RID_SVXSTR_MYMACROS)),
+    m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
+    m_sMacros(CuiResId(RID_SVXSTR_BASICMACROS)),
+    m_sDlgMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
+    m_aStrGroupStyles(CuiResId(RID_SVXSTR_GROUP_STYLES))
+    /*m_collapsedImage(BitmapEx(RID_CUIBMP_COLLAPSED)),
+    m_expandedImage(BitmapEx(RID_CUIBMP_EXPANDED))*/
+{
+    SAL_WARN("cui.cutomize", "m_sMyMacros: " << CuiResId(RID_SVXSTR_MYMACROS) );
+    SAL_WARN("cui.cutomize", "m_sProdMacros: " << m_sProdMacros );
+    SAL_WARN("cui.cutomize", "m_sMacros: " << m_sMacros );
+    SAL_WARN("cui.cutomize", "m_sDlgMacros: " << m_sDlgMacros );
+        SAL_WARN("cui.cutomize", "m_aStrGroupStyles: " << m_aStrGroupStyles );
+}
+
+
 CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
+    , xImp( new CommandCategoryListBoxResource_Impl() )
+    , pStylesInfo( nullptr )
 {
     SetDropDownLineCount(25);
 
@@ -84,6 +124,17 @@ void CommandCategoryListBox::Init(
     m_xModuleCategoryInfo.set(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
     m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
 
+    // Support style commands
+    css::uno::Reference<css::frame::XController> xController;
+    css::uno::Reference<css::frame::XModel> xModel;
+    if (xFrame.is())
+        xController = xFrame->getController();
+    if (xController.is())
+        xModel = xController->getModel();
+
+    m_aStylesInfo.init(sModuleLongName, xModel);
+    SetStylesInfo(&m_aStylesInfo);
+
 /**** InitModule Start ****/
     try
     {
@@ -124,7 +175,33 @@ void CommandCategoryListBox::Init(
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
 
+        // Add Styles
+        OUString sStyle(xImp->m_aStrGroupStyles);
+        const std::vector< SfxStyleInfo_Impl > lStyleFamilies =
+            pStylesInfo->getStyleFamilies();
+        std::vector< SfxStyleInfo_Impl >::const_iterator pIt;
 
+        for ( pIt  = lStyleFamilies.begin(); pIt != lStyleFamilies.end(); ++pIt )
+        {
+            SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(*pIt);
+
+            if ( pFamily->sLabel.isEmpty() )
+            {
+                continue;
+            }
+
+            OUString sGroupName = sStyle + " | " + pFamily->sLabel;
+
+            nEntryPos = InsertEntry( sGroupName );
+            m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>(
+                SfxCfgKind::GROUP_STYLES, 0, pFamily ) );
+            SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
+
+            SAL_WARN("cui.customize", "pFamily->sLabel: " << pFamily->sLabel);
+            SAL_WARN("cui.customize", "sGroupName: " << sGroupName);
+        }
+
+        SAL_WARN("cui.customize", "sStyle: " << sStyle);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -263,6 +340,11 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
         pFunctionListBox->Select( pFunctionListBox->GetEntry( nullptr, 0 ) );
 
     pFunctionListBox->SetUpdateMode(true);
+}
+
+void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
+{
+    pStylesInfo = pStyles;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
