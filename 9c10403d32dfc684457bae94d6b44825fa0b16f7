@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_bef8eae6",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-21T13:05:46Z",
+      "side": 1,
+      "message": "cow_wrapper\u003cT\u003e has a ctor cow_wrapper\u003cT\u003e(const T\u0026), so you can do this:\n\n      mpImplPolygon(ImplPolygon(foo,bar,baz))",
+      "parentUuid": "1a430d35_83091b98",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_d0d68cc4",
         "filename": "tools/source/generic/poly.cxx",
         "patchSetId": 1
@@ -271,6 +289,24 @@
       "side": 1,
       "message": "I took a look at the B2DPolygon comparison-operator and, if I didn\u0027t miss anyhting, it seems to be implemented the same way like this one. So I\u0027m not really sure, how to follow up on this.",
       "parentUuid": "1a430d35_f002a83d",
+      "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5ee9c619",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-21T13:05:46Z",
+      "side": 1,
+      "message": "they have this code:\n\n        if(mpPolygon.same_object(rPolygon.mpPolygon))\n            return true;\n\n        return ((*mpPolygon) \u003d\u003d (*rPolygon.mpPolygon));",
+      "parentUuid": "1a430d35_e3f81f7f",
       "revId": "9c10403d32dfc684457bae94d6b44825fa0b16f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
