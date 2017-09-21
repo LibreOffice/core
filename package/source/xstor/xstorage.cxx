@@ -927,11 +927,12 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OStorage_Impl::GetAllRelatio
 
     ReadRelInfoIfNecessary();
 
-    if ( m_nRelInfoStatus == RELINFO_READ
-      || m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
-        return m_aRelInfo;
-    else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
+    if ( m_nRelInfoStatus != RELINFO_READ
+         && m_nRelInfoStatus != RELINFO_CHANGED_STREAM_READ
+         && m_nRelInfoStatus != RELINFO_CHANGED )
             throw io::IOException( THROW_WHERE "Wrong relinfo stream!" );
+    // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
+    return m_aRelInfo;
 }
 
 void OStorage_Impl::CopyLastCommitTo( const uno::Reference< embed::XStorage >& xNewStor )
@@ -1555,24 +1556,22 @@ void OStorage_Impl::CloneStreamElement( const OUString& aStreamName,
     if (!pElement->m_xStream)
         OpenSubStream( pElement );
 
-    if (pElement->m_xStream && pElement->m_xStream->m_xPackageStream.is())
-    {
-        // the existence of m_pAntiImpl of the child is not interesting,
-        // the copy will be created internally
-
-        // usual copying is not applicable here, only last flushed version of the
-        // child stream should be used for copiing. Probably the children m_xPackageStream
-        // can be used as a base of a new stream, that would be copied to result
-        // storage. The only problem is that some package streams can be accessed from outside
-        // at the same time (now solved by wrappers that remember own position).
-
-        if (bEncryptionDataProvided)
-            pElement->m_xStream->GetCopyOfLastCommit(xTargetStream, aEncryptionData);
-        else
-            pElement->m_xStream->GetCopyOfLastCommit(xTargetStream);
-    }
-    else
+    if (!pElement->m_xStream || !pElement->m_xStream->m_xPackageStream.is())
         throw io::IOException( THROW_WHERE ); // TODO: general_error
+
+    // the existence of m_pAntiImpl of the child is not interesting,
+    // the copy will be created internally
+
+    // usual copying is not applicable here, only last flushed version of the
+    // child stream should be used for copiing. Probably the children m_xPackageStream
+    // can be used as a base of a new stream, that would be copied to result
+    // storage. The only problem is that some package streams can be accessed from outside
+    // at the same time (now solved by wrappers that remember own position).
+
+    if (bEncryptionDataProvided)
+        pElement->m_xStream->GetCopyOfLastCommit(xTargetStream, aEncryptionData);
+    else
+        pElement->m_xStream->GetCopyOfLastCommit(xTargetStream);
 }
 
 void OStorage_Impl::RemoveStreamRelInfo( const OUString& aOriginalName )
@@ -2628,15 +2627,13 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
         if (!pElement->m_xStorage)
             m_pImpl->OpenSubStorage( pElement, embed::ElementModes::READ );
 
-        if (pElement->m_xStorage)
-        {
-            // the existence of m_pAntiImpl of the child is not interesting,
-            // the copy will be created internally
-
-            pElement->m_xStorage->CopyLastCommitTo(xTargetStorage);
-        }
-        else
+        if (!pElement->m_xStorage)
             throw io::IOException( THROW_WHERE ); // TODO: general_error
+
+        // the existence of m_pAntiImpl of the child is not interesting,
+        // the copy will be created internally
+
+        pElement->m_xStorage->CopyLastCommitTo(xTargetStorage);
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
@@ -4341,37 +4338,33 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
         if ( aPropertyName == "RelationsInfoStream" )
         {
             uno::Reference< io::XInputStream > xInRelStream;
-            if ( ( aValue >>= xInRelStream ) && xInRelStream.is() )
-            {
-                uno::Reference< io::XSeekable > xSeek( xInRelStream, uno::UNO_QUERY );
-                if ( !xSeek.is() )
-                {
-                    // currently this is an internal property that is used for optimization
-                    // and the stream must support XSeekable interface
-                    // TODO/LATER: in future it can be changed if property is used from outside
-                    throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
-                }
-
-                m_pImpl->m_xNewRelInfoStream = xInRelStream;
-                m_pImpl->m_aRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
-                m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
-                m_pImpl->m_bBroadcastModified = true;
-                m_pImpl->m_bIsModified = true;
-            }
-            else
+            if ( !( aValue >>= xInRelStream ) || !xInRelStream.is() )
                 throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+
+            uno::Reference< io::XSeekable > xSeek( xInRelStream, uno::UNO_QUERY );
+            if ( !xSeek.is() )
+            {
+                // currently this is an internal property that is used for optimization
+                // and the stream must support XSeekable interface
+                // TODO/LATER: in future it can be changed if property is used from outside
+                throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+            }
+
+            m_pImpl->m_xNewRelInfoStream = xInRelStream;
+            m_pImpl->m_aRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+            m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
+            m_pImpl->m_bBroadcastModified = true;
+            m_pImpl->m_bIsModified = true;
         }
         else if ( aPropertyName == "RelationsInfo" )
         {
-            if ( aValue >>= m_pImpl->m_aRelInfo )
-            {
-                m_pImpl->m_xNewRelInfoStream.clear();
-                m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
-                m_pImpl->m_bBroadcastModified = true;
-                m_pImpl->m_bIsModified = true;
-            }
-            else
+            if ( !(aValue >>= m_pImpl->m_aRelInfo) )
                 throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+
+            m_pImpl->m_xNewRelInfoStream.clear();
+            m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
+            m_pImpl->m_bBroadcastModified = true;
+            m_pImpl->m_bIsModified = true;
         }
         else if ( ( m_pData->m_bIsRoot && ( aPropertyName == "URL" || aPropertyName == "RepairPackage") )
                  || aPropertyName == "IsRoot" )
@@ -4738,31 +4731,29 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
                 break;
             }
 
-    if ( nIDInd == -1 || bReplace )
-    {
-        if ( nIDInd == -1 )
-        {
-            nIDInd = aSeq.getLength();
-            aSeq.realloc( nIDInd + 1 );
-        }
-
-        aSeq[nIDInd].realloc( aEntry.getLength() + 1 );
-
-        aSeq[nIDInd][0].First = aIDTag;
-        aSeq[nIDInd][0].Second = sID;
-        sal_Int32 nIndTarget = 1;
-        for ( sal_Int32 nIndOrig = 0;
-              nIndOrig < aEntry.getLength();
-              nIndOrig++ )
-        {
-            if ( aEntry[nIndOrig].First != aIDTag )
-                aSeq[nIDInd][nIndTarget++] = aEntry[nIndOrig];
-        }
-
-        aSeq[nIDInd].realloc( nIndTarget );
-    }
-    else
+    if ( nIDInd != -1 && !bReplace )
         throw container::ElementExistException( THROW_WHERE );
+
+    if ( nIDInd == -1 )
+    {
+        nIDInd = aSeq.getLength();
+        aSeq.realloc( nIDInd + 1 );
+    }
+
+    aSeq[nIDInd].realloc( aEntry.getLength() + 1 );
+
+    aSeq[nIDInd][0].First = aIDTag;
+    aSeq[nIDInd][0].Second = sID;
+    sal_Int32 nIndTarget = 1;
+    for ( sal_Int32 nIndOrig = 0;
+          nIndOrig < aEntry.getLength();
+          nIndOrig++ )
+    {
+        if ( aEntry[nIndOrig].First != aIDTag )
+            aSeq[nIDInd][nIndTarget++] = aEntry[nIndOrig];
+    }
+
+    aSeq[nIDInd].realloc( nIndTarget );
 
     m_pImpl->m_aRelInfo = aSeq;
     m_pImpl->m_xNewRelInfoStream.clear();

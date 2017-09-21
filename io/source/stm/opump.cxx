@@ -354,18 +354,17 @@ void Pump::start()
 {
     Guard< Mutex > aGuard( m_aMutex );
     m_aThread = osl_createSuspendedThread(Pump::static_run,this);
-    if( m_aThread )
-    {
-        // will be released by OPump::static_run
-        acquire();
-        osl_resumeThread( m_aThread );
-    }
-    else
+    if( !m_aThread )
     {
         throw RuntimeException(
             "Pump::start Couldn't create worker thread",
             *this);
     }
+
+    // will be released by OPump::static_run
+    acquire();
+    osl_resumeThread( m_aThread );
+
 }
 
 

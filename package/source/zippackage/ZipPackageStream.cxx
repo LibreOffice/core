@@ -1161,22 +1161,19 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         if ( m_rZipPackage.getFormat() != embed::StorageFormats::PACKAGE && m_rZipPackage.getFormat() != embed::StorageFormats::OFOPXML )
             throw beans::PropertyVetoException(THROW_WHERE );
 
-        if ( aValue >>= msMediaType )
-        {
-            if ( !msMediaType.isEmpty() )
-            {
-                if ( msMediaType.indexOf ( "text" ) != -1
-                 || msMediaType == "application/vnd.sun.star.oleobject" )
-                    m_bToBeCompressed = true;
-                else if ( !m_bCompressedIsSetFromOutside )
-                    m_bToBeCompressed = false;
-            }
-        }
-        else
+        if ( !(aValue >>= msMediaType) )
             throw IllegalArgumentException(THROW_WHERE "MediaType must be a string!",
                                             uno::Reference< XInterface >(),
                                             2 );
 
+        if ( !msMediaType.isEmpty() )
+        {
+            if ( msMediaType.indexOf ( "text" ) != -1
+             || msMediaType == "application/vnd.sun.star.oleobject" )
+                m_bToBeCompressed = true;
+            else if ( !m_bCompressedIsSetFromOutside )
+                m_bToBeCompressed = false;
+        }
     }
     else if ( aPropertyName == "Size" )
     {
@@ -1191,22 +1188,20 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             throw beans::PropertyVetoException(THROW_WHERE );
 
         bool bEnc = false;
-        if ( aValue >>= bEnc )
-        {
-            // In case of new raw stream, the stream must not be encrypted on storing
-            if ( bEnc && m_nStreamMode == PACKAGE_STREAM_RAW )
-                throw IllegalArgumentException(THROW_WHERE "Raw stream can not be encrypted on storing",
-                                                uno::Reference< XInterface >(),
-                                                2 );
-
-            m_bToBeEncrypted = bEnc;
-            if ( m_bToBeEncrypted && !m_xBaseEncryptionData.is() )
-                m_xBaseEncryptionData = new BaseEncryptionData;
-        }
-        else
+        if ( !(aValue >>= bEnc) )
             throw IllegalArgumentException(THROW_WHERE "Wrong type for Encrypted property!",
                                             uno::Reference< XInterface >(),
                                             2 );
+
+        // In case of new raw stream, the stream must not be encrypted on storing
+        if ( bEnc && m_nStreamMode == PACKAGE_STREAM_RAW )
+            throw IllegalArgumentException(THROW_WHERE "Raw stream can not be encrypted on storing",
+                                            uno::Reference< XInterface >(),
+                                            2 );
+
+        m_bToBeEncrypted = bEnc;
+        if ( m_bToBeEncrypted && !m_xBaseEncryptionData.is() )
+            m_xBaseEncryptionData = new BaseEncryptionData;
 
     }
     else if ( aPropertyName == ENCRYPTION_KEY_PROPERTY )
@@ -1219,20 +1214,18 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         if ( !( aValue >>= aNewKey ) )
         {
             OUString sTempString;
-            if ( aValue >>= sTempString )
-            {
-                sal_Int32 nPathLength = sTempString.getLength();
-                Sequence < sal_Int8 > aSequence ( nPathLength );
-                sal_Int8 *pArray = aSequence.getArray();
-                const sal_Unicode *pChar = sTempString.getStr();
-                for ( sal_Int32 i = 0; i < nPathLength; i++ )
-                    pArray[i] = static_cast < sal_Int8 > ( pChar[i] );
-                aNewKey = aSequence;
-            }
-            else
+            if ( !(aValue >>= sTempString) )
                 throw IllegalArgumentException(THROW_WHERE "Wrong type for EncryptionKey property!",
                                                 uno::Reference< XInterface >(),
                                                 2 );
+
+            sal_Int32 nPathLength = sTempString.getLength();
+            Sequence < sal_Int8 > aSequence ( nPathLength );
+            sal_Int8 *pArray = aSequence.getArray();
+            const sal_Unicode *pChar = sTempString.getStr();
+            for ( sal_Int32 i = 0; i < nPathLength; i++ )
+                pArray[i] = static_cast < sal_Int8 > ( pChar[i] );
+            aNewKey = aSequence;
         }
 
         if ( aNewKey.getLength() )
@@ -1291,21 +1284,19 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     {
         bool bCompr = false;
 
-        if ( aValue >>= bCompr )
-        {
-            // In case of new raw stream, the stream must not be encrypted on storing
-            if ( bCompr && m_nStreamMode == PACKAGE_STREAM_RAW )
-                throw IllegalArgumentException(THROW_WHERE "Raw stream can not be encrypted on storing",
-                                                uno::Reference< XInterface >(),
-                                                2 );
-
-            m_bToBeCompressed = bCompr;
-            m_bCompressedIsSetFromOutside = true;
-        }
-        else
+        if ( !(aValue >>= bCompr) )
             throw IllegalArgumentException(THROW_WHERE "Wrong type for Compressed property!",
                                             uno::Reference< XInterface >(),
                                             2 );
+
+        // In case of new raw stream, the stream must not be encrypted on storing
+        if ( bCompr && m_nStreamMode == PACKAGE_STREAM_RAW )
+            throw IllegalArgumentException(THROW_WHERE "Raw stream can not be encrypted on storing",
+                                            uno::Reference< XInterface >(),
+                                            2 );
+
+        m_bToBeCompressed = bCompr;
+        m_bCompressedIsSetFromOutside = true;
     }
     else
         throw beans::UnknownPropertyException(THROW_WHERE );

@@ -809,13 +809,11 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
         if ( nIndex == nOldIndex )
             break;
-        if ( pCurrent->hasByName( sTemp ) )
-        {
-            pPrevious = pCurrent;
-            pCurrent = pCurrent->doGetByName( sTemp ).pFolder;
-        }
-        else
+        if ( !pCurrent->hasByName( sTemp ) )
             throw NoSuchElementException(THROW_WHERE );
+
+        pPrevious = pCurrent;
+        pCurrent = pCurrent->doGetByName( sTemp ).pFolder;
         nOldIndex = nIndex+1;
     }
 

@@ -506,15 +506,12 @@ OUString const & OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference<
                 uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
                 uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aTempURL );
-                if ( xTempOutStream.is() )
-                {
-                    // the current position of the original stream should be still OK, copy further
-                    ::comphelper::OStorageHelper::CopyInputToOutput( xStream, xTempOutStream );
-                    xTempOutStream->closeOutput();
-                    xTempOutStream.clear();
-                }
-                else
+                if ( !xTempOutStream.is() )
                     throw io::IOException(); // TODO:
+                // the current position of the original stream should be still OK, copy further
+                ::comphelper::OStorageHelper::CopyInputToOutput( xStream, xTempOutStream );
+                xTempOutStream->closeOutput();
+                xTempOutStream.clear();
             }
         }
         catch( const packages::WrongPasswordException& rWrongPasswordException )
@@ -585,18 +582,16 @@ OUString const & OWriteStream_Impl::FillTempGetFileName()
                         uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
                         uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( m_aTempURL );
-                        if ( xTempOutStream.is() )
-                        {
-                            // copy stream contents to the file
-                            xTempOutStream->writeBytes( aData );
-
-                            // the current position of the original stream should be still OK, copy further
-                            ::comphelper::OStorageHelper::CopyInputToOutput( xOrigStream, xTempOutStream );
-                            xTempOutStream->closeOutput();
-                            xTempOutStream.clear();
-                        }
-                        else
+                        if ( !xTempOutStream.is() )
                             throw io::IOException(); // TODO:
+
+                        // copy stream contents to the file
+                        xTempOutStream->writeBytes( aData );
+
+                        // the current position of the original stream should be still OK, copy further
+                        ::comphelper::OStorageHelper::CopyInputToOutput( xOrigStream, xTempOutStream );
+                        xTempOutStream->closeOutput();
+                        xTempOutStream.clear();
                     }
                 }
                 catch( const packages::WrongPasswordException& )
@@ -2679,31 +2674,29 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
                 break;
             }
 
-    if ( nIDInd == -1 || bReplace )
-    {
-        if ( nIDInd == -1 )
-        {
-            nIDInd = aSeq.getLength();
-            aSeq.realloc( nIDInd + 1 );
-        }
-
-        aSeq[nIDInd].realloc( aEntry.getLength() + 1 );
-
-        aSeq[nIDInd][0].First = aIDTag;
-        aSeq[nIDInd][0].Second = sID;
-        sal_Int32 nIndTarget = 1;
-        for ( sal_Int32 nIndOrig = 0;
-              nIndOrig < aEntry.getLength();
-              nIndOrig++ )
-        {
-            if ( aEntry[nIndOrig].First != aIDTag )
-                aSeq[nIDInd][nIndTarget++] = aEntry[nIndOrig];
-        }
-
-        aSeq[nIDInd].realloc( nIndTarget );
-    }
-    else
+    if ( nIDInd != -1 && !bReplace )
         throw container::ElementExistException(); // TODO
+
+    if ( nIDInd == -1 )
+    {
+        nIDInd = aSeq.getLength();
+        aSeq.realloc( nIDInd + 1 );
+    }
+
+    aSeq[nIDInd].realloc( aEntry.getLength() + 1 );
+
+    aSeq[nIDInd][0].First = aIDTag;
+    aSeq[nIDInd][0].Second = sID;
+    sal_Int32 nIndTarget = 1;
+    for ( sal_Int32 nIndOrig = 0;
+          nIndOrig < aEntry.getLength();
+          nIndOrig++ )
+    {
+        if ( aEntry[nIndOrig].First != aIDTag )
+            aSeq[nIDInd][nIndTarget++] = aEntry[nIndOrig];
+    }
+
+    aSeq[nIDInd].realloc( nIndTarget );
 
     m_pImpl->m_aNewRelInfo = aSeq;
     m_pImpl->m_xNewRelInfoStream.clear();
@@ -2901,26 +2894,24 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
             && aPropertyName == "UseCommonStoragePasswordEncryption" )
     {
         bool bUseCommonEncryption = false;
-        if ( aValue >>= bUseCommonEncryption )
+        if ( !(aValue >>= bUseCommonEncryption) )
+            throw lang::IllegalArgumentException(); //TODO
+
+        if ( m_bInitOnDemand && m_pImpl->m_bHasInsertedStreamOptimization )
         {
-            if ( m_bInitOnDemand && m_pImpl->m_bHasInsertedStreamOptimization )
+            // the data stream is provided to the packagestream directly
+            m_pImpl->m_bUseCommonEncryption = bUseCommonEncryption;
+        }
+        else if ( bUseCommonEncryption )
+        {
+            if ( !m_pImpl->m_bUseCommonEncryption )
             {
-                // the data stream is provided to the packagestream directly
-                m_pImpl->m_bUseCommonEncryption = bUseCommonEncryption;
+                m_pImpl->SetDecrypted();
+                m_pImpl->m_bUseCommonEncryption = true;
             }
-            else if ( bUseCommonEncryption )
-            {
-                if ( !m_pImpl->m_bUseCommonEncryption )
-                {
-                    m_pImpl->SetDecrypted();
-                    m_pImpl->m_bUseCommonEncryption = true;
-                }
-            }
-            else
-                m_pImpl->m_bUseCommonEncryption = false;
         }
         else
-            throw lang::IllegalArgumentException(); //TODO
+            m_pImpl->m_bUseCommonEncryption = false;
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == aMediaTypeString )
     {
@@ -2933,30 +2924,25 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == "RelationsInfoStream" )
     {
         uno::Reference< io::XInputStream > xInRelStream;
-        if ( ( aValue >>= xInRelStream ) && xInRelStream.is() )
-        {
-            uno::Reference< io::XSeekable > xSeek( xInRelStream, uno::UNO_QUERY );
-            if ( !xSeek.is() )
-            {
-                // currently this is an internal property that is used for optimization
-                // and the stream must support XSeekable interface
-                // TODO/LATER: in future it can be changed if property is used from outside
-                throw lang::IllegalArgumentException(); // TODO
-            }
-
-            m_pImpl->m_xNewRelInfoStream = xInRelStream;
-            m_pImpl->m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
-            m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
-        }
-        else
+        if ( !( aValue >>= xInRelStream ) || !xInRelStream.is() )
             throw lang::IllegalArgumentException(); // TODO
+
+        uno::Reference< io::XSeekable > xSeek( xInRelStream, uno::UNO_QUERY );
+        if ( !xSeek.is() )
+        {
+            // currently this is an internal property that is used for optimization
+            // and the stream must support XSeekable interface
+            // TODO/LATER: in future it can be changed if property is used from outside
+            throw lang::IllegalArgumentException(); // TODO
+        }
+
+        m_pImpl->m_xNewRelInfoStream = xInRelStream;
+        m_pImpl->m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+        m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == "RelationsInfo" )
     {
-        if ( aValue >>= m_pImpl->m_aNewRelInfo )
-        {
-        }
-        else
+        if ( !(aValue >>= m_pImpl->m_aNewRelInfo) )
             throw lang::IllegalArgumentException(); // TODO
     }
     else if ( aPropertyName == "Size" )
