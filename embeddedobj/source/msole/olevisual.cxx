@@ -296,17 +296,14 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 #endif
     {
         // return cached value
-        if ( m_bHasCachedSize )
-        {
-            SAL_WARN_IF( nAspect != m_nCachedAspect, "embeddedobj.ole", "Unexpected aspect is requested!" );
-            aResult = m_aCachedSize;
-        }
-        else
+        if ( !m_bHasCachedSize )
         {
             throw embed::NoVisualAreaSizeException(
                             "No size available!",
                             static_cast< ::cppu::OWeakObject* >(this) );
         }
+        SAL_WARN_IF( nAspect != m_nCachedAspect, "embeddedobj.ole", "Unexpected aspect is requested!" );
+        aResult = m_aCachedSize;
     }
 
     return aResult;

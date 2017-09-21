@@ -193,13 +193,10 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
                 "GDIMetaFile",
                 cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
-        if( xTransferable->isDataFlavorSupported( aDataFlavor ))
-        {
-            aVisualRepresentation.Data = xTransferable->getTransferData( aDataFlavor );
-            aVisualRepresentation.Flavor = aDataFlavor;
-        }
-        else
+        if( !xTransferable->isDataFlavorSupported( aDataFlavor ))
             throw uno::RuntimeException();
+        aVisualRepresentation.Data = xTransferable->getTransferData( aDataFlavor );
+        aVisualRepresentation.Flavor = aDataFlavor;
     }
 
     if ( bBackToLoaded )

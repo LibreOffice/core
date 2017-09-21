@@ -2009,63 +2009,60 @@ void SvxPropertyValuesToItemSet(
     for (sal_Int32 i = 0;  i < nProps;  ++i)
     {
         const SfxItemPropertySimpleEntry *pEntry = pPropSet->getPropertyMap().getByName( pProps[i].Name );
-        if (pEntry)
+        if (!pEntry)
+            throw beans::UnknownPropertyException( "Unknown property: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
+        // Note: there is no need to take special care of the properties
+        //      TextField (EE_FEATURE_FIELD) and
+        //      TextPortionType (WID_PORTIONTYPE)
+        //  since they are read-only and thus are already taken care of below.
+
+        if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+            // should be PropertyVetoException which is not yet defined for the new import API's functions
+            throw uno::RuntimeException("Property is read-only: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
+            //throw PropertyVetoException ("Property is read-only: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+
+        if (pEntry->nWID == WID_FONTDESC)
         {
-            // Note: there is no need to take special care of the properties
-            //      TextField (EE_FEATURE_FIELD) and
-            //      TextPortionType (WID_PORTIONTYPE)
-            //  since they are read-only and thus are already taken care of below.
-
-            if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                // should be PropertyVetoException which is not yet defined for the new import API's functions
-                throw uno::RuntimeException("Property is read-only: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
-                //throw PropertyVetoException ("Property is read-only: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
-
-            if (pEntry->nWID == WID_FONTDESC)
+            awt::FontDescriptor aDesc;
+            if (pProps[i].Value >>= aDesc)
+                SvxUnoFontDescriptor::FillItemSet( aDesc, rItemSet );
+        }
+        else if (pEntry->nWID == WID_NUMLEVEL)
+        {
+            if (pForwarder)
             {
-                awt::FontDescriptor aDesc;
-                if (pProps[i].Value >>= aDesc)
-                    SvxUnoFontDescriptor::FillItemSet( aDesc, rItemSet );
-            }
-            else if (pEntry->nWID == WID_NUMLEVEL)
-            {
-                if (pForwarder)
-                {
-                    sal_Int16 nLevel = -1;
-                    pProps[i].Value >>= nLevel;
+                sal_Int16 nLevel = -1;
+                pProps[i].Value >>= nLevel;
 
-                    // #101004# Call interface method instead of unsafe cast
-                    if (!pForwarder->SetDepth( nPara, nLevel ))
-                        throw lang::IllegalArgumentException();
-                }
+                // #101004# Call interface method instead of unsafe cast
+                if (!pForwarder->SetDepth( nPara, nLevel ))
+                    throw lang::IllegalArgumentException();
             }
-            else if (pEntry->nWID == WID_NUMBERINGSTARTVALUE )
+        }
+        else if (pEntry->nWID == WID_NUMBERINGSTARTVALUE )
+        {
+            if( pForwarder )
             {
-                if( pForwarder )
-                {
-                    sal_Int16 nStartValue = -1;
-                    if( !(pProps[i].Value >>= nStartValue) )
-                        throw lang::IllegalArgumentException();
+                sal_Int16 nStartValue = -1;
+                if( !(pProps[i].Value >>= nStartValue) )
+                    throw lang::IllegalArgumentException();
 
-                    pForwarder->SetNumberingStartValue( nPara, nStartValue );
-                }
+                pForwarder->SetNumberingStartValue( nPara, nStartValue );
             }
-            else if (pEntry->nWID == WID_PARAISNUMBERINGRESTART )
+        }
+        else if (pEntry->nWID == WID_PARAISNUMBERINGRESTART )
+        {
+            if( pForwarder )
             {
-                if( pForwarder )
-                {
-                    bool bParaIsNumberingRestart = false;
-                    if( !(pProps[i].Value >>= bParaIsNumberingRestart) )
-                        throw lang::IllegalArgumentException();
+                bool bParaIsNumberingRestart = false;
+                if( !(pProps[i].Value >>= bParaIsNumberingRestart) )
+                    throw lang::IllegalArgumentException();
 
-                    pForwarder->SetParaIsNumberingRestart( nPara, bParaIsNumberingRestart );
-                }
+                pForwarder->SetParaIsNumberingRestart( nPara, bParaIsNumberingRestart );
             }
-            else
-                pPropSet->setPropertyValue( pProps[i].Name, pProps[i].Value, rItemSet );
         }
         else
-            throw beans::UnknownPropertyException( "Unknown property: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( nullptr ) );
+            pPropSet->setPropertyValue( pProps[i].Name, pProps[i].Value, rItemSet );
     }
 }
 

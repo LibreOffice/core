@@ -482,10 +482,9 @@ void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetT
     else if( !rRet.getValueType().equals( rRetType ) )
     {
         Reference< XTypeConverter > xConverter = m_pEA->getConverter();
-        if( xConverter.is() )
-            rRet = xConverter->convertTo( rRet, rRetType );
-        else
+        if( !xConverter.is() )
             throw CannotConvertException(); // TODO TypeConversionException
+        rRet = xConverter->convertTo( rRet, rRetType );
     }
 }
 

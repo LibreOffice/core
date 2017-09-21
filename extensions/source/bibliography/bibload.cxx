@@ -621,20 +621,17 @@ Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
         CUSTOM5_POS                , // BibliographyDataField_CUSTOM5
         ISBN_POS                    //BibliographyDataField_ISBN
     };
-    if(rPropertyName == "BibliographyDataFieldNames")
-    {
-        Sequence<PropertyValue> aSeq(COLUMN_COUNT);
-        PropertyValue* pArray = aSeq.getArray();
-        BibConfig* pConfig = BibModul::GetConfig();
-        for(sal_uInt16 i = 0; i <= text::BibliographyDataField::ISBN ; i++)
-        {
-            pArray[i].Name = pConfig->GetDefColumnName(aInternalMapping[i]);
-            pArray[i].Value <<= (sal_Int16) i;
-        }
-        aRet <<= aSeq;
-    }
-    else
+    if(rPropertyName != "BibliographyDataFieldNames")
         throw UnknownPropertyException();
+    Sequence<PropertyValue> aSeq(COLUMN_COUNT);
+    PropertyValue* pArray = aSeq.getArray();
+    BibConfig* pConfig = BibModul::GetConfig();
+    for(sal_uInt16 i = 0; i <= text::BibliographyDataField::ISBN ; i++)
+    {
+        pArray[i].Name = pConfig->GetDefColumnName(aInternalMapping[i]);
+        pArray[i].Value <<= (sal_Int16) i;
+    }
+    aRet <<= aSeq;
     return aRet;
 }
 

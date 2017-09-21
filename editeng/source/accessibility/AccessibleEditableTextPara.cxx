@@ -434,13 +434,12 @@ namespace accessibility
 
     SvxEditSourceAdapter& AccessibleEditableTextPara::GetEditSource() const
     {
-        if( mpEditSource )
-            return *mpEditSource;
-        else
+        if( !mpEditSource )
             throw uno::RuntimeException("No edit source, object is defunct",
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+        return *mpEditSource;
     }
 
     SvxAccessibleTextAdapter& AccessibleEditableTextPara::GetTextForwarder() const
@@ -454,13 +453,12 @@ namespace accessibility
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
 
-        if( pTextForwarder->IsValid() )
-            return *pTextForwarder;
-        else
+        if( !pTextForwarder->IsValid() )
             throw uno::RuntimeException("Text forwarder is invalid, object is defunct",
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+        return *pTextForwarder;
     }
 
     SvxViewForwarder& AccessibleEditableTextPara::GetViewForwarder() const
@@ -476,13 +474,12 @@ namespace accessibility
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
         }
 
-        if( pViewForwarder->IsValid() )
-            return *pViewForwarder;
-        else
+        if( !pViewForwarder->IsValid() )
             throw uno::RuntimeException("View forwarder is invalid, object is defunct",
                                         uno::Reference< uno::XInterface >
                                         ( static_cast< ::cppu::OWeakObject* >
                                           ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
+        return *pViewForwarder;
     }
 
     SvxAccessibleTextEditViewAdapter& AccessibleEditableTextPara::GetEditViewForwarder( bool bCreate ) const
@@ -2644,10 +2641,9 @@ namespace accessibility
         if (bValidPara)
         {
             // we explicitly allow for the index to point at the character right behind the text
-            if (0 <= nIndex && nIndex <= rCacheTF.GetTextLen( nPara ))
-                nRes = rCacheTF.GetLineNumberAtIndex( nPara, nIndex );
-            else
+            if (0 > nIndex || nIndex > rCacheTF.GetTextLen( nPara ))
                 throw lang::IndexOutOfBoundsException();
+            nRes = rCacheTF.GetLineNumberAtIndex( nPara, nIndex );
         }
         return nRes;
     }
@@ -2663,27 +2659,24 @@ namespace accessibility
         DBG_ASSERT( bValidPara, "getTextAtLineNumber: current paragraph index out of range" );
         if (bValidPara)
         {
-            if (0 <= nLineNo && nLineNo < rCacheTF.GetLineCount( nPara ))
+            if (0 > nLineNo || nLineNo >= rCacheTF.GetLineCount( nPara ))
+                throw lang::IndexOutOfBoundsException();
+            sal_Int32 nStart = 0, nEnd = 0;
+            rCacheTF.GetLineBoundaries( nStart, nEnd, nPara, nLineNo );
+            if (nStart >= 0 && nEnd >=  0)
             {
-                sal_Int32 nStart = 0, nEnd = 0;
-                rCacheTF.GetLineBoundaries( nStart, nEnd, nPara, nLineNo );
-                if (nStart >= 0 && nEnd >=  0)
+                try
                 {
-                    try
-                    {
-                        aResult.SegmentText     = getTextRange( nStart, nEnd );
-                        aResult.SegmentStart    = nStart;
-                        aResult.SegmentEnd      = nEnd;
-                    }
-                    catch (const lang::IndexOutOfBoundsException&)
-                    {
-                        // this is not the exception that should be raised in this function ...
-                        DBG_UNHANDLED_EXCEPTION();
-                    }
+                    aResult.SegmentText     = getTextRange( nStart, nEnd );
+                    aResult.SegmentStart    = nStart;
+                    aResult.SegmentEnd      = nEnd;
+                }
+                catch (const lang::IndexOutOfBoundsException&)
+                {
+                    // this is not the exception that should be raised in this function ...
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
-            else
-                throw lang::IndexOutOfBoundsException();
         }
         return aResult;
     }

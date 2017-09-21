@@ -390,10 +390,9 @@ void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
     else if( rPropertyName == PROPERTY_CLICK_HDL ) {
         uno::Reference< task::XJob > aJob;
         rValue >>= aJob;
-        if ( aJob.is() )
-            mrJob = aJob;
-        else
+        if ( !aJob.is() )
             throw lang::IllegalArgumentException();
+        mrJob = aJob;
     }
     else if (rPropertyName == PROPERTY_SHOW_MENUICON ) {
         bool bShowMenuIcon = false;

@@ -37,6 +37,7 @@ public:
 private:
     bool rewrite(const IfStmt * );
     SourceRange ignoreMacroExpansions(SourceRange range);
+    SourceRange extendOverComments(SourceRange range);
     std::string getSourceAsString(SourceRange range);
 };
 
@@ -101,8 +102,9 @@ bool Flatten::VisitIfStmt(const IfStmt* ifStmt)
 }
 
 static std::string stripOpenAndCloseBrace(std::string s);
-static std::string deindentThenStmt(std::string const & s);
-static std::vector<std::string> split(std::string const & s);
+static std::string deindent(std::string const & s);
+static std::vector<std::string> split(std::string s);
+static bool startswith(const std::string& rStr, const char* pSubStr);
 
 bool Flatten::rewrite(const IfStmt* ifStmt)
 {
@@ -121,12 +123,22 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
     if (!elseRange.isValid()) {
         return false;
     }
-    auto elseKeywordRange = ifStmt->getElseLoc();
+    SourceRange elseKeywordRange = ifStmt->getElseLoc();
+
+    thenRange = extendOverComments(thenRange);
+    elseRange = extendOverComments(elseRange);
+    elseKeywordRange = extendOverComments(elseKeywordRange);
 
     // in adjusting the formatting I assume that "{" starts on a new line
 
     std::string conditionString = getSourceAsString(conditionRange);
-    conditionString = "!(" + conditionString + ")";
+    auto condExpr = ifStmt->getCond()->IgnoreImpCasts();
+    if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(condExpr))
+        condExpr = exprWithCleanups->getSubExpr()->IgnoreImpCasts();
+    if (isa<DeclRefExpr>(condExpr) || isa<CallExpr>(condExpr) || isa<MemberExpr>(condExpr))
+        conditionString = "!" + conditionString;
+    else
+        conditionString = "!(" + conditionString + ")";
 
     std::string thenString = getSourceAsString(thenRange);
     bool thenIsCompound = false;
@@ -136,23 +148,14 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
             thenString = stripOpenAndCloseBrace(thenString);
         }
     }
-    thenString = deindentThenStmt(thenString);
+    thenString = deindent(thenString);
 
     std::string elseString = getSourceAsString(elseRange);
-    bool elseIsCompound = false;
-    if (auto compoundStmt = dyn_cast<CompoundStmt>(ifStmt->getElse())) {
-        if (compoundStmt->getLBracLoc().isValid()) {
-            elseIsCompound = true;
-        }
-    }
-    // indent else block if necessary
-    if (thenIsCompound && !elseIsCompound)
-        elseString = "    " + elseString;
 
     if (!replaceText(elseRange, thenString)) {
         return false;
     }
-    if (!replaceText(elseKeywordRange, "")) {
+    if (!removeText(elseKeywordRange, RewriteOptions(RemoveLineIfEmpty))) {
         return false;
     }
     if (!replaceText(thenRange, elseString)) {
@@ -167,38 +170,44 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
 
 std::string stripOpenAndCloseBrace(std::string s)
 {
-    size_t openBrace = s.find_first_of("{");
-    if (openBrace != std::string::npos) {
-        size_t openLineEnd = s.find_first_of("\n", openBrace + 1);
-        if (openLineEnd != std::string::npos)
-            s = s.substr(openLineEnd + 1);
-        else
-            s = s.substr(openBrace + 1);
+    size_t i = s.find("{");
+    if (i != std::string::npos) {
+        ++i;
+        // strip to line end
+        while (s[i] == ' ')
+            ++i;
+        if (s[i] == '\n')
+            ++i;
+        s = s.substr(i);
     }
-    size_t closeBrace = s.find_last_of("}");
-    if (closeBrace != std::string::npos) {
-        size_t closeLineEnd = s.find_last_of("\n", closeBrace);
-        if (closeLineEnd != std::string::npos)
-            s = s.substr(0, closeLineEnd - 1);
-        else
-            s = s.substr(0, closeBrace - 1);
+    i = s.rfind("}");
+    if (i != std::string::npos) {
+        --i;
+        while (s[i] == ' ')
+            --i;
+        s = s.substr(0,i);
     }
     return s;
 }
 
-std::string deindentThenStmt(std::string const & s)
+std::string deindent(std::string const & s)
 {
     std::vector<std::string> lines = split(s);
     std::string rv;
     for (auto s : lines) {
-        rv += s.length() > 4 ? s.substr(4) : s;
+        if (startswith(s, "    "))
+            rv += s.substr(4);
+        else
+            rv += s;
         rv += "\n";
     }
     return rv;
 }
 
-std::vector<std::string> split(std::string const & s)
+std::vector<std::string> split(std::string s)
 {
+    if (s.back() == '\n')
+        s = s.substr(0, s.size()-1);
     size_t next = -1;
     std::vector<std::string> rv;
     do
@@ -209,6 +218,11 @@ std::vector<std::string> split(std::string const & s)
     }
     while (next != std::string::npos);
     return rv;
+}
+
+static bool startswith(const std::string& rStr, const char* pSubStr)
+{
+    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
 }
 
 SourceRange Flatten::ignoreMacroExpansions(SourceRange range) {
@@ -244,6 +258,49 @@ SourceRange Flatten::ignoreMacroExpansions(SourceRange range) {
         ? SourceRange() : range;
 }
 
+/**
+ * Extend the SourceRange to include any leading and trailing whitespace, and any comments.
+ */
+SourceRange Flatten::extendOverComments(SourceRange range)
+{
+    SourceManager& SM = compiler.getSourceManager();
+    SourceLocation startLoc = range.getBegin();
+    SourceLocation endLoc = range.getEnd();
+    const char *p1 = SM.getCharacterData( startLoc );
+    const char *p2 = SM.getCharacterData( endLoc );
+
+    // scan backwards from the beginning to include any spaces on that line
+    while (*(p1-1) == ' ')
+        --p1;
+    startLoc = startLoc.getLocWithOffset(p1 - SM.getCharacterData( startLoc ));
+
+    p2 += Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
+    // look for trailing ";"
+    while (*p2 == ';')
+        ++p2;
+    // look for trailing " "
+    while (*p2 == ' ')
+        ++p2;
+    // look for single line comments attached to the end of the statement
+    if (*p2 == '/' && *(p2+1) == '/')
+    {
+        p2 += 2;
+        while (*p2 && *p2 != '\n')
+            ++p2;
+        if (*p2 == '\n')
+            ++p2;
+    }
+    else
+    {
+        // make the source code we extract include any trailing "\n"
+        if (*p2 == '\n')
+            ++p2;
+    }
+    endLoc = endLoc.getLocWithOffset(p2 - SM.getCharacterData( endLoc ));
+
+    return SourceRange(startLoc, endLoc);
+}
+
 std::string Flatten::getSourceAsString(SourceRange range)
 {
     SourceManager& SM = compiler.getSourceManager();
@@ -251,8 +308,8 @@ std::string Flatten::getSourceAsString(SourceRange range)
     SourceLocation endLoc = range.getEnd();
     const char *p1 = SM.getCharacterData( startLoc );
     const char *p2 = SM.getCharacterData( endLoc );
-    unsigned n = Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
-    return std::string( p1, p2 - p1 + n);
+    p2 += Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
+    return std::string( p1, p2 - p1);
 }
 
 loplugin::Plugin::Registration< Flatten > X("flatten", false);
