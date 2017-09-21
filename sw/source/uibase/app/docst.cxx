@@ -324,6 +324,14 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 sName = SfxStyleDialog::GenerateUnusedName(*m_xBasePool);
 
             nRet = Edit( sName, sParent, nFamily, nMask, true, OString(), nullptr, rReq.IsAPI() );
+
+            // Update Watermark if new page style was created
+            if( nFamily == SfxStyleFamily::Page )
+            {
+                SwWrtShell* pShell = GetWrtShell();
+                const SfxWatermarkItem aWatermark = pShell->GetWatermark();
+                pShell->SetWatermark( aWatermark );
+            }
         }
         break;
 
