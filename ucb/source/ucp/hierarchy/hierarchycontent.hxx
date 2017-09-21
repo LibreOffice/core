@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYCONTENT_HXX
 #define INCLUDED_UCB_SOURCE_UCP_HIERARCHY_HIERARCHYCONTENT_HXX
 
-#include <list>
+#include <vector>
 #include <rtl/ref.hxx>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <ucbhelper/contenthelper.hxx>
@@ -155,8 +155,8 @@ private:
     makeNewIdentifier( const OUString& rTitle );
 
     typedef rtl::Reference< HierarchyContent > HierarchyContentRef;
-    typedef std::list< HierarchyContentRef > HierarchyContentRefList;
-    void queryChildren( HierarchyContentRefList& rChildren );
+    typedef std::vector< HierarchyContentRef > HierarchyContentRefVector;
+    void queryChildren( HierarchyContentRefVector& rChildren );
 
     bool exchangeIdentity(
                 const css::uno::Reference< css::ucb::XContentIdentifier >& xNewId );
