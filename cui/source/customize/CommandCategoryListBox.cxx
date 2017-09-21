@@ -38,6 +38,7 @@
 
 CommandCategoryListBox::CommandCategoryListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
+    , pStylesInfo( nullptr )
 {
     SetDropDownLineCount(25);
 
@@ -84,6 +85,17 @@ void CommandCategoryListBox::Init(
     m_xModuleCategoryInfo.set(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
     m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
 
+    // Support style commands
+    css::uno::Reference<css::frame::XController> xController;
+    css::uno::Reference<css::frame::XModel> xModel;
+    if (xFrame.is())
+        xController = xFrame->getController();
+    if (xController.is())
+        xModel = xController->getModel();
+
+    m_aStylesInfo.init(sModuleLongName, xModel);
+    SetStylesInfo(&m_aStylesInfo);
+
 /**** InitModule Start ****/
     try
     {
@@ -124,7 +136,27 @@ void CommandCategoryListBox::Init(
             SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
         }
 
+        // Add Styles
+        OUString sStyle( CuiResId(RID_SVXSTR_GROUP_STYLES) );
+        const std::vector< SfxStyleInfo_Impl > lStyleFamilies =
+            pStylesInfo->getStyleFamilies();
 
+        for ( const auto & pIt : lStyleFamilies )
+        {
+            if ( pIt.sLabel.isEmpty() )
+            {
+                continue;
+            }
+
+            SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(pIt);
+
+            OUString sGroupName = sStyle + " | " + pFamily->sLabel;
+
+            nEntryPos = InsertEntry( sGroupName );
+            m_aGroupInfo.push_back( o3tl::make_unique<SfxGroupInfo_Impl>(
+                SfxCfgKind::GROUP_STYLES, 0, pFamily ) );
+            SetEntryData( nEntryPos, m_aGroupInfo.back().get() );
+        }
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
@@ -243,14 +275,53 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
             FillFunctionsList( lCommands, pFunctionListBox, filterTerm );
             break;
         }
+        // Macros
         case SfxCfgKind::GROUP_SCRIPTCONTAINER:
         {
             //TODO:Implement
             break;
         }
+        // Styles
         case SfxCfgKind::GROUP_STYLES:
         {
-            //TODO:Implement
+            // Setup search filter parameters
+            m_searchOptions.searchString = filterTerm;
+            utl::TextSearch textSearch( m_searchOptions );
+
+            SfxStyleInfo_Impl* pFamily = static_cast<SfxStyleInfo_Impl*>(pInfo->pObject);
+
+            if (pFamily)
+            {
+
+                const std::vector< SfxStyleInfo_Impl > lStyles = pStylesInfo->getStyles(pFamily->sFamily);
+
+                for ( const auto & pIt : lStyles )
+                {
+                    OUString sUIName = pIt.sLabel;
+                    sal_Int32 aStartPos = 0;
+                    sal_Int32 aEndPos = sUIName.getLength();
+
+                    // Apply the search filter
+                    if (!filterTerm.isEmpty()
+                        && !textSearch.SearchForward( sUIName, &aStartPos, &aEndPos ) )
+                    {
+                        continue;
+                    }
+
+                    SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(pIt);
+
+                    SvTreeListEntry* pFuncEntry = pFunctionListBox->InsertEntry(
+                        sUIName );
+                    m_aGroupInfo.push_back(
+                        o3tl::make_unique<SfxGroupInfo_Impl>(
+                            SfxCfgKind::GROUP_STYLES, 0, pStyle ) );
+
+                    m_aGroupInfo.back()->sCommand = pStyle->sCommand;
+                    m_aGroupInfo.back()->sLabel = pStyle->sLabel;
+                    pFuncEntry->SetUserData( m_aGroupInfo.back().get() );
+                }
+            }
+
             break;
         }
         default:
@@ -263,6 +334,11 @@ void CommandCategoryListBox::categorySelected(  const VclPtr<SfxConfigFunctionLi
         pFunctionListBox->Select( pFunctionListBox->GetEntry( nullptr, 0 ) );
 
     pFunctionListBox->SetUpdateMode(true);
+}
+
+void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
+{
+    pStylesInfo = pStyles;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
