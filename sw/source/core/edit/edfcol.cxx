@@ -205,9 +205,9 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
-    std::set<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
-    for (const OUString& rPageStyleName : aUsedPageStyles)
+    for (const OUString& rPageStyleName : aStyles)
     {
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
         OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
@@ -513,9 +513,9 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
-    std::set<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
-    for (const OUString& rPageStyleName : aUsedPageStyles)
+    for (const OUString& rPageStyleName : aStyles)
     {
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
 
