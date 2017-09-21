@@ -864,7 +864,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     else if (bCustGeom)
     {
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
-        bool bSuccess = WriteCustomGeometry( xShape );
+        bool bSuccess = WriteCustomGeometry( xShape, pShape );
         if (!bSuccess)
             WritePresetShape( sPresetShape );
     }
