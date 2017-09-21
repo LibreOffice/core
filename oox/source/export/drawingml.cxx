@@ -95,6 +95,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/EnhancedCustomShape2d.hxx>
 #include <android/compatibility.hxx>
 
 using namespace ::css;
@@ -2498,7 +2499,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
     mpFS->endElementNS(  XML_a, XML_prstGeom );
 }
 
-bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
+bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape, const SdrObjCustomShape* pShape )
 {
     uno::Reference< beans::XPropertySet > aXPropSet;
     uno::Any aAny( rXShape->queryInterface(cppu::UnoType<beans::XPropertySet>::get()));
@@ -2598,15 +2599,16 @@ bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
 
                     for ( int j = 0; j < aPairs.getLength(); ++j )
                     {
-                        sal_Int32 nCandidate(0);
-                        if ((aPairs[j].First.Value >>= nCandidate) && nCandidate < nXMin)
-                            nXMin = nCandidate;
-                        if ((aPairs[j].Second.Value >>= nCandidate) && nCandidate < nYMin)
-                            nYMin = nCandidate;
-                        if ((aPairs[j].First.Value >>= nCandidate) && nCandidate > nXMax)
-                            nXMax = nCandidate;
-                        if ((aPairs[j].Second.Value >>= nCandidate) && nCandidate > nYMax)
-                            nYMax = nCandidate;
+                        sal_Int32 nX = GetCustomGeometryPointValue(aPairs[j].First, pShape);
+                        sal_Int32 nY = GetCustomGeometryPointValue(aPairs[j].Second, pShape);
+                        if (nX < nXMin)
+                            nXMin = nX;
+                        if (nY < nYMin)
+                            nYMin = nY;
+                        if (nX > nXMax)
+                            nXMax = nX;
+                        if (nY > nYMax)
+                            nYMax = nY;
                     }
                     mpFS->startElementNS( XML_a, XML_path,
                           XML_w, I64S( nXMax - nXMin ),
@@ -2629,16 +2631,7 @@ bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
                             case drawing::EnhancedCustomShapeSegmentCommand::MOVETO :
                             {
                                 mpFS->startElementNS( XML_a, XML_moveTo, FSEND );
-
-                                sal_Int32 nX(0), nY(0);
-                                aPairs[nPairIndex].First.Value >>= nX;
-                                aPairs[nPairIndex].Second.Value >>= nY;
-
-                                mpFS->singleElementNS( XML_a, XML_pt,
-                                   XML_x, I64S(nX),
-                                   XML_y, I64S(nY),
-                                   FSEND );
-
+                                WriteCustomGeometryPoint(aPairs[nPairIndex], pShape);
                                 mpFS->endElementNS( XML_a, XML_moveTo );
                                 nPairIndex++;
                                 break;
@@ -2646,15 +2639,7 @@ bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
                             case drawing::EnhancedCustomShapeSegmentCommand::LINETO :
                             {
                                 mpFS->startElementNS( XML_a, XML_lnTo, FSEND );
-
-                                sal_Int32 nX(0), nY(0);
-                                aPairs[nPairIndex].First.Value >>= nX;
-                                aPairs[nPairIndex].Second.Value >>= nY;
-
-                                mpFS->singleElementNS( XML_a, XML_pt,
-                                   XML_x, I64S(nX),
-                                   XML_y, I64S(nY),
-                                   FSEND );
+                                WriteCustomGeometryPoint(aPairs[nPairIndex], pShape);
                                 mpFS->endElementNS( XML_a, XML_lnTo );
                                 nPairIndex++;
                                 break;
@@ -2664,15 +2649,7 @@ bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
                                 mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
                                 for( sal_uInt8 l = 0; l <= 2; ++l )
                                 {
-                                    sal_Int32 nX(0), nY(0);
-                                    aPairs[nPairIndex+l].First.Value >>= nX;
-                                    aPairs[nPairIndex+l].Second.Value >>= nY;
-
-                                    mpFS->singleElementNS( XML_a, XML_pt,
-                                    XML_x, I64S( nX ),
-                                    XML_y, I64S( nY ),
-                                    FSEND );
-
+                                    WriteCustomGeometryPoint(aPairs[nPairIndex+l], pShape);
                                 }
                                 mpFS->endElementNS( XML_a, XML_cubicBezTo );
                                 nPairIndex += 3;
@@ -2703,15 +2680,7 @@ bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
                                 mpFS->startElementNS( XML_a, XML_quadBezTo, FSEND );
                                 for( sal_uInt8 l = 0; l < 2; ++l )
                                 {
-                                    sal_Int32 nX(0), nY(0);
-                                    aPairs[nPairIndex+l].First.Value >>= nX;
-                                    aPairs[nPairIndex+l].Second.Value >>= nY;
-
-                                    mpFS->singleElementNS( XML_a, XML_pt,
-                                        XML_x, I64S( nX ),
-                                        XML_y, I64S( nY ),
-                                        FSEND );
-
+                                    WriteCustomGeometryPoint(aPairs[nPairIndex+l], pShape);
                                 }
                                 mpFS->endElementNS( XML_a, XML_quadBezTo );
                                 nPairIndex += 2;
@@ -2736,6 +2705,32 @@ bool DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
         }
     }
     return false;
+}
+
+void DrawingML::WriteCustomGeometryPoint(const drawing::EnhancedCustomShapeParameterPair& rParamPair, const SdrObjCustomShape* pShape)
+{
+    sal_Int32 nX = GetCustomGeometryPointValue(rParamPair.First, pShape);
+    sal_Int32 nY = GetCustomGeometryPointValue(rParamPair.Second, pShape);
+
+    mpFS->singleElementNS( XML_a, XML_pt,
+        XML_x, OString::number(nX).getStr(),
+        XML_y, OString::number(nY).getStr(),
+        FSEND );
+}
+
+sal_Int32 DrawingML::GetCustomGeometryPointValue(const css::drawing::EnhancedCustomShapeParameter& rParam, const SdrObjCustomShape* pShape)
+{
+    sal_Int32 nValue = 0;
+    if(pShape)
+    {
+        const EnhancedCustomShape2d aCustoShape2d (const_cast<SdrObjCustomShape*>(pShape));
+        double fValue = 0.0;
+        aCustoShape2d.GetParameter(fValue, rParam, false, false);
+        nValue = std::lround(fValue);
+    }
+    else
+        rParam.Value >>= nValue;
+    return nValue;
 }
 
 void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
