@@ -2775,10 +2775,10 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
     else if( ((XML_NAMESPACE_OFFICE == nPrefix) && IsXMLToken(rLocalName, XML_DOCUMENT)) ||
                 ((XML_NAMESPACE_MATH == nPrefix) && IsXMLToken(rLocalName, XML_MATH)) )
     {
-        XMLEmbeddedObjectImportContext *pEContext =
-            new XMLEmbeddedObjectImportContext( GetImport(), nPrefix,
-                                                rLocalName, xAttrList );
-        maCLSID = pEContext->GetFilterCLSID();
+        std::unique_ptr<XMLEmbeddedObjectImportContext> xEContext(
+            new XMLEmbeddedObjectImportContext(GetImport(), nPrefix,
+                                               rLocalName, xAttrList));
+        maCLSID = xEContext->GetFilterCLSID();
         if( !maCLSID.isEmpty() )
         {
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
@@ -2789,10 +2789,10 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
                 uno::Reference< lang::XComponent > xComp;
                 xPropSet->getPropertyValue("Model") >>= xComp;
                 SAL_WARN_IF( !xComp.is(), "xmloff", "no xModel for own OLE format" );
-                pEContext->SetComponent( xComp );
+                xEContext->SetComponent(xComp);
             }
         }
-        pContext = pEContext;
+        pContext = xEContext.release();
     }
 
     // delegate to parent class if no context could be created
