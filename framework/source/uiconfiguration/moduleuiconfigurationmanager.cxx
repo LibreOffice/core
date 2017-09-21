@@ -1188,94 +1188,91 @@ void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& Res
             throw DisposedException();
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
-        if ( pDataSettings )
+        if ( !pDataSettings )
+            throw NoSuchElementException();
+        if ( !pDataSettings->bDefaultNode )
         {
-            if ( !pDataSettings->bDefaultNode )
-            {
-                // we have a settings entry in our user-defined layer - replace
-                Reference< XIndexAccess > xOldSettings = pDataSettings->xSettings;
+            // we have a settings entry in our user-defined layer - replace
+            Reference< XIndexAccess > xOldSettings = pDataSettings->xSettings;
 
-                // Create a copy of the data if the container is not const
-                Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
-                if ( xReplace.is() )
-                    pDataSettings->xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
-                else
-                    pDataSettings->xSettings = aNewData;
-                pDataSettings->bDefault  = false;
-                pDataSettings->bModified = true;
-                m_bModified = true;
-
-                // Modify type container
-                UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
-                rElementType.bModified = true;
-
-                Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                Reference< XInterface > xIfac( xThis, UNO_QUERY );
-
-                // Create event to notify listener about replaced element settings
-                ui::ConfigurationEvent aEvent;
-                aEvent.ResourceURL = ResourceURL;
-                aEvent.Accessor <<= xThis;
-                aEvent.Source = xIfac;
-                aEvent.ReplacedElement <<= xOldSettings;
-                aEvent.Element <<= pDataSettings->xSettings;
-
-                aGuard.clear();
-
-                implts_notifyContainerListener( aEvent, NotifyOp_Replace );
-            }
+            // Create a copy of the data if the container is not const
+            Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
+            if ( xReplace.is() )
+                pDataSettings->xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
             else
-            {
-                // we have no settings in our user-defined layer - insert
-                UIElementData aUIElementData;
+                pDataSettings->xSettings = aNewData;
+            pDataSettings->bDefault  = false;
+            pDataSettings->bModified = true;
+            m_bModified = true;
 
-                aUIElementData.bDefault     = false;
-                aUIElementData.bDefaultNode = false;
-                aUIElementData.bModified    = true;
+            // Modify type container
+            UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
+            rElementType.bModified = true;
 
-                // Create a copy of the data if the container is not const
-                Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
-                if ( xReplace.is() )
-                    aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
-                else
-                    aUIElementData.xSettings = aNewData;
-                aUIElementData.aName        = RetrieveNameFromResourceURL( ResourceURL ) + m_aXMLPostfix;
-                aUIElementData.aResourceURL = ResourceURL;
-                m_bModified = true;
+            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XInterface > xIfac( xThis, UNO_QUERY );
 
-                // Modify type container
-                UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
-                rElementType.bModified = true;
+            // Create event to notify listener about replaced element settings
+            ui::ConfigurationEvent aEvent;
+            aEvent.ResourceURL = ResourceURL;
+            aEvent.Accessor <<= xThis;
+            aEvent.Source = xIfac;
+            aEvent.ReplacedElement <<= xOldSettings;
+            aEvent.Element <<= pDataSettings->xSettings;
 
-                UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
+            aGuard.clear();
 
-                // Check our user element settings hash map as it can already contain settings that have been set to default!
-                // If no node can be found, we have to insert it.
-                UIElementDataHashMap::iterator pIter = rElements.find( ResourceURL );
-                if ( pIter != rElements.end() )
-                    pIter->second = aUIElementData;
-                else
-                    rElements.emplace( ResourceURL, aUIElementData );
-
-                Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                Reference< XInterface > xIfac( xThis, UNO_QUERY );
-
-                // Create event to notify listener about replaced element settings
-                ui::ConfigurationEvent aEvent;
-
-                aEvent.ResourceURL = ResourceURL;
-                aEvent.Accessor <<= xThis;
-                aEvent.Source = xIfac;
-                aEvent.ReplacedElement <<= pDataSettings->xSettings;
-                aEvent.Element <<= aUIElementData.xSettings;
-
-                aGuard.clear();
-
-                implts_notifyContainerListener( aEvent, NotifyOp_Replace );
-            }
+            implts_notifyContainerListener( aEvent, NotifyOp_Replace );
         }
         else
-            throw NoSuchElementException();
+        {
+            // we have no settings in our user-defined layer - insert
+            UIElementData aUIElementData;
+
+            aUIElementData.bDefault     = false;
+            aUIElementData.bDefaultNode = false;
+            aUIElementData.bModified    = true;
+
+            // Create a copy of the data if the container is not const
+            Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
+            if ( xReplace.is() )
+                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+            else
+                aUIElementData.xSettings = aNewData;
+            aUIElementData.aName        = RetrieveNameFromResourceURL( ResourceURL ) + m_aXMLPostfix;
+            aUIElementData.aResourceURL = ResourceURL;
+            m_bModified = true;
+
+            // Modify type container
+            UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
+            rElementType.bModified = true;
+
+            UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
+
+            // Check our user element settings hash map as it can already contain settings that have been set to default!
+            // If no node can be found, we have to insert it.
+            UIElementDataHashMap::iterator pIter = rElements.find( ResourceURL );
+            if ( pIter != rElements.end() )
+                pIter->second = aUIElementData;
+            else
+                rElements.emplace( ResourceURL, aUIElementData );
+
+            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XInterface > xIfac( xThis, UNO_QUERY );
+
+            // Create event to notify listener about replaced element settings
+            ui::ConfigurationEvent aEvent;
+
+            aEvent.ResourceURL = ResourceURL;
+            aEvent.Accessor <<= xThis;
+            aEvent.Source = xIfac;
+            aEvent.ReplacedElement <<= pDataSettings->xSettings;
+            aEvent.Element <<= aUIElementData.xSettings;
+
+            aGuard.clear();
+
+            implts_notifyContainerListener( aEvent, NotifyOp_Replace );
+        }
     }
 }
 
@@ -1301,65 +1298,62 @@ void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& Reso
                                      "ResourceURL: " + ResourceURL, nullptr );
 
         UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
-        if ( pDataSettings )
-        {
-            // If element settings are default, we don't need to change anything!
-            if ( pDataSettings->bDefault )
-                return;
-            else
-            {
-                Reference< XIndexAccess > xRemovedSettings = pDataSettings->xSettings;
-                pDataSettings->bDefault = true;
-
-                // check if this is a default layer node
-                if ( !pDataSettings->bDefaultNode )
-                    pDataSettings->bModified = true; // we have to remove this node from the user layer!
-                pDataSettings->xSettings.clear();
-                m_bModified = true; // user layer must be written
-
-                // Modify type container
-                UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
-                rElementType.bModified = true;
-
-                Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-                Reference< XInterface > xIfac( xThis, UNO_QUERY );
-
-                // Check if we have settings in the default layer which replaces the user-defined one!
-                UIElementData* pDefaultDataSettings = impl_findUIElementData( ResourceURL, nElementType );
-                if ( pDefaultDataSettings )
-                {
-                    // Create event to notify listener about replaced element settings
-                    ui::ConfigurationEvent aEvent;
-
-                    aEvent.ResourceURL = ResourceURL;
-                    aEvent.Accessor <<= xThis;
-                    aEvent.Source = xIfac;
-                    aEvent.Element <<= xRemovedSettings;
-                    aEvent.ReplacedElement <<= pDefaultDataSettings->xSettings;
-
-                    aGuard.clear();
-
-                    implts_notifyContainerListener( aEvent, NotifyOp_Replace );
-                }
-                else
-                {
-                    // Create event to notify listener about removed element settings
-                    ui::ConfigurationEvent aEvent;
-
-                    aEvent.ResourceURL = ResourceURL;
-                    aEvent.Accessor <<= xThis;
-                    aEvent.Source = xIfac;
-                    aEvent.Element <<= xRemovedSettings;
-
-                    aGuard.clear();
-
-                    implts_notifyContainerListener( aEvent, NotifyOp_Remove );
-                }
-            }
-        }
-        else
+        if ( !pDataSettings )
             throw NoSuchElementException( "The settings data cannot be found. "
                                           "ResourceURL: " + ResourceURL, nullptr );
+        // If element settings are default, we don't need to change anything!
+        if ( pDataSettings->bDefault )
+            return;
+        else
+        {
+            Reference< XIndexAccess > xRemovedSettings = pDataSettings->xSettings;
+            pDataSettings->bDefault = true;
+
+            // check if this is a default layer node
+            if ( !pDataSettings->bDefaultNode )
+                pDataSettings->bModified = true; // we have to remove this node from the user layer!
+            pDataSettings->xSettings.clear();
+            m_bModified = true; // user layer must be written
+
+            // Modify type container
+            UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
+            rElementType.bModified = true;
+
+            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+            Reference< XInterface > xIfac( xThis, UNO_QUERY );
+
+            // Check if we have settings in the default layer which replaces the user-defined one!
+            UIElementData* pDefaultDataSettings = impl_findUIElementData( ResourceURL, nElementType );
+            if ( pDefaultDataSettings )
+            {
+                // Create event to notify listener about replaced element settings
+                ui::ConfigurationEvent aEvent;
+
+                aEvent.ResourceURL = ResourceURL;
+                aEvent.Accessor <<= xThis;
+                aEvent.Source = xIfac;
+                aEvent.Element <<= xRemovedSettings;
+                aEvent.ReplacedElement <<= pDefaultDataSettings->xSettings;
+
+                aGuard.clear();
+
+                implts_notifyContainerListener( aEvent, NotifyOp_Replace );
+            }
+            else
+            {
+                // Create event to notify listener about removed element settings
+                ui::ConfigurationEvent aEvent;
+
+                aEvent.ResourceURL = ResourceURL;
+                aEvent.Accessor <<= xThis;
+                aEvent.Source = xIfac;
+                aEvent.Element <<= xRemovedSettings;
+
+                aGuard.clear();
+
+                implts_notifyContainerListener( aEvent, NotifyOp_Remove );
+            }
+        }
     }
 }
 
@@ -1380,47 +1374,44 @@ void SAL_CALL ModuleUIConfigurationManager::insertSettings( const OUString& NewR
             throw DisposedException();
 
         UIElementData* pDataSettings = impl_findUIElementData( NewResourceURL, nElementType );
-        if ( !pDataSettings )
-        {
-            UIElementData aUIElementData;
-
-            aUIElementData.bDefault     = false;
-            aUIElementData.bDefaultNode = false;
-            aUIElementData.bModified    = true;
-
-            // Create a copy of the data if the container is not const
-            Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
-            if ( xReplace.is() )
-                aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
-            else
-                aUIElementData.xSettings = aNewData;
-            aUIElementData.aName        = RetrieveNameFromResourceURL( NewResourceURL ) + m_aXMLPostfix;
-            aUIElementData.aResourceURL = NewResourceURL;
-            m_bModified = true;
-
-            UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
-            rElementType.bModified = true;
-
-            UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
-            rElements.emplace( NewResourceURL, aUIElementData );
-
-            Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
-            Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
-
-            // Create event to notify listener about removed element settings
-            ui::ConfigurationEvent aEvent;
-
-            aEvent.ResourceURL = NewResourceURL;
-            aEvent.Accessor <<= xThis;
-            aEvent.Source = xThis;
-            aEvent.Element <<= xInsertSettings;
-
-            aGuard.clear();
-
-            implts_notifyContainerListener( aEvent, NotifyOp_Insert );
-        }
-        else
+        if ( !(!pDataSettings) )
             throw ElementExistException();
+        UIElementData aUIElementData;
+
+        aUIElementData.bDefault     = false;
+        aUIElementData.bDefaultNode = false;
+        aUIElementData.bModified    = true;
+
+        // Create a copy of the data if the container is not const
+        Reference< XIndexReplace > xReplace( aNewData, UNO_QUERY );
+        if ( xReplace.is() )
+            aUIElementData.xSettings.set( static_cast< OWeakObject * >( new ConstItemContainer( aNewData ) ), UNO_QUERY );
+        else
+            aUIElementData.xSettings = aNewData;
+        aUIElementData.aName        = RetrieveNameFromResourceURL( NewResourceURL ) + m_aXMLPostfix;
+        aUIElementData.aResourceURL = NewResourceURL;
+        m_bModified = true;
+
+        UIElementType& rElementType = m_aUIElements[LAYER_USERDEFINED][nElementType];
+        rElementType.bModified = true;
+
+        UIElementDataHashMap& rElements = rElementType.aElementsHashMap;
+        rElements.emplace( NewResourceURL, aUIElementData );
+
+        Reference< XIndexAccess > xInsertSettings( aUIElementData.xSettings );
+        Reference< XUIConfigurationManager > xThis( static_cast< OWeakObject* >( this ), UNO_QUERY );
+
+        // Create event to notify listener about removed element settings
+        ui::ConfigurationEvent aEvent;
+
+        aEvent.ResourceURL = NewResourceURL;
+        aEvent.Accessor <<= xThis;
+        aEvent.Source = xThis;
+        aEvent.Element <<= xInsertSettings;
+
+        aGuard.clear();
+
+        implts_notifyContainerListener( aEvent, NotifyOp_Insert );
     }
 }
 

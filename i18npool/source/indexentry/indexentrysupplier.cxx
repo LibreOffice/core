@@ -63,30 +63,27 @@ sal_Bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale )
 OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rIndexEntry,
         const Locale& rLocale )
 {
-    if (getLocaleSpecificIndexEntrySupplier(rLocale, OUString()).is())
-        return xIES->getPhoneticCandidate(rIndexEntry, rLocale);
-    else
+    if (!getLocaleSpecificIndexEntrySupplier(rLocale, OUString()).is())
         throw RuntimeException();
+    return xIES->getPhoneticCandidate(rIndexEntry, rLocale);
 }
 
 OUString SAL_CALL IndexEntrySupplier::getIndexKey( const OUString& rIndexEntry,
         const OUString& rPhoneticEntry, const Locale& rLocale )
 {
-    if (xIES.is())
-        return xIES->getIndexKey(rIndexEntry, rPhoneticEntry, rLocale);
-    else
+    if (!xIES.is())
         throw RuntimeException();
+    return xIES->getIndexKey(rIndexEntry, rPhoneticEntry, rLocale);
 }
 
 sal_Int16 SAL_CALL IndexEntrySupplier::compareIndexEntry(
         const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const Locale& rLocale1,
         const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const Locale& rLocale2 )
 {
-    if (xIES.is())
-        return xIES->compareIndexEntry(rIndexEntry1, rPhoneticEntry1, rLocale1,
-                rIndexEntry2, rPhoneticEntry2, rLocale2);
-    else
+    if (!xIES.is())
         throw RuntimeException();
+    return xIES->compareIndexEntry(rIndexEntry1, rPhoneticEntry1, rLocale1,
+            rIndexEntry2, rPhoneticEntry2, rLocale2);
 }
 
 OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexEntry,

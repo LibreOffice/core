@@ -179,12 +179,11 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
                 throw uno::RuntimeException();
             }
         }
-        if (icuBI->aBreakIterator) {
-            icuBI->maLocale=rLocale;
-            bNewBreak=true;
-        } else {
+        if (!icuBI->aBreakIterator) {
             throw uno::RuntimeException();
         }
+        icuBI->maLocale=rLocale;
+        bNewBreak=true;
     }
 
     if (bNewBreak || icuBI->aICUText.pData != rText.pData)

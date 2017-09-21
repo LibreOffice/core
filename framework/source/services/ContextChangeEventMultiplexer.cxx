@@ -156,14 +156,13 @@ void SAL_CALL ContextChangeEventMultiplexer::addContextChangeEventListener (
     if (pFocusDescriptor != nullptr)
     {
         ListenerContainer& rContainer (pFocusDescriptor->maListeners);
-        if (::std::find(rContainer.begin(), rContainer.end(), rxListener) == rContainer.end())
-            rContainer.push_back(rxListener);
-        else
+        if (::std::find(rContainer.begin(), rContainer.end(), rxListener) != rContainer.end())
         {
             // The listener was added for the same event focus
             // previously.  That is an error.
             throw cssl::IllegalArgumentException("listener added twice", static_cast<XWeak*>(this), 0);
         }
+        rContainer.push_back(rxListener);
     }
 
     // Send out an initial event that informs the new listener about
