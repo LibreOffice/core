@@ -9,15 +9,10 @@
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_cxx_dep_generation_options
--MMD -MT $(1) -MP -MF $(2)_
-endef
-define gb_cxx_dep_copy
-&& mv $(1)_ $(1)
+-MMD -MT $(1) -MP -MF $(2)
 endef
 else
 define gb_cxx_dep_generation_options
-endef
-define gb_cxx_dep_copy
 endef
 endif
 
@@ -63,7 +58,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-I$(dir $(3)) \
 		$(INCLUDE) \
 		$(PCHFLAGS) \
-		$(if $(COMPILER_TEST),,$(call gb_cxx_dep_copy,$(4))) \
 		)
 endef
 
@@ -90,10 +84,9 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		$(6) \
-		$(call gb_cxx_dep_generation_options,$(1),$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2))) \
+		$(call gb_cxx_dep_generation_options,$(1),$(2)) \
 		-c $(patsubst %.cxx,%.hxx,$(3)) \
 		-o$(1) \
-		$(call gb_cxx_dep_copy,$(call gb_PrecompiledHeader_get_dep_target_tmp,$(2))) \
 		)
 endef
 
