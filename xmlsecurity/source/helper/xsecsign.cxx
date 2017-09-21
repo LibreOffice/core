@@ -20,7 +20,6 @@
 
 #include "xsecctl.hxx"
 
-#include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/sax/XBlockerMonitor.hpp>
@@ -70,9 +69,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
     m_xSAXEventKeeper->setSecurityId(nIdOfSignatureElementCollector, nSecurityId);
 
-    uno::Reference<xml::crypto::sax::XReferenceResolvedListener> xReferenceResolvedListener(new SignatureCreatorImpl);
-
-    cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
+    rtl::Reference<SignatureCreatorImpl> xSignatureCreator(new SignatureCreatorImpl);
 
     cssu::Sequence<cssu::Any> args(5);
     args[0] <<= OUString::number(nSecurityId);
@@ -83,52 +80,39 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     args[3] <<= m_xSecurityContext->getSecurityEnvironment();
 
     args[4] <<= m_xXMLSignature;
-    xInitialization->initialize(args);
+    xSignatureCreator->initialize(args);
 
     sal_Int32 nBlockerId = m_xSAXEventKeeper->addBlocker();
     m_xSAXEventKeeper->setSecurityId(nBlockerId, nSecurityId);
 
-    cssu::Reference<cssxc::sax::XBlockerMonitor> xBlockerMonitor(xReferenceResolvedListener, cssu::UNO_QUERY);
-    xBlockerMonitor->setBlockerId(nBlockerId);
+    xSignatureCreator->setBlockerId(nBlockerId);
 
-    cssu::Reference< cssxc::sax::XSignatureCreationResultBroadcaster >
-        xSignatureCreationResultBroadcaster(xReferenceResolvedListener, cssu::UNO_QUERY);
+    xSignatureCreator->addSignatureCreationResultListener(this);
 
-    xSignatureCreationResultBroadcaster->addSignatureCreationResultListener( this );
+    m_xSAXEventKeeper->addReferenceResolvedListener(nIdOfSignatureElementCollector, xSignatureCreator.get());
 
-    m_xSAXEventKeeper->addReferenceResolvedListener(
-        nIdOfSignatureElementCollector,
-        xReferenceResolvedListener);
-
-    cssu::Reference<cssxc::sax::XReferenceCollector> xReferenceCollector
-        (xReferenceResolvedListener, cssu::UNO_QUERY);
-
-    int i;
     int size = vReferenceInfors.size();
     sal_Int32 nReferenceCount = 0;
 
-    for(i=0; i<size; ++i)
+    for(int i=0; i<size; ++i)
     {
         sal_Int32 keeperId = internalSignatureInfor.vKeeperIds[i];
 
         if ( keeperId != -1)
         {
             m_xSAXEventKeeper->setSecurityId(keeperId, nSecurityId);
-            m_xSAXEventKeeper->addReferenceResolvedListener( keeperId, xReferenceResolvedListener);
-            xReferenceCollector->setReferenceId( keeperId );
+            m_xSAXEventKeeper->addReferenceResolvedListener( keeperId, xSignatureCreator.get());
+            xSignatureCreator->setReferenceId( keeperId );
             nReferenceCount++;
         }
     }
 
-    xReferenceCollector->setReferenceCount( nReferenceCount );
+    xSignatureCreator->setReferenceCount( nReferenceCount );
 
     /*
      * adds all URI binding
      */
-    cssu::Reference<cssxc::XUriBinding> xUriBinding
-        (xReferenceResolvedListener, cssu::UNO_QUERY);
-
-    for(i=0; i<size; ++i)
+    for(int i=0; i<size; ++i)
     {
         const SignatureReferenceInformation& refInfor = vReferenceInfors[i];
 
@@ -136,13 +120,10 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
             = getObjectInputStream( refInfor.ouURI );
 
         if (xInputStream.is())
-        {
-            xUriBinding->setUriBinding(refInfor.ouURI,xInputStream);
-        }
+            xSignatureCreator->setUriBinding(refInfor.ouURI,xInputStream);
     }
 
-    cssu::Reference<cssxc::sax::XKeyCollector> keyCollector (xReferenceResolvedListener, cssu::UNO_QUERY);
-    keyCollector->setKeyId(0);
+    xSignatureCreator->setKeyId(0);
 
     // use sha512 for gpg signing unconditionally
     const sal_Int32 digestID = !internalSignatureInfor.signatureInfor.ouGpgCertificate.isEmpty()?
@@ -182,7 +163,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     /*
      * replace both digestValues and signatureValue to " "
      */
-    for(i=0; i<size; ++i)
+    for(int i=0; i<size; ++i)
     {
         SignatureReferenceInformation& refInfor = vReferenceInfors[i];
         refInfor.ouDigestValue = " ";
@@ -190,7 +171,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
 
     internalSignatureInfor.signatureInfor.ouSignatureValue = " ";
 
-    return xReferenceResolvedListener;
+    return xSignatureCreator.get();
 }
 
 void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, bool isBinary, bool bXAdESCompliantIfODF)
