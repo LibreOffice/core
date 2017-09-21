@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_be462a21",
+        "filename": "vcl/inc/win/saltimer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-21T13:31:07Z",
+      "side": 1,
+      "message": "if you use both WPARAM and LPARAM in the message, you can fit in a 64-bit value :-)",
+      "revId": "5819ffc43c9412baec1afdf162adde3d3d675f8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
