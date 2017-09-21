@@ -9,8 +9,10 @@
 
 #include <libepubgen/libepubgen.h>
 
+#include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -67,6 +69,7 @@ public:
     void testParaCharProps();
     void testSection();
     void testList();
+    void testImage();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -85,6 +88,7 @@ public:
     CPPUNIT_TEST(testParaCharProps);
     CPPUNIT_TEST(testSection);
     CPPUNIT_TEST(testList);
+    CPPUNIT_TEST(testImage);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -202,6 +206,16 @@ void EPUBExportTest::testMimetype()
     // This was just "libepubgen/x.y.z", i.e. the LO version was missing.
     OUString aGenerator = getXPath(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@name='generator']", "content");
     CPPUNIT_ASSERT(aGenerator.startsWith(utl::DocInfoHelper::GetGeneratorString()));
+
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponentContext->getServiceManager(), uno::UNO_QUERY);
+    const OUString aServiceName("com.sun.star.comp.Writer.EPUBExportFilter");
+    uno::Reference<document::XFilter> xFilter(xMSF->createInstance(aServiceName), uno::UNO_QUERY);
+    // Should result in no errors.
+    xFilter->cancel();
+    // We got back what we expected.
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xFilter, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(aServiceName, xServiceInfo->getImplementationName());
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.document.ExportFilter"));
 }
 
 void EPUBExportTest::testEPUB2()
@@ -417,6 +431,14 @@ void EPUBExportTest::testList()
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // This was "C", i.e. in-list content was ignored.
     assertXPathContent(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "B");
+}
+
+void EPUBExportTest::testImage()
+{
+    createDoc("image.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:img", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
