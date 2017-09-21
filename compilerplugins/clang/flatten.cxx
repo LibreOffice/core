@@ -141,10 +141,8 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
         conditionString = "!(" + conditionString + ")";
 
     std::string thenString = getSourceAsString(thenRange);
-    bool thenIsCompound = false;
     if (auto compoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen())) {
         if (compoundStmt->getLBracLoc().isValid()) {
-            thenIsCompound = true;
             thenString = stripOpenAndCloseBrace(thenString);
         }
     }
