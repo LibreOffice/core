@@ -19,30 +19,7 @@
 
 #include "codesnippets.S"
 
-#if defined(__arm)
-// ARM support code for LibreOffice C++/UNO bridging
-//
-// Written by Peter Naulls <peter@chocky.org>
-// Modified by Caolan McNamara <caolanm@redhat.com>
-// Fixed by Michael Casadevall <mcasadevall@kubuntu.org>
-// Modified for iOS by Tor Lillqvist <tml@iki.fi>
-
-    .text
-    .align 4
-
-_privateSnippetExecutor:
-    stmfd   sp!, {r0-r3}    // follow other parameters on stack
-    mov     r0, ip          // r0 points to functionoffset/vtable
-    mov     r1, sp          // r1 points to this and params
-                            // (see cpp2uno.cxx:codeSnippet())
-    stmfd   sp!, {r4, lr}   // save return address
-                            // (r4 pushed to preserve stack alignment)
-    bl      _cpp_vtable_call
-
-    add     sp, sp, #4      // no need to restore r4 (we didn't touch it)
-    ldr     pc, [sp], #20   // return, discarding function arguments
-
-#elif defined(__arm64)
+#ifdef(__arm64)
 
     .text
     .align 4
