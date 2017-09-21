@@ -1507,7 +1507,7 @@ DECLARE_RTFEXPORT_TEST(testFdo85889mac, "fdo85889-mac.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo72031, "fdo72031.rtf")
 {
-    OUString aExpected("\xc3\x85", 2, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u00C5");
     CPPUNIT_ASSERT_EQUAL(aExpected, getRun(getParagraph(1), 1)->getString());
 }
 
