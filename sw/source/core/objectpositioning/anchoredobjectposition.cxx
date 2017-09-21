@@ -489,9 +489,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
         // tdf#101627 - the patch a4dee94afed9ade6ac50237c8d99a6e49d3bebc1
         //              for tdf#91260 causes problems if the textbox
         //              is anchored in the footer, so exclude this case
-        // tdf#108932 - ensure that the adjustment will only shrink (> 0)
         if ( !( GetAnchorFrame().GetUpper() && GetAnchorFrame().GetUpper()->IsFooterFrame() )
-             && nAdjustedRelPosY > 0
              && nAdjustedRelPosY < nProposedRelPosY )
         {
             const SwFrameFormat* pFormat = &(GetFrameFormat());
