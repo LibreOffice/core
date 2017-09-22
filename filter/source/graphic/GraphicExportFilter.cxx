@@ -48,11 +48,16 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         if ( aProperty.Name == "FilterName" )
         {
             aProperty.Value >>= aInternalFilterName;
-            aInternalFilterName = aInternalFilterName.replaceFirst("draw_", "");
-            aInternalFilterName = aInternalFilterName.replaceFirst("impress_", "");
+            const sal_Int32 nLen = aInternalFilterName.getLength();
             aInternalFilterName = aInternalFilterName.replaceFirst("calc_", "");
-            aInternalFilterName = aInternalFilterName.replaceFirst("writer_", "");
-            aInternalFilterName = aInternalFilterName.replaceFirst("web_", "");
+            if (aInternalFilterName.getLength() == nLen)
+                aInternalFilterName = aInternalFilterName.replaceFirst("writer_", "");
+            if (aInternalFilterName.getLength() == nLen)
+                aInternalFilterName = aInternalFilterName.replaceFirst("web_", "");
+            if (aInternalFilterName.getLength() == nLen)
+                aInternalFilterName = aInternalFilterName.replaceFirst("draw_", "");
+            if (aInternalFilterName.getLength() == nLen)
+                aInternalFilterName = aInternalFilterName.replaceFirst("impress_", "");
         }
         else if ( aProperty.Name == "FilterData" )
         {
