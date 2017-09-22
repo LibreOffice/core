@@ -429,13 +429,27 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
         sal_Int32 nBgn = m_aPagesCache.back();
 
         // Start adding pages while we can
-        while( nToAdd > 0 && nBgn >= 0 )
+        while (nToAdd > 0 && nBgn >= 0)
         {
-            nBgn = m_pFat->GetNextPage( nBgn );
+            sal_Int32 nOldBgn = nBgn;
+            nBgn = m_pFat->GetNextPage(nOldBgn);
             if( nBgn >= 0 )
             {
-                m_aPagesCache.push_back( nBgn );
-                nToAdd--;
+                if (nOldBgn != nBgn)
+                {
+                    //very much the normal case
+                    m_aPagesCache.push_back(nBgn);
+                    --nToAdd;
+                }
+                else
+                {
+                    //unclear if this is something we should just immediately
+                    //reject, or allow, for the moment support it but
+                    //optimize that all the pages are the same
+                    SAL_WARN("sot", "fat next page is the same as current page, autofilling " << nToAdd << " pages");
+                    m_aPagesCache.insert(m_aPagesCache.end(), nToAdd, nBgn);
+                    nToAdd = 0;
+                }
             }
         }
     }
