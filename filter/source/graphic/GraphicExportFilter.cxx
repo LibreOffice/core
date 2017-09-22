@@ -25,7 +25,9 @@
 #include <svl/outstrm.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
-GraphicExportFilter::GraphicExportFilter( const Reference<XComponentContext>& rxContext  )
+using namespace css;
+
+GraphicExportFilter::GraphicExportFilter( const uno::Reference< uno::XComponentContext > & rxContext  )
     : mxContext(rxContext)
     , mTargetWidth(0)
     , mTargetHeight(0)
@@ -35,13 +37,13 @@ GraphicExportFilter::GraphicExportFilter( const Reference<XComponentContext>& rx
 GraphicExportFilter::~GraphicExportFilter()
 {}
 
-void GraphicExportFilter::gatherProperties( const Sequence<PropertyValue>& rProperties )
+void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::PropertyValue > & rProperties )
 {
     OUString aInternalFilterName;
 
     for ( sal_Int32 i = 0; i < rProperties.getLength(); i++ )
     {
-        PropertyValue aProperty = rProperties[i];
+        beans::PropertyValue aProperty = rProperties[i];
 
         if ( aProperty.Name == "FilterName" )
         {
@@ -113,7 +115,7 @@ void GraphicExportFilter::gatherProperties( const Sequence<PropertyValue>& rProp
     }
 }
 
-sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rDescriptor )
+sal_Bool SAL_CALL GraphicExportFilter::filter( const uno::Sequence< beans::PropertyValue > & rDescriptor )
 {
     gatherProperties(rDescriptor);
 
@@ -151,7 +153,7 @@ bool GraphicExportFilter::filterRenderDocument() const
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    Sequence< PropertyValue > aFilterData( mFilterDataSequence );
+    uno::Sequence< beans::PropertyValue > aFilterData( mFilterDataSequence );
     sal_Int32 nAdd = 0;
     if (!maCompression.hasValue())
         ++nAdd;
@@ -249,12 +251,12 @@ void SAL_CALL GraphicExportFilter::cancel( )
 {
 }
 
-void SAL_CALL GraphicExportFilter::setSourceDocument( const Reference<XComponent>& xDocument )
+void SAL_CALL GraphicExportFilter::setSourceDocument( const uno::Reference< lang::XComponent > & xDocument )
 {
     mxDocument = xDocument;
 }
 
-void SAL_CALL GraphicExportFilter::initialize( const Sequence<Any>& )
+void SAL_CALL GraphicExportFilter::initialize( const uno::Sequence< uno::Any > & )
 {
 }
 

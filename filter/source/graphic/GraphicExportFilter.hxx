@@ -35,24 +35,18 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-using namespace css;
-using namespace css::uno;
-using namespace css::lang;
-using namespace css::beans;
-using namespace css::document;
-
 class GraphicExportFilter :
-    public cppu::WeakImplHelper < XFilter, XExporter, XInitialization >
+    public cppu::WeakImplHelper < css::document::XFilter, css::document::XExporter, css::lang::XInitialization >
 {
-    Reference<XComponentContext>        mxContext;
-    Reference<XComponent>               mxDocument;
-    Reference<io::XOutputStream>        mxOutputStream;
+    css::uno::Reference< css::uno::XComponentContext >  mxContext;
+    css::uno::Reference< css::lang::XComponent >        mxDocument;
+    css::uno::Reference< css::io::XOutputStream >       mxOutputStream;
 
-    void gatherProperties( const Sequence<PropertyValue>& rDescriptor );
+    void gatherProperties( const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor );
 
     OUString    mFilterExtension;
 
-    Sequence<PropertyValue> mFilterDataSequence;
+    css::uno::Sequence< css::beans::PropertyValue > mFilterDataSequence;
 
     sal_Int32 mTargetWidth;
     sal_Int32 mTargetHeight;
@@ -70,18 +64,18 @@ class GraphicExportFilter :
             const css::uno::Reference< css::drawing::XShape > & rxShape ) const;
 
 public:
-    explicit GraphicExportFilter( const Reference<XComponentContext>& rxContext );
+    explicit GraphicExportFilter( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
     virtual ~GraphicExportFilter() override;
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence<PropertyValue>& rDescriptor ) override;
+    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor ) override;
     virtual void SAL_CALL cancel( ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDocument ) override;
+    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent > & xDocument ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence<Any>& aArguments ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any > & rArguments ) override;
 };
 
 #endif
