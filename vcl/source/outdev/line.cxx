@@ -131,7 +131,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
         if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
         {
-            aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+            aB2DPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
         if( mpGraphics->DrawPolyLine(
@@ -194,7 +194,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             for(sal_uInt32 c(0); c < aLinePolyPolygon.count(); c++)
             {
                 basegfx::B2DPolyPolygon aLineTarget;
-                basegfx::tools::applyLineDashing(
+                basegfx::utils::applyLineDashing(
                     aLinePolyPolygon.getB2DPolygon(c),
                     fDotDashArray,
                     &aLineTarget);
@@ -216,12 +216,12 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             // but one that is at least as good as ImplSubdivideBezier was.
             // There, Polygon::AdaptiveSubdivide was used with default parameter
             // 1.0 as quality index.
-            aLinePolyPolygon = basegfx::tools::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
+            aLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
         }
 
         for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
         {
-            aFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
+            aFillPolyPolygon.append(basegfx::utils::createAreaGeometry(
                 aLinePolyPolygon.getB2DPolygon(a),
                 fHalfLineWidth,
                 rInfo.GetLineJoin(),

@@ -37,7 +37,7 @@
 #include "svx/unoapi.hxx"
 #include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/tools/unotools.hxx>
+#include <basegfx/utils/unotools.hxx>
 
 using namespace com::sun::star;
 using namespace ::cppu;

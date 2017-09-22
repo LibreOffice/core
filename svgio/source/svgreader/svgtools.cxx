@@ -1091,7 +1091,7 @@ namespace svgio
                                     skip_char(rCandidate, ' ', ')', nPos, nLen);
                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
 
-                                    aMatrix = aMatrix * basegfx::tools::createTranslateB2DHomMatrix(
+                                    aMatrix = aMatrix * basegfx::utils::createTranslateB2DHomMatrix(
                                         aTransX.solve(rInfoProvider, xcoordinate),
                                         aTransY.solve(rInfoProvider, ycoordinate));
                                 }
@@ -1115,7 +1115,7 @@ namespace svgio
                                     skip_char(rCandidate, ' ', ')', nPos, nLen);
                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
 
-                                    aMatrix = aMatrix * basegfx::tools::createScaleB2DHomMatrix(
+                                    aMatrix = aMatrix * basegfx::utils::createScaleB2DHomMatrix(
                                         aScaleX.solve(rInfoProvider),
                                         aScaleY.solve(rInfoProvider));
                                 }
@@ -1132,7 +1132,7 @@ namespace svgio
                                     skip_char(rCandidate, ' ', ')', nPos, nLen);
                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
 
-                                    aMatrix = aMatrix * basegfx::tools::createShearXB2DHomMatrix(tan(fSkewX));
+                                    aMatrix = aMatrix * basegfx::utils::createShearXB2DHomMatrix(tan(fSkewX));
                                 }
                             }
                             else if(rCandidate.match(aStrSkewY, nPos))
@@ -1147,7 +1147,7 @@ namespace svgio
                                     skip_char(rCandidate, ' ', ')', nPos, nLen);
                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
 
-                                    aMatrix = aMatrix * basegfx::tools::createShearYB2DHomMatrix(tan(fSkewY));
+                                    aMatrix = aMatrix * basegfx::utils::createShearYB2DHomMatrix(tan(fSkewY));
                                 }
                             }
                             break;
@@ -1178,12 +1178,12 @@ namespace svgio
                                     if(!basegfx::fTools::equalZero(fX) || !basegfx::fTools::equalZero(fY))
                                     {
                                         // rotate around point
-                                        aMatrix = aMatrix * basegfx::tools::createRotateAroundPoint(fX, fY, fAngle);
+                                        aMatrix = aMatrix * basegfx::utils::createRotateAroundPoint(fX, fY, fAngle);
                                     }
                                     else
                                     {
                                         // rotate
-                                        aMatrix = aMatrix * basegfx::tools::createRotateB2DHomMatrix(fAngle);
+                                        aMatrix = aMatrix * basegfx::utils::createRotateB2DHomMatrix(fAngle);
                                     }
                                 }
                             }

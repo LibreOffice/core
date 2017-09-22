@@ -79,7 +79,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/tools/unotools.hxx>
+#include <basegfx/utils/unotools.hxx>
 #include "svdconv.hxx"
 #include <svdobjplusdata.hxx>
 
@@ -577,7 +577,7 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const bool bBezierAl
             aRetval = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( aBezierCoords );
             if ( !bBezierAllowed && aRetval.areControlPointsUsed())
             {
-                aRetval = basegfx::tools::adaptiveSubdivideByAngle(aRetval);
+                aRetval = basegfx::utils::adaptiveSubdivideByAngle(aRetval);
             }
         }
         catch ( const css::lang::IllegalArgumentException & )
@@ -3111,7 +3111,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
     }
 
     // build matrix
-    rMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+    rMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         aScale,
         basegfx::fTools::equalZero(fShearX) ? 0.0 : tan(fShearX),
         basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,

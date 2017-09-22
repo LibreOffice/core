@@ -1410,7 +1410,7 @@ static basegfx::B2DRange lcl_ShrinkFly(const SwRect& rRect)
 }
 
 static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
-   const SwRect &rRect, SwRegionRects &rRegion, basegfx::tools::B2DClipState& rClipState, SwPaintProperties const & rProperties)
+   const SwRect &rRect, SwRegionRects &rRegion, basegfx::utils::B2DClipState& rClipState, SwPaintProperties const & rProperties)
 {
     const SwSortedObjs& rObjs = *pPage->GetSortedObjs();
     const SwFlyFrame* pSelfFly = pFrame->IsInFly() ? pFrame->FindFlyFrame() : gProp.pSRetoucheFly2;
@@ -1734,7 +1734,7 @@ bool DrawFillAttributes(
     const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
     const SwRegionRects& rPaintRegion,
-    const basegfx::tools::B2DClipState& rClipState,
+    const basegfx::utils::B2DClipState& rClipState,
     vcl::RenderContext& rOut)
 {
     if(rFillAttributes.get() && rFillAttributes->isUsed())
@@ -3500,14 +3500,14 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateDashedIndicator
     else
     {
         // Get a color for the contrast
-        basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aColor );
+        basegfx::BColor aHslLine = basegfx::utils::rgb2hsl( aColor );
         double nLuminance = aHslLine.getZ() * 2.5;
         if ( nLuminance == 0 )
             nLuminance = 0.5;
         else if ( nLuminance >= 1.0 )
             nLuminance = aHslLine.getZ() * 0.4;
         aHslLine.setZ( nLuminance );
-        const basegfx::BColor aOtherColor = basegfx::tools::hsl2rgb( aHslLine );
+        const basegfx::BColor aOtherColor = basegfx::utils::hsl2rgb( aHslLine );
 
         // Compute the plain line
         drawinglayer::primitive2d::PolygonHairlinePrimitive2D * pPlainLine =
@@ -3631,12 +3631,12 @@ void SwColumnFrame::PaintBreak( ) const
                     pOut->GetTextBoundRect( aTextRect, aBreakText );
                     long nTextOff = ( nWidth - aTextRect.GetWidth() ) / 2;
 
-                    basegfx::B2DHomMatrix aTextMatrix( basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    basegfx::B2DHomMatrix aTextMatrix( basegfx::utils::createScaleTranslateB2DHomMatrix(
                                 aFontSize.getX(), aFontSize.getY(),
                                 aRect.Left() + nTextOff, aRect.Top() ) );
                     if ( IsVertical() )
                     {
-                        aTextMatrix = basegfx::B2DHomMatrix( basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix (
+                        aTextMatrix = basegfx::B2DHomMatrix( basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix (
                                 aFontSize.getX(), aFontSize.getY(), 0.0, M_PI_2,
                                 aRect.Right(), aRect.Top() + nTextOff ) );
                     }
@@ -4471,7 +4471,7 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
         pPage->GetFormat()->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS))
     {
         SwRegionRects aRegion( aOut, 4 );
-        basegfx::tools::B2DClipState aClipState;
+        basegfx::utils::B2DClipState aClipState;
         ::lcl_SubtractFlys( this, pPage, aOut, aRegion, aClipState, gProp );
         for ( size_t i = 0; i < aRegion.size(); ++i )
             gProp.pSLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol, gProp );
@@ -6405,7 +6405,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
 
                 SwRegionRects aRegion( aRect );
                 basegfx::B2DPolygon aB2DPolygon{tools::Polygon(aRect.SVRect()).getB2DPolygon()};
-                basegfx::tools::B2DClipState aClipState{basegfx::B2DPolyPolygon(aB2DPolygon)};
+                basegfx::utils::B2DClipState aClipState{basegfx::B2DPolyPolygon(aB2DPolygon)};
                 if (pPage->GetSortedObjs() &&
                     pSh->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS))
                 {

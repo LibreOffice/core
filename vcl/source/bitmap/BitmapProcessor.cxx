@@ -33,7 +33,7 @@ BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
                                         pRead->GetPaletteColor(pRead->GetPixelIndex(nY, nX)) :
                                         pRead->GetPixel(nY, nX);
                 basegfx::BColor aBColor(Color(aColor.Invert()).getBColor());
-                aBColor = basegfx::tools::rgb2hsl(aBColor);
+                aBColor = basegfx::utils::rgb2hsl(aBColor);
 
                 double fHue = aBColor.getRed();
                 fHue += 180.0;
@@ -41,7 +41,7 @@ BitmapEx BitmapProcessor::createLightImage(const BitmapEx& rBitmapEx)
                     fHue -= 360.0;
                 aBColor.setRed(fHue);
 
-                aBColor = basegfx::tools::hsl2rgb(aBColor);
+                aBColor = basegfx::utils::hsl2rgb(aBColor);
                 aColor.SetRed((aBColor.getRed()   * 255.0) + 0.5);
                 aColor.SetGreen((aBColor.getGreen() * 255.0) + 0.5);
                 aColor.SetBlue((aBColor.getBlue()  * 255.0) + 0.5);

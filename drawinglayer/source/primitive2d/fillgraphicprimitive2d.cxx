@@ -81,7 +81,7 @@ namespace drawinglayer
                         {
                             // add graphic without tiling
                             const basegfx::B2DHomMatrix aObjectTransform(
-                                getTransformation() * basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                getTransformation() * basegfx::utils::createScaleTranslateB2DHomMatrix(
                                     rAttribute.getGraphicRange().getRange(),
                                     rAttribute.getGraphicRange().getMinimum()));
 
@@ -119,10 +119,10 @@ namespace drawinglayer
         basegfx::B2DRange FillGraphicPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range of it
-            basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
+            basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
             aPolygon.transform(getTransformation());
 
-            return basegfx::tools::getRange(aPolygon);
+            return basegfx::utils::getRange(aPolygon);
         }
 
         // provide unique ID

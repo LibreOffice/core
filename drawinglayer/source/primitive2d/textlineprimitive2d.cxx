@@ -189,7 +189,7 @@ namespace drawinglayer
                 aLine.append(basegfx::B2DPoint(getWidth(), fOffset));
 
                 const basegfx::B2DHomMatrix aUnscaledTransform(
-                    basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                    basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
                         fShearX, fRotate, aTranslate));
 
                 aLine.transform(aUnscaledTransform);
@@ -230,7 +230,7 @@ namespace drawinglayer
                     }
 
                     // move base point of text to 0.0 and de-rotate
-                    basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                    basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
                         -aTranslate.getX(), -aTranslate.getY()));
                     aTransform.rotate(-fRotate);
 

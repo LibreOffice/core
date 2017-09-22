@@ -69,7 +69,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
-                const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aCenter, -fAngle));
+                const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
@@ -92,7 +92,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
-                const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aCenter, -fAngle));
+                const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aCenter, -fAngle));
 
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
@@ -116,7 +116,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
-                const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aEndPos, -fAngle));
+                const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;
@@ -151,7 +151,7 @@ void GradTransformer::GradToVec(GradTransGradient const & rG, GradTransVector& r
             if(rG.aGradient.GetAngle())
             {
                 const double fAngle = (double)rG.aGradient.GetAngle() * (F_PI180 / 10.0);
-                const basegfx::B2DHomMatrix aTransformation(basegfx::tools::createRotateAroundPoint(aEndPos, -fAngle));
+                const basegfx::B2DHomMatrix aTransformation(basegfx::utils::createRotateAroundPoint(aEndPos, -fAngle));
 
                 aStartPos *= aTransformation;
                 aEndPos *= aTransformation;

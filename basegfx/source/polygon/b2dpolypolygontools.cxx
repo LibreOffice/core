@@ -28,7 +28,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         B2DPolyPolygon correctOrientations(const B2DPolyPolygon& rCandidate)
         {
@@ -38,7 +38,7 @@ namespace basegfx
             for(sal_uInt32 a(0); a < nCount; a++)
             {
                 const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-                const B2VectorOrientation aOrientation(tools::getOrientation(aCandidate));
+                const B2VectorOrientation aOrientation(utils::getOrientation(aCandidate));
                 sal_uInt32 nDepth(0);
 
                 for(sal_uInt32 b(0); b < nCount; b++)
@@ -47,7 +47,7 @@ namespace basegfx
                     {
                         const B2DPolygon aCompare(rCandidate.getB2DPolygon(b));
 
-                        if(tools::isInside(aCompare, aCandidate, true))
+                        if(utils::isInside(aCompare, aCandidate, true))
                         {
                             nDepth++;
                         }
@@ -85,7 +85,7 @@ namespace basegfx
                         {
                             const B2DPolygon aCompare(rCandidate.getB2DPolygon(b));
 
-                            if(tools::isInside(aCompare, aCandidate, true))
+                            if(utils::isInside(aCompare, aCandidate, true))
                             {
                                 nDepth++;
                             }
@@ -125,7 +125,7 @@ namespace basegfx
 
                     if(aCandidate.areControlPointsUsed())
                     {
-                        aRetval.append(tools::adaptiveSubdivideByDistance(aCandidate, fDistanceBound));
+                        aRetval.append(utils::adaptiveSubdivideByDistance(aCandidate, fDistanceBound));
                     }
                     else
                     {
@@ -154,7 +154,7 @@ namespace basegfx
 
                     if(aCandidate.areControlPointsUsed())
                     {
-                        aRetval.append(tools::adaptiveSubdivideByAngle(aCandidate, fAngleBound));
+                        aRetval.append(utils::adaptiveSubdivideByAngle(aCandidate, fAngleBound));
                     }
                     else
                     {
@@ -205,7 +205,7 @@ namespace basegfx
             for(sal_uInt32 a(0); a < nPolygonCount; a++)
             {
                 B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
-                aRetval.expand(tools::getRange(aCandidate));
+                aRetval.expand(utils::getRange(aCandidate));
             }
 
             return aRetval;
@@ -220,7 +220,7 @@ namespace basegfx
             {
                 const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
 
-                fRetval += tools::getSignedArea(aCandidate);
+                fRetval += utils::getSignedArea(aCandidate);
             }
 
             return fRetval;
@@ -704,7 +704,7 @@ namespace basegfx
             }
         }
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

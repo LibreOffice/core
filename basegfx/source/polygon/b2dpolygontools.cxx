@@ -47,7 +47,7 @@ static double fAngleBoundStartValue = ANGLE_BOUND_START_VALUE;
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         void openWithGeometryChange(B2DPolygon& rCandidate)
         {
@@ -3225,7 +3225,7 @@ namespace basegfx
                 if(bCheckClosed)
                 {
                     // check for closed state flag
-                    tools::checkClosed(aRetval);
+                    utils::checkClosed(aRetval);
                 }
             }
 
@@ -3345,7 +3345,7 @@ namespace basegfx
                 SAL_WARN_IF(ePolygonFlag == css::drawing::PolygonFlags_CONTROL || bControlA != bControlB,
                     "basegfx", "UnoPolygonBezierCoordsToB2DPolygon: Illegal source polygon (!)");
 
-                // the previous writes used the B2DPolyPoygon -> tools::PolyPolygon converter
+                // the previous writes used the B2DPolyPoygon -> utils::PolyPolygon converter
                 // which did not create minimal PolyPolygons, but created all control points
                 // as null vectors (identical points). Because of the former P(CA)(CB)-norm of
                 // B2DPolygon and it's unused sign of being the zero-vector and CA and CB being
@@ -3536,7 +3536,7 @@ namespace basegfx
             }
         }
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

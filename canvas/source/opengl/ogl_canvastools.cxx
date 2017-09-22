@@ -15,8 +15,8 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/tools.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/tools.hxx>
 #include <com/sun/star/rendering/ARGBColor.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -120,7 +120,7 @@ namespace oglcanvas
             y += 1.2*scale;
 
             basegfx::B2DPolyPolygon aPoly=
-                basegfx::tools::number2PolyPolygon(rNumber,10,3);
+                basegfx::utils::number2PolyPolygon(rNumber,10,3);
 
             aTmp=aTmp*aScaleShear;
             aPoly.transform(aTmp);

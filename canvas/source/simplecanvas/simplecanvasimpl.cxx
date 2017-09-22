@@ -270,7 +270,7 @@ namespace
                                         ::sal_Int8                      nTextDirection ) override
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            const basegfx::B2DHomMatrix offsetTransform(basegfx::tools::createTranslateB2DHomMatrix(aOutPos.X,aOutPos.Y));
+            const basegfx::B2DHomMatrix offsetTransform(basegfx::utils::createTranslateB2DHomMatrix(aOutPos.X,aOutPos.Y));
             rendering::RenderState aRenderState( createStrokingRenderState() );
             tools::appendToRenderState(aRenderState, offsetTransform);
 
@@ -285,7 +285,7 @@ namespace
                                           const geometry::RealPoint2D&                aLeftTop ) override
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            const basegfx::B2DHomMatrix offsetTransform(basegfx::tools::createTranslateB2DHomMatrix(aLeftTop.X,aLeftTop.Y));
+            const basegfx::B2DHomMatrix offsetTransform(basegfx::utils::createTranslateB2DHomMatrix(aLeftTop.X,aLeftTop.Y));
             rendering::RenderState aRenderState( createStrokingRenderState() );
             tools::appendToRenderState(aRenderState, offsetTransform);
 

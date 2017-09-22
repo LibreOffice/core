@@ -62,7 +62,7 @@ namespace drawinglayer
 
                 const drawinglayer::primitive2d::Primitive2DReference aEmbed(
                     new drawinglayer::primitive2d::TransformPrimitive2D(
-                        basegfx::tools::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
+                        basegfx::utils::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
                         rSeq));
 
                 aSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };

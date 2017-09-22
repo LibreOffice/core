@@ -314,9 +314,9 @@ namespace emfplushelper
         // To evtl. correct and see where this came from, please compare with the implementations
         // of EmfPlusHelperData::MapToDevice and EmfPlusHelperData::Map* in prev versions
         maMapTransform = maWorldTransform;
-        maMapTransform *= basegfx::tools::createScaleB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY);
-        maMapTransform *= basegfx::tools::createTranslateB2DHomMatrix(double(-mnFrameLeft), double(-mnFrameTop));
-        maMapTransform *= basegfx::tools::createScaleB2DHomMatrix(maBaseTransform.get(0, 0), maBaseTransform.get(1, 1));
+        maMapTransform *= basegfx::utils::createScaleB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY);
+        maMapTransform *= basegfx::utils::createTranslateB2DHomMatrix(double(-mnFrameLeft), double(-mnFrameTop));
+        maMapTransform *= basegfx::utils::createScaleB2DHomMatrix(maBaseTransform.get(0, 0), maBaseTransform.get(1, 1));
     }
 
     ::basegfx::B2DPoint EmfPlusHelperData::Map(double ix, double iy)
@@ -650,7 +650,7 @@ namespace emfplushelper
                 // get the polygon range to be able to map the start/end/center point correctly
                 // therefore, create a mapping and invert it
                 basegfx::B2DRange aPolygonRange= polygon.getB2DRange();
-                basegfx::B2DHomMatrix aPolygonTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                basegfx::B2DHomMatrix aPolygonTransformation = basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aPolygonRange.getWidth(),aPolygonRange.getHeight(),
                     aPolygonRange.getMinX(), aPolygonRange.getMinY());
                 aPolygonTransformation.invert();
@@ -883,7 +883,7 @@ namespace emfplushelper
                             (360.0*startAngle / M_PI) << ", end: " << (360.0*endAngle / M_PI) <<
                             " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
 
-                        ::basegfx::B2DPolygon polygon = basegfx::tools::createPolygonFromEllipseSegment(
+                        ::basegfx::B2DPolygon polygon = basegfx::utils::createPolygonFromEllipseSegment(
                             mappedCenter, mappedSize.getX(), mappedSize.getY(), startAngle, endAngle);
 
                         if (type != EmfPlusRecordTypeDrawArc)
@@ -939,7 +939,7 @@ namespace emfplushelper
                         ::basegfx::B2DSize mappedSize(MapSize(dw / 2, dh / 2));
                         ::basegfx::B2DPolyPolygon polyPolygon(
                             ::basegfx::B2DPolygon(
-                                ::basegfx::tools::createPolygonFromEllipse(mappedCenter, mappedSize.getX(), mappedSize.getY())));
+                                ::basegfx::utils::createPolygonFromEllipse(mappedCenter, mappedSize.getX(), mappedSize.getY())));
 
                         if (type == EmfPlusRecordTypeFillEllipse)
                         {
@@ -1163,7 +1163,7 @@ namespace emfplushelper
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
                                     // create correct transform matrix
-                                    basegfx::B2DHomMatrix aTransformMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    basegfx::B2DHomMatrix aTransformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
                                         aDstSize.getX(),
                                         aDstSize.getY(),
                                         aDstPoint.getX(),
@@ -1237,7 +1237,7 @@ namespace emfplushelper
                             LanguageTag aLanguageTag(static_cast< LanguageType >(stringFormat->language));
                             css::lang::Locale locale = aLanguageTag.getLocale();
 
-                            basegfx::B2DHomMatrix transformMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(MapSize(font->emSize,font->emSize),Map(lx,ly+font->emSize));
+                            basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(MapSize(font->emSize,font->emSize),Map(lx,ly+font->emSize));
 
                             basegfx::BColor color;
                             if (flags & 0x8000) // we use a color
@@ -1504,7 +1504,7 @@ namespace emfplushelper
 
                         ::basegfx::B2DPolyPolygon polyPolygon(
                             ::basegfx::B2DPolygon(
-                                ::basegfx::tools::createPolygonFromRect(
+                                ::basegfx::utils::createPolygonFromRect(
                                     ::basegfx::B2DRectangle(
                                         mappedPoint.getX(),
                                         mappedPoint.getY(),
@@ -1650,7 +1650,7 @@ namespace emfplushelper
                                 aDXArray.push_back(0);
 
                                 // prepare transform matrix
-                                basegfx::B2DHomMatrix transformMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
                                     MapSize(font->emSize,font->emSize),Map(charsPosX[pos],charsPosY[pos]));
                                 if (hasMatrix)
                                     transformMatrix *= transform;

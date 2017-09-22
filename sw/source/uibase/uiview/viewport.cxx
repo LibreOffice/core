@@ -46,7 +46,7 @@
 
 #include <IDocumentSettingAccess.hxx>
 
-#include <basegfx/tools/zoomtools.hxx>
+#include <basegfx/utils/zoomtools.hxx>
 #include <comphelper/lok.hxx>
 
 // The SetVisArea of the DocShell must not be called from InnerResizePixel.

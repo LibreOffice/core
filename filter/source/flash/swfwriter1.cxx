@@ -594,7 +594,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
             scale =  (double)n1 / (double)n2;
         }
 
-        basegfx::B2DHomMatrix m(basegfx::tools::createRotateB2DHomMatrix(static_cast<double>(nOrientation) * F_PI1800));
+        basegfx::B2DHomMatrix m(basegfx::utils::createRotateB2DHomMatrix(static_cast<double>(nOrientation) * F_PI1800));
         m.translate( double(aPt.X() / scale), double(aPt.Y()) );
         m.scale( scale, scale );
 

@@ -132,7 +132,7 @@ namespace drawinglayer
                                         {
                                             // found two linearly independent 2D vectors
                                             // get 2d range of texture coordinates
-                                            const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(aTexPolyPolygon));
+                                            const basegfx::B2DRange aOutlineRange(basegfx::utils::getRange(aTexPolyPolygon));
                                             const basegfx::BColor aHatchColor(getHatch().getColor());
                                             const double fAngle(getHatch().getAngle());
                                             std::vector< basegfx::B2DHomMatrix > aMatrices;
@@ -195,7 +195,7 @@ namespace drawinglayer
                                             if(a2DHatchLines.count())
                                             {
                                                 // clip against texture polygon
-                                                a2DHatchLines = basegfx::tools::clipPolyPolygonOnPolyPolygon(a2DHatchLines, aTexPolyPolygon, true, true);
+                                                a2DHatchLines = basegfx::utils::clipPolyPolygonOnPolyPolygon(a2DHatchLines, aTexPolyPolygon, true, true);
                                             }
 
                                             if(a2DHatchLines.count())
@@ -216,7 +216,7 @@ namespace drawinglayer
                                                 a2DHatchLines.transform(a2D);
 
                                                 // expand back-transformed geometry to 3D
-                                                basegfx::B3DPolyPolygon a3DHatchLines(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(a2DHatchLines, 0.0));
+                                                basegfx::B3DPolyPolygon a3DHatchLines(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(a2DHatchLines, 0.0));
 
                                                 // create 3d matrix with 3d vectors as column vectors (0,0,1 as Z) and 3d point as offset, this represents
                                                 // a coordinate system transformation from unit coordinates to the object's 3d coordinate system

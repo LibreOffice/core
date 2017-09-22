@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EMFIO_INC_MTFTOOLS_HXX
 #define INCLUDED_EMFIO_INC_MTFTOOLS_HXX
 
-#include <basegfx/tools/b2dclipstate.hxx>
+#include <basegfx/utils/b2dclipstate.hxx>
 #include <tools/poly.hxx>
 #include <vcl/font.hxx>
 #include <vcl/bitmap.hxx>
@@ -267,7 +267,7 @@ namespace emfio
 {
     class WinMtfClipPath
     {
-        basegfx::tools::B2DClipState maClip;
+        basegfx::utils::B2DClipState maClip;
 
     public:
         WinMtfClipPath() : maClip() {};

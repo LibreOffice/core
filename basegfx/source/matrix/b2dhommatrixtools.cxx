@@ -25,7 +25,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         void createSinCosOrthogonal(double& o_rSin, double& o_rCos, double fRadiant)
         {
@@ -412,7 +412,7 @@ namespace basegfx
         {
             return B2DTuple(rMatrix.get(0, nCol), rMatrix.get(1, nCol));
         }
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

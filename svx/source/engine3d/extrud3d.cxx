@@ -152,15 +152,15 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
     {
         basegfx::B2DPolyPolygon aTemp(maExtrudePolygon);
         aTemp.removeDoublePoints();
-        aTemp = basegfx::tools::correctOrientations(aTemp);
-        const basegfx::B2VectorOrientation aOrient = basegfx::tools::getOrientation(aTemp.getB2DPolygon(0));
+        aTemp = basegfx::utils::correctOrientations(aTemp);
+        const basegfx::B2VectorOrientation aOrient = basegfx::utils::getOrientation(aTemp.getB2DPolygon(0));
 
         if(basegfx::B2VectorOrientation::Positive == aOrient)
         {
             aTemp.flip();
         }
 
-        aFrontSide = basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(aTemp);
+        aFrontSide = basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(aTemp);
     }
 
     if(aFrontSide.count())
@@ -175,7 +175,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
             {
                 // scale polygon from center
                 const double fScaleFactor(GetPercentBackScale() / 100.0);
-                const basegfx::B3DRange aPolyPolyRange(basegfx::tools::getRange(aBackSide));
+                const basegfx::B3DRange aPolyPolyRange(basegfx::utils::getRange(aBackSide));
                 const basegfx::B3DPoint aCenter(aPolyPolyRange.getCenter());
 
                 aTransform.translate(-aCenter.getX(), -aCenter.getY(), -aCenter.getZ());

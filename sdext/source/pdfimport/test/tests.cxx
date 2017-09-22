@@ -43,7 +43,7 @@
 #include <com/sun/star/rendering/BlendMode.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -231,7 +231,7 @@ namespace
 
                 const char sExportString[] = "m53570 7650-35430 24100";
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( "Stroke is m535.7 518.5-354.3-241",
-                                        OUString(sExportString), basegfx::tools::exportToSvgD( aPath, true, true, false ) );
+                                        OUString(sExportString), basegfx::utils::exportToSvgD( aPath, true, true, false ) );
 
                 m_bGreenStrokeSeen = true;
             }
@@ -253,7 +253,7 @@ namespace
 
                 const char sExportString[] = "m49890 5670.00000000001-35430 24090";
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( "Stroke is m49890 5670.00000000001-35430 24090",
-                                        OUString(sExportString), basegfx::tools::exportToSvgD( aPath, true, true, false ) );
+                                        OUString(sExportString), basegfx::utils::exportToSvgD( aPath, true, true, false ) );
 
                 m_bDashedLineSeen = true;
             }
@@ -311,7 +311,7 @@ namespace
             const char sExportString[] = "m12050 49610c-4310 0-7800-3490-7800-7800 0-4300 "
                 "3490-7790 7800-7790 4300 0 7790 3490 7790 7790 0 4310-3490 7800-7790 7800z";
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Stroke is a 4-bezier circle",
-                                    OUString(sExportString), basegfx::tools::exportToSvgD( aPath, true, true, false ) );
+                                    OUString(sExportString), basegfx::utils::exportToSvgD( aPath, true, true, false ) );
 
             m_bRedCircleSeen = true;
         }
@@ -322,7 +322,7 @@ namespace
             basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
             if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
-                aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
+                aNewClip = basegfx::utils::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
             getCurrentContext().Clip = aNewClip;
         }
@@ -333,7 +333,7 @@ namespace
             basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
             if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
-                aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
+                aNewClip = basegfx::utils::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
             getCurrentContext().Clip = aNewClip;
         }

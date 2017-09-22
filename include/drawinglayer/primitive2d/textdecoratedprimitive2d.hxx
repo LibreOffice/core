@@ -25,7 +25,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 
-namespace basegfx { namespace tools {
+namespace basegfx { namespace utils {
     class B2DHomMatrixBufferedOnDemandDecompose;
 }}
 
@@ -65,7 +65,7 @@ namespace drawinglayer
             /// helper methods
             void impCreateGeometryContent(
                 std::vector< Primitive2DReference >& rTarget,
-                basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose const & rDecTrans,
+                basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose const & rDecTrans,
                 const OUString& rText,
                 sal_Int32 nTextPosition,
                 sal_Int32 nTextLength,

@@ -25,7 +25,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -59,7 +59,7 @@ namespace canvas
             // clip which is about to be set, expressed as a
             // b2drectangle
             const ::basegfx::B2DRectangle& rClipBounds(
-                ::basegfx::tools::getRange( aClipPath ) );
+                ::basegfx::utils::getRange( aClipPath ) );
 
             const ::basegfx::B2DRectangle aBounds( 0.0, 0.0,
                                                    maSize.getX(),
@@ -89,7 +89,7 @@ namespace canvas
                 // new clip could be a single rectangle - check
                 // that now:
                 const bool bNewClipIsRect(
-                    ::basegfx::tools::isRectangle( aClipPath.getB2DPolygon(0) ) );
+                    ::basegfx::utils::isRectangle( aClipPath.getB2DPolygon(0) ) );
 
                 // both new and old clip are truly rectangles
                 // - can now take the optimized path
