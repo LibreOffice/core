@@ -510,13 +510,11 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
                 SwitchToThread();
                 nMaxEvents++;
                 bOneEvent = true;
-                bWasMsg = true;
             }
     }
     while( --nMaxEvents && bOneEvent );
 
-    // Also check that we don't wait when application already has quit
-    if ( bWait && !bWasMsg && !pSVData->maAppData.mbAppQuit )
+    if ( bWait && !bWasMsg )
     {
         if ( GetMessageW( &aMsg, nullptr, 0, 0 ) )
         {
@@ -592,7 +590,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             break;
         }
         case SAL_MSG_STOPTIMER:
-            static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer)->ImplStop();
+            static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer)->ImplStop( false );
             break;
         case SAL_MSG_CREATEFRAME:
             nRet = reinterpret_cast<LRESULT>(ImplSalCreateFrame( GetSalData()->mpFirstInstance, reinterpret_cast<HWND>(lParam), (SalFrameStyleFlags)wParam ));
