@@ -14,7 +14,10 @@
 
 #include <saldatabasic.hxx>
 
+#include <memory>
+
 class SalGenericDisplay;
+namespace psp { class PrintFontManager; }
 
 enum GenericUnixSalDataType { SAL_DATA_GTK, SAL_DATA_GTK3,
                               SAL_DATA_TDE3, SAL_DATA_KDE3, SAL_DATA_KDE4,
@@ -31,8 +34,13 @@ class VCL_DLLPUBLIC GenericUnixSalData : public SalData
     OUString      m_aHostname;
     // for transient storage of unicode strings eg. 'u123' by input methods
     OUString      m_aUnicodeEntry;
+
+    friend class psp::PrintFontManager;
+    std::unique_ptr<psp::PrintFontManager> m_pPrintFontManager;
+
  public:
-    GenericUnixSalData( GenericUnixSalDataType t, SalInstance *pInstance ) : SalData(), m_eType( t ), m_pDisplay( nullptr ) { m_pInstance = pInstance; SetSalData( this ); }
+    GenericUnixSalData(GenericUnixSalDataType const t, SalInstance *const pInstance);
+    virtual ~GenericUnixSalData() override;
     virtual void Dispose() {}
 
     SalGenericDisplay *GetDisplay() const { return m_pDisplay; }
