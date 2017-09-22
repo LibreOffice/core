@@ -255,7 +255,6 @@ public:
     PPDContext( const PPDContext& rContext ) { operator=( rContext ); }
     PPDContext& operator=( const PPDContext& rContext );
     PPDContext& operator=( PPDContext&& rContext );
-    ~PPDContext();
 
     void setParser( const PPDParser* );
     const PPDParser* getParser() const { return m_pParser; }
