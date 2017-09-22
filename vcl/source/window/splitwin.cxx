@@ -52,7 +52,6 @@ class ImplSplitItem
 public:
     ImplSplitItem();
     ~ImplSplitItem();
-    void dispose();
 
     long                mnSize;
     long                mnPixSize;
@@ -85,7 +84,6 @@ class ImplSplitSet
 public:
     ImplSplitSet();
     ~ImplSplitSet();
-    void dispose();
 
     std::vector< ImplSplitItem* >      mpItems;
     Wallpaper*          mpWallpaper;
@@ -121,11 +119,6 @@ ImplSplitItem::ImplSplitItem()
 
 ImplSplitItem::~ImplSplitItem()
 {
-    dispose();
-}
-
-void ImplSplitItem::dispose()
-{
     if (mpSet) {
         delete mpSet ;
         mpSet = nullptr;
@@ -145,11 +138,6 @@ ImplSplitSet::ImplSplitSet() :
 }
 
 ImplSplitSet::~ImplSplitSet()
-{
-    dispose();
-}
-
-void ImplSplitSet::dispose()
 {
     size_t nItems = mpItems.size();
 
