@@ -942,6 +942,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 	extras_fonts \
+	$(if $(filter-out WNT,$(OS)),postprocess_fontconfig) \
 	$(call gb_Helper_optional,MORE_FONTS,\
 		fonts_caladea \
 		fonts_carlito \
@@ -955,7 +956,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_ptserif \
 		fonts_sourcecode \
 		fonts_sourcesans \
-		$(if $(filter-out WNT,$(OS)),more_fonts_conf) \
 	) \
 ))
 

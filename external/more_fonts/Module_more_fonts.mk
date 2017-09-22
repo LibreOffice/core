@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,more_fonts))
 
 $(eval $(call gb_Module_add_targets,more_fonts,\
-	$(if $(filter-out WNT,$(OS)),Package_conf) \
 	ExternalPackage_caladea \
 	ExternalPackage_carlito \
 	ExternalPackage_dejavu \
