@@ -373,15 +373,8 @@ void ExportDialog::GetGraphicSource()
             {
                 if ( mbExportSelection )                // check if there is a selection
                 {
-                    uno::Reference< view::XSelectionSupplier > xSelectionSupplier( xController, uno::UNO_QUERY );
-                    if ( xSelectionSupplier.is() )
-                    {
-                        uno::Any aAny( xSelectionSupplier->getSelection() );
-                        if ( aAny >>= mxShapes )
-                            mbGraphicsSource = true;
-                        else if ( aAny >>= mxShape )
-                            mbGraphicsSource = true;
-                    }
+                    if (DocumentToGraphicRenderer::isShapeSelected( mxShapes, mxShape, xController))
+                        mbGraphicsSource = true;
                 }
                 if ( !mxShape.is() && !mxShapes.is() && mbGraphicsSource )
                 {
