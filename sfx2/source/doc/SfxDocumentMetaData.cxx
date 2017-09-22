@@ -1843,15 +1843,14 @@ SfxDocumentMetaData::storeToStorage(
     xExp->setSourceDocument(css::uno::Reference<css::lang::XComponent>(this));
     css::uno::Reference<css::document::XFilter> xFilter(xExp,
         css::uno::UNO_QUERY_THROW);
-    if (xFilter->filter(css::uno::Sequence< css::beans::PropertyValue >())) {
-        css::uno::Reference<css::embed::XTransactedObject> xTransaction(
-            xStorage, css::uno::UNO_QUERY);
-        if (xTransaction.is()) {
-            xTransaction->commit();
-        }
-    } else {
+    if (!xFilter->filter(css::uno::Sequence< css::beans::PropertyValue >())) {
         throw css::io::IOException(
                 "SfxDocumentMetaData::storeToStorage: cannot filter", *this);
+    }
+    css::uno::Reference<css::embed::XTransactedObject> xTransaction(
+        xStorage, css::uno::UNO_QUERY);
+    if (xTransaction.is()) {
+        xTransaction->commit();
     }
 }
 
@@ -1955,15 +1954,14 @@ void SAL_CALL SfxDocumentMetaData::initialize( const css::uno::Sequence< css::un
 
     for (sal_Int32 i = 0; i < aArguments.getLength(); ++i) {
         const css::uno::Any any = aArguments[i];
-        if (any >>= xDoc) {
-            if (!xDoc.is()) {
-                throw css::lang::IllegalArgumentException(
-                    "SfxDocumentMetaData::initialize: argument is null",
-                    *this, static_cast<sal_Int16>(i));
-            }
-        } else {
+        if (!(any >>= xDoc)) {
             throw css::lang::IllegalArgumentException(
                 "SfxDocumentMetaData::initialize: argument must be XDocument",
+                *this, static_cast<sal_Int16>(i));
+        }
+        if (!xDoc.is()) {
+            throw css::lang::IllegalArgumentException(
+                "SfxDocumentMetaData::initialize: argument is null",
                 *this, static_cast<sal_Int16>(i));
         }
     }

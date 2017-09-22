@@ -584,19 +584,17 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     if (pPrinter)
                     {
                         OUString sPrinterName;
-                        if (*pValues >>= sPrinterName )
-                        {
-                            if ( !sPrinterName.isEmpty() )
-                            {
-                                VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
-                                if (pNewPrinter->IsKnown())
-                                    pDocSh->SetPrinter ( pNewPrinter );
-                                else
-                                    pNewPrinter.disposeAndClear();
-                            }
-                        }
-                        else
+                        if ( !(*pValues >>= sPrinterName) )
                             throw IllegalArgumentException();
+
+                        if ( !sPrinterName.isEmpty() )
+                        {
+                            VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
+                            if (pNewPrinter->IsKnown())
+                                pDocSh->SetPrinter ( pNewPrinter );
+                            else
+                                pNewPrinter.disposeAndClear();
+                        }
                     }
                 }
             }
@@ -604,61 +602,57 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_PRINTER_SETUP:
             {
                 Sequence < sal_Int8 > aSequence;
-                if ( *pValues >>= aSequence )
-                {
-                    sal_uInt32 nSize = aSequence.getLength();
-                    SvMemoryStream aStream ( aSequence.getArray(), nSize, StreamMode::READ );
-                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    static sal_uInt16 const nRange[] =
-                    {
-                        SID_PRINTSIZE,       SID_PRINTSIZE,
-                        SID_PRINTZOOM,       SID_PRINTZOOM,
-                        SID_PRINTTITLE,      SID_PRINTTITLE,
-                        SID_PRINTTEXT,       SID_PRINTTEXT,
-                        SID_PRINTFRAME,      SID_PRINTFRAME,
-                        SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
-                        SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
-                        SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
-                        0
-                    };
-                    auto pItemSet = o3tl::make_unique<SfxItemSet>( SmDocShell::GetPool(), nRange );
-                    SmModule *pp = SM_MOD();
-                    pp->GetConfig()->ConfigToItemSet(*pItemSet);
-                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
-
-                    pDocSh->SetPrinter( pPrinter );
-                }
-                else
+                if ( !(*pValues >>= aSequence) )
                     throw IllegalArgumentException();
+
+                sal_uInt32 nSize = aSequence.getLength();
+                SvMemoryStream aStream ( aSequence.getArray(), nSize, StreamMode::READ );
+                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                static sal_uInt16 const nRange[] =
+                {
+                    SID_PRINTSIZE,       SID_PRINTSIZE,
+                    SID_PRINTZOOM,       SID_PRINTZOOM,
+                    SID_PRINTTITLE,      SID_PRINTTITLE,
+                    SID_PRINTTEXT,       SID_PRINTTEXT,
+                    SID_PRINTFRAME,      SID_PRINTFRAME,
+                    SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
+                    SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
+                    SID_AUTO_CLOSE_BRACKETS,    SID_AUTO_CLOSE_BRACKETS,
+                    0
+                };
+                auto pItemSet = o3tl::make_unique<SfxItemSet>( SmDocShell::GetPool(), nRange );
+                SmModule *pp = SM_MOD();
+                pp->GetConfig()->ConfigToItemSet(*pItemSet);
+                VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
+
+                pDocSh->SetPrinter( pPrinter );
             }
             break;
             case HANDLE_SYMBOLS:
             {
                 // this is set
                 Sequence < SymbolDescriptor > aSequence;
-                if ( *pValues >>= aSequence )
-                {
-                    sal_uInt32 nSize = aSequence.getLength();
-                    SmModule *pp = SM_MOD();
-                    SmSymbolManager &rManager = pp->GetSymbolManager();
-                    SymbolDescriptor *pDescriptor = aSequence.getArray();
-                    for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
-                    {
-                        vcl::Font aFont;
-                        aFont.SetFamilyName ( pDescriptor->sFontName );
-                        aFont.SetCharSet ( static_cast < rtl_TextEncoding > (pDescriptor->nCharSet) );
-                        aFont.SetFamily ( static_cast < FontFamily > (pDescriptor->nFamily ) );
-                        aFont.SetPitch  ( static_cast < FontPitch >  (pDescriptor->nPitch ) );
-                        aFont.SetWeight ( static_cast < FontWeight > (pDescriptor->nWeight ) );
-                        aFont.SetItalic ( static_cast < FontItalic > (pDescriptor->nItalic ) );
-                        SmSym aSymbol ( pDescriptor->sName, aFont, static_cast < sal_Unicode > (pDescriptor->nCharacter),
-                                        pDescriptor->sSymbolSet );
-                        aSymbol.SetExportName ( pDescriptor->sExportName );
-                        rManager.AddOrReplaceSymbol ( aSymbol );
-                    }
-                }
-                else
+                if ( !(*pValues >>= aSequence) )
                     throw IllegalArgumentException();
+
+                sal_uInt32 nSize = aSequence.getLength();
+                SmModule *pp = SM_MOD();
+                SmSymbolManager &rManager = pp->GetSymbolManager();
+                SymbolDescriptor *pDescriptor = aSequence.getArray();
+                for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
+                {
+                    vcl::Font aFont;
+                    aFont.SetFamilyName ( pDescriptor->sFontName );
+                    aFont.SetCharSet ( static_cast < rtl_TextEncoding > (pDescriptor->nCharSet) );
+                    aFont.SetFamily ( static_cast < FontFamily > (pDescriptor->nFamily ) );
+                    aFont.SetPitch  ( static_cast < FontPitch >  (pDescriptor->nPitch ) );
+                    aFont.SetWeight ( static_cast < FontWeight > (pDescriptor->nWeight ) );
+                    aFont.SetItalic ( static_cast < FontItalic > (pDescriptor->nItalic ) );
+                    SmSym aSymbol ( pDescriptor->sName, aFont, static_cast < sal_Unicode > (pDescriptor->nCharacter),
+                                    pDescriptor->sSymbolSet );
+                    aSymbol.SetExportName ( pDescriptor->sExportName );
+                    rManager.AddOrReplaceSymbol ( aSymbol );
+                }
             }
             break;
             // #i33095# Security Options

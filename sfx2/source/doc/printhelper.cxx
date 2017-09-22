@@ -698,7 +698,6 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             sal_Int32 nCopies = 0;
             if ( !( rProp.Value >>= nCopies ) )
                 throw css::lang::IllegalArgumentException();
-
             aCheckedArgs[nProps].Name = rProp.Name;
             aCheckedArgs[nProps++].Value <<= nCopies;
         }
@@ -708,26 +707,20 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         else if ( rProp.Name == "Collate" || rProp.Name == "Sort" )
         {
             bool bTemp;
-            if ( rProp.Value >>= bTemp )
-            {
-                aCheckedArgs[nProps].Name = "Collate";
-                aCheckedArgs[nProps++].Value <<= bTemp;
-            }
-            else
+            if ( !(rProp.Value >>= bTemp) )
                 throw css::lang::IllegalArgumentException();
+            aCheckedArgs[nProps].Name = "Collate";
+            aCheckedArgs[nProps++].Value <<= bTemp;
         }
 
         // Pages-Property
         else if ( rProp.Name == "Pages" )
         {
             OUString sTemp;
-            if( rProp.Value >>= sTemp )
-            {
-                aCheckedArgs[nProps].Name = rProp.Name;
-                aCheckedArgs[nProps++].Value <<= sTemp;
-            }
-            else
+            if( !(rProp.Value >>= sTemp) )
                 throw css::lang::IllegalArgumentException();
+            aCheckedArgs[nProps].Name = rProp.Name;
+            aCheckedArgs[nProps++].Value <<= sTemp;
         }
 
         // MonitorVisible

@@ -430,54 +430,48 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
             static_cast<uno::XWeak*>(this));
     }
 
-    if (rURL.Protocol == "vnd.org.libreoffice.presenterscreen:"
-        && rURL.Path == msURLPath)
-    {
-        if (mpCommand.get() != nullptr)
-            mpCommand->Execute();
-    }
-    else
+    if (rURL.Protocol != "vnd.org.libreoffice.presenterscreen:"
+        || rURL.Path != msURLPath)
     {
         // We can not throw an IllegalArgumentException
         throw RuntimeException();
     }
+
+    if (mpCommand.get() != nullptr)
+        mpCommand->Execute();
 }
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::addStatusListener(
     const css::uno::Reference<css::frame::XStatusListener>& rxListener,
     const css::util::URL& rURL)
 {
-    if (rURL.Path == msURLPath)
-    {
-        maStatusListenerContainer.push_back(rxListener);
-
-        frame::FeatureStateEvent aEvent;
-        aEvent.FeatureURL = rURL;
-        aEvent.IsEnabled = mpCommand->IsEnabled();
-        aEvent.Requery = false;
-        aEvent.State = mpCommand->GetState();
-        rxListener->statusChanged(aEvent);
-    }
-    else
+    if (rURL.Path != msURLPath)
         throw RuntimeException();
+
+    maStatusListenerContainer.push_back(rxListener);
+
+    frame::FeatureStateEvent aEvent;
+    aEvent.FeatureURL = rURL;
+    aEvent.IsEnabled = mpCommand->IsEnabled();
+    aEvent.Requery = false;
+    aEvent.State = mpCommand->GetState();
+    rxListener->statusChanged(aEvent);
 }
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::removeStatusListener (
     const css::uno::Reference<css::frame::XStatusListener>& rxListener,
     const css::util::URL& rURL)
 {
-    if (rURL.Path == msURLPath)
-    {
-        StatusListenerContainer::iterator iListener (
-            ::std::find(
-                maStatusListenerContainer.begin(),
-                maStatusListenerContainer.end(),
-                rxListener));
-        if (iListener != maStatusListenerContainer.end())
-            maStatusListenerContainer.erase(iListener);
-    }
-    else
+    if (rURL.Path != msURLPath)
         throw RuntimeException();
+
+    StatusListenerContainer::iterator iListener (
+        ::std::find(
+            maStatusListenerContainer.begin(),
+            maStatusListenerContainer.end(),
+            rxListener));
+    if (iListener != maStatusListenerContainer.end())
+        maStatusListenerContainer.erase(iListener);
 }
 
 //----- document::XEventListener ----------------------------------------------

@@ -439,18 +439,16 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
         Reference< security::XPolicy > xPolicy;
         m_xComponentContext->getValueByName(
             "/singletons/com.sun.star.security.thePolicy" ) >>= xPolicy;
-        if (xPolicy.is())
-        {
-            MutexGuard guard( m_mutex );
-            if (! m_xPolicy.is())
-            {
-                m_xPolicy = xPolicy;
-            }
-        }
-        else
+        if (!xPolicy.is())
         {
             throw SecurityException(
                 "cannot get policy singleton!", static_cast<OWeakObject *>(this) );
+        }
+
+        MutexGuard guard( m_mutex );
+        if (! m_xPolicy.is())
+        {
+            m_xPolicy = xPolicy;
         }
     }
     return m_xPolicy;

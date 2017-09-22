@@ -296,16 +296,15 @@ void IdlAttributeFieldImpl::checkException(
             &e, exception->pData, exception->pType,
             getReflection()->getUno2Cpp().get());
         uno_any_destruct(exception, nullptr);
-        if (e.isExtractableTo(
+        if (!e.isExtractableTo(
                 cppu::UnoType<RuntimeException>::get()))
         {
-            cppu::throwException(e);
-        } else {
             throw WrappedTargetRuntimeException(
                 "non-RuntimeException occurred when accessing an"
                 " interface type attribute",
                 context, e);
         }
+        cppu::throwException(e);
     }
 }
 

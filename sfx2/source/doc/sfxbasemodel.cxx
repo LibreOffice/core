@@ -1878,95 +1878,87 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
     {
         if ( aFlavor.MimeType == "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" )
         {
-            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            {
-                TransferableObjectDescriptor aDesc;
-
-                aDesc.maClassName = m_pData->m_pObjectShell->GetClassName();
-                aDesc.maTypeName = aFlavor.HumanPresentableName;
-
-                // TODO/LATER: ViewAspect needs to be sal_Int64
-                aDesc.mnViewAspect = sal::static_int_cast< sal_uInt16 >( embed::Aspects::MSOLE_CONTENT );
-
-                Size aSize = m_pData->m_pObjectShell->GetVisArea().GetSize();
-
-                MapUnit aMapUnit = m_pData->m_pObjectShell->GetMapUnit();
-                aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MapUnit::Map100thMM );
-                aDesc.maDragStartPos = Point();
-                aDesc.maDisplayName.clear();
-
-                SvMemoryStream aMemStm( 1024, 1024 );
-                WriteTransferableObjectDescriptor( aMemStm, aDesc );
-                aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Tell() );
-            }
-            else
+            if ( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
                 throw datatransfer::UnsupportedFlavorException();
+
+            TransferableObjectDescriptor aDesc;
+
+            aDesc.maClassName = m_pData->m_pObjectShell->GetClassName();
+            aDesc.maTypeName = aFlavor.HumanPresentableName;
+
+            // TODO/LATER: ViewAspect needs to be sal_Int64
+            aDesc.mnViewAspect = sal::static_int_cast< sal_uInt16 >( embed::Aspects::MSOLE_CONTENT );
+
+            Size aSize = m_pData->m_pObjectShell->GetVisArea().GetSize();
+
+            MapUnit aMapUnit = m_pData->m_pObjectShell->GetMapUnit();
+            aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MapUnit::Map100thMM );
+            aDesc.maDragStartPos = Point();
+            aDesc.maDisplayName.clear();
+
+            SvMemoryStream aMemStm( 1024, 1024 );
+            WriteTransferableObjectDescriptor( aMemStm, aDesc );
+            aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Tell() );
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" )
         {
-            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            {
-                try
-                {
-                    utl::TempFile aTmp;
-                    aTmp.EnableKillingFile();
-                    storeToURL( aTmp.GetURL(), Sequence < beans::PropertyValue >() );
-                    SvStream* pStream = aTmp.GetStream( StreamMode::READ );
-                    const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
-                    Sequence< sal_Int8 > aSeq( nLen );
-                    pStream->Seek( STREAM_SEEK_TO_BEGIN );
-                    pStream->ReadBytes(aSeq.getArray(), nLen);
-                    delete pStream;
-                    if( aSeq.getLength() )
-                        aAny <<= aSeq;
-                }
-                catch ( Exception& )
-                {
-                }
-            }
-            else
+            if ( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
                 throw datatransfer::UnsupportedFlavorException();
+
+            try
+            {
+                utl::TempFile aTmp;
+                aTmp.EnableKillingFile();
+                storeToURL( aTmp.GetURL(), Sequence < beans::PropertyValue >() );
+                SvStream* pStream = aTmp.GetStream( StreamMode::READ );
+                const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
+                Sequence< sal_Int8 > aSeq( nLen );
+                pStream->Seek( STREAM_SEEK_TO_BEGIN );
+                pStream->ReadBytes(aSeq.getArray(), nLen);
+                delete pStream;
+                if( aSeq.getLength() )
+                    aAny <<= aSeq;
+            }
+            catch ( Exception& )
+            {
+            }
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
         {
-            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            {
-
-                std::shared_ptr<GDIMetaFile> xMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
-
-                if (xMetaFile)
-                {
-                    SvMemoryStream aMemStm( 65535, 65535 );
-                    aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-
-                    xMetaFile->Write( aMemStm );
-                    aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
-                                                    aMemStm.Seek( STREAM_SEEK_TO_END ) );
-                }
-            }
-            else
+            if ( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
                 throw datatransfer::UnsupportedFlavorException();
+
+
+            std::shared_ptr<GDIMetaFile> xMetaFile =
+                m_pData->m_pObjectShell->GetPreviewMetaFile( true );
+
+            if (xMetaFile)
+            {
+                SvMemoryStream aMemStm( 65535, 65535 );
+                aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+
+                xMetaFile->Write( aMemStm );
+                aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
+                                                aMemStm.Seek( STREAM_SEEK_TO_END ) );
+            }
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
         {
-            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
-            {
-                std::shared_ptr<GDIMetaFile> xMetaFile =
-                    m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( true );
-
-                if (xMetaFile)
-                {
-                    SvMemoryStream aMemStm( 65535, 65535 );
-                    aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-
-                    xMetaFile->Write( aMemStm );
-                    aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
-                                                    aMemStm.Seek( STREAM_SEEK_TO_END ) );
-                }
-            }
-            else
+            if ( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
                 throw datatransfer::UnsupportedFlavorException();
+
+            std::shared_ptr<GDIMetaFile> xMetaFile =
+                m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( true );
+
+            if (xMetaFile)
+            {
+                SvMemoryStream aMemStm( 65535, 65535 );
+                aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+
+                xMetaFile->Write( aMemStm );
+                aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
+                                                aMemStm.Seek( STREAM_SEEK_TO_END ) );
+            }
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" )
         {
@@ -2045,51 +2037,47 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )
         {
-            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
+            if ( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
+                throw datatransfer::UnsupportedFlavorException();
+
+            std::shared_ptr<GDIMetaFile> xMetaFile =
+                m_pData->m_pObjectShell->GetPreviewMetaFile( true );
+
+            if (xMetaFile)
             {
-                std::shared_ptr<GDIMetaFile> xMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
+                std::shared_ptr<SvMemoryStream> xStream(
+                    GraphicHelper::getFormatStrFromGDI_Impl(
+                        xMetaFile.get(), ConvertDataFormat::BMP ) );
 
-                if (xMetaFile)
+                if (xStream)
                 {
-                    std::shared_ptr<SvMemoryStream> xStream(
-                        GraphicHelper::getFormatStrFromGDI_Impl(
-                            xMetaFile.get(), ConvertDataFormat::BMP ) );
-
-                    if (xStream)
-                    {
-                        xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
-                                                        xStream->Seek( STREAM_SEEK_TO_END ) );
-                    }
+                    xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+                    aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
+                                                    xStream->Seek( STREAM_SEEK_TO_END ) );
                 }
             }
-            else
-                throw datatransfer::UnsupportedFlavorException();
         }
         else if ( aFlavor.MimeType == "image/png" )
         {
-            if ( aFlavor.DataType == cppu::UnoType<Sequence< sal_Int8 >>::get() )
+            if ( aFlavor.DataType != cppu::UnoType<Sequence< sal_Int8 >>::get() )
+                throw datatransfer::UnsupportedFlavorException();
+
+            std::shared_ptr<GDIMetaFile> xMetaFile =
+                m_pData->m_pObjectShell->GetPreviewMetaFile( true );
+
+            if (xMetaFile)
             {
-                std::shared_ptr<GDIMetaFile> xMetaFile =
-                    m_pData->m_pObjectShell->GetPreviewMetaFile( true );
+                std::shared_ptr<SvMemoryStream> xStream(
+                    GraphicHelper::getFormatStrFromGDI_Impl(
+                        xMetaFile.get(), ConvertDataFormat::PNG ) );
 
-                if (xMetaFile)
+                if (xStream)
                 {
-                    std::shared_ptr<SvMemoryStream> xStream(
-                        GraphicHelper::getFormatStrFromGDI_Impl(
-                            xMetaFile.get(), ConvertDataFormat::PNG ) );
-
-                    if (xStream)
-                    {
-                        xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
-                                                        xStream->Seek( STREAM_SEEK_TO_END ) );
-                    }
+                    xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+                    aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
+                                                    xStream->Seek( STREAM_SEEK_TO_END ) );
                 }
             }
-            else
-                throw datatransfer::UnsupportedFlavorException();
         }
         else
             throw datatransfer::UnsupportedFlavorException();

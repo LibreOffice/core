@@ -138,14 +138,12 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAcces
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    uno::Reference< accessibility::XAccessible >    xRet;
     ThumbnailViewItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(i));
 
-    if( pItem )
-        xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
-    else
+    if( !pItem )
         throw lang::IndexOutOfBoundsException();
 
+    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible( mbIsTransientChildrenDisabled );
     return xRet;
 }
 
@@ -414,12 +412,10 @@ void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int32 nChildIndex )
     const SolarMutexGuard aSolarGuard;
     ThumbnailViewItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
 
-    if(pItem != nullptr)
-    {
-        mpParent->SelectItem( pItem->mnId );
-    }
-    else
+    if(pItem == nullptr)
         throw lang::IndexOutOfBoundsException();
+
+    mpParent->SelectItem( pItem->mnId );
 }
 
 sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int32 nChildIndex )
@@ -427,14 +423,11 @@ sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int32 nChildI
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     ThumbnailViewItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
-    bool            bRet = false;
 
-    if (pItem != nullptr)
-        bRet = mpParent->IsItemSelected( pItem->mnId );
-    else
+    if (pItem == nullptr)
         throw lang::IndexOutOfBoundsException();
 
-    return bRet;
+    return mpParent->IsItemSelected( pItem->mnId );
 }
 
 void SAL_CALL ThumbnailViewAcc::clearAccessibleSelection()

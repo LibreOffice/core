@@ -264,12 +264,10 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
         // else is enum member(?)
 
         // update
-        if (aRet.hasValue())
-            _aElements.setValue( rName, aRet );
-        else
-        {
+        if (!aRet.hasValue())
             throw container::NoSuchElementException( rName );
-        }
+
+        _aElements.setValue( rName, aRet );
     }
     return aRet;
 }

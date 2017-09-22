@@ -47,17 +47,11 @@ uno::Any SAL_CALL SfxUnoPanels::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
-
-    if (hasByName(aName))
-    {
-        uno::Reference<ui::XPanel> xPanel = new SfxUnoPanel(xFrame, aName, mDeckId);
-        aRet <<= xPanel;
-    }
-    else
+    if (!hasByName(aName))
         throw container::NoSuchElementException();
 
-    return aRet;
+    uno::Reference<ui::XPanel> xPanel = new SfxUnoPanel(xFrame, aName, mDeckId);
+    return uno::Any(xPanel);
 }
 
 

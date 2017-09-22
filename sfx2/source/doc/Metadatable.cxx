@@ -1281,15 +1281,13 @@ void Metadatable::SetMetadataReference( const css::beans::StringPair & i_rRefere
                             IsInContent() ? s_content : s_styles );
         }
         XmlIdRegistry & rReg( dynamic_cast<XmlIdRegistry&>( GetRegistry() ) );
-        if (rReg.TryRegisterMetadatable(*this, streamName, i_rReference.Second))
-        {
-            m_pReg = &rReg;
-        }
-        else
+        if (!rReg.TryRegisterMetadatable(*this, streamName, i_rReference.Second))
         {
             throw lang::IllegalArgumentException(
                 "Metadatable::SetMetadataReference: argument is invalid", /*this*/nullptr, 0);
         }
+
+        m_pReg = &rReg;
     }
 }
 
