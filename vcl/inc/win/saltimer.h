@@ -44,7 +44,8 @@ public:
     // They must be called from the main application thread only!
 
     void ImplStart( sal_uIntPtr nMS );
-    void ImplStop();
+    /// If bRestart is set, it doesn't reset the m_bPollForMessage
+    void ImplStop( bool bRestart );
     void ImplEmitTimerCallback();
 };
 

@@ -31,7 +31,7 @@ static void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
 // deletion of timer (which is extremely likely, given that
 // INVALID_HANDLE_VALUE waits for the callback to run on the main thread),
 // this must run on the main thread too
-void WinSalTimer::ImplStop()
+void WinSalTimer::ImplStop( bool bRestart )
 {
     SalData *const pSalData = GetSalData();
     const WinSalInstance *pInst = pSalData->mpFirstInstance;
@@ -44,7 +44,8 @@ void WinSalTimer::ImplStop()
     m_nTimerId = nullptr;
     m_nTimerStartTicks = 0;
     DeleteTimerQueueTimer( nullptr, hTimer, INVALID_HANDLE_VALUE );
-    m_bPollForMessage = false;
+    if ( !bRestart )
+        m_bPollForMessage = false;
 
     // remove as many pending SAL_MSG_TIMER_CALLBACK messages as possible
     // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
@@ -63,7 +64,7 @@ void WinSalTimer::ImplStart( sal_uLong nMS )
         nMS = SAL_MAX_UINT32;
 
     // cannot change a one-shot timer, so delete it and create a new one
-    ImplStop();
+    ImplStop( true );
 
     // keep the yield running, if a 0ms Idle is scheduled
     m_bPollForMessage = ( 0 == nMS );
@@ -111,7 +112,7 @@ void WinSalTimer::Stop()
         SAL_WARN_IF(0 == ret, "vcl", "ERROR: PostMessage() failed!");
     }
     else
-        ImplStop();
+        ImplStop( false );
 }
 
 /** This gets invoked from a Timer Queue thread.
@@ -143,8 +144,8 @@ void WinSalTimer::ImplEmitTimerCallback()
     // Test for MouseLeave
     SalTestMouseLeave();
 
-    m_bPollForMessage = false;
     ImplSalYieldMutexAcquireWithWait();
+    m_bPollForMessage = false;
     CallCallback();
     ImplSalYieldMutexRelease();
 }
