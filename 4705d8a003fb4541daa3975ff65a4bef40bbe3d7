@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_394c14c7",
+        "filename": "vcl/unx/generic/fontmanager/fontmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-22T11:46:51Z",
+      "side": 1,
+      "message": "std::unique_ptr ?",
+      "revId": "4705d8a003fb4541daa3975ff65a4bef40bbe3d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
