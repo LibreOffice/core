@@ -210,8 +210,8 @@ void SAL_CALL
 CalendarImpl::setFirstDayOfWeek( sal_Int16 day )
 {
     if (!xCalendar.is())
-        throw ERROR ;    xCalendar->setFirstDayOfWeek(day);
-
+        throw ERROR;
+    xCalendar->setFirstDayOfWeek(day);
 }
 
 void SAL_CALL
@@ -243,8 +243,8 @@ sal_Int16 SAL_CALL
 CalendarImpl::getNumberOfMonthsInYear()
 {
     if (!xCalendar.is())
-        throw ERROR ;    return xCalendar->getNumberOfMonthsInYear();
-
+        throw ERROR;
+    return xCalendar->getNumberOfMonthsInYear();
 }
 
 
@@ -270,8 +270,8 @@ Sequence< CalendarItem > SAL_CALL
 CalendarImpl::getMonths()
 {
     if (!xCalendar.is())
-        throw ERROR ;    return xCalendar->getMonths();
-
+        throw ERROR;
+    return xCalendar->getMonths();
 }
 
 
