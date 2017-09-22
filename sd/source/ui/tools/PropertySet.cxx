@@ -104,14 +104,13 @@ void SAL_CALL PropertySet::removePropertyChangeListener (
                 return listener.second == rxListener;
             }));
 
-    if (iListener != mpChangeListeners->end())
-    {
-        mpChangeListeners->erase(iListener);
-    }
-    else
+    if (iListener == mpChangeListeners->end())
     {
         throw lang::IllegalArgumentException();
     }
+
+    mpChangeListeners->erase(iListener);
+
 }
 
 void SAL_CALL PropertySet::addVetoableChangeListener (

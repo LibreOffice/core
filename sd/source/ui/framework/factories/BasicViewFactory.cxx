@@ -195,41 +195,39 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
                 [&] (std::shared_ptr<ViewDescriptor> const& pVD) {
                     return ViewDescriptor::CompareView(pVD, rxView);
                 } ));
-        if (iViewShell != mpViewShellContainer->end())
-        {
-            std::shared_ptr<ViewShell> pViewShell ((*iViewShell)->mpViewShell);
-
-            if ((*iViewShell)->mxViewId->isBoundToURL(
-                FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
-            {
-                // Obtain a pointer to and connect to the frame view of the
-                // view.  The next view, that is created, will be
-                // initialized with this frame view.
-                if (mpFrameView == nullptr)
-                {
-                    mpFrameView = pViewShell->GetFrameView();
-                    if (mpFrameView)
-                        mpFrameView->Connect();
-                }
-
-                // With the view in the center pane the sub controller is
-                // released, too.
-                mpBase->GetDrawController().SetSubController(
-                    Reference<drawing::XDrawSubController>());
-
-                SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
-                if (pSfxViewShell != nullptr)
-                    pSfxViewShell->DisconnectAllClients();
-            }
-
-            ReleaseView(*iViewShell, false);
-
-            mpViewShellContainer->erase(iViewShell);
-        }
-        else
+        if (iViewShell == mpViewShellContainer->end())
         {
             throw lang::IllegalArgumentException();
         }
+
+        std::shared_ptr<ViewShell> pViewShell ((*iViewShell)->mpViewShell);
+
+        if ((*iViewShell)->mxViewId->isBoundToURL(
+            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+        {
+            // Obtain a pointer to and connect to the frame view of the
+            // view.  The next view, that is created, will be
+            // initialized with this frame view.
+            if (mpFrameView == nullptr)
+            {
+                mpFrameView = pViewShell->GetFrameView();
+                if (mpFrameView)
+                    mpFrameView->Connect();
+            }
+
+            // With the view in the center pane the sub controller is
+            // released, too.
+            mpBase->GetDrawController().SetSubController(
+                Reference<drawing::XDrawSubController>());
+
+            SfxViewShell* pSfxViewShell = pViewShell->GetViewShell();
+            if (pSfxViewShell != nullptr)
+                pSfxViewShell->DisconnectAllClients();
+        }
+
+        ReleaseView(*iViewShell, false);
+
+        mpViewShellContainer->erase(iViewShell);
     }
 }
 

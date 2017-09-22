@@ -300,23 +300,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
         buf.append( "com.sun.star.script.provider.ScriptProviderFor");
         buf.append( language );
         OUString serviceName = buf.makeStringAndClear();
-        if ( providerCache() )
-        {
-            try
-            {
-                xScriptProvider.set(
-                    providerCache()->getProvider( serviceName ),
-                    UNO_QUERY_THROW );
-            }
-            catch( const Exception& e )
-            {
-                throw provider::ScriptFrameworkErrorException(
-                    e.Message, Reference< XInterface >(),
-                    sfUri->getName(), language,
-                    provider::ScriptFrameworkErrorType::NOTSUPPORTED );
-            }
-        }
-        else
+        if ( !providerCache() )
         {
             throw provider::ScriptFrameworkErrorException(
                 "No LanguageProviders detected",
@@ -324,6 +308,21 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
                 sfUri->getName(), language,
                 provider::ScriptFrameworkErrorType::NOTSUPPORTED );
         }
+
+        try
+        {
+            xScriptProvider.set(
+                providerCache()->getProvider( serviceName ),
+                UNO_QUERY_THROW );
+        }
+        catch( const Exception& e )
+        {
+            throw provider::ScriptFrameworkErrorException(
+                e.Message, Reference< XInterface >(),
+                sfUri->getName(), language,
+                provider::ScriptFrameworkErrorType::NOTSUPPORTED );
+        }
+
         xScript=xScriptProvider->getScript( scriptURI );
     }
     else
@@ -457,16 +456,13 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
 {
     if ( !m_bIsPkgMSP )
     {
-        if ( m_xMSPPkg.is() )
-        {
-            Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
-            xCont->insertByName( aName, aElement );
-        }
-        else
+        if ( !m_xMSPPkg.is() )
         {
             throw RuntimeException( "PackageMasterScriptProvider is unitialised" );
         }
 
+        Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
+        xCont->insertByName( aName, aElement );
     }
     else
     {
@@ -529,16 +525,13 @@ MasterScriptProvider::removeByName( const OUString& Name )
 {
     if ( !m_bIsPkgMSP )
     {
-        if ( m_xMSPPkg.is() )
-        {
-            Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
-            xCont->removeByName( Name );
-        }
-        else
+        if ( !m_xMSPPkg.is() )
         {
             throw RuntimeException( "PackageMasterScriptProvider is unitialised" );
         }
 
+        Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
+        xCont->removeByName( Name );
    }
    else
    {

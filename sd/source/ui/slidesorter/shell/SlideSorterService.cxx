@@ -68,47 +68,46 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
 {
     ThrowIfDisposed();
 
-    if (rArguments.getLength() == 3)
-    {
-        try
-        {
-            mxViewId.set(rArguments[0], UNO_QUERY_THROW);
-
-            // Get the XController.
-            Reference<frame::XController> xController (rArguments[1], UNO_QUERY_THROW);
-
-            // Tunnel through the controller to obtain a ViewShellBase.
-            ViewShellBase* pBase = nullptr;
-            Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
-            ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-                xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-            if (pController != nullptr)
-                pBase = pController->GetViewShellBase();
-
-            // Get the parent window.
-            mxParentWindow.set(rArguments[2], UNO_QUERY_THROW);
-            VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(mxParentWindow);
-
-            mxParentWindow->addWindowListener(this);
-
-            if (pBase != nullptr && pParentWindow)
-                mpSlideSorter = SlideSorter::CreateSlideSorter(
-                    *pBase,
-                    nullptr,
-                    *pParentWindow);
-
-            Resize();
-        }
-        catch (RuntimeException&)
-        {
-            throw;
-        }
-    }
-    else
+    if (rArguments.getLength() != 3)
     {
         throw RuntimeException("SlideSorterService: invalid number of arguments",
             static_cast<drawing::XDrawView*>(this));
     }
+
+    try
+    {
+        mxViewId.set(rArguments[0], UNO_QUERY_THROW);
+
+        // Get the XController.
+        Reference<frame::XController> xController (rArguments[1], UNO_QUERY_THROW);
+
+        // Tunnel through the controller to obtain a ViewShellBase.
+        ViewShellBase* pBase = nullptr;
+        Reference<lang::XUnoTunnel> xTunnel (xController, UNO_QUERY_THROW);
+        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
+            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
+        if (pController != nullptr)
+            pBase = pController->GetViewShellBase();
+
+        // Get the parent window.
+        mxParentWindow.set(rArguments[2], UNO_QUERY_THROW);
+        VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow(mxParentWindow);
+
+        mxParentWindow->addWindowListener(this);
+
+        if (pBase != nullptr && pParentWindow)
+            mpSlideSorter = SlideSorter::CreateSlideSorter(
+                *pBase,
+                nullptr,
+                *pParentWindow);
+
+        Resize();
+    }
+    catch (RuntimeException&)
+    {
+        throw;
+    }
+
 }
 
 //----- XView -----------------------------------------------------------------

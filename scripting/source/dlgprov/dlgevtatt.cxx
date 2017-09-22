@@ -335,19 +335,14 @@ namespace dlgprov
             if ( !m_xEventAttacher.is() )
             {
                 Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
-                if ( xSMgr.is() )
-                {
-                    m_xEventAttacher.set( xSMgr->createInstanceWithContext(
-                        "com.sun.star.script.EventAttacher", m_xContext ), UNO_QUERY );
-
-                    if ( !m_xEventAttacher.is() )
-                        throw ServiceNotRegisteredException();
-                }
-                else
-                {
+                if ( !xSMgr.is() )
                     throw RuntimeException();
-                }
 
+                m_xEventAttacher.set( xSMgr->createInstanceWithContext(
+                    "com.sun.star.script.EventAttacher", m_xContext ), UNO_QUERY );
+
+                if ( !m_xEventAttacher.is() )
+                    throw ServiceNotRegisteredException();
             }
         }
         OUString sDialogCodeName;

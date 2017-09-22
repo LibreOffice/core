@@ -219,14 +219,12 @@ uno::Reference<XAccessible> SAL_CALL
     aGuard.clear();
 
     // Forward request to children manager.
-    if (pChildrenManager != nullptr)
-    {
-        return pChildrenManager->GetChild (nIndex);
-    }
-    else
+    if (pChildrenManager == nullptr)
         throw lang::IndexOutOfBoundsException (
             "no accessible child with index " + OUString::number(nIndex),
             static_cast<uno::XWeak*>(this));
+
+    return pChildrenManager->GetChild (nIndex);
 }
 
 OUString SAL_CALL
