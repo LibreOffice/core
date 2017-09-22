@@ -155,10 +155,10 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
         ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph, rSection.mnEnd);
         OUString sString = m_pEditWindow->pEdEngine->GetText(aSelection);
+        const ClassificationField* pClassificationField = pFieldItem ? dynamic_cast<const ClassificationField*>(pFieldItem->GetField()) : nullptr;
 
-        if (pFieldItem)
+        if (pClassificationField)
         {
-            const ClassificationField* pClassificationField = dynamic_cast<const ClassificationField*>(pFieldItem->GetField());
             aClassificationResults.push_back({ pClassificationField->meType , sString, rSection.mnParagraph });
         }
         else
