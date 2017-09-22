@@ -45,6 +45,7 @@
 class FontSubsetInfo;
 class FontConfigFontOptions;
 class FontSelectPattern;
+class GenericUnixSalData;
 
 namespace psp {
 class PPDParser;
@@ -200,8 +201,9 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     DECL_LINK( autoInstallFontLangSupport, Timer*, void );
 #endif
     PrintFontManager();
-    ~PrintFontManager();
 public:
+    ~PrintFontManager();
+    friend class ::GenericUnixSalData;
     static PrintFontManager& get(); // one instance only
 
     // There may be multiple font ids for font collections
