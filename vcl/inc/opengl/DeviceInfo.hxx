@@ -13,7 +13,7 @@
 class OpenGLDeviceInfo
 {
 public:
-    virtual ~OpenGLDeviceInfo();
+    virtual ~OpenGLDeviceInfo() = 0;
 
     virtual bool isDeviceBlocked() = 0;
 };
