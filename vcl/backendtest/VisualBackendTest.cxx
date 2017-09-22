@@ -538,13 +538,13 @@ public:
     }
 
 protected:
-    uno::Reference<lang::XMultiServiceFactory> xMSF;
-
     void Init() override
     {
         try
         {
             uno::Reference<uno::XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
+            uno::Reference<lang::XMultiServiceFactory> xMSF;
+
             xMSF = uno::Reference<lang::XMultiServiceFactory>(xComponentContext->getServiceManager(), uno::UNO_QUERY);
 
             if (!xMSF.is())
