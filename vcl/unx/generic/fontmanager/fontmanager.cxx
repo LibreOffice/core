@@ -30,6 +30,7 @@
 #include "impfontcharmap.hxx"
 #include "svdata.hxx"
 #include "unx/geninst.h"
+#include "unx/gendata.hxx"
 #include <vcl/strhelper.hxx>
 #include <vcl/ppdparser.hxx>
 #include <vcl/embeddedfontshelper.hxx>
@@ -111,19 +112,25 @@ PrintFontManager::PrintFont::PrintFont()
 {
 }
 
+GenericUnixSalData::~GenericUnixSalData()
+{
+    delete m_pPrintFontManager;
+}
+
 /*
  *  one instance only
  */
 PrintFontManager& PrintFontManager::get()
 {
-    static PrintFontManager* pManager = nullptr;
-    if( ! pManager )
+    GenericUnixSalData *const pSalData(GetGenericUnixSalData());
+    assert(pSalData);
+
+    if (!pSalData->m_pPrintFontManager)
     {
-        static PrintFontManager theManager;
-        pManager = &theManager;
-        pManager->initialize();
+        pSalData->m_pPrintFontManager = new PrintFontManager;
+        pSalData->m_pPrintFontManager->initialize();
     }
-    return *pManager;
+    return *pSalData->m_pPrintFontManager;
 }
 
 /*
