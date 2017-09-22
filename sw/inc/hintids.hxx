@@ -93,13 +93,12 @@ RES_CHRATR_BEGIN = HINT_BEGIN,
     RES_CHRATR_RELIEF,                      // 36
     RES_CHRATR_HIDDEN,                      // 37
     RES_CHRATR_OVERLINE,                    // 38
-    RES_CHRATR_RSID,                        // 39
-    RES_CHRATR_BOX,                         // 40
-    RES_CHRATR_SHADOW,                      // 41
-    RES_CHRATR_HIGHLIGHT,                   // 42
-    RES_CHRATR_GRABBAG,                     // 43
-    RES_CHRATR_BIDIRTL,                     // 44
-    RES_CHRATR_IDCTHINT,                    // 45
+    RES_CHRATR_BOX,                         // 39
+    RES_CHRATR_SHADOW,                      // 40
+    RES_CHRATR_HIGHLIGHT,                   // 41
+    RES_CHRATR_GRABBAG,                     // 42
+    RES_CHRATR_BIDIRTL,                     // 43
+    RES_CHRATR_IDCTHINT,                    // 44
 RES_CHRATR_END
 };
 
@@ -125,27 +124,27 @@ RES_TXTATR_BEGIN = RES_CHRATR_END,
    - META and METAFIELD must precede CJK_RUBY and INETFMT
  */
 RES_TXTATR_WITHEND_BEGIN = RES_TXTATR_BEGIN ,
-    RES_TXTATR_REFMARK = RES_TXTATR_WITHEND_BEGIN,  // 46
-    RES_TXTATR_TOXMARK,                             // 47
-    RES_TXTATR_META,                                // 48
-    RES_TXTATR_METAFIELD,                           // 49
-    RES_TXTATR_AUTOFMT,                             // 50
-    RES_TXTATR_INETFMT,                             // 51
-    RES_TXTATR_CHARFMT,                             // 52
-    RES_TXTATR_CJK_RUBY,                            // 53
-    RES_TXTATR_UNKNOWN_CONTAINER,                   // 54
-    RES_TXTATR_INPUTFIELD,                          // 55
+    RES_TXTATR_REFMARK = RES_TXTATR_WITHEND_BEGIN,  // 45
+    RES_TXTATR_TOXMARK,                             // 46
+    RES_TXTATR_META,                                // 47
+    RES_TXTATR_METAFIELD,                           // 48
+    RES_TXTATR_AUTOFMT,                             // 49
+    RES_TXTATR_INETFMT,                             // 50
+    RES_TXTATR_CHARFMT,                             // 51
+    RES_TXTATR_CJK_RUBY,                            // 52
+    RES_TXTATR_UNKNOWN_CONTAINER,                   // 53
+    RES_TXTATR_INPUTFIELD,                          // 54
 RES_TXTATR_WITHEND_END,
 
 // all TextAttributes without an end
 RES_TXTATR_NOEND_BEGIN = RES_TXTATR_WITHEND_END,
-    RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,      // 56
-    RES_TXTATR_FLYCNT,                              // 57
-    RES_TXTATR_FTN,                                 // 58
-    RES_TXTATR_ANNOTATION,                          // 59
-    RES_TXTATR_DUMMY3,                              // 60
-    RES_TXTATR_DUMMY1,                              // 61
-    RES_TXTATR_DUMMY2,                              // 62
+    RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,      // 55
+    RES_TXTATR_FLYCNT,                              // 56
+    RES_TXTATR_FTN,                                 // 57
+    RES_TXTATR_ANNOTATION,                          // 58
+    RES_TXTATR_DUMMY3,                              // 59
+    RES_TXTATR_DUMMY1,                              // 60
+    RES_TXTATR_DUMMY2,                              // 61
 RES_TXTATR_NOEND_END,
 RES_TXTATR_END = RES_TXTATR_NOEND_END
 };
@@ -153,25 +152,24 @@ RES_TXTATR_END = RES_TXTATR_NOEND_END
 enum RES_PARATR
 {
 RES_PARATR_BEGIN = RES_TXTATR_END,
-    RES_PARATR_LINESPACING = RES_PARATR_BEGIN,      // 63
-    RES_PARATR_ADJUST,                              // 64
-    RES_PARATR_SPLIT,                               // 65
-    RES_PARATR_ORPHANS,                             // 66
-    RES_PARATR_WIDOWS,                              // 67
-    RES_PARATR_TABSTOP,                             // 68
-    RES_PARATR_HYPHENZONE,                          // 69
-    RES_PARATR_DROP,                                // 70
-    RES_PARATR_REGISTER,                            // 71
-    RES_PARATR_NUMRULE,                             // 72
-    RES_PARATR_SCRIPTSPACE,                         // 73
-    RES_PARATR_HANGINGPUNCTUATION,                  // 74
-    RES_PARATR_FORBIDDEN_RULES,                     // 75
-    RES_PARATR_VERTALIGN,                           // 76
-    RES_PARATR_SNAPTOGRID,                          // 77
-    RES_PARATR_CONNECT_BORDER,                      // 78
-    RES_PARATR_OUTLINELEVEL,                        // 79
-    RES_PARATR_RSID,                                // 80
-    RES_PARATR_GRABBAG,                             // 81
+    RES_PARATR_LINESPACING = RES_PARATR_BEGIN,      // 62
+    RES_PARATR_ADJUST,                              // 63
+    RES_PARATR_SPLIT,                               // 64
+    RES_PARATR_ORPHANS,                             // 65
+    RES_PARATR_WIDOWS,                              // 66
+    RES_PARATR_TABSTOP,                             // 67
+    RES_PARATR_HYPHENZONE,                          // 68
+    RES_PARATR_DROP,                                // 69
+    RES_PARATR_REGISTER,                            // 70
+    RES_PARATR_NUMRULE,                             // 71
+    RES_PARATR_SCRIPTSPACE,                         // 72
+    RES_PARATR_HANGINGPUNCTUATION,                  // 73
+    RES_PARATR_FORBIDDEN_RULES,                     // 74
+    RES_PARATR_VERTALIGN,                           // 75
+    RES_PARATR_SNAPTOGRID,                          // 76
+    RES_PARATR_CONNECT_BORDER,                      // 77
+    RES_PARATR_OUTLINELEVEL,                        // 78
+    RES_PARATR_GRABBAG,                             // 79
 RES_PARATR_END
 };
 
@@ -180,17 +178,25 @@ RES_PARATR_END
 enum RES_PARATR_LIST
 {
 RES_PARATR_LIST_BEGIN = RES_PARATR_END,
-    RES_PARATR_LIST_ID = RES_PARATR_LIST_BEGIN,     // 82
-    RES_PARATR_LIST_LEVEL,                          // 83
-    RES_PARATR_LIST_ISRESTART,                      // 84
-    RES_PARATR_LIST_RESTARTVALUE,                   // 85
-    RES_PARATR_LIST_ISCOUNTED,                      // 86
+    RES_PARATR_LIST_ID = RES_PARATR_LIST_BEGIN,     // 80
+    RES_PARATR_LIST_LEVEL,                          // 81
+    RES_PARATR_LIST_ISRESTART,                      // 82
+    RES_PARATR_LIST_RESTARTVALUE,                   // 83
+    RES_PARATR_LIST_ISCOUNTED,                      // 84
 RES_PARATR_LIST_END
+};
+
+enum RES_RSID
+{
+RES_RSID_BEGIN = RES_PARATR_LIST_END,
+    RES_CHR_RSID = RES_RSID_BEGIN,               // 85
+    RES_PARA_RSID,                                // 86
+RES_RSID_END
 };
 
 enum RES_FRMATR
 {
-RES_FRMATR_BEGIN = RES_PARATR_LIST_END,
+RES_FRMATR_BEGIN = RES_RSID_END,
     RES_FILL_ORDER = RES_FRMATR_BEGIN,              // 87
     RES_FRM_SIZE,                                   // 88
     RES_PAPER_BIN,                                  // 89

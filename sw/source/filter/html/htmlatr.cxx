@@ -3167,7 +3167,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_RELIEF */             nullptr,
 /* RES_CHRATR_HIDDEN */             OutHTML_CSS1Attr,
 /* RES_CHRATR_OVERLINE */           OutHTML_CSS1Attr,
-/* RES_CHRATR_RSID */               nullptr,
+/* RES_CHR_RSID */               nullptr,
 /* RES_CHRATR_BOX */                OutHTML_CSS1Attr,
 /* RES_CHRATR_SHADOW */             nullptr,
 /* RES_CHRATR_HIGHLIGHT */          nullptr,
@@ -3211,7 +3211,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_PARATR_SNAPTOGRID*/          nullptr, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  nullptr, // new
 /* RES_PARATR_OUTLINELEVEL */       nullptr,
-/* RES_PARATR_RSID */               nullptr,
+/* RES_PARA_RSID */               nullptr,
 /* RES_PARATR_GRABBAG */            nullptr,
 
 /* RES_PARATR_LIST_ID */            nullptr, // new
