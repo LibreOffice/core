@@ -30,7 +30,7 @@
 #include <commctrl.h>
 #include "resource.h"
 
-// Unicode-only defines to break dependance on UNICODE define
+// Unicode-only defines to break dependence on UNICODE define
 #if !defined ListView_InsertColumnW
 #define ListView_InsertColumnW(hwnd, iCol, pcol) \
     (int)SNDMSG((hwnd), LVM_INSERTCOLUMNW, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMNW *)(pcol))
