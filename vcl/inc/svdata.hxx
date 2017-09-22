@@ -84,6 +84,7 @@ class DockingManager;
 class VclEventListeners2;
 class SalData;
 class OpenGLContext;
+class UITestLogger;
 
 #define SV_ICON_ID_OFFICE                               1
 #define SV_ICON_ID_TEXT                                 2
@@ -216,6 +217,8 @@ struct ImplSVWinData
     StartAutoScrollFlags    mnAutoScrollFlags = StartAutoScrollFlags::NONE; // auto scroll flags
     bool                    mbNoDeactivate = false;         // true: do not execute Deactivate
     bool                    mbNoSaveFocus = false;          // true: menus must not save/restore focus
+
+    std::unique_ptr<UITestLogger> m_pUITestLogger;
 };
 
 typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;

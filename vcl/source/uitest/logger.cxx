@@ -14,6 +14,7 @@
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <vcl/uitest/uiobject.hxx>
+#include <svdata.hxx>
 
 #include <memory>
 
@@ -162,8 +163,15 @@ void UITestLogger::logKeyInput(VclPtr<vcl::Window> const & xUIElement, const Key
 
 UITestLogger& UITestLogger::getInstance()
 {
-    static UITestLogger aInstance;
-    return aInstance;
+    ImplSVData *const pSVData = ImplGetSVData();
+    assert(pSVData);
+
+    if (!pSVData->maWinData.m_pUITestLogger)
+    {
+        pSVData->maWinData.m_pUITestLogger.reset(new UITestLogger);
+    }
+
+    return *pSVData->maWinData.m_pUITestLogger;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
