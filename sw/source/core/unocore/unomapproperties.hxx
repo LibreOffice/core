@@ -34,7 +34,7 @@
     { OUString(UNO_NAME_CHAR_FONT_CHAR_SET), RES_CHRATR_FONT,       cppu::UnoType<sal_Int16>::get(),   PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },                    \
     { OUString(UNO_NAME_CHAR_FONT_PITCH), RES_CHRATR_FONT,      cppu::UnoType<sal_Int16>::get(),                   PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },     \
     { OUString(UNO_NAME_CHAR_POSTURE), RES_CHRATR_POSTURE   ,  cppu::UnoType<css::awt::FontSlant>::get(),        PropertyAttribute::MAYBEVOID, MID_POSTURE},                   \
-    { OUString(UNO_NAME_RSID), RES_CHRATR_RSID, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID, 0 }, \
+    { OUString(UNO_NAME_RSID), RES_CHR_RSID, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID, 0 }, \
     { OUString(UNO_NAME_CHAR_LOCALE),           RES_CHRATR_LANGUAGE,    cppu::UnoType<css::lang::Locale>::get(),          PropertyAttribute::MAYBEVOID,   MID_LANG_LOCALE }, \
     { OUString(UNO_NAME_CHAR_INTEROP_GRAB_BAG), RES_CHRATR_GRABBAG,     cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(),   PROPERTY_NONE,                  0               }, \
 
@@ -108,7 +108,7 @@
 // OUString(UNO_NAME_BREAK_TYPE) and OUString(UNO_NAME_PAGE_DESC_NAME) which can not be used
 // by the SwXTextTableCursor
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01 \
-        { OUString(UNO_NAME_PARRSID),                             RES_PARATR_RSID,               cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, 0                                      }, \
+        { OUString(UNO_NAME_PARRSID),                             RES_PARA_RSID,               cppu::UnoType<sal_Int32>::get(),         PropertyAttribute::MAYBEVOID, 0                                      }, \
         { OUString(UNO_NAME_PARA_IS_HYPHENATION),                 RES_PARATR_HYPHENZONE,         cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN                          }, \
         { OUString(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS),  RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD                    }, \
         { OUString(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS), RES_PARATR_HYPHENZONE,         cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL                   }, \
