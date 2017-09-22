@@ -205,6 +205,7 @@ std::set<Color> ScDocument::GetDocColors()
 
 void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
 {
+    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
     maCalcConfig = rConfig;
 }
 
@@ -336,6 +337,7 @@ void ScDocument::CompileHybridFormula()
 
 void ScDocument::SharePooledResources( const ScDocument* pSrcDoc )
 {
+    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
     mxPoolHelper = pSrcDoc->mxPoolHelper;
     mpCellStringPool = pSrcDoc->mpCellStringPool;
 }

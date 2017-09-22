@@ -2457,6 +2457,7 @@ ScDocument::NumFmtMergeHandler::~NumFmtMergeHandler()
 
 void ScDocument::PrepareFormulaCalc()
 {
+    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
     mpFormulaGroupCxt.reset();
 }
 
@@ -3538,6 +3539,7 @@ svl::SharedString ScDocument::GetSharedString( const ScAddress& rPos ) const
 
 std::shared_ptr<sc::FormulaGroupContext>& ScDocument::GetFormulaGroupContext()
 {
+    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
     if (!mpFormulaGroupCxt)
         mpFormulaGroupCxt.reset(new sc::FormulaGroupContext);
 
@@ -3896,6 +3898,7 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
         }
     }
 
+    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
     mpFormulaGroupCxt.reset();
 }
 
@@ -6300,6 +6303,7 @@ SfxUndoManager* ScDocument::GetUndoManager()
     if (!mpUndoManager)
     {
         // to support enhanced text edit for draw objects, use an SdrUndoManager
+        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
         mpUndoManager = new SdrUndoManager;
     }
 
@@ -6718,6 +6722,32 @@ void ScDocument::SetAutoNameCache(  ScAutoNameCache* pCache )
 {
     delete pAutoNameCache;
     pAutoNameCache = pCache;
+}
+
+ScMutationGuard::ScMutationGuard(ScDocument* pDocument, ScMutationGuardFlags nFlags) :
+    mpDocument(pDocument),
+    mnFlags(nFlags)
+{
+    for (auto b = 0; b < static_cast<std::size_t>(ScMutationGuardFlags::N); b++)
+    {
+        if (static_cast<std::size_t>(mnFlags) & (1 << b))
+        {
+            assert(mpDocument->maMutationGuard[b].try_lock());
+        }
+    }
+}
+
+ScMutationGuard::~ScMutationGuard()
+{
+#ifndef NDEBUG
+    for (auto b = 0; b < static_cast<std::size_t>(ScMutationGuardFlags::N); b++)
+    {
+        if (static_cast<std::size_t>(mnFlags) & (1 << b))
+        {
+            mpDocument->maMutationGuard[b].unlock();
+        }
+    }
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
