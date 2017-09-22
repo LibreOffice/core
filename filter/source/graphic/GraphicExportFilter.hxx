@@ -44,11 +44,6 @@ class GraphicExportFilter :
 
     css::uno::Sequence< css::beans::PropertyValue >     maFilterDataSequence;
 
-    css::uno::Any   maCompression;
-    css::uno::Any   maInterlaced;
-    css::uno::Any   maTranslucent;
-    css::uno::Any   maQuality;
-
     OUString    maFilterExtension;
     sal_Int32   mnTargetWidth;
     sal_Int32   mnTargetHeight;
