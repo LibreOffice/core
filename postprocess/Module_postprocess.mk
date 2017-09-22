@@ -28,6 +28,17 @@ $(eval $(call gb_Module_add_targets,postprocess,\
 ))
 endif
 
+# For non-WNT, add instdir/share/fonts/truetype/fc_local.conf when it shall
+# contain content from at least one of external/more_fonts/fc_local.snippet
+# (conditional on MORE_FONTS in BUILD_TYPE) and
+# extras/source/truetype/symbol/fc_local.snippet (unconditional):
+ifneq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,postprocess, \
+    CustomTarget_fontconfig \
+    Package_fontconfig \
+))
+endif
+
 $(eval $(call gb_Module_add_check_targets,postprocess,\
 	CppunitTest_services \
 ))
