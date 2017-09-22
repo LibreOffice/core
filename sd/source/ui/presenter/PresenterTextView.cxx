@@ -119,18 +119,11 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
 
     if (rArguments.getLength() == 1)
     {
-        try
+        Reference<rendering::XCanvas> xCanvas (rArguments[0], UNO_QUERY_THROW);
+        if (xCanvas.is())
         {
-            Reference<rendering::XCanvas> xCanvas (rArguments[0], UNO_QUERY_THROW);
-            if (xCanvas.is())
-            {
-                mpImplementation->SetCanvas(
-                    cppcanvas::VCLFactory::createCanvas(xCanvas));
-            }
-        }
-        catch (RuntimeException&)
-        {
-            throw;
+            mpImplementation->SetCanvas(
+                cppcanvas::VCLFactory::createCanvas(xCanvas));
         }
     }
     else

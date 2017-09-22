@@ -151,22 +151,16 @@ namespace dbaui
         aArguments.put( "OpenMode", sOpenMode );
 
         aArguments.put( OUString(PROPERTY_ACTIVE_CONNECTION), m_xConnection );
-        try
-        {
-            Reference<XHierarchicalNameContainer> xHier(m_xDocumentContainer,UNO_QUERY);
-            if ( xHier.is() && xHier->hasByHierarchicalName(_rLinkName) )
-            {
-                _xDefinition.set(xHier->getByHierarchicalName(_rLinkName),UNO_QUERY);
-            }
 
-            aArguments.merge( _rAdditionalArgs, true );
-
-            xRet = xComponentLoader->loadComponentFromURL( _rLinkName, OUString(), 0, aArguments.getPropertyValues() );
-        }
-        catch(const Exception&)
+        Reference<XHierarchicalNameContainer> xHier(m_xDocumentContainer,UNO_QUERY);
+        if ( xHier.is() && xHier->hasByHierarchicalName(_rLinkName) )
         {
-            throw;
+            _xDefinition.set(xHier->getByHierarchicalName(_rLinkName),UNO_QUERY);
         }
+
+        aArguments.merge( _rAdditionalArgs, true );
+
+        xRet = xComponentLoader->loadComponentFromURL( _rLinkName, OUString(), 0, aArguments.getPropertyValues() );
 
         return xRet;
     }
