@@ -43,11 +43,11 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
 
     for ( sal_Int32 i = 0; i < rProperties.getLength(); i++ )
     {
-        beans::PropertyValue aProperty = rProperties[i];
+        const beans::PropertyValue& rProperty = rProperties[i];
 
-        if ( aProperty.Name == "FilterName" )
+        if ( rProperty.Name == "FilterName" )
         {
-            aProperty.Value >>= aInternalFilterName;
+            rProperty.Value >>= aInternalFilterName;
             const sal_Int32 nLen = aInternalFilterName.getLength();
             aInternalFilterName = aInternalFilterName.replaceFirst("calc_", "");
             if (aInternalFilterName.getLength() == nLen)
@@ -59,17 +59,17 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
             if (aInternalFilterName.getLength() == nLen)
                 aInternalFilterName = aInternalFilterName.replaceFirst("impress_", "");
         }
-        else if ( aProperty.Name == "FilterData" )
+        else if ( rProperty.Name == "FilterData" )
         {
-            aProperty.Value >>= maFilterDataSequence;
+            rProperty.Value >>= maFilterDataSequence;
         }
-        else if ( aProperty.Name == "OutputStream" )
+        else if ( rProperty.Name == "OutputStream" )
         {
-            aProperty.Value >>= mxOutputStream;
+            rProperty.Value >>= mxOutputStream;
         }
-        else if ( aProperty.Name == "SelectionOnly" )
+        else if ( rProperty.Name == "SelectionOnly" )
         {
-            aProperty.Value >>= mbSelectionOnly;
+            rProperty.Value >>= mbSelectionOnly;
         }
     }
 
