@@ -2436,6 +2436,8 @@ void SdrPathObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     long nDivY = aOld.Bottom()  - aOld.Top();
     if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
     if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
+    if ( nDivX == nMulX ) { nMulX = 1; nDivX = 1; }
+    if ( nDivY == nMulY ) { nMulY = 1; nDivY = 1; }
     Fraction aX(nMulX,nDivX);
     Fraction aY(nMulY,nDivY);
     NbcResize(aOld.TopLeft(), aX, aY);
