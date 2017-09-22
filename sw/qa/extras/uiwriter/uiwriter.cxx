@@ -1549,7 +1549,7 @@ void SwUiWriterTest::testTdf68183()
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
     SwTextNode* pTextNode = aPaM.GetNode().GetTextNode();
-    CPPUNIT_ASSERT_EQUAL(false, pTextNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
+    CPPUNIT_ASSERT_EQUAL(false, pTextNode->GetSwAttrSet().HasItem(RES_PARA_RSID));
 
     // Then enable storing of RSID and make sure that the attribute is inserted.
     SW_MOD()->GetModuleConfig()->SetStoreRsid(true);
@@ -1557,7 +1557,7 @@ void SwUiWriterTest::testTdf68183()
     pWrtShell->DelToStartOfLine();
     pWrtShell->Insert2("X");
 
-    CPPUNIT_ASSERT_EQUAL(true, pTextNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
+    CPPUNIT_ASSERT_EQUAL(true, pTextNode->GetSwAttrSet().HasItem(RES_PARA_RSID));
 }
 
 void SwUiWriterTest::testCp1000115()
