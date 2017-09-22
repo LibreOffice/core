@@ -276,6 +276,7 @@ void PosSizePropertyPanel::HandleContextChange(
 
         case CombinedEnumContext(Application_WriterVariants, Context_Graphic):
             bShowFlip = true;
+            bShowAngle = true; // RotGrfFlyFrame: Writer FlyFrames for Graphics now support angle
             break;
 
         case CombinedEnumContext(Application_Calc, Context_Draw):
