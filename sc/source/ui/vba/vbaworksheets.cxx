@@ -350,17 +350,16 @@ void SAL_CALL
 ScVbaWorksheets::setVisible( const uno::Any& _visible )
 {
     bool bState = false;
-    if ( _visible >>= bState )
-    {
-        uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_QUERY_THROW );
-        while ( xEnum->hasMoreElements() )
-        {
-            uno::Reference< excel::XWorksheet > xSheet( xEnum->nextElement(), uno::UNO_QUERY_THROW );
-            xSheet->setVisible( bState ? 1 : 0 );
-        }
-    }
-    else
+    if ( !(_visible >>= bState) )
         throw uno::RuntimeException("Visible property doesn't support non boolean #FIXME" );
+
+    uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_QUERY_THROW );
+    while ( xEnum->hasMoreElements() )
+    {
+        uno::Reference< excel::XWorksheet > xSheet( xEnum->nextElement(), uno::UNO_QUERY_THROW );
+        xSheet->setVisible( bState ? 1 : 0 );
+    }
+
 }
 
 void SAL_CALL

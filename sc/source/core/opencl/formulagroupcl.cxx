@@ -258,15 +258,13 @@ public:
     {
         FormulaToken* ref = mFormulaTree->GetFormulaToken();
         cl_uint hashCode = 0;
-        if (ref->GetType() == formula::svString)
-        {
-            const rtl::OUString s = ref->GetString().getString().toAsciiUpperCase();
-            hashCode = s.hashCode();
-        }
-        else
+        if (ref->GetType() != formula::svString)
         {
             throw Unhandled(__FILE__, __LINE__);
         }
+
+        const rtl::OUString s = ref->GetString().getString().toAsciiUpperCase();
+        hashCode = s.hashCode();
 
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_uint: " << hashCode);

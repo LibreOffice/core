@@ -217,10 +217,10 @@ uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference<table::XTablePivotChart> xChart(new TablePivotChart(m_pDocShell, m_nTab, aName));
-    if (xChart.is())
-        return uno::makeAny(xChart);
-    else
+    if (!xChart.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xChart);
 }
 
 uno::Type SAL_CALL TablePivotCharts::getElementType()
@@ -243,10 +243,10 @@ uno::Any SAL_CALL TablePivotCharts::getByName(OUString const & rName)
         throw container::NoSuchElementException();
 
     uno::Reference<table::XTablePivotChart> xChart(new TablePivotChart(m_pDocShell, m_nTab, rName));
-    if (xChart.is())
-        return uno::makeAny(xChart);
-    else
+    if (!xChart.is())
         throw container::NoSuchElementException();
+
+    return uno::makeAny(xChart);
 }
 
 uno::Sequence<OUString> SAL_CALL TablePivotCharts::getElementNames()

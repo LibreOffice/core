@@ -989,10 +989,10 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XViewPane> xPane(GetObjectByIndex_Impl((sal_uInt16)nIndex));
-    if (xPane.is())
-        return uno::makeAny(xPane);
-    else
+    if (!xPane.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xPane);
 }
 
 uno::Type SAL_CALL ScTabViewObj::getElementType()

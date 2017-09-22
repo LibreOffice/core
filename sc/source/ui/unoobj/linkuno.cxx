@@ -470,10 +470,10 @@ uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<beans::XPropertySet> xLink(GetObjectByIndex_Impl(nIndex));
-    if (xLink.is())
-        return uno::makeAny(xLink);
-    else
+    if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xLink);
 }
 
 uno::Type SAL_CALL ScSheetLinksObj::getElementType()
@@ -492,11 +492,10 @@ uno::Any SAL_CALL ScSheetLinksObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     uno::Reference<beans::XPropertySet> xLink(GetObjectByName_Impl(aName));
-    if (xLink.is())
-        return uno::makeAny(xLink);
-    else
+    if (!xLink.is())
         throw container::NoSuchElementException();
-//    return uno::Any();
+
+    return uno::makeAny(xLink);
 }
 
 sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
@@ -974,10 +973,11 @@ uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XAreaLink> xLink(GetObjectByIndex_Impl(nIndex));
-    if (xLink.is())
-        return uno::makeAny(xLink);
-    else
+    if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xLink);
+
 }
 
 uno::Type SAL_CALL ScAreaLinksObj::getElementType()
@@ -1264,10 +1264,10 @@ uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XDDELink> xLink(GetObjectByIndex_Impl(nIndex));
-    if (xLink.is())
-        return uno::makeAny(xLink);
-    else
+    if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xLink);
 }
 
 uno::Type SAL_CALL ScDDELinksObj::getElementType()
@@ -1286,10 +1286,10 @@ uno::Any SAL_CALL ScDDELinksObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XDDELink> xLink(GetObjectByName_Impl(aName));
-    if (xLink.is())
-        return uno::makeAny(xLink);
-    else
+    if (!xLink.is())
         throw container::NoSuchElementException();
+
+    return uno::makeAny(xLink);
 }
 
 uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames()

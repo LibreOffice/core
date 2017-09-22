@@ -3568,24 +3568,21 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
 
     ScRangeList aRangeList;
     ScDocument& rDoc = pDocShell->GetDocument();
-    if (ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, &rDoc, ::formula::FormulaGrammar::CONV_OOO, ';' ))
-    {
-        size_t nCount = aRangeList.size();
-        if (nCount)
-        {
-            xRet.realloc(nCount);
-            for( size_t nIndex = 0; nIndex < nCount; nIndex++ )
-            {
-                const ScRange* pRange = aRangeList[ nIndex ];
-                if( pRange )
-                    xRet[nIndex] = new ScCellRangeObj(pDocShell, *pRange);
-            }
-        }
-        else
-            throw lang::IllegalArgumentException();
-    }
-    else
+    if (!ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, &rDoc, ::formula::FormulaGrammar::CONV_OOO, ';' ))
         throw lang::IllegalArgumentException();
+
+    size_t nCount = aRangeList.size();
+    if (!nCount)
+        throw lang::IllegalArgumentException();
+
+    xRet.realloc(nCount);
+    for( size_t nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        const ScRange* pRange = aRangeList[ nIndex ];
+        if( pRange )
+            xRet[nIndex] = new ScCellRangeObj(pDocShell, *pRange);
+    }
+
     return xRet;
 }
 
