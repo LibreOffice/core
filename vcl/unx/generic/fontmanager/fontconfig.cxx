@@ -680,6 +680,8 @@ void PrintFontManager::addFontconfigDir( const OString& rDirName )
                         reinterpret_cast<FcChar8 const *>(aConfFileName.getStr()), FcTrue);
         if( !bCfgOk )
             fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
+    } else {
+        SAL_INFO("vcl", "cannot open " << aConfFileName);
     }
 
     return;
