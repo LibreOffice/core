@@ -28,6 +28,13 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 
+namespace com { namespace sun { namespace star {
+    namespace drawing {
+        class XShapes;
+        class XShape;
+    }
+}}}
+
 using namespace css;
 using namespace css::uno;
 using namespace css::lang;
@@ -57,6 +64,10 @@ class GraphicExportFilter :
     css::uno::Any   maQuality;
 
     bool filterRenderDocument() const;
+    bool filterExportShape(
+            const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor,
+            const css::uno::Reference< css::drawing::XShapes > & rxShapes,
+            const css::uno::Reference< css::drawing::XShape > & rxShape ) const;
 
 public:
     explicit GraphicExportFilter( const Reference<XComponentContext>& rxContext );

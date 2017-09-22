@@ -19,6 +19,8 @@
 
 #include "GraphicExportFilter.hxx"
 
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
+
 #include <vcl/graphicfilter.hxx>
 #include <svl/outstrm.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
@@ -115,6 +117,22 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
 {
     gatherProperties(rDescriptor);
 
+    if (mbSelectionOnly && mxDocument.is())
+    {
+        uno::Reference< frame::XModel > xModel( mxDocument, uno::UNO_QUERY);
+        if (xModel.is())
+        {
+            uno::Reference< frame::XController > xController( xModel->getCurrentController());
+            if (xController.is())
+            {
+                uno::Reference< drawing::XShapes > xShapes;
+                uno::Reference< drawing::XShape > xShape;
+                if (DocumentToGraphicRenderer::isShapeSelected( xShapes, xShape, xController))
+                    return filterExportShape( rDescriptor, xShapes, xShape);
+            }
+        }
+    }
+
     return filterRenderDocument();
 }
 
@@ -191,6 +209,40 @@ bool GraphicExportFilter::filterRenderDocument() const
     }
 
     return false;
+}
+
+bool GraphicExportFilter::filterExportShape(
+        const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor,
+        const css::uno::Reference< css::drawing::XShapes > & rxShapes,
+        const css::uno::Reference< css::drawing::XShape > & rxShape ) const
+{
+    uno::Reference< lang::XComponent > xSourceDoc;
+    if (rxShapes.is())
+        xSourceDoc.set( rxShapes, uno::UNO_QUERY_THROW );
+    else if (rxShape.is())
+        xSourceDoc.set( rxShape, uno::UNO_QUERY_THROW );
+    if (!xSourceDoc.is())
+        return false;
+
+    uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter =
+        drawing::GraphicExportFilter::create( mxContext );
+    if (!xGraphicExporter.is())
+        return false;
+
+    // Need to replace the internal filter name with the short name
+    // (extension).
+    uno::Sequence< beans::PropertyValue > aDescriptor( rDescriptor);
+    for (sal_Int32 i = 0; i < aDescriptor.getLength(); ++i)
+    {
+        if (aDescriptor[i].Name == "FilterName")
+        {
+            aDescriptor[i].Value <<= mFilterExtension;
+            break;
+        }
+    }
+
+    xGraphicExporter->setSourceDocument( xSourceDoc );
+    return xGraphicExporter->filter( aDescriptor );
 }
 
 void SAL_CALL GraphicExportFilter::cancel( )
