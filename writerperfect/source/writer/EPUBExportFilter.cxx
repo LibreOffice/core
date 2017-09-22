@@ -30,7 +30,7 @@ namespace libepubgen
 {
     enum EPUBStylesMethod
     {
-        EPUB_STYLES_METHOD_CSS, //< The styles will be described in a seprarate CSS file.
+        EPUB_STYLES_METHOD_CSS, //< The styles will be described in a separate CSS file.
         EPUB_STYLES_METHOD_INLINE, //< The styles will be described inline.
     };
 }
