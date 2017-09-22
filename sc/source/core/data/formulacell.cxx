@@ -4254,6 +4254,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
         sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
 
         SAL_INFO("sc.threaded", "Running " << nThreadCount << " threads");
+
+        ScMutationGuard aGuard(pDocument, ScMutationGuardFlags::CORE);
+
         // Start nThreadCount new threads
         std::vector<int> vResult(nThreadCount);
         std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();

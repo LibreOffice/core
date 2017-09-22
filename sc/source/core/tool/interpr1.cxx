@@ -6206,6 +6206,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
 
 void ScInterpreter::ScSumIfs()
 {
+    // ScMutationGuard aShouldFail(pDok, ScMutationGuardFlags::CORE);
     sal_uInt8 nParamCount = GetByte();
 
     if (nParamCount < 3 || (nParamCount % 2 != 1))
