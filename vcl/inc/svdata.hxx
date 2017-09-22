@@ -28,6 +28,7 @@
 #include <vcl/window.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 
 #include "vcleventlisteners.hxx"
 #include "impfontcache.hxx"
@@ -361,8 +362,12 @@ struct ImplSVData
     std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList = nullptr;
     std::unordered_map< int, OUString >* mpPaperNames = nullptr;
 
+    css::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;
+
     Link<LinkParamNone*,void> maDeInitHook;
 };
+
+css::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass();
 
 void        ImplDeInitSVData();
 VCL_PLUGIN_PUBLIC vcl::Window* ImplGetDefaultWindow();
