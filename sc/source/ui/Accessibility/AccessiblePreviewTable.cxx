@@ -181,27 +181,25 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32
     FillTableInfo();
 
     sal_Int32 nRows = 1;
-    if ( mpViewShell && mpTableInfo && nColumn >= 0 && nRow >= 0 &&
-            nColumn < mpTableInfo->GetCols() && nRow < mpTableInfo->GetRows() )
-    {
-        const ScPreviewColRowInfo& rColInfo = mpTableInfo->GetColInfo()[nColumn];
-        const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[nRow];
+    if ( !mpViewShell || !mpTableInfo || nColumn < 0 || nRow < 0 ||
+            nColumn >= mpTableInfo->GetCols() || nRow >= mpTableInfo->GetRows() )
+        throw lang::IndexOutOfBoundsException();
 
-        if ( rColInfo.bIsHeader || rRowInfo.bIsHeader )
-        {
-            //  header cells only span a single cell
-        }
-        else
-        {
-            ScDocument& rDoc = mpViewShell->GetDocument();
-            const ScMergeAttr* pItem = static_cast<const ScMergeAttr*>(rDoc.GetAttr(
-                static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE ));
-            if ( pItem && pItem->GetRowMerge() > 0 )
-                nRows = pItem->GetRowMerge();
-        }
+    const ScPreviewColRowInfo& rColInfo = mpTableInfo->GetColInfo()[nColumn];
+    const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[nRow];
+
+    if ( rColInfo.bIsHeader || rRowInfo.bIsHeader )
+    {
+        //  header cells only span a single cell
     }
     else
-        throw lang::IndexOutOfBoundsException();
+    {
+        ScDocument& rDoc = mpViewShell->GetDocument();
+        const ScMergeAttr* pItem = static_cast<const ScMergeAttr*>(rDoc.GetAttr(
+            static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE ));
+        if ( pItem && pItem->GetRowMerge() > 0 )
+            nRows = pItem->GetRowMerge();
+    }
 
     return nRows;
 }
@@ -214,27 +212,25 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnExtentAt( sal_In
     FillTableInfo();
 
     sal_Int32 nColumns = 1;
-    if ( mpViewShell && mpTableInfo && nColumn >= 0 && nRow >= 0 &&
-            nColumn < mpTableInfo->GetCols() && nRow < mpTableInfo->GetRows() )
-    {
-        const ScPreviewColRowInfo& rColInfo = mpTableInfo->GetColInfo()[nColumn];
-        const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[nRow];
+    if ( !mpViewShell || !mpTableInfo || nColumn < 0 || nRow < 0 ||
+            nColumn >= mpTableInfo->GetCols() || nRow >= mpTableInfo->GetRows() )
+        throw lang::IndexOutOfBoundsException();
 
-        if ( rColInfo.bIsHeader || rRowInfo.bIsHeader )
-        {
-            //  header cells only span a single cell
-        }
-        else
-        {
-            ScDocument& rDoc = mpViewShell->GetDocument();
-            const ScMergeAttr* pItem = static_cast<const ScMergeAttr*>(rDoc.GetAttr(
-                static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE ));
-            if ( pItem && pItem->GetColMerge() > 0 )
-                nColumns = pItem->GetColMerge();
-        }
+    const ScPreviewColRowInfo& rColInfo = mpTableInfo->GetColInfo()[nColumn];
+    const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[nRow];
+
+    if ( rColInfo.bIsHeader || rRowInfo.bIsHeader )
+    {
+        //  header cells only span a single cell
     }
     else
-        throw lang::IndexOutOfBoundsException();
+    {
+        ScDocument& rDoc = mpViewShell->GetDocument();
+        const ScMergeAttr* pItem = static_cast<const ScMergeAttr*>(rDoc.GetAttr(
+            static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE ));
+        if ( pItem && pItem->GetColMerge() > 0 )
+            nColumns = pItem->GetColMerge();
+    }
 
     return nColumns;
 }
@@ -347,13 +343,10 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow
 
     FillTableInfo();
 
-    if ( mpTableInfo && nColumn >= 0 && nRow >= 0 && nColumn < mpTableInfo->GetCols() && nRow < mpTableInfo->GetRows() )
-    {
-        //  index iterates horizontally
-    }
-    else
+    if ( !mpTableInfo || nColumn < 0 || nRow < 0 || nColumn >= mpTableInfo->GetCols() || nRow >= mpTableInfo->GetRows() )
         throw lang::IndexOutOfBoundsException();
 
+    //  index iterates horizontally
     return false;
 }
 
@@ -364,15 +357,11 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow,
 
     FillTableInfo();
 
-    sal_Int32 nRet = 0;
-    if ( mpTableInfo && nColumn >= 0 && nRow >= 0 && nColumn < mpTableInfo->GetCols() && nRow < mpTableInfo->GetRows() )
-    {
-        //  index iterates horizontally
-        nRet = nRow * mpTableInfo->GetCols() + nColumn;
-    }
-    else
+    if ( !mpTableInfo || nColumn < 0 || nRow < 0 || nColumn >= mpTableInfo->GetCols() || nRow >= mpTableInfo->GetRows() )
         throw lang::IndexOutOfBoundsException();
 
+    //  index iterates horizontally
+    sal_Int32 nRet = nRow * mpTableInfo->GetCols() + nColumn;
     return nRet;
 }
 
@@ -383,14 +372,10 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int32 nChildI
 
     FillTableInfo();
 
-    sal_Int32 nRow = 0;
-    if ( mpTableInfo && nChildIndex >= 0 && nChildIndex < static_cast<sal_Int32>(mpTableInfo->GetRows()) * mpTableInfo->GetCols() )
-    {
-        nRow = nChildIndex / mpTableInfo->GetCols();
-    }
-    else
+    if ( !mpTableInfo || nChildIndex < 0 || nChildIndex >= static_cast<sal_Int32>(mpTableInfo->GetRows()) * mpTableInfo->GetCols() )
         throw lang::IndexOutOfBoundsException();
 
+    sal_Int32 nRow = nChildIndex / mpTableInfo->GetCols();
     return nRow;
 }
 
@@ -401,14 +386,10 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int32 nChi
 
     FillTableInfo();
 
-    sal_Int32 nCol = 0;
-    if ( mpTableInfo && nChildIndex >= 0 && nChildIndex < static_cast<sal_Int32>(mpTableInfo->GetRows()) * mpTableInfo->GetCols() )
-    {
-        nCol = nChildIndex % static_cast<sal_Int32>(mpTableInfo->GetCols());
-    }
-    else
+    if ( !mpTableInfo || nChildIndex < 0 || nChildIndex >= static_cast<sal_Int32>(mpTableInfo->GetRows()) * mpTableInfo->GetCols() )
         throw lang::IndexOutOfBoundsException();
 
+    sal_Int32 nCol = nChildIndex % static_cast<sal_Int32>(mpTableInfo->GetCols());
     return nCol;
 }
 

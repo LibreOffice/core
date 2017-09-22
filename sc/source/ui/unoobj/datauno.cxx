@@ -578,36 +578,35 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
 
     sal_uInt32 nColCount = aSubTotalColumns.getLength();
 
-    if ( nPos < MAXSUBTOTAL && nColCount <= sal::static_int_cast<sal_uInt32>(SCCOL_MAX) )
+    if ( nPos >= MAXSUBTOTAL || nColCount > sal::static_int_cast<sal_uInt32>(SCCOL_MAX) )
+        // too many fields / columns
+        throw uno::RuntimeException();      // no other exceptions specified
+
+    aParam.bGroupActive[nPos] = true;
+    aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
+
+    delete aParam.pSubTotals[nPos];
+    delete aParam.pFunctions[nPos];
+
+    SCCOL nCount = static_cast<SCCOL>(nColCount);
+    aParam.nSubTotals[nPos] = nCount;
+    if (nCount != 0)
     {
-        aParam.bGroupActive[nPos] = true;
-        aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
+        aParam.pSubTotals[nPos] = new SCCOL[nCount];
+        aParam.pFunctions[nPos] = new ScSubTotalFunc[nCount];
 
-        delete aParam.pSubTotals[nPos];
-        delete aParam.pFunctions[nPos];
-
-        SCCOL nCount = static_cast<SCCOL>(nColCount);
-        aParam.nSubTotals[nPos] = nCount;
-        if (nCount != 0)
+        const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
+        for (SCCOL i=0; i<nCount; i++)
         {
-            aParam.pSubTotals[nPos] = new SCCOL[nCount];
-            aParam.pFunctions[nPos] = new ScSubTotalFunc[nCount];
-
-            const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
-            for (SCCOL i=0; i<nCount; i++)
-            {
-                aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc((ScGeneralFunction)pAry[i].Function);
-            }
-        }
-        else
-        {
-            aParam.pSubTotals[nPos] = nullptr;
-            aParam.pFunctions[nPos] = nullptr;
+            aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
+            aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc((ScGeneralFunction)pAry[i].Function);
         }
     }
-    else                                    // too many fields / columns
-        throw uno::RuntimeException();      // no other exceptions specified
+    else
+    {
+        aParam.pSubTotals[nPos] = nullptr;
+        aParam.pFunctions[nPos] = nullptr;
+    }
 
     PutData(aParam);
 }
@@ -640,10 +639,10 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XSubTotalField> xField(GetObjectByIndex_Impl((sal_uInt16)nIndex));
-    if (xField.is())
-        return uno::makeAny(xField);
-    else
+    if (!xField.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xField);
 }
 
 uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType()
@@ -2243,10 +2242,10 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByIndex_Impl(static_cast<size_t>(nIndex)));
-    if (xRange.is())
-        return uno::makeAny(xRange);
-    else
+    if (!xRange.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xRange);
 }
 
 uno::Type SAL_CALL ScDatabaseRangesObj::getElementType()
@@ -2267,11 +2266,10 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XDatabaseRange> xRange(GetObjectByName_Impl(aName));
-    if (xRange.is())
-        return uno::makeAny(xRange);
-    else
+    if (!xRange.is())
         throw container::NoSuchElementException();
-//    return uno::Any();
+
+    return uno::makeAny(xRange);
 }
 
 uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()

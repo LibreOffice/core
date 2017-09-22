@@ -2664,21 +2664,20 @@ uno::Reference< document::XDocumentProperties > SAL_CALL OReportDefinition::getD
 uno::Any SAL_CALL OReportDefinition::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
     uno::Any aResult;
-    if( isDataFlavorSupported( aFlavor ) )
-    {
-        try
-        {
-            aResult = getPreferredVisualRepresentation(0).Data;
-        }
-        catch (const uno::Exception &)
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-    else
+    if( !isDataFlavorSupported( aFlavor ) )
     {
         throw datatransfer::UnsupportedFlavorException(aFlavor.MimeType, static_cast< ::cppu::OWeakObject* >( this ));
     }
+
+    try
+    {
+        aResult = getPreferredVisualRepresentation(0).Data;
+    }
+    catch (const uno::Exception &)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
 
     return aResult;
 }

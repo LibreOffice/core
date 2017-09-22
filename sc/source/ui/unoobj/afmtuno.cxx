@@ -215,32 +215,30 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const OUString& aName, const uno::
             ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
             sal_uInt16 nDummy;
-            if (!lcl_FindAutoFormatIndex( *pFormats, aName, nDummy ))
+            if (lcl_FindAutoFormatIndex( *pFormats, aName, nDummy ))
             {
-                ScAutoFormatData* pNew = new ScAutoFormatData();
-                pNew->SetName( aName );
+                throw container::ElementExistException();
+            }
 
-                if (pFormats->insert(pNew))
-                {
-                    //! notify to other objects
-                    pFormats->Save();
+            ScAutoFormatData* pNew = new ScAutoFormatData();
+            pNew->SetName( aName );
 
-                    sal_uInt16 nNewIndex;
-                    if (lcl_FindAutoFormatIndex( *pFormats, aName, nNewIndex ))
-                    {
-                        pFormatObj->InitFormat( nNewIndex );    // can be used now
-                        bDone = true;
-                    }
-                }
-                else
+            if (pFormats->insert(pNew))
+            {
+                //! notify to other objects
+                pFormats->Save();
+
+                sal_uInt16 nNewIndex;
+                if (lcl_FindAutoFormatIndex( *pFormats, aName, nNewIndex ))
                 {
-                    OSL_FAIL("AutoFormat could not be inserted");
-                    throw uno::RuntimeException();
+                    pFormatObj->InitFormat( nNewIndex );    // can be used now
+                    bDone = true;
                 }
             }
             else
             {
-                throw container::ElementExistException();
+                OSL_FAIL("AutoFormat could not be inserted");
+                throw uno::RuntimeException();
             }
         }
     }
@@ -266,17 +264,15 @@ void SAL_CALL ScAutoFormatsObj::removeByName( const OUString& aName )
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
     ScAutoFormat::iterator it = pFormats->find(aName);
-    if (it != pFormats->end())
-    {
-        pFormats->erase(it);
-
-        //! notify to other objects
-        pFormats->Save();   // save immediately
-    }
-    else
+    if (it == pFormats->end())
     {
         throw container::NoSuchElementException();
     }
+    pFormats->erase(it);
+
+    //! notify to other objects
+    pFormats->Save();   // save immediately
+
 }
 
 // container::XEnumerationAccess
@@ -480,37 +476,35 @@ void SAL_CALL ScAutoFormatObj::setName( const OUString& aNewName )
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
 
     sal_uInt16 nDummy;
-    if (IsInserted() && nFormatIndex < pFormats->size() &&
-        !lcl_FindAutoFormatIndex( *pFormats, aNewName, nDummy ))
-    {
-        ScAutoFormat::iterator it = pFormats->begin();
-        std::advance(it, nFormatIndex);
-        ScAutoFormatData *const pData = it->second.get();
-        OSL_ENSURE(pData,"AutoFormat data not available");
-
-        ScAutoFormatData* pNew = new ScAutoFormatData(*pData);
-        pNew->SetName( aNewName );
-
-        pFormats->erase(it);
-        if (pFormats->insert(pNew))
-        {
-            it = pFormats->find(pNew);
-            ScAutoFormat::iterator itBeg = pFormats->begin();
-            nFormatIndex = std::distance(itBeg, it);
-
-            //! notify to other objects
-            pFormats->SetSaveLater(true);
-        }
-        else
-        {
-            OSL_FAIL("AutoFormat could not be inserted");
-            nFormatIndex = 0;       //! old index invalid
-        }
-    }
-    else
+    if (!IsInserted() || nFormatIndex >= pFormats->size() ||
+        lcl_FindAutoFormatIndex( *pFormats, aNewName, nDummy ))
     {
         //  not inserted or name exists
         throw uno::RuntimeException();
+    }
+
+    ScAutoFormat::iterator it = pFormats->begin();
+    std::advance(it, nFormatIndex);
+    ScAutoFormatData *const pData = it->second.get();
+    OSL_ENSURE(pData,"AutoFormat data not available");
+
+    ScAutoFormatData* pNew = new ScAutoFormatData(*pData);
+    pNew->SetName( aNewName );
+
+    pFormats->erase(it);
+    if (pFormats->insert(pNew))
+    {
+        it = pFormats->find(pNew);
+        ScAutoFormat::iterator itBeg = pFormats->begin();
+        nFormatIndex = std::distance(itBeg, it);
+
+        //! notify to other objects
+        pFormats->SetSaveLater(true);
+    }
+    else
+    {
+        OSL_FAIL("AutoFormat could not be inserted");
+        nFormatIndex = 0;       //! old index invalid
     }
 }
 

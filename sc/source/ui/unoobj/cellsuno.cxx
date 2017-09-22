@@ -2151,57 +2151,56 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
                 nOldFormat = pFormatter->GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
 
                 sal_Int32 nIntVal = 0;
-                if ( rValue >>= nIntVal )
-                {
-                    sal_uLong nNewFormat = (sal_uLong)nIntVal;
-                    rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
-
-                    const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
-                    LanguageType eNewLang =
-                        pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
-                    if ( eNewLang != eOldLang && eNewLang != LANGUAGE_DONTKNOW )
-                    {
-                        rSet.Put( SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
-
-                        // if only language is changed,
-                        // don't touch number format attribute
-                        sal_uLong nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
-                        if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
-                             nNewMod <= SV_MAX_COUNT_STANDARD_FORMATS )
-                        {
-                            rFirstItemId = 0;       // don't use ATTR_VALUE_FORMAT value
-                        }
-
-                        rSecondItemId = ATTR_LANGUAGE_FORMAT;
-                    }
-                }
-                else
+                if ( !(rValue >>= nIntVal) )
                     throw lang::IllegalArgumentException();
+
+                sal_uLong nNewFormat = (sal_uLong)nIntVal;
+                rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+
+                const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
+                LanguageType eNewLang =
+                    pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
+                if ( eNewLang != eOldLang && eNewLang != LANGUAGE_DONTKNOW )
+                {
+                    rSet.Put( SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
+
+                    // if only language is changed,
+                    // don't touch number format attribute
+                    sal_uLong nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
+                    if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
+                         nNewMod <= SV_MAX_COUNT_STANDARD_FORMATS )
+                    {
+                        rFirstItemId = 0;       // don't use ATTR_VALUE_FORMAT value
+                    }
+
+                    rSecondItemId = ATTR_LANGUAGE_FORMAT;
+                }
+
             }
             break;
         case ATTR_INDENT:
             {
                 sal_Int16 nIntVal = 0;
-                if ( rValue >>= nIntVal )
-                    rSet.Put( SfxUInt16Item( rEntry.nWID, (sal_uInt16)HMMToTwips(nIntVal) ) );
-                else
+                if ( !(rValue >>= nIntVal) )
                     throw lang::IllegalArgumentException();
+
+                rSet.Put( SfxUInt16Item( rEntry.nWID, (sal_uInt16)HMMToTwips(nIntVal) ) );
+
             }
             break;
         case ATTR_ROTATE_VALUE:
             {
                 sal_Int32 nRotVal = 0;
-                if ( rValue >>= nRotVal )
-                {
-                    //  stored value is always between 0 and 360 deg.
-                    nRotVal %= 36000;
-                    if ( nRotVal < 0 )
-                        nRotVal += 36000;
-
-                    rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, nRotVal ) );
-                }
-                else
+                if ( !(rValue >>= nRotVal) )
                     throw lang::IllegalArgumentException();
+
+                //  stored value is always between 0 and 360 deg.
+                nRotVal %= 36000;
+                if ( nRotVal < 0 )
+                    nRotVal += 36000;
+
+                rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, nRotVal ) );
+
             }
             break;
         case ATTR_STACKED:
@@ -4306,13 +4305,12 @@ void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress
     if (aMarkData.GetTableSelect( aRange.aStart.Tab() ))
     {
         aMarkData.MarkToMulti();
-        if (aMarkData.IsAllMarked( aRange ) )
-        {
-            aMarkData.SetMultiMarkArea( aRange, false );
-            lcl_RemoveNamedEntry(m_pImpl->m_aNamedEntries, aRange);
-        }
-        else
+        if (!aMarkData.IsAllMarked( aRange ) )
             throw container::NoSuchElementException();
+
+        aMarkData.SetMultiMarkArea( aRange, false );
+        lcl_RemoveNamedEntry(m_pImpl->m_aNamedEntries, aRange);
+
     }
     SetNewRanges(aNotSheetRanges);
     ScRangeList aNew;
@@ -4574,18 +4572,17 @@ uno::Any SAL_CALL ScCellRangesObj::getByName( const OUString& aName )
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
     ScRange aRange;
-    if (lcl_FindRangeOrEntry(m_pImpl->m_aNamedEntries, rRanges,
+    if (!lcl_FindRangeOrEntry(m_pImpl->m_aNamedEntries, rRanges,
                 pDocSh, aName, aRange))
-    {
-        uno::Reference<table::XCellRange> xRange;
-        if ( aRange.aStart == aRange.aEnd )
-            xRange.set(new ScCellObj( pDocSh, aRange.aStart ));
-        else
-            xRange.set(new ScCellRangeObj( pDocSh, aRange ));
-        aRet <<= xRange;
-    }
-    else
         throw container::NoSuchElementException();
+
+    uno::Reference<table::XCellRange> xRange;
+    if ( aRange.aStart == aRange.aEnd )
+        xRange.set(new ScCellObj( pDocSh, aRange.aStart ));
+    else
+        xRange.set(new ScCellRangeObj( pDocSh, aRange ));
+    aRet <<= xRange;
+
     return aRet;
 }
 
@@ -4663,10 +4660,11 @@ uno::Any SAL_CALL ScCellRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<table::XCellRange> xRange(GetObjectByIndex_Impl(nIndex));
-    if (xRange.is())
-        return uno::makeAny(xRange);
-    else
+    if (!xRange.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xRange);
+
 }
 
 uno::Type SAL_CALL ScCellRangesObj::getElementType()
@@ -5422,14 +5420,13 @@ void SAL_CALL ScCellRangeObj::autoFormat( const OUString& aName )
     {
         ScAutoFormat* pAutoFormat = ScGlobal::GetOrCreateAutoFormat();
         ScAutoFormat::const_iterator it = pAutoFormat->find(aName);
-        if (it != pAutoFormat->end())
-        {
-            ScAutoFormat::const_iterator itBeg = pAutoFormat->begin();
-            size_t nIndex = std::distance(itBeg, it);
-            pDocSh->GetDocFunc().AutoFormat(aRange, nullptr, nIndex, true);
-        }
-        else
+        if (it == pAutoFormat->end())
             throw lang::IllegalArgumentException();
+
+        ScAutoFormat::const_iterator itBeg = pAutoFormat->begin();
+        size_t nIndex = std::distance(itBeg, it);
+        pDocSh->GetDocFunc().AutoFormat(aRange, nullptr, nIndex, true);
+
     }
 }
 
@@ -6178,10 +6175,11 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
     else
     {
         ScCellTextCursor* pOther = ScCellTextCursor::getImplementation( aTextPosition );
-        if(pOther)
-            pCursor->SetSelection( pOther->GetSelection() );
-        else
+        if(!pOther)
             throw uno::RuntimeException();
+
+        pCursor->SetSelection( pOther->GetSelection() );
+
     }
 
     return xCursor;
@@ -9108,10 +9106,11 @@ uno::Any SAL_CALL ScCellFormatsObj::getByIndex( sal_Int32 nIndex )
     SolarMutexGuard aGuard;
 
     uno::Reference<table::XCellRange> xRange(GetObjectByIndex_Impl(nIndex));
-    if (xRange.is())
-        return uno::makeAny(xRange);
-    else
+    if (!xRange.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xRange);
+
 }
 
 uno::Type SAL_CALL ScCellFormatsObj::getElementType()
@@ -9464,10 +9463,11 @@ uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
-    if(static_cast<sal_uInt32>(nIndex) < aRangeLists.size())
-        return uno::makeAny(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nIndex])));
-    else
+    if(static_cast<sal_uInt32>(nIndex) >= aRangeLists.size())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nIndex])));
+
 }
 
 uno::Type SAL_CALL ScUniqueCellFormatsObj::getElementType()
