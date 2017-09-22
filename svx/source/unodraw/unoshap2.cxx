@@ -308,13 +308,10 @@ sal_Int32 SAL_CALL SvxShapeGroup::getCount()
 {
     ::SolarMutexGuard aGuard;
 
-    sal_Int32 nRetval = 0;
-
-    if(mpObj.is() && mpObj->GetSubList())
-        nRetval = mpObj->GetSubList()->GetObjCount();
-    else
+    if(!mpObj.is() || !mpObj->GetSubList())
         throw uno::RuntimeException();
 
+    sal_Int32 nRetval = mpObj->GetSubList()->GetObjCount();
     return nRetval;
 }
 

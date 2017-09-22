@@ -137,10 +137,10 @@ OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sa
 
         if ( bEscape )
         {
-            if ( aBuffer[io_nCurPos] == ',' || aBuffer[io_nCurPos] == ';' || aBuffer[io_nCurPos] == '\\' )
-                aResult.append( (sal_Char)aBuffer[io_nCurPos] );
-            else
+            if ( aBuffer[io_nCurPos] != ',' && aBuffer[io_nCurPos] != ';' && aBuffer[io_nCurPos] != '\\' )
                 throw io::WrongFormatException();
+
+            aResult.append( (sal_Char)aBuffer[io_nCurPos] );
 
             bEscape = false;
             io_nCurPos++;

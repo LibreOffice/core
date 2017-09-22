@@ -333,14 +333,12 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::ge
     uno::Reference< css::accessibility::XAccessible >    xRet;
     SvxShowCharSetItem* pItem = m_pParent->getCharSetControl()->ImplGetItem( static_cast< sal_uInt16 >( i ) );
 
-    if( pItem )
-    {
-        pItem->m_pParent = this;
-        xRet = pItem->GetAccessible();
-        m_aChildren.push_back(xRet);
-    }
-    else
+    if( !pItem )
         throw lang::IndexOutOfBoundsException();
+
+    pItem->m_pParent = this;
+    xRet = pItem->GetAccessible();
+    m_aChildren.push_back(xRet);
 
     return xRet;
 }

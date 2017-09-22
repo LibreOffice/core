@@ -179,10 +179,10 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
         }
     }
 
-    if( bFound )
-        ImplInsertByName( aName, aElement );
-    else
+    if( !bFound )
         throw container::NoSuchElementException();
+
+    ImplInsertByName( aName, aElement );
 
     if( !hasByName( aName ) )
         throw container::NoSuchElementException();

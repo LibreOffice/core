@@ -281,10 +281,10 @@ namespace accessibility
         if( !pTextForwarder )
             throw uno::RuntimeException("Unable to fetch text forwarder, model might be dead", mxFrontEnd);
 
-        if( pTextForwarder->IsValid() )
-            return *pTextForwarder;
-        else
+        if( !pTextForwarder->IsValid() )
             throw uno::RuntimeException("Text forwarder is invalid, model might be dead", mxFrontEnd);
+
+        return *pTextForwarder;
     }
 
     SvxViewForwarder& AccessibleTextHelper_Impl::GetViewForwarder() const
@@ -297,10 +297,10 @@ namespace accessibility
         if( !pViewForwarder )
             throw uno::RuntimeException("Unable to fetch view forwarder, model might be dead", mxFrontEnd);
 
-        if( pViewForwarder->IsValid() )
-            return *pViewForwarder;
-        else
+        if( !pViewForwarder->IsValid() )
             throw uno::RuntimeException("View forwarder is invalid, model might be dead", mxFrontEnd);
+
+        return *pViewForwarder;
     }
 
     SvxEditViewForwarder& AccessibleTextHelper_Impl::GetEditViewForwarder() const
@@ -315,20 +315,19 @@ namespace accessibility
             throw uno::RuntimeException("No edit view forwarder, object not in edit mode", mxFrontEnd);
         }
 
-        if( pViewForwarder->IsValid() )
-            return *pViewForwarder;
-        else
+        if( !pViewForwarder->IsValid() )
         {
             throw uno::RuntimeException("View forwarder is invalid, object not in edit mode", mxFrontEnd);
         }
+
+        return *pViewForwarder;
     }
 
     SvxEditSourceAdapter& AccessibleTextHelper_Impl::GetEditSource() const
     {
-        if( maEditSource.IsValid() )
-            return maEditSource;
-        else
+        if( !maEditSource.IsValid() )
             throw uno::RuntimeException("AccessibleTextHelper_Impl::GetEditSource: no edit source", mxFrontEnd );
+        return maEditSource;
     }
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)

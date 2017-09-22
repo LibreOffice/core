@@ -38,6 +38,7 @@ private:
     SourceRange extendOverComments(SourceRange range);
     std::string getSourceAsString(SourceRange range);
     std::string invertCondition(Expr const * condExpr, SourceRange conditionRange);
+    std::vector<std::pair<const char *, const char*>> mvModifiedRanges;
 };
 
 static const Stmt * containsSingleThrowExpr(const Stmt * stmt)
@@ -123,6 +124,20 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
         return false;
     }
     SourceRange elseKeywordRange = ifStmt->getElseLoc();
+
+    // If we overlap with a previous area we modified, we cannot perform this change
+    // without corrupting the source
+    SourceManager& SM = compiler.getSourceManager();
+    const char *p1 = SM.getCharacterData( ifStmt->getSourceRange().getBegin() );
+    const char *p2 = SM.getCharacterData( ifStmt->getSourceRange().getEnd() );
+    for (std::pair<const char*, const char *> const & rPair : mvModifiedRanges)
+    {
+        if (rPair.first <= p1 && p1 <= rPair.second)
+            return false;
+        if (p1 <= rPair.second && rPair.first <= p2)
+            return false;
+    }
+    mvModifiedRanges.emplace_back(p1, p2);
 
     thenRange = extendOverComments(thenRange);
     elseRange = extendOverComments(elseRange);
