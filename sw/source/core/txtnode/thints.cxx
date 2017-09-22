@@ -2655,7 +2655,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
         {
             std::shared_ptr<SfxItemSet> const pSet(
                     pHt->GetAutoFormat().GetStyleHandle());
-            if ((pSet->Count() == 1) && pSet->GetItem(RES_CHRATR_RSID, false))
+            if ((pSet->Count() == 1) && pSet->GetItem(RES_CHR_RSID, false))
             {
                 // fdo#70201: eliminate no-extent RSID-only AUTOFMT
                 // could be produced by ReplaceText or (maybe?) RstAttr
@@ -2768,8 +2768,8 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                         SfxItemSet set1(*p1->GetAutoFormat().GetStyleHandle());
                         SfxItemSet set2(*p2->GetAutoFormat().GetStyleHandle());
 
-                        set1.ClearItem(RES_CHRATR_RSID);
-                        set2.ClearItem(RES_CHRATR_RSID);
+                        set1.ClearItem(RES_CHR_RSID);
+                        set2.ClearItem(RES_CHR_RSID);
 
                         // sadly SfxItemSet::operator== does not seem to work?
                         SfxItemIter iter1(set1);
@@ -2967,7 +2967,7 @@ bool SwpHints::TryInsertHint(
         std::shared_ptr<SfxItemSet> const pSet( pHint->GetAutoFormat().GetStyleHandle() );
         if (pHint->GetStart() == *pHint->GetEnd())
         {
-            if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))
+            if (pSet->Count() == 1 && pSet->GetItem(RES_CHR_RSID, false))
             {   // empty range RSID-only hints could cause trouble, there's no
                 rNode.DestroyAttr(pHint); // need for them so don't insert
                 return false;

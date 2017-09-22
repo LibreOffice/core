@@ -903,7 +903,7 @@ static void lcl_ModifyOfst( SwTextFrame* pFrame, sal_Int32 nPos, sal_Int32 nLen 
  */
 static bool isA11yRelevantAttribute(sal_uInt16 nWhich)
 {
-    return nWhich != RES_CHRATR_RSID;
+    return nWhich != RES_CHR_RSID;
 }
 
 static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& nWhich )
