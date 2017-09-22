@@ -42,21 +42,19 @@ class GraphicExportFilter :
     css::uno::Reference< css::lang::XComponent >        mxDocument;
     css::uno::Reference< css::io::XOutputStream >       mxOutputStream;
 
-    void gatherProperties( const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor );
-
-    OUString    mFilterExtension;
-
-    css::uno::Sequence< css::beans::PropertyValue > mFilterDataSequence;
-
-    sal_Int32 mTargetWidth;
-    sal_Int32 mTargetHeight;
-    bool      mbSelectionOnly;
+    css::uno::Sequence< css::beans::PropertyValue >     maFilterDataSequence;
 
     css::uno::Any   maCompression;
     css::uno::Any   maInterlaced;
     css::uno::Any   maTranslucent;
     css::uno::Any   maQuality;
 
+    OUString    maFilterExtension;
+    sal_Int32   mnTargetWidth;
+    sal_Int32   mnTargetHeight;
+    bool        mbSelectionOnly;
+
+    void gatherProperties( const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor );
     bool filterRenderDocument() const;
     bool filterExportShape(
             const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor,
