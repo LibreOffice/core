@@ -17,31 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DRAWINGLAYER_TOOLS_CONVERTERS_HXX
-#define INCLUDED_DRAWINGLAYER_TOOLS_CONVERTERS_HXX
+#ifndef INCLUDED_DRAWINGLAYER_INC_CONVERTERS_HXX
+#define INCLUDED_DRAWINGLAYER_INC_CONVERTERS_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-
 namespace drawinglayer
 {
-    namespace tools
-    {
-        BitmapEx DRAWINGLAYER_DLLPUBLIC convertToBitmapEx(
-            const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
-            const geometry::ViewInformation2D& rViewInformation2D,
-            sal_uInt32 nDiscreteWidth,
-            sal_uInt32 nDiscreteHeight,
-            sal_uInt32 nMaxQuadratPixels);
 
-        double DRAWINGLAYER_DLLPUBLIC getRandomColorRange();
+    BitmapEx convertToBitmapEx(
+        const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
+        const geometry::ViewInformation2D& rViewInformation2D,
+        sal_uInt32 nDiscreteWidth,
+        sal_uInt32 nDiscreteHeight,
+        sal_uInt32 nMaxQuadratPixels);
 
-    } // end of namespace tools
+    double getRandomColorRange();
+
 } // end of namespace drawinglayer
 
-
-#endif // INCLUDED_DRAWINGLAYER_TOOLS_CONVERTERS_HXX
+#endif // INCLUDED_DRAWINGLAYER_INC_CONVERTERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

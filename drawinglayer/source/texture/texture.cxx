@@ -18,10 +18,11 @@
  */
 
 #include <drawinglayer/texture/texture.hxx>
-#include <drawinglayer/tools/converters.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tools/gradienttools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+
+#include "converters.hxx"
 
 namespace drawinglayer
 {
@@ -44,9 +45,9 @@ namespace drawinglayer
         void GeoTexSvx::modifyBColor(const basegfx::B2DPoint& /*rUV*/, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
             // base implementation creates random color (for testing only, may also be pure virtual)
-            rBColor.setRed(tools::getRandomColorRange());
-            rBColor.setGreen(tools::getRandomColorRange());
-            rBColor.setBlue(tools::getRandomColorRange());
+            rBColor.setRed(getRandomColorRange());
+            rBColor.setGreen(getRandomColorRange());
+            rBColor.setBlue(getRandomColorRange());
         }
 
         void GeoTexSvx::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const

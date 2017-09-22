@@ -206,12 +206,9 @@ namespace drawinglayer
 
 namespace drawinglayer
 {
-    namespace tools
+    double getRandomColorRange()
     {
-        double getRandomColorRange()
-        {
-            return comphelper::rng::uniform_real_distribution(0.0, nextafter(1.0, DBL_MAX));
-        }
+        return comphelper::rng::uniform_real_distribution(0.0, nextafter(1.0, DBL_MAX));
     }
 
     namespace primitive2d
@@ -270,7 +267,7 @@ namespace drawinglayer
                         const basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
                         static bool bTestByUsingRandomColor(false);
                         const basegfx::BColor aColor(bTestByUsingRandomColor
-                            ? basegfx::BColor(tools::getRandomColorRange(), tools::getRandomColorRange(), tools::getRandomColorRange())
+                            ? basegfx::BColor(getRandomColorRange(), getRandomColorRange(), getRandomColorRange())
                             : getLineAttribute().getColor());
                         rContainer.push_back(new PolyPolygonColorPrimitive2D(aNewPolyPolygon, aColor));
                     }

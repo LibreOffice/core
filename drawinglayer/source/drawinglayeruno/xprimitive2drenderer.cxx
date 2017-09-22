@@ -31,11 +31,12 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <vcl/bitmapex.hxx>
-#include <drawinglayer/tools/converters.hxx>
 #include <vcl/canvastools.hxx>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+
+#include "converters.hxx"
 
 #include <xprimitive2drenderer.hxx>
 
@@ -160,7 +161,7 @@ namespace drawinglayer
                     const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
                     BitmapEx aBitmapEx(
-                        tools::convertToBitmapEx(
+                        convertToBitmapEx(
                             xEmbedSeq,
                             aViewInformation2D,
                             nDiscreteWidth,

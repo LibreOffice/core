@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/tools/converters.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -25,134 +24,133 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <vcl/virdev.hxx>
 
+#include "converters.hxx"
+
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>
 #include <vcl/pngwrite.hxx>
 #endif
 
-
 namespace drawinglayer
 {
-    namespace tools
+
+    BitmapEx convertToBitmapEx(
+        const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
+        const geometry::ViewInformation2D& rViewInformation2D,
+        sal_uInt32 nDiscreteWidth,
+        sal_uInt32 nDiscreteHeight,
+        sal_uInt32 nMaxQuadratPixels)
     {
-        BitmapEx convertToBitmapEx(
-            const drawinglayer::primitive2d::Primitive2DContainer& rSeq,
-            const geometry::ViewInformation2D& rViewInformation2D,
-            sal_uInt32 nDiscreteWidth,
-            sal_uInt32 nDiscreteHeight,
-            sal_uInt32 nMaxQuadratPixels)
+        BitmapEx aRetval;
+#ifdef DBG_UTIL
+        static bool bDoSaveForVisualControl(false);
+#endif
+
+        if(!rSeq.empty() && nDiscreteWidth && nDiscreteHeight)
         {
-            BitmapEx aRetval;
-#ifdef DBG_UTIL
-            static bool bDoSaveForVisualControl(false);
-#endif
+            // get destination size in pixels
+            const MapMode aMapModePixel(MapUnit::MapPixel);
+            const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
+            drawinglayer::primitive2d::Primitive2DContainer aSequence(rSeq);
 
-            if(!rSeq.empty() && nDiscreteWidth && nDiscreteHeight)
+            if(nViewVisibleArea > nMaxQuadratPixels)
             {
-                // get destination size in pixels
-                const MapMode aMapModePixel(MapUnit::MapPixel);
-                const sal_uInt32 nViewVisibleArea(nDiscreteWidth * nDiscreteHeight);
-                drawinglayer::primitive2d::Primitive2DContainer aSequence(rSeq);
+                // reduce render size
+                double fReduceFactor = sqrt((double)nMaxQuadratPixels / (double)nViewVisibleArea);
+                nDiscreteWidth = basegfx::fround((double)nDiscreteWidth * fReduceFactor);
+                nDiscreteHeight = basegfx::fround((double)nDiscreteHeight * fReduceFactor);
 
-                if(nViewVisibleArea > nMaxQuadratPixels)
-                {
-                    // reduce render size
-                    double fReduceFactor = sqrt((double)nMaxQuadratPixels / (double)nViewVisibleArea);
-                    nDiscreteWidth = basegfx::fround((double)nDiscreteWidth * fReduceFactor);
-                    nDiscreteHeight = basegfx::fround((double)nDiscreteHeight * fReduceFactor);
+                const drawinglayer::primitive2d::Primitive2DReference aEmbed(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        basegfx::tools::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
+                        rSeq));
 
-                    const drawinglayer::primitive2d::Primitive2DReference aEmbed(
-                        new drawinglayer::primitive2d::TransformPrimitive2D(
-                            basegfx::tools::createScaleB2DHomMatrix(fReduceFactor, fReduceFactor),
-                            rSeq));
-
-                    aSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
-                }
-
-                const Point aEmptyPoint;
-                const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
-                ScopedVclPtrInstance< VirtualDevice > pContent;
-
-                // prepare vdev
-                pContent->SetOutputSizePixel(aSizePixel, false);
-                pContent->SetMapMode(aMapModePixel);
-
-                // set to all white
-                pContent->SetBackground(Wallpaper(Color(COL_WHITE)));
-                pContent->Erase();
-
-                // create pixel processor, also already takes care of AAing and
-                // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
-                // not wanted, change after this call as needed
-                processor2d::BaseProcessor2D* pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
-                    *pContent.get(),
-                    rViewInformation2D);
-
-                if(pContentProcessor)
-                {
-                    // render content
-                    pContentProcessor->process(aSequence);
-
-                    // get content
-                    pContent->EnableMapMode(false);
-                    const Bitmap aContent(pContent->GetBitmap(aEmptyPoint, aSizePixel));
-
-#ifdef DBG_UTIL
-                    if(bDoSaveForVisualControl)
-                    {
-                        SvFileStream aNew("c:\\test_content.png", StreamMode::WRITE|StreamMode::TRUNC);
-                        vcl::PNGWriter aPNGWriter(aContent);
-                        aPNGWriter.Write(aNew);
-                    }
-#endif
-                    // prepare for mask creation
-                    pContent->SetMapMode(aMapModePixel);
-
-                    // set alpha to all white (fully transparent)
-                    pContent->Erase();
-
-                    // embed primitives to paint them black
-                    const primitive2d::Primitive2DReference xRef(
-                        new primitive2d::ModifiedColorPrimitive2D(
-                            aSequence,
-                            basegfx::BColorModifierSharedPtr(
-                                new basegfx::BColorModifier_replace(
-                                    basegfx::BColor(0.0, 0.0, 0.0)))));
-                    const primitive2d::Primitive2DContainer xSeq { xRef };
-
-                    // render
-                    pContentProcessor->process(xSeq);
-                    delete pContentProcessor;
-
-                    // get alpha channel from vdev
-                    pContent->EnableMapMode(false);
-                    const Bitmap aAlpha(pContent->GetBitmap(aEmptyPoint, aSizePixel));
-#ifdef DBG_UTIL
-                    if(bDoSaveForVisualControl)
-                    {
-                        SvFileStream aNew("c:\\test_alpha.png", StreamMode::WRITE|StreamMode::TRUNC);
-                        vcl::PNGWriter aPNGWriter(aAlpha);
-                        aPNGWriter.Write(aNew);
-                    }
-#endif
-
-                    // create BitmapEx result
-                    aRetval = BitmapEx(aContent, AlphaMask(aAlpha));
-#ifdef DBG_UTIL
-                    if(bDoSaveForVisualControl)
-                    {
-                        SvFileStream aNew("c:\\test_combined.png", StreamMode::WRITE|StreamMode::TRUNC);
-                        vcl::PNGWriter aPNGWriter(aRetval);
-                        aPNGWriter.Write(aNew);
-                    }
-#endif
-                }
+                aSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
             }
 
-            return aRetval;
+            const Point aEmptyPoint;
+            const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);
+            ScopedVclPtrInstance< VirtualDevice > pContent;
+
+            // prepare vdev
+            pContent->SetOutputSizePixel(aSizePixel, false);
+            pContent->SetMapMode(aMapModePixel);
+
+            // set to all white
+            pContent->SetBackground(Wallpaper(Color(COL_WHITE)));
+            pContent->Erase();
+
+            // create pixel processor, also already takes care of AAing and
+            // checking the getOptionsDrawinglayer().IsAntiAliasing() switch. If
+            // not wanted, change after this call as needed
+            processor2d::BaseProcessor2D* pContentProcessor = processor2d::createPixelProcessor2DFromOutputDevice(
+                *pContent.get(),
+                rViewInformation2D);
+
+            if(pContentProcessor)
+            {
+                // render content
+                pContentProcessor->process(aSequence);
+
+                // get content
+                pContent->EnableMapMode(false);
+                const Bitmap aContent(pContent->GetBitmap(aEmptyPoint, aSizePixel));
+
+#ifdef DBG_UTIL
+                if(bDoSaveForVisualControl)
+                {
+                    SvFileStream aNew("c:\\test_content.png", StreamMode::WRITE|StreamMode::TRUNC);
+                    vcl::PNGWriter aPNGWriter(aContent);
+                    aPNGWriter.Write(aNew);
+                }
+#endif
+                // prepare for mask creation
+                pContent->SetMapMode(aMapModePixel);
+
+                // set alpha to all white (fully transparent)
+                pContent->Erase();
+
+                // embed primitives to paint them black
+                const primitive2d::Primitive2DReference xRef(
+                    new primitive2d::ModifiedColorPrimitive2D(
+                        aSequence,
+                        basegfx::BColorModifierSharedPtr(
+                            new basegfx::BColorModifier_replace(
+                                basegfx::BColor(0.0, 0.0, 0.0)))));
+                const primitive2d::Primitive2DContainer xSeq { xRef };
+
+                // render
+                pContentProcessor->process(xSeq);
+                delete pContentProcessor;
+
+                // get alpha channel from vdev
+                pContent->EnableMapMode(false);
+                const Bitmap aAlpha(pContent->GetBitmap(aEmptyPoint, aSizePixel));
+#ifdef DBG_UTIL
+                if(bDoSaveForVisualControl)
+                {
+                    SvFileStream aNew("c:\\test_alpha.png", StreamMode::WRITE|StreamMode::TRUNC);
+                    vcl::PNGWriter aPNGWriter(aAlpha);
+                    aPNGWriter.Write(aNew);
+                }
+#endif
+
+                // create BitmapEx result
+                aRetval = BitmapEx(aContent, AlphaMask(aAlpha));
+#ifdef DBG_UTIL
+                if(bDoSaveForVisualControl)
+                {
+                    SvFileStream aNew("c:\\test_combined.png", StreamMode::WRITE|StreamMode::TRUNC);
+                    vcl::PNGWriter aPNGWriter(aRetval);
+                    aPNGWriter.Write(aNew);
+                }
+#endif
+            }
         }
 
-    } // end of namespace tools
+        return aRetval;
+    }
+
 } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
