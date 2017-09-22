@@ -797,10 +797,10 @@ $(eval $(call gb_Helper_register_packages, \
 	cli_basetypes_copy \
 	desktop_install \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
+	$(if $(filter-out WNT,$(OS)),postprocess_fontconfig) \
 	extras_fonts \
 	extras_wordbook \
 	$(if $(filter MSC,$(COM)),msvc_dlls) \
-	more_fonts_conf \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
 	odk_headers_generated \
