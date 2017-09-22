@@ -699,15 +699,13 @@ void TableDesignFamily::setPropertyValue( const OUString& , const Any&  )
 
 Any TableDesignFamily::getPropertyValue( const OUString& PropertyName )
 {
-    if ( PropertyName == "DisplayName" )
-    {
-        OUString sDisplayName( SvxResId( RID_SVXSTR_STYLEFAMILY_TABLEDESIGN ) );
-        return Any( sDisplayName );
-    }
-    else
+    if ( PropertyName != "DisplayName" )
     {
         throw UnknownPropertyException( "unknown property: " + PropertyName, static_cast<OWeakObject *>(this) );
     }
+
+    OUString sDisplayName( SvxResId( RID_SVXSTR_STYLEFAMILY_TABLEDESIGN ) );
+    return Any( sDisplayName );
 }
 
 

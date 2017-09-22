@@ -175,25 +175,23 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleAt
 
     Reference< XAccessible > xAccessible;
 
-    if( mpControl )
-    {
-        Point aPnt( rPoint.X, rPoint.Y );
-        mpControl->PixelToLogic( aPnt );
-
-        SdrObject* pObj = nullptr;
-
-        if(mpView && mpView->GetSdrPageView())
-        {
-            pObj = SdrObjListPrimitiveHit(*mpPage, aPnt, 1, *mpView->GetSdrPageView(), nullptr, false);
-        }
-
-        if( pObj )
-            xAccessible = getAccessible( pObj );
-    }
-    else
+    if( !mpControl )
     {
         throw DisposedException();
     }
+
+    Point aPnt( rPoint.X, rPoint.Y );
+    mpControl->PixelToLogic( aPnt );
+
+    SdrObject* pObj = nullptr;
+
+    if(mpView && mpView->GetSdrPageView())
+    {
+        pObj = SdrObjListPrimitiveHit(*mpPage, aPnt, 1, *mpView->GetSdrPageView(), nullptr, false);
+    }
+
+    if( pObj )
+        xAccessible = getAccessible( pObj );
 
     return xAccessible;
 }
@@ -684,18 +682,16 @@ tools::Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox()
     tools::Rectangle aBounds ( 0, 0, 0, 0 );
 
     vcl::Window* pWindow = mpControl;
-    if (pWindow != nullptr)
-    {
-        aBounds = pWindow->GetWindowExtentsRelative (nullptr);
-        vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
-        if (pParent != nullptr)
-        {
-            tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative (nullptr);
-            aBounds -= aParentRect.TopLeft();
-        }
-    }
-    else
+    if (!(pWindow != nullptr))
         throw DisposedException();
+
+    aBounds = pWindow->GetWindowExtentsRelative (nullptr);
+    vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
+    if (pParent != nullptr)
+    {
+        tools::Rectangle aParentRect = pParent->GetWindowExtentsRelative (nullptr);
+        aBounds -= aParentRect.TopLeft();
+    }
 
     return aBounds;
 }

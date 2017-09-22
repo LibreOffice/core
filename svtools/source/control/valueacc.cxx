@@ -176,14 +176,12 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    uno::Reference< accessibility::XAccessible >    xRet;
     ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(i));
 
-    if( pItem )
-        xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
-    else
+    if( !pItem )
         throw lang::IndexOutOfBoundsException();
 
+    uno::Reference< accessibility::XAccessible >  xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
     return xRet;
 }
 
@@ -489,13 +487,11 @@ void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int32 nChildIndex )
     const SolarMutexGuard aSolarGuard;
     ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
 
-    if(pItem != nullptr)
-    {
-        mpParent->SelectItem( pItem->mnId );
-        mpParent->Select ();
-    }
-    else
+    if(pItem == nullptr)
         throw lang::IndexOutOfBoundsException();
+
+    mpParent->SelectItem( pItem->mnId );
+    mpParent->Select ();
 }
 
 
@@ -504,13 +500,11 @@ sal_Bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int32 nChildIndex 
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     ValueSetItem* pItem = getItem (sal::static_int_cast< sal_uInt16 >(nChildIndex));
-    bool            bRet = false;
 
-    if (pItem != nullptr)
-        bRet = mpParent->IsItemSelected( pItem->mnId );
-    else
+    if (!(pItem != nullptr))
         throw lang::IndexOutOfBoundsException();
 
+    bool  bRet = mpParent->IsItemSelected( pItem->mnId );
     return bRet;
 }
 

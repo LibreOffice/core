@@ -145,42 +145,32 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::detectNumberFormat( sal_Int32 nK
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
-    if (pFormatter)
-    {
-        sal_uInt32 nUKey = nKey;
-        double fValue = 0.0;
-        if ( pFormatter->IsNumberFormat(aString, nUKey, fValue) )
-            nRet = nUKey;
-        else
-            throw util::NotNumericException();
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
 
-    return nRet;
+    sal_uInt32 nUKey = nKey;
+    double fValue = 0.0;
+    if ( !pFormatter->IsNumberFormat(aString, nUKey, fValue) )
+        throw util::NotNumericException();;
+
+    return nUKey;
 }
 
 double SAL_CALL SvNumberFormatterServiceObj::convertStringToNumber( sal_Int32 nKey, const OUString& aString )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    double fRet = 0.0;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
-    if (pFormatter)
-    {
-        sal_uInt32 nUKey = nKey;
-        double fValue = 0.0;
-        if ( pFormatter->IsNumberFormat(aString, nUKey, fValue) )
-            fRet = fValue;
-        else
-            throw util::NotNumericException();
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
 
-    return fRet;
+    sal_uInt32 nUKey = nKey;
+    double fValue = 0.0;
+    if ( !pFormatter->IsNumberFormat(aString, nUKey, fValue) )
+        throw util::NotNumericException();;
+
+    return fValue;
 }
 
 OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToString( sal_Int32 nKey, double fValue )
@@ -189,13 +179,11 @@ OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToString( sal_Int32 
 
     OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
-    if (pFormatter)
-    {
-        Color* pColor = nullptr;
-        pFormatter->GetOutputString(fValue, nKey, aRet, &pColor);
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
+
+    Color* pColor = nullptr;
+    pFormatter->GetOutputString(fValue, nKey, aRet, &pColor);
 
     return aRet;
 }
@@ -208,17 +196,15 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32
 
     util::Color nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
-    if (pFormatter)
-    {
-        OUString aStr;
-        Color* pColor = nullptr;
-        pFormatter->GetOutputString(fValue, nKey, aStr, &pColor);
-        if (pColor)
-            nRet = pColor->GetColor();
-        // Else keep Default
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
+
+    OUString aStr;
+    Color* pColor = nullptr;
+    pFormatter->GetOutputString(fValue, nKey, aStr, &pColor);
+    if (pColor)
+        nRet = pColor->GetColor();
+    // Else keep Default
 
     return nRet;
 }
@@ -230,15 +216,14 @@ OUString SAL_CALL SvNumberFormatterServiceObj::formatString( sal_Int32 nKey,
 
     OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
-    if (pFormatter)
-    {
-        Color* pColor = nullptr;
-        pFormatter->GetOutputString(aString, nKey, aRet, &pColor);
-    }
-    else
+    if (!pFormatter)
     {
         throw uno::RuntimeException();
     }
+
+    Color* pColor = nullptr;
+    pFormatter->GetOutputString(aString, nKey, aRet, &pColor);
+
     return aRet;
 }
 
@@ -250,21 +235,19 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32
 
     util::Color nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
-    if (pFormatter)
-    {
-        OUString aStr;
-        Color* pColor = nullptr;
-        pFormatter->GetOutputString(aString, nKey, aStr, &pColor);
-        if (pColor)
-        {
-            nRet = pColor->GetColor();
-        }
-        // Else keep Default
-    }
-    else
+    if (!pFormatter)
     {
         throw uno::RuntimeException();
     }
+
+    OUString aStr;
+    Color* pColor = nullptr;
+    pFormatter->GetOutputString(aString, nKey, aStr, &pColor);
+    if (pColor)
+    {
+        nRet = pColor->GetColor();
+    }
+    // Else keep Default
 
     return nRet;
 }
@@ -275,10 +258,10 @@ OUString SAL_CALL SvNumberFormatterServiceObj::getInputString( sal_Int32 nKey, d
 
     OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
-    if (pFormatter)
-        pFormatter->GetInputLineString(fValue, nKey, aRet);
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
+
+    pFormatter->GetInputLineString(fValue, nKey, aRet);
 
     return aRet;
 }
@@ -294,22 +277,20 @@ OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString( con
 
     OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
-    if (pFormatter)
-    {
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        Color* pColor = nullptr;
-
-        bool bOk;
-        if ( bAllowEnglish )
-            bOk = pFormatter->GetPreviewStringGuess( aFormat, fValue, aRet, &pColor, eLang );
-        else
-            bOk = pFormatter->GetPreviewString( aFormat, fValue, aRet, &pColor, eLang );
-
-        if (!bOk)
-            throw util::MalformedNumberFormatException();
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
+
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    Color* pColor = nullptr;
+
+    bool bOk;
+    if ( bAllowEnglish )
+        bOk = pFormatter->GetPreviewStringGuess( aFormat, fValue, aRet, &pColor, eLang );
+    else
+        bOk = pFormatter->GetPreviewString( aFormat, fValue, aRet, &pColor, eLang );
+
+    if (!bOk)
+        throw util::MalformedNumberFormatException();
 
     return aRet;
 }
@@ -324,29 +305,25 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( co
 
     util::Color nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
-    if (pFormatter)
-    {
-        OUString aOutString;
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        Color* pColor = nullptr;
-
-        bool bOk;
-        if ( bAllowEnglish )
-            bOk = pFormatter->GetPreviewStringGuess( aFormat, fValue, aOutString, &pColor, eLang );
-        else
-            bOk = pFormatter->GetPreviewString( aFormat, fValue, aOutString, &pColor, eLang );
-
-        if (bOk)
-        {
-            if (pColor)
-                nRet = pColor->GetColor();
-            // Else keep Default
-        }
-        else
-            throw util::MalformedNumberFormatException();
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
+
+    OUString aOutString;
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    Color* pColor = nullptr;
+
+    bool bOk;
+    if ( bAllowEnglish )
+        bOk = pFormatter->GetPreviewStringGuess( aFormat, fValue, aOutString, &pColor, eLang );
+    else
+        bOk = pFormatter->GetPreviewString( aFormat, fValue, aOutString, &pColor, eLang );
+
+    if (!bOk)
+        throw util::MalformedNumberFormatException();
+
+    if (pColor)
+        nRet = pColor->GetColor();
+    // Else keep Default
 
     return nRet;
 }
@@ -388,10 +365,10 @@ uno::Reference<beans::XPropertySet> SAL_CALL SvNumberFormatsObj::getByKey( sal_I
 
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
-    if (pFormat)
-        return new SvNumberFormatObj( rSupplier, nKey, m_aMutex );
-    else
+    if (!pFormat)
         throw uno::RuntimeException();
+
+    return new SvNumberFormatObj( rSupplier, nKey, m_aMutex );
 }
 
 uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType,
@@ -401,24 +378,22 @@ uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType
     ::osl::MutexGuard aGuard( m_aMutex );
 
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if ( pFormatter )
-    {
-        sal_uInt32 nIndex = 0;
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        SvNumberFormatTable& rTable = bCreate ?
-                                        pFormatter->ChangeCL( nType, nIndex, eLang ) :
-                                        pFormatter->GetEntryTable( nType, nIndex, eLang );
-        sal_uInt32 nCount = rTable.size();
-        uno::Sequence<sal_Int32> aSeq(nCount);
-        sal_Int32* pAry = aSeq.getArray();
-        sal_uInt32 i=0;
-        for (SvNumberFormatTable::const_iterator it = rTable.begin(); it != rTable.end(); ++it, ++i)
-            pAry[i] = it->first;
-
-        return aSeq;
-    }
-    else
+    if ( !pFormatter )
         throw uno::RuntimeException();
+
+    sal_uInt32 nIndex = 0;
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    SvNumberFormatTable& rTable = bCreate ?
+                                    pFormatter->ChangeCL( nType, nIndex, eLang ) :
+                                    pFormatter->GetEntryTable( nType, nIndex, eLang );
+    sal_uInt32 nCount = rTable.size();
+    uno::Sequence<sal_Int32> aSeq(nCount);
+    sal_Int32* pAry = aSeq.getArray();
+    sal_uInt32 i=0;
+    for (SvNumberFormatTable::const_iterator it = rTable.begin(); it != rTable.end(); ++it, ++i)
+        pAry[i] = it->first;
+
+    return aSeq;
 }
 
 sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
@@ -427,20 +402,16 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
-    {
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        if (bScan)
-        {
-            //! FIXME: Something still needs to happen here ...
-        }
-        nRet = pFormatter->GetEntryKey( aFormat, eLang );
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
 
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    if (bScan)
+    {
+        //! FIXME: Something still needs to happen here ...
+    }
+    sal_Int32 nRet = pFormatter->GetEntryKey( aFormat, eLang );
     return nRet;
 }
 
@@ -451,25 +422,23 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const OUString& aFormat,
 
     sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
+    if (!pFormatter)
+        throw uno::RuntimeException();
+
+    OUString aFormStr = aFormat;
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    sal_uInt32 nKey = 0;
+    sal_Int32 nCheckPos = 0;
+    short nType = 0;
+    bool bOk = pFormatter->PutEntry( aFormStr, nCheckPos, nType, nKey, eLang );
+    if (bOk)
+        nRet = nKey;
+    else if (nCheckPos)
     {
-        OUString aFormStr = aFormat;
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        sal_uInt32 nKey = 0;
-        sal_Int32 nCheckPos = 0;
-        short nType = 0;
-        bool bOk = pFormatter->PutEntry( aFormStr, nCheckPos, nType, nKey, eLang );
-        if (bOk)
-            nRet = nKey;
-        else if (nCheckPos)
-        {
-            throw util::MalformedNumberFormatException(); // Invalid Format
-        }
-        else
-            throw uno::RuntimeException(); // Other error (e.g. already added)
+        throw util::MalformedNumberFormatException(); // Invalid Format
     }
     else
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(); // Other error (e.g. already added)
 
     return nRet;
 }
@@ -482,26 +451,24 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const OUString& aFormat,
 
     sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
+    if (!pFormatter)
+        throw uno::RuntimeException();
+
+    OUString aFormStr = aFormat;
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    LanguageType eNewLang = lcl_GetLanguage( nNewLocale );
+    sal_uInt32 nKey = 0;
+    sal_Int32 nCheckPos = 0;
+    short nType = 0;
+    bool bOk = pFormatter->PutandConvertEntry( aFormStr, nCheckPos, nType, nKey, eLang, eNewLang );
+    if (bOk || nKey > 0)
+        nRet = nKey;
+    else if (nCheckPos)
     {
-        OUString aFormStr = aFormat;
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        LanguageType eNewLang = lcl_GetLanguage( nNewLocale );
-        sal_uInt32 nKey = 0;
-        sal_Int32 nCheckPos = 0;
-        short nType = 0;
-        bool bOk = pFormatter->PutandConvertEntry( aFormStr, nCheckPos, nType, nKey, eLang, eNewLang );
-        if (bOk || nKey > 0)
-            nRet = nKey;
-        else if (nCheckPos)
-        {
-            throw util::MalformedNumberFormatException();       // Invalid format
-        }
-        else
-            throw uno::RuntimeException(); // Other error (e.g. already added)
+        throw util::MalformedNumberFormatException();       // Invalid format
     }
     else
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(); // Other error (e.g. already added)
 
     return nRet;
 }
@@ -525,16 +492,12 @@ OUString SAL_CALL SvNumberFormatsObj::generateFormat( sal_Int32 nBaseKey,
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OUString aRet;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
-    {
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        aRet = pFormatter->GenerateFormat(nBaseKey, eLang, bThousands, bRed, nDecimals, nLeading);
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
 
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    OUString aRet = pFormatter->GenerateFormat(nBaseKey, eLang, bThousands, bRed, nDecimals, nLeading);
     return aRet;
 }
 
@@ -544,16 +507,12 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardIndex( const lang::Locale& nLo
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
-    {
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        nRet = pFormatter->GetStandardIndex(eLang);
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
 
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    sal_Int32 nRet = pFormatter->GetStandardIndex(eLang);
     return nRet;
 }
 
@@ -561,19 +520,15 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardFormat( sal_Int16 nType, const
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
-    {
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        // Mask out "defined" bit, so type from an existing number format
-        // can directly be used for getStandardFormat
-        nType &= ~css::util::NumberFormat::DEFINED;
-        nRet = pFormatter->GetStandardFormat(nType, eLang);
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
 
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    // Mask out "defined" bit, so type from an existing number format
+    // can directly be used for getStandardFormat
+    nType &= ~css::util::NumberFormat::DEFINED;
+    sal_Int32 nRet = pFormatter->GetStandardFormat(nType, eLang);
     return nRet;
 }
 
@@ -581,16 +536,12 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatIndex( sal_Int16 nIndex, const l
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
-    {
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        nRet = pFormatter->GetFormatIndex( (NfIndexTableOffset)nIndex, eLang );
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
 
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    sal_Int32 nRet = pFormatter->GetFormatIndex( (NfIndexTableOffset)nIndex, eLang );
     return nRet;
 }
 
@@ -605,16 +556,12 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    sal_Int32 nRet = 0;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
-    {
-        LanguageType eLang = lcl_GetLanguage( nLocale );
-        nRet = pFormatter->GetFormatForLanguageIfBuiltIn(nKey, eLang);
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
 
+    LanguageType eLang = lcl_GetLanguage( nLocale );
+    sal_Int32 nRet = pFormatter->GetFormatForLanguageIfBuiltIn(nKey, eLang);
     return nRet;
 }
 
@@ -671,86 +618,84 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
     uno::Any aRet;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
-    if (pFormat)
-    {
-        bool bThousand, bRed;
-        sal_uInt16 nDecimals, nLeading;
+    if (!pFormat)
+        throw uno::RuntimeException();
 
-        if (aPropertyName == PROPERTYNAME_FMTSTR)
-        {
-            aRet <<= pFormat->GetFormatstring();
-        }
-        else if (aPropertyName == PROPERTYNAME_LOCALE)
-        {
-            lang::Locale aLocale( LanguageTag::convertToLocale( pFormat->GetLanguage(), false));
-            aRet <<= aLocale;
-        }
-        else if (aPropertyName == PROPERTYNAME_TYPE)
-        {
-            aRet <<= (sal_Int16)( pFormat->GetType() );
-        }
-        else if (aPropertyName == PROPERTYNAME_COMMENT)
-        {
-            aRet <<= pFormat->GetComment();
-        }
-        else if (aPropertyName == PROPERTYNAME_STDFORM)
-        {
-            //! Pass through SvNumberformat Member bStandard?
-            aRet <<= ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
-        }
-        else if (aPropertyName == PROPERTYNAME_USERDEF)
-        {
-            aRet <<= ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
-        }
-        else if (aPropertyName == PROPERTYNAME_DECIMALS)
-        {
-            pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet <<= (sal_Int16) nDecimals;
-        }
-        else if (aPropertyName == PROPERTYNAME_LEADING)
-        {
-            pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet <<= (sal_Int16) nLeading;
-        }
-        else if (aPropertyName == PROPERTYNAME_NEGRED)
-        {
-            pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet <<= bRed;
-        }
-        else if (aPropertyName == PROPERTYNAME_THOUS)
-        {
-            pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-            aRet <<= bThousand;
-        }
-        else if (aPropertyName == PROPERTYNAME_CURRSYM)
-        {
-            OUString aSymbol, aExt;
-            pFormat->GetNewCurrencySymbol( aSymbol, aExt );
-            aRet <<= aSymbol;
-        }
-        else if (aPropertyName == PROPERTYNAME_CURREXT)
-        {
-            OUString aSymbol, aExt;
-            pFormat->GetNewCurrencySymbol( aSymbol, aExt );
-            aRet <<= aExt;
-        }
-        else if (aPropertyName == PROPERTYNAME_CURRABB)
-        {
-            OUString aSymbol, aExt;
-            bool bBank = false;
-            pFormat->GetNewCurrencySymbol( aSymbol, aExt );
-            const NfCurrencyEntry* pCurr = SvNumberFormatter::GetCurrencyEntry( bBank,
-                aSymbol, aExt, pFormat->GetLanguage() );
-            if ( pCurr )
-                aRet <<= pCurr->GetBankSymbol();
-            else
-                aRet <<= OUString();
-        }
+    bool bThousand, bRed;
+    sal_uInt16 nDecimals, nLeading;
+
+    if (aPropertyName == PROPERTYNAME_FMTSTR)
+    {
+        aRet <<= pFormat->GetFormatstring();
+    }
+    else if (aPropertyName == PROPERTYNAME_LOCALE)
+    {
+        lang::Locale aLocale( LanguageTag::convertToLocale( pFormat->GetLanguage(), false));
+        aRet <<= aLocale;
+    }
+    else if (aPropertyName == PROPERTYNAME_TYPE)
+    {
+        aRet <<= (sal_Int16)( pFormat->GetType() );
+    }
+    else if (aPropertyName == PROPERTYNAME_COMMENT)
+    {
+        aRet <<= pFormat->GetComment();
+    }
+    else if (aPropertyName == PROPERTYNAME_STDFORM)
+    {
+        //! Pass through SvNumberformat Member bStandard?
+        aRet <<= ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
+    }
+    else if (aPropertyName == PROPERTYNAME_USERDEF)
+    {
+        aRet <<= ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
+    }
+    else if (aPropertyName == PROPERTYNAME_DECIMALS)
+    {
+        pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
+        aRet <<= (sal_Int16) nDecimals;
+    }
+    else if (aPropertyName == PROPERTYNAME_LEADING)
+    {
+        pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
+        aRet <<= (sal_Int16) nLeading;
+    }
+    else if (aPropertyName == PROPERTYNAME_NEGRED)
+    {
+        pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
+        aRet <<= bRed;
+    }
+    else if (aPropertyName == PROPERTYNAME_THOUS)
+    {
+        pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
+        aRet <<= bThousand;
+    }
+    else if (aPropertyName == PROPERTYNAME_CURRSYM)
+    {
+        OUString aSymbol, aExt;
+        pFormat->GetNewCurrencySymbol( aSymbol, aExt );
+        aRet <<= aSymbol;
+    }
+    else if (aPropertyName == PROPERTYNAME_CURREXT)
+    {
+        OUString aSymbol, aExt;
+        pFormat->GetNewCurrencySymbol( aSymbol, aExt );
+        aRet <<= aExt;
+    }
+    else if (aPropertyName == PROPERTYNAME_CURRABB)
+    {
+        OUString aSymbol, aExt;
+        bool bBank = false;
+        pFormat->GetNewCurrencySymbol( aSymbol, aExt );
+        const NfCurrencyEntry* pCurr = SvNumberFormatter::GetCurrencyEntry( bBank,
+            aSymbol, aExt, pFormat->GetLanguage() );
+        if ( pCurr )
+            aRet <<= pCurr->GetBankSymbol();
         else
-            throw beans::UnknownPropertyException();
+            aRet <<= OUString();
     }
     else
-        throw uno::RuntimeException();
+        throw beans::UnknownPropertyException();
 
     return aRet;
 }
@@ -787,47 +732,45 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
 
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
-    if (pFormat)
-    {
-        OUString aSymbol, aExt;
-        OUString aAbb;
-        bool bBank = false;
-        pFormat->GetNewCurrencySymbol( aSymbol, aExt );
-        const NfCurrencyEntry* pCurr = SvNumberFormatter::GetCurrencyEntry( bBank,
-            aSymbol, aExt, pFormat->GetLanguage() );
-        if ( pCurr )
-            aAbb = pCurr->GetBankSymbol();
-
-        OUString aFmtStr = pFormat->GetFormatstring();
-        OUString aComment = pFormat->GetComment();
-        bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
-        //! Pass through SvNumberformat Member bStandard?
-        bool bUserDef = ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
-        bool bThousand, bRed;
-        sal_uInt16 nDecimals, nLeading;
-        pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
-        lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
-
-        uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
-                { PROPERTYNAME_FMTSTR, uno::Any(aFmtStr) },
-                { PROPERTYNAME_LOCALE, uno::Any(aLocale) },
-                { PROPERTYNAME_TYPE, uno::Any(sal_Int16( pFormat->GetType() )) },
-                { PROPERTYNAME_COMMENT, uno::Any(aComment) },
-                { PROPERTYNAME_STDFORM, uno::Any(bStandard) },
-                { PROPERTYNAME_USERDEF, uno::Any(bUserDef) },
-                { PROPERTYNAME_DECIMALS, uno::Any(sal_Int16( nDecimals )) },
-                { PROPERTYNAME_LEADING, uno::Any(sal_Int16( nLeading )) },
-                { PROPERTYNAME_NEGRED, uno::Any(bRed) },
-                { PROPERTYNAME_THOUS, uno::Any(bThousand) },
-                { PROPERTYNAME_CURRSYM, uno::Any(aSymbol) },
-                { PROPERTYNAME_CURREXT, uno::Any(aExt) },
-                { PROPERTYNAME_CURRABB, uno::Any(aAbb) }
-            }));
-
-        return aSeq;
-    }
-    else
+    if (!pFormat)
         throw uno::RuntimeException();
+
+    OUString aSymbol, aExt;
+    OUString aAbb;
+    bool bBank = false;
+    pFormat->GetNewCurrencySymbol( aSymbol, aExt );
+    const NfCurrencyEntry* pCurr = SvNumberFormatter::GetCurrencyEntry( bBank,
+        aSymbol, aExt, pFormat->GetLanguage() );
+    if ( pCurr )
+        aAbb = pCurr->GetBankSymbol();
+
+    OUString aFmtStr = pFormat->GetFormatstring();
+    OUString aComment = pFormat->GetComment();
+    bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
+    //! Pass through SvNumberformat Member bStandard?
+    bool bUserDef = ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
+    bool bThousand, bRed;
+    sal_uInt16 nDecimals, nLeading;
+    pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
+    lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
+
+    uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+            { PROPERTYNAME_FMTSTR, uno::Any(aFmtStr) },
+            { PROPERTYNAME_LOCALE, uno::Any(aLocale) },
+            { PROPERTYNAME_TYPE, uno::Any(sal_Int16( pFormat->GetType() )) },
+            { PROPERTYNAME_COMMENT, uno::Any(aComment) },
+            { PROPERTYNAME_STDFORM, uno::Any(bStandard) },
+            { PROPERTYNAME_USERDEF, uno::Any(bUserDef) },
+            { PROPERTYNAME_DECIMALS, uno::Any(sal_Int16( nDecimals )) },
+            { PROPERTYNAME_LEADING, uno::Any(sal_Int16( nLeading )) },
+            { PROPERTYNAME_NEGRED, uno::Any(bRed) },
+            { PROPERTYNAME_THOUS, uno::Any(bThousand) },
+            { PROPERTYNAME_CURRSYM, uno::Any(aSymbol) },
+            { PROPERTYNAME_CURREXT, uno::Any(aExt) },
+            { PROPERTYNAME_CURRABB, uno::Any(aAbb) }
+        }));
+
+    return aSeq;
 }
 
 void SAL_CALL SvNumberFormatObj::setPropertyValues( const uno::Sequence<beans::PropertyValue>& )
@@ -880,37 +823,36 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aProp
     ::osl::MutexGuard aGuard( m_aMutex );
 
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
+    if (!pFormatter)
+        throw uno::RuntimeException();
+
+    if (aPropertyName == PROPERTYNAME_NOZERO)
     {
-        if (aPropertyName == PROPERTYNAME_NOZERO)
-        {
-            //  operator >>= shouldn't be used for bool (?)
-            if ( auto b = o3tl::tryAccess<bool>(aValue) )
-                pFormatter->SetNoZero( *b );
-        }
-        else if (aPropertyName == PROPERTYNAME_NULLDATE)
-        {
-            util::Date aDate;
-            if ( aValue >>= aDate )
-                pFormatter->ChangeNullDate( aDate.Day, aDate.Month, aDate.Year );
-        }
-        else if (aPropertyName == PROPERTYNAME_STDDEC)
-        {
-            sal_Int16 nInt16 = sal_Int16();
-            if ( aValue >>= nInt16 )
-                pFormatter->ChangeStandardPrec( nInt16 );
-        }
-        else if (aPropertyName == PROPERTYNAME_TWODIGIT)
-        {
-            sal_Int16 nInt16 = sal_Int16();
-            if ( aValue >>= nInt16 )
-                pFormatter->SetYear2000( nInt16 );
-        }
-        else
-            throw beans::UnknownPropertyException();
+        //  operator >>= shouldn't be used for bool (?)
+        if ( auto b = o3tl::tryAccess<bool>(aValue) )
+            pFormatter->SetNoZero( *b );
+    }
+    else if (aPropertyName == PROPERTYNAME_NULLDATE)
+    {
+        util::Date aDate;
+        if ( aValue >>= aDate )
+            pFormatter->ChangeNullDate( aDate.Day, aDate.Month, aDate.Year );
+    }
+    else if (aPropertyName == PROPERTYNAME_STDDEC)
+    {
+        sal_Int16 nInt16 = sal_Int16();
+        if ( aValue >>= nInt16 )
+            pFormatter->ChangeStandardPrec( nInt16 );
+    }
+    else if (aPropertyName == PROPERTYNAME_TWODIGIT)
+    {
+        sal_Int16 nInt16 = sal_Int16();
+        if ( aValue >>= nInt16 )
+            pFormatter->SetYear2000( nInt16 );
     }
     else
-        throw uno::RuntimeException();
+        throw beans::UnknownPropertyException();
+
 }
 
 uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& aPropertyName )
@@ -919,26 +861,24 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
 
     uno::Any aRet;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
-    {
-        if (aPropertyName == PROPERTYNAME_NOZERO)
-        {
-            aRet <<= pFormatter->GetNoZero();
-        }
-        else if (aPropertyName == PROPERTYNAME_NULLDATE)
-        {
-            const Date& rDate = pFormatter->GetNullDate();
-            aRet <<= rDate.GetUNODate();
-        }
-        else if (aPropertyName == PROPERTYNAME_STDDEC)
-            aRet <<= (sal_Int16)( pFormatter->GetStandardPrec() );
-        else if (aPropertyName == PROPERTYNAME_TWODIGIT)
-            aRet <<= (sal_Int16)( pFormatter->GetYear2000() );
-        else
-            throw beans::UnknownPropertyException();
-    }
-    else
+    if (!pFormatter)
         throw uno::RuntimeException();
+
+    if (aPropertyName == PROPERTYNAME_NOZERO)
+    {
+        aRet <<= pFormatter->GetNoZero();
+    }
+    else if (aPropertyName == PROPERTYNAME_NULLDATE)
+    {
+        const Date& rDate = pFormatter->GetNullDate();
+        aRet <<= rDate.GetUNODate();
+    }
+    else if (aPropertyName == PROPERTYNAME_STDDEC)
+        aRet <<= (sal_Int16)( pFormatter->GetStandardPrec() );
+    else if (aPropertyName == PROPERTYNAME_TWODIGIT)
+        aRet <<= (sal_Int16)( pFormatter->GetYear2000() );
+    else
+        throw beans::UnknownPropertyException();
 
     return aRet;
 }

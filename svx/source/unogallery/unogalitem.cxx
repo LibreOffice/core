@@ -215,28 +215,27 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
         {
             OUString aNewTitle;
 
-            if( *pValues >>= aNewTitle )
-            {
-                ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
-
-                if( pGalTheme )
-                {
-                    std::unique_ptr<SgaObject> pObj(pGalTheme->ImplReadSgaObject( const_cast< GalleryObject* >( implGetObject() ) ));
-
-                    if( pObj )
-                    {
-                        if( pObj->GetTitle() != aNewTitle )
-                        {
-                            pObj->SetTitle( aNewTitle );
-                            pGalTheme->InsertObject( *pObj );
-                        }
-                    }
-                }
-            }
-            else
+            if( !(*pValues >>= aNewTitle) )
             {
                 throw lang::IllegalArgumentException();
             }
+
+            ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
+
+            if( pGalTheme )
+            {
+                std::unique_ptr<SgaObject> pObj(pGalTheme->ImplReadSgaObject( const_cast< GalleryObject* >( implGetObject() ) ));
+
+                if( pObj )
+                {
+                    if( pObj->GetTitle() != aNewTitle )
+                    {
+                        pObj->SetTitle( aNewTitle );
+                        pGalTheme->InsertObject( *pObj );
+                    }
+                }
+            }
+
         }
 
         ++ppEntries;
