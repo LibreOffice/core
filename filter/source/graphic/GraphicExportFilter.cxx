@@ -83,22 +83,6 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         {
             maFilterDataSequence[i].Value >>= mnTargetHeight;
         }
-        else if ( maFilterDataSequence[i].Name == "Compression" )
-        {
-            maCompression = maFilterDataSequence[i].Value;
-        }
-        else if ( maFilterDataSequence[i].Name == "Interlaced" )
-        {
-            maInterlaced = maFilterDataSequence[i].Value;
-        }
-        else if ( maFilterDataSequence[i].Name == "Translucent" )
-        {
-            maTranslucent = maFilterDataSequence[i].Value;
-        }
-        else if ( maFilterDataSequence[i].Name == "Quality" )
-        {
-            maQuality = maFilterDataSequence[i].Value;
-        }
     }
 
     if ( !aInternalFilterName.isEmpty() )
@@ -158,53 +142,13 @@ bool GraphicExportFilter::filterRenderDocument() const
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    uno::Sequence< beans::PropertyValue > aFilterData( maFilterDataSequence );
-    sal_Int32 nAdd = 0;
-    if (!maCompression.hasValue())
-        ++nAdd;
-    if (!maInterlaced.hasValue())
-        ++nAdd;
-    if (!maTranslucent.hasValue())
-        ++nAdd;
-    if (!maQuality.hasValue())
-        ++nAdd;
-    if (nAdd)
-    {
-        sal_Int32 nLen = aFilterData.getLength();
-        aFilterData.realloc( nLen + nAdd);
-        if (!maCompression.hasValue())
-        {   // PNG
-            aFilterData[ nLen ].Name = "Compression";
-            aFilterData[ nLen ].Value <<= (sal_Int32) 9;
-            ++nLen;
-        }
-        if (!maInterlaced.hasValue())
-        {   // PNG,GIF
-            aFilterData[ nLen ].Name = "Interlaced";
-            aFilterData[ nLen ].Value <<= (sal_Int32) 0;
-            ++nLen;
-        }
-        if (!maTranslucent.hasValue())
-        {   // PNG,GIF
-            aFilterData[ nLen ].Name = "Translucent";
-            aFilterData[ nLen ].Value <<= (sal_Int32) 0;
-            ++nLen;
-        }
-        if (!maQuality.hasValue())
-        {   // JPG
-            aFilterData[ nLen ].Name = "Quality";
-            aFilterData[ nLen ].Value <<= (sal_Int32) 99;
-            ++nLen;
-        }
-        assert( nLen == aFilterData.getLength());
-    }
-
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( maFilterExtension );
 
     SvMemoryStream aMemStream;
     const GraphicConversionParameters aParameters(aTargetSizePixel, true, true);
 
-    const ErrCode nResult = rFilter.ExportGraphic( aGraphic.GetBitmapEx(aParameters), OUString(), aMemStream, nFilterFormat, &aFilterData );
+    const ErrCode nResult = rFilter.ExportGraphic( aGraphic.GetBitmapEx(aParameters), OUString(), aMemStream,
+            nFilterFormat, &maFilterDataSequence );
 
     if ( nResult == ERRCODE_NONE )
     {
