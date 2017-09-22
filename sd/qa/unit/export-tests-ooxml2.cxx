@@ -101,6 +101,7 @@ public:
     void testTdf92076();
     void testTdf59046();
     void testTdf105739();
+    void testTdf112552();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testTdf92076);
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
+    CPPUNIT_TEST(testTdf112552);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -781,6 +783,21 @@ void SdOOXMLExportTest2::testTdf105739()
     xShell->DoClose();
 }
 
+
+void SdOOXMLExportTest2::testTdf112552()
+{
+    // Background fill was not displayed, but it was because of the wrong geometry
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf112552.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", "w", "21600");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", "h", "21600");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", "21600");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", "0");
+    xDocShRef->DoClose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
