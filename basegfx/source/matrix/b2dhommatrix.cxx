@@ -188,7 +188,7 @@ namespace basegfx
             double fSin(0.0);
             double fCos(1.0);
 
-            tools::createSinCosOrthogonal(fSin, fCos, fRadiant);
+            utils::createSinCosOrthogonal(fSin, fCos, fRadiant);
             Impl2DHomMatrix aRotMat;
 
             aRotMat.set(0, 0, fCos);

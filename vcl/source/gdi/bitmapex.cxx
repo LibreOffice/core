@@ -932,7 +932,7 @@ BitmapEx BitmapEx::getTransformed(
     basegfx::B2DRange aVisibleRange(rVisibleRange);
 
     aVisibleRange.transform(
-        basegfx::tools::createScaleTranslateB2DHomMatrix(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
             aOutlineRange.getRange(),
             aOutlineRange.getMinimum()));
 
@@ -960,7 +960,7 @@ BitmapEx BitmapEx::getTransformed(
     // Build complete transform from source pixels to target pixels.
     // Start by scaling from source pixel size to unit coordinates
     basegfx::B2DHomMatrix aTransform(
-        basegfx::tools::createScaleB2DHomMatrix(
+        basegfx::utils::createScaleB2DHomMatrix(
             1.0 / nSourceWidth,
             1.0 / nSourceHeight));
 

@@ -55,7 +55,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/tools/unotools.hxx>
+#include <basegfx/utils/unotools.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/gradient.hxx>
 

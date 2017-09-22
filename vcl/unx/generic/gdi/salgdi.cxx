@@ -602,7 +602,7 @@ bool X11SalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPolyPo
 
         if(bSnapPoints)
         {
-            aPolyPoly = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aPolyPoly);
+            aPolyPoly = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aPolyPoly);
         }
 
         cairo_t* cr = getCairoContext();
@@ -788,7 +788,7 @@ bool X11SalGraphics::drawPolyLine(
         if(nEdgeCount)
         {
             const bool bSnapPoints(!getAntiAliasB2DDraw());
-            static basegfx::B2DHomMatrix aHalfPointTransform(basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5));
+            static basegfx::B2DHomMatrix aHalfPointTransform(basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5));
             basegfx::B2DCubicBezier aEdge;
             basegfx::B2DPoint aStart;
 

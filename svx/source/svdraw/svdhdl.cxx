@@ -2548,7 +2548,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
 
     // prepare crop PolyPolygon
     basegfx::B2DPolygon aGraphicOutlinePolygon(
-        basegfx::tools::createPolygonFromRect(
+        basegfx::utils::createPolygonFromRect(
             aCropped));
     basegfx::B2DPolyPolygon aCropPolyPolygon(aGraphicOutlinePolygon);
 
@@ -2560,7 +2560,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
     if(!aOverlap.isEmpty())
     {
         aCropPolyPolygon.append(
-            basegfx::tools::createPolygonFromRect(
+            basegfx::utils::createPolygonFromRect(
                 aOverlap));
     }
 

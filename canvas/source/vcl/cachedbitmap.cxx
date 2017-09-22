@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <tools/diagnose_ex.h>

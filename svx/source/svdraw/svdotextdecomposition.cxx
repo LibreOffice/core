@@ -691,7 +691,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 
     // prepare contour polygon, force to non-mirrored for laying out
     basegfx::B2DPolyPolygon aPolyPolygon(rSdrContourTextPrimitive.getUnitPolyPolygon());
-    aPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(fabs(aScale.getX()), fabs(aScale.getY())));
+    aPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(fabs(aScale.getX()), fabs(aScale.getY())));
 
     // prepare outliner
     SolarMutexGuard aSolarGuard;
@@ -715,7 +715,7 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
-    const basegfx::B2DHomMatrix aNewTransformB(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+    const basegfx::B2DHomMatrix aNewTransformB(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
         fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
@@ -1095,7 +1095,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     const double fStartInX(bVerticalWriting && bTopToBottom ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
     const double fStartInY(bVerticalWriting && !bTopToBottom ? aAdjustTranslate.getY() + aOutlinerScale.getY() : aAdjustTranslate.getY());
     const basegfx::B2DTuple aAdjOffset(fStartInX, fStartInY);
-    basegfx::B2DHomMatrix aNewTransformA(basegfx::tools::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
+    basegfx::B2DHomMatrix aNewTransformA(basegfx::utils::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
@@ -1104,7 +1104,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
-    const basegfx::B2DHomMatrix aNewTransformB(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+    const basegfx::B2DHomMatrix aNewTransformB(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
         fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
@@ -1196,7 +1196,7 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
-    const basegfx::B2DHomMatrix aNewTransformB(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+    const basegfx::B2DHomMatrix aNewTransformB(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
         fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 

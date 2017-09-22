@@ -77,7 +77,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayDashedBorder::createOve
     if (!mbToggle)
         ::std::swap(aColorA, aColorB);
 
-    const basegfx::B2DPolygon aPoly = basegfx::tools::createPolygonFromRect(maRange);
+    const basegfx::B2DPolygon aPoly = basegfx::utils::createPolygonFromRect(maRange);
     B2DPolyPolygon aPolygon(aPoly);
     const drawinglayer::primitive2d::Primitive2DReference aReference(
         new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(

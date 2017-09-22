@@ -325,8 +325,8 @@ void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::P
 
     // normalize the two polypolygons before. Force properly oriented
     // polygons.
-    aMergePolyPolygonA = basegfx::tools::prepareForPolygonOperation( aMergePolyPolygonA );
-    aMergePolyPolygonB = basegfx::tools::prepareForPolygonOperation( aMergePolyPolygonB );
+    aMergePolyPolygonA = basegfx::utils::prepareForPolygonOperation( aMergePolyPolygonA );
+    aMergePolyPolygonB = basegfx::utils::prepareForPolygonOperation( aMergePolyPolygonB );
 
     switch( nOperation )
     {
@@ -335,7 +335,7 @@ void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::P
         case PolyClipOp::UNION:
         {
             // merge A and B (OR)
-            aMergePolyPolygonA = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
+            aMergePolyPolygonA = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
 
@@ -343,7 +343,7 @@ void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::P
         case PolyClipOp::INTERSECT:
         {
             // cut poly 1 against polys 2..n (AND)
-            aMergePolyPolygonA = basegfx::tools::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
+            aMergePolyPolygonA = basegfx::utils::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
             break;
         }
     }

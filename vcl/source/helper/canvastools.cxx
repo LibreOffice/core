@@ -45,7 +45,7 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <tools/poly.hxx>

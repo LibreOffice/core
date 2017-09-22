@@ -37,7 +37,7 @@
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
@@ -63,7 +63,7 @@ namespace drawinglayer
         {
             // when we have no given definition range, use the range of the given geometry
             // also for definition (simplest case)
-            const basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
+            const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyPolygon));
 
             return createPolyPolygonFillPrimitive(
                 rPolyPolygon,
@@ -130,7 +130,7 @@ namespace drawinglayer
 
                 // create FillGradientPrimitive2D for transparence and add to new sequence
                 // fillGradientPrimitive is enough here (compared to PolyPolygonGradientPrimitive2D) since float transparence will be masked anyways
-                const basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
+                const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyPolygon));
                 const Primitive2DReference xRefB(
                     new FillGradientPrimitive2D(
                         aRange,
@@ -212,14 +212,14 @@ namespace drawinglayer
                     // scale outline to object's size to allow growing with value relative to that size
                     // and also to keep aspect ratio
                     basegfx::B2DPolyPolygon aScaledUnitPolyPolygon(rUnitPolyPolygon);
-                    aScaledUnitPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(
+                    aScaledUnitPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(
                         fabs(aScale.getX()), fabs(aScale.getY())));
 
                     // grow the polygon. To shrink, use negative value (half width)
-                    aScaledUnitPolyPolygon = basegfx::tools::growInNormalDirection(aScaledUnitPolyPolygon, -(rStroke.getWidth() * 0.5));
+                    aScaledUnitPolyPolygon = basegfx::utils::growInNormalDirection(aScaledUnitPolyPolygon, -(rStroke.getWidth() * 0.5));
 
                     // scale back to unit polygon
-                    aScaledUnitPolyPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(
+                    aScaledUnitPolyPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(
                         0.0 != aScale.getX() ? 1.0 / aScale.getX() : 1.0,
                         0.0 != aScale.getY() ? 1.0 / aScale.getY() : 1.0));
 
@@ -271,7 +271,7 @@ namespace drawinglayer
                 aJustScaleTransform.set(1, 1, aScale.getY());
                 basegfx::B2DPolyPolygon aScaledUnitPolyPolygon(rUnitPolyPolygon);
                 aScaledUnitPolyPolygon.transform(aJustScaleTransform);
-                const basegfx::B2DRange aSnapRange(basegfx::tools::getRange(aScaledUnitPolyPolygon));
+                const basegfx::B2DRange aSnapRange(basegfx::utils::getRange(aScaledUnitPolyPolygon));
 
                 // create a range describing the wanted text position and size (aTextAnchorRange). This
                 // means to use the text distance values here
@@ -284,7 +284,7 @@ namespace drawinglayer
                 // now create a transformation from this basic range (aTextAnchorRange)
                 // #i121494# if we have no scale use at least 1.0 to have a carrier e.g. for
                 // mirror values, else these will get lost
-                aAnchorTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                aAnchorTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
                     basegfx::fTools::equalZero(aTextAnchorRange.getWidth()) ? 1.0 : aTextAnchorRange.getWidth(),
                     basegfx::fTools::equalZero(aTextAnchorRange.getHeight()) ? 1.0 : aTextAnchorRange.getHeight(),
                     aTextAnchorRange.getMinX(), aTextAnchorRange.getMinY());
@@ -293,7 +293,7 @@ namespace drawinglayer
                 aAnchorTransform.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
                 // apply object's other transforms
-                aAnchorTransform = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
+                aAnchorTransform = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
                     * aAnchorTransform;
 
                 if(rText.isFitToSize())
@@ -377,7 +377,7 @@ namespace drawinglayer
                     aAnchorTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
                     // build transform from scaled only to full AnchorTransform and inverse
-                    const basegfx::B2DHomMatrix aSRT(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                    const basegfx::B2DHomMatrix aSRT(basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
                         fShearX, fRotate, aTranslate));
                     basegfx::B2DHomMatrix aISRT(aSRT);
                     aISRT.invert();
@@ -451,7 +451,7 @@ namespace drawinglayer
 
                         // scrolling needs an encapsulating clipping primitive
                         const basegfx::B2DRange aClipRange(aClipTopLeft, aClipBottomRight);
-                        basegfx::B2DPolygon aClipPolygon(basegfx::tools::createPolygonFromRect(aClipRange));
+                        basegfx::B2DPolygon aClipPolygon(basegfx::utils::createPolygonFromRect(aClipRange));
                         aClipPolygon.transform(aSRT);
                         return Primitive2DReference(new MaskPrimitive2D(basegfx::B2DPolyPolygon(aClipPolygon), aContent));
                     }

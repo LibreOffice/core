@@ -211,7 +211,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPage::createV
                 const basegfx::B2DRange aInnerRange(
                     rPage.GetLeftBorder(), rPage.GetUpperBorder(),
                     rPage.GetWidth() - rPage.GetRightBorder(), rPage.GetHeight() - rPage.GetLowerBorder());
-                const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
+                const basegfx::B2DPolygon aInnerPolgon(basegfx::utils::createPolygonFromRect(aInnerRange));
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
                         basegfx::B2DPolyPolygon(aInnerPolgon),
@@ -247,7 +247,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageFill::createVie
 {
     const SdrPage& rPage = getPage();
     const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWidth(), (double)rPage.GetHeight());
-    const basegfx::B2DPolygon aPageFillPolygon(basegfx::tools::createPolygonFromRect(aPageFillRange));
+    const basegfx::B2DPolygon aPageFillPolygon(basegfx::utils::createPolygonFromRect(aPageFillRange));
 
     // We have only the page information, not the view information. Use the
     // svtools::DOCCOLOR color for initialisation
@@ -315,7 +315,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfOuterPageBorder::cr
     else
     {
         xRetval.resize(1);
-        const basegfx::B2DPolygon aPageBorderPolygon(basegfx::tools::createPolygonFromRect(aPageBorderRange));
+        const basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
         xRetval[0] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aPageBorderPolygon, aRGBBorderColor));
     }
 
@@ -345,7 +345,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfInnerPageBorder::cr
     const basegfx::B2DRange aPageBorderRange(
         (double)rPage.GetLeftBorder(), (double)rPage.GetUpperBorder(),
         (double)(rPage.GetWidth() - rPage.GetRightBorder()), (double)(rPage.GetHeight() - rPage.GetLowerBorder()));
-    const basegfx::B2DPolygon aPageBorderPolygon(basegfx::tools::createPolygonFromRect(aPageBorderRange));
+    const basegfx::B2DPolygon aPageBorderPolygon(basegfx::utils::createPolygonFromRect(aPageBorderRange));
 
     // We have only the page information, not the view information. Use the
     // svtools::FONTCOLOR or svtools::DOCBOUNDARIES color for initialisation

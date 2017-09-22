@@ -45,7 +45,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
@@ -117,11 +117,11 @@ basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&    rCl
 
     if(rClip.count())
     {
-        return basegfx::tools::clipPolyPolygonOnRange(rClip, aClipRange, true, false);
+        return basegfx::utils::clipPolyPolygonOnRange(rClip, aClipRange, true, false);
     }
     else
     {
-        return basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aClipRange));
+        return basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aClipRange));
     }
 }
 
@@ -139,14 +139,14 @@ basegfx::B2DPolyPolygon prepareClip( const basegfx::B2DPolyPolygon& rClip )
     // TODO(P2): unnecessary, once XCanvas is correctly handling this
     // AW: Should be no longer necessary; tools are now bezier-safe
     if( aClip.areControlPointsUsed() )
-        aClip = basegfx::tools::adaptiveSubdivideByAngle( aClip );
+        aClip = basegfx::utils::adaptiveSubdivideByAngle( aClip );
 
     // normalize polygon, preparation for clipping
     // in updateCanvas()
-    aClip = basegfx::tools::correctOrientations(aClip);
-    aClip = basegfx::tools::solveCrossovers(aClip);
-    aClip = basegfx::tools::stripNeutralPolygons(aClip);
-    aClip = basegfx::tools::stripDispensablePolygons(aClip);
+    aClip = basegfx::utils::correctOrientations(aClip);
+    aClip = basegfx::utils::solveCrossovers(aClip);
+    aClip = basegfx::utils::stripNeutralPolygons(aClip);
+    aClip = basegfx::utils::stripDispensablePolygons(aClip);
 
     return aClip;
 }
@@ -173,7 +173,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
     // depending on the slide content a one pixel wide
     // line will show to the bottom and the right.
     const ::basegfx::B2DPolygon aPoly(
-        ::basegfx::tools::createPolygonFromRect(
+        ::basegfx::utils::createPolygonFromRect(
             basegfx::B2DRange(rArea)));
 
     ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(

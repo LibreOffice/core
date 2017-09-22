@@ -66,7 +66,7 @@ include/basegfx/point/b3dpoint.hxx:85
     class basegfx::B3DPoint & basegfx::B3DPoint::operator*=(const class basegfx::B3DPoint &)
 include/basegfx/point/b3dpoint.hxx:95
     class basegfx::B3DPoint & basegfx::B3DPoint::operator*=(double)
-include/basegfx/tools/unopolypolygon.hxx:91
+include/basegfx/utils/unopolypolygon.hxx:91
     const class basegfx::B2DPolyPolygon & basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const
 include/basegfx/tuple/b2i64tuple.hxx:92
     const long & basegfx::B2I64Tuple::operator[](int) const

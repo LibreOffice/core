@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_TOOLS_LERP_HXX
-#define INCLUDED_BASEGFX_TOOLS_LERP_HXX
+#ifndef INCLUDED_BASEGFX_UTILS_LERP_HXX
+#define INCLUDED_BASEGFX_UTILS_LERP_HXX
 
 #include <sal/types.h>
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         /** Generic linear interpolator
 
@@ -46,6 +46,6 @@ namespace basegfx
     }
 }
 
-#endif // INCLUDED_BASEGFX_TOOLS_LERP_HXX
+#endif // INCLUDED_BASEGFX_UTILS_LERP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

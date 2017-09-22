@@ -207,7 +207,7 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         const basegfx::B3DHomMatrix aTransform(aWorldToView * aCurrentTransform);
 
         // transform to relative scene coordinates
-        basegfx::B2DPolyPolygon aPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(m_aWireframePolyPolygon, aTransform));
+        basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(m_aWireframePolyPolygon, aTransform));
 
         // transform to 2D view coordinates
         aPolyPolygon.transform(rVCScene.getObjectTransformation());
