@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_externals,ucpimage, \
 ))
 
 $(eval $(call gb_Library_use_libraries,ucpimage, \
+    comphelper \
     cppu \
     cppuhelper \
     sal \

@@ -56,6 +56,7 @@ $(eval $(call gb_Library_add_ldflags,UAccCOM,\
 
 $(eval $(call gb_Library_use_libraries,UAccCOM,\
 	vcl \
+	comphelper \
 	cppu \
 	sal \
 ))
