@@ -240,8 +240,6 @@ std::set<OUString> collect_charts(VclPtr<ScGridWindow> const & xGridWindow)
         {
             aRet.insert(static_cast<SdrOle2Obj*>(pObject)->GetPersistName());
         }
-        else
-            SAL_DEBUG(pObject->GetName());
         pObject = aIter.Next();
     }
 
