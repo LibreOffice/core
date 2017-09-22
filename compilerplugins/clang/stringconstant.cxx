@@ -842,9 +842,17 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                 }
                 APSInt res;
                 if (!expr->getArg(1)->EvaluateAsInt(
-                        res, compiler.getASTContext())
-                    || res != n)
+                        res, compiler.getASTContext()))
                 {
+                    return true;
+                }
+                if (res != n) {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        ("suspicious 'rtl::OUString' constructor with literal"
+                         " of length %0 and non-matching length argument %1"),
+                        expr->getExprLoc())
+                        << n << res.toString(10) << expr->getSourceRange();
                     return true;
                 }
                 if (!expr->getArg(2)->EvaluateAsInt(
