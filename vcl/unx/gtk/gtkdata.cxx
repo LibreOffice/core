@@ -417,6 +417,7 @@ GtkSalData::GtkSalData( SalInstance *pInstance )
     : GenericUnixSalData( SAL_DATA_GTK, pInstance )
     , m_aDispatchMutex()
     , m_aDispatchCondition()
+    , m_pDocumentFocusListener(nullptr)
 {
     m_pUserEvent = nullptr;
 }

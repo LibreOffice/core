@@ -35,7 +35,10 @@
 
 #include <list>
 
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleEventListener; } } } }
+
 class GtkSalDisplay;
+class DocumentFocusListener;
 
 inline GdkWindow * widget_get_window(GtkWidget *widget)
 {
@@ -99,9 +102,14 @@ class GtkSalData : public GenericUnixSalData
     osl::Condition  m_aDispatchCondition;
     css::uno::Any   m_aException;
 
+    css::uno::Reference<css::accessibility::XAccessibleEventListener> m_xDocumentFocusListener;
+    DocumentFocusListener * m_pDocumentFocusListener;
+
 public:
     GtkSalData( SalInstance *pInstance );
     virtual ~GtkSalData() override;
+
+    DocumentFocusListener & GetDocumentFocusListener();
 
     void Init();
     virtual void Dispose() override;
