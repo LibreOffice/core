@@ -293,7 +293,7 @@ void SAL_CALL SlideShowView::clear()
 
     const Size aWindowSize( mrOutputWindow.GetSizePixel() );
 
-    ::basegfx::B2DPolygon aPoly( ::basegfx::tools::createPolygonFromRect(
+    ::basegfx::B2DPolygon aPoly( ::basegfx::utils::createPolygonFromRect(
                                      ::basegfx::B2DRectangle(0.0,0.0,
                                                              aWindowSize.Width(),
                                                              aWindowSize.Height() ) ) );
@@ -365,7 +365,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
     mrOutputWindow.SetPresentationArea( maPresentationArea );
 
     // scale presentation into available window rect (minus 10%); center in the window
-    const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+    const basegfx::B2DHomMatrix aMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(
         aOutputSize.Width(), aOutputSize.Height(), aOutputOffset.X(), aOutputOffset.Y()));
 
     geometry::AffineMatrix2D aRes;

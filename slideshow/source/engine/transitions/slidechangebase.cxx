@@ -160,7 +160,7 @@ void SlideChangeBase::renderBitmap(
             pCanvas->clone() );
 
         // render at output position, don't modify bitmap object (no move!):
-        const basegfx::B2DHomMatrix transform(basegfx::tools::createTranslateB2DHomMatrix(
+        const basegfx::B2DHomMatrix transform(basegfx::utils::createTranslateB2DHomMatrix(
             pageOrigin.getX(), pageOrigin.getY()));
 
         pDevicePixelCanvas->setTransformation( transform );

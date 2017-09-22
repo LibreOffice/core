@@ -297,7 +297,7 @@ namespace svgio
 
                     if(!aTextFillVector.empty())
                     {
-                        aMergedArea = basegfx::tools::mergeToSinglePolyPolygon(aTextFillVector);
+                        aMergedArea = basegfx::utils::mergeToSinglePolyPolygon(aTextFillVector);
                     }
                 }
 
@@ -677,7 +677,7 @@ namespace svgio
                             {
                                 aNewLinePrimitive = new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                     basegfx::B2DPolyPolygon(
-                                        basegfx::tools::createPolygonFromCircle(
+                                        basegfx::utils::createPolygonFromCircle(
                                             aSingle.getB2DPoint(0),
                                             fStrokeWidth * (1.44 * 0.5))),
                                     pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0));
@@ -753,7 +753,7 @@ namespace svgio
                             if(!rLineFillVector.empty())
                             {
                                 const basegfx::B2DPolyPolygon aMergedArea(
-                                    basegfx::tools::mergeToSinglePolyPolygon(
+                                    basegfx::utils::mergeToSinglePolyPolygon(
                                         rLineFillVector));
 
                                 if(aMergedArea.count())
@@ -892,7 +892,7 @@ namespace svgio
         void SvgStyleAttributes::add_markers(
             const basegfx::B2DPolyPolygon& rPath,
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-            const basegfx::tools::PointIndexSet* pHelpPointIndices) const
+            const basegfx::utils::PointIndexSet* pHelpPointIndices) const
         {
             // try to access linked markers
             const SvgMarkerNode* pStart = accessMarkerStartXLink();
@@ -953,8 +953,8 @@ namespace svgio
 
                                 if(pHelpPointIndices && !pHelpPointIndices->empty())
                                 {
-                                    const basegfx::tools::PointIndexSet::const_iterator aFound(
-                                        pHelpPointIndices->find(basegfx::tools::PointIndex(a, b)));
+                                    const basegfx::utils::PointIndexSet::const_iterator aFound(
+                                        pHelpPointIndices->find(basegfx::utils::PointIndex(a, b)));
 
                                     if(aFound != pHelpPointIndices->end())
                                     {
@@ -1002,11 +1002,11 @@ namespace svgio
                                     // This is not done here, see comment 14 in task #1232379#
                                     // or http://www.w3.org/TR/SVG/painting.html#OrientAttribute
                                     basegfx::B2DVector aEntering(
-                                        basegfx::tools::getTangentEnteringPoint(
+                                        basegfx::utils::getTangentEnteringPoint(
                                             aSubPolygonPath,
                                             nPointIndex));
                                     basegfx::B2DVector aLeaving(
-                                        basegfx::tools::getTangentLeavingPoint(
+                                        basegfx::utils::getTangentLeavingPoint(
                                             aSubPolygonPath,
                                             nPointIndex));
                                     const bool bEntering(!aEntering.equalZero());
@@ -1055,7 +1055,7 @@ namespace svgio
                                 if(!aPreparedMarkerClipRange.isEmpty())
                                 {
                                     // marker needs to be clipped, it's bigger as the mapping
-                                    basegfx::B2DPolyPolygon aClipPolygon(basegfx::tools::createPolygonFromRect(aPreparedMarkerClipRange));
+                                    basegfx::B2DPolyPolygon aClipPolygon(basegfx::utils::createPolygonFromRect(aPreparedMarkerClipRange));
 
                                     aClipPolygon.transform(aCombinedTransform);
                                     xMarker = new drawinglayer::primitive2d::MaskPrimitive2D(
@@ -1075,7 +1075,7 @@ namespace svgio
         void SvgStyleAttributes::add_path(
             const basegfx::B2DPolyPolygon& rPath,
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-            const basegfx::tools::PointIndexSet* pHelpPointIndices) const
+            const basegfx::utils::PointIndexSet* pHelpPointIndices) const
         {
             if(!rPath.count())
             {
@@ -1119,9 +1119,9 @@ namespace svgio
                 {
                     if(getFill() || getSvgGradientNodeFill() || getSvgPatternNodeFill()) {
                         // nonzero is wanted, solve geometrically (see description on basegfx)
-                        // basegfx::tools::createNonzeroConform() is expensive for huge paths
+                        // basegfx::utils::createNonzeroConform() is expensive for huge paths
                         // and is only needed if path will be filled later on
-                        aPath = basegfx::tools::createNonzeroConform(aPath);
+                        aPath = basegfx::utils::createNonzeroConform(aPath);
                     }
                 }
 

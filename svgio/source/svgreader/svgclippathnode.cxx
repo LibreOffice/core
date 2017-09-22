@@ -150,7 +150,7 @@ namespace svgio
                     if(nSize > 1)
                     {
                         // merge to single clipPolyPolygon
-                        aClipPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(rResult);
+                        aClipPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(rResult);
                     }
                     else
                     {
@@ -166,7 +166,7 @@ namespace svgio
                         const basegfx::B2DRange aContentRange(rContent.getB2DRange(aViewInformation2D));
 
                         aClipPolyPolygon.transform(
-                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            basegfx::utils::createScaleTranslateB2DHomMatrix(
                                 aContentRange.getRange(),
                                 aContentRange.getMinimum()));
                     }
@@ -184,7 +184,7 @@ namespace svgio
                     bool bCreateEmbedding(true);
                     bool bAddContent(true);
 
-                    if(basegfx::tools::isRectangle(aClipPolyPolygon))
+                    if(basegfx::utils::isRectangle(aClipPolyPolygon))
                     {
                         // ClipRegion is a rectangle, thus it is not expensive to tell
                         // if the content is completely inside or outside of it; get ranges
@@ -207,7 +207,7 @@ namespace svgio
                             basegfx::B2DRange aCommonRange(aContentRange);
 
                             aCommonRange.intersect(aClipRange);
-                            aClipPolyPolygon = basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aCommonRange));
+                            aClipPolyPolygon = basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonRange));
                         }
                         else
                         {

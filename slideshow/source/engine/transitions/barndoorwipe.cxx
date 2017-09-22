@@ -32,7 +32,7 @@ namespace internal {
     if (m_doubled)
         t /= 2.0;
 
-    basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5));
+    basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(-0.5, -0.5));
     aTransform.scale( ::basegfx::pruneScaleValue(t), 1.0 );
     aTransform.translate( 0.5, 0.5 );
     ::basegfx::B2DPolygon poly( m_unitRect );
@@ -40,7 +40,7 @@ namespace internal {
     ::basegfx::B2DPolyPolygon res(poly);
 
     if (m_doubled) {
-        aTransform = basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5);
+        aTransform = basegfx::utils::createTranslateB2DHomMatrix(-0.5, -0.5);
         aTransform.rotate( M_PI_2 );
         aTransform.translate( 0.5, 0.5 );
         poly.transform( aTransform );

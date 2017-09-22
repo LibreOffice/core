@@ -30,7 +30,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <canvas/canvastools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -64,7 +64,7 @@ namespace slideshow
             rendering::RenderState aRenderState;
             ::canvas::tools::initRenderState( aRenderState );
 
-            const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(maOutputPos));
+            const basegfx::B2DHomMatrix aTranslation(basegfx::utils::createTranslateB2DHomMatrix(maOutputPos));
             ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
 
             try

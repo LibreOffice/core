@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/canvastools.hxx>

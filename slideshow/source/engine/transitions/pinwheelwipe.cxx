@@ -37,10 +37,10 @@ namespace internal {
     for ( sal_Int32 i = m_blades; i--; )
     {
         ::basegfx::B2DPolygon p(poly);
-        p.transform(basegfx::tools::createRotateB2DHomMatrix((i * 2.0 * M_PI) / m_blades));
+        p.transform(basegfx::utils::createRotateB2DHomMatrix((i * 2.0 * M_PI) / m_blades));
         res.append( p );
     }
-    res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
+    res.transform(basegfx::utils::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
     return res;
 }
 

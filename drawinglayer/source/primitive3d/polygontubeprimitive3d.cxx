@@ -239,7 +239,7 @@ namespace drawinglayer
 
                         // create half-sphere; upper half of unit sphere
                         basegfx::B3DPolyPolygon aSphere(
-                            basegfx::tools::createUnitSphereFillPolyPolygon(
+                            basegfx::utils::createUnitSphereFillPolyPolygon(
                                 nSegments,
                                 nVerSeg,
                                 true,
@@ -314,7 +314,7 @@ namespace drawinglayer
                         if(nHorSeg)
                         {
                             // create half-sphere
-                            const basegfx::B3DPolyPolygon aSphere(basegfx::tools::createUnitSphereFillPolyPolygon(nHorSeg, nVerSeg, true, F_PI2, -F_PI2, 0.0, fAngle));
+                            const basegfx::B3DPolyPolygon aSphere(basegfx::utils::createUnitSphereFillPolyPolygon(nHorSeg, nVerSeg, true, F_PI2, -F_PI2, 0.0, fAngle));
 
                             for(sal_uInt32 a(0); a < aSphere.count(); a++)
                             {

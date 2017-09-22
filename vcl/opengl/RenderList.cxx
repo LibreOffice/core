@@ -290,7 +290,7 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
     if (nFillColor != SALCOLOR_NONE)
     {
         basegfx::B2DTrapezoidVector aTrapezoidVector;
-        basegfx::tools::trapezoidSubdivide(aTrapezoidVector, rPolyPolygon);
+        basegfx::utils::trapezoidSubdivide(aTrapezoidVector, rPolyPolygon);
 
         if (!aTrapezoidVector.empty())
         {

@@ -1468,17 +1468,17 @@ bool X11SalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rOrigPo
     basegfx::B2DPolyPolygon aPolyPoly = rOrigPolyPoly;
     const bool bSnapToRaster = !mrParent.getAntiAliasB2DDraw();
     if( bSnapToRaster )
-        aPolyPoly = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges( aPolyPoly );
+        aPolyPoly = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges( aPolyPoly );
 
     // don't bother with polygons outside of visible area
     const basegfx::B2DRange aViewRange( 0, 0, GetGraphicsWidth(), GetGraphicsHeight() );
-    aPolyPoly = basegfx::tools::clipPolyPolygonOnRange( aPolyPoly, aViewRange, true, false );
+    aPolyPoly = basegfx::utils::clipPolyPolygonOnRange( aPolyPoly, aViewRange, true, false );
     if( !aPolyPoly.count() )
         return true;
 
     // tessellate the polypolygon into trapezoids
     basegfx::B2DTrapezoidVector aB2DTrapVector;
-    basegfx::tools::trapezoidSubdivide( aB2DTrapVector, aPolyPoly );
+    basegfx::utils::trapezoidSubdivide( aB2DTrapVector, aPolyPoly );
     const int nTrapCount = aB2DTrapVector.size();
     if( !nTrapCount )
         return true;
@@ -1577,7 +1577,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     // #i101491#
     if( !bIsHairline && (rPolygon.count() > 1000) )
     {
-        // the used basegfx::tools::createAreaGeometry is simply too
+        // the used basegfx::utils::createAreaGeometry is simply too
         // expensive with very big polygons; fallback to caller (who
         // should use ImplLineConverter normally)
         // AW: ImplLineConverter had to be removed since it does not even
@@ -1597,7 +1597,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
 
     // #i122456# This is probably thought to happen to align hairlines to pixel positions, so
     // it should be a 0.5 translation, not more. It will definitely go wrong with fat lines
-    aPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5) );
+    aPolygon.transform( basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5) );
 
     // shortcut for hairline drawing to improve performance
     bool bDrawnOk = true;
@@ -1606,7 +1606,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
         // hairlines can benefit from a simplified tesselation
         // e.g. for hairlines the linejoin style can be ignored
         basegfx::B2DTrapezoidVector aB2DTrapVector;
-        basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
+        basegfx::utils::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
 
         // draw tesselation result
         const int nTrapCount = aB2DTrapVector.size();
@@ -1623,17 +1623,17 @@ bool X11SalGraphicsImpl::drawPolyLine(
     && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
     {
         // prepare for createAreaGeometry() with anisotropic linewidth
-        aPolygon.transform( basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
+        aPolygon.transform( basegfx::utils::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
     }
 
     // create the area-polygon for the line
-    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, fHalfWidth, eLineJoin, eLineCap, fMiterMinimumAngle) );
+    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::utils::createAreaGeometry(aPolygon, fHalfWidth, eLineJoin, eLineCap, fMiterMinimumAngle) );
 
     if( (rLineWidth.getX() != rLineWidth.getY())
     && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
     {
         // postprocess createAreaGeometry() for anisotropic linewidth
-        aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getY() / rLineWidth.getX()));
+        aPolygon.transform(basegfx::utils::createScaleB2DHomMatrix(1.0, rLineWidth.getY() / rLineWidth.getX()));
     }
 
     // draw each area polypolygon component individually

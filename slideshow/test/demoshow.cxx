@@ -41,7 +41,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -86,7 +86,7 @@ public:
     {
         maSize = rNewSize;
         const sal_Int32 nSize( std::min( rNewSize.Width(), rNewSize.Height() ) - 10);
-        maTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+        maTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
             nSize, nSize, (rNewSize.Width() - nSize) / 2, (rNewSize.Height() - nSize) / 2);
 
         lang::EventObject aEvent( *this );
@@ -113,7 +113,7 @@ private:
 
     virtual void SAL_CALL clear(  ) throw (uno::RuntimeException)
     {
-        ::basegfx::B2DPolygon aPoly( ::basegfx::tools::createPolygonFromRect(
+        ::basegfx::B2DPolygon aPoly( ::basegfx::utils::createPolygonFromRect(
                                          ::basegfx::B2DRectangle(0.0,0.0,
                                                                  maSize.Width(),
                                                                  maSize.Height() )));

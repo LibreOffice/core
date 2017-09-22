@@ -579,7 +579,7 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag
 {
     basegfx::B2DPolyPolygon aRetval;
     const basegfx::B2DRange aRange(maRect.Left(), maRect.Top(), maRect.Right(), maRect.Bottom());
-    aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
+    aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     aRetval.append(aTailPoly.getB2DPolygon());
     return aRetval;
 }

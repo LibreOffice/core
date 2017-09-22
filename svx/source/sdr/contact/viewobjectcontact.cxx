@@ -31,7 +31,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>

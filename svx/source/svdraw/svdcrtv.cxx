@@ -813,7 +813,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                 // Hack for calc, transform position of create placeholder
                 // object according to current zoom so as objects relative
                 // position to grid appears stable
-                aPoly.transform( basegfx::tools::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
+                aPoly.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
                 mpCreateViewExtraData->CreateAndShowOverlay(*this, nullptr, aPoly);
             }
 

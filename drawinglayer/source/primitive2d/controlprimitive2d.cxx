@@ -202,7 +202,7 @@ namespace drawinglayer
                                 }
 
                                 // short form for scale and translate transformation
-                                const basegfx::B2DHomMatrix aBitmapTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                const basegfx::B2DHomMatrix aBitmapTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(
                                     aBitmapSizeLogic.getX(), aBitmapSizeLogic.getY(), aTranslate.getX(), aTranslate.getY()));
 
                                 // create primitive
@@ -225,7 +225,7 @@ namespace drawinglayer
             // create a gray placeholder hairline polygon in object size
             basegfx::B2DRange aObjectRange(0.0, 0.0, 1.0, 1.0);
             aObjectRange.transform(getTransform());
-            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aObjectRange));
+            const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aObjectRange));
             const basegfx::BColor aGrayTone(0xc0 / 255.0, 0xc0 / 255.0, 0xc0 / 255.0);
 
             // The replacement object may also get a text like 'empty group' here later

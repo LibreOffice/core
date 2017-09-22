@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_BASEGFX_TOOLS_UNOTOOLS_HXX
-#define INCLUDED_BASEGFX_TOOLS_UNOTOOLS_HXX
+#ifndef INCLUDED_BASEGFX_UTILS_UNOTOOLS_HXX
+#define INCLUDED_BASEGFX_UTILS_UNOTOOLS_HXX
 
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -33,6 +33,6 @@ namespace unotools
 }
 }
 
-#endif // INCLUDED_BASEGFX_TOOLS_UNOTOOLS_HXX
+#endif // INCLUDED_BASEGFX_UTILS_UNOTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

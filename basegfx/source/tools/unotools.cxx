@@ -26,7 +26,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 
-#include <basegfx/tools/unotools.hxx>
+#include <basegfx/utils/unotools.hxx>
 #include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
@@ -113,7 +113,7 @@ namespace unotools
                 if(ePolyFlag == drawing::PolygonFlags_CONTROL || bControlA != bControlB)
                     throw lang::IllegalArgumentException();
 
-                // the previous writes used the B2DPolyPoygon -> tools::PolyPolygon converter
+                // the previous writes used the B2DPolyPoygon -> utils::PolyPolygon converter
                 // which did not create minimal PolyPolygons, but created all control points
                 // as null vectors (identical points). Because of the former P(CA)(CB)-norm of
                 // B2DPolygon and it's unused sign of being the zero-vector and CA and CB being
@@ -146,7 +146,7 @@ namespace unotools
 
             // #i72807# API import uses old line start/end-equal definition for closed,
             // so we need to correct this to closed state here
-            basegfx::tools::checkClosed(aNewPolygon);
+            basegfx::utils::checkClosed(aNewPolygon);
 
             // add new subpolygon
             aNewPolyPolygon.append(aNewPolygon);

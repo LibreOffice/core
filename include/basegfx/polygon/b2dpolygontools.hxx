@@ -55,7 +55,7 @@ namespace basegfx
     class B2DPolygon;
     class B2DRange;
 
-    namespace tools
+    namespace utils
     {
         // B2DPolygon tools
 
@@ -498,7 +498,7 @@ namespace basegfx
          */
         BASEGFX_DLLPUBLIC OUString exportToSvgPoints( const B2DPolygon& rPoly );
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYGONTOOLS_HXX

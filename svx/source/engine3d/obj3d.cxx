@@ -653,7 +653,7 @@ void E3dObject::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
 basegfx::B3DPolyPolygon E3dObject::CreateWireframe() const
 {
     const basegfx::B3DRange aBoundVolume(GetBoundVolume());
-    return basegfx::tools::createCubePolyPolygonFromB3DRange(aBoundVolume);
+    return basegfx::utils::createCubePolyPolygonFromB3DRange(aBoundVolume);
 }
 
 // Get the name of the object (singular)
@@ -799,7 +799,7 @@ basegfx::B2DPolyPolygon E3dCompoundObject::TakeXorPoly() const
     {
         const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
         const basegfx::B3DPolyPolygon aCubePolyPolygon(CreateWireframe());
-        aRetval = basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,
+        aRetval = basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,
             aViewInfo3D.getObjectToView() * GetTransform());
         aRetval.transform(rVCScene.getObjectTransformation());
     }
@@ -930,7 +930,7 @@ basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::
 
     if(pRootScene)
     {
-        aRetval = basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rCandidate,
+        aRetval = basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(rCandidate,
             aViewInfo3D.getObjectToView() * GetTransform());
         const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
         aRetval.transform(rVCScene.getObjectTransformation());

@@ -1538,7 +1538,7 @@ SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
 void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
 {
     ::basegfx::B2DPolyPolygon aPolyPoly;
-    if( ::basegfx::tools::importFromSvgD( aPolyPoly, getPath(), true, nullptr ) )
+    if( ::basegfx::utils::importFromSvgD( aPolyPoly, getPath(), true, nullptr ) )
     {
         SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
         if( pObj )
@@ -1547,12 +1547,12 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
             if( pPage )
             {
                 const Size aPageSize( pPage->GetSize() );
-                aPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix((double)aPageSize.Width(), (double)aPageSize.Height()));
+                aPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix((double)aPageSize.Width(), (double)aPageSize.Height()));
             }
 
             const ::tools::Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const Point aCenter( aBoundRect.Center() );
-            aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(aCenter.X(), aCenter.Y()));
+            aPolyPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(aCenter.X(), aCenter.Y()));
         }
     }
 
@@ -1581,18 +1581,18 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
 
         const Point aCenter( aBoundRect.Center() );
 
-        aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
+        aPolyPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
 
         SdrPage* pPage = pObj->GetPage();
         if( pPage )
         {
             const Size aPageSize( pPage->GetSize() );
-            aPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(
+            aPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(
                 1.0 / (double)aPageSize.Width(), 1.0 / (double)aPageSize.Height()));
         }
     }
 
-    setPath( ::basegfx::tools::exportToSvgD( aPolyPoly, true, true, true) );
+    setPath( ::basegfx::utils::exportToSvgD( aPolyPoly, true, true, true) );
 }
 
 EffectSequenceHelper::EffectSequenceHelper()

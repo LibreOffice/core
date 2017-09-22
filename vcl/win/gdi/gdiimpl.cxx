@@ -1154,13 +1154,13 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
             {
                 const basegfx::B2DRange aRangeS(aPolyPolygon.getB2DRange());
                 const basegfx::B2DRange aRangeT(aRangeS.getMinimum(), aRangeS.getMaximum() + basegfx::B2DTuple(1.0, 1.0));
-                aExpand = basegfx::B2DHomMatrix(basegfx::tools::createSourceRangeTargetRangeTransform(aRangeS, aRangeT));
+                aExpand = basegfx::B2DHomMatrix(basegfx::utils::createSourceRangeTargetRangeTransform(aRangeS, aRangeT));
             }
 
             for(sal_uInt32 a(0); a < nCount; a++)
             {
                 const basegfx::B2DPolygon aPoly(
-                    basegfx::tools::adaptiveSubdivideByDistance(
+                    basegfx::utils::adaptiveSubdivideByDistance(
                         aPolyPolygon.getB2DPolygon(a),
                         1));
                 const sal_uInt32 nPoints(aPoly.count());

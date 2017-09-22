@@ -161,7 +161,7 @@ public:
 #else
         const char randomSvg[]="m394 783h404v57h-404zm-197-505h571v576h-571zm356-634h75v200h-75zm-40-113h403v588h-403zm93-811h111v494h-111zm-364-619h562v121h-562zm-134-8h292v27h-292zm110 356h621v486h-621zm78-386h228v25h-228zm475-345h201v201h-201zm-2-93h122v126h-122zm-417-243h567v524h-567zm-266-738h863v456h-863zm262-333h315v698h-315zm-328-826h43v393h-43zm830-219h120v664h-120zm-311-636h221v109h-221zm-500 137h628v19h-628zm681-94h211v493h-211zm-366-646h384v355h-384zm-189-199h715v247h-715zm165-459h563v601h-563zm258-479h98v606h-98zm270-517h65v218h-65zm-44-259h96v286h-96zm-599-202h705v468h-705zm216-803h450v494h-450zm-150-22h26v167h-26zm-55-599h50v260h-50zm190-278h490v387h-490zm-290-453h634v392h-634zm257 189h552v300h-552zm-151-690h136v455h-136zm12-597h488v432h-488zm501-459h48v39h-48zm-224-112h429v22h-429zm-281 102h492v621h-492zm519-158h208v17h-208zm-681-563h56v427h-56zm126-451h615v392h-615zm-47-410h598v522h-598zm-32 316h79v110h-79zm-71-129h18v127h-18zm126-993h743v589h-743zm211-430h428v750h-428zm61-554h100v220h-100zm-353-49h658v157h-658zm778-383h115v272h-115zm-249-541h119v712h-119zm203 86h94v40h-94z";
         B2DPolyPolygon randomPoly;
-        tools::importFromSvgD(randomPoly, randomSvg, false, nullptr);
+        utils::importFromSvgD(randomPoly, randomSvg, false, nullptr);
         for (auto const& aPolygon : randomPoly)
             aRandomIntersections.appendElement(aPolygon.getB2DRange(), B2VectorOrientation::Negative);
 #endif
@@ -173,10 +173,10 @@ public:
         for( sal_uInt32 i=0; i<rPoly.count(); ++i )
         {
             B2DPolygon aTmp=rPoly.getB2DPolygon(i);
-            if( tools::getOrientation(aTmp) == B2VectorOrientation::Negative )
+            if( utils::getOrientation(aTmp) == B2VectorOrientation::Negative )
                 aTmp.flip();
 
-            aTmp=tools::removeNeutralPoints(aTmp);
+            aTmp=utils::removeNeutralPoints(aTmp);
             std::vector<B2DPoint> aTmp2(aTmp.count());
             for(sal_uInt32 j=0; j<aTmp.count(); ++j)
                 aTmp2[j] = aTmp.getB2DPoint(j);
@@ -202,7 +202,7 @@ public:
 
         // boxclipper & generic clipper disagree slightly on area-less
         // polygons (one or two points only)
-        aRes = tools::stripNeutralPolygons(aRes);
+        aRes = utils::stripNeutralPolygons(aRes);
 
         // now, sort all polygons with increasing 0th point
         std::sort(aRes.begin(),
@@ -218,14 +218,14 @@ public:
     {
         B2DPolyPolygon aTmp1;
         CPPUNIT_ASSERT_MESSAGE(sName,
-                               tools::importFromSvgD(
+                               utils::importFromSvgD(
                                    aTmp1, OUString::createFromAscii(sSvg), false, nullptr));
 
         const OUString aSvg=
-            tools::exportToSvgD(toTest.solveCrossovers(), true, true, false);
+            utils::exportToSvgD(toTest.solveCrossovers(), true, true, false);
         B2DPolyPolygon aTmp2;
         CPPUNIT_ASSERT_MESSAGE(sName,
-                               tools::importFromSvgD(
+                               utils::importFromSvgD(
                                    aTmp2, aSvg, false, nullptr));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -299,7 +299,7 @@ public:
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
-                    basegfx::tools::exportToSvgD(rPoly, , true, true, false),
+                    basegfx::utils::exportToSvgD(rPoly, , true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
     }
@@ -331,7 +331,7 @@ public:
         const sal_uInt32 nCount=rRange.count();
         for( sal_uInt32 i=0; i<nCount; ++i )
         {
-            B2DPolygon aRect=tools::createPolygonFromRect(std::get<0>(rRange.getElement(i)));
+            B2DPolygon aRect=utils::createPolygonFromRect(std::get<0>(rRange.getElement(i)));
             if( std::get<1>(rRange.getElement(i)) == B2VectorOrientation::Negative )
                 aRect.flip();
 
@@ -341,14 +341,14 @@ public:
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s input      - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
-                    basegfx::tools::exportToSvgD(
+                    basegfx::utils::exportToSvgD(
                         genericClip, , true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         const B2DPolyPolygon boxClipResult=rRange.solveCrossovers();
         const OUString boxClipSvg(
-            basegfx::tools::exportToSvgD(
+            basegfx::utils::exportToSvgD(
                 normalizePoly(boxClipResult), true, true, false));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s boxclipper - svg:d=\"%s\"\n",
@@ -357,9 +357,9 @@ public:
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
-        genericClip = tools::solveCrossovers(genericClip);
+        genericClip = utils::solveCrossovers(genericClip);
         const OUString genericClipSvg(
-            basegfx::tools::exportToSvgD(
+            basegfx::utils::exportToSvgD(
                 normalizePoly(genericClip), true, true, false));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s genclipper - svg:d=\"%s\"\n",

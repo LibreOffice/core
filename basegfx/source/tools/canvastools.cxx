@@ -34,7 +34,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <basegfx/tools/unopolypolygon.hxx>
+#include <basegfx/utils/unopolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -47,7 +47,7 @@
 #include <basegfx/range/b2ibox.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <limits>
 
 using namespace ::com::sun::star;
