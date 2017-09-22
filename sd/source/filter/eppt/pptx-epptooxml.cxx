@@ -972,6 +972,12 @@ void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS, const
         pFS->writeEscaped("fillcolor");
         pFS->endElementNS(XML_p, XML_attrName);
     }
+    else if (rAttributeName == "CharColor")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("style.color");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
     else
     {
         SAL_WARN("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
