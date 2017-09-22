@@ -2268,13 +2268,13 @@ public:
     }
 
 protected:
-    uno::Reference<lang::XMultiServiceFactory> xMSF;
     void Init() override
     {
         try
         {
             uno::Reference<uno::XComponentContext> xComponentContext
                 = ::cppu::defaultBootstrap_InitialComponentContext();
+            uno::Reference<lang::XMultiServiceFactory> xMSF;
             xMSF.set(xComponentContext->getServiceManager(), uno::UNO_QUERY);
             if(!xMSF.is())
                 Application::Abort("Bootstrap failure - no service manager");
