@@ -26,8 +26,9 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/texture/texture.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <drawinglayer/tools/converters.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+
+#include "converters.hxx"
 
 using namespace com::sun::star;
 
@@ -109,7 +110,7 @@ namespace drawinglayer
                 const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
                 const BitmapEx aBitmapEx(
-                    tools::convertToBitmapEx(
+                    convertToBitmapEx(
                         xEmbedSeq,
                         aViewInformation2D,
                         mnDiscreteWidth,
