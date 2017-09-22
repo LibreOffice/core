@@ -46,6 +46,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/configure.ac \
 		$(SRCDIR)/config_host/*.h.in \
 		$(BUILDDIR)/autogen.input \
+		$(BUILDDIR)/autogen.lastrun \
 		$(BUILDDIR)/autogen.sh \
 		) \
 		$(shell . $(SRCDIR)/bin/get_config_variables JAVA_HOME && \
