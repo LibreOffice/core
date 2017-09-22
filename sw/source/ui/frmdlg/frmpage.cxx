@@ -2387,6 +2387,12 @@ SwGrfExtPage::SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet)
     get(m_pBmpWin, "preview");
     m_pBmpWin->SetBitmapEx(get<FixedImage>("fallback")->GetImage().GetBitmapEx());
 
+    // RotGrfFlyFrame: Need Angle and RotateControls now
+    get(m_pFlAngle, "FL_ANGLE");
+    get(m_pNfAngle, "NF_ANGLE");
+    get(m_pCtlAngle, "CTL_ANGLE");
+    m_pCtlAngle->SetLinkedField( m_pNfAngle, 2 );
+
     SetExchangeSupport();
     m_pMirrorHorzBox->SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
     m_pMirrorVertBox->SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
@@ -2410,6 +2416,12 @@ void SwGrfExtPage::dispose()
     m_pBmpWin.clear();
     m_pConnectED.clear();
     m_pBrowseBT.clear();
+
+    // RotGrfFlyFrame: Support RotationAngle
+    m_pFlAngle.clear();
+    m_pNfAngle.clear();
+    m_pCtlAngle.clear();
+
     SfxTabPage::dispose();
 }
 
@@ -2430,6 +2442,17 @@ void SwGrfExtPage::Reset(const SfxItemSet *rSet)
         m_pBrowseBT->Enable();
         m_pConnectED->SetReadOnly(false);
     }
+
+    // RotGrfFlyFrame: Get RotationAngle and set at control
+    if(SfxItemState::SET == rSet->GetItemState( SID_ATTR_TRANSFORM_ANGLE, false, &pItem))
+    {
+        m_pCtlAngle->SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
+    }
+    else
+    {
+        m_pCtlAngle->SetRotation(0);
+    }
+    m_pCtlAngle->SaveValue();
 
     ActivatePage(*rSet);
 }
@@ -2558,6 +2581,14 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet *rSet )
         rSet->Put( SvxBrushItem( aGrfName, aFilterName, GPOS_LT,
                                 SID_ATTR_GRAF_GRAPHIC ));
     }
+
+    // RotGrfFlyFrame: Safe rotation if modified
+    if(m_pCtlAngle->IsValueModified())
+    {
+        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_pCtlAngle->GetRotation()));
+        bModified = true;
+    }
+
     return bModified;
 }
 

@@ -1707,6 +1707,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="RotateResetD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RotateReset</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="FlipVerticalD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

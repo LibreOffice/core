@@ -31,6 +31,7 @@
  <toolbar:toolbaritem xlink:href=".uno:RotateLeft"/>
  <toolbar:toolbaritem xlink:href=".uno:RotateRight"/>
  <toolbar:toolbaritem xlink:href=".uno:Rotate180"/>
+ <toolbar:toolbaritem xlink:href=".uno:RotateReset"/>
  <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FrameDialog"/>

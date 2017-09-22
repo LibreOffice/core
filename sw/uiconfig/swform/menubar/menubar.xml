@@ -328,6 +328,7 @@
           <menu:menuitem menu:id=".uno:RotateLeft"/>
           <menu:menuitem menu:id=".uno:RotateRight"/>
           <menu:menuitem menu:id=".uno:Rotate180"/>
+          <menu:menuitem menu:id=".uno:RotateReset"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menu menu:id=".uno:GroupMenu">

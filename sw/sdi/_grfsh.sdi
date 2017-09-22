@@ -94,6 +94,20 @@ interface BaseTextGraphic
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_ROTATE_GRAPHIC_RESET
+    [
+        ExecMethod = ExecuteRotation ;
+        StateMethod = GetAttrStateForRotation ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
+    SID_ATTR_TRANSFORM_ANGLE
+    [
+        ExecMethod = ExecuteRotation ;
+        StateMethod = GetAttrStateForRotation ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_OBJECT_CROP
     [
         ExecMethod = Execute ;

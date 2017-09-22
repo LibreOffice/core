@@ -996,7 +996,10 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
                     sValue = sValue.trim();
                     sal_Int32 nVal;
                     if (::sax::Converter::convertNumber( nVal, sValue ))
-                        nRotation = (sal_Int16)(nVal % 360 );
+                    {
+                        // RotGrfFlyFrame: is in 10th degrees
+                        nRotation = (sal_Int16)(nVal % 3600 );
+                    }
                 }
             }
             break;
