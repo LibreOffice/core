@@ -510,13 +510,11 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
                 SwitchToThread();
                 nMaxEvents++;
                 bOneEvent = true;
-                bWasMsg = true;
             }
     }
     while( --nMaxEvents && bOneEvent );
 
-    // Also check that we don't wait when application already has quit
-    if ( bWait && !bWasMsg && !pSVData->maAppData.mbAppQuit )
+    if ( bWait && !bWasMsg )
     {
         if ( GetMessageW( &aMsg, nullptr, 0, 0 ) )
         {

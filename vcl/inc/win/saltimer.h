@@ -26,7 +26,7 @@ class WinSalTimer : public SalTimer
 {
     HANDLE       m_nTimerId;          ///< Windows timer id
     sal_uInt32   m_nTimerStartTicks;  ///< system ticks at timer start % SAL_MAX_UINT32
-    bool         m_bPollForMessage;   ///< Run yield until a message is caught (most likely the 0ms timer)
+    mutable bool m_bPollForMessage;   ///< Run yield until a message is caught (most likely the 0ms timer)
 
 public:
     WinSalTimer();
@@ -44,7 +44,8 @@ public:
     // They must be called from the main application thread only!
 
     void ImplStart( sal_uIntPtr nMS );
-    void ImplStop();
+    /// If bRestart is set, it doesn't reset the m_bPollForMessage
+    void ImplStop( bool bRestart = false );
     void ImplEmitTimerCallback();
 };
 
