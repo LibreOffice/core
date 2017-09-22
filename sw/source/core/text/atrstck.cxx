@@ -109,7 +109,6 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
     33, // RES_CHRATR_RELIEF,                    // 36
     34, // RES_CHRATR_HIDDEN,                    // 37
     35, // RES_CHRATR_OVERLINE,                  // 38
-     0, // RES_CHRATR_RSID,                      // 39
     36, // RES_CHRATR_BOX,                       // 40
     37, // RES_CHRATR_SHADOW,                    // 41
     38, // RES_CHRATR_HIGHLIGHT,                 // 42
@@ -125,7 +124,7 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
      0, // RES_TXTATR_CHARFMT,                   // 52
     42, // RES_TXTATR_CJK_RUBY,                  // 53
      0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 54
-    43, // RES_TXTATR_INPUTFIELD                 // 55
+    43 // RES_TXTATR_INPUTFIELD                 // 55
 };
 
 namespace CharFormat

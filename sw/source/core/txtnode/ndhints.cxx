@@ -162,7 +162,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
             {
                 std::shared_ptr<SfxItemSet> const pSet(
                         pHint->GetAutoFormat().GetStyleHandle());
-                if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))
+                if (pSet->Count() == 1 && pSet->GetItem(RES_CHR_RSID, false))
                 {
                     RsidOnlyAutoFormats.insert(pHint);
                 }
