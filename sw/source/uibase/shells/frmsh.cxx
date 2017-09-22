@@ -85,6 +85,7 @@
 #define SwFrameShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
+#include <grfatr.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -361,6 +362,22 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             {
                 aNewSize.setHeight( static_cast< const SfxUInt32Item* >(pItem)->GetValue() );
                 bApplyNewSize = true;
+            }
+
+            // RotGrfFlyFrame: Get Value and disable is in SwGrfShell::GetAttrStateForRotation, but the
+            // value setter uses SID_ATTR_TRANSFORM and a group of three values. Rotation is
+            // added now, so use it in this central place. Do no forget to convert angle from
+            // 100th degrees in SID_ATTR_TRANSFORM_ANGLE to 10th degrees in RES_GRFATR_ROTATION
+            if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_ANGLE, false, &pItem))
+            {
+                const sal_uInt32 nNewRot(static_cast<const SfxUInt32Item*>(pItem)->GetValue() / 10);
+                SfxItemSet aSet(rSh.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+                rSh.GetCurAttr(aSet);
+                const SwRotationGrf& rRotation = static_cast<const SwRotationGrf&>(aSet.Get(RES_GRFATR_ROTATION));
+                const sal_uInt32 nOldRot(rRotation.GetValue());
+
+                // RotGrfFlyFrame: Rotation change here, SwFlyFrameAttrMgr aMgr is available
+                aMgr.SetRotation(nOldRot, nNewRot, rRotation.GetUnrotatedSize());
             }
 
             if ( bApplyNewSize )

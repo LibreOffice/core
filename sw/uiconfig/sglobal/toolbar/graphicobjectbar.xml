@@ -28,6 +28,7 @@
  <toolbar:toolbaritem xlink:href=".uno:FlipHorizontal"/>
  <toolbar:toolbaritem xlink:href=".uno:RotateLeft"/>
  <toolbar:toolbaritem xlink:href=".uno:RotateRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:RotateReset"/>
  <toolbar:toolbaritem xlink:href=".uno:Rotate180" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>

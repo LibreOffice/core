@@ -768,10 +768,21 @@ void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
     const basegfx::B2DRange aTargetRange(
         rAlignedGrfArea.Left(), rAlignedGrfArea.Top(),
         rAlignedGrfArea.Right(), rAlignedGrfArea.Bottom());
-    const basegfx::B2DHomMatrix aTargetTransform(
-        basegfx::utils::createScaleTranslateB2DHomMatrix(
-            aTargetRange.getRange(),
-            aTargetRange.getMinimum()));
+    basegfx::B2DHomMatrix aTargetTransform;
+
+    // RotGrfFlyFrame: Take rotation into account. Rotation is in 10th degrees
+    if(0 != rGraphicAttr.GetRotation())
+    {
+        const double fRotate(static_cast< double >(-rGraphicAttr.GetRotation()) * (M_PI/1800.0));
+        aTargetTransform.translate(-0.5, -0.5);
+        aTargetTransform.rotate(fRotate);
+        aTargetTransform.translate(0.5, 0.5);
+    }
+
+    // needed scale/translate
+    aTargetTransform *= basegfx::utils::createScaleTranslateB2DHomMatrix(
+        aTargetRange.getRange(),
+        aTargetRange.getMinimum());
 
     drawinglayer::primitive2d::Primitive2DContainer aContent(1);
     bool bDone(false);
