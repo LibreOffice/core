@@ -50,7 +50,8 @@ gtv_application_init(GtvApplication* app)
         { "enable-tiled-annotations", 0, 0, G_OPTION_ARG_NONE, nullptr, "Whether tiled annotations should be enabled", nullptr },
         { "background-color", 0, 0, G_OPTION_ARG_STRING, nullptr, "Background color", nullptr },
         { "hide-page-shadow", 0, 0, G_OPTION_ARG_NONE, nullptr, "Hide page shadow", nullptr },
-        { "hide-whitespace", 0, 0, G_OPTION_ARG_NONE, nullptr, "Hide whitespace", nullptr }
+        { "hide-whitespace", 0, 0, G_OPTION_ARG_NONE, nullptr, "Hide whitespace", nullptr },
+        { nullptr, 0, 0, G_OPTION_ARG_NONE, nullptr, nullptr, nullptr },
     };
 
     g_application_add_main_option_entries(G_APPLICATION(app), commandLineOptions);
