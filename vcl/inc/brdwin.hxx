@@ -269,8 +269,6 @@ public:
 class ImplStdBorderWindowView : public ImplBorderWindowView
 {
     ImplBorderFrameData     maFrameData;
-    VclPtr<VirtualDevice>   mpATitleVirDev;
-    VclPtr<VirtualDevice>   mpDTitleVirDev;
 
 public:
                             ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );

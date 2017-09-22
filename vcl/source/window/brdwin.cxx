@@ -753,15 +753,10 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
     maFrameData.mnHideState     = DrawButtonFlags::NONE;
     maFrameData.mnHelpState     = DrawButtonFlags::NONE;
     maFrameData.mbTitleClipped  = false;
-
-    mpATitleVirDev              = nullptr;
-    mpDTitleVirDev              = nullptr;
 }
 
 ImplStdBorderWindowView::~ImplStdBorderWindowView()
 {
-    mpATitleVirDev.disposeAndClear();
-    mpDTitleVirDev.disposeAndClear();
 }
 
 bool ImplStdBorderWindowView::MouseMove( const MouseEvent& rMEvt )
