@@ -3519,7 +3519,7 @@ static SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_CHRATR_RELIEF */             nullptr,
 /* RES_CHRATR_HIDDEN */             OutCSS1_SvxHidden,
 /* RES_CHRATR_OVERLINE */           OutCSS1_SvxOverline,
-/* RES_CHRATR_RSID */               nullptr,
+/* RES_CHR_RSID */               nullptr,
 /* RES_CHRATR_BOX */                OutCSS1_SvxBox,
 /* RES_CHRATR_SHADOW */             nullptr,
 /* RES_CHRATR_HIGHLIGHT */          nullptr,
@@ -3563,7 +3563,7 @@ static SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_PARATR_SNAPTOGRID*/          nullptr, // new
 /* RES_PARATR_CONNECT_TO_BORDER */  nullptr, // new
 /* RES_PARATR_OUTLINELEVEL */       nullptr, // new since cws outlinelevel
-/* RES_PARATR_RSID */               nullptr, // new
+/* RES_PARA_RSID */               nullptr, // new
 /* RES_PARATR_GRABBAG */            nullptr,
 
 /* RES_PARATR_LIST_ID */            nullptr, // new

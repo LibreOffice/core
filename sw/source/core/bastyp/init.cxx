@@ -303,7 +303,7 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_CHAR_RELIEF, true },        // RES_CHRATR_RELIEF
     { SID_ATTR_CHAR_HIDDEN, true },        // RES_CHRATR_HIDDEN
     { SID_ATTR_CHAR_OVERLINE, true },      // RES_CHRATR_OVERLINE
-    { 0, true },                           // RES_CHRATR_RSID
+    { 0, true },                           // RES_CHR_RSID
     { 0, true },                           // RES_CHRATR_BOX
     { 0, true },                           // RES_CHRATR_SHADOW
     { 0, true },                           // RES_CHRATR_HIGHLIGHT
@@ -349,7 +349,7 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_BORDER_CONNECT, true },     // RES_PARATR_CONNECT_BORDER
 
     { SID_ATTR_PARA_OUTLINE_LEVEL, true }, // RES_PARATR_OUTLINELEVEL //#outline level
-    { 0, true },                           // RES_PARATR_RSID
+    { 0, true },                           // RES_PARA_RSID
     { 0, true },                           // RES_PARATR_GRABBAG
     { 0, true },                           // RES_PARATR_LIST_ID
     { 0, true },                           // RES_PARATR_LIST_LEVEL
@@ -468,7 +468,7 @@ void InitCore()
     aAttrTab[ RES_CHRATR_SHADOWED- POOLATTR_BEGIN ] =       new SvxShadowedItem( false, RES_CHRATR_SHADOWED );
     aAttrTab[ RES_CHRATR_UNDERLINE- POOLATTR_BEGIN ] =      new SvxUnderlineItem( LINESTYLE_NONE, RES_CHRATR_UNDERLINE );
     aAttrTab[ RES_CHRATR_WEIGHT- POOLATTR_BEGIN ] =         new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT );
-    aAttrTab[ RES_CHRATR_RSID - POOLATTR_BEGIN ] =          new SvxRsidItem( 0, RES_CHRATR_RSID );
+    aAttrTab[ RES_CHR_RSID - POOLATTR_BEGIN ] =          new SvxRsidItem( 0, RES_CHR_RSID );
     aAttrTab[ RES_CHRATR_WORDLINEMODE- POOLATTR_BEGIN ] =   new SvxWordLineModeItem( false, RES_CHRATR_WORDLINEMODE );
     aAttrTab[ RES_CHRATR_AUTOKERN- POOLATTR_BEGIN ] =       new SvxAutoKernItem( false, RES_CHRATR_AUTOKERN );
     aAttrTab[ RES_CHRATR_BLINK - POOLATTR_BEGIN ] =         new SvxBlinkItem( false, RES_CHRATR_BLINK );
@@ -550,7 +550,7 @@ void InitCore()
     aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
 
     aAttrTab[ RES_PARATR_OUTLINELEVEL - POOLATTR_BEGIN ] =  new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 );
-    aAttrTab[ RES_PARATR_RSID - POOLATTR_BEGIN ] =          new SvxRsidItem( 0, RES_PARATR_RSID );
+    aAttrTab[ RES_PARA_RSID - POOLATTR_BEGIN ] =          new SvxRsidItem( 0, RES_PARA_RSID );
     aAttrTab[ RES_PARATR_GRABBAG - POOLATTR_BEGIN ] =       new SfxGrabBagItem( RES_PARATR_GRABBAG );
 
     aAttrTab[ RES_PARATR_LIST_ID - POOLATTR_BEGIN ] =       new SfxStringItem( RES_PARATR_LIST_ID, OUString() );

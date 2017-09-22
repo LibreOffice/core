@@ -4885,10 +4885,10 @@ void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 sal_uInt32 SwTextNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const
 {
-    SfxItemSet aSet( const_cast<SfxItemPool&>(static_cast<SfxItemPool const &>(GetDoc()->GetAttrPool())), svl::Items<RES_CHRATR_RSID, RES_CHRATR_RSID>{} );
+    SfxItemSet aSet( const_cast<SfxItemPool&>(static_cast<SfxItemPool const &>(GetDoc()->GetAttrPool())), svl::Items<RES_CHR_RSID, RES_CHR_RSID>{} );
     if ( GetAttr(aSet, nStt, nEnd) )
     {
-        const SvxRsidItem* pRsid = aSet.GetItem<SvxRsidItem>(RES_CHRATR_RSID);
+        const SvxRsidItem* pRsid = aSet.GetItem<SvxRsidItem>(RES_CHR_RSID);
         if( pRsid )
             return pRsid->GetValue();
     }
@@ -4898,7 +4898,7 @@ sal_uInt32 SwTextNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const
 
 sal_uInt32 SwTextNode::GetParRsid() const
 {
-    return reinterpret_cast<const SvxRsidItem&>(GetAttr( RES_PARATR_RSID )).GetValue();
+    return reinterpret_cast<const SvxRsidItem&>(GetAttr( RES_PARA_RSID )).GetValue();
 }
 
 bool SwTextNode::CompareParRsid( const SwTextNode &rTextNode ) const

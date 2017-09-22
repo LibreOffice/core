@@ -425,9 +425,9 @@ bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
         return false;
     }
     const sal_Int32 nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
-    SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
+    SvxRsidItem aRsid( mnRsid, RES_CHR_RSID );
 
-    SfxItemSet aSet(GetAttrPool(), svl::Items<RES_CHRATR_RSID, RES_CHRATR_RSID>{});
+    SfxItemSet aSet(GetAttrPool(), svl::Items<RES_CHR_RSID, RES_CHR_RSID>{});
     aSet.Put(aRsid);
     bool const bRet(pTextNode->SetAttr(aSet, nStart,
         rRg.GetPoint()->nContent.GetIndex()));
@@ -456,7 +456,7 @@ bool SwDoc::UpdateParRsid( SwTextNode *pTextNode, sal_uInt32 nVal )
         return false;
     }
 
-    SvxRsidItem aRsid( nVal ? nVal : mnRsid, RES_PARATR_RSID );
+    SvxRsidItem aRsid( nVal ? nVal : mnRsid, RES_PARA_RSID );
     return pTextNode->SetAttr( aRsid );
 }
 
