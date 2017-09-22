@@ -1176,24 +1176,26 @@ HRESULT DocumentHolder::SetContRects(LPCRECT aRect)
 
 HRESULT DocumentHolder::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
 {
-    const_cast<LPRECT>(aRect)->left -= m_aBorder.left;
-    const_cast<LPRECT>(aRect)->right += m_aBorder.right;
-    const_cast<LPRECT>(aRect)->top -= m_aBorder.top;
-    const_cast<LPRECT>(aRect)->bottom += m_aBorder.bottom;
-    const_cast<LPRECT>(aClip)->left -= m_aBorder.left;
-    const_cast<LPRECT>(aClip)->right += m_aBorder.right;
-    const_cast<LPRECT>(aClip)->top -= m_aBorder.top;
-    const_cast<LPRECT>(aClip)->bottom += m_aBorder.bottom;
+    auto rect = *aRect;
+    rect.left -= m_aBorder.left;
+    rect.right += m_aBorder.right;
+    rect.top -= m_aBorder.top;
+    rect.bottom += m_aBorder.bottom;
+    auto clip = *aClip;
+    clip.left -= m_aBorder.left;
+    clip.right += m_aBorder.right;
+    clip.top -= m_aBorder.top;
+    clip.bottom += m_aBorder.bottom;
 
     if(m_pCHatchWin)
-        m_pCHatchWin->RectsSet(const_cast<LPRECT>(aRect), const_cast<LPRECT>(aClip));
+        m_pCHatchWin->RectsSet(&rect, &clip);
     if(m_xEditWindow.is()) {
         m_xEditWindow->setVisible(false);
         m_xEditWindow->setPosSize(
             m_pCHatchWin ? HATCHWIN_BORDERWIDTHDEFAULT : 0,
             m_pCHatchWin ? HATCHWIN_BORDERWIDTHDEFAULT : 0,
-            aRect->right - aRect->left,
-            aRect->bottom - aRect->top,
+            rect.right - rect.left,
+            rect.bottom - rect.top,
             awt::PosSize::POSSIZE);
         m_xEditWindow->setVisible(true);
     }
