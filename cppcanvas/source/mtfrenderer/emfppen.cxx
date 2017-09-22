@@ -21,9 +21,9 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/gradienttools.hxx>
-#include <basegfx/tools/tools.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
+#include <basegfx/utils/tools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>

@@ -324,7 +324,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                 {
                     const sal_Int32 nWdt(rRectangle.GetWidth() / 2);
                     const sal_Int32 nHgt(rRectangle.GetHeight() / 2);
-                    const basegfx::B2DPolygon aInnerPoly(basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()), nWdt, nHgt));
+                    const basegfx::B2DPolygon aInnerPoly(basegfx::utils::createPolygonFromEllipse(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()), nWdt, nHgt));
 
                     aPoly.append(aInnerPoly);
                     break;

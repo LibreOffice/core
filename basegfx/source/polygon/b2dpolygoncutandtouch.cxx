@@ -77,7 +77,7 @@ namespace basegfx
 
         public:
             const B2DPolygon& getPolygon() const { return maPolygon; }
-            void setPolygon(const B2DPolygon& rNew) { maPolygon = rNew; maRange = tools::getRange(maPolygon); }
+            void setPolygon(const B2DPolygon& rNew) { maPolygon = rNew; maRange = utils::getRange(maPolygon); }
             const B2DRange& getRange() const { return maRange; }
             temporaryPointVector& getTemporaryPointVector() { return maPoints; }
         };
@@ -160,7 +160,7 @@ namespace basegfx
                 if(rCandidate.isClosed())
                 {
                     // set closed flag and correct last point (which is added double now).
-                    tools::closeWithGeometryChange(aRetval);
+                    utils::closeWithGeometryChange(aRetval);
                 }
 
                 return aRetval;
@@ -841,7 +841,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
 
         B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate)
@@ -1070,7 +1070,7 @@ namespace basegfx
             return rCandidate;
         }
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

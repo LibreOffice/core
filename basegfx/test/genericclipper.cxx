@@ -59,7 +59,7 @@ public:
         aSelfIntersecting.append(B2DPoint(100,0));
         aSelfIntersecting.setClosed(true);
 
-        aShiftedRectangle = tools::createPolygonFromRect(
+        aShiftedRectangle = utils::createPolygonFromRect(
             B2DRange(0,90,20,150));
     }
 
@@ -69,18 +69,18 @@ public:
                   B2DPolyPolygon (*pFunc)(const B2DPolyPolygon&, const B2DPolyPolygon&))
     {
         const B2DPolyPolygon aSelfIntersect(
-            tools::prepareForPolygonOperation(aSelfIntersecting));
+            utils::prepareForPolygonOperation(aSelfIntersecting));
         const B2DPolyPolygon aRect(
-            tools::prepareForPolygonOperation(aShiftedRectangle));
+            utils::prepareForPolygonOperation(aShiftedRectangle));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s input LHS - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
-                    basegfx::tools::exportToSvgD(
+                    basegfx::utils::exportToSvgD(
                         aSelfIntersect, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
         fprintf(stderr, "%s input RHS - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
-                    basegfx::tools::exportToSvgD(
+                    basegfx::utils::exportToSvgD(
                         aRect, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
@@ -91,38 +91,38 @@ public:
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 pName, OUStringToOString(
-                    basegfx::tools::exportToSvgD(aRes, true, true, false),
+                    basegfx::utils::exportToSvgD(aRes, true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         OUString aValid=OUString::createFromAscii(pValidSvgD);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(pName,
-                               aValid, basegfx::tools::exportToSvgD(aRes, true, true, false));
+                               aValid, basegfx::utils::exportToSvgD(aRes, true, true, false));
     }
 
     void validateOr()
     {
         const char* const pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm75 100v-50h-50v50z";
-        validate("validateOr", pValid, &tools::solvePolygonOperationOr);
+        validate("validateOr", pValid, &utils::solvePolygonOperationOr);
     }
 
     void validateXor()
     {
         const char* const pValid="m0 0h100v150h-75v-50h-5v50h-20v-50-10zm0 100h20v-10h-20zm75 0v-50h-50v50z";
-        validate("validateXor", pValid, &tools::solvePolygonOperationXor);
+        validate("validateXor", pValid, &utils::solvePolygonOperationXor);
     }
 
     void validateAnd()
     {
         const char* const pValid="m0 100v-10h20v10z";
-        validate("validateAnd", pValid, &tools::solvePolygonOperationAnd);
+        validate("validateAnd", pValid, &utils::solvePolygonOperationAnd);
     }
 
     void validateDiff()
     {
         const char* const pValid="m0 90v-90h100v150h-75v-50h-5v-10zm75 10v-50h-50v50z";
-        validate("validateDiff", pValid, &tools::solvePolygonOperationDiff);
+        validate("validateDiff", pValid, &utils::solvePolygonOperationDiff);
     }
 
     void validateCrossover(const char* pName,
@@ -133,14 +133,14 @@ public:
         OUString aValid=OUString::createFromAscii(pValidSvgD);
         B2DPolyPolygon aInputPoly, aValidPoly;
 
-        tools::importFromSvgD(aInputPoly, aInput, false, nullptr);
-        tools::importFromSvgD(aValidPoly, aValid, false, nullptr);
+        utils::importFromSvgD(aInputPoly, aInput, false, nullptr);
+        utils::importFromSvgD(aValidPoly, aValid, false, nullptr);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             pName,
             aValid,
-            basegfx::tools::exportToSvgD(
-                tools::solveCrossovers(aInputPoly), true, true, false));
+            basegfx::utils::exportToSvgD(
+                utils::solveCrossovers(aInputPoly), true, true, false));
     }
 
     void checkCrossoverSolver()

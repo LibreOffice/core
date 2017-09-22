@@ -19,7 +19,7 @@
 
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <comphelper/sequence.hxx>
 
 

@@ -37,7 +37,7 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/tools/lerp.hxx>
+#include <basegfx/utils/lerp.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <cppcanvas/basegfxfactory.hxx>
@@ -464,7 +464,7 @@ namespace slideshow
         {
             if( !pAttr )
             {
-                const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(
                     rShapeBounds.getWidth(), rShapeBounds.getHeight(),
                     rShapeBounds.getMinX(), rShapeBounds.getMinY()));
 
@@ -580,16 +580,16 @@ namespace slideshow
                                                     const ::basegfx::B2DRange&      rShapeBounds )
         {
             return ::basegfx::B2DRectangle(
-                basegfx::tools::lerp( rShapeBounds.getMinX(),
+                basegfx::utils::lerp( rShapeBounds.getMinX(),
                                       rShapeBounds.getMaxX(),
                                       rUnitBounds.getMinX() ),
-                basegfx::tools::lerp( rShapeBounds.getMinY(),
+                basegfx::utils::lerp( rShapeBounds.getMinY(),
                                       rShapeBounds.getMaxY(),
                                       rUnitBounds.getMinY() ),
-                basegfx::tools::lerp( rShapeBounds.getMinX(),
+                basegfx::utils::lerp( rShapeBounds.getMinX(),
                                       rShapeBounds.getMaxX(),
                                       rUnitBounds.getMaxX() ),
-                basegfx::tools::lerp( rShapeBounds.getMinY(),
+                basegfx::utils::lerp( rShapeBounds.getMinY(),
                                       rShapeBounds.getMaxY(),
                                       rUnitBounds.getMaxY() ) );
         }
@@ -665,7 +665,7 @@ namespace slideshow
                        ::cppcanvas::Color::IntSRGBA        aFillColor )
         {
             const ::basegfx::B2DPolygon aPoly(
-                ::basegfx::tools::createPolygonFromRect( rRect ));
+                ::basegfx::utils::createPolygonFromRect( rRect ));
 
             ::cppcanvas::PolyPolygonSharedPtr pPolyPoly(
                 ::cppcanvas::BaseGfxFactory::createPolyPolygon( rCanvas, aPoly ) );

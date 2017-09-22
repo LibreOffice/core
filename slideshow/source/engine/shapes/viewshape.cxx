@@ -683,7 +683,7 @@ namespace slideshow
 
                         aBitmapTransform.invert();
 
-                        const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(
+                        const basegfx::B2DHomMatrix aTranslation(basegfx::utils::createTranslateB2DHomMatrix(
                             aTmpRect.getMinX(), aTmpRect.getMinY()));
 
                         aBitmapTransform = aBitmapTransform * aTranslation;

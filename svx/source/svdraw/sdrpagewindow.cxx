@@ -227,7 +227,7 @@ namespace
 
         if(aCandidate.areControlPointsUsed())
         {
-            aCandidate = basegfx::tools::adaptiveSubdivideByAngle(rCandidate);
+            aCandidate = basegfx::utils::adaptiveSubdivideByAngle(rCandidate);
         }
 
         if(aCandidate.count())
@@ -257,7 +257,7 @@ namespace
             if(pObjA && dynamic_cast<const SdrPathObj*>( pObjA) !=  nullptr)
             {
                 basegfx::B2DPolyPolygon aPolyA(pObjA->GetPathPoly());
-                aPolyA = basegfx::tools::correctOrientations(aPolyA);
+                aPolyA = basegfx::utils::correctOrientations(aPolyA);
 
                 basegfx::B2DPolyPolygon aPolyB;
 
@@ -268,7 +268,7 @@ namespace
                     if(pObjB && dynamic_cast<const SdrPathObj*>( pObjB) !=  nullptr)
                     {
                         basegfx::B2DPolyPolygon aCandidate(pObjB->GetPathPoly());
-                        aCandidate = basegfx::tools::correctOrientations(aCandidate);
+                        aCandidate = basegfx::utils::correctOrientations(aCandidate);
                         aPolyB.append(aCandidate);
                     }
                 }
@@ -277,7 +277,7 @@ namespace
                 {
                     // poly A is the clipregion, clip poly b against it. Algo depends on
                     // poly b being closed.
-                    basegfx::B2DPolyPolygon aResult(basegfx::tools::clipPolyPolygonOnPolyPolygon(aPolyB, aPolyA));
+                    basegfx::B2DPolyPolygon aResult(basegfx::utils::clipPolyPolygonOnPolyPolygon(aPolyB, aPolyA));
 
                     for(sal_uInt32 a(0); a < aResult.count(); a++)
                     {

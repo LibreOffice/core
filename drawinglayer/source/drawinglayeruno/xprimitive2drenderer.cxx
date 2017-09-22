@@ -146,7 +146,7 @@ namespace drawinglayer
                     const sal_uInt32 nDiscreteHeight(basegfx::fround((fHeight * fFactor100th_mmToInch) * DPI_Y));
 
                     basegfx::B2DHomMatrix aEmbedding(
-                        basegfx::tools::createTranslateB2DHomMatrix(
+                        basegfx::utils::createTranslateB2DHomMatrix(
                             -aRange.getMinX(),
                             -aRange.getMinY()));
 

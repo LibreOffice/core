@@ -87,9 +87,9 @@ namespace drawinglayer
                     if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
                     {
                         // if content fits into frame, create it
-                        basegfx::B2DHomMatrix aInnerObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        basegfx::B2DHomMatrix aInnerObjectMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(
                             aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY));
-                        aInnerObjectMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
+                        aInnerObjectMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
                             * aInnerObjectMatrix;
 
                         const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
@@ -119,7 +119,7 @@ namespace drawinglayer
 
                     if(aColor.bIsVisible)
                     {
-                        basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
+                        basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
                         const Color aVclColor(aColor.nColor);
                         aOutline.transform(getObjectTransform());
                         const drawinglayer::primitive2d::Primitive2DReference xOutline(

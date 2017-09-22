@@ -60,7 +60,7 @@ namespace sdr
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
                     const basegfx::B2DRange& rRange(maRectangles[a]);
-                    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(rRange));
+                    const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(rRange));
 
                     aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
                         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(

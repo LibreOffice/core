@@ -299,8 +299,8 @@ void Svx3DLightControl::Construct2()
     {
         // create lamp control object (Yellow lined object)
         // base circle
-        const basegfx::B2DPolygon a2DCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), RADIUS_LAMP_PREVIEW_SIZE));
-        basegfx::B3DPolygon a3DCircle(basegfx::tools::createB3DPolygonFromB2DPolygon(a2DCircle));
+        const basegfx::B2DPolygon a2DCircle(basegfx::utils::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), RADIUS_LAMP_PREVIEW_SIZE));
+        basegfx::B3DPolygon a3DCircle(basegfx::utils::createB3DPolygonFromB2DPolygon(a2DCircle));
         basegfx::B3DHomMatrix aTransform;
 
         aTransform.rotate(F_PI2, 0.0, 0.0);
@@ -317,9 +317,9 @@ void Svx3DLightControl::Construct2()
         basegfx::B2DPolygon a2DHalfCircle;
         a2DHalfCircle.append(basegfx::B2DPoint(RADIUS_LAMP_PREVIEW_SIZE, 0.0));
         a2DHalfCircle.append(basegfx::B2DPoint(RADIUS_LAMP_PREVIEW_SIZE, -RADIUS_LAMP_PREVIEW_SIZE));
-        a2DHalfCircle.append(basegfx::tools::createPolygonFromEllipseSegment(
+        a2DHalfCircle.append(basegfx::utils::createPolygonFromEllipseSegment(
             basegfx::B2DPoint(0.0, 0.0), RADIUS_LAMP_PREVIEW_SIZE, RADIUS_LAMP_PREVIEW_SIZE, F_2PI - F_PI2, F_PI2));
-        basegfx::B3DPolygon a3DHalfCircle(basegfx::tools::createB3DPolygonFromB2DPolygon(a2DHalfCircle));
+        basegfx::B3DPolygon a3DHalfCircle(basegfx::utils::createB3DPolygonFromB2DPolygon(a2DHalfCircle));
 
         // create object for it
         mpLampShaftObject = new E3dPolygonObj(

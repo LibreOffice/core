@@ -27,9 +27,9 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/keystoplerp.hxx>
-#include <basegfx/tools/lerp.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/keystoplerp.hxx>
+#include <basegfx/utils/lerp.hxx>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -685,18 +685,18 @@ namespace cairocanvas
         if( rLeft.getLength() == 3 )
         {
             uno::Sequence<double> aRes(3);
-            aRes[0] = basegfx::tools::lerp(rLeft[0],rRight[0],fAlpha);
-            aRes[1] = basegfx::tools::lerp(rLeft[1],rRight[1],fAlpha);
-            aRes[2] = basegfx::tools::lerp(rLeft[2],rRight[2],fAlpha);
+            aRes[0] = basegfx::utils::lerp(rLeft[0],rRight[0],fAlpha);
+            aRes[1] = basegfx::utils::lerp(rLeft[1],rRight[1],fAlpha);
+            aRes[2] = basegfx::utils::lerp(rLeft[2],rRight[2],fAlpha);
             return aRes;
         }
         else if( rLeft.getLength() == 4 )
         {
             uno::Sequence<double> aRes(4);
-            aRes[0] = basegfx::tools::lerp(rLeft[0],rRight[0],fAlpha);
-            aRes[1] = basegfx::tools::lerp(rLeft[1],rRight[1],fAlpha);
-            aRes[2] = basegfx::tools::lerp(rLeft[2],rRight[2],fAlpha);
-            aRes[3] = basegfx::tools::lerp(rLeft[3],rRight[3],fAlpha);
+            aRes[0] = basegfx::utils::lerp(rLeft[0],rRight[0],fAlpha);
+            aRes[1] = basegfx::utils::lerp(rLeft[1],rRight[1],fAlpha);
+            aRes[2] = basegfx::utils::lerp(rLeft[2],rRight[2],fAlpha);
+            aRes[3] = basegfx::utils::lerp(rLeft[3],rRight[3],fAlpha);
             return aRes;
         }
 
@@ -868,7 +868,7 @@ namespace cairocanvas
                                             128U )) + 1 );
 
                                 const uno::Sequence<double>* pColors=&pPolyImpl->getValues().maColors[0];
-                                basegfx::tools::KeyStopLerp aLerper(pPolyImpl->getValues().maStops);
+                                basegfx::utils::KeyStopLerp aLerper(pPolyImpl->getValues().maStops);
                                 for( unsigned int i=1; i<nStepCount; ++i )
                                 {
                                     const double fT( i/double(nStepCount) );

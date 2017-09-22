@@ -125,7 +125,7 @@ BitmapEx convertMetafileToBitmapEx(
     {
         const drawinglayer::primitive2d::Primitive2DReference aMtf(
             new drawinglayer::primitive2d::MetafilePrimitive2D(
-                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                basegfx::utils::createScaleTranslateB2DHomMatrix(
                     rTargetRange.getRange(),
                     rTargetRange.getMinimum()),
                 rMtf));

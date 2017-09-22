@@ -98,7 +98,7 @@ void XMLMarkerStyleImport::importXML(
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(basegfx::tools::importFromSvgD(aPolyPolygon, strPathData, rImport.needFixPositionAfterZ(), nullptr))
+        if(basegfx::utils::importFromSvgD(aPolyPolygon, strPathData, rImport.needFixPositionAfterZ(), nullptr))
         {
             if(aPolyPolygon.count())
             {
@@ -115,7 +115,7 @@ void XMLMarkerStyleImport::importXML(
                 if(!aSourceRange.equal(aTargetRange))
                 {
                     aPolyPolygon.transform(
-                        basegfx::tools::createSourceRangeTargetRangeTransform(
+                        basegfx::utils::createSourceRangeTargetRangeTransform(
                             aSourceRange,
                             aTargetRange));
                 }
@@ -123,7 +123,7 @@ void XMLMarkerStyleImport::importXML(
                 // always use PolyPolygonBezierCoords here
                 drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
 
-                basegfx::tools::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
+                basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
                     aPolyPolygon,
                     aSourcePolyPolygon);
                 rValue <<= aSourcePolyPolygon;
@@ -173,7 +173,7 @@ void XMLMarkerStyleExport::exportXML(
             }
 
             const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
+                basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
                     aBezier));
             const basegfx::B2DRange aPolyPolygonRange(aPolyPolygon.getB2DRange());
 
@@ -189,7 +189,7 @@ void XMLMarkerStyleExport::exportXML(
 
             // Pathdata
             const OUString aPolygonString(
-                basegfx::tools::exportToSvgD(
+                basegfx::utils::exportToSvgD(
                     aPolyPolygon,
                     true,           // bUseRelativeCoordinates
                     false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now

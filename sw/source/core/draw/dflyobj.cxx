@@ -560,7 +560,7 @@ void SwVirtFlyDrawObj::NbcSetLogicRect(const tools::Rectangle& )
     const ::basegfx::B2DRange aSourceRange(aSourceRectangle.Left(), aSourceRectangle.Top(), aSourceRectangle.Right(), aSourceRectangle.Bottom());
     ::basegfx::B2DPolyPolygon aRetval;
 
-    aRetval.append(::basegfx::tools::createPolygonFromRect(aSourceRange));
+    aRetval.append(::basegfx::utils::createPolygonFromRect(aSourceRange));
 
     return aRetval;
 }

@@ -27,7 +27,7 @@
 #include <basegfx/color/bcolormodifier.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <sdr/contact/viewobjectcontactofe3d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 
 
 using namespace com::sun::star;

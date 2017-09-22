@@ -43,11 +43,11 @@ namespace drawinglayer
             // Do use createPolygonFromUnitCircle, but let create from first quadrant to mimic old geometry creation.
             // This is needed to have the same look when stroke is used since the polygon start point defines the
             // stroke start, too.
-            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromUnitCircle(1));
+            basegfx::B2DPolygon aUnitOutline(basegfx::utils::createPolygonFromUnitCircle(1));
 
             // scale and move UnitEllipse to UnitObject (-1,-1 1,1) -> (0,0 1,1)
             const basegfx::B2DHomMatrix aUnitCorrectionMatrix(
-                basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
+                basegfx::utils::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
 
             // apply to the geometry
             aUnitOutline.transform(aUnitCorrectionMatrix);
@@ -150,7 +150,7 @@ namespace drawinglayer
             Primitive2DContainer aRetval;
 
             // create unit outline polygon
-            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromUnitEllipseSegment(mfStartAngle, mfEndAngle));
+            basegfx::B2DPolygon aUnitOutline(basegfx::utils::createPolygonFromUnitEllipseSegment(mfStartAngle, mfEndAngle));
 
             if(mbCloseSegment)
             {
@@ -166,7 +166,7 @@ namespace drawinglayer
 
             // move and scale UnitEllipse to UnitObject (-1,-1 1,1) -> (0,0 1,1)
             const basegfx::B2DHomMatrix aUnitCorrectionMatrix(
-                basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
+                basegfx::utils::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
 
             // apply to the geometry
             aUnitOutline.transform(aUnitCorrectionMatrix);

@@ -266,7 +266,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                     // create dashed border
                     {
                         // create object polygon
-                        basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
+                        basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
                         aPolygon.transform(aObjectMatrix);
 
                         // create line and stroke attribute
@@ -407,7 +407,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                                     false));
 
                             // fill text matrix
-                            const basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            const basegfx::B2DHomMatrix aTextMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                                 aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
                                 fShearX,
                                 fRotate,

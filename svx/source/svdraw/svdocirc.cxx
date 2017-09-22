@@ -211,12 +211,12 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
         // create full circle. Do not use createPolygonFromEllipse; it's necessary
         // to get the start point to the bottom of the circle to keep compatible to
         // old geometry creation
-        aCircPolygon = basegfx::tools::createPolygonFromUnitCircle(1);
+        aCircPolygon = basegfx::utils::createPolygonFromUnitCircle(1);
 
         // needs own scaling and translation from unit circle to target size (same as
         // would be in createPolygonFromEllipse)
         const basegfx::B2DPoint aCenter(aRange.getCenter());
-        const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+        const basegfx::B2DHomMatrix aMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(
             aRange.getWidth() / 2.0, aRange.getHeight() / 2.0,
             aCenter.getX(), aCenter.getY()));
         aCircPolygon.transform(aMatrix);
@@ -229,7 +229,7 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
         const double fEnd((((36000 - nStart) % 36000) / 18000.0) * F_PI);
 
         // create circle segment. This is not closed by default
-        aCircPolygon = basegfx::tools::createPolygonFromEllipseSegment(
+        aCircPolygon = basegfx::utils::createPolygonFromEllipseSegment(
             aRange.getCenter(), aRange.getWidth() / 2.0, aRange.getHeight() / 2.0,
             fStart, fEnd);
 
@@ -258,11 +258,11 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
     {
         // translate top left to (0,0)
         const basegfx::B2DPoint aTopLeft(aRange.getMinimum());
-        basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+        basegfx::B2DHomMatrix aMatrix(basegfx::utils::createTranslateB2DHomMatrix(
             -aTopLeft.getX(), -aTopLeft.getY()));
 
         // shear, rotate and back to top left (if needed)
-        aMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+        aMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
             aGeo.nShearAngle ? tan((36000 - aGeo.nShearAngle) * F_PI18000) : 0.0,
             aGeo.nRotationAngle ? (36000 - aGeo.nRotationAngle) * F_PI18000 : 0.0,
             aTopLeft) * aMatrix;

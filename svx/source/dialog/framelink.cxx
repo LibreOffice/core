@@ -363,7 +363,7 @@ void getCutSet(
     const basegfx::B2DPoint& rOtherRight,
     const basegfx::B2DVector& rOtherX)
 {
-    basegfx::tools::findCut(
+    basegfx::utils::findCut(
         rLeft,
         rX,
         rOtherLeft,
@@ -371,7 +371,7 @@ void getCutSet(
         CutFlagValue::LINE,
         &rCutSet.mfOLML);
 
-    basegfx::tools::findCut(
+    basegfx::utils::findCut(
         rRight,
         rX,
         rOtherLeft,
@@ -379,7 +379,7 @@ void getCutSet(
         CutFlagValue::LINE,
         &rCutSet.mfOLMR);
 
-    basegfx::tools::findCut(
+    basegfx::utils::findCut(
         rLeft,
         rX,
         rOtherRight,
@@ -387,7 +387,7 @@ void getCutSet(
         CutFlagValue::LINE,
         &rCutSet.mfORML);
 
-    basegfx::tools::findCut(
+    basegfx::utils::findCut(
         rRight,
         rX,
         rOtherRight,

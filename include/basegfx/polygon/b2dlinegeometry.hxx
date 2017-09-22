@@ -30,7 +30,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         /** Create line start/end geometry element, mostly arrows and things like that.
 
@@ -138,7 +138,7 @@ namespace basegfx
             double fMaxPartOfEdge = 0.4,
             double fMiterMinimumAngle = (15.0 * F_PI180));
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_POLYGON_B2DLINEGEOMETRY_HXX

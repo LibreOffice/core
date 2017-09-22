@@ -369,7 +369,7 @@ void SvxPageWindow::drawFillAttributes(vcl::RenderContext& rRenderContext,
         {
             const drawinglayer::primitive2d::Primitive2DReference xOutline(
                 new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                    basegfx::tools::createPolygonFromRect(aPaintRange), GetLineColor().getBColor()));
+                    basegfx::utils::createPolygonFromRect(aPaintRange), GetLineColor().getBColor()));
 
             aSequence.push_back(xOutline);
         }

@@ -256,7 +256,7 @@ void LineInfo::applyToB2DPolyPolygon(
                 for(sal_uInt32 c(0); c < io_rLinePolyPolygon.count(); c++)
                 {
                     basegfx::B2DPolyPolygon aLineTraget;
-                    basegfx::tools::applyLineDashing(
+                    basegfx::utils::applyLineDashing(
                         io_rLinePolyPolygon.getB2DPolygon(c),
                         fDotDashArray,
                         &aLineTraget);
@@ -273,7 +273,7 @@ void LineInfo::applyToB2DPolyPolygon(
 
             for(sal_uInt32 a(0); a < io_rLinePolyPolygon.count(); a++)
             {
-                o_rFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
+                o_rFillPolyPolygon.append(basegfx::utils::createAreaGeometry(
                     io_rLinePolyPolygon.getB2DPolygon(a),
                     fHalfLineWidth,
                     GetLineJoin(),

@@ -66,7 +66,7 @@ namespace sdr
                     rOwnerPage.GetLeftBorder(), rOwnerPage.GetUpperBorder(),
                     rOwnerPage.GetWidth() - rOwnerPage.GetRightBorder(),
                     rOwnerPage.GetHeight() - rOwnerPage.GetLowerBorder());
-                const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
+                const basegfx::B2DPolygon aInnerPolgon(basegfx::utils::createPolygonFromRect(aInnerRange));
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
                     drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
                         basegfx::B2DPolyPolygon(aInnerPolgon),
