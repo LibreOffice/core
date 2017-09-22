@@ -847,8 +847,6 @@ namespace svt
             {
                 tools::Rectangle aRect = GetFieldRectPixel(nEditRow, 0, false );
                 // status cell should be painted if and only if text is displayed
-                // note: bPaintStatus is mutable, but Solaris has problems with assigning
-                // probably because it is part of a bitfield
                 pTHIS->bPaintStatus = ( GetBrowserFlags() & EditBrowseBoxFlags::HANDLE_COLUMN_TEXT ) == EditBrowseBoxFlags::HANDLE_COLUMN_TEXT;
                 rWindow.Invalidate(aRect);
                 pTHIS->bPaintStatus = true;
