@@ -367,7 +367,7 @@ SalGraphics* KDE5SalFrame::AcquireGraphics()
                 m_aGraphics[i].bInUse = true;
                 if( ! m_aGraphics[i].pGraphics )
                 {
-                    m_aGraphics[i].pGraphics.reset( new KDESalGraphics );
+                    m_aGraphics[i].pGraphics.reset( new KDE5SalGraphics );
                     m_aGraphics[i].pGraphics->Init( this, GetWindow(), GetScreenNumber() );
                 }
                 return m_aGraphics[i].pGraphics.get();

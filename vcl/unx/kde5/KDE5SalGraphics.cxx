@@ -70,7 +70,7 @@ QRect region2QRect( const tools::Rectangle& rControlRegion )
     return QRect(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 }
 
-bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
+bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
 {
     switch (type)
     {
@@ -197,7 +197,7 @@ static QRegion XRegionToQRegion( Region xr )
 }
 #endif
 
-bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
+bool KDE5SalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const tools::Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& value,
                                         const OUString& )
@@ -661,7 +661,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     return returnVal;
 }
 
-bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
+bool KDE5SalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                                              const tools::Rectangle& controlRegion, ControlState controlState,
                                              const ImplControlValue& val,
                                              const OUString&,
@@ -974,7 +974,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
     aPos was or was not inside the native widget specified by the
     nType/nPart combination.
 */
-bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
+bool KDE5SalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const tools::Rectangle& rControlRegion, const Point& rPos,
                                            bool& rIsInside )
 {

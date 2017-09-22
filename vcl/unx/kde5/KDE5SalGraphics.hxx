@@ -30,7 +30,7 @@
 /**
  * Handles native graphics requests and performs the needed drawing operations.
  */
-class KDESalGraphics : public X11SalGraphics
+class KDE5SalGraphics : public X11SalGraphics
 {
 public:
     virtual bool IsNativeControlSupported( ControlType, ControlPart ) override;
