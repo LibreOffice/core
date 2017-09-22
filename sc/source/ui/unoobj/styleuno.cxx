@@ -468,11 +468,10 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference< container::XNameContainer >  xFamily(GetObjectByIndex_Impl(nIndex));
-    if (xFamily.is())
-        return uno::makeAny(xFamily);
-    else
+    if (!xFamily.is())
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
+
+    return uno::makeAny(xFamily);
 }
 
 uno::Type SAL_CALL ScStyleFamiliesObj::getElementType()
@@ -493,11 +492,10 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     uno::Reference< container::XNameContainer >  xFamily(GetObjectByName_Impl(aName));
-    if (xFamily.is())
-        return uno::makeAny(xFamily);
-    else
+    if (!xFamily.is())
         throw container::NoSuchElementException();
-//    return uno::Any();
+
+    return uno::makeAny(xFamily);
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
@@ -664,21 +662,20 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
             //! DocFunc function ???
             //! Undo ?????????????
 
-            if ( !pStylePool->Find( aNameStr, eFamily ) )   // not available yet
-            {
-                (void)pStylePool->Make( aNameStr, eFamily, SFXSTYLEBIT_USERDEF );
-
-                if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
-                    rDoc.GetPool()->CellStyleCreated( aNameStr, &rDoc );
-
-                pStyleObj->InitDoc( pDocShell, aNameStr );  // object can be used
-
-                if (!rDoc.IsImportingXML())
-                    pDocShell->SetDocumentModified();   // new style not used yet
-                bDone = true;
-            }
-            else
+            if ( pStylePool->Find( aNameStr, eFamily ) )   // not available yet
                 throw container::ElementExistException();
+
+            (void)pStylePool->Make( aNameStr, eFamily, SFXSTYLEBIT_USERDEF );
+
+            if ( eFamily == SfxStyleFamily::Para && !rDoc.IsImportingXML() )
+                rDoc.GetPool()->CellStyleCreated( aNameStr, &rDoc );
+
+            pStyleObj->InitDoc( pDocShell, aNameStr );  // object can be used
+
+            if (!rDoc.IsImportingXML())
+                pDocShell->SetDocumentModified();   // new style not used yet
+            bDone = true;
+
         }
     }
 
@@ -770,11 +767,10 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference< style::XStyle >  xObj(GetObjectByIndex_Impl(nIndex));
-    if (xObj.is())
-        return uno::makeAny(xObj);
-    else
+    if (!xObj.is())
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
+
+    return uno::makeAny(xObj);
 }
 
 uno::Type SAL_CALL ScStyleFamilyObj::getElementType()
@@ -796,11 +792,10 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByName( const OUString& aName )
     SolarMutexGuard aGuard;
     uno::Reference< style::XStyle > xObj(
         GetObjectByName_Impl( ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily ) ));
-    if (xObj.is())
-        return uno::makeAny(xObj);
-    else
+    if (!xObj.is())
         throw container::NoSuchElementException();
-//    return uno::Any();
+
+    return uno::makeAny(xObj);
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
@@ -863,28 +858,26 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyN
 {
     uno::Any aRet;
 
-    if ( sPropertyName == "DisplayName" )
-    {
-        SolarMutexGuard aGuard;
-        const char* pResId = nullptr;
-        switch ( eFamily )
-        {
-            case SfxStyleFamily::Para:
-                pResId = STR_STYLE_FAMILY_CELL; break;
-            case SfxStyleFamily::Page:
-                pResId = STR_STYLE_FAMILY_PAGE; break;
-            default:
-                OSL_FAIL( "ScStyleFamilyObj::getPropertyValue(): invalid family" );
-        }
-        if (pResId)
-        {
-            OUString sDisplayName(ScGlobal::GetRscString(pResId));
-            aRet <<= sDisplayName;
-        }
-    }
-    else
+    if ( sPropertyName != "DisplayName" )
     {
         throw beans::UnknownPropertyException( "unknown property: " + sPropertyName, static_cast<OWeakObject *>(this) );
+    }
+
+    SolarMutexGuard aGuard;
+    const char* pResId = nullptr;
+    switch ( eFamily )
+    {
+        case SfxStyleFamily::Para:
+            pResId = STR_STYLE_FAMILY_CELL; break;
+        case SfxStyleFamily::Page:
+            pResId = STR_STYLE_FAMILY_PAGE; break;
+        default:
+            OSL_FAIL( "ScStyleFamilyObj::getPropertyValue(): invalid family" );
+    }
+    if (pResId)
+    {
+        OUString sDisplayName(ScGlobal::GetRscString(pResId));
+        aRet <<= sDisplayName;
     }
 
     return aRet;
@@ -1659,10 +1652,11 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                                             }
                                         }
                                     }
-                                    if ( bFound )
-                                        rSet.Put( SvxPaperBinItem( ATTR_PAGE_PAPERBIN, nTray ) );
-                                    else
+                                    if ( !bFound )
                                         throw lang::IllegalArgumentException();
+
+                                    rSet.Put( SvxPaperBinItem( ATTR_PAGE_PAPERBIN, nTray ) );
+
                                 }
                                 break;
                             case ATTR_PAGE_SCALETO:

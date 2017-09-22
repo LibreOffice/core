@@ -128,253 +128,250 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    if(pDocShell)
+    if(!pDocShell)
+        throw uno::RuntimeException();
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    bool bUpdateHeights = false;
+
+    ScViewOptions aViewOpt(rDoc.GetViewOptions());
+
+    /*Stampit enable/disable print cancel */
+    if ( aPropertyName == SC_UNO_ALLOWPRINTJOBCANCEL )
+        pDocShell->Stamp_SetPrintCancelState( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    /*Stampit enable/disable print cancel */
+
+    else if ( aPropertyName == SC_UNO_SHOWZERO )
+        aViewOpt.SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWNOTES )
+        aViewOpt.SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHOWGRID )
+        aViewOpt.SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_GRIDCOLOR )
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        bool bUpdateHeights = false;
-
-        ScViewOptions aViewOpt(rDoc.GetViewOptions());
-
-        /*Stampit enable/disable print cancel */
-        if ( aPropertyName == SC_UNO_ALLOWPRINTJOBCANCEL )
-            pDocShell->Stamp_SetPrintCancelState( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        /*Stampit enable/disable print cancel */
-
-        else if ( aPropertyName == SC_UNO_SHOWZERO )
-            aViewOpt.SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWNOTES )
-            aViewOpt.SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHOWGRID )
-            aViewOpt.SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_GRIDCOLOR )
+        sal_Int64 nColor = 0;
+        if (aValue >>= nColor)
         {
-            sal_Int64 nColor = 0;
-            if (aValue >>= nColor)
-            {
-                Color aColor(static_cast<sal_uInt32>(nColor));
-                aViewOpt.SetGridColor(aColor, OUString());
-            }
-        }
-        else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
-            aViewOpt.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNONAME_LINKUPD )
-        {
-            // XXX NOTE: this is the css::document::Settings property
-            // LinkUpdateMode, not the css::sheet::XGlobalSheetSettings
-            // attribute LinkUpdateMode.
-            sal_Int16 n;
-            if (!(aValue >>= n) || n < css::document::LinkUpdateModes::NEVER ||
-                    n > css::document::LinkUpdateModes::GLOBAL_SETTING)
-            {
-                throw css::lang::IllegalArgumentException(
-                    ("LinkUpdateMode property value must be a SHORT with a value in"
-                     " the range of the css::document::LinkUpdateModes constants"),
-                    css::uno::Reference<css::uno::XInterface>(), -1);
-            }
-            ScLkUpdMode eMode;
-            switch (n)
-            {
-                case css::document::LinkUpdateModes::NEVER:
-                    eMode = LM_NEVER;
-                break;
-                case css::document::LinkUpdateModes::MANUAL:
-                    eMode = LM_ON_DEMAND;
-                break;
-                case css::document::LinkUpdateModes::AUTO:
-                    eMode = LM_ALWAYS;
-                break;
-                case css::document::LinkUpdateModes::GLOBAL_SETTING:
-                default:
-                    eMode = SC_MOD()->GetAppOptions().GetLinkMode();
-                break;
-            }
-            rDoc.SetLinkMode( eMode );
-        }
-        else if ( aPropertyName == SC_UNO_COLROWHDR )
-            aViewOpt.SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_SHEETTABS )
-            aViewOpt.SetOption(VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_OUTLSYMB )
-            aViewOpt.SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_AUTOCALC )
-            rDoc.SetAutoCalc( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aPropertyName == SC_UNO_PRINTERNAME )
-        {
-            OUString sPrinterName;
-            if ( aValue >>= sPrinterName )
-            {
-                // #i75610# if the name is empty, do nothing (don't create any printer)
-                if ( !sPrinterName.isEmpty() && pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
-                {
-                    SfxPrinter* pPrinter = pDocShell->GetPrinter();
-                    if (pPrinter)
-                    {
-                        if (pPrinter->GetName() != sPrinterName)
-                        {
-                            VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
-                            if (pNewPrinter->IsKnown())
-                                pDocShell->SetPrinter( pNewPrinter, SfxPrinterChangeFlags::PRINTER );
-                            else
-                                pNewPrinter.disposeAndClear();
-                        }
-                    }
-                    else
-                        throw uno::RuntimeException();
-                }
-            }
-            else
-                throw lang::IllegalArgumentException();
-        }
-        else if ( aPropertyName == SC_UNO_PRINTERSETUP )
-        {
-            uno::Sequence<sal_Int8> aSequence;
-            if ( aValue >>= aSequence )
-            {
-                sal_uInt32 nSize = aSequence.getLength();
-                // #i75610# if the sequence is empty, do nothing (don't create any printer)
-                if ( nSize != 0 )
-                {
-                    SvMemoryStream aStream (aSequence.getArray(), nSize, StreamMode::READ );
-                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    auto pSet = o3tl::make_unique<SfxItemSet>( *rDoc.GetPool(),
-                            svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                            SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
-                            SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,
-                            SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS>{} );
-                    pDocShell->SetPrinter( SfxPrinter::Create( aStream, std::move(pSet) ) );
-                }
-            }
-        }
-        else if ( aPropertyName == SC_UNO_APPLYDOCINF )
-        {
-            bool bTmp=true;
-            if ( aValue >>= bTmp )
-                pDocShell->SetUseUserData( bTmp );
-        }
-        else if ( aPropertyName == SC_UNO_FORBIDDEN )
-        {
-            //  read-only - should not be set
-        }
-        else if ( aPropertyName == SC_UNO_CHARCOMP )
-        {
-            // Int16 contains CharacterCompressionType values
-            sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
-            rDoc.SetAsianCompression( (CharCompressType) nUno );
-            bUpdateHeights = true;
-        }
-        else if ( aPropertyName == SC_UNO_ASIANKERN )
-        {
-            rDoc.SetAsianKerning( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-            bUpdateHeights = true;
-        }
-        else if ( aPropertyName == SCSAVEVERSION )
-        {
-            bool bTmp=false;
-            if ( aValue >>= bTmp )
-                pDocShell->SetSaveVersionOnClose( bTmp );
-        }
-        else if ( aPropertyName == SC_UNO_UPDTEMPL )
-        {
-            bool bTmp=true;
-            if ( aValue >>= bTmp )
-                pDocShell->SetQueryLoadTemplate( bTmp );
-        }
-        else if ( aPropertyName == SC_UNO_LOADREADONLY )
-        {
-            bool bTmp=false;
-            if ( aValue >>= bTmp )
-                pDocShell->SetLoadReadonly( bTmp );
-        }
-        else if ( aPropertyName == SC_UNO_SHAREDOC )
-        {
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-            bool bDocShared = false;
-            if ( aValue >>= bDocShared )
-            {
-                pDocShell->SetSharedXMLFlag( bDocShared );
-            }
-#endif
-        }
-        else if ( aPropertyName == SC_UNO_MODIFYPASSWORDINFO )
-        {
-            uno::Sequence< beans::PropertyValue > aInfo;
-            if ( !( aValue >>= aInfo ) )
-                throw lang::IllegalArgumentException(
-                    "Value of type Sequence<PropertyValue> expected!",
-                    uno::Reference< uno::XInterface >(),
-                    2 );
-
-            if ( !pDocShell->SetModifyPasswordInfo( aInfo ) )
-                throw beans::PropertyVetoException(
-                    "The hash is not allowed to be changed now!" );
-        }
-        else if ( aPropertyName == SC_UNO_EMBED_FONTS )
-        {
-            bool bVal = false;
-            if ( aValue >>=bVal )
-            {
-                rDoc.SetIsUsingEmbededFonts(bVal);
-            }
-        }
-        else if ( aPropertyName == SC_UNO_SYNTAXSTRINGREF )
-        {
-            ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
-            sal_Int16 nUno = 0;
-
-            if( aValue >>= nUno )
-            {
-                switch (nUno)
-                {
-                    case 0: // CONV_OOO
-                    case 2: // CONV_XL_A1
-                    case 3: // CONV_XL_R1C1
-                    case 7: // CONV_A1_XL_A1
-                        aCalcConfig.SetStringRefSyntax( static_cast<formula::FormulaGrammar::AddressConvention>( nUno ) );
-                        break;
-                    default:
-                        aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_UNSPECIFIED );
-                        break;
-
-                }
-                rDoc.SetCalcConfig( aCalcConfig );
-            }
-        }
-
-        else
-        {
-            ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
-            if ( aPropertyName == SC_UNO_SNAPTORASTER )
-                aGridOpt.SetUseGridSnap( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-            else if ( aPropertyName == SC_UNO_RASTERVIS )
-                aGridOpt.SetGridVisible( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-            else if ( aPropertyName == SC_UNO_RASTERRESX )
-                aGridOpt.SetFieldDrawX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-            else if ( aPropertyName == SC_UNO_RASTERRESY )
-                aGridOpt.SetFieldDrawY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-            else if ( aPropertyName == SC_UNO_RASTERSUBX )
-                aGridOpt.SetFieldDivisionX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-            else if ( aPropertyName == SC_UNO_RASTERSUBY )
-                aGridOpt.SetFieldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-            else if ( aPropertyName == SC_UNO_RASTERSYNC )
-                aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-            else
-                throw beans::UnknownPropertyException();
-            aViewOpt.SetGridOptions(aGridOpt);
-        }
-        rDoc.SetViewOptions(aViewOpt);
-
-        if ( bUpdateHeights && !rDoc.IsImportingXML() )
-        {
-            //  update automatic row heights and repaint
-            SCTAB nTabCount = rDoc.GetTableCount();
-            for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
-                    pDocShell->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PaintPartFlags::Grid);
-            pDocShell->SetDocumentModified();
+            Color aColor(static_cast<sal_uInt32>(nColor));
+            aViewOpt.SetGridColor(aColor, OUString());
         }
     }
+    else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
+        aViewOpt.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNONAME_LINKUPD )
+    {
+        // XXX NOTE: this is the css::document::Settings property
+        // LinkUpdateMode, not the css::sheet::XGlobalSheetSettings
+        // attribute LinkUpdateMode.
+        sal_Int16 n;
+        if (!(aValue >>= n) || n < css::document::LinkUpdateModes::NEVER ||
+                n > css::document::LinkUpdateModes::GLOBAL_SETTING)
+        {
+            throw css::lang::IllegalArgumentException(
+                ("LinkUpdateMode property value must be a SHORT with a value in"
+                 " the range of the css::document::LinkUpdateModes constants"),
+                css::uno::Reference<css::uno::XInterface>(), -1);
+        }
+        ScLkUpdMode eMode;
+        switch (n)
+        {
+            case css::document::LinkUpdateModes::NEVER:
+                eMode = LM_NEVER;
+            break;
+            case css::document::LinkUpdateModes::MANUAL:
+                eMode = LM_ON_DEMAND;
+            break;
+            case css::document::LinkUpdateModes::AUTO:
+                eMode = LM_ALWAYS;
+            break;
+            case css::document::LinkUpdateModes::GLOBAL_SETTING:
+            default:
+                eMode = SC_MOD()->GetAppOptions().GetLinkMode();
+            break;
+        }
+        rDoc.SetLinkMode( eMode );
+    }
+    else if ( aPropertyName == SC_UNO_COLROWHDR )
+        aViewOpt.SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_SHEETTABS )
+        aViewOpt.SetOption(VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_OUTLSYMB )
+        aViewOpt.SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_AUTOCALC )
+        rDoc.SetAutoCalc( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+    else if ( aPropertyName == SC_UNO_PRINTERNAME )
+    {
+        OUString sPrinterName;
+        if ( !(aValue >>= sPrinterName) )
+            throw lang::IllegalArgumentException();
+
+        // #i75610# if the name is empty, do nothing (don't create any printer)
+        if ( !sPrinterName.isEmpty() && pDocShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+        {
+            SfxPrinter* pPrinter = pDocShell->GetPrinter();
+            if (!pPrinter)
+                throw uno::RuntimeException();
+
+            if (pPrinter->GetName() != sPrinterName)
+            {
+                VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
+                if (pNewPrinter->IsKnown())
+                    pDocShell->SetPrinter( pNewPrinter, SfxPrinterChangeFlags::PRINTER );
+                else
+                    pNewPrinter.disposeAndClear();
+            }
+
+        }
+
+    }
+    else if ( aPropertyName == SC_UNO_PRINTERSETUP )
+    {
+        uno::Sequence<sal_Int8> aSequence;
+        if ( aValue >>= aSequence )
+        {
+            sal_uInt32 nSize = aSequence.getLength();
+            // #i75610# if the sequence is empty, do nothing (don't create any printer)
+            if ( nSize != 0 )
+            {
+                SvMemoryStream aStream (aSequence.getArray(), nSize, StreamMode::READ );
+                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                auto pSet = o3tl::make_unique<SfxItemSet>( *rDoc.GetPool(),
+                        svl::Items<SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                        SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                        SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,
+                        SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS>{} );
+                pDocShell->SetPrinter( SfxPrinter::Create( aStream, std::move(pSet) ) );
+            }
+        }
+    }
+    else if ( aPropertyName == SC_UNO_APPLYDOCINF )
+    {
+        bool bTmp=true;
+        if ( aValue >>= bTmp )
+            pDocShell->SetUseUserData( bTmp );
+    }
+    else if ( aPropertyName == SC_UNO_FORBIDDEN )
+    {
+        //  read-only - should not be set
+    }
+    else if ( aPropertyName == SC_UNO_CHARCOMP )
+    {
+        // Int16 contains CharacterCompressionType values
+        sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
+        rDoc.SetAsianCompression( (CharCompressType) nUno );
+        bUpdateHeights = true;
+    }
+    else if ( aPropertyName == SC_UNO_ASIANKERN )
+    {
+        rDoc.SetAsianKerning( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        bUpdateHeights = true;
+    }
+    else if ( aPropertyName == SCSAVEVERSION )
+    {
+        bool bTmp=false;
+        if ( aValue >>= bTmp )
+            pDocShell->SetSaveVersionOnClose( bTmp );
+    }
+    else if ( aPropertyName == SC_UNO_UPDTEMPL )
+    {
+        bool bTmp=true;
+        if ( aValue >>= bTmp )
+            pDocShell->SetQueryLoadTemplate( bTmp );
+    }
+    else if ( aPropertyName == SC_UNO_LOADREADONLY )
+    {
+        bool bTmp=false;
+        if ( aValue >>= bTmp )
+            pDocShell->SetLoadReadonly( bTmp );
+    }
+    else if ( aPropertyName == SC_UNO_SHAREDOC )
+    {
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+        bool bDocShared = false;
+        if ( aValue >>= bDocShared )
+        {
+            pDocShell->SetSharedXMLFlag( bDocShared );
+        }
+#endif
+    }
+    else if ( aPropertyName == SC_UNO_MODIFYPASSWORDINFO )
+    {
+        uno::Sequence< beans::PropertyValue > aInfo;
+        if ( !( aValue >>= aInfo ) )
+            throw lang::IllegalArgumentException(
+                "Value of type Sequence<PropertyValue> expected!",
+                uno::Reference< uno::XInterface >(),
+                2 );
+
+        if ( !pDocShell->SetModifyPasswordInfo( aInfo ) )
+            throw beans::PropertyVetoException(
+                "The hash is not allowed to be changed now!" );
+    }
+    else if ( aPropertyName == SC_UNO_EMBED_FONTS )
+    {
+        bool bVal = false;
+        if ( aValue >>=bVal )
+        {
+            rDoc.SetIsUsingEmbededFonts(bVal);
+        }
+    }
+    else if ( aPropertyName == SC_UNO_SYNTAXSTRINGREF )
+    {
+        ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
+        sal_Int16 nUno = 0;
+
+        if( aValue >>= nUno )
+        {
+            switch (nUno)
+            {
+                case 0: // CONV_OOO
+                case 2: // CONV_XL_A1
+                case 3: // CONV_XL_R1C1
+                case 7: // CONV_A1_XL_A1
+                    aCalcConfig.SetStringRefSyntax( static_cast<formula::FormulaGrammar::AddressConvention>( nUno ) );
+                    break;
+                default:
+                    aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_UNSPECIFIED );
+                    break;
+
+            }
+            rDoc.SetCalcConfig( aCalcConfig );
+        }
+    }
+
     else
-        throw uno::RuntimeException();
+    {
+        ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
+        if ( aPropertyName == SC_UNO_SNAPTORASTER )
+            aGridOpt.SetUseGridSnap( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        else if ( aPropertyName == SC_UNO_RASTERVIS )
+            aGridOpt.SetGridVisible( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        else if ( aPropertyName == SC_UNO_RASTERRESX )
+            aGridOpt.SetFieldDrawX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
+        else if ( aPropertyName == SC_UNO_RASTERRESY )
+            aGridOpt.SetFieldDrawY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
+        else if ( aPropertyName == SC_UNO_RASTERSUBX )
+            aGridOpt.SetFieldDivisionX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
+        else if ( aPropertyName == SC_UNO_RASTERSUBY )
+            aGridOpt.SetFieldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
+        else if ( aPropertyName == SC_UNO_RASTERSYNC )
+            aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        else
+            throw beans::UnknownPropertyException();
+        aViewOpt.SetGridOptions(aGridOpt);
+    }
+    rDoc.SetViewOptions(aViewOpt);
+
+    if ( bUpdateHeights && !rDoc.IsImportingXML() )
+    {
+        //  update automatic row heights and repaint
+        SCTAB nTabCount = rDoc.GetTableCount();
+        for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+            if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
+                pDocShell->PostPaint(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab), PaintPartFlags::Grid);
+        pDocShell->SetDocumentModified();
+    }
+
 }
 
 uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPropertyName )
@@ -382,179 +379,178 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
     SolarMutexGuard aGuard;
     uno::Any aRet;
 
-    if(pDocShell)
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        const ScViewOptions& aViewOpt = rDoc.GetViewOptions();
-
-        /*Stampit enable/disable print cancel */
-        if ( aPropertyName == SC_UNO_ALLOWPRINTJOBCANCEL )
-            aRet <<= pDocShell->Stamp_GetPrintCancelState();
-        /*Stampit enable/disable print cancel */
-
-        else if ( aPropertyName == SC_UNO_SHOWZERO )
-            aRet <<= aViewOpt.GetOption( VOPT_NULLVALS );
-        else if ( aPropertyName == SC_UNO_SHOWNOTES )
-            aRet <<= aViewOpt.GetOption( VOPT_NOTES );
-        else if ( aPropertyName == SC_UNO_SHOWGRID )
-            aRet <<= aViewOpt.GetOption( VOPT_GRID );
-        else if ( aPropertyName == SC_UNO_GRIDCOLOR )
-        {
-            OUString aColorName;
-            Color aColor = aViewOpt.GetGridColor(&aColorName);
-            aRet <<= static_cast<sal_Int64>(aColor.GetColor());
-        }
-        else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
-            aRet <<= aViewOpt.GetOption( VOPT_PAGEBREAKS );
-        else if ( aPropertyName == SC_UNONAME_LINKUPD )
-        {
-            sal_Int16 nLUM;
-            switch (rDoc.GetLinkMode())
-            {
-                case LM_ALWAYS:
-                    nLUM = css::document::LinkUpdateModes::AUTO;
-                break;
-                case LM_NEVER:
-                    nLUM = css::document::LinkUpdateModes::NEVER;
-                break;
-                case LM_ON_DEMAND:
-                    nLUM = css::document::LinkUpdateModes::MANUAL;
-                break;
-                case LM_UNKNOWN:
-                default:
-                    nLUM = css::document::LinkUpdateModes::GLOBAL_SETTING;
-                break;
-            }
-            aRet <<= nLUM;
-        }
-        else if ( aPropertyName == SC_UNO_COLROWHDR )
-            aRet <<= aViewOpt.GetOption( VOPT_HEADER );
-        else if ( aPropertyName == SC_UNO_SHEETTABS )
-            aRet <<= aViewOpt.GetOption( VOPT_TABCONTROLS );
-        else if ( aPropertyName == SC_UNO_OUTLSYMB )
-            aRet <<= aViewOpt.GetOption( VOPT_OUTLINER );
-        else if ( aPropertyName == SC_UNO_AUTOCALC )
-            aRet <<= rDoc.GetAutoCalc();
-        else if ( aPropertyName == SC_UNO_PRINTERNAME )
-        {
-            // #i75610# don't create the printer, return empty string if no printer created yet
-            // (as in SwXDocumentSettings)
-            SfxPrinter* pPrinter = rDoc.GetPrinter( false );
-            if (pPrinter)
-                aRet <<= pPrinter->GetName();
-            else
-                aRet <<= OUString();
-        }
-        else if ( aPropertyName == SC_UNO_PRINTERSETUP )
-        {
-            // #i75610# don't create the printer, return empty sequence if no printer created yet
-            // (as in SwXDocumentSettings)
-            SfxPrinter* pPrinter = rDoc.GetPrinter( false );
-            if (pPrinter)
-            {
-                SvMemoryStream aStream;
-                pPrinter->Store( aStream );
-                aStream.Seek ( STREAM_SEEK_TO_END );
-                sal_uInt32 nSize = aStream.Tell();
-                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                uno::Sequence < sal_Int8 > aSequence( nSize );
-                aStream.ReadBytes(aSequence.getArray(), nSize);
-                aRet <<= aSequence;
-            }
-            else
-                aRet <<= uno::Sequence<sal_Int8>();
-        }
-        else if ( aPropertyName == SC_UNO_APPLYDOCINF )
-            aRet <<= pDocShell->IsUseUserData();
-        else if ( aPropertyName == SC_UNO_FORBIDDEN )
-        {
-            aRet <<= uno::Reference<i18n::XForbiddenCharacters>(new ScForbiddenCharsObj( pDocShell ));
-        }
-        else if ( aPropertyName == SC_UNO_CHARCOMP )
-            aRet <<= static_cast<sal_Int16> ( rDoc.GetAsianCompression() );
-        else if ( aPropertyName == SC_UNO_ASIANKERN )
-            aRet <<= rDoc.GetAsianKerning();
-        else if ( aPropertyName == SCSAVEVERSION )
-            aRet <<= pDocShell->IsSaveVersionOnClose();
-        else if ( aPropertyName == SC_UNO_UPDTEMPL )
-            aRet <<= pDocShell->IsQueryLoadTemplate();
-        else if ( aPropertyName == SC_UNO_LOADREADONLY )
-            aRet <<= pDocShell->IsLoadReadonly();
-        else if ( aPropertyName == SC_UNO_SHAREDOC )
-        {
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-            aRet <<= pDocShell->HasSharedXMLFlagSet();
-#endif
-        }
-        else if ( aPropertyName == SC_UNO_MODIFYPASSWORDINFO )
-            aRet <<= pDocShell->GetModifyPasswordInfo();
-        else if ( aPropertyName == SC_UNO_EMBED_FONTS )
-        {
-            aRet <<= rDoc.IsUsingEmbededFonts();
-        }
-        else if ( aPropertyName == SC_UNO_SYNTAXSTRINGREF )
-        {
-            ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
-            formula::FormulaGrammar::AddressConvention eConv = aCalcConfig.meStringRefAddressSyntax;
-
-            // don't save "unspecified" string ref syntax ... query formula grammar
-            // and save that instead
-            if( eConv == formula::FormulaGrammar::CONV_UNSPECIFIED)
-            {
-                eConv = rDoc.GetAddressConvention();
-            }
-
-            // write if it has been read|imported or explicitly changed
-            // or if ref syntax isn't what would be native for our file format
-            // i.e. CalcA1 in this case
-            if ( aCalcConfig.mbHasStringRefSyntax ||
-                 (eConv != formula::FormulaGrammar::CONV_OOO) )
-            {
-                switch (eConv)
-                {
-                    case formula::FormulaGrammar::CONV_OOO:
-                    case formula::FormulaGrammar::CONV_XL_A1:
-                    case formula::FormulaGrammar::CONV_XL_R1C1:
-                    case formula::FormulaGrammar::CONV_A1_XL_A1:
-                         aRet <<= static_cast<sal_Int16>( eConv );
-                         break;
-
-                    case formula::FormulaGrammar::CONV_UNSPECIFIED:
-                    case formula::FormulaGrammar::CONV_ODF:
-                    case formula::FormulaGrammar::CONV_XL_OOX:
-                    case formula::FormulaGrammar::CONV_LOTUS_A1:
-                    case formula::FormulaGrammar::CONV_LAST:
-                    {
-                        aRet <<= sal_Int16(9999);
-                        break;
-                    }
-                 }
-             }
-        }
-
-        else
-        {
-            const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
-            if ( aPropertyName == SC_UNO_SNAPTORASTER )
-                aRet <<= aGridOpt.GetUseGridSnap();
-            else if ( aPropertyName == SC_UNO_RASTERVIS )
-                aRet <<= aGridOpt.GetGridVisible();
-            else if ( aPropertyName == SC_UNO_RASTERRESX )
-                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawX() );
-            else if ( aPropertyName == SC_UNO_RASTERRESY )
-                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawY() );
-            else if ( aPropertyName == SC_UNO_RASTERSUBX )
-                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionX() );
-            else if ( aPropertyName == SC_UNO_RASTERSUBY )
-                aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionY() );
-            else if ( aPropertyName == SC_UNO_RASTERSYNC )
-                aRet <<= aGridOpt.GetSynchronize();
-            else
-                throw beans::UnknownPropertyException();
-        }
-    }
-    else
+    if(!pDocShell)
         throw uno::RuntimeException();
+
+    ScDocument& rDoc = pDocShell->GetDocument();
+    const ScViewOptions& aViewOpt = rDoc.GetViewOptions();
+
+    /*Stampit enable/disable print cancel */
+    if ( aPropertyName == SC_UNO_ALLOWPRINTJOBCANCEL )
+        aRet <<= pDocShell->Stamp_GetPrintCancelState();
+    /*Stampit enable/disable print cancel */
+
+    else if ( aPropertyName == SC_UNO_SHOWZERO )
+        aRet <<= aViewOpt.GetOption( VOPT_NULLVALS );
+    else if ( aPropertyName == SC_UNO_SHOWNOTES )
+        aRet <<= aViewOpt.GetOption( VOPT_NOTES );
+    else if ( aPropertyName == SC_UNO_SHOWGRID )
+        aRet <<= aViewOpt.GetOption( VOPT_GRID );
+    else if ( aPropertyName == SC_UNO_GRIDCOLOR )
+    {
+        OUString aColorName;
+        Color aColor = aViewOpt.GetGridColor(&aColorName);
+        aRet <<= static_cast<sal_Int64>(aColor.GetColor());
+    }
+    else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
+        aRet <<= aViewOpt.GetOption( VOPT_PAGEBREAKS );
+    else if ( aPropertyName == SC_UNONAME_LINKUPD )
+    {
+        sal_Int16 nLUM;
+        switch (rDoc.GetLinkMode())
+        {
+            case LM_ALWAYS:
+                nLUM = css::document::LinkUpdateModes::AUTO;
+            break;
+            case LM_NEVER:
+                nLUM = css::document::LinkUpdateModes::NEVER;
+            break;
+            case LM_ON_DEMAND:
+                nLUM = css::document::LinkUpdateModes::MANUAL;
+            break;
+            case LM_UNKNOWN:
+            default:
+                nLUM = css::document::LinkUpdateModes::GLOBAL_SETTING;
+            break;
+        }
+        aRet <<= nLUM;
+    }
+    else if ( aPropertyName == SC_UNO_COLROWHDR )
+        aRet <<= aViewOpt.GetOption( VOPT_HEADER );
+    else if ( aPropertyName == SC_UNO_SHEETTABS )
+        aRet <<= aViewOpt.GetOption( VOPT_TABCONTROLS );
+    else if ( aPropertyName == SC_UNO_OUTLSYMB )
+        aRet <<= aViewOpt.GetOption( VOPT_OUTLINER );
+    else if ( aPropertyName == SC_UNO_AUTOCALC )
+        aRet <<= rDoc.GetAutoCalc();
+    else if ( aPropertyName == SC_UNO_PRINTERNAME )
+    {
+        // #i75610# don't create the printer, return empty string if no printer created yet
+        // (as in SwXDocumentSettings)
+        SfxPrinter* pPrinter = rDoc.GetPrinter( false );
+        if (pPrinter)
+            aRet <<= pPrinter->GetName();
+        else
+            aRet <<= OUString();
+    }
+    else if ( aPropertyName == SC_UNO_PRINTERSETUP )
+    {
+        // #i75610# don't create the printer, return empty sequence if no printer created yet
+        // (as in SwXDocumentSettings)
+        SfxPrinter* pPrinter = rDoc.GetPrinter( false );
+        if (pPrinter)
+        {
+            SvMemoryStream aStream;
+            pPrinter->Store( aStream );
+            aStream.Seek ( STREAM_SEEK_TO_END );
+            sal_uInt32 nSize = aStream.Tell();
+            aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+            uno::Sequence < sal_Int8 > aSequence( nSize );
+            aStream.ReadBytes(aSequence.getArray(), nSize);
+            aRet <<= aSequence;
+        }
+        else
+            aRet <<= uno::Sequence<sal_Int8>();
+    }
+    else if ( aPropertyName == SC_UNO_APPLYDOCINF )
+        aRet <<= pDocShell->IsUseUserData();
+    else if ( aPropertyName == SC_UNO_FORBIDDEN )
+    {
+        aRet <<= uno::Reference<i18n::XForbiddenCharacters>(new ScForbiddenCharsObj( pDocShell ));
+    }
+    else if ( aPropertyName == SC_UNO_CHARCOMP )
+        aRet <<= static_cast<sal_Int16> ( rDoc.GetAsianCompression() );
+    else if ( aPropertyName == SC_UNO_ASIANKERN )
+        aRet <<= rDoc.GetAsianKerning();
+    else if ( aPropertyName == SCSAVEVERSION )
+        aRet <<= pDocShell->IsSaveVersionOnClose();
+    else if ( aPropertyName == SC_UNO_UPDTEMPL )
+        aRet <<= pDocShell->IsQueryLoadTemplate();
+    else if ( aPropertyName == SC_UNO_LOADREADONLY )
+        aRet <<= pDocShell->IsLoadReadonly();
+    else if ( aPropertyName == SC_UNO_SHAREDOC )
+    {
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+        aRet <<= pDocShell->HasSharedXMLFlagSet();
+#endif
+    }
+    else if ( aPropertyName == SC_UNO_MODIFYPASSWORDINFO )
+        aRet <<= pDocShell->GetModifyPasswordInfo();
+    else if ( aPropertyName == SC_UNO_EMBED_FONTS )
+    {
+        aRet <<= rDoc.IsUsingEmbededFonts();
+    }
+    else if ( aPropertyName == SC_UNO_SYNTAXSTRINGREF )
+    {
+        ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
+        formula::FormulaGrammar::AddressConvention eConv = aCalcConfig.meStringRefAddressSyntax;
+
+        // don't save "unspecified" string ref syntax ... query formula grammar
+        // and save that instead
+        if( eConv == formula::FormulaGrammar::CONV_UNSPECIFIED)
+        {
+            eConv = rDoc.GetAddressConvention();
+        }
+
+        // write if it has been read|imported or explicitly changed
+        // or if ref syntax isn't what would be native for our file format
+        // i.e. CalcA1 in this case
+        if ( aCalcConfig.mbHasStringRefSyntax ||
+             (eConv != formula::FormulaGrammar::CONV_OOO) )
+        {
+            switch (eConv)
+            {
+                case formula::FormulaGrammar::CONV_OOO:
+                case formula::FormulaGrammar::CONV_XL_A1:
+                case formula::FormulaGrammar::CONV_XL_R1C1:
+                case formula::FormulaGrammar::CONV_A1_XL_A1:
+                     aRet <<= static_cast<sal_Int16>( eConv );
+                     break;
+
+                case formula::FormulaGrammar::CONV_UNSPECIFIED:
+                case formula::FormulaGrammar::CONV_ODF:
+                case formula::FormulaGrammar::CONV_XL_OOX:
+                case formula::FormulaGrammar::CONV_LOTUS_A1:
+                case formula::FormulaGrammar::CONV_LAST:
+                {
+                    aRet <<= sal_Int16(9999);
+                    break;
+                }
+             }
+         }
+    }
+
+    else
+    {
+        const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
+        if ( aPropertyName == SC_UNO_SNAPTORASTER )
+            aRet <<= aGridOpt.GetUseGridSnap();
+        else if ( aPropertyName == SC_UNO_RASTERVIS )
+            aRet <<= aGridOpt.GetGridVisible();
+        else if ( aPropertyName == SC_UNO_RASTERRESX )
+            aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawX() );
+        else if ( aPropertyName == SC_UNO_RASTERRESY )
+            aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDrawY() );
+        else if ( aPropertyName == SC_UNO_RASTERSUBX )
+            aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionX() );
+        else if ( aPropertyName == SC_UNO_RASTERSUBY )
+            aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFieldDivisionY() );
+        else if ( aPropertyName == SC_UNO_RASTERSYNC )
+            aRet <<= aGridOpt.GetSynchronize();
+        else
+            throw beans::UnknownPropertyException();
+    }
+
 
     return aRet;
 }

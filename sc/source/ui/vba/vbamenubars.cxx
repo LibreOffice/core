@@ -31,14 +31,12 @@ public:
     virtual uno::Any SAL_CALL nextElement() override
     {
         // FIXME: should be add menubar
-        if( hasMoreElements() )
-        {
-            uno::Reference< XCommandBar > xCommandBar( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-            uno::Reference< excel::XMenuBar > xMenuBar( new ScVbaMenuBar( m_xParent, m_xContext, xCommandBar ) );
-            return uno::makeAny( xMenuBar );
-        }
-        else
+        if( !hasMoreElements() )
             throw container::NoSuchElementException();
+
+        uno::Reference< XCommandBar > xCommandBar( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XMenuBar > xMenuBar( new ScVbaMenuBar( m_xParent, m_xContext, xCommandBar ) );
+        return uno::makeAny( xMenuBar );
     }
 };
 

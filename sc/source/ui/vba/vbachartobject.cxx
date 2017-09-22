@@ -96,10 +96,11 @@ ScVbaChartObject::Delete()
     uno::Reference< excel::XWorksheet > xParent( getParent(), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XChartObjects > xColl( xParent->ChartObjects( uno::Any() ), uno::UNO_QUERY_THROW );
     ScVbaChartObjects* pChartObjectsImpl = static_cast< ScVbaChartObjects* >( xColl.get() );
-    if (pChartObjectsImpl)
-        pChartObjectsImpl->removeByName( getPersistName() );
-    else
+    if (!pChartObjectsImpl)
         throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), "Parent is not ChartObjects" );
+
+    pChartObjectsImpl->removeByName( getPersistName() );
+
 }
 
 void
