@@ -56,6 +56,8 @@ class GraphicExportFilter :
     css::uno::Any   maTranslucent;
     css::uno::Any   maQuality;
 
+    bool filterRenderDocument() const;
+
 public:
     explicit GraphicExportFilter( const Reference<XComponentContext>& rxContext );
     virtual ~GraphicExportFilter() override;
