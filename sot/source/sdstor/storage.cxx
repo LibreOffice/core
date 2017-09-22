@@ -809,4 +809,52 @@ sal_Int32 SotStorage::GetVersion( const css::uno::Reference < css::embed::XStora
     return 0;
 }
 
+namespace
+{
+    void traverse(const tools::SvRef<SotStorage>& rStorage, std::vector<unsigned char>& rBuf)
+    {
+        SvStorageInfoList infos;
+
+        rStorage->FillInfoList(&infos);
+
+        for (const auto& info: infos)
+        {
+            if (info.IsStream())
+            {
+                // try to open and read all content
+                tools::SvRef<SotStorageStream> xStream(rStorage->OpenSotStream(info.GetName(), StreamMode::STD_READ));
+                const size_t nSize = xStream->GetSize();
+                const size_t nRead = xStream->ReadBytes(rBuf.data(), nSize);
+                SAL_INFO("sot", "Read " << nRead << "bytes");
+            }
+            else if (info.IsStorage())
+            {
+                tools::SvRef<SotStorage> xStorage(rStorage->OpenSotStorage(info.GetName(), StreamMode::STD_READ));
+
+                // continue with children
+                traverse(xStorage, rBuf);
+            }
+            else
+            {
+            }
+        }
+    }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportOLE2(SvStream &rStream)
+{
+    try
+    {
+        size_t nSize = rStream.remainingSize();
+        tools::SvRef<SotStorage> xRootStorage(new SotStorage(&rStream, false));
+        std::vector<unsigned char> aTmpBuf(nSize);
+        traverse(xRootStorage, aTmpBuf);
+    }
+    catch (...)
+    {
+        return false;
+    }
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
