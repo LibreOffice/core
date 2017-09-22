@@ -941,5 +941,4 @@ bool Storage::Equals( const BaseStorage& rStorage ) const
     return pOther && ( pOther->pEntry == pEntry );
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
