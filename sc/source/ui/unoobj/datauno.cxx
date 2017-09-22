@@ -2357,19 +2357,17 @@ void ScUnnamedDatabaseRangesObj::setByTable( const table::CellRangeAddress& aRan
 uno::Any ScUnnamedDatabaseRangesObj::getByTable( sal_Int32 nTab )
 {
     SolarMutexGuard aGuard;
-    if (pDocShell)
-    {
-        if ( pDocShell->GetDocument().GetTableCount() <= nTab )
-            throw lang::IndexOutOfBoundsException();
-        uno::Reference<sheet::XDatabaseRange> xRange(
-            new ScDatabaseRangeObj(pDocShell, static_cast<SCTAB>(nTab)));
-        if (xRange.is())
-            return uno::makeAny(xRange);
-        else
-            throw container::NoSuchElementException();
-    }
-    else
+    if (!pDocShell)
         throw uno::RuntimeException();
+
+    if ( pDocShell->GetDocument().GetTableCount() <= nTab )
+        throw lang::IndexOutOfBoundsException();
+    uno::Reference<sheet::XDatabaseRange> xRange(
+        new ScDatabaseRangeObj(pDocShell, static_cast<SCTAB>(nTab)));
+    if (!xRange.is())
+        throw container::NoSuchElementException();
+
+    return uno::makeAny(xRange);
 }
 
 sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )

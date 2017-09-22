@@ -3335,25 +3335,27 @@ void updateTableSortField( const uno::Reference< table::XCellRange >& xParentRan
 
         // make sure that upper left point of key range is within the
         // parent range
-        if (  ( !bIsSortColumn && colRowKeyAddress.StartColumn >= parentRangeAddress.StartColumn &&
-            colRowKeyAddress.StartColumn <= parentRangeAddress.EndColumn ) || ( bIsSortColumn &&
-            colRowKeyAddress.StartRow >= parentRangeAddress.StartRow &&
-            colRowKeyAddress.StartRow <= parentRangeAddress.EndRow  ) )
-        {
-            //determine col/row index
-            if ( bIsSortColumn )
-                aTableField.Field = colRowKeyAddress.StartRow - parentRangeAddress.StartRow;
-            else
-                aTableField.Field = colRowKeyAddress.StartColumn - parentRangeAddress.StartColumn;
-            aTableField.IsCaseSensitive = bMatchCase;
-
-            if ( nOrder ==  excel::XlSortOrder::xlAscending )
-                aTableField.IsAscending = true;
-            else
-                aTableField.IsAscending = false;
-        }
-        else
+        if (
+            ( bIsSortColumn || colRowKeyAddress.StartColumn < parentRangeAddress.StartColumn ||
+              colRowKeyAddress.StartColumn > parentRangeAddress.EndColumn )
+            &&
+            ( !bIsSortColumn || colRowKeyAddress.StartRow < parentRangeAddress.StartRow ||
+              colRowKeyAddress.StartRow > parentRangeAddress.EndRow  )
+            )
             throw uno::RuntimeException("Illegal Key param" );
+
+        //determine col/row index
+        if ( bIsSortColumn )
+            aTableField.Field = colRowKeyAddress.StartRow - parentRangeAddress.StartRow;
+        else
+            aTableField.Field = colRowKeyAddress.StartColumn - parentRangeAddress.StartColumn;
+        aTableField.IsCaseSensitive = bMatchCase;
+
+        if ( nOrder ==  excel::XlSortOrder::xlAscending )
+            aTableField.IsAscending = true;
+        else
+            aTableField.IsAscending = false;
+
 
 }
 
@@ -4873,25 +4875,24 @@ uno::Any ScVbaRange::getShowDetail()
 
     // check if the specified range is a single summary column or row.
     table::CellRangeAddress thisAddress = helper.getCellRangeAddressable()->getRangeAddress();
-    if( (thisAddress.StartRow == thisAddress.EndRow &&  thisAddress.EndRow == aOutlineAddress.EndRow ) ||
-        (thisAddress.StartColumn == thisAddress.EndColumn && thisAddress.EndColumn == aOutlineAddress.EndColumn ))
-    {
-        bool bColumn = thisAddress.StartRow != thisAddress.EndRow;
-        ScDocument& rDoc = getDocumentFromRange( mxRange );
-        ScOutlineTable* pOutlineTable = rDoc.GetOutlineTable(static_cast<SCTAB>(thisAddress.Sheet), true);
-        const ScOutlineArray& rOutlineArray =  bColumn ? pOutlineTable->GetColArray(): pOutlineTable->GetRowArray();
-        SCCOLROW nPos = bColumn ? (SCCOLROW)(thisAddress.EndColumn-1):(SCCOLROW)(thisAddress.EndRow-1);
-        const ScOutlineEntry* pEntry = rOutlineArray.GetEntryByPos( 0, nPos );
-        if( pEntry )
-        {
-            const bool bShowDetail = !pEntry->IsHidden();
-            return uno::makeAny( bShowDetail );
-        }
-    }
-    else
+    if( (thisAddress.StartRow != thisAddress.EndRow || thisAddress.EndRow != aOutlineAddress.EndRow ) &&
+        (thisAddress.StartColumn != thisAddress.EndColumn || thisAddress.EndColumn != aOutlineAddress.EndColumn ))
     {
         throw uno::RuntimeException("Can not set Range.ShowDetail attribute" );
     }
+
+    bool bColumn = thisAddress.StartRow != thisAddress.EndRow;
+    ScDocument& rDoc = getDocumentFromRange( mxRange );
+    ScOutlineTable* pOutlineTable = rDoc.GetOutlineTable(static_cast<SCTAB>(thisAddress.Sheet), true);
+    const ScOutlineArray& rOutlineArray =  bColumn ? pOutlineTable->GetColArray(): pOutlineTable->GetRowArray();
+    SCCOLROW nPos = bColumn ? (SCCOLROW)(thisAddress.EndColumn-1):(SCCOLROW)(thisAddress.EndRow-1);
+    const ScOutlineEntry* pEntry = rOutlineArray.GetEntryByPos( 0, nPos );
+    if( pEntry )
+    {
+        const bool bShowDetail = !pEntry->IsHidden();
+        return uno::makeAny( bShowDetail );
+    }
+
     return aNULL();
 }
 
@@ -4913,21 +4914,20 @@ void ScVbaRange::setShowDetail(const uno::Any& aShowDetail)
 
     // check if the specified range is a single summary column or row.
     table::CellRangeAddress thisAddress = helper.getCellRangeAddressable()->getRangeAddress();
-    if( (thisAddress.StartRow == thisAddress.EndRow &&  thisAddress.EndRow == aOutlineAddress.EndRow ) ||
-        (thisAddress.StartColumn == thisAddress.EndColumn && thisAddress.EndColumn == aOutlineAddress.EndColumn ))
-    {
-        // #FIXME, seems there is a different behavior between MSO and OOo.
-        //  In OOo, the showDetail will show all the level entrys, while only show the first level entry in MSO
-        uno::Reference< sheet::XSheetOutline > xSheetOutline( helper.getSpreadSheet(), uno::UNO_QUERY_THROW );
-        if( bShowDetail )
-            xSheetOutline->showDetail( aOutlineAddress );
-        else
-            xSheetOutline->hideDetail( aOutlineAddress );
-    }
-    else
+    if( (thisAddress.StartRow != thisAddress.EndRow || thisAddress.EndRow != aOutlineAddress.EndRow ) &&
+        (thisAddress.StartColumn != thisAddress.EndColumn || thisAddress.EndColumn != aOutlineAddress.EndColumn ))
     {
         throw uno::RuntimeException("Can not set Range.ShowDetail attribute" );
     }
+
+    // #FIXME, seems there is a different behavior between MSO and OOo.
+    //  In OOo, the showDetail will show all the level entrys, while only show the first level entry in MSO
+    uno::Reference< sheet::XSheetOutline > xSheetOutline( helper.getSpreadSheet(), uno::UNO_QUERY_THROW );
+    if( bShowDetail )
+        xSheetOutline->showDetail( aOutlineAddress );
+    else
+        xSheetOutline->hideDetail( aOutlineAddress );
+
 }
 
 uno::Reference< excel::XRange > SAL_CALL

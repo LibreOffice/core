@@ -375,10 +375,10 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl((sal_uInt16)nIndex));
-    if (xEntry.is())
-        return uno::makeAny(xEntry);
-    else
+    if (!xEntry.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xEntry);
 }
 
 uno::Type SAL_CALL ScTableConditionalFormat::getElementType()
@@ -416,10 +416,10 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )
             break;
         }
 
-    if (xEntry.is())
-        return uno::makeAny(xEntry);
-    else
+    if (!xEntry.is())
         throw container::NoSuchElementException();
+
+    return uno::makeAny(xEntry);
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames()

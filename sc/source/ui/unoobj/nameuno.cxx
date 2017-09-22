@@ -601,10 +601,10 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference< sheet::XNamedRange >  xRange(GetObjectByIndex_Impl((sal_uInt16)nIndex));
-    if ( xRange.is() )
-        return uno::makeAny(xRange);
-    else
+    if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xRange);
 }
 
 uno::Type SAL_CALL ScNamedRangesObj::getElementType()
@@ -652,10 +652,10 @@ uno::Any SAL_CALL ScNamedRangesObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     uno::Reference< sheet::XNamedRange >  xRange(GetObjectByName_Impl(aName));
-    if ( xRange.is() )
-        return uno::makeAny(xRange);
-    else
+    if ( !xRange.is() )
         throw container::NoSuchElementException();
+
+    return uno::makeAny(xRange);
 }
 
 uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
@@ -1144,10 +1144,10 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference< sheet::XLabelRange >  xRange(GetObjectByIndex_Impl((sal_uInt16)nIndex));
-    if ( xRange.is() )
-        return uno::makeAny(xRange);
-    else
+    if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xRange);
 }
 
 uno::Type SAL_CALL ScLabelRangesObj::getElementType()

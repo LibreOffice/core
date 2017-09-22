@@ -551,10 +551,11 @@ ScVbaChart::Activate()
     // e.g. 'ThisWorkbook'
     uno::Reference< XHelperInterface > xParent( getParent() );
     ScVbaChartObject* pChartObj = static_cast< ScVbaChartObject* >( xParent.get() );
-    if ( pChartObj )
-        pChartObj->Activate();
-    else
+    if ( !pChartObj )
         throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), "no ChartObject as parent" );
+
+    pChartObj->Activate();
+
 }
 
 void SAL_CALL

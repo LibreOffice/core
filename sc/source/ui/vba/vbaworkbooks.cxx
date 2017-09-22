@@ -242,10 +242,11 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
                 throw uno::RuntimeException("Expected value for Delimiter" );
             OUString sStr;
             Delimiter >>= sStr;
-            if ( !sStr.isEmpty() )
-                nDelim = sStr[0];
-            else
+            if ( sStr.isEmpty() )
                 throw uno::RuntimeException("Incorrect value for Delimiter" );
+
+            nDelim = sStr[0];
+
         }
 
         getCurrentDelim() = nDelim; //set new current

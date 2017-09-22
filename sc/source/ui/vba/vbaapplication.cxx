@@ -569,12 +569,11 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll )
     if( Scroll.hasValue() )
     {
         bool aScroll = false;
-        if( Scroll >>= aScroll )
-        {
-            bScroll = aScroll;
-        }
-        else
+        if( !(Scroll >>= aScroll) )
             throw uno::RuntimeException("second parameter should be boolean" );
+
+        bScroll = aScroll;
+
     }
 
     OUString sRangeName;

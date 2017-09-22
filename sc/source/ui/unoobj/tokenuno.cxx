@@ -190,20 +190,19 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
     else if ( aPropertyName == SC_UNO_COMPILEENGLISH )
     {
         bool bOldEnglish = mbEnglish;
-        if (aValue >>= mbEnglish)
-        {
-            // Need to recreate the symbol map to change English property
-            // because the map is const. So for performance reasons set
-            // CompileEnglish _before_ OpCodeMap!
-            if (mxOpCodeMap.get() && mbEnglish != bOldEnglish)
-            {
-                ScDocument& rDoc = mpDocShell->GetDocument();
-                ScCompiler aCompiler( &rDoc, ScAddress(), rDoc.GetGrammar());
-                mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
-            }
-        }
-        else
+        if (!(aValue >>= mbEnglish))
             throw lang::IllegalArgumentException();
+
+        // Need to recreate the symbol map to change English property
+        // because the map is const. So for performance reasons set
+        // CompileEnglish _before_ OpCodeMap!
+        if (mxOpCodeMap.get() && mbEnglish != bOldEnglish)
+        {
+            ScDocument& rDoc = mpDocShell->GetDocument();
+            ScCompiler aCompiler( &rDoc, ScAddress(), rDoc.GetGrammar());
+            mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
+        }
+
     }
     else if ( aPropertyName == SC_UNO_FORMULACONVENTION )
     {
@@ -215,14 +214,13 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
     }
     else if ( aPropertyName == SC_UNO_OPCODEMAP )
     {
-        if (aValue >>= maOpCodeMapping)
-        {
-            ScDocument& rDoc = mpDocShell->GetDocument();
-            ScCompiler aCompiler( &rDoc, ScAddress(), rDoc.GetGrammar());
-            mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
-        }
-        else
+        if (!(aValue >>= maOpCodeMapping))
             throw lang::IllegalArgumentException();
+
+        ScDocument& rDoc = mpDocShell->GetDocument();
+        ScCompiler aCompiler( &rDoc, ScAddress(), rDoc.GetGrammar());
+        mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( maOpCodeMapping, mbEnglish);
+
     }
     else if ( aPropertyName == SC_UNO_EXTERNALLINKS )
     {
