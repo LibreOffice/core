@@ -3544,8 +3544,7 @@ SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
         return SprmResult();
 
     sal_uInt8* pSp = pSprms;
-
-    sal_uInt16 i=0;
+    size_t i = 0;
     while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
     {
         // Sprm found?
