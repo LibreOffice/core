@@ -31,7 +31,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultParaStyle" toolbar:text="Default" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefaultParaStyle" toolbar:text="Default"/>
  <toolbar:toolbaritem xlink:href=".uno:TitleParaStyle" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SubtitleParaStyle" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Heading1ParaStyle" toolbar:text="H1"/>
@@ -60,13 +60,13 @@
  <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:UnderlineSimple" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Strikeout" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontColor" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:BackColor" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ResetAttributes"/>
  <toolbar:toolbarseparator/>
@@ -77,10 +77,6 @@
  <toolbar:toolbaritem xlink:href=".uno:NumberListStyle" toolbar:text="Number"/>
  <toolbar:toolbaritem xlink:href=".uno:RomanListStyle" toolbar:text="Roman"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SetOutline" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
  <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
@@ -90,4 +86,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Spacing" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementIndent" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DecrementIndent" toolbar:visible="false"/>
 </toolbar:toolbar>
