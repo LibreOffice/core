@@ -442,13 +442,12 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = lcl_GetDPObject( pDocShell, nTab, aName );
-    if (pDPObj && pDocShell)
-    {
-        ScDBDocFunc aFunc(*pDocShell);
-        aFunc.RemovePivotTable(*pDPObj, true, true);  // remove - incl. undo etc.
-    }
-    else
+    if (!pDPObj || !pDocShell)
         throw RuntimeException();       // no other exceptions specified
+
+    ScDBDocFunc aFunc(*pDocShell);
+    aFunc.RemovePivotTable(*pDPObj, true, true);  // remove - incl. undo etc.
+
 }
 
 // XEnumerationAccess
@@ -3379,14 +3378,13 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
                     else if ( aPropertyName == SC_UNONAME_POS )
                     {
                         sal_Int32 nNewPos = 0;
-                        if ( ( aValue >>= nNewPos ) && nNewPos >= 0 && nNewPos < nCount )
-                        {
-                            pDim->SetMemberPosition( sName, nNewPos );
-                            // get new effective index (depends on sorting mode, which isn't modified)
-                            bGetNewIndex = true;
-                        }
-                        else
+                        if ( !( aValue >>= nNewPos ) || nNewPos < 0 || nNewPos >= nCount )
                             throw IllegalArgumentException();
+
+                        pDim->SetMemberPosition( sName, nNewPos );
+                        // get new effective index (depends on sorting mode, which isn't modified)
+                        bGetNewIndex = true;
+
                     }
                     SetDPObject( pDPObj );
 

@@ -764,13 +764,14 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             PyRef struc(PyObject_GetAttrString( o , "value" ),SAL_NO_ACQUIRE);
             PyUNO * obj = reinterpret_cast<PyUNO*>(struc.get());
             Reference< XMaterialHolder > holder( obj->members->xInvocation, UNO_QUERY );
-            if( holder.is( ) )
-                a = holder->getMaterial();
-            else
+            if( !holder.is( ) )
             {
                 throw RuntimeException(
                     "struct or exception wrapper does not support XMaterialHolder" );
             }
+
+            a = holder->getMaterial();
+
         }
         else if( PyObject_IsInstance( o, getPyUnoClass().get() ) )
         {
@@ -789,28 +790,27 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         }
         else if( PyObject_IsInstance( o, getAnyClass( runtime ).get() ) )
         {
-            if( ACCEPT_UNO_ANY == mode )
-            {
-                a = pyObject2Any( PyRef( PyObject_GetAttrString( o , "value" ), SAL_NO_ACQUIRE) );
-                Type t;
-                pyObject2Any( PyRef( PyObject_GetAttrString( o, "type" ), SAL_NO_ACQUIRE ) ) >>= t;
-
-                try
-                {
-                    a = getImpl()->cargo->xTypeConverter->convertTo( a, t );
-                }
-                catch( const css::uno::Exception & e )
-                {
-                    throw WrappedTargetRuntimeException(
-                            e.Message, e.Context, makeAny(e));
-                }
-            }
-            else
+            if( !(ACCEPT_UNO_ANY == mode) )
             {
                 throw RuntimeException(
                     "uno.Any instance not accepted during method call, "
                     "use uno.invoke instead" );
             }
+
+            a = pyObject2Any( PyRef( PyObject_GetAttrString( o , "value" ), SAL_NO_ACQUIRE) );
+            Type t;
+            pyObject2Any( PyRef( PyObject_GetAttrString( o, "type" ), SAL_NO_ACQUIRE ) ) >>= t;
+
+            try
+            {
+                a = getImpl()->cargo->xTypeConverter->convertTo( a, t );
+            }
+            catch( const css::uno::Exception & e )
+            {
+                throw WrappedTargetRuntimeException(
+                        e.Message, e.Context, makeAny(e));
+            }
+
         }
         else
         {

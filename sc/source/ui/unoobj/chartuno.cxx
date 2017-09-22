@@ -321,10 +321,10 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<table::XTableChart> xChart(GetObjectByIndex_Impl(nIndex));
-    if (xChart.is())
-        return uno::makeAny(xChart);
-    else
+    if (!xChart.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xChart);
 }
 
 uno::Type SAL_CALL ScChartsObj::getElementType()
@@ -343,10 +343,10 @@ uno::Any SAL_CALL ScChartsObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     uno::Reference<table::XTableChart> xChart(GetObjectByName_Impl(aName));
-    if (xChart.is())
-        return uno::makeAny(xChart);
-    else
+    if (!xChart.is())
         throw container::NoSuchElementException();
+
+    return uno::makeAny(xChart);
 }
 
 uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames()

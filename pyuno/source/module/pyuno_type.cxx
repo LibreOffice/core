@@ -160,38 +160,37 @@ Any PyEnum2Enum( PyObject *obj )
     char *stringValue = PyStr_AsString( value.get() );
 
     TypeDescription desc( strTypeName );
-    if( desc.is() )
-    {
-        if(desc.get()->eTypeClass != typelib_TypeClass_ENUM )
-        {
-            throw RuntimeException( "pyuno.checkEnum: " + strTypeName +  "is a " +
-                OUString::createFromAscii(typeClassToString( (css::uno::TypeClass) desc.get()->eTypeClass)) +
-                ", expected ENUM" );
-        }
-
-        desc.makeComplete();
-
-        typelib_EnumTypeDescription *pEnumDesc = reinterpret_cast<typelib_EnumTypeDescription*>(desc.get());
-        int i = 0;
-        for( i = 0; i < pEnumDesc->nEnumValues ; i ++ )
-        {
-            if( OUString::unacquired(&pEnumDesc->ppEnumNames[i]).equalsAscii( stringValue ) )
-            {
-                break;
-            }
-        }
-        if( i == pEnumDesc->nEnumValues )
-        {
-            throw RuntimeException( "value " + OUString::createFromAscii( stringValue ) +
-                "is unknown in enum " +
-                OUString::createFromAscii( PyStr_AsString( typeName.get() ) ) );
-        }
-        ret = Any( &pEnumDesc->pEnumValues[i], desc.get()->pWeakRef );
-    }
-    else
+    if( !desc.is() )
     {
         throw RuntimeException( "enum " + OUString::createFromAscii( PyStr_AsString(typeName.get()) ) + " is unknown" );
     }
+
+    if(desc.get()->eTypeClass != typelib_TypeClass_ENUM )
+    {
+        throw RuntimeException( "pyuno.checkEnum: " + strTypeName +  "is a " +
+            OUString::createFromAscii(typeClassToString( (css::uno::TypeClass) desc.get()->eTypeClass)) +
+            ", expected ENUM" );
+    }
+
+    desc.makeComplete();
+
+    typelib_EnumTypeDescription *pEnumDesc = reinterpret_cast<typelib_EnumTypeDescription*>(desc.get());
+    int i = 0;
+    for( i = 0; i < pEnumDesc->nEnumValues ; i ++ )
+    {
+        if( OUString::unacquired(&pEnumDesc->ppEnumNames[i]).equalsAscii( stringValue ) )
+        {
+            break;
+        }
+    }
+    if( i == pEnumDesc->nEnumValues )
+    {
+        throw RuntimeException( "value " + OUString::createFromAscii( stringValue ) +
+            "is unknown in enum " +
+            OUString::createFromAscii( PyStr_AsString( typeName.get() ) ) );
+    }
+    ret = Any( &pEnumDesc->pEnumValues[i], desc.get()->pWeakRef );
+
     return ret;
 }
 

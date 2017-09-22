@@ -356,10 +356,10 @@ uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
-    if (xField.is())
-        return uno::makeAny(xField);
-    else
+    if (!xField.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xField);
 }
 
 uno::Type SAL_CALL ScCellFieldsObj::getElementType()
@@ -512,10 +512,10 @@ uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     uno::Reference<text::XTextField> xField(GetObjectByIndex_Impl(nIndex));
-    if (xField.is())
-        return uno::makeAny(xField);
-    else
+    if (!xField.is())
         throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(xField);
 }
 
 uno::Type SAL_CALL ScHeaderFieldsObj::getElementType()
@@ -752,67 +752,65 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
 
 void ScEditFieldObj::setPropertyValueFile(const OUString& rName, const uno::Any& rVal)
 {
-    if (rName == SC_UNONAME_FILEFORM)
+    if (rName != SC_UNONAME_FILEFORM)
+        throw beans::UnknownPropertyException();
+
+    sal_Int16 nIntVal = 0;
+    if (rVal >>= nIntVal)
     {
-        sal_Int16 nIntVal = 0;
-        if (rVal >>= nIntVal)
+        SvxFileFormat eFormat = lcl_UnoToSvxFileFormat(nIntVal);
+        if (mpEditSource)
         {
-            SvxFileFormat eFormat = lcl_UnoToSvxFileFormat(nIntVal);
-            if (mpEditSource)
+            ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
+            ScUnoEditEngine aTempEngine(pEditEngine);
+            SvxFieldData* pField = aTempEngine.FindByPos(
+                    aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::EXTENDED_FILE);
+            OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
+            if (pField)
             {
-                ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
-                ScUnoEditEngine aTempEngine(pEditEngine);
-                SvxFieldData* pField = aTempEngine.FindByPos(
-                        aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::EXTENDED_FILE);
-                OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
-                if (pField)
-                {
-                    SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);   // local to the ScUnoEditEngine
-                    pExtFile->SetFormat(eFormat);
-                    pEditEngine->QuickInsertField(SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection);
-                    mpEditSource->UpdateData();
-                }
-            }
-            else
-            {
-                SvxFieldData* pField = getData();
-                SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);
+                SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);   // local to the ScUnoEditEngine
                 pExtFile->SetFormat(eFormat);
+                pEditEngine->QuickInsertField(SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection);
+                mpEditSource->UpdateData();
             }
         }
+        else
+        {
+            SvxFieldData* pField = getData();
+            SvxExtFileField* pExtFile = static_cast<SvxExtFileField*>(pField);
+            pExtFile->SetFormat(eFormat);
+        }
     }
-    else
-        throw beans::UnknownPropertyException();
+
 }
 
 uno::Any ScEditFieldObj::getPropertyValueFile(const OUString& rName)
 {
     uno::Any aRet;
-    if (rName == SC_UNONAME_FILEFORM)
+    if (rName != SC_UNONAME_FILEFORM)
+        throw beans::UnknownPropertyException();
+
+    SvxFileFormat eFormat = SvxFileFormat::NameAndExt;
+    const SvxFieldData* pField = nullptr;
+    if (mpEditSource)
     {
-        SvxFileFormat eFormat = SvxFileFormat::NameAndExt;
-        const SvxFieldData* pField = nullptr;
-        if (mpEditSource)
-        {
-            ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
-            ScUnoEditEngine aTempEngine(pEditEngine);
-            pField = aTempEngine.FindByPos(
-                aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::EXTENDED_FILE);
-        }
-        else
-            pField = getData();
-
-        OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
-        if (!pField)
-            throw uno::RuntimeException();
-
-        const SvxExtFileField* pExtFile = static_cast<const SvxExtFileField*>(pField);
-        eFormat = pExtFile->GetFormat();
-        sal_Int16 nIntVal = lcl_SvxToUnoFileFormat(eFormat);
-        aRet <<= nIntVal;
+        ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
+        ScUnoEditEngine aTempEngine(pEditEngine);
+        pField = aTempEngine.FindByPos(
+            aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::EXTENDED_FILE);
     }
     else
-        throw beans::UnknownPropertyException();
+        pField = getData();
+
+    OSL_ENSURE(pField, "setPropertyValueFile: Field not found");
+    if (!pField)
+        throw uno::RuntimeException();
+
+    const SvxExtFileField* pExtFile = static_cast<const SvxExtFileField*>(pField);
+    eFormat = pExtFile->GetFormat();
+    sal_Int16 nIntVal = lcl_SvxToUnoFileFormat(eFormat);
+    aRet <<= nIntVal;
+
 
     return aRet;
 }
@@ -1037,13 +1035,12 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
 
         SvxTableField* p = static_cast<SvxTableField*>(pField);
 
-        if (rName == SC_UNONAME_TABLEPOS)
-        {
-            sal_Int32 nTab = rVal.get<sal_Int32>();
-            p->SetTab(nTab);
-        }
-        else
+        if (rName != SC_UNONAME_TABLEPOS)
             throw beans::UnknownPropertyException();
+
+        sal_Int32 nTab = rVal.get<sal_Int32>();
+        p->SetTab(nTab);
+
 
         pEditEngine->QuickInsertField(SvxFieldItem(*pField, EE_FEATURE_FIELD), aSelection);
         mpEditSource->UpdateData();
@@ -1056,14 +1053,11 @@ void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any
         throw uno::RuntimeException();
 
     SvxTableField* p = static_cast<SvxTableField*>(pData);
-    if (rName == SC_UNONAME_TABLEPOS)
-    {
-        sal_Int32 nTab = rVal.get<sal_Int32>();
-        p->SetTab(nTab);
-    }
-    else
+    if (rName != SC_UNONAME_TABLEPOS)
         throw beans::UnknownPropertyException();
 
+    sal_Int32 nTab = rVal.get<sal_Int32>();
+    p->SetTab(nTab);
 }
 
 ScEditFieldObj::ScEditFieldObj(

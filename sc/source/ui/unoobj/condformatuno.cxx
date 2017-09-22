@@ -914,20 +914,19 @@ void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
         case ColorScaleEntries:
         {
             uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries;
-            if (aValue >>= aEntries)
-            {
-                if (aEntries.getLength() < 2)
-                    throw lang::IllegalArgumentException();
-
-                // TODO: we need to make sure that there are enough entries
-                size_t n = size_t(aEntries.getLength());
-                for (size_t i = 0; i < n; ++i)
-                {
-                    setColorScaleEntry(getCoreObject()->GetEntry(i), aEntries[i]);
-                }
-            }
-            else
+            if (!(aValue >>= aEntries))
                 throw lang::IllegalArgumentException();
+
+            if (aEntries.getLength() < 2)
+                throw lang::IllegalArgumentException();
+
+            // TODO: we need to make sure that there are enough entries
+            size_t n = size_t(aEntries.getLength());
+            for (size_t i = 0; i < n; ++i)
+            {
+                setColorScaleEntry(getCoreObject()->GetEntry(i), aEntries[i]);
+            }
+
         }
         break;
         default:
@@ -1231,49 +1230,45 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
         case NegativeColor:
         {
             sal_Int32 nNegativeColor = COL_AUTO;
-            if ((aValue >>= nNegativeColor) && getCoreObject()->GetDataBarData()->mbNeg)
-            {
-                getCoreObject()->GetDataBarData()->mpNegativeColor->SetColor(nNegativeColor);
-            }
-            else
+            if (!(aValue >>= nNegativeColor) || !getCoreObject()->GetDataBarData()->mbNeg)
                 throw lang::IllegalArgumentException();
+
+            getCoreObject()->GetDataBarData()->mpNegativeColor->SetColor(nNegativeColor);
+
         }
         break;
         case DataBarEntries:
         {
             uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries;
-            if (aValue >>= aEntries)
-            {
-                if (aEntries.getLength() != 2)
-                    throw lang::IllegalArgumentException();
-
-                setDataBarEntry(getCoreObject()->GetDataBarData()->mpLowerLimit.get(),
-                        aEntries[0]);
-                setDataBarEntry(getCoreObject()->GetDataBarData()->mpUpperLimit.get(),
-                        aEntries[1]);
-            }
-            else
+            if (!(aValue >>= aEntries))
                 throw lang::IllegalArgumentException();
+
+            if (aEntries.getLength() != 2)
+                throw lang::IllegalArgumentException();
+
+            setDataBarEntry(getCoreObject()->GetDataBarData()->mpLowerLimit.get(),
+                    aEntries[0]);
+            setDataBarEntry(getCoreObject()->GetDataBarData()->mpUpperLimit.get(),
+                    aEntries[1]);
+
         }
         break;
         case MinimumLength:
         {
             double nLength = 0;
-            if ((aValue >>= nLength) && nLength < 100 && nLength >= 0)
-            {
-                getCoreObject()->GetDataBarData()->mnMinLength = nLength;
-            }
-            else throw lang::IllegalArgumentException();
+            if (!(aValue >>= nLength) || nLength >= 100 || nLength < 0)
+                throw lang::IllegalArgumentException();
+            getCoreObject()->GetDataBarData()->mnMinLength = nLength;
+
         }
         break;
         case MaximumLength:
         {
             double nLength = 0;
-            if ((aValue >>= nLength) && nLength <= 100 && nLength > 0)
-            {
-                getCoreObject()->GetDataBarData()->mnMaxLength = nLength;
-            }
-            else throw lang::IllegalArgumentException();
+            if (!(aValue >>= nLength) || nLength > 100 || nLength <= 0)
+                throw lang::IllegalArgumentException();
+            getCoreObject()->GetDataBarData()->mnMaxLength = nLength;
+
         }
         break;
     }
@@ -1586,18 +1581,17 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
         case IconSetEntries:
         {
             uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries;
-            if (aValue >>= aEntries)
-            {
-                // TODO: we need to check that the number of entries
-                // corresponds to the icon type
-                sal_Int32 nLength = aEntries.getLength();
-                for (size_t i = 0; i < size_t(nLength); ++i)
-                {
-                    setIconSetEntry(getCoreObject(), aEntries[i], i);
-                }
-            }
-            else
+            if (!(aValue >>= aEntries))
                 throw lang::IllegalArgumentException();
+
+            // TODO: we need to check that the number of entries
+            // corresponds to the icon type
+            sal_Int32 nLength = aEntries.getLength();
+            for (size_t i = 0; i < size_t(nLength); ++i)
+            {
+                setIconSetEntry(getCoreObject(), aEntries[i], i);
+            }
+
         }
         break;
         default:
@@ -1813,12 +1807,11 @@ void SAL_CALL ScCondDateFormatObj::setPropertyValue(
         case Date_StyleName:
         {
             OUString aStyleName;
-            if (aValue >>= aStyleName)
-            {
-                getCoreObject()->SetStyleName(aStyleName);
-            }
-            else
+            if (!(aValue >>= aStyleName))
                 throw lang::IllegalArgumentException();
+
+            getCoreObject()->SetStyleName(aStyleName);
+
         }
         break;
         case DateType:

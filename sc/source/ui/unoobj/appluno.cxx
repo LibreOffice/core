@@ -579,24 +579,22 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int
 {
     SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-    if ( pFuncList )
-    {
-        sal_uInt16 nCount = (sal_uInt16)pFuncList->GetCount();
-        for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
-        {
-            const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
-            if ( pDesc && pDesc->nFIndex == nId )
-            {
-                uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
-                lcl_FillSequence( aSeq, *pDesc );
-                return aSeq;
-            }
-        }
-
-        throw lang::IllegalArgumentException();         // not found
-    }
-    else
+    if ( !pFuncList )
         throw uno::RuntimeException();                  // should not happen
+
+    sal_uInt16 nCount = (sal_uInt16)pFuncList->GetCount();
+    for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
+    {
+        const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
+        if ( pDesc && pDesc->nFIndex == nId )
+        {
+            uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
+            lcl_FillSequence( aSeq, *pDesc );
+            return aSeq;
+        }
+    }
+
+    throw lang::IllegalArgumentException();         // not found
 }
 
 // XNameAccess
@@ -605,25 +603,23 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-    if ( pFuncList )
-    {
-        sal_uInt16 nCount = (sal_uInt16)pFuncList->GetCount();
-        for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
-        {
-            const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
-            //! Case-insensitiv ???
-            if ( pDesc && pDesc->pFuncName && aName == *pDesc->pFuncName )
-            {
-                uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
-                lcl_FillSequence( aSeq, *pDesc );
-                return uno::makeAny(aSeq);
-            }
-        }
-
-        throw container::NoSuchElementException();      // not found
-    }
-    else
+    if ( !pFuncList )
         throw uno::RuntimeException();                  // should not happen
+
+    sal_uInt16 nCount = (sal_uInt16)pFuncList->GetCount();
+    for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
+    {
+        const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
+        //! Case-insensitiv ???
+        if ( pDesc && pDesc->pFuncName && aName == *pDesc->pFuncName )
+        {
+            uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
+            lcl_FillSequence( aSeq, *pDesc );
+            return uno::makeAny(aSeq);
+        }
+    }
+
+    throw container::NoSuchElementException();      // not found
 }
 
 // XIndexAccess
@@ -642,23 +638,21 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-    if ( pFuncList )
-    {
-        if ( nIndex >= 0 && nIndex < (sal_Int32)pFuncList->GetCount() )
-        {
-            const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
-            if ( pDesc )
-            {
-                uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
-                lcl_FillSequence( aSeq, *pDesc );
-                return uno::makeAny(aSeq);
-            }
-        }
-
-        throw lang::IndexOutOfBoundsException();        // illegal index
-    }
-    else
+    if ( !pFuncList )
         throw uno::RuntimeException();                  // should not happen
+
+    if ( nIndex >= 0 && nIndex < (sal_Int32)pFuncList->GetCount() )
+    {
+        const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
+        if ( pDesc )
+        {
+            uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
+            lcl_FillSequence( aSeq, *pDesc );
+            return uno::makeAny(aSeq);
+        }
+    }
+
+    throw lang::IndexOutOfBoundsException();        // illegal index
 }
 
 // XEnumerationAccess

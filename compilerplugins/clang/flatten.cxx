@@ -15,10 +15,8 @@
 #include "plugin.hxx"
 
 /**
-  Look for places where we can flatten the control flow in a method.
-
+  Look for places where we can flatten the control flow in a method by returning early.
  */
-
 namespace {
 
 class Flatten:
@@ -295,24 +293,24 @@ SourceRange Flatten::extendOverComments(SourceRange range)
     startLoc = startLoc.getLocWithOffset(p1 - SM.getCharacterData( startLoc ));
 
     // look for trailing ";"
-    while (*p2 == ';')
+    while (*(p2+1) == ';')
         ++p2;
     // look for trailing " "
-    while (*p2 == ' ')
+    while (*(p2+1) == ' ')
         ++p2;
     // look for single line comments attached to the end of the statement
-    if (*p2 == '/' && *(p2+1) == '/')
+    if (*(p2+1) == '/' && *(p2+2) == '/')
     {
         p2 += 2;
-        while (*p2 && *p2 != '\n')
+        while (*(p2+1) && *(p2+1) != '\n')
             ++p2;
-        if (*p2 == '\n')
+        if (*(p2+1) == '\n')
             ++p2;
     }
     else
     {
         // make the source code we extract include any trailing "\n"
-        if (*p2 == '\n')
+        if (*(p2+1) == '\n')
             ++p2;
     }
     endLoc = endLoc.getLocWithOffset(p2 - SM.getCharacterData( endLoc ));

@@ -2290,13 +2290,12 @@ ScChart2DataProvider::getPropertySetInfo()
 void SAL_CALL ScChart2DataProvider::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
 {
-    if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
-    {
-        if ( !(rValue >>= m_bIncludeHiddenCells))
-            throw lang::IllegalArgumentException();
-    }
-    else
+    if ( rPropertyName != SC_UNONAME_INCLUDEHIDDENCELLS )
         throw beans::UnknownPropertyException();
+
+    if ( !(rValue >>= m_bIncludeHiddenCells))
+        throw lang::IllegalArgumentException();
+
 }
 
 uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
