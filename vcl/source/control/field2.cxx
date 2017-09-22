@@ -58,11 +58,15 @@ using namespace ::comphelper;
 
 uno::Reference< i18n::XCharacterClassification > const & ImplGetCharClass()
 {
-    static uno::Reference< i18n::XCharacterClassification > xCharClass;
-    if ( !xCharClass.is() )
-        xCharClass = vcl::unohelper::CreateCharacterClassification();
+    ImplSVData *const pSVData = ImplGetSVData();
+    assert(pSVData);
 
-    return xCharClass;
+    if (!pSVData->m_xCharClass.is())
+    {
+        pSVData->m_xCharClass = vcl::unohelper::CreateCharacterClassification();
+    }
+
+    return pSVData->m_xCharClass;
 }
 
 static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
