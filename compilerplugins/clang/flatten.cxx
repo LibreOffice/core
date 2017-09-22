@@ -39,6 +39,7 @@ private:
     SourceRange ignoreMacroExpansions(SourceRange range);
     SourceRange extendOverComments(SourceRange range);
     std::string getSourceAsString(SourceRange range);
+    std::string invertCondition(Expr const * condExpr, SourceRange conditionRange);
 };
 
 static const Stmt * containsSingleThrowExpr(const Stmt * stmt)
@@ -131,14 +132,7 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
 
     // in adjusting the formatting I assume that "{" starts on a new line
 
-    std::string conditionString = getSourceAsString(conditionRange);
-    auto condExpr = ifStmt->getCond()->IgnoreImpCasts();
-    if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(condExpr))
-        condExpr = exprWithCleanups->getSubExpr()->IgnoreImpCasts();
-    if (isa<DeclRefExpr>(condExpr) || isa<CallExpr>(condExpr) || isa<MemberExpr>(condExpr))
-        conditionString = "!" + conditionString;
-    else
-        conditionString = "!(" + conditionString + ")";
+    std::string conditionString = invertCondition(ifStmt->getCond(), conditionRange);
 
     std::string thenString = getSourceAsString(thenRange);
     if (auto compoundStmt = dyn_cast<CompoundStmt>(ifStmt->getThen())) {
@@ -164,6 +158,32 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
     }
 
     return true;
+}
+
+std::string Flatten::invertCondition(Expr const * condExpr, SourceRange conditionRange)
+{
+    std::string s = getSourceAsString(conditionRange);
+
+    condExpr = condExpr->IgnoreImpCasts();
+
+    if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(condExpr))
+        condExpr = exprWithCleanups->getSubExpr()->IgnoreImpCasts();
+
+    if (auto unaryOp = dyn_cast<UnaryOperator>(condExpr))
+    {
+        if (unaryOp->getOpcode() != UO_LNot)
+            return "!(" + s + ")";
+        auto i = s.find("!");
+        assert (i != std::string::npos);
+        s = s.substr(i+1);
+    }
+    else if (isa<CXXOperatorCallExpr>(condExpr))
+        s = "!(" + s + ")";
+    else if (isa<DeclRefExpr>(condExpr) || isa<CallExpr>(condExpr) || isa<MemberExpr>(condExpr))
+        s = "!" + s;
+    else
+        s = "!(" + s + ")";
+    return s;
 }
 
 std::string stripOpenAndCloseBrace(std::string s)

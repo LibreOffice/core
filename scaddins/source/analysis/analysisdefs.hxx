@@ -22,7 +22,7 @@
 
 #define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
 #define CHK_FINITE(d)       if( !::rtl::math::isFinite( d ) ) throw css::lang::IllegalArgumentException()
-#define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else throw css::lang::IllegalArgumentException()
+#define RETURN_FINITE(d)    if( !::rtl::math::isFinite( d ) ) throw css::lang::IllegalArgumentException(); return d;
 
 #endif
 

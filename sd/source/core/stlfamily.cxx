@@ -485,22 +485,20 @@ void SdStyleFamily::setPropertyValue( const OUString& , const Any&  )
 
 Any SdStyleFamily::getPropertyValue( const OUString& PropertyName )
 {
-    if ( PropertyName == "DisplayName" )
-    {
-        SolarMutexGuard aGuard;
-        OUString sDisplayName;
-        switch( mnFamily )
-        {
-            case SD_STYLE_FAMILY_MASTERPAGE:    sDisplayName = getName(); break;
-            case SD_STYLE_FAMILY_CELL:          sDisplayName = SdResId(STR_CELL_STYLE_FAMILY); break;
-            default:                            sDisplayName = SdResId(STR_GRAPHICS_STYLE_FAMILY); break;
-        }
-        return Any( sDisplayName );
-    }
-    else
+    if ( PropertyName != "DisplayName" )
     {
         throw UnknownPropertyException( "unknown property: " + PropertyName, static_cast<OWeakObject *>(this) );
     }
+
+    SolarMutexGuard aGuard;
+    OUString sDisplayName;
+    switch( mnFamily )
+    {
+        case SD_STYLE_FAMILY_MASTERPAGE:    sDisplayName = getName(); break;
+        case SD_STYLE_FAMILY_CELL:          sDisplayName = SdResId(STR_CELL_STYLE_FAMILY); break;
+        default:                            sDisplayName = SdResId(STR_GRAPHICS_STYLE_FAMILY); break;
+    }
+    return Any( sDisplayName );
 }
 
 void SdStyleFamily::addPropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  )

@@ -686,18 +686,15 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
         else
             n = nBase;
 
-        if( n < nBase )
+        if( n >= nBase )
+            throw lang::IllegalArgumentException(); // illegal char!
+
+        if( bFirstDig )
         {
-            if( bFirstDig )
-            {
-                bFirstDig = false;
-                nFirstDig = n;
-            }
-            fVal = fVal * fBase + double( n );
+            bFirstDig = false;
+            nFirstDig = n;
         }
-        else
-            // illegal char!
-            throw lang::IllegalArgumentException();
+        fVal = fVal * fBase + double( n );
 
         p++;
 
@@ -1504,20 +1501,18 @@ void SortedIndividualInt32List::InsertHolidayList(
     if( rHolAny.getValueTypeClass() == uno::TypeClass_SEQUENCE )
     {
         uno::Sequence< uno::Sequence< uno::Any > > aAnySeq;
-        if( rHolAny >>= aAnySeq )
-        {
-            const uno::Sequence< uno::Any >* pSeqArray = aAnySeq.getConstArray();
-            for( sal_Int32 nIndex1 = 0; nIndex1 < aAnySeq.getLength(); nIndex1++ )
-            {
-                const uno::Sequence< uno::Any >& rSubSeq = pSeqArray[ nIndex1 ];
-                const uno::Any* pAnyArray = rSubSeq.getConstArray();
-
-                for( sal_Int32 nIndex2 = 0; nIndex2 < rSubSeq.getLength(); nIndex2++ )
-                    InsertHolidayList( rAnyConv, pAnyArray[ nIndex2 ], nNullDate, false/*bInsertOnWeekend*/ );
-            }
-        }
-        else
+        if( !(rHolAny >>= aAnySeq) )
             throw lang::IllegalArgumentException();
+
+        const uno::Sequence< uno::Any >* pSeqArray = aAnySeq.getConstArray();
+        for( sal_Int32 nIndex1 = 0; nIndex1 < aAnySeq.getLength(); nIndex1++ )
+        {
+            const uno::Sequence< uno::Any >& rSubSeq = pSeqArray[ nIndex1 ];
+            const uno::Any* pAnyArray = rSubSeq.getConstArray();
+
+            for( sal_Int32 nIndex2 = 0; nIndex2 < rSubSeq.getLength(); nIndex2++ )
+                InsertHolidayList( rAnyConv, pAnyArray[ nIndex2 ], nNullDate, false/*bInsertOnWeekend*/ );
+        }
     }
     else
         InsertHolidayList( rAnyConv, rHolAny, nNullDate, false/*bInsertOnWeekend*/ );
@@ -1751,13 +1746,10 @@ void Complex::Power( double fPower )
 {
     if( r == 0.0 && i == 0.0 )
     {
-        if( fPower > 0 )
-        {
-            r = i = 0.0;
-            return;
-        }
-        else
+        if( fPower <= 0 )
             throw lang::IllegalArgumentException();
+        r = i = 0.0;
+        return;
     }
 
     double      p, phi;
@@ -2102,15 +2094,13 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
             case uno::TypeClass_SEQUENCE:
                 {
                 uno::Sequence< uno::Sequence< uno::Any > >           aValArr;
-                if( r >>= aValArr )
-                {
-                    sal_Int32           nE = aValArr.getLength();
-                    const uno::Sequence< uno::Any >*   pArr = aValArr.getConstArray();
-                    for( sal_Int32 n = 0 ; n < nE ; n++ )
-                        Append( pArr[ n ], eAH );
-                }
-                else
+                if( !(r >>= aValArr) )
                     throw lang::IllegalArgumentException();
+
+                sal_Int32           nE = aValArr.getLength();
+                const uno::Sequence< uno::Any >*   pArr = aValArr.getConstArray();
+                for( sal_Int32 n = 0 ; n < nE ; n++ )
+                    Append( pArr[ n ], eAH );
                 }
                 break;
             default:
@@ -2558,10 +2548,10 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
         ++it;
     }
 
-    if( pFrom && pTo )
-        return pFrom->Convert( fVal, *pTo, nLevelFrom, nLevelTo );
-    else
+    if( !pFrom || !pTo )
         throw lang::IllegalArgumentException();
+
+    return pFrom->Convert( fVal, *pTo, nLevelFrom, nLevelTo );
 }
 
 

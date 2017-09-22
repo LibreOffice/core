@@ -74,10 +74,9 @@ double BesselJ( double x, sal_Int32 N )
     bool bAsymptoticPossible = pow(fX,0.4) > N;
     if (fEstimateIteration > fMaxIteration)
     {
-        if (bAsymptoticPossible)
-            return fSign * sqrt(f_2_DIV_PI/fX)* cos(fX-N*f_PI_DIV_2-f_PI_DIV_4);
-        else
+        if (!bAsymptoticPossible)
             throw NoConvergenceException();
+        return fSign * sqrt(f_2_DIV_PI/fX)* cos(fX-N*f_PI_DIV_2-f_PI_DIV_4);
     }
 
     double const epsilon = 1.0e-15; // relative error
@@ -148,10 +147,10 @@ double BesselJ( double x, sal_Int32 N )
         k = k + 1.0;
     }
     while (!bHasfound && k <= fMaxIteration);
-    if (bHasfound)
-        return u * fSign;
-    else
+    if (!bHasfound)
         throw NoConvergenceException(); // unlikely to happen
+
+    return u * fSign;
 }
 
 
@@ -367,10 +366,9 @@ double Bessely0( double fX )
         k=k+1;
     }
     while (!bHasFound && k<fMaxIteration);
-    if (bHasFound)
-        return u*f_2_DIV_PI;
-    else
+    if (!bHasFound)
         throw NoConvergenceException(); // not likely to happen
+    return u*f_2_DIV_PI;
 }
 
 // See #i31656# for a commented version of this implementation, attachment #desc6
@@ -423,10 +421,9 @@ double Bessely1( double fX )
         k=k+1;
     }
     while (!bHasFound && k<fMaxIteration);
-    if (bHasFound)
-        return -u*2.0/f_PI;
-    else
+    if (!bHasFound)
         throw NoConvergenceException();
+    return -u*2.0/f_PI;
 }
 
 double BesselY( double fNum, sal_Int32 nOrder )

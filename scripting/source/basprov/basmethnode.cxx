@@ -185,80 +185,79 @@ namespace basprov
     Any BasicMethodNodeImpl::invoke( const OUString& aFunctionName, const Sequence< Any >&,
         Sequence< sal_Int16 >&, Sequence< Any >& )
     {
-        if ( aFunctionName == BASPROV_PROPERTY_EDITABLE )
-        {
-            OUString sDocURL, sLibName, sModName;
-            sal_uInt16 nLine1 = 0, nLine2;
-
-            if ( !m_bIsAppScript )
-            {
-                Reference< frame::XModel > xModel = MiscUtils::tDocUrlToModel( m_sScriptingContext );
-
-                if ( xModel.is() )
-                {
-                    sDocURL = xModel->getURL();
-                    if ( sDocURL.isEmpty() )
-                    {
-                        Sequence < PropertyValue > aProps = xModel->getArgs();
-                        sal_Int32 nProps = aProps.getLength();
-                        const PropertyValue* pProps = aProps.getConstArray();
-                        for ( sal_Int32 i = 0; i < nProps; ++i )
-                        {
-                            // TODO: according to MBA the property 'Title' may change in future
-                            if ( pProps[i].Name == "Title" )
-                            {
-                                pProps[i].Value >>= sDocURL;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if ( m_pMethod )
-            {
-                m_pMethod->GetLineRange( nLine1, nLine2 );
-                SbModule* pModule = m_pMethod->GetModule();
-                if ( pModule )
-                {
-                    sModName = pModule->GetName();
-                    StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
-                    if ( pBasic )
-                        sLibName = pBasic->GetName();
-                }
-            }
-
-            if ( m_xContext.is() )
-            {
-                Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
-
-                Reference < frame::XDispatchProvider > xProv( xDesktop->getCurrentFrame(), UNO_QUERY );
-
-                if ( xProv.is() )
-                {
-                    Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create( m_xContext ) );
-
-                    Sequence < PropertyValue > aArgs(7);
-                    aArgs[0].Name = "Document";
-                    aArgs[0].Value <<= sDocURL;
-                    aArgs[1].Name = "LibName";
-                    aArgs[1].Value <<= sLibName;
-                    aArgs[2].Name = "Name";
-                    aArgs[2].Value <<= sModName;
-                    aArgs[3].Name = "Type";
-                    aArgs[3].Value <<= OUString("Module");
-                    aArgs[4].Name = "Line";
-                    aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
-                    xHelper->executeDispatch( xProv, ".uno:BasicIDEAppear", OUString(), 0, aArgs );
-                }
-            }
-        }
-        else
+        if ( aFunctionName != BASPROV_PROPERTY_EDITABLE )
         {
             throw IllegalArgumentException(
                 "BasicMethodNodeImpl::invoke: function name not supported!",
                 Reference< XInterface >(), 1 );
         }
+
+        OUString sDocURL, sLibName, sModName;
+        sal_uInt16 nLine1 = 0, nLine2;
+
+        if ( !m_bIsAppScript )
+        {
+            Reference< frame::XModel > xModel = MiscUtils::tDocUrlToModel( m_sScriptingContext );
+
+            if ( xModel.is() )
+            {
+                sDocURL = xModel->getURL();
+                if ( sDocURL.isEmpty() )
+                {
+                    Sequence < PropertyValue > aProps = xModel->getArgs();
+                    sal_Int32 nProps = aProps.getLength();
+                    const PropertyValue* pProps = aProps.getConstArray();
+                    for ( sal_Int32 i = 0; i < nProps; ++i )
+                    {
+                        // TODO: according to MBA the property 'Title' may change in future
+                        if ( pProps[i].Name == "Title" )
+                        {
+                            pProps[i].Value >>= sDocURL;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if ( m_pMethod )
+        {
+            m_pMethod->GetLineRange( nLine1, nLine2 );
+            SbModule* pModule = m_pMethod->GetModule();
+            if ( pModule )
+            {
+                sModName = pModule->GetName();
+                StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
+                if ( pBasic )
+                    sLibName = pBasic->GetName();
+            }
+        }
+
+        if ( m_xContext.is() )
+        {
+            Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
+
+            Reference < frame::XDispatchProvider > xProv( xDesktop->getCurrentFrame(), UNO_QUERY );
+
+            if ( xProv.is() )
+            {
+                Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create( m_xContext ) );
+
+                Sequence < PropertyValue > aArgs(7);
+                aArgs[0].Name = "Document";
+                aArgs[0].Value <<= sDocURL;
+                aArgs[1].Name = "LibName";
+                aArgs[1].Value <<= sLibName;
+                aArgs[2].Name = "Name";
+                aArgs[2].Value <<= sModName;
+                aArgs[3].Name = "Type";
+                aArgs[3].Value <<= OUString("Module");
+                aArgs[4].Name = "Line";
+                aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
+                xHelper->executeDispatch( xProv, ".uno:BasicIDEAppear", OUString(), 0, aArgs );
+            }
+        }
+
 
         return Any();
     }

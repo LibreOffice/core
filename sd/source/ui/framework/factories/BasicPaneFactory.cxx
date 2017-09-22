@@ -220,44 +220,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
                 return rPane.CompareURL(rxPaneId->getResourceURL());
             } ));
 
-    if (iDescriptor != mpPaneContainer->end())
-    {
-        if (iDescriptor->mxPane.is())
-        {
-            // The pane has already been created and is still active (has
-            // not yet been released).  This should not happen.
-            xPane = iDescriptor->mxPane;
-        }
-        else
-        {
-            // Create a new pane.
-            switch (iDescriptor->mePaneId)
-            {
-                case CenterPaneId:
-                    xPane = CreateFrameWindowPane(rxPaneId);
-                    break;
-
-                case FullScreenPaneId:
-                    xPane = CreateFullScreenPane(mxComponentContext, rxPaneId);
-                    break;
-
-                case LeftImpressPaneId:
-                case LeftDrawPaneId:
-                    xPane = CreateChildWindowPane(
-                        rxPaneId,
-                        *iDescriptor);
-                    break;
-            }
-            iDescriptor->mxPane = xPane;
-
-            // Listen for the pane being disposed.
-            Reference<lang::XComponent> xComponent (xPane, UNO_QUERY);
-            if (xComponent.is())
-                xComponent->addEventListener(this);
-        }
-        iDescriptor->mbIsReleased = false;
-    }
-    else
+    if (iDescriptor == mpPaneContainer->end())
     {
         // The requested pane can not be created by any of the factories
         // managed by the called BasicPaneFactory object.
@@ -265,6 +228,42 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
             nullptr,
             0);
     }
+
+    if (iDescriptor->mxPane.is())
+    {
+        // The pane has already been created and is still active (has
+        // not yet been released).  This should not happen.
+        xPane = iDescriptor->mxPane;
+    }
+    else
+    {
+        // Create a new pane.
+        switch (iDescriptor->mePaneId)
+        {
+            case CenterPaneId:
+                xPane = CreateFrameWindowPane(rxPaneId);
+                break;
+
+            case FullScreenPaneId:
+                xPane = CreateFullScreenPane(mxComponentContext, rxPaneId);
+                break;
+
+            case LeftImpressPaneId:
+            case LeftDrawPaneId:
+                xPane = CreateChildWindowPane(
+                    rxPaneId,
+                    *iDescriptor);
+                break;
+        }
+        iDescriptor->mxPane = xPane;
+
+        // Listen for the pane being disposed.
+        Reference<lang::XComponent> xComponent (xPane, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->addEventListener(this);
+    }
+    iDescriptor->mbIsReleased = false;
+
 
     return xPane;
 }
@@ -282,33 +281,7 @@ void SAL_CALL BasicPaneFactory::releaseResource (
             mpPaneContainer->end(),
             [&] (PaneDescriptor const& rPane) { return rPane.ComparePane(rxPane); } ));
 
-    if (iDescriptor != mpPaneContainer->end())
-    {
-        // The given pane was created by one of the factories.  Child
-        // windows are just hidden and will be reused when requested later.
-        // Other windows are disposed and their reference is reset so that
-        // on the next createPane() call for the same pane type the pane is
-        // created anew.
-        ChildWindowPane* pChildWindowPane = dynamic_cast<ChildWindowPane*>(rxPane.get());
-        if (pChildWindowPane != nullptr)
-        {
-            iDescriptor->mbIsReleased = true;
-            pChildWindowPane->Hide();
-        }
-        else
-        {
-            iDescriptor->mxPane = nullptr;
-            Reference<XComponent> xComponent (rxPane, UNO_QUERY);
-            if (xComponent.is())
-            {
-                // We are disposing the pane and do not have to be informed of
-                // that.
-                xComponent->removeEventListener(this);
-                xComponent->dispose();
-            }
-        }
-    }
-    else
+    if (iDescriptor == mpPaneContainer->end())
     {
         // The given XPane reference is either empty or the pane was not
         // created by any of the factories managed by the called
@@ -317,6 +290,31 @@ void SAL_CALL BasicPaneFactory::releaseResource (
             nullptr,
             0);
     }
+
+    // The given pane was created by one of the factories.  Child
+    // windows are just hidden and will be reused when requested later.
+    // Other windows are disposed and their reference is reset so that
+    // on the next createPane() call for the same pane type the pane is
+    // created anew.
+    ChildWindowPane* pChildWindowPane = dynamic_cast<ChildWindowPane*>(rxPane.get());
+    if (pChildWindowPane != nullptr)
+    {
+        iDescriptor->mbIsReleased = true;
+        pChildWindowPane->Hide();
+    }
+    else
+    {
+        iDescriptor->mxPane = nullptr;
+        Reference<XComponent> xComponent (rxPane, UNO_QUERY);
+        if (xComponent.is())
+        {
+            // We are disposing the pane and do not have to be informed of
+            // that.
+            xComponent->removeEventListener(this);
+            xComponent->dispose();
+        }
+    }
+
 }
 
 //===== XConfigurationChangeListener ==========================================

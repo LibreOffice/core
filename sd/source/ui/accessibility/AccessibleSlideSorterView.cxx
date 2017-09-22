@@ -499,10 +499,10 @@ void SAL_CALL AccessibleSlideSorterView::selectAccessibleChild (sal_Int32 nChild
     const SolarMutexGuard aSolarGuard;
 
     AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
-    if (pChild != nullptr)
-        mrSlideSorter.GetController().GetPageSelector().SelectPage(pChild->GetPageNumber());
-    else
+    if (pChild == nullptr)
         throw lang::IndexOutOfBoundsException();
+
+    mrSlideSorter.GetController().GetPageSelector().SelectPage(pChild->GetPageNumber());
 }
 
 sal_Bool SAL_CALL AccessibleSlideSorterView::isAccessibleChildSelected (sal_Int32 nChildIndex)
@@ -512,11 +512,11 @@ sal_Bool SAL_CALL AccessibleSlideSorterView::isAccessibleChildSelected (sal_Int3
     const SolarMutexGuard aSolarGuard;
 
     AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
-    if (pChild != nullptr)
-        bIsSelected = mrSlideSorter.GetController().GetPageSelector().IsPageSelected(
-            pChild->GetPageNumber());
-    else
+    if (pChild == nullptr)
         throw lang::IndexOutOfBoundsException();
+
+    bIsSelected = mrSlideSorter.GetController().GetPageSelector().IsPageSelected(
+        pChild->GetPageNumber());
 
     return bIsSelected;
 }
@@ -578,10 +578,10 @@ void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int32 nChi
     const SolarMutexGuard aSolarGuard;
 
     AccessibleSlideSorterObject* pChild = mpImpl->GetAccessibleChild(nChildIndex);
-    if (pChild != nullptr)
-        mrSlideSorter.GetController().GetPageSelector().DeselectPage(pChild->GetPageNumber());
-    else
+    if (pChild == nullptr)
         throw lang::IndexOutOfBoundsException();
+
+    mrSlideSorter.GetController().GetPageSelector().DeselectPage(pChild->GetPageNumber());
 }
 
 // XServiceInfo

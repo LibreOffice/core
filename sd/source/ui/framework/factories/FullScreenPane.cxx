@@ -190,26 +190,24 @@ IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)
 Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
 {
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(mxWindow);
-    if (pWindow)
-    {
-        Sequence<Any> aArg (5);
-
-        // common: first any is VCL pointer to window (for VCL canvas)
-        aArg[0] <<= reinterpret_cast<sal_Int64>(pWindow.get());
-        aArg[1] = Any();
-        aArg[2] <<= css::awt::Rectangle();
-        aArg[3] <<= false;
-        aArg[4] <<= mxWindow;
-
-        Reference<lang::XMultiServiceFactory> xFactory (
-            mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
-        return Reference<rendering::XCanvas>(
-            xFactory->createInstanceWithArguments("com.sun.star.rendering.SpriteCanvas.VCL",
-                aArg),
-            UNO_QUERY);
-    }
-    else
+    if (!pWindow)
         throw RuntimeException();
+
+    Sequence<Any> aArg (5);
+
+    // common: first any is VCL pointer to window (for VCL canvas)
+    aArg[0] <<= reinterpret_cast<sal_Int64>(pWindow.get());
+    aArg[1] = Any();
+    aArg[2] <<= css::awt::Rectangle();
+    aArg[3] <<= false;
+    aArg[4] <<= mxWindow;
+
+    Reference<lang::XMultiServiceFactory> xFactory (
+        mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
+    return Reference<rendering::XCanvas>(
+        xFactory->createInstanceWithArguments("com.sun.star.rendering.SpriteCanvas.VCL",
+            aArg),
+        UNO_QUERY);
 }
 
 void FullScreenPane::ExtractArguments (

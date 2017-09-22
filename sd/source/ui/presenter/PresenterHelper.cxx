@@ -142,29 +142,27 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
     // No shared window is given or an explicit canvas service name is
     // specified.  Create a new canvas.
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(rxWindow);
-    if (pWindow)
-    {
-        Sequence<Any> aArg (5);
-
-        // common: first any is VCL pointer to window (for VCL canvas)
-        aArg[0] <<= reinterpret_cast<sal_Int64>(pWindow.get());
-        aArg[1] = Any();
-        aArg[2] <<= css::awt::Rectangle();
-        aArg[3] <<= false;
-        aArg[4] <<= rxWindow;
-
-        Reference<lang::XMultiServiceFactory> xFactory (
-            mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
-        return Reference<rendering::XCanvas>(
-            xFactory->createInstanceWithArguments(
-                !rsOptionalCanvasServiceName.isEmpty()
-                    ? rsOptionalCanvasServiceName
-                    : OUString("com.sun.star.rendering.Canvas.VCL"),
-                aArg),
-            UNO_QUERY);
-    }
-    else
+    if (!pWindow)
         throw RuntimeException();
+
+    Sequence<Any> aArg (5);
+
+    // common: first any is VCL pointer to window (for VCL canvas)
+    aArg[0] <<= reinterpret_cast<sal_Int64>(pWindow.get());
+    aArg[1] = Any();
+    aArg[2] <<= css::awt::Rectangle();
+    aArg[3] <<= false;
+    aArg[4] <<= rxWindow;
+
+    Reference<lang::XMultiServiceFactory> xFactory (
+        mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
+    return Reference<rendering::XCanvas>(
+        xFactory->createInstanceWithArguments(
+            !rsOptionalCanvasServiceName.isEmpty()
+                ? rsOptionalCanvasServiceName
+                : OUString("com.sun.star.rendering.Canvas.VCL"),
+            aArg),
+        UNO_QUERY);
 }
 
 void SAL_CALL PresenterHelper::toTop (

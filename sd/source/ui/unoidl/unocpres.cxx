@@ -363,10 +363,10 @@ void SAL_CALL SdXCustomPresentationAccess::removeByName( const OUString& Name )
     SdCustomShow* pShow = getSdCustomShow(Name);
 
     SdCustomShowList* pList = GetCustomShowList();
-    if(pList && pShow)
-        delete pList->Remove( pShow );
-    else
+    if(!pList || !pShow)
         throw container::NoSuchElementException();
+
+    delete pList->Remove( pShow );
 
     mrModel.SetModified();
 }
@@ -383,20 +383,14 @@ uno::Any SAL_CALL SdXCustomPresentationAccess::getByName( const OUString& aName 
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aAny;
-
     SdCustomShow* pShow = getSdCustomShow(aName);
-    if(pShow)
-    {
-        uno::Reference< container::XIndexContainer >  xRef( pShow->getUnoCustomShow(), uno::UNO_QUERY );
-        aAny <<= xRef;
-    }
-    else
+    if(!pShow)
     {
         throw container::NoSuchElementException();
     }
 
-    return aAny;
+    uno::Reference< container::XIndexContainer >  xRef( pShow->getUnoCustomShow(), uno::UNO_QUERY );
+    return uno::Any(xRef);
 }
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames()
