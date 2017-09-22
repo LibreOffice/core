@@ -1082,8 +1082,9 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
 
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 
+    // Add the signature at the end.
     uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
-    xContent->attach(xParent->getAnchor()->getStart());
+    xContent->attach(xParent->getAnchor()->getEnd());
 
     uno::Reference<rdf::XResource> xRes(xField, uno::UNO_QUERY);
     const OUString name = "loext:signature:signature";
