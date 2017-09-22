@@ -196,6 +196,5 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <drawinglayer/texture/texture.hxx>
-#include <drawinglayer/tools/converters.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
