@@ -185,7 +185,8 @@ namespace desktop
             explicit lcl_Console(short nBufHeight)
                 : mConsoleMode(unknown)
             {
-                if (GetStdHandle(STD_OUTPUT_HANDLE) == nullptr) // application does not have associated standard handles
+                HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+                if (hOut == nullptr || hOut == INVALID_HANDLE_VALUE) // application does not have associated standard handles
                 {
                     STARTUPINFOA aStartupInfo;
                     aStartupInfo.cb = sizeof(aStartupInfo);
@@ -206,7 +207,7 @@ namespace desktop
                         else if (AllocConsole() != FALSE)
                             mConsoleMode = allocated;
 
-                        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+                        hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
                         // Ensure that console buffer is enough to hold required data
                         CONSOLE_SCREEN_BUFFER_INFO cinfo;
