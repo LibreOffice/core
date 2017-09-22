@@ -138,8 +138,8 @@ bool PolyPolygonEditor::SetPointsSmooth( basegfx::B2VectorContinuity eFlags, con
 
             // set continuity in point, make sure there is a curve
             bool bPolygonChanged(false);
-            bPolygonChanged = basegfx::tools::expandToCurveInPoint(aCandidate, nPntNum);
-            bPolygonChanged |= basegfx::tools::setContinuityInPoint(aCandidate, nPntNum, eFlags);
+            bPolygonChanged = basegfx::utils::expandToCurveInPoint(aCandidate, nPntNum);
+            bPolygonChanged |= basegfx::utils::setContinuityInPoint(aCandidate, nPntNum, eFlags);
 
             if(bPolygonChanged)
             {

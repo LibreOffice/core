@@ -439,7 +439,7 @@ void vcl::Region::Move( long nHorzMove, long nVertMove )
     {
         basegfx::B2DPolyPolygon aPoly(*getB2DPolyPolygon());
 
-        aPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(nHorzMove, nVertMove));
+        aPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(nHorzMove, nVertMove));
         mpB2DPolyPolygon.reset(aPoly.count() ? new basegfx::B2DPolyPolygon(aPoly) : nullptr);
         mpPolyPolygon.reset();
         mpRegionBand.reset();
@@ -486,7 +486,7 @@ void vcl::Region::Scale( double fScaleX, double fScaleY )
     {
         basegfx::B2DPolyPolygon aPoly(*getB2DPolyPolygon());
 
-        aPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fScaleX, fScaleY));
+        aPoly.transform(basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
         mpB2DPolyPolygon.reset(aPoly.count() ? new basegfx::B2DPolyPolygon(aPoly) : nullptr);
         mpPolyPolygon.reset();
         mpRegionBand.reset();
@@ -535,7 +535,7 @@ bool vcl::Region::Union( const tools::Rectangle& rRect )
         // get this B2DPolyPolygon, solve on polygon base
         basegfx::B2DPolyPolygon aThisPolyPoly(GetAsB2DPolyPolygon());
 
-        aThisPolyPoly = basegfx::tools::prepareForPolygonOperation(aThisPolyPoly);
+        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation(aThisPolyPoly);
 
         if(!aThisPolyPoly.count())
         {
@@ -546,14 +546,14 @@ bool vcl::Region::Union( const tools::Rectangle& rRect )
         {
             // get the other B2DPolyPolygon and use logical Or-Operation
             const basegfx::B2DPolygon aRectPoly(
-                basegfx::tools::createPolygonFromRect(
+                basegfx::utils::createPolygonFromRect(
                     basegfx::B2DRectangle(
                         rRect.Left(),
                         rRect.Top(),
                         rRect.Right(),
                         rRect.Bottom())));
             const basegfx::B2DPolyPolygon aClip(
-                basegfx::tools::solvePolygonOperationOr(
+                basegfx::utils::solvePolygonOperationOr(
                     aThisPolyPoly,
                     basegfx::B2DPolyPolygon(aRectPoly)));
             *this = vcl::Region(aClip);
@@ -624,7 +624,7 @@ bool vcl::Region::Intersect( const tools::Rectangle& rRect )
         if(getB2DPolyPolygon())
         {
             const basegfx::B2DPolyPolygon aPoly(
-                basegfx::tools::clipPolyPolygonOnRange(
+                basegfx::utils::clipPolyPolygonOnRange(
                     *getB2DPolyPolygon(),
                     basegfx::B2DRange(
                         rRect.Left(),
@@ -715,7 +715,7 @@ bool vcl::Region::Exclude( const tools::Rectangle& rRect )
         // get this B2DPolyPolygon
         basegfx::B2DPolyPolygon aThisPolyPoly(GetAsB2DPolyPolygon());
 
-        aThisPolyPoly = basegfx::tools::prepareForPolygonOperation(aThisPolyPoly);
+        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation(aThisPolyPoly);
 
         if(!aThisPolyPoly.count())
         {
@@ -725,10 +725,10 @@ bool vcl::Region::Exclude( const tools::Rectangle& rRect )
 
         // get the other B2DPolyPolygon
         const basegfx::B2DPolygon aRectPoly(
-            basegfx::tools::createPolygonFromRect(
+            basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom())));
         const basegfx::B2DPolyPolygon aOtherPolyPoly(aRectPoly);
-        const basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationDiff(aThisPolyPoly, aOtherPolyPoly);
+        const basegfx::B2DPolyPolygon aClip = basegfx::utils::solvePolygonOperationDiff(aThisPolyPoly, aOtherPolyPoly);
 
         *this = vcl::Region(aClip);
 
@@ -796,7 +796,7 @@ bool vcl::Region::XOr( const tools::Rectangle& rRect )
         // get this B2DPolyPolygon
         basegfx::B2DPolyPolygon aThisPolyPoly(GetAsB2DPolyPolygon());
 
-        aThisPolyPoly = basegfx::tools::prepareForPolygonOperation( aThisPolyPoly );
+        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation( aThisPolyPoly );
 
         if(!aThisPolyPoly.count())
         {
@@ -807,10 +807,10 @@ bool vcl::Region::XOr( const tools::Rectangle& rRect )
 
         // get the other B2DPolyPolygon
         const basegfx::B2DPolygon aRectPoly(
-            basegfx::tools::createPolygonFromRect(
+            basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom())));
         const basegfx::B2DPolyPolygon aOtherPolyPoly(aRectPoly);
-        const basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationXor(aThisPolyPoly, aOtherPolyPoly);
+        const basegfx::B2DPolyPolygon aClip = basegfx::utils::solvePolygonOperationXor(aThisPolyPoly, aOtherPolyPoly);
 
         *this = vcl::Region(aClip);
 
@@ -885,7 +885,7 @@ bool vcl::Region::Union( const vcl::Region& rRegion )
         // get this B2DPolyPolygon
         basegfx::B2DPolyPolygon aThisPolyPoly(GetAsB2DPolyPolygon());
 
-        aThisPolyPoly = basegfx::tools::prepareForPolygonOperation(aThisPolyPoly);
+        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation(aThisPolyPoly);
 
         if(!aThisPolyPoly.count())
         {
@@ -896,10 +896,10 @@ bool vcl::Region::Union( const vcl::Region& rRegion )
 
         // get the other B2DPolyPolygon
         basegfx::B2DPolyPolygon aOtherPolyPoly(rRegion.GetAsB2DPolyPolygon());
-        aOtherPolyPoly = basegfx::tools::prepareForPolygonOperation(aOtherPolyPoly);
+        aOtherPolyPoly = basegfx::utils::prepareForPolygonOperation(aOtherPolyPoly);
 
         // use logical OR operation
-        basegfx::B2DPolyPolygon aClip(basegfx::tools::solvePolygonOperationOr(aThisPolyPoly, aOtherPolyPoly));
+        basegfx::B2DPolyPolygon aClip(basegfx::utils::solvePolygonOperationOr(aThisPolyPoly, aOtherPolyPoly));
 
         *this = vcl::Region( aClip );
         return true;
@@ -1005,7 +1005,7 @@ bool vcl::Region::Intersect( const vcl::Region& rRegion )
         }
 
         const basegfx::B2DPolyPolygon aClip(
-            basegfx::tools::clipPolyPolygonOnPolyPolygon(
+            basegfx::utils::clipPolyPolygonOnPolyPolygon(
                 aOtherPolyPoly,
                 aThisPolyPoly,
                 true,
@@ -1100,13 +1100,13 @@ bool vcl::Region::Exclude( const vcl::Region& rRegion )
             return true;
         }
 
-        aThisPolyPoly = basegfx::tools::prepareForPolygonOperation( aThisPolyPoly );
+        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation( aThisPolyPoly );
 
         // get the other B2DPolyPolygon
         basegfx::B2DPolyPolygon aOtherPolyPoly(rRegion.GetAsB2DPolyPolygon());
-        aOtherPolyPoly = basegfx::tools::prepareForPolygonOperation( aOtherPolyPoly );
+        aOtherPolyPoly = basegfx::utils::prepareForPolygonOperation( aOtherPolyPoly );
 
-        basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationDiff( aThisPolyPoly, aOtherPolyPoly );
+        basegfx::B2DPolyPolygon aClip = basegfx::utils::solvePolygonOperationDiff( aThisPolyPoly, aOtherPolyPoly );
         *this = vcl::Region( aClip );
         return true;
     }
@@ -1187,13 +1187,13 @@ bool vcl::Region::XOr( const vcl::Region& rRegion )
             return true;
         }
 
-        aThisPolyPoly = basegfx::tools::prepareForPolygonOperation( aThisPolyPoly );
+        aThisPolyPoly = basegfx::utils::prepareForPolygonOperation( aThisPolyPoly );
 
         // get the other B2DPolyPolygon
         basegfx::B2DPolyPolygon aOtherPolyPoly(rRegion.GetAsB2DPolyPolygon());
-        aOtherPolyPoly = basegfx::tools::prepareForPolygonOperation( aOtherPolyPoly );
+        aOtherPolyPoly = basegfx::utils::prepareForPolygonOperation( aOtherPolyPoly );
 
-        basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationXor( aThisPolyPoly, aOtherPolyPoly );
+        basegfx::B2DPolyPolygon aClip = basegfx::utils::solvePolygonOperationXor( aThisPolyPoly, aOtherPolyPoly );
         *this = vcl::Region( aClip );
         return true;
     }
@@ -1251,7 +1251,7 @@ tools::Rectangle vcl::Region::GetBoundRect() const
     // prefer double precision source
     if(getB2DPolyPolygon())
     {
-        const basegfx::B2DRange aRange(basegfx::tools::getRange(*getB2DPolyPolygon()));
+        const basegfx::B2DRange aRange(basegfx::utils::getRange(*getB2DPolyPolygon()));
 
         if(aRange.isEmpty())
         {
@@ -1416,7 +1416,7 @@ bool vcl::Region::IsRectangle() const
         return false;
 
     if( getB2DPolyPolygon() )
-        return basegfx::tools::isRectangle( *getB2DPolyPolygon() );
+        return basegfx::utils::isRectangle( *getB2DPolyPolygon() );
 
     if( getPolyPolygon() )
         return getPolyPolygon()->IsRect();

@@ -47,12 +47,12 @@ namespace drawinglayer
                 case TextEffectStyle2D::ReliefEngravedDefault:
                 {
                     // prepare transform of sub-group back to (0,0) and align to X-Axis
-                    basegfx::B2DHomMatrix aBackTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                    basegfx::B2DHomMatrix aBackTransform(basegfx::utils::createTranslateB2DHomMatrix(
                         -getRotationCenter().getX(), -getRotationCenter().getY()));
                     aBackTransform.rotate(-getDirection());
 
                     // prepare transform of sub-group back to its position and rotation
-                    basegfx::B2DHomMatrix aForwardTransform(basegfx::tools::createRotateB2DHomMatrix(getDirection()));
+                    basegfx::B2DHomMatrix aForwardTransform(basegfx::utils::createRotateB2DHomMatrix(getDirection()));
                     aForwardTransform.translate(getRotationCenter().getX(), getRotationCenter().getY());
 
                     // create transformation for one discrete unit

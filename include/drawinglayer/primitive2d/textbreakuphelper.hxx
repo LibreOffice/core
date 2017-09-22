@@ -42,7 +42,7 @@ namespace drawinglayer
             const TextSimplePortionPrimitive2D&     mrSource;
             Primitive2DContainer                       mxResult;
             TextLayouterDevice                      maTextLayouter;
-            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose maDecTrans;
+            basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose maDecTrans;
 
             bool                                    mbNoDXArray : 1;
 

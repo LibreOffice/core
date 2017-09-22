@@ -106,7 +106,7 @@ namespace drawinglayer
                         aNewTransform.invert();
 
                         // apply crop enlargement in unit coordinates
-                        aNewTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        aNewTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
                             aNewRange.getRange(),
                             aNewRange.getMinimum()) * aNewTransform;
 
@@ -131,7 +131,7 @@ namespace drawinglayer
                         else
                         {
                             // mask with original object's bounds
-                            basegfx::B2DPolyPolygon aMaskPolyPolygon(basegfx::tools::createUnitPolygon());
+                            basegfx::B2DPolyPolygon aMaskPolyPolygon(basegfx::utils::createUnitPolygon());
                             aMaskPolyPolygon.transform(getTransformation());
 
                             // create maskPrimitive with aMaskPolyPolygon and aMaskContentVector

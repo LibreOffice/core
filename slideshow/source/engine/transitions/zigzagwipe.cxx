@@ -46,7 +46,7 @@ ZigZagWipe::ZigZagWipe( sal_Int32 nZigs ) : m_zigEdge( 1.0 / nZigs )
 ::basegfx::B2DPolyPolygon ZigZagWipe::operator () ( double t )
 {
     ::basegfx::B2DPolyPolygon res(m_stdZigZag);
-    res.transform(basegfx::tools::createTranslateB2DHomMatrix((1.0 + m_zigEdge) * t, 0.0));
+    res.transform(basegfx::utils::createTranslateB2DHomMatrix((1.0 + m_zigEdge) * t, 0.0));
     return res;
 }
 
@@ -55,7 +55,7 @@ ZigZagWipe::ZigZagWipe( sal_Int32 nZigs ) : m_zigEdge( 1.0 / nZigs )
     ::basegfx::B2DPolyPolygon res( createUnitRect() );
     ::basegfx::B2DPolygon poly( m_stdZigZag );
     poly.flip();
-    basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+    basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
         (1.0 + m_zigEdge) * (1.0 - t) / 2.0, 0.0));
     poly.transform( aTransform );
     res.append( poly );

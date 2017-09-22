@@ -36,7 +36,7 @@ namespace drawinglayer
     {
         void TextDecoratedPortionPrimitive2D::impCreateGeometryContent(
             std::vector< Primitive2DReference >& rTarget,
-            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose const & rDecTrans,
+            basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose const & rDecTrans,
             const OUString& rText,
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
@@ -176,7 +176,7 @@ namespace drawinglayer
                 }
             }
             std::vector< Primitive2DReference > aNewPrimitives;
-            basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(getTextTransform());
+            basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose aDecTrans(getTextTransform());
             Primitive2DContainer aRetval;
 
             // create basic geometry such as SimpleTextPrimitive, Overline, Underline,
@@ -233,7 +233,7 @@ namespace drawinglayer
                         static basegfx::BColor aShadowColor(0.3, 0.3, 0.3);
 
                         // preapare shadow transform matrix
-                        const basegfx::B2DHomMatrix aShadowTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                        const basegfx::B2DHomMatrix aShadowTransform(basegfx::utils::createTranslateB2DHomMatrix(
                             fTextShadowOffset, fTextShadowOffset));
 
                         // create shadow primitive

@@ -72,7 +72,7 @@ basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
     const double fShearX(rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0);
     const double fRotate(rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0);
 
-    return basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+    return basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         aObjectRange.getWidth(), aObjectRange.getHeight(),
         fShearX,
         fRotate,
@@ -126,7 +126,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createP
             {
                 // create embedding transformation
                 basegfx::B2DHomMatrix aEmbed(
-                    basegfx::tools::createTranslateB2DHomMatrix(
+                    basegfx::utils::createTranslateB2DHomMatrix(
                         -aChartContentRange.getMinX(),
                         -aChartContentRange.getMinY()));
 

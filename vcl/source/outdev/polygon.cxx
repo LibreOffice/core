@@ -87,7 +87,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
             if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
             {
-                aB2DPolyPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
+                aB2DPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
             }
 
             for(sal_uInt32 a(0); bSuccess && a < aB2DPolyPolygon.count(); a++)
@@ -200,7 +200,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
 
             if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
             {
-                aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
+                aB2DPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
             }
 
             bSuccess = mpGraphics->DrawPolyLine( aB2DPolygon,
@@ -303,7 +303,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
             if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
             {
-                aB2DPolyPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
+                aB2DPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyPolygon);
             }
 
             for(sal_uInt32 a(0);bSuccess && a < aB2DPolyPolygon.count(); a++)

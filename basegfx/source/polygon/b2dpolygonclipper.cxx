@@ -25,12 +25,12 @@
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
-#include <basegfx/tools/rectcliptools.hxx>
+#include <basegfx/utils/rectcliptools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         B2DPolyPolygon clipPolygonOnParallelAxis(const B2DPolygon& rCandidate, bool bParallelToXAxis, bool bAboveAxis, double fValueOnOtherAxis, bool bStroke)
         {
@@ -360,7 +360,7 @@ namespace basegfx
                         {
                             aCandidate.getBezierSegment(b, aEdge);
                             const B2DPoint aTestPoint(aEdge.interpolatePoint(0.5));
-                            const bool bIsInside(tools::isInside(rClip, aTestPoint) == bInside);
+                            const bool bIsInside(utils::isInside(rClip, aTestPoint) == bInside);
 
                             if(bIsInside)
                             {
@@ -413,10 +413,10 @@ namespace basegfx
                     // check for simplification with ranges if !bStroke (handling as stroke is more simple),
                     // but also only when bInside, else the simplification may lead to recursive calls (see
                     // calls to clipPolyPolygonOnPolyPolygon in clipPolyPolygonOnRange and clipPolygonOnRange)
-                    if (bInside && basegfx::tools::isRectangle(rClip))
+                    if (bInside && basegfx::utils::isRectangle(rClip))
                     {
                         // #i125349# detect if both given PolyPolygons are indeed ranges
-                        if (basegfx::tools::isRectangle(rCandidate))
+                        if (basegfx::utils::isRectangle(rCandidate))
                         {
                             // both are rectangle
                             if(rCandidate.getB2DRange().equal(rClip.getB2DRange()))
@@ -440,9 +440,9 @@ namespace basegfx
                                 else
                                 {
                                     // use common aIntersectionRange as result, convert
-                                    // to expected tools::PolyPolygon form
+                                    // to expected utils::PolyPolygon form
                                     return basegfx::B2DPolyPolygon(
-                                        basegfx::tools::createPolygonFromRect(aIntersectionRange));
+                                        basegfx::utils::createPolygonFromRect(aIntersectionRange));
                                 }
                             }
                         }
@@ -461,7 +461,7 @@ namespace basegfx
                     // Also get rid of some not-needed polygons (neutral, no area -> when
                     // no intersections, these are tubes).
                     // Now it is possible to correct the orientations in the cut-free
-                    // polygons to values corresponding to painting the tools::PolyPolygon with
+                    // polygons to values corresponding to painting the utils::PolyPolygon with
                     // a XOR-WindingRule.
                     aMergePolyPolygonA = solveCrossovers(aMergePolyPolygonA);
                     aMergePolyPolygonA = stripNeutralPolygons(aMergePolyPolygonA);
@@ -814,7 +814,7 @@ namespace basegfx
             return aResult;
         }
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

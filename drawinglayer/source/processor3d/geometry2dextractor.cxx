@@ -85,7 +85,7 @@ namespace drawinglayer
                 {
                     // PolygonHairlinePrimitive3D
                     const primitive3d::PolygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::PolygonHairlinePrimitive3D& >(rCandidate);
-                    basegfx::B2DPolygon a2DHairline(basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getViewInformation3D().getObjectToView()));
+                    basegfx::B2DPolygon a2DHairline(basegfx::utils::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getViewInformation3D().getObjectToView()));
 
                     if(a2DHairline.count())
                     {
@@ -100,7 +100,7 @@ namespace drawinglayer
                 {
                     // PolyPolygonMaterialPrimitive3D
                     const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(rCandidate);
-                    basegfx::B2DPolyPolygon a2DFill(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getViewInformation3D().getObjectToView()));
+                    basegfx::B2DPolyPolygon a2DFill(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getViewInformation3D().getObjectToView()));
 
                     if(a2DFill.count())
                     {

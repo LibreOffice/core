@@ -69,7 +69,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
 
         if(mnAntialiasing & AntialiasingFlags::PixelSnapHairline)
         {
-            aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+            aB2DPolyLine = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
         if(mpGraphics->DrawPolyLine(
@@ -187,7 +187,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     {
         const double fHalfLineWidth((fLineWidth * 0.5) + 0.5);
         const basegfx::B2DPolyPolygon aAreaPolyPolygon(
-                basegfx::tools::createAreaGeometry( rB2DPolygon,
+                basegfx::utils::createAreaGeometry( rB2DPolygon,
                                                     fHalfLineWidth,
                                                     eLineJoin,
                                                     eLineCap,
@@ -339,7 +339,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
             // better to remove doubles on device coordinates. Also assume from a given amount
             // of points that the single edges are not long enough to smooth
             aB2DPolygon.removeDoublePoints();
-            aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
+            aB2DPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
         }
 
         // draw the polyline

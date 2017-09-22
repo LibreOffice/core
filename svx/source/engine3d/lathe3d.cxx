@@ -174,7 +174,7 @@ bool E3dLatheObj::IsBreakObjPossible()
 SdrAttrObj* E3dLatheObj::GetBreakObj()
 {
     // create PathObj
-    basegfx::B3DPolyPolygon aLathePoly3D(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
+    basegfx::B3DPolyPolygon aLathePoly3D(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
     basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
     SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aTransPoly);
 

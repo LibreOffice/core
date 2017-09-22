@@ -105,7 +105,7 @@ namespace slideshow
                 aLinearTransform.set( 1, 2, 0.0 );
                 pBitmapCanvas->setTransformation( aLinearTransform );
 
-                const basegfx::B2DHomMatrix aShapeTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                const basegfx::B2DHomMatrix aShapeTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(
                     maBounds.getWidth(), maBounds.getHeight(),
                     maBounds.getMinX(), maBounds.getMinY()));
 

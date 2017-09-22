@@ -19,7 +19,7 @@
 
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/polygontubeprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
@@ -56,7 +56,7 @@ namespace drawinglayer
 
         basegfx::B3DRange PolygonHairlinePrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            return basegfx::tools::getRange(getB3DPolygon());
+            return basegfx::utils::getRange(getB3DPolygon());
         }
 
         // provide unique ID
@@ -85,7 +85,7 @@ namespace drawinglayer
                 else
                 {
                     // apply LineStyle
-                    basegfx::tools::applyLineDashing(getB3DPolygon(), getStrokeAttribute().getDotDashArray(), &aHairLinePolyPolygon, nullptr, getStrokeAttribute().getFullDotDashLen());
+                    basegfx::utils::applyLineDashing(getB3DPolygon(), getStrokeAttribute().getDotDashArray(), &aHairLinePolyPolygon, nullptr, getStrokeAttribute().getFullDotDashLen());
                 }
 
                 // prepare result

@@ -446,7 +446,7 @@ void ScreenshotAnnotationDlg_Impl::PaintControlDataEntry(
         // createPolygonFromRect is relative [0.0 .. 1.0]
         static double fEdgeRoundPixel(8.0);
         const basegfx::B2DPolygon aPolygon(
-            basegfx::tools::createPolygonFromRect(
+            basegfx::utils::createPolygonFromRect(
             aB2DRange,
             fEdgeRoundPixel / aB2DRange.getWidth(),
             fEdgeRoundPixel / aB2DRange.getHeight()));

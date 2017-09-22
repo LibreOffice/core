@@ -37,13 +37,13 @@ namespace internal {
 
     res.append( poly );
     // flip on y-axis:
-    poly.transform(basegfx::tools::createScaleB2DHomMatrix(-1.0, 1.0));
+    poly.transform(basegfx::utils::createScaleB2DHomMatrix(-1.0, 1.0));
     poly.flip();
     res.append( poly );
 
     if (m_center)
     {
-        res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
+        res.transform(basegfx::utils::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
 
         if (! m_single)
             res.append( flipOnXAxis(res) );
@@ -51,7 +51,7 @@ namespace internal {
     else
     {
         SAL_WARN_IF( m_fanIn, "slideshow.opengl", "FanWipe: m_fanIn is true ?" );
-        res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 1.0, 0.5, 1.0));
+        res.transform(basegfx::utils::createScaleTranslateB2DHomMatrix(0.5, 1.0, 0.5, 1.0));
     }
     return res;
 }

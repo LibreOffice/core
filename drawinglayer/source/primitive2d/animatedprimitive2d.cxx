@@ -162,7 +162,7 @@ namespace drawinglayer
                 const sal_uInt32 nIndA(sal_uInt32(floor(fIndex)));
                 const double fOffset(fIndex - (double)nIndA);
                 basegfx::B2DHomMatrix aTargetTransform;
-                std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >::const_iterator aMatA(maMatrixStack.begin() + nIndA);
+                std::vector< basegfx::utils::B2DHomMatrixBufferedDecompose >::const_iterator aMatA(maMatrixStack.begin() + nIndA);
 
                 if(basegfx::fTools::equalZero(fOffset))
                 {
@@ -173,7 +173,7 @@ namespace drawinglayer
                 {
                     // interpolate. Get involved buffered decomposed matrices
                     const sal_uInt32 nIndB((nIndA + 1) % nSize);
-                    std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >::const_iterator aMatB(maMatrixStack.begin() + nIndB);
+                    std::vector< basegfx::utils::B2DHomMatrixBufferedDecompose >::const_iterator aMatB(maMatrixStack.begin() + nIndB);
 
                     // interpolate for fOffset [0.0 .. 1.0[
                     const basegfx::B2DVector aScale(basegfx::interpolate(aMatA->getScale(), aMatB->getScale(), fOffset));
@@ -182,7 +182,7 @@ namespace drawinglayer
                     const double fShearX(((aMatB->getShearX() - aMatA->getShearX()) * fOffset) + aMatA->getShearX());
 
                     // build matrix for state
-                    aTargetTransform = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aTargetTransform = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                         aScale, fShearX, fRotate, aTranslate);
                 }
 

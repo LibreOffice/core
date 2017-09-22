@@ -885,7 +885,7 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
         aPolygon.append( basegfx::B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
     aPolygon.setClosed( true );
 
-    if( basegfx::tools::isConvex( aPolygon ) )
+    if( basegfx::utils::isConvex( aPolygon ) )
     {
         if( nPoints > 2 )
             DrawConvexPolygon( nPoints, pPtAry );
@@ -899,9 +899,9 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
 
 void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA )
 {
-    const basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::tools::solveCrossovers( rPolyPolygon );
+    const basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::utils::solveCrossovers( rPolyPolygon );
     basegfx::B2DTrapezoidVector aB2DTrapVector;
-    basegfx::tools::trapezoidSubdivide( aB2DTrapVector, aSimplePolyPolygon );
+    basegfx::utils::trapezoidSubdivide( aB2DTrapVector, aSimplePolyPolygon );
     // draw tesselation result
     if( aB2DTrapVector.size())
     {

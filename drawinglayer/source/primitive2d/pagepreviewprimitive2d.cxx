@@ -58,7 +58,7 @@ namespace drawinglayer
                         const Primitive2DReference xReferenceA(
                             new MaskPrimitive2D(
                                 basegfx::B2DPolyPolygon(
-                                    basegfx::tools::createPolygonFromRect(aAllowedContentRange)), aContent));
+                                    basegfx::utils::createPolygonFromRect(aAllowedContentRange)), aContent));
                         aContent = Primitive2DContainer { xReferenceA };
                     }
 
@@ -92,7 +92,7 @@ namespace drawinglayer
                     }
 
                     // add the missing object transformation aspects
-                    const basegfx::B2DHomMatrix aCombined(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                    const basegfx::B2DHomMatrix aCombined(basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
                             fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
                     aPageTrans = aCombined * aPageTrans;
 

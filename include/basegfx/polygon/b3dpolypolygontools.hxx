@@ -35,7 +35,7 @@ namespace basegfx
     class B3DPolyPolygon;
     class B3DRange;
 
-    namespace tools
+    namespace utils
     {
         // B3DPolyPolygon tools
 
@@ -133,7 +133,7 @@ namespace basegfx
             const B3DPolyPolygon& rPolyPolygonSource,
             css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DRetval);
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_POLYGON_B3DPOLYPOLYGONTOOLS_HXX

@@ -67,7 +67,7 @@ void OverlayStaticRectanglePrimitive::create2DDecomposition(Primitive2DContainer
     if (basegfx::fTools::more(getDiscreteUnit(), 0.0) && mfTransparence <= 1.0)
     {
         basegfx::B2DPolygon aPolygon(
-            basegfx::tools::createPolygonFromRect(aRange));
+            basegfx::utils::createPolygonFromRect(aRange));
 
         // create filled primitive
         basegfx::B2DPolyPolygon aPolyPolygon;
@@ -315,18 +315,18 @@ namespace drawinglayer
                 const double fRelativeRadiusX(fFullGrow / aOuterRange.getWidth());
                 const double fRelativeRadiusY(fFullGrow / aOuterRange.getHeight());
                 basegfx::B2DPolygon aOuterPolygon(
-                    basegfx::tools::createPolygonFromRect(
+                    basegfx::utils::createPolygonFromRect(
                         aOuterRange,
                         fRelativeRadiusX,
                         fRelativeRadiusY));
                 basegfx::B2DPolygon aInnerPolygon(
-                    basegfx::tools::createPolygonFromRect(
+                    basegfx::utils::createPolygonFromRect(
                         aInnerRange));
 
                 // apply evtl. existing rotation
                 if(!basegfx::fTools::equalZero(getRotation()))
                 {
-                    const basegfx::B2DHomMatrix aTransform(basegfx::tools::createRotateAroundPoint(
+                    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createRotateAroundPoint(
                         getObjectRange().getMinX(), getObjectRange().getMinY(), getRotation()));
 
                     aOuterPolygon.transform(aTransform);

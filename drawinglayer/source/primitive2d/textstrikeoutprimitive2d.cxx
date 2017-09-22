@@ -193,7 +193,7 @@ namespace drawinglayer
             aStrikeoutLine.append(basegfx::B2DPoint(getWidth(), -fStrikeoutOffset));
 
             const basegfx::B2DHomMatrix aUnscaledTransform(
-                basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
                     fShearX, fRotate, aTranslate));
 
             aStrikeoutLine.transform(aUnscaledTransform);
@@ -210,7 +210,7 @@ namespace drawinglayer
                 const double fLineDist(2.0 * fStrikeoutHeight);
 
                 // move base point of text to 0.0 and de-rotate
-                basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
                     -aTranslate.getX(), -aTranslate.getY()));
                 aTransform.rotate(-fRotate);
 

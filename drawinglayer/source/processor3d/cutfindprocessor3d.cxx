@@ -163,11 +163,11 @@ namespace drawinglayer
                                     const basegfx::B3DPoint aPointOnPlane(aPolygon.getB3DPoint(0));
                                     double fCut(0.0);
 
-                                    if(basegfx::tools::getCutBetweenLineAndPlane(aPlaneNormal, aPointOnPlane, maFront, maBack, fCut))
+                                    if(basegfx::utils::getCutBetweenLineAndPlane(aPlaneNormal, aPointOnPlane, maFront, maBack, fCut))
                                     {
                                         const basegfx::B3DPoint aCutPoint(basegfx::interpolate(maFront, maBack, fCut));
 
-                                        if(basegfx::tools::isInside(rPolyPolygon, aCutPoint))
+                                        if(basegfx::utils::isInside(rPolyPolygon, aCutPoint))
                                         {
                                             // #i102956# add result. Do not forget to do this in the coordinate
                                             // system the processor get started with, so use the collected

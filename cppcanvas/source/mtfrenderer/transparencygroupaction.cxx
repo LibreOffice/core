@@ -45,7 +45,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "transparencygroupaction.hxx"
@@ -380,7 +380,7 @@ namespace cppcanvas
                     // tdf#95709
                     // Adjust renderstate clip to modified scale from above
                     ::basegfx::B2DPolyPolygon aClip = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(aLocalState.Clip);
-                    aClip.transform(basegfx::tools::createScaleB2DHomMatrix(aScale));
+                    aClip.transform(basegfx::utils::createScaleB2DHomMatrix(aScale));
                     aLocalState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(mpCanvas->getUNOCanvas()->getDevice(), aClip);
                 }
 

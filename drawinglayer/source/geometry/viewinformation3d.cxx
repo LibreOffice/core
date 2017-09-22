@@ -22,7 +22,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <com/sun/star/geometry/AffineMatrix3D.hpp>
 #include <com/sun/star/geometry/RealRectangle3D.hpp>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <rtl/instance.hxx>
 
 

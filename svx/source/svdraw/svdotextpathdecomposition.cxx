@@ -260,7 +260,7 @@ namespace
         {
             // prepare polygon geometry, take into account as many parameters as possible
             basegfx::B2DPolygon aPolygonCandidate(rPolygonCandidate);
-            const double fPolyLength(basegfx::tools::getLength(aPolygonCandidate));
+            const double fPolyLength(basegfx::utils::getLength(aPolygonCandidate));
             double fPolyEnd(fPolyLength);
             double fPolyStart(0.0);
             double fAutosizeScaleFactor(1.0);
@@ -365,7 +365,7 @@ namespace
 
                         // create transformation
                         basegfx::B2DHomMatrix aNewTransformA, aNewTransformB, aNewShadowTransform;
-                        basegfx::B2DPoint aStartPos(basegfx::tools::getPositionAbsolute(aPolygonCandidate, fPolyStart, fPolyLength));
+                        basegfx::B2DPoint aStartPos(basegfx::utils::getPositionAbsolute(aPolygonCandidate, fPolyStart, fPolyLength));
                         basegfx::B2DPoint aEndPos(aStartPos);
 
                         // add font scaling
@@ -404,7 +404,7 @@ namespace
                         {
                             case XFormTextStyle::Rotate :
                             {
-                                aEndPos = basegfx::tools::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
+                                aEndPos = basegfx::utils::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
                                 const basegfx::B2DVector aDirection(aEndPos - aStartPos);
                                 aNewTransformB.rotate(atan2(aDirection.getY(), aDirection.getX()));
                                 aNewTransformB.translate(aStartPos.getX(), aStartPos.getY());
@@ -419,7 +419,7 @@ namespace
                             }
                             case XFormTextStyle::SlantX :
                             {
-                                aEndPos = basegfx::tools::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
+                                aEndPos = basegfx::utils::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
                                 const basegfx::B2DVector aDirection(aEndPos - aStartPos);
                                 const double fShearValue(atan2(aDirection.getY(), aDirection.getX()));
                                 const double fSin(sin(fShearValue));
@@ -437,7 +437,7 @@ namespace
                             }
                             case XFormTextStyle::SlantY :
                             {
-                                aEndPos = basegfx::tools::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
+                                aEndPos = basegfx::utils::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
                                 const basegfx::B2DVector aDirection(aEndPos - aStartPos);
                                 const double fShearValue(atan2(aDirection.getY(), aDirection.getX()));
                                 const double fCos(cos(fShearValue));
@@ -462,7 +462,7 @@ namespace
                         {
                             if(aEndPos.equal(aStartPos))
                             {
-                                aEndPos = basegfx::tools::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
+                                aEndPos = basegfx::utils::getPositionAbsolute(aPolygonCandidate, fPolyStart + fPortionLength, fPolyLength);
                             }
 
                             // use back vector (aStartPos - aEndPos) here to get mirrored perpendicular as in old stuff
