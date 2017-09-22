@@ -22,7 +22,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
@@ -67,7 +67,7 @@ namespace drawinglayer
         {
             // use info to create a yellow 2d rectangle, similar to empty 3d scenes and/or groups
             const basegfx::B2DRange aLocal2DRange(getB2DRange(rViewInformation));
-            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aLocal2DRange));
+            const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aLocal2DRange));
             const basegfx::BColor aYellow(1.0, 1.0, 0.0);
             rContainer.push_back(new PolygonHairlinePrimitive2D(aOutline, aYellow));
         }

@@ -53,7 +53,7 @@
 
 #include <algorithm>
 
-#include <basegfx/tools/zoomtools.hxx>
+#include <basegfx/utils/zoomtools.hxx>
 
 #define SPLIT_MARGIN      30
 #define SPLIT_HANDLE_SIZE 5

@@ -18,7 +18,7 @@
  */
 
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -482,7 +482,7 @@ namespace drawinglayer
 
                         if(bAddOutlineToCreated3DSceneRepresentation)
                         {
-                            basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
+                            basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
                             aOutline.transform(aNew2DTransform);
                             rContainer.push_back(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
                         }

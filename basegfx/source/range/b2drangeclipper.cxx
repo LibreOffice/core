@@ -838,7 +838,7 @@ namespace basegfx
         }
     }
 
-    namespace tools
+    namespace utils
     {
         B2DPolyPolygon solveCrossovers(const std::vector<B2DRange>& rRanges,
                                        const std::vector<B2VectorOrientation>& rOrientations)

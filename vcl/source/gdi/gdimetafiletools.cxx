@@ -40,7 +40,7 @@ namespace
         if(rSource.count() && rClip.count())
         {
             const basegfx::B2DPolyPolygon aResult(
-                basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                basegfx::utils::clipPolyPolygonOnPolyPolygon(
                     rSource,
                     rClip,
                     true, // inside
@@ -87,7 +87,7 @@ namespace
         if(rSource.count() && rClip.count())
         {
             const basegfx::B2DPolyPolygon aResult(
-                basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                basegfx::utils::clipPolyPolygonOnPolyPolygon(
                     rSource,
                     rClip,
                     true, // inside
@@ -131,7 +131,7 @@ namespace
             rPoint.X(), rPoint.Y(),
             rPoint.X() + rSize.Width(), rPoint.Y() + rSize.Height());
         const basegfx::B2DPolyPolygon aClipOfBitmap(
-            basegfx::tools::clipPolyPolygonOnRange(
+            basegfx::utils::clipPolyPolygonOnRange(
                 rClip,
                 aLogicBitmapRange,
                 true,
@@ -145,7 +145,7 @@ namespace
 
         // inside or overlapping. Use area to find out if it is completely
         // covering (inside) or overlapping
-        const double fClipArea(basegfx::tools::getArea(aClipOfBitmap));
+        const double fClipArea(basegfx::utils::getArea(aClipOfBitmap));
         const double fBitmapArea(
             aLogicBitmapRange.getWidth() * aLogicBitmapRange.getWidth() +
             aLogicBitmapRange.getHeight() * aLogicBitmapRange.getHeight());
@@ -196,7 +196,7 @@ namespace
         basegfx::B2DPolyPolygon aInvertPixelPoly;
 
         aInvertPixelPoly.append(
-            basegfx::tools::createPolygonFromRect(
+            basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRange(
                     0.0, 0.0,
                     aSizePixel.Width(), aSizePixel.Height())));
@@ -321,7 +321,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         rRect.Left(), rRect.Top(),
                         rRect.Right(), rRect.Bottom());
 
-                    aClips.back() = basegfx::tools::clipPolyPolygonOnRange(
+                    aClips.back() = basegfx::utils::clipPolyPolygonOnRange(
                         aClips.back(),
                         aClipRange,
                         true, // inside
@@ -339,7 +339,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 {
                     const basegfx::B2DPolyPolygon aNewClip(rRegion.GetAsB2DPolyPolygon());
 
-                    aClips.back() = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                    aClips.back() = basegfx::utils::clipPolyPolygonOnPolyPolygon(
                         aClips.back(),
                         aNewClip,
                         true,  // inside
@@ -357,7 +357,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 if((aHorMove || aVerMove) && aClips.size() && aClips.back().count())
                 {
                     aClips.back().transform(
-                        basegfx::tools::createTranslateB2DHomMatrix(
+                        basegfx::utils::createTranslateB2DHomMatrix(
                             aHorMove,
                             aVerMove));
                 }
@@ -453,7 +453,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     const MetaPixelAction* pA = static_cast< const MetaPixelAction* >(pAction);
                     const Point& rPoint = pA->GetPoint();
 
-                    if(!basegfx::tools::isInside(
+                    if(!basegfx::utils::isInside(
                         aClips.back(),
                         basegfx::B2DPoint(rPoint.X(), rPoint.Y())))
                     {
@@ -468,7 +468,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                     const MetaPointAction* pA = static_cast< const MetaPointAction* >(pAction);
                     const Point& rPoint = pA->GetPoint();
 
-                    if(!basegfx::tools::isInside(
+                    if(!basegfx::utils::isInside(
                         aClips.back(),
                         basegfx::B2DPoint(rPoint.X(), rPoint.Y())))
                     {
@@ -513,7 +513,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         bDone = handleGeometricContent(
                             aClips.back(),
                             basegfx::B2DPolyPolygon(
-                                basegfx::tools::createPolygonFromRect(
+                                basegfx::utils::createPolygonFromRect(
                                     basegfx::B2DRange(
                                         rRect.Left(), rRect.Top(),
                                         rRect.Right(), rRect.Bottom()))),
@@ -546,11 +546,11 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                             fRadiusX = std::max(0.0, std::min(1.0, fRadiusX));
                             fRadiusY = std::max(0.0, std::min(1.0, fRadiusY));
 
-                            aOutline = basegfx::tools::createPolygonFromRect(aRange, fRadiusX, fRadiusY);
+                            aOutline = basegfx::utils::createPolygonFromRect(aRange, fRadiusX, fRadiusY);
                         }
                         else
                         {
-                            aOutline = basegfx::tools::createPolygonFromRect(aRange);
+                            aOutline = basegfx::utils::createPolygonFromRect(aRange);
                         }
 
                         bDone = handleGeometricContent(
@@ -578,7 +578,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         bDone = handleGeometricContent(
                             aClips.back(),
                             basegfx::B2DPolyPolygon(
-                                basegfx::tools::createPolygonFromEllipse(
+                                basegfx::utils::createPolygonFromEllipse(
                                     aRange.getCenter(),
                                     aRange.getWidth() * 0.5,
                                     aRange.getHeight() * 0.5)),
@@ -885,7 +885,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         {
                             const basegfx::B2DPolyPolygon aSource(aPath.getB2DPolyPolygon());
                             const basegfx::B2DPolyPolygon aResult(
-                                basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                                basegfx::utils::clipPolyPolygonOnPolyPolygon(
                                     aSource,
                                     aClips.back(),
                                     true, // inside
@@ -926,7 +926,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         {
                             const basegfx::B2DPolygon aSource(aPath.getB2DPolygon());
                             const basegfx::B2DPolyPolygon aResult(
-                                basegfx::tools::clipPolygonOnPolyPolygon(
+                                basegfx::utils::clipPolygonOnPolyPolygon(
                                     aSource,
                                     aClips.back(),
                                     true, // inside
@@ -975,7 +975,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                         bDone = handleGradientContent(
                             aClips.back(),
                             basegfx::B2DPolyPolygon(
-                                basegfx::tools::createPolygonFromRect(
+                                basegfx::utils::createPolygonFromRect(
                                     basegfx::B2DRange(
                                         rRect.Left(), rRect.Top(),
                                         rRect.Right(), rRect.Bottom()))),

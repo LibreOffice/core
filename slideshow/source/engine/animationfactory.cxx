@@ -223,7 +223,7 @@ namespace slideshow
 
                     ::basegfx::B2DPolyPolygon aPolyPoly;
 
-                    ENSURE_OR_THROW( ::basegfx::tools::importFromSvgD( aPolyPoly, rSVGDPath, false, nullptr ),
+                    ENSURE_OR_THROW( ::basegfx::utils::importFromSvgD( aPolyPoly, rSVGDPath, false, nullptr ),
                                       "PathAnimation::PathAnimation(): failed to parse SVG:d path" );
                     ENSURE_OR_THROW( aPolyPoly.count() == 1,
                                       "PathAnimation::PathAnimation(): motion path consists of multiple/zero polygon(s)" );
@@ -231,7 +231,7 @@ namespace slideshow
                     // TODO(F2): Since getPositionRelative() currently
                     // cannot handle beziers, have to subdivide.
                     // AW: Should be no longer necessary; getPositionRelative is now bezier-safe
-                    maPathPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly.getB2DPolygon(0) );
+                    maPathPoly = ::basegfx::utils::adaptiveSubdivideByAngle(aPolyPoly.getB2DPolygon(0) );
                 }
 
                 virtual ~PathAnimation() override
@@ -302,7 +302,7 @@ namespace slideshow
                     ENSURE_OR_RETURN_FALSE( mpAttrLayer && mpShape,
                                        "PathAnimation::operator(): Invalid ShapeAttributeLayer" );
 
-                    ::basegfx::B2DPoint rOutPos = ::basegfx::tools::getPositionRelative( maPathPoly,
+                    ::basegfx::B2DPoint rOutPos = ::basegfx::utils::getPositionRelative( maPathPoly,
                                                                                          nValue );
 
                     // TODO(F1): Determine whether the path is

@@ -78,7 +78,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     Point aTextPos(nLeft + aHintMargin.Width() , nTextOffsetY);
     rRange = basegfx::B2DRange(nLeft, nTop, nLeft + aHintMargin.Width(), nTop + aHintMargin.Height());
 
-    basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+    basegfx::B2DHomMatrix aTextMatrix(basegfx::utils::createScaleTranslateB2DHomMatrix(
                                             aFontSize.getX(), aFontSize.getY(),
                                             aTextPos.X(), aTextPos.Y()));
 
@@ -112,7 +112,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     {
         OUString aLine = m_aMessage.getToken( 0, '\r', nIndex );
 
-        aTextMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(
+        aTextMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
                                 aFontSize.getX(), aFontSize.getY(),
                                 aLineStart.X(), aLineStart.Y() + nTextOffsetY);
 
@@ -134,7 +134,7 @@ drawinglayer::primitive2d::Primitive2DContainer ScOverlayHint::createOverlaySequ
     rRange.expand(basegfx::B2DTuple(rRange.getMaxX() + aHintMargin.Width(),
                                     rRange.getMaxY() + aHintMargin.Height()));
 
-    basegfx::B2DPolygon aPoly(basegfx::tools::createPolygonFromRect(rRange));
+    basegfx::B2DPolygon aPoly(basegfx::utils::createPolygonFromRect(rRange));
 
     const drawinglayer::primitive2d::Primitive2DReference aBg(
         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aPoly), getBaseColor().getBColor()));

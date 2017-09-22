@@ -184,7 +184,7 @@ namespace drawinglayer
 
                             // create ObjectTransform
                             const basegfx::B2DHomMatrix aObjectTransform(
-                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                basegfx::utils::createScaleTranslateB2DHomMatrix(
                                     getLocalObjectRange().getRange(),
                                     getLocalObjectRange().getMinimum()));
 
@@ -203,7 +203,7 @@ namespace drawinglayer
                         {
                             // embed to clipping; this is necessary for tiled fills
                             const basegfx::B2DPolyPolygon aPolyPolygon(
-                                basegfx::tools::createPolygonFromRect(getLocalObjectRange()));
+                                basegfx::utils::createPolygonFromRect(getLocalObjectRange()));
                             const drawinglayer::primitive2d::Primitive2DReference xClippedFill(
                                 new drawinglayer::primitive2d::MaskPrimitive2D(
                                     aPolyPolygon,

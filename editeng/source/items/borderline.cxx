@@ -33,7 +33,7 @@ namespace {
     Color lcl_compute3DColor( Color aMain, int nLight, int nMedium, int nDark )
     {
         basegfx::BColor color = aMain.getBColor( );
-        basegfx::BColor hsl = basegfx::tools::rgb2hsl( color );
+        basegfx::BColor hsl = basegfx::utils::rgb2hsl( color );
 
         int nCoef = 0;
         if ( hsl.getZ( ) >= 0.5 )
@@ -45,7 +45,7 @@ namespace {
 
         double L = hsl.getZ() * 255.0 + nCoef;
         hsl.setZ( L / 255.0 );
-        color = basegfx::tools::hsl2rgb( hsl );
+        color = basegfx::utils::hsl2rgb( hsl );
 
         return Color( color );
     }
@@ -63,9 +63,9 @@ Color SvxBorderLine::lightColor( Color aMain )
 
     // Divide Luminance by 2
     basegfx::BColor color = aMain.getBColor( );
-    basegfx::BColor hsl = basegfx::tools::rgb2hsl( color );
+    basegfx::BColor hsl = basegfx::utils::rgb2hsl( color );
     hsl.setZ( hsl.getZ() * 0.5 );
-    color = basegfx::tools::hsl2rgb( hsl );
+    color = basegfx::utils::hsl2rgb( hsl );
 
     return Color( color );
 }

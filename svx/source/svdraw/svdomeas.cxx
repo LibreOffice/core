@@ -1392,7 +1392,7 @@ bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     }
 
     // build return value matrix
-    rMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
+    rMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
     return true;
 }

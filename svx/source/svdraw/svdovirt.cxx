@@ -172,7 +172,7 @@ basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly() const
 
     if(aAnchor.X() || aAnchor.Y())
     {
-        aPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(aAnchor.X(), aAnchor.Y()));
+        aPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(aAnchor.X(), aAnchor.Y()));
     }
 
     return aPolyPolygon;

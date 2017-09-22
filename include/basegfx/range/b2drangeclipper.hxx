@@ -26,7 +26,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         /** Extract poly-polygon w/o self-intersections from poly-range
 

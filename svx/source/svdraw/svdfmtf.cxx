@@ -487,7 +487,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
                 }
 
                 // when the clip is a rectangle fast check for inside is possible
-                if(basegfx::tools::isRectangle(maClip) && aClipRange.isInside(aTextRange))
+                if(basegfx::utils::isRectangle(maClip) && aClipRange.isInside(aTextRange))
                 {
                     // completely inside ClipRect
                     break;
@@ -546,7 +546,7 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
             {
                 // clip against ClipRegion
                 const basegfx::B2DPolyPolygon aNewPoly(
-                    basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                    basegfx::utils::clipPolyPolygonOnPolyPolygon(
                         aPoly,
                         maClip,
                         true,
@@ -668,7 +668,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction const & rAct)
     if(!aStart.equal(aEnd))
     {
         basegfx::B2DPolygon aLine;
-        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
 
         aLine.append(aStart);
         aLine.append(aEnd);
@@ -867,7 +867,7 @@ void ImpSdrGDIMetaFileImport::checkClip()
         if(isClip())
         {
             const basegfx::B2DHomMatrix aTransform(
-                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                basegfx::utils::createScaleTranslateB2DHomMatrix(
                     mfScaleX,
                     mfScaleY,
                     maOfs.X(),
@@ -890,7 +890,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction const & rAct )
 
     if(aSource.count())
     {
-        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
         aSource.transform(aTransform);
     }
 
@@ -934,7 +934,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolygonAction const & rAct )
 
     if(aSource.count())
     {
-        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
         aSource.transform(aTransform);
 
         if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
@@ -955,7 +955,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction const & rAct)
 
     if(aSource.count())
     {
-        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
         aSource.transform(aTransform);
 
         if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
@@ -1110,7 +1110,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction const & rAct )
 
     if(aSource.count())
     {
-        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
         aSource.transform(aTransform);
 
         if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
@@ -1375,7 +1375,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction const & rAct)
 
     if(!aRange.isEmpty())
     {
-        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
         aRange.transform(aTransform);
         const Gradient& rGradient = rAct.GetGradient();
         SdrRectObj* pRect = new SdrRectObj(
@@ -1415,7 +1415,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTransparentAction const & rAct)
 
     if(aSource.count())
     {
-        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
         aSource.transform(aTransform);
         aSource.setClosed(true);
 
@@ -1432,7 +1432,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction const & rAct)
 
     if(aSource.count())
     {
-        const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
         aSource.transform(aTransform);
 
         if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))

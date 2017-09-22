@@ -42,7 +42,7 @@ namespace internal {
 
     if (m_center)
     {
-        aTransform = basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.0);
+        aTransform = basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.0);
         poly.transform( aTransform );
     }
     ::basegfx::B2DPolyPolygon res(poly);
@@ -51,14 +51,14 @@ namespace internal {
     {
         if (m_oppositeVertical)
         {
-            aTransform = basegfx::tools::createScaleB2DHomMatrix(1.0, -1.0);
+            aTransform = basegfx::utils::createScaleB2DHomMatrix(1.0, -1.0);
             aTransform.translate( 0.0, 1.0 );
             poly.transform( aTransform );
             poly.flip();
         }
         else
         {
-            aTransform = basegfx::tools::createTranslateB2DHomMatrix(-0.5, -0.5);
+            aTransform = basegfx::utils::createTranslateB2DHomMatrix(-0.5, -0.5);
             aTransform.rotate( M_PI );
             aTransform.translate( 0.5, 0.5 );
             poly.transform( aTransform );

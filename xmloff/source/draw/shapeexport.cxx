@@ -2189,13 +2189,13 @@ void XMLShapeExport::ImpExportPolygonShape(
             // get PolygonBezier
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*o3tl::doAccess<drawing::PolyPolygonBezierCoords>(aAny)));
+                basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*o3tl::doAccess<drawing::PolyPolygonBezierCoords>(aAny)));
 
             if(aPolyPolygon.count())
             {
                 // complex polygon shape, write as svg:d
                 const OUString aPolygonString(
-                    basegfx::tools::exportToSvgD(
+                    basegfx::utils::exportToSvgD(
                         aPolyPolygon,
                         true,       // bUseRelativeCoordinates
                         false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
@@ -2210,13 +2210,13 @@ void XMLShapeExport::ImpExportPolygonShape(
             // get non-bezier polygon
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(*o3tl::doAccess<drawing::PointSequenceSequence>(aAny)));
+                basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(*o3tl::doAccess<drawing::PointSequenceSequence>(aAny)));
 
             if(!aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
             {
                 // simple polygon shape, can be written as svg:points sequence
                 const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
-                const OUString aPointString(basegfx::tools::exportToSvgPoints(aPolygon));
+                const OUString aPointString(basegfx::utils::exportToSvgPoints(aPolygon));
 
                 // write point array
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
@@ -2228,7 +2228,7 @@ void XMLShapeExport::ImpExportPolygonShape(
             {
                 // complex polygon shape, write as svg:d
                 const OUString aPolygonString(
-                    basegfx::tools::exportToSvgD(
+                    basegfx::utils::exportToSvgD(
                         aPolyPolygon,
                         true,       // bUseRelativeCoordinates
                         false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
@@ -2605,10 +2605,10 @@ void XMLShapeExport::ImpExportConnectorShape(
     if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
     {
         const basegfx::B2DPolyPolygon aPolyPolygon(
-            basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
+            basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
                 *pSourcePolyPolygon));
         const OUString aPolygonString(
-            basegfx::tools::exportToSvgD(
+            basegfx::utils::exportToSvgD(
                 aPolyPolygon,
                 true,           // bUseRelativeCoordinates
                 false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
@@ -3567,13 +3567,13 @@ void XMLShapeExport::ImpExport3DShape(
 
                 // convert to 3D PolyPolygon
                 const basegfx::B3DPolyPolygon aPolyPolygon3D(
-                    basegfx::tools::UnoPolyPolygonShape3DToB3DPolyPolygon(
+                    basegfx::utils::UnoPolyPolygonShape3DToB3DPolyPolygon(
                         aUnoPolyPolygon3D));
 
                 // convert to 2D tools::PolyPolygon using identity 3D transformation (just grep X and Y)
                 const basegfx::B3DHomMatrix aB3DHomMatrixFor2DConversion;
                 const basegfx::B2DPolyPolygon aPolyPolygon(
-                    basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(
+                    basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(
                         aPolyPolygon3D,
                         aB3DHomMatrixFor2DConversion));
 
@@ -3591,7 +3591,7 @@ void XMLShapeExport::ImpExport3DShape(
 
                 // prepare svg:d string
                 const OUString aPolygonString(
-                    basegfx::tools::exportToSvgD(
+                    basegfx::utils::exportToSvgD(
                         aPolyPolygon,
                         true,           // bUseRelativeCoordinates
                         false,          // bDetectQuadraticBeziers TTTT: not used in old, but maybe activated now

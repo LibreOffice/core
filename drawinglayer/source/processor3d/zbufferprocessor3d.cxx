@@ -395,7 +395,7 @@ public:
         mpTransparenceGeoTexSvx(pTransparenceGeoTexSvx),
         maMaterial(rMaterial),
         maPolyPolygon(rPolyPolygon),
-        mfCenterZ(basegfx::tools::getRange(rPolyPolygon).getCenter().getZ()),
+        mfCenterZ(basegfx::utils::getRange(rPolyPolygon).getCenter().getZ()),
         mbModulate(bModulate),
         mbFilter(bFilter),
         mbSimpleTextureActive(bSimpleTextureActive),
@@ -464,7 +464,7 @@ namespace drawinglayer
                         aSnappedHairline.transform(aTransform);
 
                         // snap to integer
-                        aSnappedHairline = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aSnappedHairline);
+                        aSnappedHairline = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aSnappedHairline);
 
                         // add oversampling again
                         aTransform.identity();

@@ -482,7 +482,7 @@ namespace drawinglayer
                         {
                             // translate back to origin, scale to unit coordinates
                             basegfx::B2DHomMatrix aEmbedVectorGraphic(
-                                basegfx::tools::createTranslateB2DHomMatrix(
+                                basegfx::utils::createTranslateB2DHomMatrix(
                                     -rSvgRange.getMinX(),
                                     -rSvgRange.getMinY()));
 
@@ -533,7 +533,7 @@ namespace drawinglayer
                         || aMetaFileRealSize.getHeight() > aMetaFilePrefSize.getHeight())
                     {
                         // clipping needed. Embed to MaskPrimitive2D. Create children and mask polygon
-                        basegfx::B2DPolygon aMaskPolygon(basegfx::tools::createUnitPolygon());
+                        basegfx::B2DPolygon aMaskPolygon(basegfx::utils::createUnitPolygon());
                         aMaskPolygon.transform(rTransform);
 
                         Primitive2DReference mask = new MaskPrimitive2D(

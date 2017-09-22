@@ -186,7 +186,7 @@ static void lcl_ClearArea( const SwFrame &rFrame,
         if ( rFrame.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false ) )
         {
             SwRegionRects const region(rPtArea);
-            basegfx::tools::B2DClipState aClipState;
+            basegfx::utils::B2DClipState aClipState;
             const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, region, aClipState, rOut));
 
             if(!bDone)
@@ -723,7 +723,7 @@ bool paintUsingPrimitivesHelper(
             // the mapping from 1/100th mm content to twips if needed when the target
             // range is defined in twips
             const basegfx::B2DHomMatrix aMappingTransform(
-                basegfx::tools::createSourceRangeTargetRangeTransform(
+                basegfx::utils::createSourceRangeTargetRangeTransform(
                     rSourceRange,
                     rTargetRange));
 
@@ -769,7 +769,7 @@ void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
         rAlignedGrfArea.Left(), rAlignedGrfArea.Top(),
         rAlignedGrfArea.Right(), rAlignedGrfArea.Bottom());
     const basegfx::B2DHomMatrix aTargetTransform(
-        basegfx::tools::createScaleTranslateB2DHomMatrix(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
             aTargetRange.getRange(),
             aTargetRange.getMinimum()));
 

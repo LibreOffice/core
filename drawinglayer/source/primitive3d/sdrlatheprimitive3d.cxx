@@ -22,7 +22,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
@@ -205,10 +205,10 @@ namespace drawinglayer
             // prepare the polygon. No double points, correct orientations and a correct
             // outmost polygon are needed
             // Also important: subdivide here to ensure equal point count for all slices (!)
-            maCorrectedPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(getPolyPolygon());
+            maCorrectedPolyPolygon = basegfx::utils::adaptiveSubdivideByAngle(getPolyPolygon());
             maCorrectedPolyPolygon.removeDoublePoints();
-            maCorrectedPolyPolygon = basegfx::tools::correctOrientations(maCorrectedPolyPolygon);
-            maCorrectedPolyPolygon = basegfx::tools::correctOutmostPolygon(maCorrectedPolyPolygon);
+            maCorrectedPolyPolygon = basegfx::utils::correctOrientations(maCorrectedPolyPolygon);
+            maCorrectedPolyPolygon = basegfx::utils::correctOutmostPolygon(maCorrectedPolyPolygon);
 
             // check edge count of first sub-polygon. If different, reSegment polyPolygon. This ensures
             // that for polyPolygons, the subPolys 1..n only get reSegmented when polygon 0 is different
@@ -218,7 +218,7 @@ namespace drawinglayer
 
             if(nSubEdgeCount != getVerticalSegments())
             {
-                maCorrectedPolyPolygon = basegfx::tools::reSegmentPolyPolygon(maCorrectedPolyPolygon, getVerticalSegments());
+                maCorrectedPolyPolygon = basegfx::utils::reSegmentPolyPolygon(maCorrectedPolyPolygon, getVerticalSegments());
             }
 
             // prepare slices as geometry

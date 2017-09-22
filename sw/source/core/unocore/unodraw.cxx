@@ -2670,7 +2670,7 @@ css::drawing::PolyPolygonBezierCoords SwXShape::ConvertPolyPolygonBezierToLayout
             // apply translation difference to PolyPolygonBezier.
             if ( aTranslateDiff.X != 0 || aTranslateDiff.Y != 0 )
             {
-                const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+                const basegfx::B2DHomMatrix aMatrix(basegfx::utils::createTranslateB2DHomMatrix(
                     aTranslateDiff.X, aTranslateDiff.Y));
 
                 const sal_Int32 nOuterSequenceCount(aConvertedPath.Coordinates.getLength());

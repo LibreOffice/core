@@ -94,7 +94,7 @@ Bitmap XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         // prepare polygon geometry for rectangle
         const basegfx::B2DPolygon aRectangle(
-            basegfx::tools::createPolygonFromRect(
+            basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRange(0.0, 0.0, rSize.Width(), rSize.Height())));
 
         const XGradient& rGradient = GetGradient(nIndex)->GetGradient();

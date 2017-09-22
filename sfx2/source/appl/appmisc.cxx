@@ -145,7 +145,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     const double fAspectRatio(
         aRange.getHeight() == 0.0 ? 1.0 : aRange.getWidth()/aRange.getHeight());
     basegfx::B2DHomMatrix aTransform(
-        basegfx::tools::createTranslateB2DHomMatrix(
+        basegfx::utils::createTranslateB2DHomMatrix(
             -aRange.getMinX(),
             -aRange.getMinY()));
     aTransform.scale(

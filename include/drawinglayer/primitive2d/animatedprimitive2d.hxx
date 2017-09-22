@@ -149,7 +149,7 @@ namespace drawinglayer
         {
         private:
             /// the transformations
-            std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >        maMatrixStack;
+            std::vector< basegfx::utils::B2DHomMatrixBufferedDecompose >        maMatrixStack;
 
         protected:
         public:

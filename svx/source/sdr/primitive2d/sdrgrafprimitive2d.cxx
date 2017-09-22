@@ -37,7 +37,7 @@ namespace drawinglayer
             Primitive2DContainer  aRetval;
 
             // create unit outline polygon
-            basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
+            basegfx::B2DPolygon aUnitOutline(basegfx::utils::createUnitPolygon());
 
             // add fill, but only when graphic is transparent
             if(!getSdrLFSTAttribute().getFill().isDefault() && isTransparent())
@@ -82,7 +82,7 @@ namespace drawinglayer
                     double fScaleX(0.0 != aScale.getX() ? fHalfLineWidth / fabs(aScale.getX()) : 1.0);
                     double fScaleY(0.0 != aScale.getY() ? fHalfLineWidth / fabs(aScale.getY()) : 1.0);
                     const basegfx::B2DRange aExpandedRange(-fScaleX, -fScaleY, 1.0 + fScaleX, 1.0 + fScaleY);
-                    basegfx::B2DPolygon aExpandedUnitOutline(basegfx::tools::createPolygonFromRect(aExpandedRange));
+                    basegfx::B2DPolygon aExpandedUnitOutline(basegfx::utils::createPolygonFromRect(aExpandedRange));
 
                     aExpandedUnitOutline.transform(getTransform());
                 aRetval.push_back(

@@ -62,11 +62,11 @@ namespace sdr
             for(sal_uInt32 a(0); a < nPolygonCount; a++)
             {
                 const basegfx::B2DPolygon aCandidate(aPolyPolygon.getB2DPolygon(a));
-                const double fPolygonLength(basegfx::tools::getLength(aCandidate));
+                const double fPolygonLength(basegfx::utils::getLength(aCandidate));
                 fPolygonMaxLength = std::max(fPolygonMaxLength, fPolygonLength);
             }
 
-            const basegfx::B2DRange aPolyPolygonRange(basegfx::tools::getRange(aPolyPolygon));
+            const basegfx::B2DRange aPolyPolygonRange(basegfx::utils::getRange(aPolyPolygon));
             const basegfx::B2DVector aTextureSize(
                 F_PI * fabs(aPolyPolygonRange.getCenter().getX()), // PI * d
                 fPolygonMaxLength);

@@ -45,7 +45,7 @@ namespace sdr
                 if(mbShowBounds)
                 {
                     // view-independent part, create directly
-                    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRollingRectangle));
+                    const basegfx::B2DPolygon aPolygon(basegfx::utils::createPolygonFromRect(aRollingRectangle));
 
                     aRetval.resize(2);
                     aRetval[0] = new drawinglayer::primitive2d::PolyPolygonMarkerPrimitive2D(

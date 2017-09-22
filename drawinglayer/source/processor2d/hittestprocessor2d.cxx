@@ -92,7 +92,7 @@ namespace drawinglayer
             if(aPolygonRange.isInside(getDiscreteHitPosition()))
             {
                 // check if a polygon edge is hit
-                return basegfx::tools::isInEpsilonRange(
+                return basegfx::utils::isInEpsilonRange(
                     aLocalPolygon,
                     getDiscreteHitPosition(),
                     fDiscreteHitTolerance);
@@ -123,7 +123,7 @@ namespace drawinglayer
             {
                 // if a HitTolerance is given, check for polygon edge hit in epsilon first
                 if(bDiscreteHitToleranceUsed &&
-                    basegfx::tools::isInEpsilonRange(
+                    basegfx::utils::isInEpsilonRange(
                         aLocalPolyPolygon,
                         getDiscreteHitPosition(),
                         fDiscreteHitTolerance))
@@ -132,7 +132,7 @@ namespace drawinglayer
                 }
 
                 // check for hit in filled polyPolygon
-                if(!bRetval && basegfx::tools::isInside(
+                if(!bRetval && basegfx::utils::isInside(
                     aLocalPolyPolygon,
                     getDiscreteHitPosition(),
                     true))
@@ -209,7 +209,7 @@ namespace drawinglayer
                 if(!getHit())
                 {
                     // empty 3D scene; Check for border hit
-                    basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
+                    basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
                     aOutline.transform(rCandidate.getObjectTransformation());
 
                     mbHit = checkHairlineHitWithTolerance(aOutline, getDiscreteHitTolerance());
@@ -416,7 +416,7 @@ namespace drawinglayer
 
                     if(!aRange.isEmpty())
                     {
-                        const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                        const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
                         mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
                     }
 
@@ -459,7 +459,7 @@ namespace drawinglayer
                             else
                             {
                                 // fallback to standard HitTest
-                                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                                const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
                                 mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
                             }
                         }
@@ -486,7 +486,7 @@ namespace drawinglayer
 
                         if(!aRange.isEmpty())
                         {
-                            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                            const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
                             mbHit = checkFillHitWithTolerance(basegfx::B2DPolyPolygon(aOutline), getDiscreteHitTolerance());
                         }
                     }

@@ -19,7 +19,7 @@
 
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 
 
@@ -57,7 +57,7 @@ namespace drawinglayer
 
         basegfx::B3DRange PolyPolygonMaterialPrimitive3D::getB3DRange(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
-            return basegfx::tools::getRange(getB3DPolyPolygon());
+            return basegfx::utils::getRange(getB3DPolyPolygon());
         }
 
         // provide unique ID

@@ -21,7 +21,7 @@
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_LINEPOLYPOLYGON_HXX
 
 #include <canvas/canvastools.hxx>
-#include <basegfx/tools/unopolypolygon.hxx>
+#include <basegfx/utils/unopolypolygon.hxx>
 
 #include "dx_gdiplususer.hxx"
 #include "dx_impltools.hxx"

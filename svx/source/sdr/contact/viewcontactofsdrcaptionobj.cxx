@@ -76,7 +76,7 @@ namespace sdr
             const GeoStat& rGeoStat(rCaptionObj.GetGeoStat());
 
             // fill object matrix
-            basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+            basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                 aObjectRange.getWidth(), aObjectRange.getHeight(),
                 rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0,
                 rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0,
@@ -91,7 +91,7 @@ namespace sdr
             // Hack for calc, transform position of tail according
             // to current zoom so as objects relative position to grid
             // appears stable
-            aTail.transform( basegfx::tools::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
+            aTail.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
             // create primitive. Always create one (even if invisible) to let the decomposition
             // of SdrCaptionPrimitive2D create needed invisible elements for HitTest and BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(
@@ -155,7 +155,7 @@ namespace sdr
                         // emulate that shadow is *not* visible behind the object for
                         // transparent object fill for comments in excel
                         basegfx::B2DPolygon aObjectOutline(
-                            basegfx::tools::createPolygonFromRect(
+                            basegfx::utils::createPolygonFromRect(
                                 basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
                                 fCornerRadiusX,
                                 fCornerRadiusY));
@@ -164,11 +164,11 @@ namespace sdr
                         // create shadow outline
                         basegfx::B2DPolygon aShadowOutline(aObjectOutline);
                         aShadowOutline.transform(
-                            basegfx::tools::createTranslateB2DHomMatrix(nXDist, nYDist));
+                            basegfx::utils::createTranslateB2DHomMatrix(nXDist, nYDist));
 
                         // clip shadow outline against object outline
                         const basegfx::B2DPolyPolygon aClippedShadow(
-                            basegfx::tools::clipPolygonOnPolyPolygon(
+                            basegfx::utils::clipPolygonOnPolyPolygon(
                                 aShadowOutline,
                                 basegfx::B2DPolyPolygon(aObjectOutline),
                                 false, // take the outside

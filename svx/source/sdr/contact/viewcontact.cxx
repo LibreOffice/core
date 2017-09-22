@@ -225,7 +225,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContact::createViewIndepende
     // Since we have no access to any known model data here, the default implementation creates a yellow placeholder
     // hairline polygon with a default size of (1000, 1000, 5000, 3000)
     OSL_FAIL("ViewContact::createViewIndependentPrimitive2DSequence(): Never call the fallback base implementation, this is always an error (!)");
-    const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(1000.0, 1000.0, 5000.0, 3000.0)));
+    const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(basegfx::B2DRange(1000.0, 1000.0, 5000.0, 3000.0)));
     const basegfx::BColor aYellow(1.0, 1.0, 0.0);
     const drawinglayer::primitive2d::Primitive2DReference xReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));

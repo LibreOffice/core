@@ -1058,7 +1058,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeXorPoly() const
     basegfx::B2DPolyPolygon aRetval;
     const tools::Rectangle aR(GetCurrentBoundRect());
     const basegfx::B2DRange aRange(aR.Left(), aR.Top(), aR.Right(), aR.Bottom());
-    aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
+    aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
 
     return aRetval;
 }
@@ -1365,7 +1365,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeCreatePoly(const SdrDragStat& rDrag) cons
 
     basegfx::B2DPolyPolygon aRetval;
     const basegfx::B2DRange aRange(aRect1.Left(), aRect1.Top(), aRect1.Right(), aRect1.Bottom());
-    aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
+    aRetval.append(basegfx::utils::createPolygonFromRect(aRange));
     return aRetval;
 }
 
@@ -2370,7 +2370,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
             if(!aExtractedLineFills.empty())
             {
                 // merge to a single tools::PolyPolygon (OR)
-                aMergedLineFillPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(aExtractedLineFills);
+                aMergedLineFillPolyPolygon = basegfx::utils::mergeToSinglePolyPolygon(aExtractedLineFills);
             }
         }
 
@@ -2546,7 +2546,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
             // bezier geometry got created, even for straight edges since the given
             // object is a result of DoConvertToPolyObj. For conversion to contour
             // this is not really needed and can be reduced again AFAP
-            pPathObj->SetPathPoly(basegfx::tools::simplifyCurveSegments(pPathObj->GetPathPoly()));
+            pPathObj->SetPathPoly(basegfx::utils::simplifyCurveSegments(pPathObj->GetPathPoly()));
         }
 
         pRet = ImpConvertToContourObj(pRet, bForceLineDash);
@@ -2948,7 +2948,7 @@ bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPo
     }
 
     // build matrix
-    rMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
+    rMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
     return false;
 }

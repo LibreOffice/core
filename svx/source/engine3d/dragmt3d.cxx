@@ -230,7 +230,7 @@ void E3dDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
                 const basegfx::B3DHomMatrix aTransform(aWorldToView * rCandidate.maDisplayTransform);
 
                 // transform to relative scene coordinates
-                basegfx::B2DPolyPolygon aPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aCandidate, aTransform));
+                basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(aCandidate, aTransform));
 
                 // transform to 2D view coordinates
                 aPolyPolygon.transform(rVCScene.getObjectTransformation());

@@ -22,7 +22,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <basegfx/tools/keystoplerp.hxx>
+#include <basegfx/utils/keystoplerp.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
 using namespace ::basegfx;
@@ -32,7 +32,7 @@ namespace basegfxtools
 
 class KeyStopLerpTest : public CppUnit::TestFixture
 {
-    tools::KeyStopLerp maKeyStops;
+    utils::KeyStopLerp maKeyStops;
 
     static std::vector<double> getTestVector()
     {

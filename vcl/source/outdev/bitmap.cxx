@@ -1295,7 +1295,7 @@ void OutputDevice::DrawTransformedBitmapEx(
 
             // get from unified/relative VisibleRange to logoc one
             aVisibleRange.transform(
-                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aTargetRange.getRange(),
                     aTargetRange.getMinimum()));
 

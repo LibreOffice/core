@@ -519,7 +519,7 @@ basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
             basegfx::B2DPolyPolygon aCandidate(static_cast<SdrPathObj*>(pPartObj)->GetPathPoly());
             if(aCandidate.areControlPointsUsed())
             {
-                aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
+                aCandidate = basegfx::utils::adaptiveSubdivideByAngle(aCandidate);
             }
             aOutlines2d.append(aCandidate);
         }
@@ -742,7 +742,7 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
 
                                 if(aCandidate.areControlPointsUsed())
                                 {
-                                    aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
+                                    aCandidate = basegfx::utils::adaptiveSubdivideByAngle(aCandidate);
                                 }
 
                                 // create local polygon copy to work on

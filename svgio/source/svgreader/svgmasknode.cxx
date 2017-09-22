@@ -245,7 +245,7 @@ namespace svgio
                             // mask is object-relative, embed in content transformation
                             const drawinglayer::primitive2d::Primitive2DReference xTransform(
                                 new drawinglayer::primitive2d::TransformPrimitive2D(
-                                    basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    basegfx::utils::createScaleTranslateB2DHomMatrix(
                                         aContentRange.getRange(),
                                         aContentRange.getMinimum()),
                                     aMaskTarget));
@@ -291,7 +291,7 @@ namespace svgio
                         {
                             xNewContent = new drawinglayer::primitive2d::MaskPrimitive2D(
                                 basegfx::B2DPolyPolygon(
-                                    basegfx::tools::createPolygonFromRect(
+                                    basegfx::utils::createPolygonFromRect(
                                         aOffscreenBufferRange)),
                                 drawinglayer::primitive2d::Primitive2DContainer { xNewContent });
                         }

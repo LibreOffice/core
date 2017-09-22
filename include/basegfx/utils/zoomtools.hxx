@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_BASEGFX_TOOLS_ZOOMTOOLS_HXX
-#define INCLUDED_BASEGFX_TOOLS_ZOOMTOOLS_HXX
+#ifndef INCLUDED_BASEGFX_UTILS_ZOOMTOOLS_HXX
+#define INCLUDED_BASEGFX_UTILS_ZOOMTOOLS_HXX
 
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>

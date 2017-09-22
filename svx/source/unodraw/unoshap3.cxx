@@ -722,7 +722,7 @@ bool PolyPolygonShape3D_to_B3dPolyPolygon(
         // see callers
         if(bCorrectPolygon)
         {
-            basegfx::tools::checkClosed(aNewPolygon);
+            basegfx::utils::checkClosed(aNewPolygon);
         }
 
         rResultPolygon.append(aNewPolygon);
@@ -797,7 +797,7 @@ bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 
             // set polygon
             const basegfx::B3DHomMatrix aIdentity;
-            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
+            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
             static_cast<E3dLatheObj*>(mpObj.get())->SetPolyPoly2D(aB2DPolyPolygon);
             const sal_uInt32 nPostVerticalSegs(static_cast<E3dLatheObj*>(mpObj.get())->GetVerticalSegments());
 
@@ -851,7 +851,7 @@ bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     case OWN_ATTR_3D_VALUE_POLYPOLYGON3D:
     {
         const basegfx::B2DPolyPolygon& rPolyPoly = static_cast<E3dLatheObj*>(mpObj.get())->GetPolyPoly2D();
-        const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
+        const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
 
         B3dPolyPolygon_to_PolyPolygonShape3D(aB3DPolyPolygon, rValue);
         break;
@@ -903,7 +903,7 @@ bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxI
         {
             // set polygon
             const basegfx::B3DHomMatrix aIdentity;
-            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
+            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
             static_cast<E3dExtrudeObj*>(mpObj.get())->SetExtrudePolygon(aB2DPolyPolygon);
             return true;
         }
@@ -952,7 +952,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
     {
         // pack polygon definition
         const basegfx::B2DPolyPolygon& rPolyPoly = static_cast<E3dExtrudeObj*>(mpObj.get())->GetExtrudePolygon();
-        const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
+        const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
 
         B3dPolyPolygon_to_PolyPolygonShape3D(aB3DPolyPolygon, rValue);
         break;
@@ -1032,7 +1032,7 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxI
         {
             // set polygon
             const basegfx::B3DHomMatrix aIdentity;
-            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
+            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
             static_cast<E3dPolygonObj*>(mpObj.get())->SetPolyTexture2D(aB2DPolyPolygon);
             return true;
         }
@@ -1081,7 +1081,7 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxI
     {
         // pack texture definition
         const basegfx::B2DPolyPolygon& rPolyPoly = static_cast<E3dPolygonObj*>(mpObj.get())->GetPolyTexture2D();
-        const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
+        const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
 
         B3dPolyPolygon_to_PolyPolygonShape3D(aB3DPolyPolygon,rValue);
         break;

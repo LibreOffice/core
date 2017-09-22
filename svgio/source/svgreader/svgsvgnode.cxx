@@ -439,7 +439,7 @@ namespace svgio
                                     // need to embed in MaskPrimitive2D, too
                                     const drawinglayer::primitive2d::Primitive2DReference xMask(
                                         new drawinglayer::primitive2d::MaskPrimitive2D(
-                                            basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aTarget)),
+                                            basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aTarget)),
                                             drawinglayer::primitive2d::Primitive2DContainer { xRef }));
 
                                     rTarget.push_back(xMask);
@@ -457,7 +457,7 @@ namespace svgio
                                 // embed in transform
                                 const drawinglayer::primitive2d::Primitive2DReference xRef(
                                     new drawinglayer::primitive2d::TransformPrimitive2D(
-                                        basegfx::tools::createTranslateB2DHomMatrix(fX, fY),
+                                        basegfx::utils::createTranslateB2DHomMatrix(fX, fY),
                                         aSequence));
 
                                 aSequence = drawinglayer::primitive2d::Primitive2DContainer { xRef, };
@@ -467,7 +467,7 @@ namespace svgio
                             const drawinglayer::primitive2d::Primitive2DReference xMask(
                                 new drawinglayer::primitive2d::MaskPrimitive2D(
                                     basegfx::B2DPolyPolygon(
-                                        basegfx::tools::createPolygonFromRect(
+                                        basegfx::utils::createPolygonFromRect(
                                             basegfx::B2DRange(fX, fY, fX + fW, fY + fH))),
                                     aSequence));
 
@@ -622,7 +622,7 @@ namespace svgio
                             // real life size
                             const drawinglayer::primitive2d::Primitive2DReference xLine(
                                 new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                                    basegfx::tools::createPolygonFromRect(
+                                    basegfx::utils::createPolygonFromRect(
                                         aSvgCanvasRange),
                                     basegfx::BColor(0.0, 0.0, 0.0)));
                             const drawinglayer::primitive2d::Primitive2DReference xHidden(
@@ -641,7 +641,7 @@ namespace svgio
                             const drawinglayer::primitive2d::Primitive2DReference xMask(
                                 new drawinglayer::primitive2d::MaskPrimitive2D(
                                     basegfx::B2DPolyPolygon(
-                                        basegfx::tools::createPolygonFromRect(
+                                        basegfx::utils::createPolygonFromRect(
                                             aSvgCanvasRange)),
                                     aSequence));
 
@@ -660,7 +660,7 @@ namespace svgio
                             // drawinglayer coordinates
                             const double fScaleTo100thmm(25.4 * 100.0 / F_SVG_PIXEL_PER_INCH);
                             const basegfx::B2DHomMatrix aTransform(
-                                basegfx::tools::createScaleB2DHomMatrix(
+                                basegfx::utils::createScaleB2DHomMatrix(
                                     fScaleTo100thmm,
                                     fScaleTo100thmm));
 

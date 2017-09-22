@@ -306,7 +306,7 @@ namespace svgio
                         aNewTarget.resize(1);
                         aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
                             aBitmapEx,
-                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            basegfx::utils::createScaleTranslateB2DHomMatrix(
                                 aViewBox.getRange(),
                                 aViewBox.getMinimum()));
                     }
@@ -343,7 +343,7 @@ namespace svgio
                                 const drawinglayer::primitive2d::Primitive2DReference xMask(
                                     new drawinglayer::primitive2d::MaskPrimitive2D(
                                         basegfx::B2DPolyPolygon(
-                                            basegfx::tools::createPolygonFromRect(aTarget)),
+                                            basegfx::utils::createPolygonFromRect(aTarget)),
                                         aNewTarget));
 
                                 aNewTarget = drawinglayer::primitive2d::Primitive2DContainer { xMask };

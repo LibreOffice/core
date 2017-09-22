@@ -26,8 +26,8 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/tools.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/tools.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
 
@@ -136,7 +136,7 @@ namespace canvas
         // the colors
         return new ParametricPolyPolygon(
             rDevice,
-            ::basegfx::tools::createPolygonFromCircle(
+            ::basegfx::utils::createPolygonFromCircle(
                 ::basegfx::B2DPoint(0,0), 1 ),
             GradientType::Elliptical,
             colors, stops, fAspectRatio );
@@ -151,7 +151,7 @@ namespace canvas
         // the colors
         return new ParametricPolyPolygon(
             rDevice,
-            ::basegfx::tools::createPolygonFromRect(
+            ::basegfx::utils::createPolygonFromRect(
                 ::basegfx::B2DRectangle( -1, -1, 1, 1 ) ),
             GradientType::Rectangular,
             colors, stops, fAspectRatio );

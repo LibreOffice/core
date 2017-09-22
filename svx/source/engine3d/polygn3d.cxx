@@ -98,7 +98,7 @@ void E3dPolygonObj::CreateDefaultTexture()
         const basegfx::B3DPolygon& aPolygon(aPolyPoly3D.getB3DPolygon(a));
 
         // Determine the total size of the object
-        basegfx::B3DRange aVolume(basegfx::tools::getRange(aPolygon));
+        basegfx::B3DRange aVolume(basegfx::utils::getRange(aPolygon));
 
         // Get normal
         basegfx::B3DVector aNormal(aPolygon.getNormal());

@@ -1775,7 +1775,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
             }
 
             // if exist, remove double first/last points, set closed and correct control points
-            basegfx::tools::checkClosed(aRetval);
+            basegfx::utils::checkClosed(aRetval);
 
             if(aRetval.isClosed())
             {
@@ -1795,7 +1795,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
             }
 
             // set closed flag
-            basegfx::tools::checkClosed(aRetval);
+            basegfx::utils::checkClosed(aRetval);
         }
     }
 

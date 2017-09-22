@@ -33,7 +33,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
@@ -437,7 +437,7 @@ void PDFIProcessor::intersectClip(const uno::Reference< rendering::XPolyPolygon2
     basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
     if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
-        aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
+        aNewClip = basegfx::utils::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
     getCurrentContext().Clip = aNewClip;
 }
@@ -450,7 +450,7 @@ void PDFIProcessor::intersectEoClip(const uno::Reference< rendering::XPolyPolygo
     basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
     if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
-        aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
+        aNewClip = basegfx::utils::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
     getCurrentContext().Clip = aNewClip;
 }
@@ -517,7 +517,7 @@ void PDFIProcessor::startPage( const geometry::RealSize2D& rSize )
 {
     // initial clip is to page bounds
     getCurrentContext().Clip = basegfx::B2DPolyPolygon(
-        basegfx::tools::createPolygonFromRect(
+        basegfx::utils::createPolygonFromRect(
             basegfx::B2DRange( 0, 0, rSize.Width, rSize.Height )));
 
     sal_Int32 nNextPageNr = m_pCurPage ? m_pCurPage->PageNumber+1 : 1;

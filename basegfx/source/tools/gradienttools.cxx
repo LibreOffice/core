@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basegfx/tools/gradienttools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -100,7 +100,7 @@ namespace basegfx
         {
             const B2DPoint aCenter(0.5 * fTargetSizeX, 0.5 * fTargetSizeY);
 
-            aTextureTransform *= basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
+            aTextureTransform *= basegfx::utils::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add object translate
@@ -161,7 +161,7 @@ namespace basegfx
         {
             const B2DPoint aCenter(0.5 * fTargetSizeX, 0.5 * fTargetSizeY);
 
-            aTextureTransform *= basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
+            aTextureTransform *= basegfx::utils::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add defined offsets after rotation
@@ -238,7 +238,7 @@ namespace basegfx
         {
             const B2DPoint aCenter(0.5 * fTargetSizeX, 0.5 * fTargetSizeY);
 
-            aTextureTransform *= basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
+            aTextureTransform *= basegfx::utils::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add defined offsets after rotation
@@ -258,7 +258,7 @@ namespace basegfx
         return ODFGradientInfo(aTextureTransform, fAspectRatio, nSteps);
     }
 
-    namespace tools
+    namespace utils
     {
         ODFGradientInfo createLinearODFGradientInfo(
             const B2DRange& rTargetArea,
@@ -465,7 +465,7 @@ namespace basegfx
         {
             return getSquareGradientAlpha(rUV, rGradInfo); // only matrix setup differs
         }
-    } // namespace tools
+    } // namespace utils
 } // namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

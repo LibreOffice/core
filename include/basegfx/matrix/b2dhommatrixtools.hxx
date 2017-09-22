@@ -29,7 +29,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         /** If the rotation angle is an approximate multiple of pi/2,
             force fSin/fCos to -1/0/1, to maintain orthogonality (which
@@ -140,13 +140,13 @@ namespace basegfx
         /// get column vector from B2dHomMatrix, e.g. to extract coordinate system origin and x/yaxis
         BASEGFX_DLLPUBLIC B2DTuple getColumn(const B2DHomMatrix& rMatrix, sal_uInt16 nCol);
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         class BASEGFX_DLLPUBLIC B2DHomMatrixBufferedDecompose
         {
@@ -178,13 +178,13 @@ namespace basegfx
             double getRotate() const { return mfRotate; }
             double getShearX() const { return mfShearX; }
         };
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         class BASEGFX_DLLPUBLIC B2DHomMatrixBufferedOnDemandDecompose
         {
@@ -223,7 +223,7 @@ namespace basegfx
             const B2DVector& getTranslate() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return maTranslate; }
             double getRotate() const { const_cast< B2DHomMatrixBufferedOnDemandDecompose* >(this)->impCheckDecompose(); return mfRotate; }
         };
-    } // end of namespace tools
+    } // end of namespace utils
 
 } // end of namespace basegfx
 

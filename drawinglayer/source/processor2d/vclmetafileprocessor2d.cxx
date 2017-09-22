@@ -153,14 +153,14 @@ namespace
                     {
                         // clip in left and right
                         const basegfx::B2DPolyPolygon aLeft(
-                            basegfx::tools::clipPolygonOnParallelAxis(
+                            basegfx::utils::clipPolygonOnParallelAxis(
                                 aCandidate,
                                 false,
                                 true,
                                 aCenter.getX(),
                                 false));
                         const basegfx::B2DPolyPolygon aRight(
-                            basegfx::tools::clipPolygonOnParallelAxis(
+                            basegfx::utils::clipPolygonOnParallelAxis(
                                 aCandidate,
                                 false,
                                 false,
@@ -174,14 +174,14 @@ namespace
                     {
                         // clip in top and bottom
                         const basegfx::B2DPolyPolygon aTop(
-                            basegfx::tools::clipPolygonOnParallelAxis(
+                            basegfx::utils::clipPolygonOnParallelAxis(
                                 aCandidate,
                                 true,
                                 true,
                                 aCenter.getY(),
                                 false));
                         const basegfx::B2DPolyPolygon aBottom(
-                            basegfx::tools::clipPolygonOnParallelAxis(
+                            basegfx::utils::clipPolygonOnParallelAxis(
                                 aCandidate,
                                 true,
                                 false,
@@ -414,9 +414,9 @@ namespace drawinglayer
 
                     if(pStart && pStart->isActive())
                     {
-                        fPolyLength = basegfx::tools::getLength(aLocalPolygon);
+                        fPolyLength = basegfx::utils::getLength(aLocalPolygon);
 
-                        aStartArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
+                        aStartArrow = basegfx::utils::createAreaGeometryForLineStartEnd(
                             aLocalPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
                             fPolyLength, pStart->isCentered() ? 0.5 : 0.0, &fStart);
                     }
@@ -425,10 +425,10 @@ namespace drawinglayer
                     {
                         if(basegfx::fTools::equalZero(fPolyLength))
                         {
-                            fPolyLength = basegfx::tools::getLength(aLocalPolygon);
+                            fPolyLength = basegfx::utils::getLength(aLocalPolygon);
                         }
 
-                        aEndArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
+                        aEndArrow = basegfx::utils::createAreaGeometryForLineStartEnd(
                             aLocalPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(),
                             fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, &fEnd);
                     }
@@ -436,7 +436,7 @@ namespace drawinglayer
                     if(0.0 != fStart || 0.0 != fEnd)
                     {
                         // build new poly, consume something from old poly
-                        aLocalPolygon = basegfx::tools::getSnippetAbsolute(aLocalPolygon, fStart, fPolyLength - fEnd, fPolyLength);
+                        aLocalPolygon = basegfx::utils::getSnippetAbsolute(aLocalPolygon, fStart, fPolyLength - fEnd, fPolyLength);
                     }
                 }
 
@@ -1247,7 +1247,7 @@ namespace drawinglayer
                             }
                             else
                             {
-                                basegfx::tools::applyLineDashing(
+                                basegfx::utils::applyLineDashing(
                                     rBasePolygon, rStroke.getDotDashArray(),
                                     &aHairLinePolyPolygon, nullptr, rStroke.getFullDotDashLen());
                             }
@@ -1532,7 +1532,7 @@ namespace drawinglayer
 
                     // #i111954# do NOT use decomposition, but use direct VCL-command
                     // process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    const ::tools::PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
+                    const ::tools::PolyPolygon aToolsPolyPolygon(basegfx::utils::adaptiveSubdivideByAngle(aLocalPolyPolygon));
                     const HatchStyle aHatchStyle(
                         attribute::HatchStyle::Single == rFillHatchAttribute.getStyle() ? HatchStyle::Single :
                         attribute::HatchStyle::Double == rFillHatchAttribute.getStyle() ? HatchStyle::Double :
@@ -1608,7 +1608,7 @@ namespace drawinglayer
                         // me when that task is fixed in the master
                         const ::tools::PolyPolygon aToolsPolyPolygon(
                             getFillPolyPolygon(
-                                basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon)));
+                                basegfx::utils::adaptiveSubdivideByAngle(aLocalPolyPolygon)));
 
 
                         // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
@@ -1739,7 +1739,7 @@ namespace drawinglayer
                             {
                                 // there is already a clip polygon set; build clipped union of
                                 // current mask polygon and new one
-                                maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                                maClipPolyPolygon = basegfx::utils::clipPolyPolygonOnPolyPolygon(
                                     aMask,
                                     maClipPolyPolygon,
                                     true, // #i106516# we want the inside of aMask, not the outside

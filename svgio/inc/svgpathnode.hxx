@@ -38,7 +38,7 @@ namespace svgio
             basegfx::B2DPolyPolygon*            mpPolyPolygon;
             basegfx::B2DHomMatrix*              mpaTransform;
             SvgNumber                           maPathLength;
-            basegfx::tools::PointIndexSet       maHelpPointIndices;
+            basegfx::utils::PointIndexSet       maHelpPointIndices;
 
         public:
             SvgPathNode(

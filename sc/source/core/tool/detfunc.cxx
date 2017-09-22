@@ -161,7 +161,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aSquare.append(basegfx::B2DPoint(0.0, 10.0));
     aSquare.setClosed(true);
 
-    basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(0.0, 0.0), 100.0, 100.0));
+    basegfx::B2DPolygon aCircle(basegfx::utils::createPolygonFromEllipse(basegfx::B2DPoint(0.0, 0.0), 100.0, 100.0));
     aCircle.setClosed(true);
 
     OUString aName = SC_LINEEND_NAME;

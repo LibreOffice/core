@@ -49,7 +49,7 @@
 #include "svx/svditer.hxx"
 #include <uno/mapping.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/tools/unotools.hxx>
+#include <basegfx/utils/unotools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>

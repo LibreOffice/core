@@ -48,7 +48,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <vcl/help.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/saveopt.hxx>

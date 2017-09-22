@@ -54,7 +54,7 @@ namespace drawinglayer
 
             // get discrete rounded up square size of a single tile
             const basegfx::B2DHomMatrix aMaskRangeTransformation(
-                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aMaskRange.getRange(),
                     aMaskRange.getMinimum()));
             const basegfx::B2DHomMatrix aTransform(
@@ -105,7 +105,7 @@ namespace drawinglayer
                 const geometry::ViewInformation2D aViewInformation2D;
                 const primitive2d::Primitive2DReference xEmbedRef(
                     new primitive2d::TransformPrimitive2D(
-                        basegfx::tools::createScaleB2DHomMatrix(mnDiscreteWidth, mnDiscreteHeight),
+                        basegfx::utils::createScaleB2DHomMatrix(mnDiscreteWidth, mnDiscreteHeight),
                         getChildren()));
                 const primitive2d::Primitive2DContainer xEmbedSeq { xEmbedRef };
 
@@ -150,7 +150,7 @@ namespace drawinglayer
                 {
                     const Primitive2DReference xRef(
                         new MaskPrimitive2D(
-                            basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aUnitRange)),
+                            basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aUnitRange)),
                             aContent));
 
                     aContent = Primitive2DContainer { xRef };
@@ -195,7 +195,7 @@ namespace drawinglayer
                         // transform result which is in unit coordinates to mask's object coordinates
                         {
                             const basegfx::B2DHomMatrix aMaskTransform(
-                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                basegfx::utils::createScaleTranslateB2DHomMatrix(
                                     aMaskRange.getRange(),
                                     aMaskRange.getMinimum()));
 

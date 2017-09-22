@@ -194,11 +194,11 @@ namespace svgio
                         frX = std::min(0.5, frX);
                         frY = std::min(0.5, frY);
 
-                        aPath = basegfx::tools::createPolygonFromRect(aRange, frX * 2.0, frY * 2.0);
+                        aPath = basegfx::utils::createPolygonFromRect(aRange, frX * 2.0, frY * 2.0);
                     }
                     else
                     {
-                        aPath = basegfx::tools::createPolygonFromRect(aRange);
+                        aPath = basegfx::utils::createPolygonFromRect(aRange);
                     }
 
                     drawinglayer::primitive2d::Primitive2DContainer aNewTarget;

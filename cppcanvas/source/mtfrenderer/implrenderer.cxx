@@ -36,8 +36,8 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/gradienttools.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -573,7 +573,7 @@ namespace cppcanvas
                     }
 
                     const ::basegfx::B2DRectangle aBounds(
-                        ::basegfx::tools::getRange(aDevicePoly) );
+                        ::basegfx::utils::getRange(aDevicePoly) );
                     const ::basegfx::B2DVector aOffset(
                         rGradient.GetOfsX() / 100.0,
                         rGradient.GetOfsY() / 100.0);
@@ -588,7 +588,7 @@ namespace cppcanvas
                     switch( rGradient.GetStyle() )
                     {
                         case GradientStyle::Linear:
-                            aGradInfo = basegfx::tools::createLinearODFGradientInfo(
+                            aGradInfo = basegfx::utils::createLinearODFGradientInfo(
                                                                         aBounds,
                                                                         nSteps,
                                                                         fBorder,
@@ -614,7 +614,7 @@ namespace cppcanvas
                             // border value, hence the second (left
                             // most 1-...
                             const double fAxialBorder (1-2*(1-fBorder));
-                            aGradInfo = basegfx::tools::createAxialODFGradientInfo(
+                            aGradInfo = basegfx::utils::createAxialODFGradientInfo(
                                                                         aBounds,
                                                                         nSteps,
                                                                         fAxialBorder,
@@ -634,7 +634,7 @@ namespace cppcanvas
                         }
 
                         case GradientStyle::Radial:
-                            aGradInfo = basegfx::tools::createRadialODFGradientInfo(
+                            aGradInfo = basegfx::utils::createRadialODFGradientInfo(
                                                                         aBounds,
                                                                         aOffset,
                                                                         nSteps,
@@ -643,7 +643,7 @@ namespace cppcanvas
                             break;
 
                         case GradientStyle::Elliptical:
-                            aGradInfo = basegfx::tools::createEllipticalODFGradientInfo(
+                            aGradInfo = basegfx::utils::createEllipticalODFGradientInfo(
                                                                             aBounds,
                                                                             aOffset,
                                                                             nSteps,
@@ -653,7 +653,7 @@ namespace cppcanvas
                             break;
 
                         case GradientStyle::Square:
-                            aGradInfo = basegfx::tools::createSquareODFGradientInfo(
+                            aGradInfo = basegfx::utils::createSquareODFGradientInfo(
                                                                         aBounds,
                                                                         aOffset,
                                                                         nSteps,
@@ -663,7 +663,7 @@ namespace cppcanvas
                             break;
 
                         case GradientStyle::Rect:
-                            aGradInfo = basegfx::tools::createRectangularODFGradientInfo(
+                            aGradInfo = basegfx::utils::createRectangularODFGradientInfo(
                                                                              aBounds,
                                                                              aOffset,
                                                                              nSteps,
@@ -1058,7 +1058,7 @@ namespace cppcanvas
                     // convert rect to polygon beforehand, must revert
                     // to general polygon clipping here.
                     rState.clip = ::basegfx::B2DPolyPolygon(
-                        ::basegfx::tools::createPolygonFromRect(
+                        ::basegfx::utils::createPolygonFromRect(
                             // #121100# VCL rectangular clips always
                             // include one more pixel to the right
                             // and the bottom
@@ -1069,7 +1069,7 @@ namespace cppcanvas
                 }
 
                 // AW: Simplified
-                rState.clip = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                rState.clip = basegfx::utils::clipPolyPolygonOnPolyPolygon(
                     rClipPoly, rState.clip, true, false);
             }
 
@@ -1088,7 +1088,7 @@ namespace cppcanvas
                     rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                         rParms.mrCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
-                            ::basegfx::tools::createPolygonFromRect(
+                            ::basegfx::utils::createPolygonFromRect(
                                 // #121100# VCL rectangular clips
                                 // always include one more pixel to
                                 // the right and the bottom
@@ -1141,7 +1141,7 @@ namespace cppcanvas
                 // convert rect to polygon beforehand, must revert
                 // to general polygon clipping here.
                 ::basegfx::B2DPolyPolygon aClipPoly(
-                    ::basegfx::tools::createPolygonFromRect(
+                    ::basegfx::utils::createPolygonFromRect(
                         ::basegfx::B2DRectangle( rClipRect.Left(),
                                                  rClipRect.Top(),
                                                  rClipRect.Right(),
@@ -1150,7 +1150,7 @@ namespace cppcanvas
                 rState.clipRect.SetEmpty();
 
                 // AW: Simplified
-                rState.clip = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                rState.clip = basegfx::utils::clipPolyPolygonOnPolyPolygon(
                     aClipPoly, rState.clip, true, false);
             }
 
@@ -1165,7 +1165,7 @@ namespace cppcanvas
                     rState.xClipPoly = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                         rParms.mrCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
-                            ::basegfx::tools::createPolygonFromRect(
+                            ::basegfx::utils::createPolygonFromRect(
                                 // #121100# VCL rectangular clips
                                 // always include one more pixel to
                                 // the right and the bottom
@@ -1924,7 +1924,7 @@ namespace cppcanvas
                             // additional pixel to the right and bottom.
                             ::basegfx::B2DPoint(1,1) );
 
-                        createFillAndStroke( ::basegfx::tools::createPolygonFromRect(
+                        createFillAndStroke( ::basegfx::utils::createPolygonFromRect(
                                                  ::basegfx::B2DRange( aTopLeftPixel,
                                                                       aBottomRightPixel )),
                                              rFactoryParms );
@@ -1940,7 +1940,7 @@ namespace cppcanvas
                             break;
 
                         ::basegfx::B2DPolygon aPoly(
-                            ::basegfx::tools::createPolygonFromRect(
+                            ::basegfx::utils::createPolygonFromRect(
                                 ::basegfx::B2DRange(
                                     vcl::unotools::b2DPointFromPoint( rRect.TopLeft() ),
                                     vcl::unotools::b2DPointFromPoint( rRect.BottomRight() ) +
@@ -1968,7 +1968,7 @@ namespace cppcanvas
                             ::basegfx::B2DPoint(1,1) );
 
                         ::basegfx::B2DPolygon aPoly(
-                            ::basegfx::tools::createPolygonFromEllipse(
+                            ::basegfx::utils::createPolygonFromEllipse(
                                 aRange.getCenter(),
                                 aRange.getWidth() / 2,       // divide by 2 since createPolygonFromEllipse
                                 aRange.getHeight() / 2 ));   // expects the radius and NOT the diameter!

@@ -215,8 +215,8 @@ namespace slideshow
                 // clipping, and render each shape that intersects with
                 // the calculated update area
                 ::basegfx::B2DPolyPolygon aClip( maUpdateAreas.solveCrossovers() );
-                aClip = ::basegfx::tools::stripNeutralPolygons(aClip);
-                aClip = ::basegfx::tools::stripDispensablePolygons(aClip);
+                aClip = ::basegfx::utils::stripNeutralPolygons(aClip);
+                aClip = ::basegfx::utils::stripDispensablePolygons(aClip);
 
                 // actually, if there happen to be shapes with zero
                 // update area in the maUpdateAreas vector, the

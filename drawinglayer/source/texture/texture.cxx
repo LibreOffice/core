@@ -19,7 +19,7 @@
 
 #include <drawinglayer/texture/texture.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/tools/gradienttools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "converters.hxx"
@@ -113,7 +113,7 @@ namespace drawinglayer
             mfUnitWidth(1.0),
             mfUnitMaxY(1.0)
         {
-            maGradientInfo = basegfx::tools::createLinearODFGradientInfo(
+            maGradientInfo = basegfx::utils::createLinearODFGradientInfo(
                 rDefinitionRange,
                 nSteps,
                 fBorder,
@@ -183,7 +183,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientLinear::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const double fScaler(basegfx::tools::getLinearGradientAlpha(rUV, maGradientInfo));
+            const double fScaler(basegfx::utils::getLinearGradientAlpha(rUV, maGradientInfo));
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
@@ -207,7 +207,7 @@ namespace drawinglayer
             mfUnitMinX(0.0),
             mfUnitWidth(1.0)
         {
-            maGradientInfo = basegfx::tools::createAxialODFGradientInfo(
+            maGradientInfo = basegfx::utils::createAxialODFGradientInfo(
                 rDefinitionRange,
                 nSteps,
                 fBorder,
@@ -267,7 +267,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientAxial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const double fScaler(basegfx::tools::getAxialGradientAlpha(rUV, maGradientInfo));
+            const double fScaler(basegfx::utils::getAxialGradientAlpha(rUV, maGradientInfo));
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
@@ -289,7 +289,7 @@ namespace drawinglayer
             double fOffsetY)
         :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder)
         {
-            maGradientInfo = basegfx::tools::createRadialODFGradientInfo(
+            maGradientInfo = basegfx::utils::createRadialODFGradientInfo(
                 rDefinitionRange,
                 basegfx::B2DVector(fOffsetX,fOffsetY),
                 nSteps,
@@ -314,7 +314,7 @@ namespace drawinglayer
                 for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
                 {
                     const double fSize(1.0 - (fStepSize * a));
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::tools::createScaleB2DHomMatrix(fSize, fSize);
+                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
                     aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
@@ -323,7 +323,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientRadial::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const double fScaler(basegfx::tools::getRadialGradientAlpha(rUV, maGradientInfo));
+            const double fScaler(basegfx::utils::getRadialGradientAlpha(rUV, maGradientInfo));
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
@@ -346,7 +346,7 @@ namespace drawinglayer
             double fAngle)
         :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder)
         {
-            maGradientInfo = basegfx::tools::createEllipticalODFGradientInfo(
+            maGradientInfo = basegfx::utils::createEllipticalODFGradientInfo(
                 rDefinitionRange,
                 basegfx::B2DVector(fOffsetX,fOffsetY),
                 nSteps,
@@ -390,7 +390,7 @@ namespace drawinglayer
                     fWidth -= fIncrementX;
                     fHeight -= fIncrementY;
 
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::tools::createScaleB2DHomMatrix(fWidth, fHeight);
+                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fWidth, fHeight);
                     aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
@@ -399,7 +399,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientElliptical::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const double fScaler(basegfx::tools::getEllipticalGradientAlpha(rUV, maGradientInfo));
+            const double fScaler(basegfx::utils::getEllipticalGradientAlpha(rUV, maGradientInfo));
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
@@ -422,7 +422,7 @@ namespace drawinglayer
             double fAngle)
         :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder)
         {
-            maGradientInfo = basegfx::tools::createSquareODFGradientInfo(
+            maGradientInfo = basegfx::utils::createSquareODFGradientInfo(
                 rDefinitionRange,
                 basegfx::B2DVector(fOffsetX,fOffsetY),
                 nSteps,
@@ -448,7 +448,7 @@ namespace drawinglayer
                 for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
                 {
                     const double fSize(1.0 - (fStepSize * a));
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::tools::createScaleB2DHomMatrix(fSize, fSize);
+                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fSize, fSize);
                     aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
@@ -457,7 +457,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientSquare::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const double fScaler(basegfx::tools::getSquareGradientAlpha(rUV, maGradientInfo));
+            const double fScaler(basegfx::utils::getSquareGradientAlpha(rUV, maGradientInfo));
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
@@ -480,7 +480,7 @@ namespace drawinglayer
             double fAngle)
         :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, fBorder)
         {
-            maGradientInfo = basegfx::tools::createRectangularODFGradientInfo(
+            maGradientInfo = basegfx::utils::createRectangularODFGradientInfo(
                 rDefinitionRange,
                 basegfx::B2DVector(fOffsetX,fOffsetY),
                 nSteps,
@@ -524,7 +524,7 @@ namespace drawinglayer
                     fWidth -= fIncrementX;
                     fHeight -= fIncrementY;
 
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::tools::createScaleB2DHomMatrix(fWidth, fHeight);
+                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::utils::createScaleB2DHomMatrix(fWidth, fHeight);
                     aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
                     rEntries.push_back(aB2DHomMatrixAndBColor);
                 }
@@ -533,7 +533,7 @@ namespace drawinglayer
 
         void GeoTexSvxGradientRect::modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            const double fScaler(basegfx::tools::getRectangularGradientAlpha(rUV, maGradientInfo));
+            const double fScaler(basegfx::utils::getRectangularGradientAlpha(rUV, maGradientInfo));
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
@@ -587,7 +587,7 @@ namespace drawinglayer
                 basegfx::B2DPoint aCenter(0.5, 0.5);
                 aCenter *= maTextureTransform;
 
-                maTextureTransform = basegfx::tools::createRotateAroundPoint(aCenter, fAngle)
+                maTextureTransform = basegfx::utils::createRotateAroundPoint(aCenter, fAngle)
                     * maTextureTransform;
             }
 
@@ -788,7 +788,7 @@ namespace drawinglayer
                                 if(pMatrices)
                                 {
                                     pMatrices->push_back(
-                                        basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                        basegfx::utils::createScaleTranslateB2DHomMatrix(
                                             fWidth,
                                             fHeight,
                                             fPosX,
@@ -811,7 +811,7 @@ namespace drawinglayer
                                 if(pMatrices)
                                 {
                                     pMatrices->push_back(
-                                        basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                        basegfx::utils::createScaleTranslateB2DHomMatrix(
                                             fWidth,
                                             fHeight,
                                             fPosX,

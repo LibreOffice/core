@@ -1676,7 +1676,7 @@ static bool lcl_ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
 
 static tools::Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
-    basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
+    basegfx::B2DRange aRange(basegfx::utils::getRange(rPolyPolygon));
 
     return tools::Rectangle(
         FRound(aRange.getMinX()), FRound(aRange.getMinY()),
@@ -1783,11 +1783,11 @@ void SdrPathObj::ImpForceKind()
             // due to OBJ_PATH type
             if(aCandidate.isClosed())
             {
-                basegfx::tools::openWithGeometryChange(aCandidate);
+                basegfx::utils::openWithGeometryChange(aCandidate);
             }
             else
             {
-                basegfx::tools::closeWithGeometryChange(aCandidate);
+                basegfx::utils::closeWithGeometryChange(aCandidate);
             }
 
             maPathPolygon.setB2DPolygon(a, aCandidate);
@@ -2328,7 +2328,7 @@ Pointer SdrPathObj::GetCreatePointer() const
 
 void SdrPathObj::NbcMove(const Size& rSiz)
 {
-    maPathPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(rSiz.Width(), rSiz.Height()));
+    maPathPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(rSiz.Width(), rSiz.Height()));
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
     SdrTextObj::NbcMove(rSiz);
@@ -2336,8 +2336,8 @@ void SdrPathObj::NbcMove(const Size& rSiz)
 
 void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-rRef.X(), -rRef.Y()));
-    aTrans = basegfx::tools::createScaleTranslateB2DHomMatrix(
+    basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-rRef.X(), -rRef.Y()));
+    aTrans = basegfx::utils::createScaleTranslateB2DHomMatrix(
         double(xFact), double(yFact), rRef.X(), rRef.Y()) * aTrans;
     maPathPolygon.transform(aTrans);
 
@@ -2348,7 +2348,7 @@ void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 void SdrPathObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     // Thank JOE, the angles are defined mirrored to the mathematical meanings
-    const basegfx::B2DHomMatrix aTrans(basegfx::tools::createRotateAroundPoint(rRef.X(), rRef.Y(), -nAngle * nPi180));
+    const basegfx::B2DHomMatrix aTrans(basegfx::utils::createRotateAroundPoint(rRef.X(), rRef.Y(), -nAngle * nPi180));
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
@@ -2357,7 +2357,7 @@ void SdrPathObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 
 void SdrPathObj::NbcShear(const Point& rRefPnt, long nAngle, double fTan, bool bVShear)
 {
-    basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-rRefPnt.X(), -rRefPnt.Y()));
+    basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-rRefPnt.X(), -rRefPnt.Y()));
 
     if(bVShear)
     {
@@ -2381,7 +2381,7 @@ void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
     const double fDiffX(rRefPnt2.X() - rRefPnt1.X());
     const double fDiffY(rRefPnt2.Y() - rRefPnt1.Y());
     const double fRot(atan2(fDiffY, fDiffX));
-    basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-rRefPnt1.X(), -rRefPnt1.Y()));
+    basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-rRefPnt1.X(), -rRefPnt1.Y()));
     aTrans.rotate(-fRot);
     aTrans.scale(1.0, -1.0);
     aTrans.rotate(fRot);
@@ -2536,7 +2536,7 @@ sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj)
         sal_uInt32 nSmallestPolyIndex(0);
         sal_uInt32 nSmallestEdgeIndex(0);
         double fSmallestCut;
-        basegfx::tools::getSmallestDistancePointToPolyPolygon(GetPathPoly(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
+        basegfx::utils::getSmallestDistancePointToPolyPolygon(GetPathPoly(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
 
         nNewHdl = NbcInsPoint(rPos, false);
     }
@@ -2566,7 +2566,7 @@ sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
         sal_uInt32 nSmallestPolyIndex(0);
         sal_uInt32 nSmallestEdgeIndex(0);
         double fSmallestCut;
-        basegfx::tools::getSmallestDistancePointToPolyPolygon(GetPathPoly(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
+        basegfx::utils::getSmallestDistancePointToPolyPolygon(GetPathPoly(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
         basegfx::B2DPolygon aCandidate(GetPathPoly().getB2DPolygon(nSmallestPolyIndex));
         const bool bBefore(!aCandidate.isClosed() && 0 == nSmallestEdgeIndex && 0.0 == fSmallestCut);
         const bool bAfter(!aCandidate.isClosed() && aCandidate.count() == nSmallestEdgeIndex + 2 && 1.0 == fSmallestCut);
@@ -2679,7 +2679,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
                 {
                     // when closed, RipPoint means to open the polygon at the selected point. To
                     // be able to do that, it is necessary to make the selected point the first one
-                    basegfx::B2DPolygon aNewPolygon(basegfx::tools::makeStartPoint(aCandidate, nPnt));
+                    basegfx::B2DPolygon aNewPolygon(basegfx::utils::makeStartPoint(aCandidate, nPnt));
                     SetPathPoly(basegfx::B2DPolyPolygon(aNewPolygon));
                     ToggleClosed();
 
@@ -2727,7 +2727,7 @@ SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
             if(!bBezier)
             {
                 // reduce all bezier curves
-                pPath->SetPathPoly(basegfx::tools::adaptiveSubdivideByAngle(pPath->GetPathPoly()));
+                pPath->SetPathPoly(basegfx::utils::adaptiveSubdivideByAngle(pPath->GetPathPoly()));
             }
         }
         else
@@ -2735,7 +2735,7 @@ SdrObject* SdrPathObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
             if(bBezier)
             {
                 // create bezier curves
-                pPath->SetPathPoly(basegfx::tools::expandToCurve(pPath->GetPathPoly()));
+                pPath->SetPathPoly(basegfx::utils::expandToCurve(pPath->GetPathPoly()));
             }
         }
     }
@@ -2844,7 +2844,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
             // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
             // itself, else this method will no longer return the full polygon information (curve will
             // be lost)
-            const basegfx::B2DRange aPolyRangeNoCurve(basegfx::tools::getRange(rPolyPolygon));
+            const basegfx::B2DRange aPolyRangeNoCurve(basegfx::utils::getRange(rPolyPolygon));
             aScale = aPolyRangeNoCurve.getRange();
             aTranslate = aPolyRangeNoCurve.getMinimum();
 
@@ -2876,7 +2876,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
                 // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
                 // itself, else this method will no longer return the full polygon information (curve will
                 // be lost)
-                const basegfx::B2DRange aCorrectedRangeNoCurve(basegfx::tools::getRange(rPolyPolygon));
+                const basegfx::B2DRange aCorrectedRangeNoCurve(basegfx::utils::getRange(rPolyPolygon));
                 aTranslate = aObjectMatrix * aCorrectedRangeNoCurve.getMinimum();
                 aScale = aCorrectedRangeNoCurve.getRange();
 
@@ -2890,7 +2890,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
                 // #i72287# use polygon without control points for range calculation. Do not change rPolyPolygon
                 // itself, else this method will no longer return the full polygon information (curve will
                 // be lost)
-                const basegfx::B2DRange aPolyRangeNoCurve(basegfx::tools::getRange(rPolyPolygon));
+                const basegfx::B2DRange aPolyRangeNoCurve(basegfx::utils::getRange(rPolyPolygon));
                 aScale = aPolyRangeNoCurve.getRange();
                 aTranslate = aPolyRangeNoCurve.getMinimum();
 
@@ -2944,7 +2944,7 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
     }
 
     // build return value matrix
-    rMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+    rMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         aScale,
         basegfx::fTools::equalZero(fShearX) ? 0.0 : tan(fShearX),
         basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
@@ -3059,7 +3059,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!aTranslate.equalZero())
     {
         // #i39529# absolute positioning, so get current position (without control points (!))
-        const basegfx::B2DRange aCurrentRange(basegfx::tools::getRange(aNewPolyPolygon));
+        const basegfx::B2DRange aCurrentRange(basegfx::utils::getRange(aNewPolyPolygon));
         aTransform.translate(aTranslate.getX() - aCurrentRange.getMinX(), aTranslate.getY() - aCurrentRange.getMinY());
     }
 

@@ -733,7 +733,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
     aObjectTransform.translate(maOutRect.TopLeft().X(), maOutRect.TopLeft().Y());
 
     // create geometry using unit range and object transform
-    basegfx::B2DPolyPolygon aGeometry(basegfx::tools::createUnitPolygon());
+    basegfx::B2DPolyPolygon aGeometry(basegfx::utils::createUnitPolygon());
     aGeometry.transform(aObjectTransform);
 
     // apply line pattern if wanted
@@ -745,7 +745,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
         aPattern.push_back(1.0 * fFactor);
 
         basegfx::B2DPolyPolygon aDashed;
-        basegfx::tools::applyLineDashing(aGeometry, aPattern, &aDashed);
+        basegfx::utils::applyLineDashing(aGeometry, aPattern, &aDashed);
         aGeometry = aDashed;
     }
 

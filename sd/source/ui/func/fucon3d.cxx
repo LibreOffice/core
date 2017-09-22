@@ -112,7 +112,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
             if(aB2DPolygon.areControlPointsUsed())
             {
-                aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
+                aB2DPolygon = ::basegfx::utils::adaptiveSubdivideByAngle(aB2DPolygon);
             }
             p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
 
@@ -139,7 +139,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
             if(aB2DPolygon.areControlPointsUsed())
             {
-                aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
+                aB2DPolygon = ::basegfx::utils::adaptiveSubdivideByAngle(aB2DPolygon);
             }
             p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
             break;
@@ -147,10 +147,10 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 
         case SID_3D_TORUS:
         {
-            ::basegfx::B2DPolygon aB2DPolygon(::basegfx::tools::createPolygonFromCircle(::basegfx::B2DPoint(1000.0, 0.0), 500.0));
+            ::basegfx::B2DPolygon aB2DPolygon(::basegfx::utils::createPolygonFromCircle(::basegfx::B2DPoint(1000.0, 0.0), 500.0));
             if(aB2DPolygon.areControlPointsUsed())
             {
-                aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
+                aB2DPolygon = ::basegfx::utils::adaptiveSubdivideByAngle(aB2DPolygon);
             }
             p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aB2DPolygon));
             break;

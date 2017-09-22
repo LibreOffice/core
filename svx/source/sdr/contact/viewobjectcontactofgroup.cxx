@@ -23,7 +23,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/outdev.hxx>

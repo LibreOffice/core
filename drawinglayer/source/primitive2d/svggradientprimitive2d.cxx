@@ -387,7 +387,7 @@ namespace drawinglayer
 
                 // create ObjectTransform based on polygon range
                 const basegfx::B2DHomMatrix aObjectTransform(
-                    basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fPolyWidth, fPolyHeight,
                         aPolyRange.getMinX(), aPolyRange.getMinY()));
                 basegfx::B2DHomMatrix aUnitGradientToObject;
@@ -449,7 +449,7 @@ namespace drawinglayer
                     // add a pre-multiply to aUnitGradientToObject to allow
                     // multiplication of the polygon(xl, 0.0, xr, 1.0)
                     const basegfx::B2DHomMatrix aPreMultiply(
-                        basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        basegfx::utils::createScaleTranslateB2DHomMatrix(
                             1.0, aUnitRange.getHeight(), 0.0, aUnitRange.getMinY()));
                     aUnitGradientToObject = aUnitGradientToObject * aPreMultiply;
 
@@ -725,7 +725,7 @@ namespace drawinglayer
 
                 // create ObjectTransform based on polygon range
                 const basegfx::B2DHomMatrix aObjectTransform(
-                    basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    basegfx::utils::createScaleTranslateB2DHomMatrix(
                         fPolyWidth, fPolyHeight,
                         aPolyRange.getMinX(), aPolyRange.getMinY()));
                 basegfx::B2DHomMatrix aUnitGradientToObject;
@@ -917,7 +917,7 @@ namespace drawinglayer
 
                 // prepare polygon in needed width at start position (with discrete overlap)
                 const basegfx::B2DPolygon aPolygon(
-                    basegfx::tools::createPolygonFromRect(
+                    basegfx::utils::createPolygonFromRect(
                         basegfx::B2DRange(
                             getOffsetA() - fDiscreteUnit,
                             0.0,
@@ -932,7 +932,7 @@ namespace drawinglayer
                 {
                     basegfx::B2DPolygon aNew(aPolygon);
 
-                    aNew.transform(basegfx::tools::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
+                    aNew.transform(basegfx::utils::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
                     rContainer.push_back(new PolyPolygonColorPrimitive2D(
                         basegfx::B2DPolyPolygon(aNew),
                         basegfx::interpolate(getColorA(), getColorB(), fUnitScale)));
@@ -1013,7 +1013,7 @@ namespace drawinglayer
                                 getTranslateA(),
                                 fUnitScale));
 
-                        aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        aTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
                             fEndScale,
                             fEndScale,
                             aTranslate.getX(),
@@ -1021,12 +1021,12 @@ namespace drawinglayer
                     }
                     else
                     {
-                        aTransform = basegfx::tools::createScaleB2DHomMatrix(
+                        aTransform = basegfx::utils::createScaleB2DHomMatrix(
                             fEndScale,
                             fEndScale);
                     }
 
-                    basegfx::B2DPolygon aNew(basegfx::tools::createPolygonFromUnitCircle());
+                    basegfx::B2DPolygon aNew(basegfx::utils::createPolygonFromUnitCircle());
 
                     aNew.transform(aTransform);
                     rContainer.push_back(new PolyPolygonColorPrimitive2D(

@@ -21,7 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 

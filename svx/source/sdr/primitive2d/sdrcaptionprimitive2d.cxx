@@ -37,7 +37,7 @@ namespace drawinglayer
             Primitive2DContainer aRetval;
 
             // create unit outline polygon
-            const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
+            const basegfx::B2DPolygon aUnitOutline(basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
                 getCornerRadiusX(),
                 getCornerRadiusY()));

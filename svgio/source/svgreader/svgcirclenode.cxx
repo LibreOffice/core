@@ -123,7 +123,7 @@ namespace svgio
                 if(fR > 0.0)
                 {
                     const basegfx::B2DPolygon aPath(
-                        basegfx::tools::createPolygonFromCircle(
+                        basegfx::utils::createPolygonFromCircle(
                             basegfx::B2DPoint(
                                 getCx().isSet() ? getCx().solve(*this, xcoordinate) : 0.0,
                                 getCy().isSet() ? getCy().solve(*this, ycoordinate) : 0.0),

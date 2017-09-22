@@ -329,14 +329,14 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                     {
                         if(aPolyPolygon.areControlPointsUsed())
                         {
-                            aPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(aPolyPolygon);
+                            aPolyPolygon = basegfx::utils::adaptiveSubdivideByAngle(aPolyPolygon);
                         }
                     }
                     else
                     {
                         if(!aPolyPolygon.areControlPointsUsed())
                         {
-                            aPolyPolygon = basegfx::tools::expandToCurve(aPolyPolygon);
+                            aPolyPolygon = basegfx::utils::expandToCurve(aPolyPolygon);
                         }
                     }
 
@@ -429,7 +429,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
     // #i37011#
     if(!bBezier)
     {
-        aB2DPolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(aB2DPolyPolygon);
+        aB2DPolyPolygon = basegfx::utils::adaptiveSubdivideByAngle(aB2DPolyPolygon);
         ePathKind = bClosed ? OBJ_POLY : OBJ_PLIN;
     }
 
@@ -438,7 +438,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
     if(bBezier)
     {
         // create bezier curves
-        pPathObj->SetPathPoly(basegfx::tools::expandToCurve(pPathObj->GetPathPoly()));
+        pPathObj->SetPathPoly(basegfx::utils::expandToCurve(pPathObj->GetPathPoly()));
     }
 
     pPathObj->ImpSetAnchorPos(aAnchor);

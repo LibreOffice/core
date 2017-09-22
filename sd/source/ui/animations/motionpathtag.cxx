@@ -180,7 +180,7 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
         if( pPathObj )
         {
             const Point aRef( DragStat().Ref1() );
-            basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-aRef.X(), -aRef.Y()));
+            basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-aRef.X(), -aRef.Y()));
             aTrans.scale(double(aXFact), double(aYFact));
             aTrans.translate(aRef.X(), aRef.Y());
             basegfx::B2DPolyPolygon aDragPoly(pPathObj->GetPathPoly());
@@ -371,7 +371,7 @@ void MotionPathTag::updatePathAttributes()
     if( mxPolyPoly.count() )
     {
         aCandidate = mxPolyPoly.getB2DPolygon(0);
-        ::basegfx::tools::checkClosed( aCandidate );
+        ::basegfx::utils::checkClosed( aCandidate );
     }
 
     if( !aCandidate.isClosed() )
@@ -876,7 +876,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
             aPos = mxOrigin->getPosition();
         if( (aPos.X != maOriginPos.X) || (aPos.Y != maOriginPos.Y) )
         {
-            const basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+            const basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
                 aPos.X - maOriginPos.X, aPos.Y - maOriginPos.Y));
             mxPolyPoly.transform( aTransform );
             mpPathObj->SetPathPoly( mxPolyPoly );

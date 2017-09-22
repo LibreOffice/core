@@ -471,10 +471,10 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             {
                 if(aPolyPoly.areControlPointsUsed())
                 {
-                    aPolyPoly = basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
+                    aPolyPoly = basegfx::utils::adaptiveSubdivideByAngle(aPolyPoly);
                 }
 
-                const basegfx::B2DRange aTempRange(basegfx::tools::getRange(aPolyPoly));
+                const basegfx::B2DRange aTempRange(basegfx::utils::getRange(aPolyPoly));
                 const tools::Rectangle aBoundRect(basegfx::fround(aTempRange.getMinX()), basegfx::fround(aTempRange.getMinY()), basegfx::fround(aTempRange.getMaxX()), basegfx::fround(aTempRange.getMaxY()));
                 aBoundRect2d.Union( aBoundRect );
 

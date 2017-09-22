@@ -29,7 +29,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
@@ -351,7 +351,7 @@ namespace vclcanvas
             if( aPolyPoly.areControlPointsUsed() )
             {
                 // AW: Not needed for ApplyLineDashing anymore; should be removed
-                aPolyPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
+                aPolyPoly = ::basegfx::utils::adaptiveSubdivideByAngle(aPolyPoly);
             }
 
             // apply dashing, if any
@@ -365,9 +365,9 @@ namespace vclcanvas
                 for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
                 {
                     // AW: new interface; You may also get gaps in the same run now
-                    basegfx::tools::applyLineDashing(aPolyPoly.getB2DPolygon(i), aDashArray, &aDashedPolyPoly);
+                    basegfx::utils::applyLineDashing(aPolyPoly.getB2DPolygon(i), aDashArray, &aDashedPolyPoly);
                     //aDashedPolyPoly.append(
-                    //    ::basegfx::tools::applyLineDashing( aPolyPoly.getB2DPolygon(i),
+                    //    ::basegfx::utils::applyLineDashing( aPolyPoly.getB2DPolygon(i),
                     //                                        aDashArray ) );
                 }
 
@@ -406,7 +406,7 @@ namespace vclcanvas
                     // seem to fit very well here
 
                     // AW: New interface, will create bezier polygons now
-                    aStrokedPolyPoly.append(basegfx::tools::createAreaGeometry(
+                    aStrokedPolyPoly.append(basegfx::utils::createAreaGeometry(
                         aPolyPoly.getB2DPolygon(i),
                         strokeAttributes.StrokeWidth*0.5,
                         b2DJoineFromJoin(strokeAttributes.JoinType),
@@ -416,7 +416,7 @@ namespace vclcanvas
                         fMiterMinimumAngle
                         ));
                     //aStrokedPolyPoly.append(
-                    //    ::basegfx::tools::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),
+                    //    ::basegfx::utils::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),
                     //                                                    strokeAttributes.StrokeWidth*0.5,
                     //                                                    b2DJoineFromJoin(strokeAttributes.JoinType) ) );
                 }

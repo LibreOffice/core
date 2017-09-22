@@ -137,7 +137,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.attribute("maxx", aB2DRange.getMaxX());
                 rWriter.attribute("maxy", aB2DRange.getMaxY());
                 rWriter.startElement("polypolygon");
-                rWriter.content(basegfx::tools::exportToSvgD(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(), true, true, false));
+                rWriter.content(basegfx::utils::exportToSvgD(rPolyPolygonColorPrimitive2D.getB2DPolyPolygon(), true, true, false));
                 rWriter.endElement();
                 rWriter.endElement();
             }
@@ -159,7 +159,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 //getStrokeAttribute()
 
                 rWriter.startElement("polypolygon");
-                rWriter.content(basegfx::tools::exportToSvgD(rPolyPolygonStrokePrimitive2D.getB2DPolyPolygon(), true, true, false));
+                rWriter.content(basegfx::utils::exportToSvgD(rPolyPolygonStrokePrimitive2D.getB2DPolyPolygon(), true, true, false));
                 rWriter.endElement();
 
                 rWriter.endElement();
@@ -174,7 +174,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.attribute("color", convertColorToString(rPolygonHairlinePrimitive2D.getBColor()));
 
                 rWriter.startElement("polygon");
-                rWriter.content(basegfx::tools::exportToSvgPoints(rPolygonHairlinePrimitive2D.getB2DPolygon()));
+                rWriter.content(basegfx::utils::exportToSvgPoints(rPolygonHairlinePrimitive2D.getB2DPolygon()));
                 rWriter.endElement();
 
 

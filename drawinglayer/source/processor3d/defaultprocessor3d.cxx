@@ -270,7 +270,7 @@ namespace drawinglayer
                 basegfx::B2DRange aGraphicRange(rFillGraphicAttribute.getGraphicRange());
 
                 aGraphicRange.transform(
-                    basegfx::tools::createScaleB2DHomMatrix(
+                    basegfx::utils::createScaleB2DHomMatrix(
                         rPrimitive.getTextureSize()));
 
                 if(rFillGraphicAttribute.getTiling())
@@ -330,7 +330,7 @@ namespace drawinglayer
 
                 // transform to device coordinates (-1.0 .. 1.0) and check for visibility
                 aHairline.transform(getViewInformation3D().getObjectToView());
-                const basegfx::B3DRange a3DRange(basegfx::tools::getRange(aHairline));
+                const basegfx::B3DRange a3DRange(basegfx::utils::getRange(aHairline));
                 const basegfx::B2DRange a2DRange(a3DRange.getMinX(), a3DRange.getMinY(), a3DRange.getMaxX(), a3DRange.getMaxY());
 
                 if(a2DRange.overlaps(maRasterRange))
@@ -370,7 +370,7 @@ namespace drawinglayer
 
                 // transform to device coordinates (-1.0 .. 1.0) and check for visibility
                 aFill.transform(getViewInformation3D().getObjectToView());
-                const basegfx::B3DRange a3DRange(basegfx::tools::getRange(aFill));
+                const basegfx::B3DRange a3DRange(basegfx::utils::getRange(aFill));
                 const basegfx::B2DRange a2DRange(a3DRange.getMinX(), a3DRange.getMinY(), a3DRange.getMaxX(), a3DRange.getMaxY());
 
                 bPaintIt = a2DRange.overlaps(maRasterRange);

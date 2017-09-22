@@ -40,7 +40,7 @@
 #include <vcl/textdata.hxx>
 
 using namespace basegfx;
-using namespace basegfx::tools;
+using namespace basegfx::utils;
 using namespace ::com::sun::star;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;

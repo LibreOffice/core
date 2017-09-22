@@ -271,13 +271,13 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
 
         if( bPath )
         {
-            basegfx::tools::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), nullptr);
+            basegfx::utils::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), nullptr);
         }
         else
         {
             basegfx::B2DPolygon aPolygon;
 
-            if(basegfx::tools::importFromSvgPoints(aPolygon, sPoints))
+            if(basegfx::utils::importFromSvgPoints(aPolygon, sPoints))
             {
                 aPolyPolygon = basegfx::B2DPolyPolygon(aPolygon);
             }
@@ -295,13 +295,13 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
             if(!aSourceRange.equal(aTargetRange))
             {
                 aPolyPolygon.transform(
-                    basegfx::tools::createSourceRangeTargetRangeTransform(
+                    basegfx::utils::createSourceRangeTargetRangeTransform(
                         aSourceRange,
                         aTargetRange));
             }
 
             css::drawing::PointSequenceSequence aPointSequenceSequence;
-            basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(aPolyPolygon, aPointSequenceSequence);
+            basegfx::utils::B2DPolyPolygonToUnoPointSequenceSequence(aPolyPolygon, aPointSequenceSequence);
             xPropSet->setPropertyValue( sContourPolyPolygon, Any(aPointSequenceSequence) );
         }
 

@@ -116,11 +116,11 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
                 if (b1stSmooth)
                 {
                     b1stSmooth = false;
-                    eSmooth = basegfx::tools::getContinuityInPoint(aLocalPolygon, nPntNum);
+                    eSmooth = basegfx::utils::getContinuityInPoint(aLocalPolygon, nPntNum);
                 }
                 else
                 {
-                    bSmoothFuz = (eSmooth != basegfx::tools::getContinuityInPoint(aLocalPolygon, nPntNum));
+                    bSmoothFuz = (eSmooth != basegfx::utils::getContinuityInPoint(aLocalPolygon, nPntNum));
                 }
             }
 

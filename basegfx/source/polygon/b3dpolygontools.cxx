@@ -31,7 +31,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         // B3DPolygon tools
         void checkClosed(B3DPolygon& rCandidate)
@@ -786,7 +786,7 @@ namespace basegfx
             }
         }
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

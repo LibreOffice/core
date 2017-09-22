@@ -1459,7 +1459,7 @@ struct ShapeWritingVisitor
                         +OUString::number(y1)+"L"+OUString::number(x2)+","
                         +OUString::number(y2);
                     basegfx::B2DPolyPolygon aPoly;
-                    basegfx::tools::importFromSvgD(aPoly, sLinePath, false, nullptr);
+                    basegfx::utils::importFromSvgD(aPoly, sLinePath, false, nullptr);
 
                     writePathShape(xAttrs,
                                    xUnoAttrs,
@@ -1474,7 +1474,7 @@ struct ShapeWritingVisitor
             {
                 OUString sPoints = xElem->hasAttribute("points") ? xElem->getAttribute("points") : "";
                 basegfx::B2DPolygon aPoly;
-                (void)basegfx::tools::importFromSvgPoints(aPoly, sPoints);
+                (void)basegfx::utils::importFromSvgPoints(aPoly, sPoints);
                 if( nTokenId == XML_POLYGON || maCurrState.meFillType != NONE )
                     aPoly.setClosed(true);
 
@@ -1531,7 +1531,7 @@ struct ShapeWritingVisitor
                         rx = ry;
 
                     basegfx::B2DPolygon aPoly;
-                    aPoly = basegfx::tools::createPolygonFromRect(
+                    aPoly = basegfx::utils::createPolygonFromRect(
                                                                   basegfx::B2DRange(x,y,x+width,y+height),
                                                                   rx/(0.5*width), ry/(0.5*height) );
 
@@ -1546,7 +1546,7 @@ struct ShapeWritingVisitor
             {
                 OUString sPath = xElem->hasAttribute("d") ? xElem->getAttribute("d") : "";
                 basegfx::B2DPolyPolygon aPoly;
-                basegfx::tools::importFromSvgD(aPoly, sPath, false, nullptr);
+                basegfx::utils::importFromSvgD(aPoly, sPath, false, nullptr);
 
                 if ((maCurrState.meStrokeType == NONE) &&
                     (maCurrState.meFillType != NONE) &&
@@ -1831,7 +1831,7 @@ struct ShapeWritingVisitor
 
         xAttrs->Clear();
 
-        basegfx::B2DPolygon aPoly = basegfx::tools::createPolygonFromEllipse(rEllipse.getB2DEllipseCenter(),
+        basegfx::B2DPolygon aPoly = basegfx::utils::createPolygonFromEllipse(rEllipse.getB2DEllipseCenter(),
             rEllipse.getB2DEllipseRadius().getX(), rEllipse.getB2DEllipseRadius().getY());
         writePathShape(xAttrs, xUnoAttrs, rStyleId, basegfx::B2DPolyPolygon(aPoly));
     }
@@ -1860,9 +1860,9 @@ struct ShapeWritingVisitor
         {
             const basegfx::B2DRange aBounds(
                 aPoly.areControlPointsUsed() ?
-                basegfx::tools::getRange(
-                    basegfx::tools::adaptiveSubdivideByAngle(aPoly)) :
-                basegfx::tools::getRange(aPoly));
+                basegfx::utils::getRange(
+                    basegfx::utils::adaptiveSubdivideByAngle(aPoly)) :
+                basegfx::utils::getRange(aPoly));
             fillShapeProperties(xAttrs,
                                 aBounds,
                                 "svggraphicstyle"+rStyleId);
@@ -1876,7 +1876,7 @@ struct ShapeWritingVisitor
             aNormalize.scale(2540.0/72.0,2540.0/72.0);
             aPoly.transform(aNormalize);
 
-            xAttrs->AddAttribute( "svg:d", basegfx::tools::exportToSvgD(
+            xAttrs->AddAttribute( "svg:d", basegfx::utils::exportToSvgD(
                 aPoly,
                 false,   // no relative coords. causes rounding errors
                 false,   // no quad bezier detection. crashes older versions.

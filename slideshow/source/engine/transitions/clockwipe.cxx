@@ -53,7 +53,7 @@ namespace internal {
 
 ::basegfx::B2DPolyPolygon ClockWipe::operator () ( double t )
 {
-    const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
+    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
     ::basegfx::B2DPolygon poly( calcCenteredClock(t) );
     poly.transform( aTransform );
     return ::basegfx::B2DPolyPolygon(poly);

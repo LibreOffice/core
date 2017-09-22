@@ -32,7 +32,7 @@ namespace internal {
 ::basegfx::B2DPolyPolygon FigureWipe::operator () ( double t )
 {
     ::basegfx::B2DPolyPolygon res(m_figure);
-    res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(t, t, 0.5, 0.5));
+    res.transform(basegfx::utils::createScaleTranslateB2DHomMatrix(t, t, 0.5, 0.5));
     return res;
 }
 

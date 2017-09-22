@@ -627,7 +627,7 @@ namespace
     tools::Rectangle lcl_UpdateCalcPoly(basegfx::B2DPolygon &rCalcPoly, int nWhichPoint, const Point &rPos)
     {
         rCalcPoly.setB2DPoint(nWhichPoint, basegfx::B2DPoint(rPos.X(), rPos.Y()));
-        basegfx::B2DRange aRange(basegfx::tools::getRange(rCalcPoly));
+        basegfx::B2DRange aRange(basegfx::utils::getRange(rCalcPoly));
         return tools::Rectangle(static_cast<long>(aRange.getMinX()), static_cast<long>(aRange.getMinY()),
             static_cast<long>(aRange.getMaxX()), static_cast<long>(aRange.getMaxY()));
     }
@@ -856,7 +856,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                 pObj->TRGetBaseGeometry(aOriginalMatrix, aPolyPolygon);
                 aOriginalMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
                 aTranslate += ::basegfx::B2DTuple(aPoint.X(), aPoint.Y());
-                aOriginalMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                aOriginalMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                     aScale,
                     fShearX,
                     fRotate,

@@ -775,7 +775,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                 {
                     const tools::Polygon aPoly(
                         static_cast<const MetaPolygonAction*>(pCurrAct)->GetPolygon());
-                    if( !basegfx::tools::isRectangle(
+                    if( !basegfx::utils::isRectangle(
                             aPoly.getB2DPolygon()) ||
                         !checkRect(
                             aBackgroundComponent.aBounds,
@@ -792,7 +792,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                     const tools::PolyPolygon aPoly(
                         static_cast<const MetaPolyPolygonAction*>(pCurrAct)->GetPolyPolygon());
                     if( aPoly.Count() != 1 ||
-                        !basegfx::tools::isRectangle(
+                        !basegfx::utils::isRectangle(
                             aPoly[0].getB2DPolygon()) ||
                         !checkRect(
                             aBackgroundComponent.aBounds,

@@ -114,7 +114,7 @@ namespace canvas
         // 4) scale to normalized device coordinates
         // 5) flip y-axis
         // 6) translate to account for viewport transform
-        basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+        basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(
             maSourceOffset.getX(), maSourceOffset.getY()));
         aTransform = aTransform * rTransform;
         aTransform.translate(::basegfx::fround(rPos.getX()),
@@ -235,7 +235,7 @@ namespace canvas
         // 1) offset of surface subarea
         // 2) surface transform
         // 3) translation to output position [rPos]
-        basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(aPos1.getX(), aPos1.getY()));
+        basegfx::B2DHomMatrix aTransform(basegfx::utils::createTranslateB2DHomMatrix(aPos1.getX(), aPos1.getY()));
         aTransform = aTransform * rTransform;
         aTransform.translate(::basegfx::fround(rPos.getX()),
                              ::basegfx::fround(rPos.getY()));
@@ -366,7 +366,7 @@ namespace canvas
         // to the destination rectangle.
         const ::basegfx::B2DRectangle& rUV( getUVCoords() );
 
-        basegfx::B2DPolygon rTriangleList(basegfx::tools::clipTriangleListOnRange(rClipPoly,
+        basegfx::B2DPolygon rTriangleList(basegfx::utils::clipTriangleListOnRange(rClipPoly,
                                                                                   aSurfaceClipRect));
 
         // Push vertices to backend renderer

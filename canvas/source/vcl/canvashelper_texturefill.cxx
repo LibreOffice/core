@@ -29,10 +29,10 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/keystoplerp.hxx>
-#include <basegfx/tools/lerp.hxx>
-#include <basegfx/tools/tools.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/keystoplerp.hxx>
+#include <basegfx/utils/lerp.hxx>
+#include <basegfx/utils/tools.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
@@ -143,7 +143,7 @@ namespace vclcanvas
             // now, we potentially have to enlarge our gradient area
             // atop and below the transformed [0,1]x[0,1] unit rect,
             // for the gradient to fill the complete bound rect.
-            ::basegfx::tools::infiniteLineFromParallelogram( aLeftTop,
+            ::basegfx::utils::infiniteLineFromParallelogram( aLeftTop,
                                                              aLeftBottom,
                                                              aRightTop,
                                                              aRightBottom,
@@ -197,7 +197,7 @@ namespace vclcanvas
 
             rOutDev.SetLineColor();
 
-            basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
+            basegfx::utils::KeyStopLerp aLerper(rValues.maStops);
 
             // only iterate nStepCount-1 steps, as the last strip is
             // explicitly painted below
@@ -208,9 +208,9 @@ namespace vclcanvas
                 std::tie(nIndex,fAlpha)=aLerper.lerp(double(i)/nStepCount);
 
                 rOutDev.SetFillColor(
-                    Color( (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                           (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                           (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+                    Color( (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                           (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                           (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
                 // copy right egde of polygon to left edge (and also
                 // copy the closing point)
@@ -285,7 +285,7 @@ namespace vclcanvas
             // subdivide polygon _before_ rendering, would otherwise have
             // to be performed on every loop turn.
             if( aOuterPoly.areControlPointsUsed() )
-                aOuterPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aOuterPoly);
+                aOuterPoly = ::basegfx::utils::adaptiveSubdivideByAngle(aOuterPoly);
 
             aInnerPoly = aOuterPoly;
 
@@ -354,7 +354,7 @@ namespace vclcanvas
 
             rOutDev.SetLineColor();
 
-            basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
+            basegfx::utils::KeyStopLerp aLerper(rValues.maStops);
 
             if( !bFillNonOverlapping )
             {
@@ -375,9 +375,9 @@ namespace vclcanvas
 
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                               (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                               (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+                        Color( (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                               (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                               (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
                     // scale and render polygon, by interpolating between
                     // outer and inner polygon.
@@ -433,9 +433,9 @@ namespace vclcanvas
 
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                               (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                               (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+                        Color( (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                               (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                               (sal_uInt8)(basegfx::utils::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
 #if OSL_DEBUG_LEVEL > 0
                     if( i && !(i % 10) )

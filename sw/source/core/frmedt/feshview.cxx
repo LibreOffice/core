@@ -921,7 +921,7 @@ void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const * pObj, sal_uInt1
         if( !aCircle.count() )
         {
             ::basegfx::B2DPolygon aNewCircle;
-            aNewCircle = ::basegfx::tools::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 250.0, 250.0);
+            aNewCircle = ::basegfx::utils::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 250.0, 250.0);
             aNewCircle.setClosed(true);
             aCircle.append(aNewCircle);
         }

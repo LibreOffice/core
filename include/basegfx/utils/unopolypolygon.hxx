@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_TOOLS_UNOPOLYPOLYGON_HXX
-#define INCLUDED_BASEGFX_TOOLS_UNOPOLYPOLYGON_HXX
+#ifndef INCLUDED_BASEGFX_UTILS_UNOPOLYPOLYGON_HXX
+#define INCLUDED_BASEGFX_UTILS_UNOPOLYPOLYGON_HXX
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -106,6 +106,6 @@ namespace unotools
 }
 }
 
-#endif // INCLUDED_BASEGFX_TOOLS_UNOPOLYPOLYGON_HXX
+#endif // INCLUDED_BASEGFX_UTILS_UNOPOLYPOLYGON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

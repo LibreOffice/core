@@ -335,7 +335,7 @@ namespace drawinglayer
                 // allows to suppress AntiAliasing for pure horizontal or vertical lines. This is done since
                 // not-AntiAliased such lines look more pleasing to the eye (e.g. 2D chart content). This
                 // NEEDS to be done in discrete coordinates, so only useful for pixel based rendering.
-                aLocalPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
+                aLocalPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges(aLocalPolygon);
             }
 
             mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
@@ -355,7 +355,7 @@ namespace drawinglayer
                 {
                     // color gets completely replaced, get it
                     const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
+                    basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
 
                     mpOutputDevice->SetFillColor(Color(aModifiedColor));
@@ -464,7 +464,7 @@ namespace drawinglayer
                                     {
                                         // color gets completely replaced, get it
                                         const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                                        basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
+                                        basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
                                         aPolygon.transform(aLocalTransform);
 
                                         mpOutputDevice->SetFillColor(Color(aModifiedColor));
@@ -655,7 +655,7 @@ namespace drawinglayer
                                         basegfx::B2DRange aTileRange(rFillGraphicAttribute.getGraphicRange());
                                         const basegfx::B2DRange aPolyPolygonRange(rPolyPolygon.getB2DRange());
                                         const basegfx::B2DHomMatrix aNewObjectTransform(
-                                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                            basegfx::utils::createScaleTranslateB2DHomMatrix(
                                                 aPolyPolygonRange.getRange(),
                                                 aPolyPolygonRange.getMinimum()));
 
@@ -663,7 +663,7 @@ namespace drawinglayer
 
                                         // now clip the object polyPolygon against the tile range
                                         // to get the common area
-                                        basegfx::B2DPolyPolygon aTarget = basegfx::tools::clipPolyPolygonOnRange(
+                                        basegfx::B2DPolyPolygon aTarget = basegfx::utils::clipPolyPolygonOnRange(
                                             rPolyPolygon,
                                             aTileRange,
                                             true,
@@ -711,7 +711,7 @@ namespace drawinglayer
                 if(aMask.count())
                 {
                     aMask.transform(maCurrentTransformation);
-                    const basegfx::B2DRange aRange(basegfx::tools::getRange(aMask));
+                    const basegfx::B2DRange aRange(basegfx::utils::getRange(aMask));
                     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
 
                     if(aBufferDevice.isVisible())
@@ -977,7 +977,7 @@ namespace drawinglayer
                 else
                 {
                     // else apply LineStyle
-                    basegfx::tools::applyLineDashing(rPolygonStrokeCandidate.getB2DPolygon(),
+                    basegfx::utils::applyLineDashing(rPolygonStrokeCandidate.getB2DPolygon(),
                         rStrokeAttribute.getDotDashArray(),
                         &aHairlinePolyPolygon, nullptr, rStrokeAttribute.getFullDotDashLen());
                 }
@@ -1222,7 +1222,7 @@ namespace drawinglayer
 
                 // prepare polygon in needed width at start position (with discrete overlap)
                 const basegfx::B2DPolygon aPolygon(
-                    basegfx::tools::createPolygonFromRect(
+                    basegfx::utils::createPolygonFromRect(
                         basegfx::B2DRange(
                             rCandidate.getOffsetA() - fDiscreteUnit,
                             0.0,
@@ -1239,7 +1239,7 @@ namespace drawinglayer
                 {
                     basegfx::B2DPolygon aNew(aPolygon);
 
-                    aNew.transform(maCurrentTransformation * basegfx::tools::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
+                    aNew.transform(maCurrentTransformation * basegfx::utils::createTranslateB2DHomMatrix(fDelta * fUnitScale, 0.0));
                     mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorA, aColorB, fUnitScale)));
                     mpOutputDevice->DrawPolyPolygon(basegfx::B2DPolyPolygon(aNew));
                 }
@@ -1282,7 +1282,7 @@ namespace drawinglayer
                                 rCandidate.getTranslateA(),
                                 fUnitScale));
 
-                        aTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        aTransform = basegfx::utils::createScaleTranslateB2DHomMatrix(
                             fEndScale,
                             fEndScale,
                             aTranslate.getX(),
@@ -1290,12 +1290,12 @@ namespace drawinglayer
                     }
                     else
                     {
-                        aTransform = basegfx::tools::createScaleB2DHomMatrix(
+                        aTransform = basegfx::utils::createScaleB2DHomMatrix(
                             fEndScale,
                             fEndScale);
                     }
 
-                    basegfx::B2DPolygon aNew(basegfx::tools::createPolygonFromUnitCircle());
+                    basegfx::B2DPolygon aNew(basegfx::utils::createPolygonFromUnitCircle());
 
                     aNew.transform(maCurrentTransformation * aTransform);
                     mpOutputDevice->SetFillColor(Color(basegfx::interpolate(aColorB, aColorA, fUnitScale)));

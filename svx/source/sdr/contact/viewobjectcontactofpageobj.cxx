@@ -233,7 +233,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
             svtools::ColorConfigValue aBorderConfig = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES);
             const Color aBorderColor = aBorderConfig.bIsVisible ? aBorderConfig.nColor : aDocColor;
             const basegfx::B2DRange aPageBound(0.0, 0.0, fPageWidth, fPageHeight);
-            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aPageBound));
+            const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aPageBound));
 
             // add replacement fill
             xPageContent[0L] = drawinglayer::primitive2d::Primitive2DReference(
@@ -288,7 +288,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
     if(bCreateGrayFrame)
     {
         const Color aFrameColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES).nColor);
-        basegfx::B2DPolygon aOwnOutline(basegfx::tools::createUnitPolygon());
+        basegfx::B2DPolygon aOwnOutline(basegfx::utils::createUnitPolygon());
         aOwnOutline.transform(aPageObjectTransform);
 
         const drawinglayer::primitive2d::Primitive2DReference xGrayFrame(

@@ -23,7 +23,7 @@
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <rtl/ref.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
@@ -93,7 +93,7 @@ namespace drawinglayer
             bool bAutoUpsideDown(false);
             const attribute::SdrTextAttribute rTextAttribute = getSdrLSTAttribute().getText();
             const basegfx::B2DHomMatrix aObjectMatrix(
-                basegfx::tools::createShearXRotateTranslateB2DHomMatrix(0.0, fAngle, getStart()));
+                basegfx::utils::createShearXRotateTranslateB2DHomMatrix(0.0, fAngle, getStart()));
 
             // preapare text, but do not add yet; it needs to be aligned to
             // the line geometry
@@ -154,7 +154,7 @@ namespace drawinglayer
                 {
                     if(rLineStartEnd.isStartActive())
                     {
-                        const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(rLineStartEnd.getStartPolyPolygon()));
+                        const basegfx::B2DRange aArrowRange(basegfx::utils::getRange(rLineStartEnd.getStartPolyPolygon()));
                         fStartArrowW = rLineStartEnd.getStartWidth();
                         fStartArrowH = aArrowRange.getHeight() * fStartArrowW / aArrowRange.getWidth();
 
@@ -166,7 +166,7 @@ namespace drawinglayer
 
                     if(rLineStartEnd.isEndActive())
                     {
-                        const basegfx::B2DRange aArrowRange(basegfx::tools::getRange(rLineStartEnd.getEndPolyPolygon()));
+                        const basegfx::B2DRange aArrowRange(basegfx::utils::getRange(rLineStartEnd.getEndPolyPolygon()));
                         fEndArrowW = rLineStartEnd.getEndWidth();
                         fEndArrowH = aArrowRange.getHeight() * fEndArrowW / aArrowRange.getWidth();
 

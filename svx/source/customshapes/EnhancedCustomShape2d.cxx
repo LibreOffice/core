@@ -1071,7 +1071,7 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
             return rFillColor;
 
         basegfx::BColor aHSVColor=
-                basegfx::tools::rgb2hsv(
+                basegfx::utils::rgb2hsv(
                     basegfx::BColor(rFillColor.GetRed()/255.0,
                                     rFillColor.GetGreen()/255.0,
                                     rFillColor.GetBlue()/255.0));
@@ -1090,7 +1090,7 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
                 (1.0+nLuminance/100.0)*aHSVColor.getBlue());
         }
 
-        aHSVColor = basegfx::tools::hsv2rgb(aHSVColor);
+        aHSVColor = basegfx::utils::hsv2rgb(aHSVColor);
         return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 ),
                     (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 ),
                     (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 ) );
@@ -1509,7 +1509,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                     if(aNewB2DPolygon.count() > 1)
                     {
                         // #i76201# Add conversion to closed polygon when first and last points are equal
-                        basegfx::tools::checkClosed(aNewB2DPolygon);
+                        basegfx::utils::checkClosed(aNewB2DPolygon);
                         aNewB2DPolyPolygon.append(aNewB2DPolygon);
                     }
 
@@ -1566,7 +1566,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                         if(aNewB2DPolygon.count() > 1)
                         {
                             // #i76201# Add conversion to closed polygon when first and last points are equal
-                            basegfx::tools::checkClosed(aNewB2DPolygon);
+                            basegfx::utils::checkClosed(aNewB2DPolygon);
                             aNewB2DPolyPolygon.append(aNewB2DPolygon);
                         }
                         aNewB2DPolygon.clear();
@@ -1715,7 +1715,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                                     basegfx::B2DPoint(aCenter.X(), aRect.Top()));
 
                                 // close, rescue last controlpoint, remove double last point
-                                basegfx::tools::closeWithGeometryChange(aNewB2DPolygon);
+                                basegfx::utils::closeWithGeometryChange(aNewB2DPolygon);
                             }
                         }
                         rSrcPt += 3;
@@ -1773,7 +1773,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                     if(aNewB2DPolygon.count() > 1)
                     {
                         // #i76201# Add conversion to closed polygon when first and last points are equal
-                        basegfx::tools::checkClosed(aNewB2DPolygon);
+                        basegfx::utils::checkClosed(aNewB2DPolygon);
                         aNewB2DPolyPolygon.append(aNewB2DPolygon);
                     }
 
@@ -1856,7 +1856,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                                     << " clockwise: " << int(bClockwise));
                             basegfx::B2DPolygon aArc = CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise, aStartPoint == aEndPoint && ((bClockwise && fSwingAngle > F_PI) || (!bClockwise && fSwingAngle < -F_PI)));
                             // Now that we have the arc, move it to aStartPointB2D.
-                            basegfx::B2DHomMatrix aMatrix = basegfx::tools::createTranslateB2DHomMatrix(aStartPointB2D.getX(), aStartPointB2D.getY());
+                            basegfx::B2DHomMatrix aMatrix = basegfx::utils::createTranslateB2DHomMatrix(aStartPointB2D.getX(), aStartPointB2D.getY());
                             aArc.transform(aMatrix);
                             aNewB2DPolygon.append(aArc);
                         }
@@ -1954,7 +1954,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
     if(aNewB2DPolygon.count() > 1)
     {
         // #i76201# Add conversion to closed polygon when first and last points are equal
-        basegfx::tools::checkClosed(aNewB2DPolygon);
+        basegfx::utils::checkClosed(aNewB2DPolygon);
         aNewB2DPolyPolygon.append(aNewB2DPolygon);
     }
 

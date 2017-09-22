@@ -1009,7 +1009,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         bool bFirstObjectComplete(false);
 
         // make sure selected objects are contour objects
-        // since now basegfx::tools::adaptiveSubdivide() is used, it is no longer
+        // since now basegfx::utils::adaptiveSubdivide() is used, it is no longer
         // necessary to use ConvertMarkedToPolyObj which will subdivide curves using the old
         // mechanisms. In a next step the polygon clipper will even be able to clip curves...
         // ConvertMarkedToPolyObj(true);
@@ -1045,11 +1045,11 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                         // #i76891# unfortunately ConvertMarkedToPathObj has converted all
                         // involved polygon data to curve segments, even if not necessary.
                         // It is better to try to reduce to more simple polygons.
-                        aTmpPoly = basegfx::tools::simplifyCurveSegments(aTmpPoly);
+                        aTmpPoly = basegfx::utils::simplifyCurveSegments(aTmpPoly);
 
                         // for each part polygon as preparation, remove self-intersections
                         // correct orientations and get rid of possible neutral polygons.
-                        aTmpPoly = basegfx::tools::prepareForPolygonOperation(aTmpPoly);
+                        aTmpPoly = basegfx::utils::prepareForPolygonOperation(aTmpPoly);
 
                         if(!bFirstObjectComplete)
                         {
@@ -1057,7 +1057,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                             // a single polygon is involved
                             if(aMergePolyPolygonA.count())
                             {
-                                aMergePolyPolygonA = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonA, aTmpPoly);
+                                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonA, aTmpPoly);
                             }
                             else
                             {
@@ -1071,7 +1071,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                                 // to topologically correctly collect the 2nd polygon
                                 // group it is necessary to OR the parts (each is seen as
                                 // XOR-FillRule polygon and they are drawn over each-other)
-                                aMergePolyPolygonB = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonB, aTmpPoly);
+                                aMergePolyPolygonB = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonB, aTmpPoly);
                             }
                             else
                             {
@@ -1100,24 +1100,24 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                 static bool bTestXOR(false);
                 if(bTestXOR)
                 {
-                    aMergePolyPolygonA = basegfx::tools::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
+                    aMergePolyPolygonA = basegfx::utils::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
                 }
                 else
                 {
-                    aMergePolyPolygonA = basegfx::tools::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
+                    aMergePolyPolygonA = basegfx::utils::solvePolygonOperationOr(aMergePolyPolygonA, aMergePolyPolygonB);
                 }
                 break;
             }
             case SdrMergeMode::Subtract:
             {
                 // Subtract B from A
-                aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
+                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
                 break;
             }
             case SdrMergeMode::Intersect:
             {
                 // AND B and A
-                aMergePolyPolygonA = basegfx::tools::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
+                aMergePolyPolygonA = basegfx::utils::solvePolygonOperationAnd(aMergePolyPolygonA, aMergePolyPolygonB);
                 break;
             }
         }
@@ -1293,7 +1293,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
             // unfortunately ConvertMarkedToPathObj has converted all
             // involved polygon data to curve segments, even if not necessary.
             // It is better to try to reduce to more simple polygons.
-            basegfx::B2DPolyPolygon aTmpPoly(basegfx::tools::simplifyCurveSegments(ImpGetPolyPolygon(pObj)));
+            basegfx::B2DPolyPolygon aTmpPoly(basegfx::utils::simplifyCurveSegments(ImpGetPolyPolygon(pObj)));
             aPolyPolygon.insert(0L, aTmpPoly);
 
             if(!pInsOL)

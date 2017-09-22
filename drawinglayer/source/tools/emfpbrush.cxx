@@ -21,9 +21,9 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/gradienttools.hxx>
-#include <basegfx/tools/tools.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
+#include <basegfx/utils/tools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -185,7 +185,7 @@ namespace emfplushelper
 
                     s.Seek(pos + pathLength);
 
-                    const ::basegfx::B2DRectangle aBounds(::basegfx::tools::getRange(path->GetPolygon(rR, false)));
+                    const ::basegfx::B2DRectangle aBounds(::basegfx::utils::getRange(path->GetPolygon(rR, false)));
                     areaWidth = aBounds.getWidth();
                     areaHeight = aBounds.getHeight();
                     SAL_INFO("cppcanvas.emf", "EMF+\t polygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " " << aBounds.getWidth() << "x" << aBounds.getHeight());
@@ -202,7 +202,7 @@ namespace emfplushelper
 
                     s.Seek(pos + 8 * boundaryPointCount);
 
-                    const ::basegfx::B2DRectangle aBounds(::basegfx::tools::getRange(path->GetPolygon(rR, false)));
+                    const ::basegfx::B2DRectangle aBounds(::basegfx::utils::getRange(path->GetPolygon(rR, false)));
                     areaWidth = aBounds.getWidth();
                     areaHeight = aBounds.getHeight();
                     SAL_INFO("cppcanvas.emf", "EMF+\t polygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " " << aBounds.getWidth() << "x" << aBounds.getHeight());

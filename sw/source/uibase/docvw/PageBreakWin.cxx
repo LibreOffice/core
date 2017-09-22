@@ -50,7 +50,7 @@
 #define ARROW_WIDTH 9
 
 using namespace basegfx;
-using namespace basegfx::tools;
+using namespace basegfx::utils;
 
 namespace
 {

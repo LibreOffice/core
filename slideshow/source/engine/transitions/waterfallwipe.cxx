@@ -54,7 +54,7 @@ WaterfallWipe::WaterfallWipe( sal_Int32 nElements, bool flipOnYAxis )
 ::basegfx::B2DPolyPolygon WaterfallWipe::operator () ( double t )
 {
     ::basegfx::B2DPolygon poly( m_waterfall );
-    poly.transform(basegfx::tools::createTranslateB2DHomMatrix(0.0, ::basegfx::pruneScaleValue(2.0 * t)));
+    poly.transform(basegfx::utils::createTranslateB2DHomMatrix(0.0, ::basegfx::pruneScaleValue(2.0 * t)));
     poly.setB2DPoint( 0, ::basegfx::B2DPoint( 0.0, -1.0 ) );
     poly.setB2DPoint( poly.count()-1, ::basegfx::B2DPoint( 1.0, -1.0 ) );
 

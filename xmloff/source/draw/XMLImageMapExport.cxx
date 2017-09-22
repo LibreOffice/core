@@ -315,7 +315,7 @@ void XMLImageMapExport::ExportPolygon(const Reference<XPropertySet> & rPropertyS
     aAny >>= aPoly;
 
     const basegfx::B2DPolygon aPolygon(
-        basegfx::tools::UnoPointSequenceToB2DPolygon(
+        basegfx::utils::UnoPointSequenceToB2DPolygon(
             aPoly));
     const basegfx::B2DRange aPolygonRange(aPolygon.getB2DRange());
 
@@ -337,7 +337,7 @@ void XMLImageMapExport::ExportPolygon(const Reference<XPropertySet> & rPropertyS
 
     // export point sequence
     const OUString aPointString(
-        basegfx::tools::exportToSvgPoints(
+        basegfx::utils::exportToSvgPoints(
             aPolygon));
 
     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);

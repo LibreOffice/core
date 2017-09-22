@@ -1296,7 +1296,7 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
                 basegfx::B2DPolygon aPolygon;
 
-                if(basegfx::tools::importFromSvgPoints(aPolygon, maPoints))
+                if(basegfx::utils::importFromSvgPoints(aPolygon, maPoints))
                 {
                     if(aPolygon.count())
                     {
@@ -1310,13 +1310,13 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                         if(!aSourceRange.equal(aTargetRange))
                         {
                             aPolygon.transform(
-                                basegfx::tools::createSourceRangeTargetRangeTransform(
+                                basegfx::utils::createSourceRangeTargetRangeTransform(
                                     aSourceRange,
                                     aTargetRange));
                         }
 
                         css::drawing::PointSequenceSequence aPointSequenceSequence;
-                        basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(basegfx::B2DPolyPolygon(aPolygon), aPointSequenceSequence);
+                        basegfx::utils::B2DPolyPolygonToUnoPointSequenceSequence(basegfx::B2DPolyPolygon(aPolygon), aPointSequenceSequence);
                         xPropSet->setPropertyValue("Geometry", Any(aPointSequenceSequence));
                     }
                 }
@@ -1383,7 +1383,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
         basegfx::B2DPolyPolygon aPolyPolygon;
 
-        if(basegfx::tools::importFromSvgD(aPolyPolygon, maD, GetImport().needFixPositionAfterZ(), nullptr))
+        if(basegfx::utils::importFromSvgD(aPolyPolygon, maD, GetImport().needFixPositionAfterZ(), nullptr))
         {
             if(aPolyPolygon.count())
             {
@@ -1397,7 +1397,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                 if(!aSourceRange.equal(aTargetRange))
                 {
                     aPolyPolygon.transform(
-                        basegfx::tools::createSourceRangeTargetRangeTransform(
+                        basegfx::utils::createSourceRangeTargetRangeTransform(
                             aSourceRange,
                             aTargetRange));
                 }
@@ -1451,7 +1451,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                         {
                             drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
 
-                            basegfx::tools::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
+                            basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
                                 aPolyPolygon,
                                 aSourcePolyPolygon);
                             aAny <<= aSourcePolyPolygon;
@@ -1460,7 +1460,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
                         {
                             drawing::PointSequenceSequence aSourcePolyPolygon;
 
-                            basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(
+                            basegfx::utils::B2DPolyPolygonToUnoPointSequenceSequence(
                                 aPolyPolygon,
                                 aSourcePolyPolygon);
                             aAny <<= aSourcePolyPolygon;
@@ -1864,13 +1864,13 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
         {
             basegfx::B2DPolyPolygon aPolyPolygon;
 
-            if(basegfx::tools::importFromSvgD(aPolyPolygon, rValue, GetImport().needFixPositionAfterZ(), nullptr))
+            if(basegfx::utils::importFromSvgD(aPolyPolygon, rValue, GetImport().needFixPositionAfterZ(), nullptr))
             {
                 if(aPolyPolygon.count())
                 {
                     drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
 
-                    basegfx::tools::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
+                    basegfx::utils::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
                         aPolyPolygon,
                         aSourcePolyPolygon);
                     maPath <<= aSourcePolyPolygon;

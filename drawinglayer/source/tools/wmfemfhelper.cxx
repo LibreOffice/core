@@ -935,7 +935,7 @@ namespace wmfemfhelper
         const basegfx::BColor& rColor,
         PropertyHolder const & rPropertyHolder)
     {
-        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(rRange));
+        basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(rRange));
         aOutline.transform(rPropertyHolder.getTransformation());
 
         return new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
@@ -1279,7 +1279,7 @@ namespace wmfemfhelper
                 aSequence[1] = drawinglayer::primitive2d::Primitive2DReference(pResult);
 
                 // prepare filled polygon
-                basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aTextRange));
+                basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aTextRange));
                 aOutline.transform(aTextTransform);
 
                 aSequence[0] = drawinglayer::primitive2d::Primitive2DReference(
@@ -1626,7 +1626,7 @@ namespace wmfemfhelper
 
                             if(!aRange.isEmpty())
                             {
-                                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                                const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
                                 createHairlineAndFillPrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
                             }
                         }
@@ -1664,11 +1664,11 @@ namespace wmfemfhelper
                                     fRadiusX = std::max(0.0, std::min(1.0, fRadiusX));
                                     fRadiusY = std::max(0.0, std::min(1.0, fRadiusY));
 
-                                    aOutline = basegfx::tools::createPolygonFromRect(aRange, fRadiusX, fRadiusY);
+                                    aOutline = basegfx::utils::createPolygonFromRect(aRange, fRadiusX, fRadiusY);
                                 }
                                 else
                                 {
-                                    aOutline = basegfx::tools::createPolygonFromRect(aRange);
+                                    aOutline = basegfx::utils::createPolygonFromRect(aRange);
                                 }
 
                                 createHairlineAndFillPrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
@@ -1692,7 +1692,7 @@ namespace wmfemfhelper
 
                             if(!aRange.isEmpty())
                             {
-                                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromEllipse(
+                                const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromEllipse(
                                     aRange.getCenter(), aRange.getWidth() * 0.5, aRange.getHeight() * 0.5));
 
                                 createHairlineAndFillPrimitive(aOutline, rTargetHolders.Current(), rPropertyHolders.Current());
@@ -2135,7 +2135,7 @@ namespace wmfemfhelper
                         {
                             const Gradient& rGradient = pA->GetGradient();
                             const drawinglayer::attribute::FillGradientAttribute aAttribute(createFillGradientAttribute(rGradient));
-                            basegfx::B2DPolyPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                            basegfx::B2DPolyPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
 
                             if(aAttribute.getStartColor() == aAttribute.getEndColor())
                             {
@@ -2323,7 +2323,7 @@ namespace wmfemfhelper
 
                                 if(aOriginalPolyPolygon.count())
                                 {
-                                    aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(
+                                    aClippedPolyPolygon = basegfx::utils::clipPolyPolygonOnRange(
                                         aOriginalPolyPolygon,
                                         aClipRange,
                                         true,
@@ -2344,7 +2344,7 @@ namespace wmfemfhelper
                         {
                             // start new clipping with ClipRange
                             const basegfx::B2DPolyPolygon aNewClipPolyPolygon(
-                                basegfx::tools::createPolygonFromRect(aClipRange));
+                                basegfx::utils::createPolygonFromRect(aClipRange));
 
                             HandleNewClipRegion(aNewClipPolyPolygon, rTargetHolders, rPropertyHolders);
                         }
@@ -2388,7 +2388,7 @@ namespace wmfemfhelper
 
                                 if(aOriginalPolyPolygon.count())
                                 {
-                                    aClippedPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                                    aClippedPolyPolygon = basegfx::utils::clipPolyPolygonOnPolyPolygon(
                                         aOriginalPolyPolygon, aNewClipPolyPolygon, true, false);
                                 }
 
@@ -2430,7 +2430,7 @@ namespace wmfemfhelper
                                 basegfx::B2DVector aVector(pA->GetHorzMove(), pA->GetVertMove());
                                 aVector *= rPropertyHolders.Current().getTransformation();
                                 basegfx::B2DHomMatrix aTransform(
-                                    basegfx::tools::createTranslateB2DHomMatrix(aVector));
+                                    basegfx::utils::createTranslateB2DHomMatrix(aVector));
 
                                 // transform existing region
                                 basegfx::B2DPolyPolygon aClipPolyPolygon(

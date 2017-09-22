@@ -58,7 +58,7 @@ namespace drawinglayer
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                 const basegfx::B3DHomMatrix& aTransform,
                 SliceType3D aSliceType = SLICETYPE3D_REGULAR)
-            :   maPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPolygon)),
+            :   maPolyPolygon(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPolygon)),
                 maSliceType(aSliceType)
             {
                 maPolyPolygon.transform(aTransform);

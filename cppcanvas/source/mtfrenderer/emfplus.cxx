@@ -22,9 +22,9 @@
 #include <vcl/metaact.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/gradienttools.hxx>
-#include <basegfx/tools/tools.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
+#include <basegfx/utils/tools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dsize.hxx>
@@ -491,7 +491,7 @@ namespace cppcanvas
                     basegfx::B2DRange aBoundsRectangle (0, 0, 1, 1);
                     if (brush->type == BrushTypeLinearGradient) {
                         aGradientService = "LinearGradient";
-                        aGradInfo = basegfx::tools::createLinearODFGradientInfo(
+                        aGradInfo = basegfx::utils::createLinearODFGradientInfo(
                                 aBoundsRectangle,
                                 aStops.getLength(),
                                 0,
@@ -499,7 +499,7 @@ namespace cppcanvas
 
                     } else {
                         aGradientService = "EllipticalGradient";
-                        aGradInfo = basegfx::tools::createEllipticalODFGradientInfo(
+                        aGradInfo = basegfx::utils::createEllipticalODFGradientInfo(
                                 aBoundsRectangle,
                                 ::basegfx::B2DVector( 0, 0 ),
                                 aStops.getLength(),
@@ -564,7 +564,7 @@ namespace cppcanvas
             // of the polygon.
             const double fShift = bIsFilled ? 0 : rAttributes.StrokeWidth;
             double fConsumed = 0;
-            basegfx::B2DPolyPolygon aArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
+            basegfx::B2DPolyPolygon aArrow(basegfx::utils::createAreaGeometryForLineStartEnd(
                         rPolygon, rLineCap, bStart,
                         fWidth, fPolyLength, 0, &fConsumed, fShift));
 
@@ -650,7 +650,7 @@ namespace cppcanvas
                         {
                             double fStart = 0.0;
                             double fEnd = 0.0;
-                            double fPolyLength = basegfx::tools::getLength(aPolygon);
+                            double fPolyLength = basegfx::utils::getLength(aPolygon);
 
                             // line start
                             if (pen->customStartCap)
@@ -676,7 +676,7 @@ namespace cppcanvas
 
                             // build new poly, consume something from the old poly
                             if (fStart != 0.0 || fEnd != 0.0)
-                                aPolygon = basegfx::tools::getSnippetAbsolute(aPolygon, fStart, fPolyLength - fEnd, fPolyLength);
+                                aPolygon = basegfx::utils::getSnippetAbsolute(aPolygon, fStart, fPolyLength - fEnd, fPolyLength);
                         }
 
                         aFinalPolyPolygon.append(aPolygon);
@@ -968,7 +968,7 @@ namespace cppcanvas
                                      (360.0*startAngle/M_PI) << ", end: " << (360.0*endAngle/M_PI) <<
                                      " startAngle: " << startAngle << " sweepAngle: " << sweepAngle);
 
-                            B2DPolygon polygon = basegfx::tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
+                            B2DPolygon polygon = basegfx::utils::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
                             if ( type != EmfPlusRecordTypeDrawArc )
                             {
                                 polygon.append (mappedCenter);
@@ -1018,7 +1018,7 @@ namespace cppcanvas
                             B2DPoint mappedCenter (Map (dx + dw/2, dy + dh/2));
                             B2DSize mappedSize( MapSize (dw/2, dh/2));
 
-                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::tools::createPolygonFromEllipse( mappedCenter, mappedSize.getX (), mappedSize.getY () ) ) );
+                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::utils::createPolygonFromEllipse( mappedCenter, mappedSize.getX (), mappedSize.getY () ) ) );
 
                             if ( type == EmfPlusRecordTypeFillEllipse )
                                 EMFPPlusFillPolygon( polyPolygon,
@@ -1518,7 +1518,7 @@ namespace cppcanvas
                             B2DPoint mappedPoint (Map (dx, dy));
                             B2DSize mappedSize( MapSize (dw, dh));
 
-                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::tools::createPolygonFromRect( ::basegfx::B2DRectangle( mappedPoint.getX(), mappedPoint.getY(),
+                            ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::utils::createPolygonFromRect( ::basegfx::B2DRectangle( mappedPoint.getX(), mappedPoint.getY(),
                                                                                                                                                             mappedPoint.getX() + mappedSize.getX(),
                                                                                                                                                             mappedPoint.getY() + mappedSize.getY() ) ) ) );
                             polyPolygon.transform(rState.mapModeTransform);

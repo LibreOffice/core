@@ -639,7 +639,7 @@ void ActivityImpl::updateShapeAttributes(
         }
 
         basegfx::B2DPolygon clipPoly(
-            basegfx::tools::createPolygonFromRect(
+            basegfx::utils::createPolygonFromRect(
                 basegfx::B2DRectangle( clipPos.getX(),
                                        clipPos.getY(),
                                        clipPos.getX() + fScrollWidth,

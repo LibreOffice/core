@@ -21,7 +21,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/gdimtf.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include "vclmetafileprocessor2d.hxx"
 #include "vclpixelprocessor2d.hxx"

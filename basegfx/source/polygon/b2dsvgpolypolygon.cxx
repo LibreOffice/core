@@ -29,7 +29,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         bool PointIndex::operator<(const PointIndex& rComp) const
         {
@@ -488,7 +488,7 @@ namespace basegfx
                                 // |y1'| = |-sin phi  cos phi|  |(y1 - y2)/2|
                                 const B2DPoint p1(nLastX, nLastY);
                                 const B2DPoint p2(nX, nY);
-                                B2DHomMatrix aTransform(basegfx::tools::createRotateB2DHomMatrix(-fPhi*M_PI/180));
+                                B2DHomMatrix aTransform(basegfx::utils::createRotateB2DHomMatrix(-fPhi*M_PI/180));
 
                                 const B2DPoint p1_prime( aTransform * B2DPoint(((p1-p2)/2.0)) );
 
@@ -573,11 +573,11 @@ namespace basegfx
 
                                 // finally, create bezier polygon from this
                                 B2DPolygon aSegment(
-                                    tools::createPolygonFromUnitEllipseSegment(
+                                    utils::createPolygonFromUnitEllipseSegment(
                                         fTheta1, fTheta2 ));
 
                                 // transform ellipse by rotation & move to final center
-                                aTransform = basegfx::tools::createScaleB2DHomMatrix(fRX, fRY);
+                                aTransform = basegfx::utils::createScaleB2DHomMatrix(fRX, fRY);
                                 aTransform.translate(aCenter_prime.getX(),
                                                      aCenter_prime.getY());
                                 aTransform.rotate(fPhi*M_PI/180);

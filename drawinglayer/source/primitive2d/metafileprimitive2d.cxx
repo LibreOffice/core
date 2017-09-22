@@ -20,7 +20,7 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <wmfemfhelper.hxx>
 
-//#include <basegfx/tools/canvastools.hxx>
+//#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 //#include <basegfx/color/bcolor.hxx>
 //#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>

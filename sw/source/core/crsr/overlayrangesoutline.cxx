@@ -34,7 +34,7 @@ namespace
 
         for(sal_uInt32 a(0); a < nCount; a++)
         {
-            const basegfx::B2DPolygon aDiscretePolygon(basegfx::tools::createPolygonFromRect(rRanges[a]));
+            const basegfx::B2DPolygon aDiscretePolygon(basegfx::utils::createPolygonFromRect(rRanges[a]));
 
             if(0 == a)
             {
@@ -42,7 +42,7 @@ namespace
             }
             else
             {
-                aRetval = basegfx::tools::solvePolygonOperationOr(aRetval, basegfx::B2DPolyPolygon(aDiscretePolygon));
+                aRetval = basegfx::utils::solvePolygonOperationOr(aRetval, basegfx::B2DPolyPolygon(aDiscretePolygon));
             }
         }
 

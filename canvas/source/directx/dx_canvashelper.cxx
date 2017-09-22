@@ -24,7 +24,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
@@ -721,7 +721,7 @@ namespace dxcanvas
         // add output offset
         if( !maOutputOffset.equalZero() )
         {
-            const basegfx::B2DHomMatrix aOutputOffset(basegfx::tools::createTranslateB2DHomMatrix(
+            const basegfx::B2DHomMatrix aOutputOffset(basegfx::utils::createTranslateB2DHomMatrix(
                 maOutputOffset.getX(), maOutputOffset.getY()));
             aTransform = aOutputOffset * aTransform;
         }
@@ -760,7 +760,7 @@ namespace dxcanvas
         // add output offset
         if( !maOutputOffset.equalZero() )
         {
-            const basegfx::B2DHomMatrix aOutputOffset(basegfx::tools::createTranslateB2DHomMatrix(
+            const basegfx::B2DHomMatrix aOutputOffset(basegfx::utils::createTranslateB2DHomMatrix(
                 maOutputOffset.getX(), maOutputOffset.getY()));
             aTransform = aOutputOffset * aTransform;
         }

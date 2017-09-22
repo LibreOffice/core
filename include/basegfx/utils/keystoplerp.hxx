@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_TOOLS_KEYSTOPLERP_HXX
-#define INCLUDED_BASEGFX_TOOLS_KEYSTOPLERP_HXX
+#ifndef INCLUDED_BASEGFX_UTILS_KEYSTOPLERP_HXX
+#define INCLUDED_BASEGFX_UTILS_KEYSTOPLERP_HXX
 
 #include <basegfx/numeric/ftools.hxx>
 #include <vector>
@@ -30,7 +30,7 @@ namespace com{ namespace sun{ namespace star{ namespace uno {
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         /** Lerp in a vector of key stops
 

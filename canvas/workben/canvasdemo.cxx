@@ -27,7 +27,7 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -321,7 +321,7 @@ class DemoRenderer
             const basegfx::B2DPoint aRadii( maBox.Width()*.3,
                                             maBox.Height()*.3 );
             const basegfx::B2DPolygon& rEllipse(
-                basegfx::tools::createPolygonFromEllipse( aCenter,
+                basegfx::utils::createPolygonFromEllipse( aCenter,
                                                           aRadii.getX(),
                                                           aRadii.getY() ));
 

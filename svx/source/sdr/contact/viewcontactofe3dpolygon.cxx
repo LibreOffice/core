@@ -108,7 +108,7 @@ namespace sdr
             {
                 // #i98314#
                 // create texture size from object's size
-                const basegfx::B3DRange aObjectRange(basegfx::tools::getRange(aPolyPolygon3D));
+                const basegfx::B3DRange aObjectRange(basegfx::utils::getRange(aPolyPolygon3D));
 
                 double fWidth(0.0);
                 double fHeight(0.0);

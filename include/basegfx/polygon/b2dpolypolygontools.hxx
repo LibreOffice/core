@@ -37,7 +37,7 @@ namespace basegfx
     class B2DPolyPolygon;
     class B2DRange;
 
-    namespace tools
+    namespace utils
     {
         // B2DPolyPolygon tools
 
@@ -291,7 +291,7 @@ namespace basegfx
             const B2DPolyPolygon& rPolyPolygon,
             css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsRetval);
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX

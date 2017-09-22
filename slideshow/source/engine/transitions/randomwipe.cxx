@@ -71,7 +71,7 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     {
         ::basegfx::B2DPoint const & point = m_positions[ pos ];
         ::basegfx::B2DPolygon poly( m_rect );
-        poly.transform(basegfx::tools::createTranslateB2DHomMatrix(point.getX(), point.getY()));
+        poly.transform(basegfx::utils::createTranslateB2DHomMatrix(point.getX(), point.getY()));
         res.append( poly );
     }
     return res;

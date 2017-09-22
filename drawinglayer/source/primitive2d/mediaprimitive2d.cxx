@@ -39,7 +39,7 @@ namespace drawinglayer
             xRetval.resize(1);
 
             // create background object
-            basegfx::B2DPolygon aBackgroundPolygon(basegfx::tools::createUnitPolygon());
+            basegfx::B2DPolygon aBackgroundPolygon(basegfx::utils::createUnitPolygon());
             aBackgroundPolygon.transform(getTransform());
             const Primitive2DReference xRefBackground(
                 new PolyPolygonColorPrimitive2D(

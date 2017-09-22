@@ -56,7 +56,7 @@ namespace sdr
             // calculate texture size; use size of top/bottom cap to get a perfect mapping
             // for the caps. The in-between geometry will get a stretched size with a
             // relative factor size of caps to extrude depth
-            const basegfx::B2DRange aRange(basegfx::tools::getRange(aPolyPolygon));
+            const basegfx::B2DRange aRange(basegfx::utils::getRange(aPolyPolygon));
             const basegfx::B2DVector aTextureSize(aRange.getWidth(), aRange.getHeight());
 
             // get more data

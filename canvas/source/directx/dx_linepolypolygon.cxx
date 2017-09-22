@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 
 #include "dx_linepolypolygon.hxx"
 

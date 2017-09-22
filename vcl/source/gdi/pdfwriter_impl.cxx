@@ -1461,7 +1461,7 @@ void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OS
                                             m_pWriter->getReferenceDevice(),
                                             rPoly ) );
 
-    if( basegfx::tools::isRectangle( aPoly ) )
+    if( basegfx::utils::isRectangle( aPoly ) )
     {
         basegfx::B2DRange aRange( aPoly.getB2DRange() );
         basegfx::B2DPoint aBL( aRange.getMinX(), aRange.getMaxY() );
@@ -8420,12 +8420,12 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
         basegfx::B2DPolygon aPoly(rPoly.getB2DPolygon());
         basegfx::B2DPolyPolygon aPolyPoly;
 
-        basegfx::tools::applyLineDashing(aPoly, rInfo.m_aDashArray, &aPolyPoly);
+        basegfx::utils::applyLineDashing(aPoly, rInfo.m_aDashArray, &aPolyPoly);
 
         // Old applyLineDashing subdivided the polygon. New one will create bezier curve segments.
         // To mimic old behaviour, apply subdivide here. If beziers shall be written (better quality)
         // this line needs to be removed and the loop below adapted accordingly
-        aPolyPoly = basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
+        aPolyPoly = basegfx::utils::adaptiveSubdivideByAngle(aPolyPoly);
 
         const sal_uInt32 nPolygonCount(aPolyPoly.count());
 
@@ -10406,7 +10406,7 @@ void PDFWriterImpl::moveClipRegion( sal_Int32 nX, sal_Int32 nY )
 
 void PDFWriterImpl::intersectClipRegion( const tools::Rectangle& rRect )
 {
-    basegfx::B2DPolyPolygon aRect( basegfx::tools::createPolygonFromRect(
+    basegfx::B2DPolyPolygon aRect( basegfx::utils::createPolygonFromRect(
         basegfx::B2DRectangle( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() ) ) );
     intersectClipRegion( aRect );
 }
@@ -10418,9 +10418,9 @@ bool PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsStateUpdateFlags::ClipRegion;
     if( m_aGraphicsStack.front().m_bClipRegion )
     {
-        basegfx::B2DPolyPolygon aOld( basegfx::tools::prepareForPolygonOperation( m_aGraphicsStack.front().m_aClipRegion ) );
-        aRegion = basegfx::tools::prepareForPolygonOperation( aRegion );
-        m_aGraphicsStack.front().m_aClipRegion = basegfx::tools::solvePolygonOperationAnd( aOld, aRegion );
+        basegfx::B2DPolyPolygon aOld( basegfx::utils::prepareForPolygonOperation( m_aGraphicsStack.front().m_aClipRegion ) );
+        aRegion = basegfx::utils::prepareForPolygonOperation( aRegion );
+        m_aGraphicsStack.front().m_aClipRegion = basegfx::utils::solvePolygonOperationAnd( aOld, aRegion );
     }
     else
     {

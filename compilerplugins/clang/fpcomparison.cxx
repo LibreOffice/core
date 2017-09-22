@@ -107,11 +107,11 @@ bool FpComparison::ignore(FunctionDecl* function)
         || dc.Function("lok_approxEqual").AnonymousNamespace().GlobalNamespace()
             // libreofficekit/source/gtk/lokdocview.cxx
         // These might need fixing:
-        || (dc.Function("getSmallestDistancePointToPolygon").Namespace("tools")
+        || (dc.Function("getSmallestDistancePointToPolygon").Namespace("utils")
             .Namespace("basegfx").GlobalNamespace())
             // basegfx/source/polygon/b2dpolygontools.cxx
         || (dc.Function("getSmallestDistancePointToPolyPolygon")
-            .Namespace("tools").Namespace("basegfx").GlobalNamespace())
+            .Namespace("utils").Namespace("basegfx").GlobalNamespace())
             // basegfx/source/polygon/b2dpolypolygontools.cxx
         || dc.Function("performTest").Namespace("bridge_test").GlobalNamespace()
             // testtools/source/bridgetest/bridgetest.cxx

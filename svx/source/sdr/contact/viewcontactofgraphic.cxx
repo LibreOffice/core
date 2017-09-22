@@ -128,8 +128,8 @@ namespace sdr
             {
                 // create the EmptyPresObj fallback visualisation. The fallback graphic
                 // is already provided in rGraphicObject in this case, use it
-                aSmallerMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY);
-                aSmallerMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
+                aSmallerMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY);
+                aSmallerMatrix = basegfx::utils::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
                     * aSmallerMatrix;
 
                 const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject();
@@ -167,7 +167,7 @@ namespace sdr
                 // create a surrounding frame when no linestyle given
                 const Color aColor(Application::GetSettings().GetStyleSettings().GetShadowColor());
                 const basegfx::BColor aBColor(aColor.getBColor());
-                basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
+                basegfx::B2DPolygon aOutline(basegfx::utils::createUnitPolygon());
                 aOutline.transform(rObjectMatrix);
 
                 xRetval.push_back(
@@ -217,7 +217,7 @@ namespace sdr
                     && basegfx::fTools::lessOrEqual(fWidth, aScale.getX())
                     && basegfx::fTools::lessOrEqual(fHeight, aScale.getY()))
                 {
-                    const basegfx::B2DHomMatrix aBitmapMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                    const basegfx::B2DHomMatrix aBitmapMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                         fWidth, fHeight, fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
                     xRetval.push_back(
@@ -265,7 +265,7 @@ namespace sdr
                 if(pSdrText && pOPO)
                 {
                     // directly use the remaining space as TextRangeTransform
-                    const basegfx::B2DHomMatrix aTextRangeTransform(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                    const basegfx::B2DHomMatrix aTextRangeTransform(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                         aScale, fShearX, fRotate, aTranslate));
 
                     // directly create temp SdrBlockTextPrimitive2D
@@ -359,7 +359,7 @@ namespace sdr
             // fill object matrix
             const double fShearX(rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0);
             const double fRotate(nRotationAngle ? (36000 - nRotationAngle) * F_PI18000 : 0.0);
-            const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+            const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                 aObjectRange.getWidth(), aObjectRange.getHeight(),
                 fShearX, fRotate,
                 aObjectRange.getMinX(), aObjectRange.getMinY()));

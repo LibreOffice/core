@@ -2927,7 +2927,7 @@ void XMLTextParagraphExport::exportContour(
     PointSequenceSequence aSourcePolyPolygon;
     rPropSet->getPropertyValue( sContourPolyPolygon ) >>= aSourcePolyPolygon;
     const basegfx::B2DPolyPolygon aPolyPolygon(
-        basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(
+        basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(
             aSourcePolyPolygon));
     const sal_uInt32 nPolygonCount(aPolyPolygon.count());
 
@@ -2979,7 +2979,7 @@ void XMLTextParagraphExport::exportContour(
     {
         // simple polygon shape, can be written as svg:points sequence
         const OUString aPointString(
-            basegfx::tools::exportToSvgPoints(
+            basegfx::utils::exportToSvgPoints(
                 aPolyPolygon.getB2DPolygon(0)));
 
         // write point array
@@ -2990,7 +2990,7 @@ void XMLTextParagraphExport::exportContour(
     {
         // polypolygon, needs to be written as a svg:path sequence
         const OUString aPolygonString(
-            basegfx::tools::exportToSvgD(
+            basegfx::utils::exportToSvgD(
                 aPolyPolygon,
                 true,           // bUseRelativeCoordinates
                 false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now

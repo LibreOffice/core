@@ -37,7 +37,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/virdev.hxx>
 
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 #include <memory>
 
@@ -74,7 +74,7 @@ namespace cppcanvas
                                    nullptr,
                                    &rState.fontRotation );
 
-                basegfx::B2DHomMatrix aLocalTransformation(basegfx::tools::createRotateB2DHomMatrix(rState.fontRotation));
+                basegfx::B2DHomMatrix aLocalTransformation(basegfx::utils::createRotateB2DHomMatrix(rState.fontRotation));
                 aLocalTransformation.translate( rStartPoint.getX(),
                                                 rStartPoint.getY() );
                 ::canvas::tools::appendToRenderState( o_rRenderState,
@@ -576,7 +576,7 @@ namespace cppcanvas
                         rOffsets,
                         rLineInfo ) );
 
-                o_rOverallSize = ::basegfx::tools::getRange( aPoly ).getRange();
+                o_rOverallSize = ::basegfx::utils::getRange( aPoly ).getRange();
 
                 o_rTextLines = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                     rCanvas->getUNOCanvas()->getDevice(),
@@ -593,7 +593,7 @@ namespace cppcanvas
                     tools::createTextLinesPolyPolygon( 0.0, nLineWidth,
                                                        rLineInfo ) );
 
-                o_rOverallSize = ::basegfx::tools::getRange( aPoly ).getRange();
+                o_rOverallSize = ::basegfx::utils::getRange( aPoly ).getRange();
 
                 o_rTextLines = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                     rCanvas->getUNOCanvas()->getDevice(),
@@ -1495,7 +1495,7 @@ namespace cppcanvas
 
                 return calcEffectTextBounds( ::basegfx::unotools::b2DRectangleFromRealRectangle2D(
                                                  xTextLayout->queryTextBounds() ),
-                                             ::basegfx::tools::getRange( aPoly ),
+                                             ::basegfx::utils::getRange( aPoly ),
                                              maReliefOffset,
                                              maShadowOffset,
                                              aLocalState,
@@ -2007,7 +2007,7 @@ namespace cppcanvas
                             rReliefColor,
                             rShadowOffset,
                             rShadowColor,
-                            ::basegfx::tools::getRange(aResultingPolyPolygon),
+                            ::basegfx::utils::getRange(aResultingPolyPolygon),
                             xTextPoly,
                             aCharWidthSeq,
                             rVDev,
@@ -2024,7 +2024,7 @@ namespace cppcanvas
                             rReliefColor,
                             rShadowOffset,
                             rShadowColor,
-                            ::basegfx::tools::getRange(aResultingPolyPolygon),
+                            ::basegfx::utils::getRange(aResultingPolyPolygon),
                             xTextPoly,
                             aCharWidthSeq,
                             rVDev,

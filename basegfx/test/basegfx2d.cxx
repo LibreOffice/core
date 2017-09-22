@@ -41,7 +41,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
-#include <basegfx/tools/rectcliptools.hxx>
+#include <basegfx/utils/rectcliptools.hxx>
 
 #include <iostream>
 #include <fstream>
@@ -138,20 +138,20 @@ public:
         OUString aExport;
 
         CPPUNIT_ASSERT_MESSAGE("importing simple rectangle from SVG-D",
-                               tools::importFromSvgD( aPoly, aPath0, false, nullptr ));
-        aExport = tools::exportToSvgD( aPoly, true, true, false );
+                               utils::importFromSvgD( aPoly, aPath0, false, nullptr ));
+        aExport = utils::exportToSvgD( aPoly, true, true, false );
         const char sExportString[] = "m10 10h-20v-20h20z";
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting rectangle to SVG-D",
                                OUString(sExportString), aExport );
         CPPUNIT_ASSERT_MESSAGE("importing simple rectangle from SVG-D (round-trip",
-                               tools::importFromSvgD( aPoly, aExport, false, nullptr ));
-        aExport = tools::exportToSvgD( aPoly, true, true, false );
+                               utils::importFromSvgD( aPoly, aExport, false, nullptr ));
+        aExport = utils::exportToSvgD( aPoly, true, true, false );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting rectangle to SVG-D (round-trip)",
                                OUString(sExportString), aExport);
 
         CPPUNIT_ASSERT_MESSAGE("importing simple bezier polygon from SVG-D",
-                               tools::importFromSvgD( aPoly, aPath1, false, nullptr ));
-        aExport = tools::exportToSvgD( aPoly, true, true, false );
+                               utils::importFromSvgD( aPoly, aPath1, false, nullptr ));
+        aExport = utils::exportToSvgD( aPoly, true, true, false );
 
         // Adaptions for B2DPolygon bezier change (see #i77162#):
 
@@ -178,11 +178,11 @@ public:
         // a 2nd good test is that re-importing of aExport has to create the same
         // B2DPolPolygon again:
         B2DPolyPolygon aReImport;
-        CPPUNIT_ASSERT_MESSAGE("importing simple bezier polygon from SVG-D", tools::importFromSvgD( aReImport, aExport, false, nullptr));
+        CPPUNIT_ASSERT_MESSAGE("importing simple bezier polygon from SVG-D", utils::importFromSvgD( aReImport, aExport, false, nullptr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("re-imported polygon needs to be identical", aPoly, aReImport);
 
-        CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D", tools::importFromSvgD( aPoly, aPath2, false, nullptr));
-        aExport = tools::exportToSvgD( aPoly, true, true, false );
+        CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D", utils::importFromSvgD( aPoly, aPath2, false, nullptr));
+        aExport = utils::exportToSvgD( aPoly, true, true, false );
 
         // Adaptions for B2DPolygon bezier change (see #i77162#):
 
@@ -198,19 +198,19 @@ public:
             "8 752-224 1128-21 101-31 183-31 245 0 39 9 70 26 93 17 24 39 36 67 36 145 0 279-80 400-240s182-365 182-615c0-2"
             "88-107-533-322-734s-487-301-816-301c-395 0-715 124-960 373s-368 569-368 958q0 577.5 357 900c237 216 557 324 95"
             "8 325 189-1 389-27 600-77 211-52 378-110 503-174q40.5 105 81 210z";
-        CPPUNIT_ASSERT_MESSAGE("re-importing '@' from SVG-D", tools::importFromSvgD( aReImport, aExport, false, nullptr));
+        CPPUNIT_ASSERT_MESSAGE("re-importing '@' from SVG-D", utils::importFromSvgD( aReImport, aExport, false, nullptr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("re-imported '@' needs to be identical", aPoly, aReImport);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting '@' to SVG-D", OUString(sExportString1), aExport);
         CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D (round-trip",
-                               tools::importFromSvgD( aPoly, aExport, false, nullptr ));
-        aExport = tools::exportToSvgD( aPoly, true, true, false );
+                               utils::importFromSvgD( aPoly, aExport, false, nullptr ));
+        aExport = utils::exportToSvgD( aPoly, true, true, false );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting '@' to SVG-D (round-trip)",
                                OUString(sExportString1), aExport);
 
         CPPUNIT_ASSERT_MESSAGE("importing complex polygon from SVG-D",
-                               tools::importFromSvgD( aPoly, aPath3, false, nullptr ));
-        aExport = tools::exportToSvgD( aPoly, true, true, false );
+                               utils::importFromSvgD( aPoly, aPath3, false, nullptr ));
+        aExport = utils::exportToSvgD( aPoly, true, true, false );
         const char sExportString2[] =
             "m1598 125h306v2334h-306v-1105h-1293v1105h-305v-2334h305v973h1293"
             "zm2159 1015 78-44 85 235-91 47-91 40-90 34-90 29-89 21-88 16-88 10-88 3-102-4-97"
@@ -235,14 +235,14 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting complex polygon to SVG-D",
                                OUString(sExportString2), aExport);
         CPPUNIT_ASSERT_MESSAGE("importing complex polygon from SVG-D (round-trip",
-                               tools::importFromSvgD( aPoly, aExport, false, nullptr ));
-        aExport = tools::exportToSvgD( aPoly, true, true, false );
+                               utils::importFromSvgD( aPoly, aExport, false, nullptr ));
+        aExport = utils::exportToSvgD( aPoly, true, true, false );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting complex polygon to SVG-D (round-trip)",
                                OUString(sExportString2), aExport);
 
         const B2DPolygon aRect(
-            tools::createPolygonFromRect( B2DRange(0.0,0.0,4000.0,4000.0) ));
-        aExport = tools::exportToSvgD( B2DPolyPolygon(aRect), false, false, false );
+            utils::createPolygonFromRect( B2DRange(0.0,0.0,4000.0,4000.0) ));
+        aExport = utils::exportToSvgD( B2DPolyPolygon(aRect), false, false, false );
 
         const char sExportStringRect[] = "M0 0H4000V4000H0Z";
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting to rectangle svg-d string",
@@ -297,7 +297,7 @@ public:
         // B2DPolyRange relies on correctly orientated rects
         const B2DRange aRect(0,0,1,1);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("createPolygonFromRect - correct orientation",
-                               B2VectorOrientation::Positive, tools::getOrientation(tools::createPolygonFromRect(aRect)));
+                               B2VectorOrientation::Positive, utils::getOrientation(utils::createPolygonFromRect(aRect)));
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -669,7 +669,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("decompose: error test I4", impDecomposeComposeTest(-fSX, -fSY, tan(-fS), -fR));
 
         // cover special case of 180 degree rotation
-        B2DHomMatrix aTest=tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        B2DHomMatrix aTest=utils::createScaleShearXRotateTranslateB2DHomMatrix(
             6425,3938,
             0,
             180*F_PI180,
@@ -795,7 +795,7 @@ public:
     void testIsRectangle()
     {
         B2DPolygon aRect1(
-            tools::createPolygonFromRect(
+            utils::createPolygonFromRect(
                 B2DRange(0,0,1,1) ) );
 
         B2DPolygon aRect2 {
@@ -847,19 +847,19 @@ public:
         aNonRect5.setClosed(true);
 
         CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 1",
-                               tools::isRectangle( aRect1 ));
+                               utils::isRectangle( aRect1 ));
         CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 2",
-                               tools::isRectangle( aRect2 ));
+                               utils::isRectangle( aRect2 ));
         CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 1",
-                               !tools::isRectangle( aNonRect1 ));
+                               !utils::isRectangle( aNonRect1 ));
         CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 2",
-                               !tools::isRectangle( aNonRect2 ));
+                               !utils::isRectangle( aNonRect2 ));
         CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 3",
-                               !tools::isRectangle( aNonRect3 ));
+                               !utils::isRectangle( aNonRect3 ));
         CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 4",
-                               !tools::isRectangle( aNonRect4 ));
+                               !utils::isRectangle( aNonRect4 ));
         CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 5",
-                               !tools::isRectangle( aNonRect5 ));
+                               !utils::isRectangle( aNonRect5 ));
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -901,7 +901,7 @@ public:
         aPolyPolygon.append(aPolygon);
         aPolyPolygon.append(aPolygonOffset);
         B2DTrapezoidVector aVector;
-        basegfx::tools::trapezoidSubdivide(aVector, aPolyPolygon);
+        basegfx::utils::trapezoidSubdivide(aVector, aPolyPolygon);
         CPPUNIT_ASSERT_MESSAGE("more than zero sub-divided trapezoids",
                                aVector.size() > 0);
     }
@@ -984,15 +984,15 @@ public:
         Type aRange(0,0,10,10);
 
         CPPUNIT_ASSERT_MESSAGE("(0,0) is outside range!",
-                               tools::getCohenSutherlandClipFlags(B2IPoint(0,0),aRange) == 0);
+                               utils::getCohenSutherlandClipFlags(B2IPoint(0,0),aRange) == 0);
         CPPUNIT_ASSERT_MESSAGE("(-1,-1) is inside range!",
-                               tools::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aRange) ==
-                               (tools::RectClipFlags::LEFT|tools::RectClipFlags::TOP));
+                               utils::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aRange) ==
+                               (utils::RectClipFlags::LEFT|utils::RectClipFlags::TOP));
         CPPUNIT_ASSERT_MESSAGE("(10,10) is outside range!",
-                               tools::getCohenSutherlandClipFlags(B2IPoint(10,10),aRange) == 0);
+                               utils::getCohenSutherlandClipFlags(B2IPoint(10,10),aRange) == 0);
         CPPUNIT_ASSERT_MESSAGE("(11,11) is inside range!",
-                               tools::getCohenSutherlandClipFlags(B2IPoint(11,11),aRange) ==
-                               (tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM));
+                               utils::getCohenSutherlandClipFlags(B2IPoint(11,11),aRange) ==
+                               (utils::RectClipFlags::RIGHT|utils::RectClipFlags::BOTTOM));
     }
 
     void check()
@@ -1019,15 +1019,15 @@ public:
         B2IBox aBox(0,0,10,10);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(0,0) is outside range!",
-                               sal_uInt32(0), tools::getCohenSutherlandClipFlags(B2IPoint(0,0),aBox));
+                               sal_uInt32(0), utils::getCohenSutherlandClipFlags(B2IPoint(0,0),aBox));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(-1,-1) is inside range!",
-                               tools::RectClipFlags::LEFT|tools::RectClipFlags::TOP,
-                               tools::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aBox));
+                               utils::RectClipFlags::LEFT|utils::RectClipFlags::TOP,
+                               utils::getCohenSutherlandClipFlags(B2IPoint(-1,-1),aBox));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(9,9) is outside range!",
-                               sal_uInt32(0), tools::getCohenSutherlandClipFlags(B2IPoint(9,9),aBox));
+                               sal_uInt32(0), utils::getCohenSutherlandClipFlags(B2IPoint(9,9),aBox));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("(10,10) is inside range!",
-                               tools::RectClipFlags::RIGHT|tools::RectClipFlags::BOTTOM,
-                               tools::getCohenSutherlandClipFlags(B2IPoint(10,10),aBox));
+                               utils::RectClipFlags::RIGHT|utils::RectClipFlags::BOTTOM,
+                               utils::getCohenSutherlandClipFlags(B2IPoint(10,10),aBox));
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -1084,118 +1084,118 @@ public:
     void hslTest()
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("white",
-                               BColor(0,0,1), tools::rgb2hsl(maWhite));
+                               BColor(0,0,1), utils::rgb2hsl(maWhite));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("black",
-                               BColor(0,0,0), tools::rgb2hsl(maBlack));
+                               BColor(0,0,0), utils::rgb2hsl(maBlack));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("red",
-                               BColor(0,1,0.5), tools::rgb2hsl(maRed));
+                               BColor(0,1,0.5), utils::rgb2hsl(maRed));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("green",
-                               BColor(120,1,0.5), tools::rgb2hsl(maGreen));
+                               BColor(120,1,0.5), utils::rgb2hsl(maGreen));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("blue",
-                               BColor(240,1,0.5), tools::rgb2hsl(maBlue));
+                               BColor(240,1,0.5), utils::rgb2hsl(maBlue));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("yellow",
-                               BColor(60,1,0.5), tools::rgb2hsl(maYellow));
+                               BColor(60,1,0.5), utils::rgb2hsl(maYellow));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("magenta",
-                               BColor(300,1,0.5), tools::rgb2hsl(maMagenta));
+                               BColor(300,1,0.5), utils::rgb2hsl(maMagenta));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("cyan",
-                               BColor(180,1,0.5), tools::rgb2hsl(maCyan));
+                               BColor(180,1,0.5), utils::rgb2hsl(maCyan));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("third hue case",
-                               BColor(210,1,0.5), tools::rgb2hsl(BColor(0,0.5,1)));
+                               BColor(210,1,0.5), utils::rgb2hsl(BColor(0,0.5,1)));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip white",
-                               maWhite, tools::hsl2rgb(tools::rgb2hsl(maWhite)));
+                               maWhite, utils::hsl2rgb(utils::rgb2hsl(maWhite)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip black",
-                               maBlack, tools::hsl2rgb(tools::rgb2hsl(maBlack)));
+                               maBlack, utils::hsl2rgb(utils::rgb2hsl(maBlack)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip red",
-                               maRed, tools::hsl2rgb(tools::rgb2hsl(maRed)));
+                               maRed, utils::hsl2rgb(utils::rgb2hsl(maRed)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip green",
-                               maGreen, tools::hsl2rgb(tools::rgb2hsl(maGreen)));
+                               maGreen, utils::hsl2rgb(utils::rgb2hsl(maGreen)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip blue",
-                               maBlue, tools::hsl2rgb(tools::rgb2hsl(maBlue)));
+                               maBlue, utils::hsl2rgb(utils::rgb2hsl(maBlue)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip yellow",
-                               maYellow, tools::hsl2rgb(tools::rgb2hsl(maYellow)));
+                               maYellow, utils::hsl2rgb(utils::rgb2hsl(maYellow)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip magenta",
-                               maMagenta, tools::hsl2rgb(tools::rgb2hsl(maMagenta)));
+                               maMagenta, utils::hsl2rgb(utils::rgb2hsl(maMagenta)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip cyan",
-                               maCyan, tools::hsl2rgb(tools::rgb2hsl(maCyan)));
+                               maCyan, utils::hsl2rgb(utils::rgb2hsl(maCyan)));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("grey10",
-                               BColor(0,0,.1), tools::rgb2hsl(maWhite*.1));
+                               BColor(0,0,.1), utils::rgb2hsl(maWhite*.1));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("grey90",
-                               BColor(0,0,.9), tools::rgb2hsl(maWhite*.9));
+                               BColor(0,0,.9), utils::rgb2hsl(maWhite*.9));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("red/2",
-                               BColor(0,1,0.25), tools::rgb2hsl(maRed*.5));
+                               BColor(0,1,0.25), utils::rgb2hsl(maRed*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("green/2",
-                               BColor(120,1,0.25), tools::rgb2hsl(maGreen*.5));
+                               BColor(120,1,0.25), utils::rgb2hsl(maGreen*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("blue/2",
-                               BColor(240,1,0.25), tools::rgb2hsl(maBlue*.5));
+                               BColor(240,1,0.25), utils::rgb2hsl(maBlue*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("yellow/2",
-                               BColor(60,1,0.25), tools::rgb2hsl(maYellow*.5));
+                               BColor(60,1,0.25), utils::rgb2hsl(maYellow*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("magenta/2",
-                               BColor(300,1,0.25), tools::rgb2hsl(maMagenta*.5));
+                               BColor(300,1,0.25), utils::rgb2hsl(maMagenta*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("cyan/2",
-                               BColor(180,1,0.25), tools::rgb2hsl(maCyan*.5));
+                               BColor(180,1,0.25), utils::rgb2hsl(maCyan*.5));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("pastel",
-                               BColor(0,.5,.5), tools::rgb2hsl(BColor(.75,.25,.25)));
+                               BColor(0,.5,.5), utils::rgb2hsl(BColor(.75,.25,.25)));
     }
 
     // insert your test code here.
     void hsvTest()
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("white",
-                               BColor(0,0,1), tools::rgb2hsv(maWhite));
+                               BColor(0,0,1), utils::rgb2hsv(maWhite));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("black",
-                               BColor(0,0,0), tools::rgb2hsv(maBlack));
+                               BColor(0,0,0), utils::rgb2hsv(maBlack));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("red",
-                               BColor(0,1,1), tools::rgb2hsv(maRed));
+                               BColor(0,1,1), utils::rgb2hsv(maRed));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("green",
-                               BColor(120,1,1), tools::rgb2hsv(maGreen));
+                               BColor(120,1,1), utils::rgb2hsv(maGreen));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("blue",
-                               BColor(240,1,1), tools::rgb2hsv(maBlue));
+                               BColor(240,1,1), utils::rgb2hsv(maBlue));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("yellow",
-                               BColor(60,1,1), tools::rgb2hsv(maYellow));
+                               BColor(60,1,1), utils::rgb2hsv(maYellow));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("magenta",
-                               BColor(300,1,1), tools::rgb2hsv(maMagenta));
+                               BColor(300,1,1), utils::rgb2hsv(maMagenta));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("cyan",
-                               BColor(180,1,1), tools::rgb2hsv(maCyan));
+                               BColor(180,1,1), utils::rgb2hsv(maCyan));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip white",
-                               maWhite, tools::hsv2rgb(tools::rgb2hsv(maWhite)));
+                               maWhite, utils::hsv2rgb(utils::rgb2hsv(maWhite)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip black",
-                               maBlack, tools::hsv2rgb(tools::rgb2hsv(maBlack)));
+                               maBlack, utils::hsv2rgb(utils::rgb2hsv(maBlack)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip red",
-                               maRed, tools::hsv2rgb(tools::rgb2hsv(maRed)));
+                               maRed, utils::hsv2rgb(utils::rgb2hsv(maRed)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip green",
-                               maGreen, tools::hsv2rgb(tools::rgb2hsv(maGreen)));
+                               maGreen, utils::hsv2rgb(utils::rgb2hsv(maGreen)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip blue",
-                               maBlue, tools::hsv2rgb(tools::rgb2hsv(maBlue)));
+                               maBlue, utils::hsv2rgb(utils::rgb2hsv(maBlue)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip yellow",
-                               maYellow, tools::hsv2rgb(tools::rgb2hsv(maYellow)));
+                               maYellow, utils::hsv2rgb(utils::rgb2hsv(maYellow)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip magenta",
-                               maMagenta, tools::hsv2rgb(tools::rgb2hsv(maMagenta)));
+                               maMagenta, utils::hsv2rgb(utils::rgb2hsv(maMagenta)));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("roundtrip cyan",
-                               maCyan, tools::hsv2rgb(tools::rgb2hsv(maCyan)));
+                               maCyan, utils::hsv2rgb(utils::rgb2hsv(maCyan)));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("grey10",
-                               BColor(0,0,.1), tools::rgb2hsv(maWhite*.1));
+                               BColor(0,0,.1), utils::rgb2hsv(maWhite*.1));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("grey90",
-                               BColor(0,0,.9), tools::rgb2hsv(maWhite*.9));
+                               BColor(0,0,.9), utils::rgb2hsv(maWhite*.9));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("red/2",
-                               BColor(0,1,0.5), tools::rgb2hsv(maRed*.5));
+                               BColor(0,1,0.5), utils::rgb2hsv(maRed*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("green/2",
-                               BColor(120,1,0.5), tools::rgb2hsv(maGreen*.5));
+                               BColor(120,1,0.5), utils::rgb2hsv(maGreen*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("blue/2",
-                               BColor(240,1,0.5), tools::rgb2hsv(maBlue*.5));
+                               BColor(240,1,0.5), utils::rgb2hsv(maBlue*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("yellow/2",
-                               BColor(60,1,0.5), tools::rgb2hsv(maYellow*.5));
+                               BColor(60,1,0.5), utils::rgb2hsv(maYellow*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("magenta/2",
-                               BColor(300,1,0.5), tools::rgb2hsv(maMagenta*.5));
+                               BColor(300,1,0.5), utils::rgb2hsv(maMagenta*.5));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("cyan/2",
-                               BColor(180,1,0.5), tools::rgb2hsv(maCyan*.5));
+                               BColor(180,1,0.5), utils::rgb2hsv(maCyan*.5));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("pastel",
-                               BColor(0,.5,.5), tools::rgb2hsv(BColor(.5,.25,.25)));
+                               BColor(0,.5,.5), utils::rgb2hsv(BColor(.5,.25,.25)));
     }
 
     // Change the following lines only, if you add, remove or rename

@@ -83,7 +83,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/tools/unotools.hxx>
+#include <basegfx/utils/unotools.hxx>
 #include "gluepts.hxx"
 #include "shapeimpl.hxx"
 #include <sal/log.hxx>
@@ -2221,13 +2221,13 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                     if( auto s = o3tl::tryAccess<drawing::PointSequenceSequence>(rValue) )
                     {
                         // get polygpon data from PointSequenceSequence
-                        aNewPolyPolygon = basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(
+                        aNewPolyPolygon = basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(
                             *s);
                     }
                     else if( auto cs = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(rValue) )
                     {
                         // get polygpon data from PolyPolygonBezierCoords
-                        aNewPolyPolygon = basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
+                        aNewPolyPolygon = basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
                             *cs);
                     }
 
@@ -2238,7 +2238,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                         if( mpModel->IsWriter() )
                         {
                             Point aPoint( mpObj->GetAnchorPos() );
-                            aNewPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(aPoint.X(), aPoint.Y()));
+                            aNewPolyPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(aPoint.X(), aPoint.Y()));
                         }
                         pEdgeObj->SetEdgeTrackPath( aNewPolyPolygon );
                         return true;
@@ -2682,7 +2682,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                     if( mpModel->IsWriter() )
                     {
                         Point aPoint( mpObj->GetAnchorPos() );
-                        aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aPoint.X(), -aPoint.Y()));
+                        aPolyPoly.transform(basegfx::utils::createTranslateB2DHomMatrix(-aPoint.X(), -aPoint.Y()));
                     }
                     // Reintroduction of fix for issue #i59051# (#i108851#)
                     ForceMetricTo100th_mm( aPolyPoly );

@@ -69,7 +69,7 @@ namespace svgio
                 {
                     basegfx::B2DPolygon aPath;
 
-                    if(basegfx::tools::importFromSvgPoints(aPath, aContent))
+                    if(basegfx::utils::importFromSvgPoints(aPath, aContent))
                     {
                         if(aPath.count())
                         {

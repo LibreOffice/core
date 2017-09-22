@@ -73,7 +73,7 @@ bool XLineEndList::Create()
     aSquare.setClosed(true);
     Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aSquare), SvxResId( RID_SVXSTR_SQUARE ) ) );
 
-    basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
+    basegfx::B2DPolygon aCircle(basegfx::utils::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
     Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aCircle), SvxResId( RID_SVXSTR_CIRCLE ) ) );
 
     return true;

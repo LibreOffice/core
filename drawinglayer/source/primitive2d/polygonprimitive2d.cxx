@@ -18,7 +18,7 @@
  */
 
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -106,7 +106,7 @@ namespace drawinglayer
 
                 aDash.push_back(fLogicDashLength);
                 aDash.push_back(fLogicDashLength);
-                basegfx::tools::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA, &aDashedPolyPolyB, 2.0 * fLogicDashLength);
+                basegfx::utils::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA, &aDashedPolyPolyB, 2.0 * fLogicDashLength);
 
                 rContainer.push_back(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyA, getRGBColorA()));
                 rContainer.push_back(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyB, getRGBColorB()));
@@ -218,7 +218,7 @@ namespace drawinglayer
             if(getB2DPolygon().count())
             {
                 // #i102241# try to simplify before usage
-                const basegfx::B2DPolygon aB2DPolygon(basegfx::tools::simplifyCurveSegments(getB2DPolygon()));
+                const basegfx::B2DPolygon aB2DPolygon(basegfx::utils::simplifyCurveSegments(getB2DPolygon()));
                 basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
                 if(getStrokeAttribute().isDefault() || 0.0 == getStrokeAttribute().getFullDotDashLen())
@@ -229,7 +229,7 @@ namespace drawinglayer
                 else
                 {
                     // apply LineStyle
-                    basegfx::tools::applyLineDashing(
+                    basegfx::utils::applyLineDashing(
                         aB2DPolygon, getStrokeAttribute().getDotDashArray(),
                         &aHairLinePolyPolygon, nullptr, getStrokeAttribute().getFullDotDashLen());
                 }
@@ -248,7 +248,7 @@ namespace drawinglayer
                     for(sal_uInt32 a(0); a < nCount; a++)
                     {
                         // New version of createAreaGeometry; now creates bezier polygons
-                        aAreaPolyPolygon.append(basegfx::tools::createAreaGeometry(
+                        aAreaPolyPolygon.append(basegfx::utils::createAreaGeometry(
                             aHairLinePolyPolygon.getB2DPolygon(a),
                             fHalfLineWidth,
                             aLineJoin,
@@ -404,7 +404,7 @@ namespace drawinglayer
                 if(bHasWidth && bHasHeight)
                 {
                     // create waveline curve
-                    const basegfx::B2DPolygon aWaveline(basegfx::tools::createWaveline(getB2DPolygon(), getWaveWidth(), getWaveHeight()));
+                    const basegfx::B2DPolygon aWaveline(basegfx::utils::createWaveline(getB2DPolygon(), getWaveWidth(), getWaveHeight()));
                     rContainer.push_back(new PolygonStrokePrimitive2D(aWaveline, getLineAttribute(), getStrokeAttribute()));
                 }
                 else
@@ -511,7 +511,7 @@ namespace drawinglayer
             if(!aLocalPolygon.isClosed() && aLocalPolygon.count() > 1)
             {
                 // apply arrows
-                const double fPolyLength(basegfx::tools::getLength(aLocalPolygon));
+                const double fPolyLength(basegfx::utils::getLength(aLocalPolygon));
                 double fStart(0.0);
                 double fEnd(0.0);
                 double fStartOverlap(0.0);
@@ -520,7 +520,7 @@ namespace drawinglayer
                 if(!getStart().isDefault() && getStart().isActive())
                 {
                     // create start arrow primitive and consume
-                    aArrowA = basegfx::tools::createAreaGeometryForLineStartEnd(
+                    aArrowA = basegfx::utils::createAreaGeometryForLineStartEnd(
                         aLocalPolygon, getStart().getB2DPolyPolygon(), true, getStart().getWidth(),
                         fPolyLength, getStart().isCentered() ? 0.5 : 0.0, &fStart);
 
@@ -532,7 +532,7 @@ namespace drawinglayer
                 if(!getEnd().isDefault() && getEnd().isActive())
                 {
                     // create end arrow primitive and consume
-                    aArrowB = basegfx::tools::createAreaGeometryForLineStartEnd(
+                    aArrowB = basegfx::utils::createAreaGeometryForLineStartEnd(
                         aLocalPolygon, getEnd().getB2DPolyPolygon(), false, getEnd().getWidth(),
                         fPolyLength, getEnd().isCentered() ? 0.5 : 0.0, &fEnd);
 
@@ -543,7 +543,7 @@ namespace drawinglayer
                 if(0.0 != fStart || 0.0 != fEnd)
                 {
                     // build new poly, consume something from old poly
-                    aLocalPolygon = basegfx::tools::getSnippetAbsolute(aLocalPolygon, fStart-fStartOverlap, fPolyLength - fEnd + fEndOverlap, fPolyLength);
+                    aLocalPolygon = basegfx::utils::getSnippetAbsolute(aLocalPolygon, fStart-fStartOverlap, fPolyLength - fEnd + fEndOverlap, fPolyLength);
                 }
             }
 

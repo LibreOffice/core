@@ -25,7 +25,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 
 #include <cppcanvas/spritecanvas.hxx>
 #include <canvas/canvastools.hxx>

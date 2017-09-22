@@ -273,7 +273,7 @@ void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
     if (n100thPercent == 0)
         return;
 
-    basegfx::BColor aBColor = basegfx::tools::rgb2hsl(getBColor());
+    basegfx::BColor aBColor = basegfx::utils::rgb2hsl(getBColor());
     double fFactor = 1.0 - (std::abs(double(n100thPercent)) / 10000.0);
     double fResult;
 
@@ -287,7 +287,7 @@ void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
     }
 
     aBColor.setBlue(fResult);
-    aBColor = basegfx::tools::hsl2rgb(aBColor);
+    aBColor = basegfx::utils::hsl2rgb(aBColor);
 
     SetRed(sal_uInt8((  aBColor.getRed()   * 255.0) + 0.5));
     SetGreen(sal_uInt8((aBColor.getGreen() * 255.0) + 0.5));

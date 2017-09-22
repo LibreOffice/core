@@ -78,7 +78,7 @@ namespace sdr
             // Hack for calc, transform position of object according
             // to current zoom so as objects relative position to grid
             // appears stable
-            aUnitPolyPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
+            aUnitPolyPolygon.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
             sal_uInt32 nPolyCount(ensureGeometry(aUnitPolyPolygon));
 
             // prepare object transformation and unit polygon (direct model data)
@@ -111,7 +111,7 @@ namespace sdr
                     basegfx::B2DRange aClipRange(-nPageWidth, -nPageHeight,
                                                  nPageWidth*2, nPageHeight*2);
 
-                    aUnitPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(aUnitPolyPolygon,
+                    aUnitPolyPolygon = basegfx::utils::clipPolyPolygonOnRange(aUnitPolyPolygon,
                                                                        aClipRange, true, true);
                     nPolyCount = ensureGeometry(aUnitPolyPolygon);
 
@@ -139,7 +139,7 @@ namespace sdr
                 aUnitPolyPolygon.setB2DPolygon(0, aNewPolygon);
 
                 // #i102548# fill objectMatrix with rotation and offset (no shear for lines)
-                aObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                aObjectMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                     aLine.getLength(), 1.0,
                     0.0,
                     atan2(aLine.getY(), aLine.getX()),
@@ -149,14 +149,14 @@ namespace sdr
             {
                 // #i102548# create unscaled, unsheared, unrotated and untranslated polygon
                 // (unit polygon) by creating the object matrix and back-transforming the polygon
-                const basegfx::B2DRange aObjectRange(basegfx::tools::getRange(aUnitPolyPolygon));
+                const basegfx::B2DRange aObjectRange(basegfx::utils::getRange(aUnitPolyPolygon));
                 const GeoStat& rGeoStat(GetPathObj().GetGeoStat());
                 const double fWidth(aObjectRange.getWidth());
                 const double fHeight(aObjectRange.getHeight());
                 const double fScaleX(basegfx::fTools::equalZero(fWidth) ? 1.0 : fWidth);
                 const double fScaleY(basegfx::fTools::equalZero(fHeight) ? 1.0 : fHeight);
 
-                aObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                aObjectMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                     fScaleX, fScaleY,
                     rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0,
                     rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0,

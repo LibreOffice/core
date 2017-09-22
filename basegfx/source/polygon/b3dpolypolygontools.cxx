@@ -35,7 +35,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         // B3DPolyPolygon tools
         B3DRange getRange(const B3DPolyPolygon& rCandidate)
@@ -525,7 +525,7 @@ namespace basegfx
                     // see callers
                     if(bCheckClosed)
                     {
-                        basegfx::tools::checkClosed(aNewPolygon);
+                        basegfx::utils::checkClosed(aNewPolygon);
                     }
 
                     aRetval.append(aNewPolygon);
@@ -606,7 +606,7 @@ namespace basegfx
             }
         }
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

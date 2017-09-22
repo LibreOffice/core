@@ -34,7 +34,7 @@ namespace basegfx
     class B3DPolygon;
     class B3DRange;
 
-    namespace tools
+    namespace utils
     {
         // B3DPolygon tools
 
@@ -120,7 +120,7 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B3DPolygon snapPointsOfHorizontalOrVerticalEdges(const B3DPolygon& rCandidate);
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_POLYGON_B3DPOLYGONTOOLS_HXX

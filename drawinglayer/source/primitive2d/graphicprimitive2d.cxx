@@ -55,7 +55,7 @@ namespace drawinglayer
 
                 // mirror by applying negative scale to the unit primitive and
                 // applying the object transformation on it.
-                aTransform = basegfx::tools::createScaleB2DHomMatrix(
+                aTransform = basegfx::utils::createScaleB2DHomMatrix(
                     bHMirr ? -1.0 : 1.0,
                     bVMirr ? -1.0 : 1.0);
                 aTransform.translate(

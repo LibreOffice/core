@@ -36,14 +36,14 @@ namespace internal {
     {
         // oval:
         ::basegfx::B2DPolygon poly (
-            ::basegfx::tools::createPolygonFromEllipse( rCenter, fRadius*2, fRadius ) ); //Horizontal Ellipse is rotated by 90 degress
+            ::basegfx::utils::createPolygonFromEllipse( rCenter, fRadius*2, fRadius ) ); //Horizontal Ellipse is rotated by 90 degress
         return ::basegfx::B2DPolyPolygon( poly );
     }
     else
     {
          // circle:
         ::basegfx::B2DPolygon poly(
-            ::basegfx::tools::createPolygonFromCircle( rCenter, fRadius ) );
+            ::basegfx::utils::createPolygonFromCircle( rCenter, fRadius ) );
         return ::basegfx::B2DPolyPolygon( poly );
     }
 }

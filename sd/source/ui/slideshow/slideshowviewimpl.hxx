@@ -37,7 +37,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <cppcanvas/spritecanvas.hxx>
 #include <vcl/help.hxx>
 #include <unotools/pathoptions.hxx>

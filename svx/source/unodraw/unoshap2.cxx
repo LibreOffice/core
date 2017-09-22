@@ -58,7 +58,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/tools/unotools.hxx>
+#include <basegfx/utils/unotools.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <svx/svdograf.hxx>
@@ -960,7 +960,7 @@ basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( c
         }
 
         // check for closed state flag
-        basegfx::tools::checkClosed(aNewPolygon);
+        basegfx::utils::checkClosed(aNewPolygon);
 
         // add new subpolygon
         aRetval.append(aNewPolygon);
@@ -1018,7 +1018,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
             }
 
             // check for closed state flag
-            basegfx::tools::checkClosed(aNewPolygon);
+            basegfx::utils::checkClosed(aNewPolygon);
 
             // set polygon
             SetPolygon(basegfx::B2DPolyPolygon(aNewPolygon));

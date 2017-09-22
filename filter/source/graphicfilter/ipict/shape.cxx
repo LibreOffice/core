@@ -151,7 +151,7 @@ namespace PictReaderShape {
     long const X[2] = { oval.Left(), oval.Right() };
     long const Y[2] = { oval.Top(), oval.Bottom() };
     B2DPoint center(0.5*(X[1]+X[0]), 0.5*(Y[1]+Y[0]));
-    B2DPolygon poly = basegfx::tools::createPolygonFromEllipse(center, 0.5*(X[1]-X[0]), 0.5*(Y[1]-Y[0]));
+    B2DPolygon poly = basegfx::utils::createPolygonFromEllipse(center, 0.5*(X[1]-X[0]), 0.5*(Y[1]-Y[0]));
     if (drawFrame)
       dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLineJoin::NONE);
     else
@@ -184,7 +184,7 @@ namespace PictReaderShape {
     while (angl2 < 0.0) angl2 += F_2PI;
     while (angl2 >= F_2PI) angl2 -= F_2PI;
 
-    B2DPolygon poly = basegfx::tools::createPolygonFromEllipseSegment(center, 0.5*(X[1]-X[0]), 0.5*(Y[1]-Y[0]), angl1, angl2);
+    B2DPolygon poly = basegfx::utils::createPolygonFromEllipseSegment(center, 0.5*(X[1]-X[0]), 0.5*(Y[1]-Y[0]), angl1, angl2);
     if (drawFrame)
       dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLineJoin::NONE);
     else {
@@ -207,7 +207,7 @@ namespace PictReaderShape {
     if (ovalH > height) ovalH = static_cast< int >( height );
 
     B2DRectangle rect(B2DPoint(X[0],Y[0]), B2DPoint(X[1],Y[1]));
-    B2DPolygon poly = basegfx::tools::createPolygonFromRect(rect, (width != 0.0) ? ovalW/width : 0.0, (height != 0.0) ? ovalH/height : 0.0);
+    B2DPolygon poly = basegfx::utils::createPolygonFromRect(rect, (width != 0.0) ? ovalW/width : 0.0, (height != 0.0) ? ovalH/height : 0.0);
 
     if (drawFrame)
       dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLineJoin::NONE);

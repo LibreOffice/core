@@ -35,7 +35,7 @@
 
 #include <vcl/virdev.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -214,7 +214,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
         rContent.SetFillColor(COL_BLACK);
         rContent.SetLineColor();
         rContent.DrawTransparent(
-            ::basegfx::B2DPolyPolygon(::basegfx::tools::createPolygonFromRect(
+            ::basegfx::B2DPolyPolygon(::basegfx::utils::createPolygonFromRect(
                 ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right()+1, aBox.Bottom()+1),
                 0,
                 0)),

@@ -9,8 +9,8 @@
 
 #include <sal/config.h>
 
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/unopolypolygon.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/unopolypolygon.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/rendering/XColorSpace.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>

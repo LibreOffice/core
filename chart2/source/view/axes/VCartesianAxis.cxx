@@ -132,7 +132,7 @@ bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShap
 
 void lcl_getRotatedPolygon( B2DPolygon &aPoly, const ::basegfx::B2DRectangle &aRect, const awt::Point &aPos, const double fRotationAngleDegree )
 {
-    aPoly = basegfx::tools::createPolygonFromRect( aRect );
+    aPoly = basegfx::utils::createPolygonFromRect( aRect );
 
     // For rotating the rectangle we use the opposite angle,
     // since `B2DHomMatrix` class used for
@@ -168,7 +168,7 @@ bool doesOverlap( const Reference< drawing::XShape >& xShape1
     B2DPolyPolygon aPolyPoly1, aPolyPoly2;
     aPolyPoly1.append( aPoly1 );
     aPolyPoly2.append( aPoly2 );
-    B2DPolyPolygon overlapPoly = ::basegfx::tools::clipPolyPolygonOnPolyPolygon( aPolyPoly1, aPolyPoly2, true, false );
+    B2DPolyPolygon overlapPoly = ::basegfx::utils::clipPolyPolygonOnPolyPolygon( aPolyPoly1, aPolyPoly2, true, false );
 
     return (overlapPoly.count() > 0);
 }

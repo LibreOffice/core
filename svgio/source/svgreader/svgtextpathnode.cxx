@@ -341,7 +341,7 @@ namespace svgio
                 return false;
             }
 
-            const double fBasegfxPathLength(basegfx::tools::getLength(aPolygon));
+            const double fBasegfxPathLength(basegfx::utils::getLength(aPolygon));
 
             return !basegfx::fTools::equalZero(fBasegfxPathLength);
         }
@@ -368,7 +368,7 @@ namespace svgio
                             aPolygon.transform(*pSvgPathNode->getTransform());
                         }
 
-                        const double fBasegfxPathLength(basegfx::tools::getLength(aPolygon));
+                        const double fBasegfxPathLength(basegfx::utils::getLength(aPolygon));
 
                         if(!basegfx::fTools::equalZero(fBasegfxPathLength))
                         {

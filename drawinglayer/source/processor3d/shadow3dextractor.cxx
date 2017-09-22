@@ -147,7 +147,7 @@ namespace drawinglayer
                         }
                         else
                         {
-                            a2DHairline = basegfx::tools::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getViewInformation3D().getObjectToView());
+                            a2DHairline = basegfx::utils::createB2DPolygonFromB3DPolygon(rPrimitive.getB3DPolygon(), getViewInformation3D().getObjectToView());
                         }
 
                         if(a2DHairline.count())
@@ -178,7 +178,7 @@ namespace drawinglayer
                         }
                         else
                         {
-                            a2DFill = basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getViewInformation3D().getObjectToView());
+                            a2DFill = basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(rPrimitive.getB3DPolyPolygon(), getViewInformation3D().getObjectToView());
                         }
 
                         if(a2DFill.count())

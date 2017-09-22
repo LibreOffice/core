@@ -97,9 +97,9 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/range/basicrange.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/gradienttools.hxx>
-#include <basegfx/tools/tools.hxx>
+#include <basegfx/utils/canvastools.hxx>
+#include <basegfx/utils/gradienttools.hxx>
+#include <basegfx/utils/tools.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/vector/b2dsize.hxx>

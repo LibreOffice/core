@@ -216,7 +216,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageFill::cre
         const SdrPage& rPage = getPage();
 
         const basegfx::B2DRange aPageFillRange(0.0, 0.0, (double)rPage.GetWidth(), (double)rPage.GetHeight());
-        const basegfx::B2DPolygon aPageFillPolygon(basegfx::tools::createPolygonFromRect(aPageFillRange));
+        const basegfx::B2DPolygon aPageFillPolygon(basegfx::utils::createPolygonFromRect(aPageFillRange));
         Color aPageFillColor;
 
         if(pPageView->GetApplicationDocumentColor() != COL_AUTO)

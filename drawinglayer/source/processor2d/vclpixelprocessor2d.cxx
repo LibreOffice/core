@@ -156,7 +156,7 @@ namespace drawinglayer
                 basegfx::B2DPoint aTopRight(aRange.getMaxX() - fXOnePixel, aRange.getMinY());
                 basegfx::B2DPoint aBottomLeft(aRange.getMinX(), aRange.getMaxY() - fYOnePixel);
                 basegfx::B2DPoint aBottomRight(aRange.getMaxX() - fXOnePixel, aRange.getMaxY() - fYOnePixel);
-                aLocalPolygon = basegfx::tools::distort(aLocalPolygon, aRange, aTopLeft, aTopRight, aBottomLeft, aBottomRight);
+                aLocalPolygon = basegfx::utils::distort(aLocalPolygon, aRange, aTopLeft, aTopRight, aBottomLeft, aBottomRight);
             }
 
             const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rSource.getBColor()));
@@ -182,7 +182,7 @@ namespace drawinglayer
             basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
             // simplify curve segments
-            aLocalPolygon = basegfx::tools::simplifyCurveSegments(aLocalPolygon);
+            aLocalPolygon = basegfx::utils::simplifyCurveSegments(aLocalPolygon);
 
             if(rSource.getStrokeAttribute().isDefault() || 0.0 == rSource.getStrokeAttribute().getFullDotDashLen())
             {
@@ -192,7 +192,7 @@ namespace drawinglayer
             else
             {
                 // apply LineStyle
-                basegfx::tools::applyLineDashing(
+                basegfx::utils::applyLineDashing(
                     aLocalPolygon,
                     rSource.getStrokeAttribute().getDotDashArray(),
                     &aHairLinePolyPolygon,
@@ -745,7 +745,7 @@ namespace drawinglayer
                         // create hatch polygon in range size and discrete coordinates
                         basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getOutputRange());
                         aHatchRange.transform(maCurrentTransformation);
-                        const basegfx::B2DPolygon aHatchPolygon(basegfx::tools::createPolygonFromRect(aHatchRange));
+                        const basegfx::B2DPolygon aHatchPolygon(basegfx::utils::createPolygonFromRect(aHatchRange));
 
                         if(rFillHatchAttributes.isFillBackground())
                         {

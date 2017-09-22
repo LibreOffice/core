@@ -19,7 +19,7 @@
 
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
@@ -77,7 +77,7 @@ namespace drawinglayer
         basegfx::B2DRange PolyPolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range
-            return basegfx::tools::getRange(getB2DPolyPolygon());
+            return basegfx::utils::getRange(getB2DPolyPolygon());
         }
 
         // provide unique ID
@@ -141,7 +141,7 @@ namespace drawinglayer
         basegfx::B2DRange PolyPolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range
-            return basegfx::tools::getRange(getB2DPolyPolygon());
+            return basegfx::utils::getRange(getB2DPolyPolygon());
         }
 
         // provide unique ID
@@ -209,7 +209,7 @@ namespace drawinglayer
         basegfx::B2DRange PolyPolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // get range of it (subdivided)
-            basegfx::B2DRange aRetval(basegfx::tools::getRange(getB2DPolyPolygon()));
+            basegfx::B2DRange aRetval(basegfx::utils::getRange(getB2DPolyPolygon()));
 
             // if width, grow by line width
             if(getLineAttribute().getWidth())
@@ -256,7 +256,7 @@ namespace drawinglayer
         basegfx::B2DRange PolyPolygonColorPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range
-            return basegfx::tools::getRange(getB2DPolyPolygon());
+            return basegfx::utils::getRange(getB2DPolyPolygon());
         }
 
         // provide unique ID
@@ -422,7 +422,7 @@ namespace drawinglayer
                         // create SubSequence with FillGraphicPrimitive2D based on polygon range
                         const basegfx::B2DRange aOutRange(getB2DPolyPolygon().getB2DRange());
                         const basegfx::B2DHomMatrix aNewObjectTransform(
-                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            basegfx::utils::createScaleTranslateB2DHomMatrix(
                                 aOutRange.getRange(),
                                 aOutRange.getMinimum()));
                         Primitive2DReference xSubRef;
@@ -439,14 +439,14 @@ namespace drawinglayer
                             basegfx::B2DRange aAdaptedRange(getFillGraphic().getGraphicRange());
 
                             const basegfx::B2DHomMatrix aFromDefinitionRangeToGlobal(
-                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                basegfx::utils::createScaleTranslateB2DHomMatrix(
                                     getDefinitionRange().getRange(),
                                     getDefinitionRange().getMinimum()));
 
                             aAdaptedRange.transform(aFromDefinitionRangeToGlobal);
 
                             basegfx::B2DHomMatrix aFromGlobalToOutRange(
-                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                basegfx::utils::createScaleTranslateB2DHomMatrix(
                                     aOutRange.getRange(),
                                     aOutRange.getMinimum()));
                             aFromGlobalToOutRange.invert();
@@ -595,7 +595,7 @@ namespace drawinglayer
 
         basegfx::B2DRange PolyPolygonSelectionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            basegfx::B2DRange aRetval(basegfx::tools::getRange(getB2DPolyPolygon()));
+            basegfx::B2DRange aRetval(basegfx::utils::getRange(getB2DPolyPolygon()));
 
             if(getDiscreteGrow() > 0.0)
             {

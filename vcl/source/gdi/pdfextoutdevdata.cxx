@@ -443,7 +443,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                         if ( bClippingNeeded )
                         {
                             rWriter.Push();
-                            basegfx::B2DPolyPolygon aRect( basegfx::tools::createPolygonFromRect(
+                            basegfx::B2DPolyPolygon aRect( basegfx::utils::createPolygonFromRect(
                                 basegfx::B2DRectangle( aVisibleOutputRect.Left(), aVisibleOutputRect.Top(),
                                                        aVisibleOutputRect.Right(), aVisibleOutputRect.Bottom() ) ) );
                             rWriter.SetClipRegion( aRect);

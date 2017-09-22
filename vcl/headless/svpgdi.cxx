@@ -538,7 +538,7 @@ void SvpSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
     SalColor aOrigFillColor = m_aFillColor;
     SalColor aOrigLineColor = m_aLineColor;
 
-    basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+1, nY+1));
+    basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+1, nY+1));
     m_aLineColor = SALCOLOR_NONE;
     m_aFillColor = nSalColor;
 
@@ -558,7 +558,7 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 
     if (aOrigFillColor != SALCOLOR_NONE)
     {
-        basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
+        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
         m_aFillColor = aOrigFillColor;
         drawPolyPolygon(basegfx::B2DPolyPolygon(aRect));
         m_aFillColor = SALCOLOR_NONE;
@@ -567,7 +567,7 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     if (aOrigLineColor != SALCOLOR_NONE)
     {
         // need same -1 hack as X11SalGraphicsImpl::drawRect
-        basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle( nX, nY, nX+nWidth-1, nY+nHeight-1));
+        basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle( nX, nY, nX+nWidth-1, nY+nHeight-1));
         m_aLineColor = aOrigLineColor;
         drawPolyPolygon(basegfx::B2DPolyPolygon(aRect));
         m_aLineColor = SALCOLOR_NONE;
@@ -1283,7 +1283,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
 
 void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
-    basegfx::B2DPolygon aRect = basegfx::tools::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
+    basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
 
     invert(aRect, nFlags);
 }

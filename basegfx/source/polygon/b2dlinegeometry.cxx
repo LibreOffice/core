@@ -33,7 +33,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         B2DPolyPolygon createAreaGeometryForLineStartEnd(
             const B2DPolygon& rCandidate,
@@ -47,7 +47,7 @@ namespace basegfx
         {
             B2DPolyPolygon aRetval;
             OSL_ENSURE(rCandidate.count() > 1, "createAreaGeometryForLineStartEnd: Line polygon has too less points (!)");
-            OSL_ENSURE(rArrow.count() > 0, "createAreaGeometryForLineStartEnd: Empty arrow tools::PolyPolygon (!)");
+            OSL_ENSURE(rArrow.count() > 0, "createAreaGeometryForLineStartEnd: Empty arrow utils::PolyPolygon (!)");
             OSL_ENSURE(fWidth > 0.0, "createAreaGeometryForLineStartEnd: Width too small (!)");
             OSL_ENSURE(fDockingPosition >= 0.0 && fDockingPosition <= 1.0,
                 "createAreaGeometryForLineStartEnd: fDockingPosition out of range [0.0 .. 1.0] (!)");
@@ -75,7 +75,7 @@ namespace basegfx
                 const B2DRange aArrowSize(getRange(rArrow));
 
                 // build ArrowTransform; center in X, align with axis in Y
-                B2DHomMatrix aArrowTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                B2DHomMatrix aArrowTransform(basegfx::utils::createTranslateB2DHomMatrix(
                     -aArrowSize.getCenter().getX(), -aArrowSize.getMinimum().getY()));
 
                 // scale to target size
@@ -125,7 +125,7 @@ namespace basegfx
 
             return aRetval;
         }
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 namespace basegfx
@@ -359,7 +359,7 @@ namespace basegfx
                 const B2DVector aPerpendStartA(aNormalizedPerpendicularA * -fHalfLineWidth);
                 const B2DVector aPerpendEndA(aNormalizedPerpendicularB * -fHalfLineWidth);
                 double fCutA(0.0);
-                const CutFlagValue aCutA(tools::findCut(
+                const CutFlagValue aCutA(utils::findCut(
                     rEdge.getStartPoint(), aPerpendStartA,
                     rEdge.getEndPoint(), aPerpendEndA,
                     CutFlagValue::ALL, &fCutA));
@@ -369,7 +369,7 @@ namespace basegfx
                 const B2DVector aPerpendStartB(aNormalizedPerpendicularA * fHalfLineWidth);
                 const B2DVector aPerpendEndB(aNormalizedPerpendicularB * fHalfLineWidth);
                 double fCutB(0.0);
-                const CutFlagValue aCutB(tools::findCut(
+                const CutFlagValue aCutB(utils::findCut(
                     rEdge.getEndPoint(), aPerpendEndB,
                     rEdge.getStartPoint(), aPerpendStartB,
                     CutFlagValue::ALL, &fCutB));
@@ -384,10 +384,10 @@ namespace basegfx
                 {
                     if(bStartRound)
                     {
-                        basegfx::B2DPolygon aStartPolygon(tools::createHalfUnitCircle());
+                        basegfx::B2DPolygon aStartPolygon(utils::createHalfUnitCircle());
 
                         aStartPolygon.transform(
-                            tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            utils::createScaleShearXRotateTranslateB2DHomMatrix(
                                 fHalfLineWidth, fHalfLineWidth,
                                 0.0,
                                 atan2(aTangentA.getY(), aTangentA.getX()) + F_PI2,
@@ -447,10 +447,10 @@ namespace basegfx
                 {
                     if(bEndRound)
                     {
-                        basegfx::B2DPolygon aEndPolygon(tools::createHalfUnitCircle());
+                        basegfx::B2DPolygon aEndPolygon(utils::createHalfUnitCircle());
 
                         aEndPolygon.transform(
-                            tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            utils::createScaleShearXRotateTranslateB2DHomMatrix(
                                 fHalfLineWidth, fHalfLineWidth,
                                 0.0,
                                 atan2(aTangentB.getY(), aTangentB.getX()) - F_PI2,
@@ -522,7 +522,7 @@ namespace basegfx
                     // Remark: This nearly never happens due to curve preparations to extreme points
                     // and maximum angle turning, but I constructed a test case and checked that it is
                     // working properly.
-                    const B2DPolyPolygon aTemp(tools::solveCrossovers(aBezierPolygon));
+                    const B2DPolyPolygon aTemp(utils::solveCrossovers(aBezierPolygon));
                     const sal_uInt32 nTempCount(aTemp.count());
 
                     if(nTempCount)
@@ -589,11 +589,11 @@ namespace basegfx
                 // create left vertical
                 if(bStartRound)
                 {
-                    aEdgePolygon = tools::createHalfUnitCircle();
+                    aEdgePolygon = utils::createHalfUnitCircle();
                     fAngle = atan2(aTangent.getY(), aTangent.getX());
                     bAngle = true;
                     aEdgePolygon.transform(
-                        tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        utils::createScaleShearXRotateTranslateB2DHomMatrix(
                             fHalfLineWidth, fHalfLineWidth,
                             0.0,
                             fAngle + F_PI2,
@@ -623,7 +623,7 @@ namespace basegfx
                 // create right vertical
                 if(bEndRound)
                 {
-                    basegfx::B2DPolygon aEndPolygon(tools::createHalfUnitCircle());
+                    basegfx::B2DPolygon aEndPolygon(utils::createHalfUnitCircle());
 
                     if(!bAngle)
                     {
@@ -631,7 +631,7 @@ namespace basegfx
                     }
 
                     aEndPolygon.transform(
-                        tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        utils::createScaleShearXRotateTranslateB2DHomMatrix(
                             fHalfLineWidth, fHalfLineWidth,
                             0.0,
                             fAngle - F_PI2,
@@ -713,7 +713,7 @@ namespace basegfx
                     // is not needed since the same fCut will be found on the first edge.
                     // If it exists, insert it to complete the mitered fill polygon.
                     double fCutPos(0.0);
-                    tools::findCut(aStartPoint, rTangentPrev, aEndPoint, rTangentEdge, CutFlagValue::ALL, &fCutPos);
+                    utils::findCut(aStartPoint, rTangentPrev, aEndPoint, rTangentEdge, CutFlagValue::ALL, &fCutPos);
 
                     if(fCutPos != 0.0)
                     {
@@ -740,7 +740,7 @@ namespace basegfx
                         fAngleEnd += F_2PI;
                     }
 
-                    const B2DPolygon aBow(tools::createPolygonFromEllipseSegment(rPoint, fHalfLineWidth, fHalfLineWidth, fAngleStart, fAngleEnd));
+                    const B2DPolygon aBow(utils::createPolygonFromEllipseSegment(rPoint, fHalfLineWidth, fHalfLineWidth, fAngleStart, fAngleEnd));
 
                     if(aBow.count() > 1)
                     {
@@ -777,7 +777,7 @@ namespace basegfx
         }
     } // end of anonymus namespace
 
-    namespace tools
+    namespace utils
     {
         B2DPolyPolygon createAreaGeometry(
             const B2DPolygon& rCandidate,
@@ -971,7 +971,7 @@ namespace basegfx
                 return B2DPolyPolygon(rCandidate);
             }
         }
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
