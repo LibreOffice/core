@@ -14,6 +14,10 @@
 
 namespace {
 
+bool startsWith(const std::string& rStr, const char* pSubStr) {
+    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
+}
+
 class BadStatics
     : public clang::RecursiveASTVisitor<BadStatics>
     , public loplugin::Plugin
@@ -33,12 +37,17 @@ public:
             std::vector<QualType> const& rParents)
     {
         QualType pt;
+#if 0
         if (rpType->isAnyPointerType()) {
             pt = rpType->getPointeeType();
         } else if (auto at = rpType->getAsArrayTypeUnsafe()) {
             pt = at->getElementType();
         } else if (auto rt = rpType->getAs<ReferenceType>()) {
             pt = rt->getPointeeType();
+        }
+#endif
+        if (auto at = rpType->getAsArrayTypeUnsafe()) {
+            pt = at->getElementType();
         }
         if (!pt.isNull()) {
             QualType const pPointee(pt.getUnqualifiedType().getCanonicalType());
@@ -66,6 +75,10 @@ public:
             return std::make_pair(true, chain);
         }
         if (type.Class("array").StdNamespace()
+            || type.Class("unique_ptr").StdNamespace()
+            || type.Class("shared_ptr").StdNamespace()
+            || type.Class("Reference").Namespace("rtl").GlobalNamespace()
+            || type.Class("Sequence").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()
             || type.Class("deque").StdNamespace()
             || type.Class("forward_list").StdNamespace()
             || type.Class("initializer_list").StdNamespace()
@@ -108,10 +121,31 @@ public:
             return std::make_pair(false, std::vector<FieldDecl const*>());
         }
         if (   type.Class("DeleteOnDeinit").Namespace("vcl").GlobalNamespace()
+            || type.Class("DeleteUnoReferenceOnDeinit").Namespace("vcl").GlobalNamespace()
+            || type.Class("OString").Namespace("rtl").GlobalNamespace()
+            || type.Class("OUString").Namespace("rtl").GlobalNamespace()
+            || type.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
+            || type.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()
+            || type.Class("Mutex").Namespace("osl").GlobalNamespace()
+            || type.Class("Condition").Namespace("osl").GlobalNamespace()
+            || type.Class("WeakReference").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace() // not owning
             || type.Class("weak_ptr").StdNamespace() // not owning
+            || type.Class("basic_string").StdNamespace()
+            || type.Class("TestPlugInDefaultImpl").Namespace("CppUnit").GlobalNamespace() // CppUnit
+            || type.Class("TestNamer").Namespace("CppUnit").GlobalNamespace() // CppUnit
+            || type.Class("LanguageTag").GlobalNamespace() // probably okay currently, unless lt_tag_unref does something stupid
+            || type.Class("Thread").Namespace("salhelper").GlobalNamespace() // salhelper::Thread dtor hidden
+            || type.Class("Type").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace() // FIXME is this ok?
+            || type.Class("OImplementationId").Namespace("cppu").GlobalNamespace() // just a Sequence
+            || type.Class("B2DHomMatrix").Namespace("basegfx").GlobalNamespace()
+//            || type.Class("Allocator").Class("FileHandle_Impl").GlobalNamespace() // can't clear that?
+//            || type.Class("Allocator").GlobalNamespace() // can't clear that?
+            || type.Class("UnicodeToTextConverter_Impl").AnonymousNamespace().GlobalNamespace() // dtor is no-op
+            || type.Class("TextToUnicodeConverter_Impl").AnonymousNamespace().GlobalNamespace() // dtor is no-op
             || type.Class("ImplWallpaper").GlobalNamespace() // very odd static instance here
             || type.Class("Application").GlobalNamespace() // numerous odd subclasses in vclmain::createApplication()
             || type.Class("DemoMtfApp").GlobalNamespace() // one of these Application with own VclPtr
+            || type.Class("GlobalObject").GlobalNamespace() // sal unit test
            )
         {
             return std::make_pair(false, std::vector<FieldDecl const*>());
@@ -120,6 +154,29 @@ public:
         copy.push_back(rpType.getUnqualifiedType().getCanonicalType());
         CXXRecordDecl const*const pDecl(dyn_cast<CXXRecordDecl>(pDefinition));
         assert(pDecl);
+        // not hasNonTrivialDestructor() because if it's a default one
+        // we want to recursively check the members, if they're all good it's ok
+        if (/*pDecl->hasNonTrivialDestructor() &&*/ pDecl->hasUserDeclaredDestructor())
+        {
+            auto const*const pDtor(pDecl->getDestructor());
+            if (auto const*const pDtorDef = pDtor->getDefinition())
+            {
+                auto const pBody(pDtorDef->getBody());
+                auto const pCompound(dyn_cast_or_null<CompoundStmt>(pBody));
+                if (pCompound && pCompound->size() > 0) {
+                    return std::make_pair(true, chain);
+                }
+                // else: empty dtor impl.: check the members
+            }
+            else // assume the worst of unavailable dtors
+            {
+                if (!pDtor->isPure())
+                {
+                    return std::make_pair(true, chain);
+                }
+                // else: empty dtor impl.: check the members
+            }
+        }
         for (auto it = pDecl->field_begin(); it != pDecl->field_end(); ++it) {
             chain.push_back(*it);
             auto const ret(isBadStaticType((*it)->getType(), chain, copy));
@@ -201,6 +258,9 @@ public:
                 || name == "m_aUncommitedRegistrations" // sw/source/uibase/dbui/dbmgr.cxx
                 || (loplugin::DeclCheck(pVarDecl).Var("aAllListeners")
                     .Class("ScAddInListener").GlobalNamespace()) // not owning
+                || name == "g_pDefaultImplFontCharMap" // only trivial members
+                || startsWith(name, "autoRegisterRegistry__") // CppUnit
+                || name == "g_aBufferAllocator" // can't clear that?
                ) // these variables appear unproblematic
             {
                 return true;
