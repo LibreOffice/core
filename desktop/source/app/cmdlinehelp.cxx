@@ -185,8 +185,8 @@ namespace desktop
             explicit lcl_Console(short nBufHeight)
                 : mConsoleMode(unknown)
             {
-                if (GetStdHandle(STD_OUTPUT_HANDLE) == nullptr) // application does not have associated standard handles
-                {
+                HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+                if (hStdOut == nullptr || hStdOut == INVALID_HANDLE_VALUE) // application does not have associated standard handles
                     STARTUPINFOA aStartupInfo;
                     aStartupInfo.cb = sizeof(aStartupInfo);
                     GetStartupInfoA(&aStartupInfo);
