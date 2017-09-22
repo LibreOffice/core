@@ -51,7 +51,7 @@ namespace drawinglayer
 
             for(basegfx::B3DPolyPolygon & a : rFill)
             {
-                aRetval.expand(basegfx::tools::getRange(a));
+                aRetval.expand(basegfx::utils::getRange(a));
             }
 
             return aRetval;
@@ -64,7 +64,7 @@ namespace drawinglayer
 
             for(basegfx::B3DPolyPolygon & a : rFill)
             {
-                a = basegfx::tools::applyDefaultNormalsSphere(a, aCenter);
+                a = basegfx::utils::applyDefaultNormalsSphere(a, aCenter);
             }
         }
 
@@ -81,7 +81,7 @@ namespace drawinglayer
             // invert normals
             for(basegfx::B3DPolyPolygon & a : rFill)
             {
-                a = basegfx::tools::invertNormals(a);
+                a = basegfx::utils::invertNormals(a);
             }
         }
 
@@ -105,7 +105,7 @@ namespace drawinglayer
                 // apply parallel texture coordinates in X and/or Y
                 for(auto & a: rFill)
                 {
-                    a = basegfx::tools::applyDefaultTextureCoordinatesParallel(a, rRange, bParallelX, bParallelY);
+                    a = basegfx::utils::applyDefaultTextureCoordinatesParallel(a, rRange, bParallelX, bParallelY);
                 }
             }
 
@@ -116,7 +116,7 @@ namespace drawinglayer
 
                 for(auto & a: rFill)
                 {
-                    a = basegfx::tools::applyDefaultTextureCoordinatesSphere(a, aCenter, bSphereX, bSphereY);
+                    a = basegfx::utils::applyDefaultTextureCoordinatesSphere(a, aCenter, bSphereX, bSphereY);
                 }
             }
 

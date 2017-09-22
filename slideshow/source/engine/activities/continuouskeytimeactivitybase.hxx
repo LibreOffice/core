@@ -22,7 +22,7 @@
 
 #include "simplecontinuousactivitybase.hxx"
 
-#include <basegfx/tools/keystoplerp.hxx>
+#include <basegfx/utils/keystoplerp.hxx>
 #include <vector>
 
 
@@ -67,7 +67,7 @@ namespace slideshow
                                         sal_uInt32  nRepeatCount ) const override;
 
         private:
-            const ::basegfx::tools::KeyStopLerp maLerper;
+            const ::basegfx::utils::KeyStopLerp maLerper;
         };
     }
 }

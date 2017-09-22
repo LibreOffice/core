@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basegfx/tools/keystoplerp.hxx>
+#include <basegfx/utils/keystoplerp.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 
@@ -42,7 +42,7 @@ static void validateInput(const std::vector<double>& rKeyStops)
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         KeyStopLerp::KeyStopLerp( const std::vector<double>& rKeyStops ) :
             maKeyStops(rKeyStops),

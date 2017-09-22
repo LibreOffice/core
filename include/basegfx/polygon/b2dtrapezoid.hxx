@@ -75,7 +75,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         // convert SourcePolyPolygon to trapezoids. The trapezoids will be appended to
         // ro_Result. ro_Result will not be cleared. If SourcePolyPolygon contains curves,
@@ -104,7 +104,7 @@ namespace basegfx
             const B2DPolygon& rPolygon,
             double fLineWidth);
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 

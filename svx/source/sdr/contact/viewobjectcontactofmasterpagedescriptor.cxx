@@ -123,7 +123,7 @@ namespace sdr
 
                     // need to create a clip primitive, add clipped list to target
                     const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::MaskPrimitive2D(
-                        basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aCommonArea)), xMasterPageSequence));
+                        basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(aCommonArea)), xMasterPageSequence));
                     xRetval.push_back(xReference);
                 }
             }

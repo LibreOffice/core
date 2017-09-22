@@ -54,8 +54,8 @@
 #include "basegfx/point/b2dpoint.hxx"
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/tools/canvastools.hxx"
-#include "basegfx/tools/unopolypolygon.hxx"
+#include "basegfx/utils/canvastools.hxx"
+#include "basegfx/utils/unopolypolygon.hxx"
 
 #include <vcl/metric.hxx>
 #include <vcl/font.hxx>

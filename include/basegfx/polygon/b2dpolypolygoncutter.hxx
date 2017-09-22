@@ -26,7 +26,7 @@
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         /** Solve all crossovers (aka self-intersections) in a polyPolygon.
 
@@ -141,7 +141,7 @@ namespace basegfx
         */
         BASEGFX_DLLPUBLIC B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput);
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 

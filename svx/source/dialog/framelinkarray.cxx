@@ -139,7 +139,7 @@ basegfx::B2DHomMatrix Cell::CreateCoordinateSystem(const Array& rArray) const
             }
 
             // use column vectors as coordinate axes, homogen column for translation
-            const_cast<Cell*>(this)->maCoordinateSystem = basegfx::tools::createCoordinateSystemTransform(aOrigin, aX, aY);
+            const_cast<Cell*>(this)->maCoordinateSystem = basegfx::utils::createCoordinateSystemTransform(aOrigin, aX, aY);
         }
     }
 
@@ -1043,9 +1043,9 @@ void HelperCreateEntry(const Array& rArray, const Style& rStyle, drawinglayer::p
             if(bL || bR || bT || bB)
             {
                 const basegfx::B2DHomMatrix aCoordinateSystem(pCell->CreateCoordinateSystem(rArray));
-                const basegfx::B2DVector aX(basegfx::tools::getColumn(aCoordinateSystem, 0));
-                const basegfx::B2DVector aY(basegfx::tools::getColumn(aCoordinateSystem, 1));
-                const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(aCoordinateSystem, 2));
+                const basegfx::B2DVector aX(basegfx::utils::getColumn(aCoordinateSystem, 0));
+                const basegfx::B2DVector aY(basegfx::utils::getColumn(aCoordinateSystem, 1));
+                const basegfx::B2DPoint aOrigin(basegfx::utils::getColumn(aCoordinateSystem, 2));
 
                 if(bL || bR)
                 {
@@ -1122,8 +1122,8 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
         {
             const Cell& rCell = CELL(nCol, nRow);
             const basegfx::B2DHomMatrix aCoordinateSystem(rCell.CreateCoordinateSystem(*this));
-            const basegfx::B2DVector aX(basegfx::tools::getColumn(aCoordinateSystem, 0));
-            const basegfx::B2DVector aY(basegfx::tools::getColumn(aCoordinateSystem, 1));
+            const basegfx::B2DVector aX(basegfx::utils::getColumn(aCoordinateSystem, 0));
+            const basegfx::B2DVector aY(basegfx::utils::getColumn(aCoordinateSystem, 1));
 
             if(!aX.equalZero() && !aY.equalZero())
             {
@@ -1131,7 +1131,7 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                 size_t _nFirstRow = mxImpl->GetMergedFirstRow(nCol, nRow);
                 size_t _nLastCol = mxImpl->GetMergedLastCol(nCol, nRow);
                 size_t _nLastRow = mxImpl->GetMergedLastRow(nCol, nRow);
-                const basegfx::B2DPoint aOrigin(basegfx::tools::getColumn(aCoordinateSystem, 2));
+                const basegfx::B2DPoint aOrigin(basegfx::utils::getColumn(aCoordinateSystem, 2));
 
                 const bool bOverlapX(rCell.mbOverlapX);
                 const bool bOverlapY(rCell.mbOverlapY);

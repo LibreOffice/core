@@ -177,7 +177,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
             // build transformation: translate and rotate so that given edge is
             // on x axis, them mirror in y and translate back
             const basegfx::B2DVector aEdge(aMirrorAxisB.X() - aMirrorAxisA.X(), aMirrorAxisB.Y() - aMirrorAxisA.Y());
-            basegfx::B2DHomMatrix aMatrixTransform(basegfx::tools::createTranslateB2DHomMatrix(
+            basegfx::B2DHomMatrix aMatrixTransform(basegfx::utils::createTranslateB2DHomMatrix(
                 -aMirrorAxisA.X(), -aMirrorAxisA.Y()));
             aMatrixTransform.rotate(-atan2(aEdge.getY(), aEdge.getX()));
             aMatrixTransform.scale(1.0, -1.0);
@@ -873,7 +873,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
 
                 if(fRot3D != 0.0)
                 {
-                    aLatheMat = basegfx::tools::createRotateAroundPoint(rPnt2, -fRot3D)
+                    aLatheMat = basegfx::utils::createRotateAroundPoint(rPnt2, -fRot3D)
                         * aLatheMat;
                 }
             }
@@ -1052,7 +1052,7 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
             if(pExtrudeObj)
             {
                 const basegfx::B2DPolyPolygon aExtrudePoly(
-                    basegfx::tools::prepareForPolygonOperation(pExtrudeObj->GetExtrudePolygon()));
+                    basegfx::utils::prepareForPolygonOperation(pExtrudeObj->GetExtrudePolygon()));
                 const SfxItemSet& rLocalSet = pExtrudeObj->GetMergedItemSet();
                 const drawing::FillStyle eLocalFillStyle = ITEMVALUE(rLocalSet, XATTR_FILLSTYLE, XFillStyleItem);
                 const Color aLocalColor = static_cast<const XFillColorItem&>(rLocalSet.Get(XATTR_FILLCOLOR)).GetColorValue();
@@ -1069,7 +1069,7 @@ void E3dView::DoDepthArrange(E3dScene const * pScene, double fDepth)
                         // do pAct->mpObj and pExtrudeObj overlap? Check by
                         // using logical AND clipping
                         const basegfx::B2DPolyPolygon aAndPolyPolygon(
-                            basegfx::tools::solvePolygonOperationAnd(
+                            basegfx::utils::solvePolygonOperationAnd(
                                 aExtrudePoly,
                                 pAct->maPreparedPolyPolygon));
 
@@ -1370,7 +1370,7 @@ void E3dView::Start3DCreation()
         {
             SdrObject* pMark = GetMarkedObjectByIndex(nMark);
             basegfx::B2DPolyPolygon aXPP(pMark->TakeXorPoly());
-            aR.expand(basegfx::tools::getRange(aXPP));
+            aR.expand(basegfx::utils::getRange(aXPP));
         }
 
         basegfx::B2DPoint aCenter(aR.getCenter());

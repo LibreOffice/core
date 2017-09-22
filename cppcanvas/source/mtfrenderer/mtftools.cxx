@@ -22,7 +22,7 @@
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/range/b2drectangle.hxx>
@@ -92,7 +92,7 @@ namespace cppcanvas
 
             const ::Size aSizePixel( rVDev.LogicToPixel( aSizeLogic ) );
 
-            o_rMatrix = basegfx::tools::createScaleB2DHomMatrix(
+            o_rMatrix = basegfx::utils::createScaleB2DHomMatrix(
                 aSizePixel.Width() / (double)aSizeLogic.Width(),
                 aSizePixel.Height() / (double)aSizeLogic.Height() );
 
@@ -168,7 +168,7 @@ namespace cppcanvas
                     // rotation involved - convert to polygon first,
                     // then transform that
                     ::basegfx::B2DPolygon aLocalClip(
-                        ::basegfx::tools::createPolygonFromRect(
+                        ::basegfx::utils::createPolygonFromRect(
                                 ::basegfx::B2DRectangle(
                                     (double)(aLocalClipRect.Left()),
                                     (double)(aLocalClipRect.Top()),
@@ -197,7 +197,7 @@ namespace cppcanvas
                     o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                         rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
-                            ::basegfx::tools::createPolygonFromRect(
+                            ::basegfx::utils::createPolygonFromRect(
                                 ::basegfx::B2DRectangle(
                                     (aLocalClipRect.Left() - rOffset.getX())/pScaling->getX(),
                                     (aLocalClipRect.Top() - rOffset.getY())/pScaling->getY(),
@@ -211,7 +211,7 @@ namespace cppcanvas
                     o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                         rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
-                            ::basegfx::tools::createPolygonFromRect(
+                            ::basegfx::utils::createPolygonFromRect(
                                 ::basegfx::B2DRectangle( aLocalClipRect.Left() - rOffset.getX(),
                                                          aLocalClipRect.Top() - rOffset.getY(),
                                                          aLocalClipRect.Right() - rOffset.getX(),
@@ -268,7 +268,7 @@ namespace cppcanvas
                 const double y( rStartPos.getY() );
 
                 o_rPoly.append(
-                    ::basegfx::tools::createPolygonFromRect(
+                    ::basegfx::utils::createPolygonFromRect(
                         ::basegfx::B2DRectangle( x + nX1, y + nY1, x + nX2, y + nY2 ) ) );
             }
 
@@ -279,7 +279,7 @@ namespace cppcanvas
                              const double               nY2 )
             {
                 o_rPoly.append(
-                    ::basegfx::tools::createPolygonFromRect(
+                    ::basegfx::utils::createPolygonFromRect(
                         ::basegfx::B2DRectangle( nX1, nY1, nX2, nY2 ) ) );
             }
 

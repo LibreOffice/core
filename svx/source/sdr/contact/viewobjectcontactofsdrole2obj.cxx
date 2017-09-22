@@ -111,7 +111,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
                 const basegfx::B2DHomMatrix aObjectMatrix(static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).createObjectTransform());
 
                 // shade the representation if the object is activated outplace
-                basegfx::B2DPolygon aObjectOutline(basegfx::tools::createUnitPolygon());
+                basegfx::B2DPolygon aObjectOutline(basegfx::utils::createUnitPolygon());
                 aObjectOutline.transform(aObjectMatrix);
 
                 // Use a FillHatchPrimitive2D with necessary attributes

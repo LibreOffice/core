@@ -181,7 +181,7 @@ namespace basegfx
         bool Triangulator::CheckPointInTriangle(EdgeEntry* pEdgeA, EdgeEntry const * pEdgeB, const B2DPoint& rTestPoint)
         {
             // inside triangle or on edge?
-            if(tools::isPointInTriangle(pEdgeA->getStart(), pEdgeA->getEnd(), pEdgeB->getEnd(), rTestPoint, true))
+            if(utils::isPointInTriangle(pEdgeA->getStart(), pEdgeA->getEnd(), pEdgeB->getEnd(), rTestPoint, true))
             {
                 // but not on point
                 if(!rTestPoint.equal(pEdgeA->getEnd()) && !rTestPoint.equal(pEdgeB->getEnd()))
@@ -387,9 +387,9 @@ namespace basegfx
             B2DPolygon aRetval;
 
             // subdivide locally (triangulate does not work with beziers), remove double and neutral points
-            B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? tools::adaptiveSubdivideByAngle(rCandidate) : rCandidate);
+            B2DPolygon aCandidate(rCandidate.areControlPointsUsed() ? utils::adaptiveSubdivideByAngle(rCandidate) : rCandidate);
             aCandidate.removeDoublePoints();
-            aCandidate = tools::removeNeutralPoints(aCandidate);
+            aCandidate = utils::removeNeutralPoints(aCandidate);
 
             if(aCandidate.count() == 2)
             {
@@ -398,10 +398,10 @@ namespace basegfx
             }
             else if(aCandidate.count() > 2)
             {
-                if(tools::isConvex(aCandidate))
+                if(utils::isConvex(aCandidate))
                 {
                     // polygon is convex, just use a triangle fan
-                    tools::addTriangleFan(aCandidate, aRetval);
+                    utils::addTriangleFan(aCandidate, aRetval);
                 }
                 else
                 {
@@ -420,7 +420,7 @@ namespace basegfx
             B2DPolygon aRetval;
 
             // subdivide locally (triangulate does not work with beziers)
-            B2DPolyPolygon aCandidate(rCandidate.areControlPointsUsed() ? tools::adaptiveSubdivideByAngle(rCandidate) : rCandidate);
+            B2DPolyPolygon aCandidate(rCandidate.areControlPointsUsed() ? utils::adaptiveSubdivideByAngle(rCandidate) : rCandidate);
 
             if(aCandidate.count() == 1)
             {

@@ -77,7 +77,7 @@
 #include "controller/SlsSelectionObserver.hxx"
 #include "view/SlideSorterView.hxx"
 
-#include <basegfx/tools/zoomtools.hxx>
+#include <basegfx/utils/zoomtools.hxx>
 
 #include "Window.hxx"
 #include "fupoor.hxx"

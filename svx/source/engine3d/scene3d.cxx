@@ -219,7 +219,7 @@ basegfx::B2DPolyPolygon E3dScene::TakeXorPoly() const
     const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
     const basegfx::B3DPolyPolygon aCubePolyPolygon(CreateWireframe());
 
-    basegfx::B2DPolyPolygon aRetval(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,
+    basegfx::B2DPolyPolygon aRetval(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,
         aViewInfo3D.getObjectToView()));
     aRetval.transform(rVCScene.getObjectTransformation());
 

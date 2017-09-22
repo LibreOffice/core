@@ -1524,7 +1524,7 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     if( rB2DPolyPoly.count() )
     {
         const double fFactor(1.0/256);
-        rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
+        rB2DPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
     return true;

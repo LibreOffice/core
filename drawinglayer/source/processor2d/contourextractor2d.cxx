@@ -67,7 +67,7 @@ namespace drawinglayer
                         {
                             // line polygons need to be represented as open polygons to differentiate them
                             // from filled polygons
-                            basegfx::tools::openWithGeometryChange(aLocalPolygon);
+                            basegfx::utils::openWithGeometryChange(aLocalPolygon);
                         }
 
                         maExtractedContour.emplace_back(aLocalPolygon);
@@ -88,7 +88,7 @@ namespace drawinglayer
                     // extract BoundRect from bitmaps in world coordinates
                     const primitive2d::BitmapPrimitive2D& rBitmapCandidate(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rBitmapCandidate.getTransform());
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
+                    basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
                     maExtractedContour.emplace_back(aPolygon);
                     break;
@@ -98,7 +98,7 @@ namespace drawinglayer
                     // extract BoundRect from MetaFiles in world coordinates
                     const primitive2d::MetafilePrimitive2D& rMetaCandidate(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
                     basegfx::B2DHomMatrix aLocalTransform(getViewInformation2D().getObjectTransformation() * rMetaCandidate.getTransform());
-                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
+                    basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
                     aPolygon.transform(aLocalTransform);
                     maExtractedContour.emplace_back(aPolygon);
                     break;
@@ -177,7 +177,7 @@ namespace drawinglayer
                     // primitives who's BoundRect will be added in world coordinates
                     basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
                     aRange.transform(getViewInformation2D().getObjectTransformation());
-                    maExtractedContour.emplace_back(basegfx::tools::createPolygonFromRect(aRange));
+                    maExtractedContour.emplace_back(basegfx::utils::createPolygonFromRect(aRange));
                     break;
                 }
                 default :

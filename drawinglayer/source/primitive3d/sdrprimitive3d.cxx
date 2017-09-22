@@ -57,7 +57,7 @@ namespace drawinglayer
             {
                 for(const auto & rSlice : rSlices)
                 {
-                    aRetval.expand(basegfx::tools::getRange(rSlice.getB3DPolyPolygon()));
+                    aRetval.expand(basegfx::utils::getRange(rSlice.getB3DPolyPolygon()));
                 }
 
                 aRetval.transform(getTransform());

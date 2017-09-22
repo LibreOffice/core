@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_TOOLS_B2DCLIPSTATE_HXX
-#define INCLUDED_BASEGFX_TOOLS_B2DCLIPSTATE_HXX
+#ifndef INCLUDED_BASEGFX_UTILS_B2DCLIPSTATE_HXX
+#define INCLUDED_BASEGFX_UTILS_B2DCLIPSTATE_HXX
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
@@ -33,7 +33,7 @@ namespace basegfx
     class B2DPolyPolygon;
     class B2DHomMatrix;
 
-    namespace tools
+    namespace utils
     {
         class ImplB2DClipState;
 
@@ -93,6 +93,6 @@ namespace basegfx
     }
 }
 
-#endif // INCLUDED_BASEGFX_TOOLS_B2DCLIPSTATE_HXX
+#endif // INCLUDED_BASEGFX_UTILS_B2DCLIPSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

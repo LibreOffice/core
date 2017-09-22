@@ -22,7 +22,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <basegfx/tools/b2dclipstate.hxx>
+#include <basegfx/utils/b2dclipstate.hxx>
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -38,11 +38,11 @@ namespace basegfx2d
 class clipstate : public CppUnit::TestFixture
 {
 private:
-    tools::B2DClipState aUnion1;
-    tools::B2DClipState aUnion2;
-    tools::B2DClipState aIntersect;
-    tools::B2DClipState aXor;
-    tools::B2DClipState aSubtract;
+    utils::B2DClipState aUnion1;
+    utils::B2DClipState aUnion2;
+    utils::B2DClipState aIntersect;
+    utils::B2DClipState aXor;
+    utils::B2DClipState aSubtract;
 
 public:
     void setUp() override
@@ -86,25 +86,25 @@ public:
         aSubtract.subtractRange(aEast);
     }
 
-    void verifyPoly(const char* sName, const char* sSvg, const tools::B2DClipState& toTest)
+    void verifyPoly(const char* sName, const char* sSvg, const utils::B2DClipState& toTest)
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
                 sName, OUStringToOString(
-                    basegfx::tools::exportToSvgD(toTest.getClipPoly(), true, true, false),
+                    basegfx::utils::exportToSvgD(toTest.getClipPoly(), true, true, false),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         B2DPolyPolygon aTmp1;
         CPPUNIT_ASSERT_MESSAGE(sName,
-                               tools::importFromSvgD(
+                               utils::importFromSvgD(
                                    aTmp1, OUString::createFromAscii(sSvg), false, nullptr));
 
         const OUString aSvg=
-            tools::exportToSvgD(toTest.getClipPoly(), true, true, false);
+            utils::exportToSvgD(toTest.getClipPoly(), true, true, false);
         B2DPolyPolygon aTmp2;
         CPPUNIT_ASSERT_MESSAGE(sName,
-                               tools::importFromSvgD(
+                               utils::importFromSvgD(
                                    aTmp2, aSvg, false, nullptr));
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
@@ -130,12 +130,12 @@ public:
 
     void verifyMixedClips()
     {
-        tools::B2DClipState aMixedClip;
+        utils::B2DClipState aMixedClip;
 
         const char unionSvg[]="m100 10v90h-90v10h-20v-10h-90v-90h-10v-20h10v-90h90v-10h20v10h90v90h10v20z";
 
         B2DPolyPolygon aTmp1;
-        tools::importFromSvgD(aTmp1, unionSvg, false, nullptr);
+        utils::importFromSvgD(aTmp1, unionSvg, false, nullptr);
 
         aMixedClip.intersectPolyPolygon(aTmp1);
         aMixedClip.subtractRange(B2DRange(-20,-150,20,0));

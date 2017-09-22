@@ -50,7 +50,7 @@ namespace
 
         if(!basegfx::fTools::equalZero(fScale))
         {
-            const basegfx::B2DRange aRange(basegfx::tools::getRange(rSource));
+            const basegfx::B2DRange aRange(basegfx::utils::getRange(rSource));
             const basegfx::B2DPoint aCenter(aRange.getCenter());
             basegfx::B2DHomMatrix aTrans;
 
@@ -78,9 +78,9 @@ namespace
                 // grow the outside polygon and scale all polygons to original size. This is done
                 // to avoid a shrink which potentially would lead to self-intersections, but changes
                 // the original polygon -> not a precision step, so e.g. not usable for charts
-                const basegfx::B2DRange aRange(basegfx::tools::getRange(rPolygon));
-                rPolygon = basegfx::tools::growInNormalDirection(rPolygon, fOffset);
-                const basegfx::B2DRange aGrownRange(basegfx::tools::getRange(rPolygon));
+                const basegfx::B2DRange aRange(basegfx::utils::getRange(rPolygon));
+                rPolygon = basegfx::utils::growInNormalDirection(rPolygon, fOffset);
+                const basegfx::B2DRange aGrownRange(basegfx::utils::getRange(rPolygon));
                 const double fScaleX(basegfx::fTools::equalZero(aGrownRange.getWidth()) ? 1.0 : aRange.getWidth() / aGrownRange.getWidth());
                 const double fScaleY(basegfx::fTools::equalZero(aGrownRange.getHeight())? 1.0 : aRange.getHeight() / aGrownRange.getHeight());
                 basegfx::B2DHomMatrix aScaleTrans;
@@ -95,8 +95,8 @@ namespace
             {
                 // use more precision, shrink the outer polygons. Since this may lead to self-intersections,
                 // some kind of correction should be applied here after that step
-                rOuterPolyPolygon = basegfx::tools::growInNormalDirection(rPolygon, -fOffset);
-                // basegfx::tools::correctGrowShrinkPolygonPair(rPolygon, rOuterPolyPolygon);
+                rOuterPolyPolygon = basegfx::utils::growInNormalDirection(rPolygon, -fOffset);
+                // basegfx::utils::correctGrowShrinkPolygonPair(rPolygon, rOuterPolyPolygon);
             }
         }
     }
@@ -128,10 +128,10 @@ namespace
 
                 if(bCreateTextureCoordinates)
                 {
-                    const double fPolygonLengthA(basegfx::tools::getLength(aSubA));
+                    const double fPolygonLengthA(basegfx::utils::getLength(aSubA));
                     fTexHorMultiplicatorA = basegfx::fTools::equalZero(fPolygonLengthA) ? 1.0 : 1.0 / fPolygonLengthA;
 
-                    const double fPolygonLengthB(basegfx::tools::getLength(aSubB));
+                    const double fPolygonLengthB(basegfx::utils::getLength(aSubB));
                     fTexHorMultiplicatorB = basegfx::fTools::equalZero(fPolygonLengthB) ? 1.0 : 1.0 / fPolygonLengthB;
                 }
 
@@ -330,7 +330,7 @@ namespace
                 const basegfx::B2DPoint aNext(rPoly.getB2DPoint(nNextIndex));
                 const basegfx::B2DVector aEdgeVector(aNext - aCurrent);
 
-                if(basegfx::tools::findCut(
+                if(basegfx::utils::findCut(
                     rStart, aVector,
                     aCurrent, aEdgeVector) != CutFlagValue::NONE)
                 {
@@ -394,7 +394,7 @@ namespace drawinglayer
 
                 if(bCloseFront || bCloseBack)
                 {
-                    const basegfx::B2DRange aBaseRange(basegfx::tools::getRange(aFront));
+                    const basegfx::B2DRange aBaseRange(basegfx::utils::getRange(aFront));
                     const double fOuterLength(aBaseRange.getMaxX() * fRotation);
                     const double fInnerLength(aBaseRange.getMinX() * fRotation);
                     const double fAverageLength((fOuterLength + fInnerLength) * 0.5);
@@ -430,7 +430,7 @@ namespace drawinglayer
                 for(sal_uInt32 a(0); a < nSteps; a++)
                 {
                     const double fStep((double)(a + 1) * fStepSize);
-                    basegfx::B2DPolyPolygon aNewPoly(bBackScale ? basegfx::tools::interpolate(aFront, aBack, fStep) : aFront);
+                    basegfx::B2DPolyPolygon aNewPoly(bBackScale ? basegfx::utils::interpolate(aFront, aBack, fStep) : aFront);
                     basegfx::B3DHomMatrix aNewMat;
                     aNewMat.rotate(0.0, fRotation * fStep, 0.0);
                     rSliceVector.emplace_back(aNewPoly, aNewMat);
@@ -601,8 +601,8 @@ namespace drawinglayer
 
                 if(bCreateTextureCoordinates)
                 {
-                    aTexRangeFront = basegfx::tools::getRange(rSliceVector[0].getB3DPolyPolygon());
-                    aTexRangeBack = basegfx::tools::getRange(rSliceVector[nNumSlices - 1].getB3DPolyPolygon());
+                    aTexRangeFront = basegfx::utils::getRange(rSliceVector[0].getB3DPolyPolygon());
+                    aTexRangeBack = basegfx::utils::getRange(rSliceVector[nNumSlices - 1].getB3DPolyPolygon());
 
                     if(aTexRangeBack.getDepth() > aTexRangeBack.getWidth())
                     {
@@ -614,11 +614,11 @@ namespace drawinglayer
                             aTexRangeBack.getMaxZ(), aTexRangeBack.getMaxY(), aTexRangeBack.getMaxX());
                     }
 
-                    basegfx::B3DPoint aCenter(basegfx::tools::getRange(rSliceVector[0].getB3DPolyPolygon()).getCenter());
+                    basegfx::B3DPoint aCenter(basegfx::utils::getRange(rSliceVector[0].getB3DPolyPolygon()).getCenter());
 
                     for(a = 0; a < nLoopCount; a++)
                     {
-                        const basegfx::B3DPoint aNextCenter(basegfx::tools::getRange(rSliceVector[(a + 1) % nNumSlices].getB3DPolyPolygon()).getCenter());
+                        const basegfx::B3DPoint aNextCenter(basegfx::utils::getRange(rSliceVector[(a + 1) % nNumSlices].getB3DPolyPolygon()).getCenter());
                         const double fLength(basegfx::B3DVector(aNextCenter - aCenter).getLength());
                         aTexHeightArray.push_back(fLength);
                         aCenter = aNextCenter;
@@ -663,7 +663,7 @@ namespace drawinglayer
 
                                     if(bCreateTextureCoordinates)
                                     {
-                                        aFront = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFront, aTexRangeFront);
+                                        aFront = basegfx::utils::applyDefaultTextureCoordinatesParallel(aFront, aTexRangeFront);
                                     }
 
                                     if(bCreateNormals)
@@ -761,7 +761,7 @@ namespace drawinglayer
 
                                     if(bCreateTextureCoordinates)
                                     {
-                                        aBack = basegfx::tools::applyDefaultTextureCoordinatesParallel(aBack, aTexRangeBack);
+                                        aBack = basegfx::utils::applyDefaultTextureCoordinatesParallel(aBack, aTexRangeBack);
                                     }
 
                                     if(bCreateNormals)
@@ -865,7 +865,7 @@ namespace drawinglayer
 
                     if(bCreateTextureCoordinates)
                     {
-                        aFront = basegfx::tools::applyDefaultTextureCoordinatesParallel(aFront, aTexRangeFront);
+                        aFront = basegfx::utils::applyDefaultTextureCoordinatesParallel(aFront, aTexRangeFront);
                     }
 
                     if(bCreateNormals)
@@ -911,8 +911,8 @@ namespace drawinglayer
                 if(nPointCount && nPointCount == rLoopB.count())
                 {
                     const basegfx::B3DHomMatrix aObjectTransform(rViewInformation.getObjectToView() * rObjectTransform);
-                    const basegfx::B2DPolygon a2DLoopA(basegfx::tools::createB2DPolygonFromB3DPolygon(rLoopA, aObjectTransform));
-                    const basegfx::B2DPolygon a2DLoopB(basegfx::tools::createB2DPolygonFromB3DPolygon(rLoopB, aObjectTransform));
+                    const basegfx::B2DPolygon a2DLoopA(basegfx::utils::createB2DPolygonFromB3DPolygon(rLoopA, aObjectTransform));
+                    const basegfx::B2DPolygon a2DLoopB(basegfx::utils::createB2DPolygonFromB3DPolygon(rLoopB, aObjectTransform));
                     const basegfx::B2DPoint a2DCenterA(a2DLoopA.getB2DRange().getCenter());
                     const basegfx::B2DPoint a2DCenterB(a2DLoopB.getB2DRange().getCenter());
 
@@ -933,9 +933,9 @@ namespace drawinglayer
                             const basegfx::B2DPoint aEnd(a2DLoopB.getB2DPoint(a));
                             const basegfx::B2DPoint aMiddle(basegfx::average(aStart, aEnd));
 
-                            if(!basegfx::tools::isInside(a2DLoopA, aMiddle))
+                            if(!basegfx::utils::isInside(a2DLoopA, aMiddle))
                             {
-                                if(!basegfx::tools::isInside(a2DLoopB, aMiddle))
+                                if(!basegfx::utils::isInside(a2DLoopB, aMiddle))
                                 {
                                     if(!impHasCutWith(a2DLoopA, aStart, aEnd))
                                     {

@@ -305,16 +305,16 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
             // import 2d tools::PolyPolygon from svg:d
             basegfx::B2DPolyPolygon aPolyPolygon;
 
-            if(basegfx::tools::importFromSvgD(aPolyPolygon, maPoints, GetImport().needFixPositionAfterZ(), nullptr))
+            if(basegfx::utils::importFromSvgD(aPolyPolygon, maPoints, GetImport().needFixPositionAfterZ(), nullptr))
             {
                 // convert to 3D PolyPolygon
                 const basegfx::B3DPolyPolygon aB3DPolyPolygon(
-                    basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(
+                    basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(
                         aPolyPolygon));
 
                 // convert to UNO API class PolyPolygonShape3D
                 drawing::PolyPolygonShape3D aPolyPolygon3D;
-                basegfx::tools::B3DPolyPolygonToUnoPolyPolygonShape3D(
+                basegfx::utils::B3DPolyPolygonToUnoPolyPolygonShape3D(
                     aB3DPolyPolygon,
                     aPolyPolygon3D);
 

@@ -157,7 +157,7 @@ namespace drawinglayer
                     if(nCount)
                     {
                         // prepare object transformation for polygons
-                        rTransformation = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        rTransformation = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                             aScale, fShearX, fRotate, aTranslate);
                     }
                 }
@@ -308,7 +308,7 @@ namespace drawinglayer
                     if(!aNewRange.isEmpty())
                     {
                         // prepare object transformation for range
-                        const basegfx::B2DHomMatrix aRangeTransformation(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        const basegfx::B2DHomMatrix aRangeTransformation(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                             aScale, fShearX, fRotate, aTranslate));
 
                         // apply range transformation to it

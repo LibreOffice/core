@@ -26,7 +26,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <com/sun/star/geometry/RealBezierSegment2D.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
@@ -159,7 +159,7 @@ namespace vclcanvas
                 return false;
 
             // delegate to basegfx
-            return ::basegfx::tools::isRectangle( rPoly.getB2DPolygon() );
+            return ::basegfx::utils::isRectangle( rPoly.getB2DPolygon() );
         }
 
 

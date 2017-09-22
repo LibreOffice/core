@@ -32,7 +32,7 @@
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -198,7 +198,7 @@ namespace slideshow
 
                 const ::basegfx::B2DVector aScale( rBounds.getWidth() / aBmpSize.Width(),
                                                    rBounds.getHeight() / aBmpSize.Height() );
-                const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                const basegfx::B2DHomMatrix aTranslation(basegfx::utils::createScaleTranslateB2DHomMatrix(
                     aScale, rBounds.getMinimum()));
                 ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
 

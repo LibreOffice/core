@@ -30,7 +30,7 @@ namespace basegfx
     // predefinitions
     class B2DRange;
 
-    namespace tools
+    namespace utils
     {
         // This method clips the given tools::PolyPolygon against a horizontal or vertical axis (parallel to X or Y axis). The axis is
         // defined by bParallelToXAxis (true -> it's parallel to the X-Axis of the coordinate system, else to the Y-Axis) and the
@@ -61,7 +61,7 @@ namespace basegfx
         // to be a simple triangle list. the result is also a simple triangle list.
         BASEGFX_DLLPUBLIC B2DPolygon clipTriangleListOnRange( const B2DPolygon& rCandidate, const B2DRange& rRange );
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 #endif // INCLUDED_BASEGFX_POLYGON_B2DPOLYGONCLIPPER_HXX

@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <toolkit/helper/vclunohelper.hxx>

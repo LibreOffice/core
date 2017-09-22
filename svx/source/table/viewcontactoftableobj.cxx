@@ -85,7 +85,7 @@ namespace drawinglayer
         void SdrCellPrimitive2D::create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             // prepare unit polygon
-            const basegfx::B2DPolyPolygon aUnitPolyPolygon(basegfx::tools::createUnitPolygon());
+            const basegfx::B2DPolyPolygon aUnitPolyPolygon(basegfx::utils::createUnitPolygon());
 
             // add fill
             if(!getSdrFTAttribute().getFill().isDefault())
@@ -419,7 +419,7 @@ namespace sdr
                 const GeoStat& rGeoStat(rTableObj.GetGeoStat());
                 const double fShearX(rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0);
                 const double fRotate(rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0);
-                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                const basegfx::B2DHomMatrix aObjectMatrix(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                     aObjectRange.getWidth(), aObjectRange.getHeight(), fShearX, fRotate,
                     aObjectRange.getMinX(), aObjectRange.getMinY()));
 
