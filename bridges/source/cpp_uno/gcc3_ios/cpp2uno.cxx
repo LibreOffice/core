@@ -29,6 +29,7 @@
 
 #include "share.hxx"
 
+#ifdef __arm64
 extern "C" {
     extern int nFunIndexes, nVtableOffsets;
     extern int codeSnippets[];
@@ -447,7 +448,6 @@ extern "C" sal_Int64 cpp_vtable_call( sal_Int32 *pFunctionAndOffset,
     return nRegReturn;
 }
 
-#ifdef __arm64
 namespace
 {
     unsigned char *codeSnippet(const typelib_InterfaceTypeDescription *type,
