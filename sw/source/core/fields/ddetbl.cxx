@@ -65,10 +65,13 @@ SwDDETable::~SwDDETable()
 {
     SwDDEFieldType* pFieldTyp = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
     SwDoc* pDoc = GetFrameFormat()->GetDoc();
-    if (!pDoc->IsInDtor() && !m_aLines.empty() &&
-        m_pTableNode && m_pTableNode->GetNodes().IsDocNodes())
+    if (!pDoc->IsInDtor() && !m_aLines.empty())
     {
-        pFieldTyp->DecRefCnt();
+        assert(m_pTableNode);
+        if (m_pTableNode->GetNodes().IsDocNodes())
+        {
+            pFieldTyp->DecRefCnt();
+        }
     }
 
     // If it is the last dependent of the "deleted field" than delete it finally
