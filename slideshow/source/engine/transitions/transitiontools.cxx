@@ -32,7 +32,7 @@ namespace internal {
 // TODO(Q2): Move this to basegfx
 ::basegfx::B2DPolygon createUnitRect()
 {
-    return ::basegfx::tools::createPolygonFromRect(
+    return ::basegfx::utils::createPolygonFromRect(
         ::basegfx::B2DRectangle(0.0,0.0,
                                 1.0,1.0 ) );
 }
@@ -41,7 +41,7 @@ namespace internal {
     ::basegfx::B2DPolyPolygon const & polypoly )
 {
     ::basegfx::B2DPolyPolygon res(polypoly);
-    res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(-1.0, 1.0, 1.0, 0.0));
+    res.transform(basegfx::utils::createScaleTranslateB2DHomMatrix(-1.0, 1.0, 1.0, 0.0));
     res.flip();
     return res;
 }
@@ -50,7 +50,7 @@ namespace internal {
     ::basegfx::B2DPolyPolygon const & polypoly )
 {
     ::basegfx::B2DPolyPolygon res(polypoly);
-    res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(1.0, -1.0, 0.0, 1.0));
+    res.transform(basegfx::utils::createScaleTranslateB2DHomMatrix(1.0, -1.0, 0.0, 1.0));
     res.flip();
     return res;
 }

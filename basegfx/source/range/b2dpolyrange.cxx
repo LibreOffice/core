@@ -84,7 +84,7 @@ namespace basegfx
 
         B2DPolyPolygon solveCrossovers() const
         {
-            return tools::solveCrossovers(maRanges,maOrient);
+            return utils::solveCrossovers(maRanges,maOrient);
         }
 
         void transform(const basegfx::B2DHomMatrix& rTranslate)

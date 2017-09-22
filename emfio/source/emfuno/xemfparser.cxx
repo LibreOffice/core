@@ -172,7 +172,7 @@ namespace emfio
 
                     // use size
                     const basegfx::B2DHomMatrix aMetafileTransform(
-                        basegfx::tools::createScaleB2DHomMatrix(
+                        basegfx::utils::createScaleB2DHomMatrix(
                             aSize.Width(),
                             aSize.Height()));
 
@@ -198,7 +198,7 @@ namespace emfio
                     //     // for test, just create some graphic data that will get visualized
                     //     const basegfx::B2DRange aRange(1000, 1000, 5000, 5000);
                     //     const basegfx::BColor aColor(1.0, 0.0, 0.0);
-                    //     const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aRange));
+                    //     const basegfx::B2DPolygon aOutline(basegfx::utils::createPolygonFromRect(aRange));
                     //
                     //     aRetval.push_back(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(basegfx::B2DPolyPolygon(aOutline), aColor));
                     // }

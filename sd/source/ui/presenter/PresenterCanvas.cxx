@@ -24,7 +24,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -528,7 +528,7 @@ css::rendering::ViewState PresenterCanvas::MergeViewState (
         // transformation.
         aViewState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
             xDevice,
-            ::basegfx::B2DPolyPolygon(::basegfx::tools::createPolygonFromRect(aWindowRange)));
+            ::basegfx::B2DPolyPolygon(::basegfx::utils::createPolygonFromRect(aWindowRange)));
     }
     else
     {
@@ -540,7 +540,7 @@ css::rendering::ViewState PresenterCanvas::MergeViewState (
             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                 aViewState.Clip));
         const ::basegfx::B2DPolyPolygon aClippedClipPolygon (
-            ::basegfx::tools::clipPolyPolygonOnRange(
+            ::basegfx::utils::clipPolyPolygonOnRange(
                 aClipPolygon,
                 aWindowRange,
                 true, /* bInside */
@@ -646,7 +646,7 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rxOriginalClip));
         ::basegfx::B2DRectangle aWindowRange (nMinX, nMinY, nMaxX, nMaxY);
         const ::basegfx::B2DPolyPolygon aClippedClipPolygon (
-            ::basegfx::tools::clipPolyPolygonOnRange(
+            ::basegfx::utils::clipPolyPolygonOnRange(
                 aOriginalClip,
                 aWindowRange,
                 true, /* bInside */

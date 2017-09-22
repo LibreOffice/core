@@ -104,7 +104,7 @@ namespace emfio
                 maClip.intersectPolyPolygon(rB2DPoly);
                 break;
             case RGN_COPY :
-                maClip = basegfx::tools::B2DClipState(rB2DPoly);
+                maClip = basegfx::utils::B2DClipState(rB2DPoly);
                 break;
         }
     }
@@ -119,7 +119,7 @@ namespace emfio
     void WinMtfClipPath::setDefaultClipPath()
     {
         // Empty clip region - everything visible
-        maClip = basegfx::tools::B2DClipState();
+        maClip = basegfx::utils::B2DClipState();
     }
 
     basegfx::B2DPolyPolygon WinMtfClipPath::getClipPath() const
@@ -923,7 +923,7 @@ namespace emfio
                 const basegfx::B2DPolyPolygon& rClipPoly( maClipPath.getClipPath() );
 
                 mbComplexClip = rClipPoly.count() > 1
-                    || !basegfx::tools::isRectangle(rClipPoly);
+                    || !basegfx::utils::isRectangle(rClipPoly);
 
                 static bool bEnableComplexClipViaRegion = getenv("SAL_WMF_COMPLEXCLIP_VIA_REGION") != nullptr;
 

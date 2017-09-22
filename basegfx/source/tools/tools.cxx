@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basegfx/tools/tools.hxx>
+#include <basegfx/utils/tools.hxx>
 #include <basegfx/range/b2drange.hxx>
 
 #include <algorithm>
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
         namespace
         {

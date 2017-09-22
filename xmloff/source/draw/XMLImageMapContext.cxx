@@ -438,12 +438,12 @@ void XMLImageMapPolygonContext::Prepare(Reference<XPropertySet> & rPropertySet)
     // get polygon sequence
     basegfx::B2DPolygon aPolygon;
 
-    if(basegfx::tools::importFromSvgPoints(aPolygon, sPointsString))
+    if(basegfx::utils::importFromSvgPoints(aPolygon, sPointsString))
     {
         if(aPolygon.count())
         {
             css::drawing::PointSequence aPointSequence;
-            basegfx::tools::B2DPolygonToUnoPointSequence(aPolygon, aPointSequence);
+            basegfx::utils::B2DPolygonToUnoPointSequence(aPolygon, aPointSequence);
             rPropertySet->setPropertyValue("Polygon", Any(aPointSequence));
         }
     }

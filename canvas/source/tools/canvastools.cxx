@@ -32,7 +32,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b2irange.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -933,7 +933,7 @@ namespace canvas
                                        i_transformation );
 
             // now move resulting left,top point of bounds to (0,0)
-            const basegfx::B2DHomMatrix aCorrectedTransform(basegfx::tools::createTranslateB2DHomMatrix(
+            const basegfx::B2DHomMatrix aCorrectedTransform(basegfx::utils::createTranslateB2DHomMatrix(
                 -aTransformedRect.getMinX(), -aTransformedRect.getMinY()));
 
             // prepend to original transformation
@@ -988,11 +988,11 @@ namespace canvas
                 return false;
 
             ::basegfx::B2DPolygon aPoly(
-                ::basegfx::tools::createPolygonFromRect( rTransformRect ) );
+                ::basegfx::utils::createPolygonFromRect( rTransformRect ) );
             aPoly.transform( rTransformation );
 
-            return ::basegfx::tools::isInside( aPoly,
-                                               ::basegfx::tools::createPolygonFromRect(
+            return ::basegfx::utils::isInside( aPoly,
+                                               ::basegfx::utils::createPolygonFromRect(
                                                    rContainedRect ),
                                                true );
         }

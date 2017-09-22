@@ -25,7 +25,7 @@
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 
 #include <canvas/canvastools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <cppcanvas/polypolygon.hxx>

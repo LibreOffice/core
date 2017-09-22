@@ -25,7 +25,7 @@
 #include <vcl/canvastools.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -91,7 +91,7 @@ namespace cppcanvas
                                             bool                                bStroke ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
+                maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
                 maFillColor()
@@ -113,7 +113,7 @@ namespace cppcanvas
                                             int                                 nTransparency ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
+                maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
                 maFillColor()
@@ -264,7 +264,7 @@ namespace cppcanvas
                                                             const rendering::Texture&        rTexture ) :
                 CachedPrimitiveBase( rCanvas, true ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
+                maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
                 maTexture( rTexture )
@@ -375,7 +375,7 @@ namespace cppcanvas
                                                           const rendering::StrokeAttributes&    rStrokeAttributes ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( ::basegfx::tools::getRange(rPolyPoly) ),
+                maBounds( ::basegfx::utils::getRange(rPolyPoly) ),
                 mpCanvas( rCanvas ),
                 maState(),
                 maStrokeAttributes( rStrokeAttributes )

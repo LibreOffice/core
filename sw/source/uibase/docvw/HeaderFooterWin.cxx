@@ -54,29 +54,29 @@
 #define BUTTON_WIDTH 18
 
 using namespace basegfx;
-using namespace basegfx::tools;
+using namespace basegfx::utils;
 using namespace drawinglayer::attribute;
 
 namespace
 {
     basegfx::BColor lcl_GetFillColor(const basegfx::BColor& rLineColor)
     {
-        basegfx::BColor aHslLine = basegfx::tools::rgb2hsl(rLineColor);
+        basegfx::BColor aHslLine = basegfx::utils::rgb2hsl(rLineColor);
         double nLuminance = aHslLine.getZ() * 2.5;
         if ( nLuminance == 0 )
             nLuminance = 0.5;
         else if ( nLuminance >= 1.0 )
             nLuminance = aHslLine.getZ() * 0.4;
         aHslLine.setZ( nLuminance );
-        return basegfx::tools::hsl2rgb( aHslLine );
+        return basegfx::utils::hsl2rgb( aHslLine );
     }
 
     basegfx::BColor lcl_GetLighterGradientColor(const basegfx::BColor& rDarkColor)
     {
-        basegfx::BColor aHslDark = basegfx::tools::rgb2hsl(rDarkColor);
+        basegfx::BColor aHslDark = basegfx::utils::rgb2hsl(rDarkColor);
         double nLuminance = aHslDark.getZ() * 255 + 20;
         aHslDark.setZ( nLuminance / 255.0 );
-        return basegfx::tools::hsl2rgb( aHslDark );
+        return basegfx::utils::hsl2rgb( aHslDark );
     }
 
     B2DPolygon lcl_GetPolygon( const ::tools::Rectangle& rRect, bool bHeader )

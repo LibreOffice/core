@@ -22,7 +22,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/texture/texture.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 
@@ -158,7 +158,7 @@ namespace drawinglayer
             rContainer.push_back(
                 new PolyPolygonColorPrimitive2D(
                     basegfx::B2DPolyPolygon(
-                        basegfx::tools::createPolygonFromRect(getOutputRange())),
+                        basegfx::utils::createPolygonFromRect(getOutputRange())),
                     rOuterColor));
 
             // create solid fill steps
@@ -198,7 +198,7 @@ namespace drawinglayer
             }
 
             // add outmost range to combined polypolygon (in 1st place), create first primitive
-            aCombinedPolyPoly.insert(0, basegfx::tools::createPolygonFromRect(aOutmostRange));
+            aCombinedPolyPoly.insert(0, basegfx::utils::createPolygonFromRect(aOutmostRange));
             rContainer.push_back(
                 new PolyPolygonColorPrimitive2D(
                     aCombinedPolyPoly,
@@ -245,12 +245,12 @@ namespace drawinglayer
                 case attribute::GradientStyle::Radial:
                 case attribute::GradientStyle::Elliptical:
                 {
-                    aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 1.0);
+                    aUnitPolygon = basegfx::utils::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 1.0);
                     break;
                 }
                 default: // GradientStyle::Linear, attribute::GradientStyle::Axial, attribute::GradientStyle::Square, attribute::GradientStyle::Rect
                 {
-                    aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1.0, -1.0, 1.0, 1.0));
+                    aUnitPolygon = basegfx::utils::createPolygonFromRect(basegfx::B2DRange(-1.0, -1.0, 1.0, 1.0));
                     break;
                 }
             }

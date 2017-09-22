@@ -11,7 +11,7 @@
 #include "spirit_supplements.hxx"
 #include "gfxtypes.hxx"
 
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 
 #include <limits.h>

@@ -28,7 +28,7 @@ namespace basegfx
 {
     class BColor;
 
-    namespace tools
+    namespace utils
     {
         /// Transform from RGB to HSL
         BASEGFX_DLLPUBLIC BColor rgb2hsl(const BColor& rRGBColor);

@@ -279,7 +279,7 @@ namespace svgio
             void add_markers(
                 const basegfx::B2DPolyPolygon& rPath,
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-                const basegfx::tools::PointIndexSet* pHelpPointIndices) const;
+                const basegfx::utils::PointIndexSet* pHelpPointIndices) const;
 
         public:
             /// local attribute scanner
@@ -293,7 +293,7 @@ namespace svgio
             void add_path(
                 const basegfx::B2DPolyPolygon& rPath,
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
-                const basegfx::tools::PointIndexSet* pHelpPointIndices) const;
+                const basegfx::utils::PointIndexSet* pHelpPointIndices) const;
             void add_postProcess(
                 drawinglayer::primitive2d::Primitive2DContainer& rTarget,
                 const drawinglayer::primitive2d::Primitive2DContainer& rSource,

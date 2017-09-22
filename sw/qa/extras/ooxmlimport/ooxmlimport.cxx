@@ -877,7 +877,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo76803, "fdo76803.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
 
     drawing::PointSequenceSequence rContour = getProperty<drawing::PointSequenceSequence>(xPropertySet, "ContourPolyPolygon");
-    basegfx::B2DPolyPolygon aPolyPolygon(basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(rContour));
+    basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::UnoPointSequenceSequenceToB2DPolyPolygon(rContour));
 
     // We've got exactly one polygon inside
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), aPolyPolygon.count());

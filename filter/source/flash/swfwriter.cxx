@@ -222,7 +222,7 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
     mpTag->addUI16( nID );          // character Id
 
     // #i73264#
-    const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
+    const basegfx::B2DHomMatrix aMatrix(basegfx::utils::createTranslateB2DHomMatrix(
         Int16_(static_cast<long>(map100thmm(x)*mnDocXScale)),
         Int16_(static_cast<long>(map100thmm(y)*mnDocYScale))));
     mpTag->addMatrix( aMatrix );        // transformation matrix

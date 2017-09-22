@@ -16,7 +16,7 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
@@ -182,7 +182,7 @@ namespace oglcanvas
                                                             rTexture.AffineTransform );
             ::basegfx::B2DRange aBounds;
             for( const auto& rPoly : rPolyPolygons )
-                aBounds.expand( ::basegfx::tools::getRange( rPoly ) );
+                aBounds.expand( ::basegfx::utils::getRange( rPoly ) );
             aTextureTransform.translate(-aBounds.getMinX(), -aBounds.getMinY());
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
 
@@ -326,7 +326,7 @@ namespace oglcanvas
                                                             rTexture.AffineTransform );
             ::basegfx::B2DRange aBounds;
             for( const auto& rPolyPolygon : rPolyPolygons )
-                aBounds.expand( ::basegfx::tools::getRange( rPolyPolygon ) );
+                aBounds.expand( ::basegfx::utils::getRange( rPolyPolygon ) );
             aTextureTransform.translate(-aBounds.getMinX(), -aBounds.getMinY());
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
             aTextureTransform.invert();

@@ -551,7 +551,7 @@ struct GradRecord
 void FillStyle::Impl_addGradient( Tag* pTag ) const
 {
     std::vector< struct GradRecord > aGradientRecords;
-    basegfx::B2DHomMatrix m(basegfx::tools::createRotateB2DHomMatrix((maGradient.GetAngle() - 900) * F_PI1800));
+    basegfx::B2DHomMatrix m(basegfx::utils::createRotateB2DHomMatrix((maGradient.GetAngle() - 900) * F_PI1800));
 
     switch( maGradient.GetStyle() )
     {

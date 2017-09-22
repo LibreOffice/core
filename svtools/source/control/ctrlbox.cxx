@@ -390,7 +390,7 @@ basegfx::B2DPolyPolygon ApplyLineDashing( const basegfx::B2DPolygon& rPolygon, S
     if (aPattern.empty())
         aPolygons.append(rPolygon);
     else
-        basegfx::tools::applyLineDashing(rPolygon, aPattern, &aPolygons);
+        basegfx::utils::applyLineDashing(rPolygon, aPattern, &aPolygons);
 
     return aPolygons;
 }

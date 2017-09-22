@@ -110,18 +110,18 @@ namespace slideshow
                         break;
 
                     case TransitionInfo::ReverseMethod::Rotate180:
-                        maStaticTransformation = basegfx::tools::createRotateAroundPoint(0.5, 0.5, M_PI)
+                        maStaticTransformation = basegfx::utils::createRotateAroundPoint(0.5, 0.5, M_PI)
                             * maStaticTransformation;
                         break;
 
                     case TransitionInfo::ReverseMethod::FlipX:
-                        maStaticTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(-1.0, 1.0, 1.0, 0.0)
+                        maStaticTransformation = basegfx::utils::createScaleTranslateB2DHomMatrix(-1.0, 1.0, 1.0, 0.0)
                             * maStaticTransformation;
                         mbFlip = true;
                         break;
 
                     case TransitionInfo::ReverseMethod::FlipY:
-                        maStaticTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(1.0, -1.0, 0.0, 1.0)
+                        maStaticTransformation = basegfx::utils::createScaleTranslateB2DHomMatrix(1.0, -1.0, 0.0, 1.0)
                             * maStaticTransformation;
                         mbFlip = true;
                         break;
@@ -160,7 +160,7 @@ namespace slideshow
             // currently, clipper cannot cope with curves. Subdivide first
             // AW: Should be no longer necessary; clipping tools are now bezier-safe
             // if( aClipPoly.areControlPointsUsed() )
-            //    aClipPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aClipPoly);
+            //    aClipPoly = ::basegfx::utils::adaptiveSubdivideByAngle(aClipPoly);
 
             if( mbSubtractPolygon )
             {
@@ -178,16 +178,16 @@ namespace slideshow
                 if(aBackgroundRange.isInside(aClipPolyRange))
                 {
                     // combine polygons; make the clip polygon the hole
-                    aClipPoly = ::basegfx::tools::correctOrientations(aClipPoly);
+                    aClipPoly = ::basegfx::utils::correctOrientations(aClipPoly);
                     aClipPoly.flip();
-                    aClipPoly.insert(0, basegfx::tools::createPolygonFromRect(aBackgroundRange));
+                    aClipPoly.insert(0, basegfx::utils::createPolygonFromRect(aBackgroundRange));
                 }
                 else
                 {
                     // when not completely inside aBackgroundRange clipping is needed
                     // subtract aClipPoly from aBackgroundRange
-                    const basegfx::B2DPolyPolygon aBackgroundPolyPoly(basegfx::tools::createPolygonFromRect(aBackgroundRange));
-                    aClipPoly = basegfx::tools::solvePolygonOperationDiff(aBackgroundPolyPoly, aClipPoly);
+                    const basegfx::B2DPolyPolygon aBackgroundPolyPoly(basegfx::utils::createPolygonFromRect(aBackgroundRange));
+                    aClipPoly = basegfx::utils::solvePolygonOperationDiff(aBackgroundPolyPoly, aClipPoly);
                 }
             }
 

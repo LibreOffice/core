@@ -46,7 +46,7 @@ namespace drawinglayer
                 maPrimitives.resize(1);
                 maPrimitives[0] = drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
                     basegfx::B2DPolyPolygon(
-                        basegfx::tools::createPolygonFromRect(
+                        basegfx::utils::createPolygonFromRect(
                             maLastPaintRange)),
                         maLastDefineRange,
                     maFillAttribute.get() ? *maFillAttribute.get() : drawinglayer::attribute::SdrFillAttribute(),

@@ -451,9 +451,9 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
     {
         const tools::Rectangle aR(getSdrDragView().GetSdrPageView()->MarkSnap());
         const basegfx::B2DRange aNewRectangle(aR.Left(), aR.Top(), aR.Right(), aR.Bottom());
-        basegfx::B2DPolygon aNewPolygon(basegfx::tools::createPolygonFromRect(aNewRectangle));
+        basegfx::B2DPolygon aNewPolygon(basegfx::utils::createPolygonFromRect(aNewRectangle));
 
-        aResult = basegfx::B2DPolyPolygon(basegfx::tools::expandToCurve(aNewPolygon));
+        aResult = basegfx::B2DPolyPolygon(basegfx::utils::expandToCurve(aNewPolygon));
     }
 
     if(aResult.count())
@@ -608,7 +608,7 @@ void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
         const double fScaleY(fabs(aScale.getY()) / (basegfx::fTools::equalZero(aPolyRange.getHeight()) ? 1.0 : aPolyRange.getHeight()));
 
         // prepare transform matrix for polygon
-        basegfx::B2DHomMatrix aPolyTransform(basegfx::tools::createTranslateB2DHomMatrix(
+        basegfx::B2DHomMatrix aPolyTransform(basegfx::utils::createTranslateB2DHomMatrix(
             -aPolyRange.getMinX(), -aPolyRange.getMinY()));
         aPolyTransform.scale(fScaleX, fScaleY);
 
@@ -1511,7 +1511,7 @@ bool SdrDragMove::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragMove::getCurrentTransformation()
 {
-    return basegfx::tools::createTranslateB2DHomMatrix(DragStat().GetDX(), DragStat().GetDY());
+    return basegfx::utils::createTranslateB2DHomMatrix(DragStat().GetDX(), DragStat().GetDY());
 }
 
 void SdrDragMove::ImpCheckSnap(const Point& rPt)
@@ -1833,7 +1833,7 @@ bool SdrDragResize::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation()
 {
-    basegfx::B2DHomMatrix aRetval(basegfx::tools::createTranslateB2DHomMatrix(
+    basegfx::B2DHomMatrix aRetval(basegfx::utils::createTranslateB2DHomMatrix(
         -DragStat().Ref1().X(), -DragStat().Ref1().Y()));
     aRetval.scale(double(aXFact), double(aYFact));
     aRetval.translate(DragStat().Ref1().X(), DragStat().Ref1().Y());
@@ -2114,7 +2114,7 @@ bool SdrDragRotate::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragRotate::getCurrentTransformation()
 {
-    return basegfx::tools::createRotateAroundPoint(
+    return basegfx::utils::createRotateAroundPoint(
         DragStat().GetRef1().X(), DragStat().GetRef1().Y(),
         -atan2(nSin, nCos));
 }
@@ -2261,7 +2261,7 @@ bool SdrDragShear::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragShear::getCurrentTransformation()
 {
-    basegfx::B2DHomMatrix aRetval(basegfx::tools::createTranslateB2DHomMatrix(
+    basegfx::B2DHomMatrix aRetval(basegfx::utils::createTranslateB2DHomMatrix(
         -DragStat().GetRef1().X(), -DragStat().GetRef1().Y()));
 
     if (bResize)
@@ -2555,7 +2555,7 @@ basegfx::B2DHomMatrix SdrDragMirror::getCurrentTransformation()
         const double fDeltaY(DragStat().GetRef2().Y() - DragStat().GetRef1().Y());
         const double fRotation(atan2(fDeltaY, fDeltaX));
 
-        aRetval = basegfx::tools::createTranslateB2DHomMatrix(-DragStat().GetRef1().X(), -DragStat().GetRef1().Y());
+        aRetval = basegfx::utils::createTranslateB2DHomMatrix(-DragStat().GetRef1().X(), -DragStat().GetRef1().Y());
         aRetval.rotate(-fRotation);
         aRetval.scale(1.0, -1.0);
         aRetval.rotate(fRotation);
@@ -3478,7 +3478,7 @@ void SdrDragDistort::MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
                 const basegfx::B2DPoint aBottomLeft(aDistortedRect[3].X(), aDistortedRect[3].Y());
                 const basegfx::B2DPoint aBottomRight(aDistortedRect[2].X(), aDistortedRect[2].Y());
 
-                aDragPolygon = basegfx::tools::distort(aDragPolygon, aOriginalRange, aTopLeft, aTopRight, aBottomLeft, aBottomRight);
+                aDragPolygon = basegfx::utils::distort(aDragPolygon, aOriginalRange, aTopLeft, aTopRight, aBottomLeft, aBottomRight);
                 rTarget = aDragPolygon;
             }
         }
@@ -3808,7 +3808,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         if(!basegfx::fTools::equalZero(fShearX))
         {
             bShearCorrected = true;
-            aOriginalMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+            aOriginalMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                 aScale,
                 -fShearX,
                 fRotate,
@@ -3895,7 +3895,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         double fRotate(0.0), fShearX(0.0);
 
         aNewObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-        aNewObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        aNewObjectMatrix = basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
             aScale,
             -fShearX,
             fRotate,
@@ -3926,7 +3926,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
     // prepare unsheared/unrotated versions of the old and new transformation
     const basegfx::B2DHomMatrix aMatrixOriginalNoShearNoRotate(
-        basegfx::tools::createScaleTranslateB2DHomMatrix(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(
             basegfx::absolute(aScale),
             aTranslate));
 

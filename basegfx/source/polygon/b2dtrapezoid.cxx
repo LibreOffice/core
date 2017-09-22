@@ -360,24 +360,24 @@ namespace basegfx
                 // check if one point is on the other edge (a touch, not a cut)
                 const B2DVector aDeltaB(aEdgeB.getDeltaX(), aEdgeB.getDeltaY());
 
-                if(tools::isPointOnEdge(aEdgeA.getStart(), aEdgeB.getStart(), aDeltaB))
+                if(utils::isPointOnEdge(aEdgeA.getStart(), aEdgeB.getStart(), aDeltaB))
                 {
                     return splitEdgeAtGivenPoint(aEdgeB, aEdgeA.getStart(), aCurrent);
                 }
 
-                if(tools::isPointOnEdge(aEdgeA.getEnd(), aEdgeB.getStart(), aDeltaB))
+                if(utils::isPointOnEdge(aEdgeA.getEnd(), aEdgeB.getStart(), aDeltaB))
                 {
                     return splitEdgeAtGivenPoint(aEdgeB, aEdgeA.getEnd(), aCurrent);
                 }
 
                 const B2DVector aDeltaA(aEdgeA.getDeltaX(), aEdgeA.getDeltaY());
 
-                if(tools::isPointOnEdge(aEdgeB.getStart(), aEdgeA.getStart(), aDeltaA))
+                if(utils::isPointOnEdge(aEdgeB.getStart(), aEdgeA.getStart(), aDeltaA))
                 {
                     return splitEdgeAtGivenPoint(aEdgeA, aEdgeB.getStart(), aCurrent);
                 }
 
-                if(tools::isPointOnEdge(aEdgeB.getEnd(), aEdgeA.getStart(), aDeltaA))
+                if(utils::isPointOnEdge(aEdgeB.getEnd(), aEdgeA.getStart(), aDeltaA))
                 {
                     return splitEdgeAtGivenPoint(aEdgeA, aEdgeB.getEnd(), aCurrent);
                 }
@@ -387,7 +387,7 @@ namespace basegfx
                 double fCutA(0.0);
                 double fCutB(0.0);
 
-                if(tools::findCut(
+                if(utils::findCut(
                     aEdgeA.getStart(), aDeltaA,
                     aEdgeB.getStart(), aDeltaB,
                     CutFlagValue::LINE,
@@ -943,9 +943,9 @@ namespace basegfx
 
 namespace basegfx
 {
-    namespace tools
+    namespace utils
     {
-        // convert Source tools::PolyPolygon to trapezoids
+        // convert Source utils::PolyPolygon to trapezoids
         void trapezoidSubdivide(B2DTrapezoidVector& ro_Result, const B2DPolyPolygon& rSourcePolyPolygon)
         {
             trapezoidhelper::TrapezoidSubdivider aTrapezoidSubdivider(rSourcePolyPolygon);
@@ -1168,7 +1168,7 @@ namespace basegfx
         }
 
 
-    } // end of namespace tools
+    } // end of namespace utils
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

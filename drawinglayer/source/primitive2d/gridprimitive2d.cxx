@@ -18,7 +18,7 @@
  */
 
 #include <drawinglayer/primitive2d/gridprimitive2d.hxx>
-#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/utils/canvastools.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -43,7 +43,7 @@ namespace drawinglayer
                 getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
                 // create grid matrix which transforms from scaled logic to view
-                basegfx::B2DHomMatrix aRST(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                basegfx::B2DHomMatrix aRST(basegfx::utils::createShearXRotateTranslateB2DHomMatrix(
                     fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
                 aRST *= rViewInformation.getObjectToViewTransformation();
 
