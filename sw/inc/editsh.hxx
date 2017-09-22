@@ -946,6 +946,16 @@ public:
     OUString DeleteExtTextInput( bool bInsText = true);
     void SetExtTextInputData( const CommandExtTextInputData& );
 
+    /// Returns true iff paragraph signature validation is enabled.
+    bool IsParagraphSignatureValidationEnabled() const { return m_bDoParagraphSignatureValidation; }
+    /// Enable/Disable paragraph signature validation and return the previous value.
+    bool SetParagraphSignatureValidation(const bool bEnable)
+    {
+        const bool bOldFlag = m_bDoParagraphSignatureValidation;
+        m_bDoParagraphSignatureValidation = bEnable;
+        return bOldFlag;
+    }
+
     /// Interface for access to AutoComplete-list.
     static SwAutoCompleteWord& GetAutoCompleteWords();
 
@@ -975,7 +985,7 @@ private:
      * the existing nb-space will be removed. Bear this in mind if that problem
      * arises. */
     bool m_bNbspRunNext;    ///< NO-BREAK SPACE state flag passed to and maintained by SvxAutoCorrect::DoAutoCorrect()
-    bool m_bIsValidatingParagraphSignature; ///< Prevent nested calls of ValidateParagraphSignatures.
+    bool m_bDoParagraphSignatureValidation; ///< Prevent nested calls of ValidateParagraphSignatures.
 };
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const
