@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d4a3d79c",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-22T19:21:17Z",
+      "side": 1,
+      "message": "would be really nice to rename this to something like ProcessCurrentEvents and ProcessOneEvent, Reschedule is not a useful name",
+      "revId": "7f608be51a4bd41f237e4e0afd4121565b5c6275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7494e336",
+        "filename": "vcl/README.scheduler",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-22T19:21:17Z",
+      "side": 1,
+      "message": "the a -\u003e a",
+      "revId": "7f608be51a4bd41f237e4e0afd4121565b5c6275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_94994f71",
+        "filename": "vcl/README.scheduler",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-22T19:21:17Z",
+      "side": 1,
+      "message": "can you post a custom event to the end of the queue, and then process till you see that event?",
+      "revId": "7f608be51a4bd41f237e4e0afd4121565b5c6275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b49e4b54",
+        "filename": "vcl/README.scheduler",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-22T19:21:17Z",
+      "side": 1,
+      "message": "uite -\u003e quite",
+      "revId": "7f608be51a4bd41f237e4e0afd4121565b5c6275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
