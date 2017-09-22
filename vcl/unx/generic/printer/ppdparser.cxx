@@ -1678,10 +1678,6 @@ PPDContext& PPDContext::operator=( PPDContext&& rCopy )
     return *this;
 }
 
-PPDContext::~PPDContext()
-{
-}
-
 const PPDKey* PPDContext::getModifiedKey( int n ) const
 {
     hash_type::const_iterator it;
