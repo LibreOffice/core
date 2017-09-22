@@ -226,7 +226,7 @@ sal_Int32 DocumentToGraphicRenderer::getCurrentPageWriter()
     if (!xTextViewCursorSupplier.is())
         return 1;
     Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), UNO_QUERY);
-    return xCursor->getPage();
+    return xCursor.is() ? xCursor->getPage() : 1;
 }
 
 // static
