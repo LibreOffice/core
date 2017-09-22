@@ -37,6 +37,7 @@ using namespace css::document;
 class GraphicExportFilter :
     public cppu::WeakImplHelper < XFilter, XExporter, XInitialization >
 {
+    Reference<XComponentContext>        mxContext;
     Reference<XComponent>               mxDocument;
     Reference<io::XOutputStream>        mxOutputStream;
 

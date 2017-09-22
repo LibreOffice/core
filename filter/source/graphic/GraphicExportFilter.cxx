@@ -23,8 +23,9 @@
 #include <svl/outstrm.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
-GraphicExportFilter::GraphicExportFilter( const Reference<XComponentContext>&  )
-    : mTargetWidth(0)
+GraphicExportFilter::GraphicExportFilter( const Reference<XComponentContext>& rxContext  )
+    : mxContext(rxContext)
+    , mTargetWidth(0)
     , mTargetHeight(0)
     , mbSelectionOnly(false)
 {}
