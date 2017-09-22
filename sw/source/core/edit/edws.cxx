@@ -37,14 +37,14 @@
 SwEditShell::SwEditShell( SwEditShell& rEdSH, vcl::Window *pWindow )
     : SwCursorShell( rEdSH, pWindow )
     , m_bNbspRunNext(false)   // TODO: would copying that make sense? only if editing continues
-    , m_bIsValidatingParagraphSignature(false)
+    , m_bDoParagraphSignatureValidation(true)
 {
 }
 
 SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption *pOptions )
     : SwCursorShell( rDoc, pWindow, pOptions )
     , m_bNbspRunNext(false)
-    , m_bIsValidatingParagraphSignature(false)
+    , m_bDoParagraphSignatureValidation(true)
 {
     if (!utl::ConfigManager::IsAvoidConfig() && 0 < officecfg::Office::Common::Undo::Steps::get())
     {
