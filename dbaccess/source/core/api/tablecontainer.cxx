@@ -271,7 +271,6 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
     PContainerApprove pApprove( new ObjectNameApproval( xConnection, ObjectNameApproval::TypeTable ) );
     pApprove->approveElement( aName, descriptor );
 
-    try
     {
         EnsureReset aReset(m_nInAppend);
         Reference<XAppend> xAppend(m_xMasterContainer,UNO_QUERY);
@@ -293,10 +292,6 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
                 ::comphelper::disposeComponent(xStmt);
             }
         }
-    }
-    catch(const Exception&)
-    {
-        throw;
     }
 
     Reference<XPropertySet> xTableDefinition;
@@ -343,61 +338,54 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
 // XDrop
 void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
 {
-    try
+    Reference< XDrop > xDrop(m_xMasterContainer,UNO_QUERY);
+    if(xDrop.is())
+        xDrop->dropByName(_sElementName);
+    else
     {
-        Reference< XDrop > xDrop(m_xMasterContainer,UNO_QUERY);
-        if(xDrop.is())
-            xDrop->dropByName(_sElementName);
-        else
+        OUString sCatalog,sSchema,sTable,sComposedName;
+
+        bool bIsView = false;
+        Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
+        if ( xTable.is() && m_xMetaData.is() )
         {
-            OUString sCatalog,sSchema,sTable,sComposedName;
+            if( m_xMetaData.is() && m_xMetaData->supportsCatalogsInTableDefinitions() )
+                xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+            if( m_xMetaData.is() && m_xMetaData->supportsSchemasInTableDefinitions() )
+                xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+            xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-            bool bIsView = false;
-            Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
-            if ( xTable.is() && m_xMetaData.is() )
-            {
-                if( m_xMetaData.is() && m_xMetaData->supportsCatalogsInTableDefinitions() )
-                    xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-                if( m_xMetaData.is() && m_xMetaData->supportsSchemasInTableDefinitions() )
-                    xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-                xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+            sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InTableDefinitions );
 
-                sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, true, ::dbtools::EComposeRule::InTableDefinitions );
-
-                OUString sType;
-                xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;
-                bIsView = sType.equalsIgnoreAsciiCase("VIEW");
-            }
-
-            if(sComposedName.isEmpty())
-                ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
-
-            OUString aSql("DROP ");
-
-            if ( bIsView ) // here we have a view
-                aSql += "VIEW ";
-            else
-                aSql += "TABLE ";
-            aSql += sComposedName;
-            Reference<XConnection> xCon = m_xConnection;
-            OSL_ENSURE(xCon.is(),"Connection is null!");
-            if ( xCon.is() )
-            {
-                Reference< XStatement > xStmt = xCon->createStatement(  );
-                if(xStmt.is())
-                    xStmt->execute(aSql);
-                ::comphelper::disposeComponent(xStmt);
-            }
+            OUString sType;
+            xTable->getPropertyValue(PROPERTY_TYPE)         >>= sType;
+            bIsView = sType.equalsIgnoreAsciiCase("VIEW");
         }
 
-        if ( m_xTableDefinitions.is() && m_xTableDefinitions->hasByName(_sElementName) )
+        if(sComposedName.isEmpty())
+            ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
+
+        OUString aSql("DROP ");
+
+        if ( bIsView ) // here we have a view
+            aSql += "VIEW ";
+        else
+            aSql += "TABLE ";
+        aSql += sComposedName;
+        Reference<XConnection> xCon = m_xConnection;
+        OSL_ENSURE(xCon.is(),"Connection is null!");
+        if ( xCon.is() )
         {
-            m_xTableDefinitions->removeByName(_sElementName);
+            Reference< XStatement > xStmt = xCon->createStatement(  );
+            if(xStmt.is())
+                xStmt->execute(aSql);
+            ::comphelper::disposeComponent(xStmt);
         }
     }
-    catch(const Exception&)
+
+    if ( m_xTableDefinitions.is() && m_xTableDefinitions->hasByName(_sElementName) )
     {
-        throw;
+        m_xTableDefinitions->removeByName(_sElementName);
     }
 }
 

@@ -25,7 +25,6 @@
 
 /*TODO see using below ... */
 #define AS_ENABLE_FILTER_UINAMES
-#define WORKAROUND_EXCEPTION_PROBLEM
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -1573,23 +1572,12 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     // break this operation. Of course returned API object must be
     // checked too.
     css::uno::Reference< css::container::XNameAccess > xItem;
-    #ifdef WORKAROUND_EXCEPTION_PROBLEM
-    try
+    css::uno::Any aVal = xSet->getByName(sItem);
+    if (!(aVal >>= xItem) || !xItem.is())
     {
-    #endif
-        css::uno::Any aVal = xSet->getByName(sItem);
-        if (!(aVal >>= xItem) || !xItem.is())
-        {
-            OUString sMsg("found corrupted item \"" + sItem + "\".");
-            throw css::uno::RuntimeException(sMsg, css::uno::Reference< css::uno::XInterface >());
-        }
-    #ifdef WORKAROUND_EXCEPTION_PROBLEM
+        throw css::uno::RuntimeException("found corrupted item \"" + sItem + "\".",
+                                         css::uno::Reference< css::uno::XInterface >());
     }
-    catch(const css::container::NoSuchElementException&)
-    {
-        throw;
-    }
-    #endif
 
     // set too. Of course its already used as key into the e.g. outside
     // used hash map ... but some of our API methods provide

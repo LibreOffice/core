@@ -638,109 +638,101 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         {
             const  css::uno::Any* pValues = _rValues.getConstArray();
 
-            try
+            // dividing the Names and _rValues
+
+            // aggregate's names
+            Sequence< OUString > AggPropertyNames( nAggCount );
+            OUString* pAggNames = AggPropertyNames.getArray();
+            // aggregate's values
+            Sequence< Any >  AggValues( nAggCount );
+            Any* pAggValues = AggValues.getArray();
+
+            // delegator names
+            Sequence< OUString > DelPropertyNames( nLen - nAggCount );
+            OUString* pDelNames = DelPropertyNames.getArray();
+
+            // delegator values
+            Sequence< Any > DelValues( nLen - nAggCount );
+            Any* pDelValues = DelValues.getArray();
+
+            for ( sal_Int32 i = 0; i < nLen; ++i, ++pNames, ++pValues )
             {
-                // dividing the Names and _rValues
-
-                // aggregate's names
-                Sequence< OUString > AggPropertyNames( nAggCount );
-                OUString* pAggNames = AggPropertyNames.getArray();
-                // aggregate's values
-                Sequence< Any >  AggValues( nAggCount );
-                Any* pAggValues = AggValues.getArray();
-
-                // delegator names
-                Sequence< OUString > DelPropertyNames( nLen - nAggCount );
-                OUString* pDelNames = DelPropertyNames.getArray();
-
-                // delegator values
-                Sequence< Any > DelValues( nLen - nAggCount );
-                Any* pDelValues = DelValues.getArray();
-
-                for ( sal_Int32 i = 0; i < nLen; ++i, ++pNames, ++pValues )
+                if ( OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate == rPH.classifyProperty( *pNames ) )
                 {
-                    if ( OPropertyArrayAggregationHelper::PropertyOrigin::Aggregate == rPH.classifyProperty( *pNames ) )
-                    {
-                        *pAggNames++ = *pNames;
-                        *pAggValues++ = *pValues;
-                    }
-                    else
-                    {
-                        *pDelNames++ = *pNames;
-                        *pDelValues++ = *pValues;
-                    }
-                }
-
-                // reset, needed below
-                pDelValues = DelValues.getArray();
-
-                std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nLen - nAggCount ]);
-
-                // get the map table
-                cppu::IPropertyArrayHelper& rPH2 = getInfoHelper();
-
-                // fill the handle array
-                sal_Int32 nHitCount = rPH2.fillHandles( pHandles.get(), DelPropertyNames );
-                if (nHitCount != 0)
-                {
-                    std::unique_ptr< css::uno::Any[]> pConvertedValues(new  css::uno::Any[ nHitCount ]);
-                    std::unique_ptr< css::uno::Any[]> pOldValues(new  css::uno::Any[ nHitCount ]);
-                    nHitCount = 0;
-                    sal_Int32 i;
-
-                    {
-                    // must lock the mutex outside the loop. So all values are consistent.
-                        osl::MutexGuard aGuard( rBHelper.rMutex );
-                        for( i = 0; i < (nLen - nAggCount); ++i )
-                        {
-                            if( pHandles[i] != -1 )
-                            {
-                                sal_Int16 nAttributes;
-                                rPH2.fillPropertyMembersByHandle( nullptr, &nAttributes, pHandles[i] );
-                                if( nAttributes & css::beans::PropertyAttribute::READONLY )
-                                    throw css::beans::PropertyVetoException();
-                                // Will the property change?
-                                if( convertFastPropertyValue( pConvertedValues[ nHitCount ], pOldValues[nHitCount],
-                                                            pHandles[i], pDelValues[i] ) )
-                                {
-                                    // only increment if the property really change
-                                    pHandles[nHitCount]         = pHandles[i];
-                                    nHitCount++;
-                                }
-                            }
-                        }
-                    // release guard to fire events
-                    }
-
-                    // fire vetoable events
-                    fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, true );
-
-                    // setting the agg Properties
-                    m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);
-
-                    {
-                    // must lock the mutex outside the loop.
-                        osl::MutexGuard aGuard( rBHelper.rMutex );
-                        // Loop over all changed properties
-                        for( i = 0; i < nHitCount; i++ )
-                        {
-                            // Will the property change?
-                            setFastPropertyValue_NoBroadcast( pHandles[i], pConvertedValues[i] );
-                        }
-                    // release guard to fire events
-                    }
-
-                    // fire change events
-                    fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, false );
+                    *pAggNames++ = *pNames;
+                    *pAggValues++ = *pValues;
                 }
                 else
-                    m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);
+                {
+                    *pDelNames++ = *pNames;
+                    *pDelValues++ = *pValues;
+                }
+            }
 
-            }
-            catch(css::uno::Exception&)
+            // reset, needed below
+            pDelValues = DelValues.getArray();
+
+            std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nLen - nAggCount ]);
+
+            // get the map table
+            cppu::IPropertyArrayHelper& rPH2 = getInfoHelper();
+
+            // fill the handle array
+            sal_Int32 nHitCount = rPH2.fillHandles( pHandles.get(), DelPropertyNames );
+            if (nHitCount != 0)
             {
-                throw;
+                std::unique_ptr< css::uno::Any[]> pConvertedValues(new  css::uno::Any[ nHitCount ]);
+                std::unique_ptr< css::uno::Any[]> pOldValues(new  css::uno::Any[ nHitCount ]);
+                nHitCount = 0;
+                sal_Int32 i;
+
+                {
+                // must lock the mutex outside the loop. So all values are consistent.
+                    osl::MutexGuard aGuard( rBHelper.rMutex );
+                    for( i = 0; i < (nLen - nAggCount); ++i )
+                    {
+                        if( pHandles[i] != -1 )
+                        {
+                            sal_Int16 nAttributes;
+                            rPH2.fillPropertyMembersByHandle( nullptr, &nAttributes, pHandles[i] );
+                            if( nAttributes & css::beans::PropertyAttribute::READONLY )
+                                throw css::beans::PropertyVetoException();
+                            // Will the property change?
+                            if( convertFastPropertyValue( pConvertedValues[ nHitCount ], pOldValues[nHitCount],
+                                                        pHandles[i], pDelValues[i] ) )
+                            {
+                                // only increment if the property really change
+                                pHandles[nHitCount]         = pHandles[i];
+                                nHitCount++;
+                            }
+                        }
+                    }
+                // release guard to fire events
+                }
+
+                // fire vetoable events
+                fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, true );
+
+                // setting the agg Properties
+                m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);
+
+                {
+                // must lock the mutex outside the loop.
+                    osl::MutexGuard aGuard( rBHelper.rMutex );
+                    // Loop over all changed properties
+                    for( i = 0; i < nHitCount; i++ )
+                    {
+                        // Will the property change?
+                        setFastPropertyValue_NoBroadcast( pHandles[i], pConvertedValues[i] );
+                    }
+                // release guard to fire events
+                }
+
+                // fire change events
+                fire( pHandles.get(), pConvertedValues.get(), pOldValues.get(), nHitCount, false );
             }
+            else
+                m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);
         }
     }
 }

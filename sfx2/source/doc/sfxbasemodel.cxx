@@ -3298,20 +3298,14 @@ Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getScriptP
 {
     SfxModelGuard aGuard( *this );
 
-    Reference< script::provider::XScriptProvider > xScriptProvider;
-
     Reference< script::provider::XScriptProviderFactory > xScriptProviderFactory =
         script::provider::theMasterScriptProviderFactory::get( ::comphelper::getProcessComponentContext() );
 
-    try
-    {
-        Reference< XScriptInvocationContext > xScriptContext( this );
-        xScriptProvider.set( xScriptProviderFactory->createScriptProvider( makeAny( xScriptContext ) ), UNO_SET_THROW );
-    }
-    catch( const RuntimeException& )
-    {
-        throw;
-    }
+    Reference< XScriptInvocationContext > xScriptContext( this );
+
+    Reference< script::provider::XScriptProvider > xScriptProvider(
+        xScriptProviderFactory->createScriptProvider( makeAny( xScriptContext ) ),
+        UNO_SET_THROW );
 
     return xScriptProvider;
 }
