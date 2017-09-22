@@ -32,7 +32,7 @@ CmapResult::CmapResult( bool bSymbolic,
 ,   mbRecoded( false)
 {}
 
-static ImplFontCharMapRef xDefaultImplFontCharMap;
+static ImplFontCharMapRef g_pDefaultImplFontCharMap;
 static const sal_UCS4 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
 static const sal_UCS4 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
 
@@ -73,9 +73,9 @@ ImplFontCharMapRef const & ImplFontCharMap::getDefaultMap( bool bSymbols )
     }
 
     CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
-    xDefaultImplFontCharMap = ImplFontCharMapRef(new ImplFontCharMap(aDefaultCR));
+    g_pDefaultImplFontCharMap = ImplFontCharMapRef(new ImplFontCharMap(aDefaultCR));
 
-    return xDefaultImplFontCharMap;
+    return g_pDefaultImplFontCharMap;
 }
 
 bool ImplFontCharMap::isDefaultMap() const
