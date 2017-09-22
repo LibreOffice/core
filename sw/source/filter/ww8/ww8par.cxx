@@ -3985,7 +3985,10 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     sal_uInt8 nDropLines = 0;
     SwCharFormat* pNewSwCharFormat = nullptr;
     const SwCharFormat* pFormat = nullptr;
-    m_pStrm->Seek(m_xSBase->WW8Cp2Fc(nStartCp + nCpOfs, &m_bIsUnicode));
+
+    bool bValidPos = checkSeek(*m_pStrm, m_xSBase->WW8Cp2Fc(nStartCp + nCpOfs, &m_bIsUnicode));
+    if (!bValidPos)
+        return false;
 
     WW8_CP l = nStartCp;
     const WW8_CP nMaxPossible = WW8_CP_MAX-nStartCp;
