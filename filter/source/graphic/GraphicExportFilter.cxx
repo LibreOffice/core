@@ -29,8 +29,8 @@ using namespace css;
 
 GraphicExportFilter::GraphicExportFilter( const uno::Reference< uno::XComponentContext > & rxContext  )
     : mxContext(rxContext)
-    , mTargetWidth(0)
-    , mTargetHeight(0)
+    , mnTargetWidth(0)
+    , mnTargetHeight(0)
     , mbSelectionOnly(false)
 {}
 
@@ -56,7 +56,7 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         }
         else if ( aProperty.Name == "FilterData" )
         {
-            aProperty.Value >>= mFilterDataSequence;
+            aProperty.Value >>= maFilterDataSequence;
         }
         else if ( aProperty.Name == "OutputStream" )
         {
@@ -68,31 +68,31 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         }
     }
 
-    for ( sal_Int32 i = 0; i < mFilterDataSequence.getLength(); i++ )
+    for ( sal_Int32 i = 0; i < maFilterDataSequence.getLength(); i++ )
     {
-        if ( mFilterDataSequence[i].Name == "PixelWidth" )
+        if ( maFilterDataSequence[i].Name == "PixelWidth" )
         {
-            mFilterDataSequence[i].Value >>= mTargetWidth;
+            maFilterDataSequence[i].Value >>= mnTargetWidth;
         }
-        else if ( mFilterDataSequence[i].Name == "PixelHeight" )
+        else if ( maFilterDataSequence[i].Name == "PixelHeight" )
         {
-            mFilterDataSequence[i].Value >>= mTargetHeight;
+            maFilterDataSequence[i].Value >>= mnTargetHeight;
         }
-        else if ( mFilterDataSequence[i].Name == "Compression" )
+        else if ( maFilterDataSequence[i].Name == "Compression" )
         {
-            maCompression = mFilterDataSequence[i].Value;
+            maCompression = maFilterDataSequence[i].Value;
         }
-        else if ( mFilterDataSequence[i].Name == "Interlaced" )
+        else if ( maFilterDataSequence[i].Name == "Interlaced" )
         {
-            maInterlaced = mFilterDataSequence[i].Value;
+            maInterlaced = maFilterDataSequence[i].Value;
         }
-        else if ( mFilterDataSequence[i].Name == "Translucent" )
+        else if ( maFilterDataSequence[i].Name == "Translucent" )
         {
-            maTranslucent = mFilterDataSequence[i].Value;
+            maTranslucent = maFilterDataSequence[i].Value;
         }
-        else if ( mFilterDataSequence[i].Name == "Quality" )
+        else if ( maFilterDataSequence[i].Name == "Quality" )
         {
-            maQuality = mFilterDataSequence[i].Value;
+            maQuality = maFilterDataSequence[i].Value;
         }
     }
 
@@ -110,7 +110,7 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
         }
         if ( nFormat < nFilterCount )
         {
-            mFilterExtension = aGraphicFilter.GetExportFormatShortName( nFormat );
+            maFilterExtension = aGraphicFilter.GetExportFormatShortName( nFormat );
         }
     }
 }
@@ -144,16 +144,16 @@ bool GraphicExportFilter::filterRenderDocument() const
     sal_Int32 nCurrentPage = aRenderer.getCurrentPage();
     Size aDocumentSizePixel = aRenderer.getDocumentSizeInPixels(nCurrentPage);
 
-    Size aTargetSizePixel(mTargetWidth, mTargetHeight);
+    Size aTargetSizePixel(mnTargetWidth, mnTargetHeight);
 
-    if (mTargetWidth == 0 || mTargetHeight == 0)
+    if (mnTargetWidth == 0 || mnTargetHeight == 0)
         aTargetSizePixel = aDocumentSizePixel;
 
     Graphic aGraphic = aRenderer.renderToGraphic(nCurrentPage, aDocumentSizePixel, aTargetSizePixel, COL_WHITE);
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    uno::Sequence< beans::PropertyValue > aFilterData( mFilterDataSequence );
+    uno::Sequence< beans::PropertyValue > aFilterData( maFilterDataSequence );
     sal_Int32 nAdd = 0;
     if (!maCompression.hasValue())
         ++nAdd;
@@ -194,7 +194,7 @@ bool GraphicExportFilter::filterRenderDocument() const
         assert( nLen == aFilterData.getLength());
     }
 
-    sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( mFilterExtension );
+    sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( maFilterExtension );
 
     SvMemoryStream aMemStream;
     const GraphicConversionParameters aParameters(aTargetSizePixel, true, true);
@@ -238,7 +238,7 @@ bool GraphicExportFilter::filterExportShape(
     {
         if (aDescriptor[i].Name == "FilterName")
         {
-            aDescriptor[i].Value <<= mFilterExtension;
+            aDescriptor[i].Value <<= maFilterExtension;
             break;
         }
     }
