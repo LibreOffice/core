@@ -1398,7 +1398,7 @@ private:
     DECL_STATIC_LINK( Application, PostEventHandler, void*, void );
 };
 
-class VCL_DLLPUBLIC SolarMutexGuard
+class SolarMutexGuard
     : public osl::Guard<comphelper::SolarMutex>
 {
 public:
