@@ -2366,6 +2366,7 @@ SwTableNode::~SwTableNode()
                                 pTableFormat );
     pTableFormat->ModifyNotification( &aMsgHint, &aMsgHint );
     DelFrames();
+    m_pTable->SetTableNode(this); // set this so that ~SwDDETable can read it!
     delete m_pTable;
 }
 
@@ -2485,6 +2486,7 @@ void SwTableNode::DelFrames()
 void SwTableNode::SetNewTable( SwTable* pNewTable, bool bNewFrames )
 {
     DelFrames();
+    m_pTable->SetTableNode(this);
     delete m_pTable;
     m_pTable = pNewTable;
     if( bNewFrames )
