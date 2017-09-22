@@ -59,6 +59,7 @@
       <menu:menuitem menu:id=".uno:RotateRight"/>
       <menu:menuitem menu:id=".uno:RotateLeft"/>
       <menu:menuitem menu:id=".uno:Rotate180"/>
+      <menu:menuitem menu:id=".uno:RotateReset"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FlipVertical"/>
       <menu:menuitem menu:id=".uno:FlipHorizontal"/>

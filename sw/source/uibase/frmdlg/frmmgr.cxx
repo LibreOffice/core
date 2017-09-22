@@ -41,6 +41,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <grfatr.hxx>
 
 using namespace ::com::sun::star;
 
@@ -566,6 +567,16 @@ void SwFlyFrameAttrMgr::SetHeightSizeType( SwFrameSize eType )
     SwFormatFrameSize aSize( GetFrameSize() );
     aSize.SetHeightSizeType( eType );
     m_aSet.Put( aSize );
+}
+
+void SwFlyFrameAttrMgr::SetRotation(sal_uInt32 nOld, sal_uInt32 nNew, Size aUnrotatedSize)
+{
+    // RotGrfFlyFrame: Central handling of real change of rotation here. Adaption of pos/size
+    // may be wanted in the future
+    if(nOld != nNew)
+    {
+        m_pOwnSh->SetAttrItem(SwRotationGrf(static_cast<sal_uInt16>(nNew), aUnrotatedSize));
+    }
 }
 
 void SwFlyFrameAttrMgr::SetSize( const Size& rSize )

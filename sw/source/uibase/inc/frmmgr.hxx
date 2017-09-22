@@ -92,6 +92,9 @@ public:
 
     void                SetHeightSizeType(SwFrameSize eType);
 
+    // rotation
+    void                SetRotation(sal_uInt32 nOld, sal_uInt32 nNew, Size aUnrotatedSize);
+
     // space to content
     void                SetLRSpace( long nLeft,
                                     long nRight );

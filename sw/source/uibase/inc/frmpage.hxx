@@ -31,6 +31,7 @@
 #include <svx/swframeexample.hxx>
 #include <prcntfld.hxx>
 #include <globals.hrc>
+#include <svx/dialcontrol.hxx>
 
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
@@ -211,6 +212,11 @@ class SwGrfExtPage: public SfxTabPage
 
     VclPtr<Edit>           m_pConnectED;
     VclPtr<PushButton>     m_pBrowseBT;
+
+    // RotGrfFlyFrame: Need Angle and RotateControls now
+    VclPtr<VclFrame>            m_pFlAngle;
+    VclPtr<NumericField>        m_pNfAngle;
+    VclPtr<svx::DialControl>    m_pCtlAngle;
 
     OUString        aFilterName;
     OUString        aGrfName, aNewGrfName;

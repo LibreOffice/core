@@ -68,7 +68,7 @@
 #include <svx/graphichelper.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-
+//#include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
 #define SwGrfShell
 
@@ -259,15 +259,17 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     SID_DOCFRAME, SID_DOCFRAME,
                     SID_REFERER, SID_REFERER,
                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
-                    SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
+                    SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE, // 10051
+                    // RotGrfFlyFrame: Need RotationAngle now
+                    SID_ATTR_TRANSFORM_ANGLE, SID_ATTR_TRANSFORM_ANGLE, // 10095
                     // Items to hand over XPropertyList things like
                     // XColorList, XHatchList, XGradientList, and XBitmapList to
                     // the Area TabPage:
-                    SID_COLOR_TABLE, SID_PATTERN_LIST,
-                    SID_HTML_MODE, SID_HTML_MODE,
-                    SID_ATTR_GRAF_KEEP_ZOOM, SID_ATTR_GRAF_KEEP_ZOOM,
-                    SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_GRAPHIC,
-                        // contains SID_ATTR_GRAF_FRMSIZE_PERCENT
+                    SID_COLOR_TABLE, SID_PATTERN_LIST,  //10179
+                    SID_HTML_MODE, SID_HTML_MODE,   //10414
+                    SID_ATTR_GRAF_KEEP_ZOOM, SID_ATTR_GRAF_KEEP_ZOOM,   //10882
+                    SID_ATTR_GRAF_FRMSIZE, SID_ATTR_GRAF_GRAPHIC,   // 10884
+                    // contains SID_ATTR_GRAF_FRMSIZE_PERCENT
                     FN_GET_PRINT_AREA, FN_GET_PRINT_AREA,
                     FN_PARAM_GRF_CONNECT, FN_PARAM_GRF_CONNECT,
                     FN_PARAM_GRF_DIALOG, FN_PARAM_GRF_DIALOG,
@@ -373,6 +375,19 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             {
                 aSet.Put(
                     SfxStringItem(SID_REFERER, sh->GetMedium()->GetName()));
+            }
+
+            Size aUnrotatedSize;
+            sal_uInt16 nCurrentRotation(0);
+            {   // RotGrfFlyFrame: Add current RotationAngle value, convert from
+                // RES_GRFATR_ROTATION to SID_ATTR_TRANSFORM_ANGLE. Do not forget to
+                // convert from 10th degrees to 100th degrees
+                SfxItemSet aTmpSet( rSh.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+                rSh.GetCurAttr( aTmpSet );
+                const SwRotationGrf& rRotation = static_cast<const SwRotationGrf&>(aTmpSet.Get(RES_GRFATR_ROTATION));
+                nCurrentRotation = rRotation.GetValue();
+                aUnrotatedSize = rRotation.GetUnrotatedSize();
+                aSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ANGLE, nCurrentRotation * 10));
             }
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -488,6 +503,15 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if ( SfxItemState::SET == pSet->GetItemState(
                                         FN_UNO_DESCRIPTION, true, &pItem ))
                     rSh.SetObjDescription( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+
+                // RotGrfFlyFrame: Get and process evtl. changed RotationAngle
+                if ( SfxItemState::SET == pSet->GetItemState(SID_ATTR_TRANSFORM_ANGLE, false, &pItem ))
+                {
+                    const sal_uInt32 aNewRotation((static_cast<const SfxUInt32Item*>(pItem)->GetValue() / 10) % 3600);
+
+                    // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
+                    aMgr.SetRotation(nCurrentRotation, aNewRotation, aUnrotatedSize);
+                }
 
                 SfxItemSet aGrfSet( rSh.GetAttrPool(), svl::Items<RES_GRFATR_BEGIN,
                                                        RES_GRFATR_END-1>{} );
@@ -868,9 +892,14 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
 void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
 {
-    sal_uInt16 aRotation;
-
+    // RotGrfFlyFrame: Modify rotation attribute instead of manipulating the graphic
     SwWrtShell& rShell = GetShell();
+    SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<
+        RES_GRFATR_ROTATION, RES_GRFATR_ROTATION,
+        SID_ATTR_TRANSFORM_ANGLE, SID_ATTR_TRANSFORM_ANGLE>{} );
+    rShell.GetCurAttr( aSet );
+    const SwRotationGrf& rRotation = static_cast<const SwRotationGrf&>(aSet.Get(RES_GRFATR_ROTATION));
+    sal_uInt16 aRotation(0);
 
     if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_LEFT)
     {
@@ -884,59 +913,26 @@ void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
     {
         aRotation = 1800;
     }
-    else
+
+    if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RESET || 0 != aRotation)
     {
-        return;
+        rShell.StartAllAction();
+        rShell.StartUndo(SwUndoId::START);
+
+        if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RESET)
+        {
+            rShell.SetAttrItem(SwRotationGrf(0, rRotation.GetUnrotatedSize()));
+        }
+        else if(0 != aRotation)
+        {
+            sal_uInt16 aNewRotation((aRotation + rRotation.GetValue()) % 3600);
+
+            rShell.SetAttrItem(SwRotationGrf(aNewRotation, rRotation.GetUnrotatedSize()));
+        }
+
+        rShell.EndUndo(SwUndoId::END);
+        rShell.EndAllAction();
     }
-
-    rShell.StartAllAction();
-    rShell.StartUndo(SwUndoId::START);
-
-    Graphic aGraphic = *rShell.GetGraphic();
-    GraphicNativeTransform aTransform(aGraphic);
-    aTransform.rotate(aRotation);
-    rShell.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aGraphic));
-
-    SwFlyFrameAttrMgr aManager(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF);
-
-    long nRotatedWidth = aManager.GetSize().Height();
-    long nRotatedHeight = aManager.GetSize().Width();
-    if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_180)
-      std::swap(nRotatedWidth, nRotatedHeight);
-    Size aSize(nRotatedWidth, nRotatedHeight);
-    aManager.SetSize(aSize);
-    aManager.UpdateFlyFrame();
-    SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF>{} );
-    rShell.GetCurAttr( aSet );
-    SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF) ) );
-    tools::Rectangle aCropRectangle(aCrop.GetLeft(),  aCrop.GetTop(), aCrop.GetRight(), aCrop.GetBottom());
-
-    if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_LEFT)
-    {
-        aCrop.SetLeft(   aCropRectangle.Top()    );
-        aCrop.SetTop(    aCropRectangle.Right()  );
-        aCrop.SetRight(  aCropRectangle.Bottom() );
-        aCrop.SetBottom( aCropRectangle.Left()   );
-    }
-    else if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RIGHT)
-    {
-        aCrop.SetLeft(   aCropRectangle.Bottom() );
-        aCrop.SetTop(    aCropRectangle.Left()   );
-        aCrop.SetRight(  aCropRectangle.Top()    );
-        aCrop.SetBottom( aCropRectangle.Right()  );
-    }
-    else if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_180)
-    {
-        aCrop.SetLeft(   aCropRectangle.Right() );
-        aCrop.SetTop(    aCropRectangle.Bottom()   );
-        aCrop.SetRight(  aCropRectangle.Left()    );
-        aCrop.SetBottom( aCropRectangle.Top()  );
-    }
-
-    rShell.SetAttrItem(aCrop);
-
-    rShell.EndUndo(SwUndoId::END);
-    rShell.EndAllAction();
 }
 
 void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
@@ -953,25 +949,37 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
         bool bDisable = bIsParentContentProtected;
         switch( nWhich )
         {
-        case SID_ROTATE_GRAPHIC_LEFT:
-        case SID_ROTATE_GRAPHIC_RIGHT:
-        case SID_ROTATE_GRAPHIC_180:
-            if( rShell.GetGraphicType() == GraphicType::NONE )
+            case SID_ROTATE_GRAPHIC_LEFT:
+            case SID_ROTATE_GRAPHIC_RIGHT:
+            case SID_ROTATE_GRAPHIC_180:
             {
-                bDisable = true;
-            }
-            else
-            {
-                Graphic aGraphic = *rShell.GetGraphic();
-                GraphicNativeTransform aTransform(aGraphic);
-                if (!aTransform.canBeRotated())
+                if( rShell.GetGraphicType() == GraphicType::NONE )
                 {
                     bDisable = true;
                 }
+                break;
             }
-            break;
-        default:
-            bDisable = false;
+            case SID_ROTATE_GRAPHIC_RESET:
+            {
+                // RotGrfFlyFrame: disable when already no rotation
+                SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+                rShell.GetCurAttr( aSet );
+                const SwRotationGrf& rRotation = static_cast<const SwRotationGrf&>(aSet.Get(RES_GRFATR_ROTATION));
+                bDisable = (0 == rRotation.GetValue());
+                break;
+            }
+            case SID_ATTR_TRANSFORM_ANGLE:
+            {
+                // RotGrfFlyFrame: get rotation value from RES_GRFATR_ROTATION and copy to rSet as
+                // SID_ATTR_TRANSFORM_ANGLE, convert from 10th degrees to 100th degrees
+                SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+                rShell.GetCurAttr( aSet );
+                const SwRotationGrf& rRotation = static_cast<const SwRotationGrf&>(aSet.Get(RES_GRFATR_ROTATION));
+                rSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ANGLE, rRotation.GetValue() * 10));
+                break;
+            }
+            default:
+                bDisable = false;
         }
 
         if( bDisable )

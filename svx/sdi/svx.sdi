@@ -4305,6 +4305,23 @@ SfxVoidItem RotateRight SID_ROTATE_GRAPHIC_RIGHT
     GroupId = SfxGroupId::Graphic;
 ]
 
+SfxVoidItem RotateReset SID_ROTATE_GRAPHIC_RESET
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Graphic;
+]
+
 SfxBoolItem Crop SID_OBJECT_CROP
 ()
 [
