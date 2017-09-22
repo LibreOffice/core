@@ -16,6 +16,24 @@
       "revId": "4705d8a003fb4541daa3975ff65a4bef40bbe3d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_99b6e888",
+        "filename": "vcl/unx/generic/fontmanager/fontmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-09-22T12:50:31Z",
+      "side": 1,
+      "message": "if you can figure out how to get that to compile please update the patch",
+      "parentUuid": "1a430d35_394c14c7",
+      "revId": "4705d8a003fb4541daa3975ff65a4bef40bbe3d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
