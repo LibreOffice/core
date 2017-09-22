@@ -263,10 +263,10 @@ sal_Bool SAL_CALL NestedKeyImpl::isReadOnly(  )
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
     computeChanges();
 
-    if ( m_localKey.is() && m_localKey->isValid() )
-           return m_localKey->isReadOnly();
-    else
+    if ( !m_localKey.is() || !m_localKey->isValid() )
         throw InvalidRegistryException();
+
+   return m_localKey->isReadOnly();
 }
 
 
@@ -724,22 +724,20 @@ void SAL_CALL NestedKeyImpl::closeKey(  )
 void SAL_CALL NestedKeyImpl::deleteKey( const OUString& rKeyName )
 {
     Guard< Mutex > aGuard( m_xRegistry->m_mutex );
-    if ( m_localKey.is() && m_localKey->isValid() &&
-         !m_localKey->isReadOnly() )
-    {
-        OUString resolvedName = computeName(rKeyName);
-
-        if ( resolvedName.isEmpty() )
-        {
-            throw InvalidRegistryException();
-        }
-
-        m_xRegistry->m_localReg->getRootKey()->deleteKey(resolvedName);
-    }
-    else
+    if ( !m_localKey.is() || !m_localKey->isValid() ||
+         m_localKey->isReadOnly() )
     {
         throw InvalidRegistryException();
     }
+
+    OUString resolvedName = computeName(rKeyName);
+
+    if ( resolvedName.isEmpty() )
+    {
+        throw InvalidRegistryException();
+    }
+
+    m_xRegistry->m_localReg->getRootKey()->deleteKey(resolvedName);
 }
 
 
@@ -976,15 +974,13 @@ void SAL_CALL NestedKeyImpl::deleteLink( const OUString& rLinkName )
             resolvedName = m_name + "/" + rLinkName;
     }
 
-    if ( m_localKey.is() && m_localKey->isValid() &&
-         !m_localKey->isReadOnly() )
-    {
-        m_xRegistry->m_localReg->getRootKey()->deleteLink(resolvedName);
-    }
-    else
+    if ( !m_localKey.is() || !m_localKey->isValid() ||
+         m_localKey->isReadOnly() )
     {
         throw InvalidRegistryException();
     }
+
+    m_xRegistry->m_localReg->getRootKey()->deleteLink(resolvedName);
 }
 
 
@@ -1224,25 +1220,23 @@ void SAL_CALL NestedRegistryImpl::destroy(  )
 Reference< XRegistryKey > SAL_CALL NestedRegistryImpl::getRootKey(  )
 {
     Guard< Mutex > aGuard( m_mutex );
-    if ( m_localReg.is() && m_localReg->isValid() )
-    {
-        Reference<XRegistryKey> localKey, defaultKey;
-
-        localKey = m_localReg->getRootKey();
-
-        if ( localKey.is() )
-        {
-            if ( m_defaultReg.is() && m_defaultReg->isValid() )
-            {
-                defaultKey = m_defaultReg->getRootKey();
-            }
-
-            return static_cast<XRegistryKey*>(new NestedKeyImpl(this, localKey, defaultKey));
-        }
-    }
-    else
+    if ( !m_localReg.is() || !m_localReg->isValid() )
     {
         throw InvalidRegistryException();
+    }
+
+    Reference<XRegistryKey> localKey, defaultKey;
+
+    localKey = m_localReg->getRootKey();
+
+    if ( localKey.is() )
+    {
+        if ( m_defaultReg.is() && m_defaultReg->isValid() )
+        {
+            defaultKey = m_defaultReg->getRootKey();
+        }
+
+        return static_cast<XRegistryKey*>(new NestedKeyImpl(this, localKey, defaultKey));
     }
 
     return Reference<XRegistryKey>();

@@ -50,37 +50,35 @@ recently_used_file::recently_used_file() :
     osl::Security sec;
     OUString homedir_url;
 
-    if (sec.getHomeDir(homedir_url))
-    {
-        OUString homedir;
-        osl::FileBase::getSystemPathFromFileURL(homedir_url, homedir);
+    if (!sec.getHomeDir(homedir_url))
+        throw "Cannot determine user home directory";
 
-        OUString rufn = homedir;
-        ensure_final_slash(rufn);
-        rufn += ".recently-used";
+    OUString homedir;
+    osl::FileBase::getSystemPathFromFileURL(homedir_url, homedir);
 
-        OString tmp =
-            OUStringToOString(rufn, osl_getThreadTextEncoding());
+    OUString rufn = homedir;
+    ensure_final_slash(rufn);
+    rufn += ".recently-used";
 
-        int fd = open(tmp.getStr(), O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-        if (fd != -1) {
-            file_ = fdopen(fd, "w+");
-            if (file_ == nullptr) {
-                close(fd);
-            }
-        }
+    OString tmp =
+        OUStringToOString(rufn, osl_getThreadTextEncoding());
 
-        if (nullptr == file_)
-            throw "I/O error opening ~/.recently-used";
-
-        if (lockf(fileno(file_), F_LOCK, 0) != 0)
-        {
-            fclose(file_);
-            throw "Cannot lock ~/.recently-used";
+    int fd = open(tmp.getStr(), O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+    if (fd != -1) {
+        file_ = fdopen(fd, "w+");
+        if (file_ == nullptr) {
+            close(fd);
         }
     }
-    else
-        throw "Cannot determine user home directory";
+
+    if (nullptr == file_)
+        throw "I/O error opening ~/.recently-used";
+
+    if (lockf(fileno(file_), F_LOCK, 0) != 0)
+    {
+        fclose(file_);
+        throw "Cannot lock ~/.recently-used";
+    }
 }
 
 

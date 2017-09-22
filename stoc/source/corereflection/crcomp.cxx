@@ -210,16 +210,13 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
         if (pTD)
         {
             TYPELIB_DANGER_RELEASE( pObjTD );
-            if (coerce_assign( const_cast<char *>(static_cast<char const *>(rObj.getValue()) + _nOffset), getTypeDescr(), rValue, getReflection() ))
-            {
-                return;
-            }
-            else
+            if (!coerce_assign( const_cast<char *>(static_cast<char const *>(rObj.getValue()) + _nOffset), getTypeDescr(), rValue, getReflection() ))
             {
                 throw IllegalArgumentException(
                     "cannot assign value to destination",
                     static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
             }
+            return;
         }
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
@@ -246,16 +243,13 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
         if (pTD)
         {
             TYPELIB_DANGER_RELEASE( pObjTD );
-            if (coerce_assign( const_cast<char *>(static_cast<char const *>(rObj.getValue()) + _nOffset), getTypeDescr(), rValue, getReflection() ))
-            {
-                return;
-            }
-            else
+            if (!coerce_assign( const_cast<char *>(static_cast<char const *>(rObj.getValue()) + _nOffset), getTypeDescr(), rValue, getReflection() ))
             {
                 throw IllegalArgumentException(
                     "cannot assign to destination",
                     static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
             }
+            return;
         }
         TYPELIB_DANGER_RELEASE( pObjTD );
     }

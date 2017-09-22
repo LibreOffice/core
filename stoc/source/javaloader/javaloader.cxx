@@ -310,10 +310,9 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     const OUString & rLibName)
 {
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
-    if (loader.is())
-        return loader->writeRegistryInfo(xKey, blabla, rLibName);
-    else
+    if (!loader.is())
         throw CannotRegisterImplementationException("Could not create Java implementation loader");
+    return loader->writeRegistryInfo(xKey, blabla, rLibName);
 }
 
 
@@ -322,10 +321,9 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     const css::uno::Reference<XRegistryKey> & xKey)
 {
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
-    if (loader.is())
-        return loader->activate(rImplName, blabla, rLibName, xKey);
-    else
+    if (!loader.is())
         throw CannotActivateFactoryException("Could not create Java implementation loader");
+    return loader->activate(rImplName, blabla, rLibName, xKey);
 }
 
 static Mutex & getInitMutex()

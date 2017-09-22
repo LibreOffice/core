@@ -613,15 +613,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
                             GetMediaDescr() >> aPropsForDialog;
                             xFilterProperties->setPropertyValues( aPropsForDialog );
 
-                            if( xFilterDialog->execute() )
-                            {
-                                uno::Sequence< beans::PropertyValue > aPropsFromDialog =
-                                                                            xFilterProperties->getPropertyValues();
-                                const sal_Int32 nPropsLen {aPropsFromDialog.getLength()};
-                                for ( sal_Int32 nInd = 0; nInd < nPropsLen; ++nInd )
-                                    GetMediaDescr()[aPropsFromDialog[nInd].Name] = aPropsFromDialog[nInd].Value;
-                            }
-                            else
+                            if( !xFilterDialog->execute() )
                             {
                                 throw task::ErrorCodeIOException(
                                     ("ModelData_Impl::ExecuteFilterDialog_Impl:"
@@ -629,6 +621,12 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
                                     uno::Reference< uno::XInterface >(),
                                     sal_uInt32(ERRCODE_IO_ABORT));
                             }
+
+                            uno::Sequence< beans::PropertyValue > aPropsFromDialog =
+                                                                        xFilterProperties->getPropertyValues();
+                            const sal_Int32 nPropsLen {aPropsFromDialog.getLength()};
+                            for ( sal_Int32 nInd = 0; nInd < nPropsLen; ++nInd )
+                                GetMediaDescr()[aPropsFromDialog[nInd].Name] = aPropsFromDialog[nInd].Value;
                         }
                     }
 

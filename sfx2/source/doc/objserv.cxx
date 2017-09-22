@@ -622,21 +622,20 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 SfxStoringHelper aHelper;
 
-                if ( QueryHiddenInformation( bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving, nullptr ) == RET_YES )
-                {
-                    aHelper.GUIStoreModel( GetModel(),
-                                                         OUString::createFromAscii( pSlot->GetUnoName() ),
-                                                         aDispatchArgs,
-                                                         bPreselectPassword,
-                                                         GetDocumentSignatureState() );
-                }
-                else
+                if ( QueryHiddenInformation( bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving, nullptr ) != RET_YES )
                 {
                     // the user has decided not to store the document
                     throw task::ErrorCodeIOException(
                         "SfxObjectShell::ExecFile_Impl: ERRCODE_IO_ABORT",
                         uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
                 }
+
+                aHelper.GUIStoreModel( GetModel(),
+                                       OUString::createFromAscii( pSlot->GetUnoName() ),
+                                       aDispatchArgs,
+                                       bPreselectPassword,
+                                       GetDocumentSignatureState() );
+
 
                 // merge aDispatchArgs to the request
                 SfxAllItemSet aResultParams( GetPool() );

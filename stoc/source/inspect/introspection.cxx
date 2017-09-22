@@ -372,10 +372,9 @@ void IntrospectionAccessStatic_Impl::setPropertyValue( const Any& obj, const OUS
 //void IntrospectionAccessStatic_Impl::setPropertyValue( Any& obj, const OUString& aPropertyName, const Any& aValue ) const
 {
     sal_Int32 i = getPropertyIndex( aPropertyName );
-    if( i != -1 )
-        setPropertyValueByIndex( obj, i, aValue );
-    else
+    if( i == -1 )
         throw UnknownPropertyException(aPropertyName);
+    setPropertyValueByIndex( obj, i, aValue );
 }
 
 void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal_Int32 nSequenceIndex, const Any& aValue) const

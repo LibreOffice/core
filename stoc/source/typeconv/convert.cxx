@@ -507,17 +507,14 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         // same types or destination type is derived source type?
         TypeDescription aSourceTD( aSourceType );
         TypeDescription aDestTD( aDestType );
-        if (typelib_typedescription_isAssignableFrom( aDestTD.get(), aSourceTD.get() ))
-        {
-            aRet.setValue( rVal.getValue(), aDestTD.get() ); // evtl. .uP.cAsT.
-        }
-        else
+        if (!typelib_typedescription_isAssignableFrom( aDestTD.get(), aSourceTD.get() ))
         {
             throw CannotConvertException(
                 "value is not of same or derived type!",
                 Reference< XInterface >(), aDestinationClass,
                 FailReason::SOURCE_IS_NO_DERIVED_TYPE, 0 );
         }
+        aRet.setValue( rVal.getValue(), aDestTD.get() ); // evtl. .uP.cAsT.
         break;
     }
     // --- to INTERFACE -------------------------------------------------------------------------
@@ -636,18 +633,17 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             }
         }
 
-        if (nPos >= 0)
-        {
-            aRet.setValue(
-                &reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->pEnumValues[nPos],
-                aEnumTD.get() );
-        }
-        else
+        if (nPos < 0)
         {
             throw CannotConvertException(
                 "value cannot be converted to demanded ENUM!",
                 Reference< XInterface >(), aDestinationClass, FailReason::IS_NOT_ENUM, 0 );
         }
+
+        aRet.setValue(
+            &reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->pEnumValues[nPos],
+            aEnumTD.get() );
+
         break;
     }
 
@@ -815,17 +811,16 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
                 if (nEnumValue == reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->pEnumValues[nPos])
                     break;
             }
-            if (nPos >= 0)
-            {
-                aRet <<= OUString::unacquired(
-                    &reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->ppEnumNames[nPos]);
-            }
-            else
+            if (nPos < 0)
             {
                 throw CannotConvertException(
                     "value is not ENUM!",
                     Reference< XInterface >(), aDestinationClass, FailReason::IS_NOT_ENUM, 0 );
             }
+
+            aRet <<= OUString::unacquired(
+                &reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->ppEnumNames[nPos]);
+
             break;
         }
 

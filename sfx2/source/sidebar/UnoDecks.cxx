@@ -38,17 +38,11 @@ uno::Any SAL_CALL SfxUnoDecks::getByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    uno::Any aRet;
-
-    if (hasByName(aName))
-    {
-        uno::Reference<ui::XDeck> xDeck = new SfxUnoDeck(xFrame, aName);
-        aRet <<= xDeck;
-    }
-    else
+    if (!hasByName(aName))
         throw container::NoSuchElementException();
 
-    return aRet;
+    uno::Reference<ui::XDeck> xDeck = new SfxUnoDeck(xFrame, aName);
+    return uno::Any(xDeck);
 }
 
 
