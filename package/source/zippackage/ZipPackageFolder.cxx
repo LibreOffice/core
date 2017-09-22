@@ -407,20 +407,14 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
 
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent )
 {
-    try
-    {
-        if ( pEntry->IsFolder() )
-            maContents[pEntry->getName()] = o3tl::make_unique<ZipContentInfo>(static_cast<ZipPackageFolder*>(pEntry));
-        else
-            maContents[pEntry->getName()] = o3tl::make_unique<ZipContentInfo>(static_cast<ZipPackageStream*>(pEntry));
-    }
-    catch(const uno::Exception&)
-    {
-        throw;
-    }
+    if ( pEntry->IsFolder() )
+        maContents[pEntry->getName()] = o3tl::make_unique<ZipContentInfo>(static_cast<ZipPackageFolder*>(pEntry));
+    else
+        maContents[pEntry->getName()] = o3tl::make_unique<ZipContentInfo>(static_cast<ZipPackageStream*>(pEntry));
     if ( bSetParent )
         pEntry->setParent ( *this );
 }
+
 OUString ZipPackageFolder::getImplementationName()
 {
     return OUString("ZipPackageFolder");

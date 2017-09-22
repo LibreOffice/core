@@ -1408,18 +1408,7 @@ sal_Bool SAL_CALL CachedContentResultSet
         //unknown final count:
         aGuard.clear();
 
-        // Solaris has problems catching or propagating derived exceptions
-        // when only the base class is known, so make ResultSetException
-        // (derived from SQLException) known here:
-        bool bValid;
-        try
-        {
-            bValid = m_xResultSetOrigin->absolute( row );
-        }
-        catch (const ResultSetException&)
-        {
-            throw;
-        }
+        bool bValid = m_xResultSetOrigin->absolute( row );
 
         aGuard.reset();
         if( m_bFinalCount )

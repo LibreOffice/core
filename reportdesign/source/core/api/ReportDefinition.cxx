@@ -1484,46 +1484,40 @@ bool OReportDefinition::WriteThroughComponent(
 {
     OSL_ENSURE( nullptr != pStreamName, "Need stream name!" );
     OSL_ENSURE( nullptr != pServiceName, "Need service name!" );
-    try
+
+    // open stream
+    OUString sStreamName = OUString::createFromAscii( pStreamName );
+    uno::Reference<io::XStream> xStream = _xStorageToSaveTo->openStreamElement( sStreamName,embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+    if ( !xStream.is() )
+        return false;
+    uno::Reference<io::XOutputStream> xOutputStream = xStream->getOutputStream();
+    OSL_ENSURE(xOutputStream.is(), "Can't create output stream in package!");
+    if ( ! xOutputStream.is() )
+        return false;
+
+    uno::Reference<beans::XPropertySet> xStreamProp(xOutputStream,uno::UNO_QUERY);
+    OSL_ENSURE(xStreamProp.is(),"No valid property set for the output stream!");
+
+    uno::Reference<io::XSeekable> xSeek(xStreamProp,uno::UNO_QUERY);
+    if ( xSeek.is() )
     {
-        // open stream
-        OUString sStreamName = OUString::createFromAscii( pStreamName );
-        uno::Reference<io::XStream> xStream = _xStorageToSaveTo->openStreamElement( sStreamName,embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-        if ( !xStream.is() )
-            return false;
-        uno::Reference<io::XOutputStream> xOutputStream = xStream->getOutputStream();
-        OSL_ENSURE(xOutputStream.is(), "Can't create output stream in package!");
-        if ( ! xOutputStream.is() )
-            return false;
+        xSeek->seek(0);
+    }
 
-        uno::Reference<beans::XPropertySet> xStreamProp(xOutputStream,uno::UNO_QUERY);
-        OSL_ENSURE(xStreamProp.is(),"No valid property set for the output stream!");
+    xStreamProp->setPropertyValue( "MediaType", uno::Any(OUString("text/xml")) );
 
-        uno::Reference<io::XSeekable> xSeek(xStreamProp,uno::UNO_QUERY);
-        if ( xSeek.is() )
-        {
-            xSeek->seek(0);
-        }
-
-        xStreamProp->setPropertyValue( "MediaType", uno::Any(OUString("text/xml")) );
-
-        // encrypt all streams
-        xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption",
+    // encrypt all streams
+    xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption",
                                        uno::makeAny( true ) );
 
-        // set buffer and create outputstream
+    // set buffer and create outputstream
 
-        // write the stuff
-        bool bRet = WriteThroughComponent(
-            xOutputStream, xComponent,
-            pServiceName, rArguments, rMediaDesc );
-        // finally, commit stream.
-        return bRet;
-    }
-    catch (const uno::Exception&)
-    {
-        throw;
-    }
+    // write the stuff
+    bool bRet = WriteThroughComponent(
+        xOutputStream, xComponent,
+        pServiceName, rArguments, rMediaDesc );
+    // finally, commit stream.
+    return bRet;
 }
 
 bool OReportDefinition::WriteThroughComponent(
