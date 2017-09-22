@@ -85,6 +85,7 @@
 #define SwFrameShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
+#include <grfatr.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
