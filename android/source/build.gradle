@@ -1,11 +1,16 @@
 project.ext.set("archivesBaseName", "LibreOfficeViewer")
-//build-time dependencies - android plugin for gradle
-buildscript {
+allprojects {
     repositories {
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
+}
+//build-time dependencies - android plugin for gradle
+buildscript {
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 
@@ -24,14 +29,13 @@ dependencies {
     ])
     compile files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
     compile files("${liboWorkdir}/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar")
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:design:26.1.0' // also pulls-in corresponding support libraries
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
     compileOptions {
         // silence some java-language features hints
         sourceCompatibility 6
