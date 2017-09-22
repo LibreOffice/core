@@ -30,6 +30,16 @@
 
 #include <svtools/svtdllapi.h>
 
+namespace com { namespace sun { namespace star {
+    namespace drawing {
+        class XShapes;
+        class XShape;
+    }
+    namespace frame {
+        class XController;
+    }
+}}}
+
 class SVT_DLLPUBLIC DocumentToGraphicRenderer
 {
     const css::uno::Reference<css::lang::XComponent>& mxDocument;
@@ -63,6 +73,17 @@ public:
 
     Graphic renderToGraphic( sal_Int32 nCurrentPage, Size aDocumentSizePixel,
                             Size aTargetSizePixel, Color aPageColor);
+
+    /** Determine whether rxController has a css::view::XSelectionSupplier at
+        which either a css::drawing::XShapes or css::drawing::XShape is
+        selected. XShapes has precedence over XShape.
+
+        Call only if the SelectionOnly property was set.
+     */
+    static bool isShapeSelected(
+            css::uno::Reference< css::drawing::XShapes > & rxShapes,
+            css::uno::Reference< css::drawing::XShape > & rxShape,
+            const css::uno::Reference< css::frame::XController > & rxController );
 };
 
 #endif

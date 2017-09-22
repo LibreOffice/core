@@ -31,6 +31,8 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -225,6 +227,28 @@ sal_Int32 DocumentToGraphicRenderer::getCurrentPageWriter()
         return 1;
     Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), UNO_QUERY);
     return xCursor->getPage();
+}
+
+// static
+bool DocumentToGraphicRenderer::isShapeSelected(
+        css::uno::Reference< css::drawing::XShapes > & rxShapes,
+        css::uno::Reference< css::drawing::XShape > & rxShape,
+        const css::uno::Reference< css::frame::XController > & rxController )
+{
+    bool bShape = false;
+    if (rxController.is())
+    {
+        uno::Reference< view::XSelectionSupplier > xSelectionSupplier( rxController, uno::UNO_QUERY);
+        if (xSelectionSupplier.is())
+        {
+            uno::Any aAny( xSelectionSupplier->getSelection());
+            if (aAny >>= rxShapes)
+                bShape = true;
+            else if (aAny >>= rxShape)
+                bShape = true;
+        }
+    }
+    return bShape;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
