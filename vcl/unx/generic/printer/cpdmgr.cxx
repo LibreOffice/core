@@ -411,7 +411,7 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
                 //     if( pValue )
                 //         pValue->m_aValue = aDefaultValue;
                 }
-                keys.push_back(pKey);
+                keys.emplace_back(pKey);
             }
 
             pKey = new PPDKey("ModelName");
@@ -420,6 +420,7 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
             if( pValue )
                 pValue->m_aValue = aValueName;
             pKey -> m_pDefaultValue = pValue;
+            keys.emplace_back(pKey);
 
             pKey = new PPDKey("NickName");
             aValueName = OStringToOUString( pDest -> name, aEncoding );
@@ -427,6 +428,7 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
             if( pValue )
                 pValue->m_aValue = aValueName;
             pKey -> m_pDefaultValue = pValue;
+            keys.emplace_back(pKey);
 
             pNewParser = new PPDParser(aPrinter, keys);
             PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
