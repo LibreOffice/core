@@ -72,14 +72,13 @@ bool EmPicture::Read(HWPFile & hwpf)
 
 OlePicture::OlePicture(int tsize)
     : signature(0)
+#ifdef _WIN32
     , pis(nullptr)
+#endif
 {
     size = tsize - 4;
     if (size <= 0)
         return;
-#ifndef _WIN32
-     pis.reset( new char[size] );
-#endif
 };
 
 OlePicture::~OlePicture()
@@ -130,8 +129,7 @@ void OlePicture::Read(HWPFile & hwpf)
     }
     unlink(tname);
 #else
-    if (pis == nullptr || hwpf.ReadBlock(pis.get(), size) == 0)
-        return;
+    hwpf.SkipBlock(size);
 #endif
 }
 

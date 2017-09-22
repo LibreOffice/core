@@ -62,8 +62,6 @@ struct OlePicture
     uint signature;
 #ifdef _WIN32
     IStorage *pis;
-#else
-    std::unique_ptr<char[]> pis;
 #endif
     explicit OlePicture(int tsize);
     ~OlePicture(void);
