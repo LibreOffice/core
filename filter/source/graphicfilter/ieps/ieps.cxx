@@ -648,7 +648,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                     long nBitDepth = ImplGetNumber(pDest, nSecurityCount);
                     long nScanLines = ImplGetNumber(pDest, nSecurityCount);
                     pDest = ImplSearchEntry(pDest, reinterpret_cast<sal_uInt8 const *>("%"), nSecurityCount, 1);       // go to the first Scanline
-                    if (pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines)
+                    if (pDest && nWidth > 0 && nHeight > 0 && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines)
                     {
                         rStream.Seek( nBufStartPos + ( pDest - pBuf.get() ) );
 
