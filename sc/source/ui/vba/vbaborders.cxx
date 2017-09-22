@@ -172,13 +172,12 @@ public:
         sal_Int32 nColor = 0;
         _color >>= nColor;
         table::BorderLine aBorderLine;
-        if ( getBorderLine( aBorderLine ) )
-        {
-            aBorderLine.Color = XLRGBToOORGB( nColor );
-            setBorderLine( aBorderLine );
-        }
-        else
+        if ( !getBorderLine( aBorderLine ) )
             throw uno::RuntimeException("No Implementation available" );
+
+        aBorderLine.Color = XLRGBToOORGB( nColor );
+        setBorderLine( aBorderLine );
+
     }
 
     uno::Any SAL_CALL getColorIndex() override
@@ -236,29 +235,28 @@ public:
         sal_Int32 nWeight = 0;
         _weight >>= nWeight;
         table::BorderLine aBorderLine;
-        if ( getBorderLine( aBorderLine ) )
-        {
-            switch ( nWeight )
-            {
-                case XlBorderWeight::xlThin:
-                    aBorderLine.OuterLineWidth = OOLineThin;
-                    break;
-                case XlBorderWeight::xlMedium:
-                    aBorderLine.OuterLineWidth = OOLineMedium;
-                    break;
-                case XlBorderWeight::xlThick:
-                    aBorderLine.OuterLineWidth = OOLineThick;
-                    break;
-                case XlBorderWeight::xlHairline:
-                    aBorderLine.OuterLineWidth = OOLineHairline;
-                    break;
-                default:
-                    throw uno::RuntimeException("Bad param" );
-            }
-            setBorderLine( aBorderLine );
-        }
-        else
+        if ( !getBorderLine( aBorderLine ) )
                     throw uno::RuntimeException("Method failed" );
+
+        switch ( nWeight )
+        {
+            case XlBorderWeight::xlThin:
+                aBorderLine.OuterLineWidth = OOLineThin;
+                break;
+            case XlBorderWeight::xlMedium:
+                aBorderLine.OuterLineWidth = OOLineMedium;
+                break;
+            case XlBorderWeight::xlThick:
+                aBorderLine.OuterLineWidth = OOLineThick;
+                break;
+            case XlBorderWeight::xlHairline:
+                aBorderLine.OuterLineWidth = OOLineHairline;
+                break;
+            default:
+                throw uno::RuntimeException("Bad param" );
+        }
+        setBorderLine( aBorderLine );
+
     }
 
     void SAL_CALL setTintAndShade( const uno::Any& /*rAny*/ ) override
@@ -283,26 +281,25 @@ public:
         sal_Int32 nLineStyle = 0;
         _linestyle >>= nLineStyle;
         table::BorderLine aBorderLine;
-        if ( getBorderLine( aBorderLine ) )
-        {
-            switch ( nLineStyle )
-            {
-                case XlLineStyle::xlContinuous:
-                case XlLineStyle::xlDash:
-                case XlLineStyle::xlDashDot:
-                case XlLineStyle::xlDashDotDot:
-                case XlLineStyle::xlDot:
-                case XlLineStyle::xlDouble:
-                case XlLineStyle::xlLineStyleNone:
-                case XlLineStyle::xlSlantDashDot:
-                    break;
-                default:
-                    throw uno::RuntimeException("Bad param" );
-            }
-            setBorderLine( aBorderLine );
-        }
-        else
+        if ( !getBorderLine( aBorderLine ) )
             throw uno::RuntimeException("Method failed" );
+
+        switch ( nLineStyle )
+        {
+            case XlLineStyle::xlContinuous:
+            case XlLineStyle::xlDash:
+            case XlLineStyle::xlDashDot:
+            case XlLineStyle::xlDashDotDot:
+            case XlLineStyle::xlDot:
+            case XlLineStyle::xlDouble:
+            case XlLineStyle::xlLineStyleNone:
+            case XlLineStyle::xlSlantDashDot:
+                break;
+            default:
+                throw uno::RuntimeException("Bad param" );
+        }
+        setBorderLine( aBorderLine );
+
     }
 };
 

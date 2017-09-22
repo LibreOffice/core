@@ -327,101 +327,101 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
     if ( aPropertyName == SC_UNONAME_ANCHOR )
     {
         uno::Reference<sheet::XCellRangeAddressable> xRangeAdd(aValue, uno::UNO_QUERY);
-        if (xRangeAdd.is())
+        if (!xRangeAdd.is())
+            throw lang::IllegalArgumentException("only XCell or XSpreadsheet objects allowed", static_cast<cppu::OWeakObject*>(this), 0);
+
+        SdrObject *pObj = GetSdrObject();
+        if (pObj)
         {
-            SdrObject *pObj = GetSdrObject();
-            if (pObj)
+            ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
+            SdrPage* pPage = pObj->GetPage();
+            if ( pModel && pPage )
             {
-                ScDrawLayer* pModel = static_cast<ScDrawLayer*>(pObj->GetModel());
-                SdrPage* pPage = pObj->GetPage();
-                if ( pModel && pPage )
+                ScDocument* pDoc = pModel->GetDocument();
+                if ( pDoc )
                 {
-                    ScDocument* pDoc = pModel->GetDocument();
-                    if ( pDoc )
+                    SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+                    if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
                     {
-                        SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-                        if ( pObjSh && dynamic_cast<const ScDocShell*>( pObjSh) !=  nullptr )
+                        ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
+
+                        SCTAB nTab = 0;
+                        if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                         {
-                            ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
-
-                            SCTAB nTab = 0;
-                            if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
+                            table::CellRangeAddress aAddress = xRangeAdd->getRangeAddress();
+                            if (nTab == aAddress.Sheet)
                             {
-                                table::CellRangeAddress aAddress = xRangeAdd->getRangeAddress();
-                                if (nTab == aAddress.Sheet)
+                                tools::Rectangle aRect(pDoc->GetMMRect( static_cast<SCCOL>(aAddress.StartColumn), static_cast<SCROW>(aAddress.StartRow),
+                                    static_cast<SCCOL>(aAddress.EndColumn), static_cast<SCROW>(aAddress.EndRow), aAddress.Sheet ));
+                                awt::Point aRelPoint;
+                                uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
+                                if (xShape.is())
                                 {
-                                    tools::Rectangle aRect(pDoc->GetMMRect( static_cast<SCCOL>(aAddress.StartColumn), static_cast<SCROW>(aAddress.StartRow),
-                                        static_cast<SCCOL>(aAddress.EndColumn), static_cast<SCROW>(aAddress.EndRow), aAddress.Sheet ));
-                                    awt::Point aRelPoint;
-                                    uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
-                                    if (xShape.is())
+                                    Point aPoint;
+                                    Point aEndPoint;
+                                    if (pDoc->IsNegativePage(nTab))
                                     {
-                                        Point aPoint;
-                                        Point aEndPoint;
-                                        if (pDoc->IsNegativePage(nTab))
-                                        {
-                                            aPoint = aRect.TopRight();
-                                            aEndPoint = aRect.BottomLeft();
-                                        }
-                                        else
-                                        {
-                                            aPoint = aRect.TopLeft();
-                                            aEndPoint = aRect.BottomRight();
-                                        }
-                                        awt::Size aUnoSize;
-                                        awt::Point aCaptionPoint;
-                                        ScRange aRange;
-                                        aRelPoint = lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint );
-                                        awt::Point aUnoPoint(aRelPoint);
-
-                                        aUnoPoint.X += aPoint.X();
-                                        aUnoPoint.Y += aPoint.Y();
-
-                                        if ( aUnoPoint.Y > aEndPoint.Y() )
-                                            aUnoPoint.Y = aEndPoint.Y() - 2;
-                                        if (pDoc->IsNegativePage(nTab))
-                                        {
-                                            if ( aUnoPoint.X < aEndPoint.X() )
-                                                aUnoPoint.X = aEndPoint.X() + 2;
-                                            aUnoPoint.X -= aUnoSize.Width;
-                                            // remove difference to caption point
-                                            if (aCaptionPoint.X > 0 && aCaptionPoint.X > aUnoSize.Width)
-                                                aUnoPoint.X -= aCaptionPoint.X - aUnoSize.Width;
-                                        }
-                                        else
-                                        {
-                                            if ( aUnoPoint.X > aEndPoint.X() )
-                                                aUnoPoint.X = aEndPoint.X() - 2;
-                                            if (aCaptionPoint.X < 0)
-                                                aUnoPoint.X -= aCaptionPoint.X;
-                                        }
-                                        if (aCaptionPoint.Y < 0)
-                                            aUnoPoint.Y -= aCaptionPoint.Y;
-
-                                        xShape->setPosition(aUnoPoint);
-                                        pDocSh->SetModified();
-                                    }
-
-                                    if (aAddress.StartRow != aAddress.EndRow) //should be a Spreadsheet
-                                    {
-                                        OSL_ENSURE(aAddress.StartRow == 0 && aAddress.EndRow == MAXROW &&
-                                            aAddress.StartColumn == 0 && aAddress.EndColumn == MAXCOL, "here should be a XSpreadsheet");
-                                        ScDrawLayer::SetPageAnchored(*pObj);
+                                        aPoint = aRect.TopRight();
+                                        aEndPoint = aRect.BottomLeft();
                                     }
                                     else
                                     {
-                                        OSL_ENSURE(aAddress.StartRow == aAddress.EndRow &&
-                                            aAddress.StartColumn == aAddress.EndColumn, "here should be a XCell");
-                                        ScDrawObjData aAnchor;
-                                        aAnchor.maStart = ScAddress(aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet);
-                                        aAnchor.maStartOffset = Point(aRelPoint.X, aRelPoint.Y);
-                                        //Uno sets the Anchor in terms of the unrotated shape, not much we can do
-                                        //about that since uno also displays the shape geometry in terms of the unrotated
-                                        //shape. #TODO think about changing the anchoring behaviour here too
-                                        //Currently we've only got a start anchor, not an end-anchor, so generate that now
-                                        ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, aAnchor, *pDoc, aAddress.Sheet);
-                                        ScDrawLayer::SetCellAnchored(*pObj, aAnchor);
+                                        aPoint = aRect.TopLeft();
+                                        aEndPoint = aRect.BottomRight();
                                     }
+                                    awt::Size aUnoSize;
+                                    awt::Point aCaptionPoint;
+                                    ScRange aRange;
+                                    aRelPoint = lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint );
+                                    awt::Point aUnoPoint(aRelPoint);
+
+                                    aUnoPoint.X += aPoint.X();
+                                    aUnoPoint.Y += aPoint.Y();
+
+                                    if ( aUnoPoint.Y > aEndPoint.Y() )
+                                        aUnoPoint.Y = aEndPoint.Y() - 2;
+                                    if (pDoc->IsNegativePage(nTab))
+                                    {
+                                        if ( aUnoPoint.X < aEndPoint.X() )
+                                            aUnoPoint.X = aEndPoint.X() + 2;
+                                        aUnoPoint.X -= aUnoSize.Width;
+                                        // remove difference to caption point
+                                        if (aCaptionPoint.X > 0 && aCaptionPoint.X > aUnoSize.Width)
+                                            aUnoPoint.X -= aCaptionPoint.X - aUnoSize.Width;
+                                    }
+                                    else
+                                    {
+                                        if ( aUnoPoint.X > aEndPoint.X() )
+                                            aUnoPoint.X = aEndPoint.X() - 2;
+                                        if (aCaptionPoint.X < 0)
+                                            aUnoPoint.X -= aCaptionPoint.X;
+                                    }
+                                    if (aCaptionPoint.Y < 0)
+                                        aUnoPoint.Y -= aCaptionPoint.Y;
+
+                                    xShape->setPosition(aUnoPoint);
+                                    pDocSh->SetModified();
+                                }
+
+                                if (aAddress.StartRow != aAddress.EndRow) //should be a Spreadsheet
+                                {
+                                    OSL_ENSURE(aAddress.StartRow == 0 && aAddress.EndRow == MAXROW &&
+                                        aAddress.StartColumn == 0 && aAddress.EndColumn == MAXCOL, "here should be a XSpreadsheet");
+                                    ScDrawLayer::SetPageAnchored(*pObj);
+                                }
+                                else
+                                {
+                                    OSL_ENSURE(aAddress.StartRow == aAddress.EndRow &&
+                                        aAddress.StartColumn == aAddress.EndColumn, "here should be a XCell");
+                                    ScDrawObjData aAnchor;
+                                    aAnchor.maStart = ScAddress(aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet);
+                                    aAnchor.maStartOffset = Point(aRelPoint.X, aRelPoint.Y);
+                                    //Uno sets the Anchor in terms of the unrotated shape, not much we can do
+                                    //about that since uno also displays the shape geometry in terms of the unrotated
+                                    //shape. #TODO think about changing the anchoring behaviour here too
+                                    //Currently we've only got a start anchor, not an end-anchor, so generate that now
+                                    ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, aAnchor, *pDoc, aAddress.Sheet);
+                                    ScDrawLayer::SetCellAnchored(*pObj, aAnchor);
                                 }
                             }
                         }
@@ -429,8 +429,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                 }
             }
         }
-        else
-            throw lang::IllegalArgumentException("only XCell or XSpreadsheet objects allowed", static_cast<cppu::OWeakObject*>(this), 0);
+
     }
     else if ( aPropertyName == SC_UNONAME_IMAGEMAP )
     {
@@ -1163,10 +1162,10 @@ void SAL_CALL ScShapeObj::insertString( const uno::Reference<text::XTextRange>& 
     SolarMutexGuard aGuard;
 
     uno::Reference<text::XSimpleText> xAggSimpleText(lcl_GetSimpleText(mxShapeAgg));
-    if ( xAggSimpleText.is() )
-        xAggSimpleText->insertString( xRange, aString, bAbsorb );
-    else
+    if ( !xAggSimpleText.is() )
         throw uno::RuntimeException();
+
+    xAggSimpleText->insertString( xRange, aString, bAbsorb );
 }
 
 void SAL_CALL ScShapeObj::insertControlCharacter( const uno::Reference<text::XTextRange>& xRange,
@@ -1175,10 +1174,10 @@ void SAL_CALL ScShapeObj::insertControlCharacter( const uno::Reference<text::XTe
     SolarMutexGuard aGuard;
 
     uno::Reference<text::XSimpleText> xAggSimpleText(lcl_GetSimpleText(mxShapeAgg));
-    if ( xAggSimpleText.is() )
-        xAggSimpleText->insertControlCharacter( xRange, nControlCharacter, bAbsorb );
-    else
+    if ( !xAggSimpleText.is() )
         throw uno::RuntimeException();
+
+    xAggSimpleText->insertControlCharacter( xRange, nControlCharacter, bAbsorb );
 }
 
 // XTextRange
@@ -1194,12 +1193,10 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getStart()
     SolarMutexGuard aGuard;
 
     uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
-    if ( xAggTextRange.is() )
-        return xAggTextRange->getStart();
-    else
+    if ( !xAggTextRange.is() )
         throw uno::RuntimeException();
 
-//    return uno::Reference<text::XTextRange>();
+    return xAggTextRange->getStart();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getEnd()
@@ -1207,12 +1204,10 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getEnd()
     SolarMutexGuard aGuard;
 
     uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
-    if ( xAggTextRange.is() )
-        return xAggTextRange->getEnd();
-    else
+    if ( !xAggTextRange.is() )
         throw uno::RuntimeException();
 
-//    return uno::Reference<text::XTextRange>();
+    return xAggTextRange->getEnd();
 }
 
 OUString SAL_CALL ScShapeObj::getString()
@@ -1220,12 +1215,10 @@ OUString SAL_CALL ScShapeObj::getString()
     SolarMutexGuard aGuard;
 
     uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
-    if ( xAggTextRange.is() )
-        return xAggTextRange->getString();
-    else
+    if ( !xAggTextRange.is() )
         throw uno::RuntimeException();
 
-//    return OUString();
+    return xAggTextRange->getString();
 }
 
 void SAL_CALL ScShapeObj::setString( const OUString& aText )
@@ -1233,10 +1226,10 @@ void SAL_CALL ScShapeObj::setString( const OUString& aText )
     SolarMutexGuard aGuard;
 
     uno::Reference<text::XTextRange> xAggTextRange(lcl_GetTextRange(mxShapeAgg));
-    if ( xAggTextRange.is() )
-        xAggTextRange->setString( aText );
-    else
+    if ( !xAggTextRange.is() )
         throw uno::RuntimeException();
+
+    xAggTextRange->setString( aText );
 }
 
 // XChild
@@ -1381,20 +1374,18 @@ public:
         uno::Sequence< beans::PropertyValue > aProperties;
         ScMacroInfo* pInfo = getInfo(false);
 
-        if ( aName == SC_EVENTACC_ONCLICK )
-        {
-            if ( pInfo && !pInfo->GetMacro().isEmpty() )
-            {
-                aProperties.realloc( 2 );
-                aProperties[ 0 ].Name = SC_EVENTACC_EVENTTYPE;
-                aProperties[ 0 ].Value <<= OUString(SC_EVENTACC_SCRIPT);
-                aProperties[ 1 ].Name = SC_EVENTACC_SCRIPT;
-                aProperties[ 1 ].Value <<= pInfo->GetMacro();
-            }
-        }
-        else
+        if ( aName != SC_EVENTACC_ONCLICK )
         {
             throw container::NoSuchElementException();
+        }
+
+        if ( pInfo && !pInfo->GetMacro().isEmpty() )
+        {
+            aProperties.realloc( 2 );
+            aProperties[ 0 ].Name = SC_EVENTACC_EVENTTYPE;
+            aProperties[ 0 ].Value <<= OUString(SC_EVENTACC_SCRIPT);
+            aProperties[ 1 ].Name = SC_EVENTACC_SCRIPT;
+            aProperties[ 1 ].Value <<= pInfo->GetMacro();
         }
 
         return uno::Any( aProperties );

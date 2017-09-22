@@ -34,23 +34,22 @@ public:
     virtual uno::Any SAL_CALL nextElement() override
     {
         // FIXME: should be add menu
-        if( hasMoreElements() )
-        {
-            uno::Reference< XCommandBarControl > xCommandBarControl( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-            if( xCommandBarControl->getType() == office::MsoControlType::msoControlPopup )
-            {
-                uno::Reference< excel::XMenu > xMenu( new ScVbaMenu( m_xParent, m_xContext, xCommandBarControl ) );
-                return uno::makeAny( xMenu );
-            }
-            else if( xCommandBarControl->getType() == office::MsoControlType::msoControlButton )
-            {
-                uno::Reference< excel::XMenuItem > xMenuItem( new ScVbaMenuItem( m_xParent, m_xContext, xCommandBarControl ) );
-                return uno::makeAny( xMenuItem );
-            }
-            nextElement();
-        }
-        else
+        if( !hasMoreElements() )
             throw container::NoSuchElementException();
+
+        uno::Reference< XCommandBarControl > xCommandBarControl( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
+        if( xCommandBarControl->getType() == office::MsoControlType::msoControlPopup )
+        {
+            uno::Reference< excel::XMenu > xMenu( new ScVbaMenu( m_xParent, m_xContext, xCommandBarControl ) );
+            return uno::makeAny( xMenu );
+        }
+        else if( xCommandBarControl->getType() == office::MsoControlType::msoControlButton )
+        {
+            uno::Reference< excel::XMenuItem > xMenuItem( new ScVbaMenuItem( m_xParent, m_xContext, xCommandBarControl ) );
+            return uno::makeAny( xMenuItem );
+        }
+        nextElement();
+
         return uno::Any();
     }
 };
