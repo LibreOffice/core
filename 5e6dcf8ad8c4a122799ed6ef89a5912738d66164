@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_996d0807",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-09-22T13:21:37Z",
+      "side": 1,
+      "message": "Isn\u0027t there a memory leak if pFamily isn\u0027t used?\nIsn\u0027t it possible to test if sLabel is empty directly from *pIt?",
+      "range": {
+        "startLine": 151,
+        "startChar": 16,
+        "endLine": 151,
+        "endChar": 25
+      },
+      "revId": "5e6dcf8ad8c4a122799ed6ef89a5912738d66164",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
