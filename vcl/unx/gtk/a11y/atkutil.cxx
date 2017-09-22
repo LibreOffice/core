@@ -38,6 +38,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
+#include <unx/gtk/gtkdata.hxx>
 #include "atkwrapper.hxx"
 #include "atkutil.hxx"
 
@@ -512,10 +513,22 @@ WindowList g_aWindowList;
 
 }
 
+DocumentFocusListener & GtkSalData::GetDocumentFocusListener()
+{
+    if (!m_pDocumentFocusListener)
+    {
+        m_pDocumentFocusListener = new DocumentFocusListener;
+        m_xDocumentFocusListener.set(m_pDocumentFocusListener);
+    }
+    return *m_pDocumentFocusListener;
+}
+
 static void handle_get_focus(::VclWindowEvent const * pEvent)
 {
-    static rtl::Reference< DocumentFocusListener > aDocumentFocusListener =
-        new DocumentFocusListener;
+    GtkSalData *const pSalData(GetGtkSalData());
+    assert(pSalData);
+
+    DocumentFocusListener & rDocumentFocusListener(pSalData->GetDocumentFocusListener());
 
     vcl::Window *pWindow = pEvent->GetWindow();
 
@@ -566,7 +579,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
             g_aWindowList.list.insert(pWindow);
             try
             {
-                aDocumentFocusListener->attachRecursive(xAccessible, xContext, xStateSet);
+                rDocumentFocusListener.attachRecursive(xAccessible, xContext, xStateSet);
             }
             catch (const uno::Exception&)
             {
