@@ -117,10 +117,6 @@ X11OpenGLDeviceInfo::X11OpenGLDeviceInfo():
     GetData();
 }
 
-X11OpenGLDeviceInfo::~X11OpenGLDeviceInfo()
-{
-}
-
 void X11OpenGLDeviceInfo::GetData()
 {
     if (!glx::glxtest_pipe)
