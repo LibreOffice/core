@@ -242,6 +242,7 @@ public:
     void testTdf100709XLSX();
     void testTdf97598XLSX();
     void testTdf111974XLSM();
+    void testTdf112501();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -361,6 +362,7 @@ public:
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
     CPPUNIT_TEST(testTdf111974XLSM);
+    CPPUNIT_TEST(testTdf112501);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3888,6 +3890,73 @@ void ScFiltersTest::testTdf97598XLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("Cell A1"), aStr);
 
     xDocSh->DoClose();
+}
+
+
+void ScFiltersTest::testTdf112501()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf112501.", FORMAT_XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // There should be exactly 2 pivot tables
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pDPs->GetCount());
+
+    // Check first pivot table popup buttons (compact)
+    {
+        const ScDPObject* pDPObj = &(*pDPs)[0];
+        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        // Check whether we have the buttons at the right buttons
+        // Row button
+        {
+            const ScPatternAttr* pPattern = rDoc.GetPattern(0, 3, 0);
+            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+        }
+        // Column button
+        {
+            const ScPatternAttr* pPattern = rDoc.GetPattern(1, 2, 0);
+            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+        }
+        // Check also C3 to make sure column button is not placed there
+        {
+            const ScPatternAttr* pPattern = rDoc.GetPattern(2, 2, 0);
+            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            CPPUNIT_ASSERT(!(rMergeFlag.GetValue() & ScMF::ButtonPopup));
+        }
+    }
+
+    // Check first pivot table popup buttons (not compact)
+    {
+        const ScDPObject* pDPObj = &(*pDPs)[1];
+        CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
+        // Check whether we have the buttons at the right buttons
+        // Two row buttons
+        {
+            const ScPatternAttr* pPattern = rDoc.GetPattern(7, 3, 0);
+            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+        }
+        {
+            const ScPatternAttr* pPattern = rDoc.GetPattern(8, 3, 0);
+            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+        }
+        // Column button
+        {
+            const ScPatternAttr* pPattern = rDoc.GetPattern(9, 2, 0);
+            const SfxPoolItem& rPoolItem = pPattern->GetItem(ATTR_MERGE_FLAG);
+            const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>(rPoolItem);
+            CPPUNIT_ASSERT(rMergeFlag.GetValue() & ScMF::ButtonPopup);
+        }
+    }
 }
 
 
