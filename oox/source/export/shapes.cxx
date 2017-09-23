@@ -528,7 +528,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
 
     // visual properties
     pFS->startElementNS(mnXmlNamespace, XML_grpSpPr, FSEND);
-    WriteShapeTransformation(xShape, XML_a);
+    WriteShapeTransformation(xShape, XML_a, false, false, true);
     pFS->endElementNS(mnXmlNamespace, XML_grpSpPr);
 
     uno::Reference<drawing::XShapes> xGroupShape(xShape, uno::UNO_QUERY_THROW);
