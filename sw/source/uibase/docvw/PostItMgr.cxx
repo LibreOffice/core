@@ -2152,7 +2152,7 @@ sal_Int32 SwPostItMgr::GetSpaceBetween() const
 sal_Int32 SwPostItMgr::GetScrollSize() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
-    return long(POSTIT_SPACE_BETWEEN + POSTIT_MINIMUMSIZE_WITH_META * f);
+    return long((POSTIT_SPACE_BETWEEN + POSTIT_MINIMUMSIZE_WITH_META) * f);
 }
 
 sal_Int32 SwPostItMgr::GetMinimumSizeWithMeta() const
