@@ -1241,7 +1241,7 @@ public:
                const SwTextFootnote *pTextFootnote,
                const bool bApplyGivenScriptType,
                const SwFontScript nGivenScriptType );
-    ~SwFootnoteSave();
+    ~SwFootnoteSave() COVERITY_NOEXCEPT_FALSE;
 };
 
 SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
@@ -1307,7 +1307,7 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
         pFnt = nullptr;
 }
 
-SwFootnoteSave::~SwFootnoteSave()
+SwFootnoteSave::~SwFootnoteSave() COVERITY_NOEXCEPT_FALSE
 {
     if( pFnt )
     {
