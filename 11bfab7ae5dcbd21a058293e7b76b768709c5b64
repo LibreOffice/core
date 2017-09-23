@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_8fabfa88",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-09-23T20:09:59Z",
+      "side": 1,
+      "message": "If we display the update count below, we should display it here, too :)",
+      "range": {
+        "startLine": 206,
+        "startChar": 20,
+        "endLine": 206,
+        "endChar": 41
+      },
+      "revId": "11bfab7ae5dcbd21a058293e7b76b768709c5b64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
