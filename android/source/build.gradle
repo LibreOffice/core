@@ -1,7 +1,6 @@
 project.ext.set("archivesBaseName", "LibreOfficeViewer")
 allprojects {
     repositories {
-        jcenter()
         maven {
             url "https://maven.google.com"
         }
@@ -9,6 +8,9 @@ allprojects {
 }
 //build-time dependencies - android plugin for gradle
 buildscript {
+    repositories {
+        jcenter()
+    }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
     }
