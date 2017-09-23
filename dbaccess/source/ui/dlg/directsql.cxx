@@ -29,6 +29,7 @@
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/XMultipleResults.hpp>
 
 namespace dbaui
 {
@@ -183,52 +184,50 @@ namespace dbaui
         ::osl::MutexGuard aGuard(m_aMutex);
 
         OUString sStatus;
-        css::uno::Reference< css::sdbc::XResultSet > xResultSet;
+
+        // clear the output box
+        m_pOutput->SetText(OUString());
         try
         {
             // create a statement
             Reference< XStatement > xStatement = m_xConnection->createStatement();
-            OSL_ENSURE(xStatement.is(), "DirectSQLDialog::implExecuteStatement: no statement returned by the connection!");
+            css::uno::Reference< css::sdbc::XMultipleResults > xMR ( xStatement, UNO_QUERY );
 
-            // clear the output box
-            m_pOutput->SetText(OUString());
-            if (xStatement.is())
+            if (xMR.is())
             {
-                if (_rStatement.toAsciiUpperCase().startsWith("SELECT") && m_pShowOutput->IsChecked())
+                bool hasRS = xStatement->execute(_rStatement);
+                if(hasRS)
                 {
-                    // execute it as a query
-                    xResultSet = xStatement->executeQuery(_rStatement);
-                    // get a handle for the rows
-                    css::uno::Reference< css::sdbc::XRow > xRow( xResultSet, css::uno::UNO_QUERY );
-                    // work through each of the rows
-                    while (xResultSet->next())
+                    css::uno::Reference< css::sdbc::XResultSet > xRS (xMR->getResultSet());
+                    if (m_pShowOutput->IsChecked())
+                        display(xRS);
+                }
+                else
+                    addOutputText(OUString::number(xMR->getUpdateCount()) + " rows updated\n");
+                while ((hasRS=xMR->getMoreResults()) || (xMR->getUpdateCount() != -1))
+                {
+                    if(hasRS)
                     {
-                        // initialise the output line for each row
-                        OUString out("");
-                        // work along the columns until that are none left
-                        try
-                        {
-                            int i = 1;
-                            for (;;)
-                            {
-                                // be dumb, treat everything as a string
-                                out += xRow->getString(i) + ",";
-                                i++;
-                            }
-                        }
-                        // trap for when we fall off the end of the row
-                        catch (const SQLException&)
-                        {
-                        }
-                        // report the output
-                        addOutputText(out);
+                        css::uno::Reference< css::sdbc::XResultSet > xRS (xMR->getResultSet());
+                        if (m_pShowOutput->IsChecked())
+                            display(xRS);
                     }
-                } else {
-                    // execute it
-                    xStatement->execute(_rStatement);
                 }
             }
-
+            else
+            {
+                if (_rStatement.toAsciiUpperCase().startsWith("SELECT"))
+                {
+                    css::uno::Reference< css::sdbc::XResultSet > xRS = xStatement->executeQuery(_rStatement);
+                    if(m_pShowOutput->IsChecked())
+                        display(xRS);
+                }
+                else
+                {
+                    sal_Int32 resultCount = xStatement->executeUpdate(_rStatement);
+                    addOutputText(OUString::number(resultCount) + " rows updated\n");
+                }
+            }
             // successful
             sStatus = DBA_RES(STR_COMMAND_EXECUTED_SUCCESSFULLY);
 
@@ -246,6 +245,35 @@ namespace dbaui
 
         // add the status text
         addStatusText(sStatus);
+    }
+
+    void DirectSQLDialog::display(css::uno::Reference< css::sdbc::XResultSet > xRS)
+    {
+        // get a handle for the rows
+        css::uno::Reference< css::sdbc::XRow > xRow( xRS, css::uno::UNO_QUERY );
+        // work through each of the rows
+        while (xRS->next())
+        {
+            // initialise the output line for each row
+            OUString out("");
+            // work along the columns until that are none left
+            try
+            {
+                int i = 1;
+                for (;;)
+                {
+                    // be dumb, treat everything as a string
+                    out += xRow->getString(i) + ",";
+                    i++;
+                }
+            }
+            // trap for when we fall off the end of the row
+            catch (const SQLException&)
+            {
+            }
+            // report the output
+            addOutputText(out);
+        }
     }
 
     void DirectSQLDialog::addStatusText(const OUString& _rMessage)
