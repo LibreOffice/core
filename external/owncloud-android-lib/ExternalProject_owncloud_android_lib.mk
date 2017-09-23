@@ -15,11 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,owncloud_android_lib,\
 
 $(call gb_ExternalProject_get_state_target,owncloud_android_lib,build) :
 	$(call gb_ExternalProject_run,build,\
-	$(ICECREAM_RUN) "$(ANT)" \
-		$(if $(verbose),-v,-q) \
-		-f build.xml \
-		-Dsdk.dir=$(ANDROID_SDK_HOME) -Dtarget=android-22 \
-		release \
+	ANDROID_HOME=$(ANDROID_SDK_HOME) $(SRCDIR)/android/source/gradlew assemble \
 	)
 
 # vim: set noet sw=4 ts=4:

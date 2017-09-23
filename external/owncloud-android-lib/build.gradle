@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+    }
+}
+
+android {
+    useLibrary 'org.apache.http.legacy'
+
+    compileOptions {
+        encoding 'ISO8859-1'
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 24
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java {
+                srcDirs = [
+                    'libs/commons-codec-1.9/src/main/java',
+                    'libs/commons-httpclient-3.1/src/java',
+                    'libs/jackrabbit-webdav-2.7.2/src/main/java',
+                    'libs/slf4j-1.7.12/src/java',
+                    'libs/tomcat-7.0.40/java',
+                    'src'
+                ]
+            }
+            resources {
+                srcDirs = [
+                    'libs/tomcat-7.0.40/java',
+                    'libs/jackrabbit-webdav-2.7.2/src/main/java'
+                ]
+            }
+        }
+    }
+}

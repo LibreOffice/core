@@ -11,4 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,owncloud_android_lib))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,owncloud_android_lib,$(OWNCLOUD_ANDROID_LIB_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_add_file,owncloud_android_lib,build.gradle,external/owncloud-android-lib/build.gradle))
+
 # vim: set noet sw=4 ts=4:

@@ -1,8 +1,15 @@
+apply plugin: 'com.android.application'
+// buildhost settings - paths and the like
+apply from: 'liboSettings.gradle'
+
 project.ext.set("archivesBaseName", "LibreOfficeViewer")
 allprojects {
     repositories {
         maven {
             url "https://maven.google.com"
+        }
+        flatDir {
+            dirs "${liboWorkdir}/UnpackedTarball/owncloud_android_lib/build/outputs/aar"
         }
     }
 }
@@ -16,10 +23,6 @@ buildscript {
     }
 }
 
-apply plugin: 'com.android.application'
-// buildhost settings - paths and the like
-apply from: 'liboSettings.gradle'
-
 // compile-time dependencies
 dependencies {
     compile fileTree(dir: "${liboInstdir}/${liboUREJavaFolder}", include: [
@@ -30,7 +33,8 @@ dependencies {
             "unoloader.jar"
     ])
     compile files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
-    compile files("${liboWorkdir}/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar")
+    debugCompile(name:'owncloud_android_lib-debug', ext:'aar')
+    releaseCompile(name:'owncloud_android_lib-release', ext:'aar')
     compile 'com.android.support:design:26.1.0' // also pulls-in corresponding support libraries
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
