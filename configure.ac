@@ -624,6 +624,15 @@ darwin*) # Mac OS X or iOS
         _os=iOS
         test_gtk=no
         test_cups=no
+        enable_mpl_subset=yes
+        enable_lotuswordpro=no
+        enable_coinmp=yes
+        enable_lpsolve=no
+        enable_postgresql_sdbc=no
+        enable_extension_integration=no
+        enable_report_builder=no
+        with_theme="tango"
+        with_ppds=no
     else
         _os=Darwin
         if test -n "$LODE_HOME" ; then
@@ -2386,7 +2395,6 @@ fi
 
 # Decide whether to build database connectivity stuff (including
 # Base) or not. We probably don't want to on non-desktop OSes.
-
 if test -z "$enable_database_connectivity"; then
     # --disable-database-connectivity is unfinished work in progress
     # and the iOS test app doesn't link if we actually try to use it.
@@ -7261,18 +7269,6 @@ else
     EPM=NO
 fi
 AC_SUBST(EPM)
-
-if test $_os = iOS; then
-    enable_mpl_subset=yes
-    enable_lotuswordpro=no
-    enable_coinmp=yes
-    enable_lpsolve=no
-    enable_postgresql_sdbc=no
-    enable_extension_integration=no
-    enable_report_builder=no
-    with_theme="tango"
-    with_ppds=no
-fi
 
 ENABLE_LWP=
 if test "$enable_lotuswordpro" = "yes"; then
