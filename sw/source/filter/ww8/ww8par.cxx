@@ -4749,10 +4749,10 @@ void SwWW8ImplReader::ReadDocInfo()
             }
             else if (m_xWwFib->m_lcbSttbfAssoc) // not a template, and has a SttbfAssoc
             {
-                long nCur = m_pTableStream->Tell();
+                auto nCur = m_pTableStream->Tell();
                 Sttb aSttb;
-                m_pTableStream->Seek(m_xWwFib->m_fcSttbfAssoc); // point at tgc record
-                if (!aSttb.Read( *m_pTableStream ) )
+                // point at tgc record
+                if (!checkSeek(*m_pTableStream, m_xWwFib->m_fcSttbfAssoc) || !aSttb.Read(*m_pTableStream))
                     SAL_WARN("sw.ww8", "** Read of SttbAssoc data failed!!!! ");
                 m_pTableStream->Seek( nCur ); // return to previous position, is that necessary?
 #if OSL_DEBUG_LEVEL > 1
