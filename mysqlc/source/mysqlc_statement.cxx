@@ -175,7 +175,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
 
 sal_Int32 SAL_CALL OCommonStatement::getUpdateCount()
 {
-    return 0;
+    return cppStatement->getUpdateCount();
 }
 
 Any SAL_CALL OStatement::queryInterface(const Type & rType)
@@ -238,9 +238,7 @@ sal_Bool SAL_CALL OCommonStatement::getMoreResults()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-    // if your driver supports more than only one resultset
-    // and has one more at this moment return true
-    return false;
+    return cppStatement->getMoreResults();
 }
 
 Any SAL_CALL OCommonStatement::getWarnings()
