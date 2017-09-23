@@ -1378,7 +1378,7 @@ namespace emfio
                         Bitmap      aBitmap;
                         tools::Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
 
-                        if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
+                        if (!mpInputStream->good() || (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc))
                             bStatus = false;
                         else
                         {
