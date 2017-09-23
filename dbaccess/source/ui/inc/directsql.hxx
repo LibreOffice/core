@@ -106,6 +106,9 @@ namespace dbaui
         /// adds a status text to the output list
         void addOutputText(const OUString& _rMessage);
 
+        /// displays resultset
+        void display(css::uno::Reference< css::sdbc::XResultSet > xRS);
+
 #ifdef DBG_UTIL
         const sal_Char* impl_CheckInvariants() const;
 #endif
