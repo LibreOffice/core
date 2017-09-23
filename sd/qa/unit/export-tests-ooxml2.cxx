@@ -117,6 +117,7 @@ public:
     void testTdf112089();
     void testTdf112086();
     void testTdf112647();
+    void testGroupRotation();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -159,6 +160,7 @@ public:
     CPPUNIT_TEST(testTdf112089);
     CPPUNIT_TEST(testTdf112086);
     CPPUNIT_TEST(testTdf112647);
+    CPPUNIT_TEST(testGroupRotation);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1202,6 +1204,19 @@ void SdOOXMLExportTest2::testTdf112647()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(css::style::LineSpacingMode::FIX), aLineSpacing.Mode);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2117), aLineSpacing.Height);
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testGroupRotation()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/group_rotation.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPathNoAttribute(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:grpSpPr/a:xfrm", "rot");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[1]/p:spPr/a:xfrm", "rot", "20400000");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[2]/p:spPr/a:xfrm", "rot", "20400000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
