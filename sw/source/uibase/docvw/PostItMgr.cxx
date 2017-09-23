@@ -2140,31 +2140,31 @@ void SwPostItMgr::Rescale()
 sal_Int32 SwPostItMgr::GetInitialAnchorDistance() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
-    return long(POSTIT_INITIAL_ANCHOR_DISTANCE * f);
+    return sal_Int32(POSTIT_INITIAL_ANCHOR_DISTANCE * f);
 }
 
 sal_Int32 SwPostItMgr::GetSpaceBetween() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
-    return long(POSTIT_SPACE_BETWEEN * f);
+    return sal_Int32(POSTIT_SPACE_BETWEEN * f);
 }
 
 sal_Int32 SwPostItMgr::GetScrollSize() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
-    return long((POSTIT_SPACE_BETWEEN + POSTIT_MINIMUMSIZE_WITH_META) * f);
+    return sal_Int32((POSTIT_SPACE_BETWEEN + POSTIT_MINIMUMSIZE_WITH_META) * f);
 }
 
 sal_Int32 SwPostItMgr::GetMinimumSizeWithMeta() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
-    return long(POSTIT_MINIMUMSIZE_WITH_META * f);
+    return sal_Int32(POSTIT_MINIMUMSIZE_WITH_META * f);
 }
 
 sal_Int32 SwPostItMgr::GetSidebarScrollerHeight() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
-    return long(POSTIT_SCROLL_SIDEBAR_HEIGHT * f);
+    return sal_Int32(POSTIT_SCROLL_SIDEBAR_HEIGHT * f);
 }
 
 void SwPostItMgr::SetSpellChecking()
