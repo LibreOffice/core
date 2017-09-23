@@ -977,6 +977,30 @@ void SwUndoParagraphSigning::RepeatImpl(::sw::RepeatContext&)
 {
 }
 
+/// Creates and inserts Paragraph Signature Metadata field and creates the RDF entry
+uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Reference<frame::XModel>& xModel,
+                                                              const uno::Reference<text::XTextContent>& xParent,
+                                                              const OUString& signature)
+{
+    static const OUString MetaFilename("bails.rdf");
+    static const OUString MetaNS("urn:bails");
+    static const OUString RDFName = "loext:signature:signature";
+    static const OUString ServiceName = "com.sun.star.text.textfield.MetadataField";
+
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+    auto xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance(ServiceName), uno::UNO_QUERY);
+
+    // Add the signature at the end.
+    // uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    // xContent->attach(xParent->getAnchor()->getEnd());
+    xField->attach(xParent->getAnchor()->getEnd());
+
+    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, RDFName, signature);
+
+    return xField;
+}
+
 void SwUndoParagraphSigning::Insert()
 {
     // Disable undo to avoid introducing noise when we edit the metadata field.
@@ -992,17 +1016,7 @@ void SwUndoParagraphSigning::Insert()
             m_pDoc->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 
-    static const OUString metaFile("bails.rdf");
-    static const OUString metaNS("urn:bails");
-    const OUString name = "loext:signature:signature";
-
-    uno::Reference<frame::XModel> xModel = m_pDoc->GetDocShell()->GetBaseModel();
-    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-    m_xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance("com.sun.star.text.textfield.MetadataField"), uno::UNO_QUERY);
-    m_xField->attach(m_xParent->getAnchor()->getStart());
-
-    const css::uno::Reference<css::rdf::XResource> xSubject(m_xField, uno::UNO_QUERY);
-    SwRDFHelper::addStatement(xModel, metaNS, metaFile, xSubject, name, m_signature);
+    m_xField = lcl_InsertParagraphSignature(m_pDoc->GetDocShell()->GetBaseModel(), m_xParent, m_signature);
 
     uno::Reference<css::text::XTextRange> xText(m_xField, uno::UNO_QUERY);
     xText->setString(m_display);
@@ -1063,12 +1077,9 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
     if (!signing.Sign(sigBuf))
         return;
 
-    const OString signature = sigBuf.makeStringAndClear();
+    const OUString signature = OStringToOUString(sigBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8, 0);
 
     // 4. Add metadata
-    static const OUString metaNS("urn:bails");
-    static const OUString metaFile("bails.rdf");
-
     // Prevent validation since this will trigger a premature validation
     // upon inserting, but before seting the metadata.
     const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
@@ -1076,19 +1087,10 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
             SetParagraphSignatureValidation(bOldValidationFlag);
         });
 
-    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
-    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-    uno::Reference<css::text::XTextField> xField(xMultiServiceFactory->createInstance("com.sun.star.text.textfield.MetadataField"), uno::UNO_QUERY);
-
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 
-    // Add the signature at the end.
-    uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
-    xContent->attach(xParent->getAnchor()->getEnd());
-
-    uno::Reference<rdf::XResource> xRes(xField, uno::UNO_QUERY);
-    const OUString name = "loext:signature:signature";
-    SwRDFHelper::addStatement(xModel, metaNS, metaFile, xRes, name, OStringToOUString(signature, RTL_TEXTENCODING_UTF8, 0));
+    const uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    uno::Reference<css::text::XTextField> xField = lcl_InsertParagraphSignature(xModel, xParent, signature);
 
     {
         // Disable undo to avoid introducing noise when we edit the metadata field.
