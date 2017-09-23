@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_afcfd6ae",
+        "filename": "dbaccess/source/ui/dlg/directsql.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-09-23T14:52:39Z",
+      "side": 1,
+      "message": "The automatic clang checks of LibreOffice are unhappy with this construct of defining a variable just to cast it to void and not use it.\n\nRemove the variable completely. Or do something like:\n\naddOutputText(convertNumberToOUString(resultCount) + OUString(\" rows updated\\n\"))\n\n(I don\u0027t remember out of the top of my head what the utility function to make an OUString out of a number is called in LibreOffice...)",
+      "range": {
+        "startLine": 227,
+        "startChar": 20,
+        "endLine": 227,
+        "endChar": 44
+      },
+      "revId": "728a6f2e164e040490431b6d0850d0ef78a75911",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
