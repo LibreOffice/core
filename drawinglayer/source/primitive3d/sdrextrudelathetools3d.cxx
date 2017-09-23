@@ -155,10 +155,10 @@ namespace
 
                     if(bCreateNormals)
                     {
-                        aNew.setNormal(0L, aSubA.getNormal(nIndexA));
-                        aNew.setNormal(1L, aSubB.getNormal(nIndexA));
-                        aNew.setNormal(2L, aSubB.getNormal(nIndexB));
-                        aNew.setNormal(3L, aSubA.getNormal(nIndexB));
+                        aNew.setNormal(0, aSubA.getNormal(nIndexA));
+                        aNew.setNormal(1, aSubB.getNormal(nIndexA));
+                        aNew.setNormal(2, aSubB.getNormal(nIndexB));
+                        aNew.setNormal(3, aSubA.getNormal(nIndexB));
                     }
 
                     if(bCreateTextureCoordinates)
@@ -173,10 +173,10 @@ namespace
                         fPolygonPosB += fEdgeLengthB;
                         const double fRelTexBR(fPolygonPosB * fTexHorMultiplicatorB);
 
-                        aNew.setTextureCoordinate(0L, basegfx::B2DPoint(fRelTexAL, fTexVerStart));
-                        aNew.setTextureCoordinate(1L, basegfx::B2DPoint(fRelTexBL, fTexVerStop));
-                        aNew.setTextureCoordinate(2L, basegfx::B2DPoint(fRelTexBR, fTexVerStop));
-                        aNew.setTextureCoordinate(3L, basegfx::B2DPoint(fRelTexAR, fTexVerStart));
+                        aNew.setTextureCoordinate(0, basegfx::B2DPoint(fRelTexAL, fTexVerStart));
+                        aNew.setTextureCoordinate(1, basegfx::B2DPoint(fRelTexBL, fTexVerStop));
+                        aNew.setTextureCoordinate(2, basegfx::B2DPoint(fRelTexBR, fTexVerStop));
+                        aNew.setTextureCoordinate(3, basegfx::B2DPoint(fRelTexAR, fTexVerStart));
                     }
 
                     rTarget.append(aNew);
@@ -601,7 +601,7 @@ namespace drawinglayer
 
                 if(bCreateTextureCoordinates)
                 {
-                    aTexRangeFront = basegfx::tools::getRange(rSliceVector[0L].getB3DPolyPolygon());
+                    aTexRangeFront = basegfx::tools::getRange(rSliceVector[0].getB3DPolyPolygon());
                     aTexRangeBack = basegfx::tools::getRange(rSliceVector[nNumSlices - 1].getB3DPolyPolygon());
 
                     if(aTexRangeBack.getDepth() > aTexRangeBack.getWidth())
@@ -614,7 +614,7 @@ namespace drawinglayer
                             aTexRangeBack.getMaxZ(), aTexRangeBack.getMaxY(), aTexRangeBack.getMaxX());
                     }
 
-                    basegfx::B3DPoint aCenter(basegfx::tools::getRange(rSliceVector[0L].getB3DPolyPolygon()).getCenter());
+                    basegfx::B3DPoint aCenter(basegfx::tools::getRange(rSliceVector[0].getB3DPolyPolygon()).getCenter());
 
                     for(a = 0; a < nLoopCount; a++)
                     {

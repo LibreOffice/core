@@ -70,7 +70,7 @@ uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
     uno::Reference < io::XOutputStream > xTempOut( io::TempFile::create(comphelper::getComponentContext(xFactory)),
                                                             uno::UNO_QUERY_THROW );
     ULARGE_INTEGER nNewPos;
-    LARGE_INTEGER const aZero = { 0L, 0L };
+    LARGE_INTEGER const aZero = { 0, 0 };
     HRESULT hr = pStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
     if ( FAILED( hr ) ) return xResult;
 
@@ -129,10 +129,10 @@ HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > const & xTemp
 
     // Seek to zero and truncate the stream
     ULARGE_INTEGER nNewPos;
-    LARGE_INTEGER const aZero = { 0L, 0L };
+    LARGE_INTEGER const aZero = { 0, 0 };
     HRESULT hr = pStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
     if ( FAILED( hr ) ) return E_FAIL;
-    ULARGE_INTEGER const aUZero = { 0L, 0L };
+    ULARGE_INTEGER const aUZero = { 0, 0 };
     hr = pStream->SetSize( aUZero );
     if ( FAILED( hr ) ) return E_FAIL;
 
@@ -505,7 +505,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     if ( SUCCEEDED( hr ) )
     {
         ULARGE_INTEGER nNewPos;
-        LARGE_INTEGER const aZero = { 0L, 0L };
+        LARGE_INTEGER const aZero = { 0, 0 };
         hr = m_pExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
         if ( SUCCEEDED( hr ) )
         {
@@ -632,7 +632,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
             {
                 // no need to truncate the stream, the size of the stream is always the same
                 ULARGE_INTEGER nNewPos;
-                LARGE_INTEGER const aZero = { 0L, 0L };
+                LARGE_INTEGER const aZero = { 0, 0 };
                 hr = pNewExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
                 if ( SUCCEEDED( hr ) )
                 {
@@ -810,7 +810,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
             {
                 // no need to truncate the stream, the size of the stream is always the same
                 ULARGE_INTEGER nNewPos;
-                LARGE_INTEGER const aZero = { 0L, 0L };
+                LARGE_INTEGER const aZero = { 0, 0 };
                 hr = m_pExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
                 if ( SUCCEEDED( hr ) )
                 {
