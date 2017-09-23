@@ -18,7 +18,28 @@
   <menu:menuitem menu:id=".uno:RenameSlide"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:PresentationLayout"/>
-  <menu:menuitem menu:id=".uno:ModifyPage"/>
+  <menu:menu menu:id=".uno:SlideLayoutMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=20"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=19"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=0"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=1"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=32"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=3"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=12"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=15"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=14"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=16"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=18"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=34"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=28"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=27"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=29"/>
+      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=30"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
   <menu:menuitem menu:id=".uno:ShowSlide"/>
