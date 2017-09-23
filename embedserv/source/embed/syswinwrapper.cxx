@@ -432,7 +432,7 @@ LRESULT APIENTRY winwrap::HatchWndProc(
             return DefWindowProc(hWnd, iMsg, wParam, lParam);
     }
 
-    return 0L;
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

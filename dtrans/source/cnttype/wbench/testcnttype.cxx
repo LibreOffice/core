@@ -68,7 +68,7 @@ sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData 
         return sal_False;
 
     // set pointer to file start
-    fseek( fstream, 0L, SEEK_SET );
+    fseek( fstream, 0, SEEK_SET );
 
     char line[1024];
     while ( fscanf( fstream, "%1023[^\n]s", line ) != EOF )
@@ -91,7 +91,7 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
         return sal_False;
 
     // set pointer to file start
-    fseek( fstream, 0L, SEEK_SET );
+    fseek( fstream, 0, SEEK_SET );
 
     vector< string >::iterator iter_end = vecData.end( );
     for ( vector< string >::iterator iter = vecData.begin( ); iter != iter_end; ++iter )
