@@ -233,7 +233,7 @@ std::vector<TextLine>::size_type TEParaPortion::GetLineNumber( sal_Int32 nChar, 
 void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine )
 {
     sal_uInt16 nLines = maLines.size();
-    SAL_WARN_IF( !nLines, "vcl", "CorrectPortionNumbersFromLine: Leere Portion?" );
+    SAL_WARN_IF( !nLines, "vcl", "CorrectPortionNumbersFromLine: Empty portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {
         const TextLine& rLastFormatted = maLines[ nLastFormattedLine ];

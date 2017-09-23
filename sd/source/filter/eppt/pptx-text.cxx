@@ -768,7 +768,7 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
 {
     if ( ( nNumberingType == SVX_NUM_BITMAP ) && ( nBulletId != 0xffff ) )
     {
-        // calculate the bulletrealsize for this grafik
+        // calculate the bullet real size for this graphic
         if ( aBuGraSize.Width() && aBuGraSize.Height() )
         {
             double fCharHeight = nFontHeight;
