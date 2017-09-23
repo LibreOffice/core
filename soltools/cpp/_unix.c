@@ -172,8 +172,8 @@ void
                 Cplusplus++;
                 break;
 
-            case 'u':                   /* -undef fuer GCC (dummy) */
-            case 'l':                   /* -lang-c++ fuer GCC (dummy) */
+            case 'u':                   /* -undef for GCC (dummy) */
+            case 'l':                   /* -lang-c++ for GCC (dummy) */
                 break;
 
             default:

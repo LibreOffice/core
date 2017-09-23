@@ -96,7 +96,7 @@ void SwFieldDBPage::dispose()
 // initialise TabPage
 void SwFieldDBPage::Reset(const SfxItemSet*)
 {
-    Init(); // Allgemeine initialisierung
+    Init(); // general initialization
 
     m_pTypeLB->SetUpdateMode(false);
     const sal_Int32 nOldPos = m_pTypeLB->GetSelectedEntryPos();

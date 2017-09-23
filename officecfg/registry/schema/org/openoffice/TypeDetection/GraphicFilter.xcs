@@ -33,7 +33,7 @@
       </prop>
       <prop oor:name="FormatName" oor:type="xs:string">
         <info>
-          <desc>A shortname, which describe the grafik format.</desc>
+          <desc>A shortname which describes the graphics format.</desc>
         </info>
       </prop>
       <prop oor:name="RealFilterName" oor:type="xs:string">
