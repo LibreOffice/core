@@ -58,7 +58,7 @@ void CPDManager::onNameAcquired (GDBusConnection *connection,
     g_dbus_node_info_unref(introspection_data);
 
     CPDManager* current = static_cast<CPDManager*>(user_data);
-    std::vector<std::pair<std::string, gchar*>> backends = current -> getTempBackends();
+    std::vector<std::pair<std::string, gchar*>> backends = current->getTempBackends();
     for (std::vector<std::pair<std::string, gchar*>>::iterator it = backends.begin(); it != backends.end(); ++it) {
         GDBusProxy *proxy;
         // Get Interface for introspection
@@ -67,12 +67,12 @@ void CPDManager::onNameAcquired (GDBusConnection *connection,
         proxy = g_dbus_proxy_new_sync (connection,
                                        G_DBUS_PROXY_FLAGS_NONE,
                                        introspection_data->interfaces[0],
-                                       it -> first.c_str(),
-                                       it -> second,
+                                       it->first.c_str(),
+                                       it->second,
                                        "org.openprinting.PrintBackend",
                                        nullptr,
                                        nullptr);
-        g_free(it -> second);
+        g_free(it->second);
         g_assert (proxy != nullptr);
         g_dbus_proxy_call(proxy, "ActivateBackend",
                           nullptr,
@@ -102,7 +102,7 @@ void CPDManager::printerAdded (GDBusConnection *connection,
 {
     CPDManager* current = static_cast<CPDManager*>(user_data);
     GDBusProxy *proxy;
-    proxy = current -> getProxy(sender_name);
+    proxy = current->getProxy(sender_name);
     if (proxy == nullptr) {
         gchar* contents;
         GDBusNodeInfo *introspection_data;
@@ -122,19 +122,19 @@ void CPDManager::printerAdded (GDBusConnection *connection,
         g_free(contents);
         g_dbus_node_info_unref(introspection_data);
         std::pair<std::string, GDBusProxy *> new_backend (sender_name, proxy);
-        current -> addBackend(new_backend);
+        current->addBackend(new_backend);
     }
     CPDPrinter *pDest = static_cast<CPDPrinter *>(malloc(sizeof(CPDPrinter)));
-    pDest -> backend = proxy;
-    g_variant_get (parameters, "(sssssbss)", &(pDest -> id), &(pDest -> name), &(pDest -> info), &(pDest -> location), &(pDest -> make_and_model), &(pDest -> is_accepting_jobs), &(pDest -> printer_state), &(pDest -> backend_name));
+    pDest->backend = proxy;
+    g_variant_get (parameters, "(sssssbss)", &(pDest->id), &(pDest->name), &(pDest->info), &(pDest->location), &(pDest->make_and_model), &(pDest->is_accepting_jobs), &(pDest->printer_state), &(pDest->backend_name));
     std::stringstream printerName;
-    printerName << pDest -> name << ", " << pDest -> backend_name;
+    printerName << pDest->name << ", " << pDest->backend_name;
     std::stringstream uniqueName;
-    uniqueName << pDest -> id << ", " << pDest -> backend_name;
+    uniqueName << pDest->id << ", " << pDest->backend_name;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     OUString aPrinterName = OStringToOUString( printerName.str().c_str(), aEncoding );
     OUString aUniqueName = OStringToOUString( uniqueName.str().c_str(), aEncoding );
-    current -> addNewPrinter(aPrinterName, aUniqueName, pDest);
+    current->addNewPrinter(aPrinterName, aUniqueName, pDest);
 }
 
 void CPDManager::printerRemoved (GDBusConnection *,
@@ -173,7 +173,7 @@ GDBusProxy * CPDManager::getProxy(std::string target) {
     if (it == m_pBackends.end()) {
         return nullptr;
     }
-    return it -> second;
+    return it->second;
 }
 
 void CPDManager::addBackend(std::pair<std::string, GDBusProxy *> pair) {
@@ -209,8 +209,8 @@ void CPDManager::addNewPrinter(const OUString& aPrinterName, const OUString& aUn
     //     m_aDefaultPrinter = aPrinterName;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    aPrinter.m_aInfo.m_aComment = OStringToOUString(pDest -> info, aEncoding);
-    aPrinter.m_aInfo.m_aLocation = OStringToOUString(pDest -> location, aEncoding);
+    aPrinter.m_aInfo.m_aComment = OStringToOUString(pDest->info, aEncoding);
+    aPrinter.m_aInfo.m_aLocation = OStringToOUString(pDest->location, aEncoding);
     OUStringBuffer aBuf( 256 );
     aBuf.append( "CPD:" );
     aBuf.append( aUniqueName );
@@ -261,7 +261,7 @@ CPDManager* CPDManager::tryLoadCPD()
                 filepath << BACKEND_DIR << '/' << filename;
                 g_file_get_contents(filepath.str().c_str(), &contents, nullptr, nullptr);
                 std::pair<std::string, gchar*> new_tbackend (filename, contents);
-                pManager -> addTempBackend(new_tbackend);
+                pManager->addTempBackend(new_tbackend);
             }
             g_dir_close(dir);
         }
@@ -332,8 +332,8 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
         CPDPrinter* pDest = dest_it->second;
         GVariant* ret = nullptr;
         GError* error = nullptr;
-        ret = g_dbus_proxy_call_sync (pDest -> backend, "GetAllOptions",
-                                      g_variant_new("(s)", (pDest -> id)),
+        ret = g_dbus_proxy_call_sync (pDest->backend, "GetAllOptions",
+                                      g_variant_new("(s)", (pDest->id)),
                                       G_DBUS_CALL_FLAGS_NONE,
                                       -1, nullptr, &error);
         if (ret != nullptr && error == nullptr)
@@ -400,7 +400,7 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
                     pValue->m_aValue = aValueName;
 
                     if (aValueName.equals(aDefaultValue)) {
-                        pKey -> m_pDefaultValue = pValue;
+                        pKey->m_pDefaultValue = pValue;
                         bDefaultFound = true;
                     }
 
@@ -419,15 +419,15 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
             pValue = pKey->insertValue( aValueName, eQuoted );
             if( pValue )
                 pValue->m_aValue = aValueName;
-            pKey -> m_pDefaultValue = pValue;
+            pKey->m_pDefaultValue = pValue;
             keys.emplace_back(pKey);
 
             pKey = new PPDKey("NickName");
-            aValueName = OStringToOUString( pDest -> name, aEncoding );
+            aValueName = OStringToOUString( pDest->name, aEncoding );
             pValue = pKey->insertValue( aValueName, eQuoted );
             if( pValue )
                 pValue->m_aValue = aValueName;
-            pKey -> m_pDefaultValue = pValue;
+            pKey->m_pDefaultValue = pValue;
             keys.emplace_back(pKey);
 
             pNewParser = new PPDParser(aPrinter, keys);
@@ -445,10 +445,10 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
                     if( p1Value != pKey->getDefaultValue() )
                     {
                         rContext.setValue( pKey, p1Value, true );
-                        SAL_INFO("vcl.unx.print", "key " << pKey -> getKey() << " is set to " << *defit);
+                        SAL_INFO("vcl.unx.print", "key " << pKey->getKey() << " is set to " << *defit);
                     }
                     else
-                        SAL_INFO("vcl.unx.print", "key " << pKey -> getKey() << " is defaulted to " << *defit);
+                        SAL_INFO("vcl.unx.print", "key " << pKey->getKey() << " is defaulted to " << *defit);
                 }
             }
 
@@ -705,10 +705,10 @@ bool CPDManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
         int nNumOptions = 0;
         GVariant *pArr = nullptr;
         getOptionsFromDocumentSetup( rDocumentJobData, bBanner, sJobName, nNumOptions, &pArr );
-        ret = g_dbus_proxy_call_sync (pDest -> backend, "printFile",
+        ret = g_dbus_proxy_call_sync (pDest->backend, "printFile",
                                       g_variant_new(
                                                     "(ssi@a(ss))",
-                                                    (pDest -> id),
+                                                    (pDest->id),
                                                     aSysFile.getStr(),
                                                     nNumOptions,
                                                     pArr
