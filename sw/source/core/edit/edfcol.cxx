@@ -228,7 +228,7 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
 {
     static const OUString metaNS("urn:bails");
 
-    OUString msg = "Invalid Signature";
+    OUString msg = SwResId(STR_INVALID_SIGNATURE);
     bool valid = false;
 
     const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
@@ -258,6 +258,30 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
     return std::make_pair(valid, msg);
 }
 
+/// Creates and inserts Paragraph Signature Metadata field and creates the RDF entry
+uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Reference<frame::XModel>& xModel,
+                                                              const uno::Reference<text::XTextContent>& xParent,
+                                                              const OUString& signature)
+{
+    static const OUString MetaFilename("bails.rdf");
+    static const OUString MetaNS("urn:bails");
+    static const OUString RDFName = "loext:signature:signature";
+    static const OUString ServiceName = "com.sun.star.text.textfield.MetadataField";
+
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+    auto xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance(ServiceName), uno::UNO_QUERY);
+
+    // Add the signature at the end.
+    // uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
+    // xContent->attach(xParent->getAnchor()->getEnd());
+    xField->attach(xParent->getAnchor()->getEnd());
+
+    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, RDFName, signature);
+
+    return xField;
+}
+
 /// Updates the signature field text if changed and returns true only iff updated.
 bool lcl_UpdateParagraphSignatureField(SwDoc* pDoc,
                                        const uno::Reference<frame::XModel>& xModel,
@@ -276,7 +300,7 @@ bool lcl_UpdateParagraphSignatureField(SwDoc* pDoc,
     const OUString curText = xText->getString();
     if (curText != res.second)
     {
-        xText->setString(res.second);
+        xText->setString(res.second + " ");
         return true;
     }
 
@@ -977,30 +1001,6 @@ void SwUndoParagraphSigning::RepeatImpl(::sw::RepeatContext&)
 {
 }
 
-/// Creates and inserts Paragraph Signature Metadata field and creates the RDF entry
-uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Reference<frame::XModel>& xModel,
-                                                              const uno::Reference<text::XTextContent>& xParent,
-                                                              const OUString& signature)
-{
-    static const OUString MetaFilename("bails.rdf");
-    static const OUString MetaNS("urn:bails");
-    static const OUString RDFName = "loext:signature:signature";
-    static const OUString ServiceName = "com.sun.star.text.textfield.MetadataField";
-
-    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-    auto xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance(ServiceName), uno::UNO_QUERY);
-
-    // Add the signature at the end.
-    // uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
-    // xContent->attach(xParent->getAnchor()->getEnd());
-    xField->attach(xParent->getAnchor()->getEnd());
-
-    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
-    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, RDFName, signature);
-
-    return xField;
-}
-
 void SwUndoParagraphSigning::Insert()
 {
     // Disable undo to avoid introducing noise when we edit the metadata field.
@@ -1092,18 +1092,7 @@ void SwEditShell::SignParagraph(SwPaM* pPaM)
     const uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<css::text::XTextField> xField = lcl_InsertParagraphSignature(xModel, xParent, signature);
 
-    {
-        // Disable undo to avoid introducing noise when we edit the metadata field.
-        const bool isUndoEnabled = GetDoc()->GetIDocumentUndoRedo().DoesUndo();
-        GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
-        comphelper::ScopeGuard const g2([&] () {
-                GetDoc()->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
-             });
-
-        const std::pair<bool, OUString> res = lcl_MakeParagraphSignatureFieldText(xModel, xField, utf8Text);
-        uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
-        xText->setString(res.second + " ");
-    }
+    lcl_UpdateParagraphSignatureField(GetDoc(), xModel, xField, utf8Text);
 
     SwUndoParagraphSigning* pUndo = new SwUndoParagraphSigning(SwPosition(*pNode), xField, xParent, true);
     GetDoc()->GetIDocumentUndoRedo().AppendUndo(pUndo);

@@ -1340,8 +1340,9 @@
 /*--------------------------------------------------------------------
     Description: Paragraph Signature
  --------------------------------------------------------------------*/
-#define STR_VALID                               NC_("STR_VALID", "Valid")
+#define STR_VALID                               NC_("STR_VALID", " Valid ")
 #define STR_INVALID                             NC_("STR_INVALID", "Invalid")
+#define STR_INVALID_SIGNATURE                   NC_("STR_INVALID_SIGNATURE", "Invalid Signature")
 #define STR_SIGNED_BY                           NC_("STR_SIGNED_BY", "Signed-by")
 #define STR_PARAGRAPH_SIGNATURE                 NC_("STR_PARAGRAPH_SIGNATURE", "Paragraph Signature")
 
