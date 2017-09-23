@@ -41,8 +41,8 @@ public:
     // "purely virtual methods" from the SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override; // leer
-    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;   // leer
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override; // empty
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;   // empty
 };
 
 
