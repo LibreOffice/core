@@ -1062,7 +1062,9 @@ void SwPostItMgr::AutoScroll(const SwAnnotationWin* pPostIt,const unsigned long 
                                             mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Bottom() - aSidebarheight)).Y() - (pPostIt->GetPosPixel().Y()+pPostIt->GetSizePixel().Height());
             // this just adds the missing value to get the next a* GetScrollSize() after aDiff
             // e.g aDiff= 61 POSTIT_SCROLL=50 --> lScroll = 100
-            const long lScroll = bBottom ? (aDiff + ( GetScrollSize() - (aDiff % GetScrollSize()))) : (aDiff - (GetScrollSize() + (aDiff % GetScrollSize())));
+            const auto nScrollSize = GetScrollSize();
+            assert(nScrollSize);
+            const long lScroll = bBottom ? (aDiff + ( nScrollSize - (aDiff % nScrollSize))) : (aDiff - (nScrollSize + (aDiff % nScrollSize)));
             Scroll(lScroll, aPage);
         }
     }
