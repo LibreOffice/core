@@ -286,7 +286,7 @@ void initColWidths(RowInfo* pRowInfo, const ScDocument* pDoc, double fColScale, 
     }
 }
 
-bool handleConditionalFormat(ScConditionalFormatList* pCondFormList, const std::vector<sal_uInt32>& rCondFormats,
+bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const std::vector<sal_uInt32>& rCondFormats,
         CellInfo* pInfo, ScStyleSheetPool* pStlPool,
         const ScAddress& rAddr, bool& bHidden, bool& bHideFormula, bool bTabProtect)
 {
@@ -295,7 +295,7 @@ bool handleConditionalFormat(ScConditionalFormatList* pCondFormList, const std::
     for(std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin();
             itr != rCondFormats.end() && !bFound; ++itr)
     {
-        ScConditionalFormat* pCondForm = pCondFormList->GetFormat(*itr);
+        ScConditionalFormat* pCondForm = rCondFormList.GetFormat(*itr);
         if(!pCondForm)
             continue;
 
@@ -438,7 +438,7 @@ void ScDocument::FillInfo(
     initColWidths(pRowInfo, this, fColScale, nTab, nCol2, nRotMax);
 
     ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
-    if(pCondFormList)
+    if (pCondFormList)
         pCondFormList->startRendering();
 
     for (SCCOL nArrCol=0; nArrCol<=nCol2+2; nArrCol++)                    // left & right + 1
@@ -584,9 +584,9 @@ void ScDocument::FillInfo(
                                     pThisRowInfo->bEmptyBack = false;
                                 }
 
-                                if (bContainsCondFormat)
+                                if (bContainsCondFormat && pCondFormList)
                                 {
-                                    bAnyCondition |= handleConditionalFormat(pCondFormList, rCondFormats, pInfo, pStlPool, ScAddress(nX, nCurRow, nTab),
+                                    bAnyCondition |= handleConditionalFormat(*pCondFormList, rCondFormats, pInfo, pStlPool, ScAddress(nX, nCurRow, nTab),
                                             bHidden, bHideFormula, bTabProtect);
                                 }
 
@@ -653,7 +653,7 @@ void ScDocument::FillInfo(
         // STD_COL_WIDTH farthest to the left and right is needed for DrawExtraShadow
     }
 
-    if(pCondFormList)
+    if (pCondFormList)
         pCondFormList->endRendering();
 
     //  bedingte Formatierung auswerten
