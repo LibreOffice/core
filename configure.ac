@@ -2388,10 +2388,13 @@ if test -z "$enable_avmedia"; then
     enable_avmedia=yes
 fi
 
+BUILD_TYPE="$BUILD_TYPE AVMEDIA"
 if test "$enable_avmedia" = yes; then
-    BUILD_TYPE="$BUILD_TYPE AVMEDIA"
     AC_DEFINE(HAVE_FEATURE_AVMEDIA)
+else
+    USE_AVMEDIA_DUMMY='TRUE'
 fi
+AC_SUBST(USE_AVMEDIA_DUMMY)
 
 # Decide whether to build database connectivity stuff (including
 # Base) or not. We probably don't want to on non-desktop OSes.
