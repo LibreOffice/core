@@ -64,7 +64,7 @@ namespace xmloff { namespace metadata
         // TODO: instead of having all of the below static, it should be some per-instance data. This way, the
         // approach used here would scale much better.
         // That is, if you have multiple "meta data instances", which manage a small, but closed set of properties,
-        // then looking looking through those multiple instances would probably be faster than searching within
+        // then looking through those multiple instances would probably be faster than searching within
         // one big instance, since in this case, every instance can quickly decide whether it is responsible
         // for some attribute or property, and otherwise delegate to the next instance.
 

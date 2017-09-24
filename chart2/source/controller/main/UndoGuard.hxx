@@ -31,7 +31,7 @@
 namespace chart
 {
 
-/** A guard which which does nothing, unless you explicitly call commitAction. In particular, in its destructor, it
+/** A guard which does nothing, unless you explicitly call commitAction. In particular, in its destructor, it
     does neither auto-commit nor auto-rollback the model changes.
  */
 class UndoGuard

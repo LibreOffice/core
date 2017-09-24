@@ -399,8 +399,8 @@ sub generate_unique_filename_for_filetable
     $uniquefilename =~ s/\-/\_/g;       # no "-" allowed
     $uniquefilename =~ s/\@/\_/g;       # no "@" allowed
     $uniquefilename =~ s/\$/\_/g;       # no "$" allowed
-    $uniquefilename =~ s/^\s*\./\_/g;       # no "." at the beginning allowed allowed
-    $uniquefilename =~ s/^\s*\d/\_d/g;      # no number at the beginning allowed allowed (even file "0.gif", replacing to "_d.gif")
+    $uniquefilename =~ s/^\s*\./\_/g;       # no "." at the beginning allowed
+    $uniquefilename =~ s/^\s*\d/\_d/g;      # no number at the beginning allowed (even file "0.gif", replacing to "_d.gif")
     $uniquefilename =~ s/org_openoffice_/ooo_/g;    # shorten the unique file name
 
     my $lcuniquefilename = lc($uniquefilename); # only lowercase names
