@@ -10,7 +10,6 @@ package org.libreoffice;
 
 
 import org.libreoffice.kit.LibreOfficeKit;
-import org.mozilla.gecko.gfx.GeckoLayerClient;
 
 /**
  * Create a desired instance of TileProvider.
