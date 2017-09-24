@@ -68,10 +68,9 @@
 using namespace ::com::sun::star;
 
 // Global data of the DrawingEngine
-SdrGlobalData::SdrGlobalData() :
-    pSysLocale(nullptr),
-    pLocaleData(nullptr),
-    pDefaults(nullptr)
+SdrGlobalData::SdrGlobalData()
+    : pSysLocale(nullptr)
+    , pLocaleData(nullptr)
 {
     if (!utl::ConfigManager::IsAvoidConfig())
     {
@@ -332,21 +331,6 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
     }
 
     return bRetval;
-}
-
-SdrEngineDefaults::SdrEngineDefaults():
-    aFontColor(COL_AUTO),
-    aMapFraction(1,1)
-{
-}
-
-SdrEngineDefaults& SdrEngineDefaults::GetDefaults()
-{
-    SdrGlobalData& rGlobalData=GetSdrGlobalData();
-    if (rGlobalData.pDefaults==nullptr) {
-        rGlobalData.pDefaults=new SdrEngineDefaults;
-    }
-    return *rGlobalData.pDefaults;
 }
 
 SdrOutliner* SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rModel)
