@@ -955,12 +955,13 @@ void HelperCreateHorizontalEntry(
     const Style& rEndRFromB(rArray.GetCellStyleRight( col, row ));
     const Style& rEndFromBL(rArray.GetCellStyleTR( col, row ));
     StyleVectorTable aEnd;
+    const basegfx::B2DVector aAxis(-rX);
 
-    aEnd.add(rEndFromTL, -rX, -rX -rY, true);
-    aEnd.add(rEndRFromT, -rX, -rY, true);
-    aEnd.add(rEndRFromR, -rX, rX, false);
-    aEnd.add(rEndRFromB, -rX, rY, false);
-    aEnd.add(rEndFromBL, -rX, rY - rX, true);
+    aEnd.add(rEndFromTL, aAxis, aAxis - rY, true);
+    aEnd.add(rEndRFromT, aAxis, -rY, true);
+    aEnd.add(rEndRFromR, aAxis, rX, false);
+    aEnd.add(rEndRFromB, aAxis, rY, false);
+    aEnd.add(rEndFromBL, aAxis, rY - rX, true);
     aEnd.sort();
 
     CreateBorderPrimitives(
@@ -1002,12 +1003,13 @@ void HelperCreateVerticalEntry(
     const Style& rEndBFromR(rArray.GetCellStyleBottom( col, row ));
     const Style& rEndFromTR(rArray.GetCellStyleBL( col, row ));
     StyleVectorTable aEnd;
+    const basegfx::B2DVector aAxis(-rY);
 
-    aEnd.add(rEndFromTR, -rY, rX - rY, false);
-    aEnd.add(rEndBFromR, -rY, rX, false);
-    aEnd.add(rEndBFromB, -rY, rY, false);
-    aEnd.add(rEndBFromL, -rY, -rX, true);
-    aEnd.add(rEndFromTL, -rY, -rX - rY, true);
+    aEnd.add(rEndFromTR, aAxis, rX - rY, false);
+    aEnd.add(rEndBFromR, aAxis, rX, false);
+    aEnd.add(rEndBFromB, aAxis, rY, false);
+    aEnd.add(rEndBFromL, aAxis, -rX, true);
+    aEnd.add(rEndFromTL, aAxis, aAxis - rX, true);
     aEnd.sort();
 
     CreateBorderPrimitives(
@@ -1188,18 +1190,20 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                         const Style& rTLFromRight(GetCellStyleTop(_nFirstCol, _nFirstRow));
                         const Style& rTLFromBottom(GetCellStyleLeft(_nFirstCol, _nFirstRow));
                         StyleVectorTable aStart;
+                        const basegfx::B2DVector aAxisA(aX + aY);
 
-                        aStart.add(rTLFromRight, aX + aY, aX, false);
-                        aStart.add(rTLFromBottom, aX + aY, aY, false);
+                        aStart.add(rTLFromRight, aAxisA, aX, false);
+                        aStart.add(rTLFromBottom, aAxisA, aY, false);
                         aStart.sort();
 
                         /// Fill bottom-right Style Table
                         const Style& rBRFromBottom(GetCellStyleRight(_nLastCol, _nLastRow));
                         const Style& rBRFromLeft(GetCellStyleBottom(_nLastCol, _nLastRow));
                         StyleVectorTable aEnd;
+                        const basegfx::B2DVector aAxisB(-aX -aY);
 
-                        aEnd.add(rBRFromBottom, -aX -aY, -aY, true);
-                        aEnd.add(rBRFromLeft, -aX -aY, -aX, true);
+                        aEnd.add(rBRFromBottom, aAxisB, -aY, true);
+                        aEnd.add(rBRFromLeft, aAxisB, -aX, true);
                         aEnd.sort();
 
                         CreateBorderPrimitives(
@@ -1221,18 +1225,20 @@ drawinglayer::primitive2d::Primitive2DContainer Array::CreateB2DPrimitiveRange(
                         const Style& rBLFromTop(GetCellStyleLeft(_nFirstCol, _nLastRow));
                         const Style& rBLFromBottom(GetCellStyleBottom(_nFirstCol, _nLastRow));
                         StyleVectorTable aStart;
+                        const basegfx::B2DVector aAxisA(aX - aY);
 
-                        aStart.add(rBLFromTop, aX - aY, -aY, true);
-                        aStart.add(rBLFromBottom, aX - aY, aX, false);
+                        aStart.add(rBLFromTop, aAxisA, -aY, true);
+                        aStart.add(rBLFromBottom, aAxisA, aX, false);
                         aStart.sort();
 
                         /// Fill top-right Style Table
-                        const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
                         const Style& rTRFromLeft(GetCellStyleTop(_nLastCol, _nFirstRow));
+                        const Style& rTRFromBottom(GetCellStyleRight(_nLastCol, _nFirstRow));
                         StyleVectorTable aEnd;
+                        const basegfx::B2DVector aAxisB(aY - aX);
 
-                        aEnd.add(rTRFromBottom, aY - aX, -aY, true);
-                        aEnd.add(rTRFromLeft, aY - aX, -aX, false);
+                        aEnd.add(rTRFromLeft, aAxisB, -aX, true);
+                        aEnd.add(rTRFromBottom, aAxisB, aY, false);
                         aEnd.sort();
 
                         CreateBorderPrimitives(

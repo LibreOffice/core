@@ -232,35 +232,25 @@ private:
 
     double                                      mfRefModeOffset;
     basegfx::B2DVector                          maB2DVector;
+    double                                      mfAngle;
     std::vector< OffsetAndHalfWidthAndColor >   maOffsets;
 
 public:
     StyleVectorCombination(
         const Style& rStyle,
         const basegfx::B2DVector& rB2DVector,
+        const double fAngle,
         bool bMirrored,
         const Color* pForceColor = nullptr);
 
     double getRefModeOffset() const { return mfRefModeOffset; }
     const basegfx::B2DVector& getB2DVector() const { return maB2DVector; }
-
+    double getAngle() const { return mfAngle; }
     bool empty() const { return maOffsets.empty(); }
     size_t size() const { return maOffsets.size(); }
+    bool operator<( const StyleVectorCombination& rOther) const { return mfAngle < rOther.mfAngle; }
 
-    void getColorAndOffsetAndHalfWidth(size_t nIndex, Color& rColor, double& rfOffset, double& rfHalfWidth) const
-    {
-        if(nIndex >= maOffsets.size())
-            return;
-        const OffsetAndHalfWidthAndColor& rCandidate(maOffsets[nIndex]);
-        rfOffset = rCandidate.mfOffset;
-        rfHalfWidth = rCandidate.mfHalfWidth;
-        rColor = rCandidate.maColor;
-    }
-
-    bool operator<(const StyleVectorCombination& rOther) const
-    {
-        return getB2DVector().cross(rOther.getB2DVector()) < 0.0;
-    }
+    void getColorAndOffsetAndHalfWidth(size_t nIndex, Color& rColor, double& rfOffset, double& rfHalfWidth) const;
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC StyleVectorTable
@@ -278,18 +268,9 @@ public:
         const Style& rStyle,
         const basegfx::B2DVector& rMyVector,
         const basegfx::B2DVector& rOtherVector,
-        bool bMirrored)
-    {
-        if(rStyle.IsUsed() && !basegfx::areParallel(rMyVector, rOtherVector))
-        {
-            maEntries.emplace_back(rStyle, rOtherVector, bMirrored);
-        }
-    }
+        bool bMirrored);
 
-    void sort()
-    {
-        std::sort(maEntries.begin(), maEntries.end());
-    }
+    void sort();
 
     bool empty() const { return maEntries.empty(); }
     size_t size() const { return maEntries.size(); }
