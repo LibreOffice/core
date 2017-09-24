@@ -31,10 +31,12 @@ const SvxFieldItem* findField(editeng::Section const & rSection)
 
 } // end anonymous namespace
 
-ClassificationDialog::ClassificationDialog(vcl::Window* pParent)
+ClassificationDialog::ClassificationDialog(vcl::Window* pParent, const bool bPerParagraph, const std::function<void()>& rParagraphSignHandler)
     : ModalDialog(pParent, "AdvancedDocumentClassificationDialog", "svx/ui/classificationdialog.ui")
     , maHelper(SfxObjectShell::Current()->getDocProperties())
     , maInternationalHelper(SfxObjectShell::Current()->getDocProperties(), /*bUseLocalizedPolicy*/ false)
+    , m_bPerParagraph(bPerParagraph)
+    , m_aParagraphSignHandler(rParagraphSignHandler)
 {
     get(m_pEditWindow, "classificationEditWindow");
     get(m_pSignButton, "signButton");
@@ -48,6 +50,8 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent)
     get(m_pIntellectualPropertyPartEdit, "intellectualPropertyPartEntry");
 
     m_pSignButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
+    m_pSignButton->Show(m_bPerParagraph);
+
     m_pBoldButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
     m_pIntellectualPropertyPartAddButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
 
@@ -257,7 +261,7 @@ IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
     }
     else if (pButton == m_pSignButton)
     {
-        //TODO sign current paragraph
+        m_aParagraphSignHandler();
     }
     else if (pButton == m_pIntellectualPropertyPartAddButton)
     {
