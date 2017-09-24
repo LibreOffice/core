@@ -238,12 +238,13 @@ Any Adapter::invoke( const OUString &aFunctionName,
         raiseInvocationTargetExceptionWhenNeeded( runtime);
         if( !method.is() )
         {
-            OUStringBuffer buf;
-            buf.append( "pyuno::Adapter: Method " ).append( aFunctionName );
-            buf.append( " is not implemented at object " );
             PyRef str( PyObject_Repr( mWrappedObject.get() ), SAL_NO_ACQUIRE );
-            buf.append(pyString2ustring(str.get()));
-            throw IllegalArgumentException( buf.makeStringAndClear(), Reference< XInterface > (),0 );
+
+            OUString sMsg = "pyuno::Adapter: Method "
+                          + aFunctionName
+                          + " is not implemented at object "
+                          + pyString2ustring(str.get());
+            throw IllegalArgumentException( sMsg, Reference< XInterface > (),0 );
         }
 
         PyRef pyRet( PyObject_CallObject( method.get(), argsTuple.get() ), SAL_NO_ACQUIRE );
@@ -276,15 +277,14 @@ Any Adapter::invoke( const OUString &aFunctionName,
 
                     if( aOutParamIndex.getLength() +1 != seq.getLength() )
                     {
-                        OUStringBuffer buf;
-                        buf.append( "pyuno bridge: expected for method " );
-                        buf.append( aFunctionName );
-                        buf.append( " one return value and " );
-                        buf.append( aOutParamIndex.getLength() );
-                        buf.append( " out parameters, got a sequence of " );
-                        buf.append( seq.getLength() );
-                        buf.append( " elements as return value." );
-                        throw RuntimeException(buf.makeStringAndClear(), *this );
+                        OUString sMsg = "pyuno bridge: expected for method "
+                                      + aFunctionName
+                                      + " one return value and "
+                                      + OUString::number(aOutParamIndex.getLength())
+                                      + " out parameters, got a sequence of "
+                                      + OUString::number(seq.getLength())
+                                      + " elements as return value.";
+                        throw RuntimeException( sMsg, *this );
                     }
 
                     aOutParam.realloc( aOutParamIndex.getLength() );
