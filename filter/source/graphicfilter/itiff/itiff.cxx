@@ -1366,6 +1366,38 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
             if ( bStatus )
             {
+                //sanity check consider ReadMap condition for last row and
+                //last plane
+                if (nCompression == 1 || nCompression == 32771)
+                {
+                    sal_uInt32 nStripBytesPerRow;
+                    if (nCompression == 1)
+                        nStripBytesPerRow = nBytesPerRow;
+                    else
+                        nStripBytesPerRow = ( nBytesPerRow + 1 ) & 0xfffffffe;
+                    sal_uInt32 np = nPlanes - 1;
+                    if (np >= SAL_N_ELEMENTS(aMap))
+                        bStatus = false;
+                    sal_Int32 ny = nImageLength - 1;
+                    sal_uInt32 nStrip(0);
+                    if (bStatus)
+                    {
+                        nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
+                        if (nStrip >= aStripOffsets.size())
+                            bStatus = false;
+                    }
+                    if (bStatus)
+                    {
+                        auto nStart = aStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow;
+                        auto nEnd = nStart + nBytesPerRow;
+                        if (nEnd > nEndOfFile)
+                            bStatus = false;
+                    }
+                }
+            }
+
+            if ( bStatus )
+            {
                 pAlphaMask.reset();
                 Size aTargetSize(nImageWidth, nImageLength);
                 aBitmap = Bitmap(aTargetSize, nDstBitsPerPixel);
