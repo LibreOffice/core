@@ -518,12 +518,12 @@ bool TIFFReader::ReadMap()
         {
             for (sal_uInt32 np = 0; np < nPlanes; ++np)
             {
+                if (np >= SAL_N_ELEMENTS(aMap))
+                    return false;
                 sal_uInt32 nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
                 if ( nStrip >= aStripOffsets.size())
                     return false;
                 pTIFF->Seek( aStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
-                if (np >= SAL_N_ELEMENTS(aMap))
-                    return false;
                 pTIFF->ReadBytes(aMap[np].data(), nBytesPerRow);
                 if (!pTIFF->good())
                     return false;
@@ -1340,49 +1340,49 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 else
                     nDstBitsPerPixel = 8;
 
+                if ( nPlanarConfiguration == 1 )
+                    nPlanes = 1;
+                else
+                    nPlanes = nSamplesPerPixel;
+
+                if ( ( nFillOrder == 2 ) && ( nCompression != 5 ) )     // in the LZW mode bits are already being inverted
+                    bByteSwap = true;
+
+                nStripsPerPlane = ( nImageLength - 1 ) / GetRowsPerStrip() + 1;
+                bStatus = nPlanes != 0;
+            }
+
+            if ( bStatus )
+            {
+                sal_uInt64 nRowSize = (static_cast<sal_uInt64>(nImageWidth) * nSamplesPerPixel / nPlanes * nBitsPerSample + 7) >> 3;
+                if (nRowSize > SAL_MAX_INT32 / SAL_N_ELEMENTS(aMap))
+                {
+                    SAL_WARN("filter.tiff", "Ludicrous row size of: " << nRowSize << " required");
+                    bStatus = false;
+                }
+                else
+                    nBytesPerRow = nRowSize;
+            }
+
+            if ( bStatus )
+            {
                 pAlphaMask.reset();
                 Size aTargetSize(nImageWidth, nImageLength);
                 aBitmap = Bitmap(aTargetSize, nDstBitsPerPixel);
                 xAcc = Bitmap::ScopedWriteAccess(aBitmap);
                 if (xAcc && xAcc->Width() == nImageWidth && xAcc->Height() == nImageLength)
                 {
-                    if ( nPlanarConfiguration == 1 )
-                        nPlanes = 1;
-                    else
-                        nPlanes = nSamplesPerPixel;
-
-                    if ( ( nFillOrder == 2 ) && ( nCompression != 5 ) )     // in the LZW mode bits are already being inverted
-                        bByteSwap = true;
-
-                    nStripsPerPlane = ( nImageLength - 1 ) / GetRowsPerStrip() + 1;
-                    bStatus = nPlanes != 0;
-
-                    if (bStatus)
+                    for (auto& j : aMap)
                     {
-                        sal_uInt64 nRowSize = (static_cast<sal_uInt64>(nImageWidth) * nSamplesPerPixel / nPlanes * nBitsPerSample + 7) >> 3;
-                        if (nRowSize > SAL_MAX_INT32 / SAL_N_ELEMENTS(aMap))
+                        try
                         {
-                            SAL_WARN("filter.tiff", "Ludicrous row size of: " << nRowSize << " required");
-                            bStatus = false;
+                            j.resize(nBytesPerRow);
                         }
-                        else
-                            nBytesPerRow = nRowSize;
-                    }
-
-                    if (bStatus)
-                    {
-                        for (auto& j : aMap)
+                        catch (const std::bad_alloc &)
                         {
-                            try
-                            {
-                                j.resize(nBytesPerRow);
-                            }
-                            catch (const std::bad_alloc &)
-                            {
-                                j.clear();
-                                bStatus = false;
-                                break;
-                            }
+                            j.clear();
+                            bStatus = false;
+                            break;
                         }
                     }
 
