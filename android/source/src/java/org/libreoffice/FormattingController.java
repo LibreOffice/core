@@ -142,7 +142,7 @@ import org.libreoffice.kit.Document;
                         return;
                 }
 
-                ImageButton button = (ImageButton) mContext.findViewById(buttonId);
+                ImageButton button = mContext.findViewById(buttonId);
                 button.setSelected(selected);
                 if (selected) {
                     button.getBackground().setState(new int[]{android.R.attr.state_selected});

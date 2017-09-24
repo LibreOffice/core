@@ -132,7 +132,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         }
         setContentView(R.layout.activity_main);
 
-        toolbarTop = (Toolbar) findViewById(R.id.toolbar);
+        toolbarTop = findViewById(R.id.toolbar);
         hideBottomToolbar();
 
         mToolbarController = new ToolbarController(this, toolbarTop);
@@ -151,7 +151,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         loKitThread.start();
 
         mLayerClient = new GeckoLayerClient(this);
-        LayerView layerView = (LayerView) findViewById(R.id.layer_view);
+        LayerView layerView = findViewById(R.id.layer_view);
         mLayerClient.setView(layerView);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
         mLayerClient.notifyReady();
@@ -204,10 +204,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             }
         }
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         if (mDocumentPartViewListAdapter == null) {
-            mDrawerList = (ListView) findViewById(R.id.left_drawer);
+            mDrawerList = findViewById(R.id.left_drawer);
 
             mDocumentPartViewListAdapter = new DocumentPartViewListAdapter(this, R.layout.document_part_list_layout, mDocumentPartView);
             mDrawerList.setAdapter(mDocumentPartViewListAdapter);
@@ -216,7 +216,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
 
         mToolbarController.setupToolbars();
 
-        TabHost host = (TabHost) findViewById(R.id.toolbarTabHost);
+        TabHost host = findViewById(R.id.toolbarTabHost);
         host.setup();
 
         TabHost.TabSpec spec = host.newTabSpec("Character");
@@ -234,8 +234,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         spec.setIndicator("Insert");
         host.addTab(spec);
 
-        LinearLayout bottomToolbarLayout = (LinearLayout) findViewById(R.id.toolbar_bottom);
-        LinearLayout toolbarColorPickerLayout = (LinearLayout) findViewById(R.id.toolbar_color_picker);
+        LinearLayout bottomToolbarLayout = findViewById(R.id.toolbar_bottom);
+        LinearLayout toolbarColorPickerLayout = findViewById(R.id.toolbar_color_picker);
         bottomToolbarSheetBehavior = BottomSheetBehavior.from(bottomToolbarLayout);
         toolbarColorPickerBottomSheetBehavior = BottomSheetBehavior.from(toolbarColorPickerLayout);
         bottomToolbarSheetBehavior.setHideable(true);
@@ -505,7 +505,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     }
 
     private void showSoftKeyboardDirect() {
-        LayerView layerView = (LayerView) findViewById(R.id.layer_view);
+        LayerView layerView = findViewById(R.id.layer_view);
 
         if (layerView.requestFocus()) {
             InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);

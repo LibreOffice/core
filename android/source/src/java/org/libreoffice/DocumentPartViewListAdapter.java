@@ -38,10 +38,10 @@ public class DocumentPartViewListAdapter extends ArrayAdapter<DocumentPartView> 
         }
 
         DocumentPartView documentPartView = getItem(position);
-        TextView textView = (TextView) view.findViewById(R.id.text);
+        TextView textView = view.findViewById(R.id.text);
         textView.setText(documentPartView.partName);
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.image);
+        ImageView imageView = view.findViewById(R.id.image);
         thumbnailCollector.createThumbnail(position, imageView);
 
         return view;

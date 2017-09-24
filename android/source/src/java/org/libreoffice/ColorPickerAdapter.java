@@ -160,7 +160,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
 
         public ColorPickerViewHolder(View itemView) {
             super(itemView);
-            this.colorBox = (ImageButton) itemView.findViewById(R.id.fontColorBox);
+            this.colorBox = itemView.findViewById(R.id.fontColorBox);
         }
     }
 }

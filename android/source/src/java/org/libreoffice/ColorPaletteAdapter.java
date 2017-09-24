@@ -122,7 +122,7 @@ public class ColorPaletteAdapter extends RecyclerView.Adapter<ColorPaletteAdapte
 
         public ColorPaletteViewHolder(View itemView) {
             super(itemView);
-            colorBox = (ImageButton) itemView.findViewById(R.id.fontColorBox);
+            colorBox = itemView.findViewById(R.id.fontColorBox);
         }
     }
 

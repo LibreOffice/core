@@ -167,7 +167,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         setContentView(R.layout.activity_document_browser);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
 
@@ -175,22 +175,22 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        editFAB = (FloatingActionButton) findViewById(R.id.editFAB);
+        editFAB = findViewById(R.id.editFAB);
         editFAB.setOnClickListener(this);
-        impressFAB = (FloatingActionButton) findViewById(R.id.newImpressFAB);
+        impressFAB = findViewById(R.id.newImpressFAB);
         impressFAB.setOnClickListener(this);
-        writerFAB = (FloatingActionButton) findViewById(R.id.newWriterFAB);
+        writerFAB = findViewById(R.id.newWriterFAB);
         writerFAB.setOnClickListener(this);
-        calcFAB = (FloatingActionButton) findViewById(R.id.newCalcFAB);
+        calcFAB = findViewById(R.id.newCalcFAB);
         calcFAB.setOnClickListener(this);
-        drawFAB = (FloatingActionButton) findViewById(R.id.newDrawFAB);
+        drawFAB = findViewById(R.id.newDrawFAB);
         drawFAB.setOnClickListener(this);
-        writerLayout = (LinearLayout) findViewById(R.id.writerLayout);
-        impressLayout = (LinearLayout) findViewById(R.id.impressLayout);
-        calcLayout = (LinearLayout) findViewById(R.id.calcLayout);
-        drawLayout = (LinearLayout) findViewById(R.id.drawLayout);
+        writerLayout = findViewById(R.id.writerLayout);
+        impressLayout = findViewById(R.id.impressLayout);
+        calcLayout = findViewById(R.id.calcLayout);
+        drawLayout = findViewById(R.id.drawLayout);
 
-        recentRecyclerView = (RecyclerView) findViewById(R.id.list_recent);
+        recentRecyclerView = findViewById(R.id.list_recent);
 
         Set<String> recentFileStrings = prefs.getStringSet(RECENT_DOCUMENTS_KEY, new HashSet<String>());
 
@@ -208,15 +208,15 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         recentRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recentRecyclerView.setAdapter(new RecentFilesAdapter(this, recentFiles));
 
-        fileRecyclerView = (RecyclerView) findViewById(R.id.file_recycler_view);
+        fileRecyclerView = findViewById(R.id.file_recycler_view);
         //This should be tested because it possibly disables view recycling
         fileRecyclerView.setNestedScrollingEnabled(false);
         openDirectory(currentDirectory);
         registerForContextMenu(fileRecyclerView);
 
         //Setting up navigation drawer
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationDrawer = (NavigationView) findViewById(R.id.navigation_drawer);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationDrawer = findViewById(R.id.navigation_drawer);
 
         final ArrayList<CharSequence> providerNames = new ArrayList<CharSequence>(
                 Arrays.asList(documentProviderFactory.getNames())
@@ -1132,12 +1132,12 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             ViewHolder(View itemView) {
                 super(itemView);
                 this.itemView = itemView;
-                filenameView = (TextView) itemView.findViewById(R.id.file_item_name);
-                iconView = (ImageView) itemView.findViewById(R.id.file_item_icon);
+                filenameView = itemView.findViewById(R.id.file_item_name);
+                iconView = itemView.findViewById(R.id.file_item_icon);
                 // Check if view mode is List, only then initialise Size and Date field
                 if (isViewModeList()) {
-                    fileSizeView = (TextView) itemView.findViewById(R.id.file_item_size);
-                    fileDateView = (TextView) itemView.findViewById(R.id.file_item_date);
+                    fileSizeView = itemView.findViewById(R.id.file_item_size);
+                    fileDateView = itemView.findViewById(R.id.file_item_date);
                 }
             }
         }

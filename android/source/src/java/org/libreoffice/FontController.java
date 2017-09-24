@@ -57,7 +57,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     };
 
     private void changeFontColorBoxColor(final int color){
-        final ImageButton fontColorPickerButton = (ImageButton)mActivity.findViewById(R.id.font_color_picker_button);
+        final ImageButton fontColorPickerButton = mActivity.findViewById(R.id.font_color_picker_button);
 
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
@@ -176,28 +176,28 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     }
 
     private void setupFontNameSpinner() {
-        Spinner fontSpinner = (Spinner) mActivity.findViewById(R.id.font_name_spinner);
+        Spinner fontSpinner = mActivity.findViewById(R.id.font_name_spinner);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_spinner_item, mFontList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fontSpinner.setAdapter(dataAdapter);
     }
 
     private void setupFontSizeSpinner() {
-        Spinner fontSizeSpinner = (Spinner) mActivity.findViewById(R.id.font_size_spinner);
+        Spinner fontSizeSpinner = mActivity.findViewById(R.id.font_size_spinner);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_spinner_item, mFontSizes);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fontSizeSpinner.setAdapter(dataAdapter);
     }
 
     private void setupColorPicker(){
-        RecyclerView recyclerView = (RecyclerView) mActivity.findViewById(R.id.fontColorView);
+        RecyclerView recyclerView = mActivity.findViewById(R.id.fontColorView);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 11, GridLayoutManager.VERTICAL, true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(gridLayoutManager);
 
 
 
-        RecyclerView recyclerView2 = (RecyclerView) mActivity.findViewById(R.id.fontColorViewSub);
+        RecyclerView recyclerView2 = mActivity.findViewById(R.id.fontColorViewSub);
         GridLayoutManager gridLayoutManager2 = new GridLayoutManager(mActivity,4);
         recyclerView2.setHasFixedSize(true);
         recyclerView2.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -217,8 +217,8 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
         this.colorPickerAdapter = new ColorPickerAdapter(mActivity, colorPaletteAdapter, colorPaletteListener);
         recyclerView.setAdapter(colorPickerAdapter);
-        RelativeLayout fontColorPicker = (RelativeLayout) mActivity.findViewById(R.id.font_color_picker);
-        ImageButton fontColorPickerButton = (ImageButton)mActivity.findViewById(R.id.font_color_picker_button);
+        RelativeLayout fontColorPicker = mActivity.findViewById(R.id.font_color_picker);
+        ImageButton fontColorPickerButton = mActivity.findViewById(R.id.font_color_picker_button);
         View.OnClickListener clickListener = new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -227,12 +227,12 @@ public class FontController implements AdapterView.OnItemSelectedListener {
                 mActivity.findViewById(R.id.search_toolbar).setVisibility(View.GONE);
             }
         };
-        LinearLayout toolbarColorPicker = (LinearLayout) mActivity.findViewById(R.id.toolbar_color_picker);
-        LinearLayout toolbarBottomLayout = (LinearLayout) mActivity.findViewById(R.id.toolbar_bottom);
+        LinearLayout toolbarColorPicker = mActivity.findViewById(R.id.toolbar_color_picker);
+        LinearLayout toolbarBottomLayout = mActivity.findViewById(R.id.toolbar_bottom);
         colorPickerBehavior = BottomSheetBehavior.from(toolbarColorPicker);
         toolBarBottomBehavior = BottomSheetBehavior.from(toolbarBottomLayout);
 
-        ImageButton pickerGoBackButton = (ImageButton)mActivity.findViewById(R.id.button_go_back_color_picker);
+        ImageButton pickerGoBackButton = mActivity.findViewById(R.id.button_go_back_color_picker);
         pickerGoBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -256,7 +256,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     }
 
     private void selectFontCurrentThread(String fontName) {
-        Spinner spinner = (Spinner) mActivity.findViewById(R.id.font_name_spinner);
+        Spinner spinner = mActivity.findViewById(R.id.font_name_spinner);
 
         if (!mFontNameSpinnerSet) {
             spinner.setOnItemSelectedListener(this);
@@ -277,7 +277,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     }
 
     private void resetFontSizes(String fontName) {
-        Spinner spinner = (Spinner) mActivity.findViewById(R.id.font_size_spinner);
+        Spinner spinner = mActivity.findViewById(R.id.font_size_spinner);
         ArrayAdapter<String> arrayAdapter = (ArrayAdapter<String>) spinner.getAdapter();
 
         List<String> fontSizes = mAllFontSizes.get(fontName);
@@ -296,7 +296,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     }
 
     private void selectFontSizeCurrentThread(String fontSize) {
-        Spinner spinner = (Spinner) mActivity.findViewById(R.id.font_size_spinner);
+        Spinner spinner = mActivity.findViewById(R.id.font_size_spinner);
         if (!mFontSizeSpinnerSet) {
             spinner.setOnItemSelectedListener(this);
             mFontSizeSpinnerSet = true;

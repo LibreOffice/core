@@ -85,8 +85,8 @@ class RecentFilesAdapter extends RecyclerView.Adapter<RecentFilesAdapter.ViewHol
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.textView = (TextView) itemView.findViewById(R.id.textView);
-            this.imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            this.textView = itemView.findViewById(R.id.textView);
+            this.imageView = itemView.findViewById(R.id.imageView);
         }
     }
 }

@@ -46,7 +46,7 @@ public class PresentationActivity extends AppCompatActivity {
         String filePath = intent.getDataString();
 
         // set up WebView
-        mWebView = (WebView) findViewById(R.id.presentation_view);
+        mWebView = findViewById(R.id.presentation_view);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -56,9 +56,9 @@ public class PresentationActivity extends AppCompatActivity {
         });
 
         // set up buttons within presentation_gesture_view
-        ImageButton prevButton = (ImageButton) findViewById(R.id.slide_show_nav_prev);
-        ImageButton nextButton = (ImageButton) findViewById(R.id.slide_show_nav_next);
-        Button backButton = (Button) findViewById(R.id.slide_show_nav_back);
+        ImageButton prevButton = findViewById(R.id.slide_show_nav_prev);
+        ImageButton nextButton = findViewById(R.id.slide_show_nav_next);
+        Button backButton = findViewById(R.id.slide_show_nav_back);
 
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override

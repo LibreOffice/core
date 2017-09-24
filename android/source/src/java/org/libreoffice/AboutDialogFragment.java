@@ -40,13 +40,13 @@ public class AboutDialogFragment extends DialogFragment {
 
         // When linking text, force to always use default color. This works
         // around a pressed color state bug.
-        TextView textView = (TextView) messageView.findViewById(R.id.about_credits);
+        TextView textView = messageView.findViewById(R.id.about_credits);
         int defaultColor = textView.getTextColors().getDefaultColor();
         textView.setTextColor(defaultColor);
 
         // Take care of placeholders in the version and vendor text views.
-        TextView versionView = (TextView)messageView.findViewById(R.id.about_version);
-        TextView vendorView = (TextView)messageView.findViewById(R.id.about_vendor);
+        TextView versionView = messageView.findViewById(R.id.about_version);
+        TextView vendorView = messageView.findViewById(R.id.about_vendor);
         try
         {
             String versionName = getActivity().getPackageManager()

@@ -59,12 +59,12 @@ public class DirectoryBrowserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_directory_browser, container, false);
 
-        final EditText directoryHeader = (EditText)v.findViewById(R.id.directory_header);
-        Button directorySearchButton = (Button)v.findViewById(R.id.directory_search_button);
-        Button positiveButton = (Button)v.findViewById(R.id.confirm_button);
-        Button negativeButton = (Button)v.findViewById(R.id.cancel_button);
-        ImageView upImage = (ImageView)v.findViewById(R.id.up_image);
-        ListView directoryListView = (ListView) v.findViewById(R.id.directory_list);
+        final EditText directoryHeader = v.findViewById(R.id.directory_header);
+        Button directorySearchButton = v.findViewById(R.id.directory_search_button);
+        Button positiveButton = v.findViewById(R.id.confirm_button);
+        Button negativeButton = v.findViewById(R.id.cancel_button);
+        ImageView upImage = v.findViewById(R.id.up_image);
+        ListView directoryListView = v.findViewById(R.id.directory_list);
 
         directoryHeader.setText(currentDirectory.getPath());
         directorySearchButton.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +167,7 @@ public class DirectoryBrowserFragment extends Fragment {
             }
 
             File f = this.getItem(position);
-            TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
+            TextView tv = convertView.findViewById(android.R.id.text1);
             tv.setText(f.getName());
 
             return convertView;

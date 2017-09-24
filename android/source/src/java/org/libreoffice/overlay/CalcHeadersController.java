@@ -38,8 +38,8 @@ public class CalcHeadersController {
     public CalcHeadersController(LibreOfficeMainActivity context, LayerView layerView) {
         mContext = context;
         mContext.getDocumentOverlay().setCalcHeadersController(this);
-        mCalcRowHeadersView = (CalcHeadersView) context.findViewById(R.id.calc_header_row);
-        mCalcColumnHeadersView = (CalcHeadersView) context.findViewById(R.id.calc_header_column);
+        mCalcRowHeadersView = context.findViewById(R.id.calc_header_row);
+        mCalcColumnHeadersView = context.findViewById(R.id.calc_header_column);
         if (mCalcColumnHeadersView == null || mCalcRowHeadersView == null) {
             Log.e(LOGTAG, "Failed to initialize Calc headers - View is null");
         } else {
