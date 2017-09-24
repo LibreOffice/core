@@ -1183,7 +1183,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SwWrtShell* pShell = GetWrtShell();
             ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr, true, [pShell]()
             {
-                pShell->SignParagraph(pShell->GetCursor());
+                pShell->SignParagraph();
             }));
 
             std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
