@@ -89,6 +89,7 @@ private:
     vcl::Font           aFont;
     const SubsetMap*    pSubsetMap;
     bool                isSearchMode;
+    bool                m_bHasInsert;
 
     std::deque<OUString> maRecentCharList;
     std::deque<OUString> maRecentCharFontList;
@@ -128,7 +129,7 @@ private:
     void selectCharByCode(Radix radix);
 
 public:
-                    SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet=nullptr );
+                    SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet=nullptr, const bool bInsert=true);
     virtual         ~SvxCharacterMap() override;
     virtual short Execute() override;
     virtual void    dispose() override;
