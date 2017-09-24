@@ -49,7 +49,7 @@ GraphicsStatus::GraphicsStatus() :
 }
 
 /*
- * non graphics graphics routines
+ * non graphics routines
  */
 
 void
