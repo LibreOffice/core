@@ -247,7 +247,7 @@ namespace dbaui
         addStatusText(sStatus);
     }
 
-    void DirectSQLDialog::display(css::uno::Reference< css::sdbc::XResultSet > xRS)
+    void DirectSQLDialog::display(const css::uno::Reference< css::sdbc::XResultSet >& xRS)
     {
         // get a handle for the rows
         css::uno::Reference< css::sdbc::XRow > xRow( xRS, css::uno::UNO_QUERY );
