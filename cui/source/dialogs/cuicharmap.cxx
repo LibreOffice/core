@@ -54,17 +54,19 @@ using namespace css;
 
 // class SvxCharacterMap =================================================
 
-SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
+SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet, bool bInsert )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
     , pSubsetMap( nullptr )
     , isSearchMode(true)
+    , m_bHasInsert(bInsert)
     , mxContext(comphelper::getProcessComponentContext())
 {
     get(m_pShowSet, "showcharset");
     get(m_pSearchSet, "searchcharset");
     get(m_pShowChar, "showchar");
     m_pShowChar->SetCentered(true);
-    get(m_pOKBtn, "ok");
+    if (m_bHasInsert) get(m_pOKBtn, "insert");
+    else get(m_pOKBtn, "ok");
     get(m_pFontText, "fontft");
     get(m_pFontLB, "fontlb");
     m_pFontLB->SetStyle(m_pFontLB->GetStyle() | WB_SORT);
@@ -475,6 +477,8 @@ void SvxCharacterMap::init()
     m_pFontLB->SetSelectHdl( LINK( this, SvxCharacterMap, FontSelectHdl ) );
     m_pSubsetLB->SetSelectHdl( LINK( this, SvxCharacterMap, SubsetSelectHdl ) );
     m_pOKBtn->SetClickHdl( LINK( this, SvxCharacterMap, InsertClickHdl ) );
+    m_pOKBtn->Show();
+
 
     m_pShowSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharDoubleClickHdl ) );
     m_pShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
@@ -619,15 +623,17 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
     if(sGlyph.isEmpty())
         return;
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    if (m_bHasInsert) {
+      uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    uno::Sequence<beans::PropertyValue> aArgs(2);
-    aArgs[0].Name = "Symbols";
-    aArgs[0].Value <<= sGlyph;
+      uno::Sequence<beans::PropertyValue> aArgs(2);
+      aArgs[0].Name = "Symbols";
+      aArgs[0].Value <<= sGlyph;
 
-    aArgs[1].Name = "FontName";
-    aArgs[1].Value <<= aFont.GetFamilyName();
-    comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+      aArgs[1].Name = "FontName";
+      aArgs[1].Value <<= aFont.GetFamilyName();
+      comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+    }
 
     updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
 }
