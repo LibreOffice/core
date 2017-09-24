@@ -1461,7 +1461,7 @@ bool SwFieldMgr::InsertField(
         // Insert Paragraph Signature field by signing the paragraph.
         // The resulting field is really a metadata field, created and added via signing.
         case TYP_PARAGRAPHSIGFLD:
-            pCurShell->SignParagraph(pCurShell->GetCursor());
+            pCurShell->SignParagraph();
             return true;
         break;
 
