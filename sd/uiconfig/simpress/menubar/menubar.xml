@@ -220,6 +220,8 @@
             <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
             <menu:menuitem menu:id=".uno:InsertTable"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:CapturePoint"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Text"/>
             <menu:menuitem menu:id=".uno:InsertAnnotation"/>
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
@@ -255,8 +257,6 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:ImportFromFile"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:InsertFormMenu">
                 <menu:menupopup>
@@ -484,6 +484,7 @@
     <menu:menu menu:id=".uno:SlideMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:InsertSlide"/>
+            <menu:menuitem menu:id=".uno:ImportSlideFromFile"/>
             <menu:menuitem menu:id=".uno:DuplicateSlide"/>
             <menu:menuitem menu:id=".uno:DeleteSlide"/>
             <menu:menuseparator/>
@@ -512,14 +513,14 @@
                      <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=30"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:SlideSetup"/>
             <menu:menuitem menu:id=".uno:SelectBackground"/>
             <menu:menuitem menu:id=".uno:SaveBackground"/>
+            <menu:menuitem menu:id=".uno:SlideSetup"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:PresentationLayout"/>
-            <menu:menuitem menu:id=".uno:MasterLayouts"/>
             <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
             <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
+            <menu:menuitem menu:id=".uno:MasterLayouts"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HideSlide"/>
             <menu:menuitem menu:id=".uno:ShowSlide"/>
