@@ -1166,7 +1166,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
         break;
         case SID_CLASSIFICATION_DIALOG:
         {
-            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr));
+            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr, false));
 
             SwWrtShell* pShell = GetWrtShell();
             std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
@@ -1180,9 +1180,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
         break;
         case SID_PARAGRAPH_SIGN_CLASSIFY_DLG:
         {
-            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr));
-
             SwWrtShell* pShell = GetWrtShell();
+            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr, true, [pShell]()
+            {
+                pShell->SignParagraph(pShell->GetCursor());
+            }));
+
             std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
             pDialog->setupValues(aInput);
 
