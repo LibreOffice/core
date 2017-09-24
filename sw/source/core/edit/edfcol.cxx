@@ -1040,14 +1040,12 @@ void SwUndoParagraphSigning::Remove()
     lcl_RemoveParagraphSignatureField(m_xField);
 }
 
-void SwEditShell::SignParagraph(SwPaM* pPaM)
+void SwEditShell::SignParagraph()
 {
-    if (!pPaM)
-        return;
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
     if (!pDocShell)
         return;
-    const SwPosition* pPosStart = pPaM->Start();
+    const SwPosition* pPosStart = GetCursor()->Start();
     if (!pPosStart)
         return;
     SwTextNode* pNode = pPosStart->nNode.GetNode().GetTextNode();
