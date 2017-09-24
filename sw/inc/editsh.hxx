@@ -375,7 +375,7 @@ public:
     void SetWatermark(const SfxWatermarkItem& rText);
 
     /// Sign the paragraph at the cursor.
-    void SignParagraph(SwPaM* pPaM);
+    void SignParagraph();
 
     /// Validate paragraph signatures, if any, at the cursor.
     void ValidateParagraphSignatures(bool updateDontRemove);
