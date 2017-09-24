@@ -62,39 +62,24 @@ SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel&
  * One should set these default settings as the first
  * thing at program start, before any other method is called.
  */
-class SVX_DLLPUBLIC SdrEngineDefaults
+namespace SdrEngineDefaults
 {
-friend class SdrAttrObj;
-    Color            aFontColor;
-    Fraction         aMapFraction;
-
-private:
-    static SdrEngineDefaults& GetDefaults();
-
-public:
-    SdrEngineDefaults();
-
-    // Default FontColor is COL_BLACK
-    static Color      GetFontColor()                       { return GetDefaults().aFontColor; }
+    // Default FontColor is COL_AUTO
+    inline Color GetFontColor() { return COL_AUTO; }
 
     // Default FontHeight is 847. The font height uses logical units (MapUnit/MapFraction
     // see below for further details). The default setting 847/100mm corresponds to about
     // 24 Point. If e.g. one would use Twips (SetMapUnit(MapUnit::MapTwip)) (20 Twip = 1 Point)
     // instead, one would need to set the font height to 480, in order to get a 24 Point height.
-    static size_t      GetFontHeight()                      { return 847; }
+    inline size_t GetFontHeight() { return 847; }
 
     // The MapMode is needed for the global Outliner.
     // Incidentally, every newly instantiated SdrModel is assigned this MapMode by default.
     // Default MapUnit is MapUnit::Map100thMM
-    static MapUnit    GetMapUnit()                         { return MapUnit::Map100thMM; }
+    inline MapUnit GetMapUnit() { return MapUnit::Map100thMM; }
 
     // Default MapFraction is 1/1.
-    static Fraction   GetMapFraction()                     { return GetDefaults().aMapFraction; }
-
-    // Create an Outliner with the engine-global default values on the heap.
-    // If pMod != nullptr, the MapMode of the passed model is used.
-    // The resulting default font height, however, stays the same (the logical font height is converted).
-    friend SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rMod);
+    inline Fraction GetMapFraction() { return Fraction(1, 1); }
 };
 
 class SfxItemSet;
@@ -202,7 +187,6 @@ class SVX_DLLPUBLIC SdrGlobalData
 public:
     std::vector<Link<SdrObjCreatorParams, SdrObject*>>
                         aUserMakeObjHdl;
-    SdrEngineDefaults*  pDefaults;
     OLEObjCache         aOLEObjCache;
 
 
