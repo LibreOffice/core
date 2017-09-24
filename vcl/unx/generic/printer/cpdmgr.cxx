@@ -248,9 +248,8 @@ CPDManager* CPDManager::tryLoadCPD()
 
     if (!pEnv || !*pEnv) {
         GDir *dir;
-        GError *error = nullptr;
         const gchar *filename;
-        dir = g_dir_open(BACKEND_DIR, 0, &error);
+        dir = g_dir_open(BACKEND_DIR, 0, nullptr);
         if (dir != nullptr) {
             while ((filename = g_dir_read_name(dir))) {
                 if (pManager == nullptr) {
@@ -328,7 +327,6 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
 
     if( dest_it != m_aCPDDestMap.end() )
     {
-
         CPDPrinter* pDest = dest_it->second;
         GVariant* ret = nullptr;
         GError* error = nullptr;
@@ -457,7 +455,10 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
             g_variant_unref(ret);
         }
         else
+        {
+            g_clear_error(&error);
             SAL_INFO("vcl.unx.print", "CPD GetAllOptions failed, falling back to generic driver");
+        }
     }
     else
         SAL_INFO("vcl.unx.print", "no dest found for printer " << aPrinter);
