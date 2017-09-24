@@ -159,8 +159,8 @@ namespace connectivity { namespace hsqldb
         Reference< XResultSet > xResult( xStatement->executeQuery( aCommand.makeStringAndClear() ), UNO_QUERY_THROW );
         if ( !xResult->next() )
         {
-            // hmm. There is no view view the name as we know it. Can only mean some other instance
-            // dropped this view meanwhile ...
+            // hmm. There is no view the name as we know it. Can only mean some other instance
+            // dropped this view meanwhile...
             throw DisposedException();
         }
 
