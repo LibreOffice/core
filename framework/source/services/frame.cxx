@@ -833,7 +833,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getContainerWindow()
     @descr      We need a parent to support some functionality! e.g. findFrame()
                 By the way we use the chance to set an internal information about our top state.
                 So we must not check this information during every isTop() call.
-                We are top, if our parent is the desktop instance or we havent any parent.
+                We are top, if our parent is the desktop instance or we haven't any parent.
 
     @seealso    getCreator()
     @seealso    findFrame()

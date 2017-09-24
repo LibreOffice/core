@@ -189,7 +189,7 @@ void SessionListener::StoreSession( bool bAsync )
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception& e) {
         SAL_WARN("fwk.session",e.Message);
-        // save failed, but tell manager to go on if we havent yet dispatched the request
+        // save failed, but tell manager to go on if we haven't yet dispatched the request
         // in case of synchronous saving the notification is done by the caller
         if ( bAsync && m_rSessionManager.is() )
             m_rSessionManager->saveDone(this);

@@ -401,7 +401,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
         aEvt.ListenerType = aEvt.ListenerType.copy(nLastDot+1);
     aIt->aEventList.push_back( aEvt );
 
-    // register new new Event
+    // register new Event
     for( auto& rObj : aIt->aObjList )
     {
         Reference< XAllListener > xAll =

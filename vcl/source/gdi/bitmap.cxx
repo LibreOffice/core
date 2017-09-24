@@ -1119,7 +1119,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
     if (!nTol && pReadAcc && (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal)
         && pReadAcc->GetBestMatchingColor(Color(COL_WHITE)) == pReadAcc->GetBestMatchingColor(rTransColor))
     {
-        //if we're a 1 bit pixel already, and the transcolor matches the color that would replace it already already, then just return a copy
+        //if we're a 1 bit pixel already, and the transcolor matches the color that would replace it already, then just return a copy
         return *this;
     }
 

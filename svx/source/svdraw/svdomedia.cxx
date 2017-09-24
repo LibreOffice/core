@@ -412,7 +412,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
     bool bBroadcastChanged = false;
     const AVMediaSetMask nMaskSet = rNewProperties.getMaskSet();
 
-    // use only a subset of MediaItem properties for own own properties
+    // use only a subset of MediaItem properties for own properties
     if( AVMediaSetMask::MIME_TYPE & nMaskSet )
         m_xImpl->m_MediaProperties.setMimeType( rNewProperties.getMimeType() );
 

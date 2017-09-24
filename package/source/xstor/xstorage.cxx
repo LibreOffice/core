@@ -3200,7 +3200,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
         SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( THROW_WHERE "Can't open encrypted stream stream!",
+        throw embed::StorageWrappedTargetException( THROW_WHERE "Can't open encrypted stream!",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
