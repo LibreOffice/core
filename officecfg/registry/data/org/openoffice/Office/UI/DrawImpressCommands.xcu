@@ -715,6 +715,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ImportSlideFromFile" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Import Slides...</value>
+        </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:ImportFromFile</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ZoomPanning" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Shift</value>
@@ -1440,12 +1451,12 @@
       </node>
       <node oor:name=".uno:DisplayMasterBackground" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Display Master Background</value>
+          <value xml:lang="en-US">Master Background</value>
         </prop>
       </node>
       <node oor:name=".uno:DisplayMasterObjects" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Display Master Objects</value>
+          <value xml:lang="en-US">Master Objects</value>
         </prop>
       </node>
       <node oor:name=".uno:EditStyle" oor:op="replace">
