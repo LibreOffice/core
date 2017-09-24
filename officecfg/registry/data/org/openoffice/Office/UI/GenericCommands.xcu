@@ -6404,6 +6404,11 @@
           <value xml:lang="en-US">Classification Dialog</value>
         </prop>
       </node>
+      <node oor:name=".uno:ParagraphClassificationDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Paragraph Classification Dialog</value>
+        </prop>
+      </node>
       <node oor:name=".uno:EditSelectMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select</value>
