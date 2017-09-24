@@ -37,6 +37,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent)
     , maInternationalHelper(SfxObjectShell::Current()->getDocProperties(), /*bUseLocalizedPolicy*/ false)
 {
     get(m_pEditWindow, "classificationEditWindow");
+    get(m_pSignButton, "signButton");
     get(m_pBoldButton, "boldButton");
     get(m_pClassificationListBox, "classificationCB");
     get(m_pInternationalClassificationListBox, "internationalClassificationCB");
@@ -46,6 +47,7 @@ ClassificationDialog::ClassificationDialog(vcl::Window* pParent)
     get(m_pIntellectualPropertyPartAddButton, "intellectualPropertyPartAddButton");
     get(m_pIntellectualPropertyPartEdit, "intellectualPropertyPartEntry");
 
+    m_pSignButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
     m_pBoldButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
     m_pIntellectualPropertyPartAddButton->SetClickHdl(LINK(this, ClassificationDialog, ButtonClicked));
 
@@ -83,6 +85,7 @@ ClassificationDialog::~ClassificationDialog()
 void ClassificationDialog::dispose()
 {
     m_pEditWindow.clear();
+    m_pSignButton.clear();
     m_pBoldButton.clear();
     m_pClassificationListBox.clear();
     m_pInternationalClassificationListBox.clear();
@@ -251,6 +254,10 @@ IMPL_LINK(ClassificationDialog, ButtonClicked, Button*, pButton, void)
     if (pButton == m_pBoldButton)
     {
         m_pEditWindow->InvertSelectionWeight();
+    }
+    else if (pButton == m_pSignButton)
+    {
+        //TODO sign current paragraph
     }
     else if (pButton == m_pIntellectualPropertyPartAddButton)
     {

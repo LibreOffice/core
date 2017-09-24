@@ -27,6 +27,7 @@ class SVX_DLLPUBLIC ClassificationDialog : public ModalDialog
 {
 private:
     VclPtr<ClassificationEditView> m_pEditWindow;
+    VclPtr<PushButton> m_pSignButton;
     VclPtr<PushButton> m_pBoldButton;
     VclPtr<ListBox> m_pClassificationListBox;
     VclPtr<ListBox> m_pInternationalClassificationListBox;
