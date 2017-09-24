@@ -2557,10 +2557,11 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                         aStartVector.sort();
 
                         svx::frame::StyleVectorTable aEndVector;
+                        const basegfx::B2DVector aAxis(-aX);
 
-                        aEndVector.add(aStyles[ 4 ], -aX, -aY, true); // aRFromT
-                        aEndVector.add(aStyles[ 5 ], -aX, aX, false); // aRFromR
-                        aEndVector.add(aStyles[ 6 ], -aX, aY, false); // aRFromB
+                        aEndVector.add(aStyles[ 4 ], aAxis, -aY, true); // aRFromT
+                        aEndVector.add(aStyles[ 5 ], aAxis, aX, false); // aRFromR
+                        aEndVector.add(aStyles[ 6 ], aAxis, aY, false); // aRFromB
                         aEndVector.sort();
 
                         CreateBorderPrimitives(
@@ -2590,10 +2591,11 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
                         aStartVector.sort();
 
                         svx::frame::StyleVectorTable aEndVector;
+                        const basegfx::B2DVector aAxis(-aX);
 
-                        aEndVector.add(aStyles[ 6 ], -aX, -aY, false); // aBFromR
-                        aEndVector.add(aStyles[ 5 ], -aX, aX, false); // aBFromB
-                        aEndVector.add(aStyles[ 4 ], -aX, aY, true); // aBFromL
+                        aEndVector.add(aStyles[ 6 ], aAxis, -aY, false); // aBFromR
+                        aEndVector.add(aStyles[ 5 ], aAxis, aX, false); // aBFromB
+                        aEndVector.add(aStyles[ 4 ], aAxis, aY, true); // aBFromL
                         aEndVector.sort();
 
                         CreateBorderPrimitives(
