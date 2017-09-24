@@ -1308,6 +1308,11 @@ void ToolBox::doDeferredInit(WinBits nBits)
     mbIsDeferredInit = false;
 }
 
+void ToolBox::queue_resize(StateChangedType eReason)
+{
+    Window::queue_resize(eReason);
+}
+
 ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
     DockingWindow( WindowType::TOOLBOX )
 {
