@@ -65,7 +65,7 @@ public class ClimakerTestCase extends ComplexTestCase
 }
 
 
-/*  This reads reads from an InputStream and discards the data.
+/*  This read from an InputStream and discards the data.
  */
 class Reader extends Thread
 {

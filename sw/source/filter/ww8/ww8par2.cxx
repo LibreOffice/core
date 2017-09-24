@@ -2387,8 +2387,8 @@ void WW8TabDesc::CalcDefaults()
 
         /*
         If the last cell was "false" then there is no valid cell following it,
-        so the default mapping forward wont't work. So map it (and
-        contiguous invalid cells backwards to the last valid cell instead.
+        so the default mapping forward won't work. So map it (and
+        contiguous invalid cells backwards to the last valid cell instead.)
         */
         if (i && !pR->bExist[i-1])
         {

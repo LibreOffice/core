@@ -136,7 +136,7 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
     if (bHasExited)
         return osl_Process_E_None;
 
-    // fallback - given that we we wait for an infinite time on WaitForSingleObject, this should
+    // fallback - given that we wait for an infinite time on WaitForSingleObject, this should
     // never occur... unless CreateRemoteThread failed
     SAL_WARN("sal.osl", "TerminateProcess(hProcess, 0) called - we should never get here!");
     return (TerminateProcess(hProcess, 0) == FALSE) ? osl_Process_E_Unknown : osl_Process_E_None;

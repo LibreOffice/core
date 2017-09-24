@@ -34,7 +34,7 @@ using namespace com::sun::star::uno;
 // well known under MS Windows
 // the MS HTML Format has a header before the real html data
 
-// Version:1.0      Version number of the clipboard. Staring is 0.9
+// Version:1.0      Version number of the clipboard. Starting is 0.9
 // StartHTML:       Byte count from the beginning of the clipboard to the start
 //                  of the context, or -1 if no context
 // EndHTML:         Byte count from the beginning of the clipboard to the end

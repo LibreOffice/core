@@ -304,7 +304,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector<
             Reference< XConnection > xCon( m_xConnection, UNO_SET_THROW );
             m_xMetaData.set( xCon->getMetaData(), UNO_SET_THROW );
 
-            // create a table table filter suitable for the XDatabaseMetaData::getTables call,
+            // create a table filter suitable for the XDatabaseMetaData::getTables call,
             // taking into account both the externally-provided table type filter, and any
             // table type restriction which is inherent to the container
             Sequence< OUString > aTableTypeFilter;

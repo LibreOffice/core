@@ -2089,7 +2089,7 @@ AC_ARG_WITH(compat-oowrappers,
 
 AC_ARG_WITH(os-version,
     AS_HELP_STRING([--with-os-version=<OSVERSION>],
-        [For FreeBSD users, use this option option to override the detected OSVERSION.]),
+        [For FreeBSD users, use this option to override the detected OSVERSION.]),
 ,)
 
 AC_ARG_WITH(mingw-cross-compiler,

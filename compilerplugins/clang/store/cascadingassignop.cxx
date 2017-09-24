@@ -21,7 +21,7 @@ operators, which are errorprone, e.g.
 However, it finds 556 cases in sw/source alone, thus likely needs some more
 restricting, e.g. by checking for multiline conditional operator statements or
 a certain length in characters (but that needs the Context/SourceManager, which
-I havent played with yet).
+I haven't played with yet).
 */
 
 // the value is rather arbitrary, but code above this number of stmts begins to

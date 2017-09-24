@@ -2174,7 +2174,7 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox&, rListBox, voi
 
 IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox&, rListBox, void )
 {
-    //column break or break break after
+    //column break or break after
     sal_Int32 nBreakPos = m_pBreakPositionLB->GetSelectedEntryPos();
     if ( rListBox.GetSelectedEntryPos() == 1 || 1 == nBreakPos)
     {

@@ -47,7 +47,7 @@ namespace com { namespace sun { namespace star { namespace datatransfer {
 // IDropSource::QueryContinueDrag, to actions as are declared in
 // css::datatransfer::dnd::DNDConstants ( ACTION_MOVE etc).
 // If the grfKeyState indicates the ALt or right mousebutton then the returned
-// values combines all possible actions. This is because those key and button are
+// values combines all possible actions. This is because those keys and buttons are
 // used when the user expect a menu to appear when he drops. The menu then
 // contains entries, such as move, copy, link, cancel.
 // An odd fact is that the argument grfKeyState in IDropTarget::Drop does not

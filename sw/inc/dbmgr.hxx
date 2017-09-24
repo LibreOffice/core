@@ -486,10 +486,10 @@ public:
     /// Stop reacting to removed database registrations.
     void releaseRevokeListener();
 
-    /// Revoke not commited registrations in case of mail merge cancel
+    /// Revoke not committed registrations in case of mail merge cancel
     void RevokeLastRegistrations();
 
-    /// Accept not commited registrations
+    /// Accept not committed registrations
     void CommitLastRegistrations();
 
     /// Remove not used connections.

@@ -3013,7 +3013,7 @@ the same sprmCMajority as appears before 0x6f in word 6/95
 I think the easiest explanation is that the CJK Word for Window 95, or whatever
 the product was went rogue, and did their own things with at least first three
 slots after sprmCMajority to do a different thing. I have no reason to think Tono
-was wrong with what they do in the a698<->a699 versions versions, but with magic
+was wrong with what they do in the a698<->a699 versions, but with magic
 a5dc they probably did mean sprmCFBoldBi, sprmCFItalicBi cause they have that 0x81
 pattern which has significance for those types of properties.
 */

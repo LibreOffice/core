@@ -1,6 +1,6 @@
 The schema and default settings for the OpenOffice.org configuration database.
 
-If you change change a file in this module, then a make postprocess is needed after make officecfg.
+If you change a file in this module, then a make postprocess is needed after make officecfg.
 
 See also:
 [[configmgr]]
