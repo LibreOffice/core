@@ -54,10 +54,11 @@ using namespace css;
 
 // class SvxCharacterMap =================================================
 
-SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet )
+SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bInsert, const SfxItemSet* pSet )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
     , pSubsetMap( nullptr )
     , isSearchMode(true)
+    , hasInsert(bInsert)
     , mxContext(comphelper::getProcessComponentContext())
 {
     get(m_pShowSet, "showcharset");
@@ -472,6 +473,8 @@ void SvxCharacterMap::init()
         m_pFontLB->SelectEntryPos(0);
     FontSelectHdl(*m_pFontLB);
 
+    if (!hasInsert) m_pOKBtn->SetText("Ok");
+
     m_pFontLB->SetSelectHdl( LINK( this, SvxCharacterMap, FontSelectHdl ) );
     m_pSubsetLB->SetSelectHdl( LINK( this, SvxCharacterMap, SubsetSelectHdl ) );
     m_pOKBtn->SetClickHdl( LINK( this, SvxCharacterMap, InsertClickHdl ) );
@@ -614,20 +617,22 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
 }
 
 
-void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
+void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph, bool i_hasInsert)
 {
     if(sGlyph.isEmpty())
         return;
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    if (i_hasInsert) {
+      uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    uno::Sequence<beans::PropertyValue> aArgs(2);
-    aArgs[0].Name = "Symbols";
-    aArgs[0].Value <<= sGlyph;
+      uno::Sequence<beans::PropertyValue> aArgs(2);
+      aArgs[0].Name = "Symbols";
+      aArgs[0].Value <<= sGlyph;
 
-    aArgs[1].Name = "FontName";
-    aArgs[1].Value <<= aFont.GetFamilyName();
-    comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+      aArgs[1].Name = "FontName";
+      aArgs[1].Value <<= aFont.GetFamilyName();
+      comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+    }
 
     updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
 }
@@ -909,7 +914,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
     // using the new UCS4 constructor
     OUString aOUStr( &cChar, 1 );
     setFavButtonState(aOUStr, aFont.GetFamilyName());
-    insertCharToDoc(aOUStr);
+    insertCharToDoc(aOUStr, hasInsert);
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, SearchCharDoubleClickHdl, SvxShowCharSet*, void)
@@ -918,7 +923,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharDoubleClickHdl, SvxShowCharSet*, void
     // using the new UCS4 constructor
     OUString aOUStr( &cChar, 1 );
     setFavButtonState(aOUStr, aFont.GetFamilyName());
-    insertCharToDoc(aOUStr);
+    insertCharToDoc(aOUStr, hasInsert);
 }
 
 IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
@@ -933,7 +938,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SearchCharSelectHdl, SvxShowCharSet*, void)
 
 IMPL_LINK_NOARG(SvxCharacterMap, InsertClickHdl, Button*, void)
 {
-   insertCharToDoc(m_pShowChar->GetText());
+   insertCharToDoc(m_pShowChar->GetText(), hasInsert);
    EndDialog(RET_OK);
 }
 

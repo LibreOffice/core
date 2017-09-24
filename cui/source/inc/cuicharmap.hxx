@@ -89,6 +89,7 @@ private:
     vcl::Font           aFont;
     const SubsetMap*    pSubsetMap;
     bool                isSearchMode;
+    bool                hasInsert;
 
     std::deque<OUString> maRecentCharList;
     std::deque<OUString> maRecentCharFontList;
@@ -128,7 +129,7 @@ private:
     void selectCharByCode(Radix radix);
 
 public:
-                    SvxCharacterMap( vcl::Window* pParent, const SfxItemSet* pSet=nullptr );
+                    SvxCharacterMap( vcl::Window* pParent, const bool hasInsert=true, const SfxItemSet* pSet=nullptr);
     virtual         ~SvxCharacterMap() override;
     virtual short Execute() override;
     virtual void    dispose() override;
@@ -150,7 +151,7 @@ public:
     bool            isFavChar(const OUString& sTitle, const OUString& rFont);
 
     void            updateRecentCharControl();
-    void            insertCharToDoc(const OUString& sChar);
+    void            insertCharToDoc(const OUString& sChar, bool i_hasInsert);
 
     void            updateFavCharControl();
     void            setFavButtonState(const OUString& sTitle, const OUString& rFont);
