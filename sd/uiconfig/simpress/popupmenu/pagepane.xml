@@ -15,9 +15,7 @@
   <menu:menuitem menu:id=".uno:InsertSlide"/>
   <menu:menuitem menu:id=".uno:DuplicateSlide"/>
   <menu:menuitem menu:id=".uno:DeleteSlide"/>
-  <menu:menuitem menu:id=".uno:RenameSlide"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:PresentationLayout"/>
   <menu:menu menu:id=".uno:SlideLayoutMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=20"/>
@@ -40,8 +38,9 @@
       <menu:menuitem menu:id=".uno:AssignLayout?WhatLayout:long=30"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuitem menu:id=".uno:SlideSetup"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
-  <menu:menuitem menu:id=".uno:ShowSlide"/>
   <menu:menuitem menu:id=".uno:HideSlide"/>
+  <menu:menuitem menu:id=".uno:ShowSlide"/>
+  <menu:menuitem menu:id=".uno:RenameSlide"/>
 </menu:menupopup>
