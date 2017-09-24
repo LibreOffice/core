@@ -38,7 +38,7 @@
 #define STR_OUTLINE_MODE                                NC_("STR_OUTLINE_MODE", "Outline")
 #define STR_NOTES_MODE                                  NC_("STR_NOTES_MODE", "Notes")
 #define STR_NOTES_MASTER_MODE                           NC_("STR_NOTES_MASTER_MODE", "Master Notes")
-#define STR_HANDOUT_MASTER_MODE                         NC_("STR_HANDOUT_MASTER_MODE", "Handout")
+#define STR_HANDOUT_MASTER_MODE                         NC_("STR_HANDOUT_MASTER_MODE", "Master Handout")
 #define STR_AUTOLAYOUT_NONE                             NC_("STR_AUTOLAYOUT_NONE", "Blank Slide")
 #define STR_AUTOLAYOUT_ONLY_TITLE                       NC_("STR_AUTOLAYOUT_ONLY_TITLE", "Title Only")
 #define STR_AUTOLAYOUT_ONLY_TEXT                        NC_("STR_AUTOLAYOUT_ONLY_TEXT", "Centered Text")
