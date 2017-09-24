@@ -40,6 +40,9 @@ private:
     SfxClassificationHelper maHelper;
     SfxClassificationHelper maInternationalHelper;
 
+    const bool m_bPerParagraph;
+    const std::function<void()> m_aParagraphSignHandler;
+
     DECL_LINK(ButtonClicked, Button*, void);
     DECL_LINK(SelectClassificationHdl, ListBox&, void);
     DECL_LINK(SelectMarkingHdl, ListBox&, void);
@@ -49,7 +52,7 @@ private:
     void insertField(ClassificationType eType, OUString const & rString);
 
 public:
-    ClassificationDialog(vcl::Window* pParent);
+    ClassificationDialog(vcl::Window* pParent, bool bPerParagraph, const std::function<void()>& rParagraphSignHandler = [](){});
     virtual ~ClassificationDialog() override;
     virtual void dispose() override;
 
