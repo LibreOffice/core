@@ -2269,12 +2269,18 @@ void SdImportTest::testTdf108926()
 void SdImportTest::testTdf100065()
 {
     sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf100065.pptx"), PPTX);
-    uno::Reference< container::XIndexAccess > xGroupShape(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
-    uno::Reference< beans::XPropertySet > xShape(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
 
-    sal_Int32 nAngle;
-    CPPUNIT_ASSERT(xShape->getPropertyValue("RotateAngle") >>= nAngle);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nAngle);
+    uno::Reference< container::XIndexAccess > xGroupShape1(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xShape1(xGroupShape1->getByIndex(1), uno::UNO_QUERY_THROW);
+    sal_Int32 nAngle1;
+    CPPUNIT_ASSERT(xShape1->getPropertyValue("RotateAngle") >>= nAngle1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), nAngle1);
+
+    uno::Reference< container::XIndexAccess > xGroupShape2(getShapeFromPage(1, 0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xShape2(xGroupShape2->getByIndex(0), uno::UNO_QUERY_THROW);
+    sal_Int32 nAngle2;
+    CPPUNIT_ASSERT(xShape2->getPropertyValue("RotateAngle") >>= nAngle2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(18000), nAngle2);
 
     xDocShRef->DoClose();
 }

@@ -517,10 +517,12 @@ Reference< XShape > const & Shape::createAndInsert(
                 if(aScale.getX() < 0)
                 {
                     mbFlipH = !mbFlipH;
+                    aTransformation.scale(-1, 1);
                 }
                 if(aScale.getY() < 0)
                 {
                     mbFlipV = !mbFlipV;
+                    aTransformation.scale(1, -1);
                 }
             }
             // rotate around object's center
