@@ -13,7 +13,9 @@ $(eval $(call gb_ExternalPackage_use_external_project,libassuan,libassuan))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 
+ifneq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libassuan,$(LIBO_LIB_FOLDER)/libassuan.so.0,src/.libs/libassuan.so.0.7.3))
+endif
 
 endif # $(DISABLE_DYNLOADING)
 
