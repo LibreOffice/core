@@ -22,6 +22,30 @@
       "revId": "5e6dcf8ad8c4a122799ed6ef89a5912738d66164",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_63926aa1",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-24T19:03:09Z",
+      "side": 1,
+      "message": "Indeed, there is.\nYep!\n\nAnd in fact, we don\u0027t need to create an iterator at all. Going to fix this.",
+      "parentUuid": "1a430d35_996d0807",
+      "range": {
+        "startLine": 151,
+        "startChar": 16,
+        "endLine": 151,
+        "endChar": 25
+      },
+      "revId": "5e6dcf8ad8c4a122799ed6ef89a5912738d66164",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
