@@ -91,7 +91,7 @@ $(APP4_JAR) : $(SAMPLE_CLASS_OUT)/$(APP4_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP4_NAM
 $(SAMPLE_NAME) : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR) $(APP4_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo The $(APP1_NAME) search the "$(QM)./test$(QM)" directory for documents, convert
-	@echo them using using the "$(QM)MS Word 97$(QM)" filter and the extension "$(QM).doc$(QM)".
+	@echo them using the "$(QM)MS Word 97$(QM)" filter and the extension "$(QM).doc$(QM)".
 	@echo The converted files are store in "$(QM)$(SAMPLE_GEN_OUT)/converted_files$(QM)".
 	@echo The list of possible filter names can change. Normally an updated list can be found 
 	@echo on "$(QM)http://www.openoffice.org/files/documents/25/111/filter_description.html$(QM)".

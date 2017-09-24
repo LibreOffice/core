@@ -3509,7 +3509,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
           m_pImpl->AddLog( THROW_WHERE "Rethrow" );
 
           uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( THROW_WHERE "Can't open encrypted stream stream!",
+        throw embed::StorageWrappedTargetException( THROW_WHERE "Can't open encrypted stream!",
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }

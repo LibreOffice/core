@@ -46,7 +46,7 @@ interface XUntitledNumbers : com::sun::star::uno::XInterface
     long leaseNumber ( [in] com::sun::star::uno::XInterface xComponent )
         raises (com::sun::star::lang::IllegalArgumentException);
 
-    /** has to be used to mark those number as "free for using".
+    /** has to be used to mark those numbers as "free for using".
 
         If the registered component does not use such leased number any longer
         it has to be released so it can be used for new components.
