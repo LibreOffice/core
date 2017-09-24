@@ -215,10 +215,11 @@ namespace sdr
 
             /// Fill bottom-right Style Table
             svx::frame::StyleVectorTable aEnd;
+            const basegfx::B2DVector aAxis(-rX);
 
-            aEnd.add(rRightA, -rX, -aY, bHor); // bHor ? true : false));
-            aEnd.add(rRightB, -rX, rX, false); // bHor ? false : false));
-            aEnd.add(rRightC, -rX, aY, !bHor); // bHor ? false : true));
+            aEnd.add(rRightA, aAxis, -aY, bHor); // bHor ? true : false));
+            aEnd.add(rRightB, aAxis, rX, false); // bHor ? false : false));
+            aEnd.add(rRightC, aAxis, aY, !bHor); // bHor ? false : true));
             aEnd.sort();
 
             CreateBorderPrimitives(
