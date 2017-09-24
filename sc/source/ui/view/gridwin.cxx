@@ -507,6 +507,7 @@ void ScGridWindow::dispose()
     mpNoteMarker.reset();
     mpAutoFilterPopup.disposeAndClear();
     mpDPFieldPopup.disposeAndClear();
+    aComboButton.SetOutputDevice(nullptr);
 
     vcl::Window::dispose();
 }
