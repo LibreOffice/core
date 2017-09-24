@@ -106,7 +106,10 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
 
         // omit text/plain;charset=unicode since it is not well defined
         if (rtl_str_compare(pName, "text/plain;charset=unicode") == 0)
+        {
+            g_free(pName);
             continue;
+        }
 
         for (size_t j = 0; j < SAL_N_ELEMENTS(aConversionTab); ++j)
         {
@@ -122,6 +125,7 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
         // them out for now before they confuse this code's clients:
         if (rtl_str_indexOfChar(pFinalName, '/') == -1)
         {
+            g_free(pName);
             continue;
         }
 
