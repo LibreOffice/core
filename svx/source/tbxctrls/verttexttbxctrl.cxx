@@ -52,6 +52,12 @@ SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 {
 }
 
+void SvxVertCTLTextTbxCtrl::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+{
+    SfxToolBoxControl::initialize(rArguments);
+    setFastPropertyValue_NoBroadcast(1, css::uno::makeAny(true));
+}
+
 void SvxVertCTLTextTbxCtrl::StateChanged(
     sal_uInt16 nSID,
     SfxItemState eState,
