@@ -10286,7 +10286,9 @@ if test "$_os" = "Linux"; then
         LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
     fi
 else
-    BUILD_TYPE="$BUILD_TYPE LIBGPGERROR"
+    BUILD_TYPE="$BUILD_TYPE LIBASSUAN LIBGPGERROR"
+    GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
+    GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
 fi
 AC_SUBST(SYSTEM_GPGMEPP)
 AC_SUBST(GPG_ERROR_CFLAGS)
