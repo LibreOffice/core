@@ -507,7 +507,6 @@ Reference< XShape > const & Shape::createAndInsert(
         if( bUseRotationTransform )
         {
             // OOXML flips shapes before rotating them.
-            double fRotation = F_PI180 * ( (double)mnRotation / 60000.0 );
             if( bIsCustomShape )
             {
                 basegfx::B2DVector aScale, aTranslate;
@@ -526,7 +525,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 }
             }
             // rotate around object's center
-            aTransformation.rotate( fRotation );
+            aTransformation.rotate( F_PI180 * ( (double)mnRotation / 60000.0 ) );
         }
 
         // move object back from center
@@ -546,20 +545,19 @@ Reference< XShape > const & Shape::createAndInsert(
     aParentTransformation = aTransformation;
     aTransformation.scale(1/double(EMU_PER_HMM), 1/double(EMU_PER_HMM));
 
-    if( bIsCustomShape )
+    if( bIsCustomShape && mbFlipH != mbFlipV )
     {
         basegfx::B2DVector aScale, aTranslate;
         double fRotate, fShearX;
         aTransformation.decompose(aScale, aTranslate, fRotate, fShearX);
 
-        // OOXML rotates shapes before flipping them, so the rotation needs to be inverted.
-        if( mbFlipH != mbFlipV)
+        if(fRotate != 0)
         {
             // calculate object's center
             basegfx::B2DPoint aCenter(0.5, 0.5);
             aCenter *= aTransformation;
-
             aTransformation.translate( -aCenter.getX(), -aCenter.getY() );
+            // OOXML flips shapes before rotating them, so the rotation needs to be inverted
             aTransformation.rotate( fRotate * -2.0 );
             aTransformation.translate( aCenter.getX(), aCenter.getY() );
         }
