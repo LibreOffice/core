@@ -3853,7 +3853,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Default&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|defaultD">Default</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|defaultD">Default</property>
       </object>
     </child>
     <child>
@@ -3867,7 +3867,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Accent 1&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Accent1">Accent 1</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Accent1">Accent 1</property>
       </object>
     </child>
     <child>
@@ -3875,7 +3875,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Accent 2&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Accent2">Accent 2</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Accent2">Accent 2</property>
       </object>
     </child>
     <child>
@@ -3883,7 +3883,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Accent 3&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Accent3">Accent 3</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Accent3">Accent 3</property>
       </object>
     </child>
     <child>
@@ -3897,7 +3897,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Header1">Header 1</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Header1">Header 1</property>
       </object>
     </child>
     <child>
@@ -3905,7 +3905,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|Header2">Header 2</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|Header2">Header 2</property>
       </object>
     </child>
     <child>
@@ -3919,7 +3919,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Bad&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|bad">Bad</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|bad">Bad</property>
       </object>
     </child>
     <child>
@@ -3927,7 +3927,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Error&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|error">Error</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|error">Error</property>
       </object>
     </child>
     <child>
@@ -3935,7 +3935,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Good&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|good">Good</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|good">Good</property>
       </object>
     </child>
     <child>
@@ -3943,7 +3943,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Neutral&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|neutral">Neutral</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|neutral">Neutral</property>
       </object>
     </child>
     <child>
@@ -3951,7 +3951,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Warning&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|warning">Warning</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|warning">Warning</property>
       </object>
     </child>
     <child>
@@ -3965,7 +3965,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Footnote&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|footnote">Footnote</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|footnote">Footnote</property>
       </object>
     </child>
     <child>
@@ -3973,7 +3973,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StyleApply?Style:string=Note&amp;amp;FamilyName:string=CellStyles</property>
-        <property name="label" translatable="yes" context="notebookbar_groupedbar_full|note">Note</property>
+        <property name="label" translatable="yes" context="notebookbar_groupedbar_compact|note">Note</property>
       </object>
     </child>
     <child>
