@@ -71,6 +71,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/sglobal,\
 	sw/uiconfig/sglobal/toolbar/symbolshapes \
 	sw/uiconfig/sglobal/toolbar/tableobjectbar \
 	sw/uiconfig/sglobal/toolbar/textobjectbar \
+    sw/uiconfig/sglobal/toolbar/textstylebar \
 	sw/uiconfig/sglobal/toolbar/toolbar \
 	sw/uiconfig/sglobal/toolbar/viewerbar \
 ))
