@@ -1178,6 +1178,20 @@ void SwDocShell::Execute(SfxRequest& rReq)
             pDialog.disposeAndClear();
         }
         break;
+        case SID_PARAGRAPH_SIGN_CLASSIFY_DLG:
+        {
+            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr));
+
+            SwWrtShell* pShell = GetWrtShell();
+            std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
+            pDialog->setupValues(aInput);
+
+            if (RET_OK == pDialog->Execute())
+                pShell->ApplyAdvancedClassification(pDialog->getResult());
+
+            pDialog.disposeAndClear();
+        }
+        break;
         case SID_WATERMARK:
         {
             SwWrtShell* pSh = GetWrtShell();

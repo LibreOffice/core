@@ -383,6 +383,12 @@ interface BaseTextSelection
         StateMethod = StateStyle ;
     ]
 
+    SID_PARAGRAPH_SIGN_CLASSIFY_DLG
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+    ]
+
     SID_WATERMARK
     [
         ExecMethod = Execute ;
