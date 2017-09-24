@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <o3tl/make_unique.hxx>
 #include "osl/module.h"
 #include "osl/file.h"
 
@@ -36,7 +37,6 @@
 #include "sft.hxx"
 #include "sallayout.hxx"
 #include "CommonSalLayout.hxx"
-#include "win/ScopedHDC.hxx"
 
 #include <cstdio>
 #include <cstdlib>
@@ -60,14 +60,14 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 {
     OpenGLGlyphDrawElement aElement;
 
-    ScopedHDC aHDC(CreateCompatibleDC(hDC));
+    std::unique_ptr<HDC> pHDC = o3tl::make_unique<HDC>(CreateCompatibleDC(hDC), &DeleteDC);
 
-    if (!aHDC)
+    if (!pHDC)
     {
         SAL_WARN("vcl.gdi", "CreateCompatibleDC failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
-    HFONT hOrigFont = static_cast<HFONT>(SelectObject(aHDC.get(), hFont));
+    HFONT hOrigFont = static_cast<HFONT>(SelectObject(*pHDC, hFont));
     if (hOrigFont == nullptr)
     {
         SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
@@ -81,7 +81,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 
     pTxt->changeTextAntiAliasMode(D2DTextAntiAliasMode::AntiAliased);
 
-    if (!pTxt->BindFont(aHDC.get()))
+    if (!pTxt->BindFont(*pHDC))
     {
         SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by Direct Write.");
         return false;
