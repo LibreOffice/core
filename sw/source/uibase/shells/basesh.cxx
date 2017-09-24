@@ -957,6 +957,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             GetView().GetDocShell()->Execute(rReq);
         }
         break;
+        case SID_PARAGRAPH_SIGN_CLASSIFY_DLG:
+        {
+            GetView().GetDocShell()->Execute(rReq);
+        }
+        break;
         case SID_WATERMARK:
         {
             GetView().GetDocShell()->Execute(rReq);

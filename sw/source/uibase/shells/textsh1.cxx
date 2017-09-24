@@ -1090,23 +1090,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case SID_PARA_SIGNATURE_ADD:
-        {
-            SwPaM* pPaM = nullptr;
-            if (pArgs)
-            {
-                const SfxPoolItem* pPaMItem = nullptr;
-                pArgs->GetItemState(GetPool().GetWhich(FN_PARAM_PAM), false, &pPaMItem);
-                if (pPaMItem)
-                    pPaM = static_cast< const SwPaMItem* >(pPaMItem)->GetValue();
-            }
-
-            if (!pPaM)
-                pPaM = rWrtSh.GetCursor();
-
-            rWrtSh.SignParagraph(pPaM);
-        }
-        break;
         case FN_NUM_CONTINUE:
         {
             OUString sContinuedListId;

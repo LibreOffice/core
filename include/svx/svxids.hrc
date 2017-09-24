@@ -973,7 +973,7 @@
 #define SID_DRAW_MEASURELINE                            ( SID_SVX_START + 1167 )
 #define SID_AUTHOR_COLOR                                ( SID_SVX_START + 1168 )
 #define SID_BMPMASK_COLOR                               ( SID_SVX_START + 1169 )
-#define SID_PARA_SIGNATURE_ADD                          ( SID_SVX_START + 1170 )
+#define SID_PARAGRAPH_SIGN_CLASSIFY_DLG                 ( SID_SVX_START + 1170 )
 #define SID_CLASSIFICATION_DIALOG                       ( SID_SVX_START + 1171 )
 
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id

@@ -4391,6 +4391,24 @@ SfxVoidItem ClassificationDialog SID_CLASSIFICATION_DIALOG
     GroupId = SfxGroupId::Document;
 ]
 
+SfxVoidItem ParagraphClassificationDialog SID_PARAGRAPH_SIGN_CLASSIFY_DLG
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Document;
+]
+
 SfxBoolItem Init3D SID_3D_INIT
 
 [
