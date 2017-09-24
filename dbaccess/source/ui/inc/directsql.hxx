@@ -107,7 +107,7 @@ namespace dbaui
         void addOutputText(const OUString& _rMessage);
 
         /// displays resultset
-        void display(css::uno::Reference< css::sdbc::XResultSet > xRS);
+        void display(const css::uno::Reference< css::sdbc::XResultSet >& xRS);
 
 #ifdef DBG_UTIL
         const sal_Char* impl_CheckInvariants() const;
