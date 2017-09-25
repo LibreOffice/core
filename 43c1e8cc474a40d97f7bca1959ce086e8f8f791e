@@ -34,6 +34,24 @@
       "revId": "43c1e8cc474a40d97f7bca1959ce086e8f8f791e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_06137467",
+        "filename": "external/libassuan/UnpackedTarball_libassuan.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-09-25T19:48:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_265b1030",
+      "revId": "43c1e8cc474a40d97f7bca1959ce086e8f8f791e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
