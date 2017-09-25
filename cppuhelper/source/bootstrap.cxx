@@ -87,21 +87,28 @@ Reference< XComponentContext > SAL_CALL bootstrap()
 
     try
     {
-        char const * p1 = cppuhelper_detail_findSofficePath();
+        auto* p1 = cppuhelper_detail_findSofficePath();
         if (p1 == nullptr) {
             throw BootstrapException(
                 "no soffice installation found!");
         }
         rtl::OUString p2;
-        if (!rtl_convertStringToUString(
+#if defined(_WIN32)
+        p2 = SAL_U(p1);
+        free(p1);
+#else
+        bool bOk = rtl_convertStringToUString(
                 &p2.pData, p1, std::strlen(p1), osl_getThreadTextEncoding(),
                 (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
                  RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
-                 RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
+                 RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR));
+        free(p1);
+        if (!bOk)
         {
             throw BootstrapException(
                 "bad characters in soffice installation path!");
         }
+#endif
         OUString path;
         if (osl::FileBase::getFileURLFromSystemPath(p2, path) !=
             osl::FileBase::E_None)
