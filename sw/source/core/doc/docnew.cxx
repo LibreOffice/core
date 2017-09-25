@@ -530,6 +530,7 @@ SwDoc::~SwDoc()
         // Remove the revoke listener here first, so that we don't remove the data source from the document.
         mpDBManager->releaseRevokeListener();
         SwDBManager::RevokeDataSource(maDBData.sDataSource);
+        SwDBManager::RevokeDataSource(mpDBManager->getEmbeddedName());
     }
     else if (!mpDBManager->getEmbeddedName().isEmpty())
     {
