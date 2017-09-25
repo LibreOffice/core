@@ -27,8 +27,14 @@ extern "C" {
 #endif
 
 /* Internal function to find an soffice installation.
-   Not to be called by client code */
-char const* cppuhelper_detail_findSofficePath(void);
+   Not to be called by client code.
+   Returned pointer must be released with free() */
+#if defined(_WIN32)
+wchar_t*
+#else
+char*
+#endif
+cppuhelper_detail_findSofficePath(void);
 
 #if defined __cplusplus
 }

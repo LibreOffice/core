@@ -139,7 +139,8 @@ endif
 
 # On Windows MSVC only supports C90 so force gnu89 (especially in clang) to
 # to catch potential gnu89/C90 incompatibilities locally.
-gb_CFLAGS_COMMON += -std=gnu89
+# MSVC does support declarations after statements, so allow it explicitly
+gb_CFLAGS_COMMON += -std=gnu89 -Wno-declaration-after-statement
 
 ifeq ($(ENABLE_LTO),TRUE)
 ifeq ($(COM_IS_CLANG),TRUE)
