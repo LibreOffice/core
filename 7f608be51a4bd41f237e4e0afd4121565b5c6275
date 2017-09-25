@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_06837405",
+        "filename": "include/vcl/svapp.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-09-25T13:57:57Z",
+      "side": 1,
+      "message": "ProcessOneEvent feels even more wrong.\n\nFor ProcessCurrentEvents, we would need to rename the bool to \"bSingleEvent\" IMHO, and still default to false. This also inverts the boolean meaning.\n\nI also don\u0027t like the name ProcessEventsToIdle, as Idle is not well defined. ProcessAllPendingEvents seems more logical, IMHO.\n\nSo for 6.1, feel free to propose a great renaming patch ;-)\n\nAlternatively we can drop Reschedule and make it two functions and drop the boolean. Then a changed function name would make more sense.\n\nEnough bike-shedding for today.",
+      "parentUuid": "1a430d35_d4a3d79c",
+      "revId": "7f608be51a4bd41f237e4e0afd4121565b5c6275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_7494e336",
         "filename": "vcl/README.scheduler",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2017-09-22T19:21:17Z",
       "side": 1,
       "message": "can you post a custom event to the end of the queue, and then process till you see that event?",
+      "revId": "7f608be51a4bd41f237e4e0afd4121565b5c6275",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_86776439",
+        "filename": "vcl/README.scheduler",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-09-25T13:57:57Z",
+      "side": 1,
+      "message": "So the end of a priority queue would be an event with the lowest possible prio. But now someone always posts a higher prio event while being processed \u003d\u003e you never return.\n\nAnd Gtk+ already processes multiple events, if they have the same prio. That was some news for me.",
+      "parentUuid": "1a430d35_94994f71",
       "revId": "7f608be51a4bd41f237e4e0afd4121565b5c6275",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
