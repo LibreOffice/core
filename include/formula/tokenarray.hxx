@@ -292,7 +292,8 @@ public:
                                 { nMode = GetCombinedBitsRecalcMode() | nBits; }
 
     FormulaTokenArray();
-    /// Assignment with references to FormulaToken entries (not copied!)
+    /** Assignment with incrementing references of FormulaToken entries
+        (not copied!) */
     FormulaTokenArray( const FormulaTokenArray& );
     virtual ~FormulaTokenArray();
 
@@ -468,7 +469,8 @@ public:
 
     virtual FormulaToken* MergeArray( );
 
-    /// Assignment with references to FormulaToken entries (not copied!)
+    /** Assignment with incrementing references of FormulaToken entries
+        (not copied!) */
     FormulaTokenArray& operator=( const FormulaTokenArray& );
 
     /** Determines if this formula needs any changes to convert it to something
