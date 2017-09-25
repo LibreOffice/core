@@ -80,6 +80,7 @@ void CommonInitialize(int *argc, char ***argv)
     setenv("JPEGMEM", "768M", 1);
     setenv("SAL_WMF_COMPLEXCLIP_VIA_REGION", "1", 1);
     setenv("SAL_DISABLE_PRINTERLIST", "1", 1);
+    setenv("SAL_DISABLE_DEFAULTPRINTER", "1", 1);
     setenv("SAL_NO_FONT_LOOKUP", "1", 1);
 
     osl_setCommandArgs(*argc, *argv);
