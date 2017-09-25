@@ -91,6 +91,7 @@ static const OUString MetaFilename("bails.rdf");
 static const OUString MetaNS("urn:bails");
 static const OUString ParagraphSignatureRDFName = "loext:paragraph:signature";
 static const OUString MetadataFieldServiceName = "com.sun.star.text.textfield.MetadataField";
+static const OUString DocInfoServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
 
 /// Find all page styles which are currently used in the document.
 std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
@@ -382,10 +383,9 @@ bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const
 
 void insertFieldToDocument(uno::Reference<lang::XMultiServiceFactory> const & rxMultiServiceFactory, uno::Reference<text::XText> const & rxText, OUString const & rsKey)
 {
-    const OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
-    if (!lcl_hasField(rxText, aServiceName, rsKey))
+    if (!lcl_hasField(rxText, DocInfoServiceName, rsKey))
     {
-        uno::Reference<beans::XPropertySet> xField(rxMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xField(rxMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);
         xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(rsKey));
         uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
         rxText->insertTextContent(rxText->getEnd(), xTextContent, false);
@@ -544,7 +544,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
 
             uno::Reference<lang::XServiceInfo> xTextField;
             xTextPortion->getPropertyValue(UNO_NAME_TEXT_FIELD) >>= xTextField;
-            if (!xTextField->supportsService("com.sun.star.text.TextField.DocInfo.Custom"))
+            if (!xTextField->supportsService(DocInfoServiceName))
                 continue;
 
             OUString aName;
@@ -607,7 +607,6 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     for (const OUString& rPageStyleName : aStyles)
     {
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
-        const OUString aServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
         uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
         if (bHeaderIsNeeded || bWatermarkIsNeeded || bHadWatermark)
@@ -624,10 +623,10 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
 
             if (bHeaderIsNeeded)
             {
-                if (!lcl_hasField(xHeaderText, aServiceName, SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()))
+                if (!lcl_hasField(xHeaderText, DocInfoServiceName, SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()))
                 {
                     // Append a field to the end of the header text.
-                    uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);
                     xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()));
                     uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
                     xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
@@ -651,10 +650,10 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
             uno::Reference<text::XText> xFooterText;
             xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
             static OUString sFooter = SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCFOOTER();
-            if (!lcl_hasField(xFooterText, aServiceName, sFooter))
+            if (!lcl_hasField(xFooterText, DocInfoServiceName, sFooter))
             {
                 // Append a field to the end of the footer text.
-                uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(DocInfoServiceName), uno::UNO_QUERY);
                 xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(sFooter));
                 uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
                 xFooterText->insertTextContent(xFooterText->getEnd(), xTextContent, /*bAbsorb=*/false);
