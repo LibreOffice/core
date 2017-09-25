@@ -25,6 +25,11 @@
 #include <unx/salframe.h>
 #include <unx/salgdi.h>
 
+#include "KDE5SalGraphics.hxx"
+
+class QWidget;
+class KDE5SalGraphics;
+
 class KDE5SalFrame : public X11SalFrame
 {
     private:
@@ -32,13 +37,15 @@ class KDE5SalFrame : public X11SalFrame
 
         struct GraphicsHolder
         {
-            std::unique_ptr<X11SalGraphics> pGraphics;
+            std::unique_ptr<KDE5SalGraphics> pGraphics;
             bool bInUse;
 
             GraphicsHolder() : bInUse( false ) {}
         };
 
         GraphicsHolder m_aGraphics[ nMaxGraphics ];
+
+        QWidget* m_pWindow;
 
     public:
         KDE5SalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
