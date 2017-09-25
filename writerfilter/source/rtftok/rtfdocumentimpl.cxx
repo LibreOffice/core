@@ -3209,11 +3209,10 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
     }
     if (bHex && !m_aHexBuffer.isEmpty())
     {
-        OUString aString = OStringToOUString(
-            m_aHexBuffer.makeStringAndClear(),
-            ((m_aStates.top().eDestination == Destination::FONTENTRY
-              && m_aStates.top().nCurrentEncoding == RTL_TEXTENCODING_SYMBOL)
-             ? RTL_TEXTENCODING_MS_1252 : m_aStates.top().nCurrentEncoding));
+        rtl_TextEncoding nEncoding = m_aStates.top().nCurrentEncoding;
+        if (m_aStates.top().eDestination == Destination::FONTENTRY && m_aStates.top().nCurrentEncoding == RTL_TEXTENCODING_SYMBOL)
+            nEncoding = RTL_TEXTENCODING_MS_1252;
+        OUString aString = OStringToOUString(m_aHexBuffer.makeStringAndClear(), nEncoding);
         text(aString);
     }
 }

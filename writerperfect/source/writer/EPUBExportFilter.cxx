@@ -28,11 +28,11 @@ using namespace com::sun::star;
 #if !LIBEPUBGEN_VERSION_SUPPORT
 namespace libepubgen
 {
-    enum EPUBStylesMethod
-    {
-        EPUB_STYLES_METHOD_CSS, //< The styles will be described in a separate CSS file.
-        EPUB_STYLES_METHOD_INLINE, //< The styles will be described inline.
-    };
+enum EPUBStylesMethod
+{
+    EPUB_STYLES_METHOD_CSS, //< The styles will be described in a separate CSS file.
+    EPUB_STYLES_METHOD_INLINE, //< The styles will be described inline.
+};
 }
 #endif
 
