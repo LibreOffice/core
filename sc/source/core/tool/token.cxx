@@ -1810,6 +1810,8 @@ ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
 {
     Clear();
     Assign( rArr );
+    mnHashValue = rArr.mnHashValue;
+    meVectorState = rArr.meVectorState;
     return *this;
 }
 
