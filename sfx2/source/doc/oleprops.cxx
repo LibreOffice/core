@@ -1033,8 +1033,8 @@ void SfxOleSection::ImplSave( SvStream& rStrm )
 
 bool SfxOleSection::SeekToPropertyPos( SvStream& rStrm, sal_uInt32 nPropPos ) const
 {
-    rStrm.Seek( static_cast< std::size_t >( mnStartPos + nPropPos ) );
-    return rStrm.GetErrorCode() == ERRCODE_NONE;
+    return checkSeek(rStrm, static_cast<std::size_t>(mnStartPos + nPropPos)) &&
+           rStrm.GetErrorCode() == ERRCODE_NONE;
 }
 
 void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
