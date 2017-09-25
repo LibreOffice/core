@@ -30,6 +30,13 @@ gb_UITest_GDBTRACE := --gdb
 gb_UITest__interactive := $(true)
 endif
 
+ifneq ($(gb_UITest_DEBUGRUN),)
+gb_UITest_SOFFICEARG:=connect:pipe,name=$(USER)
+gb_UITest__interactive := $(true)
+else
+gb_UITest_SOFFICEARG:=path:$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice
+endif
+
 gb_UITest_COMMAND := LIBO_LANG=en_US.UTF-8 $(gb_UITest_EXECUTABLE) $(SRCDIR)/uitest/test_main.py
 
 .PHONY : $(call gb_UITest_get_clean_target,%)
@@ -66,7 +73,7 @@ else
 			SAL_USE_VCLPLUGIN=svp \
 		)) \
 		$(gb_UITest_COMMAND) \
-		--soffice=path:$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice \
+		--soffice="$(gb_UITest_SOFFICEARG)" \
 		--userdir=$(call gb_Helper_make_url,$(dir $(call gb_UITest_get_target,$*))user) \
 		--dir=$(strip $(MODULES)) \
 		$(gb_UITest_GDBTRACE) \
