@@ -3221,7 +3221,7 @@ void SwDBManager::CommitLastRegistrations()
 {
     for (auto aIt = m_aUncommitedRegistrations.begin(); aIt != m_aUncommitedRegistrations.end();)
     {
-        if (aIt->first == m_pDoc->GetDocShell())
+        if (aIt->first == m_pDoc->GetDocShell() || aIt->first == nullptr)
         {
             m_aNotUsedConnections.push_back(aIt->second);
             aIt = m_aUncommitedRegistrations.erase(aIt);
