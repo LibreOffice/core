@@ -24,7 +24,7 @@ XMLSectionContext::XMLSectionContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLSectionContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLSectionContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     return CreateTextChildContext(mrImport, rName);
 }

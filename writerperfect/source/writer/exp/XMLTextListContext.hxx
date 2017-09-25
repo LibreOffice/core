@@ -23,7 +23,7 @@ class XMLTextListContext : public XMLImportContext
 public:
     XMLTextListContext(XMLImport &rImport);
 
-    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 };
 
 } // namespace exp

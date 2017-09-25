@@ -133,7 +133,7 @@ XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLMetaDocumentContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLMetaDocumentContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "dc:title")
         return new XMLDcTitleContext(mrImport, *this);

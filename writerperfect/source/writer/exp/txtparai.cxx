@@ -76,7 +76,7 @@ class XMLSpanContext : public XMLImportContext
 public:
     XMLSpanContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList);
 
-    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL characters(const OUString &rChars) override;
@@ -94,7 +94,7 @@ XMLSpanContext::XMLSpanContext(XMLImport &rImport, const librevenge::RVNGPropert
         m_aPropertyList.insert(itProp.key(), itProp()->clone());
 }
 
-XMLImportContext *XMLSpanContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLSpanContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "draw:frame")
         return new XMLTextFrameContext(mrImport);
@@ -259,7 +259,7 @@ XMLParaContext::XMLParaContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLParaContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLParaContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "text:a")
         return new XMLHyperlinkContext(mrImport);
@@ -308,7 +308,7 @@ void XMLParaContext::characters(const OUString &rChars)
     mrImport.GetGenerator().closeSpan();
 }
 
-XMLImportContext *CreateParagraphOrSpanChildContext(XMLImport &rImport, const OUString &rName, const librevenge::RVNGPropertyList &rTextPropertyList)
+rtl::Reference<XMLImportContext> CreateParagraphOrSpanChildContext(XMLImport &rImport, const OUString &rName, const librevenge::RVNGPropertyList &rTextPropertyList)
 {
     if (rName == "text:span")
         return new XMLSpanContext(rImport, rTextPropertyList);

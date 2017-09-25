@@ -10,11 +10,12 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLICTXT_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EXP_XMLICTXT_HXX
 
-#include <cppuhelper/implbase.hxx>
-
 #include <librevenge/librevenge.h>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+
+#include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 namespace writerperfect
 {
@@ -32,7 +33,7 @@ class XMLImportContext : public cppu::WeakImplHelper
 public:
     XMLImportContext(XMLImport &rImport);
 
-    virtual XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
+    virtual rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
 
     // XDocumentHandler
     void SAL_CALL startDocument() override;

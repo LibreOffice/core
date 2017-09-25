@@ -43,7 +43,7 @@ class XMLImport : public cppu::WeakImplHelper
 public:
     XMLImport(librevenge::RVNGTextInterface &rGenerator);
 
-    XMLImportContext *CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
+    rtl::Reference<XMLImportContext> CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs);
 
     librevenge::RVNGTextInterface &GetGenerator() const;
     std::map<OUString, librevenge::RVNGPropertyList> &GetAutomaticTextStyles();

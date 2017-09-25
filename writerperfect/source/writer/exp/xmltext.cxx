@@ -26,12 +26,12 @@ XMLBodyContentContext::XMLBodyContentContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLBodyContentContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLBodyContentContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     return CreateTextChildContext(mrImport, rName);
 }
 
-XMLImportContext *CreateTextChildContext(XMLImport &rImport, const OUString &rName)
+rtl::Reference<XMLImportContext> CreateTextChildContext(XMLImport &rImport, const OUString &rName)
 {
     if (rName == "text:p" || rName == "text:h")
         return new XMLParaContext(rImport);

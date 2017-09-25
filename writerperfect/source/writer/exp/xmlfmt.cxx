@@ -26,7 +26,7 @@ XMLStylesContext::XMLStylesContext(XMLImport &rImport, std::map<OUString, librev
 {
 }
 
-XMLImportContext *XMLStylesContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLStylesContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "style:style")
         return new XMLStyleContext(mrImport, *this);
