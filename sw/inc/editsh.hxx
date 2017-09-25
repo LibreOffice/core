@@ -380,6 +380,10 @@ public:
     /// Validate paragraph signatures, if any, at the cursor.
     void ValidateParagraphSignatures(bool updateDontRemove);
 
+    /// Returns true iff the cursor is within a paragraph metadata field.
+    /// Currently there are two variants: signature and classification.
+    bool IsCursorInParagraphMetadataField() const;
+
     void Insert2(SwField const &, const bool bForceExpandHints);
 
     void UpdateFields( SwField & );   ///< One single field.
