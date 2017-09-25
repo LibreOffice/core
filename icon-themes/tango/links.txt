@@ -609,8 +609,6 @@ cmd/lc_cellprotection.png cmd/lc_protect.png
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
 cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
-cmd/lc_defaultparastyle.png cmd/lc_controlcodes.png
-cmd/sc_defaultparastyle.png cmd/sc_controlcodes.png
 
 # writer epub export
 cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
