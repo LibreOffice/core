@@ -576,25 +576,6 @@ static struct hostent* osl_gethostbyname_r (
 #endif
 }
 
-static sal_Char* getFullQualifiedDomainName (const sal_Char *pHostName)
-{
-    struct hostent  aHostByName;
-    struct hostent *pHostByName;
-    sal_Char        pQualifiedHostBuffer[ MAX_HOSTBUFFER_SIZE ];
-    sal_Char  *pFullQualifiedName = nullptr;
-    int     nErrorNo;
-
-    pHostByName = osl_gethostbyname_r (
-        pHostName,
-        &aHostByName, pQualifiedHostBuffer,
-        sizeof(pQualifiedHostBuffer), &nErrorNo );
-    if (pHostByName != nullptr)
-    {
-        pFullQualifiedName = strdup(pHostByName->h_name);
-    }
-    return pFullQualifiedName;
-}
-
 static bool isFullQualifiedDomainName (const sal_Char *pHostName)
 {
     /* a FQDN (aka 'hostname.domain.top_level_domain' )
@@ -602,6 +583,34 @@ static bool isFullQualifiedDomainName (const sal_Char *pHostName)
      * match as well for 'hostname.' but is good enough
      * for now )*/
     return strchr( pHostName, (int)'.' ) != nullptr;
+}
+
+static sal_Char* getFullQualifiedDomainName (const sal_Char *pHostName)
+{
+    sal_Char  *pFullQualifiedName = nullptr;
+
+    if (isFullQualifiedDomainName(pHostName))
+    {
+        pFullQualifiedName = strdup(pHostName);
+    }
+    else
+    {
+        struct hostent  aHostByName;
+        struct hostent *pHostByName;
+        sal_Char        pQualifiedHostBuffer[ MAX_HOSTBUFFER_SIZE ];
+        int     nErrorNo;
+
+        pHostByName = osl_gethostbyname_r (
+            pHostName,
+            &aHostByName, pQualifiedHostBuffer,
+            sizeof(pQualifiedHostBuffer), &nErrorNo );
+        if (pHostByName != nullptr)
+        {
+            pFullQualifiedName = strdup(pHostByName->h_name);
+        }
+    }
+
+    return pFullQualifiedName;
 }
 
 struct oslHostAddrImpl
@@ -620,20 +629,10 @@ static oslHostAddr hostentToHostAddr (const struct hostent *he)
     if ((he == nullptr) || (he->h_name == nullptr) || (he->h_addr_list[0] == nullptr))
         return nullptr;
 
-    if (isFullQualifiedDomainName(he->h_name))
-    {
-        cn= strdup(he->h_name);
-        SAL_WARN_IF( !cn, "sal.osl", "insufficient memory" );
-        if (cn == nullptr)
-            return nullptr;
-    }
-    else
-    {
-        cn = getFullQualifiedDomainName (he->h_name);
-        SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
-        if (cn == nullptr)
-            return nullptr;
-    }
+    cn = getFullQualifiedDomainName (he->h_name);
+    SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
+    if (cn == nullptr)
+        return nullptr;
 
     pSockAddr = createSocketAddr();
     SAL_WARN_IF( !pSockAddr, "sal.osl", "insufficient memory" );
@@ -788,19 +787,49 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
 
     if (pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
     {
+        oslHostAddr pHostAddr = nullptr;
+        oslSocketAddr pSockAddr = nullptr;
         const struct sockaddr_in *sin= reinterpret_cast<sockaddr_in *>(&pAddr->m_sockaddr);
-        struct hostent *he;
+        char host[MAX_HOSTBUFFER_SIZE];
+        sal_Char *cn;
+        int res;
 
         if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
             return nullptr;
 
-        char const * addr = reinterpret_cast<char const *>(&sin->sin_addr);
-            // at least some Androids apparently have a gethostbyaddr with char*
-            // instead of void* argument
-        he= gethostbyaddr(addr,
-                          sizeof (sin->sin_addr),
-                          sin->sin_family);
-        return hostentToHostAddr (he);
+        res = getnameinfo(&pAddr->m_sockaddr, sizeof(struct sockaddr_in),
+                          host, sizeof(host), nullptr, 0, NI_NAMEREQD);
+        if (res != 0)
+            return nullptr;
+
+        cn = getFullQualifiedDomainName(host);
+        SAL_WARN_IF( !cn, "sal.osl", "couldn't get full qualified domain name" );
+        if (cn == nullptr)
+            return nullptr;
+
+        pSockAddr = createSocketAddr();
+        SAL_WARN_IF( !pSockAddr, "sal.osl", "insufficient memory" );
+        if (pSockAddr == nullptr)
+        {
+            free(cn);
+            return nullptr;
+        }
+
+        memcpy(&pSockAddr->m_sockaddr, &pAddr->m_sockaddr, sizeof(pAddr->m_sockaddr));
+
+        pHostAddr = static_cast<oslHostAddr>(malloc(sizeof(struct oslHostAddrImpl)));
+        SAL_WARN_IF( !pAddr, "sal.osl", "allocation error" );
+        if (pHostAddr == nullptr)
+        {
+            destroySocketAddr(pSockAddr);
+            free(cn);
+            return nullptr;
+        }
+
+        pHostAddr->pHostName = cn;
+        pHostAddr->pSockAddr = pSockAddr;
+
+        return pHostAddr;
     }
 
     return nullptr;
