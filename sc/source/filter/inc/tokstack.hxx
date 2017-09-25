@@ -381,7 +381,7 @@ inline const TokenId TokenPool::Store()
 
 const inline ScTokenArray* TokenPool::operator []( const TokenId& rId )
 {
-    pScToken->ClearScTokenArray();
+    pScToken->Clear();
 
     if( rId )
     {//...only if rId > 0!

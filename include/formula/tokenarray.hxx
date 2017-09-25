@@ -297,6 +297,8 @@ public:
     FormulaTokenArray( const FormulaTokenArray& );
     virtual ~FormulaTokenArray();
 
+    virtual void Clear();
+
     void SetFromRangeName( bool b ) { mbFromRangeName = b; }
     bool IsFromRangeName() const { return mbFromRangeName; }
 
@@ -310,7 +312,6 @@ public:
      */
     bool IsShareable() const { return mbShareable; }
 
-    void Clear();
     void DelRPN();
     FormulaToken* FirstToken() const;
 

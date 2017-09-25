@@ -1813,10 +1813,11 @@ ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
     return *this;
 }
 
-void ScTokenArray::ClearScTokenArray()
+void ScTokenArray::Clear()
 {
-    Clear();
+    mnHashValue = 0;
     meVectorState = FormulaVectorEnabled;
+    FormulaTokenArray::Clear();
 }
 
 ScTokenArray* ScTokenArray::Clone() const
