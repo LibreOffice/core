@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_66ab58d7",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1815,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-09-25T10:39:22Z",
+      "side": 0,
+      "message": "These can not be replaced by default ctors, note that FormulaTokenArray::Assign() increments the references of the individual tokens and is also called for the FormulaTokenArray copy-ctor.",
+      "revId": "07fef83b20504890336fd146c558561dacf7e7e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
