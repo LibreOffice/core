@@ -1159,7 +1159,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
     /**
-     * Helper Funktion to copy the whole content of _xFromSection to the _xToSection
+     * Helper function to copy the whole content of _xFromSection to the _xToSection
      * @param _xFromSection
      * @param _xToSection
      */
