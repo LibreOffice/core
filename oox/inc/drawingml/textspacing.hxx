@@ -47,7 +47,7 @@ namespace oox { namespace drawingml {
                 css::style::LineSpacing aSpacing;
                 aSpacing.Mode = ( nUnit == Unit::Percent
                                   ? css::style::LineSpacingMode::PROP
-                                  :   css::style::LineSpacingMode::MINIMUM );
+                                  : css::style::LineSpacingMode::FIX );
                 aSpacing.Height = static_cast< sal_Int16 >( nUnit == Unit::Percent ? nValue / 1000 :  nValue );
                 return aSpacing;
             }
