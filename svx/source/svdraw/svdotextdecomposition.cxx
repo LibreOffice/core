@@ -62,25 +62,12 @@ using namespace com::sun::star;
 
 namespace
 {
-    drawinglayer::primitive2d::Primitive2DContainer impConvertVectorToPrimitive2DSequence(const std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rPrimitiveVector)
-    {
-        const sal_Int32 nCount(rPrimitiveVector.size());
-        drawinglayer::primitive2d::Primitive2DContainer aRetval(nCount);
-
-        for(sal_Int32 a(0); a < nCount; a++)
-        {
-            aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(rPrimitiveVector[a]);
-        }
-
-        return aRetval;
-    }
-
     class impTextBreakupHandler
     {
     private:
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maTextPortionPrimitives;
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maLinePrimitives;
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* >  maParagraphPrimitives;
+        drawinglayer::primitive2d::Primitive2DContainer             maTextPortionPrimitives;
+        drawinglayer::primitive2d::Primitive2DContainer             maLinePrimitives;
+        drawinglayer::primitive2d::Primitive2DContainer             maParagraphPrimitives;
 
         SdrOutliner&                                                mrOutliner;
         basegfx::B2DHomMatrix                                       maNewTransformA;
@@ -507,9 +494,8 @@ namespace
         // empty line primitives (contrary to paragraphs, see below).
         if(!maTextPortionPrimitives.empty())
         {
-            drawinglayer::primitive2d::Primitive2DContainer aLineSequence(impConvertVectorToPrimitive2DSequence(maTextPortionPrimitives));
+            maLinePrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyLinePrimitive2D(maTextPortionPrimitives));
             maTextPortionPrimitives.clear();
-            maLinePrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyLinePrimitive2D(aLineSequence));
         }
     }
 
@@ -518,9 +504,8 @@ namespace
         // ALWAYS create a paragraph primitive, even when no content was added. This is done to
         // have the correct paragraph count even with empty paragraphs. Those paragraphs will
         // have an empty sub-PrimitiveSequence.
-        drawinglayer::primitive2d::Primitive2DContainer aParagraphSequence(impConvertVectorToPrimitive2DSequence(maLinePrimitives));
+        maParagraphPrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(maLinePrimitives));
         maLinePrimitives.clear();
-        maParagraphPrimitives.push_back(new drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D(aParagraphSequence));
     }
 
     void impTextBreakupHandler::impHandleDrawPortionInfo(const DrawPortionInfo& rInfo)
@@ -672,7 +657,7 @@ namespace
             impFlushLinePrimitivesToParagraphPrimitives();
         }
 
-        return impConvertVectorToPrimitive2DSequence(maParagraphPrimitives);
+        return maParagraphPrimitives;
     }
 } // end of anonymous namespace
 
