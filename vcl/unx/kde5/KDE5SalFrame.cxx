@@ -351,8 +351,8 @@ void KDE5SalFrame::updateGraphics( bool bClear )
     Drawable aDrawable = bClear ? None : GetWindow();
     for( int i = 0; i < nMaxGraphics; i++ )
     {
-        if( m_aGraphics[i].bInUse )
-            m_aGraphics[i].pGraphics->SetDrawable( aDrawable, GetScreenNumber() );
+        /*if( m_aGraphics[i].bInUse )
+            m_aGraphics[i].pGraphics->SetDrawable( aDrawable, GetScreenNumber() );*/
     }
 }
 
@@ -367,8 +367,8 @@ SalGraphics* KDE5SalFrame::AcquireGraphics()
                 m_aGraphics[i].bInUse = true;
                 if( ! m_aGraphics[i].pGraphics )
                 {
-                    m_aGraphics[i].pGraphics.reset( new KDE5SalGraphics );
-                    m_aGraphics[i].pGraphics->Init( this, GetWindow(), GetScreenNumber() );
+                    m_aGraphics[i].pGraphics.reset( new KDE5SalGraphics( this, m_pWindow ) );
+                    //m_aGraphics[i].pGraphics->Init( this, GetWindow(), GetScreenNumber() );
                 }
                 return m_aGraphics[i].pGraphics.get();
             }

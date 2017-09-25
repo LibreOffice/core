@@ -26,7 +26,7 @@
 
 #undef Region
 
-#include "KDE5SalGraphics.hxx"
+#include "KDE5SalFrame.hxx"
 #include "KDE5SalInstance.hxx"
 
 #include <vcl/settings.hxx>
@@ -68,6 +68,13 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
 QRect region2QRect( const tools::Rectangle& rControlRegion )
 {
     return QRect(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
+}
+
+KDE5SalGraphics::KDE5SalGraphics( KDE5SalFrame *pFrame, QWidget *pWindow )
+   : SvpSalGraphics(),
+   m_pWindow( pWindow ),
+   m_pFrame( pFrame )
+{
 }
 
 bool KDE5SalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
