@@ -55,7 +55,8 @@ class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 
 public:
     ScTokenArray();
-    /// Assignment with references to FormulaToken entries (not copied!)
+    /** Assignment with incrementing references of FormulaToken entries
+        (not copied!) */
     ScTokenArray( const ScTokenArray& );
     virtual ~ScTokenArray() override;
     void ClearScTokenArray();
@@ -114,7 +115,8 @@ public:
     /// Assign XML string placeholder to the array
     void AssignXMLString( const OUString &rText, const OUString &rFormulaNmsp );
 
-    /// Assignment with references to FormulaToken entries (not copied!)
+    /** Assignment with incrementing references of FormulaToken entries
+        (not copied!) */
     ScTokenArray& operator=( const ScTokenArray& );
 
     /**
