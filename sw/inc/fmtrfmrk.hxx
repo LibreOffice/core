@@ -38,10 +38,10 @@ class SwFormatRefMark
     , public SwModify
 {
     friend class SwTextRefMark;
-    SwTextRefMark* pTextAttr;
+    SwTextRefMark* m_pTextAttr;
 
     SwFormatRefMark& operator=(const SwFormatRefMark& rRefMark) = delete;
-    OUString aRefName;
+    OUString m_aRefName;
 
     css::uno::WeakReference<css::text::XTextContent> m_wXReferenceMark;
 
@@ -60,10 +60,10 @@ public:
 
     void InvalidateRefMark();
 
-    const SwTextRefMark *GetTextRefMark() const   { return pTextAttr; }
+    const SwTextRefMark *GetTextRefMark() const   { return m_pTextAttr; }
 
-    OUString &GetRefName()       { return aRefName; }
-    const OUString &GetRefName() const { return aRefName; }
+    OUString &GetRefName()       { return m_aRefName; }
+    const OUString &GetRefName() const { return m_aRefName; }
 
     css::uno::WeakReference<css::text::XTextContent> const& GetXRefMark() const
         { return m_wXReferenceMark; }
