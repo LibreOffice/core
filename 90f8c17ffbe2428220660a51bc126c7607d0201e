@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c9741d9e",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-25T22:09:11Z",
+      "side": 1,
+      "message": "You can do: maCustomEntry \u003d get\u003cFixedText\u003e(\"customlabel\")-\u003eGetText()\n\nthen you won\u0027t need to allocate and dispose mpCustomEntry variable",
+      "revId": "90f8c17ffbe2428220660a51bc126c7607d0201e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
