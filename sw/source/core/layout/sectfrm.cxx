@@ -589,34 +589,14 @@ namespace
         return pLayFrame;
     }
 
-    /// Checks if pFrame is in a table, which itself is in a section.
-    bool IsFrameInTableInSection(const SwFrame* pFrame)
-    {
-        if (!pFrame->IsInTab())
-            return false;
-
-        // The frame is in a table, see if the table is in a section.
-        return pFrame->FindTabFrame()->IsInSct();
-    }
-
-    /// Checks if pFrame is in a table, which itself is in a table.
-    bool IsFrameInTableInTable(const SwFrame* pFrame)
-    {
-        if (!pFrame->IsInTab())
-            return false;
-
-        // The frame is in a table, see if the inner table is in an outer
-        // table.
-        bool bNested = false;
-        if (const SwFrame* pUpper = pFrame->FindTabFrame()->GetUpper())
-            bNested = pUpper->IsInTab();
-        return bNested;
-    }
-
     /// Checks if pFrame has a parent that can contain a split section frame.
     bool CanContainSplitSection(const SwFrame* pFrame)
     {
-        return !IsFrameInTableInSection(pFrame) && !IsFrameInTableInTable(pFrame);
+        if (!pFrame->IsInTab())
+            return true;
+
+        // The frame is in a table, see if the table is in a section.
+        return !pFrame->FindTabFrame()->IsInSct();
     }
 }
 

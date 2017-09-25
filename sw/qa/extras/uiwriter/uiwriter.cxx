@@ -205,6 +205,7 @@ public:
     void testTableInNestedSection();
     void testTableInSectionInTable();
     void testSectionInTableInTable();
+    void testSectionInTableInTable2();
     void testTdf112160();
     void testLinesInSectionInTable();
     void testLinesMoveBackwardsInSectionInTable();
@@ -317,6 +318,7 @@ public:
     CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testTableInSectionInTable);
     CPPUNIT_TEST(testSectionInTableInTable);
+    CPPUNIT_TEST(testSectionInTableInTable2);
     CPPUNIT_TEST(testTdf112160);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
     CPPUNIT_TEST_SUITE_END();
@@ -3840,6 +3842,21 @@ void SwUiWriterTest::testSectionInTableInTable()
     // page boundary.
     // This crashed the layout later in SwFrame::IsFootnoteAllowed().
     createDoc("tdf112109.fodt");
+}
+
+void SwUiWriterTest::testSectionInTableInTable2()
+{
+    createDoc("split-section-in-nested-table.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_uInt32 nSection1 = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
+    sal_uInt32 nSection1Follow = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "follow").toUInt32();
+    // This failed, the section wasn't split inside a nested table.
+    sal_uInt32 nSection2 = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
+    sal_uInt32 nSection2Precede = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section", "precede").toUInt32();
+
+    // Make sure that the first's follow and the second's precede is correct.
+    CPPUNIT_ASSERT_EQUAL(nSection2, nSection1Follow);
+    CPPUNIT_ASSERT_EQUAL(nSection1, nSection2Precede);
 }
 
 void SwUiWriterTest::testTdf112160()
