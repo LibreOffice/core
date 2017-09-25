@@ -31,23 +31,23 @@ SwFormatRefMark::~SwFormatRefMark( )
 SwFormatRefMark::SwFormatRefMark( const OUString& rName )
     : SfxPoolItem(RES_TXTATR_REFMARK)
     , SwModify(nullptr)
-    , pTextAttr(nullptr)
-    , aRefName(rName)
+    , m_pTextAttr(nullptr)
+    , m_aRefName(rName)
 {
 }
 
 SwFormatRefMark::SwFormatRefMark( const SwFormatRefMark& rAttr )
     : SfxPoolItem(RES_TXTATR_REFMARK)
     , SwModify(nullptr)
-    , pTextAttr(nullptr)
-    , aRefName(rAttr.aRefName)
+    , m_pTextAttr(nullptr)
+    , m_aRefName(rAttr.m_aRefName)
 {
 }
 
 bool SwFormatRefMark::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return aRefName == static_cast<const SwFormatRefMark&>(rAttr).aRefName;
+    return m_aRefName == static_cast<const SwFormatRefMark&>(rAttr).m_aRefName;
 }
 
 SfxPoolItem* SwFormatRefMark::Clone( SfxItemPool* ) const
@@ -80,7 +80,7 @@ SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
     , m_pTextNode( nullptr )
     , m_pEnd( nullptr )
 {
-    rAttr.pTextAttr = this;
+    rAttr.m_pTextAttr = this;
     if ( pEnd )
     {
         m_nEnd = *pEnd;
