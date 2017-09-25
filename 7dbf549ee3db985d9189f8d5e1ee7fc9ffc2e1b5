@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_8963f5db",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-25T22:31:10Z",
+      "side": 1,
+      "message": "Pls add some dialog title",
+      "revId": "7dbf549ee3db985d9189f8d5e1ee7fc9ffc2e1b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a95ef10f",
+        "filename": "sd/uiconfig/simpress/ui/customscalemenu.ui",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-25T22:31:10Z",
+      "side": 1,
+      "message": "Ok and cancel button are at the top of the dialog (only then spinboxes follow), this looks rather odd. \n\nAlso please use dialog-action-area widget wherever possible",
+      "revId": "7dbf549ee3db985d9189f8d5e1ee7fc9ffc2e1b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
