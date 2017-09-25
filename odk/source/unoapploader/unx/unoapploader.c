@@ -32,7 +32,7 @@
 #include "rtl/string.h"
 #include "sal/types.h"
 
-char const* getPath(void);
+char* getPath(void);
 char* createCommandName( char* argv0 );
 
 static const int SEPARATOR = '/';
@@ -63,7 +63,7 @@ static const char* PATHSEPARATOR = ":";
  */
 int main( int argc, char *argv[] )
 {
-    char const* path;
+    char* path;
     char* cmdname;
 
     (void) argc; /* avoid warning about unused parameter */
@@ -80,9 +80,7 @@ int main( int argc, char *argv[] )
 #else
         static const char* ENVVARNAME = "LD_LIBRARY_PATH";
 #endif
-        char * libpath;
-        int freeLibpath;
-
+        char* libpath;
         char* value;
         char* envstr;
         int size;
@@ -96,6 +94,7 @@ int main( int argc, char *argv[] )
             pathlen + RTL_CONSTASCII_LENGTH(unoinfoSuffix) + 1);
             /*TODO: overflow */
         if (unoinfo == NULL) {
+            free(path);
             fprintf(stderr, "Error: out of memory!\n");
             exit(EXIT_FAILURE);
         }
@@ -168,13 +167,12 @@ int main( int argc, char *argv[] )
                 fprintf(stderr, "Error: executing unoinfo failed!\n");
                 exit(EXIT_FAILURE);
             }
-            freeLibpath = 1;
+            free(path);
         }
         else
         {
             /* Assume an old OOo 2.x installation without unoinfo: */
-            libpath = (char *) path;
-            freeLibpath = 0;
+            libpath = path;
         }
 
         value = getenv( ENVVARNAME );
@@ -196,10 +194,7 @@ int main( int argc, char *argv[] )
         strcat( envstr, "=" );
 #endif
         strcat( envstr, libpath );
-        if ( freeLibpath != 0 )
-        {
-            free( libpath );
-        }
+        free( libpath );
         if ( value != NULL )
         {
             strcat( envstr, PATHSEPARATOR );
@@ -233,11 +228,12 @@ int main( int argc, char *argv[] )
  * Gets the path of a UNO installation.
  *
  * @return the installation path or NULL, if no installation was specified or
- *         found, or if an error occurred
+ *         found, or if an error occurred.
+ *         Returned pointer must be released with free()
  */
-char const* getPath(void)
+char* getPath(void)
 {
-    char const* path = cppuhelper_detail_findSofficePath();
+    char* path = cppuhelper_detail_findSofficePath();
 
     if ( path == NULL )
     {
