@@ -79,6 +79,7 @@
 #include <strings.hrc>
 #include <undobj.hxx>
 #include <UndoParagraphSignature.hxx>
+#include <txtatr.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1153,6 +1154,32 @@ void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
             GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
         }
     }
+}
+
+bool SwEditShell::IsCursorInParagraphMetadataField() const
+{
+    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+    if (pNode != nullptr)
+    {
+        SwTextAttr* pAttr = pNode->GetTextAttrAt(GetCursor()->Start()->nContent.GetIndex(), RES_TXTATR_METAFIELD);
+        SwTextMeta* pTextMeta = static_txtattr_cast<SwTextMeta*>(pAttr);
+        if (pTextMeta != nullptr)
+        {
+            SwFormatMeta& rFormatMeta(static_cast<SwFormatMeta&>(pTextMeta->GetAttr()));
+            if (::sw::Meta* pMeta = rFormatMeta.GetMeta())
+            {
+                if (const SwDocShell* pDocSh = GetDoc()->GetDocShell())
+                {
+                    const css::uno::Reference<css::rdf::XResource> xSubject(pMeta->MakeUnoObject(), uno::UNO_QUERY);
+                    uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
+                    const std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
+                    return (aStatements.find(ParagraphSignatureRDFName) != aStatements.end());
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 // #i62675#
