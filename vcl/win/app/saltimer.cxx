@@ -76,7 +76,8 @@ void WinSalTimer::ImplStart( sal_uLong nMS )
     // to be 0 and should not hurt; also see
     // https://www.microsoft.com/msj/0499/pooling/pooling.aspx
     CreateTimerQueueTimer(&m_nTimerId, nullptr, SalTimerProc,
-                          (void*) m_nTimerStartTicks,
+                          reinterpret_cast<void*>(
+                              sal_uIntPtr(m_nTimerStartTicks)),
                           nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
 }
 
@@ -131,7 +132,8 @@ static void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
         // that happened during execution of the callback later directly from
         // the message queue
         BOOL const ret = PostMessageW(GetSalData()->mpFirstInstance->mhComWnd,
-                                      SAL_MSG_TIMER_CALLBACK, (WPARAM) data, 0);
+                                      SAL_MSG_TIMER_CALLBACK,
+                                      reinterpret_cast<WPARAM>(data), 0);
 #if OSL_DEBUG_LEVEL > 0
         if (0 == ret) // SEH prevents using SAL_WARN here?
             fputs("ERROR: PostMessage() failed!\n", stderr);
