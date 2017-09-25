@@ -39,35 +39,41 @@
  * @return the installation path or NULL, if no installation was found or
  *         if an error occurred
  */
-static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
+static wchar_t* getPathFromRegistryKey( HKEY hroot, const wchar_t* subKeyName )
 {
     HKEY hkey;
     DWORD type;
-    char* data = NULL;
+    wchar_t* data = NULL;
     DWORD size;
 
     /* open the specified registry key */
-    if ( RegOpenKeyEx( hroot, subKeyName, 0, KEY_READ, &hkey ) != ERROR_SUCCESS )
+    if ( RegOpenKeyExW( hroot, subKeyName, 0, KEY_READ, &hkey ) != ERROR_SUCCESS )
     {
         return NULL;
     }
 
     /* find the type and size of the default value */
-    if ( RegQueryValueEx( hkey, NULL, NULL, &type, NULL, &size) != ERROR_SUCCESS )
+    if ( RegQueryValueExW( hkey, NULL, NULL, &type, NULL, &size) != ERROR_SUCCESS )
     {
         RegCloseKey( hkey );
         return NULL;
     }
 
     /* get memory to hold the default value */
-    data = (char*) malloc( size );
+    data = (wchar_t*) malloc( size + sizeof(wchar_t) );
 
     /* read the default value */
-    if ( RegQueryValueEx( hkey, NULL, NULL, &type, (LPBYTE) data, &size ) != ERROR_SUCCESS )
+    if ( RegQueryValueExW( hkey, NULL, NULL, &type, (LPBYTE) data, &size ) != ERROR_SUCCESS )
     {
         RegCloseKey( hkey );
+        free( data );
         return NULL;
     }
+
+    // According to https://msdn.microsoft.com/en-us/ms724911, If the data has the REG_SZ,
+    // REG_MULTI_SZ or REG_EXPAND_SZ type, the string may not have been stored with the
+    // proper terminating null characters
+    data[size / sizeof(wchar_t)] = 0;
 
     /* release registry key handle */
     RegCloseKey( hkey );
@@ -81,14 +87,22 @@ static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
  * @return the installation path or NULL, if no installation was found or
  *         if an error occurred
  */
-static char* platformSpecific()
+static wchar_t* platformSpecific()
 {
-    const char* SUBKEYNAME = "Software\\LibreOffice\\UNO\\InstallPath";
+    const wchar_t* UNOPATHVARNAME = L"UNO_PATH";
 
-    char* path = NULL;
+    /* get the installation path from the UNO_PATH environment variable */
+    wchar_t* env = _wgetenv(UNOPATHVARNAME);
+
+    if (env && env[0])
+    {
+        return wcsdup(env);
+    }
+
+    const wchar_t* SUBKEYNAME = L"Software\\LibreOffice\\UNO\\InstallPath";
 
     /* read the key's default value from HKEY_CURRENT_USER */
-    path = getPathFromRegistryKey( HKEY_CURRENT_USER, SUBKEYNAME );
+    wchar_t* path = getPathFromRegistryKey( HKEY_CURRENT_USER, SUBKEYNAME );
 
     if ( path == NULL )
     {
@@ -115,19 +129,28 @@ static char* platformSpecific()
  */
 static char* platformSpecific(void)
 {
+    const char* UNOPATHVARNAME = "UNO_PATH";
+
+    /* get the installation path from the UNO_PATH environment variable */
+    char* env = getenv(UNOPATHVARNAME);
+
     const int SEPARATOR = '/';
     const char* PATHSEPARATOR = ":";
     const char* PATHVARNAME = "PATH";
     const char* APPENDIX = "/libreoffice";
 
     char* path = NULL;
-    char* env = NULL;
     char* str = NULL;
     char* dir = NULL;
     char* sep = NULL;
 
     char buffer[PATH_MAX];
     int pos;
+
+    if (env && env[0])
+    {
+        return strdup(env);
+    }
 
     /* get the value of the PATH environment variable */
     env = getenv( PATHVARNAME );
@@ -184,19 +207,14 @@ static char* platformSpecific(void)
 
 #endif
 
-char const* cppuhelper_detail_findSofficePath()
+#if defined(_WIN32)
+wchar_t*
+#else
+char*
+#endif
+cppuhelper_detail_findSofficePath()
 {
-    const char* UNOPATHVARNAME = "UNO_PATH";
-
-    char* path = NULL;
-
-    /* get the installation path from the UNO_PATH environment variable */
-    path = getenv( UNOPATHVARNAME );
-
-    if (!path || !path[0])
-        path = platformSpecific();
-
-    return path;
+    return platformSpecific();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,10 +36,11 @@
 #include "cppuhelper/findsofficepath.h"
 #include "sal/types.h"
 
-#define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
+#define MY_SIZE(s) (sizeof (s) / sizeof *(s))
+#define MY_LENGTH(s) (MY_SIZE(s) - 1)
 
-char const* getPath(void);
-char* createCommandLine( char const * lpCmdLine );
+wchar_t* getPath(void);
+wchar_t* createCommandLine( wchar_t const * lpCmdLine );
 FILE* getErrorFile( int create );
 void writeError( const char* errstr );
 void closeErrorFile(void);
@@ -64,28 +65,15 @@ void closeErrorFile(void);
  * root key HKEY_CURRENT_USER in the Windows Registry. If this key is missing,
  * the key is read from the root key HKEY_LOCAL_MACHINE.</p>
  */
-int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
-                    LPSTR lpCmdLine, int nCmdShow )
+int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
+                    LPWSTR lpCmdLine, int nCmdShow )
 {
-    const char* ENVVARNAME = "PATH";
-    const char* PATHSEPARATOR = ";";
-
-    char const* path = NULL;
-    char path2[MAX_PATH];
-    char* value = NULL;
-    char* envstr = NULL;
-    char* cmdline = NULL;
-    size_t size;
-    STARTUPINFO startup_info;
-    PROCESS_INFORMATION process_info;
-    BOOL bCreate;
-
     (void) hInstance; /* unused */
     (void) hPrevInstance; /* unused */
     (void) nCmdShow; /* unused */
 
     /* get the path of the UNO installation */
-    path = getPath();
+    wchar_t* path = getPath();
 
     if ( path != NULL )
     {
@@ -93,56 +81,54 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
             MY_LENGTH(L"\"") + MAX_PATH +
             MY_LENGTH(L"\\unoinfo.exe\" c++")];
             /* hopefully does not overflow */
-        int pathsize;
-        SECURITY_ATTRIBUTES sec;
-        HANDLE temp;
-        HANDLE stdoutRead;
-        HANDLE stdoutWrite;
-        STARTUPINFOW startinfo;
-        PROCESS_INFORMATION procinfo;
-        int ret;
         cmd[0] = L'"';
-        pathsize = MultiByteToWideChar(CP_ACP, 0, path, -1, cmd + 1, MAX_PATH);
-        if (pathsize == 0) {
-            writeError("Error: MultiByteToWideChar failed!\n");
-            closeErrorFile();
-            return 1;
-        }
+        wcscpy(cmd + 1, path);
         if (wcschr(cmd + 1, L'"') != NULL) {
+            free(path);
             writeError("Error: bad characters in UNO installation path!\n");
             closeErrorFile();
             return 1;
         }
+        size_t pathsize = wcslen(cmd);
         wcscpy(
             cmd + pathsize,
             &L"\\unoinfo.exe\" c++"[
                 pathsize == 1 || cmd[pathsize - 1] != L'\\' ? 0 : 1]);
+        SECURITY_ATTRIBUTES sec;
         sec.nLength = sizeof (SECURITY_ATTRIBUTES);
         sec.lpSecurityDescriptor = NULL;
         sec.bInheritHandle = TRUE;
+        HANDLE stdoutRead;
+        HANDLE stdoutWrite;
+        HANDLE temp;
         if (CreatePipe(&temp, &stdoutWrite, &sec, 0) == 0 ||
             DuplicateHandle(
                 GetCurrentProcess(), temp, GetCurrentProcess(), &stdoutRead, 0,
                 FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS) == 0)
         {
+            free(path);
             writeError("Error: CreatePipe/DuplicateHandle failed!\n");
             closeErrorFile();
             return 1;
         }
-        memset(&startinfo, 0, sizeof (STARTUPINFOW));
-        startinfo.cb = sizeof (STARTUPINFOW);
+        STARTUPINFOW startinfo;
+        PROCESS_INFORMATION procinfo;
+        memset(&startinfo, 0, sizeof(startinfo));
+        startinfo.cb = sizeof(startinfo);
         startinfo.lpDesktop = L"";
         startinfo.dwFlags = STARTF_USESTDHANDLES;
         startinfo.hStdOutput = stdoutWrite;
-        ret = CreateProcessW(
+        BOOL ret = CreateProcessW(
             NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &startinfo, &procinfo);
-        if (ret != 0) {
+        if (ret != FALSE) {
+            // Release result of GetPath()
+            free(path);
+
             char * buf = NULL;
             char * tmp;
             DWORD n = 1000;
             DWORD k = 0;
             DWORD exitcode;
-            int path2size;
             CloseHandle(stdoutWrite);
             CloseHandle(procinfo.hThread);
             for (;;) {
@@ -193,22 +179,19 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 closeErrorFile();
                 return 1;
             }
-            if (k == 0) {
-                path2size = 0;
-            } else {
-                path2size = WideCharToMultiByte(
-                    CP_ACP, 0, (wchar_t *) buf, k / 2, path2, MAX_PATH - 1,
-                    NULL, NULL);
-                if (path2size == 0) {
-                    writeError("Error: converting unoinfo output failed!\n");
-                    closeErrorFile();
-                    return 1;
-                }
+            path = (wchar_t*)realloc(buf, k + sizeof(wchar_t));
+            if (path == NULL)
+            {
+                free(buf);
+                writeError(
+                    "Error: out of memory zero-terminating unoinfo output!\n");
+                closeErrorFile();
+                return 1;
             }
-            path2[path2size] = '\0';
-            path = path2;
+            path[k / 2] = L'\0';
         } else {
             if (GetLastError() != ERROR_FILE_NOT_FOUND) {
+                free(path);
                 writeError("Error: calling unoinfo failed!\n");
                 closeErrorFile();
                 return 1;
@@ -218,27 +201,30 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         }
 
         /* get the value of the PATH environment variable */
-        value = getenv( ENVVARNAME );
+        const wchar_t* ENVVARNAME = L"PATH";
+        const wchar_t* PATHSEPARATOR = L";";
+        wchar_t* value = _wgetenv( ENVVARNAME );
 
         /*
          * add the UNO installation path to the PATH environment variable;
          * note that this only affects the environment variable of the current
          * process, the command processor's environment is not changed
          */
-        size = strlen( ENVVARNAME ) + strlen( "=" ) + strlen( path ) + 1;
+        size_t size = wcslen( ENVVARNAME ) + wcslen( L"=" ) + wcslen( path ) + 1;
         if ( value != NULL )
-            size += strlen( PATHSEPARATOR ) + strlen( value );
-        envstr = (char*) malloc( size );
-        strcpy( envstr, ENVVARNAME );
-        strcat( envstr, "=" );
-        strcat( envstr, path );
+            size += wcslen( PATHSEPARATOR ) + wcslen( value );
+        wchar_t* envstr = (wchar_t*) malloc( size*sizeof(wchar_t) );
+        wcscpy( envstr, ENVVARNAME );
+        wcscat( envstr, L"=" );
+        wcscat( envstr, path );
         if ( value != NULL )
         {
-            strcat( envstr, PATHSEPARATOR );
-            strcat( envstr, value );
+            wcscat( envstr, PATHSEPARATOR );
+            wcscat( envstr, value );
         }
-        _putenv( envstr );
+        _wputenv( envstr );
         free( envstr );
+        free( path );
     }
     else
     {
@@ -246,7 +232,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
 
     /* create the command line for the application process */
-    cmdline = createCommandLine( lpCmdLine );
+    wchar_t* cmdline = createCommandLine( lpCmdLine );
     if ( cmdline == NULL )
     {
         writeError( "Error: cannot create command line!\n" );
@@ -255,10 +241,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
 
     /* create the application process */
-    memset( &startup_info, 0, sizeof( STARTUPINFO ) );
-    startup_info.cb = sizeof( STARTUPINFO );
-    bCreate = CreateProcess( NULL, cmdline, NULL,  NULL, FALSE, 0, NULL, NULL,
-                             &startup_info, &process_info );
+    STARTUPINFOW startup_info;
+    PROCESS_INFORMATION process_info;
+    memset( &startup_info, 0, sizeof(startup_info) );
+    startup_info.cb = sizeof(startup_info);
+    BOOL bCreate = CreateProcessW( NULL, cmdline, NULL,  NULL, FALSE, 0, NULL, NULL,
+        &startup_info, &process_info );
     free( cmdline );
     if ( !bCreate )
     {
@@ -277,11 +265,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
  * Gets the path of a UNO installation.
  *
  * @return the installation path or NULL, if no installation was specified or
- *         found, or if an error occurred
+ *         found, or if an error occurred.
+ *         Returned pointer must be released with free()
  */
-char const* getPath()
+wchar_t* getPath()
 {
-    char const* path = cppuhelper_detail_findSofficePath();
+    wchar_t* path = cppuhelper_detail_findSofficePath();
 
     if ( path == NULL )
         writeError( "Warning: getting path from Windows Registry failed!\n" );
@@ -302,38 +291,38 @@ char const* getPath()
  * @return the command line for the application process or NULL, if an error
  *         occurred
  */
-char* createCommandLine( char const * appendix )
+wchar_t* createCommandLine( wchar_t const * appendix )
 {
-    const char* CMDPREFIX = "_";
-    const char* DQUOTE = "\"";
-    const char* SPACE = " ";
+    const wchar_t* CMDPREFIX = L"_";
+    const wchar_t* DQUOTE = L"\"";
+    const wchar_t* SPACE = L" ";
 
-    char* cmdline = NULL;
+    wchar_t* cmdline = NULL;
 
-    char cmdname[ _MAX_PATH ];
-    char drive[ _MAX_DRIVE ];
-    char dir[ _MAX_PATH ];
-    char base[ _MAX_FNAME ];
-    char newbase[ _MAX_FNAME ];
-    char ext[ _MAX_EXT ];
+    wchar_t cmdname[ _MAX_PATH ];
+    wchar_t drive[ _MAX_DRIVE ];
+    wchar_t dir[ _MAX_PATH ];
+    wchar_t base[ _MAX_FNAME ];
+    wchar_t newbase[ _MAX_FNAME ];
+    wchar_t ext[ _MAX_EXT ];
 
     /* get the absolute path of the executable file */
-    if ( GetModuleFileName( NULL, cmdname, sizeof( cmdname ) ) )
+    if ( GetModuleFileNameW( NULL, cmdname, MY_SIZE( cmdname ) ) )
     {
         /* prefix the executable file name by '_' */
-        _splitpath( cmdname, drive, dir, base, ext );
-        strcpy( newbase, CMDPREFIX );
-        strcat( newbase, base );
-        _makepath( cmdname, drive, dir, newbase, ext );
+        _wsplitpath( cmdname, drive, dir, base, ext );
+        wcscpy( newbase, CMDPREFIX );
+        wcscat( newbase, base );
+        _wmakepath( cmdname, drive, dir, newbase, ext );
 
         /* create the command line */
-        cmdline = (char*) malloc( strlen( DQUOTE ) + strlen( cmdname ) +
-            strlen ( DQUOTE ) + strlen( SPACE ) + strlen( appendix ) + 1 );
-        strcpy( cmdline, DQUOTE );
-        strcat( cmdline, cmdname );
-        strcat( cmdline, DQUOTE );
-        strcat( cmdline, SPACE );
-        strcat( cmdline, appendix );
+        cmdline = (wchar_t*) malloc( (wcslen( DQUOTE ) + wcslen( cmdname ) +
+            wcslen ( DQUOTE ) + wcslen( SPACE ) + wcslen( appendix ) + 1) * sizeof(wchar_t) );
+        wcscpy( cmdline, DQUOTE );
+        wcscat( cmdline, cmdname );
+        wcscat( cmdline, DQUOTE );
+        wcscat( cmdline, SPACE );
+        wcscat( cmdline, appendix );
     }
 
     return cmdline;
@@ -356,38 +345,38 @@ char* createCommandLine( char const * appendix )
  */
 FILE* getErrorFile( int create )
 {
-    const char* MODE = "w";
-    const char* BASEPOSTFIX = "-error";
-    const char* EXTENSION = ".log";
+    const wchar_t* MODE = L"w";
+    const wchar_t* BASEPOSTFIX = L"-error";
+    const wchar_t* EXTENSION = L".log";
 
     static FILE* ferr = NULL;
 
-    char fname[ _MAX_PATH ];
-    char drive[ _MAX_DRIVE ];
-    char dir[ _MAX_PATH ];
-    char base[ _MAX_FNAME ];
-    char newbase[ _MAX_FNAME ];
-    char ext[ _MAX_EXT ];
+    wchar_t fname[ _MAX_PATH ];
+    wchar_t drive[ _MAX_DRIVE ];
+    wchar_t dir[ _MAX_PATH ];
+    wchar_t base[ _MAX_FNAME ];
+    wchar_t newbase[ _MAX_FNAME ];
+    wchar_t ext[ _MAX_EXT ];
 
     if ( ferr == NULL && create )
     {
         /* get the absolute path of the executable file */
-        if ( GetModuleFileName( NULL, fname, sizeof( fname ) ) )
+        if ( GetModuleFileNameW( NULL, fname, MY_SIZE( fname ) ) )
         {
             /* create error file in the directory of the executable file */
-            _splitpath( fname, drive, dir, base, ext );
-            strcpy( newbase, base );
-            strcat( newbase, BASEPOSTFIX );
-            _makepath( fname, drive, dir, newbase, EXTENSION );
-            ferr = fopen( fname, MODE );
+            _wsplitpath( fname, drive, dir, base, ext );
+            wcscpy( newbase, base );
+            wcscat( newbase, BASEPOSTFIX );
+            _wmakepath( fname, drive, dir, newbase, EXTENSION );
+            ferr = _wfopen( fname, MODE );
 
             if ( ferr == NULL )
             {
                 /* create error file in the temp directory */
-                GetTempPath( sizeof( fname ), fname );
-                strcat( fname, newbase );
-                strcat( fname, EXTENSION );
-                ferr = fopen( fname, MODE );
+                GetTempPathW(MY_SIZE( fname ), fname );
+                wcscat( fname, newbase );
+                wcscat( fname, EXTENSION );
+                ferr = _wfopen( fname, MODE );
             }
         }
     }
