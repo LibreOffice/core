@@ -129,6 +129,22 @@ namespace emfio
         sal_uInt8       lfQuality;
         sal_uInt8       lfPitchAndFamily;
         OUString        alfFaceName;
+        LOGFONTW()
+            : lfHeight(0)
+            , lfWidth(0)
+            , lfEscapement(0)
+            , lfOrientation(0)
+            , lfWeight(0)
+            , lfItalic(0)
+            , lfUnderline(0)
+            , lfStrikeOut(0)
+            , lfCharSet(0)
+            , lfOutPrecision(0)
+            , lfClipPrecision(0)
+            , lfQuality(0)
+            , lfPitchAndFamily(0)
+        {
+        }
     };
 }
 
