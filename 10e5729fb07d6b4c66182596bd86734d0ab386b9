@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_23486287",
+        "filename": "cui/source/dialogs/cuicharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-09-25T09:25:18Z",
+      "side": 0,
+      "message": "It\u0027s not needed to add this parameter here, since hasInsert is a member variable, so you can use it directly inside this method.",
+      "revId": "10e5729fb07d6b4c66182596bd86734d0ab386b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_660fd82e",
+        "filename": "cui/source/dialogs/cuicharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-09-25T09:25:18Z",
+      "side": 1,
+      "message": "It\u0027s not a good idea to have this parameter at the second place. This constructor is called also from other places. It is called via VclPtr\u003cSvxCharacterMap\u003e::Create() method which uses a Window and a SfxItemSet parameter and so SfxItemSet is convert to the bool bInsert.\nSo better to add this bInsert parameter to the end of the list.",
+      "revId": "c04dd400797569281df5e5838aea9977d9461666",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_861e8461",
+        "filename": "cui/source/dialogs/cuicharmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-09-25T09:25:18Z",
+      "side": 1,
+      "message": "Here the problem is that this \"Ok\" string can not be translated to other languages. All the strings which are on the GUI should be placed on a translatable file (e.g. *.ui, *.src, etc).\nThis kind of situation used to be handled by adding duplicate items. In this case you can add both an Insert button and an OK button to the specialcharacters.ui file and show / hide the right one depending on the situation.",
+      "revId": "c04dd400797569281df5e5838aea9977d9461666",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a619c07b",
+        "filename": "cui/source/inc/cuicharmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-09-25T09:25:18Z",
+      "side": 1,
+      "message": "I see that in this class the naming of members are inconsistent, but in general it\u0027s recommended to use the m or m_ prefix for member variables, so would be better to use m_bHasInsert or mbHasInsert as a name.\nSee code conventions:\nhttps://wiki.openoffice.org/wiki/Writer/Code_Conventions",
+      "revId": "c04dd400797569281df5e5838aea9977d9461666",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
