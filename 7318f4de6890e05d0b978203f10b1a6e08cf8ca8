@@ -16,6 +16,24 @@
       "revId": "7318f4de6890e05d0b978203f10b1a6e08cf8ca8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a6e1c09c",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-25T17:30:55Z",
+      "side": 1,
+      "message": "Suggestion came from the UI/UX people. Jay also commented on tdf#112207 regarding the macros.",
+      "parentUuid": "1a430d35_663d18bb",
+      "revId": "7318f4de6890e05d0b978203f10b1a6e08cf8ca8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
