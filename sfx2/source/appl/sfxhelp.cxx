@@ -54,6 +54,7 @@
 #include <vcl/layout.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
+#include "openuriexternally.hxx"
 
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>
@@ -530,17 +531,14 @@ static bool impl_showOnlineHelp( const OUString& rURL )
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
-    OUString aHelpLink( "http://helponline.libreoffice.org/help.html?"  );
+    OUString aHelpLink( "https://helponline.libreoffice.org/help.html?"  );
 
     aHelpLink += rURL.copy( aInternal.getLength() );
     aHelpLink = aHelpLink.replaceAll("%2F","/");
     try
     {
-        Reference< XSystemShellExecute > xSystemShell(
-                SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-
-        xSystemShell->execute( aHelpLink, OUString(), SystemShellExecuteFlags::URIS_ONLY );
-        return true;
+    sfx2::openUriExternally(aHelpLink, false);
+    return true;
     }
     catch (const Exception&)
     {
