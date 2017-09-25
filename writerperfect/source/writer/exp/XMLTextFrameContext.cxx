@@ -25,7 +25,7 @@ class XMLTextImageContext : public XMLImportContext
 public:
     XMLTextImageContext(XMLImport &rImport);
 
-    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL endElement(const OUString &rName) override;
@@ -40,7 +40,7 @@ XMLTextImageContext::XMLTextImageContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLTextImageContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLTextImageContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "office:binary-data")
     {
@@ -76,7 +76,7 @@ XMLTextFrameContext::XMLTextFrameContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLTextFrameContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLTextFrameContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "draw:image")
         return new XMLTextImageContext(mrImport);

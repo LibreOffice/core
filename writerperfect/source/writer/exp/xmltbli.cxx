@@ -26,7 +26,7 @@ class XMLTableCellContext : public XMLImportContext
 public:
     XMLTableCellContext(XMLImport &rImport);
 
-    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL endElement(const OUString &rName) override;
@@ -37,7 +37,7 @@ XMLTableCellContext::XMLTableCellContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLTableCellContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLTableCellContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     return CreateTextChildContext(mrImport, rName);
 }
@@ -58,7 +58,7 @@ class XMLTableRowContext : public XMLImportContext
 public:
     XMLTableRowContext(XMLImport &rImport);
 
-    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL endElement(const OUString &rName) override;
@@ -69,7 +69,7 @@ XMLTableRowContext::XMLTableRowContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLTableRowContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLTableRowContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "table:table-cell")
         return new XMLTableCellContext(mrImport);
@@ -91,7 +91,7 @@ XMLTableContext::XMLTableContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLTableContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "table:table-row")
         return new XMLTableRowContext(mrImport);

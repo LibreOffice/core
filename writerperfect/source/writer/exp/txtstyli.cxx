@@ -81,7 +81,7 @@ XMLStyleContext::XMLStyleContext(XMLImport &rImport, XMLStylesContext &rStyles)
 {
 }
 
-XMLImportContext *XMLStyleContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLStyleContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "style:paragraph-properties")
         return new XMLParagraphPropertiesContext(mrImport, *this);

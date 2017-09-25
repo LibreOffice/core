@@ -27,7 +27,7 @@ class XMLStylesContext : public XMLImportContext
 public:
     XMLStylesContext(XMLImport &rImport, std::map<OUString, librevenge::RVNGPropertyList> &rParagraphStyles, std::map<OUString, librevenge::RVNGPropertyList> &rTextStyles);
 
-    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentParagraphStyles();
     std::map<OUString, librevenge::RVNGPropertyList> &GetCurrentTextStyles();

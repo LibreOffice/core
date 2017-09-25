@@ -27,7 +27,7 @@ class XMLBodyContext : public XMLImportContext
 public:
     XMLBodyContext(XMLImport &rImport);
 
-    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
 };
 
 XMLBodyContext::XMLBodyContext(XMLImport &rImport)
@@ -35,7 +35,7 @@ XMLBodyContext::XMLBodyContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLBodyContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLBodyContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "office:text")
         return new XMLBodyContentContext(mrImport);
@@ -48,7 +48,7 @@ class XMLOfficeDocContext : public XMLImportContext
 public:
     XMLOfficeDocContext(XMLImport &rImport);
 
-    XMLImportContext *CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/) override;
 };
 
 XMLOfficeDocContext::XMLOfficeDocContext(XMLImport &rImport)
@@ -56,7 +56,7 @@ XMLOfficeDocContext::XMLOfficeDocContext(XMLImport &rImport)
 {
 }
 
-XMLImportContext *XMLOfficeDocContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLOfficeDocContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "office:body")
         return new XMLBodyContext(mrImport);
@@ -74,7 +74,7 @@ XMLImport::XMLImport(librevenge::RVNGTextInterface &rGenerator)
 {
 }
 
-XMLImportContext *XMLImport::CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+rtl::Reference<XMLImportContext> XMLImport::CreateContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "office:document")
         return new XMLOfficeDocContext(*this);
