@@ -62,6 +62,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
@@ -114,6 +116,7 @@ public:
     void testTdf112334();
     void testTdf112089();
     void testTdf112086();
+    void testTdf112647();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -155,6 +158,7 @@ public:
     CPPUNIT_TEST(testTdf112334);
     CPPUNIT_TEST(testTdf112089);
     CPPUNIT_TEST(testTdf112086);
+    CPPUNIT_TEST(testTdf112647);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1182,6 +1186,22 @@ void SdOOXMLExportTest2::testTdf112086()
 
     sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[2]/p:cBhvr/p:attrNameLst/p:attrName");
     CPPUNIT_ASSERT_EQUAL(OUString("ppt_h"), sAttributeName);
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf112647()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf112647.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
+
+    css::style::LineSpacing aLineSpacing;
+    xPropSet->getPropertyValue("ParaLineSpacing") >>= aLineSpacing;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(css::style::LineSpacingMode::FIX), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2117), aLineSpacing.Height);
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
