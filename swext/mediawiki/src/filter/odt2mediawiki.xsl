@@ -329,7 +329,7 @@
     </template>
 
     <!--
-        Funktion generating a token consisting of the given character
+        Function generating a token consisting of the given character
         repeated 'level' times.
 
         @param level
