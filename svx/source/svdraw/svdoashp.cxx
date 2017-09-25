@@ -617,6 +617,11 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
                         }
                         break;
 
+                        case mso_sptChevron :
+                        case mso_sptHomePlate :
+                             nMode |= CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX;
+                        break;
+
                         case mso_sptWedgeRectCallout :
                         case mso_sptWedgeRRectCallout :
                         case mso_sptCloudCallout :
@@ -1523,6 +1528,11 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
                 sal_Int32 nX = ( aIter->aPosition.X - aOld.Left() ) + maRect.Left();
                 aIter->xInteraction->setControllerPosition( css::awt::Point( nX, aIter->xInteraction->getPosition().Y ) );
             }
+            else if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
+            {
+                sal_Int32 nX = maRect.Right() - (aOld.Right() - aIter->aPosition.X);
+                aIter->xInteraction->setControllerPosition( css::awt::Point( nX, aIter->xInteraction->getPosition().Y ) );
+            }
             if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_Y )
             {
                 sal_Int32 nY = ( aIter->aPosition.Y - aOld.Top() ) + maRect.Top();
@@ -1535,6 +1545,7 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
     }
     InvalidateRenderGeometry();
 }
+
 void SdrObjCustomShape::NbcRotate( const Point& rRef, long nAngle, double sn, double cs )
 {
     bool bMirroredX = IsMirroredX();
@@ -1933,8 +1944,12 @@ void SdrObjCustomShape::DragResizeCustomShape( const tools::Rectangle& rNewRect 
             {
                 if ( aIter->nMode & CustomShapeHandleModes::RESIZE_FIXED )
                     aIter->xInteraction->setControllerPosition( aIter->aPosition );
-                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X )
+                if ( aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_X ||
+                     aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX )
                 {
+                    if (aIter->nMode & CustomShapeHandleModes::RESIZE_ABSOLUTE_NEGX)
+                        bOldMirroredX = !bOldMirroredX;
+
                     sal_Int32 nX;
                     if ( bOldMirroredX )
                     {

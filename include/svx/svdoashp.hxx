@@ -57,11 +57,12 @@ enum class CustomShapeHandleModes
     RESIZE_ABSOLUTE_Y    = 8,
     MOVE_SHAPE           = 16,
     ORTHO4               = 32,
+    RESIZE_ABSOLUTE_NEGX = 64
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<CustomShapeHandleModes> : is_typed_flags<CustomShapeHandleModes, 63> {};
+    template<> struct typed_flags<CustomShapeHandleModes> : is_typed_flags<CustomShapeHandleModes, 127> {};
 }
 
 struct SdrCustomShapeInteraction
