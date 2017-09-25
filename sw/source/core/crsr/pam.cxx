@@ -43,9 +43,7 @@
 #include <hints.hxx>
 #include <xmloff/odffields.hxx>
 
-#include <rdfhelper.hxx>
-#include <txtatr.hxx>
-#include <docsh.hxx>
+#include <editsh.hxx>
 
 // for the dump "MSC-" compiler
 inline sal_Int32 GetSttOrEnd( bool bCondition, const SwContentNode& rNd )
@@ -715,30 +713,10 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         bRet = !( pA == pB && pA != nullptr );
     }
 
-    // Paragraph Signatures are read-only.
     if (!bRet)
     {
-        SwTextNode* pNode = Start()->nNode.GetNode().GetTextNode();
-        if (pNode != nullptr)
-        {
-            SwTextAttr* pAttr = pNode->GetTextAttrAt(Start()->nContent.GetIndex(), RES_TXTATR_METAFIELD);
-            SwTextMeta* pTextMeta = static_txtattr_cast<SwTextMeta*>(pAttr);
-            if (pTextMeta)
-            {
-                SwFormatMeta& rFormatMeta(static_cast<SwFormatMeta&>(pTextMeta->GetAttr()));
-                if (::sw::Meta* pMeta = rFormatMeta.GetMeta())
-                {
-                    if (const SwDocShell* pDocSh = pDoc->GetDocShell())
-                    {
-                        static const OUString metaNS("urn:bails");
-                        const css::uno::Reference<css::rdf::XResource> xSubject(pMeta->MakeUnoObject(), uno::UNO_QUERY);
-                        uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
-                        const std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, metaNS, xSubject);
-                        bRet = (aStatements.find("loext:paragraph:signature") != aStatements.end());
-                    }
-                }
-            }
-        }
+        // Paragraph Signatures and Classification fields are read-only.
+        bRet = pDoc->GetEditShell()->IsCursorInParagraphMetadataField();
     }
 
     return bRet;
