@@ -734,7 +734,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
                         const css::uno::Reference<css::rdf::XResource> xSubject(pMeta->MakeUnoObject(), uno::UNO_QUERY);
                         uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
                         const std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, metaNS, xSubject);
-                        bRet = (aStatements.find("loext:signature:signature") != aStatements.end());
+                        bRet = (aStatements.find("loext:paragraph:signature") != aStatements.end());
                     }
                 }
             }
