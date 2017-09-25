@@ -2056,7 +2056,7 @@ const char* DrawingML::GetAlignment( style::ParagraphAdjust nAlignment )
     return sAlignment;
 }
 
-void DrawingML::WriteLinespacing( LineSpacing& rSpacing )
+void DrawingML::WriteLinespacing( const LineSpacing& rSpacing )
 {
     if( rSpacing.Mode == LineSpacingMode::PROP )
     {
@@ -2067,7 +2067,7 @@ void DrawingML::WriteLinespacing( LineSpacing& rSpacing )
     else
     {
         mpFS->singleElementNS( XML_a, XML_spcPts,
-                               XML_val, I32S( rSpacing.Height ),
+                               XML_val, I32S( std::lround(rSpacing.Height / 25.4 * 72) ),
                                FSEND );
     }
 }
