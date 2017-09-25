@@ -21,6 +21,7 @@
 
 #include <string.h>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
 #include <set>
@@ -1070,7 +1071,12 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
             nBytes = (short) n;
         if( nBytes )
         {
-            if( !m_pData || !m_pData->Pos2Page( m_nPage * m_nPageSize + m_nOffset ) )
+            if (!m_pData)
+                break;
+            sal_Int32 nPos;
+            if (o3tl::checked_multiply<sal_Int32>(m_nPage, m_nPageSize, nPos))
+                break;
+            if (!m_pData->Pos2Page(nPos + m_nOffset))
                 break;
             // all reading through the stream
             short nRes = (short) m_pData->Read( static_cast<sal_uInt8*>(pBuf) + nDone, nBytes );
