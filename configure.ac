@@ -6925,6 +6925,8 @@ then
         # This is where JDK9 puts the library
         if test -e "$JAVA_HOME/lib/libjawt.so"; then
             JAWTLIB="-L$JAVA_HOME/lib/ -ljawt"
+        elif test -e "$JAVA_HOME/lib/"$my_java_arch"/libjawt.so"; then
+            JAWTLIB="-L$JAVA_HOME/lib/"$my_java_arch"/ -ljawt"
         else
             JAWTLIB="-L$JAVA_HOME/jre/lib/$my_java_arch -ljawt"
         fi
