@@ -87,6 +87,10 @@
 
 namespace
 {
+static const OUString MetaFilename("bails.rdf");
+static const OUString MetaNS("urn:bails");
+static const OUString ParagraphSignatureRDFName = "loext:paragraph:signature";
+static const OUString MetadataFieldServiceName = "com.sun.star.text.textfield.MetadataField";
 
 /// Find all page styles which are currently used in the document.
 std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
@@ -226,14 +230,12 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
                                     const uno::Reference<css::text::XTextField>& xField,
                                     const OString& utf8Text)
 {
-    static const OUString metaNS("urn:bails");
-
     OUString msg = SwResId(STR_INVALID_SIGNATURE);
     bool valid = false;
 
     const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
-    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, metaNS, xSubject);
-    const auto it = aStatements.find("loext:signature:signature");
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
+    const auto it = aStatements.find(ParagraphSignatureRDFName);
     if (it != aStatements.end())
     {
         const sal_Char* pData = utf8Text.getStr();
@@ -263,13 +265,8 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Referen
                                                               const uno::Reference<text::XTextContent>& xParent,
                                                               const OUString& signature)
 {
-    static const OUString MetaFilename("bails.rdf");
-    static const OUString MetaNS("urn:bails");
-    static const OUString RDFName = "loext:signature:signature";
-    static const OUString ServiceName = "com.sun.star.text.textfield.MetadataField";
-
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-    auto xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance(ServiceName), uno::UNO_QUERY);
+    auto xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance(MetadataFieldServiceName), uno::UNO_QUERY);
 
     // Add the signature at the end.
     // uno::Reference<text::XTextContent> xContent(xField, uno::UNO_QUERY);
@@ -277,7 +274,7 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Referen
     xField->attach(xParent->getAnchor()->getEnd());
 
     const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
-    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, RDFName, signature);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphSignatureRDFName, signature);
 
     return xField;
 }
@@ -307,7 +304,7 @@ bool lcl_UpdateParagraphSignatureField(SwDoc* pDoc,
     return false;
 }
 
-void lcl_RemoveParagraphSignatureField(const uno::Reference<css::text::XTextField>& xField)
+void lcl_RemoveParagraphMetadataField(const uno::Reference<css::text::XTextField>& xField)
 {
     uno::Reference<css::text::XTextContent> xFieldTextContent(xField, uno::UNO_QUERY);
     uno::Reference<css::text::XTextRange> xParagraph(xFieldTextContent->getAnchor());
@@ -969,11 +966,10 @@ SwUndoParagraphSigning::SwUndoParagraphSigning(const SwPosition& rPos,
     m_bRemove(bRemove)
 {
     // Save the metadata and field content to undo/redo.
-    static const OUString metaNS("urn:bails");
     uno::Reference<frame::XModel> xModel = m_pDoc->GetDocShell()->GetBaseModel();
     const css::uno::Reference<css::rdf::XResource> xSubject(m_xField, uno::UNO_QUERY);
-    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, metaNS, xSubject);
-    const auto it = aStatements.find("loext:signature:signature");
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
+    const auto it = aStatements.find(ParagraphSignatureRDFName);
     if (it != aStatements.end())
         m_signature = it->second;
 
@@ -1037,7 +1033,7 @@ void SwUndoParagraphSigning::Remove()
             m_pDoc->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 
-    lcl_RemoveParagraphSignatureField(m_xField);
+    lcl_RemoveParagraphMetadataField(m_xField);
 }
 
 void SwEditShell::SignParagraph()
@@ -1154,7 +1150,7 @@ void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
             GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
             SwUndoParagraphSigning* pUndo = new SwUndoParagraphSigning(SwPosition(*pNode), xContent, xParent, false);
             GetDoc()->GetIDocumentUndoRedo().AppendUndo(pUndo);
-            lcl_RemoveParagraphSignatureField(xContent);
+            lcl_RemoveParagraphMetadataField(xContent);
             GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
         }
     }
