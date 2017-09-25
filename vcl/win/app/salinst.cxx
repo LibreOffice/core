@@ -23,6 +23,7 @@
 
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
+#include <tools/time.hxx>
 #include <comphelper/solarmutex.hxx>
 
 #include <vcl/inputtypes.hxx>

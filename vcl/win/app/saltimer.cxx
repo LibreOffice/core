@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <tools/time.hxx>
+
 #include <svsys.h>
 #include <win/saldata.hxx>
 #include <win/saltimer.h>
