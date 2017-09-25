@@ -1345,11 +1345,21 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 else
                     nPlanes = nSamplesPerPixel;
 
+                bStatus = nPlanes != 0;
+            }
+
+            sal_uInt32 nDiv = GetRowsPerStrip() + 1;
+
+            if ( bStatus )
+            {
+                bStatus = (nDiv != 0);
+            }
+
+            if ( bStatus )
+            {
                 if ( ( nFillOrder == 2 ) && ( nCompression != 5 ) )     // in the LZW mode bits are already being inverted
                     bByteSwap = true;
-
-                nStripsPerPlane = ( nImageLength - 1 ) / GetRowsPerStrip() + 1;
-                bStatus = nPlanes != 0;
+                nStripsPerPlane = ( nImageLength - 1 ) / nDiv;
             }
 
             if ( bStatus )
