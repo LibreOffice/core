@@ -23,6 +23,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     (void)ReadWindowMetafile(aStream, aGDIMetaFile);
+    //fontconfigs alloc mechanism is too complicated for lsan/valgrind so
+    //force the fontconfig options to be released now, they are demand loaded
+    //so will be recreated if necessary
+    SvpSalGraphics::getPlatformGlyphCache().ClearFontOptions();
     return 0;
 }
 
