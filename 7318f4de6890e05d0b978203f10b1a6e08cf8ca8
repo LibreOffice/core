@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_663d18bb",
+        "filename": "cui/source/customize/CommandCategoryListBox.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-09-25T10:37:51Z",
+      "side": 1,
+      "message": "I\u0027d prefer appending a single entry -- \"Styles\" -- to command category listbox and then displaying styles in the listbox below in a tree structure.\n\nHaving some 10+ style families, appended to 20+ items long list of command categories can make it hard to find things (not to mention more items coming from macros and extensions that will follow soon)\n\nHas UX has approved this?",
+      "revId": "7318f4de6890e05d0b978203f10b1a6e08cf8ca8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
