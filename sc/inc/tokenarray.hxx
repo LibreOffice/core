@@ -59,7 +59,7 @@ public:
         (not copied!) */
     ScTokenArray( const ScTokenArray& );
     virtual ~ScTokenArray() override;
-    virtual void Clear();
+    virtual void Clear() override;
     ScTokenArray* Clone() const;    /// True copy!
 
     void GenHash();
