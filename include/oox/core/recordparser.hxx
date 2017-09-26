@@ -44,7 +44,6 @@ namespace prv {
 struct RecordInputSource
 {
     BinaryInputStreamRef mxInStream;
-    OUString     maPublicId;
     OUString     maSystemId;
 };
 
