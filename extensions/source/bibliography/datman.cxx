@@ -1422,10 +1422,6 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt)
             }
             else
                 aUID = evt.NewValue;
-
-            Reference< XRowLocate > xLocate(xBibCursor, UNO_QUERY);
-            DBG_ASSERT(xLocate.is(), "BibDataManager::propertyChange : invalid cursor !");
-            xLocate->moveToBookmark(aUID);
         }
     }
     catch (const Exception&)

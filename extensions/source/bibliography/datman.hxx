@@ -92,7 +92,6 @@ private:
         OUString                     aDataSourceURL;
         OUString                     aQuoteChar;
         css::uno::Any                aUID;
-        css::uno::Reference< css::sdbc::XResultSet >                  xBibCursor;
 
         ::comphelper::OInterfaceContainerHelper2   m_aLoadListeners;
 
