@@ -1390,9 +1390,12 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         bStatus = false;
                     sal_Int32 ny = nImageLength - 1;
                     sal_uInt32 nStrip(0);
+                    nDiv = GetRowsPerStrip();
+                    if (bStatus)
+                        bStatus = nDiv != 0;
                     if (bStatus)
                     {
-                        nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
+                        nStrip = ny / nDiv + np * nStripsPerPlane;
                         if (nStrip >= aStripOffsets.size())
                             bStatus = false;
                     }
