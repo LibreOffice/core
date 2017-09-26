@@ -80,7 +80,7 @@ sal_Int32 SAL_CALL Locator::getLineNumber()
 OUString SAL_CALL Locator::getPublicId()
 {
     checkDispose();
-    return mpParser->getInputSource().maPublicId;
+    return OUString();
 }
 
 OUString SAL_CALL Locator::getSystemId()
