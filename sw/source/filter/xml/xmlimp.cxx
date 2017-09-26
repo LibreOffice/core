@@ -1592,6 +1592,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportFODT(SvStream &rStream)
     bool ret = xFilter->filter(aArgs);
     xDocSh->SetLoading(SfxLoadedFlags::ALL);
 
+    xDocSh->DoClose();
+
     return ret;
 }
 
