@@ -66,7 +66,6 @@ namespace oox { namespace ppt {
         ::sal_Int16 mnTransitionSubType;
         bool  mbTransitionDirectionNormal;
         css::presentation::AnimationSpeed mnAnimationSpeed;
-        ::sal_Int32 mnFadeColor;
         bool  mbMode; /**< http://api.libreoffice.org/docs/common/ref/com/sun/star/animations/XTransitionFilter.html Mode property */
         ::sal_Int32 mnAdvanceTime;
     };
