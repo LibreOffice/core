@@ -22,6 +22,7 @@
 #include <string.h>
 #include <utility>
 
+#include <filter/msfilter/util.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/random.h>
@@ -1053,7 +1054,10 @@ bool XclExpXmlStream::exportDocument()
     tools::SvRef<SotStorage> rStorage = static_cast<SotStorage*>(nullptr);
     XclExpObjList::ResetCounters();
 
-    XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, rDoc, RTL_TEXTENCODING_DONTKNOW );
+    XclExpRootData aData(
+        EXC_BIFF8, *pShell->GetMedium (), rStorage, rDoc,
+        msfilter::util::getBestTextEncodingFromLocale(
+            Application::GetSettings().GetLanguageTag().getLocale()));
     aData.meOutput = EXC_OUTPUT_XML_2007;
     aData.maXclMaxPos.Set( EXC_MAXCOL_XML_2007, EXC_MAXROW_XML_2007, EXC_MAXTAB_XML_2007 );
     aData.maMaxPos.SetCol( ::std::min( aData.maScMaxPos.Col(), aData.maXclMaxPos.Col() ) );
