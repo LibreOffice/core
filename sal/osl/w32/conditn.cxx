@@ -32,10 +32,10 @@ oslCondition SAL_CALL osl_createCondition(void)
 {
     oslCondition Condition;
 
-    Condition= reinterpret_cast<oslCondition>(CreateEvent(nullptr,          /* no security */
-                                         true,      /* manual reset */
-                                         false,     /* initial state not signaled */
-                                         nullptr));         /* automatic name */
+    Condition= reinterpret_cast<oslCondition>(CreateEventW(nullptr,   /* no security */
+                                                           true,      /* manual reset */
+                                                           false,     /* initial state not signaled */
+                                                           nullptr)); /* automatic name */
 
     return Condition;
 
@@ -88,7 +88,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
                 /* We Must not dispatch the message. PM_NOREMOVE leaves the message queue untouched
                  but dispatches SendMessage calls automatically */
 
-                PeekMessage( &msg, nullptr, 0, 0, PM_NOREMOVE );
+                PeekMessageW( &msg, nullptr, 0, 0, PM_NOREMOVE );
                 }
                 break;
 

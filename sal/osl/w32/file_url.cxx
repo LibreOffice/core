@@ -675,7 +675,7 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
                 {
                     ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
                     sal_uInt32 nNewLen = GetCaseCorrectPathName( SAL_W(pDecodedURL) + nSkip,
-                                                                 ::osl::mingw_reinterpret_cast<LPWSTR>(aBuf),
+                                                                 SAL_W(aBuf),
                                                                  aBuf.getBufSizeInSymbols(),
                                                                  false );
 
@@ -975,15 +975,15 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
         {
             osl_acquireMutex( g_CurrentDirectoryMutex );
 
-            GetCurrentDirectoryW( aCurrentDir.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aCurrentDir) );
+            GetCurrentDirectoryW( aCurrentDir.getBufSizeInSymbols(), SAL_W(aCurrentDir) );
             SetCurrentDirectoryW( SAL_W(ustrBaseSysPath->buffer) );
         }
 
-        dwResult = GetFullPathNameW( SAL_W(ustrRelSysPath->buffer), aBuffer.getBufSizeInSymbols(), ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), &lpFilePart );
+        dwResult = GetFullPathNameW( SAL_W(ustrRelSysPath->buffer), aBuffer.getBufSizeInSymbols(), SAL_W(aBuffer), &lpFilePart );
 
         if ( ustrBaseSysPath )
         {
-            SetCurrentDirectoryW( ::osl::mingw_reinterpret_cast<LPCWSTR>(aCurrentDir) );
+            SetCurrentDirectoryW( SAL_W(aCurrentDir) );
 
             osl_releaseMutex( g_CurrentDirectoryMutex );
         }

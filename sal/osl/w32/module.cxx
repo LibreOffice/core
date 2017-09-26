@@ -52,11 +52,10 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     if ( osl_File_E_None != nError )
         rtl_uString_assign(&Module, strModuleName);
 
-    h = LoadLibraryW(reinterpret_cast<LPCWSTR>(Module->buffer));
+    h = LoadLibraryW(SAL_W(Module->buffer));
 
     if (h == nullptr)
-        h = LoadLibraryExW(reinterpret_cast<LPCWSTR>(Module->buffer), nullptr,
-                                  LOAD_WITH_ALTERED_SEARCH_PATH);
+        h = LoadLibraryExW(SAL_W(Module->buffer), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
 
     // In case of long path names (\\?\c:\...) try to shorten the filename.
     // LoadLibrary cannot handle file names which exceed 260 letters.
@@ -66,15 +65,13 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     if (h == nullptr && Module->length > 260)
     {
         std::vector<WCHAR> vec(Module->length + 1);
-        DWORD len = GetShortPathNameW(reinterpret_cast<LPCWSTR>(Module->buffer),
-                                      reinterpret_cast<LPWSTR>(&vec[0]), Module->length + 1);
+        DWORD len = GetShortPathNameW(SAL_W(Module->buffer), &vec[0], Module->length + 1);
         if (len )
         {
-            h = LoadLibraryW(reinterpret_cast<LPWSTR>(&vec[0]));
+            h = LoadLibraryW(&vec[0]);
 
             if (h == nullptr)
-                h = LoadLibraryExW(reinterpret_cast<LPWSTR>(&vec[0]), nullptr,
-                                  LOAD_WITH_ALTERED_SEARCH_PATH);
+                h = LoadLibraryExW(&vec[0], nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
         }
     }
 
@@ -116,7 +113,7 @@ oslModule osl_loadModuleRelativeAscii(
 sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
-    LPCWSTR pName = pModuleName ? reinterpret_cast<LPCWSTR>(pModuleName->buffer) : nullptr;
+    LPCWSTR pName = pModuleName ? SAL_W(pModuleName->buffer) : nullptr;
     HMODULE h = GetModuleHandleW(pName);
     if( h )
     {
@@ -209,7 +206,7 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 
 typedef BOOL (WINAPI *SymInitialize_PROC)(
     HANDLE   hProcess,
-    LPSTR    UserSearchPath,
+    LPWSTR   UserSearchPath,
     BOOL     fInvadeProcess
     );
 
@@ -220,7 +217,7 @@ typedef BOOL (WINAPI *SymCleanup_PROC)(
 typedef BOOL (WINAPI *SymGetModuleInfo_PROC)(
     HANDLE              hProcess,
     DWORD               dwAddr,
-    PIMAGEHLP_MODULE  ModuleInfo
+    PIMAGEHLP_MODULEW   ModuleInfo
     );
 
 /* Seems that IMAGEHLP.DLL is always available on NT 4. But MSDN from Platform SDK says Win 2K is required. MSDN from VS 6.0a says
@@ -247,29 +244,29 @@ static bool SAL_CALL osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustr
         SymInitialize_PROC      lpfnSymInitialize;
         SymCleanup_PROC         lpfnSymCleanup;
 
-        lpfnSymInitialize = reinterpret_cast<SymInitialize_PROC>(GetProcAddress( hModImageHelp, "SymInitialize" ));
+        lpfnSymInitialize = reinterpret_cast<SymInitialize_PROC>(GetProcAddress( hModImageHelp, "SymInitializeW" ));
         lpfnSymCleanup = reinterpret_cast<SymCleanup_PROC>(GetProcAddress( hModImageHelp, "SymCleanup" ));
-        lpfnSymGetModuleInfo = reinterpret_cast<SymGetModuleInfo_PROC>(GetProcAddress( hModImageHelp, "SymGetModuleInfo" ));
+        lpfnSymGetModuleInfo = reinterpret_cast<SymGetModuleInfo_PROC>(GetProcAddress( hModImageHelp, "SymGetModuleInfoW" ));
 
         if ( lpfnSymInitialize && lpfnSymCleanup && lpfnSymGetModuleInfo )
         {
-            IMAGEHLP_MODULE ModuleInfo;
-            ::osl::LongPathBuffer< sal_Char > aModuleFileName( MAX_LONG_PATH );
-            LPSTR   lpSearchPath = nullptr;
+            IMAGEHLP_MODULEW ModuleInfo;
+            ::osl::LongPathBuffer< sal_Unicode > aModuleFileName( MAX_LONG_PATH );
+            LPWSTR lpSearchPath = nullptr;
 
-            if ( GetModuleFileNameA( nullptr, aModuleFileName, aModuleFileName.getBufSizeInSymbols() ) )
+            if ( GetModuleFileNameW( nullptr, SAL_W(aModuleFileName), aModuleFileName.getBufSizeInSymbols() ) )
             {
-                char *pLastBkSlash = strrchr( aModuleFileName, '\\' );
+                wchar_t *pLastBkSlash = wcsrchr( SAL_W(aModuleFileName), L'\\' );
 
                 if (
                     pLastBkSlash &&
-                    pLastBkSlash > static_cast<sal_Char*>(aModuleFileName)
-                    && *(pLastBkSlash - 1) != ':'
-                    && *(pLastBkSlash - 1) != '\\'
+                    pLastBkSlash > SAL_W(aModuleFileName)
+                    && *(pLastBkSlash - 1) != L':'
+                    && *(pLastBkSlash - 1) != L'\\'
                     )
                 {
                     *pLastBkSlash = 0;
-                    lpSearchPath = aModuleFileName;
+                    lpSearchPath = SAL_W(aModuleFileName);
                 }
             }
 
@@ -287,11 +284,11 @@ static bool SAL_CALL osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustr
                     BaseOfImage to a HMODULE (on NT it's the same) and use GetModuleFileName to retrieve the full
                     path of the loaded image */
 
-                if ( ModuleInfo.LoadedImageName[0] || GetModuleFileNameA( reinterpret_cast<HMODULE>(ModuleInfo.BaseOfImage), ModuleInfo.LoadedImageName, sizeof(ModuleInfo.LoadedImageName) ) )
+                if ( ModuleInfo.LoadedImageName[0] || GetModuleFileNameW( reinterpret_cast<HMODULE>(ModuleInfo.BaseOfImage), ModuleInfo.LoadedImageName, SAL_N_ELEMENTS(ModuleInfo.LoadedImageName) ) )
                 {
                     rtl_uString *ustrSysPath = nullptr;
 
-                    rtl_string2UString( &ustrSysPath, ModuleInfo.LoadedImageName, strlen(ModuleInfo.LoadedImageName), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+                    rtl_uString_newFromStr( &ustrSysPath, SAL_U(ModuleInfo.LoadedImageName) );
                     OSL_ASSERT(ustrSysPath != nullptr);
                     osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
                     rtl_uString_release( ustrSysPath );
@@ -368,7 +365,7 @@ static bool SAL_CALL osl_addressGetModuleURL_NT_( void *pv, rtl_uString **pustrU
                     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
                     rtl_uString *ustrSysPath = nullptr;
 
-                    GetModuleFileNameW( lpModules[iModule], ::osl::mingw_reinterpret_cast<LPWSTR>(aBuffer), aBuffer.getBufSizeInSymbols() );
+                    GetModuleFileNameW( lpModules[iModule], SAL_W(aBuffer), aBuffer.getBufSizeInSymbols() );
 
                     rtl_uString_newFromStr( &ustrSysPath, aBuffer );
                     osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );

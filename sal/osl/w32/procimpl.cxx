@@ -474,9 +474,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         flags |= DETACHED_PROCESS;
 
     STARTUPINFOW startup_info;
-    memset(&startup_info, 0, sizeof(STARTUPINFO));
+    memset(&startup_info, 0, sizeof(startup_info));
 
-    startup_info.cb        = sizeof(STARTUPINFO);
+    startup_info.cb        = sizeof(startup_info);
     startup_info.dwFlags   = STARTF_USESHOWWINDOW;
     startup_info.lpDesktop = const_cast<LPWSTR>(L"");
 

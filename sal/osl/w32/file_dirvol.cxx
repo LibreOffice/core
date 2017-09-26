@@ -257,9 +257,9 @@ static HANDLE WINAPI OpenLogicalDrivesEnum()
     LPDRIVEENUM pEnum = static_cast<LPDRIVEENUM>(HeapAlloc( GetProcessHeap(), 0, sizeof(DRIVEENUM) ));
     if ( pEnum )
     {
-        DWORD dwNumCopied = GetLogicalDriveStringsW( (sizeof(pEnum->cBuffer) - 1) / sizeof(WCHAR), pEnum->cBuffer );
+        DWORD dwNumCopied = GetLogicalDriveStringsW( SAL_N_ELEMENTS(pEnum->cBuffer) - 1, pEnum->cBuffer );
 
-        if ( dwNumCopied && dwNumCopied < sizeof(pEnum->cBuffer) / sizeof(WCHAR) )
+        if ( dwNumCopied && dwNumCopied < SAL_N_ELEMENTS(pEnum->cBuffer) )
         {
             pEnum->lpCurrent = pEnum->cBuffer;
             pEnum->lpIdent = L"tagDRIVEENUM";
