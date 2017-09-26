@@ -208,7 +208,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
             else
                 nWinBits = pWin->GetStyle();
 
-            if ( nWinBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) )
+            if ( nWinBits & ( WB_SIZEABLE | WB_CLOSEABLE ) )
                 eFloatFlags |= FloatWinPopupFlags::AllowTearOff;
 
             pWin->EnableDocking();
