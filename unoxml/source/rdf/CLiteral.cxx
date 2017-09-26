@@ -102,30 +102,27 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< css::uno::Any > & a
             "CLiteral::initialize: argument must be string", *this, 0);
     }
     //FIXME: what is legal?
-    if ((true)) {
-        m_Value = arg0;
-    } else {
+    if (!(true)) {
         throw css::lang::IllegalArgumentException(
             "CLiteral::initialize: argument is not valid literal value", *this, 0);
     }
+    m_Value = arg0;
 
     if (len > 1) {
         OUString arg1;
         css::uno::Reference< css::rdf::XURI > xURI;
         if (aArguments[1] >>= arg1) {
-            if (!arg1.isEmpty()) {
-                m_Language = arg1;
-            } else {
+            if (arg1.isEmpty()) {
                 throw css::lang::IllegalArgumentException(
                     "CLiteral::initialize: argument is not valid language", *this, 1);
             }
+            m_Language = arg1;
         } else if (aArguments[1] >>= xURI) {
-            if (xURI.is()) {
-                m_xDatatype = xURI;
-            } else {
+            if (!xURI.is()) {
                 throw css::lang::IllegalArgumentException(
                     "CLiteral::initialize: argument is null", *this, 1);
             }
+            m_xDatatype = xURI;
         } else {
             throw css::lang::IllegalArgumentException(
                 "CLiteral::initialize: argument must be string or URI", *this, 1);

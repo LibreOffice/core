@@ -117,10 +117,10 @@ void SAL_CALL NeonInputStream::seek( sal_Int64 location )
     if ( location < 0 )
         throw css::lang::IllegalArgumentException();
 
-    if ( location <= mLen )
-        mPos = location;
-    else
+    if ( location > mLen )
         throw css::lang::IllegalArgumentException();
+
+    mPos = location;
 }
 
 sal_Int64 SAL_CALL NeonInputStream::getPosition()

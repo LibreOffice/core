@@ -148,26 +148,25 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
 {
     SolarMutexGuard aSolarGuard;
     uno::Reference < XTabPageModel > xTabPageModel;
-    if(aElement >>= xTabPageModel)
+    if(!(aElement >>= xTabPageModel))
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, static_cast<OWeakObject *>(this), 2 );
+
+    if ( sal_Int32( m_aTabPageVector.size()) ==nIndex )
+        m_aTabPageVector.push_back( xTabPageModel );
+    else if ( sal_Int32( m_aTabPageVector.size()) > nIndex )
     {
-        if ( sal_Int32( m_aTabPageVector.size()) ==nIndex )
-            m_aTabPageVector.push_back( xTabPageModel );
-        else if ( sal_Int32( m_aTabPageVector.size()) > nIndex )
-        {
-            std::vector< uno::Reference< XTabPageModel > >::iterator aIter = m_aTabPageVector.begin();
-            aIter += nIndex;
-            m_aTabPageVector.insert( aIter, xTabPageModel );
-        }
-        else
-            throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
-        ContainerEvent aEvent;
-        aEvent.Source = *this;
-        aEvent.Element = aElement;
-        aEvent.Accessor <<= OUString::number(nIndex);
-        maContainerListeners.elementInserted( aEvent );
+        std::vector< uno::Reference< XTabPageModel > >::iterator aIter = m_aTabPageVector.begin();
+        aIter += nIndex;
+        m_aTabPageVector.insert( aIter, xTabPageModel );
     }
     else
-        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION, static_cast<OWeakObject *>(this), 2 );
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
+    ContainerEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.Element = aElement;
+    aEvent.Accessor <<= OUString::number(nIndex);
+    maContainerListeners.elementInserted( aEvent );
+
 }
 
 void SAL_CALL UnoControlTabPageContainerModel::removeByIndex( ::sal_Int32 /*Index*/ )

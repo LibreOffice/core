@@ -2553,53 +2553,52 @@ void Content::insert(
             if ( Environment.is() )
                 xIH = Environment->getInteractionHandler();
 
-            if ( xIH.is() )
-            {
-                uno::Any aExAsAny( uno::makeAny( aEx ) );
-
-                rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
-                    = new ucbhelper::SimpleInteractionRequest(
-                        aExAsAny,
-                        ContinuationFlags::Approve | ContinuationFlags::Disapprove );
-                xIH->handle( xRequest.get() );
-
-                const ContinuationFlags nResp = xRequest->getResponse();
-
-                switch ( nResp )
-                {
-                    case ContinuationFlags::NONE:
-                        // Not handled; throw.
-                        throw aEx;
-//                            break;
-
-                    case ContinuationFlags::Approve:
-                        // Continue -> Overwrite.
-                        bReplaceExisting = true;
-                        break;
-
-                    case ContinuationFlags::Disapprove:
-                        // Abort.
-                        throw ucb::CommandFailedException(
-                                    OUString(),
-                                    uno::Reference< uno::XInterface >(),
-                                    aExAsAny );
-//                            break;
-
-                    default:
-                        SAL_WARN( "ucb.ucp.webdav", "Content::insert - "
-                                    "Unknown interaction selection!" );
-                        throw ucb::CommandFailedException(
-                                    "Unknown interaction selection!",
-                                    uno::Reference< uno::XInterface >(),
-                                    aExAsAny );
-//                            break;
-                }
-            }
-            else
+            if ( !xIH.is() )
             {
                 // No IH; throw.
                 throw aEx;
             }
+
+            uno::Any aExAsAny( uno::makeAny( aEx ) );
+
+            rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
+                = new ucbhelper::SimpleInteractionRequest(
+                    aExAsAny,
+                    ContinuationFlags::Approve | ContinuationFlags::Disapprove );
+            xIH->handle( xRequest.get() );
+
+            const ContinuationFlags nResp = xRequest->getResponse();
+
+            switch ( nResp )
+            {
+                case ContinuationFlags::NONE:
+                    // Not handled; throw.
+                    throw aEx;
+//                            break;
+
+                case ContinuationFlags::Approve:
+                    // Continue -> Overwrite.
+                    bReplaceExisting = true;
+                    break;
+
+                case ContinuationFlags::Disapprove:
+                    // Abort.
+                    throw ucb::CommandFailedException(
+                                OUString(),
+                                uno::Reference< uno::XInterface >(),
+                                aExAsAny );
+//                            break;
+
+                default:
+                    SAL_WARN( "ucb.ucp.webdav", "Content::insert - "
+                                "Unknown interaction selection!" );
+                    throw ucb::CommandFailedException(
+                                "Unknown interaction selection!",
+                                uno::Reference< uno::XInterface >(),
+                                aExAsAny );
+//                            break;
+            }
+
         }
     }
 

@@ -187,10 +187,9 @@ Reference<XContent> SAL_CALL FTPContentProvider::queryContent(
         }
         else {
             Reference<XContentProvider> xProvider(UniversalContentBroker::create( m_xContext )->queryContentProvider("http:"));
-            if(xProvider.is())
-                return xProvider->queryContent(xCanonicId);
-            else
+            if(!xProvider.is())
                 throw RuntimeException();
+            return xProvider->queryContent(xCanonicId);
         }
     } catch(const malformed_exception&) {
         throw IllegalIdentifierException();

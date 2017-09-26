@@ -170,54 +170,50 @@ ContentProvider::createDocumentContent(
         const uno::Reference< frame::XModel >& Model )
 {
     // model -> id -> content identifier -> queryContent
-    if ( m_xDocsMgr.is() )
-    {
-        OUString aDocId = tdoc_ucp::OfficeDocumentsManager::queryDocumentId( Model );
-        if ( !aDocId.isEmpty() )
-        {
-            OUStringBuffer aBuffer;
-            aBuffer.append( TDOC_URL_SCHEME ":/" );
-            aBuffer.append( aDocId );
-
-            uno::Reference< ucb::XContentIdentifier > xId
-                = new ::ucbhelper::ContentIdentifier( aBuffer.makeStringAndClear() );
-
-            osl::MutexGuard aGuard( m_aMutex );
-
-            // Check, if a content with given id already exists...
-            uno::Reference< ucb::XContent > xContent
-                = queryExistingContent( xId ).get();
-
-            if ( !xContent.is() )
-            {
-                // Create a new content.
-                xContent = Content::create( m_xContext, this, xId );
-            }
-
-            if ( xContent.is() )
-                return xContent;
-
-            // no content.
-            throw lang::IllegalArgumentException(
-                "Illegal Content Identifier!",
-                static_cast< cppu::OWeakObject * >( this ),
-                1 );
-        }
-        else
-        {
-            throw lang::IllegalArgumentException(
-                "Unable to obtain document id from model!",
-                static_cast< cppu::OWeakObject * >( this ),
-                1 );
-        }
-     }
-     else
+    if ( !m_xDocsMgr.is() )
      {
         throw lang::IllegalArgumentException(
             "No Document Manager!",
             static_cast< cppu::OWeakObject * >( this ),
             1 );
      }
+
+    OUString aDocId = tdoc_ucp::OfficeDocumentsManager::queryDocumentId( Model );
+    if ( aDocId.isEmpty() )
+    {
+        throw lang::IllegalArgumentException(
+            "Unable to obtain document id from model!",
+            static_cast< cppu::OWeakObject * >( this ),
+            1 );
+    }
+
+    OUStringBuffer aBuffer;
+    aBuffer.append( TDOC_URL_SCHEME ":/" );
+    aBuffer.append( aDocId );
+
+    uno::Reference< ucb::XContentIdentifier > xId
+        = new ::ucbhelper::ContentIdentifier( aBuffer.makeStringAndClear() );
+
+    osl::MutexGuard aGuard( m_aMutex );
+
+    // Check, if a content with given id already exists...
+    uno::Reference< ucb::XContent > xContent
+        = queryExistingContent( xId ).get();
+
+    if ( !xContent.is() )
+    {
+        // Create a new content.
+        xContent = Content::create( m_xContext, this, xId );
+    }
+
+    if ( xContent.is() )
+        return xContent;
+
+    // no content.
+    throw lang::IllegalArgumentException(
+        "Illegal Content Identifier!",
+        static_cast< cppu::OWeakObject * >( this ),
+        1 );
 }
 
 

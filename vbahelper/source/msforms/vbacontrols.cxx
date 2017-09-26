@@ -408,19 +408,17 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
             }
         }
 
-        if ( xNewControl.is() )
-        {
-            UpdateCollectionIndex( lcl_controlsWrapper( mxDialog  ) );
-            aResult <<= xNewControl;
-            aResult = createCollectionObject( aResult );
-            uno::Reference< msforms::XControl > xVBAControl( aResult, uno::UNO_QUERY_THROW );
-            if( fDefWidth > 0.0 )
-                xVBAControl->setWidth( fDefWidth );
-            if( fDefHeight > 0.0 )
-                xVBAControl->setHeight( fDefHeight );
-        }
-        else
+        if ( !xNewControl.is() )
             throw uno::RuntimeException();
+
+        UpdateCollectionIndex( lcl_controlsWrapper( mxDialog  ) );
+        aResult <<= xNewControl;
+        aResult = createCollectionObject( aResult );
+        uno::Reference< msforms::XControl > xVBAControl( aResult, uno::UNO_QUERY_THROW );
+        if( fDefWidth > 0.0 )
+            xVBAControl->setWidth( fDefWidth );
+        if( fDefHeight > 0.0 )
+            xVBAControl->setHeight( fDefHeight );
     }
     catch (const uno::RuntimeException&)
     {

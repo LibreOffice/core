@@ -319,35 +319,33 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
         xModel = getCurrentDocument();
 
     MacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( xModel ), aMacroName );
-    if( aMacroInfo.mbFound )
-    {
-        // handle the arguments
-        const uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
-
-        int nArg = SAL_N_ELEMENTS( aArgsPtrArray );
-        uno::Sequence< uno::Any > aArgs( nArg );
-
-        const uno::Any** pArg = aArgsPtrArray;
-        const uno::Any** pArgEnd = ( aArgsPtrArray + nArg );
-
-        sal_Int32 nArgProcessed = 0;
-
-        for ( ; pArg != pArgEnd; ++pArg, ++nArgProcessed )
-            aArgs[ nArgProcessed ] =  **pArg;
-
-        // resize array to position of last param with value
-        aArgs.realloc( nArgProcessed + 1 );
-
-        uno::Any aRet;
-        uno::Any aDummyCaller;
-        executeMacro( aMacroInfo.mpDocContext, aMacroInfo.msResolvedMacro, aArgs, aRet, aDummyCaller );
-
-        return aRet;
-    }
-    else
+    if( !aMacroInfo.mbFound )
     {
         throw uno::RuntimeException( "The macro doesn't exist" );
     }
+
+    // handle the arguments
+    const uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
+
+    int nArg = SAL_N_ELEMENTS( aArgsPtrArray );
+    uno::Sequence< uno::Any > aArgs( nArg );
+
+    const uno::Any** pArg = aArgsPtrArray;
+    const uno::Any** pArgEnd = ( aArgsPtrArray + nArg );
+
+    sal_Int32 nArgProcessed = 0;
+
+    for ( ; pArg != pArgEnd; ++pArg, ++nArgProcessed )
+        aArgs[ nArgProcessed ] =  **pArg;
+
+    // resize array to position of last param with value
+    aArgs.realloc( nArgProcessed + 1 );
+
+    uno::Any aRet;
+    uno::Any aDummyCaller;
+    executeMacro( aMacroInfo.mpDocContext, aMacroInfo.msResolvedMacro, aArgs, aRet, aDummyCaller );
+
+    return aRet;
 }
 
 void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const OUString& aFunction, const uno::Any& aLatestTime, const uno::Any& aSchedule )

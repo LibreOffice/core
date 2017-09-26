@@ -394,11 +394,9 @@ void SAL_CALL
 FileProvider::setPropertyValue( const OUString& aPropertyName,
                                 const Any& )
 {
-    if( aPropertyName == "FileSystemNotation" ||
+    if( !(aPropertyName == "FileSystemNotation" ||
         aPropertyName == "HomeDirectory"      ||
-        aPropertyName == "HostName" )
-        return;
-    else
+        aPropertyName == "HostName") )
         throw UnknownPropertyException( THROW_WHERE );
 }
 
