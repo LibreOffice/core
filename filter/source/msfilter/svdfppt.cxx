@@ -1368,7 +1368,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
             while( nCurrentEditAtomStrmPos )
             {
                 sal_uInt32 nPersistIncPos = aCurrentEditAtom.nOffsetPersistDirectory;
-                if (nPersistIncPos && rStCtrl.Seek(nPersistIncPos) == nPersistIncPos)
+                if (nPersistIncPos && checkSeek(rStCtrl, nPersistIncPos))
                 {
                     DffRecordHeader aPersistHd;
                     ReadDffRecordHeader( rStCtrl, aPersistHd );
@@ -1407,9 +1407,8 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                     }
                 }
                 nCurrentEditAtomStrmPos = aCurrentEditAtom.nOffsetLastEdit < nCurrentEditAtomStrmPos ? aCurrentEditAtom.nOffsetLastEdit : 0;
-                if ( nCurrentEditAtomStrmPos )
+                if (nCurrentEditAtomStrmPos && checkSeek(rStCtrl, nCurrentEditAtomStrmPos))
                 {
-                    rStCtrl.Seek( nCurrentEditAtomStrmPos );
                     ReadPptUserEditAtom( rStCtrl, aCurrentEditAtom );
                 }
             }
