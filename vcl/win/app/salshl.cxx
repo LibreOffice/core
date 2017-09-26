@@ -33,7 +33,7 @@ HCURSOR ImplLoadSalCursor( int nId )
 {
     SAL_WARN_IF( !aSalShlData.mhInst, "vcl", "no DLL instance handle" );
 
-    HCURSOR hCursor = LoadCursor( aSalShlData.mhInst, MAKEINTRESOURCE( nId ) );
+    HCURSOR hCursor = LoadCursorW( aSalShlData.mhInst, MAKEINTRESOURCEW( nId ) );
 
     SAL_WARN_IF( !hCursor, "vcl", "cursor not found in sal resource" );
 
@@ -44,7 +44,7 @@ HBITMAP ImplLoadSalBitmap( int nId )
 {
     SAL_WARN_IF( !aSalShlData.mhInst, "vcl", "no DLL instance handle" );
 
-    HBITMAP hBitmap = LoadBitmap( aSalShlData.mhInst, MAKEINTRESOURCE( nId ) );
+    HBITMAP hBitmap = LoadBitmapW( aSalShlData.mhInst, MAKEINTRESOURCEW( nId ) );
 
     SAL_WARN_IF( !hBitmap, "vcl", "bitmap not found in sal resource" );
 
@@ -72,19 +72,19 @@ bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
     }
 
     // Try at first to load the icons from the application exe file
-    rIcon = static_cast<HICON>(LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
+    rIcon = static_cast<HICON>(LoadImageW( pSalData->mhInst, MAKEINTRESOURCEW( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
                                            LR_DEFAULTCOLOR ));
     if ( !rIcon )
     {
         // If the application don't provide these icons, then we try
         // to load the icon from the VCL resource
-        rIcon = static_cast<HICON>(LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
+        rIcon = static_cast<HICON>(LoadImageW( aSalShlData.mhInst, MAKEINTRESOURCEW( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
                                            LR_DEFAULTCOLOR ));
         if ( rIcon )
         {
-            rSmallIcon = static_cast<HICON>(LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
+            rSmallIcon = static_cast<HICON>(LoadImageW( aSalShlData.mhInst, MAKEINTRESOURCEW( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
                                            LR_DEFAULTCOLOR ));
         }
@@ -93,7 +93,7 @@ bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
     }
     else
     {
-        rSmallIcon = static_cast<HICON>(LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
+        rSmallIcon = static_cast<HICON>(LoadImageW( pSalData->mhInst, MAKEINTRESOURCEW( nId ),
                                        IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
                                        LR_DEFAULTCOLOR ));
     }

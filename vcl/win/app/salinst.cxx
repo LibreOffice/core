@@ -88,7 +88,7 @@ void SalAbort( const OUString& rErrorText, bool )
         CrashReporter::AddKeyValue("AbortMessage", rErrorText);
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
-        FatalAppExitW( 0, reinterpret_cast<LPCWSTR>(rErrorText.getStr()) );
+        FatalAppExitW( 0, SAL_W(rErrorText.getStr()) );
     }
 }
 
@@ -228,27 +228,27 @@ void SalData::initKeyCodeMap()
 {
     UINT nKey;
     #define initKey( a, b )\
-        nKey = LOWORD( VkKeyScan( a ) );\
+        nKey = LOWORD( VkKeyScanW( a ) );\
         if( nKey < 0xffff )\
             maVKMap[ nKey ] = b;
 
     maVKMap.clear();
 
-    initKey( '+', KEY_ADD );
-    initKey( '-', KEY_SUBTRACT );
-    initKey( '*', KEY_MULTIPLY );
-    initKey( '/', KEY_DIVIDE );
-    initKey( '.', KEY_POINT );
-    initKey( ',', KEY_COMMA );
-    initKey( '<', KEY_LESS );
-    initKey( '>', KEY_GREATER );
-    initKey( '=', KEY_EQUAL );
-    initKey( '~', KEY_TILDE );
-    initKey( '`', KEY_QUOTELEFT );
-    initKey( '[', KEY_BRACKETLEFT );
-    initKey( ']', KEY_BRACKETRIGHT );
-    initKey( ';', KEY_SEMICOLON );
-    initKey( '\'', KEY_QUOTERIGHT );
+    initKey( L'+', KEY_ADD );
+    initKey( L'-', KEY_SUBTRACT );
+    initKey( L'*', KEY_MULTIPLY );
+    initKey( L'/', KEY_DIVIDE );
+    initKey( L'.', KEY_POINT );
+    initKey( L',', KEY_COMMA );
+    initKey( L'<', KEY_LESS );
+    initKey( L'>', KEY_GREATER );
+    initKey( L'=', KEY_EQUAL );
+    initKey( L'~', KEY_TILDE );
+    initKey( L'`', KEY_QUOTELEFT );
+    initKey( L'[', KEY_BRACKETLEFT );
+    initKey( L']', KEY_BRACKETRIGHT );
+    initKey( L';', KEY_SEMICOLON );
+    initKey( L'\'', KEY_QUOTERIGHT );
 }
 
 // SalData
@@ -344,11 +344,11 @@ void InitSalMain()
     SalData* pData = GetSalData();
     if ( pData )    // Im AppServer NULL
     {
-        STARTUPINFO aSI;
+        STARTUPINFOW aSI;
         aSI.cb = sizeof( aSI );
-        GetStartupInfo( &aSI );
-        pData->mhInst                   = GetModuleHandle( nullptr );
-        pData->mnCmdShow                = aSI.wShowWindow;
+        GetStartupInfoW( &aSI );
+        pData->mhInst    = GetModuleHandleW( nullptr );
+        pData->mnCmdShow = aSI.wShowWindow;
     }
 }
 

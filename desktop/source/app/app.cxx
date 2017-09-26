@@ -2633,12 +2633,12 @@ void Desktop::CheckFirstRun( )
 
 #ifdef _WIN32
         // Check if Quickstarter should be started (on Windows only)
-        TCHAR szValue[8192];
+        WCHAR szValue[8192];
         DWORD nValueSize = sizeof(szValue);
         HKEY hKey;
-        if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  "Software\\LibreOffice", &hKey ) )
+        if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE, L"Software\\LibreOffice", &hKey ) )
         {
-            if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("RunQuickstartAtFirstStart"), nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
+            if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"RunQuickstartAtFirstStart", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
             {
                 css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*bAutostart*/);

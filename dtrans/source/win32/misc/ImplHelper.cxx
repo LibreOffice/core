@@ -92,27 +92,23 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
     else
         OSL_ASSERT( false );
 
-    // we use the GetLocaleInfoA because don't want to provide
-    // a unicode wrapper function for Win9x in sal/systools
-    char buff[6];
-    sal_Int32 nResult = GetLocaleInfoA(
-        lcid, lctype | LOCALE_USE_CP_ACP, buff, sizeof( buff ) );
+    // First, get required buffer size, in characters
+    int nResult = GetLocaleInfoW(
+        lcid, lctype, nullptr, 0 );
 
     OSL_ASSERT( nResult );
 
     if ( nResult )
     {
-        sal_Int32 len = MultiByteToWideChar(
-            CP_ACP, 0, buff, -1, nullptr, 0 );
+        std::unique_ptr<wchar_t> buff( new wchar_t[nResult] );
+        // Now get the actual data
+        nResult = GetLocaleInfoW( lcid, lctype, buff.get(), nResult );
 
-        OSL_ASSERT( len > 0 );
+        OSL_ASSERT(nResult);
 
-        std::vector< sal_Unicode > lpwchBuff(len);
+        if (nResult)
+            winCP = SAL_U( buff.get() );
 
-        len = MultiByteToWideChar(
-            CP_ACP, 0, buff, -1, reinterpret_cast<LPWSTR>(&lpwchBuff[0]), len );
-
-        winCP = OUString( &lpwchBuff[0], (len - 1) );
     }
 
     return winCP;

@@ -1195,7 +1195,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
             if( SUCCEEDED(hRes) )
             {
                 OUString sTempINetFiles;
-                if( osl::FileBase::getFileURLFromSystemPath(reinterpret_cast<sal_Unicode*>(sPath), sTempINetFiles) == osl::FileBase::E_None )
+                if( osl::FileBase::getFileURLFromSystemPath(SAL_U(sPath), sTempINetFiles) == osl::FileBase::E_None )
                     bIsInTempPath = !sTempINetFiles.isEmpty() && sLocationURL.startsWith( sTempINetFiles );
             }
         }

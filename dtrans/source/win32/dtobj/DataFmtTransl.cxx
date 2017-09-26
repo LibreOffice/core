@@ -87,7 +87,7 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
                     aFormat >>= aClipFmtName;
 
                     OSL_ASSERT( aClipFmtName.getLength( ) );
-                    cf = RegisterClipboardFormatW( reinterpret_cast<LPCWSTR>(aClipFmtName.getStr( )) );
+                    cf = RegisterClipboardFormatW( SAL_W(aClipFmtName.getStr( )) );
 
                     OSL_ENSURE( CF_INVALID != cf, "RegisterClipboardFormat failed" );
                 }
@@ -163,7 +163,7 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const 
     if ( !aClipFmtName.getLength( ) )
         return CFormatEtc( CF_INVALID );
 
-    CLIPFORMAT cf = sal::static_int_cast<CLIPFORMAT>(RegisterClipboardFormatW( reinterpret_cast<LPCWSTR>(aClipFmtName.getStr( )) ));
+    CLIPFORMAT cf = sal::static_int_cast<CLIPFORMAT>(RegisterClipboardFormatW( SAL_W(aClipFmtName.getStr( )) ));
     return getFormatEtcForClipformat( cf );
 }
 
@@ -172,7 +172,7 @@ OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
     OSL_PRECOND( CF_INVALID != aClipformat, "Invalid clipboard format" );
 
     sal_Unicode wBuff[ MAX_CLIPFORMAT_NAME + 1 ]; // Null terminator isn't counted, apparently.
-    sal_Int32   nLen = GetClipboardFormatNameW( aClipformat, reinterpret_cast<LPWSTR>(wBuff), MAX_CLIPFORMAT_NAME );
+    sal_Int32   nLen = GetClipboardFormatNameW( aClipformat, SAL_W(wBuff), MAX_CLIPFORMAT_NAME );
 
     return OUString( wBuff, nLen );
 }
@@ -204,7 +204,7 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT
         of which FileContents it wants to paste
         see MSDN: "Handling Shell Data Transfer Scenarios"
     */
-    if ( cf == RegisterClipboardFormatA( CFSTR_FILECONTENTS ) )
+    if ( cf == RegisterClipboardFormat( CFSTR_FILECONTENTS ) )
          fetc.setLindex( 0 );
 
     return fetc;

@@ -116,7 +116,7 @@ using namespace ::com::sun::star::beans;
 # define IDC_PEN MAKEINTRESOURCE(32631)
 #endif
 
-const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYSTEM_WINDOW_ACTIVATED");
+const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageW(L"SYSTEM_WINDOW_ACTIVATED");
 
 bool WinSalFrame::mbInReparent = FALSE;
 
@@ -227,7 +227,7 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
             pRect->bottom  = GetSystemMetrics( SM_CYSCREEN );
         }
         else
-            SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
+            SystemParametersInfoW( SPI_GETWORKAREA, 0, pRect, 0 );
     }
     else
     {
@@ -262,7 +262,7 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
             if( !bIgnoreTaskbar )
             {
                 RECT wRect, scrRect;
-                SystemParametersInfo( SPI_GETWORKAREA, 0, &wRect, 0 );
+                SystemParametersInfoW( SPI_GETWORKAREA, 0, &wRect, 0 );
                 scrRect.left = 0;
                 scrRect.top = 0;
                 scrRect.right = GetSystemMetrics( SM_CXSCREEN );
@@ -503,8 +503,8 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
 HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, bool bAsChild )
 {
     HINSTANCE hInstance = GetSalData()->mhInst;
-    sal_uLong nSysStyle     = GetWindowLong( oldhWnd, GWL_STYLE );
-    sal_uLong nExSysStyle   = GetWindowLong( oldhWnd, GWL_EXSTYLE );
+    sal_uLong nSysStyle     = GetWindowLongW( oldhWnd, GWL_STYLE );
+    sal_uLong nExSysStyle   = GetWindowLongW( oldhWnd, GWL_EXSTYLE );
 
     if( bAsChild )
     {
@@ -675,15 +675,15 @@ static const sal_uInt16 aImplTranslateKeyTab[KEY_TAB_SIZE] =
 static UINT ImplSalGetWheelScrollLines()
 {
     UINT nScrLines = 0;
-    HWND hWndMsWheel = FindWindowA( MSH_WHEELMODULE_CLASS, MSH_WHEELMODULE_TITLE );
+    HWND hWndMsWheel = FindWindowW( MSH_WHEELMODULE_CLASS, MSH_WHEELMODULE_TITLE );
     if ( hWndMsWheel )
     {
-        UINT nGetScrollLinesMsgId = RegisterWindowMessage( MSH_SCROLL_LINES );
+        UINT nGetScrollLinesMsgId = RegisterWindowMessageW( MSH_SCROLL_LINES );
         nScrLines = (UINT)SendMessageW( hWndMsWheel, nGetScrollLinesMsgId, 0, 0 );
     }
 
     if ( !nScrLines )
-        if( !SystemParametersInfo( SPI_GETWHEELSCROLLLINES, 0, &nScrLines, 0 ) )
+        if( !SystemParametersInfoW( SPI_GETWHEELSCROLLLINES, 0, &nScrLines, 0 ) )
             nScrLines = 0 ;
 
     if ( !nScrLines )
@@ -695,7 +695,7 @@ static UINT ImplSalGetWheelScrollLines()
 static UINT ImplSalGetWheelScrollChars()
 {
     UINT nScrChars = 0;
-    if( !SystemParametersInfo( SPI_GETWHEELSCROLLCHARS, 0, &nScrChars, 0 ) )
+    if( !SystemParametersInfoW( SPI_GETWHEELSCROLLCHARS, 0, &nScrChars, 0 ) )
     {
         return 3;
     }
@@ -1070,7 +1070,7 @@ void WinSalFrame::SetTitle( const OUString& rTitle )
 {
     static_assert( sizeof( WCHAR ) == sizeof( sal_Unicode ), "must be the same size" );
 
-    SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.getStr()) );
+    SetWindowTextW( mhWnd, SAL_W(rTitle.getStr()) );
 }
 
 void WinSalFrame::SetIcon( sal_uInt16 nIcon )
@@ -1935,16 +1935,16 @@ void WinSalFrame::StartPresentation( bool bStart )
     if ( bStart )
     {
         // turn off screen-saver when in Presentation mode
-        SystemParametersInfo( SPI_GETSCREENSAVEACTIVE, 0,
+        SystemParametersInfoW( SPI_GETSCREENSAVEACTIVE, 0,
                               &(pSalData->mbScrSvrEnabled), 0 );
         if ( pSalData->mbScrSvrEnabled )
-            SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, FALSE, nullptr, 0 );
+            SystemParametersInfoW( SPI_SETSCREENSAVEACTIVE, FALSE, nullptr, 0 );
     }
     else
     {
         // turn on screen-saver
         if ( pSalData->mbScrSvrEnabled )
-            SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, pSalData->mbScrSvrEnabled, nullptr, 0 );
+            SystemParametersInfoW( SPI_SETSCREENSAVEACTIVE, pSalData->mbScrSvrEnabled, nullptr, 0 );
     }
 }
 
@@ -2031,7 +2031,7 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     struct ImplPtrData
     {
         HCURSOR         mhCursor;
-        LPCSTR          mnSysId;
+        LPCTSTR         mnSysId;
         UINT            mnOwnId;
     };
 
@@ -2303,7 +2303,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
         else
         {
             nKeyLen = aRet.getLength();
-            wcscpy( aKeyBuf, reinterpret_cast< const wchar_t* >( aRet.getStr() ));
+            wcscpy( aKeyBuf, SAL_W( aRet.getStr() ));
         }
     }
 
@@ -2344,21 +2344,21 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
     if ( nKeyCode & KEY_MOD1 )
     {
-        nSysCode = MapVirtualKey( VK_CONTROL, 0 );
+        nSysCode = MapVirtualKeyW( VK_CONTROL, 0 );
         nSysCode = (nSysCode << 16) | (((sal_uLong)1) << 25);
         ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Ctrl" );
     }
 
     if ( nKeyCode & KEY_MOD2 )
     {
-        nSysCode = MapVirtualKey( VK_MENU, 0 );
+        nSysCode = MapVirtualKeyW( VK_MENU, 0 );
         nSysCode = (nSysCode << 16) | (((sal_uLong)1) << 25);
         ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Alt" );
     }
 
     if ( nKeyCode & KEY_SHIFT )
     {
-        nSysCode = MapVirtualKey( VK_SHIFT, 0 );
+        nSysCode = MapVirtualKeyW( VK_SHIFT, 0 );
         nSysCode = (nSysCode << 16) | (((sal_uLong)1) << 25);
         ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, "Shift" );
     }
@@ -2516,7 +2516,7 @@ OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
     if ( nSysCode )
     {
-        nSysCode = MapVirtualKey( nSysCode, 0 );
+        nSysCode = MapVirtualKeyW( nSysCode, 0 );
         if ( nSysCode )
             nSysCode = (nSysCode << 16) | nSysCode2;
         ImplGetKeyNameText( nSysCode, aKeyBuf, nKeyBufLen, nMaxKeyLen, pReplace );
@@ -2554,14 +2554,14 @@ static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Fon
     // 6 Point is the smallest one
     if ( rFont.GetFontHeight() < 8 )
     {
-        if ( rtl_ustr_compareIgnoreAsciiCase( reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName), reinterpret_cast<const sal_Unicode*>(L"MS Sans Serif") ) == 0 )
+        if ( rtl_ustr_compareIgnoreAsciiCase( SAL_U(rLogFont.lfFaceName), SAL_U(L"MS Sans Serif") ) == 0 )
             rFont.SetFontHeight( 8 );
         else if ( rFont.GetFontHeight() < 6 )
             rFont.SetFontHeight( 6 );
     }
 }
 
-static long ImplA2I( const BYTE* pStr )
+static long ImplW2I( const wchar_t* pStr )
 {
     long    n = 0;
     int     nSign = 1;
@@ -2597,18 +2597,18 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     if ( nDragHeight )
         aMouseSettings.SetStartDragHeight( nDragHeight );
     HKEY hRegKey;
-    if ( RegOpenKey( HKEY_CURRENT_USER,
-                     "Control Panel\\Desktop",
-                     &hRegKey ) == ERROR_SUCCESS )
+    if ( RegOpenKeyW( HKEY_CURRENT_USER,
+                      L"Control Panel\\Desktop",
+                      &hRegKey ) == ERROR_SUCCESS )
     {
-        BYTE    aValueBuf[10];
+        wchar_t aValueBuf[10];
         DWORD   nValueSize = sizeof( aValueBuf );
         DWORD   nType;
-        if ( RegQueryValueEx( hRegKey, "MenuShowDelay", nullptr,
-                              &nType, aValueBuf, &nValueSize ) == ERROR_SUCCESS )
+        if ( RegQueryValueExW( hRegKey, L"MenuShowDelay", nullptr,
+                               &nType, reinterpret_cast<LPBYTE>(aValueBuf), &nValueSize ) == ERROR_SUCCESS )
         {
             if ( nType == REG_SZ )
-                aMouseSettings.SetMenuDelay( (sal_uLong)ImplA2I( aValueBuf ) );
+                aMouseSettings.SetMenuDelay( (sal_uLong)ImplW2I( aValueBuf ) );
         }
 
         RegCloseKey( hRegKey );
@@ -2689,8 +2689,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
     aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
     aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
-    long bFlatMenus = 0;
-    SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenus, 0);
+    BOOL bFlatMenus = FALSE;
+    SystemParametersInfoW( SPI_GETFLATMENU, 0, &bFlatMenus, 0);
     if( bFlatMenus )
     {
         aStyleSettings.SetUseFlatMenus( TRUE );
@@ -2707,13 +2707,13 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // caret width
     DWORD nCaretWidth = 2;
-    if( SystemParametersInfo( SPI_GETCARETWIDTH, 0, &nCaretWidth, 0 ) )
+    if( SystemParametersInfoW( SPI_GETCARETWIDTH, 0, &nCaretWidth, 0 ) )
         aStyleSettings.SetCursorSize( nCaretWidth );
 
     // High contrast
     HIGHCONTRAST hc;
     hc.cbSize = sizeof( HIGHCONTRAST );
-    if( SystemParametersInfo( SPI_GETHIGHCONTRAST, hc.cbSize, &hc, 0 )
+    if( SystemParametersInfoW( SPI_GETHIGHCONTRAST, hc.cbSize, &hc, 0 )
             && (hc.dwFlags & HCF_HIGHCONTRASTON) )
         aStyleSettings.SetHighContrastMode( true );
     else
@@ -2775,7 +2775,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetTabFont( aAppFont );
 
     BOOL bDragFull;
-    if ( SystemParametersInfo( SPI_GETDRAGFULLWINDOWS, 0, &bDragFull, 0 ) )
+    if ( SystemParametersInfoW( SPI_GETDRAGFULLWINDOWS, 0, &bDragFull, 0 ) )
     {
         DragFullOptions nDragFullOptions = aStyleSettings.GetDragFullOptions();
         if ( bDragFull )
@@ -2785,20 +2785,20 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetDragFullOptions( nDragFullOptions );
     }
 
-    if ( RegOpenKey( HKEY_CURRENT_USER,
-                     "Control Panel\\International\\Calendars\\TwoDigitYearMax",
-                     &hRegKey ) == ERROR_SUCCESS )
+    if ( RegOpenKeyW( HKEY_CURRENT_USER,
+                      L"Control Panel\\International\\Calendars\\TwoDigitYearMax",
+                      &hRegKey ) == ERROR_SUCCESS )
     {
-        BYTE    aValueBuf[10];
+        wchar_t aValueBuf[10];
         DWORD   nValue;
         DWORD   nValueSize = sizeof( aValueBuf );
         DWORD   nType;
-        if ( RegQueryValueEx( hRegKey, "1", nullptr,
-                              &nType, aValueBuf, &nValueSize ) == ERROR_SUCCESS )
+        if ( RegQueryValueExW( hRegKey, L"1", nullptr,
+                               &nType, reinterpret_cast<LPBYTE>(aValueBuf), &nValueSize ) == ERROR_SUCCESS )
         {
             if ( nType == REG_SZ )
             {
-                nValue = (sal_uLong)ImplA2I( aValueBuf );
+                nValue = (sal_uLong)ImplW2I( aValueBuf );
                 if ( (nValue > 1000) && (nValue < 10000) )
                 {
                     MiscSettings aMiscSettings = rSettings.GetMiscSettings();
@@ -4436,15 +4436,15 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
         HDC hdc = GetDC( hWnd );
         SIZE strSize;
 
-        NONCLIENTMETRICS ncm;
+        NONCLIENTMETRICSW ncm;
         memset( &ncm, 0, sizeof(ncm) );
         ncm.cbSize = sizeof( ncm );
-        SystemParametersInfo( SPI_GETNONCLIENTMETRICS, 0, &ncm, 0 );
+        SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, 0, &ncm, 0 );
 
         // Assume every menu item can be default and printed bold
         //ncm.lfMenuFont.lfWeight = FW_BOLD;
 
-        HFONT hfntOld = static_cast<HFONT>(SelectObject(hdc, CreateFontIndirect( &ncm.lfMenuFont )));
+        HFONT hfntOld = static_cast<HFONT>(SelectObject(hdc, CreateFontIndirectW( &ncm.lfMenuFont )));
 
         // menu text and accelerator
         OUString aStr(pSalMenuItem->mText);
@@ -4577,16 +4577,16 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         x += bmpSize.Width() + 3;
         aRect.left = x;
 
-        NONCLIENTMETRICS ncm;
+        NONCLIENTMETRICSW ncm;
         memset( &ncm, 0, sizeof(ncm) );
         ncm.cbSize = sizeof( ncm );
-        SystemParametersInfo( SPI_GETNONCLIENTMETRICS, 0, &ncm, 0 );
+        SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, 0, &ncm, 0 );
 
         // Print default menu entry with bold font
         //if ( pDI->itemState & ODS_DEFAULT )
         //    ncm.lfMenuFont.lfWeight = FW_BOLD;
 
-        hfntOld = static_cast<HFONT>(SelectObject(pDI->hDC, CreateFontIndirect( &ncm.lfMenuFont )));
+        hfntOld = static_cast<HFONT>(SelectObject(pDI->hDC, CreateFontIndirectW( &ncm.lfMenuFont )));
 
         SIZE strSize;
         OUString aStr( pSalMenuItem->mText );
@@ -4605,8 +4605,8 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             aStr = pSalMenuItem->mAccelText;
             GetTextExtentPoint32W( pDI->hDC, SAL_W(aStr.getStr()),
                                     aStr.getLength(), &strSizeA );
-            TEXTMETRIC tm;
-            GetTextMetrics( pDI->hDC, &tm );
+            TEXTMETRICW tm;
+            GetTextMetricsW( pDI->hDC, &tm );
 
             // position the accelerator string to the right but leave space for the
             // (potential) submenu arrow (tm.tmMaxCharWidth)
@@ -4969,7 +4969,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             auto pTextBuf = std::unique_ptr<WCHAR[]>(new WCHAR[nTextLen]);
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf.get(), nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf.get()), (sal_Int32)nTextLen );
+            aEvt.maText = OUString( SAL_U(pTextBuf.get()), (sal_Int32)nTextLen );
         }
 
         aEvt.mnCursorPos = aEvt.maText.getLength();
@@ -4992,17 +4992,18 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         LONG    nTextLen = ImmGetCompositionStringW( hIMC, GCS_COMPSTR, nullptr, 0 ) / sizeof( WCHAR );
         if ( nTextLen > 0 )
         {
-            WCHAR* pTextBuf = new WCHAR[nTextLen];
-            ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
-            delete [] pTextBuf;
+            {
+                auto pTextBuf = std::unique_ptr<WCHAR>(new WCHAR[nTextLen]);
+                ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf.get(), nTextLen*sizeof( WCHAR ) );
+                aEvt.maText = OUString( SAL_U(pTextBuf.get()), (sal_Int32)nTextLen );
+            }
 
-            BYTE*   pAttrBuf = nullptr;
+            std::unique_ptr<BYTE> pAttrBuf;
             LONG        nAttrLen = ImmGetCompositionStringW( hIMC, GCS_COMPATTR, nullptr, 0 );
             if ( nAttrLen > 0 )
             {
-                pAttrBuf = new BYTE[nAttrLen];
-                ImmGetCompositionStringW( hIMC, GCS_COMPATTR, pAttrBuf, nAttrLen );
+                pAttrBuf.reset(new BYTE[nAttrLen]);
+                ImmGetCompositionStringW( hIMC, GCS_COMPATTR, pAttrBuf.get(), nAttrLen );
             }
 
             if ( pAttrBuf )
@@ -5012,7 +5013,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                 memset( pSalAttrAry, 0, nTextLen2*sizeof( sal_uInt16 ) );
                 for( sal_Int32 i = 0; (i < nTextLen2) && (i < nAttrLen); i++ )
                 {
-                    BYTE nWinAttr = pAttrBuf[i];
+                    BYTE nWinAttr = pAttrBuf.get()[i];
                     ExtTextInputAttr   nSalAttr;
                     if ( nWinAttr == ATTR_TARGET_CONVERTED )
                     {
@@ -5031,7 +5032,6 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
                 }
 
                 aEvt.mpTextAttr = pSalAttrAry;
-                delete [] pAttrBuf;
             }
         }
 
@@ -5443,9 +5443,9 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     if ( nMsg == WM_CREATE )
     {
         // Save Window-Instance in Windowhandle
-        // Can also be used for the W-Version, because the struct
+        // Can also be used for the A-Version, because the struct
         // to access lpCreateParams is the same structure
-        CREATESTRUCTA* pStruct = reinterpret_cast<CREATESTRUCTA*>(lParam);
+        CREATESTRUCTW* pStruct = reinterpret_cast<CREATESTRUCTW*>(lParam);
         WinSalFrame* pFrame = static_cast<WinSalFrame*>(pStruct->lpCreateParams);
         if ( pFrame != nullptr )
         {
@@ -5870,7 +5870,7 @@ bool HasAtHook()
 {
     BOOL bIsRunning = FALSE;
     // pvParam must be BOOL
-    return SystemParametersInfo(SPI_GETSCREENREADER, 0, &bIsRunning, 0)
+    return SystemParametersInfoW(SPI_GETSCREENREADER, 0, &bIsRunning, 0)
         && bIsRunning;
 }
 #endif

@@ -37,8 +37,8 @@ D2DWriteTextOutRenderer::pDWriteCreateFactory_t D2DWriteTextOutRenderer::DWriteC
 
 bool D2DWriteTextOutRenderer::InitModules()
 {
-    mmD2d1 = LoadLibrary("D2d1.dll");
-    mmDWrite = LoadLibrary("dwrite.dll");
+    mmD2d1 = LoadLibraryW(L"D2d1.dll");
+    mmDWrite = LoadLibraryW(L"dwrite.dll");
     if (mmD2d1 && mmDWrite)
     {
         D2D1CreateFactory = pD2D1CreateFactory_t(GetProcAddress(mmD2d1, "D2D1CreateFactory"));
@@ -75,7 +75,7 @@ D2DTextAntiAliasMode lclGetSystemTextAntiAliasMode()
     D2DTextAntiAliasMode eMode = D2DTextAntiAliasMode::Default;
 
     BOOL bFontSmoothing;
-    if (!SystemParametersInfo(SPI_GETFONTSMOOTHING, 0, &bFontSmoothing, 0))
+    if (!SystemParametersInfoW(SPI_GETFONTSMOOTHING, 0, &bFontSmoothing, 0))
         return eMode;
 
     if (bFontSmoothing)
@@ -83,7 +83,7 @@ D2DTextAntiAliasMode lclGetSystemTextAntiAliasMode()
         eMode = D2DTextAntiAliasMode::AntiAliased;
 
         UINT nType;
-        if (SystemParametersInfo(SPI_GETFONTSMOOTHINGTYPE, 0, &nType, 0) && nType == FE_FONTSMOOTHINGCLEARTYPE)
+        if (SystemParametersInfoW(SPI_GETFONTSMOOTHINGTYPE, 0, &nType, 0) && nType == FE_FONTSMOOTHINGCLEARTYPE)
             eMode = D2DTextAntiAliasMode::ClearType;
     }
     else

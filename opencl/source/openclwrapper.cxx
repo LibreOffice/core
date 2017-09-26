@@ -502,10 +502,10 @@ bool initOpenCLRunEnv( GPUEnv *gpuInfo )
     const bool bIsNotWinOrIsWin8OrGreater = IsWindows8OrGreater();
 # else
     bool bIsNotWinOrIsWin8OrGreater = true;
-    OSVERSIONINFO aVersionInfo;
+    OSVERSIONINFOW aVersionInfo;
     memset( &aVersionInfo, 0, sizeof(aVersionInfo) );
     aVersionInfo.dwOSVersionInfoSize = sizeof( aVersionInfo );
-    if (GetVersionEx( &aVersionInfo ))
+    if (GetVersionExW( &aVersionInfo ))
     {
         // Windows 7 or lower?
         if (aVersionInfo.dwMajorVersion < 6 ||
