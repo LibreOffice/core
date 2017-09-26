@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * This file incorporates work covered by the following license notice:
+ * This file incorporates work covered by the following license notice:
  *
  *   Licensed to the Apache Software Foundation (ASF) under one or more
  *   contributor license agreements. See the NOTICE file distributed
@@ -170,6 +170,7 @@ sal_uInt16 aTextNodeSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+    RES_CHR_RSID, RES_RSID_END - 1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
     // FillAttribute support (paragraph FillStyle)
@@ -249,6 +250,7 @@ sal_uInt16 aCharFormatSetRange[] = {
 sal_uInt16 aCharAutoFormatSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
+    RES_CHR_RSID, RES_CHR_RSID,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
