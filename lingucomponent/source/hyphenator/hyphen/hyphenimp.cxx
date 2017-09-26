@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined(_WIN32)
-#include <prewin.h>
-#include <postwin.h>
-#endif
-
 #include <com/sun/star/uno/Reference.h>
 
 #include <cppuhelper/factory.hxx>
@@ -247,6 +242,34 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
     return bRes;
 }
 
+namespace {
+bool LoadDictionary(HDInfo& rDict)
+{
+    OUString DictFN = rDict.aName + ".dic";
+    OUString dictpath;
+
+    osl::FileBase::getSystemPathFromFileURL(DictFN, dictpath);
+
+#if defined(_WIN32)
+    // hnj_hyphen_load expects UTF-8 encoded paths with \\?\ long path prefix.
+    OString sTmp = Win_AddLongPathPrefix(OUStringToOString(dictpath, RTL_TEXTENCODING_UTF8));
+#else
+    OString sTmp(OU2ENC(dictpath, osl_getThreadTextEncoding()));
+#endif
+    HyphenDict *dict = nullptr;
+    if ((dict = hnj_hyphen_load(sTmp.getStr())) == nullptr)
+    {
+        SAL_WARN(
+            "lingucomponent",
+            "Couldn't find file " << OU2ENC(dictpath, osl_getThreadTextEncoding()));
+        return false;
+    }
+    rDict.aPtr = dict;
+    rDict.eEnc = getTextEncodingFromCharset(dict->cset);
+    return true;
+}
+}
+
 Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWord,
        const css::lang::Locale& aLocale,
        sal_Int16 nMaxLeading,
@@ -282,25 +305,8 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         // if this dictionary has not been loaded yet do that
         if (!aDicts[k].aPtr)
         {
-            OUString DictFN = aDicts[k].aName + ".dic";
-            OUString dictpath;
-
-            osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
-
-#if defined(_WIN32)
-            // Hyphen waits UTF-8 encoded paths with \\?\ long path prefix.
-            OString sTmp = Win_AddLongPathPrefix(OUStringToOString(dictpath, RTL_TEXTENCODING_UTF8));
-#else
-            OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
-#endif
-
-            if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == nullptr )
-            {
-               fprintf(stderr, "Couldn't find file %s\n", OU2ENC(dictpath, osl_getThreadTextEncoding()) );
-               return nullptr;
-            }
-            aDicts[k].aPtr = dict;
-            aDicts[k].eEnc = getTextEncodingFromCharset(dict->cset);
+            if (!LoadDictionary(aDicts[k]))
+                return nullptr;
         }
 
         // other wise hyphenate the word with that dictionary
@@ -507,29 +513,6 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
     return nullptr;
 }
 
-#if defined(_WIN32)
-static OString Win_GetShortPathName( const OUString &rLongPathName )
-{
-    OString aRes;
-
-    sal_Unicode aShortBuffer[1024] = {0};
-    sal_Int32   nShortBufSize = SAL_N_ELEMENTS( aShortBuffer );
-
-    // use the version of 'GetShortPathName' that can deal with Unicode...
-    sal_Int32 nShortLen = GetShortPathNameW(
-            reinterpret_cast<LPCWSTR>( rLongPathName.getStr() ),
-            reinterpret_cast<LPWSTR>( aShortBuffer ),
-            nShortBufSize );
-
-    if (nShortLen < nShortBufSize) // conversion successful?
-        aRes = OString( OU2ENC( OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
-    else
-        OSL_FAIL( "Win_GetShortPathName: buffer to short" );
-
-    return aRes;
-}
-#endif //defined(WNT)
-
 Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const OUString& aWord,
         const css::lang::Locale& aLocale,
         const css::beans::PropertyValues& aProperties )
@@ -561,27 +544,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         // if this dictionary has not been loaded yet do that
         if (!aDicts[k].aPtr)
         {
-            OUString DictFN = aDicts[k].aName + ".dic";
-            OUString dictpath;
-
-            osl::FileBase::getSystemPathFromFileURL( DictFN, dictpath );
-            OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
-
-#if defined(_WIN32)
-            // workaround for Windows specific problem that the
-            // path length in calls to 'fopen' is limited to somewhat
-            // about 120+ characters which will usually be exceed when
-            // using dictionaries as extensions.
-            sTmp = Win_GetShortPathName( dictpath );
-#endif
-
-            if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == nullptr )
-            {
-               fprintf(stderr, "Couldn't find file %s and %s\n", sTmp.getStr(), OU2ENC(dictpath, osl_getThreadTextEncoding()) );
-               return nullptr;
-            }
-            aDicts[k].aPtr = dict;
-            aDicts[k].eEnc = getTextEncodingFromCharset(dict->cset);
+            if (!LoadDictionary(aDicts[k]))
+                return nullptr;
         }
 
         // other wise hyphenate the word with that dictionary
