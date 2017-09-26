@@ -312,7 +312,7 @@ void XSpreadsheets2::importSheetToCopy()
         // import sheet
         uno::Reference< sheet::XSpreadsheets2 > xDestSheets (xDestDoc->getSheets(), UNO_QUERY_THROW);
         sal_Int32 nDestPos = 0;
-        sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, aSrcSheetName, nDestPos);
+        sal_Int32 nDestPosEffective = xDestSheets->importSheet(css::uno::Reference< css::sheet::XSpreadsheetDocument>(), aSrcSheetName, nDestPos);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet index", nDestPosEffective, nDestPos);
     }
     else
