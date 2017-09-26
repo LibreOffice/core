@@ -73,7 +73,7 @@ class SwFieldVarPage : public SwFieldPage
     OUString            sOldValueFT;
     OUString            sOldNameFT;
 
-    sal_uLong           nOldFormat;
+    sal_uInt32          nOldFormat;
     bool                bInit;
 
     DECL_LINK( TypeHdl, ListBox&, void );
