@@ -51,16 +51,10 @@
 #define RID_SVXSTR_MOVE_MENU                        NC_("RID_SVXSTR_MOVE_MENU", "Move Menu")
 #define RID_SVXSTR_ADD_SUBMENU                      NC_("RID_SVXSTR_ADD_SUBMENU", "Add Submenu")
 #define RID_SVXSTR_SUBMENU_NAME                     NC_("RID_SVXSTR_SUBMENU_NAME", "Submenu name")
-#define RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION     NC_("RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION", "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.")
 #define RID_SVXSTR_DELETE_ICON_CONFIRM              NC_("RID_SVXSTR_DELETE_ICON_CONFIRM", "Are you sure to delete the image?")
 #define RID_SVXSTR_REPLACE_ICON_WARNING             NC_("RID_SVXSTR_REPLACE_ICON_WARNING", "The icon %ICONNAME is already contained in the image list.\nWould you like to replace the existing icon?")
 #define RID_SVXSTR_REPLACE_ICON_CONFIRM             NC_("RID_SVXSTR_REPLACE_ICON_CONFIRM", "Confirm Icon Replacement")
 #define RID_SVXSTR_YESTOALL                         NC_("RID_SVXSTR_YESTOALL", "Yes to All")
-#define RID_SVXSTR_PRODUCTNAME_TOOLBARS             NC_("RID_SVXSTR_PRODUCTNAME_TOOLBARS", "%PRODUCTNAME %MODULENAME Toolbars")
-#define RID_SVXSTR_PRODUCTNAME_CONTEXTMENUS         NC_("RID_SVXSTR_PRODUCTNAME_CONTEXTMENUS", "%PRODUCTNAME %MODULENAME Context Menus")
-#define RID_SVXSTR_TOOLBAR                          NC_("RID_SVXSTR_TOOLBAR", "Toolbar")
-//#define RID_SVXSTR_TOOLBAR_CONTENT                  NC_("RID_SVXSTR_TOOLBAR_CONTENT", "Toolbar Content")
-#define RID_SVXSTR_COMMANDS                         NC_("RID_SVXSTR_COMMANDS", "Commands")
 #define RID_SXVSTR_CONFIRM_DELETE_TOOLBAR           NC_("RID_SXVSTR_CONFIRM_DELETE_TOOLBAR", "There are no more commands on the toolbar. Do you want to delete the toolbar?")
 /* Translators: Do not translate %SAVE IN SELECTION% It is a placeholder
    and will be replaced at runtime by the name of the selected application
