@@ -90,7 +90,7 @@ protected:
     OLECHAR const *         mCurFileUrl;
     BOOL                    mbLoad;
     BOOL                    mbViewOnly;
-    WNDCLASS                mPWinClass;
+    WNDCLASSW               mPWinClass;
     HWND                    mParentWin;
     HWND                    mOffWin;
 

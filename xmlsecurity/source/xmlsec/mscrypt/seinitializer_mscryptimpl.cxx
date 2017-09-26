@@ -50,13 +50,14 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 {
     const char* n_pCertStore ;
     HCERTSTORE  n_hStoreHandle ;
+    OString sCertDir;
 
     //Initialize the crypto engine
     if( sCertDB.getLength() > 0 )
     {
-        OString sCertDir(sCertDB.getStr(), sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
+        sCertDir = OString(sCertDB.getStr(), sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
         n_pCertStore = sCertDir.getStr();
-        n_hStoreHandle = CertOpenSystemStore( NULL, n_pCertStore ) ;
+        n_hStoreHandle = CertOpenSystemStoreW( NULL, SAL_W(sCertDB.getStr())) ;
         if( n_hStoreHandle == nullptr )
         {
             return nullptr;

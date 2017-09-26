@@ -39,23 +39,23 @@
 
 #pragma warning (pop)
 
-#define STAROFFICE_WINDOWCLASS "SOParentWindow"
+#define STAROFFICE_WINDOWCLASS L"SOParentWindow"
 
 
 void OutputError_Impl( HWND hw, HRESULT ErrorCode )
 {
-    LPTSTR sMessage;
-    FormatMessageA(
+    LPWSTR sMessage;
+    FormatMessageW(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM,
         nullptr,
         ErrorCode,
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-        reinterpret_cast<LPTSTR>(&sMessage),
+        reinterpret_cast<LPWSTR>(&sMessage),
         0,
         nullptr
     );
-    ::MessageBoxA( hw, sMessage, nullptr, MB_OK | MB_ICONINFORMATION );
+    MessageBoxW( hw, sMessage, nullptr, MB_OK | MB_ICONINFORMATION );
     LocalFree( sMessage );
 }
 
@@ -164,17 +164,17 @@ CSOActiveX::CSOActiveX()
         OutputError_Impl( nullptr, hr );
 
     mPWinClass.style            = CS_HREDRAW|CS_VREDRAW;
-    mPWinClass.lpfnWndProc      = ::DefWindowProc;
+    mPWinClass.lpfnWndProc      = DefWindowProcW;
     mPWinClass.cbClsExtra       = 0;
     mPWinClass.cbWndExtra       = 0;
-    mPWinClass.hInstance        = GetModuleHandle(nullptr); //myInstance;
+    mPWinClass.hInstance        = GetModuleHandleW(nullptr); //myInstance;
     mPWinClass.hIcon            = nullptr;
     mPWinClass.hCursor          = nullptr;
     mPWinClass.hbrBackground    = reinterpret_cast<HBRUSH>(COLOR_BACKGROUND);
     mPWinClass.lpszMenuName     = nullptr;
     mPWinClass.lpszClassName    = STAROFFICE_WINDOWCLASS;
 
-    RegisterClass(&mPWinClass);
+    RegisterClassW(&mPWinClass);
 }
 
 CSOActiveX::~CSOActiveX()
@@ -991,9 +991,9 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
             }
 
             mParentWin = hwnd;
-            mOffWin = CreateWindow(
+            mOffWin = CreateWindowW(
                                 STAROFFICE_WINDOWCLASS,
-                                "OfficeContainer",
+                                L"OfficeContainer",
                                 WS_CHILD | WS_CLIPCHILDREN | WS_BORDER,
                                 di.prcBounds->left,
                                 di.prcBounds->top,

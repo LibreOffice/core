@@ -929,8 +929,8 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 OUString aSystemPath;
                 osl_getSystemPathFromFileURL( aFileURL.pData, &aSystemPath.pData );
 
-                WIN32_FIND_DATA aFindFileData;
-                HANDLE  hFind = FindFirstFile( reinterpret_cast<PCWSTR>(aSystemPath.getStr()), &aFindFileData );
+                WIN32_FIND_DATAW aFindFileData;
+                HANDLE  hFind = FindFirstFileW( SAL_W(aSystemPath.getStr()), &aFindFileData );
                 if (hFind != INVALID_HANDLE_VALUE)
                     iDialog->SetFolder(pFolder);
                 else

@@ -127,7 +127,7 @@ static ImpTwain* pImpTwainInstance = nullptr;
 
 LRESULT CALLBACK TwainWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
-    return DefWindowProc( hWnd, nMsg, nPar1, nPar2 );
+    return DefWindowProcW( hWnd, nMsg, nPar1, nPar2 );
 }
 
 LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
@@ -235,11 +235,11 @@ ImpTwain::ImpTwain( ScannerManager& rMgr, const Link<unsigned long,void>& rNotif
     strncpy( aAppIdent.ProductName, "Office", 32 );
     aAppIdent.ProductName[32] = aAppIdent.ProductName[33] = 0;
 
-    WNDCLASS aWc = { 0, &TwainWndProc, 0, sizeof( WNDCLASS ), GetModuleHandle( nullptr ), nullptr, nullptr, nullptr, nullptr, "TwainClass" };
-    RegisterClass( &aWc );
+    WNDCLASSW aWc = { 0, &TwainWndProc, 0, sizeof( WNDCLASSW ), GetModuleHandleW( nullptr ), nullptr, nullptr, nullptr, nullptr, L"TwainClass" };
+    RegisterClassW( &aWc );
 
-    hTwainWnd = CreateWindowEx( WS_EX_TOPMOST, aWc.lpszClassName, "TWAIN", 0, 0, 0, 0, 0, HWND_DESKTOP, nullptr, aWc.hInstance, nullptr );
-    hTwainHook = SetWindowsHookEx( WH_GETMESSAGE, &TwainMsgProc, nullptr, GetCurrentThreadId() );
+    hTwainWnd = CreateWindowExW( WS_EX_TOPMOST, aWc.lpszClassName, L"TWAIN", 0, 0, 0, 0, 0, HWND_DESKTOP, nullptr, aWc.hInstance, nullptr );
+    hTwainHook = SetWindowsHookExW( WH_GETMESSAGE, &TwainMsgProc, nullptr, GetCurrentThreadId() );
 
     // block destruction until ImplDestroyHdl is called
     mxSelfRef = static_cast< ::cppu::OWeakObject* >( this );
