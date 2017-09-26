@@ -13,13 +13,17 @@ import uno
 from org.libreoffice.unotest import pyuno
 from com.sun.star.beans import PropertyValue
 
+testEnvironmentInitialized = False
 
 class CollectionsTestBase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.context = pyuno.getComponentContext()
-        pyuno.private_initTestEnvironment()
+        global testEnvironmentInitialized
+        if not testEnvironmentInitialized:
+            pyuno.private_initTestEnvironment()
+            testEnvironmentInitialized = True
 
     def setUp(self):
         self._components = []
