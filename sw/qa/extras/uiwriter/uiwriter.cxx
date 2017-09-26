@@ -258,6 +258,7 @@ public:
     void testTdf105625();
     void testTdf106736();
     void testTdf58604();
+    void testTdf112025();
     void testMsWordCompTrailingBlanks();
     void testCreateDocxAnnotation();
     void testTdf107976();
@@ -414,6 +415,7 @@ public:
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
     CPPUNIT_TEST(testTdf58604);
+    CPPUNIT_TEST(testTdf112025);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
@@ -5092,6 +5094,28 @@ void SwUiWriterTest::testTdf58604()
     load(DATA_DIRECTORY, "tdf58604.odt");
     CPPUNIT_ASSERT_EQUAL( OUString("POR_BRK"), parseDump( "(/root/page/body/txt/LineBreak[1]/preceding::Text)[last()]", "nType" ) );
 #endif
+}
+
+void SwUiWriterTest::testTdf112025()
+{
+    load(DATA_DIRECTORY, "fdo112025.odt");
+    const int numberOfParagraphs = getParagraphs();
+    CPPUNIT_ASSERT_EQUAL(1, numberOfParagraphs);
+
+    // get a page cursor
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToEndOfPage();
+
+    OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo112025-insert.docx";
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({{ "Name", uno::makeAny(insertFileid) }}));
+    lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    // something has been inserted + an additional paragraph
+    CPPUNIT_ASSERT_GREATER(numberOfParagraphs, getParagraphs());
+
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 }
 
 void SwUiWriterTest::testTdf108524()
