@@ -322,11 +322,12 @@ sal_Bool SAL_CALL Desktop::terminate()
 
         // The clipboard listener needs to be the first. It can create copies of the
         // existing document which needs basically all the available infrastructure.
-        impl_sendTerminateToClipboard();
-
-        impl_sendNotifyTerminationEvent();
         {
-            SolarMutexGuard aGuard;
+            SolarMutexResettableGuard aGuard;
+            impl_sendTerminateToClipboard();
+            aGuard.clear();
+            impl_sendNotifyTerminationEvent();
+            aGuard.reset();
             Scheduler::ProcessEventsToIdle();
         }
 
