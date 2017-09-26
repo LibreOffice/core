@@ -893,12 +893,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
 {
     // RotGrfFlyFrame: Modify rotation attribute instead of manipulating the graphic
-    SwWrtShell& rShell = GetShell();
-    SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<
-        RES_GRFATR_ROTATION, RES_GRFATR_ROTATION,
-        SID_ATTR_TRANSFORM_ANGLE, SID_ATTR_TRANSFORM_ANGLE>{} );
-    rShell.GetCurAttr( aSet );
-    const SwRotationGrf& rRotation = static_cast<const SwRotationGrf&>(aSet.Get(RES_GRFATR_ROTATION));
     sal_uInt16 aRotation(0);
 
     if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_LEFT)
@@ -916,22 +910,23 @@ void SwGrfShell::ExecuteRotation(SfxRequest const &rReq)
 
     if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RESET || 0 != aRotation)
     {
-        rShell.StartAllAction();
-        rShell.StartUndo(SwUndoId::START);
+        SwWrtShell& rShell = GetShell();
+        SfxItemSet aSet( rShell.GetAttrPool(), svl::Items<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION>{} );
+        rShell.GetCurAttr( aSet );
+        const SwRotationGrf& rRotation = static_cast<const SwRotationGrf&>(aSet.Get(RES_GRFATR_ROTATION));
+        SwFlyFrameAttrMgr aMgr(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF);
 
+        // RotGrfFlyFrame: Possible rotation change here, SwFlyFrameAttrMgr aMgr is available
         if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_RESET)
         {
-            rShell.SetAttrItem(SwRotationGrf(0, rRotation.GetUnrotatedSize()));
+            aMgr.SetRotation(rRotation.GetValue(), 0, rRotation.GetUnrotatedSize());
         }
         else if(0 != aRotation)
         {
-            sal_uInt16 aNewRotation((aRotation + rRotation.GetValue()) % 3600);
+            const sal_uInt16 aNewRotation((aRotation + rRotation.GetValue()) % 3600);
 
-            rShell.SetAttrItem(SwRotationGrf(aNewRotation, rRotation.GetUnrotatedSize()));
+            aMgr.SetRotation(rRotation.GetValue(), aNewRotation, rRotation.GetUnrotatedSize());
         }
-
-        rShell.EndUndo(SwUndoId::END);
-        rShell.EndAllAction();
     }
 }
 
