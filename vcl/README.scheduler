@@ -93,7 +93,7 @@ can be added to the scheduler reasonably.
 
 Currently for Mac and Windows, we run main thread deferrals by disabling the
 SolarMutex using a boolean. In the case of the redirect, this makes
-tryToaAcquire and doAcquire return true or 1, while a release is ignored.
+tryToAcquire and doAcquire return true or 1, while a release is ignored.
 Also the IsCurrentThread() mutex check function will act accordingly, so all
 the DBG_TESTSOLARMUTEX won't fail.
 

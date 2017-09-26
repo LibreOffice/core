@@ -413,7 +413,7 @@ void getCutSet(
 void getExtends(
     std::vector<ExtendSet>& rExtendSet,                         // target Left/Right values to fill
     const basegfx::B2DPoint& rOrigin,                           // own vector start
-    const StyleVectorCombination& rCombination,                 // own vector and offstets for lines
+    const StyleVectorCombination& rCombination,                 // own vector and offsets for lines
     const basegfx::B2DVector& rPerpendX,                        // normalized perpendicular to own vector
     const std::vector< StyleVectorCombination >& rStyleVector)  // other vectors emerging in this point
 {
