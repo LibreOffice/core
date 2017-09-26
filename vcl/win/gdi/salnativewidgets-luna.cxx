@@ -351,7 +351,7 @@ bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
         RECT rcContent;
         hr = vsAPI.GetThemeBackgroundContentRect( hTheme, hDC, iPart, iState, &rc, &rcContent);
         hr = vsAPI.DrawThemeText( hTheme, hDC, iPart, iState,
-            reinterpret_cast<LPCWSTR>(aStr.getStr()), -1,
+            SAL_W(aStr.getStr()), -1,
             DT_CENTER | DT_VCENTER | DT_SINGLELINE,
             0, &rcContent);
     }

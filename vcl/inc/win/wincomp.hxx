@@ -97,22 +97,22 @@ inline void DeletePalette( HPALETTE hPalette )
 
 inline void SetWindowStyle( HWND hWnd, DWORD nStyle )
 {
-    SetWindowLong( hWnd, GWL_STYLE, nStyle );
+    SetWindowLongPtrW( hWnd, GWL_STYLE, nStyle );
 }
 
 inline DWORD GetWindowStyle( HWND hWnd )
 {
-    return GetWindowLong( hWnd, GWL_STYLE );
+    return GetWindowLongPtrW( hWnd, GWL_STYLE );
 }
 
 inline void SetWindowExStyle( HWND hWnd, DWORD nStyle )
 {
-    SetWindowLong( hWnd, GWL_EXSTYLE, nStyle );
+    SetWindowLongPtrW( hWnd, GWL_EXSTYLE, nStyle );
 }
 
 inline DWORD GetWindowExStyle( HWND hWnd )
 {
-    return GetWindowLong( hWnd, GWL_EXSTYLE );
+    return GetWindowLongPtrW( hWnd, GWL_EXSTYLE );
 }
 
 inline BOOL IsMinimized( HWND hWnd )
@@ -127,12 +127,12 @@ inline BOOL IsMaximized( HWND hWnd )
 
 inline void SetWindowFont( HWND hWnd, HFONT hFont, BOOL bRedraw )
 {
-    SendMessage( hWnd, WM_SETFONT, reinterpret_cast<WPARAM>(hFont), MAKELPARAM((UINT)bRedraw,0) );
+    SendMessageW( hWnd, WM_SETFONT, reinterpret_cast<WPARAM>(hFont), MAKELPARAM((UINT)bRedraw,0) );
 }
 
 inline HFONT GetWindowFont( HWND hWnd )
 {
-    return reinterpret_cast<HFONT>(SendMessage( hWnd, WM_GETFONT, 0, 0 ));
+    return reinterpret_cast<HFONT>(SendMessageW( hWnd, WM_GETFONT, 0, 0 ));
 }
 
 inline void SetClassCursor( HWND hWnd, HCURSOR hCursor )
@@ -167,17 +167,17 @@ inline HBRUSH GetClassBrush( HWND hWnd )
 
 inline HINSTANCE GetWindowInstance( HWND hWnd )
 {
-    return reinterpret_cast<HINSTANCE>(GetWindowLongPtr( hWnd, GWLP_HINSTANCE ));
+    return reinterpret_cast<HINSTANCE>(GetWindowLongPtrW( hWnd, GWLP_HINSTANCE ));
 }
 
 
-#define MOUSEZ_CLASSNAME  "MouseZ"            // wheel window class
-#define MOUSEZ_TITLE      "Magellan MSWHEEL"  // wheel window title
+#define MOUSEZ_CLASSNAME  L"MouseZ"            // wheel window class
+#define MOUSEZ_TITLE      L"Magellan MSWHEEL"  // wheel window title
 
 #define MSH_WHEELMODULE_CLASS (MOUSEZ_CLASSNAME)
 #define MSH_WHEELMODULE_TITLE (MOUSEZ_TITLE)
 
-#define MSH_SCROLL_LINES "MSH_SCROLL_LINES_MSG"
+#define MSH_SCROLL_LINES L"MSH_SCROLL_LINES_MSG"
 
 #ifndef WHEEL_DELTA
 #define WHEEL_DELTA                 120

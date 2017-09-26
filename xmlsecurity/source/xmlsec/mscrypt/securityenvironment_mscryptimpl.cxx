@@ -372,7 +372,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPerso
         CertEnumSystemStore(CERT_SYSTEM_STORE_CURRENT_USER, nullptr, nullptr, cert_enum_system_store_callback);
 #endif
 
-        hSystemKeyStore = CertOpenSystemStore( 0, "MY" ) ;
+        hSystemKeyStore = CertOpenSystemStoreW( 0, L"MY" ) ;
         if( hSystemKeyStore != nullptr ) {
             pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
             while (pCertContext)
@@ -420,7 +420,6 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPerso
 
 Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) {
     unsigned int i ;
-    LPCSTR   pszName ;
     X509Certificate_MSCryptImpl *xcert = nullptr ;
     PCCERT_CONTEXT pCertContext = nullptr ;
     HCERTSTORE hCertStore = nullptr ;
@@ -434,10 +433,9 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const
     encoding = osl_getTextEncodingFromLocale( pLocale ) ;
 
     //Create cert info from issue and serial
-    OString oissuer = OUStringToOString( issuerName , encoding ) ;
-    pszName = oissuer.getStr() ;
+    LPCWSTR pszName = SAL_W( issuerName.getStr() );
 
-    if( ! ( CertStrToName(
+    if( ! ( CertStrToNameW(
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
         pszName ,
         CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG | CERT_NAME_STR_ENABLE_UTF8_UNICODE_FLAG,
@@ -452,7 +450,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const
     if(!certInfo.Issuer.pbData)
         throw RuntimeException() ;
 
-    if( ! ( CertStrToName(
+    if( ! ( CertStrToNameW(
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
         pszName ,
         CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG | CERT_NAME_STR_ENABLE_UTF8_UNICODE_FLAG,
@@ -492,19 +490,19 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const
             hCertStore = m_hCertStore ;
             break;
         case 2:
-            hCertStore = CertOpenSystemStore( 0, "MY" ) ;
+            hCertStore = CertOpenSystemStoreW( 0, L"MY" ) ;
             if(hCertStore == nullptr || !m_bEnableDefault) continue ;
             break;
         case 3:
-            hCertStore = CertOpenSystemStore( 0, "Root" ) ;
+            hCertStore = CertOpenSystemStoreW( 0, L"Root" ) ;
             if(hCertStore == nullptr || !m_bEnableDefault) continue ;
             break;
         case 4:
-            hCertStore = CertOpenSystemStore( 0, "Trust" ) ;
+            hCertStore = CertOpenSystemStoreW( 0, L"Trust" ) ;
             if(hCertStore == nullptr || !m_bEnableDefault) continue ;
             break;
         case 5:
-            hCertStore = CertOpenSystemStore( 0, "CA" ) ;
+            hCertStore = CertOpenSystemStoreW( 0, L"CA" ) ;
             if(hCertStore == nullptr || !m_bEnableDefault) continue ;
             break;
         default:
@@ -1055,7 +1053,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
      */
     if( defaultEnabled() ) {
         //Add system key store into the keys manager.
-        m_hMySystemStore = CertOpenSystemStore( 0, "MY" ) ;
+        m_hMySystemStore = CertOpenSystemStoreW( 0, L"MY" ) ;
         if( m_hMySystemStore != nullptr ) {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore( pKeysMngr, m_hMySystemStore ) < 0 ) {
                 CertCloseStore( m_hMySystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
@@ -1065,7 +1063,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
         }
 
         //Add system root store into the keys manager.
-        m_hRootSystemStore = CertOpenSystemStore( 0, "Root" ) ;
+        m_hRootSystemStore = CertOpenSystemStoreW( 0, L"Root" ) ;
         if( m_hRootSystemStore != nullptr ) {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore( pKeysMngr, m_hRootSystemStore ) < 0 ) {
                 CertCloseStore( m_hRootSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
@@ -1075,7 +1073,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
         }
 
         //Add system trusted store into the keys manager.
-        m_hTrustSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
+        m_hTrustSystemStore = CertOpenSystemStoreW( 0, L"Trust" ) ;
         if( m_hTrustSystemStore != nullptr ) {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hTrustSystemStore ) < 0 ) {
                 CertCloseStore( m_hTrustSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
@@ -1085,7 +1083,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl::createKeysManager() {
         }
 
         //Add system CA store into the keys manager.
-        m_hCaSystemStore = CertOpenSystemStore( 0, "CA" ) ;
+        m_hCaSystemStore = CertOpenSystemStoreW( 0, L"CA" ) ;
         if( m_hCaSystemStore != nullptr ) {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hCaSystemStore ) < 0 ) {
                 CertCloseStore( m_hCaSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;

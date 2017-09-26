@@ -187,9 +187,9 @@ namespace desktop
             {
                 if (GetStdHandle(STD_OUTPUT_HANDLE) == nullptr) // application does not have associated standard handles
                 {
-                    STARTUPINFOA aStartupInfo;
+                    STARTUPINFOW aStartupInfo;
                     aStartupInfo.cb = sizeof(aStartupInfo);
-                    GetStartupInfoA(&aStartupInfo);
+                    GetStartupInfoW(&aStartupInfo);
                     if ((aStartupInfo.dwFlags & STARTF_USESTDHANDLES) == STARTF_USESTDHANDLES)
                     {
                         // If standard handles had been passed to this process, use them
@@ -247,11 +247,11 @@ namespace desktop
                     ke.bKeyDown = TRUE;
                     ke.wRepeatCount = 1;
                     ke.wVirtualKeyCode = VK_RETURN;
-                    ke.wVirtualScanCode = MapVirtualKeyA(VK_RETURN, MAPVK_VK_TO_VSC);
-                    ke.uChar.AsciiChar = '\r';
+                    ke.wVirtualScanCode = MapVirtualKeyW(VK_RETURN, MAPVK_VK_TO_VSC);
+                    ke.uChar.UnicodeChar = L'\r';
                     ke.dwControlKeyState = 0;
                     DWORD nEvents;
-                    WriteConsoleInputA(GetStdHandle(STD_INPUT_HANDLE), &ir, 1, &nEvents);
+                    WriteConsoleInputW(GetStdHandle(STD_INPUT_HANDLE), &ir, 1, &nEvents);
                     break;
                 }
                 case allocated:

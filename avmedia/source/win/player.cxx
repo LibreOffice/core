@@ -44,7 +44,7 @@ namespace avmedia { namespace win {
 
 LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
-    Player* pPlayer = reinterpret_cast<Player*>(::GetWindowLongPtr( hWnd, 0 ));
+    Player* pPlayer = reinterpret_cast<Player*>(::GetWindowLongPtrW( hWnd, 0 ));
     bool    bProcessed = true;
 
     if( pPlayer )
@@ -62,7 +62,7 @@ LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM
     else
         bProcessed = false;
 
-    return( bProcessed ? 0 : DefWindowProc( hWnd, nMsg, nPar1, nPar2 ) );
+    return( bProcessed ? 0 : DefWindowProcW( hWnd, nMsg, nPar1, nPar2 ) );
 }
 
 
@@ -226,31 +226,31 @@ void SAL_CALL Player::start(  )
     {
         if ( mbAddWindow )
         {
-            static WNDCLASS* mpWndClass = nullptr;
+            static WNDCLASSW* mpWndClass = nullptr;
             if ( !mpWndClass )
             {
-                mpWndClass = new WNDCLASS;
+                mpWndClass = new WNDCLASSW;
 
                 memset( mpWndClass, 0, sizeof( *mpWndClass ) );
-                mpWndClass->hInstance = GetModuleHandle( nullptr );
+                mpWndClass->hInstance = GetModuleHandleW( nullptr );
                 mpWndClass->cbWndExtra = sizeof( DWORD );
                 mpWndClass->lpfnWndProc = MediaPlayerWndProc_2;
-                mpWndClass->lpszClassName = "com_sun_star_media_Sound_Player";
+                mpWndClass->lpszClassName = L"com_sun_star_media_Sound_Player";
                 mpWndClass->hbrBackground = static_cast<HBRUSH>(::GetStockObject( BLACK_BRUSH ));
                 mpWndClass->hCursor = ::LoadCursor( nullptr, IDC_ARROW );
 
-                ::RegisterClass( mpWndClass );
+                RegisterClassW( mpWndClass );
             }
             if ( !mnFrameWnd )
             {
-                mnFrameWnd = ::CreateWindow( mpWndClass->lpszClassName, nullptr,
-                                           0,
-                                           0, 0, 0, 0,
-                                           nullptr, nullptr, mpWndClass->hInstance, nullptr );
+                mnFrameWnd = CreateWindowW( mpWndClass->lpszClassName, nullptr,
+                                            0,
+                                            0, 0, 0, 0,
+                                            nullptr, nullptr, mpWndClass->hInstance, nullptr );
                 if ( mnFrameWnd )
                 {
                     ::ShowWindow(mnFrameWnd, SW_HIDE);
-                    ::SetWindowLongPtr( mnFrameWnd, 0, reinterpret_cast<LONG_PTR>(this) );
+                    SetWindowLongPtrW( mnFrameWnd, 0, reinterpret_cast<LONG_PTR>(this) );
                     // mpVW->put_Owner( (OAHWND) mnFrameWnd );
                     setNotifyWnd( mnFrameWnd );
                 }
