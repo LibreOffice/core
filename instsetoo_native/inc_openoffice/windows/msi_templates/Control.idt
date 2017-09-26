@@ -195,14 +195,14 @@ MaintenanceType	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_138	RadioGroup
 MaintenanceType	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_139		
 MaintenanceType	DlgLine	Line	0	234	376	0	1				
 MaintenanceType	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_140		
-MaintenanceType	Ico1	Icon	34	75	24	24	5242881		SetupPartialIco		
-MaintenanceType	Ico2	Icon	34	135	24	24	5242881		SetupRepairIco		
-MaintenanceType	Ico3	Icon	34	195	24	24	5242881		TrashcanIco		
+MaintenanceType	Ico1	Icon	35	75	24	24	5242881		SetupPartialIco		
+MaintenanceType	Ico2	Icon	35	135	24	24	5242881		SetupRepairIco		
+MaintenanceType	Ico3	Icon	35	195	24	24	5242881		TrashcanIco		
 MaintenanceType	Next	PushButton	230	243	66	17	3		OOO_CONTROL_141	Cancel	
 MaintenanceType	RadioGroup	RadioButtonGroup	21	55	290	170	3	_IsMaintenance		Back	
-MaintenanceType	Text1	Text	80	72	260	35	3		OOO_CONTROL_143		
-MaintenanceType	Text2	Text	80	135	260	35	3		OOO_CONTROL_144		
-MaintenanceType	Text3	Text	80	192	260	35	3		OOO_CONTROL_145		
+MaintenanceType	Text1	Text	80	75	270	35	3		OOO_CONTROL_143		
+MaintenanceType	Text2	Text	80	135	270	35	3		OOO_CONTROL_144		
+MaintenanceType	Text3	Text	80	195	270	35	3		OOO_CONTROL_145		
 MaintenanceWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_146	Next	
 MaintenanceWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_147	Back	
 MaintenanceWelcome	DlgLine	Line	0	234	376	0	1				

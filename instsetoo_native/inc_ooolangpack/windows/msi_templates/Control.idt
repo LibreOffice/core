@@ -190,8 +190,8 @@ MaintenanceType	Ico1	Icon	35	75	24	24	5242881		SetupRepairIco
 MaintenanceType	Ico2	Icon	35	135	24	24	5242881		TrashcanIco		
 MaintenanceType	Next	PushButton	230	243	66	17	3		OOO_CONTROL_141	Cancel	
 MaintenanceType	RadioGroup	RadioButtonGroup	21	55	290	170	3	_IsMaintenance		Back	
-MaintenanceType	Text1	Text	80	72	260	35	3		OOO_CONTROL_144		
-MaintenanceType	Text2	Text	80	135	260	35	3		OOO_CONTROL_145		
+MaintenanceType	Text1	Text	80	75	270	35	3		OOO_CONTROL_144		
+MaintenanceType	Text2	Text	80	135	270	35	3		OOO_CONTROL_145		
 MaintenanceWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_146	Next	
 MaintenanceWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_147	Back	
 MaintenanceWelcome	DlgLine	Line	0	234	376	0	1				
