@@ -60,10 +60,10 @@ bool SAL_CALL IsWindowsVistaOrNewer()
 #ifdef _WIN32_WINNT_WINBLUE
     return IsWindowsVistaOrGreater();
 #else
-    OSVERSIONINFO osvi;
+    OSVERSIONINFOW osvi;
     osvi.dwOSVersionInfoSize = sizeof(osvi);
 
-    if(!GetVersionEx(&osvi))
+    if(!GetVersionExW(&osvi))
         return false;
 
     bool bRet = (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId) &&

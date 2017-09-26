@@ -38,7 +38,7 @@
 
 #define SYSTEM_WIN32   1
 
-#define OLD_PROC_KEY "oldwindowproc"
+#define OLD_PROC_KEY L"oldwindowproc"
 
 static LRESULT APIENTRY OpenOfficeWndProc( HWND , UINT , WPARAM , LPARAM );
 
@@ -131,10 +131,10 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
        and calls on such construct produce
        a stack overflow.
      */
-    if (GetProp( hWnd, OLD_PROC_KEY )==NULL)
+    if (GetPropW( hWnd, OLD_PROC_KEY )==NULL)
     {
-        hFuncPtr = SetWindowLongPtr( hWnd, GWLP_WNDPROC, (LONG_PTR)OpenOfficeWndProc );
-        SetProp( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
+        hFuncPtr = SetWindowLongPtrW( hWnd, GWLP_WNDPROC, (LONG_PTR)OpenOfficeWndProc );
+        SetPropW( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
     }
 
     return (jlong)hWnd;
@@ -182,7 +182,7 @@ static LRESULT APIENTRY OpenOfficeWndProc(
 #pragma warning(push)
 #pragma warning(disable: 4152) /* function/data pointer conversion: */
 #endif
-    return CallWindowProc(GetProp(hWnd, OLD_PROC_KEY),
+    return CallWindowProcW(GetPropW(hWnd, OLD_PROC_KEY),
                           hWnd, uMsg, wParam, lParam);
 #if defined _MSC_VER
 #pragma warning(pop)

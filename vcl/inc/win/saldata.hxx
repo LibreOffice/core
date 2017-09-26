@@ -199,8 +199,8 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_TMPSUBFRAME_CLASSNAMEW  L"SALTMPSUBFRAME"
 #define SAL_OBJECT_WNDEXTRA         sizeof( DWORD )
 #define SAL_OBJECT_THIS             GWLP_USERDATA
-#define SAL_OBJECT_CLASSNAMEA       "SALOBJECT"
-#define SAL_OBJECT_CHILDCLASSNAMEA  "SALOBJECTCHILD"
+#define SAL_OBJECT_CLASSNAMEW       L"SALOBJECT"
+#define SAL_OBJECT_CHILDCLASSNAMEW  L"SALOBJECTCHILD"
 #define SAL_COM_CLASSNAMEW          L"SALCOMWND"
 
 #define SAL_MOUSELEAVE_TIMEOUT      300
@@ -276,7 +276,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 inline void SetWindowPtr( HWND hWnd, WinSalFrame* pThis )
 {
-    SetWindowLongPtr( hWnd, SAL_FRAME_THIS, reinterpret_cast<LONG_PTR>(pThis) );
+    SetWindowLongPtrW( hWnd, SAL_FRAME_THIS, reinterpret_cast<LONG_PTR>(pThis) );
 }
 
 inline WinSalFrame* GetWindowPtr( HWND hWnd )
@@ -286,12 +286,12 @@ inline WinSalFrame* GetWindowPtr( HWND hWnd )
 
 inline void SetSalObjWindowPtr( HWND hWnd, WinSalObject* pThis )
 {
-    SetWindowLongPtr( hWnd, SAL_OBJECT_THIS, reinterpret_cast<LONG_PTR>(pThis) );
+    SetWindowLongPtrW( hWnd, SAL_OBJECT_THIS, reinterpret_cast<LONG_PTR>(pThis) );
 }
 
 inline WinSalObject* GetSalObjWindowPtr( HWND hWnd )
 {
-    return reinterpret_cast<WinSalObject*>(GetWindowLongPtr( hWnd, SAL_OBJECT_THIS ));
+    return reinterpret_cast<WinSalObject*>(GetWindowLongPtrW( hWnd, SAL_OBJECT_THIS ));
 }
 
 #endif // INCLUDED_VCL_INC_WIN_SALDATA_HXX

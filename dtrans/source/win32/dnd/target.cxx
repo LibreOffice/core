@@ -76,7 +76,7 @@ void SAL_CALL DropTarget::disposing()
     if( m_threadIdTarget)
     {
         // Call RevokeDragDrop and wait for the OLE thread to die;
-        PostThreadMessage( m_threadIdTarget, WM_REVOKEDRAGDROP, reinterpret_cast<WPARAM>(this), 0);
+        PostThreadMessageW( m_threadIdTarget, WM_REVOKEDRAGDROP, reinterpret_cast<WPARAM>(this), 0);
         WaitForSingleObject( m_hOleThread, INFINITE);
         CloseHandle( m_hOleThread);
         //OSL_ENSURE( SUCCEEDED( hr), "HWND not valid!" );
@@ -142,13 +142,13 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
             m_threadIdWindow= GetWindowThreadProcessId( m_hWnd, nullptr);
             // The event is set by the thread that we will create momentarily.
             // It indicates that the thread is ready to receive messages.
-            HANDLE m_evtThreadReady= CreateEvent( nullptr, FALSE, FALSE, nullptr);
+            HANDLE m_evtThreadReady= CreateEventW( nullptr, FALSE, FALSE, nullptr);
 
             m_hOleThread= CreateThread( nullptr, 0, DndTargetOleSTAFunc,
                                             &m_evtThreadReady, 0, &m_threadIdTarget);
             WaitForSingleObject( m_evtThreadReady, INFINITE);
             CloseHandle( m_evtThreadReady);
-            PostThreadMessage( m_threadIdTarget, WM_REGISTERDRAGDROP, reinterpret_cast<WPARAM>(this), 0);
+            PostThreadMessageW( m_threadIdTarget, WM_REGISTERDRAGDROP, reinterpret_cast<WPARAM>(this), 0);
         }
         else if( hr == S_OK || hr == S_FALSE)
         {
@@ -197,7 +197,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
     {
         MSG msg;
         // force the creation of a message queue
-        PeekMessage( &msg, nullptr, 0, 0, PM_NOREMOVE);
+        PeekMessageW( &msg, nullptr, 0, 0, PM_NOREMOVE);
         // Signal the creator ( DropTarget::initialize) that the thread is
         // ready to receive messages.
         SetEvent( *static_cast<HANDLE*>(pParams));
@@ -206,7 +206,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
         DWORD threadId= GetCurrentThreadId();
         // We force the creation of a thread message queue. This is necessary
         // for a later call to AttachThreadInput
-        while( GetMessage(&msg, nullptr, 0, 0) )
+        while( GetMessageW(&msg, nullptr, 0, 0) )
         {
             if( msg.message == WM_REGISTERDRAGDROP)
             {
@@ -238,7 +238,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
                 break;
             }
             TranslateMessage(  &msg);
-            DispatchMessage( &msg);
+            DispatchMessageW( &msg);
         }
         OleUninitialize();
     }

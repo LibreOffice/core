@@ -356,9 +356,9 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
         case WM_CREATE:
             {
             // Window-Instanz am Windowhandle speichern
-            // Can also be used for the W-Version, because the struct
+            // Can also be used for the A-Version, because the struct
             // to access lpCreateParams is the same structure
-            CREATESTRUCTA* pStruct = reinterpret_cast<CREATESTRUCTA*>(lParam);
+            CREATESTRUCTW* pStruct = reinterpret_cast<CREATESTRUCTW*>(lParam);
             pSysObj = static_cast<WinSalObject*>(pStruct->lpCreateParams);
             SetSalObjWindowPtr( hWnd, pSysObj );
             // set HWND already here,
@@ -372,12 +372,12 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
     return nRet;
 }
 
-LRESULT CALLBACK SalSysObjWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalSysObjWndProc( hWnd, nMsg, wParam, lParam, bDef );
     if ( bDef )
-        nRet = DefWindowProcA( hWnd, nMsg, wParam, lParam );
+        nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
     return nRet;
 }
 
@@ -443,12 +443,12 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
     return nRet;
 }
 
-LRESULT CALLBACK SalSysObjChildWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalSysObjChildWndProc( hWnd, nMsg, wParam, lParam, bDef );
     if ( bDef )
-        nRet = DefWindowProcA( hWnd, nMsg, wParam, lParam );
+        nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
     return nRet;
 }
 
@@ -467,10 +467,10 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 
     if ( !pSalData->mbObjClassInit )
     {
-        WNDCLASSEXA aWndClassEx;
+        WNDCLASSEXW aWndClassEx;
         aWndClassEx.cbSize          = sizeof( aWndClassEx );
         aWndClassEx.style           = 0;
-        aWndClassEx.lpfnWndProc     = SalSysObjWndProcA;
+        aWndClassEx.lpfnWndProc     = SalSysObjWndProcW;
         aWndClassEx.cbClsExtra      = 0;
         aWndClassEx.cbWndExtra      = SAL_OBJECT_WNDEXTRA;
         aWndClassEx.hInstance       = pSalData->mhInst;
@@ -479,15 +479,15 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
         aWndClassEx.hCursor         = LoadCursor( nullptr, IDC_ARROW );
         aWndClassEx.hbrBackground   = nullptr;
         aWndClassEx.lpszMenuName    = nullptr;
-        aWndClassEx.lpszClassName   = SAL_OBJECT_CLASSNAMEA;
-        if ( RegisterClassExA( &aWndClassEx ) )
+        aWndClassEx.lpszClassName   = SAL_OBJECT_CLASSNAMEW;
+        if ( RegisterClassExW( &aWndClassEx ) )
         {
             // Clean background first because of plugins.
             aWndClassEx.cbWndExtra      = 0;
             aWndClassEx.hbrBackground   = reinterpret_cast<HBRUSH>(COLOR_WINDOW+1);
-            aWndClassEx.lpfnWndProc     = SalSysObjChildWndProcA;
-            aWndClassEx.lpszClassName   = SAL_OBJECT_CHILDCLASSNAMEA;
-            if ( RegisterClassExA( &aWndClassEx ) )
+            aWndClassEx.lpfnWndProc     = SalSysObjChildWndProcW;
+            aWndClassEx.lpszClassName   = SAL_OBJECT_CHILDCLASSNAMEW;
+            if ( RegisterClassExW( &aWndClassEx ) )
                 pSalData->mbObjClassInit = true;
         }
     }
@@ -500,7 +500,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
         // SystemChildWindow. Otherwise, DXCanvas (using a hidden
         // SystemChildWindow) clobbers applets/plugins during
         // animations .
-        HWND hWnd = CreateWindowExA( 0, SAL_OBJECT_CLASSNAMEA, "",
+        HWND hWnd = CreateWindowExW( 0, SAL_OBJECT_CLASSNAMEW, L"",
                                      WS_CHILD | WS_CLIPSIBLINGS, 0, 0, 0, 0,
                                      pParent->mhWnd, nullptr,
                                      pInst->mhInst, pObject );
@@ -513,7 +513,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
             // of zorder.
             SetWindowPos(hWnd,HWND_TOP,0,0,0,0,
                          SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);
-            hWndChild = CreateWindowExA( 0, SAL_OBJECT_CHILDCLASSNAMEA, "",
+            hWndChild = CreateWindowExW( 0, SAL_OBJECT_CHILDCLASSNAMEW, L"",
                                          WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_VISIBLE,
                                          0, 0, 0, 0,
                                          hWnd, nullptr,
@@ -523,13 +523,14 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
         if ( !hWndChild )
         {
 #if OSL_DEBUG_LEVEL > 1
-            char *msg = NULL;
-            FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER
+            wchar_t *msg = NULL;
+            FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER
                           |FORMAT_MESSAGE_IGNORE_INSERTS
                           |FORMAT_MESSAGE_FROM_SYSTEM,
                            NULL, GetLastError(), 0,
-                           (LPSTR) &msg, 0, NULL);
-            MessageBoxA(NULL, msg, "CreateWindowExA failed", MB_OK);
+                           (LPWSTR) &msg, 0, NULL);
+            MessageBoxW(NULL, msg, L"CreateWindowExW failed", MB_OK);
+            HeapFree(GetProcessHeap(), msg);
 #endif
             delete pObject;
             return nullptr;
