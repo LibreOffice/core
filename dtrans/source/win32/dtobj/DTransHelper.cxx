@@ -177,7 +177,7 @@ sal_uInt32 SAL_CALL CStgTransferHelper::memSize( CLIPFORMAT cf ) const
         HGLOBAL hGlob;
         GetHGlobalFromStream( m_lpStream, &hGlob );
 
-        if ( CF_TEXT == cf || RegisterClipboardFormat( "HTML Format" ) == cf )
+        if ( CF_TEXT == cf || RegisterClipboardFormatW( L"HTML Format" ) == cf )
         {
             sal_Char* pText = static_cast< sal_Char* >( GlobalLock( hGlob ) );
             if ( pText )

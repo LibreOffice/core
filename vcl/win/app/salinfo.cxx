@@ -59,7 +59,7 @@ bool WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_I
     if( GetMonitorInfoW( reinterpret_cast<HMONITOR>(hMonitor), &aInfo ) )
     {
         aInfo.szDevice[CCHDEVICENAME-1] = 0;
-        OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aInfo.szDevice) );
+        OUString aDeviceName( SAL_U(aInfo.szDevice) );
         std::map< OUString, unsigned int >::const_iterator it =
             m_aDeviceNameToMonitor.find( aDeviceName );
         if( it != m_aDeviceNameToMonitor.end() )
@@ -110,8 +110,8 @@ bool WinSalSystem::initMonitors()
             {
                 aDev.DeviceName[31] = 0;
                 aDev.DeviceString[127] = 0;
-                OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aDev.DeviceName) );
-                OUString aDeviceString( reinterpret_cast<const sal_Unicode *>(aDev.DeviceString) );
+                OUString aDeviceName( SAL_U(aDev.DeviceName) );
+                OUString aDeviceString( SAL_U(aDev.DeviceString) );
                 if( aDeviceStringCount.find( aDeviceString ) == aDeviceStringCount.end() )
                     aDeviceStringCount[ aDeviceString ] = 1;
                 else
@@ -169,8 +169,8 @@ int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& r
     ImplHideSplash();
     return MessageBoxW(
         nullptr,
-        reinterpret_cast<LPCWSTR>(rMessage.getStr()),
-        reinterpret_cast<LPCWSTR>(rTitle.getStr()),
+        SAL_W(rMessage.getStr()),
+        SAL_W(rTitle.getStr()),
         MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | MB_DEFBUTTON1);
 }
 

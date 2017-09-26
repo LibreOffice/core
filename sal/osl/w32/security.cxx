@@ -66,7 +66,9 @@ typedef BOOL (STDMETHODCALLTYPE FAR * LPFNGETUSERPROFILEDIR) (
 #define TOKEN_DUP_QUERY (TOKEN_QUERY|TOKEN_DUPLICATE)
 
 static bool GetSpecialFolder(rtl_uString **strPath,int nFolder);
-static BOOL Privilege(LPCWSTR pszPrivilege, BOOL bEnable);
+// We use LPCTSTR here, because we use it with SE_foo_NAME constants
+// which are defined in winnt.h as UNICODE-dependent TEXT("PrivilegeName")
+static BOOL Privilege(LPCTSTR pszPrivilege, BOOL bEnable);
 static bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **strName, bool bIncludeDomain);
 
 oslSecurity SAL_CALL osl_getCurrentSecurity(void)
@@ -99,7 +101,7 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
     }
 
     // this process must have the right: 'act as a part of operatingsystem'
-    OSL_ASSERT(LookupPrivilegeValueW(nullptr, L"SeTcbPrivilege", &luid));
+    OSL_ASSERT(LookupPrivilegeValue(nullptr, SE_TCB_NAME, &luid));
     (void) luid;
 
     if (LogonUserW(SAL_W(strUser), strDomain ? SAL_W(strDomain) : L"", SAL_W(rtl_uString_getStr(strPasswd)),
@@ -510,7 +512,7 @@ sal_Bool SAL_CALL osl_loadUserProfile(oslSecurity Security)
 
     RegCloseKey(HKEY_CURRENT_USER);
 
-    if (Privilege(L"SeRestorePrivilege", TRUE))
+    if (Privilege(SE_RESTORE_NAME, TRUE))
     {
         HMODULE                 hUserEnvLib         = nullptr;
         LPFNLOADUSERPROFILE     fLoadUserProfile    = nullptr;
@@ -712,7 +714,9 @@ static bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
     return bRet;
 }
 
-static BOOL Privilege(LPCWSTR strPrivilege, BOOL bEnable)
+// We use LPCTSTR here, because we use it with SE_foo_NAME constants
+// which are defined in winnt.h as UNICODE-dependent TEXT("PrivilegeName")
+static BOOL Privilege(LPCTSTR strPrivilege, BOOL bEnable)
 {
     HANDLE           hToken;
     TOKEN_PRIVILEGES tp;
@@ -722,7 +726,7 @@ static BOOL Privilege(LPCWSTR strPrivilege, BOOL bEnable)
         return FALSE;
 
     // get the luid
-    if (!LookupPrivilegeValueW(nullptr, strPrivilege, &tp.Privileges[0].Luid))
+    if (!LookupPrivilegeValue(nullptr, strPrivilege, &tp.Privileges[0].Luid))
         return FALSE;
 
     tp.PrivilegeCount = 1;

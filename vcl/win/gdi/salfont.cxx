@@ -527,7 +527,7 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
     aDFA.SetSymbolFlag(rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get the font face name
-    aDFA.SetFamilyName(OUString(reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName)));
+    aDFA.SetFamilyName(SAL_U(rLogFont.lfFaceName));
 
     // use the face's style name only if it looks reasonable
     const wchar_t* pStyleName = rEnumFont.elfStyle;
@@ -537,7 +537,7 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
         if( *p < 0x0020 )
             break;
     if( p < pEnd )
-        aDFA.SetStyleName(OUString(reinterpret_cast<const sal_Unicode*>(pStyleName)));
+        aDFA.SetStyleName(SAL_U(pStyleName));
 
     // heuristics for font quality
     // -   opentypeTT > truetype
@@ -571,7 +571,7 @@ static WinFontFace* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
 
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
-    OUString aFontName( reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName) );
+    OUString aFontName( SAL_U(rLogFont.lfFaceName) );
     if (!aFontName.isEmpty())
     {
         rFont.SetFamilyName( aFontName );
@@ -944,8 +944,8 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
     HFONT hOldFont = SelectFont( getHDC(), mhFonts[nFallbackLevel] );
 
     wchar_t aFaceName[LF_FACESIZE+60];
-    if( ::GetTextFaceW( getHDC(), sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
-        rxFontMetric->SetFamilyName(OUString(reinterpret_cast<const sal_Unicode*>(aFaceName)));
+    if( GetTextFaceW( getHDC(), SAL_N_ELEMENTS(aFaceName), aFaceName ) )
+        rxFontMetric->SetFamilyName(SAL_U(aFaceName));
 
     const DWORD nHheaTag = CalcTag("hhea");
     const DWORD nOS2Tag = CalcTag("OS/2");
@@ -964,7 +964,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
 
     // get the font metric
     OUTLINETEXTMETRICW aOutlineMetric;
-    const bool bOK = GetOutlineTextMetricsW(getHDC(), sizeof(OUTLINETEXTMETRICW), &aOutlineMetric);
+    const bool bOK = GetOutlineTextMetricsW(getHDC(), sizeof(aOutlineMetric), &aOutlineMetric);
     // restore the HDC to the font in the base level
     SelectFont( getHDC(), hOldFont );
     if( !bOK )
@@ -1019,7 +1019,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         // Ignore vertical fonts
         if ( pLogFont->elfLogFont.lfFaceName[0] != '@' )
         {
-            OUString aName = OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName));
+            OUString aName = SAL_U(pLogFont->elfLogFont.lfFaceName);
             pInfo->mpName = &aName;
             memcpy(pInfo->mpLogFont->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.getLength()+1)*sizeof(wchar_t));
             pInfo->mpLogFont->lfCharSet = pLogFont->elfLogFont.lfCharSet;
@@ -1062,7 +1062,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
 struct TempFontItem
 {
     OUString maFontFilePath;
-    OString maResourcePath;
+    OUString maResourcePath;
     TempFontItem* mpNextItem;
 };
 
@@ -1072,35 +1072,33 @@ bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
     OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
-    nRet = AddFontResourceExW( reinterpret_cast<LPCWSTR>(aUSytemPath.getStr()), FR_PRIVATE, nullptr );
+    nRet = AddFontResourceExW( SAL_W(aUSytemPath.getStr()), FR_PRIVATE, nullptr );
 
     if ( !nRet )
     {
         static int nCounter = 0;
-        char aFileName[] = "soAA.fot";
-        aFileName[2] = sal::static_int_cast<char>('A' + (15 & (nCounter>>4)));
-        aFileName[3] = sal::static_int_cast<char>('A' + (15 & nCounter));
-        char aResourceName[512];
-        int const nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
-        int nLen = ::GetTempPathA( nMaxLen, aResourceName );
-        ::strncpy( aResourceName + nLen, aFileName, sizeof( aResourceName )- nLen );
+        wchar_t aFileName[] = L"soAA.fot";
+        aFileName[2] = sal::static_int_cast<wchar_t>(L'A' + (15 & (nCounter>>4)));
+        aFileName[3] = sal::static_int_cast<wchar_t>(L'A' + (15 & nCounter));
+        wchar_t aResourceName[512];
+        int const nMaxLen = SAL_N_ELEMENTS(aResourceName) - 16;
+        int nLen = GetTempPathW( nMaxLen, aResourceName );
+        wcsncpy( aResourceName + nLen, aFileName, SAL_N_ELEMENTS( aResourceName ) - nLen );
         // security: end buffer in any case
-        aResourceName[ (sizeof(aResourceName)/sizeof(*aResourceName))-1 ] = 0;
-        ::DeleteFileA( aResourceName );
+        aResourceName[ SAL_N_ELEMENTS(aResourceName)-1 ] = 0;
+        DeleteFileW( aResourceName );
 
-        rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
-        OString aCFileName = OUStringToOString( aUSytemPath, theEncoding );
         // TODO: font should be private => need to investigate why it doesn't work then
-        if( !::CreateScalableFontResourceA( 0, aResourceName, aCFileName.getStr(), nullptr ) )
+        if( !CreateScalableFontResourceW( 0, aResourceName, SAL_W(aUSytemPath.getStr()), nullptr ) )
             return false;
         ++nCounter;
 
-        nRet = ::AddFontResourceA( aResourceName );
+        nRet = AddFontResourceW( aResourceName );
         if( nRet > 0 )
         {
             TempFontItem* pNewItem = new TempFontItem;
-            pNewItem->maResourcePath = OString( aResourceName );
-            pNewItem->maFontFilePath = aUSytemPath.getStr();
+            pNewItem->maResourcePath = SAL_U( aResourceName );
+            pNewItem->maFontFilePath = aUSytemPath;
             pNewItem->mpNextItem = rSalData.mpTempFontItem;
             rSalData.mpTempFontItem = pNewItem;
         }
@@ -1117,13 +1115,13 @@ void ImplReleaseTempFonts( SalData& rSalData )
         ++nCount;
         if( p->maResourcePath.getLength() )
         {
-            const char* pResourcePath = p->maResourcePath.getStr();
-            ::RemoveFontResourceA( pResourcePath );
-            ::DeleteFileA( pResourcePath );
+            const wchar_t* pResourcePath = SAL_W(p->maResourcePath.getStr());
+            RemoveFontResourceW( pResourcePath );
+            DeleteFileW( pResourcePath );
         }
         else
         {
-            ::RemoveFontResourceW( reinterpret_cast<LPCWSTR>(p->maFontFilePath.getStr()) );
+            RemoveFontResourceW( SAL_W(p->maFontFilePath.getStr()) );
         }
 
         rSalData.mpTempFontItem = p->mpNextItem;
@@ -1147,19 +1145,17 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     rDFA.SetPitch(PITCH_DONTKNOW);
 
     // Create temporary file name
-    char aResourceName[512];
-    int nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
-    int nLen = ::GetTempPathA( nMaxLen, aResourceName );
-    ::strncpy( aResourceName + nLen, "soAAT.fot", std::max( 0, nMaxLen - nLen ));
-    ::DeleteFileA( aResourceName );
+    wchar_t aResourceName[512];
+    int nMaxLen = SAL_N_ELEMENTS(aResourceName) - 16;
+    int nLen = GetTempPathW( nMaxLen, aResourceName );
+    wcsncpy( aResourceName + nLen, L"soAAT.fot", std::max( 0, nMaxLen - nLen ));
+    DeleteFileW( aResourceName );
 
     // Create font resource file (typically with a .fot file name extension).
-    rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
-    OString aCFileName = OUStringToOString( aUSytemPath, theEncoding );
-    ::CreateScalableFontResourceA( 0, aResourceName, aCFileName.getStr(), nullptr );
+    CreateScalableFontResourceW( 0, aResourceName, SAL_W(aUSytemPath.getStr()), nullptr );
 
     // Open and read the font resource file
-    OUString aFotFileName = OStringToOUString( aResourceName, osl_getThreadTextEncoding() );
+    OUString aFotFileName = SAL_U( aResourceName );
     osl::FileBase::getFileURLFromSystemPath( aFotFileName, aFotFileName );
     osl::File aFotFile( aFotFileName );
     osl::FileBase::RC aError = aFotFile.open( osl_File_OpenFlag_Read );
@@ -1171,7 +1167,7 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     aFotFile.read( aBuffer, sizeof( aBuffer ), nBytesRead );
     // clean up temporary resource file
     aFotFile.close();
-    ::DeleteFileA( aResourceName );
+    DeleteFileW( aResourceName );
 
     // retrieve font family name from byte offset 0x4F6
     sal_uInt64 i = 0x4F6;
@@ -1608,8 +1604,8 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
 #if OSL_DEBUG_LEVEL > 1
     // get font metrics
-    TEXTMETRICA aWinMetric;
-    if( !::GetTextMetricsA( getHDC(), &aWinMetric ) )
+    TEXTMETRICW aWinMetric;
+    if( !::GetTextMetricsW( getHDC(), &aWinMetric ) )
         return FALSE;
 
     SAL_WARN_IF( (aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "vcl", "cannot subset device font" );

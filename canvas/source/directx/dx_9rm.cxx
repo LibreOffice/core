@@ -73,7 +73,7 @@ namespace dxcanvas
         public:
 
             monitorSupport() :
-                mhLibrary(LoadLibrary("user32.dll")),
+                mhLibrary(LoadLibraryW(L"user32.dll")),
                 mpMonitorFromWindow(nullptr)
             {
                 if(mhLibrary)

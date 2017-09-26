@@ -532,11 +532,11 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                         char dirname[128];
                         int fd;
 #ifdef _WIN32
-                        GetTempPath(sizeof(dirname), dirname);
+                        GetTempPathA(sizeof(dirname), dirname);
                         sprintf(filename, "%s%s",dirname, emp->name);
                         if( (fd = open( filename , _O_CREAT | _O_WRONLY | _O_BINARY , 0666)) >= 0 )
 #else
-                            strcpy(dirname, "/tmp/");
+                        strcpy(dirname, "/tmp/");
                         sprintf(filename, "%s%s", dirname, emp->name);
                         if( (fd = open( filename , O_CREAT | O_WRONLY , 0666)) >= 0 )
 #endif
