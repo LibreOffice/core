@@ -493,14 +493,16 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
      * stream then contains the PICF and the corresponding graphic!
      * We otherwise map the variable pDataStream to pStream.
      */
-    sal_uLong nOldPos = m_pDataStream->Tell();
+    auto nOldPos = m_pDataStream->Tell();
     WW8_PIC aPic;
-    m_pDataStream->Seek( m_nPicLocFc );
-    PicRead( m_pDataStream, &aPic, m_bVer67);
+    bool bValid = checkSeek(*m_pDataStream, m_nPicLocFc);
+
+    if (bValid)
+        PicRead( m_pDataStream, &aPic, m_bVer67);
 
     // Sanity check is needed because for example check boxes in field results
     // contain a WMF-like struct
-    if (m_pDataStream->good() && (aPic.lcb >= 58))
+    if (bValid && m_pDataStream->good() && (aPic.lcb >= 58))
     {
         if( m_pFlyFormatOfJustInsertedGraphic )
         {
