@@ -1402,7 +1402,7 @@ public:
         : osl::Guard<comphelper::SolarMutex>( Application::GetSolarMutex() ) {}
 };
 
-class VCL_DLLPUBLIC SolarMutexClearableGuard
+class SolarMutexClearableGuard
     : public osl::ClearableGuard<comphelper::SolarMutex>
 {
 public:
@@ -1410,7 +1410,7 @@ public:
         : osl::ClearableGuard<comphelper::SolarMutex>( Application::GetSolarMutex() ) {}
 };
 
-class VCL_DLLPUBLIC SolarMutexResettableGuard
+class SolarMutexResettableGuard
     : public osl::ResettableGuard<comphelper::SolarMutex>
 {
 public:
