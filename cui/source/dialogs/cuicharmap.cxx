@@ -624,15 +624,15 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         return;
 
     if (m_bHasInsert) {
-      uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-      uno::Sequence<beans::PropertyValue> aArgs(2);
-      aArgs[0].Name = "Symbols";
-      aArgs[0].Value <<= sGlyph;
+        uno::Sequence<beans::PropertyValue> aArgs(2);
+        aArgs[0].Name = "Symbols";
+        aArgs[0].Value <<= sGlyph;
 
-      aArgs[1].Name = "FontName";
-      aArgs[1].Value <<= aFont.GetFamilyName();
-      comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+        aArgs[1].Name = "FontName";
+        aArgs[1].Value <<= aFont.GetFamilyName();
+        comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
     }
 
     updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
