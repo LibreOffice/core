@@ -1894,7 +1894,9 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
         if( !bPosOk )
             break;
 
-        rStrm.Seek( fcAct );
+        bool bValid = checkSeek(rStrm, fcAct);
+        if (!bValid)
+            break;
 
         long nLen = ( (nNextPieceCp < nBehindTextCp) ? nNextPieceCp
             : nBehindTextCp ) - nAktStartCp;
