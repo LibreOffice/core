@@ -469,12 +469,18 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
                 pBuf = rUniStr.getStr();
                 const sal_Unicode* pCheckChar = pBuf;
                 rtl_TextEncoding aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the first character
+                if (aTextEncoding == RTL_TEXTENCODING_DONTKNOW) {
+                    aTextEncoding = aTextEncodingOrg;
+                }
                 for ( i = 1; i < nStringLen; i++)
                 {
                     if (aTextEncoding != aTextEncodingOrg) // found something
                         break;
                     pCheckChar++;
                     aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the next character
+                    if (aTextEncoding == RTL_TEXTENCODING_DONTKNOW) {
+                        aTextEncoding = aTextEncodingOrg;
+                    }
                 }
 
                 aByteStr = OUStringToOString(rUniStr,  aTextEncoding);
