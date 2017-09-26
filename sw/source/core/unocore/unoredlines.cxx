@@ -60,15 +60,11 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-    uno::Any aRet;
-    if ((rRedTable.size() > static_cast<size_t>(nIndex)) && (nIndex >= 0))
-    {
-        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTable[nIndex], *GetDoc() );
-        aRet <<= xRet;
-    }
-    else
+    if ((rRedTable.size() <= static_cast<size_t>(nIndex)) || (nIndex < 0))
         throw lang::IndexOutOfBoundsException();
-    return aRet;
+
+    uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTable[nIndex], *GetDoc() );
+    return uno::Any(xRet);
 }
 
 uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration()

@@ -98,14 +98,12 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index )
     OUString sNewGroup = lcl_CheckGroupName( sGroup );
 
     uno::Reference< container::XIndexAccess > xGroup;
-    if( xAutoTextContainer->hasByName( sNewGroup ) )
-    {
-        xGroup.set( xAutoTextContainer->getByName( sNewGroup ), uno::UNO_QUERY_THROW );
-    }
-    else
+    if( !xAutoTextContainer->hasByName( sNewGroup ) )
     {
         throw uno::RuntimeException("Auto Text Entry doesn't exist" );
     }
+
+    xGroup.set( xAutoTextContainer->getByName( sNewGroup ), uno::UNO_QUERY_THROW );
 
     uno::Reference< XCollection > xCol( new SwVbaAutoTextEntries( this, mxContext, xGroup ) );
     if( index.hasValue() )

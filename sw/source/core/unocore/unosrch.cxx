@@ -545,31 +545,30 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
 {
     SolarMutexGuard aGuard;
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
-    if(pEntry)
-    {
-        if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-        bool bVal = false;
-        if(auto b = o3tl::tryAccess<bool>(aValue))
-            bVal = *b;
-        switch(pEntry->nWID)
-        {
-            case WID_SEARCH_ALL :           m_bAll        = bVal; break;
-            case WID_WORDS:                 m_bWord       = bVal; break;
-            case WID_BACKWARDS :            m_bBack       = bVal; break;
-            case WID_REGULAR_EXPRESSION :   m_bExpr       = bVal; break;
-            case WID_CASE_SENSITIVE  :      m_bCase       = bVal; break;
-            //case WID_IN_SELECTION  :      bInSel      = bVal; break;
-            case WID_STYLES          :      m_bStyles     = bVal; break;
-            case WID_SIMILARITY      :      m_bSimilarity = bVal; break;
-            case WID_SIMILARITY_RELAX:      m_bLevRelax   = bVal; break;
-            case WID_SIMILARITY_EXCHANGE:   aValue >>= m_nLevExchange; break;
-            case WID_SIMILARITY_ADD:        aValue >>= m_nLevAdd; break;
-            case WID_SIMILARITY_REMOVE :    aValue >>= m_nLevRemove;break;
-        };
-    }
-    else
+    if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+    if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
+        throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    bool bVal = false;
+    if(auto b = o3tl::tryAccess<bool>(aValue))
+        bVal = *b;
+    switch(pEntry->nWID)
+    {
+        case WID_SEARCH_ALL :           m_bAll        = bVal; break;
+        case WID_WORDS:                 m_bWord       = bVal; break;
+        case WID_BACKWARDS :            m_bBack       = bVal; break;
+        case WID_REGULAR_EXPRESSION :   m_bExpr       = bVal; break;
+        case WID_CASE_SENSITIVE  :      m_bCase       = bVal; break;
+        //case WID_IN_SELECTION  :      bInSel      = bVal; break;
+        case WID_STYLES          :      m_bStyles     = bVal; break;
+        case WID_SIMILARITY      :      m_bSimilarity = bVal; break;
+        case WID_SIMILARITY_RELAX:      m_bLevRelax   = bVal; break;
+        case WID_SIMILARITY_EXCHANGE:   aValue >>= m_nLevExchange; break;
+        case WID_SIMILARITY_ADD:        aValue >>= m_nLevAdd; break;
+        case WID_SIMILARITY_REMOVE :    aValue >>= m_nLevRemove;break;
+    };
+
 }
 
 uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName)
@@ -579,33 +578,32 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName)
 
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
     bool bSet = false;
-    if(pEntry)
-    {
-        sal_Int16 nSet = 0;
-        switch(pEntry->nWID)
-        {
-            case WID_SEARCH_ALL :           bSet = m_bAll; goto SET_BOOL;
-            case WID_WORDS:                 bSet = m_bWord; goto SET_BOOL;
-            case WID_BACKWARDS :            bSet = m_bBack; goto SET_BOOL;
-            case WID_REGULAR_EXPRESSION :   bSet = m_bExpr; goto SET_BOOL;
-            case WID_CASE_SENSITIVE  :      bSet = m_bCase; goto SET_BOOL;
-            //case WID_IN_SELECTION  :      bSet = bInSel; goto SET_BOOL;
-            case WID_STYLES          :      bSet = m_bStyles; goto SET_BOOL;
-            case WID_SIMILARITY      :      bSet = m_bSimilarity; goto SET_BOOL;
-            case WID_SIMILARITY_RELAX:      bSet = m_bLevRelax;
-SET_BOOL:
-            aRet <<= bSet;
-            break;
-            case WID_SIMILARITY_EXCHANGE:   nSet = m_nLevExchange; goto SET_UINT16;
-            case WID_SIMILARITY_ADD:        nSet = m_nLevAdd; goto SET_UINT16;
-            case WID_SIMILARITY_REMOVE :    nSet = m_nLevRemove;
-SET_UINT16:
-            aRet <<= nSet;
-            break;
-        };
-    }
-    else
+    if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+    sal_Int16 nSet = 0;
+    switch(pEntry->nWID)
+    {
+        case WID_SEARCH_ALL :           bSet = m_bAll; goto SET_BOOL;
+        case WID_WORDS:                 bSet = m_bWord; goto SET_BOOL;
+        case WID_BACKWARDS :            bSet = m_bBack; goto SET_BOOL;
+        case WID_REGULAR_EXPRESSION :   bSet = m_bExpr; goto SET_BOOL;
+        case WID_CASE_SENSITIVE  :      bSet = m_bCase; goto SET_BOOL;
+        //case WID_IN_SELECTION  :      bSet = bInSel; goto SET_BOOL;
+        case WID_STYLES          :      bSet = m_bStyles; goto SET_BOOL;
+        case WID_SIMILARITY      :      bSet = m_bSimilarity; goto SET_BOOL;
+        case WID_SIMILARITY_RELAX:      bSet = m_bLevRelax;
+SET_BOOL:
+        aRet <<= bSet;
+        break;
+        case WID_SIMILARITY_EXCHANGE:   nSet = m_nLevExchange; goto SET_UINT16;
+        case WID_SIMILARITY_ADD:        nSet = m_nLevAdd; goto SET_UINT16;
+        case WID_SIMILARITY_REMOVE :    nSet = m_nLevRemove;
+SET_UINT16:
+        aRet <<= nSet;
+        break;
+    };
+
     return aRet;
 }
 

@@ -295,238 +295,235 @@ uno::Reference< beans::XPropertySetInfo >  SwXFootnoteProperties::getPropertySet
 void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
 {
     SolarMutexGuard aGuard;
-    if(pDoc)
+    if(!pDoc)
+        throw uno::RuntimeException();
+
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    if(!pEntry)
+        throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+    if ( pEntry->nFlags & PropertyAttribute::READONLY)
+        throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    SwFootnoteInfo aFootnoteInfo(pDoc->GetFootnoteInfo());
+    switch(pEntry->nWID)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
-        if(pEntry)
+        case WID_PREFIX:
         {
-            if ( pEntry->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            SwFootnoteInfo aFootnoteInfo(pDoc->GetFootnoteInfo());
-            switch(pEntry->nWID)
+            OUString uTmp;
+            aValue >>= uTmp;
+            aFootnoteInfo.SetPrefix(uTmp);
+        }
+        break;
+        case WID_SUFFIX:
+        {
+            OUString uTmp;
+            aValue >>= uTmp;
+            aFootnoteInfo.SetSuffix(uTmp);
+        }
+        break;
+        case WID_NUMBERING_TYPE:
+        {
+            sal_Int16 nTmp = 0;
+            aValue >>= nTmp;
+            if(!(nTmp >= 0 &&
+                (nTmp <= SVX_NUM_ARABIC ||
+                    nTmp > SVX_NUM_BITMAP)))
+                throw lang::IllegalArgumentException();
+
+            aFootnoteInfo.aFormat.SetNumberingType((SvxNumType)nTmp);
+
+        }
+        break;
+        case WID_START_AT:
+        {
+            sal_Int16 nTmp = 0;
+            aValue >>= nTmp;
+            aFootnoteInfo.nFootnoteOffset = nTmp;
+        }
+        break;
+        case WID_FOOTNOTE_COUNTING:
+        {
+            sal_Int16 nTmp = 0;
+            aValue >>= nTmp;
+            switch(nTmp)
             {
-                case WID_PREFIX:
-                {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    aFootnoteInfo.SetPrefix(uTmp);
-                }
+                case  FootnoteNumbering::PER_PAGE:
+                    aFootnoteInfo.eNum = FTNNUM_PAGE;
                 break;
-                case WID_SUFFIX:
-                {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    aFootnoteInfo.SetSuffix(uTmp);
-                }
+                case  FootnoteNumbering::PER_CHAPTER:
+                    aFootnoteInfo.eNum = FTNNUM_CHAPTER;
                 break;
-                case WID_NUMBERING_TYPE:
-                {
-                    sal_Int16 nTmp = 0;
-                    aValue >>= nTmp;
-                    if(nTmp >= 0 &&
-                        (nTmp <= SVX_NUM_ARABIC ||
-                            nTmp > SVX_NUM_BITMAP))
-                        aFootnoteInfo.aFormat.SetNumberingType((SvxNumType)nTmp);
-                    else
-                        throw lang::IllegalArgumentException();
-                }
-                break;
-                case WID_START_AT:
-                {
-                    sal_Int16 nTmp = 0;
-                    aValue >>= nTmp;
-                    aFootnoteInfo.nFootnoteOffset = nTmp;
-                }
-                break;
-                case WID_FOOTNOTE_COUNTING:
-                {
-                    sal_Int16 nTmp = 0;
-                    aValue >>= nTmp;
-                    switch(nTmp)
-                    {
-                        case  FootnoteNumbering::PER_PAGE:
-                            aFootnoteInfo.eNum = FTNNUM_PAGE;
-                        break;
-                        case  FootnoteNumbering::PER_CHAPTER:
-                            aFootnoteInfo.eNum = FTNNUM_CHAPTER;
-                        break;
-                        case  FootnoteNumbering::PER_DOCUMENT:
-                            aFootnoteInfo.eNum = FTNNUM_DOC;
-                        break;
-                    }
-                }
-                break;
-                case WID_PARAGRAPH_STYLE:
-                {
-                    SwTextFormatColl* pColl = lcl_GetParaStyle(pDoc, aValue);
-                    if(pColl)
-                        aFootnoteInfo.SetFootnoteTextColl(*pColl);
-                }
-                break;
-                case WID_PAGE_STYLE:
-                {
-                    SwPageDesc* pDesc = lcl_GetPageDesc(pDoc, aValue);
-                    if(pDesc)
-                        aFootnoteInfo.ChgPageDesc( pDesc );
-                }
-                break;
-                case WID_ANCHOR_CHARACTER_STYLE:
-                case WID_CHARACTER_STYLE:
-                {
-                    SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
-                    if(pFormat)
-                    {
-                        if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
-                            aFootnoteInfo.SetAnchorCharFormat(pFormat);
-                        else
-                            aFootnoteInfo.SetCharFormat(pFormat);
-                    }
-                }
-                break;
-                case WID_POSITION_END_OF_DOC:
-                {
-                    bool bVal = *o3tl::doAccess<bool>(aValue);
-                    aFootnoteInfo.ePos = bVal ? FTNPOS_CHAPTER : FTNPOS_PAGE;
-                }
-                break;
-                case WID_END_NOTICE:
-                {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    aFootnoteInfo.aQuoVadis = uTmp;
-                }
-                break;
-                case WID_BEGIN_NOTICE:
-                {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    aFootnoteInfo.aErgoSum = uTmp;
-                }
+                case  FootnoteNumbering::PER_DOCUMENT:
+                    aFootnoteInfo.eNum = FTNNUM_DOC;
                 break;
             }
-            pDoc->SetFootnoteInfo(aFootnoteInfo);
         }
-        else
-            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        break;
+        case WID_PARAGRAPH_STYLE:
+        {
+            SwTextFormatColl* pColl = lcl_GetParaStyle(pDoc, aValue);
+            if(pColl)
+                aFootnoteInfo.SetFootnoteTextColl(*pColl);
+        }
+        break;
+        case WID_PAGE_STYLE:
+        {
+            SwPageDesc* pDesc = lcl_GetPageDesc(pDoc, aValue);
+            if(pDesc)
+                aFootnoteInfo.ChgPageDesc( pDesc );
+        }
+        break;
+        case WID_ANCHOR_CHARACTER_STYLE:
+        case WID_CHARACTER_STYLE:
+        {
+            SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
+            if(pFormat)
+            {
+                if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
+                    aFootnoteInfo.SetAnchorCharFormat(pFormat);
+                else
+                    aFootnoteInfo.SetCharFormat(pFormat);
+            }
+        }
+        break;
+        case WID_POSITION_END_OF_DOC:
+        {
+            bool bVal = *o3tl::doAccess<bool>(aValue);
+            aFootnoteInfo.ePos = bVal ? FTNPOS_CHAPTER : FTNPOS_PAGE;
+        }
+        break;
+        case WID_END_NOTICE:
+        {
+            OUString uTmp;
+            aValue >>= uTmp;
+            aFootnoteInfo.aQuoVadis = uTmp;
+        }
+        break;
+        case WID_BEGIN_NOTICE:
+        {
+            OUString uTmp;
+            aValue >>= uTmp;
+            aFootnoteInfo.aErgoSum = uTmp;
+        }
+        break;
     }
-    else
-        throw uno::RuntimeException();
+    pDoc->SetFootnoteInfo(aFootnoteInfo);
+
+
 }
 
 uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    if(pDoc)
+    if(!pDoc)
+        throw uno::RuntimeException();
+
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    if(!pEntry)
+        throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+    const SwFootnoteInfo& rFootnoteInfo = pDoc->GetFootnoteInfo();
+    switch(pEntry->nWID)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
-        if(pEntry)
+        case WID_PREFIX:
         {
-            const SwFootnoteInfo& rFootnoteInfo = pDoc->GetFootnoteInfo();
-            switch(pEntry->nWID)
+            aRet <<= rFootnoteInfo.GetPrefix();
+        }
+        break;
+        case WID_SUFFIX:
+        {
+            aRet <<= rFootnoteInfo.GetSuffix();
+        }
+        break;
+        case  WID_NUMBERING_TYPE :
+        {
+            aRet <<= (sal_Int16)rFootnoteInfo.aFormat.GetNumberingType();
+        }
+        break;
+        case  WID_START_AT:
+            aRet <<= (sal_Int16)rFootnoteInfo.nFootnoteOffset;
+        break;
+        case  WID_FOOTNOTE_COUNTING  :
+        {
+            sal_Int16 nRet = 0;
+            switch(rFootnoteInfo.eNum)
             {
-                case WID_PREFIX:
-                {
-                    aRet <<= rFootnoteInfo.GetPrefix();
-                }
+                case  FTNNUM_PAGE:
+                    nRet = FootnoteNumbering::PER_PAGE;
                 break;
-                case WID_SUFFIX:
-                {
-                    aRet <<= rFootnoteInfo.GetSuffix();
-                }
+                case  FTNNUM_CHAPTER:
+                    nRet = FootnoteNumbering::PER_CHAPTER;
                 break;
-                case  WID_NUMBERING_TYPE :
-                {
-                    aRet <<= (sal_Int16)rFootnoteInfo.aFormat.GetNumberingType();
-                }
-                break;
-                case  WID_START_AT:
-                    aRet <<= (sal_Int16)rFootnoteInfo.nFootnoteOffset;
-                break;
-                case  WID_FOOTNOTE_COUNTING  :
-                {
-                    sal_Int16 nRet = 0;
-                    switch(rFootnoteInfo.eNum)
-                    {
-                        case  FTNNUM_PAGE:
-                            nRet = FootnoteNumbering::PER_PAGE;
-                        break;
-                        case  FTNNUM_CHAPTER:
-                            nRet = FootnoteNumbering::PER_CHAPTER;
-                        break;
-                        case  FTNNUM_DOC:
-                            nRet = FootnoteNumbering::PER_DOCUMENT;
-                        break;
-                    }
-                    aRet <<= nRet;
-                }
-                break;
-                case  WID_PARAGRAPH_STYLE    :
-                {
-                    SwTextFormatColl* pColl = rFootnoteInfo.GetFootnoteTextColl();
-                    OUString aString;
-                    if(pColl)
-                        aString = pColl->GetName();
-                    SwStyleNameMapper::FillProgName(aString, aString, SwGetPoolIdFromName::TxtColl, true);
-                    aRet <<= aString;
-                }
-                break;
-                case  WID_PAGE_STYLE :
-                {
-                    OUString aString;
-                    if( rFootnoteInfo.KnowsPageDesc() )
-                    {
-                        SwStyleNameMapper::FillProgName(
-                                rFootnoteInfo.GetPageDesc( *pDoc )->GetName(),
-                                aString,
-                                SwGetPoolIdFromName::PageDesc,
-                                true);
-                    }
-                    aRet <<= aString;
-                }
-                break;
-                case WID_ANCHOR_CHARACTER_STYLE:
-                case WID_CHARACTER_STYLE:
-                {
-                    OUString aString;
-                    const SwCharFormat* pCharFormat = nullptr;
-                    if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
-                    {
-                        if( rFootnoteInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
-                            pCharFormat = rFootnoteInfo.GetAnchorCharFormat(*pDoc);
-                    }
-                    else
-                    {
-                        if( rFootnoteInfo.GetCharFormatDep()->GetRegisteredIn() )
-                            pCharFormat = rFootnoteInfo.GetCharFormat(*pDoc);
-                    }
-                    if( pCharFormat )
-                    {
-                        SwStyleNameMapper::FillProgName(
-                                pCharFormat->GetName(),
-                                aString,
-                                SwGetPoolIdFromName::ChrFmt,
-                                true);
-                    }
-                    aRet <<= aString;
-                }
-                break;
-                case  WID_POSITION_END_OF_DOC:
-                    aRet <<= FTNPOS_CHAPTER == rFootnoteInfo.ePos;
-                break;
-                case  WID_END_NOTICE         :
-                    aRet <<= rFootnoteInfo.aQuoVadis;
-                break;
-                case  WID_BEGIN_NOTICE       :
-                    aRet <<= rFootnoteInfo.aErgoSum;
+                case  FTNNUM_DOC:
+                    nRet = FootnoteNumbering::PER_DOCUMENT;
                 break;
             }
+            aRet <<= nRet;
         }
-        else
-            throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        break;
+        case  WID_PARAGRAPH_STYLE    :
+        {
+            SwTextFormatColl* pColl = rFootnoteInfo.GetFootnoteTextColl();
+            OUString aString;
+            if(pColl)
+                aString = pColl->GetName();
+            SwStyleNameMapper::FillProgName(aString, aString, SwGetPoolIdFromName::TxtColl, true);
+            aRet <<= aString;
+        }
+        break;
+        case  WID_PAGE_STYLE :
+        {
+            OUString aString;
+            if( rFootnoteInfo.KnowsPageDesc() )
+            {
+                SwStyleNameMapper::FillProgName(
+                        rFootnoteInfo.GetPageDesc( *pDoc )->GetName(),
+                        aString,
+                        SwGetPoolIdFromName::PageDesc,
+                        true);
+            }
+            aRet <<= aString;
+        }
+        break;
+        case WID_ANCHOR_CHARACTER_STYLE:
+        case WID_CHARACTER_STYLE:
+        {
+            OUString aString;
+            const SwCharFormat* pCharFormat = nullptr;
+            if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
+            {
+                if( rFootnoteInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
+                    pCharFormat = rFootnoteInfo.GetAnchorCharFormat(*pDoc);
+            }
+            else
+            {
+                if( rFootnoteInfo.GetCharFormatDep()->GetRegisteredIn() )
+                    pCharFormat = rFootnoteInfo.GetCharFormat(*pDoc);
+            }
+            if( pCharFormat )
+            {
+                SwStyleNameMapper::FillProgName(
+                        pCharFormat->GetName(),
+                        aString,
+                        SwGetPoolIdFromName::ChrFmt,
+                        true);
+            }
+            aRet <<= aString;
+        }
+        break;
+        case  WID_POSITION_END_OF_DOC:
+            aRet <<= FTNPOS_CHAPTER == rFootnoteInfo.ePos;
+        break;
+        case  WID_END_NOTICE         :
+            aRet <<= rFootnoteInfo.aQuoVadis;
+        break;
+        case  WID_BEGIN_NOTICE       :
+            aRet <<= rFootnoteInfo.aErgoSum;
+        break;
     }
-    else
-        throw uno::RuntimeException();
+
+
     return aRet;
 }
 
@@ -592,73 +589,72 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
     if(pDoc)
     {
         const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
-        if(pEntry)
-        {
-            if ( pEntry->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            SwEndNoteInfo aEndInfo(pDoc->GetEndNoteInfo());
-            switch(pEntry->nWID)
-            {
-                case WID_PREFIX:
-                {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    aEndInfo.SetPrefix(uTmp);
-                }
-                break;
-                case WID_SUFFIX:
-                {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    aEndInfo.SetSuffix(uTmp);
-                }
-                break;
-                case  WID_NUMBERING_TYPE :
-                {
-                    sal_Int16 nTmp = 0;
-                    aValue >>= nTmp;
-                    aEndInfo.aFormat.SetNumberingType((SvxNumType)nTmp);
-                }
-                break;
-                case  WID_START_AT:
-                {
-                    sal_Int16 nTmp = 0;
-                    aValue >>= nTmp;
-                    aEndInfo.nFootnoteOffset = nTmp;
-                }
-                break;
-                case  WID_PARAGRAPH_STYLE    :
-                {
-                    SwTextFormatColl* pColl = lcl_GetParaStyle(pDoc, aValue);
-                    if(pColl)
-                        aEndInfo.SetFootnoteTextColl(*pColl);
-                }
-                break;
-                case  WID_PAGE_STYLE :
-                {
-                    SwPageDesc* pDesc = lcl_GetPageDesc(pDoc, aValue);
-                    if(pDesc)
-                        aEndInfo.ChgPageDesc( pDesc );
-                }
-                break;
-                case WID_ANCHOR_CHARACTER_STYLE:
-                case  WID_CHARACTER_STYLE    :
-                {
-                    SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
-                    if(pFormat)
-                    {
-                        if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
-                            aEndInfo.SetAnchorCharFormat(pFormat);
-                        else
-                            aEndInfo.SetCharFormat(pFormat);
-                    }
-                }
-                break;
-            }
-            pDoc->SetEndNoteInfo(aEndInfo);
-        }
-        else
+        if(!pEntry)
             throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+        if ( pEntry->nFlags & PropertyAttribute::READONLY)
+            throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        SwEndNoteInfo aEndInfo(pDoc->GetEndNoteInfo());
+        switch(pEntry->nWID)
+        {
+            case WID_PREFIX:
+            {
+                OUString uTmp;
+                aValue >>= uTmp;
+                aEndInfo.SetPrefix(uTmp);
+            }
+            break;
+            case WID_SUFFIX:
+            {
+                OUString uTmp;
+                aValue >>= uTmp;
+                aEndInfo.SetSuffix(uTmp);
+            }
+            break;
+            case  WID_NUMBERING_TYPE :
+            {
+                sal_Int16 nTmp = 0;
+                aValue >>= nTmp;
+                aEndInfo.aFormat.SetNumberingType((SvxNumType)nTmp);
+            }
+            break;
+            case  WID_START_AT:
+            {
+                sal_Int16 nTmp = 0;
+                aValue >>= nTmp;
+                aEndInfo.nFootnoteOffset = nTmp;
+            }
+            break;
+            case  WID_PARAGRAPH_STYLE    :
+            {
+                SwTextFormatColl* pColl = lcl_GetParaStyle(pDoc, aValue);
+                if(pColl)
+                    aEndInfo.SetFootnoteTextColl(*pColl);
+            }
+            break;
+            case  WID_PAGE_STYLE :
+            {
+                SwPageDesc* pDesc = lcl_GetPageDesc(pDoc, aValue);
+                if(pDesc)
+                    aEndInfo.ChgPageDesc( pDesc );
+            }
+            break;
+            case WID_ANCHOR_CHARACTER_STYLE:
+            case  WID_CHARACTER_STYLE    :
+            {
+                SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
+                if(pFormat)
+                {
+                    if(pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE)
+                        aEndInfo.SetAnchorCharFormat(pFormat);
+                    else
+                        aEndInfo.SetCharFormat(pFormat);
+                }
+            }
+            break;
+        }
+        pDoc->SetEndNoteInfo(aEndInfo);
+
     }
 }
 
@@ -669,82 +665,81 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
     if(pDoc)
     {
         const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
-        if(pEntry)
-        {
-            const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
-            switch(pEntry->nWID)
-            {
-                case WID_PREFIX:
-                    aRet <<= rEndInfo.GetPrefix();
-                break;
-                case WID_SUFFIX:
-                    aRet <<= rEndInfo.GetSuffix();
-                break;
-                case  WID_NUMBERING_TYPE :
-                    aRet <<= (sal_Int16)rEndInfo.aFormat.GetNumberingType();
-                break;
-                case  WID_START_AT:
-                    aRet <<= (sal_Int16)rEndInfo.nFootnoteOffset;
-                break;
-                case  WID_PARAGRAPH_STYLE    :
-                {
-                    SwTextFormatColl* pColl = rEndInfo.GetFootnoteTextColl();
-                    OUString aString;
-                    if(pColl)
-                        aString = pColl->GetName();
-                    SwStyleNameMapper::FillProgName(
-                            aString,
-                            aString,
-                            SwGetPoolIdFromName::TxtColl,
-                            true);
-                    aRet <<= aString;
-
-                }
-                break;
-                case  WID_PAGE_STYLE :
-                {
-                    OUString aString;
-                    if( rEndInfo.KnowsPageDesc() )
-                    {
-                        SwStyleNameMapper::FillProgName(
-                            rEndInfo.GetPageDesc( *pDoc )->GetName(),
-                            aString,
-                            SwGetPoolIdFromName::PageDesc,
-                            true );
-                    }
-                    aRet <<= aString;
-                }
-                break;
-                case WID_ANCHOR_CHARACTER_STYLE:
-                case WID_CHARACTER_STYLE:
-                {
-                    OUString aString;
-                    const SwCharFormat* pCharFormat = nullptr;
-                    if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
-                    {
-                        if( rEndInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
-                            pCharFormat = rEndInfo.GetAnchorCharFormat(*pDoc);
-                    }
-                    else
-                    {
-                        if( rEndInfo.GetCharFormatDep()->GetRegisteredIn() )
-                            pCharFormat = rEndInfo.GetCharFormat(*pDoc);
-                    }
-                    if( pCharFormat )
-                    {
-                        SwStyleNameMapper::FillProgName(
-                                pCharFormat->GetName(),
-                                aString,
-                                SwGetPoolIdFromName::ChrFmt,
-                                true );
-                    }
-                    aRet <<= aString;
-                }
-                break;
-            }
-        }
-        else
+        if(!pEntry)
             throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+        const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
+        switch(pEntry->nWID)
+        {
+            case WID_PREFIX:
+                aRet <<= rEndInfo.GetPrefix();
+            break;
+            case WID_SUFFIX:
+                aRet <<= rEndInfo.GetSuffix();
+            break;
+            case  WID_NUMBERING_TYPE :
+                aRet <<= (sal_Int16)rEndInfo.aFormat.GetNumberingType();
+            break;
+            case  WID_START_AT:
+                aRet <<= (sal_Int16)rEndInfo.nFootnoteOffset;
+            break;
+            case  WID_PARAGRAPH_STYLE    :
+            {
+                SwTextFormatColl* pColl = rEndInfo.GetFootnoteTextColl();
+                OUString aString;
+                if(pColl)
+                    aString = pColl->GetName();
+                SwStyleNameMapper::FillProgName(
+                        aString,
+                        aString,
+                        SwGetPoolIdFromName::TxtColl,
+                        true);
+                aRet <<= aString;
+
+            }
+            break;
+            case  WID_PAGE_STYLE :
+            {
+                OUString aString;
+                if( rEndInfo.KnowsPageDesc() )
+                {
+                    SwStyleNameMapper::FillProgName(
+                        rEndInfo.GetPageDesc( *pDoc )->GetName(),
+                        aString,
+                        SwGetPoolIdFromName::PageDesc,
+                        true );
+                }
+                aRet <<= aString;
+            }
+            break;
+            case WID_ANCHOR_CHARACTER_STYLE:
+            case WID_CHARACTER_STYLE:
+            {
+                OUString aString;
+                const SwCharFormat* pCharFormat = nullptr;
+                if( pEntry->nWID == WID_ANCHOR_CHARACTER_STYLE )
+                {
+                    if( rEndInfo.GetAnchorCharFormatDep()->GetRegisteredIn() )
+                        pCharFormat = rEndInfo.GetAnchorCharFormat(*pDoc);
+                }
+                else
+                {
+                    if( rEndInfo.GetCharFormatDep()->GetRegisteredIn() )
+                        pCharFormat = rEndInfo.GetCharFormat(*pDoc);
+                }
+                if( pCharFormat )
+                {
+                    SwStyleNameMapper::FillProgName(
+                            pCharFormat->GetName(),
+                            aString,
+                            SwGetPoolIdFromName::ChrFmt,
+                            true );
+                }
+                aRet <<= aString;
+            }
+            break;
+        }
+
     }
     return aRet;
 }
@@ -808,208 +803,200 @@ void SwXLineNumberingProperties::setPropertyValue(
     const OUString& rPropertyName, const Any& aValue)
 {
     SolarMutexGuard aGuard;
-    if(pDoc)
+    if(!pDoc)
+        throw uno::RuntimeException();
+
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    if(!pEntry)
+        throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+    if ( pEntry->nFlags & PropertyAttribute::READONLY)
+        throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    SwLineNumberInfo  aFontMetric(pDoc->GetLineNumberInfo());
+    switch(pEntry->nWID)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
-        if(pEntry)
+        case WID_NUM_ON:
         {
-            if ( pEntry->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            SwLineNumberInfo  aFontMetric(pDoc->GetLineNumberInfo());
-            switch(pEntry->nWID)
+            bool bVal = *o3tl::doAccess<bool>(aValue);
+            aFontMetric.SetPaintLineNumbers(bVal);
+        }
+        break;
+        case WID_CHARACTER_STYLE :
+        {
+            SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
+            if(pFormat)
+                aFontMetric.SetCharFormat(pFormat);
+        }
+        break;
+        case WID_NUMBERING_TYPE  :
+        {
+            SvxNumberType aNumType(aFontMetric.GetNumType());
+            sal_Int16 nTmp = 0;
+            aValue >>= nTmp;
+            aNumType.SetNumberingType((SvxNumType)nTmp);
+            aFontMetric.SetNumType(aNumType);
+        }
+        break;
+        case WID_NUMBER_POSITION :
+        {
+            sal_Int16 nTmp = 0;
+            aValue >>= nTmp;
+            switch(nTmp)
             {
-                case WID_NUM_ON:
-                {
-                    bool bVal = *o3tl::doAccess<bool>(aValue);
-                    aFontMetric.SetPaintLineNumbers(bVal);
-                }
+                case  style::LineNumberPosition::LEFT:
+                     aFontMetric.SetPos(LINENUMBER_POS_LEFT); ;
                 break;
-                case WID_CHARACTER_STYLE :
-                {
-                    SwCharFormat* pFormat = lcl_getCharFormat(pDoc, aValue);
-                    if(pFormat)
-                        aFontMetric.SetCharFormat(pFormat);
-                }
+                case style::LineNumberPosition::RIGHT :
+                     aFontMetric.SetPos(LINENUMBER_POS_RIGHT);       ;
                 break;
-                case WID_NUMBERING_TYPE  :
-                {
-                    SvxNumberType aNumType(aFontMetric.GetNumType());
-                    sal_Int16 nTmp = 0;
-                    aValue >>= nTmp;
-                    aNumType.SetNumberingType((SvxNumType)nTmp);
-                    aFontMetric.SetNumType(aNumType);
-                }
+                case  style::LineNumberPosition::INSIDE:
+                    aFontMetric.SetPos(LINENUMBER_POS_INSIDE);      ;
                 break;
-                case WID_NUMBER_POSITION :
-                {
-                    sal_Int16 nTmp = 0;
-                    aValue >>= nTmp;
-                    switch(nTmp)
-                    {
-                        case  style::LineNumberPosition::LEFT:
-                             aFontMetric.SetPos(LINENUMBER_POS_LEFT); ;
-                        break;
-                        case style::LineNumberPosition::RIGHT :
-                             aFontMetric.SetPos(LINENUMBER_POS_RIGHT);       ;
-                        break;
-                        case  style::LineNumberPosition::INSIDE:
-                            aFontMetric.SetPos(LINENUMBER_POS_INSIDE);      ;
-                        break;
-                        case  style::LineNumberPosition::OUTSIDE:
-                            aFontMetric.SetPos(LINENUMBER_POS_OUTSIDE);
-                        break;
-                    }
-                }
-                break;
-                case WID_DISTANCE        :
-                {
-                    sal_Int32 nVal = 0;
-                    aValue >>= nVal;
-                    sal_Int32 nTmp = convertMm100ToTwip(nVal);
-                    if (nTmp > USHRT_MAX)
-                        nTmp = USHRT_MAX;
-                    aFontMetric.SetPosFromLeft( static_cast< sal_uInt16 >(nTmp) );
-                }
-                break;
-                case WID_INTERVAL   :
-                {
-                    sal_Int16 nTmp = 0;
-                    aValue >>= nTmp;
-                    if( nTmp > 0)
-                        aFontMetric.SetCountBy(nTmp);
-                }
-                break;
-                case WID_SEPARATOR_TEXT  :
-                {
-                    OUString uTmp;
-                    aValue >>= uTmp;
-                    aFontMetric.SetDivider(uTmp);
-                }
-                break;
-                case WID_SEPARATOR_INTERVAL:
-                {
-                    sal_Int16 nTmp = 0;
-                    aValue >>= nTmp;
-                    if( nTmp >= 0)
-                        aFontMetric.SetDividerCountBy(nTmp);
-                }
-                break;
-                case WID_COUNT_EMPTY_LINES :
-                {
-                    bool bVal = *o3tl::doAccess<bool>(aValue);
-                    aFontMetric.SetCountBlankLines(bVal);
-                }
-                break;
-                case WID_COUNT_LINES_IN_FRAMES :
-                {
-                    bool bVal = *o3tl::doAccess<bool>(aValue);
-                    aFontMetric.SetCountInFlys(bVal);
-                }
-                break;
-                case WID_RESTART_AT_EACH_PAGE :
-                {
-                    bool bVal = *o3tl::doAccess<bool>(aValue);
-                    aFontMetric.SetRestartEachPage(bVal);
-                }
+                case  style::LineNumberPosition::OUTSIDE:
+                    aFontMetric.SetPos(LINENUMBER_POS_OUTSIDE);
                 break;
             }
-            pDoc->SetLineNumberInfo(aFontMetric);
         }
-        else
-            throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        break;
+        case WID_DISTANCE        :
+        {
+            sal_Int32 nVal = 0;
+            aValue >>= nVal;
+            sal_Int32 nTmp = convertMm100ToTwip(nVal);
+            if (nTmp > USHRT_MAX)
+                nTmp = USHRT_MAX;
+            aFontMetric.SetPosFromLeft( static_cast< sal_uInt16 >(nTmp) );
+        }
+        break;
+        case WID_INTERVAL   :
+        {
+            sal_Int16 nTmp = 0;
+            aValue >>= nTmp;
+            if( nTmp > 0)
+                aFontMetric.SetCountBy(nTmp);
+        }
+        break;
+        case WID_SEPARATOR_TEXT  :
+        {
+            OUString uTmp;
+            aValue >>= uTmp;
+            aFontMetric.SetDivider(uTmp);
+        }
+        break;
+        case WID_SEPARATOR_INTERVAL:
+        {
+            sal_Int16 nTmp = 0;
+            aValue >>= nTmp;
+            if( nTmp >= 0)
+                aFontMetric.SetDividerCountBy(nTmp);
+        }
+        break;
+        case WID_COUNT_EMPTY_LINES :
+        {
+            bool bVal = *o3tl::doAccess<bool>(aValue);
+            aFontMetric.SetCountBlankLines(bVal);
+        }
+        break;
+        case WID_COUNT_LINES_IN_FRAMES :
+        {
+            bool bVal = *o3tl::doAccess<bool>(aValue);
+            aFontMetric.SetCountInFlys(bVal);
+        }
+        break;
+        case WID_RESTART_AT_EACH_PAGE :
+        {
+            bool bVal = *o3tl::doAccess<bool>(aValue);
+            aFontMetric.SetRestartEachPage(bVal);
+        }
+        break;
     }
-    else
-        throw uno::RuntimeException();
+    pDoc->SetLineNumberInfo(aFontMetric);
 }
 
 Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
     Any aRet;
-    if(pDoc)
+    if(!pDoc)
+        throw uno::RuntimeException();
+
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
+    if(!pEntry)
+        throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+    const SwLineNumberInfo& rInfo = pDoc->GetLineNumberInfo();
+    switch(pEntry->nWID)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
-        if(pEntry)
+        case WID_NUM_ON:
+            aRet <<= rInfo.IsPaintLineNumbers();
+        break;
+        case WID_CHARACTER_STYLE :
         {
-            const SwLineNumberInfo& rInfo = pDoc->GetLineNumberInfo();
-            switch(pEntry->nWID)
+            OUString aString;
+            // return empty string if no char format is set
+            // otherwise it would be created here
+            if(rInfo.HasCharFormat())
             {
-                case WID_NUM_ON:
-                    aRet <<= rInfo.IsPaintLineNumbers();
+                SwStyleNameMapper::FillProgName(
+                            rInfo.GetCharFormat(pDoc->getIDocumentStylePoolAccess())->GetName(),
+                            aString,
+                            SwGetPoolIdFromName::ChrFmt,
+                            true);
+            }
+            aRet <<= aString;
+        }
+        break;
+        case WID_NUMBERING_TYPE  :
+            aRet <<= (sal_Int16)rInfo.GetNumType().GetNumberingType();
+        break;
+        case WID_NUMBER_POSITION :
+        {
+            sal_Int16 nRet = 0;
+            switch(rInfo.GetPos())
+            {
+                case  LINENUMBER_POS_LEFT:
+                    nRet = style::LineNumberPosition::LEFT;
                 break;
-                case WID_CHARACTER_STYLE :
-                {
-                    OUString aString;
-                    // return empty string if no char format is set
-                    // otherwise it would be created here
-                    if(rInfo.HasCharFormat())
-                    {
-                        SwStyleNameMapper::FillProgName(
-                                    rInfo.GetCharFormat(pDoc->getIDocumentStylePoolAccess())->GetName(),
-                                    aString,
-                                    SwGetPoolIdFromName::ChrFmt,
-                                    true);
-                    }
-                    aRet <<= aString;
-                }
+                case LINENUMBER_POS_RIGHT :
+                    nRet = style::LineNumberPosition::RIGHT      ;
                 break;
-                case WID_NUMBERING_TYPE  :
-                    aRet <<= (sal_Int16)rInfo.GetNumType().GetNumberingType();
+                case  LINENUMBER_POS_INSIDE:
+                    nRet = style::LineNumberPosition::INSIDE     ;
                 break;
-                case WID_NUMBER_POSITION :
-                {
-                    sal_Int16 nRet = 0;
-                    switch(rInfo.GetPos())
-                    {
-                        case  LINENUMBER_POS_LEFT:
-                            nRet = style::LineNumberPosition::LEFT;
-                        break;
-                        case LINENUMBER_POS_RIGHT :
-                            nRet = style::LineNumberPosition::RIGHT      ;
-                        break;
-                        case  LINENUMBER_POS_INSIDE:
-                            nRet = style::LineNumberPosition::INSIDE     ;
-                        break;
-                        case LINENUMBER_POS_OUTSIDE :
-                            nRet = style::LineNumberPosition::OUTSIDE    ;
-                        break;
-                    }
-                    aRet <<= nRet;
-                }
-                break;
-                case WID_DISTANCE        :
-                {
-                    sal_uInt32 nPos = rInfo.GetPosFromLeft();
-                    if(USHRT_MAX == nPos)
-                        nPos = 0;
-                    aRet <<= static_cast < sal_Int32 >(convertTwipToMm100(nPos));
-                }
-                break;
-                case WID_INTERVAL   :
-                    aRet <<= (sal_Int16)rInfo.GetCountBy();
-                break;
-                case WID_SEPARATOR_TEXT  :
-                    aRet <<= rInfo.GetDivider();
-                break;
-                case WID_SEPARATOR_INTERVAL:
-                    aRet <<= (sal_Int16)rInfo.GetDividerCountBy();
-                break;
-                case WID_COUNT_EMPTY_LINES :
-                    aRet <<= rInfo.IsCountBlankLines();
-                break;
-                case WID_COUNT_LINES_IN_FRAMES :
-                    aRet <<= rInfo.IsCountInFlys();
-                break;
-                case WID_RESTART_AT_EACH_PAGE :
-                    aRet <<= rInfo.IsRestartEachPage();
+                case LINENUMBER_POS_OUTSIDE :
+                    nRet = style::LineNumberPosition::OUTSIDE    ;
                 break;
             }
+            aRet <<= nRet;
         }
-        else
-            throw UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        break;
+        case WID_DISTANCE        :
+        {
+            sal_uInt32 nPos = rInfo.GetPosFromLeft();
+            if(USHRT_MAX == nPos)
+                nPos = 0;
+            aRet <<= static_cast < sal_Int32 >(convertTwipToMm100(nPos));
+        }
+        break;
+        case WID_INTERVAL   :
+            aRet <<= (sal_Int16)rInfo.GetCountBy();
+        break;
+        case WID_SEPARATOR_TEXT  :
+            aRet <<= rInfo.GetDivider();
+        break;
+        case WID_SEPARATOR_INTERVAL:
+            aRet <<= (sal_Int16)rInfo.GetDividerCountBy();
+        break;
+        case WID_COUNT_EMPTY_LINES :
+            aRet <<= rInfo.IsCountBlankLines();
+        break;
+        case WID_COUNT_LINES_IN_FRAMES :
+            aRet <<= rInfo.IsCountInFlys();
+        break;
+        case WID_RESTART_AT_EACH_PAGE :
+            aRet <<= rInfo.IsRestartEachPage();
+        break;
     }
-    else
-        throw uno::RuntimeException();
     return aRet;
 }
 

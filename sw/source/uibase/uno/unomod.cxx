@@ -354,10 +354,10 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
             sal_Int16 nTmp = 0;
             rValue >>= nTmp;
             SwPostItMode nVal = static_cast<SwPostItMode>(nTmp);
-            if(nVal <= SwPostItMode::EndPage)
-                mpPrtOpt->SetPrintPostIts(nVal);
-            else
+            if(!(nVal <= SwPostItMode::EndPage))
                 throw lang::IllegalArgumentException();
+
+            mpPrtOpt->SetPrintPostIts(nVal);
         }
         break;
         case HANDLE_PRINTSET_EMPTY_PAGES:
@@ -369,10 +369,10 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         case HANDLE_PRINTSET_FAX_NAME:
         {
             OUString sString;
-            if ( rValue >>= sString)
-                mpPrtOpt->SetFaxName(sString);
-            else
+            if ( !(rValue >>= sString))
                 throw lang::IllegalArgumentException();
+
+            mpPrtOpt->SetFaxName(sString);
         }
         break;
         case HANDLE_PRINTSET_PROSPECT_RTL:
@@ -708,20 +708,18 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case HANDLE_VIEWSET_HELP_URL:
         {
-            if ( pView )
-            {
-                OUString sHelpURL;
-                if ( ! ( rValue >>= sHelpURL ) )
-                    throw IllegalArgumentException();
-
-                INetURLObject aHID( sHelpURL );
-                if ( aHID.GetProtocol() == INetProtocol::Hid )
-                      pView->GetEditWin().SetHelpId( OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
-                else
-                    throw IllegalArgumentException ();
-            }
-            else
+            if ( !pView )
                 throw UnknownPropertyException();
+
+            OUString sHelpURL;
+            if ( ! ( rValue >>= sHelpURL ) )
+                throw IllegalArgumentException();
+
+            INetURLObject aHID( sHelpURL );
+            if ( aHID.GetProtocol() != INetProtocol::Hid )
+                throw IllegalArgumentException ();
+
+            pView->GetEditWin().SetHelpId( OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
         }
         break;
         case HANDLE_VIEWSET_HORI_RULER_METRIC:
@@ -889,17 +887,15 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         break;
         case HANDLE_VIEWSET_HELP_URL :
         {
-            if ( pView )
-            {
-                bBool = false;
-                OUStringBuffer sHelpURL;
-                sHelpURL.append ( INET_HID_SCHEME );
-                SwEditWin &rEditWin = pView->GetEditWin();
-                sHelpURL.append( OUString::fromUtf8( rEditWin.GetHelpId() ) );
-                rValue <<= sHelpURL.makeStringAndClear();
-            }
-            else
+            if ( !pView )
                 throw UnknownPropertyException();
+
+            bBool = false;
+            OUStringBuffer sHelpURL;
+            sHelpURL.append ( INET_HID_SCHEME );
+            SwEditWin &rEditWin = pView->GetEditWin();
+            sHelpURL.append( OUString::fromUtf8( rEditWin.GetHelpId() ) );
+            rValue <<= sHelpURL.makeStringAndClear();
         }
         break;
         case HANDLE_VIEWSET_HORI_RULER_METRIC:

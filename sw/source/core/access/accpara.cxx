@@ -1289,12 +1289,10 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
     OUString sText( GetString() );
 
     // return character (if valid)
-    if( IsValidChar(nIndex, sText.getLength() ) )
-    {
-        return sText[nIndex];
-    }
-    else
+    if( !IsValidChar(nIndex, sText.getLength() ) )
         throw lang::IndexOutOfBoundsException();
+
+    return sText[nIndex];
 }
 
 css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabStop( sal_Int32 nIndex  )
@@ -2515,13 +2513,11 @@ OUString SwAccessibleParagraph::getTextRange(
 
     OUString sText( GetString() );
 
-    if ( IsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
-    {
-        OrderRange( nStartIndex, nEndIndex );
-        return sText.copy(nStartIndex, nEndIndex-nStartIndex );
-    }
-    else
+    if ( !IsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
         throw lang::IndexOutOfBoundsException();
+
+    OrderRange( nStartIndex, nEndIndex );
+    return sText.copy(nStartIndex, nEndIndex-nStartIndex );
 }
 
 /*accessibility::*/TextSegment SwAccessibleParagraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType )
@@ -2792,44 +2788,43 @@ sal_Bool SwAccessibleParagraph::replaceText(
 
     const OUString& rText = GetString();
 
-    if( IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
-    {
-        if( !IsEditableState() )
-            return false;
-
-        SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
-
-        // translate positions
-        sal_Int32 nStart;
-        sal_Int32 nEnd;
-        bool bSuccess = GetPortionData().GetEditableRange(
-                                        nStartIndex, nEndIndex, nStart, nEnd );
-
-        // edit only if the range is editable
-        if( bSuccess )
-        {
-            // create SwPosition for nStartIndex
-            SwIndex aIndex( pNode, nStart );
-            SwPosition aStartPos( *pNode, aIndex );
-
-            // create SwPosition for nEndIndex
-            SwPosition aEndPos( aStartPos );
-            aEndPos.nContent = nEnd;
-
-            // now create XTextRange as helper and set string
-            const uno::Reference<text::XTextRange> xRange(
-                SwXTextRange::CreateXTextRange(
-                    *pNode->GetDoc(), aStartPos, &aEndPos));
-            xRange->setString(sReplacement);
-
-            // delete portion data
-            ClearPortionData();
-        }
-
-        return bSuccess;
-    }
-    else
+    if( !IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
         throw lang::IndexOutOfBoundsException();
+
+    if( !IsEditableState() )
+        return false;
+
+    SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
+
+    // translate positions
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
+    bool bSuccess = GetPortionData().GetEditableRange(
+                                    nStartIndex, nEndIndex, nStart, nEnd );
+
+    // edit only if the range is editable
+    if( bSuccess )
+    {
+        // create SwPosition for nStartIndex
+        SwIndex aIndex( pNode, nStart );
+        SwPosition aStartPos( *pNode, aIndex );
+
+        // create SwPosition for nEndIndex
+        SwPosition aEndPos( aStartPos );
+        aEndPos.nContent = nEnd;
+
+        // now create XTextRange as helper and set string
+        const uno::Reference<text::XTextRange> xRange(
+            SwXTextRange::CreateXTextRange(
+                *pNode->GetDoc(), aStartPos, &aEndPos));
+        xRange->setString(sReplacement);
+
+        // delete portion data
+        ClearPortionData();
+    }
+
+    return bSuccess;
+
 }
 
 sal_Bool SwAccessibleParagraph::setAttributes(

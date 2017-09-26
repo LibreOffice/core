@@ -270,27 +270,26 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
     if(aNewElementName != aElementName && hasByName(aNewElementName))
         throw container::ElementExistException();
     std::unique_ptr<SwTextBlocks> pGlosGroup(pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName) : nullptr);
-    if(pGlosGroup && !pGlosGroup->GetError())
-    {
-        sal_uInt16 nIdx = pGlosGroup->GetIndex( aElementName);
-        if(USHRT_MAX == nIdx)
-            throw lang::IllegalArgumentException();
-        OUString aNewShort(aNewElementName);
-        OUString aNewName(aNewElementTitle);
-        sal_uInt16 nOldLongIdx = pGlosGroup->GetLongIndex( aNewShort );
-        sal_uInt16 nOldIdx = pGlosGroup->GetIndex( aNewName );
-
-        if( nIdx != USHRT_MAX &&
-                (nOldLongIdx == USHRT_MAX || nOldLongIdx == nIdx )&&
-                    (nOldIdx == USHRT_MAX || nOldIdx == nIdx ))
-        {
-            pGlosGroup->Rename( nIdx, &aNewShort, &aNewName );
-            if(pGlosGroup->GetError() != ERRCODE_NONE)
-                throw io::IOException();
-        }
-    }
-    else
+    if(!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
+
+    sal_uInt16 nIdx = pGlosGroup->GetIndex( aElementName);
+    if(USHRT_MAX == nIdx)
+        throw lang::IllegalArgumentException();
+    OUString aNewShort(aNewElementName);
+    OUString aNewName(aNewElementTitle);
+    sal_uInt16 nOldLongIdx = pGlosGroup->GetLongIndex( aNewShort );
+    sal_uInt16 nOldIdx = pGlosGroup->GetIndex( aNewName );
+
+    if( nIdx != USHRT_MAX &&
+            (nOldLongIdx == USHRT_MAX || nOldLongIdx == nIdx )&&
+                (nOldIdx == USHRT_MAX || nOldIdx == nIdx ))
+    {
+        pGlosGroup->Rename( nIdx, &aNewShort, &aNewName );
+        if(pGlosGroup->GetError() != ERRCODE_NONE)
+            throw io::IOException();
+    }
+
 }
 
 static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
@@ -433,14 +432,12 @@ void SwXAutoTextGroup::removeByName(const OUString& aEntryName)
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<SwTextBlocks> pGlosGroup(pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName) : nullptr);
-    if(pGlosGroup && !pGlosGroup->GetError())
-    {
-        sal_uInt16 nIdx = pGlosGroup->GetIndex(aEntryName);
-        if ( nIdx != USHRT_MAX )
-            pGlosGroup->Delete(nIdx);
-    }
-    else
+    if(!pGlosGroup || pGlosGroup->GetError())
         throw container::NoSuchElementException();
+
+    sal_uInt16 nIdx = pGlosGroup->GetIndex(aEntryName);
+    if ( nIdx != USHRT_MAX )
+        pGlosGroup->Delete(nIdx);
 }
 
 OUString SwXAutoTextGroup::getName()

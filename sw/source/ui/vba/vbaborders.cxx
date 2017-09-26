@@ -178,52 +178,51 @@ public:
         sal_Int32 nLineStyle = 0;
         _linestyle >>= nLineStyle;
         table::BorderLine aBorderLine;
-        if ( getBorderLine( aBorderLine ) )
-        {
-            switch ( nLineStyle )
-            {
-                case word::WdLineStyle::wdLineStyleNone:
-                {
-                    aBorderLine.InnerLineWidth = 0;
-                    aBorderLine.OuterLineWidth = 0;
-                    break;
-                }
-                case word::WdLineStyle::wdLineStyleDashDot:
-                case word::WdLineStyle::wdLineStyleDashDotDot:
-                case word::WdLineStyle::wdLineStyleDashDotStroked:
-                case word::WdLineStyle::wdLineStyleDashLargeGap:
-                case word::WdLineStyle::wdLineStyleDashSmallGap:
-                case word::WdLineStyle::wdLineStyleDot:
-                case word::WdLineStyle::wdLineStyleDouble:
-                case word::WdLineStyle::wdLineStyleDoubleWavy:
-                case word::WdLineStyle::wdLineStyleEmboss3D:
-                case word::WdLineStyle::wdLineStyleEngrave3D:
-                case word::WdLineStyle::wdLineStyleInset:
-                case word::WdLineStyle::wdLineStyleOutset:
-                case word::WdLineStyle::wdLineStyleSingle:
-                case word::WdLineStyle::wdLineStyleSingleWavy:
-                case word::WdLineStyle::wdLineStyleThickThinLargeGap:
-                case word::WdLineStyle::wdLineStyleThickThinMedGap:
-                case word::WdLineStyle::wdLineStyleThickThinSmallGap:
-                case word::WdLineStyle::wdLineStyleThinThickLargeGap:
-                case word::WdLineStyle::wdLineStyleThinThickMedGap:
-                case word::WdLineStyle::wdLineStyleThinThickSmallGap:
-                case word::WdLineStyle::wdLineStyleThinThickThinLargeGap:
-                case word::WdLineStyle::wdLineStyleThinThickThinMedGap:
-                case word::WdLineStyle::wdLineStyleThinThickThinSmallGap:
-                case word::WdLineStyle::wdLineStyleTriple:
-                {
-                    aBorderLine.InnerLineWidth = 0;
-                    aBorderLine.OuterLineWidth = OOLineHairline;
-                    break;
-                }
-                default:
-                    throw uno::RuntimeException("Bad param" );
-            }
-            setBorderLine( aBorderLine );
-        }
-        else
+        if ( !getBorderLine( aBorderLine ) )
             throw uno::RuntimeException("Method failed" );
+
+        switch ( nLineStyle )
+        {
+            case word::WdLineStyle::wdLineStyleNone:
+            {
+                aBorderLine.InnerLineWidth = 0;
+                aBorderLine.OuterLineWidth = 0;
+                break;
+            }
+            case word::WdLineStyle::wdLineStyleDashDot:
+            case word::WdLineStyle::wdLineStyleDashDotDot:
+            case word::WdLineStyle::wdLineStyleDashDotStroked:
+            case word::WdLineStyle::wdLineStyleDashLargeGap:
+            case word::WdLineStyle::wdLineStyleDashSmallGap:
+            case word::WdLineStyle::wdLineStyleDot:
+            case word::WdLineStyle::wdLineStyleDouble:
+            case word::WdLineStyle::wdLineStyleDoubleWavy:
+            case word::WdLineStyle::wdLineStyleEmboss3D:
+            case word::WdLineStyle::wdLineStyleEngrave3D:
+            case word::WdLineStyle::wdLineStyleInset:
+            case word::WdLineStyle::wdLineStyleOutset:
+            case word::WdLineStyle::wdLineStyleSingle:
+            case word::WdLineStyle::wdLineStyleSingleWavy:
+            case word::WdLineStyle::wdLineStyleThickThinLargeGap:
+            case word::WdLineStyle::wdLineStyleThickThinMedGap:
+            case word::WdLineStyle::wdLineStyleThickThinSmallGap:
+            case word::WdLineStyle::wdLineStyleThinThickLargeGap:
+            case word::WdLineStyle::wdLineStyleThinThickMedGap:
+            case word::WdLineStyle::wdLineStyleThinThickSmallGap:
+            case word::WdLineStyle::wdLineStyleThinThickThinLargeGap:
+            case word::WdLineStyle::wdLineStyleThinThickThinMedGap:
+            case word::WdLineStyle::wdLineStyleThinThickThinSmallGap:
+            case word::WdLineStyle::wdLineStyleTriple:
+            {
+                aBorderLine.InnerLineWidth = 0;
+                aBorderLine.OuterLineWidth = OOLineHairline;
+                break;
+            }
+            default:
+                throw uno::RuntimeException("Bad param" );
+        }
+        setBorderLine( aBorderLine );
+
     }
 };
 

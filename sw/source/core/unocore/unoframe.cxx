@@ -1498,11 +1498,11 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     // is no contour, or if the contour has been set by the
                     // API itself (or in other words, if the contour isn't
                     // used already).
-                    if( !pNoText->HasContour_() ||
-                        !pNoText->IsContourMapModeValid() )
-                        pNoText->SetPixelContour( *o3tl::doAccess<bool>(aValue) );
-                    else
+                    if( pNoText->HasContour_() && pNoText->IsContourMapModeValid() )
                         throw lang::IllegalArgumentException();
+
+                    pNoText->SetPixelContour( *o3tl::doAccess<bool>(aValue) );
+
                 }
                 else
                 {
@@ -1535,45 +1535,44 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
         else if(FN_UNO_FRAME_STYLE_NAME == pEntry->nWID)
         {
             SwFrameFormat *pFrameFormat = lcl_GetFrameFormat( aValue, pFormat->GetDoc() );
-            if( pFrameFormat )
-            {
-                UnoActionContext aAction(pFormat->GetDoc());
+            if( !pFrameFormat )
+                throw lang::IllegalArgumentException();
 
-                SfxItemSet* pSet = nullptr;
-                // #i31771#, #i25798# - No adjustment of
-                // anchor ( no call of method <sw_ChkAndSetNewAnchor(..)> ),
-                // if document is currently in reading mode.
-                if ( !pFormat->GetDoc()->IsInReading() )
+            UnoActionContext aAction(pFormat->GetDoc());
+
+            SfxItemSet* pSet = nullptr;
+            // #i31771#, #i25798# - No adjustment of
+            // anchor ( no call of method <sw_ChkAndSetNewAnchor(..)> ),
+            // if document is currently in reading mode.
+            if ( !pFormat->GetDoc()->IsInReading() )
+            {
+                // see SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Point* pDocPos )
+                SwFlyFrame *pFly = nullptr;
                 {
-                    // see SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Point* pDocPos )
-                    SwFlyFrame *pFly = nullptr;
+                    const SwFrameFormat* pFormatXX = pFormat;
+                    if (dynamic_cast<const SwFlyFrameFormat*>( pFormatXX) )
+                        pFly = static_cast<const SwFlyFrameFormat*>(pFormatXX)->GetFrame();
+                }
+                if ( pFly )
+                {
+                    const ::SfxPoolItem* pItem;
+                    if( SfxItemState::SET == pFrameFormat->GetItemState( RES_ANCHOR, false, &pItem ))
                     {
-                        const SwFrameFormat* pFormatXX = pFormat;
-                        if (dynamic_cast<const SwFlyFrameFormat*>( pFormatXX) )
-                            pFly = static_cast<const SwFlyFrameFormat*>(pFormatXX)->GetFrame();
-                    }
-                    if ( pFly )
-                    {
-                        const ::SfxPoolItem* pItem;
-                        if( SfxItemState::SET == pFrameFormat->GetItemState( RES_ANCHOR, false, &pItem ))
+                        pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrameFormatSetRange );
+                        pSet->Put( *pItem );
+                        if ( pFormat->GetDoc()->GetEditShell() != nullptr
+                             && !sw_ChkAndSetNewAnchor( *pFly, *pSet ) )
                         {
-                            pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrameFormatSetRange );
-                            pSet->Put( *pItem );
-                            if ( pFormat->GetDoc()->GetEditShell() != nullptr
-                                 && !sw_ChkAndSetNewAnchor( *pFly, *pSet ) )
-                            {
-                                delete pSet;
-                                pSet = nullptr;
-                            }
+                            delete pSet;
+                            pSet = nullptr;
                         }
                     }
                 }
-
-                pFormat->GetDoc()->SetFrameFormatToFly( *pFormat, *pFrameFormat, pSet );
-                delete pSet;
             }
-            else
-                throw lang::IllegalArgumentException();
+
+            pFormat->GetDoc()->SetFrameFormatToFly( *pFormat, *pFrameFormat, pSet );
+            delete pSet;
+
         }
         else if( FN_UNO_GRAPHIC_U_R_L == pEntry->nWID ||
                 FN_UNO_GRAPHIC_FILTER == pEntry->nWID)
@@ -2569,19 +2568,18 @@ uno::Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
     if(pFormat)
     {
         const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
-        if(pEntry)
-        {
-            if ( pEntry->nWID < RES_FRMATR_END )
-            {
-                const SfxPoolItem& rDefItem =
-                    pFormat->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
-                const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
-
-                rDefItem.QueryValue(aRet, nMemberId);
-            }
-        }
-        else
+        if(!pEntry)
             throw beans::UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+        if ( pEntry->nWID < RES_FRMATR_END )
+        {
+            const SfxPoolItem& rDefItem =
+                pFormat->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
+            const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+
+            rDefItem.QueryValue(aRet, nMemberId);
+        }
+
     }
     else if(!IsDescriptor())
         throw uno::RuntimeException();
@@ -2655,20 +2653,19 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor()
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >  aRef;
     SwFrameFormat* pFormat = GetFrameFormat();
-    if(pFormat)
-    {
-        const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-        // return an anchor for non-page bound frames
-        // and for page bound frames that have a page no == NULL and a content position
-        if ((rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) ||
-            (rAnchor.GetContentAnchor() && !rAnchor.GetPageNum()))
-        {
-            const SwPosition &rPos = *(rAnchor.GetContentAnchor());
-            aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), rPos, nullptr);
-        }
-    }
-    else
+    if(!pFormat)
         throw uno::RuntimeException();
+
+    const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
+    // return an anchor for non-page bound frames
+    // and for page bound frames that have a page no == NULL and a content position
+    if ((rAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) ||
+        (rAnchor.GetContentAnchor() && !rAnchor.GetPageNum()))
+    {
+        const SwPosition &rPos = *(rAnchor.GetContentAnchor());
+        aRef = SwXTextRange::CreateXTextRange(*pFormat->GetDoc(), rPos, nullptr);
+    }
+
     return aRef;
 }
 
@@ -2697,379 +2694,378 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     }
 
     SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
-    if(pDoc)
+    if(!pDoc)
+        throw lang::IllegalArgumentException();
+
+    SwUnoInternalPaM aIntPam(*pDoc);
+    // this now needs to return TRUE
+    ::sw::XTextRangeToSwPaM(aIntPam, xTextRange);
+
+    SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
+    SwPaM aPam(rNode);
+    aPam.Move( fnMoveBackward, GoInDoc );
+    static sal_uInt16 const aFrameAttrRange[] =
     {
-        SwUnoInternalPaM aIntPam(*pDoc);
-        // this now needs to return TRUE
-        ::sw::XTextRangeToSwPaM(aIntPam, xTextRange);
+        RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
+        RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
 
-        SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
-        SwPaM aPam(rNode);
-        aPam.Move( fnMoveBackward, GoInDoc );
-        static sal_uInt16 const aFrameAttrRange[] =
+        // FillAttribute support
+        XATTR_FILL_FIRST, XATTR_FILL_LAST,
+
+        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+        0
+    };
+    static sal_uInt16 const aGrAttrRange[] =
+    {
+        RES_GRFATR_BEGIN,       RES_GRFATR_END-1,
+        0
+    };
+    SfxItemSet aGrSet(pDoc->GetAttrPool(), aGrAttrRange );
+
+    SfxItemSet aFrameSet(pDoc->GetAttrPool(), aFrameAttrRange );
+
+    // set correct parent to get the XFILL_NONE FillStyle as needed
+    aFrameSet.SetParent(&pDoc->GetDfltFrameFormat()->GetAttrSet());
+
+    // no the related items need to be added to the set
+    bool bSizeFound;
+    if(!pProps->AnyToItemSet( pDoc, aFrameSet, aGrSet, bSizeFound))
+        throw lang::IllegalArgumentException();
+    // a TextRange is handled separately
+    *aPam.GetPoint() = *aIntPam.GetPoint();
+    if(aIntPam.HasMark())
+    {
+        aPam.SetMark();
+        *aPam.GetMark() = *aIntPam.GetMark();
+    }
+
+    const SfxPoolItem* pItem;
+    RndStdIds eAnchorId = RndStdIds::FLY_AT_PARA;
+    if(SfxItemState::SET == aFrameSet.GetItemState(RES_ANCHOR, false, &pItem) )
+    {
+        eAnchorId = static_cast<const SwFormatAnchor*>(pItem)->GetAnchorId();
+        if( RndStdIds::FLY_AT_FLY == eAnchorId &&
+            !aPam.GetNode().FindFlyStartNode())
         {
-            RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-            RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-
-            // FillAttribute support
-            XATTR_FILL_FIRST, XATTR_FILL_LAST,
-
-            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-            0
-        };
-        static sal_uInt16 const aGrAttrRange[] =
-        {
-            RES_GRFATR_BEGIN,       RES_GRFATR_END-1,
-            0
-        };
-        SfxItemSet aGrSet(pDoc->GetAttrPool(), aGrAttrRange );
-
-        SfxItemSet aFrameSet(pDoc->GetAttrPool(), aFrameAttrRange );
-
-        // set correct parent to get the XFILL_NONE FillStyle as needed
-        aFrameSet.SetParent(&pDoc->GetDfltFrameFormat()->GetAttrSet());
-
-        // no the related items need to be added to the set
-        bool bSizeFound;
-        if(!pProps->AnyToItemSet( pDoc, aFrameSet, aGrSet, bSizeFound))
-            throw lang::IllegalArgumentException();
-        // a TextRange is handled separately
-        *aPam.GetPoint() = *aIntPam.GetPoint();
-        if(aIntPam.HasMark())
-        {
-            aPam.SetMark();
-            *aPam.GetMark() = *aIntPam.GetMark();
+            // framebound only where a frame exists
+            SwFormatAnchor aAnchor(RndStdIds::FLY_AT_PARA);
+            aFrameSet.Put(aAnchor);
         }
-
-        const SfxPoolItem* pItem;
-        RndStdIds eAnchorId = RndStdIds::FLY_AT_PARA;
-        if(SfxItemState::SET == aFrameSet.GetItemState(RES_ANCHOR, false, &pItem) )
+        else if ((RndStdIds::FLY_AT_PAGE == eAnchorId) &&
+                 0 == static_cast<const SwFormatAnchor*>(pItem)->GetPageNum() )
         {
-            eAnchorId = static_cast<const SwFormatAnchor*>(pItem)->GetAnchorId();
-            if( RndStdIds::FLY_AT_FLY == eAnchorId &&
-                !aPam.GetNode().FindFlyStartNode())
-            {
-                // framebound only where a frame exists
-                SwFormatAnchor aAnchor(RndStdIds::FLY_AT_PARA);
-                aFrameSet.Put(aAnchor);
-            }
-            else if ((RndStdIds::FLY_AT_PAGE == eAnchorId) &&
-                     0 == static_cast<const SwFormatAnchor*>(pItem)->GetPageNum() )
-            {
-                SwFormatAnchor aAnchor( *static_cast<const SwFormatAnchor*>(pItem) );
-                aAnchor.SetAnchor( aPam.GetPoint() );
-                aFrameSet.Put(aAnchor);
-            }
+            SwFormatAnchor aAnchor( *static_cast<const SwFormatAnchor*>(pItem) );
+            aAnchor.SetAnchor( aPam.GetPoint() );
+            aFrameSet.Put(aAnchor);
         }
+    }
 
-        const ::uno::Any* pStyle;
-        SwFrameFormat *pParentFrameFormat = nullptr;
-        if(pProps->GetProperty(FN_UNO_FRAME_STYLE_NAME, 0, pStyle))
-            pParentFrameFormat = lcl_GetFrameFormat( *pStyle, pDoc );
+    const ::uno::Any* pStyle;
+    SwFrameFormat *pParentFrameFormat = nullptr;
+    if(pProps->GetProperty(FN_UNO_FRAME_STYLE_NAME, 0, pStyle))
+        pParentFrameFormat = lcl_GetFrameFormat( *pStyle, pDoc );
 
-        SwFlyFrameFormat* pFormat = nullptr;
-        if( eType == FLYCNTTYPE_FRM)
+    SwFlyFrameFormat* pFormat = nullptr;
+    if( eType == FLYCNTTYPE_FRM)
+    {
+        UnoActionContext aCont(pDoc);
+        if(m_pCopySource)
         {
-            UnoActionContext aCont(pDoc);
-            if(m_pCopySource)
+            SwFormatAnchor* pAnchorItem = nullptr;
+            // the frame is inserted bound to page
+            // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
+            if (eAnchorId != RndStdIds::FLY_AT_PAGE)
             {
-                SwFormatAnchor* pAnchorItem = nullptr;
-                // the frame is inserted bound to page
-                // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
-                if (eAnchorId != RndStdIds::FLY_AT_PAGE)
-                {
-                    pAnchorItem = static_cast<SwFormatAnchor*>(aFrameSet.Get(RES_ANCHOR).Clone());
-                    aFrameSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, 1 ));
-                }
-
-                aPam.DeleteMark(); // mark position node will be deleted!
-                aIntPam.DeleteMark(); // mark position node will be deleted!
-                pFormat = pDoc->MakeFlyAndMove( *m_pCopySource, aFrameSet,
-                               nullptr,
-                               pParentFrameFormat );
-                if(pAnchorItem && pFormat)
-                {
-                    pFormat->DelFrames();
-                    pAnchorItem->SetAnchor( m_pCopySource->Start() );
-                    SfxItemSet aAnchorSet( pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
-                    aAnchorSet.Put( *pAnchorItem );
-                    pDoc->SetFlyFrameAttr( *pFormat, aAnchorSet );
-                    delete pAnchorItem;
-                }
-                DELETEZ( m_pCopySource );
-            }
-            else
-            {
-                pFormat = pDoc->MakeFlySection( RndStdIds::FLY_AT_PARA, aPam.GetPoint(),
-                                         &aFrameSet, pParentFrameFormat );
-            }
-            if(pFormat)
-            {
-                pFormat->Add(this);
-                if(!m_sName.isEmpty())
-                    pDoc->SetFlyName(*pFormat, m_sName);
-            }
-            // wake up the SwXTextFrame
-            static_cast<SwXTextFrame*>(this)->SetDoc( bIsDescriptor ? m_pDoc : GetFrameFormat()->GetDoc() );
-        }
-        else if( eType == FLYCNTTYPE_GRF)
-        {
-            UnoActionContext aCont(pDoc);
-            const ::uno::Any* pGraphicURL;
-            OUString sGraphicURL;
-            GraphicObject *pGrfObj = nullptr;
-            if(pProps->GetProperty(FN_UNO_GRAPHIC_U_R_L, 0, pGraphicURL))
-            {
-                (*pGraphicURL) >>= sGraphicURL;
-                if( sGraphicURL.startsWith(sPackageProtocol) )
-                {
-                    pGrfObj = new GraphicObject;
-                    pGrfObj->SetUserData( sGraphicURL );
-                    sGraphicURL.clear();
-                }
-                else if( sGraphicURL.startsWith(sGraphicObjectProtocol) )
-                {
-                    OString sId(OUStringToOString(
-                        sGraphicURL.copy( sizeof(sGraphicObjectProtocol)-1 ),
-                        RTL_TEXTENCODING_ASCII_US));
-                    pGrfObj = new GraphicObject( sId );
-                    sGraphicURL.clear();
-                }
-            }
-            Graphic aGraphic;
-            const ::uno::Any* pGraphic;
-            if( pProps->GetProperty( FN_UNO_GRAPHIC, 0, pGraphic ))
-            {
-                uno::Reference< graphic::XGraphic > xGraphic;
-                (*pGraphic) >>= xGraphic;
-                aGraphic = Graphic( xGraphic );
+                pAnchorItem = static_cast<SwFormatAnchor*>(aFrameSet.Get(RES_ANCHOR).Clone());
+                aFrameSet.Put( SwFormatAnchor( RndStdIds::FLY_AT_PAGE, 1 ));
             }
 
-            OUString sFltName;
-            const ::uno::Any* pFilter;
-            if(pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0, pFilter))
+            aPam.DeleteMark(); // mark position node will be deleted!
+            aIntPam.DeleteMark(); // mark position node will be deleted!
+            pFormat = pDoc->MakeFlyAndMove( *m_pCopySource, aFrameSet,
+                           nullptr,
+                           pParentFrameFormat );
+            if(pAnchorItem && pFormat)
             {
-                (*pFilter) >>= sFltName;
+                pFormat->DelFrames();
+                pAnchorItem->SetAnchor( m_pCopySource->Start() );
+                SfxItemSet aAnchorSet( pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
+                aAnchorSet.Put( *pAnchorItem );
+                pDoc->SetFlyFrameAttr( *pFormat, aAnchorSet );
+                delete pAnchorItem;
             }
-
-            pFormat = (pGrfObj)
-                ? pDoc->getIDocumentContentOperations().InsertGraphicObject(
-                        aPam, *pGrfObj, &aFrameSet, &aGrSet, pParentFrameFormat)
-                : pDoc->getIDocumentContentOperations().InsertGraphic(
-                        aPam, sGraphicURL, sFltName, &aGraphic,
-                        &aFrameSet, &aGrSet, pParentFrameFormat);
-            delete pGrfObj;
-            if(pFormat)
-            {
-                SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFormat->GetContent().GetContentIdx()
-                                            ->GetIndex()+1 ]->GetGrfNode();
-                if (pGrfNd)
-                    pGrfNd->SetChgTwipSize( !bSizeFound );
-                pFormat->Add(this);
-                if(!m_sName.isEmpty())
-                    pDoc->SetFlyName(*pFormat, m_sName);
-
-            }
-            const ::uno::Any* pSurroundContour;
-            if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR, pSurroundContour))
-                setPropertyValue(UNO_NAME_SURROUND_CONTOUR, *pSurroundContour);
-            const ::uno::Any* pContourOutside;
-            if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE, pContourOutside))
-                setPropertyValue(UNO_NAME_CONTOUR_OUTSIDE, *pContourOutside);
-            const ::uno::Any* pContourPoly;
-            if(pProps->GetProperty(FN_PARAM_CONTOUR_PP, 0, pContourPoly))
-                setPropertyValue(UNO_NAME_CONTOUR_POLY_POLYGON, *pContourPoly);
-            const ::uno::Any* pPixelContour;
-            if(pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0, pPixelContour))
-                setPropertyValue(UNO_NAME_IS_PIXEL_CONTOUR, *pPixelContour);
-            const ::uno::Any* pAutoContour;
-            if(pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0, pAutoContour))
-                setPropertyValue(UNO_NAME_IS_AUTOMATIC_CONTOUR, *pAutoContour);
+            DELETEZ( m_pCopySource );
         }
         else
         {
-            const ::uno::Any* pCLSID = nullptr;
-            const ::uno::Any* pStreamName = nullptr;
-            const ::uno::Any* pEmbeddedObject = nullptr;
-            if(!pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID)
-                && !pProps->GetProperty( FN_UNO_STREAM_NAME, 0, pStreamName )
-                && !pProps->GetProperty( FN_EMBEDDED_OBJECT, 0, pEmbeddedObject ))
-                throw uno::RuntimeException();
-            if(pCLSID)
+            pFormat = pDoc->MakeFlySection( RndStdIds::FLY_AT_PARA, aPam.GetPoint(),
+                                     &aFrameSet, pParentFrameFormat );
+        }
+        if(pFormat)
+        {
+            pFormat->Add(this);
+            if(!m_sName.isEmpty())
+                pDoc->SetFlyName(*pFormat, m_sName);
+        }
+        // wake up the SwXTextFrame
+        static_cast<SwXTextFrame*>(this)->SetDoc( bIsDescriptor ? m_pDoc : GetFrameFormat()->GetDoc() );
+    }
+    else if( eType == FLYCNTTYPE_GRF)
+    {
+        UnoActionContext aCont(pDoc);
+        const ::uno::Any* pGraphicURL;
+        OUString sGraphicURL;
+        GraphicObject *pGrfObj = nullptr;
+        if(pProps->GetProperty(FN_UNO_GRAPHIC_U_R_L, 0, pGraphicURL))
+        {
+            (*pGraphicURL) >>= sGraphicURL;
+            if( sGraphicURL.startsWith(sPackageProtocol) )
             {
-                OUString aCLSID;
-                SvGlobalName aClassName;
-                uno::Reference < embed::XEmbeddedObject > xIPObj;
-                std::unique_ptr < comphelper::EmbeddedObjectContainer > pCnt;
-                if( (*pCLSID) >>= aCLSID )
-                {
-                    if( !aClassName.MakeId( aCLSID ) )
-                    {
-                        lang::IllegalArgumentException aExcept;
-                        aExcept.Message = "CLSID invalid";
-                        throw aExcept;
-                    }
-
-                    pCnt.reset( new comphelper::EmbeddedObjectContainer );
-                    OUString aName;
-
-                    OUString sDocumentBaseURL = pDoc->GetPersist()->getDocumentBaseURL();
-                    xIPObj = pCnt->CreateEmbeddedObject(aClassName.GetByteSequence(), aName,
-                                                        &sDocumentBaseURL);
-                }
-                if ( xIPObj.is() )
-                {
-                    UnoActionContext aAction(pDoc);
-                    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
-                    if(!bSizeFound)
-                    {
-                        //TODO/LATER: how do I transport it to the OLENode?
-                        sal_Int64 nAspect = m_nDrawAspect;
-
-                        // TODO/LEAN: VisualArea still needs running state
-                        svt::EmbeddedObjectRef::TryRunningState( xIPObj );
-
-                        // set parent to get correct VisArea(in case of object needing parent printer)
-                        uno::Reference < container::XChild > xChild( xIPObj, uno::UNO_QUERY );
-                        if ( xChild.is() )
-                            xChild->setParent( pDoc->GetDocShell()->GetModel() );
-
-                        //The Size should be suggested by the OLE server if not manually set
-                        MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
-                        awt::Size aSize;
-                        try
-                        {
-                            aSize = xIPObj->getVisualAreaSize( nAspect );
-                        }
-                        catch ( embed::NoVisualAreaSizeException& )
-                        {
-                            // the default size will be set later
-                        }
-
-                        Size aSz( aSize.Width, aSize.Height );
-                        if ( !aSz.Width() || !aSz.Height() )
-                        {
-                            aSz.Width() = aSz.Height() = 5000;
-                            aSz = OutputDevice::LogicToLogic
-                                                    ( aSz, MapMode( MapUnit::Map100thMM ), aRefMap );
-                        }
-                        MapMode aMyMap( MapUnit::MapTwip );
-                        aSz = OutputDevice::LogicToLogic( aSz, aRefMap, aMyMap );
-                        SwFormatFrameSize aFrameSz;
-                        aFrameSz.SetSize(aSz);
-                        aFrameSet.Put(aFrameSz);
-                    }
-                    SwFlyFrameFormat* pFormat2 = nullptr;
-
-                    ::svt::EmbeddedObjectRef xObjRef( xIPObj, m_nDrawAspect);
-                    pFormat2 = pDoc->getIDocumentContentOperations().InsertEmbObject(
-                            aPam, xObjRef, &aFrameSet );
-
-                    // store main document name to show in the title bar
-                    uno::Reference< frame::XTitle > xModelTitle( pDoc->GetDocShell()->GetModel(), css::uno::UNO_QUERY );
-                    if( xModelTitle.is() )
-                        xIPObj->setContainerName( xModelTitle->getTitle() );
-
-                    assert(pFormat2 && "Doc->Insert(notxt) failed.");
-
-                    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
-                    pFormat2->Add(this);
-                    if(!m_sName.isEmpty())
-                        pDoc->SetFlyName(*pFormat2, m_sName);
-                }
+                pGrfObj = new GraphicObject;
+                pGrfObj->SetUserData( sGraphicURL );
+                sGraphicURL.clear();
             }
-            else if( pStreamName )
+            else if( sGraphicURL.startsWith(sGraphicObjectProtocol) )
             {
-                OUString sStreamName;
-                (*pStreamName) >>= sStreamName;
-                pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
-
-                SwFlyFrameFormat* pFrameFormat = nullptr;
-                pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, m_nDrawAspect, &aFrameSet, nullptr );
-
-                // store main document name to show in the title bar
-                SwOLENode* pNd = nullptr;
-                const SwNodeIndex* pIdx = pFrameFormat->GetContent().GetContentIdx();
-                if( pIdx )
-                {
-                    SwNodeIndex aIdx( *pIdx, 1 );
-                    SwNoTextNode* pNoText = aIdx.GetNode().GetNoTextNode();
-                    pNd = pNoText->GetOLENode();
-                }
-                if( pNd )
-                {
-                    uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
-                    if( xObj.is() )
-                    {
-                        uno::Reference< frame::XTitle > xModelTitle( pDoc->GetDocShell()->GetModel(), css::uno::UNO_QUERY );
-                        if( xModelTitle.is() )
-                            xObj->setContainerName( xModelTitle->getTitle() );
-                    }
-                }
-
-                pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
-                pFrameFormat->Add(this);
-                if(!m_sName.isEmpty())
-                    pDoc->SetFlyName(*pFrameFormat, m_sName);
-            }
-            else if (pEmbeddedObject)
-            {
-                uno::Reference< embed::XEmbeddedObject > obj;
-                (*pEmbeddedObject) >>= obj;
-                svt::EmbeddedObjectRef xObj;
-                xObj.Assign( obj, embed::Aspects::MSOLE_CONTENT );
-
-                pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
-
-                // Not sure if these setParent() and InsertEmbeddedObject() calls are really
-                // needed, it seems to work without, but logic from code elsewhere suggests
-                // they should be done.
-                SfxObjectShell& rPers = *pDoc->GetPersist();
-                uno::Reference < container::XChild > xChild( obj, uno::UNO_QUERY );
-                if ( xChild.is() )
-                    xChild->setParent( rPers.GetModel() );
-                OUString rName;
-                rPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
-
-                SwFlyFrameFormat* pFrameFormat = nullptr;
-                pFrameFormat = pDoc->getIDocumentContentOperations().InsertEmbObject(
-                        aPam, xObj, &aFrameSet);
-                pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
-                pFrameFormat->Add(this);
-                if(!m_sName.isEmpty())
-                    pDoc->SetFlyName(*pFrameFormat, m_sName);
+                OString sId(OUStringToOString(
+                    sGraphicURL.copy( sizeof(sGraphicObjectProtocol)-1 ),
+                    RTL_TEXTENCODING_ASCII_US));
+                pGrfObj = new GraphicObject( sId );
+                sGraphicURL.clear();
             }
         }
-        if( pFormat && pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
-            GetOrCreateSdrObject(*pFormat);
-        const ::uno::Any* pOrder;
-        if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
-            setPropertyValue(UNO_NAME_Z_ORDER, *pOrder);
-        const ::uno::Any* pReplacement;
-        if( pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement) )
-            setPropertyValue(UNO_NAME_GRAPHIC, *pReplacement);
-        // new attribute Title
-        const ::uno::Any* pTitle;
-        if ( pProps->GetProperty(FN_UNO_TITLE, 0, pTitle) )
+        Graphic aGraphic;
+        const ::uno::Any* pGraphic;
+        if( pProps->GetProperty( FN_UNO_GRAPHIC, 0, pGraphic ))
         {
-            setPropertyValue(UNO_NAME_TITLE, *pTitle);
-        }
-        // new attribute Description
-        const ::uno::Any* pDescription;
-        if ( pProps->GetProperty(FN_UNO_DESCRIPTION, 0, pDescription) )
-        {
-            setPropertyValue(UNO_NAME_DESCRIPTION, *pDescription);
+            uno::Reference< graphic::XGraphic > xGraphic;
+            (*pGraphic) >>= xGraphic;
+            aGraphic = Graphic( xGraphic );
         }
 
-        // For grabbag
-        const uno::Any* pFrameIntropgrabbagItem;
-        if( pProps->GetProperty(RES_FRMATR_GRABBAG, 0, pFrameIntropgrabbagItem) )
+        OUString sFltName;
+        const ::uno::Any* pFilter;
+        if(pProps->GetProperty(FN_UNO_GRAPHIC_FILTER, 0, pFilter))
         {
-            setPropertyValue(UNO_NAME_FRAME_INTEROP_GRAB_BAG, *pFrameIntropgrabbagItem);
+            (*pFilter) >>= sFltName;
         }
+
+        pFormat = (pGrfObj)
+            ? pDoc->getIDocumentContentOperations().InsertGraphicObject(
+                    aPam, *pGrfObj, &aFrameSet, &aGrSet, pParentFrameFormat)
+            : pDoc->getIDocumentContentOperations().InsertGraphic(
+                    aPam, sGraphicURL, sFltName, &aGraphic,
+                    &aFrameSet, &aGrSet, pParentFrameFormat);
+        delete pGrfObj;
+        if(pFormat)
+        {
+            SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFormat->GetContent().GetContentIdx()
+                                        ->GetIndex()+1 ]->GetGrfNode();
+            if (pGrfNd)
+                pGrfNd->SetChgTwipSize( !bSizeFound );
+            pFormat->Add(this);
+            if(!m_sName.isEmpty())
+                pDoc->SetFlyName(*pFormat, m_sName);
+
+        }
+        const ::uno::Any* pSurroundContour;
+        if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR, pSurroundContour))
+            setPropertyValue(UNO_NAME_SURROUND_CONTOUR, *pSurroundContour);
+        const ::uno::Any* pContourOutside;
+        if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE, pContourOutside))
+            setPropertyValue(UNO_NAME_CONTOUR_OUTSIDE, *pContourOutside);
+        const ::uno::Any* pContourPoly;
+        if(pProps->GetProperty(FN_PARAM_CONTOUR_PP, 0, pContourPoly))
+            setPropertyValue(UNO_NAME_CONTOUR_POLY_POLYGON, *pContourPoly);
+        const ::uno::Any* pPixelContour;
+        if(pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0, pPixelContour))
+            setPropertyValue(UNO_NAME_IS_PIXEL_CONTOUR, *pPixelContour);
+        const ::uno::Any* pAutoContour;
+        if(pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0, pAutoContour))
+            setPropertyValue(UNO_NAME_IS_AUTOMATIC_CONTOUR, *pAutoContour);
     }
     else
-        throw lang::IllegalArgumentException();
+    {
+        const ::uno::Any* pCLSID = nullptr;
+        const ::uno::Any* pStreamName = nullptr;
+        const ::uno::Any* pEmbeddedObject = nullptr;
+        if(!pProps->GetProperty(FN_UNO_CLSID, 0, pCLSID)
+            && !pProps->GetProperty( FN_UNO_STREAM_NAME, 0, pStreamName )
+            && !pProps->GetProperty( FN_EMBEDDED_OBJECT, 0, pEmbeddedObject ))
+            throw uno::RuntimeException();
+        if(pCLSID)
+        {
+            OUString aCLSID;
+            SvGlobalName aClassName;
+            uno::Reference < embed::XEmbeddedObject > xIPObj;
+            std::unique_ptr < comphelper::EmbeddedObjectContainer > pCnt;
+            if( (*pCLSID) >>= aCLSID )
+            {
+                if( !aClassName.MakeId( aCLSID ) )
+                {
+                    lang::IllegalArgumentException aExcept;
+                    aExcept.Message = "CLSID invalid";
+                    throw aExcept;
+                }
+
+                pCnt.reset( new comphelper::EmbeddedObjectContainer );
+                OUString aName;
+
+                OUString sDocumentBaseURL = pDoc->GetPersist()->getDocumentBaseURL();
+                xIPObj = pCnt->CreateEmbeddedObject(aClassName.GetByteSequence(), aName,
+                                                    &sDocumentBaseURL);
+            }
+            if ( xIPObj.is() )
+            {
+                UnoActionContext aAction(pDoc);
+                pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+                if(!bSizeFound)
+                {
+                    //TODO/LATER: how do I transport it to the OLENode?
+                    sal_Int64 nAspect = m_nDrawAspect;
+
+                    // TODO/LEAN: VisualArea still needs running state
+                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+                    // set parent to get correct VisArea(in case of object needing parent printer)
+                    uno::Reference < container::XChild > xChild( xIPObj, uno::UNO_QUERY );
+                    if ( xChild.is() )
+                        xChild->setParent( pDoc->GetDocShell()->GetModel() );
+
+                    //The Size should be suggested by the OLE server if not manually set
+                    MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
+                    awt::Size aSize;
+                    try
+                    {
+                        aSize = xIPObj->getVisualAreaSize( nAspect );
+                    }
+                    catch ( embed::NoVisualAreaSizeException& )
+                    {
+                        // the default size will be set later
+                    }
+
+                    Size aSz( aSize.Width, aSize.Height );
+                    if ( !aSz.Width() || !aSz.Height() )
+                    {
+                        aSz.Width() = aSz.Height() = 5000;
+                        aSz = OutputDevice::LogicToLogic
+                                                ( aSz, MapMode( MapUnit::Map100thMM ), aRefMap );
+                    }
+                    MapMode aMyMap( MapUnit::MapTwip );
+                    aSz = OutputDevice::LogicToLogic( aSz, aRefMap, aMyMap );
+                    SwFormatFrameSize aFrameSz;
+                    aFrameSz.SetSize(aSz);
+                    aFrameSet.Put(aFrameSz);
+                }
+                SwFlyFrameFormat* pFormat2 = nullptr;
+
+                ::svt::EmbeddedObjectRef xObjRef( xIPObj, m_nDrawAspect);
+                pFormat2 = pDoc->getIDocumentContentOperations().InsertEmbObject(
+                        aPam, xObjRef, &aFrameSet );
+
+                // store main document name to show in the title bar
+                uno::Reference< frame::XTitle > xModelTitle( pDoc->GetDocShell()->GetModel(), css::uno::UNO_QUERY );
+                if( xModelTitle.is() )
+                    xIPObj->setContainerName( xModelTitle->getTitle() );
+
+                assert(pFormat2 && "Doc->Insert(notxt) failed.");
+
+                pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
+                pFormat2->Add(this);
+                if(!m_sName.isEmpty())
+                    pDoc->SetFlyName(*pFormat2, m_sName);
+            }
+        }
+        else if( pStreamName )
+        {
+            OUString sStreamName;
+            (*pStreamName) >>= sStreamName;
+            pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+
+            SwFlyFrameFormat* pFrameFormat = nullptr;
+            pFrameFormat = pDoc->getIDocumentContentOperations().InsertOLE( aPam, sStreamName, m_nDrawAspect, &aFrameSet, nullptr );
+
+            // store main document name to show in the title bar
+            SwOLENode* pNd = nullptr;
+            const SwNodeIndex* pIdx = pFrameFormat->GetContent().GetContentIdx();
+            if( pIdx )
+            {
+                SwNodeIndex aIdx( *pIdx, 1 );
+                SwNoTextNode* pNoText = aIdx.GetNode().GetNoTextNode();
+                pNd = pNoText->GetOLENode();
+            }
+            if( pNd )
+            {
+                uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
+                if( xObj.is() )
+                {
+                    uno::Reference< frame::XTitle > xModelTitle( pDoc->GetDocShell()->GetModel(), css::uno::UNO_QUERY );
+                    if( xModelTitle.is() )
+                        xObj->setContainerName( xModelTitle->getTitle() );
+                }
+            }
+
+            pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
+            pFrameFormat->Add(this);
+            if(!m_sName.isEmpty())
+                pDoc->SetFlyName(*pFrameFormat, m_sName);
+        }
+        else if (pEmbeddedObject)
+        {
+            uno::Reference< embed::XEmbeddedObject > obj;
+            (*pEmbeddedObject) >>= obj;
+            svt::EmbeddedObjectRef xObj;
+            xObj.Assign( obj, embed::Aspects::MSOLE_CONTENT );
+
+            pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+
+            // Not sure if these setParent() and InsertEmbeddedObject() calls are really
+            // needed, it seems to work without, but logic from code elsewhere suggests
+            // they should be done.
+            SfxObjectShell& rPers = *pDoc->GetPersist();
+            uno::Reference < container::XChild > xChild( obj, uno::UNO_QUERY );
+            if ( xChild.is() )
+                xChild->setParent( rPers.GetModel() );
+            OUString rName;
+            rPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
+
+            SwFlyFrameFormat* pFrameFormat = nullptr;
+            pFrameFormat = pDoc->getIDocumentContentOperations().InsertEmbObject(
+                    aPam, xObj, &aFrameSet);
+            pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
+            pFrameFormat->Add(this);
+            if(!m_sName.isEmpty())
+                pDoc->SetFlyName(*pFrameFormat, m_sName);
+        }
+    }
+    if( pFormat && pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+        GetOrCreateSdrObject(*pFormat);
+    const ::uno::Any* pOrder;
+    if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
+        setPropertyValue(UNO_NAME_Z_ORDER, *pOrder);
+    const ::uno::Any* pReplacement;
+    if( pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement) )
+        setPropertyValue(UNO_NAME_GRAPHIC, *pReplacement);
+    // new attribute Title
+    const ::uno::Any* pTitle;
+    if ( pProps->GetProperty(FN_UNO_TITLE, 0, pTitle) )
+    {
+        setPropertyValue(UNO_NAME_TITLE, *pTitle);
+    }
+    // new attribute Description
+    const ::uno::Any* pDescription;
+    if ( pProps->GetProperty(FN_UNO_DESCRIPTION, 0, pDescription) )
+    {
+        setPropertyValue(UNO_NAME_DESCRIPTION, *pDescription);
+    }
+
+    // For grabbag
+    const uno::Any* pFrameIntropgrabbagItem;
+    if( pProps->GetProperty(RES_FRMATR_GRABBAG, 0, pFrameIntropgrabbagItem) )
+    {
+        setPropertyValue(UNO_NAME_FRAME_INTEROP_GRAB_BAG, *pFrameIntropgrabbagItem);
+    }
+
     // reset the flag and delete Descriptor pointer
     ResetDescriptor();
 }
@@ -3083,17 +3079,16 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
     {
         SwDoc* pDoc = pFormat->GetDoc();
         SwUnoInternalPaM aIntPam(*pDoc);
-        if (::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
-        {
-            SfxItemSet aSet( pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
-            aSet.SetParent(&pFormat->GetAttrSet());
-            SwFormatAnchor aAnchor = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR));
-            aAnchor.SetAnchor( aIntPam.Start() );
-            aSet.Put(aAnchor);
-            pDoc->SetFlyFrameAttr( *pFormat, aSet );
-        }
-        else
+        if (!::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
             throw lang::IllegalArgumentException();
+
+        SfxItemSet aSet( pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{} );
+        aSet.SetParent(&pFormat->GetAttrSet());
+        SwFormatAnchor aAnchor = static_cast<const SwFormatAnchor&>(aSet.Get(RES_ANCHOR));
+        aAnchor.SetAnchor( aIntPam.Start() );
+        aSet.Put(aAnchor);
+        pDoc->SetFlyFrameAttr( *pFormat, aSet );
+
     }
 }
 
@@ -3235,41 +3230,40 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor()
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextCursor >  aRef;
     SwFrameFormat* pFormat = GetFrameFormat();
-    if(pFormat)
-    {
-        //save current start node to be able to check if there is content after the table -
-        //otherwise the cursor would be in the body text!
-        const SwNode& rNode = pFormat->GetContent().GetContentIdx()->GetNode();
-        const SwStartNode* pOwnStartNode = rNode.FindSttNodeByType(SwFlyStartNode);
-
-        SwPaM aPam(rNode);
-        aPam.Move(fnMoveForward, GoInNode);
-        SwTableNode* pTableNode = aPam.GetNode().FindTableNode();
-        SwContentNode* pCont = nullptr;
-        while( pTableNode )
-        {
-            aPam.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
-            pCont = GetDoc()->GetNodes().GoNext(&aPam.GetPoint()->nNode);
-            pTableNode = pCont->FindTableNode();
-        }
-        if(pCont)
-            aPam.GetPoint()->nContent.Assign(pCont, 0);
-
-        const SwStartNode* pNewStartNode =
-            aPam.GetNode().FindSttNodeByType(SwFlyStartNode);
-        if(!pNewStartNode || pNewStartNode != pOwnStartNode)
-        {
-            uno::RuntimeException aExcept;
-            aExcept.Message = "no text available";
-            throw aExcept;
-        }
-
-        SwXTextCursor *const pXCursor = new SwXTextCursor(
-                 *pFormat->GetDoc(), this, CursorType::Frame, *aPam.GetPoint());
-        aRef =  static_cast<text::XWordCursor*>(pXCursor);
-    }
-    else
+    if(!pFormat)
         throw uno::RuntimeException();
+
+    //save current start node to be able to check if there is content after the table -
+    //otherwise the cursor would be in the body text!
+    const SwNode& rNode = pFormat->GetContent().GetContentIdx()->GetNode();
+    const SwStartNode* pOwnStartNode = rNode.FindSttNodeByType(SwFlyStartNode);
+
+    SwPaM aPam(rNode);
+    aPam.Move(fnMoveForward, GoInNode);
+    SwTableNode* pTableNode = aPam.GetNode().FindTableNode();
+    SwContentNode* pCont = nullptr;
+    while( pTableNode )
+    {
+        aPam.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
+        pCont = GetDoc()->GetNodes().GoNext(&aPam.GetPoint()->nNode);
+        pTableNode = pCont->FindTableNode();
+    }
+    if(pCont)
+        aPam.GetPoint()->nContent.Assign(pCont, 0);
+
+    const SwStartNode* pNewStartNode =
+        aPam.GetNode().FindSttNodeByType(SwFlyStartNode);
+    if(!pNewStartNode || pNewStartNode != pOwnStartNode)
+    {
+        uno::RuntimeException aExcept;
+        aExcept.Message = "no text available";
+        throw aExcept;
+    }
+
+    SwXTextCursor *const pXCursor = new SwXTextCursor(
+             *pFormat->GetDoc(), this, CursorType::Frame, *aPam.GetPoint());
+    aRef =  static_cast<text::XWordCursor*>(pXCursor);
+
     return aRef;
 }
 
@@ -3279,18 +3273,17 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
     uno::Reference< text::XTextCursor >  aRef;
     SwFrameFormat* pFormat = GetFrameFormat();
     SwUnoInternalPaM aPam(*GetDoc());
-    if (pFormat && ::sw::XTextRangeToSwPaM(aPam, aTextPosition))
-    {
-        SwNode& rNode = pFormat->GetContent().GetContentIdx()->GetNode();
-        if(aPam.GetNode().FindFlyStartNode() == rNode.FindFlyStartNode())
-        {
-            aRef = static_cast<text::XWordCursor*>(
-                    new SwXTextCursor(*pFormat->GetDoc(), this, CursorType::Frame,
-                        *aPam.GetPoint(), aPam.GetMark()));
-        }
-    }
-    else
+    if (!pFormat || !::sw::XTextRangeToSwPaM(aPam, aTextPosition))
         throw uno::RuntimeException();
+
+    SwNode& rNode = pFormat->GetContent().GetContentIdx()->GetNode();
+    if(aPam.GetNode().FindFlyStartNode() == rNode.FindFlyStartNode())
+    {
+        aRef = static_cast<text::XWordCursor*>(
+                new SwXTextCursor(*pFormat->GetDoc(), this, CursorType::Frame,
+                    *aPam.GetPoint(), aPam.GetMark()));
+    }
+
     return aRef;
 }
 

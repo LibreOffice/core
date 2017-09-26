@@ -80,40 +80,37 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
              (RES_TXTATR_CHARFMT == pMap->nWID))
     {
         OUString uStyle;
-        if(aValue >>= uStyle)
-        {
-            OUString sStyle;
-            SwStyleNameMapper::FillUIName(uStyle, sStyle, SwGetPoolIdFromName::ChrFmt, true );
-            SwDocStyleSheet* pStyle =
-                static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
-            SwFormatDrop* pDrop = nullptr;
-            SwFormatCharFormat *pCharFormat = nullptr;
-            if(pStyle)
-            {
-                rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );
-                if (xStyle->GetCharFormat() == m_pDoc->GetDfltCharFormat())
-                    return; // don't SetCharFormat with formats from mpDfltCharFormat
-
-                if (RES_PARATR_DROP == pMap->nWID)
-                {
-                    pDrop = static_cast<SwFormatDrop*>(rItem.Clone());   // because rItem is const...
-                    pDrop->SetCharFormat(xStyle->GetCharFormat());
-                    m_pDoc->SetDefault(*pDrop);
-                }
-                else // RES_TXTATR_CHARFMT == pMap->nWID
-                {
-                    pCharFormat = static_cast<SwFormatCharFormat*>(rItem.Clone());   // because rItem is const...
-                    pCharFormat->SetCharFormat(xStyle->GetCharFormat());
-                    m_pDoc->SetDefault(*pCharFormat);
-                }
-            }
-            else
-                throw lang::IllegalArgumentException();
-            delete pDrop;
-            delete pCharFormat;
-        }
-        else
+        if(!(aValue >>= uStyle))
             throw lang::IllegalArgumentException();
+
+        OUString sStyle;
+        SwStyleNameMapper::FillUIName(uStyle, sStyle, SwGetPoolIdFromName::ChrFmt, true );
+        SwDocStyleSheet* pStyle =
+            static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
+        SwFormatDrop* pDrop = nullptr;
+        SwFormatCharFormat *pCharFormat = nullptr;
+        if(!pStyle)
+            throw lang::IllegalArgumentException();
+
+        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );
+        if (xStyle->GetCharFormat() == m_pDoc->GetDfltCharFormat())
+            return; // don't SetCharFormat with formats from mpDfltCharFormat
+
+        if (RES_PARATR_DROP == pMap->nWID)
+        {
+            pDrop = static_cast<SwFormatDrop*>(rItem.Clone());   // because rItem is const...
+            pDrop->SetCharFormat(xStyle->GetCharFormat());
+            m_pDoc->SetDefault(*pDrop);
+        }
+        else // RES_TXTATR_CHARFMT == pMap->nWID
+        {
+            pCharFormat = static_cast<SwFormatCharFormat*>(rItem.Clone());   // because rItem is const...
+            pCharFormat->SetCharFormat(xStyle->GetCharFormat());
+            m_pDoc->SetDefault(*pCharFormat);
+        }
+
+        delete pDrop;
+        delete pCharFormat;
     }
     else
     {

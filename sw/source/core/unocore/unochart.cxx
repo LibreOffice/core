@@ -2172,13 +2172,11 @@ void SAL_CALL SwChartDataSequence::setPropertyValue(
     if (m_bDisposed)
         throw lang::DisposedException();
 
-    if (rPropertyName == UNO_NAME_ROLE)
-    {
-        if ( !(rValue >>= m_aRole) )
-            throw lang::IllegalArgumentException();
-    }
-    else
+    if (rPropertyName != UNO_NAME_ROLE)
         throw beans::UnknownPropertyException();
+
+    if ( !(rValue >>= m_aRole) )
+        throw lang::IllegalArgumentException();
 }
 
 uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
@@ -2188,13 +2186,10 @@ uno::Any SAL_CALL SwChartDataSequence::getPropertyValue(
     if (m_bDisposed)
         throw lang::DisposedException();
 
-    uno::Any aRes;
-    if (rPropertyName == UNO_NAME_ROLE)
-        aRes <<= m_aRole;
-    else
+    if (!(rPropertyName == UNO_NAME_ROLE))
         throw beans::UnknownPropertyException();
 
-    return aRes;
+    return uno::Any(m_aRole);
 }
 
 void SAL_CALL SwChartDataSequence::addPropertyChangeListener(

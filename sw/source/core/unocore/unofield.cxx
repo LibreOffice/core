@@ -610,21 +610,20 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
             // Thus the last property set will be used as Data Source.
 
             const sal_uInt16 nMemberValueId = GetFieldTypeMId( rPropertyName, *pType );
-            if ( USHRT_MAX != nMemberValueId )
-            {
-                pType->PutValue( rValue, nMemberValueId );
-                if ( pType->Which() == SwFieldIds::User )
-                {
-                    // trigger update of User field in order to get depending Input Fields updated.
-                    pType->UpdateFields();
-                }
-            }
-            else
+            if ( USHRT_MAX == nMemberValueId )
             {
                 throw beans::UnknownPropertyException(
                     "Unknown property: " + rPropertyName,
                     static_cast< cppu::OWeakObject * >( this ) );
             }
+
+            pType->PutValue( rValue, nMemberValueId );
+            if ( pType->Which() == SwFieldIds::User )
+            {
+                // trigger update of User field in order to get depending Input Fields updated.
+                pType->UpdateFields();
+            }
+
         }
     }
     else if (!pType && m_pImpl->m_pDoc && rPropertyName == UNO_NAME_NAME)
@@ -1925,26 +1924,25 @@ void SAL_CALL SwXTextField::attach(
         SwTextAttr* pTextAttr = aPam.GetNode().GetTextNode()->GetFieldTextAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
 
         // What about updating the fields? (see fldmgr.cxx)
-        if (pTextAttr)
-        {
-            const SwFormatField& rField = pTextAttr->GetFormatField();
-            m_pImpl->m_pFormatField = &rField;
+        if (!pTextAttr)
+            throw uno::RuntimeException("no SwTextAttr inserted?");  // could theoretically happen, if paragraph is full
 
-            if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION
-                 && *aPam.GetPoint() != *aPam.GetMark() )
+        const SwFormatField& rField = pTextAttr->GetFormatField();
+        m_pImpl->m_pFormatField = &rField;
+
+        if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION
+             && *aPam.GetPoint() != *aPam.GetMark() )
+        {
+            // create annotation mark
+            const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
+            OSL_ENSURE( pPostItField != nullptr, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
+            if ( pPostItField != nullptr )
             {
-                // create annotation mark
-                const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
-                OSL_ENSURE( pPostItField != nullptr, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
-                if ( pPostItField != nullptr )
-                {
-                    IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
-                    pMarksAccess->makeAnnotationMark( aPam, pPostItField->GetName() );
-                }
+                IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+                pMarksAccess->makeAnnotationMark( aPam, pPostItField->GetName() );
             }
         }
-        else // could theoretically happen, if paragraph is full
-            throw uno::RuntimeException("no SwTextAttr inserted?");
+
     }
     delete pField;
 
@@ -1966,52 +1964,51 @@ void SAL_CALL SwXTextField::attach(
               && m_pImpl->m_nServiceId == SwServiceType::FieldTypeAnnotation )
     {
         SwUnoInternalPaM aIntPam( *m_pImpl->m_pDoc );
-        if ( ::sw::XTextRangeToSwPaM( aIntPam, xTextRange ) )
-        {
-            // nothing to do, if the text range only covers the former annotation field
-            if ( aIntPam.Start()->nNode != aIntPam.End()->nNode
-                 || aIntPam.Start()->nContent.GetIndex() != aIntPam.End()->nContent.GetIndex()-1 )
-            {
-                UnoActionContext aCont( m_pImpl->m_pDoc );
-                // insert copy of annotation at new text range
-                SwPostItField* pPostItField = static_cast< SwPostItField* >(m_pImpl->m_pFormatField->GetField()->CopyField());
-                SwFormatField aFormatField( *pPostItField );
-                delete pPostItField;
-                SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
-                m_pImpl->m_pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFormatField );
-                // delete former annotation
-                {
-                    const SwTextField* pTextField = m_pImpl->m_pFormatField->GetTextField();
-                    SwTextNode& rTextNode = *pTextField->GetpTextNode();
-                    SwPaM aPam( rTextNode, pTextField->GetStart() );
-                    aPam.SetMark();
-                    aPam.Move();
-                    m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
-                }
-                // keep inserted annotation
-                {
-                    SwTextField* pTextAttr = aEnd.GetNode().GetTextNode()->GetFieldTextAttrAt( aEnd.End()->nContent.GetIndex()-1, true );
-                    if ( pTextAttr != nullptr )
-                    {
-                        m_pImpl->m_pFormatField = &pTextAttr->GetFormatField();
+        if ( !::sw::XTextRangeToSwPaM( aIntPam, xTextRange ) )
+            throw lang::IllegalArgumentException();
 
-                        if ( *aIntPam.GetPoint() != *aIntPam.GetMark() )
+        // nothing to do, if the text range only covers the former annotation field
+        if ( aIntPam.Start()->nNode != aIntPam.End()->nNode
+             || aIntPam.Start()->nContent.GetIndex() != aIntPam.End()->nContent.GetIndex()-1 )
+        {
+            UnoActionContext aCont( m_pImpl->m_pDoc );
+            // insert copy of annotation at new text range
+            SwPostItField* pPostItField = static_cast< SwPostItField* >(m_pImpl->m_pFormatField->GetField()->CopyField());
+            SwFormatField aFormatField( *pPostItField );
+            delete pPostItField;
+            SwPaM aEnd( *aIntPam.End(), *aIntPam.End() );
+            m_pImpl->m_pDoc->getIDocumentContentOperations().InsertPoolItem( aEnd, aFormatField );
+            // delete former annotation
+            {
+                const SwTextField* pTextField = m_pImpl->m_pFormatField->GetTextField();
+                SwTextNode& rTextNode = *pTextField->GetpTextNode();
+                SwPaM aPam( rTextNode, pTextField->GetStart() );
+                aPam.SetMark();
+                aPam.Move();
+                m_pImpl->m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
+            }
+            // keep inserted annotation
+            {
+                SwTextField* pTextAttr = aEnd.GetNode().GetTextNode()->GetFieldTextAttrAt( aEnd.End()->nContent.GetIndex()-1, true );
+                if ( pTextAttr != nullptr )
+                {
+                    m_pImpl->m_pFormatField = &pTextAttr->GetFormatField();
+
+                    if ( *aIntPam.GetPoint() != *aIntPam.GetMark() )
+                    {
+                        // create annotation mark
+                        const SwPostItField* pField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
+                        OSL_ENSURE( pField != nullptr, "<SwXTextField::attach(..)> - annotation field missing!" );
+                        if ( pField != nullptr )
                         {
-                            // create annotation mark
-                            const SwPostItField* pField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
-                            OSL_ENSURE( pField != nullptr, "<SwXTextField::attach(..)> - annotation field missing!" );
-                            if ( pField != nullptr )
-                            {
-                                IDocumentMarkAccess* pMarksAccess = aIntPam.GetDoc()->getIDocumentMarkAccess();
-                                pMarksAccess->makeAnnotationMark( aIntPam, pField->GetName() );
-                            }
+                            IDocumentMarkAccess* pMarksAccess = aIntPam.GetDoc()->getIDocumentMarkAccess();
+                            pMarksAccess->makeAnnotationMark( aIntPam, pField->GetName() );
                         }
                     }
                 }
             }
         }
-        else
-            throw lang::IllegalArgumentException();
+
     }
     else
         throw lang::IllegalArgumentException();
@@ -2251,10 +2248,11 @@ SwXTextField::setPropertyValue(
         }
         if (pBool)
         {
-            if( auto b = o3tl::tryAccess<bool>(rValue) )
-                *pBool = *b;
-            else
+            auto b = o3tl::tryAccess<bool>(rValue);
+            if( !b )
                 throw lang::IllegalArgumentException();
+            *pBool = *b;
+
         }
     }
     else

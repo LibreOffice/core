@@ -2172,14 +2172,11 @@ SwXDocumentIndexMark::setPropertyValue(
             case WID_LEVEL:
             {
                 const sal_Int16 nVal = lcl_AnyToInt16(rValue);
-                if(nVal >= 0 && nVal < MAXLEVEL)
-                {
-                    m_pImpl->m_nLevel = nVal;
-                }
-                else
+                if(nVal < 0 || nVal >= MAXLEVEL)
                 {
                     throw lang::IllegalArgumentException();
                 }
+                m_pImpl->m_nLevel = nVal;
             }
             break;
             case WID_TOC_BOOKMARK :

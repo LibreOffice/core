@@ -1037,13 +1037,12 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
         tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
         comphelper::SequenceAsHashMap aPropMap(tableCellProperties);
         OUString sRedlineType;
-        if(aPropMap.getValue("RedlineType") >>= sRedlineType)
-        {
-            // Create a 'Table Cell Redline' object
-            SwUnoCursorHelper::makeTableCellRedline(*pBox, sRedlineType, tableCellProperties);
-        }
-        else
+        if(!(aPropMap.getValue("RedlineType") >>= sRedlineType))
             throw beans::UnknownPropertyException("No redline type property: ", static_cast<cppu::OWeakObject*>(this));
+
+        // Create a 'Table Cell Redline' object
+        SwUnoCursorHelper::makeTableCellRedline(*pBox, sRedlineType, tableCellProperties);
+
 
     }
     else
@@ -1308,15 +1307,14 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
             tableRowProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
             comphelper::SequenceAsHashMap aPropMap( tableRowProperties );
             OUString sRedlineType;
-            if( aPropMap.getValue("RedlineType") >>= sRedlineType )
-            {
-                // Create a 'Table Row Redline' object
-                SwUnoCursorHelper::makeTableRowRedline( *pLn, sRedlineType, tableRowProperties);
-            }
-            else
+            if( !(aPropMap.getValue("RedlineType") >>= sRedlineType) )
             {
                 throw beans::UnknownPropertyException("No redline type property: ", static_cast < cppu::OWeakObject * > ( this ) );
             }
+
+            // Create a 'Table Row Redline' object
+            SwUnoCursorHelper::makeTableRowRedline( *pLn, sRedlineType, tableRowProperties);
+
         }
         else
         {
@@ -3388,115 +3386,114 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     {
         const SfxItemPropertySimpleEntry *const pEntry =
                 m_pImpl->m_pPropSet->getPropertyMap().getByName(rPropertyName);
-        if(pEntry)
+        if(!pEntry)
+            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+        if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
+            throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
+        SwDoc *const pDoc = m_pImpl->m_pTableCursor->GetDoc();
+        SwUnoTableCursor& rCursor(dynamic_cast<SwUnoTableCursor&>(*m_pImpl->m_pTableCursor));
         {
-            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-
-            SwDoc *const pDoc = m_pImpl->m_pTableCursor->GetDoc();
-            SwUnoTableCursor& rCursor(dynamic_cast<SwUnoTableCursor&>(*m_pImpl->m_pTableCursor));
+            // HACK: remove pending actions for selecting old style tables
+            UnoActionRemoveContext aRemoveContext(rCursor);
+        }
+        rCursor.MakeBoxSels();
+        switch(pEntry->nWID )
+        {
+            case FN_UNO_TABLE_CELL_BACKGROUND:
             {
-                // HACK: remove pending actions for selecting old style tables
-                UnoActionRemoveContext aRemoveContext(rCursor);
+                SvxBrushItem aBrush( RES_BACKGROUND );
+                SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aBrush);
+                static_cast<SfxPoolItem&>(aBrush).PutValue(aValue, pEntry->nMemberId);
+                pDoc->SetBoxAttr(*m_pImpl->m_pTableCursor, aBrush);
+
             }
-            rCursor.MakeBoxSels();
-            switch(pEntry->nWID )
+            break;
+            case RES_BOX :
             {
-                case FN_UNO_TABLE_CELL_BACKGROUND:
+                SfxItemSet aSet(pDoc->GetAttrPool(),
+                                svl::Items<RES_BOX, RES_BOX,
+                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
+                SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
+                aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::ALL, false);
+                SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::NONE;
+                switch(pEntry->nMemberId & ~CONVERT_TWIPS)
                 {
-                    SvxBrushItem aBrush( RES_BACKGROUND );
-                    SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aBrush);
-                    static_cast<SfxPoolItem&>(aBrush).PutValue(aValue, pEntry->nMemberId);
-                    pDoc->SetBoxAttr(*m_pImpl->m_pTableCursor, aBrush);
+                    case  LEFT_BORDER :             nValid = SvxBoxInfoItemValidFlags::LEFT; break;
+                    case  RIGHT_BORDER:             nValid = SvxBoxInfoItemValidFlags::RIGHT; break;
+                    case  TOP_BORDER  :             nValid = SvxBoxInfoItemValidFlags::TOP; break;
+                    case  BOTTOM_BORDER:            nValid = SvxBoxInfoItemValidFlags::BOTTOM; break;
+                    case  LEFT_BORDER_DISTANCE :
+                    case  RIGHT_BORDER_DISTANCE:
+                    case  TOP_BORDER_DISTANCE  :
+                    case  BOTTOM_BORDER_DISTANCE:
+                        nValid = SvxBoxInfoItemValidFlags::DISTANCE;
+                    break;
+                }
+                aBoxInfo.SetValid(nValid);
 
-                }
-                break;
-                case RES_BOX :
-                {
-                    SfxItemSet aSet(pDoc->GetAttrPool(),
-                                    svl::Items<RES_BOX, RES_BOX,
-                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
-                    SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-                    aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::ALL, false);
-                    SvxBoxInfoItemValidFlags nValid = SvxBoxInfoItemValidFlags::NONE;
-                    switch(pEntry->nMemberId & ~CONVERT_TWIPS)
-                    {
-                        case  LEFT_BORDER :             nValid = SvxBoxInfoItemValidFlags::LEFT; break;
-                        case  RIGHT_BORDER:             nValid = SvxBoxInfoItemValidFlags::RIGHT; break;
-                        case  TOP_BORDER  :             nValid = SvxBoxInfoItemValidFlags::TOP; break;
-                        case  BOTTOM_BORDER:            nValid = SvxBoxInfoItemValidFlags::BOTTOM; break;
-                        case  LEFT_BORDER_DISTANCE :
-                        case  RIGHT_BORDER_DISTANCE:
-                        case  TOP_BORDER_DISTANCE  :
-                        case  BOTTOM_BORDER_DISTANCE:
-                            nValid = SvxBoxInfoItemValidFlags::DISTANCE;
-                        break;
-                    }
-                    aBoxInfo.SetValid(nValid);
+                aSet.Put(aBoxInfo);
+                SwDoc::GetTabBorders(rCursor, aSet);
 
-                    aSet.Put(aBoxInfo);
-                    SwDoc::GetTabBorders(rCursor, aSet);
+                aSet.Put(aBoxInfo);
+                SvxBoxItem aBoxItem(static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX)));
+                static_cast<SfxPoolItem&>(aBoxItem).PutValue(aValue, pEntry->nMemberId);
+                aSet.Put(aBoxItem);
+                pDoc->SetTabBorders(*m_pImpl->m_pTableCursor, aSet);
+            }
+            break;
+            case RES_BOXATR_FORMAT:
+            {
+                SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
+                static_cast<SfxPoolItem&>(aNumberFormat).PutValue(aValue, 0);
+                pDoc->SetBoxAttr(rCursor, aNumberFormat);
+            }
+            break;
+            case FN_UNO_RANGE_ROW_LABEL:
+            {
+                bool bTmp = *o3tl::doAccess<bool>(aValue);
+                if (m_pImpl->m_bFirstRowAsLabel != bTmp)
+                {
+                    lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
+                    m_pImpl->m_bFirstRowAsLabel = bTmp;
+                }
+            }
+            break;
+            case FN_UNO_RANGE_COL_LABEL:
+            {
+                bool bTmp = *o3tl::doAccess<bool>(aValue);
+                if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
+                {
+                    lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
+                    m_pImpl->m_bFirstColumnAsLabel = bTmp;
+                }
+            }
+            break;
+            case RES_VERT_ORIENT:
+            {
+                sal_Int16 nAlign = -1;
+                aValue >>= nAlign;
+                if( nAlign >= text::VertOrientation::NONE && nAlign <= text::VertOrientation::BOTTOM)
+                    pDoc->SetBoxAlign( rCursor, nAlign );
+            }
+            break;
+            default:
+            {
+                SfxItemSet aItemSet( pDoc->GetAttrPool(), {{pEntry->nWID, pEntry->nWID}} );
+                SwUnoCursorHelper::GetCursorAttr(rCursor.GetSelRing(),
+                        aItemSet);
 
-                    aSet.Put(aBoxInfo);
-                    SvxBoxItem aBoxItem(static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX)));
-                    static_cast<SfxPoolItem&>(aBoxItem).PutValue(aValue, pEntry->nMemberId);
-                    aSet.Put(aBoxItem);
-                    pDoc->SetTabBorders(*m_pImpl->m_pTableCursor, aSet);
-                }
-                break;
-                case RES_BOXATR_FORMAT:
+                if (!SwUnoCursorHelper::SetCursorPropertyValue(
+                        *pEntry, aValue, rCursor.GetSelRing(), aItemSet))
                 {
-                    SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
-                    static_cast<SfxPoolItem&>(aNumberFormat).PutValue(aValue, 0);
-                    pDoc->SetBoxAttr(rCursor, aNumberFormat);
+                    m_pImpl->m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
                 }
-                break;
-                case FN_UNO_RANGE_ROW_LABEL:
-                {
-                    bool bTmp = *o3tl::doAccess<bool>(aValue);
-                    if (m_pImpl->m_bFirstRowAsLabel != bTmp)
-                    {
-                        lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
-                        m_pImpl->m_bFirstRowAsLabel = bTmp;
-                    }
-                }
-                break;
-                case FN_UNO_RANGE_COL_LABEL:
-                {
-                    bool bTmp = *o3tl::doAccess<bool>(aValue);
-                    if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
-                    {
-                        lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
-                        m_pImpl->m_bFirstColumnAsLabel = bTmp;
-                    }
-                }
-                break;
-                case RES_VERT_ORIENT:
-                {
-                    sal_Int16 nAlign = -1;
-                    aValue >>= nAlign;
-                    if( nAlign >= text::VertOrientation::NONE && nAlign <= text::VertOrientation::BOTTOM)
-                        pDoc->SetBoxAlign( rCursor, nAlign );
-                }
-                break;
-                default:
-                {
-                    SfxItemSet aItemSet( pDoc->GetAttrPool(), {{pEntry->nWID, pEntry->nWID}} );
-                    SwUnoCursorHelper::GetCursorAttr(rCursor.GetSelRing(),
-                            aItemSet);
-
-                    if (!SwUnoCursorHelper::SetCursorPropertyValue(
-                            *pEntry, aValue, rCursor.GetSelRing(), aItemSet))
-                    {
-                        m_pImpl->m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
-                    }
-                    SwUnoCursorHelper::SetCursorAttr(rCursor.GetSelRing(),
-                            aItemSet, SetAttrMode::DEFAULT, true);
-                }
+                SwUnoCursorHelper::SetCursorAttr(rCursor.GetSelRing(),
+                        aItemSet, SetAttrMode::DEFAULT, true);
             }
         }
-        else
-            throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
     }
 }
 
@@ -3509,76 +3506,75 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
     {
         const SfxItemPropertySimpleEntry *const pEntry =
             m_pImpl->m_pPropSet->getPropertyMap().getByName(rPropertyName);
-        if(pEntry)
-        {
-            switch(pEntry->nWID )
-            {
-                case FN_UNO_TABLE_CELL_BACKGROUND:
-                {
-                    SvxBrushItem aBrush( RES_BACKGROUND );
-                    if (SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aBrush))
-                        aBrush.QueryValue(aRet, pEntry->nMemberId);
+        if(!pEntry)
+           throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-                }
-                break;
-                case RES_BOX :
+        switch(pEntry->nWID )
+        {
+            case FN_UNO_TABLE_CELL_BACKGROUND:
+            {
+                SvxBrushItem aBrush( RES_BACKGROUND );
+                if (SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aBrush))
+                    aBrush.QueryValue(aRet, pEntry->nMemberId);
+
+            }
+            break;
+            case RES_BOX :
+            {
+                SwDoc *const pDoc = m_pImpl->m_pTableCursor->GetDoc();
+                SfxItemSet aSet(pDoc->GetAttrPool(),
+                                svl::Items<RES_BOX, RES_BOX,
+                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
+                aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
+                SwDoc::GetTabBorders(*m_pImpl->m_pTableCursor, aSet);
+                const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
+                rBoxItem.QueryValue(aRet, pEntry->nMemberId);
+            }
+            break;
+            case RES_BOXATR_FORMAT:
+                OSL_FAIL("not implemented");
+            break;
+            case FN_UNO_PARA_STYLE:
+            {
+                SwFormatColl *const pTmpFormat =
+                    SwUnoCursorHelper::GetCurTextFormatColl(*m_pImpl->m_pTableCursor, false);
+                OUString sRet;
+                if(pFormat)
+                    sRet = pTmpFormat->GetName();
+                aRet <<= sRet;
+            }
+            break;
+            case FN_UNO_RANGE_ROW_LABEL:
+                aRet <<= m_pImpl->m_bFirstRowAsLabel;
+            break;
+            case FN_UNO_RANGE_COL_LABEL:
+                aRet <<= m_pImpl->m_bFirstColumnAsLabel;
+            break;
+            case RES_VERT_ORIENT:
+            {
+                SwFormatVertOrient aVertOrient;
+                if (SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aVertOrient))
                 {
-                    SwDoc *const pDoc = m_pImpl->m_pTableCursor->GetDoc();
-                    SfxItemSet aSet(pDoc->GetAttrPool(),
-                                    svl::Items<RES_BOX, RES_BOX,
-                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
-                    aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
-                    SwDoc::GetTabBorders(*m_pImpl->m_pTableCursor, aSet);
-                    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
-                    rBoxItem.QueryValue(aRet, pEntry->nMemberId);
-                }
-                break;
-                case RES_BOXATR_FORMAT:
-                    OSL_FAIL("not implemented");
-                break;
-                case FN_UNO_PARA_STYLE:
-                {
-                    SwFormatColl *const pTmpFormat =
-                        SwUnoCursorHelper::GetCurTextFormatColl(*m_pImpl->m_pTableCursor, false);
-                    OUString sRet;
-                    if(pFormat)
-                        sRet = pTmpFormat->GetName();
-                    aRet <<= sRet;
-                }
-                break;
-                case FN_UNO_RANGE_ROW_LABEL:
-                    aRet <<= m_pImpl->m_bFirstRowAsLabel;
-                break;
-                case FN_UNO_RANGE_COL_LABEL:
-                    aRet <<= m_pImpl->m_bFirstColumnAsLabel;
-                break;
-                case RES_VERT_ORIENT:
-                {
-                    SwFormatVertOrient aVertOrient;
-                    if (SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aVertOrient))
-                    {
-                        aVertOrient.QueryValue( aRet, pEntry->nMemberId );
-                    }
-                }
-                break;
-                default:
-                {
-                    SfxItemSet aSet(
-                        m_pImpl->m_pTableCursor->GetDoc()->GetAttrPool(),
-                        svl::Items<
-                            RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
-                            RES_UNKNOWNATR_CONTAINER,
-                                RES_UNKNOWNATR_CONTAINER>{});
-                    // first look at the attributes of the cursor
-                    SwUnoTableCursor *const pCursor =
-                        dynamic_cast<SwUnoTableCursor*>(&(*m_pImpl->m_pTableCursor));
-                    SwUnoCursorHelper::GetCursorAttr(pCursor->GetSelRing(), aSet);
-                    m_pImpl->m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
+                    aVertOrient.QueryValue( aRet, pEntry->nMemberId );
                 }
             }
+            break;
+            default:
+            {
+                SfxItemSet aSet(
+                    m_pImpl->m_pTableCursor->GetDoc()->GetAttrPool(),
+                    svl::Items<
+                        RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
+                        RES_UNKNOWNATR_CONTAINER,
+                            RES_UNKNOWNATR_CONTAINER>{});
+                // first look at the attributes of the cursor
+                SwUnoTableCursor *const pCursor =
+                    dynamic_cast<SwUnoTableCursor*>(&(*m_pImpl->m_pTableCursor));
+                SwUnoCursorHelper::GetCursorAttr(pCursor->GetSelRing(), aSet);
+                m_pImpl->m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
+            }
         }
-        else
-           throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
     }
     return aRet;
 }

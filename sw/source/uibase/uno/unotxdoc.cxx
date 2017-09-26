@@ -527,26 +527,22 @@ void SwXTextDocument::reformat()
 void SwXTextDocument::lockControllers()
 {
     SolarMutexGuard aGuard;
-    if(IsValid())
-    {
-        UnoActionContext* pContext = new UnoActionContext(pDocShell->GetDoc());
-        aActionArr.push_front(pContext);
-    }
-    else
+    if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
+
+    UnoActionContext* pContext = new UnoActionContext(pDocShell->GetDoc());
+    aActionArr.push_front(pContext);
 }
 
 void SwXTextDocument::unlockControllers()
 {
     SolarMutexGuard aGuard;
-    if(!aActionArr.empty())
-    {
-        UnoActionContext* pContext = aActionArr.front();
-        aActionArr.pop_front();
-        delete pContext;
-    }
-    else
+    if(aActionArr.empty())
         throw RuntimeException("Nothing to unlock");
+
+    UnoActionContext* pContext = aActionArr.front();
+    aActionArr.pop_front();
+    delete pContext;
 }
 
 sal_Bool SwXTextDocument::hasControllersLocked()
@@ -636,15 +632,13 @@ void SwXTextDocument::removeEventListener(const Reference< lang::XEventListener 
 Reference< XPropertySet > SwXTextDocument::getLineNumberingProperties()
 {
     SolarMutexGuard aGuard;
-    if(IsValid())
-    {
-        if(!mxXLineNumberingProperties.is())
-        {
-            mxXLineNumberingProperties = new SwXLineNumberingProperties(pDocShell->GetDoc());
-        }
-    }
-    else
+    if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
+
+    if(!mxXLineNumberingProperties.is())
+    {
+        mxXLineNumberingProperties = new SwXLineNumberingProperties(pDocShell->GetDoc());
+    }
     return mxXLineNumberingProperties;
 }
 
@@ -1002,35 +996,34 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings()
 {
     SolarMutexGuard aGuard;
     Sequence< beans::PropertyValue > aSeq(9);
-    if(IsValid())
-    {
-        beans::PropertyValue* pArray = aSeq.getArray();
-        SwPagePreviewPrtData aData;
-        const SwPagePreviewPrtData* pData = pDocShell->GetDoc()->GetPreviewPrtData();
-        if(pData)
-            aData = *pData;
-        Any aVal;
-        aVal <<= (sal_Int16)aData.GetRow();
-        pArray[0] = beans::PropertyValue("PageRows", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int16)aData.GetCol();
-        pArray[1] = beans::PropertyValue("PageColumns", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetLeftSpace());
-        pArray[2] = beans::PropertyValue("LeftMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetRightSpace());
-        pArray[3] = beans::PropertyValue("RightMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetTopSpace());
-        pArray[4] = beans::PropertyValue("TopMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetBottomSpace());
-        pArray[5] = beans::PropertyValue("BottomMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetHorzSpace());
-        pArray[6] = beans::PropertyValue("HoriMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= (sal_Int32)convertTwipToMm100(aData.GetVertSpace());
-        pArray[7] = beans::PropertyValue("VertMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        aVal <<= aData.GetLandscape();
-        pArray[8] = beans::PropertyValue("IsLandscape", -1, aVal, PropertyState_DIRECT_VALUE);
-    }
-    else
+    if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
+
+    beans::PropertyValue* pArray = aSeq.getArray();
+    SwPagePreviewPrtData aData;
+    const SwPagePreviewPrtData* pData = pDocShell->GetDoc()->GetPreviewPrtData();
+    if(pData)
+        aData = *pData;
+    Any aVal;
+    aVal <<= (sal_Int16)aData.GetRow();
+    pArray[0] = beans::PropertyValue("PageRows", -1, aVal, PropertyState_DIRECT_VALUE);
+    aVal <<= (sal_Int16)aData.GetCol();
+    pArray[1] = beans::PropertyValue("PageColumns", -1, aVal, PropertyState_DIRECT_VALUE);
+    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetLeftSpace());
+    pArray[2] = beans::PropertyValue("LeftMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetRightSpace());
+    pArray[3] = beans::PropertyValue("RightMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetTopSpace());
+    pArray[4] = beans::PropertyValue("TopMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetBottomSpace());
+    pArray[5] = beans::PropertyValue("BottomMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetHorzSpace());
+    pArray[6] = beans::PropertyValue("HoriMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    aVal <<= (sal_Int32)convertTwipToMm100(aData.GetVertSpace());
+    pArray[7] = beans::PropertyValue("VertMargin", -1, aVal, PropertyState_DIRECT_VALUE);
+    aVal <<= aData.GetLandscape();
+    pArray[8] = beans::PropertyValue("IsLandscape", -1, aVal, PropertyState_DIRECT_VALUE);
+
     return aSeq;
 }
 
@@ -1078,155 +1071,154 @@ static OUString lcl_CreateOutlineString( size_t nIndex,
 void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue >& aSettings)
 {
     SolarMutexGuard aGuard;
-    if(IsValid())
-    {
-        SwPagePreviewPrtData aData;
-        //if only a few properties are coming, then use the current settings
-        const SwPagePreviewPrtData* pData = pDocShell->GetDoc()->GetPreviewPrtData();
-        if(pData)
-            aData = *pData;
-        const beans::PropertyValue* pProperties = aSettings.getConstArray();
-        int nCount = aSettings.getLength();
-        for(int i = 0; i < nCount; i++)
-        {
-            OUString sName = pProperties[i].Name;
-            const Any& rVal = pProperties[i].Value;
-            bool bException;
-            sal_uInt32 nVal = lcl_Any_To_ULONG(rVal, bException);
-            if( sName == "PageRows" )
-            {
-                if(!nVal || nVal > 0xff)
-                    throw RuntimeException("Invalid value");
-                aData.SetRow((sal_uInt8)nVal);
-            }
-            else if(sName == "PageColumns")
-            {
-                if(!nVal  || nVal > 0xff)
-                    throw RuntimeException("Invalid value");
-                aData.SetCol((sal_uInt8)nVal);
-            }
-            else if(sName == "LeftMargin")
-            {
-                aData.SetLeftSpace(convertMm100ToTwip(nVal));
-            }
-            else if(sName == "RightMargin")
-            {
-                aData.SetRightSpace(convertMm100ToTwip(nVal));
-            }
-            else if(sName == "TopMargin")
-            {
-                aData.SetTopSpace(convertMm100ToTwip(nVal));
-            }
-            else if(sName == "BottomMargin")
-            {
-                aData.SetBottomSpace(convertMm100ToTwip(nVal));
-            }
-            else if(sName == "HoriMargin")
-            {
-                aData.SetHorzSpace(convertMm100ToTwip(nVal));
-            }
-            else if(sName == "VertMargin")
-            {
-                aData.SetVertSpace(convertMm100ToTwip(nVal));
-            }
-            else if(sName == "IsLandscape")
-            {
-                auto b = o3tl::tryAccess<bool>(rVal);
-                bException = bool(b);
-                if (b)
-                {
-                    aData.SetLandscape(*b);
-                }
-            }
-            else
-                bException = true;
-            if(bException)
-                throw RuntimeException();
-        }
-        pDocShell->GetDoc()->SetPreviewPrtData(&aData);
-    }
-    else
+    if(!IsValid())
         throw DisposedException("", static_cast< XTextDocument* >(this));
+
+    SwPagePreviewPrtData aData;
+    //if only a few properties are coming, then use the current settings
+    const SwPagePreviewPrtData* pData = pDocShell->GetDoc()->GetPreviewPrtData();
+    if(pData)
+        aData = *pData;
+    const beans::PropertyValue* pProperties = aSettings.getConstArray();
+    int nCount = aSettings.getLength();
+    for(int i = 0; i < nCount; i++)
+    {
+        OUString sName = pProperties[i].Name;
+        const Any& rVal = pProperties[i].Value;
+        bool bException;
+        sal_uInt32 nVal = lcl_Any_To_ULONG(rVal, bException);
+        if( sName == "PageRows" )
+        {
+            if(!nVal || nVal > 0xff)
+                throw RuntimeException("Invalid value");
+            aData.SetRow((sal_uInt8)nVal);
+        }
+        else if(sName == "PageColumns")
+        {
+            if(!nVal  || nVal > 0xff)
+                throw RuntimeException("Invalid value");
+            aData.SetCol((sal_uInt8)nVal);
+        }
+        else if(sName == "LeftMargin")
+        {
+            aData.SetLeftSpace(convertMm100ToTwip(nVal));
+        }
+        else if(sName == "RightMargin")
+        {
+            aData.SetRightSpace(convertMm100ToTwip(nVal));
+        }
+        else if(sName == "TopMargin")
+        {
+            aData.SetTopSpace(convertMm100ToTwip(nVal));
+        }
+        else if(sName == "BottomMargin")
+        {
+            aData.SetBottomSpace(convertMm100ToTwip(nVal));
+        }
+        else if(sName == "HoriMargin")
+        {
+            aData.SetHorzSpace(convertMm100ToTwip(nVal));
+        }
+        else if(sName == "VertMargin")
+        {
+            aData.SetVertSpace(convertMm100ToTwip(nVal));
+        }
+        else if(sName == "IsLandscape")
+        {
+            auto b = o3tl::tryAccess<bool>(rVal);
+            bException = bool(b);
+            if (b)
+            {
+                aData.SetLandscape(*b);
+            }
+        }
+        else
+            bException = true;
+        if(bException)
+            throw RuntimeException();
+    }
+    pDocShell->GetDoc()->SetPreviewPrtData(&aData);
+
 }
 
 void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOptions)
 {
     SolarMutexGuard aGuard;
-    if(IsValid())
+    if(!IsValid())
+        throw DisposedException("", static_cast< XTextDocument* >(this));
+
+    SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *pDocShell, SfxInterfaceId(7) );
+    SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SfxCallMode::SYNCHRON,
+                                pDocShell->GetDoc()->GetAttrPool());
+        aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, true));
+
+    for ( int n = 0; n < xOptions.getLength(); ++n )
     {
-        SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *pDocShell, SfxInterfaceId(7) );
-        SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SfxCallMode::SYNCHRON,
-                                    pDocShell->GetDoc()->GetAttrPool());
-            aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, true));
+        // get Property-Value from options
+        const beans::PropertyValue &rProp = xOptions.getConstArray()[n];
+        Any aValue( rProp.Value );
 
-        for ( int n = 0; n < xOptions.getLength(); ++n )
+        // FileName-Property?
+        if ( rProp.Name == UNO_NAME_FILE_NAME )
         {
-            // get Property-Value from options
-            const beans::PropertyValue &rProp = xOptions.getConstArray()[n];
-            Any aValue( rProp.Value );
-
-            // FileName-Property?
-            if ( rProp.Name == UNO_NAME_FILE_NAME )
+            OUString sFileURL;
+            if ( rProp.Value >>= sFileURL )
             {
-                OUString sFileURL;
-                if ( rProp.Value >>= sFileURL )
-                {
-                    // Convert the File URL into a system dependent path, as the SalPrinter expects
-                    OUString sSystemPath;
-                    FileBase::getSystemPathFromFileURL ( sFileURL, sSystemPath );
-                    aReq.AppendItem(SfxStringItem( SID_FILE_NAME, sSystemPath ) );
-                }
-                else if ( rProp.Value.getValueType() != cppu::UnoType<void>::get() )
-                    throw IllegalArgumentException();
+                // Convert the File URL into a system dependent path, as the SalPrinter expects
+                OUString sSystemPath;
+                FileBase::getSystemPathFromFileURL ( sFileURL, sSystemPath );
+                aReq.AppendItem(SfxStringItem( SID_FILE_NAME, sSystemPath ) );
             }
-
-            // CopyCount-Property
-            else if ( rProp.Name == UNO_NAME_COPY_COUNT )
-            {
-                sal_Int32 nCopies = 0;
-                aValue >>= nCopies;
-                aReq.AppendItem(SfxInt16Item( SID_PRINT_COPIES, (sal_Int16)nCopies ) );
-            }
-
-            // Collate-Property
-            else if ( rProp.Name == UNO_NAME_COLLATE )
-            {
-                if ( auto b = o3tl::tryAccess<bool>(rProp.Value) )
-
-                    aReq.AppendItem(SfxBoolItem( SID_PRINT_COLLATE, *b ) );
-                else
-                    throw IllegalArgumentException();
-            }
-
-            // Sort-Property
-            else if ( rProp.Name == UNO_NAME_SORT )
-            {
-                if ( auto b = o3tl::tryAccess<bool>(rProp.Value) )
-                    aReq.AppendItem(SfxBoolItem( SID_PRINT_SORT, *b ) );
-                else
-                    throw IllegalArgumentException();
-            }
-
-            // Pages-Property
-            else if ( rProp.Name == UNO_NAME_PAGES )
-            {
-                OUString sTmp;
-                if ( rProp.Value >>= sTmp )
-                    aReq.AppendItem( SfxStringItem( SID_PRINT_PAGES, sTmp ) );
-                else
-                    throw IllegalArgumentException();
-            }
+            else if ( rProp.Value.getValueType() != cppu::UnoType<void>::get() )
+                throw IllegalArgumentException();
         }
 
-        // #i117783#
-        bApplyPagePrintSettingsFromXPagePrintable = true;
-        pFrame->GetViewShell()->ExecuteSlot(aReq);
-        // Frame close
-        pFrame->DoClose();
+        // CopyCount-Property
+        else if ( rProp.Name == UNO_NAME_COPY_COUNT )
+        {
+            sal_Int32 nCopies = 0;
+            aValue >>= nCopies;
+            aReq.AppendItem(SfxInt16Item( SID_PRINT_COPIES, (sal_Int16)nCopies ) );
+        }
 
+        // Collate-Property
+        else if ( rProp.Name == UNO_NAME_COLLATE )
+        {
+            auto b = o3tl::tryAccess<bool>(rProp.Value);
+            if ( !b )
+                throw IllegalArgumentException();
+            aReq.AppendItem(SfxBoolItem( SID_PRINT_COLLATE, *b ) );
+
+        }
+
+        // Sort-Property
+        else if ( rProp.Name == UNO_NAME_SORT )
+        {
+            auto b = o3tl::tryAccess<bool>(rProp.Value);
+            if ( !b )
+                throw IllegalArgumentException();
+
+            aReq.AppendItem(SfxBoolItem( SID_PRINT_SORT, *b ) );
+        }
+
+        // Pages-Property
+        else if ( rProp.Name == UNO_NAME_PAGES )
+        {
+            OUString sTmp;
+            if ( !(rProp.Value >>= sTmp) )
+                throw IllegalArgumentException();
+
+            aReq.AppendItem( SfxStringItem( SID_PRINT_PAGES, sTmp ) );
+
+        }
     }
-    else
-        throw DisposedException("", static_cast< XTextDocument* >(this));
+
+    // #i117783#
+    bApplyPagePrintSettingsFromXPagePrintable = true;
+    pFrame->GetViewShell()->ExecuteSlot(aReq);
+    // Frame close
+    pFrame->DoClose();
+
 }
 
 Reference< XNameAccess >  SwXTextDocument::getReferenceMarks()
@@ -4262,12 +4254,10 @@ void SwXOutlineTarget::setPropertyValue(
 
 Any SwXOutlineTarget::getPropertyValue(const OUString& rPropertyName)
 {
-    Any aRet;
-    if(rPropertyName == UNO_LINK_DISPLAY_NAME)
-        aRet <<= sOutlineText;
-    else
-        throw UnknownPropertyException();
-    return aRet;
+    if(rPropertyName != UNO_LINK_DISPLAY_NAME)
+        throw UnknownPropertyException();;
+
+    return Any(sOutlineText);
 }
 
 void SwXOutlineTarget::addPropertyChangeListener(

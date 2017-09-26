@@ -391,12 +391,9 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
         for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
         {
             const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pPropertyNames[nProp]);
-            if(pEntry)
-            {
-                GetPropertyValue( pValues[nProp], *pEntry, &rUnoCursor, pSet );
-            }
-            else
+            if(!pEntry)
                 throw beans::UnknownPropertyException( "Unknown property: " + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            GetPropertyValue( pValues[nProp], *pEntry, &rUnoCursor, pSet );
         }
     }
     return aValues;
