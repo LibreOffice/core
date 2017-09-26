@@ -1219,6 +1219,7 @@ SfxStyleFamily SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily 
 
                 SfxItemSet aSet(GetPool(), aFrameFormatSetRange );
                 pCurrWrtShell->GetFlyFrameAttr( aSet );
+                aSet.ClearItem(RES_ANCHOR); // tdf#112574 no anchor in styles
 
                 SwFrameFormat* pFFormat = pCurrWrtShell->GetSelectedFrameFormat();
                 pFrame->SetDerivedFrom( pFFormat );
