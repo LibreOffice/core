@@ -1186,7 +1186,8 @@ void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
             break;
         nSectPosPos = rStrm.Tell();
         // read section
-        rStrm.Seek(nSectPos);
+        if (!checkSeek(rStrm, nSectPos))
+            break;
         LoadObject(rStrm, AddSection(aSectGuid));
         if (!rStrm.good())
             break;
