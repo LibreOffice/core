@@ -2614,7 +2614,10 @@ void SwFrameFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         const SfxPoolItem* tmp = nullptr;
         static_cast< const SwAttrSetChg* >(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false, &tmp );
         if( tmp )
+        {
+            assert(static_cast<SwAttrSetChg const*>(pNew)->GetTheChgdSet() == &m_aSet); // must not be style's set!
             newAnchorPosition = static_cast< const SwFormatAnchor* >( tmp )->GetContentAnchor();
+        }
     }
     if( pNew && pNew->Which() == RES_ANCHOR )
         newAnchorPosition = static_cast< const SwFormatAnchor* >( pNew )->GetContentAnchor();
@@ -2623,7 +2626,10 @@ void SwFrameFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         const SfxPoolItem* tmp = nullptr;
         static_cast< const SwAttrSetChg* >(pOld)->GetChgSet()->GetItemState( RES_ANCHOR, false, &tmp );
         if( tmp )
+        {
+            assert(static_cast<SwAttrSetChg const*>(pOld)->GetTheChgdSet() == &m_aSet); // must not be style's set!
             oldAnchorPosition = static_cast< const SwFormatAnchor* >( tmp )->GetContentAnchor();
+        }
     }
     if( pOld && pOld->Which() == RES_ANCHOR )
         oldAnchorPosition = static_cast< const SwFormatAnchor* >( pOld )->GetContentAnchor();
