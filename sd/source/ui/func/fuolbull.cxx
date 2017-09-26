@@ -99,12 +99,10 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
                     std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
 
-                    if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
+                    if (OutlineView* pView = dynamic_cast<OutlineView*>(mpView))
                     {
-                        pOLV = static_cast<OutlineView*>(mpView)
-                            ->GetViewByWindow(mpViewShell->GetActiveWindow());
-
-                        aGuard.reset( new OutlineViewModelChangeGuard( static_cast<OutlineView&>(*mpView) ) );
+                        pOLV = pView->GetViewByWindow(mpViewShell->GetActiveWindow());
+                        aGuard.reset(new OutlineViewModelChangeGuard(*pView));
                     }
 
                     if( pOLV )
@@ -235,14 +233,10 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
     std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
+    if (OutlineView* pView = dynamic_cast<OutlineView*>(mpView))
     {
-        if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
-        {
-            pOLV = static_cast<OutlineView*>(mpView)
-                ->GetViewByWindow(mpViewShell->GetActiveWindow());
-
-            aGuard.reset( new OutlineViewModelChangeGuard( static_cast<OutlineView&>(*mpView) ) );
-        }
+        pOLV = pView->GetViewByWindow(mpViewShell->GetActiveWindow());
+        aGuard.reset(new OutlineViewModelChangeGuard(*pView));
     }
 
     SdrOutliner* pOwner = bInMasterView ? mpView->GetTextEditOutliner() : nullptr;
