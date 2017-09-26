@@ -421,11 +421,13 @@ namespace emfplushelper
 
             if (pen->penDataFlags & 0x00000020 && pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predefined line style
             {
-                // taken from the old cppcanvas implementation
-                const std::vector<double> dash = { 3, 3 };
-                const std::vector<double> dot = { 1, 3 };
-                const std::vector<double> dashdot = { 3, 3, 1, 3 };
-                const std::vector<double> dashdotdot = { 3, 3, 1, 3, 1, 3 };
+                // short writing
+                const double pw = transformedPenWidth;
+                // taken from the old cppcanvas implementation and multiplied with pen width
+                const std::vector<double> dash = { 3*pw, 3*pw };
+                const std::vector<double> dot = { pw, 3*pw };
+                const std::vector<double> dashdot = { 3*pw, 3*pw, pw, 3*pw };
+                const std::vector<double> dashdotdot = { 3*pw, 3*pw, pw, 3*pw, pw, 3*pw };
 
                 drawinglayer::attribute::StrokeAttribute aStrokeAttribute;
 
@@ -459,11 +461,8 @@ namespace emfplushelper
                 std::vector<double> aPattern(pen->dashPattern.size());
                 for (size_t i=0; i<aPattern.size(); i++)
                 {
-                    aPattern[i] = 0.5 * MapSize(double(pen->dashPattern[i]),0).getX();
-                    // here, this is just a guess
-                    // without transform it es way too small
-                    // with 1 * MapSize(...) it es too large
-                    // with 0.5 * MapSize is looks like in MSO
+                    // convert from float to double and multiply with the adjusted pen width
+                    aPattern[i] = transformedPenWidth * pen->dashPattern[i];
                 }
                 drawinglayer::attribute::StrokeAttribute strokeAttribute(aPattern);
                 mrTargetHolders.Current().append(
