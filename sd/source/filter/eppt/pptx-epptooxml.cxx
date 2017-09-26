@@ -306,8 +306,11 @@ ShapeExport& PowerPointShapeExport::WriteUnknownShape( const Reference< XShape >
     }
     else if ( sShapeType == "com.sun.star.presentation.SubtitleShape" )
     {
-        if( !WritePlaceholder( xShape, Subtitle, mbMaster ) )
-            ShapeExport::WriteTextShape( xShape );
+        if(mePageType != MASTER)
+        {
+            if( !WritePlaceholder( xShape, Subtitle, mbMaster ) )
+                ShapeExport::WriteTextShape( xShape );
+        }
     }
 
     return *this;
@@ -1718,7 +1721,7 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
     ImplWriteBackground( pFS, aXBackgroundPropSet );
-    WriteShapeTree( pFS, LAYOUT, true );
+    WriteShapeTree( pFS, MASTER, true );
 
     pFS->endElementNS( XML_p, XML_cSld );
 
@@ -1875,7 +1878,7 @@ void PowerPointExport::WriteShapeTree( const FSHelperPtr& pFS, PageType ePageTyp
 
 ShapeExport& PowerPointShapeExport::WritePageShape( const Reference< XShape >& xShape, PageType ePageType, bool bPresObj )
 {
-    if( ( ePageType == NOTICE && bPresObj ) || ePageType == LAYOUT )
+    if( ( ePageType == NOTICE && bPresObj ) || ePageType == LAYOUT || ePageType == MASTER )
         return WritePlaceholderShape( xShape, SlideImage );
 
     return WriteTextShape( xShape );

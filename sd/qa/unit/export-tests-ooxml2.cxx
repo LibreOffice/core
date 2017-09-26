@@ -105,6 +105,7 @@ public:
     void testTdf59046();
     void testTdf105739();
     void testTdf112552();
+    void testTdf112557();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -133,6 +134,7 @@ public:
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
     CPPUNIT_TEST(testTdf112552);
+    CPPUNIT_TEST(testTdf112557);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -805,6 +807,18 @@ void SdOOXMLExportTest2::testTdf112552()
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", "h", "21600");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", "21600");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", "0");
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf112557()
+{
+    // Subtitle shape should be skipped by export.
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf112557.odp"), ODP);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slideMasters/slideMaster1.xml");
+    assertXPath(pXmlDocContent, "/p:sldMaster/p:cSld/p:spTree/p:sp", 2); // title and object
     xDocShRef->DoClose();
 }
 
