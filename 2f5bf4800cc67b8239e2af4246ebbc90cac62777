@@ -69,6 +69,24 @@
       "revId": "2f5bf4800cc67b8239e2af4246ebbc90cac62777",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_49dcade4",
+        "filename": "lingucomponent/source/hyphenator/hyphen/hyphenimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-09-26T07:16:11Z",
+      "side": 1,
+      "message": "I\u0027ll fix it. I like to do things as soon as I\u0027m in the place, but I\u0027m regularly hit because of this :) Now I have a legal excuse ;)",
+      "parentUuid": "1a430d35_a9735114",
+      "revId": "2f5bf4800cc67b8239e2af4246ebbc90cac62777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
