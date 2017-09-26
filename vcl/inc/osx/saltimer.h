@@ -43,6 +43,12 @@ public:
 
 class AquaSalTimer : public SalTimer
 {
+    NSTimer    *m_pRunningTimer;
+    sal_Int32   m_nTimerStartTicks;  ///< system ticks at timer start % SAL_MAX_INT32
+
+    void queueDispatchTimerEvent( bool bAtStart );
+    void callTimerCallback();
+
 public:
     AquaSalTimer();
     virtual ~AquaSalTimer() override;
@@ -50,11 +56,11 @@ public:
     void Start( sal_uLong nMS ) override;
     void Stop() override;
 
-    static void handleStartTimerEvent( NSEvent* pEvent );
-    static void handleDispatchTimerEvent();
+    void handleStartTimerEvent( NSEvent* pEvent );
+    void handleDispatchTimerEvent( NSEvent* pEvent );
+    void handleTimerElapsed();
 
-    static NSTimer* pRunningTimer;
-    static bool bDispatchTimer;
+    bool IsTimerElapsed() const;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALTIMER_H

@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <rtl/math.hxx>
+#include <tools/time.hxx>
 
 #include "osx/saltimer.h"
 #include "osx/salnstimer.h"
@@ -27,9 +28,6 @@
 #include "osx/salframe.h"
 #include "osx/salinst.h"
 
-NSTimer* AquaSalTimer::pRunningTimer = nil;
-
-static void ImplSalStopTimer();
 
 void ImplNSAppPostEvent( short nEventId, BOOL bAtStart, int nUserData )
 {
@@ -73,7 +71,16 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     [NSApp postEvent: pEvent atStart: bAtStart];
 }
 
-static void ImplSalStartTimer( sal_uLong nMS )
+void AquaSalTimer::queueDispatchTimerEvent( bool bAtStart )
+{
+    Stop();
+    m_nTimerStartTicks = tools::Time::GetMonotonicTicks() % SAL_MAX_INT32;
+    if ( 0 == m_nTimerStartTicks )
+        m_nTimerStartTicks++;
+    ImplNSAppPostEvent( AquaSalInstance::DispatchTimerEvent, bAtStart, m_nTimerStartTicks );
+}
+
+void AquaSalTimer::Start( sal_uLong nMS )
 {
     SalData* pSalData = GetSalData();
 
@@ -84,27 +91,26 @@ static void ImplSalStartTimer( sal_uLong nMS )
     }
 
     if ( 0 == nMS && !pSalData->mpFirstInstance->mbIsLiveResize )
-    {
-        ImplSalStopTimer();
-        ImplNSAppPostEvent( AquaSalInstance::DispatchTimerEvent, NO );
-    }
+        queueDispatchTimerEvent( NO );
     else
     {
         NSTimeInterval aTI = double(nMS) / 1000.0;
-        if( AquaSalTimer::pRunningTimer != nil )
+        if( m_pRunningTimer != nil )
         {
-            if ([AquaSalTimer::pRunningTimer isValid] && rtl::math::approxEqual(
-                    [AquaSalTimer::pRunningTimer timeInterval], aTI))
+            if ([m_pRunningTimer isValid] && rtl::math::approxEqual(
+                    [m_pRunningTimer timeInterval], aTI))
             {
                 // set new fire date
-                [AquaSalTimer::pRunningTimer setFireDate: [NSDate dateWithTimeIntervalSinceNow: aTI]];
+                [m_pRunningTimer setFireDate: [NSDate dateWithTimeIntervalSinceNow: aTI]];
             }
             else
-                ImplSalStopTimer();
+                Stop();
         }
-        if( AquaSalTimer::pRunningTimer == nil )
+        else
+            Stop();
+        if( m_pRunningTimer == nil )
         {
-            AquaSalTimer::pRunningTimer = [[NSTimer scheduledTimerWithTimeInterval: aTI
+            m_pRunningTimer = [[NSTimer scheduledTimerWithTimeInterval: aTI
                                                     target: [[[TimerCallbackCaller alloc] init] autorelease]
                                                     selector: @selector(timerElapsed:)
                                                     userInfo: nil
@@ -113,27 +119,47 @@ static void ImplSalStartTimer( sal_uLong nMS )
             /* #i84055# add timer to tracking run loop mode,
                so they also elapse while e.g. life resize
             */
-            [[NSRunLoop currentRunLoop] addTimer: AquaSalTimer::pRunningTimer forMode: NSEventTrackingRunLoopMode];
+            [[NSRunLoop currentRunLoop] addTimer: m_pRunningTimer forMode: NSEventTrackingRunLoopMode];
         }
     }
 }
 
-static void ImplSalStopTimer()
+void AquaSalTimer::Stop()
 {
-    if( AquaSalTimer::pRunningTimer != nil )
+    assert( GetSalData()->mpFirstInstance->IsMainThread() );
+
+    if( m_pRunningTimer != nil )
     {
-        [AquaSalTimer::pRunningTimer invalidate];
-        [AquaSalTimer::pRunningTimer release];
-        AquaSalTimer::pRunningTimer = nil;
+        [m_pRunningTimer invalidate];
+        [m_pRunningTimer release];
+        m_pRunningTimer = nil;
     }
+    m_nTimerStartTicks = 0;
 }
 
-void AquaSalTimer::handleDispatchTimerEvent()
+void AquaSalTimer::callTimerCallback()
 {
     ImplSVData* pSVData = ImplGetSVData();
     SolarMutexGuard aGuard;
     if( pSVData->maSchedCtx.mpSalTimer )
         pSVData->maSchedCtx.mpSalTimer->CallCallback();
+}
+
+void AquaSalTimer::handleTimerElapsed()
+{
+    // Stop the timer, as it is just invalidated after the firing function
+    Stop();
+
+    if ( GetSalData()->mpFirstInstance->mbIsLiveResize )
+        callTimerCallback();
+    else
+        queueDispatchTimerEvent( YES );
+}
+
+void AquaSalTimer::handleDispatchTimerEvent( NSEvent *pEvent )
+{
+    if (m_nTimerStartTicks == [pEvent data1])
+        callTimerCallback();
 }
 
 void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
@@ -143,30 +169,33 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
     {
         NSTimeInterval posted = [pEvent timestamp] + NSTimeInterval([pEvent data1])/1000.0;
         NSTimeInterval current = [NSDate timeIntervalSinceReferenceDate];
-        if( (posted - current) <= 0.0 )
-            handleDispatchTimerEvent();
-        else
-            ImplSalStartTimer( sal_uLong( [pEvent data1] ) );
+        sal_uLong nTimeoutMS = 0;
+        if( (posted - current) > 0.0 )
+            nTimeoutMS = ceil( (posted - current) * 1000 );
+        Start( nTimeoutMS );
     }
 }
 
+bool AquaSalTimer::IsTimerElapsed() const
+{
+    assert( !(m_nTimerStartTicks && m_pRunningTimer) );
+    if ( 0 != m_nTimerStartTicks )
+        return true;
+    if ( !m_pRunningTimer )
+        return false;
+    NSDate* pDt = [m_pRunningTimer fireDate];
+    return pDt && ([pDt timeIntervalSinceNow] < 0);
+}
+
 AquaSalTimer::AquaSalTimer( )
+    : m_pRunningTimer( nil )
+    , m_nTimerStartTicks( 0 )
 {
 }
 
 AquaSalTimer::~AquaSalTimer()
 {
-    ImplSalStopTimer();
-}
-
-void AquaSalTimer::Start( sal_uLong nMS )
-{
-    ImplSalStartTimer( nMS );
-}
-
-void AquaSalTimer::Stop()
-{
-    ImplSalStopTimer();
+    Stop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
