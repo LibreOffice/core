@@ -71,6 +71,7 @@ public:
     void testList();
     void testImage();
     void testTable();
+    void testLink();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST(testList);
     CPPUNIT_TEST(testImage);
     CPPUNIT_TEST(testTable);
+    CPPUNIT_TEST(testLink);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -451,6 +453,15 @@ void EPUBExportTest::testTable()
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPath(mpXmlDoc, "//xhtml:table/xhtml:tbody/xhtml:tr/xhtml:td", 4);
+}
+
+void EPUBExportTest::testLink()
+{
+    createDoc("link.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a", "https://libreoffice.org/");
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "https://libreoffice.org/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EPUBExportTest);
