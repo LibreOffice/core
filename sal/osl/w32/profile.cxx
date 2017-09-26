@@ -30,6 +30,7 @@
 #include <rtl/alloc.h>
 #include <sal/macros.h>
 #include <algorithm>
+#include <vector>
 using std::min;
 static inline void copy_ustr_n( void *dest, const void *source, size_t length ) { memcpy(dest, source, length*sizeof(sal_Unicode)); }
 
@@ -355,6 +356,85 @@ static bool writeProfileImpl(osl_TFile* pFile)
     return true;
 }
 
+namespace {
+// Use Unicode version of GetPrivateProfileString, to work with Multi-language paths
+DWORD GetPrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
+    const sal_Char* pszSection, const sal_Char* pszEntry,
+    sal_Char* pszString, sal_uInt32 MaxLen,
+    const sal_Char* pszDefault)
+{
+    OSL_ASSERT(pProfile && (!MaxLen || pszString));
+
+    rtl_uString *pSection = nullptr, *pEntry = nullptr, *pDefault = nullptr;
+    if (pszSection)
+    {
+        rtl_string2UString(&pSection, pszSection, strlen(pszSection), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+        OSL_ASSERT(pSection);
+    }
+    if (pszEntry)
+    {
+        rtl_string2UString(&pEntry, pszEntry, strlen(pszEntry), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+        OSL_ASSERT(pEntry);
+    }
+    if (pszDefault)
+    {
+        rtl_string2UString(&pDefault, pszDefault, strlen(pszDefault), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+        OSL_ASSERT(pDefault);
+    }
+
+    LPCWSTR pWSection = (pSection ? SAL_W(rtl_uString_getStr(pSection)) : nullptr),
+            pWEntry   = (pEntry   ? SAL_W(rtl_uString_getStr(pEntry))   : nullptr),
+            pWDefault = (pDefault ? SAL_W(rtl_uString_getStr(pDefault)) : nullptr);
+
+    std::vector<wchar_t> aBuf(MaxLen + 1);
+    GetPrivateProfileStringW(pWSection, pWEntry, pWDefault, &aBuf[0], MaxLen, SAL_W(rtl_uString_getStr(pProfile->m_strFileName)));
+
+    if (pDefault)
+        rtl_uString_release(pDefault);
+    if (pEntry)
+        rtl_uString_release(pEntry);
+    if (pSection)
+        rtl_uString_release(pSection);
+
+    return WideCharToMultiByte(CP_ACP, 0, &aBuf[0], -1, pszString, MaxLen, nullptr, nullptr);
+}
+
+// Use Unicode version of WritePrivateProfileString, to work with Multi-language paths
+BOOL WritePrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
+    const sal_Char* pszSection, const sal_Char* pszEntry,
+    const sal_Char* pszString)
+{
+    OSL_ASSERT(pProfile && pszSection);
+    rtl_uString *pSection, *pEntry = nullptr, *pString = nullptr;
+    rtl_string2UString(&pSection, pszSection, strlen(pszSection), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+    OSL_ASSERT(pSection);
+    if (pszEntry)
+    {
+        rtl_string2UString(&pEntry, pszEntry, strlen(pszEntry), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+        OSL_ASSERT(pEntry);
+    }
+    if (pszString)
+    {
+        rtl_string2UString(&pString, pszString, strlen(pszString), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+        OSL_ASSERT(pString);
+    }
+
+    LPCWSTR pWSection = SAL_W(pSection->buffer),
+            pWEntry   = (pEntry   ? SAL_W(rtl_uString_getStr(pEntry))   : nullptr),
+            pWString  = (pString  ? SAL_W(rtl_uString_getStr(pString))  : nullptr);
+
+    BOOL bResult = WritePrivateProfileStringW(pWSection, pWEntry, pWString, SAL_W(rtl_uString_getStr(pProfile->m_strFileName)));
+
+    if (pString)
+        rtl_uString_release(pString);
+    if (pEntry)
+        rtl_uString_release(pEntry);
+    rtl_uString_release(pSection);
+
+    return bResult;
+}
+}
+
 sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
                               const sal_Char* pszSection, const sal_Char* pszEntry,
                               sal_Char* pszString, sal_uInt32 MaxLen,
@@ -393,10 +473,8 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
     }
     else
     {
-        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
-
-        WideCharToMultiByte(CP_ACP,0, reinterpret_cast<LPCWSTR>(pProfile->m_strFileName->buffer), -1, aFileName, aFileName.getBufSizeInSymbols(), nullptr, nullptr);
-        GetPrivateProfileString(pszSection, pszEntry, pszDefault, pszString, MaxLen, aFileName);
+        if (GetPrivateProfileStringWrapper(pProfile, pszSection, pszEntry, pszString, MaxLen, pszDefault) > 0)
+            pStr = pszString; // required to return true below
     }
 
     releaseProfile(pProfile);
@@ -531,10 +609,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     }
     else
     {
-        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
-
-        WideCharToMultiByte(CP_ACP,0, reinterpret_cast<LPCWSTR>(pProfile->m_strFileName->buffer), -1, aFileName, aFileName.getBufSizeInSymbols(), nullptr, nullptr);
-        WritePrivateProfileString(pszSection, pszEntry, pszString, aFileName);
+        WritePrivateProfileStringWrapper(pProfile, pszSection, pszEntry, pszString);
     }
 
     bRet = releaseProfile(pProfile);
@@ -609,10 +684,7 @@ sal_Bool SAL_CALL osl_removeProfileEntry(oslProfile Profile,
     }
     else
     {
-        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
-
-        WideCharToMultiByte(CP_ACP,0, reinterpret_cast<LPCWSTR>(pProfile->m_strFileName->buffer), -1, aFileName, aFileName.getBufSizeInSymbols(), nullptr, nullptr);
-        WritePrivateProfileString(pszSection, pszEntry, nullptr, aFileName);
+        WritePrivateProfileStringWrapper(pProfile, pszSection, pszEntry, nullptr);
     }
 
     bRet = releaseProfile(pProfile);
@@ -673,10 +745,7 @@ sal_uInt32 SAL_CALL osl_getProfileSectionEntries(oslProfile Profile, const sal_C
     }
     else
     {
-        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
-
-        WideCharToMultiByte(CP_ACP,0, reinterpret_cast<LPCWSTR>(pProfile->m_strFileName->buffer), -1, aFileName, aFileName.getBufSizeInSymbols(), nullptr, nullptr);
-        n = GetPrivateProfileString(pszSection, nullptr, nullptr, pszBuffer, MaxLen, aFileName);
+        n = GetPrivateProfileStringWrapper(pProfile, pszSection, nullptr, pszBuffer, MaxLen, nullptr);
     }
 
     releaseProfile(pProfile);
@@ -828,7 +897,7 @@ bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName, rtl
         else if ((rtl_ustr_ascii_compare_WithLength(pPath, RTL_CONSTASCII_LENGTH(STR_INI_METASYS), STR_INI_METASYS) == 0) &&
             ((nLen == RTL_CONSTASCII_LENGTH(STR_INI_METASYS)) || (pPath[RTL_CONSTASCII_LENGTH(STR_INI_METASYS)] == '/')))
         {
-            if (((nPathLen = GetWindowsDirectoryW(::osl::mingw_reinterpret_cast<LPWSTR>(aPath), aPath.getBufSizeInSymbols())) == 0) || (nPathLen >= aPath.getBufSizeInSymbols()))
+            if (((nPathLen = GetWindowsDirectoryW(SAL_W(aPath), aPath.getBufSizeInSymbols())) == 0) || (nPathLen >= aPath.getBufSizeInSymbols()))
                 return false;
 
             if (nLen > RTL_CONSTASCII_LENGTH(STR_INI_METASYS))
@@ -938,10 +1007,10 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
     }
     else
     {
-        ::osl::LongPathBuffer< sal_Char > aFileName( MAX_LONG_PATH );
+        std::vector<wchar_t> aBuf(MaxLen + 1);
+        GetPrivateProfileSectionNamesW(&aBuf[0], MaxLen, SAL_W(rtl_uString_getStr(pProfile->m_strFileName)));
 
-        WideCharToMultiByte(CP_ACP,0, reinterpret_cast<LPCWSTR>(pProfile->m_strFileName->buffer), -1, aFileName, aFileName.getBufSizeInSymbols(), nullptr, nullptr);
-        n = GetPrivateProfileSectionNames(pszBuffer, MaxLen, aFileName);
+        n = WideCharToMultiByte(CP_ACP, 0, &aBuf[0], -1, pszBuffer, MaxLen, nullptr, nullptr);
     }
 
     releaseProfile(pProfile);
@@ -1007,7 +1076,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
 
     if (! bWriteable)
     {
-        pFile->m_Handle = CreateFileW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strFileName )), GENERIC_READ,
+        pFile->m_Handle = CreateFileW( SAL_W(rtl_uString_getStr( strFileName )), GENERIC_READ,
                                           FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                           OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
@@ -1020,7 +1089,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
         SAL_INFO("sal.osl", "opening read/write " << pszFilename);
 #endif
 
-        if ((pFile->m_Handle = CreateFileW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strFileName )), GENERIC_READ | GENERIC_WRITE,
+        if ((pFile->m_Handle = CreateFileW( SAL_W(rtl_uString_getStr( strFileName )), GENERIC_READ | GENERIC_WRITE,
                                                FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                                OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
             == INVALID_HANDLE_VALUE)
@@ -1750,13 +1819,13 @@ static bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
     ustrExtension=nullptr;
 
     /* unlink bak */
-    DeleteFileW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrBakFile )) );
+    DeleteFileW( SAL_W(rtl_uString_getStr( ustrBakFile )) );
 
     /* rename ini bak */
-    MoveFileExW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrIniFile )), reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrBakFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
+    MoveFileExW( SAL_W(rtl_uString_getStr( ustrIniFile )), SAL_W(rtl_uString_getStr( ustrBakFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
 
     /* rename tmp ini */
-    MoveFileExW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrTmpFile )), reinterpret_cast<LPCWSTR>(rtl_uString_getStr( ustrIniFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
+    MoveFileExW( SAL_W(rtl_uString_getStr( ustrTmpFile )), SAL_W(rtl_uString_getStr( ustrIniFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
 
     return false;
 }

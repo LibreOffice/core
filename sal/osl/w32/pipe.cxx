@@ -70,9 +70,9 @@ oslPipe osl_createPipeImpl(void)
     pPipe->m_File = INVALID_HANDLE_VALUE;
     pPipe->m_NamedObject = nullptr;
 
-    pPipe->m_ReadEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
-    pPipe->m_WriteEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
-    pPipe->m_AcceptEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
+    pPipe->m_ReadEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+    pPipe->m_WriteEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+    pPipe->m_AcceptEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
 
     return pPipe;
 }

@@ -360,38 +360,40 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     /// some initialization work for Windows OS
 
     /// Get the user name, computer name, user home directory.
-    LPTSTR lpszSystemInfo;      // pointer to system information string
+    LPWSTR lpszSystemInfo;      // pointer to system information string
     DWORD cchBuff = BUFSIZE;    // size of computer or user name
-    TCHAR tchBuffer[BUFSIZE];   // buffer for string
+    WCHAR wchBuffer[BUFSIZE];   // buffer for string
 
-    lpszSystemInfo = tchBuffer;
-    if( GetUserNameA(lpszSystemInfo, &cchBuff) )
-        strUserName = ::rtl::OUString::createFromAscii( lpszSystemInfo );
+    lpszSystemInfo = wchBuffer;
+    if( GetUserNameW(lpszSystemInfo, &cchBuff) )
+        strUserName = SAL_U(lpszSystemInfo);
 
-    if( GetComputerName(lpszSystemInfo, &cchBuff) )
-        strComputerName = ::rtl::OUString::createFromAscii( lpszSystemInfo );
+    cchBuff = BUFSIZE;
+    if( GetComputerNameW(lpszSystemInfo, &cchBuff) )
+        strComputerName = SAL_U(lpszSystemInfo);
 
     /// Get user home directory.
     HKEY hRegKey;
-    sal_Char PathA[_MAX_PATH];
-    if (RegOpenKey(HKEY_CURRENT_USER,  "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",  &hRegKey) == ERROR_SUCCESS)
+    if (RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", &hRegKey) == ERROR_SUCCESS)
     {
-        LONG lRet;
-        DWORD lSize = sizeof(PathA);
+        sal_Unicode PathW[_MAX_PATH];
+        LSTATUS lRet;
+        DWORD lSize = sizeof(PathW);
         DWORD Type;
 
-        lRet = RegQueryValueEx(hRegKey, "AppData", nullptr, &Type, reinterpret_cast<unsigned char *>(PathA), &lSize);
-        if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _access( PathA, 0 ) == 0 ) )
+        lRet = RegQueryValueExW(hRegKey, L"AppData", nullptr, &Type, reinterpret_cast<unsigned char *>(PathW), &lSize);
+        if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _waccess( SAL_W(PathW), 0 ) == 0 ) )
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
-                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strConfigDirectory ) );
+                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( PathW, strConfigDirectory ) );
         }
 
-        lRet = RegQueryValueEx(hRegKey, "Personal", nullptr, &Type, reinterpret_cast<unsigned char *>(PathA), &lSize);
-        if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _access( PathA, 0 ) == 0 ) )
+        lSize = sizeof(PathW);
+        lRet = RegQueryValueExW(hRegKey, L"Personal", nullptr, &Type, reinterpret_cast<unsigned char *>(PathW), &lSize);
+        if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _waccess( SAL_W(PathW), 0 ) == 0 ) )
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
-                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strHomeDirectory ) );
+                                    ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( PathW, strHomeDirectory ) );
         }
 
         RegCloseKey(hRegKey);
@@ -479,7 +481,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     DWORD dwSidRev=SID_REVISION;
     DWORD dwCounter;
     DWORD dwSidSize;
-    sal_Char    *Ident;
+    wchar_t *Ident;
 
     /* obtain SidIdentifierAuthority */
     psia=GetSidIdentifierAuthority(pSid);
@@ -488,16 +490,16 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     dwSubAuthorities=std::min((int) *GetSidSubAuthorityCount(pSid), 5);
 
     /* buffer length: S-SID_REVISION- + identifierauthority- + subauthorities- + NULL */
-    Ident=static_cast<sal_Char *>(malloc(88*sizeof(sal_Char)));
+    Ident=static_cast<wchar_t *>(malloc(88*sizeof(wchar_t)));
 
     /* prepare S-SID_REVISION- */
-    dwSidSize=wsprintf(Ident, TEXT("S-%lu-"), dwSidRev);
+    dwSidSize=wsprintfW(Ident, L"S-%lu-", dwSidRev);
 
     /* prepare SidIdentifierAuthority */
     if ((psia->Value[0] != 0) || (psia->Value[1] != 0))
     {
-        dwSidSize+=wsprintf(Ident + strlen(Ident),
-                    TEXT("0x%02hx%02hx%02hx%02hx%02hx%02hx"),
+        dwSidSize+=wsprintfW(Ident + wcslen(Ident),
+                    L"0x%02hx%02hx%02hx%02hx%02hx%02hx",
                     (sal_uInt16)psia->Value[0],
                     (sal_uInt16)psia->Value[1],
                     (sal_uInt16)psia->Value[2],
@@ -507,8 +509,8 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     }
     else
     {
-        dwSidSize+=wsprintf(Ident + strlen(Ident),
-                    TEXT("%lu"),
+        dwSidSize+=wsprintfW(Ident + wcslen(Ident),
+                    L"%lu",
                     (sal_uInt32)(psia->Value[5]      )   +
                     (sal_uInt32)(psia->Value[4] <<  8)   +
                     (sal_uInt32)(psia->Value[3] << 16)   +
@@ -518,11 +520,11 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     /* loop through SidSubAuthorities */
     for (dwCounter=0; dwCounter < dwSubAuthorities; dwCounter++)
     {
-        dwSidSize+=wsprintf(Ident + dwSidSize, TEXT("-%lu"),
+        dwSidSize+=wsprintfW(Ident + dwSidSize, L"-%lu",
                     *GetSidSubAuthority(pSid, dwCounter) );
     }
 
-    strUserID = ::rtl::OUString::createFromAscii( Ident );
+    strUserID = SAL_U(Ident);
 
     free(Ident);
     delete [] static_cast<BYTE*>(pSid);

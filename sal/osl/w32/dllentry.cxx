@@ -66,8 +66,8 @@ static BOOL WINAPI RawDllMain( HINSTANCE, DWORD fdwReason, LPVOID )
             {
 #ifdef _DEBUG
                 WCHAR buf[64];
-                DWORD const res = GetEnvironmentVariableW(L"SAL_NO_ASSERT_DIALOGS", buf, sizeof(buf));
-                if (res && res < sizeof(buf))
+                DWORD const res = GetEnvironmentVariableW(L"SAL_NO_ASSERT_DIALOGS", buf, SAL_N_ELEMENTS(buf));
+                if (res && res < SAL_N_ELEMENTS(buf))
                 {
                     // disable the dialog on abort()
                     _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
@@ -203,20 +203,20 @@ BOOL WINAPI DllMain( HINSTANCE, DWORD fdwReason, LPVOID )
     {
         case DLL_PROCESS_ATTACH:
         {
-            TCHAR   szBuffer[64];
+            WCHAR szBuffer[64];
 
             // This code will attach the process to its parent process
             // if the parent process had set the environment variable.
             // The corresponding code (setting the environment variable)
             // is desktop/win32/source/officeloader.cxx
 
-            DWORD   dwResult = GetEnvironmentVariable( "ATTACHED_PARENT_PROCESSID", szBuffer, sizeof(szBuffer) );
+            DWORD dwResult = GetEnvironmentVariableW( L"ATTACHED_PARENT_PROCESSID", szBuffer, SAL_N_ELEMENTS(szBuffer) );
 
-            if ( dwResult && dwResult < sizeof(szBuffer) )
+            if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
             {
                 DWORD   dwThreadId = 0;
 
-                DWORD_PTR   dwParentProcessId = (DWORD_PTR)atol( szBuffer );
+                DWORD_PTR dwParentProcessId = (DWORD_PTR)_wtol( szBuffer );
 
                 if ( dwParentProcessId && GetParentProcessId() == dwParentProcessId )
                 {

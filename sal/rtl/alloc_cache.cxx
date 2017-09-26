@@ -1223,7 +1223,7 @@ static void rtl_cache_wsupdate_init()
 
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     g_cache_list.m_update_done = 0;
-    g_cache_list.m_update_cond = CreateEvent (nullptr, TRUE, FALSE, nullptr);
+    g_cache_list.m_update_cond = CreateEventW (nullptr, TRUE, FALSE, nullptr);
 
     g_cache_list.m_update_thread =
         CreateThread (nullptr, 0, rtl_cache_wsupdate_all, reinterpret_cast<LPVOID>(10), 0, &dwThreadId);

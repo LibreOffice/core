@@ -541,8 +541,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
         {
             oslHostAddr pRet = static_cast<oslHostAddr>(
                     rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
-            rtl_uString_newFromStr(&pRet->pHostName,
-                    reinterpret_cast<sal_Unicode*>(&buf));
+            rtl_uString_newFromStr(&pRet->pHostName, SAL_U(buf));
             pRet->pSockAddr = createSocketAddr();
             memcpy(& pRet->pSockAddr->m_sockaddr,
                    & pAddr->m_sockaddr, sizeof(struct sockaddr));
@@ -1603,7 +1602,7 @@ void SAL_CALL osl_getLastSocketErrorDescription (
         {
             sal_Unicode message[128];
 
-            wsprintfW(reinterpret_cast<LPWSTR>(message), L"Unknown WinSock Error Number %d", error);
+            wsprintfW(SAL_W(message), L"Unknown WinSock Error Number %d", error);
             rtl_uString_newFromStr (strError, message);
         }
 

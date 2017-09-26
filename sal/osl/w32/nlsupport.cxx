@@ -45,7 +45,7 @@
 #define ELP_LANGUAGE_FIELD_LENGTH 4
 #define ELP_COUNTRY_FIELD_LENGTH  3
 
-/** Struct used in EnumLocalesProcA() called via EnumSystemLocalesA() to obtain
+/** Struct used in EnumLocalesProcW() called via EnumSystemLocalesW() to obtain
     available locales.
 */
 struct EnumLocalesParams
