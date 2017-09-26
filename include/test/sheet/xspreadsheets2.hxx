@@ -42,9 +42,6 @@ public:
     virtual css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString&) = 0;
     virtual void createFileURL(const OUString&, OUString&) = 0;
 
-protected:
-    css::uno::Reference< css::sheet::XSpreadsheetDocument> xDocument;
-
 private:
     css::uno::Reference< css::sheet::XSpreadsheetDocument> getDoc(const OUString&, css::uno::Reference< css::lang::XComponent >&);
     static css::uno::Reference< css::sheet::XNamedRanges> getNamedRanges(css::uno::Reference< css::sheet::XSpreadsheetDocument > const &);
