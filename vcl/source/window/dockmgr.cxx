@@ -942,8 +942,13 @@ void ImplDockingWindowWrapper::ImplPreparePopupMode( FloatWinPopupFlags nFlags )
     else
         pWin = VclPtr<ImplPopupFloatWin>::Create( mpParent, bAllowTearOff );
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
-    pWin->SetText( GetWindow()->GetText() );
 
+    // At least for DockingWindow, GetText() has a side effect of setting deferred
+    // properties. This must be done before setting the border window (see below),
+    // so that the border width will end up in mpWindowImpl->mnBorderWidth, not in
+    // the border window (See DockingWindow::setPosSizeOnContainee() and
+    // DockingWindow::GetOptimalSize()).
+    pWin->SetText( GetWindow()->GetText() );
     pWin->SetOutputSizePixel( GetWindow()->GetSizePixel() );
 
     GetWindow()->mpWindowImpl->mpBorderWindow  = nullptr;
@@ -1073,6 +1078,13 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                                           : mnFloatBits,
                                          this );
 
+                // At least for DockingWindow, GetText() has a side effect of setting deferred
+                // properties. This must be done before setting the border window (see below),
+                // so that the border width will end up in mpWindowImpl->mnBorderWidth, not in
+                // the border window (See DockingWindow::setPosSizeOnContainee() and
+                // DockingWindow::GetOptimalSize()).
+                pWin->SetText( GetWindow()->GetText() );
+
                 GetWindow()->mpWindowImpl->mpBorderWindow  = nullptr;
                 GetWindow()->mpWindowImpl->mnLeftBorder    = 0;
                 GetWindow()->mpWindowImpl->mnTopBorder     = 0;
@@ -1089,7 +1101,6 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 pWin->mpWindowImpl->mpClientWindow = mpDockingWindow;
                 GetWindow()->mpWindowImpl->mpRealParent = pRealParent;
 
-                pWin->SetText( GetWindow()->GetText() );
                 pWin->SetOutputSizePixel( GetWindow()->GetSizePixel() );
                 pWin->SetPosPixel( maFloatPos );
                 // pass on DockingData to FloatingWindow
