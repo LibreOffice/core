@@ -46,10 +46,15 @@
 using namespace ::com::sun::star;
 
 static sal_uInt16 aFrameMgrRange[] = {
-                            RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+                            RES_FRMATR_BEGIN, RES_FRMATR_END-1, // 87-129
+
+                            // RotGrfFlyFrame: Support here, but seems not to be
+                            // added in range of m_pOwnSh->GetFlyFrameAttr result
+                            // (see below). Tried to find, but could not identify
+                            RES_GRFATR_ROTATION, RES_GRFATR_ROTATION, // 132
 
                             // FillAttribute support
-                            XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                            XATTR_FILL_FIRST, XATTR_FILL_LAST, // 1014-1033
 
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                             FN_SET_FRM_NAME, FN_SET_FRM_NAME,
@@ -569,13 +574,17 @@ void SwFlyFrameAttrMgr::SetHeightSizeType( SwFrameSize eType )
     m_aSet.Put( aSize );
 }
 
-void SwFlyFrameAttrMgr::SetRotation(sal_uInt32 nOld, sal_uInt32 nNew, Size aUnrotatedSize)
+void SwFlyFrameAttrMgr::SetRotation(sal_uInt16 nOld, sal_uInt16 nNew, const Size& rUnrotatedSize)
 {
-    // RotGrfFlyFrame: Central handling of real change of rotation here. Adaption of pos/size
-    // may be wanted in the future
+    // RotGrfFlyFrame: Central handling of real change of rotation here, all adaptions use this.
+    // Adaption of pos/size may be wanted in the future. Already tried to keep last SIze in
+    // UnrotatedSize in the SwRotationGrf Item, but this will lead to various problems. Also tried
+    // to use m_aSet.Put(...) as in other methods (also read methods for Rotation/UnrotatedSize) but
+    // somehow the needed ID (RES_GRFATR_ROTATION) is *not* in the SfxItemSet of the Frame, so for
+    // now set directly. Undo/Redo is preserved by AttributeChange
     if(nOld != nNew)
     {
-        m_pOwnSh->SetAttrItem(SwRotationGrf(static_cast<sal_uInt16>(nNew), aUnrotatedSize));
+        m_pOwnSh->SetAttrItem(SwRotationGrf(nNew, rUnrotatedSize));
     }
 }
 
