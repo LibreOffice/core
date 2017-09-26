@@ -4414,7 +4414,7 @@ if test "$cross_compiling" = "yes"; then
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in \
         ios/LibreOfficeKit/lo_kit.xcconfig.in \
-        ios/LibreOfficeApp/lo_app.xcconfig.in) \
+        ios/LibreOfficeLight/lo_app.xcconfig.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
     cp configure CONF-FOR-BUILD
     test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host 2>/dev/null
