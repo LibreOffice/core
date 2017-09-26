@@ -27,7 +27,6 @@ using namespace drawinglayer::geometry;
 using namespace drawinglayer::processor2d;
 using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::attribute;
-using namespace drawinglayer::geometry;
 using namespace basegfx;
 
 namespace
