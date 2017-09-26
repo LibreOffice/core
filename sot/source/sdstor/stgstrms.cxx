@@ -572,10 +572,10 @@ bool StgStrm::SetSize( sal_Int32 nBytes )
 // Since this access is implemented as a StgStrm, we can use the
 // FAT allocator.
 
-StgFATStrm::StgFATStrm( StgIo& r ) : StgStrm( r )
+StgFATStrm::StgFATStrm(StgIo& r, sal_Int32 nFatStrmSize) : StgStrm( r )
 {
     m_pFat.reset( new StgFAT( *this, true ) );
-    m_nSize = m_rIo.m_aHdr.GetFATSize() * m_nPageSize;
+    m_nSize = nFatStrmSize;
 }
 
 bool StgFATStrm::Pos2Page( sal_Int32 nBytePos )
