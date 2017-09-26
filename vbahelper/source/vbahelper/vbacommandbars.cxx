@@ -55,23 +55,21 @@ public:
     virtual uno::Any SAL_CALL nextElement() override
     {
         // FIXME: should be add menubar
-        if( hasMoreElements() )
-        {
-            OUString sResourceUrl( m_sNames[ m_nCurrentPosition++ ] );
-            if( sResourceUrl.indexOf( "private:resource/toolbar/" ) != -1 )
-            {
-                uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
-                uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, false ) );
-                // Strange, shouldn't the Enumeration support match/share the
-                // iteration code? ( e.g. ScVbaCommandBars::Item(...) )
-                // and we at least should return here ( something ) it seems
-                return uno::makeAny( xCommandBar );
-             }
-             else
-                return nextElement();
-        }
-        else
+        if( !hasMoreElements() )
             throw container::NoSuchElementException();
+
+        OUString sResourceUrl( m_sNames[ m_nCurrentPosition++ ] );
+        if( sResourceUrl.indexOf( "private:resource/toolbar/" ) != -1 )
+        {
+            uno::Reference< container::XIndexAccess > xCBarSetting = m_pCBarHelper->getSettings( sResourceUrl );
+            uno::Reference< XCommandBar > xCommandBar( new ScVbaCommandBar( m_xParent, m_xContext, m_pCBarHelper, xCBarSetting, sResourceUrl, false ) );
+            // Strange, shouldn't the Enumeration support match/share the
+            // iteration code? ( e.g. ScVbaCommandBars::Item(...) )
+            // and we at least should return here ( something ) it seems
+            return uno::makeAny( xCommandBar );
+         }
+         else
+            return nextElement();
     }
 };
 

@@ -743,34 +743,31 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
 
     // split parameter
     sal_Int32 idx;
-    if (    ((idx = arg0.indexOf    ('#')) >= 0)
-        ||  ((idx = arg0.lastIndexOf('/')) >= 0)
-        ||  ((idx = arg0.lastIndexOf(':')) >= 0))
-    {
-
-        if (idx < arg0.getLength() - 1) {
-            arg1 = arg0.copy(idx+1);
-            arg0 = arg0.copy(0, idx+1);
-        }
-    } else {
+    if (    ((idx = arg0.indexOf    ('#')) < 0)
+        &&  ((idx = arg0.lastIndexOf('/')) < 0)
+        &&  ((idx = arg0.lastIndexOf(':')) < 0) )
+ {
         throw css::lang::IllegalArgumentException(
             "CURI::initialize: argument not splittable: no separator [#/:]", *this, 0);
     }
+    if (idx < arg0.getLength() - 1) {
+        arg1 = arg0.copy(idx+1);
+        arg0 = arg0.copy(0, idx+1);
+    }
 
     //FIXME: what is legal?
-    if (!arg0.isEmpty()) {
-        m_Namespace = arg0;
-    } else {
+    if (arg0.isEmpty()) {
         throw css::lang::IllegalArgumentException(
             "CURI::initialize: argument is not valid namespace", *this, 0);
     }
+    m_Namespace = arg0;
+
     //FIXME: what is legal?
-    if ((true)) {
-        m_LocalName = arg1;
-    } else {
+    if ((false)) {
         throw css::lang::IllegalArgumentException(
             "CURI::initialize: argument is not valid local name", *this, 1);
     }
+    m_LocalName = arg1;
 }
 
 // css::rdf::XNode:

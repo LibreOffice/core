@@ -493,31 +493,30 @@ css::uno::Any SAL_CALL
 librdf_GraphResult::nextElement()
 {
     ::osl::MutexGuard g(m_rMutex);
-    if (!m_pStream.get() || !librdf_stream_end(m_pStream.get())) {
-        librdf_node * pCtxt = getContext_Lock();
-
-        librdf_statement *pStmt( librdf_stream_get_object(m_pStream.get()) );
-        if (!pStmt) {
-            rdf::QueryException e(
-                "librdf_GraphResult::nextElement: "
-                "librdf_stream_get_object failed", *this);
-            throw lang::WrappedTargetException(
-                "librdf_GraphResult::nextElement: "
-                "librdf_stream_get_object failed", *this,
-                    uno::makeAny(e));
-        }
-        // NB: pCtxt may be null here if this is result of a graph query
-        if (pCtxt && isInternalContext(pCtxt)) {
-            pCtxt = nullptr; // XML ID context is implementation detail!
-        }
-        rdf::Statement Stmt(
-            m_xRep->getTypeConverter().convertToStatement(pStmt, pCtxt) );
-        // NB: this will invalidate current item.
-        librdf_stream_next(m_pStream.get());
-        return uno::makeAny(Stmt);
-    } else {
+    if (m_pStream.get() && librdf_stream_end(m_pStream.get())) {
         throw container::NoSuchElementException();
     }
+    librdf_node * pCtxt = getContext_Lock();
+
+    librdf_statement *pStmt( librdf_stream_get_object(m_pStream.get()) );
+    if (!pStmt) {
+        rdf::QueryException e(
+            "librdf_GraphResult::nextElement: "
+            "librdf_stream_get_object failed", *this);
+        throw lang::WrappedTargetException(
+            "librdf_GraphResult::nextElement: "
+            "librdf_stream_get_object failed", *this,
+                uno::makeAny(e));
+    }
+    // NB: pCtxt may be null here if this is result of a graph query
+    if (pCtxt && isInternalContext(pCtxt)) {
+        pCtxt = nullptr; // XML ID context is implementation detail!
+    }
+    rdf::Statement Stmt(
+        m_xRep->getTypeConverter().convertToStatement(pStmt, pCtxt) );
+    // NB: this will invalidate current item.
+    librdf_stream_next(m_pStream.get());
+    return uno::makeAny(Stmt);
 }
 
 
@@ -601,35 +600,34 @@ css::uno::Any SAL_CALL
 librdf_QuerySelectResult::nextElement()
 {
     ::osl::MutexGuard g(m_rMutex);
-    if (!librdf_query_results_finished(m_pQueryResult.get())) {
-        sal_Int32 count(m_BindingNames.getLength());
-        OSL_ENSURE(count >= 0, "negative length?");
-        std::shared_ptr<librdf_node*> const pNodes(new librdf_node*[count],
-            NodeArrayDeleter(count));
-        for (int i = 0; i < count; ++i) {
-            pNodes.get()[i] = nullptr;
-        }
-        if (librdf_query_results_get_bindings(m_pQueryResult.get(), nullptr,
-                    pNodes.get()))
-        {
-            rdf::QueryException e(
-                "librdf_QuerySelectResult::nextElement: "
-                "librdf_query_results_get_bindings failed", *this);
-            throw lang::WrappedTargetException(
-                "librdf_QuerySelectResult::nextElement: "
-                "librdf_query_results_get_bindings failed", *this,
-                uno::makeAny(e));
-        }
-        uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
-        for (int i = 0; i < count; ++i) {
-            ret[i] = m_xRep->getTypeConverter().convertToXNode(pNodes.get()[i]);
-        }
-        // NB: this will invalidate current item.
-        librdf_query_results_next(m_pQueryResult.get());
-        return uno::makeAny(ret);
-    } else {
+    if (librdf_query_results_finished(m_pQueryResult.get())) {
         throw container::NoSuchElementException();
     }
+    sal_Int32 count(m_BindingNames.getLength());
+    OSL_ENSURE(count >= 0, "negative length?");
+    std::shared_ptr<librdf_node*> const pNodes(new librdf_node*[count],
+        NodeArrayDeleter(count));
+    for (int i = 0; i < count; ++i) {
+        pNodes.get()[i] = nullptr;
+    }
+    if (librdf_query_results_get_bindings(m_pQueryResult.get(), nullptr,
+                pNodes.get()))
+    {
+        rdf::QueryException e(
+            "librdf_QuerySelectResult::nextElement: "
+            "librdf_query_results_get_bindings failed", *this);
+        throw lang::WrappedTargetException(
+            "librdf_QuerySelectResult::nextElement: "
+            "librdf_query_results_get_bindings failed", *this,
+            uno::makeAny(e));
+    }
+    uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
+    for (int i = 0; i < count; ++i) {
+        ret[i] = m_xRep->getTypeConverter().convertToXNode(pNodes.get()[i]);
+    }
+    // NB: this will invalidate current item.
+    librdf_query_results_next(m_pQueryResult.get());
+    return uno::makeAny(ret);
 }
 
 // css::rdf::XQuerySelectResult:
@@ -1302,27 +1300,25 @@ librdf_Repository::querySelect(const OUString & i_rQuery)
     }
 
     const int count( librdf_query_results_get_bindings_count(pResults.get()) );
-    if (count >= 0) {
-        uno::Sequence< OUString > names(count);
-        for (int i = 0; i < count; ++i) {
-            const char* name( librdf_query_results_get_binding_name(
-                pResults.get(), i) );
-            if (!name) {
-                throw rdf::QueryException(
-                    "librdf_Repository::querySelect: binding is null", *this);
-            }
-
-            names[i] = OUString::createFromAscii(name);
-        }
-
-        return new librdf_QuerySelectResult(this, m_aMutex,
-            pQuery, pResults, names);
-
-    } else {
+    if (count < 0) {
         throw rdf::QueryException(
             "librdf_Repository::querySelect: "
             "librdf_query_results_get_bindings_count failed", *this);
     }
+    uno::Sequence< OUString > names(count);
+    for (int i = 0; i < count; ++i) {
+        const char* name( librdf_query_results_get_binding_name(
+            pResults.get(), i) );
+        if (!name) {
+            throw rdf::QueryException(
+                "librdf_Repository::querySelect: binding is null", *this);
+        }
+
+        names[i] = OUString::createFromAscii(name);
+    }
+
+    return new librdf_QuerySelectResult(this, m_aMutex,
+        pQuery, pResults, names);
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL

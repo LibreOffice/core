@@ -93,12 +93,11 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< css::uno::Any > &
     }
 
     //FIXME: what is legal?
-    if (!arg.isEmpty()) {
-        m_NodeID = arg;
-    } else {
+    if (arg.isEmpty()) {
         throw css::lang::IllegalArgumentException(
             "CBlankNode::initialize: argument is not valid blank node ID", *this, 0);
     }
+    m_NodeID = arg;
 }
 
 // css::rdf::XNode:

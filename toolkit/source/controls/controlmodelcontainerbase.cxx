@@ -1827,48 +1827,47 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
     if ( Operation < Insert || Operation > Remove )
         throw IllegalArgumentException();
 
-    if ( xAllChildren.is() )
-    {
-        if ( Operation == Remove )
-        {
-            Reference< XControlModel > xOldModel( xAllChildren->getByName( aName ), UNO_QUERY );
-            xAllChildren->removeByName( aName );
+    if ( !xAllChildren.is() )
+        throw IllegalArgumentException();
 
-            Reference< XNameContainer > xChildContainer( xOldModel, UNO_QUERY );
-            if ( xChildContainer.is() )
-            {
-                Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
-                // container control is being removed from this container, reset the
-                // global list of containees
-                if ( xProps.is() )
-                    xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( uno::Reference< XNameContainer >() ) );
-                Sequence< OUString > aChildNames = xChildContainer->getElementNames();
-                for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
-                    updateUserFormChildren( xAllChildren, aChildNames[ index ], Operation,  Reference< XControlModel > () );
-            }
-        }
-        else if ( Operation == Insert )
+    if ( Operation == Remove )
+    {
+        Reference< XControlModel > xOldModel( xAllChildren->getByName( aName ), UNO_QUERY );
+        xAllChildren->removeByName( aName );
+
+        Reference< XNameContainer > xChildContainer( xOldModel, UNO_QUERY );
+        if ( xChildContainer.is() )
         {
-            xAllChildren->insertByName( aName, uno::makeAny( xTarget ) );
-            Reference< XNameContainer > xChildContainer( xTarget, UNO_QUERY );
-            if ( xChildContainer.is() )
+            Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
+            // container control is being removed from this container, reset the
+            // global list of containees
+            if ( xProps.is() )
+                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( uno::Reference< XNameContainer >() ) );
+            Sequence< OUString > aChildNames = xChildContainer->getElementNames();
+            for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
+                updateUserFormChildren( xAllChildren, aChildNames[ index ], Operation,  Reference< XControlModel > () );
+        }
+    }
+    else if ( Operation == Insert )
+    {
+        xAllChildren->insertByName( aName, uno::makeAny( xTarget ) );
+        Reference< XNameContainer > xChildContainer( xTarget, UNO_QUERY );
+        if ( xChildContainer.is() )
+        {
+            // container control is being added from this container, reset the
+            // global list of containees to point to the correct global list
+            Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
+            if ( xProps.is() )
+                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( xAllChildren ) );
+            Sequence< OUString > aChildNames = xChildContainer->getElementNames();
+            for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
             {
-                // container control is being added from this container, reset the
-                // global list of containees to point to the correct global list
-                Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
-                if ( xProps.is() )
-                    xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( xAllChildren ) );
-                Sequence< OUString > aChildNames = xChildContainer->getElementNames();
-                for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
-                {
-                    Reference< XControlModel > xChildTarget( xChildContainer->getByName( aChildNames[ index ] ), UNO_QUERY );
-                    updateUserFormChildren( xAllChildren, aChildNames[ index ], Operation, xChildTarget );
-                }
+                Reference< XControlModel > xChildTarget( xChildContainer->getByName( aChildNames[ index ] ), UNO_QUERY );
+                updateUserFormChildren( xAllChildren, aChildNames[ index ], Operation, xChildTarget );
             }
         }
     }
-    else
-        throw IllegalArgumentException();
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1239,10 +1239,11 @@ void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const css
         nPropId = (sal_Int32) GetPropertyId( rPropertyName );
         DBG_ASSERT( nPropId, "Invalid ID in UnoControlModel::setPropertyValue" );
     }
-    if( nPropId )
-        setFastPropertyValue( nPropId, rValue );
-    else
+    if( !nPropId )
         throw css::beans::UnknownPropertyException();
+
+    setFastPropertyValue( nPropId, rValue );
+
 }
 
 // css::beans::XFastPropertySet

@@ -38,12 +38,10 @@ public:
     }
     virtual uno::Any SAL_CALL nextElement() override
     {
-        if( hasMoreElements() )
-        {
-            return m_pCommandBarControls->createCollectionObject( uno::makeAny( m_nCurrentPosition++ ) );
-        }
-        else
+        if( !hasMoreElements() )
             throw container::NoSuchElementException();
+
+        return m_pCommandBarControls->createCollectionObject( uno::makeAny( m_nCurrentPosition++ ) );
     }
 };
 
