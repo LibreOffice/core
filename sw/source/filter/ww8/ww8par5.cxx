@@ -961,7 +961,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     }
     else
     {                                   // read field
-        long nOldPos = m_pStrm->Tell();
+        auto nOldPos = m_pStrm->Tell();
         OUString aStr;
         if ( aF.nId == 6 && aF.bCodeNest )
         {
@@ -983,7 +983,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         }
 
         eF_ResT eRes = (this->*aWW8FieldTab[aF.nId])( &aF, aStr );
-        m_pStrm->Seek( nOldPos );
+        m_pStrm->Seek(nOldPos);
 
         switch ( eRes )
         {
