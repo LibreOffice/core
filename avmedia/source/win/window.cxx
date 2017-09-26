@@ -43,7 +43,7 @@ namespace avmedia { namespace win {
 
 LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
-    Window* pWindow = reinterpret_cast<Window*>(::GetWindowLongPtr( hWnd, 0 ));
+    Window* pWindow = reinterpret_cast<Window*>(GetWindowLongPtrW( hWnd, 0 ));
     bool    bProcessed = true;
 
     if( pWindow )
@@ -136,22 +136,22 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
     else
         bProcessed = false;
 
-    return( bProcessed ? 0 : DefWindowProc( hWnd, nMsg, nPar1, nPar2 ) );
+    return( bProcessed ? 0 : DefWindowProcW( hWnd, nMsg, nPar1, nPar2 ) );
 }
 
-WNDCLASS* lcl_getWndClass()
+WNDCLASSW* lcl_getWndClass()
 {
-    WNDCLASS* s_pWndClass = new WNDCLASS;
+    WNDCLASSW* s_pWndClass = new WNDCLASSW;
 
     memset( s_pWndClass, 0, sizeof( *s_pWndClass ) );
-    s_pWndClass->hInstance = GetModuleHandle( nullptr );
+    s_pWndClass->hInstance = GetModuleHandleW( nullptr );
     s_pWndClass->cbWndExtra = sizeof( DWORD );
     s_pWndClass->lpfnWndProc = MediaPlayerWndProc;
-    s_pWndClass->lpszClassName = "com_sun_star_media_PlayerWnd";
+    s_pWndClass->lpszClassName = L"com_sun_star_media_PlayerWnd";
     s_pWndClass->hbrBackground = static_cast<HBRUSH>(::GetStockObject( BLACK_BRUSH ));
     s_pWndClass->hCursor = ::LoadCursor( nullptr, IDC_ARROW );
 
-    ::RegisterClass( s_pWndClass );
+    RegisterClassW( s_pWndClass );
 
     return s_pWndClass;
 }
@@ -261,7 +261,7 @@ void Window::ImplLayoutVideoWindow()
 bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 {
     IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
-    static WNDCLASS* mpWndClass = lcl_getWndClass();
+    static WNDCLASSW* mpWndClass = lcl_getWndClass();
 
     if( !mnFrameWnd && pVideoWindow && mpWndClass )
     {
@@ -273,23 +273,23 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 
         mnParentWnd = reinterpret_cast<HWND>(nWnd);
 
-        mnFrameWnd = ::CreateWindow( mpWndClass->lpszClassName, nullptr,
-                                           WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
-                                           aRect.X, aRect.Y, aRect.Width, aRect.Height,
-                                           mnParentWnd, nullptr, mpWndClass->hInstance, nullptr );
+        mnFrameWnd = CreateWindowW( mpWndClass->lpszClassName, nullptr,
+                                    WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+                                    aRect.X, aRect.Y, aRect.Width, aRect.Height,
+                                    mnParentWnd, nullptr, mpWndClass->hInstance, nullptr );
 
         if( mnFrameWnd )
         {
-            ::SetWindowLongPtr( mnFrameWnd, 0, reinterpret_cast<LONG_PTR>(this) );
+            SetWindowLongPtrW( mnFrameWnd, 0, reinterpret_cast<LONG_PTR>(this) );
 
-                        pVideoWindow->put_Owner( reinterpret_cast<OAHWND>(mnFrameWnd) );
-                        pVideoWindow->put_MessageDrain( reinterpret_cast<OAHWND>(mnFrameWnd) );
-                        pVideoWindow->put_WindowStyle( WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN );
+            pVideoWindow->put_Owner( reinterpret_cast<OAHWND>(mnFrameWnd) );
+            pVideoWindow->put_MessageDrain( reinterpret_cast<OAHWND>(mnFrameWnd) );
+            pVideoWindow->put_WindowStyle( WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN );
 
-                        mrPlayer.setNotifyWnd( mnFrameWnd );
+            mrPlayer.setNotifyWnd( mnFrameWnd );
 
-                        meZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
-                        ImplLayoutVideoWindow();
+            meZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
+            ImplLayoutVideoWindow();
         }
     }
 
@@ -303,7 +303,7 @@ void Window::processGraphEvent()
 
 void Window::updatePointer()
 {
-    char* pCursorName;
+    LPCTSTR pCursorName;
 
     switch( mnPointerType )
     {
@@ -316,7 +316,7 @@ void Window::updatePointer()
         break;
     }
 
-    ::SetCursor( ::LoadCursor( nullptr, pCursorName ) );
+    SetCursor( LoadCursor( nullptr, pCursorName ) );
 }
 
 void SAL_CALL Window::update(  )

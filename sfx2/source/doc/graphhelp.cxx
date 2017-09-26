@@ -88,7 +88,6 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 
         OUString aMetaFile = aTempFile.GetFileName();
         OUString aMetaURL = aTempFile.GetURL();
-        OString aWinFile = OUStringToOString( aMetaFile, osl_getThreadTextEncoding() );
 
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aMetaURL, StreamMode::STD_READWRITE );
         if ( pStream )
@@ -99,7 +98,7 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
             delete pStream;
 
             if ( !nFailed )
-                pResult = GetEnhMetaFileA( aWinFile.getStr() );
+                pResult = GetEnhMetaFileW( SAL_W(aMetaFile.getStr()) );
         }
     }
 #else

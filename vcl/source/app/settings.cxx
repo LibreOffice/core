@@ -2445,21 +2445,21 @@ bool MiscSettings::GetEnableATToolSupport() const
         // be activated ..
         HKEY hkey;
 
-        if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
-            "Software\\LibreOffice\\Accessibility\\AtToolSupport",
+        if( ERROR_SUCCESS == RegOpenKeyW(HKEY_CURRENT_USER,
+            L"Software\\LibreOffice\\Accessibility\\AtToolSupport",
             &hkey) )
         {
             DWORD dwType;
-            sal_uInt8 Data[6]; // possible values: "true", "false", "1", "0", DWORD
+            wchar_t Data[6]; // possible values: "true", "false", "1", "0", DWORD
             DWORD cbData = sizeof(Data);
 
-            if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
-                nullptr, &dwType, Data, &cbData) )
+            if( ERROR_SUCCESS == RegQueryValueExW(hkey, L"SupportAssistiveTechnology",
+                nullptr, &dwType, reinterpret_cast<LPBYTE>(Data), &cbData) )
             {
                 switch (dwType)
                 {
                     case REG_SZ:
-                        mxData->mnEnableATT = ((0 == stricmp(reinterpret_cast<const char *>(Data), "1")) || (0 == stricmp(reinterpret_cast<const char *>(Data), "true"))) ? TRISTATE_TRUE : TRISTATE_FALSE;
+                        mxData->mnEnableATT = ((0 == wcsicmp(Data, L"1")) || (0 == wcsicmp(Data, L"true"))) ? TRISTATE_TRUE : TRISTATE_FALSE;
                         break;
                     case REG_DWORD:
                         switch (reinterpret_cast<DWORD *>(Data)[0]) {
@@ -2517,29 +2517,29 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
         HKEY hkey;
 
         // If the accessibility key in the Windows registry exists, change it synchronously
-        if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
-            "Software\\LibreOffice\\Accessibility\\AtToolSupport",
+        if( ERROR_SUCCESS == RegOpenKeyW(HKEY_CURRENT_USER,
+            L"Software\\LibreOffice\\Accessibility\\AtToolSupport",
             &hkey) )
         {
             DWORD dwType;
-            sal_uInt8 Data[6]; // possible values: "true", "false", 1, 0
+            wchar_t Data[6]; // possible values: "true", "false", 1, 0
             DWORD cbData = sizeof(Data);
 
-            if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
-                nullptr,   &dwType, Data, &cbData) )
+            if( ERROR_SUCCESS == RegQueryValueExW(hkey, L"SupportAssistiveTechnology",
+                nullptr,   &dwType, reinterpret_cast<LPBYTE>(Data), &cbData) )
             {
                 switch (dwType)
                 {
                     case REG_SZ:
-                        RegSetValueEx(hkey, "SupportAssistiveTechnology",
+                        RegSetValueExW(hkey, L"SupportAssistiveTechnology",
                             0, dwType,
-                            reinterpret_cast<sal_uInt8 const *>(bEnable ? "true" : "false"),
-                            bEnable ? sizeof("true") : sizeof("false"));
+                            reinterpret_cast<const BYTE*>(bEnable ? L"true" : L"false"),
+                            bEnable ? sizeof(L"true") : sizeof(L"false"));
                         break;
                     case REG_DWORD:
                         reinterpret_cast<DWORD *>(Data)[0] = bEnable ? 1 : 0;
-                        RegSetValueEx(hkey, "SupportAssistiveTechnology",
-                            0, dwType, Data, sizeof(DWORD));
+                        RegSetValueExW(hkey, L"SupportAssistiveTechnology",
+                            0, dwType, reinterpret_cast<const BYTE*>(Data), sizeof(DWORD));
                         break;
                     default:
                         // Unsupported registry type

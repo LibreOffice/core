@@ -276,7 +276,6 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     m_eStreamMode &= ~StreamMode::TRUNC; // don't truncate on reopen
 
     aFilename = aParsedFilename;
-    OString aFileNameA(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
     SetLastError( ERROR_SUCCESS );  // might be changed by Redirector
 
     DWORD   nOpenAction;
@@ -317,8 +316,8 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
             nOpenAction = OPEN_EXISTING;
     }
 
-    pInstanceData->hFile = CreateFile(
-        aFileNameA.getStr(),
+    pInstanceData->hFile = CreateFileW(
+        SAL_W(aFilename.getStr()),
         nAccessMode,
         nShareMode,
         nullptr,
@@ -351,8 +350,8 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
             // if Openaction is CREATE_ALWAYS
             nOpenAction = OPEN_EXISTING;
             SetLastError( ERROR_SUCCESS );
-            pInstanceData->hFile = CreateFile(
-                aFileNameA.getStr(),
+            pInstanceData->hFile = CreateFileW(
+                SAL_W(aFilename.getStr()),
                 GENERIC_READ,
                 nShareMode,
                 nullptr,

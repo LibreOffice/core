@@ -96,9 +96,9 @@ typedef struct tagMYITEM
 static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, bool bOwnerdraw, const OUString& module )
 {
     MENUITEMINFOW mi;
-    memset( &mi, 0, sizeof( MENUITEMINFOW ) );
+    memset( &mi, 0, sizeof( mi ) );
 
-    mi.cbSize = sizeof( MENUITEMINFOW );
+    mi.cbSize = sizeof( mi );
     if( id == static_cast<UINT>( -1 ) )
     {
         mi.fMask=MIIM_TYPE;
@@ -326,7 +326,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     EnableMenuItem( popupMenu, IDM_TEMPLATE, MF_BYCOMMAND | (ShutdownIcon::bModalMode ? MF_GRAYED : MF_ENABLED) );
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, nullptr );
-                    BOOL const ret = PostMessage( hWnd, 0, 0, 0 );
+                    BOOL const ret = PostMessageW( hWnd, 0, 0, 0 );
                     SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
                     switch( m )
                     {
@@ -344,11 +344,11 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                             break;
                         case IDM_EXIT:
                             // delete taskbar icon
-                            NOTIFYICONDATAA nid;
-                            nid.cbSize=sizeof(NOTIFYICONDATA);
+                            NOTIFYICONDATAW nid;
+                            nid.cbSize=sizeof(nid);
                             nid.hWnd = hWnd;
                             nid.uID = ID_QUICKSTART;
-                            Shell_NotifyIconA(NIM_DELETE, &nid);
+                            Shell_NotifyIconW(NIM_DELETE, &nid);
                             break;
                     }
 
@@ -372,11 +372,11 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             else if ( uMsg == s_uMsgKillTray )
             {
                 // delete taskbar icon
-                NOTIFYICONDATAA nid;
-                nid.cbSize=sizeof(NOTIFYICONDATA);
+                NOTIFYICONDATAW nid;
+                nid.cbSize=sizeof(nid);
                 nid.hWnd = hWnd;
                 nid.uID = ID_QUICKSTART;
-                Shell_NotifyIconA(NIM_DELETE, &nid);
+                Shell_NotifyIconW(NIM_DELETE, &nid);
 
                 BOOL const ret = PostMessageW(aExecuterWindow, WM_COMMAND, IDM_EXIT, reinterpret_cast<LPARAM>(hWnd));
                 SAL_WARN_IF(0 == ret, "sfx.appl", "ERROR: PostMessage() failed!");
@@ -628,7 +628,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
         }
     }
 
-    hIcon = static_cast<HICON>(LoadImageA( hModule, MAKEINTRESOURCE( pMyItem->iconId ),
+    hIcon = static_cast<HICON>(LoadImageW( hModule, MAKEINTRESOURCEW( pMyItem->iconId ),
                                 IMAGE_ICON, cx, cy,
                                 LR_DEFAULTCOLOR | LR_SHARED ));
 
@@ -719,7 +719,7 @@ static HRESULT WINAPI SHCoCreateInstance( LPVOID lpszReserved, REFCLSID clsid, L
     {
         typedef HRESULT (WINAPI *SHCoCreateInstance_PROC)( LPVOID lpszReserved, REFCLSID clsid, LPUNKNOWN pUnkUnknwon, REFIID iid, LPVOID *ppv );
 
-        SHCoCreateInstance_PROC lpfnSHCoCreateInstance = reinterpret_cast<SHCoCreateInstance_PROC>(GetProcAddress( hModShell, MAKEINTRESOURCE(102) ));
+        SHCoCreateInstance_PROC lpfnSHCoCreateInstance = reinterpret_cast<SHCoCreateInstance_PROC>(GetProcAddress( hModShell, MAKEINTRESOURCEA(102) ));
 
         if ( lpfnSHCoCreateInstance )
             hResult = lpfnSHCoCreateInstance( lpszReserved, clsid, pUnkUnknown, iid, ppv );

@@ -762,7 +762,7 @@ bool CreateSigningCertificateAttribute(void const * pDerEncoded, int nDerEncoded
     std::vector<unsigned char> aSHA256{0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01};
 
     HCRYPTPROV hProv = 0;
-    if (!CryptAcquireContext(&hProv, nullptr, nullptr, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
+    if (!CryptAcquireContextW(&hProv, nullptr, nullptr, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
     {
         SAL_WARN("svl.crypto", "CryptAcquireContext() failed");
         return false;
@@ -1867,7 +1867,7 @@ bad_data:
 bool VerifyNonDetachedSignature(const std::vector<unsigned char>& aData, const std::vector<BYTE>& rExpectedHash)
 {
     HCRYPTPROV hProv = 0;
-    if (!CryptAcquireContext(&hProv, nullptr, nullptr, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
+    if (!CryptAcquireContextW(&hProv, nullptr, nullptr, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
     {
         SAL_WARN("svl.crypto", "CryptAcquireContext() failed");
         return false;
@@ -1941,14 +1941,13 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
                             szName,
                             dwData))
     {
+        LocalFree(szName);
         SAL_WARN("svl.crypto", "ValidateSignature: CertGetNameString failed");
         return subjectName;
     }
 
-    subjectName = OUString(reinterpret_cast<sal_Unicode*>(szName));
-
-    if (szName != nullptr)
-        LocalFree(szName);
+    subjectName = SAL_U(szName);
+    LocalFree(szName);
 
     return subjectName;
 }

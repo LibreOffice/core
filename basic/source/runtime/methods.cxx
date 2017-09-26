@@ -2958,8 +2958,7 @@ void SbRtl_GetAttr(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
             OUString aPathURL = getFullPath( rPar.Get(1)->GetOUString() );
             OUString aPath;
             FileBase::getSystemPathFromFileURL( aPathURL, aPath );
-            OString aSystemPath(OUStringToOString(aPath, osl_getThreadTextEncoding()));
-            DWORD nRealFlags = GetFileAttributes (aSystemPath.getStr());
+            DWORD nRealFlags = GetFileAttributesW (SAL_W(aPath.getStr()));
             if (nRealFlags != 0xffffffff)
             {
                 if (nRealFlags == FILE_ATTRIBUTE_NORMAL)
