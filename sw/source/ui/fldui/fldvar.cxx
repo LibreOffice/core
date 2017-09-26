@@ -327,7 +327,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
             {
                 m_pNumFormatLB->Clear();
                 sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_SETVAR_TEXT), 0);
-                m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
+                m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(NUMBERFORMAT_ENTRY_NOT_FOUND));
                 m_pNumFormatLB->SelectEntryPos(0);
             }
             // is there a corresponding SetField
@@ -443,7 +443,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox const * pBox)
                             m_pNumFormatLB->Clear();
 
                             sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_USERVAR_TEXT), 0);
-                            m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
+                            m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(NUMBERFORMAT_ENTRY_NOT_FOUND));
                             m_pNumFormatLB->SelectEntryPos(0);
                         }
                     }
@@ -708,7 +708,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
         sOldSel = m_pFormatLB->GetEntry(nFormatSel);
 
     OUString sOldNumSel;
-    sal_uLong nOldNumFormat = 0;
+    sal_uInt32 nOldNumFormat = 0;
     sal_Int32 nNumFormatSel = m_pNumFormatLB->GetSelectedEntryPos();
     if (nNumFormatSel != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -725,7 +725,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
     {
         if (GetCurField() != nullptr && IsFieldEdit())
         {
-            bSpecialFormat = GetCurField()->GetFormat() == SAL_MAX_UINT32;
+            bSpecialFormat = GetCurField()->GetFormat() == NUMBERFORMAT_ENTRY_NOT_FOUND;
 
             if (!bSpecialFormat)
             {
@@ -739,7 +739,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
         }
         else
         {
-            if (nOldNumFormat && nOldNumFormat != ULONG_MAX)
+            if (nOldNumFormat && nOldNumFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
                 m_pNumFormatLB->SetDefFormat(nOldNumFormat);
             else
                 m_pNumFormatLB->SetFormatType(css::util::NumberFormat::NUMBER);
@@ -753,9 +753,9 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             if (!IsFieldEdit() || bSpecialFormat)
             {
                 sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_MARK_TEXT), 0);
-                m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
+                m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(NUMBERFORMAT_ENTRY_NOT_FOUND));
                 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_USERVAR_CMD), 1);
-                m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
+                m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(NUMBERFORMAT_ENTRY_NOT_FOUND));
             }
         }
         break;
@@ -765,7 +765,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             if (!IsFieldEdit() || bSpecialFormat)
             {
                 sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_SETVAR_TEXT), 0);
-                m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
+                m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(NUMBERFORMAT_ENTRY_NOT_FOUND));
             }
         }
         break;
@@ -773,14 +773,14 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
         case TYP_FORMELFLD:
         {
             sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_GETVAR_NAME), 0);
-            m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
+            m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(NUMBERFORMAT_ENTRY_NOT_FOUND));
         }
         break;
 
         case TYP_GETFLD:
         {
             sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_GETVAR_NAME), 0);
-            m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
+            m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(NUMBERFORMAT_ENTRY_NOT_FOUND));
         }
         break;
     }
@@ -796,7 +796,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
     {
         if (!nOldNumFormat && (nNumFormatSel = m_pNumFormatLB->GetEntryPos(sOldNumSel)) != LISTBOX_ENTRY_NOTFOUND)
             m_pNumFormatLB->SelectEntryPos(nNumFormatSel);
-        else if (nOldNumFormat && nOldNumFormat == ULONG_MAX)
+        else if (nOldNumFormat && nOldNumFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             m_pNumFormatLB->SelectEntry(sOldSel);
     }
 
@@ -1123,7 +1123,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
     sal_uInt16 nSubType = (nSubPos == LISTBOX_ENTRY_NOTFOUND) ? 0 :
         (sal_uInt16)reinterpret_cast<sal_uLong>(m_pSelectionLB->GetEntryData(nSubPos));
 
-    sal_uLong nFormat;
+    sal_uInt32 nFormat;
 
     if (!m_pNumFormatLB->IsVisible())
     {
@@ -1132,13 +1132,13 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         if(nFormatPos == LISTBOX_ENTRY_NOTFOUND)
             nFormat = 0;
         else
-            nFormat = reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(nFormatPos));
+            nFormat = static_cast<sal_uInt32>(reinterpret_cast<sal_uIntPtr>(m_pFormatLB->GetEntryData(nFormatPos)));
     }
     else
     {
         nFormat = m_pNumFormatLB->GetFormat();
 
-        if (nFormat && nFormat != ULONG_MAX && m_pNumFormatLB->IsAutomaticLanguage())
+        if (nFormat && nFormat != NUMBERFORMAT_ENTRY_NOT_FOUND && m_pNumFormatLB->IsAutomaticLanguage())
         {
             // Switch language to office language because Kalkulator expects
             // String in office format and it should be fed into the dialog
@@ -1157,9 +1157,9 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
     {
         case TYP_USERFLD:
         {
-            nSubType = (nFormat == ULONG_MAX) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR;
+            nSubType = (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR;
 
-            if (nFormat == ULONG_MAX && m_pNumFormatLB->GetSelectedEntry() == SwResId(FMT_USERVAR_CMD))
+            if (nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND && m_pNumFormatLB->GetSelectedEntry() == SwResId(FMT_USERVAR_CMD))
                 nSubType |= nsSwExtendedSubType::SUB_CMD;
 
             if (m_pInvisibleCB->IsChecked())
@@ -1169,14 +1169,14 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         case TYP_FORMELFLD:
         {
             nSubType = nsSwGetSetExpType::GSE_FORMULA;
-            if (m_pNumFormatLB->IsVisible() && nFormat == ULONG_MAX)
+            if (m_pNumFormatLB->IsVisible() && nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
                 nSubType |= nsSwExtendedSubType::SUB_CMD;
             break;
         }
         case TYP_GETFLD:
         {
             nSubType &= 0xff00;
-            if (m_pNumFormatLB->IsVisible() && nFormat == ULONG_MAX)
+            if (m_pNumFormatLB->IsVisible() && nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
                 nSubType |= nsSwExtendedSubType::SUB_CMD;
             break;
         }
@@ -1195,7 +1195,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
                 nSubType = (nSubType & 0xff00) | nsSwGetSetExpType::GSE_STRING;
             }
             else
-                nSubType = (nSubType & 0xff00) | ((nFormat == ULONG_MAX) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR);
+                nSubType = (nSubType & 0xff00) | ((nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR);
 
             if (m_pInvisibleCB->IsChecked())
                 nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
