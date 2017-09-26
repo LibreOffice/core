@@ -86,6 +86,27 @@ Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mpImpl(new Impl)
     mpImpl->valid = true;
 }
 
+/**
+ * only here to prevent passing of NaN
+ */
+Fraction::Fraction( double nNum, double nDen ) : mpImpl(new Impl)
+{
+    assert( !std::isnan(nNum) );
+    assert( !std::isnan(nDen) );
+    assert( nNum >= std::numeric_limits<sal_Int32>::min() );
+    assert( nNum <= std::numeric_limits<sal_Int32>::max( ));
+    assert( nDen >= std::numeric_limits<sal_Int32>::min() );
+    assert( nDen <= std::numeric_limits<sal_Int32>::max( ));
+    if ( nDen == 0 )
+    {
+        mpImpl->valid = false;
+        SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
+        return;
+    }
+    mpImpl->value.assign( sal_Int64(nNum), sal_Int64(nDen));
+    mpImpl->valid = true;
+}
+
 Fraction::Fraction( double dVal ) : mpImpl(new Impl)
 {
     try
@@ -439,7 +460,8 @@ SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 static boost::rational<sal_Int32> rational_FromDouble(double dVal)
 {
     if ( dVal > std::numeric_limits<sal_Int32>::max() ||
-            dVal < std::numeric_limits<sal_Int32>::min() )
+         dVal < std::numeric_limits<sal_Int32>::min() ||
+         std::isnan(dVal) )
         throw boost::bad_rational();
 
     const sal_Int32 nMAX = std::numeric_limits<sal_Int32>::max() / 10;
