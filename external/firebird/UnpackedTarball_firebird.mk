@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/libc++.patch \
 		external/firebird/0001-Avoid-hangup-in-SS-when-error-happens-at-system-atta.patch.1 \
 		external/firebird/0002-Backported-fix-for-CORE-5452-Segfault-when-engine-s-.patch.1 \
+		external/firebird/automake.patch \
 ))
 
 ifeq ($(OS),WNT)
