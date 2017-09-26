@@ -66,6 +66,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
@@ -105,6 +107,7 @@ public:
     void testTdf59046();
     void testTdf105739();
     void testTdf112552();
+    void testTdf112647();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -133,6 +136,7 @@ public:
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
     CPPUNIT_TEST(testTdf112552);
+    CPPUNIT_TEST(testTdf112647);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -805,6 +809,21 @@ void SdOOXMLExportTest2::testTdf112552()
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", "h", "21600");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x", "21600");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y", "0");
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf112647()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf112647.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference<text::XTextRange> xParagraph( getParagraphFromShape( 0, xShape ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
+
+    css::style::LineSpacing aLineSpacing;
+    xPropSet->getPropertyValue("ParaLineSpacing") >>= aLineSpacing;
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(css::style::LineSpacingMode::FIX), aLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2117), aLineSpacing.Height);
     xDocShRef->DoClose();
 }
 

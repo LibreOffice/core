@@ -38,16 +38,19 @@ namespace oox { namespace drawingml {
             PERCENT
         };
         TextSpacing()
-            : nUnit( POINTS ), nValue( 0 ), bHasValue( false )
+            : nUnit( POINTS ), nValue( 0 ), bHasValue( false ), bExactValue( false )
             {
             }
-        TextSpacing( sal_Int32 nPoints ) : nUnit( POINTS ), nValue( nPoints ), bHasValue( true ){};
+        TextSpacing( sal_Int32 nPoints ) : nUnit( POINTS ), nValue( nPoints ), bHasValue( true ), bExactValue ( false ){};
         css::style::LineSpacing toLineSpacing() const
             {
                 css::style::LineSpacing aSpacing;
-                aSpacing.Mode = ( nUnit == PERCENT
-                                  ? css::style::LineSpacingMode::PROP
-                                  :   css::style::LineSpacingMode::MINIMUM );
+                if (nUnit == PERCENT)
+                    aSpacing.Mode = css::style::LineSpacingMode::PROP;
+                else if (bExactValue)
+                    aSpacing.Mode = css::style::LineSpacingMode::FIX;
+                else
+                    aSpacing.Mode = css::style::LineSpacingMode::MINIMUM;
                 aSpacing.Height = static_cast< sal_Int16 >( nUnit == PERCENT ? nValue / 1000 :  nValue );
                 return aSpacing;
             }
@@ -61,6 +64,7 @@ namespace oox { namespace drawingml {
         sal_Int32 nUnit;
         sal_Int32 nValue;
         bool  bHasValue;
+        bool  bExactValue;
     };
 
 } }
