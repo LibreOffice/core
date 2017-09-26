@@ -522,6 +522,20 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
             expr->getExprLoc())
             << expr->getSubExprAsWritten()->getType() << expr->getType()
             << expr->getSourceRange();
+    } else if (expr->getType()->isFundamentalType()) {
+        if (auto const sub = dyn_cast<CXXConstCastExpr>(
+                expr->getSubExpr()->IgnoreParens()))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                ("redundant const_cast from %0 to %1 within reinterpret_cast to"
+                 " fundamental type %2"),
+                expr->getExprLoc())
+                << sub->getSubExprAsWritten()->getType()
+                << sub->getTypeAsWritten() << expr->getTypeAsWritten()
+                << expr->getSourceRange();
+            return true;
+        }
     }
     return true;
 }
