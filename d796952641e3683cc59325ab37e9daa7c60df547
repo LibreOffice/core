@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e963993f",
+        "filename": "sfx2/source/appl/sfxhelp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-26T07:02:25Z",
+      "side": 1,
+      "message": "indentation",
+      "revId": "d796952641e3683cc59325ab37e9daa7c60df547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
