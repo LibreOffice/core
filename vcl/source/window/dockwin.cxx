@@ -996,8 +996,8 @@ void DockingWindow::setPosSizeOnContainee()
 {
     Size aSize = GetOutputSizePixel();
 
-    // Can't use get_border_width() here, because we don't want
-    // the border to be also visible to the floating window.
+    // Don't make the border width accessible via get_border_width(),
+    // otherwise the floating window will handle the border as well.
     sal_Int32 nBorderWidth = mpWindowImpl->mnBorderWidth;
 
     aSize.Width() -= 2 * nBorderWidth;
@@ -1015,8 +1015,8 @@ Size DockingWindow::GetOptimalSize() const
 
     Size aSize = VclContainer::getLayoutRequisition(*GetWindow(GetWindowType::FirstChild));
 
-    // Can't use get_border_width() here, because we don't want
-    // the border to be also visible to the floating window.
+    // Don't make the border width accessible via get_border_width(),
+    // otherwise the floating window will handle the border as well.
     sal_Int32 nBorderWidth = mpWindowImpl->mnBorderWidth;
 
     aSize.Height() += 2 * nBorderWidth;
