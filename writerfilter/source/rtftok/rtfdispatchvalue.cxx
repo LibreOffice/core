@@ -388,8 +388,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             return RTFError::OK;
 
         m_nCurrentEncoding = aRTFEncodings[i].codepage == 0 // Default (CP_ACP)
-            ? osl_getThreadTextEncoding()
-            : rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
+                             ? osl_getThreadTextEncoding()
+                             : rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
         m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
     }
     break;
