@@ -214,8 +214,6 @@ SwFormat::~SwFormat()
     // ones on DerivedFrom.
     if( HasWriterListeners() )
     {
-        OSL_ENSURE( DerivedFrom(), "SwFormat::~SwFormat: Def dependents!" );
-
         m_bFormatInDTOR = true;
 
         SwFormat* pParentFormat = DerivedFrom();
@@ -356,11 +354,11 @@ bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
     if ( (pDerFrom == DerivedFrom()) || (pDerFrom == this) )
         return false;
 
-    OSL_ENSURE( Which()==pDerFrom->Which()
-            || ( Which()==RES_CONDTXTFMTCOLL && pDerFrom->Which()==RES_TXTFMTCOLL)
-            || ( Which()==RES_TXTFMTCOLL && pDerFrom->Which()==RES_CONDTXTFMTCOLL)
-            || ( Which()==RES_FLYFRMFMT && pDerFrom->Which()==RES_FRMFMT ),
-            "SetDerivedFrom: derive apples from oranges?");
+    assert(    Which()==pDerFrom->Which()
+            || (Which()==RES_CONDTXTFMTCOLL && pDerFrom->Which()==RES_TXTFMTCOLL)
+            || (Which()==RES_TXTFMTCOLL && pDerFrom->Which()==RES_CONDTXTFMTCOLL)
+            || (Which()==RES_FLYFRMFMT && pDerFrom->Which()==RES_FRMFMT)
+            );
 
     if ( IsInCache() )
     {
