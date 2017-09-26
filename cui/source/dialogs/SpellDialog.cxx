@@ -1749,7 +1749,7 @@ void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternativ
 }
 
 
-void SentenceEditWindow_Impl::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
+void SentenceEditWindow_Impl::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     GetTextEngine()->SetAttrib(rAttr, nPara, nStart, nEnd);
 }
