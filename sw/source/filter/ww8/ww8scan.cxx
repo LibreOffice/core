@@ -1541,7 +1541,10 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
             m_aPieceGrpprls.push_back(p);    // add to array
         }
         else
-            pStr->SeekRel( nLen );         // non-Grpprl left
+        {
+            nLen = std::min<sal_uInt64>(nLen, pStr->remainingSize());
+            pStr->Seek(pStr->Tell() + nLen);         // non-Grpprl left
+        }
     }
 
     // read Piece Table PLCF
@@ -1843,6 +1846,12 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     }else{
         rF.nLRes = 0;                               // no result found
         rF.nLen = rF.nSRes - rF.nSCode + 2;         // total length
+    }
+
+    if (rF.nLen < 0)
+    {
+        rF.nLen = 0;
+        goto Err;
     }
 
     rPLCF.advance();
@@ -6583,7 +6592,7 @@ WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip)
     WW8_STD* pStd = nullptr;
 
     sal_uInt16 cbStd(0);
-    rSt.ReadUInt16( cbStd );   // read length
+    rSt.ReadUInt16(cbStd);   // read length
 
     const sal_uInt16 nRead = cbSTDBaseInFile;
     if( cbStd >= cbSTDBaseInFile )
@@ -6628,14 +6637,20 @@ WW8_STD* WW8Style::Read1STDFixed(sal_uInt16& rSkip)
             pStd->fAutoRedef =   a16Bit & 0x0001       ;
             pStd->fHidden    = ( a16Bit & 0x0002 ) >> 1;
             // You never know: cautionary skipped
-            if( 10 < nRead )
-                rSt.SeekRel( nRead-10 );
+            if (nRead > 10)
+            {
+                auto nSkip = std::min<sal_uInt64>(nRead - 10, rSt.remainingSize());
+                rSt.Seek(rSt.Tell() + nSkip);
+            }
         }
         while( false ); // trick: the block above will passed through exactly one time
                     //   and can be left early with a "break"
 
-        if( (ERRCODE_NONE != rSt.GetError()) || !nRead )
-            DELETEZ( pStd );        // report error with NULL
+        if (!rSt.good() || !nRead)
+        {
+            delete pStd;
+            pStd = nullptr;       // report error with NULL
+        }
 
         rSkip = cbStd - cbSTDBaseInFile;
     }

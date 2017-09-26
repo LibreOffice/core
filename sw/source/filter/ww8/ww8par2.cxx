@@ -4005,7 +4005,8 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
 
     if ( !xStd || sName.isEmpty() || ((1 != xStd->sgc) && (2 != xStd->sgc)) )
     {
-        pStStrm->SeekRel( nSkip );
+        nSkip = std::min<sal_uInt64>(nSkip, pStStrm->remainingSize());
+        pStStrm->Seek(pStStrm->Tell() + nSkip);
         return;
     }
 
@@ -4100,7 +4101,8 @@ void WW8RStyle::ScanStyles()        // investigate style dependencies
             rSI = SwWW8StyInf();
 
         xStd.reset();
-        pStStrm->SeekRel( nSkip );              // skip Names and Sprms
+        nSkip = std::min<sal_uInt64>(nSkip, pStStrm->remainingSize());
+        pStStrm->Seek(pStStrm->Tell() + nSkip);              // skip Names and Sprms
     }
 }
 
