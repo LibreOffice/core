@@ -1848,12 +1848,12 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         *rPam.GetPoint() = *aDelPam.GetPoint();
         pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
         m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+        rPam.DeleteMark();
     }
     else
     {
         SwNodeRange aRg( rStt.nNode, rEnd.nNode );
-        if( rPam.GetPoint() != &rEnd )
-            rPam.Exchange();
+        rPam.Normalize(false);
 
         // Try to move past the End
         if( !rPam.Move( fnMoveForward, GoInNode ) )
@@ -1862,7 +1862,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             rPam.Exchange();
             if( !rPam.Move( fnMoveBackward, GoInNode ))
             {
-                OSL_FAIL( "no more Nodes" );
+                SAL_WARN("sw.core", "DelFullPara: no more Nodes");
                 return false;
             }
         }
@@ -1895,13 +1895,9 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             }
         }
 
-        SwContentNode *pTmpNode = rPam.GetBound().nNode.GetNode().GetContentNode();
-        rPam.GetBound().nContent.Assign( pTmpNode, 0 );
-        pTmpNode = rPam.GetBound( false ).nNode.GetNode().GetContentNode();
-        rPam.GetBound( false ).nContent.Assign( pTmpNode, 0 );
+        rPam.DeleteMark();
         m_rDoc.GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
     }
-    rPam.DeleteMark();
     m_rDoc.getIDocumentState().SetModified();
 
     return true;
