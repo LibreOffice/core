@@ -466,7 +466,7 @@ public:
     /** Attempt to process current pending event(s)
 
      It doesn't sleep if no events are available for processing.
-     This doesn't processs any events generated after invoking the function.
+     This doesn't process any events generated after invoking the function.
      So in contrast to Scheduler::ProcessEventsToIdle, this cannot become
      busy-locked by an event-generating event in the event queue.
 

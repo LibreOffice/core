@@ -1004,7 +1004,7 @@ void SwUndoParagraphSigning::Insert()
     m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     // Prevent validation since this will trigger a premature validation
-    // upon inserting, but before seting the metadata.
+    // upon inserting, but before setting the metadata.
     SwEditShell* pEditSh = m_pDoc->GetEditShell();
     const bool bOldValidationFlag = pEditSh->SetParagraphSignatureValidation(false);
     comphelper::ScopeGuard const g([&] () {
@@ -1075,7 +1075,7 @@ void SwEditShell::SignParagraph()
 
     // 4. Add metadata
     // Prevent validation since this will trigger a premature validation
-    // upon inserting, but before seting the metadata.
+    // upon inserting, but before setting the metadata.
     const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
     comphelper::ScopeGuard const g([this, bOldValidationFlag] () {
             SetParagraphSignatureValidation(bOldValidationFlag);
