@@ -433,6 +433,8 @@ void EPUBExportTest::testList()
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     // This was "C", i.e. in-list content was ignored.
     assertXPathContent(mpXmlDoc, "//xhtml:p[2]/xhtml:span", "B");
+    // Test nested list content.
+    assertXPathContent(mpXmlDoc, "//xhtml:p[6]/xhtml:span", "F");
 }
 
 void EPUBExportTest::testImage()

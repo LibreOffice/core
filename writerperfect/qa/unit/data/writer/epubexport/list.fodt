@@ -19,6 +19,18 @@
         </text:list-item>
       </text:list>
       <text:p>C</text:p>
+      <text:p>D</text:p>
+      <text:list xml:id="list111055674" text:style-name="L1">
+        <text:list-item>
+          <text:p text:style-name="P1">E</text:p>
+          <text:list>
+            <text:list-item>
+              <text:p text:style-name="P1">F</text:p>
+            </text:list-item>
+          </text:list>
+        </text:list-item>
+      </text:list>
+      <text:p>G</text:p>
     </office:text>
   </office:body>
 </office:document>
