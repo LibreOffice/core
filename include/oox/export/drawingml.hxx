@@ -186,7 +186,7 @@ public:
     void WriteSrcRect( const css::uno::Reference< css::beans::XPropertySet >&, const OUString& );
     void WriteOutline( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteStretch( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& rURL );
-    void WriteLinespacing( css::style::LineSpacing& rLineSpacing );
+    void WriteLinespacing( const css::style::LineSpacing& rLineSpacing );
 
     OUString WriteBlip( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
             const OUString& rURL, bool bRelPathToMedia = false , const Graphic *pGraphic=nullptr );
