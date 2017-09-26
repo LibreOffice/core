@@ -13,6 +13,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <osl/thread.h>
 #include <rtl/tencinfo.h>
 #include <tools/colordata.hxx>
 #include <tools/mapunit.hxx>
@@ -386,7 +387,9 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // not found
             return RTFError::OK;
 
-        m_nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
+        m_nCurrentEncoding = aRTFEncodings[i].codepage == 0 // Default (CP_ACP)
+            ? osl_getThreadTextEncoding()
+            : rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
         m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
     }
     break;
