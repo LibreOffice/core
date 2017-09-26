@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cstddef>
+
 #include "redundantcast.hxx"
 
 void f1(char *) {}
@@ -318,12 +320,18 @@ void testArithmeticTypedefs() {
     (void) (T1) nt1r(); // expected-error {{redundant}}
 }
 
+void testReinterpretConstCast() {
+    int n = 0;
+    (void) reinterpret_cast<std::size_t>((const_cast<int const *>(&n))); // expected-error-re {{redundant const_cast from 'int *' to 'const int *' within reinterpret_cast to fundamental type 'std::size_t' (aka 'unsigned {{.+}}') [loplugin:redundantcast]}}
+}
+
 int main() {
     testConstCast();
     testStaticCast();
     testFunctionalCast();
     testCStyleCast();
     testCStyleCastOfTemplateMethodResult(nullptr);
+    testReinterpretConstCast();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
