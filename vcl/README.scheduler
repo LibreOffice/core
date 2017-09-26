@@ -276,5 +276,5 @@ priority idle in the event loop.
 
 A few layers of indirection make this code hard to follow. The SalXLib::Yield
 and SalX11Display::Yield architecture makes it impossible to process just the
-current events. This really needs a refactorung and rearchitecture step, which
+current events. This really needs a refactoring and rearchitecture step, which
 will also affect the Gtk+ and KDE4 backend for the user event handling.
