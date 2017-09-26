@@ -49,6 +49,7 @@ namespace oox { namespace drawingml {
         case A_TOKEN( spcPts ):
             maSpacing.nUnit = TextSpacing::POINTS;
             maSpacing.nValue = GetTextSpacingPoint( rAttribs.getString( XML_val ).get() );
+            maSpacing.bExactValue = true;
             break;
         default:
             break;
