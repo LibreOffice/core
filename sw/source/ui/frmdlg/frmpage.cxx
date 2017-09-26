@@ -1749,13 +1749,16 @@ DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
     {
         FillItemSet( _pSet );
 
-        //FillItemSet doesn't set the anchor into the set when it matches
-        //the original. But for the other pages we need the current anchor.
-        SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
-                            : getFrameDlgParentShell();
-        RndStdIds eAnchorId = (RndStdIds)GetAnchor();
-        SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
-        _pSet->Put( aAnc );
+        if (!m_bFormat) // tdf#112574 no anchor in styles
+        {
+            //FillItemSet doesn't set the anchor into the set when it matches
+            //the original. But for the other pages we need the current anchor.
+            SwWrtShell* pSh = m_bFormat ? ::GetActiveWrtShell()
+                                : getFrameDlgParentShell();
+            RndStdIds eAnchorId = (RndStdIds)GetAnchor();
+            SwFormatAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
+            _pSet->Put( aAnc );
+        }
     }
 
     return DeactivateRC::LeavePage;
