@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_69224903",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-26T06:36:23Z",
+      "side": 1,
+      "message": "o3tl::make_unique probably doesn\u0027t know how to deal with custom deleters.\n\nprobably best to just go\n ... pHDC(CreateCom...\n\ninstead of trying to use it",
+      "revId": "fde0094a5eb4d5fea173a4ad04d0042dc2c06b48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
