@@ -27,16 +27,12 @@
 
 @implementation TimerCallbackCaller
 
--(void)timerElapsed:(NSTimer*)pTimer
+-(void)timerElapsed:(NSTimer*)pNSTimer
 {
-    (void)pTimer;
-    // nil the timer, as it is just invalidated after the firing function
-    AquaSalTimer::pRunningTimer = nil;
-    const AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
-    if (pInst->mbIsLiveResize)
-        AquaSalTimer::handleDispatchTimerEvent();
-    else
-        ImplNSAppPostEvent( AquaSalInstance::DispatchTimerEvent, YES );
+    (void) pNSTimer;
+    AquaSalTimer *pTimer = static_cast<AquaSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+    if (pTimer)
+        pTimer->handleTimerElapsed();
 }
 
 @end
