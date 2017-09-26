@@ -16,6 +16,24 @@
       "revId": "fde0094a5eb4d5fea173a4ad04d0042dc2c06b48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c995fde4",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-09-26T07:32:05Z",
+      "side": 1,
+      "message": "Reading https://herbsutter.com/2013/05/29/gotw-89-solution-smart-pointers/, it\u0027s not a question of o3tl customizing, you can\u0027t use make_unique (/make_shared) with a custom deleter.\n\nIf I follow your suggestion, it means std::unique_ptr\u003cHDC, decltype(\u0026DeleteDC)\u003e pHDC(CreateCompatibleDC(hDC));\nIn this case, just decltype(\u0026DeleteDC) would be sufficient to use the custom deleter?",
+      "parentUuid": "1a430d35_69224903",
+      "revId": "fde0094a5eb4d5fea173a4ad04d0042dc2c06b48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
