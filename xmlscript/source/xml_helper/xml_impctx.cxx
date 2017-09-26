@@ -375,16 +375,13 @@ void DocumentHandlerImpl::initialize(
 {
     MGuard guard( m_pMutex );
     Reference< xml::input::XRoot > xRoot;
-    if (arguments.getLength() == 1 &&
-        (arguments[ 0 ] >>= xRoot) &&
-        xRoot.is())
-    {
-        m_xRoot = xRoot;
-    }
-    else
+    if (arguments.getLength() != 1 ||
+        !(arguments[ 0 ] >>= xRoot) ||
+        !xRoot.is())
     {
         throw RuntimeException( "missing root instance!" );
     }
+    m_xRoot = xRoot;
 }
 
 // XNamespaceMapping

@@ -71,18 +71,12 @@ namespace vcl { namespace unohelper {
     // css::datatransfer::XTransferable
     uno::Any TextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor )
     {
-        uno::Any aAny;
-
         SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
-        if ( nT == SotClipboardFormatId::STRING )
-        {
-            aAny <<= maText;
-        }
-        else
+        if ( nT != SotClipboardFormatId::STRING )
         {
             throw datatransfer::UnsupportedFlavorException();
         }
-        return aAny;
+        return uno::Any(maText);
     }
 
     uno::Sequence< datatransfer::DataFlavor > TextDataObject::getTransferDataFlavors(  )

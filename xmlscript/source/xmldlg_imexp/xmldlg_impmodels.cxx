@@ -216,16 +216,15 @@ Reference< xml::input::XElement > ProgressBarElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement(
-            nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement(
+        nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void ProgressBarElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlProgressBarModel" );
@@ -258,15 +257,14 @@ Reference< xml::input::XElement > ScrollBarElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void ScrollBarElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), getControlModelName( "com.sun.star.awt.UnoControlScrollBarModel" , _xAttributes ) );
@@ -308,14 +306,12 @@ Reference< xml::input::XElement > SpinButtonElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void SpinButtonElement::endElement()
@@ -356,15 +352,14 @@ Reference< xml::input::XElement > FixedLineElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void FixedLineElement::endElement()
 {
     ControlImportContext ctx(m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFixedLineModel" );
@@ -396,15 +391,14 @@ Reference< xml::input::XElement > PatternFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void PatternFieldElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlPatternFieldModel" );
@@ -444,14 +438,12 @@ Reference< xml::input::XElement > FormattedFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void FormattedFieldElement::endElement()
@@ -572,15 +564,14 @@ Reference< xml::input::XElement > TimeFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void TimeFieldElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlTimeFieldModel" );
@@ -626,15 +617,14 @@ Reference< xml::input::XElement > NumericFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void NumericFieldElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlNumericFieldModel" );
@@ -682,15 +672,14 @@ Reference< xml::input::XElement > DateFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void DateFieldElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlDateFieldModel" );
@@ -737,15 +726,14 @@ Reference< xml::input::XElement > CurrencyFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void CurrencyFieldElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlCurrencyFieldModel" );
@@ -793,15 +781,14 @@ Reference< xml::input::XElement > FileControlElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void FileControlElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFileControlModel" );
@@ -837,15 +824,14 @@ Reference< xml::input::XElement > TreeControlElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void TreeControlElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.tree.TreeControlModel" );
@@ -883,14 +869,12 @@ Reference< xml::input::XElement > ImageControlElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void ImageControlElement::endElement()
@@ -925,14 +909,12 @@ Reference< xml::input::XElement > TextElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void TextElement::endElement()
@@ -972,15 +954,14 @@ Reference< xml::input::XElement > FixedHyperLinkElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!" , Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void FixedHyperLinkElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlFixedHyperlinkModel" );
@@ -1021,15 +1002,14 @@ Reference< xml::input::XElement > TextFieldElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void TextFieldElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlEditModel" );
@@ -1203,14 +1183,12 @@ Reference< xml::input::XElement > RadioElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException("expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 // radiogroup
@@ -1484,15 +1462,14 @@ Reference< xml::input::XElement > CheckBoxElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
+
 void CheckBoxElement::endElement()
 {
     ControlImportContext ctx( m_xImport.get(), getControlId( _xAttributes ), "com.sun.star.awt.UnoControlCheckBoxModel" );
@@ -1550,14 +1527,12 @@ Reference< xml::input::XElement > ButtonElement::startChildElement(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     // event
-    if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
-    else
+    if (!m_xImport->isEventElement( nUid, rLocalName ))
     {
         throw xml::sax::SAXException( "expected event element!",  Reference< XInterface >(), Any() );
     }
+
+    return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
 }
 
 void ButtonElement::endElement()
@@ -1777,14 +1752,12 @@ Reference< xml::input::XElement > StyleElement::startChildElement(
 void StyleElement::endElement()
 {
     OUString aStyleId( _xAttributes->getValueByUidName( m_xImport->XMLNS_DIALOGS_UID, "style-id" ) );
-    if (!aStyleId.isEmpty())
-    {
-        m_xImport->addStyle( aStyleId, this );
-    }
-    else
+    if (aStyleId.isEmpty())
     {
         throw xml::sax::SAXException( "missing style-id attribute!", Reference< XInterface >(), Any() );
     }
+
+    m_xImport->addStyle( aStyleId, this );
 }
 
 // styles

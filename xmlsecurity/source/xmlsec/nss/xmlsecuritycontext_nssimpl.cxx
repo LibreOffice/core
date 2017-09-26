@@ -62,25 +62,20 @@ sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::getSecurityEnvironmentNumber(  )
 css::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_NssImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
 {
-    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecurityEnvironment;
+    if (index < 0 || index >= ( sal_Int32 )m_vSecurityEnvironments.size())
+        throw RuntimeException();
 
-    if (index >= 0 && index < ( sal_Int32 )m_vSecurityEnvironments.size())
-    {
-        xSecurityEnvironment = m_vSecurityEnvironments[index];
-    }
-    else
-        throw RuntimeException() ;
-
+    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecurityEnvironment = m_vSecurityEnvironments[index];
     return xSecurityEnvironment;
 }
 
 css::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_NssImpl::getSecurityEnvironment(  )
 {
-    if (m_nDefaultEnvIndex >= 0 && m_nDefaultEnvIndex < ( sal_Int32 )m_vSecurityEnvironments.size())
-        return getSecurityEnvironmentByIndex(m_nDefaultEnvIndex);
-    else
-        throw RuntimeException() ;
+    if (m_nDefaultEnvIndex < 0 || m_nDefaultEnvIndex >= ( sal_Int32 )m_vSecurityEnvironments.size())
+        throw RuntimeException();
+
+    return getSecurityEnvironmentByIndex(m_nDefaultEnvIndex);
 }
 
 sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::getDefaultSecurityEnvironmentIndex(  )

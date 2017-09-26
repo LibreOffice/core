@@ -62,18 +62,16 @@ namespace xmlscript
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        if ( aArguments.getLength() == 1 )
-        {
-            aArguments[0] >>= m_xHandler;
-
-            if ( !m_xHandler.is() )
-            {
-                throw RuntimeException( "XMLBasicExporterBase::initialize: invalid argument format!" );
-            }
-        }
-        else
+        if ( aArguments.getLength() != 1 )
         {
             throw RuntimeException( "XMLBasicExporterBase::initialize: invalid number of arguments!" );
+        }
+
+        aArguments[0] >>= m_xHandler;
+
+        if ( !m_xHandler.is() )
+        {
+            throw RuntimeException( "XMLBasicExporterBase::initialize: invalid argument format!" );
         }
     }
 
