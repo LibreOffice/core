@@ -93,8 +93,10 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
     }
     else
     {
+      SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.13 NSDragPboard
       mPasteboard = bUseSystemPasteboard ? [NSPasteboard generalPasteboard] :
         [NSPasteboard pasteboardWithName: NSDragPboard];
+      SAL_WNODEPRECATED_DECLARATIONS_POP
 
       if (mPasteboard == nil)
         {
