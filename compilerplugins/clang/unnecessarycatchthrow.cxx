@@ -58,6 +58,15 @@ bool UnnecessaryCatchThrow::VisitCXXTryStmt(CXXTryStmt const * tryStmt)
     auto subExpr = throwExpr->getSubExpr();
     if (subExpr)
     {
+        if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(subExpr)) {
+            if (!cxxConstructExpr->getConstructor()->isCopyConstructor())
+                return true;
+            if (!cxxConstructExpr->getConstructor()->getParent()->hasAttr<FinalAttr>())
+                return true;
+            if (cxxConstructExpr->getNumArgs() != 1)
+                return true;
+            subExpr = cxxConstructExpr->getArg(0);
+        }
         auto declRefExpr = dyn_cast<DeclRefExpr>(subExpr->IgnoreImpCasts());
         if (!declRefExpr)
             return true;
