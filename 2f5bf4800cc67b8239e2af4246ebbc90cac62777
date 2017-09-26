@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_295e8176",
+        "filename": "lingucomponent/source/hyphenator/hyphen/hyphenimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-09-26T07:04:42Z",
+      "side": 1,
+      "message": "I\u0027m just moving the code verbatim, with comments and warnings, from Hyphenator::hyphenate() :) This is also true for your next comment. Do you think I should fix it here?",
+      "parentUuid": "1a430d35_897855f4",
+      "revId": "2f5bf4800cc67b8239e2af4246ebbc90cac62777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_a9735114",
         "filename": "lingucomponent/source/hyphenator/hyphen/hyphenimp.cxx",
         "patchSetId": 1
