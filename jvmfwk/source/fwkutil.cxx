@@ -66,18 +66,19 @@ bool isAccessibilitySupportDesired()
 #ifdef _WIN32
     bool retVal = false;
     HKEY    hKey = nullptr;
-    if (RegOpenKeyEx(HKEY_CURRENT_USER,
-                     "Software\\LibreOffice\\Accessibility\\AtToolSupport",
-                     0, KEY_READ, &hKey) == ERROR_SUCCESS)
+    if (RegOpenKeyExA(HKEY_CURRENT_USER,
+                      "Software\\LibreOffice\\Accessibility\\AtToolSupport",
+                      0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
         DWORD   dwType = 0;
         DWORD   dwLen = 16;
         unsigned char arData[16];
-        if( RegQueryValueEx(hKey, "SupportAssistiveTechnology", nullptr, &dwType, arData,
-                            & dwLen)== ERROR_SUCCESS)
+        if( RegQueryValueExA(hKey, "SupportAssistiveTechnology", nullptr, &dwType, arData,
+                             &dwLen)== ERROR_SUCCESS)
         {
             if (dwType == REG_SZ)
             {
+                arData[std::min(dwLen, DWORD(15))] = 0;
                 if (strcmp(reinterpret_cast<char*>(arData), "true") == 0
                     || strcmp(reinterpret_cast<char*>(arData), "1") == 0)
                     retVal = true;
@@ -98,9 +99,8 @@ bool isAccessibilitySupportDesired()
                         "jfw", "bad registry value " << unsigned(arData[0]));
             }
         }
+        RegCloseKey(hKey);
     }
-    RegCloseKey(hKey);
-
 #elif defined UNX
     // Java is no longer required for a11y - we use atk directly.
     bool retVal = ::rtl::Bootstrap::get( "JFW_PLUGIN_FORCE_ACCESSIBILITY", sValue) && sValue == "1";

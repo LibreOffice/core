@@ -515,7 +515,7 @@ bool WinSalBitmap::Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle )
     {
         BITMAP  aDDBInfo;
 
-        if( GetObjectA( mhDDB, sizeof( BITMAP ), &aDDBInfo ) )
+        if( GetObjectW( mhDDB, sizeof( aDDBInfo ), &aDDBInfo ) )
         {
             maSize = Size( aDDBInfo.bmWidth, aDDBInfo.bmHeight );
             mnBitCount = aDDBInfo.bmPlanes * aDDBInfo.bmBitsPixel;
@@ -610,7 +610,7 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 
         GlobalUnlock( rSalBmp.mhDIB );
 
-        if( hNewDDB && GetObjectA( hNewDDB, sizeof( BITMAP ), &aDDBInfo ) )
+        if( hNewDDB && GetObjectW( hNewDDB, sizeof( aDDBInfo ), &aDDBInfo ) )
         {
             mhDDB = hNewDDB;
             maSize = Size( aDDBInfo.bmWidth, aDDBInfo.bmHeight );
@@ -797,7 +797,7 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
         BITMAP aBmp;
 
         // find out size of source bitmap
-        GetObjectA( hHdl, sizeof( BITMAP ), &aBmp );
+        GetObjectW( hHdl, sizeof( aBmp ), &aBmp );
 
         // create destination bitmap
         if ( (hCopy = CreateBitmapIndirect( &aBmp )) != nullptr )

@@ -118,8 +118,8 @@ STDMETHODIMP EmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pM
     }
     else
     {
-        CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
-        CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
+        CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatW( L"Embed Source" );
+        CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatW( L"Embedded Object" );
         if ( pFormatetc->cfFormat == cf_embSource || pFormatetc->cfFormat == cf_embObj )
         {
             if ( !( pFormatetc->tymed & TYMED_ISTORAGE ) )
@@ -157,8 +157,8 @@ STDMETHODIMP EmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM 
       || pFormatetc->dwAspect == DVASPECT_DOCPRINT )
         return DV_E_DVASPECT;
 
-    CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
-    CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
+    CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatW( L"Embed Source" );
+    CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatW( L"Embedded Object" );
 
     if ( pFormatetc->cfFormat == cf_embSource || pFormatetc->cfFormat == cf_embObj )
     {
@@ -204,8 +204,8 @@ STDMETHODIMP EmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
         }
         else
         {
-            CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
-            CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
+            CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatW( L"Embed Source" );
+            CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatW( L"Embedded Object" );
             if ( pFormatetc->cfFormat == cf_embSource || pFormatetc->cfFormat == cf_embObj )
             {
                 if ( !( pFormatetc->tymed & TYMED_ISTORAGE ) )
@@ -241,8 +241,8 @@ STDMETHODIMP EmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn
     }
     else
     {
-        CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatA( "Embed Source" );
-        CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
+        CLIPFORMAT cf_embSource = (CLIPFORMAT)RegisterClipboardFormatW( L"Embed Source" );
+        CLIPFORMAT cf_embObj = (CLIPFORMAT)RegisterClipboardFormatW( L"Embedded Object" );
         if ( pFormatetcIn->cfFormat == cf_embSource || pFormatetcIn->cfFormat == cf_embObj )
         {
             pFormatetcOut->tymed = TYMED_ISTORAGE;

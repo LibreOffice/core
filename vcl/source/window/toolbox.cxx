@@ -5130,19 +5130,19 @@ void ToolBox::ImplDisableFlatButtons()
         bInit = true;
         HKEY hkey;
 
-        if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER, "Software\\LibreOffice\\Accessibility\\AtToolSupport", &hkey) )
+        if( ERROR_SUCCESS == RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\LibreOffice\\Accessibility\\AtToolSupport", &hkey) )
         {
             DWORD dwType = 0;
-            sal_uInt8 Data[6]; // possible values: "true", "false", "1", "0", DWORD
+            wchar_t Data[6]; // possible values: "true", "false", "1", "0", DWORD
             DWORD cbData = sizeof(Data);
 
-            if( ERROR_SUCCESS == RegQueryValueEx(hkey, "DisableFlatToolboxButtons",
-                nullptr, &dwType, Data, &cbData) )
+            if( ERROR_SUCCESS == RegQueryValueExW(hkey, L"DisableFlatToolboxButtons",
+                nullptr, &dwType, reinterpret_cast<LPBYTE>(Data), &cbData) )
             {
                 switch (dwType)
                 {
                     case REG_SZ:
-                        bValue = ((0 == stricmp(reinterpret_cast<const char *>(Data), "1")) || (0 == stricmp(reinterpret_cast<const char *>(Data), "true")));
+                        bValue = ((0 == wcsicmp(Data, L"1")) || (0 == wcsicmp(Data, L"true")));
                         break;
                     case REG_DWORD:
                         bValue = (bool)(reinterpret_cast<DWORD *>(Data)[0]);

@@ -183,7 +183,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     case WM_DESTROY:
         return 0;
     default:
-        return DefWindowProc(hwnd, message, wParam, lParam);
+        return DefWindowProcW(hwnd, message, wParam, lParam);
     }
 }
 
@@ -193,7 +193,7 @@ bool InitTempWindow(HWND& hwnd, int width, int height, const PIXELFORMATDESCRIPT
 
     PIXELFORMATDESCRIPTOR  pfd = inPfd;
     int ret;
-    WNDCLASS wc;
+    WNDCLASSW wc;
     wc.style = 0;
     wc.lpfnWndProc = WndProc;
     wc.cbClsExtra = wc.cbWndExtra = 0;
@@ -202,9 +202,9 @@ bool InitTempWindow(HWND& hwnd, int width, int height, const PIXELFORMATDESCRIPT
     wc.hCursor = nullptr;
     wc.hbrBackground = nullptr;
     wc.lpszMenuName = nullptr;
-    wc.lpszClassName = "GLRenderer";
-    RegisterClass(&wc);
-    hwnd = CreateWindow(wc.lpszClassName, nullptr, WS_DISABLED, 0, 0, width, height, nullptr, nullptr, wc.hInstance, nullptr);
+    wc.lpszClassName = L"GLRenderer";
+    RegisterClassW(&wc);
+    hwnd = CreateWindowW(wc.lpszClassName, nullptr, WS_DISABLED, 0, 0, width, height, nullptr, nullptr, wc.hInstance, nullptr);
     glWin.hDC = GetDC(hwnd);
 
     int nPixelFormat = ChoosePixelFormat(glWin.hDC, &pfd);
