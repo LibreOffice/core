@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <tools/toolsdllapi.h>
 #include <memory>
+#include <type_traits>
 
 class SvStream;
 
@@ -37,8 +38,14 @@ public:
                     Fraction();
                     Fraction( const Fraction & rFrac );
                     Fraction( Fraction && rFrac );
-                    Fraction( sal_Int64 nNum, sal_Int64 nDen );
     explicit        Fraction( double dVal );
+                    Fraction( double nNum, double nDen );
+                    Fraction( sal_Int64 nNum, sal_Int64 nDen );
+                    // just to prevent ambiguity between the sal_Int64 and double constructors
+                    template<typename T1, typename T2> Fraction(
+                        T1 nNum, T2 nDen,
+                        typename std::enable_if<std::is_integral<T1>::value && std::is_integral<T2>::value, int>::type = 0)
+                        : Fraction( sal_Int64(nNum), sal_Int64(nDen) ) {}
                     ~Fraction();
 
     bool            IsValid() const;
