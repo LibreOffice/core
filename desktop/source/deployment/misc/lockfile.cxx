@@ -55,7 +55,7 @@ static OString impl_getHostname()
        */
     DWORD sz = MAX_COMPUTERNAME_LENGTH + 1;
     auto szHost = std::unique_ptr<char[]>(new char[sz]);
-    if (GetComputerName(szHost.get(), &sz))
+    if (GetComputerNameA(szHost.get(), &sz))
         aHost = OString(szHost.get());
     else
         aHost = OString("UNKNOWN");

@@ -255,10 +255,9 @@ void Tracker::Construct()
         }
 
         // get default handle size from Windows profile setting
-        static const TCHAR szWindows[] = TEXT("windows");
-        static const TCHAR szInplaceBorderWidth[] =
-            TEXT("oleinplaceborderwidth");
-        afxHandleSize = GetProfileInt(szWindows, szInplaceBorderWidth, 4);
+        static const WCHAR szWindows[] = L"windows";
+        static const WCHAR szInplaceBorderWidth[] = L"oleinplaceborderwidth";
+        afxHandleSize = GetProfileIntW(szWindows, szInplaceBorderWidth, 4);
         bInitialized = TRUE;
 
         afxCursors[0] = afxCursors[2] = LoadCursor(nullptr,IDC_SIZENWSE);
@@ -396,7 +395,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
     for (;;)
     {
         MSG msg;
-        GetMessage(&msg, nullptr, 0, 0);
+        GetMessageW(&msg, nullptr, 0, 0);
 
         if (GetCapture() != hWnd)
             break;
@@ -461,7 +460,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
 
             // just dispatch rest of the messages
         default:
-            DispatchMessage(&msg);
+            DispatchMessageW(&msg);
             break;
         }
     }

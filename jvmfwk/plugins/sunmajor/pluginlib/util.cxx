@@ -631,7 +631,11 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                 // Find out how long the string for JavaHome is and allocate memory to hold the path
                 if( RegQueryValueExW(hKey, L"JavaHome", nullptr, &dwType, nullptr, &dwTmpPathLen)== ERROR_SUCCESS)
                 {
-                    unsigned char* szTmpPath= static_cast<unsigned char *>(malloc( dwTmpPathLen));
+                    unsigned char* szTmpPath= static_cast<unsigned char *>(malloc(dwTmpPathLen+sizeof(sal_Unicode)));
+                    // According to https://msdn.microsoft.com/en-us/ms724911, the application should ensure
+                    // that the string is properly terminated before using it
+                    for (DWORD i = 0; i < sizeof(sal_Unicode); ++i)
+                        szTmpPath[dwTmpPathLen + i] = 0;
                     // Get the path for the runtime lib
                     if(RegQueryValueExW(hKey, L"JavaHome", nullptr, &dwType, szTmpPath, &dwTmpPathLen) == ERROR_SUCCESS)
                     {

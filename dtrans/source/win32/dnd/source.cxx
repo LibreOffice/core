@@ -314,7 +314,7 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
         // We force the creation of a thread message queue. This is necessary
         // for a later call to AttachThreadInput
         MSG msgtemp;
-        PeekMessage( &msgtemp, nullptr, WM_USER, WM_USER, PM_NOREMOVE);
+        PeekMessageW( &msgtemp, nullptr, WM_USER, WM_USER, PM_NOREMOVE);
 
         DWORD threadId= GetCurrentThreadId();
 

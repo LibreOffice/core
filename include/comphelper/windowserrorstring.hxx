@@ -29,7 +29,7 @@ inline OUString WindowsErrorString(DWORD nErrorCode)
                        nullptr) == 0)
         return OUString::number(nErrorCode, 16);
 
-    OUString result(reinterpret_cast<sal_Unicode const *>(pMsgBuf));
+    OUString result(SAL_U(pMsgBuf));
     result.endsWith("\r\n", &result);
 
     LocalFree(pMsgBuf);

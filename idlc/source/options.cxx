@@ -192,7 +192,7 @@ OString convertIncPathtoShortWindowsPath(const OString& incPath) {
     std::vector<sal_Unicode> vec(path.getLength() + 1);
     //GetShortPathNameW only works if the file can be found!
     const DWORD len = GetShortPathNameW(
-        reinterpret_cast<LPCWSTR>(path.getStr()), reinterpret_cast<LPWSTR>(&vec[0]), path.getLength() + 1);
+        SAL_W(path.getStr()), SAL_W(&vec[0]), path.getLength() + 1);
 
     if (len > 0)
     {

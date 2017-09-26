@@ -205,9 +205,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSerialNu
 
 OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
-        DWORD cbIssuer ;
-
-        cbIssuer = CertNameToStr(
+        DWORD cchIssuer = CertNameToStrW(
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
             &( m_pCertContext->pCertInfo->Issuer ),
             CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
@@ -215,28 +213,22 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() {
         ) ;
 
         // Here the cbIssuer count the last 0x00 , take care.
-        if( cbIssuer != 0 ) {
-            auto issuer = std::unique_ptr<char[]>(new char[ cbIssuer ]);
+        if( cchIssuer != 0 ) {
+            auto issuer = std::unique_ptr<wchar_t>(new wchar_t[ cchIssuer ]);
 
-            cbIssuer = CertNameToStr(
+            cchIssuer = CertNameToStrW(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
                 &( m_pCertContext->pCertInfo->Issuer ),
                 CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
-                issuer.get(), cbIssuer
+                issuer.get(), cchIssuer
             ) ;
 
-            if( cbIssuer <= 0 ) {
+            if( cchIssuer <= 0 ) {
                 throw RuntimeException() ;
             }
 
-            // for correct encoding
-            sal_uInt16 encoding ;
-            rtl_Locale *pLocale = nullptr ;
-            osl_getProcessLocale( &pLocale ) ;
-            encoding = osl_getTextEncodingFromLocale( pLocale ) ;
-
-            if(issuer.get()[cbIssuer-1] == 0) cbIssuer--; //delimit the last 0x00;
-            OUString xIssuer(issuer.get() , cbIssuer ,encoding ) ;
+            if(issuer.get()[cchIssuer -1] == 0) cchIssuer--; //delimit the last 0x00;
+            OUString xIssuer(SAL_U(issuer.get()), cchIssuer) ;
 
             return replaceTagSWithTagST(xIssuer);
         } else {
@@ -251,32 +243,29 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectName()
 {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr )
     {
-        DWORD cbSubject ;
-
-        cbSubject = CertNameToStrW(
+        DWORD cchSubject = CertNameToStrW(
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
             &( m_pCertContext->pCertInfo->Subject ),
             CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
             nullptr, 0
         ) ;
 
-        if( cbSubject != 0 )
+        if( cchSubject != 0 )
         {
-            auto subject = std::unique_ptr<wchar_t[]>(new wchar_t[ cbSubject ]);
+            auto subject = std::unique_ptr<wchar_t>(new wchar_t[ cchSubject ]);
 
-            cbSubject = CertNameToStrW(
+            cchSubject = CertNameToStrW(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
                 &( m_pCertContext->pCertInfo->Subject ),
                 CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG ,
-                subject.get(), cbSubject
+                subject.get(), cchSubject
             ) ;
 
-            if( cbSubject <= 0 ) {
+            if( cchSubject <= 0 ) {
                 throw RuntimeException() ;
             }
 
-            OUString xSubject(
-                reinterpret_cast<const sal_Unicode*>(subject.get()));
+            OUString xSubject(SAL_U(subject.get()));
 
             return replaceTagSWithTagST(xSubject);
         } else

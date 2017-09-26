@@ -485,8 +485,7 @@ static void load_msvcr(OUString const & jvm_dll, OUStringLiteral msvcr)
     }
 
     if (LoadLibraryW(
-            reinterpret_cast<wchar_t const *>(
-                OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr())))
+            SAL_W(OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr())))
         return;
 
     // Then check if msvcr71.dll is in the parent folder of where
@@ -498,8 +497,7 @@ static void load_msvcr(OUString const & jvm_dll, OUStringLiteral msvcr)
         return;
 
     LoadLibraryW(
-        reinterpret_cast<wchar_t const *>(
-            OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr()));
+        SAL_W(OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr()));
 }
 
 // Check if the jvm DLL imports msvcr71.dll, and in that case try

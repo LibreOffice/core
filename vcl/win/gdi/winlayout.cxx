@@ -253,7 +253,7 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     if (rLayout.getFontSelData().mbVertical)
     {
         LOGFONTW aLogFont;
-        GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
+        GetObjectW(hFont, sizeof(aLogFont), &aLogFont);
         if (aLogFont.lfFaceName[0] == '@')
         {
             memmove(&aLogFont.lfFaceName[0], &aLogFont.lfFaceName[1],
