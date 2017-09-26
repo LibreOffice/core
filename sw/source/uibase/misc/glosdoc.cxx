@@ -613,14 +613,12 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
     bool bCreate = ( rCompleteGroupName == GetDefName() );
     std::unique_ptr< SwTextBlocks > pGlosGroup( GetGroupDoc( rCompleteGroupName, bCreate ) );
 
-    if ( pGlosGroup.get() && !pGlosGroup->GetError() )
-    {
-        sal_uInt16 nIdx = pGlosGroup->GetIndex( rEntryName );
-        if ( USHRT_MAX == nIdx )
-            throw container::NoSuchElementException();
-    }
-    else
+    if ( !pGlosGroup.get() || pGlosGroup->GetError() )
         throw lang::WrappedTargetException();
+
+    sal_uInt16 nIdx = pGlosGroup->GetIndex( rEntryName );
+    if ( USHRT_MAX == nIdx )
+        throw container::NoSuchElementException();
 
     Reference< text::XAutoTextEntry > xReturn;
 

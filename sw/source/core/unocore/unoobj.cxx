@@ -246,18 +246,16 @@ lcl_setAutoStyle(IStyleAccess & rStyleAccess, const uno::Any & rValue,
     std::shared_ptr<SfxItemSet> pStyle = bPara ?
         rStyleAccess.getByName(uStyle, IStyleAccess::AUTO_STYLE_PARA ):
         rStyleAccess.getByName(uStyle, IStyleAccess::AUTO_STYLE_CHAR );
-    if(pStyle.get())
-    {
-        SwFormatAutoFormat aFormat( (bPara)
-            ? sal::static_int_cast< sal_uInt16 >(RES_AUTO_STYLE)
-            : sal::static_int_cast< sal_uInt16 >(RES_TXTATR_AUTOFMT) );
-        aFormat.SetStyleHandle( pStyle );
-        rSet.Put(aFormat);
-    }
-    else
+    if(!pStyle.get())
     {
          throw lang::IllegalArgumentException();
     }
+
+    SwFormatAutoFormat aFormat( (bPara)
+        ? sal::static_int_cast< sal_uInt16 >(RES_AUTO_STYLE)
+        : sal::static_int_cast< sal_uInt16 >(RES_TXTATR_AUTOFMT) );
+    aFormat.SetStyleHandle( pStyle );
+    rSet.Put(aFormat);
 };
 
 void

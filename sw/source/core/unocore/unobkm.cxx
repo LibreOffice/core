@@ -621,11 +621,10 @@ SwXFieldmark::setPropertyValue(const OUString& PropertyName,
     {
         ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
         bool bChecked( false );
-        if ( pCheckboxFm && ( rValue >>= bChecked ) )
-            pCheckboxFm->SetChecked( bChecked );
-        else
+        if ( !(pCheckboxFm && ( rValue >>= bChecked )) )
             throw uno::RuntimeException();
 
+        pCheckboxFm->SetChecked( bChecked );
     }
     else
         SwXFieldmark_Base::setPropertyValue( PropertyName, rValue );
@@ -640,10 +639,10 @@ uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
     if ( rPropertyName == "Checked" )
     {
         ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
-        if ( pCheckboxFm )
-            return uno::makeAny( pCheckboxFm->IsChecked() );
-        else
+        if ( !pCheckboxFm )
             throw uno::RuntimeException();
+
+        return uno::makeAny( pCheckboxFm->IsChecked() );
     }
     return SwXFieldmark_Base::getPropertyValue( rPropertyName );
 }

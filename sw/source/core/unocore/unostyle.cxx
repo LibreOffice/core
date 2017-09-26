@@ -3373,41 +3373,40 @@ uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(nIndex < 0 || nIndex >= AUTOSTYLE_FAMILY_COUNT)
         throw lang::IndexOutOfBoundsException();
-    if(IsValid())
-    {
-        uno::Reference< style::XAutoStyleFamily >  aRef;
-        IStyleAccess::SwAutoStyleFamily nType = aAutoStyleByIndex[nIndex];
-        switch( nType )
-        {
-            case IStyleAccess::AUTO_STYLE_CHAR:
-            {
-                if(!m_xAutoCharStyles.is())
-                    m_xAutoCharStyles = new SwXAutoStyleFamily(m_pDocShell, nType);
-                aRef = m_xAutoCharStyles;
-            }
-            break;
-            case IStyleAccess::AUTO_STYLE_RUBY:
-            {
-                if(!m_xAutoRubyStyles.is())
-                    m_xAutoRubyStyles = new SwXAutoStyleFamily(m_pDocShell, nType );
-                aRef = m_xAutoRubyStyles;
-            }
-            break;
-            case IStyleAccess::AUTO_STYLE_PARA:
-            {
-                if(!m_xAutoParaStyles.is())
-                    m_xAutoParaStyles = new SwXAutoStyleFamily(m_pDocShell, nType );
-                aRef = m_xAutoParaStyles;
-            }
-            break;
-
-            default:
-                ;
-        }
-        aRet <<= aRef;
-    }
-    else
+    if(!IsValid())
         throw uno::RuntimeException();
+
+    uno::Reference< style::XAutoStyleFamily >  aRef;
+    IStyleAccess::SwAutoStyleFamily nType = aAutoStyleByIndex[nIndex];
+    switch( nType )
+    {
+        case IStyleAccess::AUTO_STYLE_CHAR:
+        {
+            if(!m_xAutoCharStyles.is())
+                m_xAutoCharStyles = new SwXAutoStyleFamily(m_pDocShell, nType);
+            aRef = m_xAutoCharStyles;
+        }
+        break;
+        case IStyleAccess::AUTO_STYLE_RUBY:
+        {
+            if(!m_xAutoRubyStyles.is())
+                m_xAutoRubyStyles = new SwXAutoStyleFamily(m_pDocShell, nType );
+            aRef = m_xAutoRubyStyles;
+        }
+        break;
+        case IStyleAccess::AUTO_STYLE_PARA:
+        {
+            if(!m_xAutoParaStyles.is())
+                m_xAutoParaStyles = new SwXAutoStyleFamily(m_pDocShell, nType );
+            aRef = m_xAutoParaStyles;
+        }
+        break;
+
+        default:
+            ;
+    }
+    aRet <<= aRef;
+
     return aRet;
 }
 

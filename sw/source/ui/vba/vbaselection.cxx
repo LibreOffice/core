@@ -82,19 +82,18 @@ uno::Reference< text::XTextRange > SwVbaSelection::GetSelectedRange()
 {
     uno::Reference< text::XTextRange > xTextRange;
     uno::Reference< lang::XServiceInfo > xServiceInfo( mxModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService("com.sun.star.text.TextRanges") )
-    {
-        uno::Reference< container::XIndexAccess > xTextRanges( xServiceInfo, uno::UNO_QUERY_THROW );
-        if( xTextRanges->getCount() > 0 )
-        {
-            // if there are multiple selection, just return the last selected Range.
-            xTextRange.set( xTextRanges->getByIndex( xTextRanges->getCount()-1 ), uno::UNO_QUERY_THROW );
-        }
-    }
-    else
+    if( !xServiceInfo->supportsService("com.sun.star.text.TextRanges") )
     {
         throw uno::RuntimeException("Not implemented" );
     }
+
+    uno::Reference< container::XIndexAccess > xTextRanges( xServiceInfo, uno::UNO_QUERY_THROW );
+    if( xTextRanges->getCount() > 0 )
+    {
+        // if there are multiple selection, just return the last selected Range.
+        xTextRange.set( xTextRanges->getByIndex( xTextRanges->getCount()-1 ), uno::UNO_QUERY_THROW );
+    }
+
     return xTextRange;
 }
 
@@ -646,10 +645,9 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
                     nPage = 0;
                }
             }
-            if( nPage != 0 )
-                xPageCursor->jumpToPage( ( sal_Int16 )nPage );
-            else
+            if( nPage == 0 )
                 throw uno::RuntimeException("Not implemented" );
+            xPageCursor->jumpToPage( ( sal_Int16 )nPage );
             break;
         }
         default:

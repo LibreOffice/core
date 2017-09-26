@@ -409,10 +409,9 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
     {
         if (pMarkups[i].nType == text::TextMarkupType::SENTENCE)
         {
-            if (nSentenceMarkUpIndex == -1)
-                nSentenceMarkUpIndex = i;
-            else    // there is already one sentence markup
-                throw lang::IllegalArgumentException();
+            if (nSentenceMarkUpIndex != -1)
+                throw lang::IllegalArgumentException(); // there is already one sentence markup
+            nSentenceMarkUpIndex = i;
         }
         else if( pMarkups[i].nType != text::TextMarkupType::PROOFREADING )
             return;

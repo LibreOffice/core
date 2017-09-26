@@ -385,60 +385,58 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             //the printer must be created
             OUString sPrinterName;
-            if( rValue >>= sPrinterName  )
+            if( !(rValue >>= sPrinterName)  )
+                throw IllegalArgumentException();
+
+            if( !mpPrinter && !sPrinterName.isEmpty() && mpDocSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
             {
-                if( !mpPrinter && !sPrinterName.isEmpty() && mpDocSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+                SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( true );
+                if ( pPrinter->GetName() != sPrinterName )
                 {
-                    SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( true );
-                    if ( pPrinter->GetName() != sPrinterName )
+                    VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
+                    assert (! pNewPrinter->isDisposed() );
+                    if( pNewPrinter->IsKnown() )
                     {
-                        VclPtrInstance<SfxPrinter> pNewPrinter( std::unique_ptr<SfxItemSet>(pPrinter->GetOptions().Clone()), sPrinterName );
-                        assert (! pNewPrinter->isDisposed() );
-                        if( pNewPrinter->IsKnown() )
-                        {
-                            // set printer only once; in _postSetValues
-                            mpPrinter = pNewPrinter;
-                        }
-                        else
-                        {
-                            pNewPrinter.disposeAndClear();
-                        }
+                        // set printer only once; in _postSetValues
+                        mpPrinter = pNewPrinter;
+                    }
+                    else
+                    {
+                        pNewPrinter.disposeAndClear();
                     }
                 }
             }
-            else
-                throw IllegalArgumentException();
+
         }
         break;
         case HANDLE_PRINTER_SETUP:
         {
             Sequence < sal_Int8 > aSequence;
-            if ( rValue >>= aSequence )
-            {
-                sal_uInt32 nSize = aSequence.getLength();
-                if( nSize > 0 )
-                {
-                    SvMemoryStream aStream (aSequence.getArray(), nSize,
-                                            StreamMode::READ );
-                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    static sal_uInt16 const nRange[] =
-                    {
-                        FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                        SID_HTML_MODE,  SID_HTML_MODE,
-                        SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                        0
-                    };
-                    auto pItemSet = o3tl::make_unique<SfxItemSet>( mpDoc->GetAttrPool(), nRange );
-                    VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
-                    assert (! pPrinter->isDisposed() );
-                    // set printer only once; in _postSetValues
-                    mpPrinter.disposeAndClear();
-                    mpPrinter = pPrinter;
-                }
-            }
-            else
+            if ( !(rValue >>= aSequence) )
                 throw IllegalArgumentException();
+
+            sal_uInt32 nSize = aSequence.getLength();
+            if( nSize > 0 )
+            {
+                SvMemoryStream aStream (aSequence.getArray(), nSize,
+                                        StreamMode::READ );
+                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                static sal_uInt16 const nRange[] =
+                {
+                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
+                    SID_HTML_MODE,  SID_HTML_MODE,
+                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                    0
+                };
+                auto pItemSet = o3tl::make_unique<SfxItemSet>( mpDoc->GetAttrPool(), nRange );
+                VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
+                assert (! pPrinter->isDisposed() );
+                // set printer only once; in _postSetValues
+                mpPrinter.disposeAndClear();
+                mpPrinter = pPrinter;
+            }
+
         }
         break;
         case HANDLE_IS_KERN_ASIAN_PUNCTUATION:

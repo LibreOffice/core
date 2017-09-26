@@ -127,15 +127,13 @@ void SAL_CALL SwVbaStyle::setNameLocal( const OUString& _namelocal )
 
 uno::Reference< word::XParagraphFormat > SAL_CALL SwVbaStyle::getParagraphFormat()
 {
-    if( word::WdStyleType::wdStyleTypeParagraph == getType() )
-    {
-        uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
-        return uno::Reference< word::XParagraphFormat >( new SwVbaParagraphFormat( this, mxContext, mxStyleProps ) );
-    }
-    else
+    if( word::WdStyleType::wdStyleTypeParagraph != getType() )
     {
         throw uno::RuntimeException();
     }
+
+    uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
+    return uno::Reference< word::XParagraphFormat >( new SwVbaParagraphFormat( this, mxContext, mxStyleProps ) );
 }
 
 sal_Bool SAL_CALL SwVbaStyle::getAutomaticallyUpdate()
@@ -155,30 +153,26 @@ uno::Any SAL_CALL SwVbaStyle::getBaseStyle()
     // ParentStyle
     OUString sBaseStyle;
     mxStyleProps->getPropertyValue("ParentStyle") >>= sBaseStyle;
-    if( !sBaseStyle.isEmpty() )
-    {
-        uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
-        return xCol->Item( uno::makeAny( sBaseStyle ), uno::Any() );
-    }
-    else
+    if( sBaseStyle.isEmpty() )
     {
         throw uno::RuntimeException();
     }
+
+    uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
+    return xCol->Item( uno::makeAny( sBaseStyle ), uno::Any() );
 }
 
 void SAL_CALL SwVbaStyle::setBaseStyle( const uno::Any& _basestyle )
 {
     uno::Reference< word::XStyle > xStyle;
     _basestyle >>= xStyle;
-    if( xStyle.is() )
-    {
-        OUString sBaseStyle = xStyle->getName();
-        mxStyleProps->setPropertyValue("ParentStyle", uno::makeAny( sBaseStyle ) );
-    }
-    else
+    if( !xStyle.is() )
     {
         throw uno::RuntimeException();
     }
+
+    OUString sBaseStyle = xStyle->getName();
+    mxStyleProps->setPropertyValue("ParentStyle", uno::makeAny( sBaseStyle ) );
 }
 
 uno::Any SAL_CALL SwVbaStyle::getNextParagraphStyle()
@@ -186,30 +180,26 @@ uno::Any SAL_CALL SwVbaStyle::getNextParagraphStyle()
     //FollowStyle
     OUString sFollowStyle;
     mxStyleProps->getPropertyValue("FollowStyle") >>= sFollowStyle;
-    if( !sFollowStyle.isEmpty() )
-    {
-        uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
-        return xCol->Item( uno::makeAny( sFollowStyle ), uno::Any() );
-    }
-    else
+    if( sFollowStyle.isEmpty() )
     {
         throw uno::RuntimeException();
     }
+
+    uno::Reference< XCollection > xCol( new SwVbaStyles( this, mxContext, mxModel ) );
+    return xCol->Item( uno::makeAny( sFollowStyle ), uno::Any() );
 }
 
 void SAL_CALL SwVbaStyle::setNextParagraphStyle( const uno::Any& _nextparagraphstyle )
 {
     uno::Reference< word::XStyle > xStyle;
     _nextparagraphstyle >>= xStyle;
-    if( xStyle.is() )
-    {
-        OUString sFollowStyle = xStyle->getName();
-        mxStyleProps->setPropertyValue("FollowStyle", uno::makeAny( sFollowStyle ) );
-    }
-    else
+    if( !xStyle.is() )
     {
         throw uno::RuntimeException();
     }
+
+    OUString sFollowStyle = xStyle->getName();
+    mxStyleProps->setPropertyValue("FollowStyle", uno::makeAny( sFollowStyle ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaStyle::getListLevelNumber()

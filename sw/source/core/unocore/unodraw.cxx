@@ -673,20 +673,19 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     if( pDesc && (xRg = pDesc->GetTextRange()).is() )
     {
         pInternalPam = new SwUnoInternalPaM(*pDoc);
-        if (::sw::XTextRangeToSwPaM(*pInternalPam, xRg))
-        {
-            if(RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() &&
-                                !pInternalPam->GetNode().FindFlyStartNode())
-            {
-                        aAnchor.SetType(RndStdIds::FLY_AS_CHAR);
-            }
-            else if (RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId())
-            {
-                aAnchor.SetAnchor(pInternalPam->Start());
-            }
-        }
-        else
+        if (!::sw::XTextRangeToSwPaM(*pInternalPam, xRg))
             throw uno::RuntimeException();
+
+        if(RndStdIds::FLY_AT_FLY == aAnchor.GetAnchorId() &&
+                            !pInternalPam->GetNode().FindFlyStartNode())
+        {
+                    aAnchor.SetType(RndStdIds::FLY_AS_CHAR);
+        }
+        else if (RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId())
+        {
+            aAnchor.SetAnchor(pInternalPam->Start());
+        }
+
     }
     else if ((aAnchor.GetAnchorId() != RndStdIds::FLY_AT_PAGE) && pDoc->getIDocumentLayoutAccess().GetCurrentLayout())
     {
@@ -1128,49 +1127,48 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                                         new SwUnoInternalPaM( *(pFormat->GetDoc()) ));
                         uno::Reference< text::XTextRange > xRg;
                         aValue >>= xRg;
-                        if (::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
-                        {
-                            if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
-                            {
-                                //delete old SwFormatFlyCnt
-                                //With AnchorAsCharacter the current TextAttribute has to be deleted.
-                                //Tbis removes the frame format too.
-                                //To prevent this the connection between format and attribute has to be broken before.
-                                const SwPosition *pPos = aAnchor.GetContentAnchor();
-                                SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
-                                SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
-                                const sal_Int32 nIdx = pPos->nContent.GetIndex();
-                                SwTextAttr * const pHint =
-                                    pTextNode->GetTextAttrForCharAt(
-                                        nIdx, RES_TXTATR_FLYCNT );
-                                assert(pHint && "Missing Hint.");
-                                SAL_WARN_IF( pHint->Which() != RES_TXTATR_FLYCNT,
-                                            "sw.uno", "Missing FlyInCnt-Hint." );
-                                SAL_WARN_IF( pHint->GetFlyCnt().GetFrameFormat() != pFormat,
-                                            "sw.uno", "Wrong TextFlyCnt-Hint." );
-                                const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt())
-                                    .SetFlyFormat();
-
-                                //The connection is removed now the attribute can be deleted.
-                                pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
-                                //create a new one
-                                SwTextNode *pNd = pInternalPam->GetNode().GetTextNode();
-                                SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TextNode." );
-                                SwFormatFlyCnt aFormat( pFormat );
-                                pNd->InsertItem(aFormat, pInternalPam->GetPoint()
-                                        ->nContent.GetIndex(), 0 );
-                            }
-                            else
-                            {
-                                aAnchor.SetAnchor( pInternalPam->GetPoint() );
-                                aSet.Put(aAnchor);
-                                pFormat->SetFormatAttr(aSet);
-                            }
-                        }
-                        else
+                        if (!::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
                         {
                             throw uno::RuntimeException();
                         }
+
+                        if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                        {
+                            //delete old SwFormatFlyCnt
+                            //With AnchorAsCharacter the current TextAttribute has to be deleted.
+                            //Tbis removes the frame format too.
+                            //To prevent this the connection between format and attribute has to be broken before.
+                            const SwPosition *pPos = aAnchor.GetContentAnchor();
+                            SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+                            SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
+                            const sal_Int32 nIdx = pPos->nContent.GetIndex();
+                            SwTextAttr * const pHint =
+                                pTextNode->GetTextAttrForCharAt(
+                                    nIdx, RES_TXTATR_FLYCNT );
+                            assert(pHint && "Missing Hint.");
+                            SAL_WARN_IF( pHint->Which() != RES_TXTATR_FLYCNT,
+                                        "sw.uno", "Missing FlyInCnt-Hint." );
+                            SAL_WARN_IF( pHint->GetFlyCnt().GetFrameFormat() != pFormat,
+                                        "sw.uno", "Wrong TextFlyCnt-Hint." );
+                            const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt())
+                                .SetFlyFormat();
+
+                            //The connection is removed now the attribute can be deleted.
+                            pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
+                            //create a new one
+                            SwTextNode *pNd = pInternalPam->GetNode().GetTextNode();
+                            SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TextNode." );
+                            SwFormatFlyCnt aFormat( pFormat );
+                            pNd->InsertItem(aFormat, pInternalPam->GetPoint()
+                                    ->nContent.GetIndex(), 0 );
+                        }
+                        else
+                        {
+                            aAnchor.SetAnchor( pInternalPam->GetPoint() );
+                            aSet.Put(aAnchor);
+                            pFormat->SetFormatAttr(aSet);
+                        }
+
                     }
                 }
                 else if (pEntry->nWID == FN_TEXT_BOX)
@@ -1760,112 +1758,111 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
     uno::Sequence< beans::PropertyState > aRet(aPropertyNames.getLength());
-    if(xShapeAgg.is())
-    {
-        SvxShape* pSvxShape = GetSvxShape();
-        bool bGroupMember = false;
-        bool bFormControl = false;
-        SdrObject* pObject = pSvxShape ? pSvxShape->GetSdrObject() : nullptr;
-        if(pObject)
-        {
-            bGroupMember = pObject->GetUpGroup() != nullptr;
-            bFormControl = pObject->GetObjInventor() == SdrInventor::FmForm;
-        }
-        const OUString* pNames = aPropertyNames.getConstArray();
-        beans::PropertyState* pRet = aRet.getArray();
-        uno::Reference< XPropertyState >  xShapePrState;
-        for(sal_Int32 nProperty = 0; nProperty < aPropertyNames.getLength(); nProperty++)
-        {
-            const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( pNames[nProperty] );
-            if(pEntry)
-            {
-                if(RES_OPAQUE == pEntry->nWID)
-                    pRet[nProperty] = bFormControl ?
-                        beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
-                else if(FN_ANCHOR_POSITION == pEntry->nWID)
-                    pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
-                else if(FN_TEXT_RANGE == pEntry->nWID)
-                    pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
-                else if(bGroupMember)
-                    pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
-                else if (pEntry->nWID == RES_FRM_SIZE &&
-                         (pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT_RELATION ||
-                          pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH_RELATION))
-                    pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
-                else if (pEntry->nWID == FN_TEXT_BOX)
-                {
-                    // The TextBox property is set, if we can find a textbox for this shape.
-                    if (pFormat && SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
-                        pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
-                    else
-                        pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
-                }
-                else if(pFormat)
-                {
-                    const SwAttrSet& rSet = pFormat->GetAttrSet();
-                    SfxItemState eItemState = rSet.GetItemState(pEntry->nWID, false);
+    if(!xShapeAgg.is())
+        throw uno::RuntimeException();
 
-                    if(SfxItemState::SET == eItemState)
-                        pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
-                    else if(SfxItemState::DEFAULT == eItemState)
-                        pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
-                    else
-                        pRet[nProperty] = beans::PropertyState_AMBIGUOUS_VALUE;
-                }
+    SvxShape* pSvxShape = GetSvxShape();
+    bool bGroupMember = false;
+    bool bFormControl = false;
+    SdrObject* pObject = pSvxShape ? pSvxShape->GetSdrObject() : nullptr;
+    if(pObject)
+    {
+        bGroupMember = pObject->GetUpGroup() != nullptr;
+        bFormControl = pObject->GetObjInventor() == SdrInventor::FmForm;
+    }
+    const OUString* pNames = aPropertyNames.getConstArray();
+    beans::PropertyState* pRet = aRet.getArray();
+    uno::Reference< XPropertyState >  xShapePrState;
+    for(sal_Int32 nProperty = 0; nProperty < aPropertyNames.getLength(); nProperty++)
+    {
+        const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( pNames[nProperty] );
+        if(pEntry)
+        {
+            if(RES_OPAQUE == pEntry->nWID)
+                pRet[nProperty] = bFormControl ?
+                    beans::PropertyState_DEFAULT_VALUE : beans::PropertyState_DIRECT_VALUE;
+            else if(FN_ANCHOR_POSITION == pEntry->nWID)
+                pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
+            else if(FN_TEXT_RANGE == pEntry->nWID)
+                pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
+            else if(bGroupMember)
+                pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
+            else if (pEntry->nWID == RES_FRM_SIZE &&
+                     (pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT_RELATION ||
+                      pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH_RELATION))
+                pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
+            else if (pEntry->nWID == FN_TEXT_BOX)
+            {
+                // The TextBox property is set, if we can find a textbox for this shape.
+                if (pFormat && SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
+                    pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
                 else
-                {
-                    SfxPoolItem* pItem = nullptr;
-                    switch(pEntry->nWID)
-                    {
-                        case RES_ANCHOR:
-                            pItem = pImpl->GetAnchor();
-                        break;
-                        case RES_HORI_ORIENT:
-                            pItem = pImpl->GetHOrient();
-                        break;
-                        case RES_VERT_ORIENT:
-                            pItem = pImpl->GetVOrient();
-                        break;
-                        case  RES_LR_SPACE:
-                            pItem = pImpl->GetLRSpace();
-                        break;
-                        case  RES_UL_SPACE:
-                            pItem = pImpl->GetULSpace();
-                        break;
-                        case  RES_SURROUND:
-                            pItem = pImpl->GetSurround();
-                        break;
-                        // #i28701#
-                        case RES_WRAP_INFLUENCE_ON_OBJPOS:
-                        {
-                            pItem = pImpl->GetWrapInfluenceOnObjPos();
-                        }
-                        break;
-                    }
-                    if(pItem)
-                        pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
-                    else
-                        pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
-                }
+                    pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
+            }
+            else if(pFormat)
+            {
+                const SwAttrSet& rSet = pFormat->GetAttrSet();
+                SfxItemState eItemState = rSet.GetItemState(pEntry->nWID, false);
+
+                if(SfxItemState::SET == eItemState)
+                    pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
+                else if(SfxItemState::DEFAULT == eItemState)
+                    pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
+                else
+                    pRet[nProperty] = beans::PropertyState_AMBIGUOUS_VALUE;
             }
             else
             {
-                if(!xShapePrState.is())
+                SfxPoolItem* pItem = nullptr;
+                switch(pEntry->nWID)
                 {
-                    const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
-                    uno::Any aPState = xShapeAgg->queryAggregation(rPStateType);
-                    auto ps = o3tl::tryAccess<uno::Reference<XPropertyState>>(
-                        aPState);
-                    if(!ps)
-                        throw uno::RuntimeException();
-                    xShapePrState = *ps;
+                    case RES_ANCHOR:
+                        pItem = pImpl->GetAnchor();
+                    break;
+                    case RES_HORI_ORIENT:
+                        pItem = pImpl->GetHOrient();
+                    break;
+                    case RES_VERT_ORIENT:
+                        pItem = pImpl->GetVOrient();
+                    break;
+                    case  RES_LR_SPACE:
+                        pItem = pImpl->GetLRSpace();
+                    break;
+                    case  RES_UL_SPACE:
+                        pItem = pImpl->GetULSpace();
+                    break;
+                    case  RES_SURROUND:
+                        pItem = pImpl->GetSurround();
+                    break;
+                    // #i28701#
+                    case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                    {
+                        pItem = pImpl->GetWrapInfluenceOnObjPos();
+                    }
+                    break;
                 }
-                pRet[nProperty] = xShapePrState->getPropertyState(pNames[nProperty]);
+                if(pItem)
+                    pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
+                else
+                    pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
             }
         }
+        else
+        {
+            if(!xShapePrState.is())
+            {
+                const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
+                uno::Any aPState = xShapeAgg->queryAggregation(rPStateType);
+                auto ps = o3tl::tryAccess<uno::Reference<XPropertyState>>(
+                    aPState);
+                if(!ps)
+                    throw uno::RuntimeException();
+                xShapePrState = *ps;
+            }
+            pRet[nProperty] = xShapePrState->getPropertyState(pNames[nProperty]);
+        }
     }
-    else
-        throw uno::RuntimeException();
+
     return aRet;
 }
 
@@ -1873,62 +1870,61 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
-    if(xShapeAgg.is())
+    if(!xShapeAgg.is())
+        throw uno::RuntimeException();
+
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+    if(pEntry)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
-        if(pEntry)
+        if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
+            throw uno::RuntimeException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        if(pFormat)
         {
-            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw uno::RuntimeException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            if(pFormat)
-            {
-                const SfxItemSet& rSet = pFormat->GetAttrSet();
-                SfxItemSet aSet(pFormat->GetDoc()->GetAttrPool(), {{pEntry->nWID, pEntry->nWID}});
-                aSet.SetParent(&rSet);
-                aSet.ClearItem(pEntry->nWID);
-                pFormat->GetDoc()->SetAttr(aSet, *pFormat);
-            }
-            else
-            {
-                switch(pEntry->nWID)
-                {
-                    case RES_ANCHOR:        pImpl->RemoveAnchor();  break;
-                    case RES_HORI_ORIENT:   pImpl->RemoveHOrient(); break;
-                    case RES_VERT_ORIENT:   pImpl->RemoveVOrient(); break;
-                    case  RES_LR_SPACE:     pImpl->RemoveLRSpace(); break;
-                    case  RES_UL_SPACE:     pImpl->RemoveULSpace(); break;
-                    case  RES_SURROUND:     pImpl->RemoveSurround();break;
-                    case RES_OPAQUE :       pImpl->SetOpaque(false);  break;
-                    case FN_TEXT_RANGE :
-                    break;
-                    // #i26791#
-                    case RES_FOLLOW_TEXT_FLOW:
-                    {
-                        pImpl->RemoveFollowTextFlow();
-                    }
-                    break;
-                    // #i28701#
-                    case RES_WRAP_INFLUENCE_ON_OBJPOS:
-                    {
-                        pImpl->RemoveWrapInfluenceOnObjPos();
-                    }
-                    break;
-                }
-            }
+            const SfxItemSet& rSet = pFormat->GetAttrSet();
+            SfxItemSet aSet(pFormat->GetDoc()->GetAttrPool(), {{pEntry->nWID, pEntry->nWID}});
+            aSet.SetParent(&rSet);
+            aSet.ClearItem(pEntry->nWID);
+            pFormat->GetDoc()->SetAttr(aSet, *pFormat);
         }
         else
         {
-            const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
-            uno::Any aPState = xShapeAgg->queryAggregation(rPStateType);
-            auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
-                aPState);
-            if(!xShapePrState)
-                throw uno::RuntimeException();
-            (*xShapePrState)->setPropertyToDefault( rPropertyName );
+            switch(pEntry->nWID)
+            {
+                case RES_ANCHOR:        pImpl->RemoveAnchor();  break;
+                case RES_HORI_ORIENT:   pImpl->RemoveHOrient(); break;
+                case RES_VERT_ORIENT:   pImpl->RemoveVOrient(); break;
+                case  RES_LR_SPACE:     pImpl->RemoveLRSpace(); break;
+                case  RES_UL_SPACE:     pImpl->RemoveULSpace(); break;
+                case  RES_SURROUND:     pImpl->RemoveSurround();break;
+                case RES_OPAQUE :       pImpl->SetOpaque(false);  break;
+                case FN_TEXT_RANGE :
+                break;
+                // #i26791#
+                case RES_FOLLOW_TEXT_FLOW:
+                {
+                    pImpl->RemoveFollowTextFlow();
+                }
+                break;
+                // #i28701#
+                case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                {
+                    pImpl->RemoveWrapInfluenceOnObjPos();
+                }
+                break;
+            }
         }
     }
     else
-        throw uno::RuntimeException();
+    {
+        const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
+        uno::Any aPState = xShapeAgg->queryAggregation(rPStateType);
+        auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
+            aPState);
+        if(!xShapePrState)
+            throw uno::RuntimeException();
+        (*xShapePrState)->setPropertyToDefault( rPropertyName );
+    }
+
 }
 
 uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
@@ -1936,33 +1932,31 @@ uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
     uno::Any aRet;
-    if(xShapeAgg.is())
+    if(!xShapeAgg.is())
+        throw uno::RuntimeException();
+
+    const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
+    if(pEntry)
     {
-        const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
-        if(pEntry)
-        {
-            if(pEntry->nWID < RES_FRMATR_END && pFormat)
-            {
-                const SfxPoolItem& rDefItem =
-                    pFormat->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
-                rDefItem.QueryValue(aRet, pEntry->nMemberId);
-            }
-            else
-                throw uno::RuntimeException();
-        }
-        else
-        {
-            const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
-            uno::Any aPState = xShapeAgg->queryAggregation(rPStateType);
-            auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
-                aPState);
-            if(!xShapePrState)
-                throw uno::RuntimeException();
-            (*xShapePrState)->getPropertyDefault( rPropertyName );
-        }
+        if(!(pEntry->nWID < RES_FRMATR_END && pFormat))
+            throw uno::RuntimeException();
+
+        const SfxPoolItem& rDefItem =
+            pFormat->GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
+        rDefItem.QueryValue(aRet, pEntry->nMemberId);
+
     }
     else
-        throw uno::RuntimeException();
+    {
+        const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
+        uno::Any aPState = xShapeAgg->queryAggregation(rPStateType);
+        auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
+            aPState);
+        if(!xShapePrState)
+            throw uno::RuntimeException();
+        (*xShapePrState)->getPropertyDefault( rPropertyName );
+    }
+
     return aRet;
 }
 
@@ -2740,58 +2734,58 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
     SolarMutexGuard aGuard;
     SvxShape* pSvxShape = GetSvxShape();
     SwFrameFormat* pFormat = GetFrameFormat();
-    if(pSvxShape && pFormat)
-    {
-        uno::Reference<XShapes> xShapes;
-        if( xShapeAgg.is() )
-        {
-            const uno::Type& rType = cppu::UnoType<XShapes>::get();
-            uno::Any aAgg = xShapeAgg->queryAggregation( rType );
-            aAgg >>= xShapes;
-        }
-        if(xShapes.is())
-            xShapes->add(xShape);
-        else
-            throw uno::RuntimeException();
+    if(!(pSvxShape && pFormat))
+        throw uno::RuntimeException();
 
-        uno::Reference<lang::XUnoTunnel> xTunnel(xShape, uno::UNO_QUERY);
-        SwXShape* pSwShape = nullptr;
-        if(xShape.is())
-            pSwShape = reinterpret_cast< SwXShape * >(
-                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
-        if(pSwShape && pSwShape->m_bDescriptor)
+    uno::Reference<XShapes> xShapes;
+    if( xShapeAgg.is() )
+    {
+        const uno::Type& rType = cppu::UnoType<XShapes>::get();
+        uno::Any aAgg = xShapeAgg->queryAggregation( rType );
+        aAgg >>= xShapes;
+    }
+    if(!xShapes.is())
+        throw uno::RuntimeException();
+
+    xShapes->add(xShape);
+
+
+    uno::Reference<lang::XUnoTunnel> xTunnel(xShape, uno::UNO_QUERY);
+    SwXShape* pSwShape = nullptr;
+    if(xShape.is())
+        pSwShape = reinterpret_cast< SwXShape * >(
+                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
+    if(pSwShape && pSwShape->m_bDescriptor)
+    {
+        SvxShape* pAddShape = reinterpret_cast< SvxShape * >(
+                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
+        if(pAddShape)
         {
-            SvxShape* pAddShape = reinterpret_cast< SvxShape * >(
-                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
-            if(pAddShape)
+            SdrObject* pObj = pAddShape->GetSdrObject();
+            if(pObj)
             {
-                SdrObject* pObj = pAddShape->GetSdrObject();
-                if(pObj)
+                SwDoc* pDoc = pFormat->GetDoc();
+                // set layer of new drawing
+                // object to corresponding invisible layer.
+                if( SdrInventor::FmForm != pObj->GetObjInventor())
                 {
-                    SwDoc* pDoc = pFormat->GetDoc();
-                    // set layer of new drawing
-                    // object to corresponding invisible layer.
-                    if( SdrInventor::FmForm != pObj->GetObjInventor())
-                    {
-                        pObj->SetLayer( pSwShape->pImpl->GetOpaque()
-                                        ? pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId()
-                                        : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() );
-                    }
-                    else
-                    {
-                        pObj->SetLayer(pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
-                    }
+                    pObj->SetLayer( pSwShape->pImpl->GetOpaque()
+                                    ? pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId()
+                                    : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() );
+                }
+                else
+                {
+                    pObj->SetLayer(pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
                 }
             }
-            pSwShape->m_bDescriptor = false;
-            //add the group member to the format of the group
-            SwFrameFormat* pShapeFormat = ::FindFrameFormat( pSvxShape->GetSdrObject() );
-            if(pShapeFormat)
-                pFormat->Add(pSwShape);
         }
+        pSwShape->m_bDescriptor = false;
+        //add the group member to the format of the group
+        SwFrameFormat* pShapeFormat = ::FindFrameFormat( pSvxShape->GetSdrObject() );
+        if(pShapeFormat)
+            pFormat->Add(pSwShape);
     }
-    else
-        throw uno::RuntimeException();
+
 }
 
 void SwXGroupShape::remove( const uno::Reference< XShape >& xShape )

@@ -1085,10 +1085,9 @@ void SAL_CALL SwXMailMerge::addPropertyChangeListener(
     if (!m_bDisposing && rListener.is())
     {
         const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
-        if (pCur)
-            m_aPropListeners.addInterface( pCur->nWID, rListener );
-        else
+        if (!pCur)
             throw UnknownPropertyException();
+        m_aPropListeners.addInterface( pCur->nWID, rListener );
     }
 }
 
@@ -1100,10 +1099,9 @@ void SAL_CALL SwXMailMerge::removePropertyChangeListener(
     if (!m_bDisposing && rListener.is())
     {
         const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
-        if (pCur)
-            m_aPropListeners.removeInterface( pCur->nWID, rListener );
-        else
+        if (!pCur)
             throw UnknownPropertyException();
+        m_aPropListeners.removeInterface( pCur->nWID, rListener );
     }
 }
 
