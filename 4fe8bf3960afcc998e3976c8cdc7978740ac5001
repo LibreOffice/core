@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_cc126bb4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4963,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-26T13:33:27Z",
+      "side": 1,
+      "message": "can be const",
+      "revId": "4fe8bf3960afcc998e3976c8cdc7978740ac5001",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0c0d5390",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4964,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-26T13:33:27Z",
+      "side": 1,
+      "message": "should be exactly 3? or if the exact number does not matter, then strip down test doc to one para",
+      "revId": "4fe8bf3960afcc998e3976c8cdc7978740ac5001",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2c104fa8",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4976,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-26T13:33:27Z",
+      "side": 1,
+      "message": "same here - why not check for 6 (or cut down docx testdoc)?",
+      "revId": "4fe8bf3960afcc998e3976c8cdc7978740ac5001",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
