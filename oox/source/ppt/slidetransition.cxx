@@ -45,7 +45,6 @@ namespace oox { namespace ppt {
         , mnTransitionSubType( 0 )
         , mbTransitionDirectionNormal( true )
         , mnAnimationSpeed( AnimationSpeed_FAST )
-        , mnFadeColor( 0 )
         , mbMode( true )
         , mnAdvanceTime( -1 )
     {
@@ -57,7 +56,6 @@ namespace oox { namespace ppt {
         , mnTransitionSubType( 0 )
         , mbTransitionDirectionNormal( true )
         , mnAnimationSpeed( AnimationSpeed_FAST )
-        , mnFadeColor( 0 )
         , mbMode( true )
         , mnAdvanceTime( -1 )
     {
@@ -78,11 +76,11 @@ namespace oox { namespace ppt {
             aProps.setProperty( PROP_TransitionSubtype, mnTransitionSubType);
             aProps.setProperty( PROP_TransitionDirection, mbTransitionDirectionNormal);
             aProps.setProperty( PROP_Speed, mnAnimationSpeed);
-            aProps.setProperty( PROP_TransitionFadeColor, mnFadeColor);
-        if( mnAdvanceTime != -1 ) {
-        aProps.setProperty( PROP_Duration, mnAdvanceTime/1000);
-        aProps.setProperty( PROP_Change, static_cast<sal_Int32>(1));
-        }
+            aProps.setProperty( PROP_TransitionFadeColor, 0);
+            if( mnAdvanceTime != -1 ) {
+                aProps.setProperty( PROP_Duration, mnAdvanceTime/1000);
+                aProps.setProperty( PROP_Change, static_cast<sal_Int32>(1));
+            }
         }
         catch( Exception& )
         {
@@ -98,7 +96,7 @@ namespace oox { namespace ppt {
             xFilter->setTransition( mnTransitionType );
             xFilter->setSubtype( mnTransitionSubType );
             xFilter->setDirection( mbTransitionDirectionNormal );
-            xFilter->setFadeColor( mnFadeColor );
+            xFilter->setFadeColor( 0 );
             xFilter->setMode( mbMode );
         }
         catch( Exception& )
