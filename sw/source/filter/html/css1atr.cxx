@@ -3149,7 +3149,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     OUString aGraphicInBase64;
     OUString aGraphicAsLink;
 
-    // Embedded Grafic -> export WriteEmbedded
+    // Embedded Graphic -> export WriteEmbedded
     const Graphic* pGrf = nullptr;
     if( rHTMLWrt.mbEmbedImages || aLink.isEmpty())
     {
