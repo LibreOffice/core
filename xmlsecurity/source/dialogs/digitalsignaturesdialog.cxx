@@ -87,21 +87,18 @@ namespace
     {
         OUString sDef("ODF/DefaultVersion");
         Sequence< css::uno::Any > aValues = GetProperties( Sequence<OUString>(&sDef,1) );
-        if ( aValues.getLength() == 1)
-        {
-            sal_Int16 nTmp = 0;
-            if ( aValues[0] >>= nTmp )
-                m_nODF = nTmp;
-            else
-                throw uno::RuntimeException(
-                    "[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!",
-                    nullptr );
-
-        }
-        else
+        if ( aValues.getLength() != 1)
             throw uno::RuntimeException(
                 "[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion",
                 nullptr);
+
+        sal_Int16 nTmp = 0;
+        if ( !(aValues[0] >>= nTmp) )
+            throw uno::RuntimeException(
+                "[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!",
+                nullptr );
+
+        m_nODF = nTmp;
     }
 }
 

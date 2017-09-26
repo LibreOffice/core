@@ -441,19 +441,17 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
 {
     CK_MECHANISM_TYPE nNSSCipherID = 0;
     bool bW3CPadding = false;
-    if ( nCipherID == css::xml::crypto::CipherID::AES_CBC_W3C_PADDING )
-    {
-        nNSSCipherID = CKM_AES_CBC;
-        bW3CPadding = true;
-
-        if ( aKey.getLength() != 16 && aKey.getLength() != 24 && aKey.getLength() != 32 )
-            throw css::lang::IllegalArgumentException("Unexpected key length.", css::uno::Reference< css::uno::XInterface >(), 2 );
-
-        if ( aParams.getLength() )
-            throw css::lang::IllegalArgumentException("Unexpected arguments provided for cipher creation.", css::uno::Reference< css::uno::XInterface >(), 5 );
-    }
-    else
+    if ( nCipherID != css::xml::crypto::CipherID::AES_CBC_W3C_PADDING )
         throw css::lang::IllegalArgumentException("Unexpected cipher requested.", css::uno::Reference< css::uno::XInterface >(), 1 );
+
+    nNSSCipherID = CKM_AES_CBC;
+    bW3CPadding = true;
+
+    if ( aKey.getLength() != 16 && aKey.getLength() != 24 && aKey.getLength() != 32 )
+        throw css::lang::IllegalArgumentException("Unexpected key length.", css::uno::Reference< css::uno::XInterface >(), 2 );
+
+    if ( aParams.getLength() )
+        throw css::lang::IllegalArgumentException("Unexpected arguments provided for cipher creation.", css::uno::Reference< css::uno::XInterface >(), 5 );
 
     css::uno::Reference< css::xml::crypto::XCipherContext > xResult;
     if( initNSS( m_xContext ) )
