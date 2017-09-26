@@ -505,12 +505,12 @@ void DocumentHolder::UIDeactivate()
 void CopyToOLEMenu(HMENU hOrig,WORD origPos,HMENU hDest,WORD destPos)
 {
     HMENU subMenu(nullptr);
-    char buffer[256];
+    wchar_t buffer[256];
 
     subMenu = GetSubMenu(hOrig,origPos);
-    GetMenuString(hOrig,origPos,buffer,256,MF_BYPOSITION);
-    InsertMenu(hDest,destPos,MF_BYPOSITION | MF_POPUP,
-               reinterpret_cast<UINT_PTR>(subMenu),LPCTSTR(buffer));
+    GetMenuStringW(hOrig,origPos,buffer,256,MF_BYPOSITION);
+    InsertMenuW(hDest,destPos,MF_BYPOSITION | MF_POPUP,
+               reinterpret_cast<UINT_PTR>(subMenu),buffer);
 
     MENUITEMINFOW mi;
     memset(&mi,0,sizeof(mi));

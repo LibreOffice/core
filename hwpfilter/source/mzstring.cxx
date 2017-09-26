@@ -34,7 +34,7 @@
 #include <string.h>
 
 #ifndef _WIN32
-# define wsprintf sprintf
+# define wsprintfA sprintf
 #endif
 
 const int AllocSize = 8;
@@ -181,7 +181,7 @@ MzString &MzString::operator << (int i)
 {
     char str[80];
 
-    wsprintf(str, "%d", i);
+    wsprintfA(str, "%d", i);
     append(str);
     return *this;
 }
@@ -191,7 +191,7 @@ MzString &MzString::operator << (long l)
 {
     char str[80];
 
-    wsprintf(str, "%ld", l);
+    wsprintfA(str, "%ld", l);
     append(str);
     return *this;
 }
