@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_e9cab919",
+        "filename": "lingucomponent/source/hyphenator/hyphen/hyphenimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-09-26T07:07:14Z",
+      "side": 1,
+      "message": "Btw: I believe that \"waits\" is correct here, because the logic is that \"if there\u0027s \\\\?\\, then hnj_fopen expects it to be utf-8, otherwise system-locale-encoded\" - see hyphen-fdo48017-wfopen.patch",
+      "parentUuid": "1a430d35_295e8176",
+      "revId": "2f5bf4800cc67b8239e2af4246ebbc90cac62777",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_a9735114",
         "filename": "lingucomponent/source/hyphenator/hyphen/hyphenimp.cxx",
         "patchSetId": 1
