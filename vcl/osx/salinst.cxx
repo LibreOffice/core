@@ -426,11 +426,13 @@ bool AquaSalInstance::IsMainThread() const
 
 void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 {
+    AquaSalTimer *pTimer = static_cast<AquaSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
     int nSubtype = [pEvent subtype];
     switch( nSubtype )
     {
     case AppStartTimerEvent:
-        AquaSalTimer::handleStartTimerEvent( pEvent );
+        if ( pTimer )
+            pTimer->handleStartTimerEvent( pEvent );
         break;
     case AppEndLoopEvent:
         [NSApp stop: NSApp];
@@ -450,7 +452,8 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         break;
     }
     case DispatchTimerEvent:
-        AquaSalTimer::handleDispatchTimerEvent();
+        if ( pTimer )
+            pTimer->handleDispatchTimerEvent( pEvent );
         break;
 #if !HAVE_FEATURE_MACOSX_SANDBOX
     case AppleRemoteControlEvent: // Defined in <apple_remote/RemoteMainController.h>
@@ -566,7 +569,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     {
         // handle available events
         NSEvent* pEvent = nil;
-        NSTimeInterval now = [[NSProcessInfo processInfo]systemUptime];
+        NSTimeInterval now = [[NSProcessInfo processInfo] systemUptime];
         do
         {
             SolarMutexReleaser aReleaser;
@@ -598,12 +601,11 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         {
             SolarMutexReleaser aReleaser;
 
-            NSDate* pDt = AquaSalTimer::pRunningTimer ? [AquaSalTimer::pRunningTimer fireDate] : [NSDate distantFuture];
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
     // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
             pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask
 SAL_WNODEPRECATED_DECLARATIONS_POP
-                            untilDate: pDt
+                            untilDate: [NSDate distantFuture]
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
             if( pEvent )
@@ -682,14 +684,9 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
 
     if( nType & VclInputFlags::TIMER )
     {
-        if( AquaSalTimer::pRunningTimer )
-        {
-            NSDate* pDt = [AquaSalTimer::pRunningTimer fireDate];
-            if( pDt && [pDt timeIntervalSinceNow] < 0 )
-            {
-                return true;
-            }
-        }
+        AquaSalTimer *pTimer = static_cast<AquaSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+        if (pTimer && pTimer->IsTimerElapsed())
+            return true;
     }
 
     unsigned/*NSUInteger*/ nEventMask = 0;
