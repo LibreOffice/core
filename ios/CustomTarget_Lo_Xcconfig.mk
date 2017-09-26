@@ -11,7 +11,6 @@ IOSWORK := $(BUILDDIR)/workdir
 IOSDIR := $(IOSWORK)/ios
 IOSRESOURCE := $(IOSDIR)/resources
 IOSGENERATED := $(IOSDIR)/generated
-IOSLINK := $(SRCDIR)/ios/ioswork
 LO_XCCONFIG = $(IOSGENERATED)/lo.xcconfig
 
 
@@ -20,7 +19,8 @@ define IOSbuild
 	CC=; \
 	$(call gb_Helper_print_on_error, \
 		xcodebuild \
-			-project $(SRCDIR)/ios/experimental/$(1)/$(1).xcodeproj \
+                        -xcconfig $(BUILDDIR)/ios/$1/lo_kit.xconfig \
+			-project $(SRCDIR)/ios/$(1)/$(1).xcodeproj \
 			-target $(1) \
 			-sdk $(XCODEBUILD_SDK) \
 			-arch $(XCODE_ARCHS) \
@@ -42,9 +42,8 @@ $(LO_XCCONFIG) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 
 	# prepare work directories for all ios builds
-	rm -rf $(IOSRESOURCE) $(IOSLINK) 2>/dev/null;
+	rm -rf $(IOSRESOURCE) 2>/dev/null;
 	mkdir -p $(IOSDIR) $(IOSGENERATED) $(IOSRESOURCE) $(IOSRESOURCE)/services;
-	ln -s $(IOSWORK) $(IOSLINK)
 
 	# generate file with call declarations
 	$(SRCDIR)/solenv/bin/native-code.py \
@@ -127,7 +126,6 @@ $(LO_XCCONFIG) :
 $(call gb_CustomTarget_get_clean_target,ios/Lo_Xcconfig):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
 	rm -rf $(IOSDIR)
-	rm -f $(IOSLINK)
 	rm -f $(WORKDIR)/CustomTarget/ios/Lo_Xcconfig.done
 
 

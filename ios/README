@@ -1,1 +1,57 @@
-experimental iOS apps that use LibreOffice code.
+iOS experimental app and LibreOfficeKit.
+
+-- experiments/LibreOfficeKit
+prelink all LO libraries into one to facilitate easier linking
+
+-- experiments/LibreOfficeLight
+a swift based UI, very much work in progress
+
+-- support
+the arm64 and simulator are the only supported processsors,
+old 32 bit iPhones are not supported.
+
+The swift app are done for 3 structures
+  simulator + full debug libraries
+  arm64 + full debug libraries
+  arm64 + optimized libraries
+
+-- SETUP
+Due to the 3 modes, at lease 3 workdir are needed together with a 
+seperate UI workdir.
+
+Because the main work is done on the UI, where it is convinient to
+swift fast between arm64 and simulator, it is advanteous to compile
+the 3 configurations of LO first, and then link against those.
+
+Due to the multiple workdirs a distint directory setup is needed
+   ./core - libreoffice git clone (name can be changed)
+   ./ios-arm64 - workdir for production, autogen.input:
+                        standard +
+                        #--enable-debug
+                        #--enable-ios-simulator
+                        --host=arm64-apple-darwin
+   ./ios-arm64-debug - workdir for debug on device, autogen.input:
+                        standard +
+                        --enable-debug
+                        #--enable-ios-simulator
+                        --host=arm64-apple-darwin
+   ./ios-simulator - workdir for simulator-debug, autogen.input:
+                        standard +
+                        --enable-debug
+                        --enable-ios-simulator
+                        --host=arm64-apple-darwin
+   ./ios-app - workdir for UI, NO autogen.input
+
+-- Steps to generate
+1) copy ./core/distro-configs/LibreOfficeiOS.conf to autogen.input in
+   ./ios-arm64, ./ios-arm64-debug, ./ios-simulator
+   Correct as per above, add your local setup (e.g. location of tarballs)
+2) run ../core/autogen.sh in ios-arm64, ios-arm64-debug and ios-simulator
+   this will generate ./*/ios/lo.xcconfig and prepare LO to be compiled
+3) run make in ios-arm64, ios-arm64-debug and ios-simulator
+   this will build LO is 3 configurations and store the LibreOfficeKit
+   libraries in ./ios-app/libraries as:
+           ./ios-app/Library/LibreOfficeKit-arm64.a
+           ./ios-app/Library/LibreOfficeKit-arm64-debug.a
+           ./ios-app/Library/LibreOfficeKit-simulator.a
+4) open xcode with LibreOfficeLight and enjoy

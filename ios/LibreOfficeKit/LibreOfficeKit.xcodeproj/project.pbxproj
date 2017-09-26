@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -25,7 +25,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3969A8CA1F7826EB006F06A9 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../../ioswork/ios/generated/lo.xcconfig; sourceTree = "<group>"; };
 		39B5D2151F78130F008FB162 /* libLibreOfficeKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLibreOfficeKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		39B5D2181F78130F008FB162 /* LibreOfficeKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibreOfficeKit.h; sourceTree = "<group>"; };
 		39B5D2191F78130F008FB162 /* LibreOfficeKit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibreOfficeKit.mm; sourceTree = "<group>"; };
@@ -45,7 +44,6 @@
 		3969A8C91F782610006F06A9 /* Support files */ = {
 			isa = PBXGroup;
 			children = (
-				3969A8CA1F7826EB006F06A9 /* lo.xcconfig */,
 			);
 			name = "Support files";
 			sourceTree = "<group>";
@@ -112,7 +110,7 @@
 				};
 			};
 			buildConfigurationList = 39B5D2101F78130F008FB162 /* Build configuration list for PBXProject "LibreOfficeKit" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (

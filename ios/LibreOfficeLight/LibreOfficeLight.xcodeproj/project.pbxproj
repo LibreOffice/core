@@ -50,7 +50,6 @@
 		3992D8591E5B762A00BEA987 /* DocumentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DocumentController.swift; path = LibreOfficeLight/DocumentController.swift; sourceTree = SOURCE_ROOT; };
 		3992D85B1E5B764A00BEA987 /* SideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideMenu.swift; path = LibreOfficeLight/SideMenu.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
-		39B084E21E5F0A9600682A59 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../../ioswork/ios/generated/lo.xcconfig; sourceTree = SOURCE_ROOT; };
 		39B084E51E5F0BB400682A59 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../../ioswork/ios/resources/fundamentalrc; sourceTree = SOURCE_ROOT; };
 		39B084E61E5F0BB400682A59 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../../ioswork/ios/resources/offapi.rdb; sourceTree = SOURCE_ROOT; };
 		39B084E71E5F0BB400682A59 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = ../../ioswork/ios/resources/oovbaapi.rdb; sourceTree = SOURCE_ROOT; };
@@ -78,7 +77,6 @@
 				39022C221EDC303200100066 /* InfoPlist.strings */,
 				39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */,
 				397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */,
-				39B084E21E5F0A9600682A59 /* lo.xcconfig */,
 				397E09071E597BD8001374E0 /* Assets.xcassets */,
 				396F92F61E7AE62400A28C82 /* Settings.bundle */,
 			);
@@ -286,7 +284,6 @@
 /* Begin XCBuildConfiguration section */
 		397E09231E597BD8001374E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
@@ -364,7 +361,6 @@
 		};
 		397E09241E597BD8001374E0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
@@ -436,7 +432,6 @@
 		};
 		397E09261E597BD8001374E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -476,7 +471,6 @@
 		};
 		397E09271E597BD8001374E0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39B084E21E5F0A9600682A59 /* lo.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
