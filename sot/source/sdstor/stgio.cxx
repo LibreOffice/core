@@ -24,6 +24,7 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
+#include <o3tl/safeint.hxx>
 #include <rtl/instance.hxx>
 
 #include <memory>
@@ -88,9 +89,21 @@ void StgIo::SetupStreams()
     m_pDataStrm = nullptr;
     m_pFAT      = nullptr;
     ResetError();
-    SetPhysPageSize( 1 << m_aHdr.GetPageSize() );
-    m_pFAT = new StgFATStrm( *this );
-    m_pTOC = new StgDirStrm( *this );
+    short nPhysPageSize = 1 << m_aHdr.GetPageSize();
+    SetPhysPageSize(nPhysPageSize);
+    sal_Int32 nFatStrmSize;
+    if (o3tl::checked_multiply<sal_Int32>(m_aHdr.GetFATSize(), nPhysPageSize, nFatStrmSize))
+    {
+        SAL_WARN("sot", "Error: " << m_aHdr.GetFATSize() << " * " << nPhysPageSize << " would overflow");
+        SetError(SVSTREAM_FILEFORMAT_ERROR);
+        m_pFAT = nullptr;
+        m_pTOC = nullptr;
+    }
+    else
+    {
+        m_pFAT = new StgFATStrm(*this, nFatStrmSize);
+        m_pTOC = new StgDirStrm( *this );
+    }
     if( !GetError() )
     {
         StgDirEntry* pRoot = m_pTOC->GetRoot();
