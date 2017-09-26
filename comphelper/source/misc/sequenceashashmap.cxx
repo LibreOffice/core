@@ -26,7 +26,6 @@
 namespace comphelper{
 
 SequenceAsHashMap::SequenceAsHashMap()
-    : SequenceAsHashMapBase()
 {
 }
 
