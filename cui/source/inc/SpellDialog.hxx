@@ -84,7 +84,7 @@ public:
     void            Init(VclPtr<ToolBox> const &rToolbar);
     void            SetModifyHdl(const Link<Edit&,void>& rLink) override { m_aModifyLink = rLink;}
 
-    void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
+    void            SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
     void            SetText( const OUString& rStr ) override;
 
     bool            MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker1>& );
