@@ -184,7 +184,6 @@ public:
     virtual const std::vector<LayoutAtomPtr>& getChildren() const override;
 private:
     static bool compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int32 nSecond);
-    static bool compareResult(sal_Int32 nOperator, const OUString& sFirst, const OUString& sSecond);
     const dgm::Point* getPresNode() const;
     sal_Int32 getNodeCount() const;
 

@@ -1265,8 +1265,6 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
     }
     else if (pButton == m_pOKButton)
     {
-        GetAddHdl().Call( *this );
-
         // If we are displaying Slot API commands then this the dialog is being
         // run from Tools/Configure and we should not close it
         if ( !m_bShowSlots )
@@ -1293,12 +1291,6 @@ SvxScriptSelectorDialog::SetRunLabel()
     m_pOKButton->SetText(CuiResId(RID_SVXSTR_SELECTOR_RUN));
 }
 
-void
-SvxScriptSelectorDialog::SetDialogDescription( const OUString& rDescription )
-{
-    m_pDialogDescription->SetText( rDescription );
-}
-
 OUString
 SvxScriptSelectorDialog::GetScriptURL() const
 {
@@ -1318,12 +1310,6 @@ SvxScriptSelectorDialog::GetScriptURL() const
     }
 
     return result;
-}
-
-OUString
-SvxScriptSelectorDialog::GetSelectedDisplayName()
-{
-    return m_pCommands->GetEntryText( m_pCommands->FirstSelected() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -192,7 +192,6 @@ class SvxScriptSelectorDialog : public ModalDialog
     OUString                               m_sDefaultDesc;
     SfxStylesInfo_Impl                     m_aStylesInfo;
     bool                                   m_bShowSlots;
-    Link<SvxScriptSelectorDialog&,void>    m_aAddHdl;
 
     DECL_LINK( ClickHdl, Button *, void );
     DECL_LINK( SelectHdl, SvTreeListBox*, void );
@@ -210,18 +209,8 @@ public:
     virtual ~SvxScriptSelectorDialog() override;
     virtual void dispose() override;
 
-    void        SetAddHdl( const Link<SvxScriptSelectorDialog&,void>& rLink ) { m_aAddHdl = rLink; }
-    const Link<SvxScriptSelectorDialog&,void>& GetAddHdl() const { return m_aAddHdl; }
-
-    void        SetImageProvider(SaveInData* provider)
-    {
-        m_pCategories->SetImageProvider(provider);
-    }
-
     OUString    GetScriptURL() const;
-    OUString    GetSelectedDisplayName();
     void        SetRunLabel();
-    void        SetDialogDescription(const OUString& rDescription);
 };
 
 #endif
