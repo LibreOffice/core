@@ -1030,9 +1030,9 @@ void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 sal_uInt32 SdrCircObj::GetSnapPointCount() const
 {
     if (meCircleKind==OBJ_CIRC) {
-        return 1L;
+        return 1;
     } else {
-        return 3L;
+        return 3;
     }
 }
 
