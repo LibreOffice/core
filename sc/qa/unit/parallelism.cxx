@@ -103,7 +103,11 @@ void ScParallelismTest::testSUMIFS()
 
     for (auto i = 1; i < 1000; i++)
     {
-        /*A*/ m_pDoc->SetValue(0, i, 0, i/10 + 1000);
+        /*A*/
+        if (i%19)
+            m_pDoc->SetValue(0, i, 0, i/10 + 1000);
+        else
+            m_pDoc->SetValue(0, i, 0, 123456);
         /*B*/ m_pDoc->SetValue(1, i, 0, i%10);
         /*C*/ m_pDoc->SetValue(2, i, 0, i%5);
 
@@ -161,7 +165,10 @@ void ScParallelismTest::testSUMIFS()
     for (auto i = 1; i < 1000; i++)
     {
         OString sMessage = "At row " + OString::number(i+1);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), m_pDoc->GetValue(5, 10+i%10, 0), m_pDoc->GetValue(15, i, 0), 1e-10);
+        if ((10+i%10)%19)
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), m_pDoc->GetValue(5, 10+i%10, 0), m_pDoc->GetValue(15, i, 0), 1e-10);
+        else
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(sMessage.getStr(), 0, m_pDoc->GetValue(15, i, 0), 1e-10);
     }
 
     m_pDoc->DeleteTab(0);
