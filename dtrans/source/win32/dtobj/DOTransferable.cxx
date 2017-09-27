@@ -230,14 +230,8 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
             // check CF_DIB availability as an alternative
             fetc.setClipformat(CF_DIB);
 
-            try
-            {
-                clipDataStream = getClipboardData( fetc );
-            }
-            catch( UnsupportedFlavorException& )
-            {
-                throw; // pass through, tried all possibilities
-            }
+            clipDataStream = getClipboardData( fetc );
+                // pass UnsupportedFlavorException out, tried all possibilities
         }
         else
             throw; // pass through exception
