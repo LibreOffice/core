@@ -189,6 +189,8 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
             || name == "etiGraphicExport"
             || name == "epsGraphicExport"
             || name == "releasePool" // vcl/osx/saldata.cxx
+            || name == "call_userEventFn"
+                // vcl/unx/gtk/gtkdata.cxx, vcl/unx/gtk3/gtk3gtkdata.cxx
             )
                 return true;
     }

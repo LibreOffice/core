@@ -816,12 +816,11 @@ void GtkSalTimer::Stop()
 extern "C" {
     static gboolean call_userEventFn( void *data )
     {
-        GtkSalData *pThis = static_cast<GtkSalData *>(data);
         SolarMutexGuard aGuard;
         const SalGenericDisplay *pDisplay = GetGenericUnixSalData()->GetDisplay();
         if ( pDisplay )
         {
-            GtkSalDisplay *pThisDisplay = pThis->GetGtkDisplay();
+            GtkSalDisplay *pThisDisplay = static_cast<GtkSalData *>(data)->GetGtkDisplay();
             assert(static_cast<const SalGenericDisplay *>(pThisDisplay) == pDisplay);
             pThisDisplay->DispatchInternalEvent();
         }
