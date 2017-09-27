@@ -35,9 +35,9 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 #ifdef _WIN32_WINNT_WINBLUE
     bool const bIsVistaOrLater = IsWindowsVistaOrGreater();
 #else
-    OSVERSIONINFO   osverinfo;
-    osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    GetVersionEx( &osverinfo );
+    OSVERSIONINFOW osverinfo;
+    osverinfo.dwOSVersionInfoSize = sizeof(osverinfo);
+    GetVersionExW( &osverinfo );
     bool const bIsVistaOrLater = (osverinfo.dwMajorVersion >= 6);
 #endif
 
