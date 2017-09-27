@@ -1,0 +1,13 @@
+diff -ru gpgme.orig/m4/ax_cxx_compile_stdcxx.m4 gpgme/m4/ax_cxx_compile_stdcxx.m4
+--- gpgme.orig/m4/ax_cxx_compile_stdcxx.m4	2016-05-27 22:04:36.000000000 +0200
++++ gpgme/m4/ax_cxx_compile_stdcxx.m4	2017-09-29 17:34:49.795243600 +0200
+@@ -156,7 +156,7 @@
+ 
+ #error "This is not a C++ compiler"
+ 
+-#elif __cplusplus < 201103L
++#elif __cplusplus < 201103L && !(defined _MSC_VER)
+ 
+ #error "This is not a C++11 compiler"
+ 
+Nur in gpgme/m4: ax_cxx_compile_stdcxx.m4~.
