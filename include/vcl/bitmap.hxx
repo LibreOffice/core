@@ -229,8 +229,8 @@ public:
     Bitmap&                 operator=( const Bitmap& rBitmap );
     Bitmap&                 operator=( Bitmap&& rBitmap );
     inline bool             operator!() const;
-    inline bool             operator==( const Bitmap& rBitmap ) const;
-    inline bool             operator!=( const Bitmap& rBitmap ) const;
+    bool                    operator==( const Bitmap& rBitmap ) const = delete;
+    bool                    operator!=( const Bitmap& rBitmap ) const = delete;
 
     bool                    IsEqual( const Bitmap& rBmp ) const;
 
@@ -749,16 +749,6 @@ private:
 inline bool Bitmap::operator!() const
 {
     return( mxImpBmp == nullptr );
-}
-
-inline bool Bitmap::operator==( const Bitmap& rBitmap ) const
-{
-    return( rBitmap.mxImpBmp == mxImpBmp );
-}
-
-inline bool Bitmap::operator!=( const Bitmap& rBitmap ) const
-{
-    return( rBitmap.mxImpBmp != mxImpBmp );
 }
 
 inline bool Bitmap::IsEmpty() const
