@@ -86,7 +86,7 @@ namespace
     ::sw::mark::IMark* pMark = getIDocumentMarkAccess()->makeMark(
         *GetCursor(),
         rName,
-        eMark);
+        eMark, sw::mark::InsertMode::New);
     ::sw::mark::IBookmark* pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pMark);
     if(pBookmark)
     {

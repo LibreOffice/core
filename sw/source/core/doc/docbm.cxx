@@ -367,7 +367,8 @@ namespace sw { namespace mark
 
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const OUString& rName,
-        const IDocumentMarkAccess::MarkType eType)
+        const IDocumentMarkAccess::MarkType eType,
+        sw::mark::InsertMode const eMode)
     {
 #if OSL_DEBUG_LEVEL > 0
         {
@@ -466,7 +467,7 @@ namespace sw { namespace mark
                 // no special array for these
                 break;
         }
-        pMarkBase->InitDoc(m_pDoc);
+        pMarkBase->InitDoc(m_pDoc, eMode);
         SAL_INFO("sw.core", "--- makeType ---");
         SAL_INFO("sw.core", "Marks");
         lcl_DebugMarks(m_vAllMarks);
@@ -484,7 +485,8 @@ namespace sw { namespace mark
         const OUString& rType )
     {
         sw::mark::IMark* pMark = makeMark( rPaM, rName,
-                IDocumentMarkAccess::MarkType::TEXT_FIELDMARK );
+                IDocumentMarkAccess::MarkType::TEXT_FIELDMARK,
+                sw::mark::InsertMode::New);
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
@@ -498,7 +500,8 @@ namespace sw { namespace mark
         const OUString& rType)
     {
         sw::mark::IMark* pMark = makeMark( rPaM, rName,
-                IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK );
+                IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK,
+                sw::mark::InsertMode::New);
         sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
         if (pFieldMark)
             pFieldMark->SetFieldname( rType );
@@ -516,14 +519,15 @@ namespace sw { namespace mark
         if(ppExistingMark != m_vBookmarks.end())
             return ppExistingMark->get();
         const SwPaM aPaM(aPos);
-        return makeMark(aPaM, OUString(), eType);
+        return makeMark(aPaM, OUString(), eType, sw::mark::InsertMode::New);
     }
 
     sw::mark::IMark* MarkManager::makeAnnotationMark(
         const SwPaM& rPaM,
         const OUString& rName )
     {
-        return makeMark( rPaM, rName, IDocumentMarkAccess::MarkType::ANNOTATIONMARK );
+        return makeMark(rPaM, rName, IDocumentMarkAccess::MarkType::ANNOTATIONMARK,
+                sw::mark::InsertMode::New);
     }
 
     void MarkManager::repositionMark(
@@ -1281,7 +1285,9 @@ void SaveBookmark::SetInDoc(
     if(!aPam.HasMark()
         || CheckNodesRange(aPam.GetPoint()->nNode, aPam.GetMark()->nNode, true))
     {
-        ::sw::mark::IBookmark* const pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pDoc->getIDocumentMarkAccess()->makeMark(aPam, m_aName, m_eOrigBkmType));
+        ::sw::mark::IBookmark* const pBookmark = dynamic_cast<::sw::mark::IBookmark*>(
+            pDoc->getIDocumentMarkAccess()->makeMark(aPam, m_aName,
+                m_eOrigBkmType, sw::mark::InsertMode::New));
         if(pBookmark)
         {
             pBookmark->SetKeyCode(m_aCode);

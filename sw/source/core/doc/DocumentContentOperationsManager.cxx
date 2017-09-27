@@ -268,19 +268,11 @@ namespace
                 lcl_SetCpyPos(pMark->GetOtherMarkPos(), rStt, *pCpyStt, *aTmpPam.GetMark(), nDelCount);
             }
 
-            const IDocumentMarkAccess::MarkType aMarkType = IDocumentMarkAccess::GetType(*pMark);
-            if (aMarkType == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK)
-            {
-                // Node's CopyText() copies also dummy characters, which need to be removed
-                // (they will be added later in MarkBase::InitDoc inside IDocumentMarkAccess::makeMark)
-                // CHECKBOX_FIELDMARK doesn't contain any other data in its range, so just clear it
-                pDestDoc->getIDocumentContentOperations().DeleteRange(aTmpPam);
-            }
-
             ::sw::mark::IMark* const pNewMark = pDestDoc->getIDocumentMarkAccess()->makeMark(
                 aTmpPam,
                 pMark->GetName(),
-                IDocumentMarkAccess::GetType(*pMark));
+                IDocumentMarkAccess::GetType(*pMark),
+                ::sw::mark::InsertMode::CopyText);
             // Explicitly try to get exactly the same name as in the source
             // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
             pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
@@ -3900,7 +3892,10 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk =
+                    m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam,
+                        OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
+                        ::sw::mark::InsertMode::New);
 
                 //JP 06.01.98: MUSS noch optimiert werden!!!
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
@@ -3991,7 +3986,10 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::EMPTY, nullptr);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk =
+                    m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam,
+                        OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
+                        ::sw::mark::InsertMode::New);
 
                 SwIndex& rIdx = aDelPam.GetPoint()->nContent;
                 rIdx.Assign( nullptr, 0 );
