@@ -1464,6 +1464,8 @@ public:
 
 void ScFormulaCell::Interpret()
 {
+    ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
+
 #if DEBUG_CALCULATION
     static bool bDebugCalculationInit = true;
     if (bDebugCalculationInit)
@@ -1475,7 +1477,7 @@ void ScFormulaCell::Interpret()
     DebugCalculationStacker aDebugEntry( aPos, pDocument);
 #endif
 
-    if (!IsDirtyOrInTableOpDirty() || pDocument->GetRecursionHelper().IsInReturn())
+    if (!IsDirtyOrInTableOpDirty() || rRecursionHelper.IsInReturn())
         return;     // no double/triple processing
 
     //FIXME:
@@ -1496,20 +1498,19 @@ void ScFormulaCell::Interpret()
             aResult.SetResultError( FormulaError::NONE );
 
         // Start or add to iteration list.
-        if (!pDocument->GetRecursionHelper().IsDoingIteration() ||
-                !pDocument->GetRecursionHelper().GetRecursionInIterationStack().top()->bIsIterCell)
-            pDocument->GetRecursionHelper().SetInIterationReturn( true);
+        if (!rRecursionHelper.IsDoingIteration() ||
+                !rRecursionHelper.GetRecursionInIterationStack().top()->bIsIterCell)
+            rRecursionHelper.SetInIterationReturn( true);
 
         return;
     }
     // no multiple interprets for GetErrCode, IsValue, GetValue and
     // different entry point recursions. Would also lead to premature
     // convergence in iterations.
-    if (pDocument->GetRecursionHelper().GetIteration() && nSeenInIteration ==
-            pDocument->GetRecursionHelper().GetIteration())
+    if (rRecursionHelper.GetIteration() && nSeenInIteration ==
+            rRecursionHelper.GetIteration())
         return ;
 
-    ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
     bool bOldRunning = bRunning;
     if (rRecursionHelper.GetRecursionCount() > MAXRECURSION)
     {
