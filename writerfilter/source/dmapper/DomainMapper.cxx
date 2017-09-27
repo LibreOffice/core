@@ -1493,7 +1493,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_EG_SectPrContents_bidi:
         if (pSectionContext != nullptr)
-            pSectionContext->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode2::RL_TB) ));
+        {
+            const sal_Int16 writingMode = (nIntValue != 0) ? sal_Int16(text::WritingMode2::RL_TB) : sal_Int16(text::WritingMode2::LR_TB);
+            pSectionContext->Insert(PROP_WRITING_MODE, uno::makeAny(writingMode));
+        }
         break;
     case NS_ooxml::LN_EG_RPrBase_highlight:
         {
