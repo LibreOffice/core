@@ -42,10 +42,10 @@
 */
 typedef BOOL (__stdcall * CloseServiceHandle_t)(SC_HANDLE);
 typedef BOOL (__stdcall * ControlService_t)(SC_HANDLE, DWORD, LPSERVICE_STATUS);
-typedef SC_HANDLE (__stdcall * OpenSCManager_t)(LPCSTR, LPCSTR, DWORD);
-typedef SC_HANDLE (__stdcall * OpenService_t)(SC_HANDLE, LPCSTR, DWORD);
+typedef SC_HANDLE (__stdcall * OpenSCManager_t)(LPCWSTR, LPCWSTR, DWORD);
+typedef SC_HANDLE (__stdcall * OpenService_t)(SC_HANDLE, LPCWSTR, DWORD);
 typedef BOOL (__stdcall * QueryServiceStatus_t)(SC_HANDLE, LPSERVICE_STATUS);
-typedef BOOL (__stdcall * StartService_t)(SC_HANDLE, DWORD, LPCSTR*);
+typedef BOOL (__stdcall * StartService_t)(SC_HANDLE, DWORD, LPCWSTR*);
 
 static CloseServiceHandle_t CloseServiceHandle_ = nullptr;
 static ControlService_t ControlService_ = nullptr;
@@ -54,7 +54,7 @@ static OpenService_t OpenService_ = nullptr;
 static QueryServiceStatus_t QueryServiceStatus_ = nullptr;
 static StartService_t StartService_ = nullptr;
 
-const char * const INDEXING_SERVICE_NAME = "cisvc";
+const char * const INDEXING_SERVICE_NAME = L"cisvc";
 
 bool StopIndexingService(SC_HANDLE hService)
 {
@@ -150,18 +150,16 @@ void StartIndexingService(SC_HANDLE hService)
 
 extern "C" UINT __stdcall RestartIndexingService(MSIHANDLE)
 {
-    // MessageBoxW(NULL, L"Restarting Indexing Service", L"Message", MB_OK | MB_ICONINFORMATION);
-
-    HMODULE hAdvapi32 = LoadLibrary("advapi32.dll");
+    HMODULE hAdvapi32 = LoadLibraryW(L"advapi32.dll");
 
     if (hAdvapi32)
     {
         CloseServiceHandle_ = reinterpret_cast<CloseServiceHandle_t>(GetProcAddress(hAdvapi32, "CloseServiceHandle"));
         ControlService_ = reinterpret_cast<ControlService_t>(GetProcAddress(hAdvapi32, "ControlService"));
-        OpenSCManager_ = reinterpret_cast<OpenSCManager_t>(GetProcAddress(hAdvapi32, "OpenSCManagerA"));
-        OpenService_ = reinterpret_cast<OpenService_t>(GetProcAddress(hAdvapi32, "OpenServiceA"));
+        OpenSCManager_ = reinterpret_cast<OpenSCManager_t>(GetProcAddress(hAdvapi32, "OpenSCManagerW"));
+        OpenService_ = reinterpret_cast<OpenService_t>(GetProcAddress(hAdvapi32, "OpenServiceW"));
         QueryServiceStatus_ = reinterpret_cast<QueryServiceStatus_t>(GetProcAddress(hAdvapi32, "QueryServiceStatus"));
-        StartService_ = reinterpret_cast<StartService_t>(GetProcAddress(hAdvapi32, "StartServiceA"));
+        StartService_ = reinterpret_cast<StartService_t>(GetProcAddress(hAdvapi32, "StartServiceW"));
     }
 
     /* On systems other than Windows 2000/XP the service API
