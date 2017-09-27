@@ -44,7 +44,12 @@ public:
 
     const TextCharAttrib& GetAttrib( sal_uInt16 n ) const { return *maAttribs[n].get(); }
     TextCharAttrib& GetAttrib( sal_uInt16 n )       { return *maAttribs[n].get(); }
-    void            RemoveAttrib( sal_uInt16 n )    { maAttribs[n].release(); maAttribs.erase( maAttribs.begin() + n ); }
+    TextCharAttrib*  RemoveAttrib( sal_uInt16 n )
+    {
+        TextCharAttrib* pReleased = maAttribs[n].release();
+        maAttribs.erase( maAttribs.begin() + n );
+        return pReleased;
+    }
 
     void            InsertAttrib( TextCharAttrib* pAttrib );
 

@@ -2504,8 +2504,9 @@ void TextEngine::RemoveAttribs( sal_uInt32 nPara, sal_uInt16 nWhich )
     }
 }
 
-void TextEngine::RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib )
+TextCharAttrib* TextEngine::RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib )
 {
+    TextCharAttrib* pRet = nullptr;
     if ( nPara < mpDoc->GetNodes().size() )
     {
         TextNode* pNode = mpDoc->GetNodes()[ nPara ];
@@ -2516,7 +2517,7 @@ void TextEngine::RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib )
             {
                 if(&(rAttribs.GetAttrib( nAttr - 1 )) == &rAttrib)
                 {
-                    rAttribs.RemoveAttrib( nAttr -1 );
+                    pRet = rAttribs.RemoveAttrib( nAttr -1 );
                     break;
                 }
             }
@@ -2526,6 +2527,7 @@ void TextEngine::RemoveAttrib( sal_uInt32 nPara, const TextCharAttrib& rAttrib )
             FormatAndUpdate();
         }
     }
+    return pRet;
 }
 
 void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd, bool bIdleFormatAndUpdate )
