@@ -64,28 +64,8 @@ chart2/inc/ChartModel.hxx:483
     chart::ChartModel mnEnd sal_Int32
 chart2/source/controller/main/ElementSelector.hxx:37
     chart::ListBoxEntryData nHierarchyDepth sal_Int32
-chart2/source/inc/MediaDescriptorHelper.hxx:72
-    apphelper::MediaDescriptorHelper AsTemplate _Bool
-chart2/source/inc/MediaDescriptorHelper.hxx:80
-    apphelper::MediaDescriptorHelper Hidden _Bool
-chart2/source/inc/MediaDescriptorHelper.hxx:91
-    apphelper::MediaDescriptorHelper OpenNewView _Bool
-chart2/source/inc/MediaDescriptorHelper.hxx:92
-    apphelper::MediaDescriptorHelper Overwrite _Bool
-chart2/source/inc/MediaDescriptorHelper.hxx:94
-    apphelper::MediaDescriptorHelper Preview _Bool
-chart2/source/inc/MediaDescriptorHelper.hxx:95
+chart2/source/inc/MediaDescriptorHelper.hxx:85
     apphelper::MediaDescriptorHelper ReadOnly _Bool
-chart2/source/inc/MediaDescriptorHelper.hxx:98
-    apphelper::MediaDescriptorHelper Silent _Bool
-chart2/source/inc/MediaDescriptorHelper.hxx:99
-    apphelper::MediaDescriptorHelper Unpacked _Bool
-chart2/source/inc/MediaDescriptorHelper.hxx:102
-    apphelper::MediaDescriptorHelper Version sal_Int16
-chart2/source/inc/MediaDescriptorHelper.hxx:106
-    apphelper::MediaDescriptorHelper ViewId sal_Int16
-chart2/source/inc/MediaDescriptorHelper.hxx:116
-    apphelper::MediaDescriptorHelper SetEmbedded _Bool
 chart2/source/model/inc/BaseCoordinateSystem.hxx:118
     chart::BaseCoordinateSystem m_xContext css::uno::Reference<css::uno::XComponentContext>
 chart2/source/view/charttypes/PieChart.hxx:128
@@ -120,10 +100,6 @@ connectivity/source/inc/dbase/DTable.hxx:62
     connectivity::dbase::ODbaseTable::DBFHeader dateElems sal_uInt8 [3]
 connectivity/source/inc/dbase/DTable.hxx:86
     connectivity::dbase::ODbaseTable::DBFColumn db_adr sal_uInt32
-connectivity/source/inc/OTypeInfo.hxx:34
-    connectivity::OTypeInfo nPrecision sal_Int32
-connectivity/source/inc/OTypeInfo.hxx:36
-    connectivity::OTypeInfo nMaximumScale sal_Int16
 cppcanvas/source/mtfrenderer/emfpbrush.hxx:102
     cppcanvas::internal::EMFPBrush wrapMode sal_Int32
 cppcanvas/source/mtfrenderer/emfppen.hxx:42
@@ -246,10 +222,6 @@ emfio/source/reader/emfreader.cxx:324
     (anonymous namespace)::BLENDFUNCTION aBlendFlags unsigned char
 extensions/source/scanner/scanner.hxx:47
     ScannerManager mpData void *
-forms/source/component/FormattedField.hxx:45
-    frm::OFormattedModel m_nFieldType sal_Int32
-framework/inc/services/desktop.hxx:402
-    framework::Desktop m_xLastFrame css::uno::Reference<css::frame::XFrame>
 framework/inc/services/layoutmanager.hxx:262
     framework::LayoutManager m_bGlobalSettings _Bool
 framework/inc/services/layoutmanager.hxx:276
@@ -270,8 +242,6 @@ include/editeng/adjustitem.hxx:39
     SvxAdjustItem bLeft _Bool
 include/LibreOfficeKit/LibreOfficeKit.h:108
     _LibreOfficeKitDocumentClass nSize size_t
-include/linguistic/lngprophelp.hxx:178
-    linguistic::PropertyHelper_Spell nResMaxNumberOfSuggestions sal_Int16
 include/opencl/openclwrapper.hxx:36
     openclwrapper::KernelEnv mpkProgram cl_program
 include/opencl/openclwrapper.hxx:52
@@ -284,6 +254,8 @@ include/opencl/platforminfo.hxx:31
     OpenCLDeviceInfo mnFrequency size_t
 include/svx/bmpmask.hxx:129
     SvxBmpMask aSelItem class SvxBmpMaskSelectItem
+include/svx/ClassificationField.hxx:60
+    svx::ClassificationResult mnParagraph sal_Int32
 include/svx/float3d.hxx:177
     Svx3DWin pControllerItem class Svx3DCtrlItem *
 include/svx/imapdlg.hxx:118
@@ -535,9 +507,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo2/sw/source/filter/inc/rtf.hxx:27:9)
-sw/source/uibase/inc/fldmgr.hxx:77
-    SwInsertField_Data m_aDBDataSource css::uno::Any
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /home/noel/libo3/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49

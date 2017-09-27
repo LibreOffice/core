@@ -24,6 +24,14 @@ connectivity/source/drivers/evoab2/EApi.h:126
     (anonymous) ext char *
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
+connectivity/source/inc/OTypeInfo.hxx:31
+    connectivity::OTypeInfo aTypeName class rtl::OUString
+connectivity/source/inc/OTypeInfo.hxx:32
+    connectivity::OTypeInfo aLocalTypeName class rtl::OUString
+connectivity/source/inc/OTypeInfo.hxx:34
+    connectivity::OTypeInfo nPrecision sal_Int32
+connectivity/source/inc/OTypeInfo.hxx:36
+    connectivity::OTypeInfo nMaximumScale sal_Int16
 cppu/source/threadpool/threadpool.cxx:377
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
@@ -108,17 +116,17 @@ pyuno/source/module/pyuno_impl.hxx:326
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac ::std::unique_ptr<DlgEdFactory>
-sal/osl/unx/thread.cxx:93
+sal/osl/unx/thread.cxx:90
     osl_thread_priority_st m_Highest int
-sal/osl/unx/thread.cxx:94
+sal/osl/unx/thread.cxx:91
     osl_thread_priority_st m_Above_Normal int
-sal/osl/unx/thread.cxx:95
+sal/osl/unx/thread.cxx:92
     osl_thread_priority_st m_Normal int
-sal/osl/unx/thread.cxx:96
+sal/osl/unx/thread.cxx:93
     osl_thread_priority_st m_Below_Normal int
-sal/osl/unx/thread.cxx:97
+sal/osl/unx/thread.cxx:94
     osl_thread_priority_st m_Lowest int
-sal/osl/unx/thread.cxx:115
+sal/osl/unx/thread.cxx:112
     osl_thread_global_st m_priority struct osl_thread_priority_st
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
@@ -163,7 +171,7 @@ svl/source/crypto/cryptosign.cxx:280
 svl/source/crypto/cryptosign.cxx:281
     (anonymous namespace)::(anonymous) failInfo SECItem
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo2/svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
