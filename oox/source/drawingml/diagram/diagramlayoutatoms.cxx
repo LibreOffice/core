@@ -122,18 +122,6 @@ bool ConditionAtom::compareResult(sal_Int32 nOperator, sal_Int32 nFirst, sal_Int
     }
 }
 
-bool ConditionAtom::compareResult(sal_Int32 nOperator, const OUString& sFirst, const OUString& sSecond)
-{
-    switch (nOperator)
-    {
-    case XML_equ: return sFirst == sSecond;
-    case XML_neq: return sFirst != sSecond;
-    default:
-        SAL_WARN("oox.drawingml", "unsupported operator: " << nOperator);
-        return false;
-    }
-}
-
 const dgm::Point* ConditionAtom::getPresNode() const
 {
     const DiagramData::PointsNameMap& rPoints = mrLayoutNode.getDiagram().getData()->getPointsPresNameMap();
