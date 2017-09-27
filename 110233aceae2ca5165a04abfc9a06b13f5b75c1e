@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_924cfa71",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-09-27T09:44:21Z",
+      "side": 1,
+      "message": "We\u0027re also processing single events in DispatchUserEvents, so that means removing a single front item. Always happens for Dialog::Execute, where we sleep waiting for user input.\n\nMaybe a memmove is overall cheaper then all the alloc + free of list items. Has always been a list; it\u0027s actually a queue. I didn\u0027t use std::queue, because there is those RemoveEvent function. Probably there is a better solution to invalidate / remove events.",
+      "parentUuid": "1a430d35_b219f67b",
+      "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_921eba61",
         "filename": "vcl/inc/salusereventlist.hxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_5269b2bd",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-09-27T09:44:21Z",
+      "side": 1,
+      "message": "Feel free to profile it ;-)\n\nChanging the lookup from O(log(n)) to O(1). Hmm - we have a lot of calls to isFrameAlive…\n\nI have no idea how often we actually add and remove frames.\n\nJust saw it had been an unordered_set in osx originally and I forgot to remove the hash function.\n\nI\u0027ll revert to std::unordered_set.",
+      "parentUuid": "1a430d35_921eba61",
+      "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_720f8e2e",
         "filename": "vcl/inc/salusereventlist.hxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2017-09-27T08:52:22Z",
       "side": 1,
       "message": "rather just return std::set\u003cSalFrame*\u003e instead of const_cast\u0027ing everywhere ?",
+      "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7264eee4",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-09-27T09:44:21Z",
+      "side": 1,
+      "message": "Can I just const_cast to const std::set\u003cSalFrame\u003e\u0026 ?\n\nI just try to prevent modifications to the set, not the frames in the set. Probably I should just const_cast the inserted frames to SalFrame* and keep a std::set\u003cSalFrame*\u003e.",
+      "parentUuid": "1a430d35_720f8e2e",
       "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
