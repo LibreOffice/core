@@ -90,14 +90,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
 {
     // get the private profile string
     OUString sValue;
-    if(!maFileName.isEmpty())
-    {
-        // get key/value from a file
-        Config aCfg( maFileName );
-        aCfg.SetGroup( maGroupName );
-        sValue = OStringToOUString(aCfg.ReadKey(maKey), RTL_TEXTENCODING_DONTKNOW);
-    }
-    else
+    if(maFileName.isEmpty())
     {
         // get key/value from Windows registry
 #ifdef _WIN32
@@ -129,6 +122,12 @@ uno::Any PrivateProfileStringListener::getValueEvent()
 #endif
     }
 
+    // get key/value from a file
+    Config aCfg( maFileName );
+    aCfg.SetGroup( maGroupName );
+    sValue = OStringToOUString(aCfg.ReadKey(maKey), RTL_TEXTENCODING_DONTKNOW);
+
+
     return uno::makeAny( sValue );
 }
 
@@ -137,14 +136,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
     // set the private profile string
     OUString aValue;
     value >>= aValue;
-    if(!maFileName.isEmpty())
-    {
-        // set value into a file
-        Config aCfg( maFileName );
-        aCfg.SetGroup( maGroupName );
-        aCfg.WriteKey( maKey, OUStringToOString(aValue, RTL_TEXTENCODING_DONTKNOW) );
-    }
-    else
+    if(maFileName.isEmpty())
     {
         //set value into Windows registry
 #ifdef _WIN32
@@ -171,6 +163,12 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
         throw uno::RuntimeException("Not implemented" );
 #endif
     }
+
+    // set value into a file
+    Config aCfg( maFileName );
+    aCfg.SetGroup( maGroupName );
+    aCfg.WriteKey( maKey, OUStringToOString(aValue, RTL_TEXTENCODING_DONTKNOW) );
+
 
 }
 

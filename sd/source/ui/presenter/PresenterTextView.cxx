@@ -117,20 +117,19 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
 {
     ThrowIfDisposed();
 
-    if (rArguments.getLength() == 1)
-    {
-        Reference<rendering::XCanvas> xCanvas (rArguments[0], UNO_QUERY_THROW);
-        if (xCanvas.is())
-        {
-            mpImplementation->SetCanvas(
-                cppcanvas::VCLFactory::createCanvas(xCanvas));
-        }
-    }
-    else
+    if (!(rArguments.getLength() == 1))
     {
         throw RuntimeException("PresenterTextView: invalid number of arguments",
                 static_cast<XWeak*>(this));
     }
+
+    Reference<rendering::XCanvas> xCanvas (rArguments[0], UNO_QUERY_THROW);
+    if (xCanvas.is())
+    {
+        mpImplementation->SetCanvas(
+            cppcanvas::VCLFactory::createCanvas(xCanvas));
+    }
+
 }
 
 Any PresenterTextView::GetPropertyValue (const OUString& rsPropertyName)

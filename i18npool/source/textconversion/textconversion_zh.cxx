@@ -283,44 +283,42 @@ OUString SAL_CALL
 TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
 {
-    if (rLocale.Language == "zh" && ( nConversionType == TextConversionType::TO_SCHINESE || nConversionType == TextConversionType::TO_TCHINESE) ) {
-
-        aLocale=rLocale;
-        bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
-
-        if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER)
-            // char to char dictionary
-            return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
-        else {
-            Sequence <sal_Int32> offset;
-            // word to word dictionary
-            return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions, offset);
-        }
-    } else
+    if (rLocale.Language != "zh" || ( nConversionType != TextConversionType::TO_SCHINESE && nConversionType != TextConversionType::TO_TCHINESE) )
         throw NoSupportException(); // Conversion type is not supported in this service.
+
+    aLocale=rLocale;
+    bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
+
+    if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER)
+        // char to char dictionary
+        return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
+    else {
+        Sequence <sal_Int32> offset;
+        // word to word dictionary
+        return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions, offset);
+    }
 }
 
 OUString SAL_CALL
 TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
 {
-    if (rLocale.Language == "zh" && ( nConversionType == TextConversionType::TO_SCHINESE || nConversionType == TextConversionType::TO_TCHINESE) ) {
-
-        aLocale=rLocale;
-        bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
-
-        if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER) {
-            offset.realloc(0);
-            // char to char dictionary
-            return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
-        } else {
-            if (offset.getLength() < 2*nLength)
-                offset.realloc(2*nLength);
-            // word to word dictionary
-            return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions, offset);
-        }
-    } else
+    if (rLocale.Language != "zh" || ( nConversionType != TextConversionType::TO_SCHINESE && nConversionType != TextConversionType::TO_TCHINESE) )
         throw NoSupportException(); // Conversion type is not supported in this service.
+
+    aLocale=rLocale;
+    bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
+
+    if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER) {
+        offset.realloc(0);
+        // char to char dictionary
+        return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
+    } else {
+        if (offset.getLength() < 2*nLength)
+            offset.realloc(2*nLength);
+        // word to word dictionary
+        return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions, offset);
+    }
 }
 
 sal_Bool SAL_CALL

@@ -98,11 +98,9 @@ public:
     virtual css::uno::Any SAL_CALL getByName(
         const OUString& aName ) override
     {
-        if( hasItem( aName ) )
-            return css::uno::makeAny( getItem( aName ) );
-        else
+        if( !hasItem( aName ) )
             throw css::container::NoSuchElementException();
-
+        return css::uno::makeAny( getItem( aName ) );
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override

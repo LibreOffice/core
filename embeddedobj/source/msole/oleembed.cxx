@@ -903,75 +903,73 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
     else
 #endif
     {
-        if ( nVerbID == -9 )
-        {
-            // the workaround verb to show the object in case no server is available
-
-            // if it is possible, the object will be converted to OOo format
-            if ( !m_bTriedConversion )
-            {
-                m_bTriedConversion = true;
-                if ( TryToConvertToOOo( m_xObjectStream ) )
-                {
-                    changeState( embed::EmbedStates::ACTIVE );
-                    return;
-                }
-            }
-
-            if ( !m_xOwnView.is() && m_xObjectStream.is() && m_aFilterName != "Text" )
-            {
-                try {
-                    uno::Reference< io::XSeekable > xSeekable( m_xObjectStream, uno::UNO_QUERY );
-                    if ( xSeekable.is() )
-                        xSeekable->seek( 0 );
-
-                    m_xOwnView = new OwnView_Impl( m_xFactory, m_xObjectStream->getInputStream() );
-                }
-                catch( uno::RuntimeException& )
-                {
-                    throw;
-                }
-                catch (uno::Exception const& e)
-                {
-                    SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::doVerb: "
-                        "-9 fallback path: exception caught: " << e.Message);
-                }
-            }
-
-            // it may be the OLE Storage, try to extract stream
-            if ( !m_xOwnView.is() && m_xObjectStream.is() && m_aFilterName == "Text" )
-            {
-                uno::Reference< io::XStream > xStream = lcl_ExtractObjectStream( m_xFactory, m_xObjectStream );
-
-                if ( TryToConvertToOOo( xStream ) )
-                {
-                    changeState( embed::EmbedStates::ACTIVE );
-                    return;
-                }
-            }
-
-            if (!m_xOwnView.is() || !m_xOwnView->Open())
-            {
-                //Make a RO copy and see if the OS can find something to at
-                //least display the content for us
-                if (m_aTempDumpURL.isEmpty())
-                    m_aTempDumpURL = lcl_ExtractObject(m_xFactory, m_xObjectStream);
-
-                if (!m_aTempDumpURL.isEmpty())
-                {
-                    uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
-                        css::system::SystemShellExecute::create(comphelper::getComponentContext(m_xFactory)) );
-                    xSystemShellExecute->execute(m_aTempDumpURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
-                }
-                else
-                    throw embed::UnreachableStateException();
-            }
-        }
-        else
+        if ( nVerbID != -9 )
         {
 
             throw embed::UnreachableStateException();
         }
+
+        // the workaround verb to show the object in case no server is available
+
+        // if it is possible, the object will be converted to OOo format
+        if ( !m_bTriedConversion )
+        {
+            m_bTriedConversion = true;
+            if ( TryToConvertToOOo( m_xObjectStream ) )
+            {
+                changeState( embed::EmbedStates::ACTIVE );
+                return;
+            }
+        }
+
+        if ( !m_xOwnView.is() && m_xObjectStream.is() && m_aFilterName != "Text" )
+        {
+            try {
+                uno::Reference< io::XSeekable > xSeekable( m_xObjectStream, uno::UNO_QUERY );
+                if ( xSeekable.is() )
+                    xSeekable->seek( 0 );
+
+                m_xOwnView = new OwnView_Impl( m_xFactory, m_xObjectStream->getInputStream() );
+            }
+            catch( uno::RuntimeException& )
+            {
+                throw;
+            }
+            catch (uno::Exception const& e)
+            {
+                SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::doVerb: "
+                    "-9 fallback path: exception caught: " << e.Message);
+            }
+        }
+
+        // it may be the OLE Storage, try to extract stream
+        if ( !m_xOwnView.is() && m_xObjectStream.is() && m_aFilterName == "Text" )
+        {
+            uno::Reference< io::XStream > xStream = lcl_ExtractObjectStream( m_xFactory, m_xObjectStream );
+
+            if ( TryToConvertToOOo( xStream ) )
+            {
+                changeState( embed::EmbedStates::ACTIVE );
+                return;
+            }
+        }
+
+        if (!m_xOwnView.is() || !m_xOwnView->Open())
+        {
+            //Make a RO copy and see if the OS can find something to at
+            //least display the content for us
+            if (m_aTempDumpURL.isEmpty())
+                m_aTempDumpURL = lcl_ExtractObject(m_xFactory, m_xObjectStream);
+
+            if (m_aTempDumpURL.isEmpty())
+                throw embed::UnreachableStateException();
+
+            uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+                css::system::SystemShellExecute::create(comphelper::getComponentContext(m_xFactory)) );
+            xSystemShellExecute->execute(m_aTempDumpURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
+
+        }
+
     }
 }
 

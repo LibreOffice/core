@@ -69,19 +69,18 @@ void SAL_CALL StatusBarWrapper::dispose()
     m_aListenerContainer.disposeAndClear( aEvent );
 
     SolarMutexGuard g;
-    if ( !m_bDisposed )
-    {
-        if ( m_xStatusBarManager.is() )
-            m_xStatusBarManager->dispose();
-        m_xStatusBarManager.clear();
-        m_xConfigSource.clear();
-        m_xConfigData.clear();
-        m_xContext.clear();
-
-        m_bDisposed = true;
-    }
-    else
+    if ( m_bDisposed )
         throw DisposedException();
+
+    if ( m_xStatusBarManager.is() )
+        m_xStatusBarManager->dispose();
+    m_xStatusBarManager.clear();
+    m_xConfigSource.clear();
+    m_xConfigData.clear();
+    m_xContext.clear();
+
+    m_bDisposed = true;
+
 }
 
 // XInitialization

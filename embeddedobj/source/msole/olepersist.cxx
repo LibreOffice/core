@@ -120,15 +120,12 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
                     ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
             uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aResult );
-            if ( xTempOutStream.is() )
-            {
-                // copy stream contents to the file
-                ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOutStream );
-                xTempOutStream->closeOutput();
-                xTempOutStream.clear();
-            }
-            else
+            if ( !xTempOutStream.is() )
                 throw io::IOException(); // TODO:
+            // copy stream contents to the file
+            ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOutStream );
+            xTempOutStream->closeOutput();
+            xTempOutStream.clear();
         }
         catch( const packages::WrongPasswordException& )
         {
@@ -267,14 +264,10 @@ uno::Reference< io::XStream > OleEmbeddedObject::GetNewFilledTempStream_Impl( co
             uno::UNO_QUERY_THROW );
 
     uno::Reference< io::XOutputStream > xTempOutStream = xTempFile->getOutputStream();
-    if ( xTempOutStream.is() )
-    {
-        ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOutStream );
-        xTempOutStream->flush();
-    }
-    else
+    if ( !xTempOutStream.is() )
         throw io::IOException(); // TODO:
-
+    ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOutStream );
+    xTempOutStream->flush();
     return xTempFile;
 }
 
@@ -388,110 +381,108 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
     uno::Reference< io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY_THROW );
     uno::Reference< io::XOutputStream > xTempOutStream = xTempFile->getOutputStream();
-    if ( xTempOutStream.is() )
+    if ( !xTempOutStream.is() )
+        throw io::IOException(); // TODO:
+
+    // the OlePres stream must have additional header
+    // TODO/LATER: might need to be extended in future (actually makes sense only for SO7 format)
+    uno::Reference< io::XInputStream > xInCacheStream = xCachedVisualRepresentation->getInputStream();
+    if ( !xInCacheStream.is() )
+        throw uno::RuntimeException();
+
+    // write 0xFFFFFFFF at the beginning
+    uno::Sequence< sal_Int8 > aData( 4 );
+    * reinterpret_cast<sal_uInt32*>(aData.getArray()) = 0xFFFFFFFF;
+
+    xTempOutStream->writeBytes( aData );
+
+    // write clipboard format
+    uno::Sequence< sal_Int8 > aSigData( 2 );
+    xInCacheStream->readBytes( aSigData, 2 );
+    if ( aSigData.getLength() < 2 )
+        throw io::IOException();
+
+    if ( aSigData[0] == 'B' && aSigData[1] == 'M' )
     {
-        // the OlePres stream must have additional header
-        // TODO/LATER: might need to be extended in future (actually makes sense only for SO7 format)
-        uno::Reference< io::XInputStream > xInCacheStream = xCachedVisualRepresentation->getInputStream();
-        if ( !xInCacheStream.is() )
-            throw uno::RuntimeException();
-
-        // write 0xFFFFFFFF at the beginning
-        uno::Sequence< sal_Int8 > aData( 4 );
-        * reinterpret_cast<sal_uInt32*>(aData.getArray()) = 0xFFFFFFFF;
-
-        xTempOutStream->writeBytes( aData );
-
-        // write clipboard format
-        uno::Sequence< sal_Int8 > aSigData( 2 );
-        xInCacheStream->readBytes( aSigData, 2 );
-        if ( aSigData.getLength() < 2 )
-            throw io::IOException();
-
-        if ( aSigData[0] == 'B' && aSigData[1] == 'M' )
-        {
-            // it's a bitmap
-            aData[0] = 0x02; aData[1] = 0; aData[2] = 0; aData[3] = 0;
-        }
-        else
-        {
-            // treat it as a metafile
-            aData[0] = 0x03; aData[1] = 0; aData[2] = 0; aData[3] = 0;
-        }
-        xTempOutStream->writeBytes( aData );
-
-        // write job related information
-        aData[0] = 0x04; aData[1] = 0; aData[2] = 0; aData[3] = 0;
-        xTempOutStream->writeBytes( aData );
-
-        // write aspect
-        aData[0] = 0x01; aData[1] = 0; aData[2] = 0; aData[3] = 0;
-        xTempOutStream->writeBytes( aData );
-
-        // write l-index
-        * reinterpret_cast<sal_uInt32*>(aData.getArray()) = 0xFFFFFFFF;
-        xTempOutStream->writeBytes( aData );
-
-        // write adv. flags
+        // it's a bitmap
         aData[0] = 0x02; aData[1] = 0; aData[2] = 0; aData[3] = 0;
-        xTempOutStream->writeBytes( aData );
-
-        // write compression
-        * reinterpret_cast<sal_uInt32*>(aData.getArray()) = 0x0;
-        xTempOutStream->writeBytes( aData );
-
-        // get the size
-        awt::Size aSize = getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-        sal_Int32 nIndex = 0;
-
-        // write width
-        for ( nIndex = 0; nIndex < 4; nIndex++ )
-        {
-            aData[nIndex] = (sal_Int8)( aSize.Width % 0x100 );
-            aSize.Width /= 0x100;
-        }
-        xTempOutStream->writeBytes( aData );
-
-        // write height
-        for ( nIndex = 0; nIndex < 4; nIndex++ )
-        {
-            aData[nIndex] = (sal_Int8)( aSize.Height % 0x100 );
-            aSize.Height /= 0x100;
-        }
-        xTempOutStream->writeBytes( aData );
-
-        // write garbage, it will be overwritten by the size
-        xTempOutStream->writeBytes( aData );
-
-        // write first bytes that was used to detect the type
-        xTempOutStream->writeBytes( aSigData );
-
-        // write the rest of the stream
-        ::comphelper::OStorageHelper::CopyInputToOutput( xInCacheStream, xTempOutStream );
-
-        // write the size of the stream
-        sal_Int64 nLength = xTempSeek->getLength() - 40;
-        if ( nLength < 0 || nLength >= 0xFFFFFFFF )
-        {
-            SAL_WARN( "embeddedobj.ole", "Length is not acceptable!" );
-            return;
-        }
-        for ( sal_Int32 nInd = 0; nInd < 4; nInd++ )
-        {
-            aData[nInd] = (sal_Int8)( ( (sal_uInt64) nLength ) % 0x100 );
-            nLength /= 0x100;
-        }
-        xTempSeek->seek( 36 );
-        xTempOutStream->writeBytes( aData );
-
-        xTempOutStream->flush();
-
-        xTempSeek->seek( 0 );
-        if ( xCachedSeek.is() )
-            xCachedSeek->seek( 0 );
     }
     else
-        throw io::IOException(); // TODO:
+    {
+        // treat it as a metafile
+        aData[0] = 0x03; aData[1] = 0; aData[2] = 0; aData[3] = 0;
+    }
+    xTempOutStream->writeBytes( aData );
+
+    // write job related information
+    aData[0] = 0x04; aData[1] = 0; aData[2] = 0; aData[3] = 0;
+    xTempOutStream->writeBytes( aData );
+
+    // write aspect
+    aData[0] = 0x01; aData[1] = 0; aData[2] = 0; aData[3] = 0;
+    xTempOutStream->writeBytes( aData );
+
+    // write l-index
+    * reinterpret_cast<sal_uInt32*>(aData.getArray()) = 0xFFFFFFFF;
+    xTempOutStream->writeBytes( aData );
+
+    // write adv. flags
+    aData[0] = 0x02; aData[1] = 0; aData[2] = 0; aData[3] = 0;
+    xTempOutStream->writeBytes( aData );
+
+    // write compression
+    * reinterpret_cast<sal_uInt32*>(aData.getArray()) = 0x0;
+    xTempOutStream->writeBytes( aData );
+
+    // get the size
+    awt::Size aSize = getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+    sal_Int32 nIndex = 0;
+
+    // write width
+    for ( nIndex = 0; nIndex < 4; nIndex++ )
+    {
+        aData[nIndex] = (sal_Int8)( aSize.Width % 0x100 );
+        aSize.Width /= 0x100;
+    }
+    xTempOutStream->writeBytes( aData );
+
+    // write height
+    for ( nIndex = 0; nIndex < 4; nIndex++ )
+    {
+        aData[nIndex] = (sal_Int8)( aSize.Height % 0x100 );
+        aSize.Height /= 0x100;
+    }
+    xTempOutStream->writeBytes( aData );
+
+    // write garbage, it will be overwritten by the size
+    xTempOutStream->writeBytes( aData );
+
+    // write first bytes that was used to detect the type
+    xTempOutStream->writeBytes( aSigData );
+
+    // write the rest of the stream
+    ::comphelper::OStorageHelper::CopyInputToOutput( xInCacheStream, xTempOutStream );
+
+    // write the size of the stream
+    sal_Int64 nLength = xTempSeek->getLength() - 40;
+    if ( nLength < 0 || nLength >= 0xFFFFFFFF )
+    {
+        SAL_WARN( "embeddedobj.ole", "Length is not acceptable!" );
+        return;
+    }
+    for ( sal_Int32 nInd = 0; nInd < 4; nInd++ )
+    {
+        aData[nInd] = (sal_Int8)( ( (sal_uInt64) nLength ) % 0x100 );
+        nLength /= 0x100;
+    }
+    xTempSeek->seek( 36 );
+    xTempOutStream->writeBytes( aData );
+
+    xTempOutStream->flush();
+
+    xTempSeek->seek( 0 );
+    if ( xCachedSeek.is() )
+        xCachedSeek->seek( 0 );
 
     // insert the result file as replacement image
     OUString aCacheName = "\002OlePres000";
@@ -1164,7 +1155,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         }
     }
 #endif
-    else
+    else if (true) // loplugin:flatten
     {
         throw io::IOException(); // TODO
     }
@@ -1304,12 +1295,11 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
     if ( m_bWaitSaveCompleted )
     {
-        if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
-            saveCompleted( m_xParentStorage != xStorage || m_aEntryName != sEntName );
-        else
+        if ( nEntryConnectionMode != embed::EntryInitModes::NO_INIT )
             throw embed::WrongStateException(
                         "The object waits for saveCompleted() call!",
                         static_cast< ::cppu::OWeakObject* >(this) );
+        saveCompleted( m_xParentStorage != xStorage || m_aEntryName != sEntName );
     }
 
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY_THROW );

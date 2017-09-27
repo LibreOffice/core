@@ -162,10 +162,9 @@ public:
 
     virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override
     {
-        if( isValidIndex( nIndex ) )
-            return css::uno::makeAny( getItem( nIndex ) );
-        else
+        if( !isValidIndex( nIndex ) )
             throw css::lang::IndexOutOfBoundsException();
+        return css::uno::makeAny( getItem( nIndex ) );
     }
 
     // XIndexReplace : XIndexAccess
@@ -173,13 +172,11 @@ public:
                                           const css::uno::Any& aElement ) override
     {
         T t;
-        if( isValidIndex( nIndex) )
-            if( ( aElement >>= t )  &&  isValid( t ) )
-                setItem( nIndex, t );
-            else
-                throw css::lang::IllegalArgumentException();
-        else
+        if( !isValidIndex( nIndex) )
             throw css::lang::IndexOutOfBoundsException();
+        if( !( aElement >>= t ) || !isValid( t ) )
+            throw css::lang::IllegalArgumentException();
+        setItem( nIndex, t );
     }
 
     // XEnumerationAccess : XElementAccess
@@ -199,25 +196,21 @@ public:
     virtual void SAL_CALL insert( const css::uno::Any& aElement ) override
     {
         T t;
-        if( ( aElement >>= t )  &&  isValid( t ) )
-            if( ! hasItem( t ) )
-                addItem( t );
-            else
-                throw css::container::ElementExistException();
-        else
+        if( !( aElement >>= t )  || !isValid( t ) )
             throw css::lang::IllegalArgumentException();
+        if( hasItem( t ) )
+            throw css::container::ElementExistException();
+        addItem( t );
     }
 
     virtual void SAL_CALL remove( const css::uno::Any& aElement ) override
     {
         T t;
-        if( aElement >>= t )
-            if( hasItem( t ) )
-                removeItem( t );
-            else
-                throw css::container::NoSuchElementException();
-        else
+        if( !(aElement >>= t) )
             throw css::lang::IllegalArgumentException();
+        if( !hasItem( t ) )
+            throw css::container::NoSuchElementException();
+        removeItem( t );
     }
 
 

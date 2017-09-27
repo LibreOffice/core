@@ -558,17 +558,16 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
     if ( PropertyName == "DefaultContext" )
     {
         Reference< XComponentContext > xContext;
-        if (aValue >>= xContext)
-        {
-            MutexGuard aGuard( m_mutex );
-            m_xContext = xContext;
-        }
-        else
+        if (!(aValue >>= xContext))
         {
             throw IllegalArgumentException(
                 "no XComponentContext given!",
                 static_cast<OWeakObject *>(this), 1 );
         }
+
+        MutexGuard aGuard( m_mutex );
+        m_xContext = xContext;
+
     }
     else
     {
@@ -698,27 +697,23 @@ void OServiceManager::setPropertyValue(
     const OUString& PropertyName, const Any& aValue )
 {
     check_undisposed();
-    if ( PropertyName == "DefaultContext" )
-    {
-        Reference< XComponentContext > xContext;
-        if (aValue >>= xContext)
-        {
-            MutexGuard aGuard( m_mutex );
-            m_xContext = xContext;
-        }
-        else
-        {
-            throw IllegalArgumentException(
-                "no XComponentContext given!",
-                static_cast<OWeakObject *>(this), 1 );
-        }
-    }
-    else
+    if ( PropertyName != "DefaultContext" )
     {
         throw UnknownPropertyException(
             "unknown property " + PropertyName,
             static_cast<OWeakObject *>(this) );
     }
+
+    Reference< XComponentContext > xContext;
+    if (!(aValue >>= xContext))
+    {
+        throw IllegalArgumentException(
+            "no XComponentContext given!",
+            static_cast<OWeakObject *>(this), 1 );
+    }
+
+    MutexGuard aGuard( m_mutex );
+    m_xContext = xContext;
 }
 
 Any OServiceManager::getPropertyValue(const OUString& PropertyName)

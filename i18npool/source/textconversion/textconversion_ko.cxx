@@ -221,83 +221,83 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
     result.Boundary.startPos = result.Boundary.endPos = 0;
 
     // do conversion only when there are right conversion type and dictionary services.
-    if (nConversionType == TextConversionType::TO_HANGUL ||
-            nConversionType == TextConversionType::TO_HANJA) {
-        sal_Int32 start, end, length = aText.getLength() - nStartPos;
+    if (nConversionType != TextConversionType::TO_HANGUL &&
+        nConversionType != TextConversionType::TO_HANJA)
+        throw NoSupportException(); // Conversion type is not supported in this service.
+    sal_Int32 start, end, length = aText.getLength() - nStartPos;
 
-        if (length < 0 || nStartPos < 0)
-            length = 0;
-        else if (length > nLength)
-            length = nLength;
+    if (length < 0 || nStartPos < 0)
+        length = 0;
+    else if (length > nLength)
+        length = nLength;
 
-        sal_Int16 scriptType = SCRIPT_OTHERS;
-        sal_Int32 len = 1;
-        bool toHanja = (nConversionType == TextConversionType::TO_HANJA);
-        // FROM_LEFT:  Hangul -> Hanja
-        // FROM_RIGHT: Hanja  -> Hangul
-        ConversionDirection eDirection = toHanja ? ConversionDirection_FROM_LEFT : ConversionDirection_FROM_RIGHT;
-        sal_Int32 maxLength = toHanja ? maxLeftLength : maxRightLength;
-        if (maxLength == 0) maxLength = 1;
+    sal_Int16 scriptType = SCRIPT_OTHERS;
+    sal_Int32 len = 1;
+    bool toHanja = (nConversionType == TextConversionType::TO_HANJA);
+    // FROM_LEFT:  Hangul -> Hanja
+    // FROM_RIGHT: Hanja  -> Hangul
+    ConversionDirection eDirection = toHanja ? ConversionDirection_FROM_LEFT : ConversionDirection_FROM_RIGHT;
+    sal_Int32 maxLength = toHanja ? maxLeftLength : maxRightLength;
+    if (maxLength == 0) maxLength = 1;
 
-        // search for a max length of convertible text
-        for (start = 0, end = 0; start < length; start++) {
-            if (end <= start) {
-                scriptType = checkScriptType(aText[nStartPos + start]);
-                if (nConversionType == TextConversionType::TO_HANJA) {
-                    if (scriptType != SCRIPT_HANGUL) // skip non-Hangul characters
-                        continue;
-                } else {
-                    if (scriptType != SCRIPT_HANJA) // skip non-Hanja characters
-                        continue;
-                }
-                end = start + 1;
-            }
-            if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER) {
-                result.Candidates = getCharConversions(aText, nStartPos + start, len, toHanja); // char2char conversion
+    // search for a max length of convertible text
+    for (start = 0, end = 0; start < length; start++) {
+        if (end <= start) {
+            scriptType = checkScriptType(aText[nStartPos + start]);
+            if (nConversionType == TextConversionType::TO_HANJA) {
+                if (scriptType != SCRIPT_HANGUL) // skip non-Hangul characters
+                    continue;
             } else {
-                for (; end < length && end - start < maxLength; end++)
-                    if (checkScriptType(aText[nStartPos + end]) != scriptType)
-                        break;
-
-                for (len = end - start; len > 0; len--) {
-                    if (len > 1) {
-                        try {
-                            if (xCDL.is())
-                                result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len,
-                                    aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); // user dictionary
-                        }
-                        catch ( NoSupportException & ) {
-                            // clear reference (when there is no user dictionary) in order
-                            // to not always have to catch this exception again
-                            // in further calls. (save time)
-                            xCDL = nullptr;
-                        }
-                        catch (...) {
-                            // catch all other exceptions to allow
-                            // querying the system dictionary in the next line
-                        }
-                        if (xCD.is() && toHanja) { // System dictionary would not do Hanja_to_Hangul conversion.
-                            candidates = xCD->getConversions(aText, start + nStartPos, len, eDirection, nConversionOptions);
-                            result.Candidates += candidates;
-                        }
-                    } else if (! toHanja) { // do whole word character 2 character conversion for Hanja to Hangul conversion
-                        result.Candidates = getCharConversions(aText, nStartPos + start, length - start, toHanja);
-                        if (result.Candidates.hasElements())
-                            len = result.Candidates[0].getLength();
-                    }
-                    if (result.Candidates.hasElements())
-                        break;
-                }
+                if (scriptType != SCRIPT_HANJA) // skip non-Hanja characters
+                    continue;
             }
-            // found match
-            if (result.Candidates.hasElements()) {
-                result.Boundary.startPos = start + nStartPos;
-                result.Boundary.endPos = start + len + nStartPos;
-                return result;
+            end = start + 1;
+        }
+        if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER) {
+            result.Candidates = getCharConversions(aText, nStartPos + start, len, toHanja); // char2char conversion
+        } else {
+            for (; end < length && end - start < maxLength; end++)
+                if (checkScriptType(aText[nStartPos + end]) != scriptType)
+                    break;
+
+            for (len = end - start; len > 0; len--) {
+                if (len > 1) {
+                    try {
+                        if (xCDL.is())
+                            result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len,
+                                aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); // user dictionary
+                    }
+                    catch ( NoSupportException & ) {
+                        // clear reference (when there is no user dictionary) in order
+                        // to not always have to catch this exception again
+                        // in further calls. (save time)
+                        xCDL = nullptr;
+                    }
+                    catch (...) {
+                        // catch all other exceptions to allow
+                        // querying the system dictionary in the next line
+                    }
+                    if (xCD.is() && toHanja) { // System dictionary would not do Hanja_to_Hangul conversion.
+                        candidates = xCD->getConversions(aText, start + nStartPos, len, eDirection, nConversionOptions);
+                        result.Candidates += candidates;
+                    }
+                } else if (! toHanja) { // do whole word character 2 character conversion for Hanja to Hangul conversion
+                    result.Candidates = getCharConversions(aText, nStartPos + start, length - start, toHanja);
+                    if (result.Candidates.hasElements())
+                        len = result.Candidates[0].getLength();
+                }
+                if (result.Candidates.hasElements())
+                    break;
             }
         }
-    } else
-        throw NoSupportException(); // Conversion type is not supported in this service.
+        // found match
+        if (result.Candidates.hasElements()) {
+            result.Boundary.startPos = start + nStartPos;
+            result.Boundary.endPos = start + len + nStartPos;
+            return result;
+        }
+    }
+
     return result;
 }
 

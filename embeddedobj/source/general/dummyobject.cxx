@@ -293,34 +293,29 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
 
     if ( m_bWaitSaveCompleted )
     {
-        if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
-            saveCompleted( m_xParentStorage != xStorage || m_aEntryName != sEntName );
-        else
+        if ( nEntryConnectionMode != embed::EntryInitModes::NO_INIT )
             throw embed::WrongStateException(
                         "The object waits for saveCompleted() call!",
                         static_cast< ::cppu::OWeakObject* >(this) );
-    }
 
-    if ( nEntryConnectionMode == embed::EntryInitModes::DEFAULT_INIT
-      || nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
-    {
-        if ( xStorage->hasByName( sEntName ) )
-
-        {
-            m_xParentStorage = xStorage;
-            m_aEntryName = sEntName;
-            m_nObjectState = embed::EmbedStates::LOADED;
-        }
-        else
-            throw lang::IllegalArgumentException( "Wrong entry is provided!",
-                                static_cast< ::cppu::OWeakObject* >(this),
-                                2 );
+        saveCompleted( m_xParentStorage != xStorage || m_aEntryName != sEntName );
 
     }
-    else
+
+    if ( nEntryConnectionMode != embed::EntryInitModes::DEFAULT_INIT
+        && nEntryConnectionMode != embed::EntryInitModes::NO_INIT )
         throw lang::IllegalArgumentException( "Wrong connection mode is provided!",
                                 static_cast< ::cppu::OWeakObject* >(this),
                                 3 );
+
+    if ( !xStorage->hasByName( sEntName ) )
+        throw lang::IllegalArgumentException( "Wrong entry is provided!",
+                            static_cast< ::cppu::OWeakObject* >(this),
+                            2 );
+
+    m_xParentStorage = xStorage;
+    m_aEntryName = sEntName;
+    m_nObjectState = embed::EmbedStates::LOADED;
 }
 
 

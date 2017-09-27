@@ -361,48 +361,46 @@ namespace dlgprov
 
             // get input stream provider
             Reference< io::XInputStreamProvider > xISP;
-            if ( xLibContainer.is() )
-            {
-                // load dialog library
-                if ( !xLibContainer->isLibraryLoaded( sLibName ) )
-                    xLibContainer->loadLibrary( sLibName );
-
-                // get dialog library
-                if ( xLibContainer->hasByName( sLibName ) )
-                {
-                    Any aElement = xLibContainer->getByName( sLibName );
-                    aElement >>= xDialogLib;
-                }
-
-                if ( xDialogLib.is() )
-                {
-                    // get input stream provider
-                    if ( xDialogLib->hasByName( sDlgName ) )
-                    {
-                        Any aElement = xDialogLib->getByName( sDlgName );
-                        aElement >>= xISP;
-                    }
-
-                    if ( !xISP.is() )
-                    {
-                        throw IllegalArgumentException(
-                            "DialogProviderImpl::getDialogModel: dialog not found!",
-                            Reference< XInterface >(), 1 );
-                    }
-                }
-                else
-                {
-                    throw IllegalArgumentException(
-                        "DialogProviderImpl::getDialogModel: library not found!",
-                        Reference< XInterface >(), 1 );
-                }
-            }
-            else
+            if ( !xLibContainer.is() )
             {
                 throw IllegalArgumentException(
                     "DialogProviderImpl::getDialog: library container not found!",
                     Reference< XInterface >(), 1 );
             }
+
+            // load dialog library
+            if ( !xLibContainer->isLibraryLoaded( sLibName ) )
+                xLibContainer->loadLibrary( sLibName );
+
+            // get dialog library
+            if ( xLibContainer->hasByName( sLibName ) )
+            {
+                Any aElement = xLibContainer->getByName( sLibName );
+                aElement >>= xDialogLib;
+            }
+
+            if ( !xDialogLib.is() )
+            {
+                throw IllegalArgumentException(
+                    "DialogProviderImpl::getDialogModel: library not found!",
+                    Reference< XInterface >(), 1 );
+            }
+
+            // get input stream provider
+            if ( xDialogLib->hasByName( sDlgName ) )
+            {
+                Any aElement = xDialogLib->getByName( sDlgName );
+                aElement >>= xISP;
+            }
+
+            if ( !xISP.is() )
+            {
+                throw IllegalArgumentException(
+                    "DialogProviderImpl::getDialogModel: dialog not found!",
+                    Reference< XInterface >(), 1 );
+            }
+
+
 
             if ( xISP.is() )
                 xInput = xISP->createInputStream();
