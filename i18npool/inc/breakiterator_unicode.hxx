@@ -23,6 +23,7 @@
 
 #include <unicode/brkiter.h>
 #include <memory>
+#include <unordered_map>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -71,27 +72,35 @@ public:
 protected:
     const sal_Char *cBreakIterator, *lineRule;
 
+    /** Used as map value. */
+    struct BI_ValueData
+    {
+        OUString                                maICUText;
+        UText*                                  mpUt;
+        std::shared_ptr< icu::BreakIterator >   mpBreakIterator;
+
+        BI_ValueData() : mpUt(nullptr)
+        {
+        }
+        ~BI_ValueData()
+        {
+            utext_close(mpUt);
+        }
+    };
+
     struct BI_Data
     {
-        OUString            aICUText;
-        UText*              ut;
-        std::unique_ptr<icu::BreakIterator> aBreakIterator;
-        css::lang::Locale   maLocale;
-
-        BI_Data() : ut(nullptr)
-        {
-        }
-        ~BI_Data()
-        {
-            utext_close(ut);
-        }
-
+        std::shared_ptr< BI_ValueData > mpValue;
+        OString                         maBIMapKey;
     } character, sentence, line, *icuBI;
     BI_Data words[4]; // 4 is css::i18n::WordType enumeration size
 
     /// @throws css::uno::RuntimeException
     void SAL_CALL loadICUBreakIterator(const css::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char* name, const OUString& rText);
+
+public:
+    typedef std::unordered_map< OString, std::shared_ptr< BI_ValueData >, OStringHash > BIMap;
 };
 
 } } } }
