@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_32b8a6e5",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T13:35:07Z",
+      "side": 1,
+      "message": "SalFrameHashMap -\u003e SalFrameSet",
+      "revId": "fb8e021133f6dc66b386243701b1f65f30b49d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_52cff27e",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T13:35:07Z",
+      "side": 1,
+      "message": "why not just change the signature of the method?",
+      "revId": "fb8e021133f6dc66b386243701b1f65f30b49d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
