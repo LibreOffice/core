@@ -35,7 +35,7 @@ PageOrientationPopup::~PageOrientationPopup()
 
 VclPtr<SfxPopupWindow> PageOrientationPopup::CreatePopupWindow()
 {
-    VclPtr<sw::sidebar::PageOrientationControl> pControl = VclPtr<sw::sidebar::PageOrientationControl>::Create(GetSlotId());
+    VclPtr<sw::sidebar::PageOrientationControl> pControl = VclPtr<sw::sidebar::PageOrientationControl>::Create(GetSlotId(), &GetToolBox());
     pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
     SetPopupWindow(pControl);
 

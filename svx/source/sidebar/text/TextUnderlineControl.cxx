@@ -29,8 +29,8 @@
 
 namespace svx {
 
-TextUnderlineControl::TextUnderlineControl(sal_uInt16 nId)
-:   SfxPopupWindow(nId, "TextUnderlineControl", "svx/ui/textunderlinecontrol.ui")
+TextUnderlineControl::TextUnderlineControl(sal_uInt16 nId, vcl::Window* pParent)
+:   SfxPopupWindow(nId, pParent, "TextUnderlineControl", "svx/ui/textunderlinecontrol.ui")
 {
     get(maNone, "none");
     get(maSingle, "single");

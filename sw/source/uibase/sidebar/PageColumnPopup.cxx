@@ -35,7 +35,7 @@ PageColumnPopup::~PageColumnPopup()
 
 VclPtr<SfxPopupWindow> PageColumnPopup::CreatePopupWindow()
 {
-    VclPtr<sw::sidebar::PageColumnControl> pControl = VclPtr<sw::sidebar::PageColumnControl>::Create(GetSlotId());
+    VclPtr<sw::sidebar::PageColumnControl> pControl = VclPtr<sw::sidebar::PageColumnControl>::Create(GetSlotId(), &GetToolBox());
     pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
     SetPopupWindow(pControl);
 

@@ -27,7 +27,8 @@ enum class FILTER_CATEGORY;
 class SFX2_DLLPUBLIC SfxEmojiControl : public SfxPopupWindow
 {
 public:
-    explicit SfxEmojiControl(sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame);
+    explicit SfxEmojiControl(sal_uInt16 nId, vcl::Window* pParent,
+                             const css::uno::Reference< css::frame::XFrame >& rFrame);
 
     virtual ~SfxEmojiControl() override;
 

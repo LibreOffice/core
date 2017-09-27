@@ -30,7 +30,7 @@ namespace svx {
 class ParaLineSpacingControl : public SfxPopupWindow
 {
 public:
-    explicit ParaLineSpacingControl(sal_uInt16 nId);
+    explicit ParaLineSpacingControl(sal_uInt16 nId, vcl::Window* pParent);
     virtual ~ParaLineSpacingControl() override;
     virtual void dispose() override;
 

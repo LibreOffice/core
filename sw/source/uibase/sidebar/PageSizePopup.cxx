@@ -35,7 +35,7 @@ PageSizePopup::~PageSizePopup()
 
 VclPtr<SfxPopupWindow> PageSizePopup::CreatePopupWindow()
 {
-    VclPtr<sw::sidebar::PageSizeControl> pControl = VclPtr<sw::sidebar::PageSizeControl>::Create(GetSlotId());
+    VclPtr<sw::sidebar::PageSizeControl> pControl = VclPtr<sw::sidebar::PageSizeControl>::Create(GetSlotId(), &GetToolBox());
     pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
     SetPopupWindow(pControl);
 

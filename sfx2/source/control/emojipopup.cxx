@@ -35,7 +35,7 @@ EmojiPopup::~EmojiPopup()
 
 VclPtr<SfxPopupWindow> EmojiPopup::CreatePopupWindow()
 {
-    VclPtr<SfxEmojiControl> pControl = VclPtr<SfxEmojiControl>::Create(GetSlotId(), m_xFrame);
+    VclPtr<SfxEmojiControl> pControl = VclPtr<SfxEmojiControl>::Create(GetSlotId(), &GetToolBox(), m_xFrame);
 
     pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
 

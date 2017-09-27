@@ -36,8 +36,8 @@ const char FILTER_UNICODE9[]  = "unicode9";
 
 using namespace com::sun::star;
 
-SfxEmojiControl::SfxEmojiControl(sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame)
-    : SfxPopupWindow(nId, "emojictrl", "sfx/ui/emojicontrol.ui", rFrame)
+SfxEmojiControl::SfxEmojiControl(sal_uInt16 nId, vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame)
+    : SfxPopupWindow(nId, pParent, "emojictrl", "sfx/ui/emojicontrol.ui", rFrame)
 {
     get(mpTabControl, "tab_control");
     get(mpEmojiView, "emoji_view");

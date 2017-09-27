@@ -38,7 +38,7 @@ TextCharacterSpacingPopup::~TextCharacterSpacingPopup()
 
 VclPtr<SfxPopupWindow> TextCharacterSpacingPopup::CreatePopupWindow()
 {
-    VclPtr<TextCharacterSpacingControl> pControl = VclPtr<TextCharacterSpacingControl>::Create(GetSlotId());
+    VclPtr<TextCharacterSpacingControl> pControl = VclPtr<TextCharacterSpacingControl>::Create(GetSlotId(), &GetToolBox());
 
     pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
 

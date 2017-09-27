@@ -710,22 +710,10 @@ void SAL_CALL SfxFrameStatusListener::statusChanged( const css::frame::FeatureSt
 
 SfxPopupWindow::SfxPopupWindow(
     sal_uInt16 nId,
+    vcl::Window* pParentWindow,
     const Reference< XFrame >& rFrame,
     WinBits nBits ) :
-    FloatingWindow( SfxGetpApp()->GetTopWindow(), nBits )
-    , m_bFloating( false )
-    , m_bCascading( false )
-    , m_nId( nId )
-    , m_xFrame( rFrame )
-{
-    vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
-    if ( pWindow )
-        static_cast<SystemWindow *>(pWindow)->GetTaskPaneList()->AddWindow( this );
-}
-
-SfxPopupWindow::SfxPopupWindow(sal_uInt16 nId, const OString& rID, const OUString& rUIXMLDescription,
-                               const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : FloatingWindow(SfxGetpApp()->GetTopWindow(), rID, rUIXMLDescription, rFrame)
+    FloatingWindow( pParentWindow, nBits )
     , m_bFloating( false )
     , m_bCascading( false )
     , m_nId( nId )
