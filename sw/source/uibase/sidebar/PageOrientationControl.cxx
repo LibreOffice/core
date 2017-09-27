@@ -52,8 +52,8 @@ namespace {
 
 namespace sw { namespace sidebar {
 
-PageOrientationControl::PageOrientationControl( sal_uInt16 nId )
-    : SfxPopupWindow( nId, "PageOrientationControl", "modules/swriter/ui/pageorientationcontrol.ui" )
+PageOrientationControl::PageOrientationControl( sal_uInt16 nId, vcl::Window* pParent )
+    : SfxPopupWindow( nId, pParent, "PageOrientationControl", "modules/swriter/ui/pageorientationcontrol.ui" )
     , mpPageItem( new SvxPageItem(SID_ATTR_PAGE) )
     , mpPageSizeItem( new SvxSizeItem(SID_ATTR_PAGE_SIZE) )
     , mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) )

@@ -30,7 +30,7 @@ namespace sw { namespace sidebar {
 class PageColumnControl : public SfxPopupWindow
 {
 public:
-    explicit PageColumnControl(sal_uInt16 nId);
+    explicit PageColumnControl(sal_uInt16 nId, vcl::Window* pParent);
 
     virtual ~PageColumnControl() override;
     virtual void dispose() override;

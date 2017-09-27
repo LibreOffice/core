@@ -39,8 +39,8 @@
 
 namespace svx {
 
-TextCharacterSpacingControl::TextCharacterSpacingControl(sal_uInt16 nId)
-    : SfxPopupWindow(nId, "TextCharacterSpacingControl", "svx/ui/textcharacterspacingcontrol.ui")
+TextCharacterSpacingControl::TextCharacterSpacingControl(sal_uInt16 nId, vcl::Window* pParent)
+    : SfxPopupWindow(nId, pParent, "TextCharacterSpacingControl", "svx/ui/textcharacterspacingcontrol.ui")
 ,   mnId(nId)
 ,   mnCustomKern(0)
 ,   mnLastCus(SPACING_NOCUSTOM)

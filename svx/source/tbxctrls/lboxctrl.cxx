@@ -71,7 +71,7 @@ public:
 };
 
 SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx)
-    : SfxPopupWindow(nSlotId, "FloatingUndoRedo", "svx/ui/floatingundoredo.ui")
+    : SfxPopupWindow(nSlotId, &rTbx, "FloatingUndoRedo", "svx/ui/floatingundoredo.ui")
     , rToolBox(rTbx)
     , bUserSel(false)
     , nTbxId(nId)

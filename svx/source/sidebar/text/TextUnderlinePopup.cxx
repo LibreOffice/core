@@ -43,7 +43,7 @@ void TextUnderlinePopup::initialize( const css::uno::Sequence< css::uno::Any >& 
 
 VclPtr<SfxPopupWindow> TextUnderlinePopup::CreatePopupWindow()
 {
-    VclPtr<TextUnderlineControl> pControl = VclPtr<TextUnderlineControl>::Create(GetSlotId());
+    VclPtr<TextUnderlineControl> pControl = VclPtr<TextUnderlineControl>::Create(GetSlotId(), &GetToolBox());
     pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
     SetPopupWindow(pControl);
 

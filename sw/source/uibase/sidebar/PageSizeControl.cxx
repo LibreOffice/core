@@ -65,8 +65,8 @@ namespace
 
 namespace sw { namespace sidebar {
 
-PageSizeControl::PageSizeControl( sal_uInt16 nId )
-    : SfxPopupWindow( nId, "PageSizeControl", "modules/swriter/ui/pagesizecontrol.ui" )
+PageSizeControl::PageSizeControl( sal_uInt16 nId, vcl::Window* pParent )
+    : SfxPopupWindow( nId, pParent, "PageSizeControl", "modules/swriter/ui/pagesizecontrol.ui" )
     , maPaperList()
 {
     get(maMoreButton, "moreoptions");

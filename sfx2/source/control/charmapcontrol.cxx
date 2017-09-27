@@ -24,8 +24,8 @@
 
 using namespace css;
 
-SfxCharmapCtrl::SfxCharmapCtrl(sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame)
-    : SfxPopupWindow(nId, "charmapctrl", "sfx/ui/charmapcontrol.ui", rFrame)
+SfxCharmapCtrl::SfxCharmapCtrl(sal_uInt16 nId, vcl::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rFrame)
+    : SfxPopupWindow(nId, pParent, "charmapctrl", "sfx/ui/charmapcontrol.ui", rFrame)
 {
     get( m_pRecentCharView[0], "viewchar1" );
     get( m_pRecentCharView[1], "viewchar2" );

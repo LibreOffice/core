@@ -46,8 +46,8 @@
 
 using namespace svx;
 
-ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
-    : SfxPopupWindow(nId, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui")
+ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId, vcl::Window* pParent)
+    : SfxPopupWindow(nId, pParent, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui")
 {
     mpSpacing1Button = get<PushButton>("spacing_1");
     mpSpacing115Button = get<PushButton>("spacing_115");

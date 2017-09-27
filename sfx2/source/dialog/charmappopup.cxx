@@ -35,7 +35,7 @@ CharmapPopup::~CharmapPopup()
 
 VclPtr<SfxPopupWindow> CharmapPopup::CreatePopupWindow()
 {
-    VclPtr<SfxCharmapCtrl> pControl = VclPtr<SfxCharmapCtrl>::Create(GetSlotId(), m_xFrame);
+    VclPtr<SfxCharmapCtrl> pControl = VclPtr<SfxCharmapCtrl>::Create(GetSlotId(), &GetToolBox(), m_xFrame);
 
     pControl->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
 

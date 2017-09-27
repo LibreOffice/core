@@ -92,13 +92,9 @@ protected:
     virtual void            statusChanged( const css::frame::FeatureStateEvent& rEvent );
 
 public:
-                            SfxPopupWindow( sal_uInt16 nId,
+                            SfxPopupWindow(sal_uInt16 nId, vcl::Window *pParent,
                                             const css::uno::Reference< css::frame::XFrame >& rFrame,
                                             WinBits nBits );
-                            SfxPopupWindow(sal_uInt16 nId,
-                                           const OString& rID, const OUString& rUIXMLDescription,
-                                           const css::uno::Reference<css::frame::XFrame> &rFrame =
-                                               css::uno::Reference<css::frame::XFrame>());
                             SfxPopupWindow(sal_uInt16 nId, vcl::Window *pParent,
                                            const OString& rID, const OUString& rUIXMLDescription,
                                            const css::uno::Reference<css::frame::XFrame> &rFrame =

@@ -31,8 +31,8 @@
 
 namespace sw { namespace sidebar {
 
-PageColumnControl::PageColumnControl( sal_uInt16 nId )
-    : SfxPopupWindow( nId, "PageColumnControl", "modules/swriter/ui/pagecolumncontrol.ui" )
+PageColumnControl::PageColumnControl( sal_uInt16 nId, vcl::Window* pParent )
+    : SfxPopupWindow( nId, pParent, "PageColumnControl", "modules/swriter/ui/pagecolumncontrol.ui" )
 {
     get( m_pMoreButton, "moreoptions" );
 

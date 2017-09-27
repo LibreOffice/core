@@ -32,7 +32,8 @@ class SvxCharView;
 class SFX2_DLLPUBLIC SfxCharmapCtrl : public SfxPopupWindow
 {
 public:
-    explicit SfxCharmapCtrl(sal_uInt16 nId, const css::uno::Reference< css::frame::XFrame >& rFrame);
+    explicit SfxCharmapCtrl(sal_uInt16 nId, vcl::Window* pParent,
+                            const css::uno::Reference< css::frame::XFrame >& rFrame);
 
     virtual ~SfxCharmapCtrl() override;
 

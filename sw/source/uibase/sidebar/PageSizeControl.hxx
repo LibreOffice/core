@@ -41,7 +41,7 @@ namespace sw { namespace sidebar {
 class PageSizeControl : public SfxPopupWindow
 {
 public:
-    explicit PageSizeControl(sal_uInt16 nId);
+    explicit PageSizeControl(sal_uInt16 nId, vcl::Window* pParent);
     virtual ~PageSizeControl() override;
     virtual void dispose() override;
 

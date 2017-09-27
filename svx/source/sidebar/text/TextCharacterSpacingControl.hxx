@@ -34,7 +34,7 @@ namespace svx {
 class TextCharacterSpacingControl : public SfxPopupWindow
 {
 public:
-    explicit TextCharacterSpacingControl(sal_uInt16 nId);
+    explicit TextCharacterSpacingControl(sal_uInt16 nId, vcl::Window* pParent);
     virtual ~TextCharacterSpacingControl() override;
     virtual void dispose() override;
 

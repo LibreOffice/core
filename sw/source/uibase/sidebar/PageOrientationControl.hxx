@@ -32,7 +32,7 @@ namespace sw { namespace sidebar {
 class PageOrientationControl : public SfxPopupWindow
 {
 public:
-    explicit PageOrientationControl(sal_uInt16 nId);
+    explicit PageOrientationControl(sal_uInt16 nId, vcl::Window* pParent);
     virtual ~PageOrientationControl() override;
     virtual void dispose() override;
 
