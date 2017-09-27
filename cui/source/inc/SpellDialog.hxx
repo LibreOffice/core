@@ -61,10 +61,10 @@ class SentenceEditWindow_Impl : public VclMultiLineEdit
     using VclMultiLineEdit::SetText;
 
 private:
-    std::set< sal_uInt16 >      m_aIgnoreErrorsAt;
+    std::set< sal_Int32 >      m_aIgnoreErrorsAt;
     VclPtr<ToolBox>     m_xToolbar;
-    sal_uInt16          m_nErrorStart;
-    sal_uInt16          m_nErrorEnd;
+    sal_Int32           m_nErrorStart;
+    sal_Int32           m_nErrorEnd;
     bool                m_bIsUndoEditMode;
 
     Link<Edit&,void>    m_aModifyLink;
@@ -84,12 +84,12 @@ public:
     void            Init(VclPtr<ToolBox> const &rToolbar);
     void            SetModifyHdl(const Link<Edit&,void>& rLink) override { m_aModifyLink = rLink;}
 
-    void            SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
+    void            SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd );
     void            SetText( const OUString& rStr ) override;
 
     bool            MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker1>& );
     void            ChangeMarkedWord(const OUString& rNewWord, LanguageType eLanguage);
-    void            MoveErrorMarkTo(sal_uInt16 nErrorStart, sal_uInt16 nErrorEnd, bool bGrammar);
+    void            MoveErrorMarkTo(sal_Int32 nErrorStart, sal_Int32 nErrorEnd, bool bGrammar);
     OUString        GetErrorText() const;
     void            RestoreCurrentError();
 
@@ -111,7 +111,7 @@ public:
     void            ResetUndo();
     void            Undo();
     void            AddUndoAction( SfxUndoAction *pAction );
-    sal_uInt16      GetUndoActionCount();
+    size_t          GetUndoActionCount();
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionEnd();
 

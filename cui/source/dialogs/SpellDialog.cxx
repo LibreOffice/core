@@ -1060,7 +1060,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                         sServiceName = xNamed->getName();
                     SpellErrorDescription aDesc( false, aStart->xAlternatives->getWord(),
                                     aStart->xAlternatives->getLocale(), aStart->xAlternatives->getAlternatives(), nullptr);
-                    m_pSentenceED->SetAttrib( SpellErrorAttrib(aDesc), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
+                    m_pSentenceED->SetAttrib( SpellErrorAttrib(aDesc), 0, nStartPosition, nEndPosition );
                 }
                 else if(aStart->bIsGrammarError )
                 {
@@ -1086,11 +1086,11 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                         &aStart->aGrammarError.aFullComment,
                         &aStart->aGrammarError.aRuleIdentifier,
                         &sFullCommentURL );
-                    m_pSentenceED->SetAttrib( SpellErrorAttrib(aDesc), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
+                    m_pSentenceED->SetAttrib( SpellErrorAttrib(aDesc), 0, nStartPosition, nEndPosition );
                 }
                 if(aStart->bIsField)
-                    m_pSentenceED->SetAttrib( SpellBackgroundAttrib(COL_LIGHTGRAY), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
-                m_pSentenceED->SetAttrib( SpellLanguageAttrib(aStart->eLanguage), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
+                    m_pSentenceED->SetAttrib( SpellBackgroundAttrib(COL_LIGHTGRAY), 0, nStartPosition, nEndPosition );
+                m_pSentenceED->SetAttrib( SpellLanguageAttrib(aStart->eLanguage), 0, nStartPosition, nEndPosition );
                 nStartPosition = nEndPosition;
             }
             ++aStart;
@@ -1622,7 +1622,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 }
 
 
-void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_uInt16 nStart, sal_uInt16 nEnd, bool bGrammarError)
+void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, bool bGrammarError)
 {
     TextEngine* pTextEngine = GetTextEngine();
     pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTCOLOR );
@@ -1748,8 +1748,7 @@ void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternativ
     GetTextEngine()->SetAttrib( SpellErrorAttrib(aDesc), 0, m_nErrorStart, m_nErrorEnd );
 }
 
-
-void SentenceEditWindow_Impl::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
+void SentenceEditWindow_Impl::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd )
 {
     GetTextEngine()->SetAttrib(rAttr, nPara, nStart, nEnd);
 }
@@ -1937,7 +1936,7 @@ void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction )
 }
 
 
-sal_uInt16 SentenceEditWindow_Impl::GetUndoActionCount()
+size_t SentenceEditWindow_Impl::GetUndoActionCount()
 {
     return GetTextEngine()->GetUndoManager().GetUndoActionCount();
 }
