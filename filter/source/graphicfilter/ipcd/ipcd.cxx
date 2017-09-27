@@ -308,17 +308,17 @@ void PCDReader::ReadImage()
                 nL *= 89024;
                 nCb -= 156;
                 nCr -= 137;
-                nRed = ( nL + nCr * 119374L + 0x8000 ) >> 16;
+                nRed = ( nL + nCr * 119374 + 0x8000 ) >> 16;
                 if ( nRed < 0 )
                     nRed = 0;
                 if ( nRed > 255)
                     nRed = 255;
-                nGreen = ( nL - nCb * 28198L - nCr * 60761L + 0x8000 ) >> 16;
+                nGreen = ( nL - nCb * 28198 - nCr * 60761 + 0x8000 ) >> 16;
                 if ( nGreen < 0 )
                     nGreen = 0;
                 if ( nGreen > 255 )
                     nGreen = 255;
-                nBlue = ( nL + nCb * 145352L + 0x8000 ) >> 16;
+                nBlue = ( nL + nCb * 145352 + 0x8000 ) >> 16;
                 if ( nBlue < 0 )
                     nBlue = 0;
                 if ( nBlue > 255 )
