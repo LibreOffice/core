@@ -10162,7 +10162,7 @@ if test "$_os" = "Linux" -o "$_os" = "Darwin"; then
 else
     # TODO(davido): Windows build must be protected with a configure option
     # unless CI doesn't support libtool with windres with gcc preprocessor
-    BUILD_TYPE="$BUILD_TYPE LIBASSUAN LIBGPGERROR"
+    BUILD_TYPE="$BUILD_TYPE LIBASSUAN LIBGPGERROR GPGMEPP"
     GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
     GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
     LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
