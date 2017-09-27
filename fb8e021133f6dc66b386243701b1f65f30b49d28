@@ -37,6 +37,41 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_92aeba83",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T13:53:56Z",
+      "side": 1,
+      "message": "what sub-kind of set it is, is less important to me than just  not confusing the reader by calling it a map :-)\n\n(but yes, most set\u0027s are maps internally)",
+      "parentUuid": "1a430d35_5296124d",
+      "revId": "fb8e021133f6dc66b386243701b1f65f30b49d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d2b682db",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T13:53:56Z",
+      "side": 1,
+      "message": "note that eraseFrame can take a const*, even if insertFrame takes a normal *",
+      "revId": "fb8e021133f6dc66b386243701b1f65f30b49d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_52cff27e",
         "filename": "vcl/source/app/salusereventlist.cxx",
         "patchSetId": 2
@@ -66,6 +101,24 @@
       "side": 1,
       "message": "Wouldn\u0027t that prevent inserting const SalFrame* without a const_cast? IMHO this way it is easier to use and \"more correct\".\n\nI know we\u0027re actually lying a bit about the API regarding const-ness. Nothing modifies those inserted frames in the class.",
       "parentUuid": "1a430d35_52cff27e",
+      "revId": "fb8e021133f6dc66b386243701b1f65f30b49d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b2a9f67d",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T13:53:56Z",
+      "side": 1,
+      "message": "is there anywhere which needs to insert a const SalFrame*?\n\nI note that in the places that loop over the frames, we are calling non-const methods PostEvent and SendPaintEvent and we modify maInvalidRect\n\nSo we\u0027re not really const-safe here.....",
+      "parentUuid": "1a430d35_92c95a7b",
       "revId": "fb8e021133f6dc66b386243701b1f65f30b49d28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
