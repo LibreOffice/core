@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_b25e5610",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T09:52:35Z",
+      "side": 1,
+      "message": "or use std::deque, which has cheap front removal, but std::list is probably fine, not likely to be a performance issue",
+      "parentUuid": "1a430d35_924cfa71",
+      "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_921eba61",
         "filename": "vcl/inc/salusereventlist.hxx",
         "patchSetId": 1
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Can I just const_cast to const std::set\u003cSalFrame\u003e\u0026 ?\n\nI just try to prevent modifications to the set, not the frames in the set. Probably I should just const_cast the inserted frames to SalFrame* and keep a std::set\u003cSalFrame*\u003e.",
       "parentUuid": "1a430d35_720f8e2e",
+      "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d29be2c7",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T09:52:35Z",
+      "side": 1,
+      "message": "I would modify the set to be \n    std::unordered_set\u003cSalFrame*\u003e\nand just change the return type to\n    std::unorderedSet\u003cSalFrame*\u003e const \u0026\nand change the insert/remove methods to take a \n    SalFrame*\nas a parameter.",
+      "parentUuid": "1a430d35_7264eee4",
       "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
