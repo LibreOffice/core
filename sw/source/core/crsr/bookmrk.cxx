@@ -72,10 +72,10 @@ namespace
         if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
             SwPosition const& rStart(pField->GetMarkStart());
-            assert(rStart.nNode.GetNode().GetTextNode()->GetText()[rStart.nContent.GetIndex()] == aStartMark);
+            assert(rStart.nNode.GetNode().GetTextNode()->GetText()[rStart.nContent.GetIndex()] == aStartMark); (void) rStart; (void) aStartMark;
         }
         SwPosition const& rEnd(pField->GetMarkEnd());
-        assert(rEnd.nNode.GetNode().GetTextNode()->GetText()[rEnd.nContent.GetIndex() - 1] == aEndMark);
+        assert(rEnd.nNode.GetNode().GetTextNode()->GetText()[rEnd.nContent.GetIndex() - 1] == aEndMark); (void) rEnd;
     }
 
     void lcl_SetFieldMarks(Fieldmark* const pField,
