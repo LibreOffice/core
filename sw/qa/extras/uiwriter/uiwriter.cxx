@@ -3839,7 +3839,7 @@ void SwUiWriterTest::testTdf89954()
     SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     // Placeholder character for the comment anchor was ^A (CH_TXTATR_BREAKWORD), not <fff9> (CH_TXTATR_INWORD).
     // As a result, autocorrect did not turn the 't' input into 'T'.
-    OUString aExpected("Tes\xef\xbf\xb9t. Test.", 14, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"Tes\uFFF9t. Test.");
     CPPUNIT_ASSERT_EQUAL(aExpected, aNodeIndex.GetNode().GetTextNode()->GetText());
 }
 

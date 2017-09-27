@@ -510,8 +510,7 @@ awt::Size SAL_CALL OFixedLine::getSize(  )
 
 void SAL_CALL OFixedLine::setSize( const awt::Size& aSize )
 {
-    const char hundredthmmC[] = "0\xe2\x80\x89\xC2\xB5""m"; // in UTF-8: 0, thin space, µ (micro), m (meter)
-    const OUString hundredthmm(hundredthmmC, sizeof(hundredthmmC)-1, RTL_TEXTENCODING_UTF8);
+    const OUString hundredthmm(u"0\u2009\u00B5m"); // 0, thin space, µ (micro), m (meter)
     if ( aSize.Width < MIN_WIDTH && m_nOrientation == 1 )
         throw beans::PropertyVetoException("Too small width for FixedLine; minimum is "  + OUString::number(MIN_WIDTH)  + hundredthmm, static_cast<cppu::OWeakObject*>(this));
     else if ( aSize.Height < MIN_HEIGHT && m_nOrientation == 0 )

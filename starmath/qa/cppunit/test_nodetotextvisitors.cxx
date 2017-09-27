@@ -667,12 +667,9 @@ void Test::testMiscEquivalent()
 
 void Test::testParser()
 {
-    char const* const formula = "{ \xf0\x9d\x91\x8e }"; // non-BMP Unicode
-    char const* const expected = "\xf0\x9d\x91\x8e";
-
     OUString sOutput;
-    OUString sInput = OUString(formula, strlen(formula), RTL_TEXTENCODING_UTF8);
-    OUString sExpected = OUString(expected, strlen(expected), RTL_TEXTENCODING_UTF8);
+    OUString sInput(u"{ \U0001D44E }"); // non-BMP Unicode
+    OUString sExpected(u"\U0001D44E");
     std::unique_ptr<SmNode> pNode(SmParser().ParseExpression(sInput));
     pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef);
     SmNodeToTextVisitor(pNode.get(), sOutput);

@@ -238,7 +238,7 @@ DECLARE_RTFEXPORT_TEST(testFdo79384, "fdo79384.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Маркеры спискамЫ", 31, RTL_TEXTENCODING_UTF8), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(u"Маркеры спискамЫ"), xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo47326, "fdo47326.rtf")
@@ -279,7 +279,7 @@ DECLARE_RTFEXPORT_TEST(testFdo45394, "fdo45394.rtf")
     uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     OUString aActual = xHeaderText->getString();
     // Encoding in the header was wrong.
-    OUString aExpected("\xd0\x9f\xd0\x9a \xd0\xa0\xd0\x98\xd0\x9a", 11, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u041F\u041A \u0420\u0418\u041A");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -344,7 +344,7 @@ DECLARE_RTFEXPORT_TEST(testFdo48023, "fdo48023.rtf")
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
     // Implicit encoding detection based on locale was missing
-    OUString aExpected("\xd0\x9f\xd1\x80\xd0\xbe\xd0\xb3\xd1\x80\xd0\xb0\xd0\xbc\xd0\xbc\xd0\xb8\xd1\x81\xd1\x82", 22, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0441\u0442");
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -366,7 +366,7 @@ DECLARE_RTFEXPORT_TEST(testFdo44211, "fdo44211.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    OUString aExpected("\xc4\x85\xc4\x8d\xc4\x99", 6, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u0105\u010D\u0119");
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -534,7 +534,7 @@ DECLARE_RTFEXPORT_TEST(testFdo36089, "fdo36089.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo48446, "fdo48446.rtf")
 {
-    OUString aExpected("\xd0\x98\xd0\xbc\xd1\x8f", 6, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u0418\u043C\u044F");
     getParagraph(1, aExpected);
 }
 
@@ -683,7 +683,7 @@ DECLARE_RTFEXPORT_TEST(testFdo56512, "fdo56512.rtf")
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    OUString aExpected("\xd7\xa2\xd7\x95\xd7\xa1\xd7\xa7 \xd7\x9e\xd7\x95\xd7\xa8\xd7\xa9\xd7\x94 ", 20, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u05E2\u05D5\u05E1\u05E7 \u05DE\u05D5\u05E8\u05E9\u05D4 ");
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -828,7 +828,7 @@ DECLARE_RTFEXPORT_TEST(testFdo59638, "fdo59638.rtf")
         if (rProp.Name == "BulletChar")
         {
             // Was '*', should be 'o'.
-            CPPUNIT_ASSERT_EQUAL(OUString("\xEF\x82\xB7", 3, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            CPPUNIT_ASSERT_EQUAL(OUString(u"\uF0B7"), rProp.Value.get<OUString>());
             return;
         }
     }
@@ -923,7 +923,7 @@ DECLARE_RTFEXPORT_TEST(testFdo42109, "fdo42109.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo62977, "fdo62977.rtf")
 {
     // The middle character was imported as '?' instead of the proper unicode value.
-    getRun(getParagraph(1), 1, OUString("\xE5\xB9\xB4\xEF\xBC\x94\xE6\x9C\x88", 9, RTL_TEXTENCODING_UTF8));
+    getRun(getParagraph(1), 1, OUString(u"\u5E74\uFF14\u6708"));
 }
 
 DECLARE_RTFEXPORT_TEST(testN818997, "n818997.rtf")
@@ -935,7 +935,7 @@ DECLARE_RTFEXPORT_TEST(testN818997, "n818997.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo64671, "fdo64671.rtf")
 {
     // Additional '}' was inserted before the special character.
-    getRun(getParagraph(1), 1, OUString("\xC5\xBD", 2, RTL_TEXTENCODING_UTF8));
+    getRun(getParagraph(1), 1, OUString(u"\u017D"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo62044, "fdo62044.rtf")
@@ -1034,7 +1034,7 @@ DECLARE_RTFEXPORT_TEST(testFdo77996, "fdo77996.rtf")
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xProps(xDocumentPropertiesSupplier->getDocumentProperties());
     CPPUNIT_ASSERT_EQUAL(OUString("Aln Lin (Bei Jing)"), xProps->getAuthor());
-    OUString aTitle("\xe5\x8e\xa6\xe9\x97\xa8\xe9\x92\xa8\xe4\xb8\x9a\xe8\x82\xa1\xe4\xbb\xbd\xe6\x9c\x89\xe9\x99\x90\xe5\x85\xac\xe5\x8f\xb8", 30, RTL_TEXTENCODING_UTF8);
+    OUString aTitle(u"\u53A6\u95E8\u94A8\u4E1A\u80A1\u4EFD\u6709\u9650\u516C\u53F8");
     CPPUNIT_ASSERT_EQUAL(aTitle, xProps->getTitle());
     uno::Reference<beans::XPropertySet> xUDProps(xProps->getUserDefinedProperties(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("jay"), getProperty<OUString>(xUDProps, "Operator"));
@@ -1111,7 +1111,7 @@ DECLARE_RTFEXPORT_TEST(testFdo44715, "fdo44715.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo68076, "fdo68076.rtf")
 {
     // Encoding of the last char was wrong (more 'o' than 'y').
-    OUString aExpected("\xD0\x9E\xD0\xB1\xD1\x8A\xD0\xB5\xD0\xBA\xD1\x82 \xE2\x80\x93 \xD1\x83", 19, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u041E\u0431\u044A\u0435\u043A\u0442 \u2013 \u0443");
     getParagraph(1, aExpected);
 }
 
@@ -1353,12 +1353,12 @@ DECLARE_RTFEXPORT_TEST(testDprectAnchor, "dprect-anchor.rtf")
 
 DECLARE_RTFEXPORT_TEST(testFdo76628, "fdo76628.rtf")
 {
-    OUString aExpected("\xd0\x9e\xd0\x91\xd0\xa0\xd0\x90\xd0\x97\xd0\x95\xd0\xa6", 14, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u041E\u0411\u0420\u0410\u0417\u0415\u0426");
     // Should be 'SAMPLE' in Russian, was garbage.
     getParagraph(1, aExpected);
 
     uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
-    OUString aExpectedHeader("\xd0\x9f\xd0\xbe\xd0\xb4\xd0\xb3\xd0\xbe\xd1\x82\xd0\xbe\xd0\xb2\xd0\xbb\xd0\xb5\xd0\xbd\xd0\xbe", 24, RTL_TEXTENCODING_UTF8);
+    OUString aExpectedHeader(u"\u041F\u043E\u0434\u0433\u043E\u0442\u043E\u0432\u043B\u0435\u043D\u043E");
     // Should be 'prepared' in Russian, was garbage.
     getParagraphOfText(1, xHeaderText, aExpectedHeader);
 }
@@ -1484,7 +1484,7 @@ DECLARE_RTFEXPORT_TEST(testFdo85889pc, "fdo85889-pc.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    OUString aExpected("\xc2\xb1\xe2\x89\xa5\xe2\x89\xa4", 8, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u00B1\u2265\u2264");
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -1492,7 +1492,7 @@ DECLARE_RTFEXPORT_TEST(testFdo85889pca, "fdo85889-pca.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    OUString aExpected("\xc2\xb1\xe2\x80\x97\xc2\xbe", 7, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u00B1\u2017\u00BE");
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -1500,7 +1500,7 @@ DECLARE_RTFEXPORT_TEST(testFdo85889mac, "fdo85889-mac.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    OUString aExpected("\xc3\x92\xc3\x9a\xc3\x9b", 6, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u00D2\u00DA\u00DB");
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 

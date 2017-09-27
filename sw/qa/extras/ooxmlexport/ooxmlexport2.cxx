@@ -224,8 +224,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo51034, "fdo51034.odt")
 // Replace symbol - (i.e. U+2212) with ASCII - , LO does this change and it shouldn't matter.
 void CHECK_FORMULA(OUString const & expected, OUString const & actual) {
     CPPUNIT_ASSERT_EQUAL(
-        expected.replaceAll( " ", "" ).replaceAll( OUString( "\xe2\x88\x92", strlen( "\xe2\x88\x92" ), RTL_TEXTENCODING_UTF8 ), "-" ),
-        actual.replaceAll( " ", "" ).replaceAll( OUString( "\xe2\x88\x92", strlen( "\xe2\x88\x92" ), RTL_TEXTENCODING_UTF8 ), "-" ));
+        expected.replaceAll( " ", "" ).replaceAll( OUString(u"\u2212"), "-" ),
+        actual.replaceAll( " ", "" ).replaceAll( OUString(u"\u2212"), "-" ));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathAccents, "math-accents.docx")
@@ -942,7 +942,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "BulletChar")
         {
-            CPPUNIT_ASSERT_EQUAL(OUString("\x0", 1, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            CPPUNIT_ASSERT_EQUAL(OUString("\x0", 1, RTL_TEXTENCODING_ASCII_US), rProp.Value.get<OUString>());
             return;
         }
     }

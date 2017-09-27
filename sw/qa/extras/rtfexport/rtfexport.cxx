@@ -230,14 +230,14 @@ DECLARE_RTFEXPORT_TEST(testMathD, "math-d.rtf")
 DECLARE_RTFEXPORT_TEST(testMathEscaping, "math-escaping.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected("\xc3\xa1 \\{", 5, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u00E1 \\{");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
 DECLARE_RTFEXPORT_TEST(testMathLim, "math-lim.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected("lim from {x \xe2\x86\x92 1} {x}", 22, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"lim from {x \u2192 1} {x}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -258,20 +258,19 @@ DECLARE_RTFEXPORT_TEST(testMathBox, "math-mbox.rtf")
 DECLARE_RTFEXPORT_TEST(testMathMso2007, "math-mso2007.rtf")
 {
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected("A = \xcf\x80 {r} ^ {2}", 16, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"A = \u03C0 {r} ^ {2}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(2), 1));
-    aExpected = OUString("{left (x + a right )} ^ {n} = sum from {k = 0} to {n} {left (stack { n # k } right ) {x} ^ {k} {a} ^ {n \xe2\x88\x92 k}}", 111, RTL_TEXTENCODING_UTF8);
+    aExpected = OUString(u"{left (x + a right )} ^ {n} = sum from {k = 0} to {n} {left (stack { n # k } right ) {x} ^ {k} {a} ^ {n \u2212 k}}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(3), 1));
-    aExpected = OUString("{left (1 + x right )} ^ {n} = 1 + {nx} over {1 !} + {n left (n \xe2\x88\x92 1 right ) {x} ^ {2}} over {2 !} + \xe2\x80\xa6", 104, RTL_TEXTENCODING_UTF8);
+    aExpected = OUString(u"{left (1 + x right )} ^ {n} = 1 + {nx} over {1 !} + {n left (n \u2212 1 right ) {x} ^ {2}} over {2 !} + \u2026");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(4), 1));
-    aExpected = OUString("f left (x right ) = {a} rsub {0} + sum from {n = 1} to {\xe2\x88\x9e} {left ({a} rsub {n} cos {n\xcf\x80x} over {L} + {b} rsub {n} sin {n\xcf\x80x} over {L} right )}", 144,
-                         RTL_TEXTENCODING_UTF8);
+    aExpected = OUString(u"f left (x right ) = {a} rsub {0} + sum from {n = 1} to {\u221E} {left ({a} rsub {n} cos {n\u03C0x} over {L} + {b} rsub {n} sin {n\u03C0x} over {L} right )}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(5), 1));
@@ -279,19 +278,19 @@ DECLARE_RTFEXPORT_TEST(testMathMso2007, "math-mso2007.rtf")
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(6), 1));
-    aExpected = OUString("x = {\xe2\x88\x92 b \xc2\xb1 sqrt {{b} ^ {2} \xe2\x88\x92 4 ac}} over {2 a}", 51, RTL_TEXTENCODING_UTF8);
+    aExpected = OUString(u"x = {\u2212 b \u00B1 sqrt {{b} ^ {2} \u2212 4 ac}} over {2 a}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(7), 1));
-    aExpected = OUString("{e} ^ {x} = 1 + {x} over {1 !} + {{x} ^ {2}} over {2 !} + {{x} ^ {3}} over {3 !} + \xe2\x80\xa6 , \xe2\x88\x92 \xe2\x88\x9e < x < \xe2\x88\x9e", 106, RTL_TEXTENCODING_UTF8);
+    aExpected = OUString(u"{e} ^ {x} = 1 + {x} over {1 !} + {{x} ^ {2}} over {2 !} + {{x} ^ {3}} over {3 !} + \u2026 , \u2212 \u221E < x < \u221E");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(8), 1));
-    aExpected = OUString("sin \xce\xb1 \xc2\xb1 sin \xce\xb2 = 2 sin {1} over {2} left (\xce\xb1 \xc2\xb1 \xce\xb2 right ) cos {1} over {2} left (\xce\xb1 \xe2\x88\x93 \xce\xb2 right )", 101, RTL_TEXTENCODING_UTF8);
+    aExpected = OUString(u"sin \u03B1 \u00B1 sin \u03B2 = 2 sin {1} over {2} left (\u03B1 \u00B1 \u03B2 right ) cos {1} over {2} left (\u03B1 \u2213 \u03B2 right )");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     aActual = getFormula(getRun(getParagraph(9), 1));
-    aExpected = OUString("cos \xce\xb1 + cos \xce\xb2 = 2 cos {1} over {2} left (\xce\xb1 + \xce\xb2 right ) cos {1} over {2} left (\xce\xb1 \xe2\x88\x92 \xce\xb2 right )", 99, RTL_TEXTENCODING_UTF8);
+    aExpected = OUString(u"cos \u03B1 + cos \u03B2 = 2 cos {1} over {2} left (\u03B1 + \u03B2 right ) cos {1} over {2} left (\u03B1 \u2212 \u03B2 right )");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -375,7 +374,7 @@ DECLARE_RTFEXPORT_TEST(testMathRuns, "math-runs.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo77979, "fdo77979.odt")
 {
     // font name is encoded with \fcharset of font
-    OUString aExpected("\xE5\xBE\xAE\xE8\xBD\xAF\xE9\x9B\x85\xE9\xBB\x91", 12, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u5FAE\u8F6F\u96C5\u9ED1");
     CPPUNIT_ASSERT_EQUAL(aExpected, getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
@@ -456,7 +455,7 @@ DECLARE_RTFEXPORT_TEST(testFdo61507, "fdo61507.rtf")
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
-    OUString aExpected = OUString("\xc3\x89\xc3\x81\xc5\x90\xc5\xb0\xe2\x88\xad", 11, RTL_TEXTENCODING_UTF8);
+    OUString aExpected = OUString(u"\u00C9\u00C1\u0150\u0170\u222D");
     CPPUNIT_ASSERT_EQUAL(aExpected, xDocumentProperties->getTitle());
 
     // Only "Hello.", no additional characters.
@@ -484,7 +483,7 @@ DECLARE_RTFEXPORT_TEST(testMnor, "mnor.rtf")
 {
     // \mnor wasn't handled, leading to missing quotes around "divF" and so on.
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
-    OUString aExpected("iiint from {V} to <?> {\"divF\"} dV = llint from {S} to <?> {\"F\" \xe2\x88\x99 \"n\" dS}", 74, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"iiint from {V} to <?> {\"divF\"} dV = llint from {S} to <?> {\"F\" \u2219 \"n\" dS}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 

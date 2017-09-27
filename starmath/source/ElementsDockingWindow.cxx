@@ -559,7 +559,7 @@ void SmElementsControl::addElements(const std::pair<const char*, const char*> aE
         } else {
             OUString aElement(OUString::createFromAscii(pElement));
             if (aElement == RID_NEWLINE)
-                addElement(OUString( "\xe2\x86\xb5", 3, RTL_TEXTENCODING_UTF8 ), aElement, SmResId(pElementHelp));
+                addElement(OUString(u"\u21B5"), aElement, SmResId(pElementHelp));
             else if (aElement == RID_SBLANK)
                 addElement("\"`\"", aElement, SmResId(pElementHelp));
             else if (aElement == RID_BLANK)
