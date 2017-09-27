@@ -180,9 +180,6 @@ enum
     FMT_EURO                = 52
 };
 
-#define RTL_CONSTUTF8_USTRINGPARAM( constAsciiStr ) (&(constAsciiStr)[0]), \
-    ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1)), RTL_TEXTENCODING_UTF8
-
 class LwpCurrencyPool
 {
 public:
@@ -201,9 +198,9 @@ private:
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("oS",true, true);//FMT_AUSTRIANSCHILLING = 3,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("BF",true, true);//FMT_BELGIANFRANC      = 4,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("R$",false, true);//FMT_BRAZILIANCRUZEIRO    = 5,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("\357\277\241")));                 //FMT_BRITISHPOUND      = 6,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(u"\uFFE1"));                 //FMT_BRITISHPOUND      = 6,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("C$");                   //FMT_CANADIANDOLLAR        = 7,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("PRC\357\277\245")),false,true);   //FMT_CHINESEYUAN           = 8,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(u"PRC\uFFE5"),false,true);   //FMT_CHINESEYUAN           = 8,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Kc",true, true);//FMT_CZECHKORUNA           = 9,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Dkr",false, true);//FMT_DANISHKRONE         = 10,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("ECU",true, true);//FMT_ECU                  = 11,
@@ -215,9 +212,9 @@ private:
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Ft",true, true);//FMT_HUNGARIANFORINT       = 17,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rs",false, true);//FMT_INDIANRUPEE          = 18,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rp",false, true);//FMT_INDONESIANRUPIAH = 19,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("IR\357\277\241")));                   //FMT_IRISHPUNT         = 20,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(u"IR\uFFE1"));                   //FMT_IRISHPUNT         = 20,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("L.",false, true);//FMT_ITALIANLIRA          = 21,
-        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("\357\277\245")));             //FMT_JAPANESEYEN           = 22,
+        m_aCurrencyInfo[nC++]=LwpCurrencyInfo(OUString(u"\uFFE5"));             //FMT_JAPANESEYEN           = 22,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("LF",true, true);//FMT_LUXEMBOURGFRANC       = 23,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Rm",false, true);//FMT_MALAYSIANRINGGIT = 24,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("Mex$");                 //FMT_MEXICANPESO           = 25,
@@ -241,7 +238,7 @@ private:
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("$");                    //FMT_USDOLLAR          = 43,
         m_aCurrencyInfo[nC++]=LwpCurrencyInfo("OTH",false, true);//FMT_OTHERCURRENCY       = 44,
 
-        m_aCurrencyInfo[FMT_EURO]=LwpCurrencyInfo(OUString(RTL_CONSTUTF8_USTRINGPARAM("\342\202\254")));             //FMT_EURO              = 52
+        m_aCurrencyInfo[FMT_EURO]=LwpCurrencyInfo(OUString(u"\u20AC"));             //FMT_EURO              = 52
     }
 };
 

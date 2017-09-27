@@ -9,10 +9,14 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
 #include <cstdlib>
+#include <iomanip>
 #include <limits>
+#include <sstream>
 #include <stack>
 #include <string>
+#include <vector>
 #include <iostream>
 
 #include "check.hxx"
@@ -119,6 +123,8 @@ public:
     bool VisitCXXConstructExpr(CXXConstructExpr const * expr);
 
 private:
+    enum class ContentKind { Ascii, Utf8, Arbitrary };
+
     enum class TreatEmpty { DefaultCtor, CheckEmpty, Error };
 
     enum class ChangeKind { Char, CharLen, SingleChar, OUStringLiteral1 };
@@ -128,8 +134,9 @@ private:
     std::string describeChangeKind(ChangeKind kind);
 
     bool isStringConstant(
-        Expr const * expr, unsigned * size, bool * nonArray, bool * nonAscii,
-        bool * embeddedNuls, bool * terminatingNul);
+        Expr const * expr, unsigned * size, bool * nonArray,
+        ContentKind * content, bool * embeddedNuls, bool * terminatingNul,
+        std::vector<char32_t> * utf8Content = nullptr);
 
     bool isZero(Expr const * expr);
 
@@ -507,16 +514,16 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         unsigned n;
         bool nonArray;
-        bool non;
+        ContentKind cont;
         bool emb;
         bool trm;
         if (!isStringConstant(
-                expr->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray, &non,
+                expr->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray, &cont,
                 &emb, &trm))
         {
             return true;
         }
-        if (non) {
+        if (cont != ContentKind::Ascii) {
             report(
                 DiagnosticsEngine::Warning,
                 ("call of '%0' with string constant argument containing"
@@ -548,16 +555,16 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         for (unsigned i = 0; i != 2; ++i) {
             unsigned n;
             bool nonArray;
-            bool non;
+            ContentKind cont;
             bool emb;
             bool trm;
             if (!isStringConstant(
-                    expr->getArg(i)->IgnoreParenImpCasts(), &n, &nonArray, &non,
-                    &emb, &trm))
+                    expr->getArg(i)->IgnoreParenImpCasts(), &n, &nonArray,
+                    &cont, &emb, &trm))
             {
                 continue;
             }
-            if (non) {
+            if (cont != ContentKind::Ascii) {
                 report(
                     DiagnosticsEngine::Warning,
                     ("call of '%0' with string constant argument containing"
@@ -593,16 +600,16 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         for (unsigned i = 0; i != 2; ++i) {
             unsigned n;
             bool nonArray;
-            bool non;
+            ContentKind cont;
             bool emb;
             bool trm;
             if (!isStringConstant(
-                    expr->getArg(i)->IgnoreParenImpCasts(), &n, &nonArray, &non,
-                    &emb, &trm))
+                    expr->getArg(i)->IgnoreParenImpCasts(), &n, &nonArray,
+                    &cont, &emb, &trm))
             {
                 continue;
             }
-            if (non) {
+            if (cont != ContentKind::Ascii) {
                 report(
                     DiagnosticsEngine::Warning,
                     ("call of '%0' with string constant argument containing"
@@ -637,16 +644,16 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         unsigned n;
         bool nonArray;
-        bool non;
+        ContentKind cont;
         bool emb;
         bool trm;
         if (!isStringConstant(
-                expr->getArg(1)->IgnoreParenImpCasts(), &n, &nonArray, &non,
+                expr->getArg(1)->IgnoreParenImpCasts(), &n, &nonArray, &cont,
                 &emb, &trm))
         {
             return true;
         }
-        if (non) {
+        if (cont != ContentKind::Ascii) {
             report(
                 DiagnosticsEngine::Warning,
                 ("call of '%0' with string constant argument containing"
@@ -756,8 +763,6 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         ChangeKind kind;
         PassThrough pass;
         bool simplify;
-        bool encIsAscii;
-        std::string enc;
         switch (expr->getConstructor()->getNumParams()) {
         case 1:
             if (!loplugin::TypeCheck(
@@ -783,11 +788,11 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                 } else {
                     unsigned n;
                     bool nonArray;
-                    bool non;
+                    ContentKind cont;
                     bool emb;
                     bool trm;
                     if (!isStringConstant(
-                            arg->IgnoreParenImpCasts(), &n, &nonArray, &non,
+                            arg->IgnoreParenImpCasts(), &n, &nonArray, &cont,
                             &emb, &trm))
                     {
                         return true;
@@ -803,7 +808,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                     {
                         return true;
                     }
-                    if (non) {
+                    if (cont != ContentKind::Ascii) {
                         report(
                             DiagnosticsEngine::Warning,
                             ("construction of %0 with string constant argument"
@@ -831,12 +836,13 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
             {
                 unsigned n;
                 bool nonArray;
-                bool non;
+                ContentKind cont;
                 bool emb;
                 bool trm;
+                std::vector<char32_t> utf8Cont;
                 if (!isStringConstant(
                         expr->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray,
-                        &non, &emb, &trm))
+                        &cont, &emb, &trm, &utf8Cont))
                 {
                     return true;
                 }
@@ -855,20 +861,90 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                         << n << res.toString(10) << expr->getSourceRange();
                     return true;
                 }
+                APSInt enc;
                 if (!expr->getArg(2)->EvaluateAsInt(
-                        res, compiler.getASTContext()))
+                        enc, compiler.getASTContext()))
                 {
                     return true;
                 }
-                encIsAscii = res == 11; // RTL_TEXTENCODING_ASCII_US
-                enc = res.toString(10);
+                auto const encIsAscii = enc == 11; // RTL_TEXTENCODING_ASCII_US
+                auto const encIsUtf8 = enc == 76; // RTL_TEXTENCODING_UTF8
                 if (!expr->getArg(3)->EvaluateAsInt(
                         res, compiler.getASTContext())
                     || res != 0x333) // OSTRING_TO_OUSTRING_CVTFLAGS
                 {
                     return true;
                 }
-                if (non || emb) {
+                if (!encIsAscii && cont == ContentKind::Ascii) {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        ("suspicious 'rtl::OUString' constructor with text"
+                         " encoding %0 but plain ASCII content; use"
+                         " 'RTL_TEXTENCODING_ASCII_US' instead"),
+                        expr->getArg(2)->getExprLoc())
+                        << enc.toString(10) << expr->getSourceRange();
+                    return true;
+                }
+                if (encIsUtf8) {
+                    if (cont == ContentKind::Arbitrary) {
+                        report(
+                            DiagnosticsEngine::Warning,
+                            ("suspicious 'rtl::OUString' constructor with text"
+                             " encoding 'RTL_TEXTENCODING_UTF8' but non-UTF-8"
+                             " content"),
+                            expr->getArg(0)->getExprLoc())
+                            << expr->getSourceRange();
+                    } else {
+                        assert(cont == ContentKind::Utf8);
+                        //TODO: keep original content as much as possible
+                        std::ostringstream s;
+                        for (auto const c: utf8Cont) {
+                            if (c == '\\') {
+                                s << "\\\\";
+                            } else if (c == '"') {
+                                s << "\\\"";
+                            } else if (c == '\a') {
+                                s << "\\a";
+                            } else if (c == '\b') {
+                                s << "\\b";
+                            } else if (c == '\f') {
+                                s << "\\f";
+                            } else if (c == '\n') {
+                                s << "\\n";
+                            } else if (c == '\r') {
+                                s << "\\r";
+                            } else if (c == '\t') {
+                                s << "\\r";
+                            } else if (c == '\v') {
+                                s << "\\v";
+                            } else if (c <= 0x1F || c == 0x7F) {
+                                s << "\\x" << std::oct << std::setw(3)
+                                  << std::setfill('0')
+                                  << static_cast<std::uint_least32_t>(c);
+                            } else if (c < 0x7F) {
+                                s << char(c);
+                            } else if (c <= 0xFFFF) {
+                                s << "\\u" << std::hex << std::uppercase
+                                  << std::setw(4) << std::setfill('0')
+                                  << static_cast<std::uint_least32_t>(c);
+                            } else {
+                                assert(c <= 0x10FFFF);
+                                s << "\\U" << std::hex << std::uppercase
+                                  << std::setw(8) << std::setfill('0')
+                                  << static_cast<std::uint_least32_t>(c);
+                            }
+                        }
+                        report(
+                            DiagnosticsEngine::Warning,
+                            ("simplify construction of %0 with UTF-8 content as"
+                             " OUString(u\"%1\")"),
+                            expr->getExprLoc())
+                            << classdecl << s.str() << expr->getSourceRange();
+
+                    }
+                    return true;
+                }
+                if (cont != ContentKind::Ascii || emb) {
                     // cf. remaining uses of RTL_CONSTASCII_USTRINGPARAM
                     return true;
                 }
@@ -1067,10 +1143,8 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         if (simplify) {
             report(
                 DiagnosticsEngine::Warning,
-                ("simplify construction of %0 with %1%select{ (but beware, the"
-                 " given textencoding %3 is not RTL_TEXTENCODING_ASCII_US)|}2"),
-                expr->getExprLoc())
-                << classdecl << describeChangeKind(kind) << encIsAscii << enc
+                "simplify construction of %0 with %1", expr->getExprLoc())
+                << classdecl << describeChangeKind(kind)
                 << expr->getSourceRange();
         }
         return true;
@@ -1113,13 +1187,14 @@ std::string StringConstant::describeChangeKind(ChangeKind kind) {
 }
 
 bool StringConstant::isStringConstant(
-    Expr const * expr, unsigned * size, bool * nonArray, bool * nonAscii,
-    bool * embeddedNuls, bool * terminatingNul)
+    Expr const * expr, unsigned * size, bool * nonArray, ContentKind * content,
+    bool * embeddedNuls, bool * terminatingNul,
+    std::vector<char32_t> * utf8Content)
 {
     assert(expr != nullptr);
     assert(size != nullptr);
     assert(nonArray != nullptr);
-    assert(nonAscii != nullptr);
+    assert(content != nullptr);
     assert(embeddedNuls != nullptr);
     assert(terminatingNul != nullptr);
     QualType t = expr->getType();
@@ -1167,19 +1242,124 @@ bool StringConstant::isStringConstant(
             return false;
         }
         unsigned n = lit->getLength();
-        bool non = false;
+        ContentKind cont = ContentKind::Ascii;
         bool emb = false;
+        char32_t val = 0;
+        enum class Utf8State { Start, E0, EB, F0, F4, Trail1, Trail2, Trail3 };
+        Utf8State s = Utf8State::Start;
         StringRef str = lit->getString();
         for (unsigned i = 0; i != n; ++i) {
-            if (str[i] == '\0') {
+            auto const c = static_cast<unsigned char>(str[i]);
+            if (c == '\0') {
                 emb = true;
-            } else if (static_cast<unsigned char>(str[i]) >= 0x80) {
-                non = true;
+            }
+            switch (s) {
+            case Utf8State::Start:
+                if (c >= 0x80) {
+                    if (c >= 0xC2 && c <= 0xDF) {
+                        val = c & 0x1F;
+                        s = Utf8State::Trail1;
+                    } else if (c == 0xE0) {
+                        val = c & 0x0F;
+                        s = Utf8State::E0;
+                    } else if ((c >= 0xE1 && c <= 0xEA)
+                               || (c >= 0xEE && c <= 0xEF))
+                    {
+                        val = c & 0x0F;
+                        s = Utf8State::Trail2;
+                    } else if (c == 0xEB) {
+                        val = c & 0x0F;
+                        s = Utf8State::EB;
+                    } else if (c == 0xF0) {
+                        val = c & 0x03;
+                        s = Utf8State::F0;
+                    } else if (c >= 0xF1 && c <= 0xF3) {
+                        val = c & 0x03;
+                        s = Utf8State::Trail3;
+                    } else if (c == 0xF4) {
+                        val = c & 0x03;
+                        s = Utf8State::F4;
+                    } else {
+                        cont = ContentKind::Arbitrary;
+                    }
+                } else if (utf8Content != nullptr
+                           && cont != ContentKind::Arbitrary)
+                {
+                    utf8Content->push_back(c);
+                }
+                break;
+            case Utf8State::E0:
+                if (c >= 0xA0 && c <= 0xBF) {
+                    val = (val << 6) | (c & 0x3F);
+                    s = Utf8State::Trail1;
+                } else {
+                    cont = ContentKind::Arbitrary;
+                    s = Utf8State::Start;
+                }
+                break;
+            case Utf8State::EB:
+                if (c >= 0x80 && c <= 0x9F) {
+                    val = (val << 6) | (c & 0x3F);
+                    s = Utf8State::Trail1;
+                } else {
+                    cont = ContentKind::Arbitrary;
+                    s = Utf8State::Start;
+                }
+                break;
+            case Utf8State::F0:
+                if (c >= 0x90 && c <= 0xBF) {
+                    val = (val << 6) | (c & 0x3F);
+                    s = Utf8State::Trail2;
+                } else {
+                    cont = ContentKind::Arbitrary;
+                    s = Utf8State::Start;
+                }
+                break;
+            case Utf8State::F4:
+                if (c >= 0x80 && c <= 0x8F) {
+                    val = (val << 6) | (c & 0x3F);
+                    s = Utf8State::Trail2;
+                } else {
+                    cont = ContentKind::Arbitrary;
+                    s = Utf8State::Start;
+                }
+                break;
+            case Utf8State::Trail1:
+                if (c >= 0x80 && c <= 0xBF) {
+                    cont = ContentKind::Utf8;
+                    if (utf8Content != nullptr)
+                    {
+                        utf8Content->push_back((val << 6) | (c & 0x3F));
+                        val = 0;
+                    }
+                } else {
+                    cont = ContentKind::Arbitrary;
+                }
+                s = Utf8State::Start;
+                break;
+            case Utf8State::Trail2:
+                if (c >= 0x80 && c <= 0xBF) {
+                    val = (val << 6) | (c & 0x3F);
+                    s = Utf8State::Trail1;
+                } else {
+                    cont = ContentKind::Arbitrary;
+                    s = Utf8State::Start;
+                }
+                break;
+            case Utf8State::Trail3:
+                if (c >= 0x80 && c <= 0xBF) {
+                    val = (val << 6) | (c & 0x3F);
+                    s = Utf8State::Trail2;
+                } else {
+                    cont = ContentKind::Arbitrary;
+                    s = Utf8State::Start;
+                }
+                break;
             }
         }
         *size = n;
         *nonArray = isPtr;
-        *nonAscii = non;
+        *content = cont;
         *embeddedNuls = emb;
         *terminatingNul = true;
         return true;
@@ -1201,7 +1381,7 @@ bool StringConstant::isStringConstant(
             Expr const * e2 = e->IgnoreParenImpCasts();
             if (e2 != e) {
                 return isStringConstant(
-                    e2, size, nonArray, nonAscii, embeddedNuls, terminatingNul);
+                    e2, size, nonArray, content, embeddedNuls, terminatingNul);
             }
             //TODO: string literals are represented as recursive LValues???
             llvm::APInt n
@@ -1211,7 +1391,7 @@ bool StringConstant::isStringConstant(
             assert(n.ule(std::numeric_limits<unsigned>::max()));
             *size = static_cast<unsigned>(n.getLimitedValue());
             *nonArray = isPtr || *nonArray;
-            *nonAscii = false; //TODO
+            *content = ContentKind::Ascii; //TODO
             *embeddedNuls = false; //TODO
             *terminatingNul = true;
             return true;
@@ -1223,8 +1403,9 @@ bool StringConstant::isStringConstant(
             }
             unsigned n = v.getArraySize();
             assert(n != 0);
-            bool non = false;
+            ContentKind cont = ContentKind::Ascii;
             bool emb = false;
+            //TODO: check for ContentType::Utf8
             for (unsigned i = 0; i != n - 1; ++i) {
                 APValue e(v.getArrayInitializedElt(i));
                 if (!e.isInt()) { //TODO: assert?
@@ -1234,7 +1415,7 @@ bool StringConstant::isStringConstant(
                 if (iv == 0) {
                     emb = true;
                 } else if (iv.uge(0x80)) {
-                    non = true;
+                    cont = ContentKind::Arbitrary;
                 }
             }
             APValue e(v.getArrayInitializedElt(n - 1));
@@ -1244,7 +1425,7 @@ bool StringConstant::isStringConstant(
             bool trm = e.getInt() == 0;
             *size = trm ? n - 1 : n;
             *nonArray = isPtr;
-            *nonAscii = non;
+            *content = cont;
             *embeddedNuls = emb;
             *terminatingNul = trm;
             return true;
@@ -1477,16 +1658,16 @@ void StringConstant::handleChar(
 {
     unsigned n;
     bool nonArray;
-    bool non;
+    ContentKind cont;
     bool emb;
     bool trm;
     if (!isStringConstant(
-            expr->getArg(arg)->IgnoreParenImpCasts(), &n, &nonArray, &non, &emb,
-            &trm))
+            expr->getArg(arg)->IgnoreParenImpCasts(), &n, &nonArray, &cont,
+            &emb, &trm))
     {
         return;
     }
-    if (non) {
+    if (cont != ContentKind::Ascii) {
         report(
             DiagnosticsEngine::Warning,
             ("call of '%0' with string constant argument containing non-ASCII"
@@ -1537,11 +1718,11 @@ void StringConstant::handleCharLen(
     // out how to do that yet anyway):
     unsigned n;
     bool nonArray;
-    bool non;
+    ContentKind cont;
     bool emb;
     bool trm;
     if (!(isStringConstant(
-              expr->getArg(arg1)->IgnoreParenImpCasts(), &n, &nonArray, &non,
+              expr->getArg(arg1)->IgnoreParenImpCasts(), &n, &nonArray, &cont,
               &emb, &trm)
           && trm))
     {
@@ -1565,13 +1746,13 @@ void StringConstant::handleCharLen(
         }
         unsigned n2;
         bool nonArray2;
-        bool non2;
+        ContentKind cont2;
         bool emb2;
         bool trm2;
         if (!(isStringConstant(
                   subs->getBase()->IgnoreParenImpCasts(), &n2, &nonArray2,
-                  &non2, &emb2, &trm2)
-              && n2 == n && non2 == non && emb2 == emb && trm2 == trm
+                  &cont2, &emb2, &trm2)
+              && n2 == n && cont2 == cont && emb2 == emb && trm2 == trm
                   //TODO: same strings
               && subs->getIdx()->EvaluateAsInt(res, compiler.getASTContext())
               && res == 0))
@@ -1579,7 +1760,7 @@ void StringConstant::handleCharLen(
             return;
         }
     }
-    if (non) {
+    if (cont != ContentKind::Ascii) {
         report(
             DiagnosticsEngine::Warning,
             ("call of '%0' with string constant argument containing non-ASCII"
@@ -1663,16 +1844,16 @@ void StringConstant::handleOUStringCtor(
     }
     unsigned n;
     bool nonArray;
-    bool non;
+    ContentKind cont;
     bool emb;
     bool trm;
     if (!isStringConstant(
-            e3->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray, &non, &emb,
+            e3->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray, &cont, &emb,
             &trm))
     {
         return;
     }
-    //TODO: non, emb, trm
+    //TODO: cont, emb, trm
     if (rewriter != nullptr) {
         auto loc1 = e3->getLocStart();
         auto range = e3->getParenOrBraceRange();
@@ -1753,11 +1934,11 @@ void StringConstant::handleFunArgOstring(
     auto argExpr = expr->getArg(arg)->IgnoreParenImpCasts();
     unsigned n;
     bool nonArray;
-    bool non;
+    ContentKind cont;
     bool emb;
     bool trm;
-    if (isStringConstant(argExpr, &n, &nonArray, &non, &emb, &trm)) {
-        if (non || emb) {
+    if (isStringConstant(argExpr, &n, &nonArray, &cont, &emb, &trm)) {
+        if (cont != ContentKind::Ascii || emb) {
             return;
         }
         if (!trm) {
@@ -1797,7 +1978,7 @@ void StringConstant::handleFunArgOstring(
             case 2:
                 if (isStringConstant(
                         cexpr->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray,
-                        &non, &emb, &trm))
+                        &cont, &emb, &trm))
                 {
                     APSInt res;
                     if (cexpr->getArg(1)->EvaluateAsInt(

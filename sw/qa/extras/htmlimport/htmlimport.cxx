@@ -146,7 +146,7 @@ DECLARE_HTMLIMPORT_TEST(testListStyleType, "list-style.html")
         if (rProp.Name == "BulletChar")
         {
             // should be 'o'.
-            CPPUNIT_ASSERT_EQUAL(OUString("\xEE\x80\x89", 3, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            CPPUNIT_ASSERT_EQUAL(OUString(u"\uE009"), rProp.Value.get<OUString>());
             bBulletFound = true;
             break;
         }

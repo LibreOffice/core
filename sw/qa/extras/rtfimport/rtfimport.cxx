@@ -196,7 +196,7 @@ DECLARE_RTFIMPORT_TEST(testFdo45182, "fdo45182.rtf")
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     // Encoding in the footnote was wrong.
-    OUString aExpected("\xc5\xbeivnost\xc3\xad\n", 11, RTL_TEXTENCODING_UTF8);
+    OUString aExpected(u"\u017Eivnost\u00ED\n");
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
@@ -634,7 +634,7 @@ public:
     }
     virtual void verify() override
     {
-        OUString aExpected("\xd0\x98\xd0\xbc\xd1\x8f", 6, RTL_TEXTENCODING_UTF8);
+        OUString aExpected(u"\u0418\u043C\u044F");
         getParagraph(1, aExpected);
     }
 };
