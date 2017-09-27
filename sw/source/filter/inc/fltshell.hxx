@@ -47,7 +47,7 @@ inline bool SwFltGetFlag(sal_uLong nFieldFlags, int no)
 
 //Subvert the Node/Content system to get positions which don't update as
 //content is appended to them
-struct SW_DLLPUBLIC SwFltPosition
+struct SwFltPosition
 {
 public:
     SwNodeIndex m_nNode;
