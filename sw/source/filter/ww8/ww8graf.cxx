@@ -666,7 +666,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                 }
                 else
                 {
-                    if (!m_aFieldStack.empty() && End_Field())
+                    if (!m_aFieldStack.empty() && End_Field() && !aChunks.empty())
                         aChunks.back().SetEndPos(nStart+1);
                 }
             }
