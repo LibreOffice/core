@@ -361,6 +361,11 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                         }
                     }
                 }
+                else
+                {
+                    // Defunct connection entry
+                    RemoveEntry(pParent);
+                }
             }
             catch (const Exception&)
             {
