@@ -7,7 +7,7 @@ prelink all LO libraries into one to facilitate easier linking
 a swift based UI, very much work in progress
 
 -- support
-the arm64 and simulator are the only supported processsors,
+the arm64 and simulator are the only supported processors,
 old 32 bit iPhones are not supported.
 
 The swift app are done for 3 structures
@@ -16,14 +16,14 @@ The swift app are done for 3 structures
   arm64 + optimized libraries
 
 -- SETUP
-Due to the 3 modes, at lease 3 workdir are needed together with a 
-seperate UI workdir.
+Due to the 3 modes, at least 3 workdirs are needed together with a
+separated UI workdir.
 
-Because the main work is done on the UI, where it is convinient to
-swift fast between arm64 and simulator, it is advanteous to compile
+Because the main work is done on the UI, where it is convenient to
+switch fast between arm64 and simulator, it is advantageous to compile
 the 3 configurations of LO first, and then link against those.
 
-Due to the multiple workdirs a distint directory setup is needed
+Due to the multiple workdirs a distinct directory setup is needed
    ./core - libreoffice git clone (name can be changed)
    ./ios-arm64 - workdir for production, autogen.input:
                         standard +
