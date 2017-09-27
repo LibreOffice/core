@@ -33,17 +33,17 @@
 // Unicode-only defines to break dependence on UNICODE define
 #if !defined ListView_InsertColumnW
 #define ListView_InsertColumnW(hwnd, iCol, pcol) \
-    (int)SNDMSG((hwnd), LVM_INSERTCOLUMNW, (WPARAM)(int)(iCol), reinterpret_cast<LPARAM>(const_cast<const LV_COLUMNW *>(pcol)))
+    (int)SNDMSG((hwnd), LVM_INSERTCOLUMNW, (WPARAM)(int)(iCol), reinterpret_cast<LPARAM>(pcol))
 #endif
 
 #if !defined ListView_InsertItemW
 #define ListView_InsertItemW(hwnd, pitem)   \
-    (int)SNDMSG((hwnd), LVM_INSERTITEMW, 0, reinterpret_cast<LPARAM>(const_cast<const LV_ITEMW *>(pitem)))
+    (int)SNDMSG((hwnd), LVM_INSERTITEMW, 0, reinterpret_cast<LPARAM>(pitem))
 #endif
 
 #if !defined ListView_SetItemW
 #define ListView_SetItemW(hwnd, pitem) \
-    (BOOL)SNDMSG((hwnd), LVM_SETITEMW, 0, reinterpret_cast<LPARAM>(const_cast<const LV_ITEMW *>(pitem)))
+    (BOOL)SNDMSG((hwnd), LVM_SETITEMW, 0, reinterpret_cast<LPARAM>(pitem))
 #endif
 
 
