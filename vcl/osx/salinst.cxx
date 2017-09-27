@@ -589,7 +589,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     {
         // handle available events
         NSEvent* pEvent = nil;
-        NSDate *now = [[NSDate alloc] init];
+        NSTimeInterval now = [[NSProcessInfo processInfo]systemUptime];
         do
         {
             SolarMutexReleaser aReleaser;
@@ -598,7 +598,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
             pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask
 SAL_WNODEPRECATED_DECLARATIONS_POP
-                            untilDate: now
+                            untilDate: nil
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
             if( pEvent )
@@ -611,7 +611,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
             [NSApp updateWindows];
 
-            if ( !bHandleAllCurrentEvents || !pEvent )
+            if ( !bHandleAllCurrentEvents || !pEvent || now < [pEvent timestamp] )
                 break;
         }
         while( true );
@@ -744,7 +744,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     if( nType & VclInputFlags::KEYBOARD)
         nEventMask |= NSKeyDownMask | NSKeyUpMask | NSFlagsChangedMask;
     if( nType & VclInputFlags::OTHER)
-        nEventMask |= NSTabletPoint;
+        nEventMask |= NSTabletPoint | NSApplicationDefinedMask;
 SAL_WNODEPRECATED_DECLARATIONS_POP
     // TODO: VclInputFlags::PAINT / more VclInputFlags::OTHER
     if( !bool(nType) )
