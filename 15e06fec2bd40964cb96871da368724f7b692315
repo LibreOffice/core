@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_32f7c6f6",
+        "filename": "sw/source/uibase/app/docsh2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-27T10:15:06Z",
+      "side": 1,
+      "message": "You are now disabling \u0027new window\u0027 menu item on the normal view (actually whenever it is not web view) after toggling views because the call is in the SwDocShell::ToggleLayoutMode() method.\n\nWhy not just remove the call to SetNewWindowAllowed()?",
+      "range": {
+        "startLine": 191,
+        "startChar": 31,
+        "endLine": 191,
+        "endChar": 59
+      },
+      "revId": "15e06fec2bd40964cb96871da368724f7b692315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
