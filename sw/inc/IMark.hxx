@@ -31,6 +31,11 @@ struct SwPosition;
 
 namespace sw { namespace mark
 {
+    enum class InsertMode
+    {
+        New,
+        CopyText,
+    };
 
     class SW_DLLPUBLIC IMark
         : virtual public SwModify // inherited as interface

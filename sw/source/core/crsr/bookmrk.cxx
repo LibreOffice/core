@@ -65,7 +65,20 @@ namespace
         }
     }
 
-    void lcl_AssureFieldMarksSet(Fieldmark* const pField,
+    void lcl_AssertFieldMarksSet(Fieldmark* const pField,
+        const sal_Unicode aStartMark,
+        const sal_Unicode aEndMark)
+    {
+        if (aEndMark != CH_TXT_ATR_FORMELEMENT)
+        {
+            SwPosition const& rStart(pField->GetMarkStart());
+            assert(rStart.nNode.GetNode().GetTextNode()->GetText()[rStart.nContent.GetIndex()] == aStartMark);
+        }
+        SwPosition const& rEnd(pField->GetMarkEnd());
+        assert(rEnd.nNode.GetNode().GetTextNode()->GetText()[rEnd.nContent.GetIndex() - 1] == aEndMark);
+    }
+
+    void lcl_SetFieldMarks(Fieldmark* const pField,
         SwDoc* const io_pDoc,
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
@@ -280,7 +293,7 @@ namespace sw { namespace mark
         m_aName = rName;
     }
 
-    void Bookmark::InitDoc(SwDoc* const io_pDoc)
+    void Bookmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const)
     {
         if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
@@ -399,9 +412,16 @@ namespace sw { namespace mark
         : Fieldmark(rPaM)
     { }
 
-    void TextFieldmark::InitDoc(SwDoc* const io_pDoc)
+    void TextFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
     {
-        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+        if (eMode == sw::mark::InsertMode::New)
+        {
+            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+        }
+        else
+        {
+            lcl_AssertFieldMarksSet(this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+        }
     }
 
     void TextFieldmark::ReleaseDoc(SwDoc* const pDoc)
@@ -413,15 +433,22 @@ namespace sw { namespace mark
         : Fieldmark(rPaM)
     { }
 
-    void CheckboxFieldmark::InitDoc(SwDoc* const io_pDoc)
+    void CheckboxFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
     {
-        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+        if (eMode == sw::mark::InsertMode::New)
+        {
+            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
 
-        // For some reason the end mark is moved from 1 by the Insert: we don't
-        // want this for checkboxes
-        SwPosition aNewEndPos = this->GetMarkEnd();
-        aNewEndPos.nContent--;
-        SetMarkEndPos( aNewEndPos );
+            // For some reason the end mark is moved from 1 by the Insert:
+            // we don't want this for checkboxes
+            SwPosition aNewEndPos = GetMarkEnd();
+            aNewEndPos.nContent--;
+            SetMarkEndPos( aNewEndPos );
+        }
+        else
+        {
+            lcl_AssertFieldMarksSet(this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+        }
     }
 
     void CheckboxFieldmark::ReleaseDoc(SwDoc* const pDoc)

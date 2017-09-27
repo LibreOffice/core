@@ -72,12 +72,15 @@ class IDocumentMarkAccess
            @param eMark
            [in] the type of the new mark.
 
+           @param eMode
+           [in] is the new mark part of a text copy operation
+
            @returns
            a pointer to the new mark (name might have changed).
         */
         virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM,
             const OUString& rProposedName,
-            MarkType eMark) = 0;
+            MarkType eMark, ::sw::mark::InsertMode eMode) = 0;
 
         virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
             const OUString& rName,
