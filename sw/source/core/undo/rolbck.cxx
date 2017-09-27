@@ -648,7 +648,8 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
             pMarkAccess->deleteMark( pMark );
         }
         ::sw::mark::IBookmark* const pBookmark =
-            dynamic_cast< ::sw::mark::IBookmark* >( pMarkAccess->makeMark(*pPam, m_aName, m_eBkmkType) );
+            dynamic_cast<::sw::mark::IBookmark*>(
+                pMarkAccess->makeMark(*pPam, m_aName, m_eBkmkType, sw::mark::InsertMode::New));
         if ( pBookmark != nullptr )
         {
             pBookmark->SetKeyCode(m_aKeycode);

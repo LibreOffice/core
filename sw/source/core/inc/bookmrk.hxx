@@ -95,7 +95,7 @@ namespace sw {
                     m_pPos1.swap(m_pPos2);
             }
 
-            virtual void InitDoc(SwDoc* const)
+            virtual void InitDoc(SwDoc* const, sw::mark::InsertMode)
             {
             }
 
@@ -163,7 +163,7 @@ namespace sw {
                 const vcl::KeyCode& rCode,
                 const OUString& rName,
                 const OUString& rShortName);
-            virtual void InitDoc(SwDoc* const io_Doc) override;
+            virtual void InitDoc(SwDoc* const io_Doc, sw::mark::InsertMode eMode) override;
 
             virtual void DeregisterFromDoc(SwDoc* const io_pDoc) override;
 
@@ -231,7 +231,7 @@ namespace sw {
         {
         public:
             TextFieldmark(const SwPaM& rPaM);
-            virtual void InitDoc(SwDoc* const io_pDoc) override;
+            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
         };
 
@@ -241,7 +241,7 @@ namespace sw {
         {
         public:
             CheckboxFieldmark(const SwPaM& rPaM);
-            virtual void InitDoc(SwDoc* const io_pDoc) override;
+            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
             bool IsChecked() const override;
             void SetChecked(bool checked) override;

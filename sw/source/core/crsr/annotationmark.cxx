@@ -49,7 +49,7 @@ namespace sw { namespace mark
     {
     }
 
-    void AnnotationMark::InitDoc(SwDoc* const io_pDoc)
+    void AnnotationMark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const)
     {
         SwTextNode *pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
 

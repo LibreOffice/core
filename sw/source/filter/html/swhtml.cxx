@@ -2815,7 +2815,8 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         const ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
                             *pAttrPam,
                             sName,
-                            IDocumentMarkAccess::MarkType::BOOKMARK );
+                            IDocumentMarkAccess::MarkType::BOOKMARK,
+                            ::sw::mark::InsertMode::New);
 
                         // jump to bookmark
                         if( JUMPTO_MARK == m_eJumpTo && pNewMark->GetName() == m_sJmpMark )
