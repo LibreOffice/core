@@ -34,7 +34,7 @@
 using namespace com::sun::star;
 
 KDE5SalInstance::KDE5SalInstance(SalYieldMutex* pMutex)
-    : X11SalInstance(pMutex)
+    :SvpSalInstance( pMutex )
 {
     ImplSVData* pSVData = ImplGetSVData();
     delete pSVData->maAppData.mpToolkitName;
@@ -54,13 +54,13 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDE5SalInstance::createFilePicker(
         return uno::Reference< ui::dialogs::XFilePicker2 >(
             kdeXLib->createFilePicker(xMSF) );
     else*/
-        return X11SalInstance::createFilePicker( xMSF );
+        return SalInstance::createFilePicker( xMSF );
 }
 
-SalX11Display* KDE5SalInstance::CreateDisplay() const
+/*SalX11Display* KDE5SalInstance::CreateDisplay() const
 {
     return new SalKDE5Display( QX11Info::display() );
-}
+}*/
 
 bool KDE5SalInstance::IsMainThread() const
 {

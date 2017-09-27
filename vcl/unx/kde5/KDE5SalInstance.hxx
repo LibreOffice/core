@@ -19,15 +19,15 @@
 
 #pragma once
 
-#include <unx/salinst.h>
+#include <headless/svpinst.hxx>
 
 class SalYieldMutex;
 class SalFrame;
 
-class KDE5SalInstance : public X11SalInstance
+class KDE5SalInstance : public SvpSalInstance
 {
 protected:
-    virtual SalX11Display* CreateDisplay() const override;
+//    virtual SalX11Display* CreateDisplay() const override;
 
 public:
     explicit KDE5SalInstance(SalYieldMutex* pMutex);
