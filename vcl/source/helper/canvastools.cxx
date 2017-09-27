@@ -293,7 +293,7 @@ namespace vcl
                     aAlpha = ::Bitmap( aPixelSize,
                                        sal::static_int_cast<sal_uInt16>(nAlphaDepth),
                                        &::Bitmap::GetGreyPalette(
-                                           sal::static_int_cast<sal_uInt16>(1L << nAlphaDepth)) );
+                                           sal::static_int_cast<sal_uInt16>(1 << nAlphaDepth)) );
 
                 { // limit scoped access
                     Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );

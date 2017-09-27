@@ -2262,7 +2262,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             if( mpModel->IsWriter() )
                 aPoint += mpObj->GetAnchorPos();
 
-            pMeasureObj->NbcSetPoint( aPoint, pProperty->nWID == OWN_ATTR_MEASURE_START_POS ? 0L : 1L );
+            pMeasureObj->NbcSetPoint( aPoint, pProperty->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 );
             pMeasureObj->SetChanged();
             pMeasureObj->BroadcastObjectChange();
             return true;

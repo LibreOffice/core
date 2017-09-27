@@ -190,7 +190,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         CPPUNIT_ASSERT_MESSAGE( "8bit or less: missing palette",
                                 xPal.is());
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Palette incorrect entry count",
-                                static_cast<sal_Int32>(1L << nOriginalDepth), xPal->getNumberOfEntries());
+                                static_cast<sal_Int32>(1 << nOriginalDepth), xPal->getNumberOfEntries());
         uno::Sequence<double> aIndex;
         CPPUNIT_ASSERT_MESSAGE( "Palette is not read-only",
                                 !xPal->setIndex(aIndex,true,0));

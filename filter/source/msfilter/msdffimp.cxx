@@ -4751,8 +4751,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             nSpFlags &= ~ShapeFlag::FlipV;
                         }
 
-                        pRet->NbcSetPoint(aPoint1, 0L); // start point
-                        pRet->NbcSetPoint(aPoint2, 1L); // endpoint
+                        pRet->NbcSetPoint(aPoint1, 0); // start point
+                        pRet->NbcSetPoint(aPoint2, 1); // endpoint
 
                         sal_Int32 n1HorzDist, n1VertDist, n2HorzDist, n2VertDist;
                         n1HorzDist = n1VertDist = n2HorzDist = n2VertDist = 0;

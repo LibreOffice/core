@@ -154,7 +154,7 @@ OutputDevice* ObjectContactOfObjListPainter::TryToGetOutputDevice() const
 
 sal_uInt32 ObjectContactOfPagePainter::GetPaintObjectCount() const
 {
-    return (GetStartPage() ? 1L : 0L);
+    return (GetStartPage() ? 1 : 0);
 }
 
 ViewContact& ObjectContactOfPagePainter::GetPaintObjectViewContact(sal_uInt32 /*nIndex*/)

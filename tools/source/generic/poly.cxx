@@ -1818,14 +1818,14 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
     if(bCurve)
     {
         // #127979# Reduce source point count hard to the limit of the tools Polygon
-        if(nB2DLocalCount > ((0x0000ffff / 3L) - 1))
+        if(nB2DLocalCount > ((0x0000ffff / 3) - 1))
         {
             OSL_FAIL("Polygon::Polygon: Too many points in given B2DPolygon, need to reduce hard to maximum of tools Polygon (!)");
-            nB2DLocalCount = ((0x0000ffff / 3L) - 1);
+            nB2DLocalCount = ((0x0000ffff / 3) - 1);
         }
 
         // calculate target point count
-        const sal_uInt32 nLoopCount(bClosed ? nB2DLocalCount : (nB2DLocalCount ? nB2DLocalCount - 1 : 0L ));
+        const sal_uInt32 nLoopCount(bClosed ? nB2DLocalCount : (nB2DLocalCount ? nB2DLocalCount - 1 : 0 ));
 
         if(nLoopCount)
         {
@@ -1921,7 +1921,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
         if(nB2DLocalCount)
         {
             // point list creation
-            const sal_uInt32 nTargetCount(nB2DLocalCount + (bClosed ? 1L : 0L));
+            const sal_uInt32 nTargetCount(nB2DLocalCount + (bClosed ? 1 : 0));
             mpImplPolygon = new ImplPolygon( static_cast< sal_uInt16 >(nTargetCount) );
             sal_uInt16 nIndex(0);
 
