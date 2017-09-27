@@ -66,6 +66,8 @@ int main() {
     (void) OUString("x\xA0x", 3, RTL_TEXTENCODING_ISO_8859_1);
 
     (void) OUString("xxx", 2, RTL_TEXTENCODING_ASCII_US); // expected-error {{suspicious 'rtl::OUString' constructor with literal of length 3 and non-matching length argument 2 [loplugin:stringconstant]}}
+
+    (void) OUString(u8"xxx", 3, RTL_TEXTENCODING_ASCII_US); // expected-error {{simplify construction of 'OUString' with string constant argument [loplugin:stringconstant]}}
 }
 
 
