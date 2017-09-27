@@ -36,7 +36,7 @@ class Content;
 
 namespace dp_misc {
 
-struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
+struct StrTitle
 {
     static css::uno::Sequence< OUString > getTitleSequence()
     {

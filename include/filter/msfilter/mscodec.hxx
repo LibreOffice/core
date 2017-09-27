@@ -476,13 +476,13 @@ struct MSFILTER_DLLPUBLIC EncryptionVerifierRC4
     EncryptionVerifierRC4();
 };
 
-struct MSFILTER_DLLPUBLIC StandardEncryptionInfo
+struct StandardEncryptionInfo
 {
     EncryptionStandardHeader header;
     EncryptionVerifierAES    verifier;
 };
 
-struct MSFILTER_DLLPUBLIC RC4EncryptionInfo
+struct RC4EncryptionInfo
 {
     EncryptionStandardHeader header;
     EncryptionVerifierRC4 verifier;
