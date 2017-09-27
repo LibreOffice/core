@@ -359,61 +359,60 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
     osl::ResettableMutexGuard g(m_aMutex);
 
     Sequence< PropertyValue > aPropSet;
-    if ( aPropertySet >>= aPropSet )
+    if ( !(aPropertySet >>= aPropSet) )
+        throw IllegalArgumentException();
+
+    ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
+    if ( pIter != m_aResourceURLToInfoCache.end() )
+        throw ElementExistException();
+    else
     {
-        ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
-        if ( pIter != m_aResourceURLToInfoCache.end() )
-            throw ElementExistException();
-        else
+        if ( !m_bConfigAccessInitialized )
         {
-            if ( !m_bConfigAccessInitialized )
-            {
-                impl_initializeConfigAccess();
-                m_bConfigAccessInitialized = true;
-            }
+            impl_initializeConfigAccess();
+            m_bConfigAccessInitialized = true;
+        }
 
-            // Try to ask our configuration access
-            if ( m_xConfigAccess.is() )
+        // Try to ask our configuration access
+        if ( m_xConfigAccess.is() )
+        {
+            if ( m_xConfigAccess->hasByName( rResourceURL ) )
+                throw ElementExistException();
+            else
             {
-                if ( m_xConfigAccess->hasByName( rResourceURL ) )
-                    throw ElementExistException();
-                else
+                WindowStateInfo aWinStateInfo;
+                impl_fillStructFromSequence( aWinStateInfo, aPropSet );
+                m_aResourceURLToInfoCache.emplace( rResourceURL, aWinStateInfo );
+
+                // insert must be write-through => insert element into configuration
+                Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
+                if ( xNameContainer.is() )
                 {
-                    WindowStateInfo aWinStateInfo;
-                    impl_fillStructFromSequence( aWinStateInfo, aPropSet );
-                    m_aResourceURLToInfoCache.emplace( rResourceURL, aWinStateInfo );
+                    Reference< XSingleServiceFactory > xFactory( m_xConfigAccess, UNO_QUERY );
+                    g.clear();
 
-                    // insert must be write-through => insert element into configuration
-                    Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
-                    if ( xNameContainer.is() )
+                    try
                     {
-                        Reference< XSingleServiceFactory > xFactory( m_xConfigAccess, UNO_QUERY );
-                        g.clear();
-
-                        try
+                        Reference< XPropertySet > xPropSet( xFactory->createInstance(), UNO_QUERY );
+                        if ( xPropSet.is() )
                         {
-                            Reference< XPropertySet > xPropSet( xFactory->createInstance(), UNO_QUERY );
-                            if ( xPropSet.is() )
-                            {
-                                Any a;
-                                impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
-                                a <<= xPropSet;
-                                xNameContainer->insertByName( rResourceURL, a );
-                                Reference< XChangesBatch > xFlush( xFactory, UNO_QUERY );
-                                if ( xFlush.is() )
-                                    xFlush->commitChanges();
-                            }
+                            Any a;
+                            impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
+                            a <<= xPropSet;
+                            xNameContainer->insertByName( rResourceURL, a );
+                            Reference< XChangesBatch > xFlush( xFactory, UNO_QUERY );
+                            if ( xFlush.is() )
+                                xFlush->commitChanges();
                         }
-                        catch ( const Exception& )
-                        {
-                        }
+                    }
+                    catch ( const Exception& )
+                    {
                     }
                 }
             }
         }
     }
-    else
-        throw IllegalArgumentException();
+
 }
 
 // XNameReplace
@@ -423,68 +422,66 @@ void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rR
     osl::ResettableMutexGuard g(m_aMutex);
 
     Sequence< PropertyValue > aPropSet;
-    if ( aPropertySet >>= aPropSet )
+    if ( !(aPropertySet >>= aPropSet) )
+        throw IllegalArgumentException();
+
+    ResourceURLToInfoCache::iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
+    if ( pIter != m_aResourceURLToInfoCache.end() )
     {
-        ResourceURLToInfoCache::iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
-        if ( pIter != m_aResourceURLToInfoCache.end() )
+        WindowStateInfo& rWinStateInfo = pIter->second;
+        impl_fillStructFromSequence( rWinStateInfo, aPropSet );
+        m_bModified = true;
+    }
+    else
+    {
+        if ( !m_bConfigAccessInitialized )
         {
-            WindowStateInfo& rWinStateInfo = pIter->second;
-            impl_fillStructFromSequence( rWinStateInfo, aPropSet );
-            m_bModified = true;
-        }
-        else
-        {
-            if ( !m_bConfigAccessInitialized )
-            {
-                impl_initializeConfigAccess();
-                m_bConfigAccessInitialized = true;
-            }
-
-            // Try to ask our configuration access
-            Reference< XNameAccess > xNameAccess;
-            Any a( m_xConfigAccess->getByName( rResourceURL ));
-
-            if ( a >>= xNameAccess )
-            {
-                WindowStateInfo& rWinStateInfo( impl_insertCacheAndReturnWinState( rResourceURL, xNameAccess ));
-                impl_fillStructFromSequence( rWinStateInfo, aPropSet );
-                m_bModified = true;
-                pIter = m_aResourceURLToInfoCache.find( rResourceURL );
-            }
-            else
-                throw NoSuchElementException();
+            impl_initializeConfigAccess();
+            m_bConfigAccessInitialized = true;
         }
 
-        if ( m_bModified && pIter != m_aResourceURLToInfoCache.end() )
+        // Try to ask our configuration access
+        Reference< XNameAccess > xNameAccess;
+        Any a( m_xConfigAccess->getByName( rResourceURL ));
+
+        if ( !(a >>= xNameAccess) )
+            throw NoSuchElementException();
+
+        WindowStateInfo& rWinStateInfo( impl_insertCacheAndReturnWinState( rResourceURL, xNameAccess ));
+        impl_fillStructFromSequence( rWinStateInfo, aPropSet );
+        m_bModified = true;
+        pIter = m_aResourceURLToInfoCache.find( rResourceURL );
+
+    }
+
+    if ( m_bModified && pIter != m_aResourceURLToInfoCache.end() )
+    {
+        Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
+        if ( xNameContainer.is() )
         {
-            Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
-            if ( xNameContainer.is() )
+            WindowStateInfo aWinStateInfo( pIter->second );
+            OUString        aResourceURL( pIter->first );
+            m_bModified = false;
+            g.clear();
+
+            try
             {
-                WindowStateInfo aWinStateInfo( pIter->second );
-                OUString        aResourceURL( pIter->first );
-                m_bModified = false;
-                g.clear();
-
-                try
+                Reference< XPropertySet > xPropSet;
+                if ( xNameContainer->getByName( aResourceURL ) >>= xPropSet )
                 {
-                    Reference< XPropertySet > xPropSet;
-                    if ( xNameContainer->getByName( aResourceURL ) >>= xPropSet )
-                    {
-                        impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
+                    impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
 
-                        Reference< XChangesBatch > xFlush( m_xConfigAccess, UNO_QUERY );
-                        if ( xFlush.is() )
-                            xFlush->commitChanges();
-                    }
+                    Reference< XChangesBatch > xFlush( m_xConfigAccess, UNO_QUERY );
+                    if ( xFlush.is() )
+                        xFlush->commitChanges();
                 }
-                catch ( const Exception& )
-                {
-                }
+            }
+            catch ( const Exception& )
+            {
             }
         }
     }
-    else
-        throw IllegalArgumentException();
+
 }
 
 // container.XContainerListener

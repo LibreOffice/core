@@ -1028,21 +1028,19 @@ void Binding::setValue( const css::uno::Any& aValue )
     if( ! supportsType( aValue.getValueType() ) )
         throw IncompatibleTypesException( EXCEPT( "type unsupported" ) );
 
-    if( maBindingExpression.hasValue() )
-    {
-        css::uno::Reference<css::xml::dom::XNode> xNode = maBindingExpression.getNode();
-        if( xNode.is() )
-        {
-            OUString sValue = Convert::get().toXSD( aValue );
-            bool bSuccess = getModelImpl()->setSimpleContent( xNode, sValue );
-            if( ! bSuccess )
-                throw InvalidBindingStateException( EXCEPT( "can't set value" ) );
-        }
-        else
-            throw InvalidBindingStateException( EXCEPT( "no suitable node found" ) );
-    }
-    else
+    if( !maBindingExpression.hasValue() )
         throw InvalidBindingStateException( EXCEPT( "no suitable node found" ) );
+
+    css::uno::Reference<css::xml::dom::XNode> xNode = maBindingExpression.getNode();
+    if( !xNode.is() )
+        throw InvalidBindingStateException( EXCEPT( "no suitable node found" ) );
+
+    OUString sValue = Convert::get().toXSD( aValue );
+    bool bSuccess = getModelImpl()->setSimpleContent( xNode, sValue );
+    if( ! bSuccess )
+        throw InvalidBindingStateException( EXCEPT( "can't set value" ) );
+
+
 }
 
 

@@ -344,7 +344,7 @@ std::string Flatten::getSourceAsString(SourceRange range)
     return std::string( p1, p2 - p1);
 }
 
-loplugin::Plugin::Registration< Flatten > X("flatten", false);
+loplugin::Plugin::Registration< Flatten > X("flatten", true);
 
 }
 

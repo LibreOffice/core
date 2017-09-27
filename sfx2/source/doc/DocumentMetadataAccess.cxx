@@ -511,47 +511,45 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     try {
         if (!splitPath(i_rPath, dir, rest)) throw uno::RuntimeException();
         if (dir.isEmpty()) {
-            if (i_xStorage->isStreamElement(i_rPath)) {
-                const uno::Reference<io::XStream> xStream(
-                    i_xStorage->openStreamElement(i_rPath,
-                        embed::ElementModes::READ), uno::UNO_SET_THROW);
-                const uno::Reference<io::XInputStream> xInStream(
-                    xStream->getInputStream(), uno::UNO_SET_THROW );
-                const uno::Reference<rdf::XURI> xBaseURI(
-                    rdf::URI::create(i_rImpl.m_xContext, i_rBaseURI));
-                const uno::Reference<rdf::XURI> xURI(
-                    rdf::URI::createNS(i_rImpl.m_xContext,
-                        i_rBaseURI, i_rPath));
-                i_rImpl.m_xRepository->importGraph(rdf::FileFormat::RDF_XML,
-                    xInStream, xURI, xBaseURI);
-            } else {
+            if (!i_xStorage->isStreamElement(i_rPath)) {
                 throw mkException(
                     "readStream: is not a stream",
                     ucb::IOErrorCode_NO_FILE, i_rBaseURI + i_rPath, i_rPath);
             }
+            const uno::Reference<io::XStream> xStream(
+                i_xStorage->openStreamElement(i_rPath,
+                    embed::ElementModes::READ), uno::UNO_SET_THROW);
+            const uno::Reference<io::XInputStream> xInStream(
+                xStream->getInputStream(), uno::UNO_SET_THROW );
+            const uno::Reference<rdf::XURI> xBaseURI(
+                rdf::URI::create(i_rImpl.m_xContext, i_rBaseURI));
+            const uno::Reference<rdf::XURI> xURI(
+                rdf::URI::createNS(i_rImpl.m_xContext,
+                    i_rBaseURI, i_rPath));
+            i_rImpl.m_xRepository->importGraph(rdf::FileFormat::RDF_XML,
+                xInStream, xURI, xBaseURI);
         } else {
-            if (i_xStorage->isStorageElement(dir)) {
-                const uno::Reference<embed::XStorage> xDir(
-                    i_xStorage->openStorageElement(dir,
-                        embed::ElementModes::READ));
-                const uno::Reference< beans::XPropertySet > xDirProps(xDir,
-                    uno::UNO_QUERY_THROW);
-                try {
-                    OUString mimeType;
-                    xDirProps->getPropertyValue(
-                            utl::MediaDescriptor::PROP_MEDIATYPE() )
-                        >>= mimeType;
-                    if (mimeType.startsWith(s_odfmime)) {
-                        SAL_WARN("sfx", "readStream: refusing to recurse into embedded document");
-                        return;
-                    }
-                } catch (const uno::Exception &) { }
-                readStream(i_rImpl, xDir, rest, i_rBaseURI+dir+"/" );
-            } else {
+            if (!i_xStorage->isStorageElement(dir)) {
                 throw mkException(
                     "readStream: is not a directory",
                     ucb::IOErrorCode_NO_DIRECTORY, i_rBaseURI + dir, dir);
             }
+            const uno::Reference<embed::XStorage> xDir(
+                i_xStorage->openStorageElement(dir,
+                    embed::ElementModes::READ));
+            const uno::Reference< beans::XPropertySet > xDirProps(xDir,
+                uno::UNO_QUERY_THROW);
+            try {
+                OUString mimeType;
+                xDirProps->getPropertyValue(
+                        utl::MediaDescriptor::PROP_MEDIATYPE() )
+                    >>= mimeType;
+                if (mimeType.startsWith(s_odfmime)) {
+                    SAL_WARN("sfx", "readStream: refusing to recurse into embedded document");
+                    return;
+                }
+            } catch (const uno::Exception &) { }
+            readStream(i_rImpl, xDir, rest, i_rBaseURI+dir+"/" );
         }
     } catch (const container::NoSuchElementException & e) {
         throw mkException(e.Message, ucb::IOErrorCode_NOT_EXISTING_PATH,

@@ -1408,61 +1408,59 @@ void ImplementationRegistration::prepareRegister(
         // set implLoaderUrl
     }
 
-    if( m_xSMgr.is() ) {
-        try
-        {
-            Reference < XImplementationLoader > xAct(
-                m_xSMgr->createInstanceWithContext(activatorName, m_xCtx) , UNO_QUERY );
-            if (xAct.is())
-            {
-                Reference < XSimpleRegistry > xRegistry;
-
-                if (xReg.is())
-                {
-                    // registry supplied by user
-                    xRegistry = xReg;
-                }
-                else
-                {
-                    xRegistry = getRegistryFromServiceManager();
-                }
-
-                if ( xRegistry.is())
-                {
-                    doRegister(m_xSMgr, m_xCtx, xAct, xRegistry, implementationLoaderUrl,
-                               locationUrl, registeredLocationUrl);
-                }
-            }
-            else
-            {
-                throw CannotRegisterImplementationException(
-                    "ImplementationRegistration::registerImplementation() - The service "
-                    + activatorName + " cannot be instantiated" );
-            }
-        }
-        catch( CannotRegisterImplementationException & )
-        {
-            throw;
-        }
-        catch( const InvalidRegistryException & e )
-        {
-            throw CannotRegisterImplementationException(
-                "ImplementationRegistration::registerImplementation() "
-                "InvalidRegistryException during registration (" + e.Message + ")" );
-        }
-        catch( const MergeConflictException & e )
-        {
-            throw CannotRegisterImplementationException(
-                "ImplementationRegistration::registerImplementation() "
-                "MergeConflictException during registration (" + e.Message + ")" );
-        }
-    }
-    else
-    {
+    if( !m_xSMgr.is() )    {
         throw CannotRegisterImplementationException(
                 "ImplementationRegistration::registerImplementation() "
                 "no componentcontext available to instantiate loader" );
     }
+
+    try
+    {
+        Reference < XImplementationLoader > xAct(
+            m_xSMgr->createInstanceWithContext(activatorName, m_xCtx) , UNO_QUERY );
+        if (!xAct.is())
+        {
+            throw CannotRegisterImplementationException(
+                "ImplementationRegistration::registerImplementation() - The service "
+                + activatorName + " cannot be instantiated" );
+        }
+
+        Reference < XSimpleRegistry > xRegistry;
+
+        if (xReg.is())
+        {
+            // registry supplied by user
+            xRegistry = xReg;
+        }
+        else
+        {
+            xRegistry = getRegistryFromServiceManager();
+        }
+
+        if ( xRegistry.is())
+        {
+            doRegister(m_xSMgr, m_xCtx, xAct, xRegistry, implementationLoaderUrl,
+                       locationUrl, registeredLocationUrl);
+        }
+
+    }
+    catch( CannotRegisterImplementationException & )
+    {
+        throw;
+    }
+    catch( const InvalidRegistryException & e )
+    {
+        throw CannotRegisterImplementationException(
+            "ImplementationRegistration::registerImplementation() "
+            "InvalidRegistryException during registration (" + e.Message + ")" );
+    }
+    catch( const MergeConflictException & e )
+    {
+        throw CannotRegisterImplementationException(
+            "ImplementationRegistration::registerImplementation() "
+            "MergeConflictException during registration (" + e.Message + ")" );
+    }
+
 }
 
 
@@ -1677,23 +1675,22 @@ void ImplementationRegistration::doRegister(
 
             bool bSuccess =
                 xAct->writeRegistryInfo(xSourceKey, implementationLoaderUrl, locationUrl);
-            if ( bSuccess )
-            {
-                prepareRegistry(xDest, xSourceKey, implementationLoaderUrl, registeredLocationUrl, xCtx);
-
-                xSourceKey->closeKey();
-
-                xSourceKey = xReg->getRootKey();
-                Reference < XRegistryKey > xDestKey = xDest->getRootKey();
-                stoc_impreg::mergeKeys( xDestKey, xSourceKey );
-                xDestKey->closeKey();
-                xSourceKey->closeKey();
-            }
-            else
+            if ( !bSuccess )
             {
                 throw CannotRegisterImplementationException(
                     "ImplementationRegistration::doRegistration() component registration signaled failure" );
             }
+
+            prepareRegistry(xDest, xSourceKey, implementationLoaderUrl, registeredLocationUrl, xCtx);
+
+            xSourceKey->closeKey();
+
+            xSourceKey = xReg->getRootKey();
+            Reference < XRegistryKey > xDestKey = xDest->getRootKey();
+            stoc_impreg::mergeKeys( xDestKey, xSourceKey );
+            xDestKey->closeKey();
+            xSourceKey->closeKey();
+
 
             // Cleanup Source registry.
             if ( xSourceKey->isValid() )

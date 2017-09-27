@@ -187,15 +187,15 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
             continue;
 
         switch(curr) {
-            case u'-':
-                if (key_count > 0 && i + 1 < len ) {
+            case u'-': {
+                    if (key_count <= 0 || i + 1 >= len)
+                        throw RuntimeException();
                     for (curr = keyStr[++i]; key_count < MAX_KEYS && keys[key_count-1].key < curr; key_count++) {
                         keys[key_count].key = keys[key_count-1].key+1;
                         keys[key_count].desc.clear();
                     }
-                } else
-                    throw RuntimeException();
-                break;
+                    break;
+                }
             case u'[':
                 for (i++; i < len && keyStr[i] != ']'; i++) {
                     if (unicode::isWhiteSpace(keyStr[i])) {
@@ -212,8 +212,10 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
             case u'{':
                 close = '}';
                 SAL_FALLTHROUGH;
-            case u'(':
-                if (key_count > 0) {
+            case u'(': {
+                    if (key_count <= 0)
+                        throw RuntimeException();
+
                     sal_Int16 end = i+1;
                     for (; end < len && keyStr[end] != close; end++) ;
 
@@ -228,9 +230,8 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
                         keys[key_count++].desc.clear();
                     }
                     i=end+1;
-                } else
-                    throw RuntimeException();
-                break;
+                    break;
+                }
             default:
                 keys[key_count].key = curr;
                 keys[key_count++].desc.clear();

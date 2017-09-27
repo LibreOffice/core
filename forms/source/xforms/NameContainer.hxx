@@ -127,13 +127,11 @@ public:
         const css::uno::Any& aElement ) override
     {
         T aItem;
-        if( aElement >>= aItem )
-            if( hasByName( rName ) )
-                replace( rName, aItem );
-            else
-                throw css::container::NoSuchElementException();
-        else
+        if( !(aElement >>= aItem) )
             throw css::lang::IllegalArgumentException();
+        if( !hasByName( rName ) )
+            throw css::container::NoSuchElementException();
+        replace( rName, aItem );
     }
 
 
@@ -145,22 +143,19 @@ public:
         const css::uno::Any& aElement ) override
     {
         T aItem;
-        if( aElement >>= aItem )
-            if( ! hasByName( rName ) )
-                insert( rName, aItem );
-            else
-                throw css::container::ElementExistException();
-        else
+        if( !(aElement >>= aItem) )
             throw css::lang::IllegalArgumentException();
+        if( hasByName( rName ) )
+            throw css::container::ElementExistException();
+        insert( rName, aItem );
     }
 
     virtual void SAL_CALL removeByName(
         const OUString& rName ) override
     {
-        if( hasByName( rName ) )
-            remove( rName );
-        else
+        if( !hasByName( rName ) )
             throw css::container::NoSuchElementException();
+        remove( rName );
     }
 
 };

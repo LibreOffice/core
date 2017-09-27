@@ -166,60 +166,54 @@ sal_Int32 SAL_CALL ItemContainer::getCount()
 Any SAL_CALL ItemContainer::getByIndex( sal_Int32 Index )
 {
     ShareGuard aLock( m_aShareMutex );
-    if ( sal_Int32( m_aItemVector.size()) > Index )
-        return makeAny( m_aItemVector[Index] );
-    else
+    if ( sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
+
+    return makeAny( m_aItemVector[Index] );
 }
 
 // XIndexContainer
 void SAL_CALL ItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
 {
     Sequence< PropertyValue > aSeq;
-    if ( aItem >>= aSeq )
-    {
-        ShareGuard aLock( m_aShareMutex );
-        if ( sal_Int32( m_aItemVector.size()) == Index )
-            m_aItemVector.push_back( aSeq );
-        else if ( sal_Int32( m_aItemVector.size()) >Index )
-        {
-            std::vector< Sequence< PropertyValue > >::iterator aIter = m_aItemVector.begin();
-            aIter += Index;
-            m_aItemVector.insert( aIter, aSeq );
-        }
-        else
-            throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
-    }
-    else
+    if ( !(aItem >>= aSeq) )
         throw IllegalArgumentException( WRONG_TYPE_EXCEPTION,
                                         static_cast<OWeakObject *>(this), 2 );
-}
 
-void SAL_CALL ItemContainer::removeByIndex( sal_Int32 nIndex )
-{
     ShareGuard aLock( m_aShareMutex );
-    if ( (sal_Int32)m_aItemVector.size() > nIndex )
+    if ( sal_Int32( m_aItemVector.size()) == Index )
+        m_aItemVector.push_back( aSeq );
+    else if ( sal_Int32( m_aItemVector.size()) >Index )
     {
-        m_aItemVector.erase(m_aItemVector.begin() + nIndex);
+        std::vector< Sequence< PropertyValue > >::iterator aIter = m_aItemVector.begin();
+        aIter += Index;
+        m_aItemVector.insert( aIter, aSeq );
     }
     else
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 }
 
+void SAL_CALL ItemContainer::removeByIndex( sal_Int32 nIndex )
+{
+    ShareGuard aLock( m_aShareMutex );
+    if ( (sal_Int32)m_aItemVector.size() <= nIndex )
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
+
+    m_aItemVector.erase(m_aItemVector.begin() + nIndex);
+}
+
 void SAL_CALL ItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
 {
     Sequence< PropertyValue > aSeq;
-    if ( aItem >>= aSeq )
-    {
-        ShareGuard aLock( m_aShareMutex );
-        if ( sal_Int32( m_aItemVector.size()) > Index )
-            m_aItemVector[Index] = aSeq;
-        else
-            throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
-    }
-    else
+    if ( !(aItem >>= aSeq) )
         throw IllegalArgumentException( WRONG_TYPE_EXCEPTION,
                                         static_cast<OWeakObject *>(this), 2 );
+
+    ShareGuard aLock( m_aShareMutex );
+    if ( !(sal_Int32( m_aItemVector.size()) > Index) )
+        throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
+
+    m_aItemVector[Index] = aSeq;
 }
 
 } // namespace framework
