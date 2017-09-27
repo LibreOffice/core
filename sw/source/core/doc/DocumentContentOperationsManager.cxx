@@ -269,7 +269,8 @@ namespace
             ::sw::mark::IMark* const pNewMark = pDestDoc->getIDocumentMarkAccess()->makeMark(
                 aTmpPam,
                 pMark->GetName(),
-                IDocumentMarkAccess::GetType(*pMark));
+                IDocumentMarkAccess::GetType(*pMark),
+                ::sw::mark::InsertMode::CopyText);
             // Explicitly try to get exactly the same name as in the source
             // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
             pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
@@ -3861,7 +3862,10 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, nullptr);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk =
+                    m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam,
+                        OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
+                        ::sw::mark::InsertMode::New);
 
                 //JP 06.01.98: MUSS noch optimiert werden!!!
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
@@ -3953,7 +3957,10 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, nullptr);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk =
+                    m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam,
+                        OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK,
+                        ::sw::mark::InsertMode::New);
 
                 SwIndex& rIdx = aDelPam.GetPoint()->nContent;
                 rIdx.Assign( nullptr, 0 );

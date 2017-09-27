@@ -244,7 +244,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     m_pImpl->registerInMark(*this,
         m_pImpl->m_pDoc->getIDocumentMarkAccess()->makeMark(
-            aPam, m_pImpl->m_sMarkName, eType));
+            aPam, m_pImpl->m_sMarkName, eType, ::sw::mark::InsertMode::New));
     // #i81002#
     // Check, if bookmark has been created.
     // E.g., the creation of a cross-reference bookmark is suppress,

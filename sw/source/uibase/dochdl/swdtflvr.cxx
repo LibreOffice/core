@@ -3774,7 +3774,8 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
             aPaM,
             sMarkName,
-            IDocumentMarkAccess::MarkType::BOOKMARK);
+            IDocumentMarkAccess::MarkType::BOOKMARK,
+            ::sw::mark::InsertMode::New);
         rServerObject.SetDdeBookmark(*pNewMark);
     }
 

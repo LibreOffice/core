@@ -209,7 +209,8 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     aPaM.Move(fnMoveForward, GoInDoc);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
     sw::mark::IMark *pMark =
-            rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK);
+        rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK,
+            ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT(pMark);
     // select so pMark start position is on a node that is fully deleted
     aPaM.Move(fnMoveBackward, GoInNode);
@@ -243,7 +244,8 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
     aPaM.Move(fnMoveBackward, GoInContent);
     IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
     sw::mark::IMark *pMark =
-        rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK);
+        rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::MarkType::BOOKMARK,
+            ::sw::mark::InsertMode::New);
     CPPUNIT_ASSERT(pMark);
 
     // delete the same selection as the bookmark
