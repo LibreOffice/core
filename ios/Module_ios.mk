@@ -11,8 +11,7 @@ $(eval $(call gb_Module_Module,ios))
 ifeq ($(OS),IOS)
 
 $(eval $(call gb_Module_add_targets,ios,\
-	CustomTarget_Lo_Xcconfig \
-	CustomTarget_LibreOfficeLight_app \
+	CustomTarget_setup \
 ))
 
 endif

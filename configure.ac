@@ -2872,21 +2872,13 @@ if test $_os = iOS; then
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
         versionmin=-mios-simulator-version-min=9.3
-        if test "$host_cpu" = "arm64"; then
-            XCODE_ARCHS=x86_64
-            BITNESS=-fembed-bitcode
-        else
-            XCODE_ARCHS=i386
-        fi
+        XCODE_ARCHS=x86_64
+        BITNESS=-fembed-bitcode
     else
         platform=iPhoneOS
         versionmin=-miphoneos-version-min=9.3
-        if test "$host_cpu" = "arm64"; then
-            XCODE_ARCHS=arm64
-            BITNESS=-fembed-bitcode
-        else
-            XCODE_ARCHS=arm
-        fi
+        XCODE_ARCHS=arm64
+        BITNESS=-fembed-bitcode
     fi
     xcode_developer=`xcode-select -print-path`
 
@@ -4412,9 +4404,7 @@ if test "$cross_compiling" = "yes"; then
         bin/officeotron.sh.in \
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
-        sysui/desktop/macosx/Info.plist.in \
-        ios/LibreOfficeKit/lo_kit.xcconfig.in \
-        ios/LibreOfficeLight/lo_app.xcconfig.in) \
+        sysui/desktop/macosx/Info.plist.in) \
     | (cd CONF-FOR-BUILD && tar xf -)
     cp configure CONF-FOR-BUILD
     test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host 2>/dev/null
@@ -12377,9 +12367,7 @@ AC_CONFIG_FILES([config_host.mk
                  bin/odfvalidator.sh
                  bin/officeotron.sh
                  instsetoo_native/util/openoffice.lst
-                 sysui/desktop/macosx/Info.plist
-                 ios/LibreOfficeKit/lo_kit.xcconfig
-                 ios/LibreOfficeLight/lo_app.xcconfig])
+                 sysui/desktop/macosx/Info.plist])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_dconf.h])
