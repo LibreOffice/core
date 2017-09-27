@@ -19,8 +19,6 @@
 
 #include "shlxtmsi.hxx"
 
-#include <malloc.h>
-
 extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
 {
     WCHAR   szValue[8192];
@@ -40,6 +38,7 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
     {
         if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
         {
+            szValue[min(SAL_N_ELEMENTS(szValue) - 1, nValueSize / sizeof(*szValue))] = 0;
             sInstDir = szValue;
             MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
             // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_CURRENT_USER", MB_OK );
@@ -51,6 +50,7 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
     {
         if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
         {
+            szValue[min(SAL_N_ELEMENTS(szValue) - 1, nValueSize / sizeof(*szValue))] = 0;
             sInstDir = szValue;
             MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
             // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_LOCAL_MACHINE", MB_OK );

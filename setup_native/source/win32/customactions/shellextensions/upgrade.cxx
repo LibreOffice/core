@@ -17,45 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// NB This file still makes use of largely ANSI MSI API calls
-#undef UNICODE
-#undef _UNICODE
-
 #include "shlxtmsi.hxx"
 
 #include <malloc.h>
 #include <assert.h>
 
-using namespace std;
-
 namespace
 {
     // The provided GUID must be without surrounding '{}'
-    string GetGuidPart(const string& guid, int index)
+    std::wstring GetGuidPart(const std::wstring& guid, int index)
     {
         assert((guid.length() == 36) && "No GUID or wrong format!");
         assert(((index > -1) && (index < 5)) && "Out of range!");
 
-        if (index == 0) return string(guid.c_str(), 8);
-        if (index == 1) return string(guid.c_str() + 9, 4);
-        if (index == 2) return string(guid.c_str() + 14, 4);
-        if (index == 3) return string(guid.c_str() + 19, 4);
-        if (index == 4) return string(guid.c_str() + 24, 12);
+        if (index == 0) return std::wstring(guid.c_str(), 8);
+        if (index == 1) return std::wstring(guid.c_str() + 9, 4);
+        if (index == 2) return std::wstring(guid.c_str() + 14, 4);
+        if (index == 3) return std::wstring(guid.c_str() + 19, 4);
+        if (index == 4) return std::wstring(guid.c_str() + 24, 12);
 
-        return string();
+        return std::wstring();
     }
 
-    void Swap(char* p1, char* p2)
+    void Swap(wchar_t* p1, wchar_t* p2)
     {
-        char tmp = *p1;
+        wchar_t tmp = *p1;
         *p1 = *p2;
         *p2 = tmp;
     }
 
-    string Invert(const string& str)
+    std::wstring Invert(const std::wstring& str)
     {
-        char* buff = static_cast<char*>(_alloca(str.length()));
-        strncpy(buff, str.c_str(), str.length());
+        wchar_t* buff = static_cast<wchar_t*>(_alloca(str.length()*sizeof(wchar_t)));
+        wcsncpy(buff, str.c_str(), str.length());
 
         char* front = buff;
         char* back = buff + str.length() - 1;
@@ -63,7 +57,7 @@ namespace
         while (front < back)
             Swap(front++, back--);
 
-        return string(buff, str.length());
+        return std::wstring(buff, str.length());
     }
 
     // Convert the upgrade code (which is a GUID) according
@@ -72,11 +66,11 @@ namespace
     // The first 8 bytes will be inverted, from the last
     // 8 bytes always the nibbles will be inverted for further
     // details look in the MSDN under compressed registry keys
-    string ConvertGuid(const string& guid)
+    std::wstring ConvertGuid(const std::wstring& guid)
     {
-        string convertedGuid;
+        std::wstring convertedGuid;
 
-        string part = GetGuidPart(guid, 0);
+        std::wstring part = GetGuidPart(guid, 0);
         convertedGuid = Invert(part);
 
         part = GetGuidPart(guid, 1);
@@ -99,40 +93,40 @@ namespace
         return convertedGuid;
     }
 
-    string GetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
+    string GetMsiPropertyW(MSIHANDLE handle, const std::wstring& sProperty)
     {
-        string  result;
-        CHAR    szDummy[1] = "";
+        std::wstring result;
+        WCHAR   szDummy[1] = L"";
         DWORD   nChars = 0;
 
-        if (MsiGetPropertyA(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
+        if (MsiGetPropertyW(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
         {
-            DWORD nBytes = ++nChars * sizeof(CHAR);
-            LPSTR buffer = static_cast<LPSTR>(_alloca(nBytes));
+            DWORD nBytes = ++nChars * sizeof(WCHAR);
+            LPWSTR buffer = static_cast<LPWSTR>(_alloca(nBytes));
             ZeroMemory( buffer, nBytes );
-            MsiGetPropertyA( handle, sProperty.c_str(), buffer, &nChars );
+            MsiGetPropertyW( handle, sProperty.c_str(), buffer, &nChars );
             result = buffer;
         }
         return  result;
     }
 
-    inline bool IsSetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
+    inline bool IsSetMsiPropertyW(MSIHANDLE handle, const std::wstring& sProperty)
     {
-        return (GetMsiPropertyA(handle, sProperty).length() > 0);
+        return (GetMsiPropertyW(handle, sProperty).length() > 0);
     }
 
-    inline void UnsetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
+    inline void UnsetMsiPropertyW(MSIHANDLE handle, const std::wstring& sProperty)
     {
-        MsiSetPropertyA(handle, sProperty.c_str(), nullptr);
+        MsiSetPropertyW(handle, sProperty.c_str(), nullptr);
     }
 
-    inline void SetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
+    inline void SetMsiPropertyW(MSIHANDLE handle, const std::wstring& sProperty)
     {
-        MsiSetPropertyA(handle, sProperty.c_str(), "1");
+        MsiSetPropertyW(handle, sProperty.c_str(), L"1");
     }
 
     bool RegistryKeyHasUpgradeSubKey(
-        HKEY hRootKey, const wstring& regKey, const string& upgradeKey)
+        HKEY hRootKey, const std::wstring& regKey, const std::wstring& upgradeKey)
     {
         HKEY hKey;
         if (RegOpenKeyW(hRootKey, regKey.c_str(), &hKey) == ERROR_SUCCESS)
@@ -140,14 +134,14 @@ namespace
             DWORD nSubKeys;
             DWORD lLongestSubKey;
 
-            if (RegQueryInfoKeyA(
+            if (RegQueryInfoKeyW(
                 hKey, nullptr, nullptr, nullptr, &nSubKeys, &lLongestSubKey, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr) == ERROR_SUCCESS)
             {
-                LPSTR buffer = static_cast<LPSTR>(_alloca(lLongestSubKey + 1));
+                LPWSTR buffer = static_cast<LPWSTR>(_alloca((lLongestSubKey + 1)*sizeof(WCHAR)));
 
                 for (DWORD i = 0; i < nSubKeys; i++)
                 {
-                    LONG ret = RegEnumKeyA(hKey, i, buffer, lLongestSubKey + 1);
+                    LONG ret = RegEnumKeyW(hKey, i, buffer, lLongestSubKey + 1);
                     if ((ret == ERROR_SUCCESS) && (buffer == upgradeKey))
                         return true;
                 }
@@ -159,25 +153,25 @@ namespace
 
 extern "C" UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
 {
-    string upgradeCode = GetMsiPropertyA(handle, "UpgradeCode");
-    upgradeCode = ConvertGuid(string(upgradeCode.c_str() + 1, upgradeCode.length() - 2));
+    std::wstring upgradeCode = GetMsiPropertyW(handle, L"UpgradeCode");
+    upgradeCode = ConvertGuid(std::wstring(upgradeCode.c_str() + 1, upgradeCode.length() - 2));
 
-    // MessageBoxA(NULL, upgradeCode.c_str(), "Debug", MB_OK);
+    // MessageBoxW(NULL, upgradeCode.c_str(), "Debug", MB_OK);
 
     if (RegistryKeyHasUpgradeSubKey(
         HKEY_CURRENT_USER,
         L"Software\\Microsoft\\Installer\\UpgradeCodes",
-        upgradeCode) && IsSetMsiPropertyA(handle, "ALLUSERS"))
+        upgradeCode) && IsSetMsiPropertyW(handle, L"ALLUSERS"))
     {
-        UnsetMsiPropertyA(handle, "ALLUSERS");
+        UnsetMsiPropertyW(handle, L"ALLUSERS");
         // MessageBoxW(NULL, L"ALLUSERS removed", L"DEBUG", MB_OK);
     }
     else if (RegistryKeyHasUpgradeSubKey(
              HKEY_LOCAL_MACHINE,
              L"Software\\Classes\\Installer\\UpgradeCodes",
-             upgradeCode) && !IsSetMsiPropertyA(handle, "ALLUSERS"))
+             upgradeCode) && !IsSetMsiPropertyW(handle, L"ALLUSERS"))
     {
-        SetMsiPropertyA(handle, "ALLUSERS");
+        SetMsiPropertyW(handle, L"ALLUSERS");
         // MessageBoxW(NULL, L"ALLUSERS set", L"DEBUG", MB_OK);
     }
     return ERROR_SUCCESS;

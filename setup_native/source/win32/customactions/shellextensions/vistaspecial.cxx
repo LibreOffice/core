@@ -19,11 +19,6 @@
 
 #include "shlxtmsi.hxx"
 
-#include <malloc.h>
-#include <assert.h>
-
-#include <queue>
-#include <stdio.h>
 #include <strsafe.h>
 
 #include <systools/win32/uwinapi.h>
@@ -34,7 +29,7 @@ static BOOL RemoveCompleteDirectoryW(const std::wstring& rPath)
     bool bDirectoryRemoved = true;
 
     std::wstring sPattern = rPath + L"\\" + L"*.*";
-    WIN32_FIND_DATA aFindData;
+    WIN32_FIND_DATAW aFindData;
 
     // Finding all content in rPath
 
@@ -106,6 +101,7 @@ extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
         }
     }
 
+    // ? This succeeds unconditionally, even if bSuccess is false!
     return ERROR_SUCCESS;
 }
 
