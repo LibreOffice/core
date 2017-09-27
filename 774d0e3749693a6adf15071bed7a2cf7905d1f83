@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_57cb6453",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-27T01:35:36Z",
+      "side": 1,
+      "message": "Well - this is only checking for pointer equality. but see toplevel comment for the real disaster",
+      "revId": "774d0e3749693a6adf15071bed7a2cf7905d1f83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
