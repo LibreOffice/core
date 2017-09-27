@@ -1,0 +1,122 @@
+diff -ru gpgme.orig/m4/ax_cxx_compile_stdcxx.m4 gpgme/m4/ax_cxx_compile_stdcxx.m4
+--- gpgme.orig/m4/ax_cxx_compile_stdcxx.m4	2016-05-27 22:04:36.000000000 +0200
++++ gpgme/m4/ax_cxx_compile_stdcxx.m4	2017-09-29 17:34:49.795243600 +0200
+@@ -156,7 +156,7 @@
+ 
+ #error "This is not a C++ compiler"
+ 
+-#elif __cplusplus < 201103L
++#elif __cplusplus < 201103L && !(defined _MSC_VER)
+ 
+ #error "This is not a C++11 compiler"
+ 
+diff -ru gpgme.orig/src/dirinfo.c gpgme/src/dirinfo.c
+--- gpgme.orig/src/dirinfo.c	2017-03-21 11:09:41.000000000 +0100
++++ gpgme/src/dirinfo.c	2017-09-30 08:36:13.239279300 +0200
+@@ -33,6 +33,10 @@
+ 
+ DEFINE_STATIC_LOCK (dirinfo_lock);
+ 
++#ifndef F_OK
++#define F_OK 0
++#endif
++
+ /* Constants used internally to select the data.  */
+ enum
+   {
+diff -ru gpgme.orig/src/mbox-util.c gpgme/src/mbox-util.c
+--- gpgme.orig/src/mbox-util.c	2016-11-16 13:22:41.000000000 +0100
++++ gpgme/src/mbox-util.c	2017-09-30 08:18:29.270567500 +0200
+@@ -28,7 +28,9 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#if HAVE_UNISTD_H
+ #include <unistd.h>
++#endif
+ #include <errno.h>
+ 
+ #include "mbox-util.h"
+diff -ru gpgme.orig/src/priv-io.h gpgme/src/priv-io.h
+--- gpgme.orig/src/priv-io.h	2016-11-16 13:23:14.000000000 +0100
++++ gpgme/src/priv-io.h	2017-09-30 08:20:38.770562400 +0200
+@@ -36,6 +36,9 @@
+ #ifdef HAVE_SYS_TYPES_H
+ # include <sys/types.h>
+ #endif
++#if _MSC_VER
++typedef int pid_t;
++#endif
+ 
+ 
+ /* A single file descriptor passed to spawn.  For child fds, dup_to
+diff -ru gpgme.orig/src/util.h gpgme/src/util.h
+--- gpgme.orig/src/util.h	2017-03-28 11:41:30.000000000 +0200
++++ gpgme/src/util.h	2017-09-30 08:10:54.194049100 +0200
+@@ -39,6 +39,9 @@
+ #ifdef HAVE_UNISTD_H
+ # include <unistd.h>
+ #endif
++#ifdef _MSC_VER
++typedef int pid_t;
++#endif
+ 
+ #include "gpgme.h"
+ 
+diff -ru gpgme.orig/src/w32-util.c gpgme/src/w32-util.c
+--- gpgme.orig/src/w32-util.c	2017-03-09 09:01:10.000000000 +0100
++++ gpgme/src/w32-util.c	2017-09-30 08:32:02.114330500 +0200
+@@ -721,7 +721,8 @@
+       v /= 62;
+       XXXXXX[5] = letters[v % 62];
+ 
+-      fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
++      //fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
++      fd = open (tmpl, O_RDWR | O_CREAT | O_EXCL);
+       if (fd >= 0)
+ 	{
+ 	  gpg_err_set_errno (save_errno);
+diff -ru gpgme.orig/src/Makefile.am gpgme/src/Makefile.am
+--- gpgme.orig/src/Makefile.am	2017-09-30 11:50:07.456960000 +0200
++++ gpgme/src/Makefile.am	2017-09-30 11:51:29.609649400 +0200
+@@ -26,7 +26,7 @@
+ m4data_DATA = gpgme.m4
+ nodist_include_HEADERS = gpgme.h
+ 
+-bin_PROGRAMS = gpgme-tool
++bin_PROGRAMS =
+ 
+ if BUILD_W32_GLIB
+ ltlib_gpgme_glib = libgpgme-glib.la
+@@ -99,8 +99,8 @@
+ # versions, because then every object file is only compiled once.
+ AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GPG_ERROR_CFLAGS@ @GLIB_CFLAGS@
+ 
+-gpgme_tool_SOURCES = gpgme-tool.c argparse.c argparse.h
+-gpgme_tool_LDADD = libgpgme.la @LIBASSUAN_LIBS@ @GPG_ERROR_LIBS@
++gpgme_tool_SOURCES =
++gpgme_tool_LDADD =
+ 
+ 
+ if HAVE_W32_SYSTEM
+@@ -120,7 +120,7 @@
+ SUFFIXES = .rc .lo
+ 
+ .rc.lo:
+-	$(LTRCCOMPILE) -i "$<" -o "$@"
++	$(LTRCCOMPILE) -i $< -o $@
+ 
+ gpgme_res = versioninfo.lo
+ no_undefined = -no-undefined
+diff -ru gpgme.orig/src/vfs-mount.c gpgme/src/vfs-mount.c
+--- gpgme.orig/src/vfs-mount.c	2017-03-09 09:01:10.000000000 +0100
++++ gpgme/src/vfs-mount.c	2017-09-30 13:10:51.845807600 +0200
+@@ -68,7 +68,7 @@
+   if (err)
+     return err;
+ 
+-  if (! strcasecmp ("MOUNTPOINT", code))
++  if (! _stricmp ("MOUNTPOINT", code))
+     {
+       if (opd->result.mount_dir)
+ 	free (opd->result.mount_dir);
