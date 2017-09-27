@@ -786,7 +786,7 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
 
     if( !aRectDst.IsEmpty() )
     {
-        if( pBmpSrc && ( *pBmpSrc != *this ) )
+        if( pBmpSrc && ( pBmpSrc->mxImpBmp != mxImpBmp ) )
         {
             Bitmap*         pSrc = const_cast<Bitmap*>(pBmpSrc);
             const Size      aCopySizePix( pSrc->GetSizePixel() );
@@ -965,7 +965,7 @@ bool Bitmap::CopyPixel_AlphaOptimized( const Rectangle& rRectDst, const Rectangl
 
     if( !aRectDst.IsEmpty() )
     {
-        if( pBmpSrc && ( *pBmpSrc != *this ) )
+        if( pBmpSrc && ( pBmpSrc->mxImpBmp != mxImpBmp ) )
         {
             Bitmap*         pSrc = const_cast<Bitmap*>(pBmpSrc);
             const Size      aCopySizePix( pSrc->GetSizePixel() );
