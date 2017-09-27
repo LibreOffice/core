@@ -44,9 +44,8 @@ public:
     AlphaMask&  operator=( const AlphaMask& rAlphaMask ) { return static_cast<AlphaMask&>( Bitmap::operator=( rAlphaMask ) ); }
     AlphaMask&  operator=( AlphaMask&& rAlphaMask ) { return static_cast<AlphaMask&>( Bitmap::operator=( std::move(rAlphaMask) ) ); }
     bool        operator!() const { return Bitmap::operator!(); }
-    bool        operator==( const AlphaMask& rAlphaMask ) const = delete;
-    bool        operator!=( const AlphaMask& rAlphaMask ) const = delete;
-    bool        IsEqual( const AlphaMask& rAlphaMask ) const { return Bitmap::IsEqual(rAlphaMask); }
+    bool        operator==( const AlphaMask& rAlphaMask ) const { return Bitmap::operator==(rAlphaMask); }
+    bool        operator!=( const AlphaMask& rAlphaMask ) const { return Bitmap::operator!=(rAlphaMask); }
 
     void        SetPrefMapMode( const MapMode& rMapMode ) { Bitmap::SetPrefMapMode( rMapMode ); }
 
