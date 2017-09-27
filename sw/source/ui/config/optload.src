@@ -73,21 +73,21 @@ TabPage TP_OPTLOAD_PAGE
     };
     FixedText FT_FIELD
     {
-        Pos = MAP_APPFONT ( 130 , 14 ) ;
+        Pos = MAP_APPFONT ( 140 , 14 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
         Text [ en-US ] = "Automatically";
     };
     CheckBox CB_AUTO_UPDATE_FIELDS
     {
         HelpID = "sw:CheckBox:TP_OPTLOAD_PAGE:CB_AUTO_UPDATE_FIELDS";
-        Pos = MAP_APPFONT ( 136 , 26) ;
+        Pos = MAP_APPFONT ( 146 , 26) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "~Fields";
     };
     CheckBox CB_AUTO_UPDATE_CHARTS
     {
         HelpID = "sw:CheckBox:TP_OPTLOAD_PAGE:CB_AUTO_UPDATE_CHARTS";
-        Pos = MAP_APPFONT ( 136 , 39) ;
+        Pos = MAP_APPFONT ( 146 , 39) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text [ en-US ] = "~Charts";
     };
