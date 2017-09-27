@@ -24,7 +24,7 @@
 #include <tools/fldunit.hxx>
 #include <tools/mapunit.hxx>
 
-class SVX_DLLPUBLIC TransfrmHelper
+class TransfrmHelper
 {
 public:
     static void ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits, const MapUnit ePoolUnit, const FieldUnit eDlgUnit)

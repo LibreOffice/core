@@ -148,7 +148,7 @@ namespace basegfx
 {
     namespace utils
     {
-        class BASEGFX_DLLPUBLIC B2DHomMatrixBufferedDecompose
+        class B2DHomMatrixBufferedDecompose
         {
         private:
             B2DVector              maScale;

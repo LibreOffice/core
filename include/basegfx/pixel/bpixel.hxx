@@ -27,7 +27,7 @@
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC BPixel
+    class BPixel
     {
     protected:
         union

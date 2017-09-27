@@ -26,7 +26,7 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 
-class MSFILTER_DLLPUBLIC DffRecordHeader
+class DffRecordHeader
 {
 public:
     sal_uInt8   nRecVer; // may be DFF_PSFLAG_CONTAINER

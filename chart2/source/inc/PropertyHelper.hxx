@@ -138,7 +138,7 @@ OOO_DLLPUBLIC_CHARTTOOLS void setEmptyPropertyValueDefault( tPropertyValueMap & 
 
 } // namespace PropertyHelper
 
-struct OOO_DLLPUBLIC_CHARTTOOLS PropertyNameLess
+struct PropertyNameLess
 {
     bool operator() ( const css::beans::Property & first,
                              const css::beans::Property & second )
