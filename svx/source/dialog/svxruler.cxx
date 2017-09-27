@@ -129,7 +129,7 @@ struct SvxRuler_Impl {
     long   lLastLMargin;
     long   lLastRMargin;
     SvxProtectItem aProtectItem;
-    SfxBoolItem* pTextRTLItem;
+    std::unique_ptr<SfxBoolItem> pTextRTLItem;
     sal_uInt16 nControlerItems;
     sal_uInt16 nIdx;
     sal_uInt16 nColLeftPix;
@@ -143,22 +143,16 @@ struct SvxRuler_Impl {
                                       // false means relative to SvxRuler::GetLeftFrameMargin()
 
     SvxRuler_Impl() :
-        pPercBuf(nullptr), pBlockBuf(nullptr), nPercSize(0), nTotalDist(0),
+        nPercSize(0), nTotalDist(0),
         lOldWinPos(0), lMaxLeftLogic(0), lMaxRightLogic(0),
         lLastLMargin(0), lLastRMargin(0), aProtectItem(SID_RULER_PROTECT),
-        pTextRTLItem(nullptr), nControlerItems(0), nIdx(0),
+        nControlerItems(0), nIdx(0),
         nColLeftPix(0), nColRightPix(0),
         bIsTableRows(false),
         bIsTabsRelativeToIndent(true)
     {
     }
 
-    ~SvxRuler_Impl()
-    {
-        nPercSize = 0; nTotalDist = 0;
-        pPercBuf = nullptr;
-        delete pTextRTLItem;
-    }
     void SetPercSize(sal_uInt16 nSize);
 
 };
@@ -754,10 +748,9 @@ void SvxRuler::UpdateTextRTL(const SfxBoolItem* pItem)
 {
     if(bActive && bHorz)
     {
-        delete mxRulerImpl->pTextRTLItem;
-        mxRulerImpl->pTextRTLItem = nullptr;
+        mxRulerImpl->pTextRTLItem.reset();
         if(pItem)
-            mxRulerImpl->pTextRTLItem = new SfxBoolItem(*pItem);
+            mxRulerImpl->pTextRTLItem.reset(new SfxBoolItem(*pItem));
         SetTextRTL(mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue());
         StartListening_Impl();
     }
