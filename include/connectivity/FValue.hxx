@@ -472,7 +472,7 @@ namespace connectivity
 
 
     /// TSetBound is a functor to set the bound value with e.q. for_each call
-    struct OOO_DLLPUBLIC_DBTOOLS TSetBound
+    struct TSetBound
     {
         bool m_bBound;
         TSetBound(bool _bBound) : m_bBound(_bBound){}
@@ -482,7 +482,7 @@ namespace connectivity
 
 
     /// TSetBound is a functor to set the bound value with e.q. for_each call
-    struct OOO_DLLPUBLIC_DBTOOLS TSetRefBound
+    struct TSetRefBound
     {
         bool m_bBound;
         TSetRefBound(bool _bBound) : m_bBound(_bBound){}
