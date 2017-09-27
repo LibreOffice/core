@@ -1325,6 +1325,20 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108806, "tdf108806.docx")
         paragraph->getString());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf87533_bidi, "tdf87533_bidi.docx")
+{
+    // "w:bidi" (specified inside Default paragraph properties) should not be ignored
+    const OUString writingMode = "WritingMode"; //getPropertyName(PROP_WRITING_MODE);
+
+    // check: master-style has RTL
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(text::WritingMode2::RL_TB), getProperty<sal_Int32>(xPropertySet, writingMode));
+
+    // check: style of the first paragraph has RTL
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(text::WritingMode2::RL_TB), getProperty<sal_Int32>(xPara, writingMode));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testVmlAdjustments, "vml-adjustments.docx")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
