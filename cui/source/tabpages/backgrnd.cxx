@@ -683,7 +683,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 {
                     const Graphic* pGraphic = rOldItem.GetGraphic();
                     if (pGraphic)
-                        bModifyBrush = !pGraphic->GetBitmap().IsEqual(aBgdGraphic.GetBitmap());
+                        bModifyBrush = pGraphic->GetBitmap() != aBgdGraphic.GetBitmap();
                 }
                 if (bModifyBrush)
                 {

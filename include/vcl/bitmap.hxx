@@ -224,10 +224,8 @@ public:
     Bitmap&                 operator=( const Bitmap& rBitmap );
     Bitmap&                 operator=( Bitmap&& rBitmap );
     inline bool             operator!() const;
-    bool                    operator==( const Bitmap& rBitmap ) const = delete;
-    bool                    operator!=( const Bitmap& rBitmap ) const = delete;
-
-    bool                    IsEqual( const Bitmap& rBmp ) const;
+    bool                    operator==( const Bitmap& rBitmap ) const;
+    bool                    operator!=( const Bitmap& rBitmap ) const { return !operator==(rBitmap); }
 
     inline bool             IsEmpty() const;
     void                    SetEmpty();
