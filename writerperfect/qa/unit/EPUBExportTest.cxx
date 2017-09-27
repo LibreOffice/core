@@ -292,6 +292,8 @@ void EPUBExportTest::testMeta()
     // This was "Unknown Author", <meta:initial-creator> was not handled.
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:creator", "A U Thor");
     assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:title", "Title");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/dc:language", "hu");
+    assertXPathContent(mpXmlDoc, "/opf:package/opf:metadata/opf:meta[@property='dcterms:modified']", "2017-09-27T09:51:19Z");
 }
 
 void EPUBExportTest::testParaNamedstyle()
