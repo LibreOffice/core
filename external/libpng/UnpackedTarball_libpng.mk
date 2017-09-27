@@ -15,4 +15,8 @@ $(eval $(call gb_UnpackedTarball_add_files,libpng,.,\
 	external/libpng/configs/pnglibconf.h \
 ))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libpng,\
+	external/libpng/libpng-osx.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:
