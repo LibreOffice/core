@@ -31,6 +31,7 @@
 #endif
 #include <string>
 #include <memory>
+#include <filepath.hxx>
 
 class CPropertySheet : public IShellExtInit, public IShellPropSheetExt
 {
@@ -80,7 +81,7 @@ private:
 
 private:
     long m_RefCnt;
-    char m_szFileName[MAX_PATH];
+    Filepath_char_t m_szFileName[MAX_PATH];
 };
 
 #endif

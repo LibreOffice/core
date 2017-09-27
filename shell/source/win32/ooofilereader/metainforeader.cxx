@@ -26,7 +26,7 @@
 
 /** constructor.
 */
-CMetaInfoReader::CMetaInfoReader( const std::string& DocumentName ):
+CMetaInfoReader::CMetaInfoReader( const std::wstring& DocumentName ):
 CBaseReader( DocumentName )
 {
     try

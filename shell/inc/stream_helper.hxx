@@ -21,6 +21,7 @@
 #define INCLUDED_SHELL_INC_INTERNAL_STREAM_HELPER_HXX
 
 #include "types.hxx"
+#include <filepath.hxx>
 
 struct IStream;
 
@@ -39,7 +40,7 @@ private:
 class FileStream : public StreamInterface
 {
 public:
-    FileStream(const char *filename);
+    FileStream(const Filepath_char_t *filename);
     ~FileStream() override;
     unsigned long sread (unsigned char *buf, unsigned long size) override;
     long stell () override;

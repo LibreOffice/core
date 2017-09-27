@@ -44,17 +44,17 @@
 
 css::beans::Optional<css::uno::Any> ImplGetLocale(LCID lcid)
 {
-    CHAR buffer[8];
-    PSTR cp = buffer;
+    WCHAR buffer[8];
+    PWSTR cp = buffer;
 
-    cp += GetLocaleInfoA( lcid, LOCALE_SISO639LANGNAME , buffer, 4 );
+    cp += GetLocaleInfoW( lcid, LOCALE_SISO639LANGNAME, buffer, 4 );
     if( cp > buffer )
     {
-        if( 0 < GetLocaleInfoA( lcid, LOCALE_SISO3166CTRYNAME, cp, buffer + 8 - cp) )
+        if( 0 < GetLocaleInfoW( lcid, LOCALE_SISO3166CTRYNAME, cp, buffer + 8 - cp) )
             // #i50822# minus character must be written before cp
             *(cp - 1) = '-';
 
-        return {true, css::uno::Any(OUString::createFromAscii(buffer))};
+        return {true, css::uno::Any(OUString(SAL_U(buffer)))};
     }
 
     return {false, {}};

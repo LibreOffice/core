@@ -571,10 +571,10 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(LPCWSTR pszFileName, DWORD /*dwMode*/)
     try
     {
         delete m_pMetaInfoReader;
-        m_pMetaInfoReader = new CMetaInfoReader(WStringToString(m_pwszFileName));
+        m_pMetaInfoReader = new CMetaInfoReader(m_pwszFileName);
 
         delete m_pContentReader;
-        m_pContentReader = new CContentReader(WStringToString(m_pwszFileName), m_pMetaInfoReader->getDefaultLocale());
+        m_pContentReader = new CContentReader(m_pwszFileName, m_pMetaInfoReader->getDefaultLocale());
     }
     catch (const std::exception&)
     {

@@ -26,7 +26,7 @@
 
 /** constructor.
 */
-CContentReader::CContentReader( const std::string& DocumentName, LocaleSet_t const & DocumentLocale ):
+CContentReader::CContentReader( const std::wstring& DocumentName, LocaleSet_t const & DocumentLocale ):
 CBaseReader( DocumentName )
 {
     try

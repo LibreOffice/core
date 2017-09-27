@@ -106,11 +106,11 @@ long BufferStream::sseek (long offset, int origin)
         return -1;
 }
 
-FileStream::FileStream(const char *filename) :
+FileStream::FileStream(const wchar_t *filename) :
     file(nullptr)
 {
     // fdo#67534: avoid locking to not interfere with soffice opening the file
-    file = _fsopen(filename, "rb", _SH_DENYNO);
+    file = _wfsopen(filename, L"rb", _SH_DENYNO);
 }
 
 FileStream::~FileStream()

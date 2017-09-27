@@ -30,6 +30,7 @@
 #pragma warning(pop)
 #endif
 #include <string>
+#include <filepath.hxx>
 
 class CInfoTip : public IQueryInfo, public IPersistFile
 {
@@ -84,9 +85,9 @@ public:
             /* [out] */ LPOLESTR __RPC_FAR *ppszFileName) override;
 
 private:
-    long         m_RefCnt;
-    char         m_szFileName[MAX_PATH];
-    std::wstring m_FileNameOnly;
+    long            m_RefCnt;
+    Filepath_char_t m_szFileName[MAX_PATH];
+    std::wstring    m_FileNameOnly;
 };
 
 #endif

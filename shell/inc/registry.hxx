@@ -32,30 +32,31 @@
 #pragma warning(pop)
 #endif
 #include <string>
+#include <filepath.hxx>
 
 /** Sets a value of the specified registry key, an empty ValueName sets the default
     value
     Returns true on success
 */
-bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, const char* Value);
+bool SetRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, const Filepath_char_t* ValueName, const Filepath_char_t* Value);
 
 /** Deletes the specified registry key and all of its subkeys
     Returns true on success
 */
-bool DeleteRegistryKey(HKEY RootKey, const char* KeyName);
+bool DeleteRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName);
 
 /** May be used to determine if the specified registry key has subkeys
     The function returns true on success else if an error occurs false
 */
-bool HasSubkeysRegistryKey(HKEY RootKey, const char* KeyName, bool& bResult);
+bool HasSubkeysRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, bool& bResult);
 
 /** Converts a GUID to its string representation
 */
-std::string ClsidToString(const CLSID& clsid);
+Filepath_t ClsidToString(const CLSID& clsid);
 
 /** Get the content of a specific key.
 */
-bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, char *pszData, DWORD dwBufLen);
+bool QueryRegistryKey(HKEY RootKey, const Filepath_char_t* KeyName, const Filepath_char_t* ValueName, Filepath_char_t *pszData, DWORD dwBufLen);
 
 
 #endif

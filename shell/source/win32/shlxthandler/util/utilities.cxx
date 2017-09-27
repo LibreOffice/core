@@ -87,7 +87,7 @@ std::wstring GetResString(int ResId)
 
     int rc = LoadStringW( GetModuleHandleW(MODULE_NAME), ResId, szResStr, sizeof(szResStr) );
 
-    OutputDebugStringFormatA( "GetResString: read %d chars\n", rc );
+    OutputDebugStringFormatW( L"GetResString: read %d chars\n", rc );
     // OSL_ENSURE(rc, "String resource not found");
 
     return std::wstring(szResStr);
@@ -100,10 +100,10 @@ bool is_windows_xp_or_above()
 #ifdef _WIN32_WINNT_WINBLUE
     return IsWindowsXPOrGreater();
 #else
-    OSVERSIONINFO osvi;
+    OSVERSIONINFOW osvi;
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
-    GetVersionEx(&osvi);
+    GetVersionExW(&osvi);
 
     // LLA: check for windows xp or above (Vista)
     if (osvi.dwMajorVersion > 5 ||

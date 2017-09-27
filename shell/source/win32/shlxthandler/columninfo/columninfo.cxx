@@ -45,7 +45,7 @@ bool IsOOFileExtension(wchar_t const * Extension)
 {
     for (size_t i = 0; i < OOFileExtensionTableSize; i++)
     {
-        if (0 == _wcsicmp(Extension, OOFileExtensionTable[i].ExtensionUnicode))
+        if (0 == _wcsicmp(Extension, OOFileExtensionTable[i].ExtensionU))
             return true;
     }
 
@@ -139,7 +139,7 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOL
         {
             std::wstring fname = getShortPathName( std::wstring( pscd->wszFile ) );
 
-            CMetaInfoReader meta_info_accessor(WStringToString(fname));
+            CMetaInfoReader meta_info_accessor(fname);
 
             VariantClear(pvarData);
 

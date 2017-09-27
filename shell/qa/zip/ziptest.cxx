@@ -42,7 +42,7 @@ using namespace std;
 class Test : public CppUnit::TestFixture
 {
 private:
-    string documentName;
+    wstring documentName;
     LPSTREAM pStream;
 public:
     Test();
@@ -66,16 +66,16 @@ CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 Test::Test() : documentName(), pStream(nullptr)
 {
-    const char* pSrcRoot = getenv( "SRC_ROOT" );
+    const wchar_t* pSrcRoot = _wgetenv(L"SRC_ROOT");
     if (pSrcRoot)
     {
         documentName.append(pSrcRoot);
-        documentName.append("/");
+        documentName.append(L"/");
     }
-    documentName.append("shell/qa/zip/simpledocument.odt");
+    documentName.append(L"shell/qa/zip/simpledocument.odt");
 
     // Create an IStream pointer from the file
-    HANDLE hFile = CreateFileA(documentName.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, 0, nullptr);
+    HANDLE hFile = CreateFileW(documentName.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, 0, nullptr);
 
     DWORD dwFileSize = GetFileSize(hFile, nullptr);
     HGLOBAL hGlobal = GlobalAlloc(GMEM_MOVEABLE, dwFileSize);

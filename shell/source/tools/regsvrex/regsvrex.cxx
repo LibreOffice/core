@@ -30,19 +30,19 @@
 typedef HRESULT (__stdcall *lpfnDllRegisterServer)();
 typedef HRESULT (__stdcall *lpfnDllUnregisterServer)();
 
-bool IsUnregisterParameter(const char* Param)
+bool IsUnregisterParameter(const wchar_t* Param)
 {
-    return ((0 == _stricmp(Param, "/u")) ||
-            (0 == _stricmp(Param, "-u")));
+    return ((0 == _wcsicmp(Param, L"/u")) ||
+            (0 == _wcsicmp(Param, L"-u")));
 }
 
-int main(int argc, char* argv[])
+int wmain(int argc, wchar_t* argv[])
 {
     HMODULE hmod;
 
     if (2 == argc)
     {
-        hmod = LoadLibraryA(argv[1]);
+        hmod = LoadLibraryW(argv[1]);
 
         if (hmod)
         {
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
     }
     else if (3 == argc && IsUnregisterParameter(argv[1]))
     {
-        hmod = LoadLibraryA(argv[2]);
+        hmod = LoadLibraryW(argv[2]);
 
         if (hmod)
         {
