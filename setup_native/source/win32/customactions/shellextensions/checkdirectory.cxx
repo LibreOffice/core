@@ -43,7 +43,7 @@ extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
 
     std::wstring sSetupIniPath = sInstallPath + sOfficeHostnamePath + L"\\program\\setup.ini";
 
-    WIN32_FIND_DATA data;
+    WIN32_FIND_DATAW data;
     HANDLE hdl = FindFirstFileW(sSetupIniPath.c_str(), &data);
 
     // std::wstring mystr = L"Searching for " + sSetupIniPath;

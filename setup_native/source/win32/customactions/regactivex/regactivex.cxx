@@ -147,7 +147,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     nDeinstallMode = 0;
 
     INSTALLSTATE current_state;
-       INSTALLSTATE future_state;
+    INSTALLSTATE future_state;
 
     if ( ERROR_SUCCESS == MsiGetFeatureStateW( hMSI, L"gm_p_Wrt_Bin", &current_state, &future_state ) )
     {
@@ -158,7 +158,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
         if ( future_state == INSTALLSTATE_LOCAL
           || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= WRITER_COMPONENT;
-           else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
+        else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= WRITER_COMPONENT;
     }
     else
@@ -175,7 +175,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
         if ( future_state == INSTALLSTATE_LOCAL
           || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= CALC_COMPONENT;
-           else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
+        else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= CALC_COMPONENT;
     }
     else
@@ -192,7 +192,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
         if ( future_state == INSTALLSTATE_LOCAL
           || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= DRAW_COMPONENT;
-           else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
+        else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= DRAW_COMPONENT;
     }
     else
@@ -209,7 +209,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
         if ( future_state == INSTALLSTATE_LOCAL
           || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= IMPRESS_COMPONENT;
-           else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
+        else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= IMPRESS_COMPONENT;
     }
     else
@@ -226,7 +226,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
         if ( future_state == INSTALLSTATE_LOCAL
           || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             nInstallMode |= MATH_COMPONENT;
-           else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
+        else if ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_ABSENT )
             nDeinstallMode |= MATH_COMPONENT;
     }
     else

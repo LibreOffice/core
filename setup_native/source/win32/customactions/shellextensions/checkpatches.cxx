@@ -18,14 +18,7 @@
  */
 
 #include "shlxtmsi.hxx"
-
-#include <malloc.h>
-#include <assert.h>
-
-#include <queue>
-#include <stdio.h>
 #include <strsafe.h>
-
 #include <systools/win32/uwinapi.h>
 
 #ifdef DEBUG
@@ -35,7 +28,7 @@ inline void OutputDebugStringFormatW( PCWSTR pFormat, ... )
     va_list args;
 
     va_start( args, pFormat );
-    StringCchVPrintfW( buffer, sizeof(buffer)/sizeof(buffer[0]), pFormat, args );
+    StringCchVPrintfW( buffer, SAL_N_ELEMENTS(buffer), pFormat, args );
     OutputDebugStringW( buffer );
     va_end(args);
 }
