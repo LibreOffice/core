@@ -1292,7 +1292,7 @@ namespace {
 
 bool needToExtendSelection(const OUString& rSelectedText, const OUString& rInsertText)
 {
-    return !rInsertText.startsWithIgnoreAsciiCase(rSelectedText);
+    return !ScGlobal::GetpTransliteration()->isMatch( rSelectedText, rInsertText);
 }
 
 void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInserted )
