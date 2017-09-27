@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b219f67b",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T08:52:22Z",
+      "side": 1,
+      "message": "std::vector?",
+      "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_921eba61",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T08:52:22Z",
+      "side": 1,
+      "message": "std::unordered_set ?",
+      "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_720f8e2e",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-27T08:52:22Z",
+      "side": 1,
+      "message": "rather just return std::set\u003cSalFrame*\u003e instead of const_cast\u0027ing everywhere ?",
+      "revId": "110233aceae2ca5165a04abfc9a06b13f5b75c1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
