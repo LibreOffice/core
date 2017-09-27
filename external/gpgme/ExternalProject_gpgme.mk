@@ -20,6 +20,28 @@ $(eval $(call gb_ExternalProject_use_externals,gpgme,\
        libassuan \
 ))
 
+ifeq ($(COM),MSC)
+$(call gb_ExternalProject_get_state_target,gpgme,build):
+	$(call gb_ExternalProject_run,build,\
+		autoreconf \
+		&& ./configure \
+		   --enable-languages="cl cpp" \
+		   --enable-static \
+		   --disable-shared \
+		   GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
+		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
+		   LIBASSUAN_CFLAGS="$(LIBASSUAN_CFLAGS)" \
+		   LIBASSUAN_LIBS="$(LIBASSUAN_LIBS)" \
+			CFLAGS='$(CFLAGS) \
+				$(if $(ENABLE_OPTIMIZED), \
+					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
+				$(if $(ENABLE_DEBUG),$(gb_DEBUG_CFLAGS)) \
+				$(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))' \
+		   --host=$(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32) \
+	  && $(MAKE) \
+	)
+
+else
 $(call gb_ExternalProject_get_state_target,gpgme,build):
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
@@ -41,4 +63,5 @@ $(call gb_ExternalProject_get_state_target,gpgme,build):
 	  && $(MAKE) \
 	)
 
+endif
 # vim: set noet sw=4 ts=4:
