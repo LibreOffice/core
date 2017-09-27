@@ -297,8 +297,8 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     ZeroMemory(&sei, sizeof( sei));
 
     sei.cbSize       = sizeof(sei);
-    sei.lpFile       = reinterpret_cast<LPCWSTR>(preprocessed_command.getStr());
-    sei.lpParameters = reinterpret_cast<LPCWSTR>(aParameter.getStr());
+    sei.lpFile       = SAL_W(preprocessed_command.getStr());
+    sei.lpParameters = SAL_W(aParameter.getStr());
     sei.nShow        = SW_SHOWNORMAL;
 
     if (NO_SYSTEM_ERROR_MESSAGE & nFlags)

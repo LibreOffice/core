@@ -28,6 +28,7 @@
 
 #include "xml_parser.hxx"
 #include "zipfile.hxx"
+#include <filepath.hxx>
 
 class CBaseReader : public i_xml_parser_event_handler
 {
@@ -35,7 +36,7 @@ public:
     virtual ~CBaseReader() override;
 
 protected: // protected because its only an implementation relevant class
-    CBaseReader( const std::string& DocumentName );
+    CBaseReader( const Filepath_t& DocumentName );
 
     CBaseReader( StreamInterface *stream );
 

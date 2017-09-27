@@ -23,6 +23,7 @@
 #include "global.hxx"
 
 #include <string>
+#include <filepath.hxx>
 
 // A simple table with information about the currently used OO file extensions
 // for instance ".sxw" and information about windows registry keys which are
@@ -34,20 +35,19 @@
 */
 struct FileExtensionEntry
 {
-    const char*    ExtensionAnsi;         // e.g. ".sxw"
-    const wchar_t* ExtensionUnicode;      // e.g. L".sxw"
-    const char*    RegistryForwardKey;    // e.g. "soffice.StarWriterDocument.6"
+    const char*    ExtensionA;            // e.g. ".sxw"
+    const wchar_t* ExtensionU;            // e.g. L".sxw"
+    const wchar_t* RegistryForwardKey;    // e.g. "soffice.StarWriterDocument.6"
 };
 
 extern const FileExtensionEntry OOFileExtensionTable[];
 
 extern const size_t OOFileExtensionTableSize;
 
-
 /** Return the extension of a file
     name without the '.'
 */
-std::string get_file_name_extension(const std::string& file_name);
+Filepath_t get_file_name_extension(const Filepath_t& file_name);
 
 
 /** Return the type of a file
@@ -55,7 +55,7 @@ std::string get_file_name_extension(const std::string& file_name);
 
 enum File_Type_t { UNKNOWN, WRITER, CALC, DRAW, IMPRESS, MATH, WEB, DATABASE };
 
-File_Type_t get_file_type(const std::string& file_name);
+File_Type_t get_file_type(const Filepath_t& file_name);
 
 #endif
 

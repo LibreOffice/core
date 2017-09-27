@@ -56,7 +56,7 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
     /* We just try to load the MAPI dll as a test
        if a mail client is available */
     Reference<XSimpleMailClient> xSmplMailClient;
-    HMODULE handle = LoadLibrary("mapi32.dll");
+    HMODULE handle = LoadLibraryW(L"mapi32.dll");
     if ((handle != INVALID_HANDLE_VALUE) && (handle != nullptr))
     {
         FreeLibrary(handle);

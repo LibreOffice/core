@@ -22,6 +22,7 @@
 
 #include "basereader.hxx"
 #include <stack>
+#include <filepath.hxx>
 
 class ITag;
 class StreamInterface;
@@ -31,7 +32,7 @@ class CContentReader : public CBaseReader
 public:
     virtual ~CContentReader() override;
 
-    CContentReader( const std::string& DocumentName, LocaleSet_t const & DocumentLocale );
+    CContentReader( const Filepath_t& DocumentName, LocaleSet_t const & DocumentLocale );
 
     CContentReader( StreamInterface* stream, LocaleSet_t const & DocumentLocale );
 

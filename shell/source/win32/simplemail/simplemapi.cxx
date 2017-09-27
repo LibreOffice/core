@@ -27,7 +27,7 @@ CSimpleMapi::CSimpleMapi() :
     m_lpfnMapiLogoff(nullptr),
     m_lpfnMapiSendMail(nullptr)
 {
-    m_hMapiDll = LoadLibrary("mapi32.dll");
+    m_hMapiDll = LoadLibraryW(L"mapi32.dll");
     if ((m_hMapiDll == INVALID_HANDLE_VALUE) || (m_hMapiDll == nullptr))
         throw std::runtime_error("Couldn't load MAPI library");
 

@@ -101,23 +101,23 @@ ULONG STDMETHODCALLTYPE CInfoTip::Release()
 
 /** get file type information from registry.
 */
-std::wstring getFileTypeInfo(const std::string& file_extension)
+std::wstring getFileTypeInfo(const std::wstring& file_extension)
 {
-    char extKeyValue[MAX_STRING];
-    char typeKeyValue[MAX_STRING];
-    ::std::string sDot(".");
-    if (QueryRegistryKey(HKEY_CLASSES_ROOT, (sDot.append(file_extension)).c_str(), "", extKeyValue, MAX_STRING))
-        if (QueryRegistryKey( HKEY_CLASSES_ROOT, extKeyValue, "",typeKeyValue, MAX_STRING))
-            return StringToWString(typeKeyValue);
+    wchar_t extKeyValue[MAX_STRING];
+    wchar_t typeKeyValue[MAX_STRING];
+    ::std::wstring sDot(L".");
+    if (QueryRegistryKey(HKEY_CLASSES_ROOT, (sDot.append(file_extension)).c_str(), L"", extKeyValue, MAX_STRING))
+        if (QueryRegistryKey( HKEY_CLASSES_ROOT, extKeyValue, L"",typeKeyValue, MAX_STRING))
+            return typeKeyValue;
 
     return EMPTY_STRING;
 }
 
 /** get file size.
 */
-DWORD getSizeOfFile( char const * FileName )
+DWORD getSizeOfFile( wchar_t const * FileName )
 {
-    HANDLE hFile = CreateFile(StringToWString(FileName).c_str(),            // open file
+    HANDLE hFile = CreateFileW(FileName,                                    // open file
                         GENERIC_READ,                                       // open for reading
                         FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE, // share for all operations
                         nullptr,                                            // no security
@@ -178,7 +178,7 @@ std::wstring formatSizeOfFile( DWORD dwSize )
 
 /** get file size information.
 */
-std::wstring getFileSizeInfo(char const * FileName)
+std::wstring getFileSizeInfo(wchar_t const * FileName)
 {
     DWORD dwSize=getSizeOfFile(FileName);
     if (dwSize != INVALID_FILE_SIZE)
@@ -329,13 +329,11 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/
 
     fname = getShortPathName( fname );
 
-    std::string fnameA = WStringToString(fname);
-
     // ZeroMemory because strncpy doesn't '\0'-terminates the destination
     // string; reserve the last place in the buffer for the final '\0'
     // that's why '(sizeof(m_szFileName) - 1)'
     ZeroMemory(m_szFileName, sizeof(m_szFileName));
-    strncpy(m_szFileName, fnameA.c_str(), (sizeof(m_szFileName) - 1));
+    wcsncpy(m_szFileName, fname.c_str(), (sizeof(m_szFileName)/sizeof(*m_szFileName) - 1));
 
     return S_OK;
 }

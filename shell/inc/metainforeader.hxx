@@ -23,6 +23,7 @@
 #include "basereader.hxx"
 #include "types.hxx"
 #include <stack>
+#include <filepath.hxx>
 
 class ITag;
 class CKeywordsTag;
@@ -34,7 +35,7 @@ class CMetaInfoReader : public CBaseReader
 public:
     virtual ~CMetaInfoReader() override;
 
-    CMetaInfoReader( const std::string& DocumentName );
+    CMetaInfoReader( const Filepath_t& DocumentName );
 
     CMetaInfoReader( StreamInterface* stream );
 

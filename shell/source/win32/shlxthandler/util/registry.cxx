@@ -39,20 +39,20 @@
 #pragma warning(pop)
 #endif
 
-bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, const char* Value)
+bool SetRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueName, const wchar_t* Value)
 {
     HKEY hSubKey;
 
     // open or create the desired key
-    char dummy[] = "";
-    int rc = RegCreateKeyExA(
+    wchar_t dummy[] = L"";
+    int rc = RegCreateKeyExW(
         RootKey, KeyName, 0, dummy, REG_OPTION_NON_VOLATILE, KEY_WRITE, nullptr, &hSubKey, nullptr);
 
     if (ERROR_SUCCESS == rc)
     {
-        rc = RegSetValueExA(
+        rc = RegSetValueExW(
             hSubKey, ValueName, 0, REG_SZ, reinterpret_cast<const BYTE*>(Value),
-            static_cast<DWORD>(strlen(Value) + 1));
+            static_cast<DWORD>((wcslen(Value) + 1) * sizeof(*Value)));
 
         RegCloseKey(hSubKey);
     }
@@ -61,11 +61,11 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
 }
 
 
-bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
+bool DeleteRegistryKey(HKEY RootKey, const wchar_t* KeyName)
 {
     HKEY hKey;
 
-    int rc = RegOpenKeyExA(
+    int rc = RegOpenKeyExW(
         RootKey,
         KeyName,
         0,
@@ -77,24 +77,24 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
 
     if (ERROR_SUCCESS == rc)
     {
-        char* SubKey;
+        wchar_t* SubKey;
         DWORD nMaxSubKeyLen;
 
-        rc = RegQueryInfoKeyA(
+        rc = RegQueryInfoKeyW(
             hKey, nullptr, nullptr, nullptr, nullptr,
             &nMaxSubKeyLen,
             nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 
         nMaxSubKeyLen++; // space for trailing '\0'
 
-        SubKey = static_cast<char*>(
-            _alloca(nMaxSubKeyLen*sizeof(char)));
+        SubKey = static_cast<wchar_t*>(
+            _alloca(nMaxSubKeyLen*sizeof(wchar_t)));
 
         while (ERROR_SUCCESS == rc)
         {
             DWORD nLen = nMaxSubKeyLen;
 
-            rc = RegEnumKeyExA(
+            rc = RegEnumKeyExW(
                 hKey,
                 0,       // always index zero
                 SubKey,
@@ -103,7 +103,7 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
 
             if (ERROR_NO_MORE_ITEMS == rc)
             {
-                rc = RegDeleteKeyA(RootKey, KeyName);
+                rc = RegDeleteKeyW(RootKey, KeyName);
                 break;
             }
             else if (rc == ERROR_SUCCESS)
@@ -123,18 +123,19 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
 /** May be used to determine if the specified registry key has subkeys
     The function returns true on success else if an error occurs false
 */
-bool HasSubkeysRegistryKey(HKEY RootKey, const char* KeyName, /* out */ bool& bResult)
+bool HasSubkeysRegistryKey(HKEY RootKey, const wchar_t* KeyName, /* out */ bool& bResult)
 {
     HKEY hKey;
 
-    LONG rc = RegOpenKeyExA(RootKey, KeyName, 0, KEY_READ, &hKey);
+    LONG rc = RegOpenKeyExW(RootKey, KeyName, 0, KEY_READ, &hKey);
 
     if (ERROR_SUCCESS == rc)
     {
         DWORD nSubKeys = 0;
 
-        rc = RegQueryInfoKeyA(hKey, nullptr, nullptr, nullptr, &nSubKeys, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
+        rc = RegQueryInfoKeyW(hKey, nullptr, nullptr, nullptr, &nSubKeys, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr);
 
+        RegCloseKey(hKey);
         bResult = (nSubKeys > 0);
     }
 
@@ -142,28 +143,26 @@ bool HasSubkeysRegistryKey(HKEY RootKey, const char* KeyName, /* out */ bool& bR
 }
 
 // Convert a CLSID to a char string.
-std::string ClsidToString(const CLSID& clsid)
+std::wstring ClsidToString(const CLSID& clsid)
 {
     // Get CLSID
     LPOLESTR wszCLSID = nullptr;
     StringFromCLSID(clsid, &wszCLSID);
 
-    char buff[39];
-    // Covert from wide characters to non-wide.
-    wcstombs(buff, wszCLSID, sizeof(buff));
+    std::wstring sResult = wszCLSID;
 
     // Free memory.
     CoTaskMemFree(wszCLSID) ;
 
-    return std::string(buff);
+    return sResult;
 }
 
 
-bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, char *pszData, DWORD dwBufLen)
+bool QueryRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueName, wchar_t *pszData, DWORD dwBufLen)
 {
     HKEY hKey;
 
-    int rc = RegOpenKeyExA(
+    int rc = RegOpenKeyExW(
         RootKey,
         KeyName,
         0,
@@ -172,8 +171,9 @@ bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, 
 
     if (ERROR_SUCCESS == rc)
     {
-        rc = RegQueryValueExA(
-            hKey, ValueName, nullptr, nullptr, reinterpret_cast<LPBYTE>(pszData),&dwBufLen);
+        DWORD dwBytes = dwBufLen * sizeof(*pszData);
+        rc = RegQueryValueExW(
+            hKey, ValueName, nullptr, nullptr, reinterpret_cast<LPBYTE>(pszData),&dwBytes);
 
         RegCloseKey(hKey);
     }

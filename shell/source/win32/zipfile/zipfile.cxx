@@ -351,7 +351,7 @@ struct stricmp
             IOException if the specified file doesn't exist
             AccessViolationException if read access to the file is denied
 */
-bool ZipFile::IsZipFile(const std::string& /*FileName*/)
+bool ZipFile::IsZipFile(const std::wstring& /*FileName*/)
 {
     return true;
 }
@@ -377,7 +377,7 @@ bool ZipFile::IsZipFile(void* /*stream*/)
             IOException if the specified file doesn't exist or is no zip file
             AccessViolationException if read access to the file is denied
 */
-bool ZipFile::IsValidZipFileVersionNumber(const std::string& /*FileName*/)
+bool ZipFile::IsValidZipFileVersionNumber(const std::wstring& /*FileName*/)
 {
     return true;
 }
@@ -400,7 +400,7 @@ bool ZipFile::IsValidZipFileVersionNumber(void* /* stream*/)
             WrongZipVersionException if the zip file cannot be uncompressed
             with the used zlib version
 */
-ZipFile::ZipFile(const std::string &FileName) :
+ZipFile::ZipFile(const std::wstring &FileName) :
     m_pStream(nullptr),
     m_bShouldFree(true)
 {

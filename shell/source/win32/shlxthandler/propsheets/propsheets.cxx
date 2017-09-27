@@ -57,14 +57,14 @@
 CPropertySheet::CPropertySheet(long RefCnt) :
     m_RefCnt(RefCnt)
 {
-    OutputDebugStringFormatA("CPropertySheet::CTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
+    OutputDebugStringFormatW(L"CPropertySheet::CTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
     InterlockedIncrement(&g_DllRefCnt);
 }
 
 
 CPropertySheet::~CPropertySheet()
 {
-    OutputDebugStringFormatA("CPropertySheet::DTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
+    OutputDebugStringFormatW(L"CPropertySheet::DTor [%d], [%d]", m_RefCnt, g_DllRefCnt );
     InterlockedDecrement(&g_DllRefCnt);
 }
 
@@ -99,14 +99,14 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
 
 ULONG STDMETHODCALLTYPE CPropertySheet::AddRef()
 {
-    OutputDebugStringFormatA("CPropertySheet::AddRef [%d]", m_RefCnt );
+    OutputDebugStringFormatW(L"CPropertySheet::AddRef [%d]", m_RefCnt );
     return InterlockedIncrement(&m_RefCnt);
 }
 
 
 ULONG STDMETHODCALLTYPE CPropertySheet::Release()
 {
-    OutputDebugStringFormatA("CPropertySheet::Release [%d]", m_RefCnt );
+    OutputDebugStringFormatW(L"CPropertySheet::Release [%d]", m_RefCnt );
     long refcnt = InterlockedDecrement(&m_RefCnt);
 
     if (0 == refcnt)
@@ -131,7 +131,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
 
     // save the file name
     if (SUCCEEDED(hr) &&
-        (1 == DragQueryFileA(
+        (1 == DragQueryFileW(
             static_cast<HDROP>(medium.hGlobal),
             0xFFFFFFFF,
             nullptr,
@@ -146,9 +146,8 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
             if ( result_size != 0 )
             {
                 std::wstring fname = getShortPathName( buffer.get() );
-                std::string fnameA = WStringToString( fname );
                 ZeroMemory( m_szFileName, sizeof( m_szFileName ) );
-                strncpy( m_szFileName, fnameA.c_str(), ( sizeof( m_szFileName ) - 1 ) );
+                wcsncpy( m_szFileName, fname.c_str(), ( SAL_N_ELEMENTS( m_szFileName ) - 1 ) );
                 hr = S_OK;
             }
             else
@@ -176,11 +175,11 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
     bool bIsVistaOrLater = IsWindowsVistaOrGreater();
 #else
     // Get OS version (we don't need the summary page on Windows Vista or later)
-    OSVERSIONINFO sInfoOS;
+    OSVERSIONINFOW sInfoOS;
 
-    ZeroMemory( &sInfoOS, sizeof(OSVERSIONINFO) );
-    sInfoOS.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
-    GetVersionEx( &sInfoOS );
+    ZeroMemory( &sInfoOS, sizeof(sInfoOS) );
+    sInfoOS.dwOSVersionInfoSize = sizeof( sInfoOS );
+    GetVersionExW( &sInfoOS );
     bool bIsVistaOrLater = (sInfoOS.dwMajorVersion >= 6);
 #endif
 
@@ -303,10 +302,10 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
     {
         CMetaInfoReader metaInfo(m_szFileName);
 
-        SetWindowText(GetDlgItem(hwnd,IDC_TITLE),    metaInfo.getTagData( META_INFO_TITLE ).c_str() );
-        SetWindowText(GetDlgItem(hwnd,IDC_AUTHOR),   metaInfo.getTagData( META_INFO_AUTHOR ).c_str() );
-        SetWindowText(GetDlgItem(hwnd,IDC_SUBJECT),  metaInfo.getTagData( META_INFO_SUBJECT ).c_str() );
-        SetWindowText(GetDlgItem(hwnd,IDC_KEYWORDS), metaInfo.getTagData( META_INFO_KEYWORDS ).c_str() );
+        SetWindowTextW(GetDlgItem(hwnd,IDC_TITLE),    metaInfo.getTagData( META_INFO_TITLE ).c_str() );
+        SetWindowTextW(GetDlgItem(hwnd,IDC_AUTHOR),   metaInfo.getTagData( META_INFO_AUTHOR ).c_str() );
+        SetWindowTextW(GetDlgItem(hwnd,IDC_SUBJECT),  metaInfo.getTagData( META_INFO_SUBJECT ).c_str() );
+        SetWindowTextW(GetDlgItem(hwnd,IDC_KEYWORDS), metaInfo.getTagData( META_INFO_KEYWORDS ).c_str() );
 
         // comments read from meta.xml use "\n" for return, but this will not displayable in Edit control, add
         // "\r" before "\n" to form "\r\n" in order to display return in Edit control.
@@ -317,7 +316,7 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
             tempStr.insert(itor, L"\r");
             itor = tempStr.find(L"\n", itor + 2);
         }
-        SetWindowText(GetDlgItem(hwnd,IDC_COMMENTS), tempStr.c_str());
+        SetWindowTextW(GetDlgItem(hwnd,IDC_COMMENTS), tempStr.c_str());
     }
     catch (const std::exception&)
     {

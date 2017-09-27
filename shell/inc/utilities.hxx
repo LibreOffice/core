@@ -92,18 +92,18 @@ LCID LocaleSetToLCID( const LocaleSet_t & Locale );
 
 
 #ifdef DEBUG
-inline void OutputDebugStringFormatA( LPCSTR pFormat, ... )
+inline void OutputDebugStringFormatW( LPCWSTR pFormat, ... )
 {
-    CHAR    buffer[1024];
+    WCHAR    buffer[1024];
     va_list args;
 
     va_start( args, pFormat );
-    StringCchVPrintfA( buffer, sizeof(buffer), pFormat, args );
+    StringCchVPrintfW( buffer, sizeof(buffer)/sizeof(*buffer), pFormat, args );
     va_end( args );
-    OutputDebugStringA( buffer );
+    OutputDebugStringW( buffer );
 }
 #else
-static inline void OutputDebugStringFormatA( LPCSTR, ... )
+static inline void OutputDebugStringFormatW( LPCWSTR, ... )
 {
 }
 #endif

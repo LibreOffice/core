@@ -35,7 +35,7 @@
 #pragma warning(pop)
 #endif
 
-#define WININET_DLL_NAME "wininet.dll"
+#define WININET_DLL_NAME L"wininet.dll"
 #define EQUAL_SIGN '='
 #define COLON      ':'
 #define SPACE      ' '
@@ -102,14 +102,14 @@ namespace
 
 WinInetBackend::WinInetBackend()
 {
-    Library hWinInetDll( LoadLibrary( WININET_DLL_NAME ) );
+    Library hWinInetDll( LoadLibraryW( WININET_DLL_NAME ) );
     if( hWinInetDll.module )
     {
         typedef BOOL ( WINAPI *InternetQueryOption_Proc_T )( HINTERNET, DWORD, LPVOID, LPDWORD );
 
         InternetQueryOption_Proc_T lpfnInternetQueryOption =
             reinterpret_cast< InternetQueryOption_Proc_T >(
-                GetProcAddress( hWinInetDll.module, "InternetQueryOptionA" ) );
+                GetProcAddress( hWinInetDll.module, "InternetQueryOptionW" ) );
         if (lpfnInternetQueryOption)
         {
             // Some Windows versions would fail the InternetQueryOption call
@@ -120,7 +120,7 @@ WinInetBackend::WinInetBackend()
             // reallocation:
             INTERNET_PROXY_INFO pi;
             LPINTERNET_PROXY_INFO lpi = &pi;
-            DWORD dwLength = sizeof (INTERNET_PROXY_INFO);
+            DWORD dwLength = sizeof (pi);
             BOOL ok = lpfnInternetQueryOption(
                 nullptr,
                 INTERNET_OPTION_PROXY,
@@ -165,8 +165,10 @@ WinInetBackend::WinInetBackend()
             // an empty proxy list, so we don't have to check if
             // proxy is enabled or not
 
-            OUString aProxyList       = OUString::createFromAscii( lpi->lpszProxy );
-            OUString aProxyBypassList = OUString::createFromAscii( lpi->lpszProxyBypass );
+            // We use a W-version of InternetQueryOption; it returns struct with pointers to wide strings
+            // There's no INTERNET_PROXY_INFOW, so we simply cast returned struct's members
+            OUString aProxyList       = reinterpret_cast<const sal_Unicode*>( lpi->lpszProxy );
+            OUString aProxyBypassList = reinterpret_cast<const sal_Unicode*>( lpi->lpszProxyBypass );
 
             // override default for ProxyType, which is "0" meaning "No proxies".
             valueProxyType_.IsPresent = true;

@@ -23,37 +23,37 @@
 #include <sal/macros.h>
 
 
-const std::string WRITER_FILE_EXTENSIONS   = "sxwstwsxgodtottodm";
-const std::string CALC_FILE_EXTENSIONS     = "sxcstcodsots";
-const std::string DRAW_FILE_EXTENSIONS     = "sxdstdodgotg";
-const std::string IMPRESS_FILE_EXTENSIONS  = "sxistiodpotp";
-const std::string MATH_FILE_EXTENSIONS     = "sxmodf";
-const std::string WEB_FILE_EXTENSIONS      = "oth";
-const std::string DATABASE_FILE_EXTENSIONS = "odb";
+const std::wstring WRITER_FILE_EXTENSIONS   = L"sxwstwsxgodtottodm";
+const std::wstring CALC_FILE_EXTENSIONS     = L"sxcstcodsots";
+const std::wstring DRAW_FILE_EXTENSIONS     = L"sxdstdodgotg";
+const std::wstring IMPRESS_FILE_EXTENSIONS  = L"sxistiodpotp";
+const std::wstring MATH_FILE_EXTENSIONS     = L"sxmodf";
+const std::wstring WEB_FILE_EXTENSIONS      = L"oth";
+const std::wstring DATABASE_FILE_EXTENSIONS = L"odb";
 
 const FileExtensionEntry OOFileExtensionTable[] = {
-    { ".sxw", L".sxw", "soffice.StarWriterDocument.6"       },
-    { ".sxc", L".sxc", "soffice.StarCalcDocument.6"         },
-    { ".sxi", L".sxi", "soffice.StarImpressDocument.6"      },
-    { ".sxd", L".sxd", "soffice.StarDrawDocument.6"         },
-    { ".sxm", L".sxm", "soffice.StarMathDocument.6"         },
-    { ".stw", L".stw", "soffice.StarWriterTemplate.6"       },
-    { ".sxg", L".sxg", "soffice.StarWriterGlobalDocument.6" },
-    { ".std", L".std", "soffice.StarDrawTemplate.6"         },
-    { ".sti", L".sti", "soffice.StarImpressTemplate.6"      },
-    { ".stc", L".stc", "soffice.StarCalcTemplate.6"         },
-    { ".odt", L".odt", "LibreOffice.WriterDocument.1"       },
-    { ".ott", L".ott", "LibreOffice.WriterTemplate.1"       },
-    { ".odm", L".odm", "LibreOffice.WriterGlobalDocument.1" },
-    { ".oth", L".oth", "LibreOffice.WriterWebTemplate.1"    },
-    { ".ods", L".ods", "LibreOffice.CalcDocument.1"         },
-    { ".ots", L".ots", "LibreOffice.CalcTemplate.1"         },
-    { ".odg", L".odg", "LibreOffice.DrawDocument.1"         },
-    { ".otg", L".otg", "LibreOffice.DrawTemplate.1"         },
-    { ".odp", L".odp", "LibreOffice.ImpressDocument.1"      },
-    { ".otp", L".otp", "LibreOffice.ImpressTemplate.1"      },
-    { ".odf", L".odf", "LibreOffice.MathDocument.1"         },
-    { ".odb", L".odb", "LibreOffice.DatabaseDocument.1"     }
+    { ".sxw", L".sxw", L"soffice.StarWriterDocument.6"       },
+    { ".sxc", L".sxc", L"soffice.StarCalcDocument.6"         },
+    { ".sxi", L".sxi", L"soffice.StarImpressDocument.6"      },
+    { ".sxd", L".sxd", L"soffice.StarDrawDocument.6"         },
+    { ".sxm", L".sxm", L"soffice.StarMathDocument.6"         },
+    { ".stw", L".stw", L"soffice.StarWriterTemplate.6"       },
+    { ".sxg", L".sxg", L"soffice.StarWriterGlobalDocument.6" },
+    { ".std", L".std", L"soffice.StarDrawTemplate.6"         },
+    { ".sti", L".sti", L"soffice.StarImpressTemplate.6"      },
+    { ".stc", L".stc", L"soffice.StarCalcTemplate.6"         },
+    { ".odt", L".odt", L"LibreOffice.WriterDocument.1"       },
+    { ".ott", L".ott", L"LibreOffice.WriterTemplate.1"       },
+    { ".odm", L".odm", L"LibreOffice.WriterGlobalDocument.1" },
+    { ".oth", L".oth", L"LibreOffice.WriterWebTemplate.1"    },
+    { ".ods", L".ods", L"LibreOffice.CalcDocument.1"         },
+    { ".ots", L".ots", L"LibreOffice.CalcTemplate.1"         },
+    { ".odg", L".odg", L"LibreOffice.DrawDocument.1"         },
+    { ".otg", L".otg", L"LibreOffice.DrawTemplate.1"         },
+    { ".odp", L".odp", L"LibreOffice.ImpressDocument.1"      },
+    { ".otp", L".otp", L"LibreOffice.ImpressTemplate.1"      },
+    { ".odf", L".odf", L"LibreOffice.MathDocument.1"         },
+    { ".odb", L".odb", L"LibreOffice.DatabaseDocument.1"     }
     };
 
 
@@ -63,41 +63,41 @@ const size_t OOFileExtensionTableSize = SAL_N_ELEMENTS(OOFileExtensionTable);
 /** Return the extension of a file
     name without the '.'
 */
-std::string get_file_name_extension(const std::string& file_name)
+std::wstring get_file_name_extension(const std::wstring& file_name)
 {
-    std::string::size_type idx = file_name.find_last_of(".");
+    std::wstring::size_type idx = file_name.find_last_of(L".");
 
-    if (std::string::npos != idx++)
-        return std::string(file_name.begin() + idx, file_name.end());
+    if (std::wstring::npos != idx++)
+        return std::wstring(file_name.begin() + idx, file_name.end());
 
-    return std::string();
+    return std::wstring();
 }
 
 
 /** Return the type of a file
 */
 
-File_Type_t get_file_type(const std::string& file_name)
+File_Type_t get_file_type(const std::wstring& file_name)
 {
-    std::string fext = get_file_name_extension(file_name);
+    std::wstring fext = get_file_name_extension(file_name);
     std::transform(
         fext.begin(), fext.end(), fext.begin(),
-        [](char c) {
-            return rtl::toAsciiLowerCase(static_cast<unsigned char>(c)); });
+        [](wchar_t c) {
+            return rtl::toAsciiLowerCase(c); });
 
-    if (std::string::npos != WRITER_FILE_EXTENSIONS.find(fext))
+    if (std::wstring::npos != WRITER_FILE_EXTENSIONS.find(fext))
         return WRITER;
-    else if (std::string::npos != CALC_FILE_EXTENSIONS.find(fext))
+    else if (std::wstring::npos != CALC_FILE_EXTENSIONS.find(fext))
         return CALC;
-    else if (std::string::npos != DRAW_FILE_EXTENSIONS.find(fext))
+    else if (std::wstring::npos != DRAW_FILE_EXTENSIONS.find(fext))
         return DRAW;
-    else if (std::string::npos != IMPRESS_FILE_EXTENSIONS.find(fext))
+    else if (std::wstring::npos != IMPRESS_FILE_EXTENSIONS.find(fext))
         return IMPRESS;
-    else if (std::string::npos != MATH_FILE_EXTENSIONS.find(fext))
+    else if (std::wstring::npos != MATH_FILE_EXTENSIONS.find(fext))
         return MATH;
-    else if (std::string::npos != WEB_FILE_EXTENSIONS.find(fext))
+    else if (std::wstring::npos != WEB_FILE_EXTENSIONS.find(fext))
         return WEB;
-    else if (std::string::npos != DATABASE_FILE_EXTENSIONS.find(fext))
+    else if (std::wstring::npos != DATABASE_FILE_EXTENSIONS.find(fext))
         return DATABASE;
     else
         return UNKNOWN;

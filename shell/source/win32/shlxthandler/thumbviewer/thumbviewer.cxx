@@ -73,10 +73,10 @@ namespace internal
 #ifdef _WIN32_WINNT_WINBLUE
         return IsWindowsXPOrGreater();
 #else
-        OSVERSIONINFO osvi;
+        OSVERSIONINFOW osvi;
         ZeroMemory(&osvi, sizeof(osvi));
         osvi.dwOSVersionInfoSize = sizeof(osvi);
-        GetVersionEx(&osvi);
+        GetVersionExW(&osvi);
 
         return ((osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
                 ((osvi.dwMajorVersion >= 5) && (osvi.dwMinorVersion >= 1)));
@@ -376,7 +376,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
     try
     {
         std::wstring fname = getShortPathName( filename_ );
-        std::unique_ptr<ZipFile> zipfile( new ZipFile( WStringToString( fname ) ) );
+        std::unique_ptr<ZipFile> zipfile( new ZipFile( fname ) );
 
         if (zipfile->HasContent(THUMBNAIL_CONTENT))
         {
@@ -477,7 +477,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
     }
     catch(std::exception&)
     {
-        OutputDebugStringFormatA( "CThumbviewer Extract ERROR!\n" );
+        OutputDebugStringFormatW( L"CThumbviewer Extract ERROR!\n" );
         hr = E_FAIL;
     }
     return hr;
