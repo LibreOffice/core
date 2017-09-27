@@ -65,7 +65,7 @@ namespace
         }
     }
 
-    void lcl_AssertFieldMarksSet(Fieldmark* const pField,
+    void lcl_AssertFieldMarksSet(Fieldmark const * const pField,
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
