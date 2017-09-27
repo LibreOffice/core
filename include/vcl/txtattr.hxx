@@ -113,6 +113,7 @@ private:
 public:
                     TextCharAttrib( const TextAttrib& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
                     TextCharAttrib( const TextCharAttrib& rTextCharAttrib );
+                    ~TextCharAttrib(){};
 
     const TextAttrib&   GetAttr() const         { return *mpAttr; }
 

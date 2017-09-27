@@ -1643,11 +1643,14 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
     ExtTextEngine* pTextEngine = GetTextEngine();
     pTextEngine->UndoActionStart();
     const TextCharAttrib*  pErrorAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_ERROR );
+    std::unique_ptr<TextCharAttrib> pReleasedErrorAttrib;
+    std::unique_ptr<TextCharAttrib> pReleasedLangAttrib;
+    std::unique_ptr<TextCharAttrib> pReleasedBackAttrib;
     DBG_ASSERT(pErrorAttrib, "no error attribute found");
     const SpellErrorDescription* pSpellErrorDescription = nullptr;
     if(pErrorAttrib)
     {
-        pTextEngine->RemoveAttrib(0, *pErrorAttrib);
+        pReleasedErrorAttrib = pTextEngine->RemoveAttrib(0, *pErrorAttrib);
         pSpellErrorDescription = &static_cast<const SpellErrorAttrib&>(pErrorAttrib->GetAttr()).GetErrorDescription();
     }
     const TextCharAttrib*  pBackAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_BACKGROUND );
@@ -1666,7 +1669,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
             nTextLen)
         {
             SpellLanguageAttrib aNewLangAttrib( static_cast<const SpellLanguageAttrib&>(pLangAttrib->GetAttr()).GetLanguage());
-            pTextEngine->RemoveAttrib(0, *pLangAttrib);
+            pReleasedLangAttrib = pTextEngine->RemoveAttrib(0, *pLangAttrib);
             pTextEngine->SetAttrib( aNewLangAttrib, 0, m_nErrorEnd + nDiffLen, nTextLen );
         }
     }
@@ -1675,7 +1678,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
     {
         std::unique_ptr<TextAttrib> pNewBackground(pBackAttrib->GetAttr().Clone());
         const sal_Int32 nStart = pBackAttrib->GetStart();
-        pTextEngine->RemoveAttrib(0, *pBackAttrib);
+        pReleasedBackAttrib = pTextEngine->RemoveAttrib(0, *pBackAttrib);
         pTextEngine->SetAttrib(*pNewBackground, 0, nStart, m_nErrorStart);
     }
     pTextEngine->SetModified(true);
