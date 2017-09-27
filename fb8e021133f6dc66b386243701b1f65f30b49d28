@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_5296124d",
+        "filename": "vcl/inc/salusereventlist.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-09-27T13:46:35Z",
+      "side": 1,
+      "message": "Not a SalFrameUnorderedSet?\n\nCan a std::unordered_set be implemented without a hash map? I don\u0027t think so…\n\nSalFrameSet is better to distinguish from the SalFrameHash. And more in line with the stdlib++, so I\u0027ll rename it.",
+      "parentUuid": "1a430d35_32b8a6e5",
+      "revId": "fb8e021133f6dc66b386243701b1f65f30b49d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_52cff27e",
         "filename": "vcl/source/app/salusereventlist.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-09-27T13:35:07Z",
       "side": 1,
       "message": "why not just change the signature of the method?",
+      "revId": "fb8e021133f6dc66b386243701b1f65f30b49d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_92c95a7b",
+        "filename": "vcl/source/app/salusereventlist.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-09-27T13:46:35Z",
+      "side": 1,
+      "message": "Wouldn\u0027t that prevent inserting const SalFrame* without a const_cast? IMHO this way it is easier to use and \"more correct\".\n\nI know we\u0027re actually lying a bit about the API regarding const-ness. Nothing modifies those inserted frames in the class.",
+      "parentUuid": "1a430d35_52cff27e",
       "revId": "fb8e021133f6dc66b386243701b1f65f30b49d28",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
