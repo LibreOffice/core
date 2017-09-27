@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_12b1eae1",
+        "filename": "svx/source/dialog/svxruler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-09-27T13:56:31Z",
+      "side": 1,
+      "message": "nitpick: what about putting this part some lines below in an additional \"else\"?\nIt would avoid to call reset twice when we go in if part.",
+      "range": {
+        "startLine": 751,
+        "startChar": 8,
+        "endLine": 751,
+        "endChar": 42
+      },
+      "revId": "55d01af5df85384bed7e4016b86e725e238e2635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
