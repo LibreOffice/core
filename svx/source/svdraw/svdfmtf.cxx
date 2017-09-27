@@ -793,27 +793,27 @@ bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrc
 
                     if(aDstPoly.getB2DPoint(nMaxDstPnt) == rSrcPoly.getB2DPoint(0))
                     {
-                        aDstPoly.append(rSrcPoly, 1L, rSrcPoly.count() - 1);
+                        aDstPoly.append(rSrcPoly, 1, rSrcPoly.count() - 1);
                         bOk = true;
                     }
                     else if(aDstPoly.getB2DPoint(0) == rSrcPoly.getB2DPoint(nMaxSrcPnt))
                     {
                         basegfx::B2DPolygon aNew(rSrcPoly);
-                        aNew.append(aDstPoly, 1L, aDstPoly.count() - 1);
+                        aNew.append(aDstPoly, 1, aDstPoly.count() - 1);
                         aDstPoly = aNew;
                         bOk = true;
                     }
                     else if(aDstPoly.getB2DPoint(0) == rSrcPoly.getB2DPoint(0))
                     {
                         aDstPoly.flip();
-                        aDstPoly.append(rSrcPoly, 1L, rSrcPoly.count() - 1);
+                        aDstPoly.append(rSrcPoly, 1, rSrcPoly.count() - 1);
                         bOk = true;
                     }
                     else if(aDstPoly.getB2DPoint(nMaxDstPnt) == rSrcPoly.getB2DPoint(nMaxSrcPnt))
                     {
                         basegfx::B2DPolygon aNew(rSrcPoly);
                         aNew.flip();
-                        aDstPoly.append(aNew, 1L, aNew.count() - 1);
+                        aDstPoly.append(aNew, 1, aNew.count() - 1);
                         bOk = true;
                     }
                 }
