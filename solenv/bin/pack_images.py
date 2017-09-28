@@ -14,6 +14,7 @@ from __future__ import with_statement
 
 import argparse
 from collections import OrderedDict
+import contextlib
 import logging
 import os
 import shutil
@@ -242,7 +243,7 @@ def create_zip_archive(zip_list, links, tmp_dir, tmp_zip_file, sort_file=None):
 
     ordered_zip_list = optimize_zip_layout(zip_list, sort_file)
 
-    with zipfile.ZipFile(tmp_zip_file, 'w') as tmp_zip:
+    with contextlib.closing(zipfile.ZipFile(tmp_zip_file, 'w')) as tmp_zip:
         if links.keys():
             LOGGER.info("Add file 'links.txt' to zip archive")
             create_links_file(tmp_dir, links)
