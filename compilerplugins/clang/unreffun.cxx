@@ -113,7 +113,7 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
              ? decl->isThisDeclarationADefinition() : decl->isFirstDecl())
         || !compiler.getSourceManager().isInMainFile(canon->getLocation())
         || isInUnoIncludeFile(canon)
-        || canon->isMain()
+        || canon->isMain() || canon->isMSVCRTEntryPoint()
         || (decl->getTemplatedKind() == FunctionDecl::TK_FunctionTemplate
             && (decl->getDescribedFunctionTemplate()->spec_begin()
                 != decl->getDescribedFunctionTemplate()->spec_end()))
