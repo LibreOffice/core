@@ -64,11 +64,6 @@ public:
      * @see Application::Reschedule
      */
     static void       ProcessEventsToIdle();
-    /**
-     * Process events until the parameter turns true,
-     * allows processing until a specific event has been processed
-     */
-    static void       ProcessEventsToSignal(bool& bSignal);
 
     /// Control the deterministic mode.  In this mode, two subsequent runs of
     /// LibreOffice fire about the same amount idles.
