@@ -72,12 +72,12 @@ public class OwnCloudProvider implements IDocumentProvider,
     }
 
     @Override
-    public IFile getRootDirectory() {
-        return createFromUri(URI.create(FileUtils.PATH_SEPARATOR));
+    public IFile getRootDirectory(Context context) {
+        return createFromUri(context, URI.create(FileUtils.PATH_SEPARATOR));
     }
 
     @Override
-    public IFile createFromUri(URI uri) {
+    public IFile createFromUri(Context context, URI uri) {
         ReadRemoteFileOperation refreshOperation = new ReadRemoteFileOperation(
                 uri.getPath());
         RemoteOperationResult result = refreshOperation.execute(client);
@@ -179,7 +179,7 @@ public class OwnCloudProvider implements IDocumentProvider,
     }
 
     @Override
-    public boolean checkProviderAvailability() {
+    public boolean checkProviderAvailability(Context context) {
         return true;
     }
 }

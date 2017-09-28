@@ -16,6 +16,7 @@ import org.libreoffice.storage.IFile;
 
 import org.libreoffice.R;
 
+import android.content.Context;
 import android.os.Environment;
 
 /**
@@ -30,12 +31,12 @@ public class LocalDocumentsProvider implements IDocumentProvider {
     }
 
     @Override
-    public IFile getRootDirectory() {
+    public IFile getRootDirectory(Context context) {
         return new LocalFile(Environment.getExternalStorageDirectory());
     }
 
     @Override
-    public IFile createFromUri(URI uri) {
+    public IFile createFromUri(Context context, URI uri) {
         return new LocalFile(uri);
     }
 
@@ -50,7 +51,7 @@ public class LocalDocumentsProvider implements IDocumentProvider {
     }
 
     @Override
-    public boolean checkProviderAvailability() {
+    public boolean checkProviderAvailability(Context context) {
         return true;
     }
 }

@@ -69,7 +69,7 @@
     <!-- Document provider names -->
     <string name="document_locations">Document locations</string>
     <string name="close_document_locations">Close document locations</string>
-    <string name="local_documents">Local documents</string>
+    <string name="local_documents">Documents directory</string>
     <string name="local_file_system">Local file system</string>
     <string name="external_sd_file_system">External SD</string>
     <string name="otg_file_system">OTG device (experimental)</string>

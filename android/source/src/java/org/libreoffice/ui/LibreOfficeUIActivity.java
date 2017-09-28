@@ -9,6 +9,7 @@
 
 package org.libreoffice.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -18,6 +19,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
@@ -30,6 +32,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -91,6 +94,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     private int viewMode;
     private int sortMode;
     private boolean showHiddenFiles;
+    // dynamic permissions IDs
+    private static int PERMISSION_READ_EXTERNAL_STORAGE = 0;
 
     FileFilter fileFilter;
     FilenameFilter filenameFilter;
@@ -160,9 +165,20 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         registerReceiver(mUSBReceiver, filter);
         // init UI and populate with contents from the provider
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: remove local document providers if really is denied, code right now assumes it is granted/
+            // there is no onRequestPermissionsResult evaluating the callback
+            // without the read permissions, LO could only load documents passed via intent from other apps
+            Log.i(LOGTAG, "no permission to read external storage - asking for permission");
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSION_READ_EXTERNAL_STORAGE);
+        }
+
         switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
         createUI();
-        getAnimations();
+        fabOpenAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_open);
+        fabCloseAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_close);
     }
 
     public void createUI() {
@@ -199,7 +215,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         final ArrayList<IFile> recentFiles = new ArrayList<IFile>();
         for (String recentFileString : recentFileStrings) {
             try {
-                recentFiles.add(documentProvider.createFromUri(new URI(recentFileString)));
+                recentFiles.add(documentProvider.createFromUri(this, new URI(recentFileString)));
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             } catch (RuntimeException e){
@@ -227,20 +243,16 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         // Loop through the document providers menu items and check if they are available or not
         for (int index = 0; index < providerNames.size(); index++) {
             MenuItem item = navigationDrawer.getMenu().getItem(index);
-            boolean isDocumentProviderAvailable = checkDocumentProviderAvailability(documentProviderFactory.getProvider(index));
-            if (!isDocumentProviderAvailable){
-                item.setEnabled(false);
-            }
+            item.setEnabled(documentProviderFactory.getProvider(index).checkProviderAvailability(this));
         }
 
-        final Context context = this; //needed for anonymous method below
         navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 switch (item.getItemId()) {
                     case R.id.menu_storage_preferences: {
-                        startActivity(new Intent(context, DocumentProviderSettingsActivity.class));
+                        startActivity(new Intent(LibreOfficeUIActivity.this, DocumentProviderSettingsActivity.class));
                         return true;
                     }
 
@@ -300,11 +312,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         drawerToggle.syncState();
     }
 
-    private void getAnimations() {
-        fabOpenAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_open);
-        fabCloseAnimation = AnimationUtils.loadAnimation(this, R.anim.fab_close);
-    }
-
     private void expandFabMenu() {
         ViewCompat.animate(editFAB).rotation(45.0F).withLayer().setDuration(300).setInterpolator(new OvershootInterpolator(10.0F)).start();
         drawLayout.startAnimation(fabOpenAnimation);
@@ -329,10 +336,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         drawFAB.setClickable(false);
         calcFAB.setClickable(false);
         isFabMenuOpen = false;
-    }
-
-    private boolean checkDocumentProviderAvailability(IDocumentProvider provider) {
-        return provider.checkProviderAvailability();
     }
 
     @Override
@@ -429,7 +432,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 // a different thread
                 try {
                     documentProvider = provider[0];
-                    homeDirectory = documentProvider.getRootDirectory();
+                    homeDirectory = documentProvider.getRootDirectory(LibreOfficeUIActivity.this);
                     currentDirectory = homeDirectory;
                     filePaths = currentDirectory.listFiles(FileUtilities
                             .getFileFilter(filterMode));
@@ -444,7 +447,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                         }
                     });
                     startActivity(new Intent(activity, DocumentProviderSettingsActivity.class));
-                    Log.e(LOGTAG, e.getMessage(), e.getCause());
+                    Log.e(LOGTAG, "failed to switch document provider "+ e.getMessage(), e.getCause());
                 }
                 return null;
             }
@@ -613,7 +616,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             protected IFile doInBackground(Void... dir) {
                 // this operation may imply network access and must be run in
                 // a different thread
-                return currentDirectory.getParent();
+                return currentDirectory.getParent(LibreOfficeUIActivity.this);
             }
 
             @Override
@@ -830,10 +833,10 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         Intent i = this.getIntent();
         if (i.hasExtra(CURRENT_DIRECTORY_KEY)) {
             try {
-                currentDirectory = documentProvider.createFromUri(new URI(
+                currentDirectory = documentProvider.createFromUri(this, new URI(
                         i.getStringExtra(CURRENT_DIRECTORY_KEY)));
             } catch (URISyntaxException e) {
-                currentDirectory = documentProvider.getRootDirectory();
+                currentDirectory = documentProvider.getRootDirectory(this);
             }
             Log.d(LOGTAG, CURRENT_DIRECTORY_KEY);
         }
@@ -883,10 +886,10 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                     .getProvider(savedInstanceState.getInt(DOC_PROVIDER_KEY));
         }
         try {
-            currentDirectory = documentProvider.createFromUri(new URI(
+            currentDirectory = documentProvider.createFromUri(this, new URI(
                     savedInstanceState.getString(CURRENT_DIRECTORY_KEY)));
         } catch (URISyntaxException e) {
-            currentDirectory = documentProvider.getRootDirectory();
+            currentDirectory = documentProvider.getRootDirectory(this);
         }
         filterMode = savedInstanceState.getInt(FILTER_MODE_KEY, FileUtilities.ALL);
         viewMode = savedInstanceState.getInt(EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);

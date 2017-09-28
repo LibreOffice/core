@@ -102,11 +102,11 @@ public class ExternalFile implements IFile{
     }
 
     @Override
-    public IFile getParent() {
+    public IFile getParent(Context context) {
         // this is the root node
         if(docFile.getParentFile() == null) return null;
 
-        return new ExternalFile(provider, docFile.getParentFile(), context);
+        return new ExternalFile(provider, docFile.getParentFile(), this.context);
     }
 
     @Override
