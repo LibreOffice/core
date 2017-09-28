@@ -235,7 +235,9 @@ bool KDE5XLib::nativeEventFilter(const QByteArray &eventType, void *message, lon
 
 void KDE5XLib::setupEventLoop()
 {
-    QAbstractEventDispatcher::instance()->installNativeEventFilter( this );
+    QAbstractEventDispatcher *qDispatcher = QAbstractEventDispatcher::instance();
+
+    //qDispatcher->installNativeEventFilter( this );
 #if KF5_HAVE_GLIB
     if( m_isGlibEventLoopType )
     {

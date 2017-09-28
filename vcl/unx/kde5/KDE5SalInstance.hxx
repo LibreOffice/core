@@ -26,8 +26,9 @@ class SalFrame;
 
 class KDE5SalInstance : public SvpSalInstance
 {
+
 protected:
-//    virtual SalX11Display* CreateDisplay() const override;
+    //SalX11Display* CreateDisplay() const;
 
 public:
     explicit KDE5SalInstance(SalYieldMutex* pMutex);

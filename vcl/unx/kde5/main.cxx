@@ -79,7 +79,7 @@ extern "C" {
         KDE5Data *salData = new KDE5Data( pInstance );
         salData->Init();
         salData->initNWF();
-        pInstance->SetLib(salData->GetLib());
+        //pInstance->SetLib(salData->GetLib());
 
         return pInstance;
     }

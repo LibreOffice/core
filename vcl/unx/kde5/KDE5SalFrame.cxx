@@ -47,20 +47,19 @@
 #include <boost/optional.hpp>
 
 
-KDE5SalFrame::KDE5SalFrame( SalFrame* pParent, SalFrameStyleFlags nState ) :
-    X11SalFrame( pParent, nState )
+KDE5SalFrame::KDE5SalFrame( SalFrame* pParent, SalFrameStyleFlags nState )
 {
 }
 
 void KDE5SalFrame::Show( bool bVisible, bool bNoActivate )
 {
-    if ( !GetParent() && ! (GetStyle() & SalFrameStyleFlags::INTRO) )
+    if ( !GetParent() /*&& ! (GetStyle() & SalFrameStyleFlags::INTRO)*/ )
     {
-        KDE5XLib* pXLib = static_cast<KDE5XLib*>(GetDisplay()->GetXLib());
+        KDE5XLib* pXLib = new KDE5XLib();//static_cast<KDE5XLib*>(GetDisplay()->GetXLib());
         pXLib->doStartup();
     }
 
-    X11SalFrame::Show( bVisible, bNoActivate );
+    //X11SalFrame::Show( bVisible, bNoActivate );
 }
 
 /** Helper function to convert colors.
@@ -348,7 +347,7 @@ void KDE5SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 
 void KDE5SalFrame::updateGraphics( bool bClear )
 {
-    Drawable aDrawable = bClear ? None : GetWindow();
+    vcl::Window* pWindow = GetWindow();
     for( int i = 0; i < nMaxGraphics; i++ )
     {
         /*if( m_aGraphics[i].bInUse )

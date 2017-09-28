@@ -35,7 +35,10 @@ void KDE5Data::Init()
 {
     pXLib_ = new KDE5XLib();
     pXLib_->Init();
-    SetDisplay( SalKDE5Display::self() );
+    //SetDisplay( SalKDE5Display::self() );
+
+    int argc = 1;
+    qMyApp = new QApplication(argc, nullptr);
 }
 
 void KDE5Data::initNWF()
@@ -52,7 +55,8 @@ void KDE5Data::initNWF()
     pSVData->maNWFData.mbNoFocusRects = true;
 
     // Styled menus need additional space
-    QStyle *style = QApplication::style();
+    //QStyle *style = QApplication::style();
+    QStyle *style = qMyApp->style();
     pSVData->maNWFData.mnMenuFormatBorderX =
        style->pixelMetric( QStyle::PM_MenuPanelWidth ) +
        style->pixelMetric( QStyle::PM_MenuHMargin );
@@ -63,6 +67,7 @@ void KDE5Data::initNWF()
 
 void KDE5Data::deInitNWF()
 {
+    delete qMyApp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
