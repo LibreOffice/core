@@ -101,7 +101,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
     if( mpAttribsCache && ( EditEngineAttribs::All == nOnlyHardAttrib ) )
     {
         // have we the correct set in cache?
-        if( const_cast<SvxOutlinerForwarder*>(this)->maAttribCacheSelection.IsEqual(rSel) )
+        if( maAttribCacheSelection == rSel )
         {
             // yes! just return the cache
             return *mpAttribsCache;

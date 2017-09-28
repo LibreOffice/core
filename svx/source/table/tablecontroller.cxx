@@ -1589,7 +1589,7 @@ SvxTableController::TblAction SvxTableController::getKeyboardAction(const KeyEve
             // during text edit, check if we navigate out of the cell
             ESelection aOldSelection = pOLV->GetSelection();
             pOLV->PostKeyEvent(rKEvt);
-            bTextMove = pOLV && ( aOldSelection.IsEqual(pOLV->GetSelection()) );
+            bTextMove = pOLV && (aOldSelection == pOLV->GetSelection());
             if( !bTextMove )
             {
                 nAction = TblAction::NONE;

@@ -139,9 +139,10 @@ struct ESelection
         { }
 
     void    Adjust();
-    bool    IsEqual( const ESelection& rS ) const;
-    bool    IsLess( const ESelection& rS ) const;
-    bool    IsGreater( const ESelection& rS ) const;
+    bool    operator==( const ESelection& rS ) const;
+    bool    operator!=( const ESelection& rS ) const { return !operator==(rS); }
+    bool    operator<( const ESelection& rS ) const;
+    bool    operator>( const ESelection& rS ) const;
     bool    IsZero() const;
     bool    HasRange() const;
 };
@@ -164,26 +165,26 @@ inline bool ESelection::IsZero() const
              ( nEndPara == 0 ) && ( nEndPos == 0 ) );
 }
 
-inline bool ESelection::IsEqual( const ESelection& rS ) const
+inline bool ESelection::operator==( const ESelection& rS ) const
 {
     return ( ( nStartPara == rS.nStartPara ) && ( nStartPos == rS.nStartPos ) &&
              ( nEndPara == rS.nEndPara ) && ( nEndPos == rS.nEndPos ) );
 }
 
-inline bool ESelection::IsLess( const ESelection& rS ) const
+inline bool ESelection::operator<( const ESelection& rS ) const
 {
     // The selection must be adjusted.
     // => Only check if end of 'this' < Start of rS
     return ( nEndPara < rS.nStartPara ) ||
-        ( ( nEndPara == rS.nStartPara ) && ( nEndPos < rS.nStartPos ) && !IsEqual( rS ) );
+        ( ( nEndPara == rS.nStartPara ) && ( nEndPos < rS.nStartPos ) && !operator==( rS ) );
 }
 
-inline bool ESelection::IsGreater( const ESelection& rS ) const
+inline bool ESelection::operator>( const ESelection& rS ) const
 {
     // The selection must be adjusted.
     // => Only check if end of 'this' < Start of rS
     return ( nStartPara > rS.nEndPara ) ||
-        ( ( nStartPara == rS.nEndPara ) && ( nStartPos > rS.nEndPos ) && !IsEqual( rS ) );
+        ( ( nStartPara == rS.nEndPara ) && ( nStartPos > rS.nEndPos ) && !operator==( rS ) );
 }
 
 inline void ESelection::Adjust()

@@ -146,7 +146,7 @@ namespace frm
         if ( m_pSelectionListener && m_pView )
         {
             ESelection aCurrentSelection = m_pView->GetSelection();
-            if ( !aCurrentSelection.IsEqual( m_aLastKnownSelection ) )
+            if ( aCurrentSelection != m_aLastKnownSelection )
             {
                 m_aLastKnownSelection = aCurrentSelection;
                 m_pSelectionListener->onSelectionChanged( m_aLastKnownSelection );

@@ -84,7 +84,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     sal_Int32 nLastParaLen = aLastParaText.getLength();
 
     ESelection aEndSel = ESelection(nLastPara, nLastParaLen);
-    bool bAtEndOfTextContent = aCurSel.IsEqual(aEndSel);
+    bool bAtEndOfTextContent = aCurSel == aEndSel;
 
     // Possibility: Are we "pushing" at the end of the object?
     if (nCode == KEY_RIGHT && bAtEndOfTextContent && pNextLink)
@@ -106,7 +106,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     }
 
     ESelection aStartSel = ESelection(0, 0);
-    bool bAtStartOfTextContent = aCurSel.IsEqual(aStartSel);
+    bool bAtStartOfTextContent = aCurSel == aStartSel;
 
     // Possibility: Are we "pushing" at the start of the object?
     if (nCode == KEY_LEFT && bAtStartOfTextContent && pPrevLink)

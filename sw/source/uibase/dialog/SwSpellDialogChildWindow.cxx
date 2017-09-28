@@ -553,7 +553,7 @@ void SwSpellDialogChildWindow::GetFocus()
                     {
                         OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
                         OSL_ENSURE(pOLV, "no OutlinerView in SwSpellDialogChildWindow::GetFocus()");
-                        if(!pOLV || !m_pSpellState->m_aESelection.IsEqual(pOLV->GetSelection()))
+                        if(!pOLV || m_pSpellState->m_aESelection != pOLV->GetSelection())
                             bInvalidate = true;
                     }
                 }

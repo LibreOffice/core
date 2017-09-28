@@ -506,7 +506,7 @@ namespace accessibility
             ESelection aSelection;
             if( GetEditViewForwarder().GetSelection( aSelection ) )
             {
-                if( !maLastSelection.IsEqual( aSelection ) &&
+                if( maLastSelection != aSelection &&
                     aSelection.nEndPara < maParaManager.GetNum() )
                 {
                     // #103998# Not that important, changed from assertion to trace

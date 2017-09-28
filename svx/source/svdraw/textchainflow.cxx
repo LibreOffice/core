@@ -294,7 +294,7 @@ void EditingTextChainFlow::impBroadcastCursorInfo() const
     ESelection aPreChainingSel = GetTextChain()->GetPreChainingSel(GetLinkTarget()) ;
 
     // Test whether the cursor is out of the box.
-    bool bCursorOut = mbPossiblyCursorOut && maOverflowPosSel.IsLess(aPreChainingSel);
+    bool bCursorOut = mbPossiblyCursorOut && maOverflowPosSel < aPreChainingSel;
 
     // NOTE: I handled already the stuff for the comments below. They will be kept temporarily till stuff settles down.
     // Possibility: 1) why don't we stop passing the actual event to the TextChain and instead we pass

@@ -649,7 +649,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
         pOutliner->SetUpdateMode( true );
     }
 
-    if ( aOldSel.IsEqual( aSel ) )          // aSel is adjusted
+    if ( aOldSel == aSel )          // aSel is adjusted
         aOldSel.nEndPos = nNewEnd;
     else
         aOldSel.nStartPos = nNewEnd;        // if aOldSel is backwards
