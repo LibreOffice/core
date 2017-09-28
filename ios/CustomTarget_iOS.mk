@@ -93,6 +93,7 @@ ifeq ("$(wildcard $(IOSRES))","")
 	    > $(IOSGEN)/native-code.mm
 
 	# generate resource files used to start/run LibreOffice
+	cp $(WORKDIR)/UnpackedTarball/icu/source/data/in/icudt59l.dat $(IOSRES)/icudt59l.dat
 	cp $(INSTDIR)/program/types.rdb             $(IOSRES)/udkapi.rdb
 	cp $(INSTDIR)/program/types/offapi.rdb      $(IOSRES)
 	cp $(INSTDIR)/program/types/oovbaapi.rdb    $(IOSRES)
@@ -147,7 +148,7 @@ $(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj iosCopySetup
 	    xcodebuild \
 	        -xcconfig $(IOSKITXC) \
 	        -project $(IOSKITPRJ) \
-	        -target iOS_LO_Kit.a \
+	        -target LibreOfficeKit \
 	        -sdk $(XCODEBUILD_SDK) \
 	        -arch $(XCODE_ARCHS) \
 	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \
@@ -166,7 +167,7 @@ $(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
 	    xcodebuild \
 	        -xcconfig $(IOSAPPXC) \
 	        -project $(IOSAPPPRJ) \
-	        -target $(IOSAPP) \
+	        -target LibreOfficeLight \
 	        -sdk $(XCODEBUILD_SDK) \
 	        -arch $(XCODE_ARCHS) \
 	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \

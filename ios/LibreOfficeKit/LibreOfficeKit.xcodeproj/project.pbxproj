@@ -160,7 +160,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -187,7 +187,7 @@
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
-					"$(LO_WORKDIR)/ios/generated",
+					"$(LO_SRCDIR)/ios/generated",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -197,7 +197,7 @@
 					"-lstdc++",
 				);
 				SDKROOT = iphoneos;
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "x86_64 arm64";
 			};
 			name = Debug;
 		};
@@ -223,7 +223,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -244,18 +244,19 @@
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
-					"$(LO_WORKDIR)/ios/generated",
+					"$(LO_SRCDIR)/ios/generated",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(LINK_LDFLAGS)",
 					"-lstdc++",
 				);
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = arm64;
-				"VALID_ARCHS[sdk=*]" = arm64;
+				VALID_ARCHS = "x86_64 arm64";
+				"VALID_ARCHS[sdk=*]" = "";
 			};
 			name = Release;
 		};
