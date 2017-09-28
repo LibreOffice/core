@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.libreoffice.R;
 import org.libreoffice.storage.DocumentProviderSettingsActivity;
@@ -22,24 +23,22 @@ public class OTGDocumentsProvider implements IExternalDocumentProvider,
 
     private static final String LOGTAG = OTGDocumentsProvider.class.getSimpleName();
 
-    private Context context;
     private String rootPathURI;
     private int id;
 
     public OTGDocumentsProvider(int id, Context context) {
-        this.context = context;
         this.id = id;
-        setupRootPath();
+        setupRootPath(context);
     }
 
-    private void setupRootPath() {
+    private void setupRootPath(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         rootPathURI = preferences.getString(
                 DocumentProviderSettingsActivity.KEY_PREF_OTG_PATH_URI, "");
     }
 
     @Override
-    public IFile createFromUri(URI uri) {
+    public IFile createFromUri(Context context, URI uri) {
         return new LocalFile(uri);
     }
 
@@ -54,15 +53,16 @@ public class OTGDocumentsProvider implements IExternalDocumentProvider,
     }
 
     @Override
-    public IFile getRootDirectory() {
-
+    public IFile getRootDirectory(Context context) {
+        // TODO: handle this with more fine-grained exceptions
         if(rootPathURI.equals("")) {
+            Log.e(LOGTAG, "rootPathURI is empty");
             throw new RuntimeException(context.getString(R.string.ext_document_provider_error));
         }
 
         File f = IOUtils.getFileFromURIString(rootPathURI);
         if(IOUtils.isInvalidFile(f)) {
-            //missing device
+            Log.e(LOGTAG, "rootPathURI is invalid - missing device?");
             throw new RuntimeException(context.getString(R.string.otg_missing_error));
         }
 
@@ -78,12 +78,12 @@ public class OTGDocumentsProvider implements IExternalDocumentProvider,
     }
 
     @Override
-    public String guessRootURI() {
+    public String guessRootURI(Context context) {
         return "";
     }
 
     @Override
-    public boolean checkProviderAvailability() {
+    public boolean checkProviderAvailability(Context context) {
         // check if system supports USB Host
         return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_USB_HOST);
     }

@@ -64,7 +64,7 @@ public class BrowserSelectorActivity extends AppCompatActivity {
         IExternalDocumentProvider provider =
                 (IExternalDocumentProvider) DocumentProviderFactory.getInstance()
                         .getProvider(providerIndex);
-        String previousDirectoryPath = preferences.getString(preferenceKey, provider.guessRootURI());
+        String previousDirectoryPath = preferences.getString(preferenceKey, provider.guessRootURI(this));
         Intent i = new Intent(this, DirectoryBrowserActivity.class);
         i.putExtra(DirectoryBrowserActivity.DIRECTORY_PATH_EXTRA, previousDirectoryPath);
         startActivityForResult(i, REQUEST_INTERNAL_BROWSER);

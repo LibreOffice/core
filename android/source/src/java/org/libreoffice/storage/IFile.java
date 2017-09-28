@@ -9,6 +9,8 @@
 
 package org.libreoffice.storage;
 
+import android.content.Context;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.net.URI;
@@ -91,8 +93,9 @@ public interface IFile {
      * Returns the pparent of this file.
      *
      * @return this file's parent or null if it does not have it.
+     * @param context
      */
-    IFile getParent();
+    IFile getParent(Context context);
 
     /**
      * Returns the document wrapped by this IFile as a local file. The result

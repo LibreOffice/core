@@ -1,5 +1,7 @@
 package org.libreoffice.storage.owncloud;
 
+import android.content.Context;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.UnsupportedEncodingException;
@@ -123,12 +125,12 @@ public class OwnCloudFile implements IFile {
     }
 
     @Override
-    public IFile getParent() {
+    public IFile getParent(Context context) {
         if (parentPath == null)
             // this is the root node
             return null;
 
-        return provider.createFromUri(URI.create(parentPath));
+        return provider.createFromUri(context, URI.create(parentPath));
     }
 
     @Override

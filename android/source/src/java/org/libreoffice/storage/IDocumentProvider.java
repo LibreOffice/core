@@ -9,6 +9,8 @@
 
 package org.libreoffice.storage;
 
+import android.content.Context;
+
 import java.net.URI;
 
 /**
@@ -22,19 +24,22 @@ public interface IDocumentProvider {
      *
      * @return Content root element.
      * @throws RuntimeException in case of error.
+     * @param context
      */
-    IFile getRootDirectory();
+    IFile getRootDirectory(Context context);
 
     /**
      * Transforms some URI into the IFile object that represents that content.
      *
+     *
+     * @param context
      * @param uri
      *            URI pointing to some content object that has been previously
      *            retrieved with IFile.getUri().
      * @return IFile object pointing to the content represented by uri.
      * @throws RuntimeException in case of error.
      */
-    IFile createFromUri(URI uri);
+    IFile createFromUri(Context context, URI uri);
 
     /**
      * Get internationalized name for this provider. This name is intended to be
@@ -59,6 +64,7 @@ public interface IDocumentProvider {
      * Checks if the Document Provider is available or not.
      *
      * @return A boolean value based on provider availability.
+     * @param context
      */
-    boolean checkProviderAvailability();
+    boolean checkProviderAvailability(Context context);
 }
