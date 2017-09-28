@@ -200,8 +200,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     std::wstring tmpTypeStr = getFileTypeInfo( get_file_name_extension(m_szFileName) );
     if ( tmpTypeStr != EMPTY_STRING )
     {
-        msg += GetResString(IDS_TYPE_COLON) + CONST_SPACE;
-        msg += tmpTypeStr;
+        msg += GetResString(IDS_TYPE_COLON) + CONST_SPACE + tmpTypeStr;
     }
 
     try
@@ -213,15 +212,13 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
         {
             if ( msg != EMPTY_STRING )
                 msg += L"\n";
-            msg += GetResString(IDS_TITLE_COLON) + CONST_SPACE;
-            msg += meta_info_accessor.getTagData( META_INFO_TITLE );
+            msg += GetResString(IDS_TITLE_COLON) + CONST_SPACE + meta_info_accessor.getTagData( META_INFO_TITLE );
         }
         else
         {
             if ( msg != EMPTY_STRING )
                 msg += L"\n";
-            msg += GetResString(IDS_TITLE_COLON) + CONST_SPACE;
-            msg += m_FileNameOnly;
+            msg += GetResString(IDS_TITLE_COLON) + CONST_SPACE + m_FileNameOnly;
         }
 
         //display document author;
@@ -229,8 +226,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
         {
             if ( msg != EMPTY_STRING )
                 msg += L"\n";
-            msg += GetResString( IDS_AUTHOR_COLON ) + CONST_SPACE;
-            msg += meta_info_accessor.getTagData( META_INFO_AUTHOR );
+            msg += GetResString( IDS_AUTHOR_COLON ) + CONST_SPACE + meta_info_accessor.getTagData( META_INFO_AUTHOR );
         }
 
         //display document subject;
@@ -238,8 +234,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
         {
             if ( msg != EMPTY_STRING )
                 msg += L"\n";
-            msg += GetResString(IDS_SUBJECT_COLON) + CONST_SPACE;
-            msg += meta_info_accessor.getTagData( META_INFO_SUBJECT );
+            msg += GetResString(IDS_SUBJECT_COLON) + CONST_SPACE + meta_info_accessor.getTagData( META_INFO_SUBJECT );
         }
 
         //display document description;
@@ -247,8 +242,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
         {
             if ( msg != EMPTY_STRING )
                 msg += L"\n";
-            msg += GetResString( IDS_COMMENTS_COLON ) + CONST_SPACE;
-            msg += meta_info_accessor.getTagData( META_INFO_DESCRIPTION );
+            msg += GetResString( IDS_COMMENTS_COLON ) + CONST_SPACE + meta_info_accessor.getTagData( META_INFO_DESCRIPTION );
         }
 
         //display modified time formatted into locale representation.
@@ -256,8 +250,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
         {
             if ( msg != EMPTY_STRING )
                 msg += L"\n";
-            msg += GetResString( IDS_MODIFIED_COLON ) + CONST_SPACE;
-            msg += iso8601_date_to_local_date(meta_info_accessor.getTagData(META_INFO_MODIFIED ));
+            msg += GetResString( IDS_MODIFIED_COLON ) + CONST_SPACE + iso8601_date_to_local_date(meta_info_accessor.getTagData(META_INFO_MODIFIED ));
         }
     }
     catch (const std::exception&)
@@ -268,9 +261,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     std::wstring tmpSizeStr = getFileSizeInfo( m_szFileName );
     if ( tmpSizeStr != EMPTY_STRING )
     {
-        msg += L"\n";
-        msg += GetResString( IDS_SIZE_COLON ) + CONST_SPACE;
-        msg += tmpSizeStr;
+        msg += L"\n" + GetResString( IDS_SIZE_COLON ) + CONST_SPACE + tmpSizeStr;
     }
 
 

@@ -297,9 +297,10 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtensio
     //there shall be no empty line after the last entry.
     if (m_bNoEntry)
         m_bNoEntry = false;
+        sMsg += sError;
     else
-        sMsg += "\n";
-    sMsg += sError;
+        sMsg += "\n" + sError;
+    // sMsg += sError;
     //Insert more information about the error
     if (!exceptionMessage.isEmpty())
         sMsg += m_sThisErrorOccurred + exceptionMessage + "\n";
@@ -338,8 +339,8 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
         tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 
-        destFolder = dp_misc::makeURL( sTempDir, tempEntry );
-        destFolder += "_";
+        destFolder = dp_misc::makeURL( sTempDir, tempEntry ) + "_";
+        // destFolder += "_";
         m_sDownloadFolder = destFolder;
         try
         {
@@ -590,8 +591,8 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     }
     tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
 
-    destFolder = dp_misc::makeURL( m_sDownloadFolder, tempEntry );
-    destFolder += "_";
+    destFolder = dp_misc::makeURL( m_sDownloadFolder, tempEntry ) + "_";
+    // destFolder += "_";
 
     ::ucbhelper::Content destFolderContent;
     dp_misc::create_folder( &destFolderContent, destFolder, m_updateCmdEnv.get() );

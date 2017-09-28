@@ -303,9 +303,10 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
 
     for(sal_Int32 i=0; i<nToken; i++)
     {
-        OUString aString = comphelper::string::strip(rListStr.getToken(i, LF), ' ');
-        aStr += aString;
-        aStr += OUStringLiteral1(cDelimiter);
+        // OUString aString = comphelper::string::strip(rListStr.getToken(i, LF), ' ');
+        // aStr += aString + OUStringLiteral1(cDelimiter);
+        // aStr += OUStringLiteral1(cDelimiter);
+        aStr += OUString(comphelper::string::strip(rListStr.getToken(i, LF), ' ')) + OUStringLiteral1(cDelimiter);
     }
 
     aStr = comphelper::string::strip(aStr, cDelimiter);

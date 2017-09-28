@@ -98,8 +98,8 @@ void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMo
             {
                 if ( eTranslateMode & TRANSLATE_VALUE )
                 {
-                    rString = "#";
-                    rString += OUString::createFromAscii( p->mpMSName );
+                    rString = "#" + OUString::createFromAscii( p->mpMSName );
+
                 }
                 else
                     rString = OUString::createFromAscii( p->mpMSName );
