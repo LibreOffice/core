@@ -677,7 +677,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     // NB: Excel's range does not include page field area (if any).
     ScRange aOutRange = rDPObj.GetOutputRangeByType(sheet::DataPilotOutputRangeType::TABLE);
 
-    sal_Int32 nFirstHeaderRow = aColFields.size();
+    sal_Int32 nFirstHeaderRow = rDPObj.GetHeaderLayout() ? 2 : 1;
     sal_Int32 nFirstDataRow = 2;
     sal_Int32 nFirstDataCol = 1;
     ScRange aResRange = rDPObj.GetOutputRangeByType(sheet::DataPilotOutputRangeType::RESULT);

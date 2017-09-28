@@ -219,6 +219,7 @@ public:
     void testPivotTableRowColPageFieldFilter();
     void testPivotTableEmptyItem();
     void testPivotTablePageFieldFilter();
+    void testPivotTableFirstHeaderRowXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -332,6 +333,7 @@ public:
     CPPUNIT_TEST(testPivotTableRowColPageFieldFilter);
     CPPUNIT_TEST(testPivotTableEmptyItem);
     CPPUNIT_TEST(testPivotTablePageFieldFilter);
+    CPPUNIT_TEST(testPivotTableFirstHeaderRowXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -4853,6 +4855,27 @@ void ScExportTest::testPivotTablePageFieldFilter()
     }
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableFirstHeaderRowXLSX()
+{
+    // tdf#112733: We have different tables here, but have the same value as firstHeaderRow
+    // The documentation is not clear about thit firstHeaderRow actually measn, but MS Excel works on this way
+    ScDocShellRef xShell = loadDoc("pivot_table_first_header_row.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
+
+    pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable2.xml");
+    CPPUNIT_ASSERT(pTable);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
+
+    pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable3.xml");
+    CPPUNIT_ASSERT(pTable);
+    assertXPath(pTable, "/x:pivotTableDefinition/x:location", "firstHeaderRow", "1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
