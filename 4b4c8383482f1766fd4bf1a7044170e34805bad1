@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5d4c6342",
+        "filename": "external/python3/ExternalProject_python3.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-09-28T08:27:35Z",
+      "side": 1,
+      "message": "This is about the target runtime version, and there the README.md states, the current minimum is 10.9.\n\nAccording to commit 55a4fd60b1df233ad0b35ed302f4dd0e308d3551 this check means the functions are not available for runtime 10.8 - 10.11 if you use a newer SDK to build.\n\nSince the minimum runtime is 10.9, I would understand a drop of 10.8, as this isn\u0027t supported anymore.",
+      "revId": "4b4c8383482f1766fd4bf1a7044170e34805bad1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
