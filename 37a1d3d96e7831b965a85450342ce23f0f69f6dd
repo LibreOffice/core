@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1d6e5b01",
+        "filename": "vcl/osx/saltimer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-28T19:01:26Z",
+      "side": 1,
+      "message": "is it guaranteed that Stop() is only called from the main thread? otherwise we need some locking here",
+      "revId": "37a1d3d96e7831b965a85450342ce23f0f69f6dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
