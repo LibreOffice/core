@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bd8c6780",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-09-28T07:08:59Z",
+      "side": 1,
+      "message": "To make sure that this implementation will not decrease performance, I would secure this code with macro check, like:\n\n#if OSL_DEBUG_LEVEL \u003e 1",
+      "revId": "398e67fca9b5bdf317f7da0f16b1754cc3218b47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
