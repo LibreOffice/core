@@ -569,8 +569,8 @@ static void findDisposeAndClearStatements(std::set<const FieldDecl*>& aVclPtrFie
     const MemberExpr *pCalleeMemberExpr = dyn_cast<MemberExpr>(pCallExpr->getCallee());
 
     if (!pCalleeMemberExpr->getBase()) return;
-    if (!isa<MemberExpr>(pCalleeMemberExpr->getBase())) return;
-    const MemberExpr *pCalleeMemberExprBase = dyn_cast<MemberExpr>(pCalleeMemberExpr->getBase());
+    const MemberExpr *pCalleeMemberExprBase = dyn_cast<MemberExpr>(pCalleeMemberExpr->getBase()->IgnoreImpCasts());
+    if (pCalleeMemberExprBase == nullptr) return;
 
     const FieldDecl* xxx = dyn_cast_or_null<FieldDecl>(pCalleeMemberExprBase->getMemberDecl());
     if (xxx)
