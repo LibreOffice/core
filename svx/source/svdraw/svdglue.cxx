@@ -278,10 +278,6 @@ bool SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrO
 
 void SdrGluePointList::Clear()
 {
-    sal_uInt16 nCount=GetCount();
-    for (sal_uInt16 i=0; i<nCount; i++) {
-        delete GetObject(i);
-    }
     aList.clear();
 }
 
@@ -303,7 +299,7 @@ sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
     sal_uInt16 nId=pGP->GetId();
     sal_uInt16 nCount=GetCount();
     sal_uInt16 nInsPos=nCount;
-    sal_uInt16 nLastId=nCount!=0 ? GetObject(nCount-1)->GetId() : 0;
+    sal_uInt16 nLastId=nCount!=0 ? aList[nCount-1]->GetId() : 0;
     DBG_ASSERT(nLastId>=nCount,"SdrGluePointList::Insert(): nLastId<nCount");
     bool bHole = nLastId>nCount;
     if (nId<=nLastId) {
@@ -312,7 +308,7 @@ sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
         } else {
             bool bBrk = false;
             for (sal_uInt16 nNum=0; nNum<nCount && !bBrk; nNum++) {
-                const SdrGluePoint* pGP2=GetObject(nNum);
+                const auto& pGP2=aList[nNum];
                 sal_uInt16 nTmpId=pGP2->GetId();
                 if (nTmpId==nId) {
                     nId=nLastId+1; // already in use
@@ -326,16 +322,14 @@ sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
         }
         pGP->SetId(nId);
     }
-    aList.insert(aList.begin()+nInsPos, pGP);
+    aList.emplace(aList.begin()+nInsPos, pGP);
     return nInsPos;
 }
 
 void SdrGluePointList::Invalidate(vcl::Window& rWin, const SdrObject* pObj) const
 {
-    sal_uInt16 nCount=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
-        GetObject(nNum)->Invalidate(rWin,pObj);
-    }
+    for (auto& xGP : aList)
+        xGP->Invalidate(rWin,pObj);
 }
 
 sal_uInt16 SdrGluePointList::FindGluePoint(sal_uInt16 nId) const
@@ -345,7 +339,7 @@ sal_uInt16 SdrGluePointList::FindGluePoint(sal_uInt16 nId) const
     sal_uInt16 nCount=GetCount();
     sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
     for (sal_uInt16 nNum=0; nNum<nCount && nRet==SDRGLUEPOINT_NOTFOUND; nNum++) {
-        const SdrGluePoint* pGP=GetObject(nNum);
+        const auto& pGP=aList[nNum];
         if (pGP->GetId()==nId) nRet=nNum;
     }
     return nRet;
@@ -358,7 +352,7 @@ sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut
     sal_uInt16 nNum = nCount;
     while ((nNum>0) && nRet==SDRGLUEPOINT_NOTFOUND) {
         nNum--;
-        const SdrGluePoint* pGP = GetObject(nNum);
+        const auto& pGP = aList[nNum];
         if (pGP->IsHit(rPnt,rOut,pObj))
             nRet = nNum;
     }
@@ -367,18 +361,14 @@ sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut
 
 void SdrGluePointList::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
 {
-    sal_uInt16 nCount=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
-        GetObject(nNum)->SetReallyAbsolute(bOn,rObj);
-    }
+    for (auto& xGP : aList)
+        xGP->SetReallyAbsolute(bOn,rObj);
 }
 
 void SdrGluePointList::Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj)
 {
-    sal_uInt16 nCount=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
-        GetObject(nNum)->Rotate(rRef,nAngle,sn,cs,pObj);
-    }
+    for (auto& xGP : aList)
+        xGP->Rotate(rRef,nAngle,sn,cs,pObj);
 }
 
 void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj)
@@ -390,18 +380,14 @@ void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, const SdrO
 
 void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj)
 {
-    sal_uInt16 nCount=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
-        GetObject(nNum)->Mirror(rRef1,rRef2,nAngle,pObj);
-    }
+    for (auto& xGP : aList)
+        xGP->Mirror(rRef1,rRef2,nAngle,pObj);
 }
 
 void SdrGluePointList::Shear(const Point& rRef, double tn, bool bVShear, const SdrObject* pObj)
 {
-    sal_uInt16 nCount=GetCount();
-    for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
-        GetObject(nNum)->Shear(rRef,tn,bVShear,pObj);
-    }
+    for (auto& xGP : aList)
+        xGP->Shear(rRef,tn,bVShear,pObj);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
