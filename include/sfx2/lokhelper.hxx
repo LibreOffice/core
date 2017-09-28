@@ -45,7 +45,7 @@ public:
     /// Emits a LOK_CALLBACK_DIALOG_CHILD
     static void notifyDialogChild(const OUString& rDialogID, const OUString& rAction, const Point& rPos);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
-    static void notifyInvalidation(SfxViewShell* pThisView, const OString& rPayload);
+    static void notifyInvalidation(const SfxViewShell* pThisView, const OString& rPayload);
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
     static const long MaxTwips = 1e9;

@@ -179,7 +179,7 @@ void SfxLokHelper::notifyDialogChild(const OUString& rDialogID, const OUString& 
     }
 }
 
-void SfxLokHelper::notifyInvalidation(SfxViewShell* pThisView, const OString& rPayload)
+void SfxLokHelper::notifyInvalidation(const SfxViewShell* pThisView, const OString& rPayload)
 {
     OStringBuffer aBuf;
     aBuf.append(rPayload);
