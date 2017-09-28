@@ -1097,14 +1097,14 @@ void ValueSet::ImplTracking( const Point& rPos, bool bRepeat )
     ValueSetItem* pItem = ImplGetItem( ImplGetItem( rPos ) );
     if ( pItem )
     {
-        if( GetStyle() & WB_MENUSTYLEVALUESET )
+        if( GetStyle() & WB_MENUSTYLEVALUESET || GetStyle() & WB_FLATVALUESET )
             mbHighlight = true;
 
         ImplHighlightItem( pItem->mnId );
     }
     else
     {
-        if( GetStyle() & WB_MENUSTYLEVALUESET )
+        if( GetStyle() & WB_MENUSTYLEVALUESET || GetStyle() & WB_FLATVALUESET )
             mbHighlight = true;
 
         ImplHighlightItem( mnSelItemId, false );
@@ -1188,7 +1188,7 @@ void ValueSet::MouseButtonUp( const MouseEvent& rMouseEvent )
 void ValueSet::MouseMove( const MouseEvent& rMouseEvent )
 {
     // because of SelectionMode
-    if ( mbSelection || (GetStyle() & WB_MENUSTYLEVALUESET) )
+    if ( mbSelection || (GetStyle() & WB_MENUSTYLEVALUESET) || (GetStyle() & WB_FLATVALUESET))
         ImplTracking( rMouseEvent.GetPosPixel(), false );
     Control::MouseMove( rMouseEvent );
 }
