@@ -23,8 +23,6 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent)
 {
     get(m_pCbUrl, "url");
     get(m_pBtnBrowse, "browse");
-    get(m_pRBDirectData, "directdata");
-    get(m_pRBScriptData, "scriptdata");
     get(m_pRBValuesInLine, "valuesinline");
     get(m_pRBAddressValue, "addressvalue");
     get(m_pCBRefreshOnEmpty, "refresh_ui");
@@ -42,9 +40,6 @@ DataStreamDlg::DataStreamDlg(ScDocShell *pDocShell, vcl::Window* pParent)
     m_pCbUrl->SetSelectHdl( LINK( this, DataStreamDlg, UpdateComboBoxHdl ) );
     m_pRBAddressValue->SetClickHdl( LINK( this, DataStreamDlg, UpdateClickHdl ) );
     m_pRBAddressValue->Enable(false);
-    m_pRBScriptData->Enable(false);
-    m_pRBDirectData->Hide();
-    m_pRBScriptData->Hide();
     m_pRBNoMove->Hide();
     m_pRBValuesInLine->SetClickHdl( LINK( this, DataStreamDlg, UpdateClickHdl ) );
     m_pEdRange->SetModifyHdl( LINK( this, DataStreamDlg, UpdateHdl ) );
@@ -61,8 +56,6 @@ void DataStreamDlg::dispose()
 {
     m_pCbUrl.clear();
     m_pBtnBrowse.clear();
-    m_pRBDirectData.clear();
-    m_pRBScriptData.clear();
     m_pRBValuesInLine.clear();
     m_pRBAddressValue.clear();
     m_pCBRefreshOnEmpty.clear();
@@ -200,8 +193,6 @@ void DataStreamDlg::StartStream()
         nLimit = m_pEdLimit->GetText().toInt32();
     OUString rURL = m_pCbUrl->GetText();
     sal_uInt32 nSettings = 0;
-    if (m_pRBScriptData->IsChecked())
-       nSettings |= DataStream::SCRIPT_STREAM;
     if (m_pRBValuesInLine->IsChecked())
        nSettings |= DataStream::VALUES_IN_LINE;
 

@@ -24,7 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>
-
+#include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>

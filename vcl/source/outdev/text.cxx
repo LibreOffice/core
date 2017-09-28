@@ -25,7 +25,7 @@
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
 #include <comphelper/processfactory.hxx>
-
+#include <osl/file.h>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapaccess.hxx>

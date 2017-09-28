@@ -31,8 +31,6 @@ class DataStreamDlg : public ModalDialog
 
     VclPtr<SvtURLBox>      m_pCbUrl;
     VclPtr<PushButton>     m_pBtnBrowse;
-    VclPtr<RadioButton>    m_pRBDirectData;
-    VclPtr<RadioButton>    m_pRBScriptData;
     VclPtr<RadioButton>    m_pRBValuesInLine;
     VclPtr<RadioButton>    m_pRBAddressValue;
     VclPtr<CheckBox>       m_pCBRefreshOnEmpty;

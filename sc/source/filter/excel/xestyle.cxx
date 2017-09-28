@@ -25,6 +25,7 @@
 #include <iterator>
 #include <set>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <rtl/tencinfo.h>
 #include <vcl/font.hxx>
 #include <svl/zformat.hxx>
 #include <svl/itempool.hxx>
