@@ -205,7 +205,7 @@ void ImplSalYieldMutexAcquireWithWait( sal_uInt32 nCount )
 bool ImplSalYieldMutexTryToAcquire()
 {
     WinSalInstance* pInst = GetSalData()->mpInstance;
-    return pInst ? pInst->mpSalYieldMutex->tryToAcquire() : false;
+    return pInst && pInst->mpSalYieldMutex->tryToAcquire();
 }
 
 void ImplSalYieldMutexRelease()
