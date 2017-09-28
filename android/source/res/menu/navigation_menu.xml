@@ -6,7 +6,7 @@
 
         <item android:id="@+id/menu_provider_documents"
             android:title="@string/local_documents"
-            android:icon="@drawable/ic_insert_drive_file_black_24dp" />
+            android:icon="@drawable/ic_folder_black_24dp" />
 
         <item android:id="@+id/menu_provider_filesystem"
             android:title="@string/local_file_system"
