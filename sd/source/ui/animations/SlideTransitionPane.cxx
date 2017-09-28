@@ -440,6 +440,11 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     get(mpRB_ADVANCE_ON_MOUSE, "rb_mouse_click");
     get(mpRB_ADVANCE_AUTO, "rb_auto_after");
     get(mpMF_ADVANCE_AUTO_AFTER, "auto_after_value");
+    auto nMax = mpMF_ADVANCE_AUTO_AFTER->GetMax();
+    mpMF_ADVANCE_AUTO_AFTER->SetMax(1000);
+    Size aOptimalSize(mpMF_ADVANCE_AUTO_AFTER->CalcMinimumSize());
+    mpMF_ADVANCE_AUTO_AFTER->set_width_request(aOptimalSize.Width());
+    mpMF_ADVANCE_AUTO_AFTER->SetMax(nMax);
     get(mpPB_APPLY_TO_ALL, "apply_to_all");
     get(mpPB_PLAY, "play");
     get(mpCB_AUTO_PREVIEW, "auto_preview");
