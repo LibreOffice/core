@@ -216,10 +216,8 @@ void OMarkableOutputStream::deleteMark(sal_Int32 Mark)
             "MarkableOutputStream::deleteMark unknown mark (" + OUString::number(Mark) + ")",
             *this, 0);
     }
-    else {
-        m_mapMarks.erase( ii );
-        checkMarksAndFlush();
-    }
+    m_mapMarks.erase( ii );
+    checkMarksAndFlush();
 }
 
 void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
@@ -232,9 +230,7 @@ void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
             "MarkableOutputStream::jumpToMark unknown mark (" + OUString::number(nMark) + ")",
             *this, 0);
     }
-    else {
-        m_nCurrentPos = (*ii).second;
-    }
+    m_nCurrentPos = (*ii).second;
 }
 
 void OMarkableOutputStream::jumpToFurthest()
@@ -631,10 +627,8 @@ void OMarkableInputStream::deleteMark(sal_Int32 Mark)
             "MarkableInputStream::deleteMark unknown mark (" + OUString::number(Mark) + ")",
             *this , 0 );
     }
-    else {
-        m_mapMarks.erase( ii );
-        checkMarksAndFlush();
-    }
+    m_mapMarks.erase( ii );
+    checkMarksAndFlush();
 }
 
 void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
@@ -648,10 +642,7 @@ void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
             "MarkableInputStream::jumpToMark unknown mark (" + OUString::number(nMark) + ")",
             *this , 0 );
     }
-    else
-    {
-        m_nCurrentPos = (*ii).second;
-    }
+    m_nCurrentPos = (*ii).second;
 }
 
 void OMarkableInputStream::jumpToFurthest()

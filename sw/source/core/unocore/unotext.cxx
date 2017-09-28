@@ -1883,22 +1883,20 @@ void SwXText::Impl::ConvertCell(
             {
                 throw lang::IllegalArgumentException();
             }
-            else
+
+            m_pDoc->getIDocumentContentOperations().SplitNode(*aStartCellPam.Start(), false);
+            sal_uLong const nNewIndex(aStartCellPam.Start()->nNode.GetIndex());
+            if (nNewIndex != nStartCellNodeIndex)
             {
-                m_pDoc->getIDocumentContentOperations().SplitNode(*aStartCellPam.Start(), false);
-                sal_uLong const nNewIndex(aStartCellPam.Start()->nNode.GetIndex());
-                if (nNewIndex != nStartCellNodeIndex)
+                // aStartCellPam now points to the 2nd node
+                // the last cell may *also* point to 2nd node now - fix it!
+                assert(nNewIndex == nStartCellNodeIndex + 1);
+                if (pLastCell->aEnd.GetIndex() == nNewIndex)
                 {
-                    // aStartCellPam now points to the 2nd node
-                    // the last cell may *also* point to 2nd node now - fix it!
-                    assert(nNewIndex == nStartCellNodeIndex + 1);
-                    if (pLastCell->aEnd.GetIndex() == nNewIndex)
+                    --pLastCell->aEnd;
+                    if (pLastCell->aStart.GetIndex() == nNewIndex)
                     {
-                        --pLastCell->aEnd;
-                        if (pLastCell->aStart.GetIndex() == nNewIndex)
-                        {
-                            --pLastCell->aStart;
-                        }
+                        --pLastCell->aStart;
                     }
                 }
             }

@@ -571,9 +571,7 @@ namespace fileaccess {
             excep.Message = "the name contained invalid characters";
             if(isHandled)
                 throw excep;
-            else {
-                cancelCommandExecution( Any(excep), xEnv );
-            }
+            cancelCommandExecution( Any(excep), xEnv );
 //              ioErrorCode = IOErrorCode_INVALID_CHARACTER;
 //              cancelCommandExecution(
 //                  ioErrorCode,
@@ -591,9 +589,7 @@ namespace fileaccess {
             excep.Message = "folder exists and overwrite forbidden";
             if(isHandled)
                 throw excep;
-            else {
-                cancelCommandExecution( Any(excep), xEnv );
-            }
+            cancelCommandExecution( Any(excep), xEnv );
 //              ioErrorCode = IOErrorCode_ALREADY_EXISTING;
 //              cancelCommandExecution(
 //                  ioErrorCode,

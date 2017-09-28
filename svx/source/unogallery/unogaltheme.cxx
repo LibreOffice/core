@@ -135,13 +135,10 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
         {
             throw lang::IndexOutOfBoundsException();
         }
-        else
-        {
-            const GalleryObject* pObj = mpTheme->ImplGetGalleryObject( nIndex );
+        const GalleryObject* pObj = mpTheme->ImplGetGalleryObject( nIndex );
 
-            if( pObj )
-                aRet <<= uno::Reference< gallery::XGalleryItem >( new GalleryItem( *this, *pObj ) );
-        }
+        if( pObj )
+            aRet <<= uno::Reference< gallery::XGalleryItem >( new GalleryItem( *this, *pObj ) );
     }
 
     return aRet;
@@ -291,8 +288,7 @@ void SAL_CALL GalleryTheme::removeByIndex( sal_Int32 nIndex )
     {
         if( ( nIndex < 0 ) || ( nIndex >= getCount() ) )
             throw lang::IndexOutOfBoundsException();
-        else
-            mpTheme->RemoveObject( nIndex );
+        mpTheme->RemoveObject( nIndex );
     }
 }
 

@@ -1121,54 +1121,51 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         // set property <TextRange> not valid for to-page anchored shapes
                         throw lang::IllegalArgumentException();
                     }
+
+                    std::unique_ptr<SwUnoInternalPaM> pInternalPam(
+                                    new SwUnoInternalPaM( *(pFormat->GetDoc()) ));
+                    uno::Reference< text::XTextRange > xRg;
+                    aValue >>= xRg;
+                    if (!::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
+                    {
+                        throw uno::RuntimeException();
+                    }
+
+                    if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+                    {
+                        //delete old SwFormatFlyCnt
+                        //With AnchorAsCharacter the current TextAttribute has to be deleted.
+                        //Tbis removes the frame format too.
+                        //To prevent this the connection between format and attribute has to be broken before.
+                        const SwPosition *pPos = aAnchor.GetContentAnchor();
+                        SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
+                        SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
+                        const sal_Int32 nIdx = pPos->nContent.GetIndex();
+                        SwTextAttr * const pHint =
+                                pTextNode->GetTextAttrForCharAt(
+                                nIdx, RES_TXTATR_FLYCNT );
+                        assert(pHint && "Missing Hint.");
+                        SAL_WARN_IF( pHint->Which() != RES_TXTATR_FLYCNT,
+                                    "sw.uno", "Missing FlyInCnt-Hint." );
+                        SAL_WARN_IF( pHint->GetFlyCnt().GetFrameFormat() != pFormat,
+                                    "sw.uno", "Wrong TextFlyCnt-Hint." );
+                        const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt())
+                            .SetFlyFormat();
+
+                        //The connection is removed now the attribute can be deleted.
+                        pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
+                        //create a new one
+                        SwTextNode *pNd = pInternalPam->GetNode().GetTextNode();
+                        SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TextNode." );
+                        SwFormatFlyCnt aFormat( pFormat );
+                        pNd->InsertItem(aFormat, pInternalPam->GetPoint()
+                                ->nContent.GetIndex(), 0 );
+                    }
                     else
                     {
-                        std::unique_ptr<SwUnoInternalPaM> pInternalPam(
-                                        new SwUnoInternalPaM( *(pFormat->GetDoc()) ));
-                        uno::Reference< text::XTextRange > xRg;
-                        aValue >>= xRg;
-                        if (!::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
-                        {
-                            throw uno::RuntimeException();
-                        }
-
-                        if (aAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
-                        {
-                            //delete old SwFormatFlyCnt
-                            //With AnchorAsCharacter the current TextAttribute has to be deleted.
-                            //Tbis removes the frame format too.
-                            //To prevent this the connection between format and attribute has to be broken before.
-                            const SwPosition *pPos = aAnchor.GetContentAnchor();
-                            SwTextNode *pTextNode = pPos->nNode.GetNode().GetTextNode();
-                            SAL_WARN_IF( !pTextNode->HasHints(), "sw.uno", "Missing FlyInCnt-Hint." );
-                            const sal_Int32 nIdx = pPos->nContent.GetIndex();
-                            SwTextAttr * const pHint =
-                                pTextNode->GetTextAttrForCharAt(
-                                    nIdx, RES_TXTATR_FLYCNT );
-                            assert(pHint && "Missing Hint.");
-                            SAL_WARN_IF( pHint->Which() != RES_TXTATR_FLYCNT,
-                                        "sw.uno", "Missing FlyInCnt-Hint." );
-                            SAL_WARN_IF( pHint->GetFlyCnt().GetFrameFormat() != pFormat,
-                                        "sw.uno", "Wrong TextFlyCnt-Hint." );
-                            const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt())
-                                .SetFlyFormat();
-
-                            //The connection is removed now the attribute can be deleted.
-                            pTextNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
-                            //create a new one
-                            SwTextNode *pNd = pInternalPam->GetNode().GetTextNode();
-                            SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TextNode." );
-                            SwFormatFlyCnt aFormat( pFormat );
-                            pNd->InsertItem(aFormat, pInternalPam->GetPoint()
-                                    ->nContent.GetIndex(), 0 );
-                        }
-                        else
-                        {
-                            aAnchor.SetAnchor( pInternalPam->GetPoint() );
-                            aSet.Put(aAnchor);
-                            pFormat->SetFormatAttr(aSet);
-                        }
-
+                        aAnchor.SetAnchor( pInternalPam->GetPoint() );
+                        aSet.Put(aAnchor);
+                        pFormat->SetFormatAttr(aSet);
                     }
                 }
                 else if (pEntry->nWID == FN_TEXT_BOX)

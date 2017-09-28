@@ -169,33 +169,32 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
 {
     if (hasByName(aName))
         throw ElementExistException(THROW_WHERE );
-    else
+
+    uno::Reference < XUnoTunnel > xRef;
+    aElement >>= xRef;
+    if ( !(aElement >>= xRef) )
+        throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+
+    sal_Int64 nTest;
+    ZipPackageEntry *pEntry;
+    if ( ( nTest = xRef->getSomething ( ZipPackageFolder::static_getImplementationId() ) ) != 0 )
     {
-        uno::Reference < XUnoTunnel > xRef;
-        aElement >>= xRef;
-        if ( !(aElement >>= xRef) )
-            throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
-
-        sal_Int64 nTest;
-        ZipPackageEntry *pEntry;
-        if ( ( nTest = xRef->getSomething ( ZipPackageFolder::static_getImplementationId() ) ) != 0 )
-        {
-            ZipPackageFolder *pFolder = reinterpret_cast < ZipPackageFolder * > ( nTest );
-            pEntry = static_cast < ZipPackageEntry * > ( pFolder );
-        }
-        else if ( ( nTest = xRef->getSomething ( ZipPackageStream::static_getImplementationId() ) ) != 0 )
-        {
-            ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream * > ( nTest );
-            pEntry = static_cast < ZipPackageEntry * > ( pStream );
-        }
-        else
-            throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
-
-        if (pEntry->getName() != aName )
-            pEntry->setName (aName);
-        doInsertByName ( pEntry, true );
+        ZipPackageFolder *pFolder = reinterpret_cast < ZipPackageFolder * > ( nTest );
+        pEntry = static_cast < ZipPackageEntry * > ( pFolder );
     }
+    else if ( ( nTest = xRef->getSomething ( ZipPackageStream::static_getImplementationId() ) ) != 0 )
+    {
+        ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream * > ( nTest );
+        pEntry = static_cast < ZipPackageEntry * > ( pStream );
+    }
+    else
+       throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
+
+    if (pEntry->getName() != aName )
+        pEntry->setName (aName);
+    doInsertByName ( pEntry, true );
 }
+
 void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
 {
     ContentHash::iterator aIter = maContents.find ( Name );

@@ -740,40 +740,38 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
     const SfxItemPropertySimpleEntry* pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pEntry)
         throw UnknownPropertyException();
-    else
-    {
-        sal_Int16 nWID = pEntry->nWID;
-        switch (nWID)
-        {
-            case WID_PAGE_COUNT :
-            case WID_LINE_COUNT :
-            {
-                // format document completely in order to get meaningful
-                // values for page count and line count
-                m_pView->GetWrtShell().CalcLayout();
 
-                sal_Int32 nCount = -1;
-                if (nWID == WID_PAGE_COUNT)
-                    nCount = m_pView->GetWrtShell().GetPageCount();
-                else // WID_LINE_COUNT
-                    nCount = m_pView->GetWrtShell().GetLineCount();
-                aRet <<= nCount;
-            }
-            break;
-            case WID_IS_HIDE_SPELL_MARKS :
-                // deprecated #i91949
-            break;
-            case WID_IS_CONSTANT_SPELLCHECK :
-            {
-                const SwViewOption *pOpt = m_pView->GetWrtShell().GetViewOptions();
-                if (!pOpt)
-                    throw RuntimeException();
-                aRet <<= bool(pOpt->GetCoreOptions() & ViewOptFlags1::OnlineSpell);
-            }
-            break;
-            default :
-                OSL_FAIL("unknown WID");
+    sal_Int16 nWID = pEntry->nWID;
+    switch (nWID)
+    {
+        case WID_PAGE_COUNT :
+        case WID_LINE_COUNT :
+        {
+            // format document completely in order to get meaningful
+            // values for page count and line count
+            m_pView->GetWrtShell().CalcLayout();
+
+            sal_Int32 nCount = -1;
+            if (nWID == WID_PAGE_COUNT)
+                nCount = m_pView->GetWrtShell().GetPageCount();
+            else // WID_LINE_COUNT
+                nCount = m_pView->GetWrtShell().GetLineCount();
+            aRet <<= nCount;
         }
+        break;
+        case WID_IS_HIDE_SPELL_MARKS :
+            // deprecated #i91949
+        break;
+        case WID_IS_CONSTANT_SPELLCHECK :
+        {
+            const SwViewOption *pOpt = m_pView->GetWrtShell().GetViewOptions();
+            if (!pOpt)
+                throw RuntimeException();
+            aRet <<= bool(pOpt->GetCoreOptions() & ViewOptFlags1::OnlineSpell);
+        }
+        break;
+        default :
+            OSL_FAIL("unknown WID");
     }
 
     return aRet;

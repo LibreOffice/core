@@ -941,8 +941,8 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location )
     osl::MutexGuard aGuard( m_aMutex );
     if( location < 0 )
         throw IllegalArgumentException();
-    else
-        pos = sal::static_int_cast<sal_Int32>( location );
+
+    pos = sal::static_int_cast<sal_Int32>( location );
 
     if( pos > buffer.getLength() )
         pos = buffer.getLength();

@@ -128,8 +128,7 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( co
 
     if ( pIter != m_aFactoryManagerMap.end() )
         throw ElementExistException();
-    else
-        m_aFactoryManagerMap.emplace( aHashKey, rServiceSpecifier );
+    m_aFactoryManagerMap.emplace( aHashKey, rServiceSpecifier );
 }
 
 void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule )
@@ -143,8 +142,7 @@ void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModul
 
     if ( pIter == m_aFactoryManagerMap.end() )
         throw NoSuchElementException();
-    else
-        m_aFactoryManagerMap.erase( aHashKey );
+    m_aFactoryManagerMap.erase( aHashKey );
 }
 
 Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFactoriesDescription() const

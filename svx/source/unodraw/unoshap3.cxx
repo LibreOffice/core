@@ -154,28 +154,26 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
     {
         throw uno::RuntimeException();
     }
+
+    SdrObjList& rList = *pSdrShape->GetObjList();
+
+    const size_t nObjCount = rList.GetObjCount();
+    size_t nObjNum = 0;
+    while( nObjNum < nObjCount )
+    {
+        if(rList.GetObj( nObjNum ) == pSdrShape )
+            break;
+        nObjNum++;
+    }
+
+    if( nObjNum < nObjCount )
+    {
+        SdrObject* pObject = rList.NbcRemoveObject( nObjNum );
+        SdrObject::Free( pObject );
+    }
     else
     {
-        SdrObjList& rList = *pSdrShape->GetObjList();
-
-        const size_t nObjCount = rList.GetObjCount();
-        size_t nObjNum = 0;
-        while( nObjNum < nObjCount )
-        {
-            if(rList.GetObj( nObjNum ) == pSdrShape )
-                break;
-            nObjNum++;
-        }
-
-        if( nObjNum < nObjCount )
-        {
-            SdrObject* pObject = rList.NbcRemoveObject( nObjNum );
-            SdrObject::Free( pObject );
-        }
-        else
-        {
-            SAL_WARN( "svx", "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
-        }
+        SAL_WARN( "svx", "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
     }
 }
 

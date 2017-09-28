@@ -173,8 +173,8 @@ XInputStream_impl::getLength()
     err = m_aFile.setPos( osl_Pos_Absolut, uCurrentPos );
     if( err != osl::FileBase::E_None )
         throw io::IOException();
-    else
-        return sal_Int64( uEndPos );
+
+    return sal_Int64( uEndPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

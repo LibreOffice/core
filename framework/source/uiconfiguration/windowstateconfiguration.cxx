@@ -255,8 +255,7 @@ Any SAL_CALL ConfigurationAccess_WindowState::getByName( const OUString& rResour
         Any a( impl_getWindowStateFromResourceURL( rResourceURL ) );
         if ( a == Any() )
             throw NoSuchElementException();
-        else
-            return a;
+        return a;
     }
 }
 
@@ -365,54 +364,49 @@ void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rRe
     ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
     if ( pIter != m_aResourceURLToInfoCache.end() )
         throw ElementExistException();
-    else
+
+    if ( !m_bConfigAccessInitialized )
     {
-        if ( !m_bConfigAccessInitialized )
-        {
-            impl_initializeConfigAccess();
-            m_bConfigAccessInitialized = true;
-        }
+        impl_initializeConfigAccess();
+        m_bConfigAccessInitialized = true;
+    }
 
-        // Try to ask our configuration access
-        if ( m_xConfigAccess.is() )
+    // Try to ask our configuration access
+    if ( m_xConfigAccess.is() )
+    {
+        if ( m_xConfigAccess->hasByName( rResourceURL ) )
+            throw ElementExistException();
+
+        WindowStateInfo aWinStateInfo;
+        impl_fillStructFromSequence( aWinStateInfo, aPropSet );
+        m_aResourceURLToInfoCache.emplace( rResourceURL, aWinStateInfo );
+
+        // insert must be write-through => insert element into configuration
+        Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
+        if ( xNameContainer.is() )
         {
-            if ( m_xConfigAccess->hasByName( rResourceURL ) )
-                throw ElementExistException();
-            else
+            Reference< XSingleServiceFactory > xFactory( m_xConfigAccess, UNO_QUERY );
+            g.clear();
+
+            try
             {
-                WindowStateInfo aWinStateInfo;
-                impl_fillStructFromSequence( aWinStateInfo, aPropSet );
-                m_aResourceURLToInfoCache.emplace( rResourceURL, aWinStateInfo );
-
-                // insert must be write-through => insert element into configuration
-                Reference< XNameContainer > xNameContainer( m_xConfigAccess, UNO_QUERY );
-                if ( xNameContainer.is() )
+                Reference< XPropertySet > xPropSet( xFactory->createInstance(), UNO_QUERY );
+                if ( xPropSet.is() )
                 {
-                    Reference< XSingleServiceFactory > xFactory( m_xConfigAccess, UNO_QUERY );
-                    g.clear();
-
-                    try
-                    {
-                        Reference< XPropertySet > xPropSet( xFactory->createInstance(), UNO_QUERY );
-                        if ( xPropSet.is() )
-                        {
-                            Any a;
-                            impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
-                            a <<= xPropSet;
-                            xNameContainer->insertByName( rResourceURL, a );
-                            Reference< XChangesBatch > xFlush( xFactory, UNO_QUERY );
-                            if ( xFlush.is() )
-                                xFlush->commitChanges();
-                        }
-                    }
-                    catch ( const Exception& )
-                    {
-                    }
+                    Any a;
+                    impl_putPropertiesFromStruct( aWinStateInfo, xPropSet );
+                    a <<= xPropSet;
+                    xNameContainer->insertByName( rResourceURL, a );
+                    Reference< XChangesBatch > xFlush( xFactory, UNO_QUERY );
+                    if ( xFlush.is() )
+                        xFlush->commitChanges();
                 }
+            }
+            catch ( const Exception& )
+            {
             }
         }
     }
-
 }
 
 // XNameReplace

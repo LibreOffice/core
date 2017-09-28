@@ -550,34 +550,31 @@ namespace canvas
                 throw lang::IllegalArgumentException();
 #endif
             }
-            else
+            if( bitmapLayout.ColorSpace->getBitsPerPixel() < 0 )
             {
-                if( bitmapLayout.ColorSpace->getBitsPerPixel() < 0 )
-                {
 #if OSL_DEBUG_LEVEL > 0
-                    throw lang::IllegalArgumentException(
-                        OUString::createFromAscii(pStr) +
-                        ": verifyInput(): bitmap layout's ColorSpace getBitsPerPixel() is negative",
-                        xIf, nArgPos );
+                throw lang::IllegalArgumentException(
+                    OUString::createFromAscii(pStr) +
+                    ": verifyInput(): bitmap layout's ColorSpace getBitsPerPixel() is negative",
+                    xIf, nArgPos );
 #else
-                    throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException();
 #endif
-                }
+            }
 
-                if( bitmapLayout.ColorSpace->getEndianness() < util::Endianness::LITTLE ||
-                    bitmapLayout.ColorSpace->getEndianness() > util::Endianness::BIG )
-                {
+            if( bitmapLayout.ColorSpace->getEndianness() < util::Endianness::LITTLE ||
+                bitmapLayout.ColorSpace->getEndianness() > util::Endianness::BIG )
+            {
 #if OSL_DEBUG_LEVEL > 0
-                    throw lang::IllegalArgumentException(
-                        OUString::createFromAscii(pStr) +
-                        ": verifyInput(): bitmap layout's ColorSpace getEndianness() value is out of range (" +
-                        OUString::number(sal::static_int_cast<sal_Int32>(bitmapLayout.ColorSpace->getEndianness())) +
-                        " not known)",
-                        xIf, nArgPos );
+                throw lang::IllegalArgumentException(
+                    OUString::createFromAscii(pStr) +
+                    ": verifyInput(): bitmap layout's ColorSpace getEndianness() value is out of range (" +
+                    OUString::number(sal::static_int_cast<sal_Int32>(bitmapLayout.ColorSpace->getEndianness())) +
+                    " not known)",
+                    xIf, nArgPos );
 #else
-                    throw lang::IllegalArgumentException();
+                throw lang::IllegalArgumentException();
 #endif
-                }
             }
         }
 

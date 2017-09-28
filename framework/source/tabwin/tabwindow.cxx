@@ -619,34 +619,32 @@ void SAL_CALL TabWindow::setTabProps( ::sal_Int32 ID, const css::uno::Sequence< 
         sal_uInt16 nPos = pTabControl->GetPagePos( sal_uInt16( ID ));
         if ( nPos == TAB_PAGE_NOTFOUND )
             throw css::lang::IndexOutOfBoundsException();
-        else
+
+        comphelper::SequenceAsHashMap aSeqHashMap( Properties );
+
+        OUString aTitle  = pTabControl->GetPageText( sal_uInt16( ID ));
+        sal_Int32       nNewPos = nPos;
+
+        aTitle = aSeqHashMap.getUnpackedValueOrDefault< OUString >(
+                                m_aTitlePropName, aTitle );
+        pTabControl->SetPageText( sal_uInt16( ID ), aTitle );
+        nNewPos = aSeqHashMap.getUnpackedValueOrDefault< sal_Int32 >(
+                                m_aPosPropName, nNewPos );
+        if ( nNewPos != sal_Int32( nPos ))
         {
-            comphelper::SequenceAsHashMap aSeqHashMap( Properties );
+            nPos = sal_uInt16( nNewPos );
+            if ( nPos >= pTabControl->GetPageCount() )
+                nPos = TAB_APPEND;
 
-            OUString aTitle  = pTabControl->GetPageText( sal_uInt16( ID ));
-            sal_Int32       nNewPos = nPos;
-
-            aTitle = aSeqHashMap.getUnpackedValueOrDefault< OUString >(
-                                    m_aTitlePropName, aTitle );
-            pTabControl->SetPageText( sal_uInt16( ID ), aTitle );
-            nNewPos = aSeqHashMap.getUnpackedValueOrDefault< sal_Int32 >(
-                                    m_aPosPropName, nNewPos );
-            if ( nNewPos != sal_Int32( nPos ))
-            {
-                nPos = sal_uInt16( nNewPos );
-                if ( nPos >= pTabControl->GetPageCount() )
-                    nPos = TAB_APPEND;
-
-                pTabControl->RemovePage( sal_uInt16( ID ));
-                pTabControl->InsertPage( sal_uInt16( ID ), aTitle, nPos );
-            }
-
-            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-            aLock.clear();
-
-            css::uno::Sequence< css::beans::NamedValue > aNamedValueSeq = getTabProps( ID );
-            implts_SendNotification( NOTIFY_CHANGED, ID, aNamedValueSeq );
+            pTabControl->RemovePage( sal_uInt16( ID ));
+            pTabControl->InsertPage( sal_uInt16( ID ), aTitle, nPos );
         }
+
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        aLock.clear();
+
+        css::uno::Sequence< css::beans::NamedValue > aNamedValueSeq = getTabProps( ID );
+        implts_SendNotification( NOTIFY_CHANGED, ID, aNamedValueSeq );
     }
 }
 
@@ -665,18 +663,16 @@ css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindow::getTabProps( ::
         sal_uInt16 nPos = pTabControl->GetPagePos( sal_uInt16( ID ));
         if ( nPos == TAB_PAGE_NOTFOUND )
             throw css::lang::IndexOutOfBoundsException();
-        else
-        {
-            OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
-                          nPos   = pTabControl->GetPagePos( sal_uInt16( ID ));
 
-            css::uno::Sequence< css::beans::NamedValue > aSeq
-            {
-                { m_aTitlePropName, css::uno::makeAny( aTitle ) },
-                { m_aPosPropName,   css::uno::makeAny( sal_Int32( nPos )) }
-            };
-            return aSeq;
-        }
+        OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
+                  nPos   = pTabControl->GetPagePos( sal_uInt16( ID ));
+
+        css::uno::Sequence< css::beans::NamedValue > aSeq
+        {
+            { m_aTitlePropName, css::uno::makeAny( aTitle ) },
+            { m_aPosPropName,   css::uno::makeAny( sal_Int32( nPos )) }
+        };
+        return aSeq;
     }
 
     return aNamedValueSeq;
@@ -696,21 +692,19 @@ void SAL_CALL TabWindow::activateTab( ::sal_Int32 ID )
         sal_uInt16 nPos = pTabControl->GetPagePos( sal_uInt16( ID ));
         if ( nPos == TAB_PAGE_NOTFOUND )
             throw css::lang::IndexOutOfBoundsException();
-        else
-        {
-            sal_Int32 nOldID     = pTabControl->GetCurPageId();
-            OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
-            pTabControl->SetCurPageId( sal_uInt16( ID ));
-            pTabControl->SelectTabPage( sal_uInt16( ID ));
-            impl_SetTitle( aTitle );
 
-            aLock.clear();
-            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        sal_Int32 nOldID     = pTabControl->GetCurPageId();
+        OUString aTitle = pTabControl->GetPageText( sal_uInt16( ID ));
+        pTabControl->SetCurPageId( sal_uInt16( ID ));
+        pTabControl->SelectTabPage( sal_uInt16( ID ));
+        impl_SetTitle( aTitle );
 
-            if ( nOldID != TAB_PAGE_NOTFOUND )
-                implts_SendNotification( NOTIFY_DEACTIVATED, nOldID );
-            implts_SendNotification( NOTIFY_ACTIVATED, ID );
-        }
+        aLock.clear();
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+        if ( nOldID != TAB_PAGE_NOTFOUND )
+            implts_SendNotification( NOTIFY_DEACTIVATED, nOldID );
+        implts_SendNotification( NOTIFY_ACTIVATED, ID );
     }
 }
 

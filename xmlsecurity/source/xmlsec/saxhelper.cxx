@@ -131,33 +131,31 @@ SAXHelper::SAXHelper( )
 //      and neither can we call xsltCleanupGlobals()
         throw cssu::RuntimeException() ;
     }
-    else
+
+    xmlSAXVersion(m_pParserCtxt->sax, 1);
+
+    if (m_pParserCtxt->inputTab != nullptr)
     {
-        xmlSAXVersion(m_pParserCtxt->sax, 1);
+        m_pParserCtxt->inputTab[0] = nullptr ;
+    }
 
-        if (m_pParserCtxt->inputTab != nullptr)
-        {
-            m_pParserCtxt->inputTab[0] = nullptr ;
-        }
-
-        if( m_pParserCtxt->sax == nullptr )
-        {
-            xmlFreeParserCtxt( m_pParserCtxt ) ;
+    if( m_pParserCtxt->sax == nullptr )
+    {
+        xmlFreeParserCtxt( m_pParserCtxt ) ;
 
 //      see issue i74334, we cannot call xmlCleanupParser when libxml is still used
 //      in other parts of the office.
 //      xmlCleanupParser() ;
 //      and neither can we call xsltCleanupGlobals()
-            m_pParserCtxt = nullptr ;
-            throw cssu::RuntimeException() ;
-        }
-        else
-        {
-            m_pSaxHandler = m_pParserCtxt->sax ;
+        m_pParserCtxt = nullptr ;
+        throw cssu::RuntimeException() ;
+    }
+    else
+    {
+        m_pSaxHandler = m_pParserCtxt->sax ;
 
-            //Adjust the context
-            m_pParserCtxt->recovery = 1 ;
-        }
+        //Adjust the context
+        m_pParserCtxt->recovery = 1 ;
     }
 }
 

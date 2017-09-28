@@ -1357,8 +1357,7 @@ void SAL_CALL ChartDocumentWrapper::setDelegator(
         if( rDelegator.is() )
             throw lang::DisposedException("ChartDocumentWrapper is disposed",
                 static_cast< ::cppu::OWeakObject* >( this ));
-        else
-            return;
+        return;
     }
 
     if( rDelegator.is())

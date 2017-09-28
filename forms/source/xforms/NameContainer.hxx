@@ -103,8 +103,7 @@ public:
         typename map_t::const_iterator aIter = findItem( rName );
         if( aIter == maItems.end() )
             throw css::container::NoSuchElementException();
-        else
-            return css::uno::makeAny( aIter->second );
+        return css::uno::makeAny( aIter->second );
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override

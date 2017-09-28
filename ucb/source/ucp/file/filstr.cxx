@@ -250,11 +250,10 @@ XStream_impl::getPosition()
 sal_Int64 SAL_CALL
 XStream_impl::getLength()
 {
-        sal_uInt64 uEndPos;
-        if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
-                throw io::IOException( THROW_WHERE );
-        else
-                return sal_Int64( uEndPos );
+    sal_uInt64 uEndPos;
+    if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
+            throw io::IOException( THROW_WHERE );
+    return sal_Int64( uEndPos );
 }
 
 void SAL_CALL

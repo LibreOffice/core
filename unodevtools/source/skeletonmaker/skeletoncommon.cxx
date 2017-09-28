@@ -81,9 +81,8 @@ bool getOutputStream(ProgramOptions const & options,
     {
         throw CannotDumpException(
             "cannot open " + b2u(targetSourceFileName) + " for writing");
-    } else {
-        tmpSourceFileName = file.getName();
     }
+    tmpSourceFileName = file.getName();
     file.close();
     *ppOutputStream = new std::ofstream(tmpSourceFileName.getStr(),
                                         std::ios_base::binary);

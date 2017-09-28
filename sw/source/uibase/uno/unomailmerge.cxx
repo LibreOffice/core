@@ -1034,44 +1034,42 @@ uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
     const SfxItemPropertySimpleEntry* pCur = m_pPropSet->getPropertyMap().getByName( rPropertyName );
     if (!pCur)
         throw UnknownPropertyException();
-    else
+
+    switch (pCur->nWID)
     {
-        switch (pCur->nWID)
-        {
-            case WID_SELECTION :                aRet <<= m_aSelection;  break;
-            case WID_RESULT_SET :               aRet <<= m_xResultSet;  break;
-            case WID_CONNECTION :               aRet <<= m_xConnection;  break;
-            case WID_MODEL :                    aRet <<= m_xModel;  break;
-            case WID_DATA_SOURCE_NAME :         aRet <<= m_aDataSourceName;  break;
-            case WID_DATA_COMMAND :             aRet <<= m_aDataCommand;  break;
-            case WID_FILTER :                   aRet <<= m_aFilter;  break;
-            case WID_DOCUMENT_URL :             aRet <<= m_aDocumentURL;  break;
-            case WID_OUTPUT_URL :               aRet <<= m_aOutputURL;  break;
-            case WID_DATA_COMMAND_TYPE :        aRet <<= m_nDataCommandType;  break;
-            case WID_OUTPUT_TYPE :              aRet <<= m_nOutputType;  break;
-            case WID_ESCAPE_PROCESSING :        aRet <<= m_bEscapeProcessing;  break;
-            case WID_SINGLE_PRINT_JOBS :        aRet <<= m_bSinglePrintJobs;  break;
-            case WID_FILE_NAME_FROM_COLUMN :    aRet <<= m_bFileNameFromColumn;  break;
-            case WID_FILE_NAME_PREFIX :         aRet <<= m_aFileNamePrefix;  break;
-            case WID_MAIL_SUBJECT:              aRet <<= m_sSubject; break;
-            case WID_ADDRESS_FROM_COLUMN:       aRet <<= m_sAddressFromColumn; break;
-            case WID_SEND_AS_HTML:              aRet <<= m_bSendAsHTML; break;
-            case WID_SEND_AS_ATTACHMENT:        aRet <<= m_bSendAsAttachment; break;
-            case WID_MAIL_BODY:                 aRet <<= m_sMailBody; break;
-            case WID_ATTACHMENT_NAME:           aRet <<= m_sAttachmentName; break;
-            case WID_ATTACHMENT_FILTER:         aRet <<= m_sAttachmentFilter;break;
-            case WID_PRINT_OPTIONS:             aRet <<= m_aPrintSettings; break;
-            case WID_SAVE_AS_SINGLE_FILE:       aRet <<= m_bSaveAsSingleFile; break;
-            case WID_SAVE_FILTER:               aRet <<= m_sSaveFilter; break;
-            case WID_SAVE_FILTER_OPTIONS:       aRet <<= m_sSaveFilterOptions; break;
-            case WID_SAVE_FILTER_DATA:          aRet <<= m_aSaveFilterData; break;
-            case WID_COPIES_TO:                 aRet <<= m_aCopiesTo; break;
-            case WID_BLIND_COPIES_TO:           aRet <<= m_aBlindCopiesTo;break;
-            case WID_IN_SERVER_PASSWORD:        aRet <<= m_sInServerPassword; break;
-            case WID_OUT_SERVER_PASSWORD:       aRet <<= m_sOutServerPassword; break;
-            default :
-                OSL_FAIL("unknown WID");
-        }
+        case WID_SELECTION :                aRet <<= m_aSelection;  break;
+        case WID_RESULT_SET :               aRet <<= m_xResultSet;  break;
+        case WID_CONNECTION :               aRet <<= m_xConnection;  break;
+        case WID_MODEL :                    aRet <<= m_xModel;  break;
+        case WID_DATA_SOURCE_NAME :         aRet <<= m_aDataSourceName;  break;
+        case WID_DATA_COMMAND :             aRet <<= m_aDataCommand;  break;
+        case WID_FILTER :                   aRet <<= m_aFilter;  break;
+        case WID_DOCUMENT_URL :             aRet <<= m_aDocumentURL;  break;
+        case WID_OUTPUT_URL :               aRet <<= m_aOutputURL;  break;
+        case WID_DATA_COMMAND_TYPE :        aRet <<= m_nDataCommandType;  break;
+        case WID_OUTPUT_TYPE :              aRet <<= m_nOutputType;  break;
+        case WID_ESCAPE_PROCESSING :        aRet <<= m_bEscapeProcessing;  break;
+        case WID_SINGLE_PRINT_JOBS :        aRet <<= m_bSinglePrintJobs;  break;
+        case WID_FILE_NAME_FROM_COLUMN :    aRet <<= m_bFileNameFromColumn;  break;
+        case WID_FILE_NAME_PREFIX :         aRet <<= m_aFileNamePrefix;  break;
+        case WID_MAIL_SUBJECT:              aRet <<= m_sSubject; break;
+        case WID_ADDRESS_FROM_COLUMN:       aRet <<= m_sAddressFromColumn; break;
+        case WID_SEND_AS_HTML:              aRet <<= m_bSendAsHTML; break;
+        case WID_SEND_AS_ATTACHMENT:        aRet <<= m_bSendAsAttachment; break;
+        case WID_MAIL_BODY:                 aRet <<= m_sMailBody; break;
+        case WID_ATTACHMENT_NAME:           aRet <<= m_sAttachmentName; break;
+        case WID_ATTACHMENT_FILTER:         aRet <<= m_sAttachmentFilter;break;
+        case WID_PRINT_OPTIONS:             aRet <<= m_aPrintSettings; break;
+        case WID_SAVE_AS_SINGLE_FILE:       aRet <<= m_bSaveAsSingleFile; break;
+        case WID_SAVE_FILTER:               aRet <<= m_sSaveFilter; break;
+        case WID_SAVE_FILTER_OPTIONS:       aRet <<= m_sSaveFilterOptions; break;
+        case WID_SAVE_FILTER_DATA:          aRet <<= m_aSaveFilterData; break;
+        case WID_COPIES_TO:                 aRet <<= m_aCopiesTo; break;
+        case WID_BLIND_COPIES_TO:           aRet <<= m_aBlindCopiesTo;break;
+        case WID_IN_SERVER_PASSWORD:        aRet <<= m_sInServerPassword; break;
+        case WID_OUT_SERVER_PASSWORD:       aRet <<= m_sOutServerPassword; break;
+        default :
+            OSL_FAIL("unknown WID");
     }
 
     return aRet;

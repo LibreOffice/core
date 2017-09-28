@@ -92,12 +92,9 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
         {
             throw RuntimeException();
         }
-        else
-        {
-            xCC->addResourceFactory(
-                "private:resource/pane/Presenter/*",
-                this);
-        }
+        xCC->addResourceFactory(
+            "private:resource/pane/Presenter/*",
+             this);
     }
     catch (RuntimeException&)
     {

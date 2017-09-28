@@ -320,47 +320,44 @@ void OpIf::GenSlidingWindowFunction(std::stringstream &ss,
     {
         throw UnhandledToken("unknown operand for ocPush", __FILE__, __LINE__);
     }
-    else
+    if(vSubArguments.size()==3)
     {
-        if(vSubArguments.size()==3)
-        {
-            ss << "    if(isnan(";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-            ss << ")||  ";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-            ss << " == 0)\n";
-            ss << "         return ";
-            ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-            ss << ";\n";
-            ss << "     else";
-            ss <<"          return ";
-            ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-            ss <<";\n";
-        }
-        if(vSubArguments.size()==2)
-        {
-            ss << "    if(isnan(";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-            ss << ")||  ";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-            ss << " == 0)\n";
-            ss << "         return 0;\n";
-            ss << "     else";
-            ss <<"          return ";
-            ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-            ss <<";\n";
-        }
-        if(vSubArguments.size()==1)
-        {
-            ss << "    if(isnan(";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-            ss << ")||  ";
-            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-            ss << " == 0)\n";
-            ss << "         return 0;\n";
-            ss << "     else";
-            ss <<"          return 1;\n";
-        }
+        ss << "    if(isnan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ")||  ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " == 0)\n";
+        ss << "         return ";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        ss << "     else";
+        ss <<"          return ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+    }
+    if(vSubArguments.size()==2)
+    {
+        ss << "    if(isnan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ")||  ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " == 0)\n";
+        ss << "         return 0;\n";
+        ss << "     else";
+        ss <<"          return ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+    }
+    if(vSubArguments.size()==1)
+    {
+        ss << "    if(isnan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ")||  ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " == 0)\n";
+        ss << "         return 0;\n";
+        ss << "     else";
+        ss <<"          return 1;\n";
     }
     ss << "}\n";
 }
