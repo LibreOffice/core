@@ -24,10 +24,6 @@
 #include "config.hxx"
 #include "utilities.hxx"
 
-#ifdef _WIN32_WINNT_WINBLUE
-#include <VersionHelpers.h>
-#endif
-
 // constants
 
 
@@ -91,28 +87,6 @@ std::wstring GetResString(int ResId)
     // OSL_ENSURE(rc, "String resource not found");
 
     return std::wstring(szResStr);
-}
-
-
-bool is_windows_xp_or_above()
-{
-// the Win32 SDK 8.1 deprecates GetVersionEx()
-#ifdef _WIN32_WINNT_WINBLUE
-    return IsWindowsXPOrGreater();
-#else
-    OSVERSIONINFOW osvi;
-    ZeroMemory(&osvi, sizeof(osvi));
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
-    GetVersionExW(&osvi);
-
-    // LLA: check for windows xp or above (Vista)
-    if (osvi.dwMajorVersion > 5 ||
-        (5 == osvi.dwMajorVersion && osvi.dwMinorVersion >= 1))
-    {
-        return true;
-    }
-    return false;
-#endif
 }
 
 

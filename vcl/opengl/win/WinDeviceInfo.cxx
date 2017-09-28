@@ -18,6 +18,9 @@
 #include <windows.h>
 #include <objbase.h>
 #include <setupapi.h>
+#include "Lm.h"
+#pragma comment(lib, "Netapi32.lib")
+
 #include <algorithm>
 #include <cstdint>
 
@@ -149,14 +152,15 @@ uint32_t ParseIDFromDeviceID(const OUString &key, const char *prefix, int length
 // OS version in 16.16 major/minor form
 // based on http://msdn.microsoft.com/en-us/library/ms724834(VS.85).aspx
 enum {
-    kWindowsUnknown = 0,
-    kWindowsXP =         0x00050001,
+    kWindowsUnknown    = 0,
+    kWindowsXP         = 0x00050001,
     kWindowsServer2003 = 0x00050002,
-    kWindowsVista =      0x00060000,
-    kWindows7 =          0x00060001,
-    kWindows8 =          0x00060002,
-    kWindows8_1 =        0x00060003,
-    kWindows10 =         0x000A0000  // Major 10 Minor 0
+    kWindowsVista      = 0x00060000,
+    kWindows7          = 0x00060001,
+    kWindows8          = 0x00060002,
+    kWindows8_1        = 0x00060003,
+    kWindows10         = 0x000A0000,  // Major 10 Minor 0
+    kWindowsUndetected = 0xFFFFFFFF,  // Detection failed for some reason; used to prevent repeated failing detections
 };
 
 
@@ -189,23 +193,18 @@ int32_t WindowsOSVersion()
 {
     static int32_t winVersion = kWindowsUnknown;
 
-    OSVERSIONINFO vinfo;
-
     if (winVersion == kWindowsUnknown)
     {
-        vinfo.dwOSVersionInfoSize = sizeof (vinfo);
-#pragma warning(push)
-#pragma warning(disable:4996)
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        if (!GetVersionEx(&vinfo))
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        LPWKSTA_INFO_100 pWkstaInfo = nullptr;
+        if (NetWkstaGetInfo(nullptr, 100, reinterpret_cast<LPBYTE*>(&pWkstaInfo)) == NERR_Success)
         {
-#pragma warning(pop)
-            winVersion = kWindowsUnknown;
+            winVersion = int32_t(pWkstaInfo->wki100_ver_major << 16) + pWkstaInfo->wki100_ver_minor;
+            NetApiBufferFree(pWkstaInfo);
         }
         else
         {
-            winVersion = int32_t(vinfo.dwMajorVersion << 16) + vinfo.dwMinorVersion;
+            // Detection failed: not enough permissions? Take it and do not repeat detection again
+            winVersion = kWindowsUndetected;
         }
     }
 

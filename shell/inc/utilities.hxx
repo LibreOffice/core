@@ -64,12 +64,6 @@ std::wstring UTF8ToWString(const std::string& String);
 std::wstring GetResString(int ResId);
 
 
-/** Returns whether we are running
-    on Windows XP or not
-*/
-bool is_windows_xp_or_above();
-
-
 /** helper function to judge if the string is only has spaces.
     @returns
         <TRUE>if the provided string contains only but at least one space

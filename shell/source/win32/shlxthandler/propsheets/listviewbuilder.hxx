@@ -62,32 +62,11 @@ protected:
     virtual void insert_item(const std::wstring& title, const std::wstring& value, bool is_editable);
 
     HWND get_list_view() const;
-    int get_current_row() const;
-
-    int  row_index_;
-
 private:
+    int  row_index_;
     HWND hwnd_list_view_;
     std::wstring column1_title_;
     std::wstring column2_title_;
-
-    friend list_view_builder_ptr create_list_view_builder(HWND hwnd_lv, const std::wstring& col1, const std::wstring& col2);
-};
-
-
-class winxp_list_view_builder : public list_view_builder
-{
-protected:
-    winxp_list_view_builder(
-        HWND hwnd_list_view,
-        const std::wstring& column1_title,
-        const std::wstring& column2_title);
-
-    virtual void setup_list_view() override;
-    virtual void insert_group(const std::wstring& name) override;
-    virtual void insert_item(const std::wstring& title, const std::wstring& value, bool is_editable) override;
-
-private:
     int  group_count_;
     int  row_count_;
 
