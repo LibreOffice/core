@@ -59,6 +59,8 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <sw_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <notxtfrm.hxx>
 
 using namespace ::com::sun::star;
 
@@ -920,20 +922,96 @@ void SwVirtFlyDrawObj::Crop(const Point& rRef, const Fraction& xFact, const Frac
     GetFormat()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
+// RotGrfFlyFrame: Helper to access possible rotation of Graphic contained in FlyFrame
+sal_uInt16 SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame() const
+{
+    sal_uInt16 nRetval(0);
+    const SwNoTextFrame* pNoTx = dynamic_cast< const SwNoTextFrame* >(GetFlyFrame()->Lower());
+
+    if(pNoTx)
+    {
+        SwNoTextNode& rNoTNd = const_cast< SwNoTextNode& >(*static_cast<const SwNoTextNode*>(pNoTx->GetNode()));
+        SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
+
+        if(nullptr != pGrfNd)
+        {
+            const SwAttrSet& rSet = pGrfNd->GetSwAttrSet();
+            const SwRotationGrf& rRotation = rSet.GetRotationGrf();
+
+            nRetval = rRotation.GetValue();
+        }
+    }
+
+    return nRetval;
+}
+
+SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
+{
+    // call parent
+    SdrObject* pRetval = SdrVirtObj::getFullDragClone();
+
+    if(pRetval)
+    {
+        // RotGrfFlyFrame: Add transformation to placeholder object
+        const sal_uInt16 nRotation(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame());
+
+        if(0 != nRotation)
+        {
+            const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
+            const tools::Rectangle aOutRect(GetFlyFrame()->Frame().SVRect());
+            const basegfx::B2DRange aTargetRange(
+                aOutRect.Left(), aOutRect.Top(),
+                aOutRect.Right(), aOutRect.Bottom());
+            const basegfx::B2DHomMatrix aTargetTransform(
+                basegfx::tools::createRotateAroundCenterKeepAspectRatioStayInsideRange(
+                    aTargetRange,
+                    fRotate));
+
+            pRetval->TRSetBaseGeometry(aTargetTransform, basegfx::B2DPolyPolygon());
+        }
+    }
+
+    return pRetval;
+}
+
 void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
 {
-    tools::Rectangle aRect(GetSnapRect());
-
-    if(!aRect.IsEmpty())
+    // RotGrfFlyFrame: Adapt to possible rotated Graphic contained in FlyFrame
+    if(GetFlyFrame()->Frame().HasArea())
     {
-       rTarget.AddHdl(new SdrCropHdl(aRect.TopLeft()     , SdrHdlKind::UpperLeft, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.TopCenter()   , SdrHdlKind::Upper, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.TopRight()    , SdrHdlKind::UpperRight, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.LeftCenter()  , SdrHdlKind::Left , 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.RightCenter() , SdrHdlKind::Right, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.BottomLeft()  , SdrHdlKind::LowerLeft, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.BottomCenter(), SdrHdlKind::Lower, 0, 0));
-       rTarget.AddHdl(new SdrCropHdl(aRect.BottomRight() , SdrHdlKind::LowerRight, 0, 0));
+        const tools::Rectangle aOutRect(GetFlyFrame()->Frame().SVRect());
+        const basegfx::B2DRange aTargetRange(
+            aOutRect.Left(), aOutRect.Top(),
+            aOutRect.Right(), aOutRect.Bottom());
+
+        if(!aTargetRange.isEmpty())
+        {
+            const sal_uInt16 nRotation(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame());
+            const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
+            const basegfx::B2DHomMatrix aTargetTransform(
+                basegfx::tools::createRotateAroundCenterKeepAspectRatioStayInsideRange(
+                    aTargetRange,
+                    fRotate));
+            basegfx::B2DPoint aPos;
+            const double fShearX(0.0);
+
+            aPos = aTargetTransform * basegfx::B2DPoint(0.0, 0.0);
+            rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperLeft, fShearX, fRotate));
+            aPos = aTargetTransform * basegfx::B2DPoint(0.5, 0.0);
+            rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Upper, fShearX, fRotate));
+            aPos = aTargetTransform * basegfx::B2DPoint(1.0, 0.0);
+            rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::UpperRight, fShearX, fRotate));
+            aPos = aTargetTransform * basegfx::B2DPoint(0.0, 0.5);
+            rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Left , fShearX, fRotate));
+            aPos = aTargetTransform * basegfx::B2DPoint(1.0, 0.5);
+            rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Right, fShearX, fRotate));
+            aPos = aTargetTransform * basegfx::B2DPoint(0.0, 1.0);
+            rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerLeft, fShearX, fRotate));
+            aPos = aTargetTransform * basegfx::B2DPoint(0.5, 1.0);
+            rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::Lower, fShearX, fRotate));
+            aPos = aTargetTransform * basegfx::B2DPoint(1.0, 1.0);
+            rTarget.AddHdl(new SdrCropHdl(Point(basegfx::fround(aPos.getX()), basegfx::fround(aPos.getY())), SdrHdlKind::LowerRight, fShearX, fRotate));
+        }
     }
 }
 

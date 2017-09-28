@@ -126,6 +126,13 @@ namespace basegfx
                 fRadiant);
         }
 
+        /// special for creating a mapping for a Range rotated around it's center
+        /// while keeping AspectRatio unchanged and staying inside the given Range
+        /// by optimally using the available space (no overlap or outside allowed)
+        BASEGFX_DLLPUBLIC B2DHomMatrix createRotateAroundCenterKeepAspectRatioStayInsideRange(
+            const basegfx::B2DRange& rTargetRange,
+            double fRotate);
+
         /// special for the case to map from source range to target range
         BASEGFX_DLLPUBLIC B2DHomMatrix createSourceRangeTargetRangeTransform(
             const B2DRange& rSourceRange,

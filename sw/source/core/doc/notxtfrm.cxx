@@ -757,53 +757,24 @@ bool paintUsingPrimitivesHelper(
     return false;
 }
 
-void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
-         GraphicObject const& rGrfObj, GraphicAttr const& rGraphicAttr,
-         SwRect const& rAlignedGrfArea)
+void paintGraphicUsingPrimitivesHelper(
+    vcl::RenderContext & rOutputDevice,
+    GraphicObject const& rGrfObj,
+    GraphicAttr const& rGraphicAttr,
+    SwRect const& rAlignedGrfArea)
 {
-    // unify using GraphicPrimitive2D
+    // RotGrfFlyFrame: unify using GraphicPrimitive2D
     // -> the primitive handles all crop and mirror stuff
     // -> the primitive renderer will create the needed pdf export data
     // -> if bitmap content, it will be cached system-dependent
     const basegfx::B2DRange aTargetRange(
         rAlignedGrfArea.Left(), rAlignedGrfArea.Top(),
         rAlignedGrfArea.Right(), rAlignedGrfArea.Bottom());
-    basegfx::B2DHomMatrix aTargetTransform;
-
-    // RotGrfFlyFrame: Take rotation into account. Rotation is in 10th degrees
-    if(0 != rGraphicAttr.GetRotation())
-    {
-        // Fit rotated graphic to center of available space, keeping page ratio:
-        // Adapt scaling ratio of unit object and rotate it
-        const double fRotate(static_cast< double >(-rGraphicAttr.GetRotation()) * (M_PI/1800.0));
-        aTargetTransform.scale(1.0, aTargetRange.getHeight() / aTargetRange.getWidth());
-        aTargetTransform.rotate(fRotate);
-
-        // get the range to see where we are in unit coordinates
-        basegfx::B2DRange aFullRange(0.0, 0.0, 1.0, 1.0);
-        aFullRange.transform(aTargetTransform);
-
-        // detect needed scales in X/Y and choose the smallest for staying inside the
-        // available space while keeping aspect ratio of the source
-        const double fScaleX(aTargetRange.getWidth() / aFullRange.getWidth());
-        const double fScaleY(aTargetRange.getHeight() / aFullRange.getHeight());
-        const double fScaleMin(std::min(fScaleX, fScaleY));
-
-        // TopLeft to zero, then scale, then move to center of available space
-        aTargetTransform.translate(-aFullRange.getMinX(), -aFullRange.getMinY());
-        aTargetTransform.scale(fScaleMin, fScaleMin);
-        aTargetTransform.translate(
-            aTargetRange.getCenterX() - (0.5 * fScaleMin * aFullRange.getWidth()),
-            aTargetRange.getCenterY() - (0.5 * fScaleMin * aFullRange.getHeight()));
-    }
-    else
-    {
-        // just scale/translate needed
-        aTargetTransform *= basegfx::tools::createScaleTranslateB2DHomMatrix(
-            aTargetRange.getRange(),
-            aTargetRange.getMinimum());
-    }
-
+    const double fRotate(static_cast< double >(-rGraphicAttr.GetRotation()) * (M_PI/1800.0));
+    const basegfx::B2DHomMatrix aTargetTransform(
+        basegfx::tools::createRotateAroundCenterKeepAspectRatioStayInsideRange(
+            aTargetRange,
+            fRotate));
     drawinglayer::primitive2d::Primitive2DContainer aContent(1);
     bool bDone(false);
 

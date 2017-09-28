@@ -3585,200 +3585,62 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 {
     Hide();
 
-    if( DragStat().GetDX()==0 && DragStat().GetDY()==0 )
+    if(0 == DragStat().GetDX() && 0 == DragStat().GetDY())
+    {
+        // no change, done
         return false;
+    }
 
     const SdrMarkList& rMarkList = getSdrDragView().GetMarkedObjectList();
 
-    if( rMarkList.GetMarkCount() != 1 )
+    if(1 != rMarkList.GetMarkCount())
+    {
+        // Crop only with single Object selected
         return false;
-
-    SdrObject* pSdrObject = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-
-    // tdf#34555: in order to implement visual crop in Writer, we need to handle two
-    // cases:
-    // EndSdrDrag when called in Impress/Draw/...: pSdrObject is a SdrGrafObj
-    // EndSdrDrag when called in Writer: pSdrObject is a SwVirtFlyDrawObj
-    // Main principle: if marked object is not SdrGrafObj, we start a generic handling
-    // based on virtual methods added to SdrObject, on MM100/Twip coordinates and so on.
-    // If marked object is SdrGrafObj, we do all the work here with matrix based
-    // coordinates.
-    if (dynamic_cast<const SdrGrafObj*>( pSdrObject) ==  nullptr) {
-        const bool bUndo = getSdrDragView().IsUndoEnabled();
-        if( bUndo )
-        {
-            OUString aUndoStr;
-            ImpTakeDescriptionStr(STR_DragMethCrop, aUndoStr);
-            getSdrDragView().BegUndo( aUndoStr );
-            getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pSdrObject));
-            // also need attr undo, the SdrGrafCropItem will be changed
-            getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pSdrObject));
-        }
-
-        // We need to produce a reference point and two (X & Y) scales
-        SdrHdl* pRef1=GetHdlList().GetHdl(SdrHdlKind::UpperLeft);
-        SdrHdl* pRef2=GetHdlList().GetHdl(SdrHdlKind::LowerRight);
-
-        if (pRef1==nullptr || pRef2==nullptr)
-            return false;
-
-        tools::Rectangle rect(pRef1->GetPos(),pRef2->GetPos());
-
-        Point aEnd(DragStat().GetNow());
-        Point aStart(DragStat().GetStart());
-        Point aRef(rect.Center());
-
-        // Reference point is the point opposed to the dragged handle
-        switch(GetDragHdlKind())
-        {
-            case SdrHdlKind::UpperLeft: aRef = rect.BottomRight();                                  break;
-            case SdrHdlKind::Upper: aRef = rect.BottomCenter(); DragStat().SetHorFixed(true);   break;
-            case SdrHdlKind::UpperRight: aRef = rect.BottomLeft();                                   break;
-            case SdrHdlKind::Left : aRef = rect.RightCenter();  DragStat().SetVerFixed(true);   break;
-            case SdrHdlKind::Right: aRef = rect.LeftCenter();   DragStat().SetVerFixed(true);   break;
-            case SdrHdlKind::LowerLeft: aRef = rect.TopRight();                                     break;
-            case SdrHdlKind::Lower: aRef = rect.TopCenter();    DragStat().SetHorFixed(true);   break;
-            case SdrHdlKind::LowerRight: aRef = rect.TopLeft();                                      break;
-            default: break;
-        }
-
-        // By default, scale is new size / old size
-        long nXDiv = aStart.X()-aRef.X(); if (nXDiv==0) nXDiv=1;
-        long nYDiv = aStart.Y()-aRef.Y(); if (nYDiv==0) nYDiv=1;
-        long nXMul = aEnd.X()-aRef.X();
-        long nYMul = aEnd.Y()-aRef.Y();
-
-        if (nXDiv<0)
-        {
-            nXDiv=-nXDiv;
-            nXMul=-nXMul;
-        }
-
-        if (nYDiv<0)
-        {
-            nYDiv=-nYDiv;
-            nYMul=-nYMul;
-        }
-
-        // Take ortho into account.
-        bool bXNeg=nXMul<0; if (bXNeg) nXMul=-nXMul;
-        bool bYNeg=nYMul<0; if (bYNeg) nYMul=-nYMul;
-        bool bOrtho=getSdrDragView().IsOrtho() || !getSdrDragView().IsResizeAllowed();
-
-        if (!DragStat().IsHorFixed() && !DragStat().IsVerFixed())
-        {
-            if (std::abs(nXDiv)<=1 || std::abs(nYDiv)<=1)
-                bOrtho=false;
-
-            if (bOrtho)
-            {
-                if ((Fraction(nXMul,nXDiv)>Fraction(nYMul,nYDiv)) !=getSdrDragView().IsBigOrtho())
-                {
-                    nXMul=nYMul;
-                    nXDiv=nYDiv;
-                }
-                else
-                {
-                    nYMul=nXMul;
-                    nYDiv=nXDiv;
-                }
-            }
-        }
-        else
-        {
-            if (bOrtho)
-            {
-                if (DragStat().IsHorFixed())
-                {
-                    bXNeg=false;
-                    nXMul=nYMul;
-                    nXDiv=nYDiv;
-                }
-
-                if (DragStat().IsVerFixed())
-                {
-                    bYNeg=false;
-                    nYMul=nXMul;
-                    nYDiv=nXDiv;
-                }
-            }
-            else
-            {
-                if (DragStat().IsHorFixed())
-                {
-                    bXNeg=false;
-                    nXMul=1;
-                    nXDiv=1;
-                }
-
-                if (DragStat().IsVerFixed())
-                {
-                    bYNeg=false;
-                    nYMul=1;
-                    nYDiv=1;
-                }
-            }
-        }
-        Fraction aXFact(nXMul,nXDiv);
-        Fraction aYFact(nYMul,nYDiv);
-        Fraction aMaxFact(0x7FFFFFFF,1);
-
-        if (bOrtho)
-        {
-            if (aXFact>aMaxFact)
-            {
-                aXFact=aMaxFact;
-                aYFact=aMaxFact;
-            }
-
-            if (aYFact>aMaxFact)
-            {
-                aXFact=aMaxFact;
-                aYFact=aMaxFact;
-            }
-        }
-
-        if (bXNeg)
-            aXFact=Fraction(-aXFact.GetNumerator(),aXFact.GetDenominator());
-
-        if (bYNeg)
-            aYFact=Fraction(-aYFact.GetNumerator(),aYFact.GetDenominator());
-
-        // With Ref point (opposed to dragged point), X scale and Y scale,
-        // we call crop (virtual method) on pSdrObject which calls VirtFlyDrawObj
-        // crop
-        pSdrObject->Crop(aRef, aXFact, aYFact);
-
-        if( bUndo )
-            getSdrDragView().EndUndo();
-
-        // Job's done
-        return true;
     }
 
-    // This part of code handles the case where pSdrObject is SdrGrafObj
+    // prepare for SdrGrafObj or others. This code has to work with usual
+    // SdrGrafObj's from Draw/Impress/Calc, but also with SdrObjects from
+    // Writer. It would be better to handle this in Writer directly, but
+    // there are currently no easy mechanisms to plug an alternative interaction
+    // from there
+    SdrObject* pSdrObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
+    struct SdrObjDeleter { void operator()(SdrObject* b) { SdrObject::Free(b); }};
+    std::unique_ptr< SdrObject, SdrObjDeleter > pFullDragClone;
+    bool bExternal(false);
+    SdrObject* pExternalSdrObject(nullptr);
 
+    // RotGrfFlyFrame: Crop decision for DrawingLayer/Writer now
+    // locally, no two-in-one methods any more
+    if (nullptr != pSdrObject && dynamic_cast< const SdrGrafObj* >(pSdrObject) ==  nullptr)
+    {
+        // If Writer, get the already offered for interaction SdrGrafObj
+        // and set up for using that replacement object that contains the
+        // real transformation. That SdrObject is owned and has to be deleted,
+        // so use a std::unique_ptr with special handling for the protected
+        // SDrObject destructor
+        pFullDragClone.reset(pSdrObject->getFullDragClone());
+
+        if(pFullDragClone && dynamic_cast< SdrGrafObj* >(pFullDragClone.get()))
+        {
+            bExternal = true;
+            pExternalSdrObject = pSdrObject;
+            pSdrObject = pFullDragClone.get();
+        }
+    }
+
+    // get and check for SdrGrafObj now
     SdrGrafObj* pObj = dynamic_cast<SdrGrafObj*>( pSdrObject );
-    if( !pObj || (pObj->GetGraphicType() == GraphicType::NONE) || (pObj->GetGraphicType() == GraphicType::Default) )
+
+    if(!pObj)
+    {
         return false;
+    }
 
-    const GraphicObject& rGraphicObject = pObj->GetGraphicObject();
-    const MapMode aMapMode100thmm(MapUnit::Map100thMM);
-    Size aGraphicSize(rGraphicObject.GetPrefSize());
+    // no undo for external needed, done there
+    const bool bUndo(!bExternal && getSdrDragView().IsUndoEnabled());
 
-    if( MapUnit::MapPixel == rGraphicObject.GetPrefMapMode().GetMapUnit() )
-        aGraphicSize = Application::GetDefaultDevice()->PixelToLogic( aGraphicSize, aMapMode100thmm );
-    else
-        aGraphicSize = OutputDevice::LogicToLogic( aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapMode100thmm);
-
-    if( aGraphicSize.Width() == 0 || aGraphicSize.Height() == 0 )
-        return false;
-
-    const SdrGrafCropItem& rOldCrop = static_cast<const SdrGrafCropItem&>(pObj->GetMergedItem(SDRATTR_GRAFCROP));
-
-    const bool bUndo = getSdrDragView().IsUndoEnabled();
-
-    if( bUndo )
+    if(bUndo)
     {
         OUString aUndoStr;
         ImpTakeDescriptionStr(STR_DragMethCrop, aUndoStr);
@@ -3789,20 +3651,15 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
     }
 
-    // new part to commute the user's drag activities
     // get the original objects transformation
     basegfx::B2DHomMatrix aOriginalMatrix;
     basegfx::B2DPolyPolygon aPolyPolygon;
     bool bShearCorrected(false);
-
-    // get transformation from object
     pObj->TRGetBaseGeometry(aOriginalMatrix, aPolyPolygon);
 
     {   // correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
-        basegfx::B2DTuple aScale;
-        basegfx::B2DTuple aTranslate;
+        basegfx::B2DTuple aScale, aTranslate;
         double fRotate(0.0), fShearX(0.0);
-
         aOriginalMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
         if(!basegfx::fTools::equalZero(fShearX))
@@ -3815,11 +3672,6 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
                 aTranslate);
         }
     }
-
-    // invert it to be able to work on unit coordinates
-    basegfx::B2DHomMatrix aInverse(aOriginalMatrix);
-
-    aInverse.invert();
 
     // generate start point of original drag vector in unit coordinates (the
     // vis-a-vis of the drag point)
@@ -3839,7 +3691,10 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         default: break;
     }
 
-    // create the current drag position in unit coordinates
+    // create the current drag position in unit coordinates. To get there,
+    // transform back the DragPoint to UnitCoordinates
+    basegfx::B2DHomMatrix aInverse(aOriginalMatrix);
+    aInverse.invert();
     basegfx::B2DPoint aLocalCurrent(aInverse * basegfx::B2DPoint(DragStat().GetNow().X(), DragStat().GetNow().Y()));
 
     // if one of the edge handles is used, limit to X or Y drag only
@@ -3884,48 +3739,18 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         }
     }
 
-    // preparematrix to apply to object; evtl. back-correct shear
-    basegfx::B2DHomMatrix aNewObjectMatrix(aOriginalMatrix * aDiscreteChangeMatrix);
-
-    if(bShearCorrected)
-    {
-        // back-correct shear
-        basegfx::B2DTuple aScale;
-        basegfx::B2DTuple aTranslate;
-        double fRotate(0.0), fShearX(0.0);
-
-        aNewObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
-        aNewObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-            aScale,
-            -fShearX,
-            fRotate,
-            aTranslate);
-    }
-
-    // apply change to object by applying the unit coordinate change followed
-    // by the original change
-    pObj->TRSetBaseGeometry(aNewObjectMatrix, aPolyPolygon);
-
-    // the following old code uses aOldRect/aNewRect to calculate the crop change for
-    // the crop item. It implies unrotated objects, so create the unrotated original
-    // rectangle and the unrotated modified rectangle. Latter can in case of shear and/or
-    // rotation not be fetched by using
-
-    //Rectangle aNewRect( pObj->GetLogicRect() );
-
-    // as it was done before because the top-left of that new rect *will* have an offset
-    // caused by the evtl. existing shear and/or rotation, so calculate a unrotated
-    // rectangle how it would be as a result when applying the unit coordinate change
-    // to the unrotated original transformation.
-    basegfx::B2DTuple aScale;
-    basegfx::B2DTuple aTranslate;
+    // We now have the whole executed Crop in UnitCoordinates in
+    // aDiscreteChangeMatrix, go to concrete sizes now.
+    // Create the unrotated original rectangle and the unrotated modified
+    // rectangle as Ranges
+    basegfx::B2DTuple aScale, aTranslate;
     double fRotate, fShearX;
 
     // get access to scale and translate
     aOriginalMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
     // prepare unsheared/unrotated versions of the old and new transformation
-    const basegfx::B2DHomMatrix aMatrixOriginalNoShearNoRotate(
+    const basegfx::B2DHomMatrix aOriginalMatrixNoShearNoRotate(
         basegfx::tools::createScaleTranslateB2DHomMatrix(
             basegfx::absolute(aScale),
             aTranslate));
@@ -3933,55 +3758,129 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // create the ranges for these
     basegfx::B2DRange aRangeOriginalNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
     basegfx::B2DRange aRangeNewNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
+    aRangeOriginalNoShearNoRotate.transform(aOriginalMatrixNoShearNoRotate);
+    aRangeNewNoShearNoRotate.transform(aOriginalMatrixNoShearNoRotate * aDiscreteChangeMatrix);
 
-    aRangeOriginalNoShearNoRotate.transform(aMatrixOriginalNoShearNoRotate);
-    aRangeNewNoShearNoRotate.transform(aMatrixOriginalNoShearNoRotate * aDiscreteChangeMatrix);
-
-    // extract the old Rectangle structures
-    tools::Rectangle aOldRect(
-        basegfx::fround(aRangeOriginalNoShearNoRotate.getMinX()),
-        basegfx::fround(aRangeOriginalNoShearNoRotate.getMinY()),
-        basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxX()),
-        basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxY()));
-    tools::Rectangle aNewRect(
-        basegfx::fround(aRangeNewNoShearNoRotate.getMinX()),
-        basegfx::fround(aRangeNewNoShearNoRotate.getMinY()),
-        basegfx::fround(aRangeNewNoShearNoRotate.getMaxX()),
-        basegfx::fround(aRangeNewNoShearNoRotate.getMaxY()));
-
-    // continue with the old original stuff
-    if (!aOldRect.GetWidth() || !aOldRect.GetHeight())
-        throw o3tl::divide_by_zero();
-
-    double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
-    double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
-
-    sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
-    sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
-    sal_Int32 nDiffRight = aNewRect.Right() - aOldRect.Right();
-    sal_Int32 nDiffBottom = aNewRect.Bottom() - aOldRect.Bottom();
-
-    if(pObj->IsMirrored())
+    if(bExternal)
     {
-        // mirrored X or Y, for old stuff, exchange X
-        // check for aw080
-        sal_Int32 nTmp(nDiffLeft);
-        nDiffLeft = -nDiffRight;
-        nDiffRight = -nTmp;
+        // With Ref point (opposed to dragged point), X scale and Y scale,
+        // we call crop (virtual method) on pSdrObject which calls VirtFlyDrawObj
+        // crop. aRef needs to be adapted to concrete Object's boundaries which
+        // is different from Crop-Ranges. This is because the Graphic and it's
+        // SdrObject representaion is inside the FlyFrame, but not identical
+        // with it.
+        const tools::Rectangle& rOutRect(pExternalSdrObject->GetCurrentBoundRect());
+        const basegfx::B2DHomMatrix aExternalTransform(
+            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                rOutRect.getWidth(), rOutRect.getHeight(),
+                rOutRect.Left(), rOutRect.Top()));
+        const basegfx::B2DPoint aRef(aExternalTransform * aLocalStart);
+        const double fScaleX(aRangeNewNoShearNoRotate.getWidth() / aRangeOriginalNoShearNoRotate.getWidth());
+        const double fScaleY(aRangeNewNoShearNoRotate.getHeight() / aRangeOriginalNoShearNoRotate.getHeight());
+
+        pExternalSdrObject->Crop(
+            Point(basegfx::fround(aRef.getX()), basegfx::fround(aRef.getY())),
+            Fraction(fScaleX),
+            Fraction(fScaleY));
+    }
+    else
+    {
+        // prepare matrix to apply to object; evtl. back-correct shear
+        basegfx::B2DHomMatrix aNewObjectMatrix(aOriginalMatrix * aDiscreteChangeMatrix);
+
+        if(bShearCorrected)
+        {
+            // back-correct shear
+            basegfx::B2DTuple aScale;
+            basegfx::B2DTuple aTranslate;
+            double fRotate(0.0), fShearX(0.0);
+
+            aNewObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+            aNewObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                aScale,
+                -fShearX,
+                fRotate,
+                aTranslate);
+        }
+
+        // apply change to object by applying the unit coordinate change followed
+        // by the original change
+        pObj->TRSetBaseGeometry(aNewObjectMatrix, aPolyPolygon);
+
+        // extract the old Rectangle structures
+        tools::Rectangle aOldRect(
+            basegfx::fround(aRangeOriginalNoShearNoRotate.getMinX()),
+            basegfx::fround(aRangeOriginalNoShearNoRotate.getMinY()),
+            basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxX()),
+            basegfx::fround(aRangeOriginalNoShearNoRotate.getMaxY()));
+        tools::Rectangle aNewRect(
+            basegfx::fround(aRangeNewNoShearNoRotate.getMinX()),
+            basegfx::fround(aRangeNewNoShearNoRotate.getMinY()),
+            basegfx::fround(aRangeNewNoShearNoRotate.getMaxX()),
+            basegfx::fround(aRangeNewNoShearNoRotate.getMaxY()));
+
+        // continue with the old original stuff
+        if (!aOldRect.GetWidth() || !aOldRect.GetHeight())
+        {
+            throw o3tl::divide_by_zero();
+        }
+
+        if((pObj->GetGraphicType() == GraphicType::NONE) || (pObj->GetGraphicType() == GraphicType::Default))
+        {
+            return false;
+        }
+
+        const GraphicObject& rGraphicObject = pObj->GetGraphicObject();
+        const MapMode aMapMode100thmm(MapUnit::Map100thMM);
+        Size aGraphicSize(rGraphicObject.GetPrefSize());
+
+        if(MapUnit::MapPixel == rGraphicObject.GetPrefMapMode().GetMapUnit())
+        {
+            aGraphicSize = Application::GetDefaultDevice()->PixelToLogic(aGraphicSize, aMapMode100thmm);
+        }
+        else
+        {
+            aGraphicSize = OutputDevice::LogicToLogic(aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapMode100thmm);
+        }
+
+        if(0 == aGraphicSize.Width() || 0 == aGraphicSize.Height())
+        {
+            return false;
+        }
+
+        const SdrGrafCropItem& rOldCrop = static_cast<const SdrGrafCropItem&>(pObj->GetMergedItem(SDRATTR_GRAFCROP));
+        double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
+        double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
+
+        sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
+        sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
+        sal_Int32 nDiffRight = aNewRect.Right() - aOldRect.Right();
+        sal_Int32 nDiffBottom = aNewRect.Bottom() - aOldRect.Bottom();
+
+        if(pObj->IsMirrored())
+        {
+            // mirrored X or Y, for old stuff, exchange X
+            // check for aw080
+            sal_Int32 nTmp(nDiffLeft);
+            nDiffLeft = -nDiffRight;
+            nDiffRight = -nTmp;
+        }
+
+        sal_Int32 nLeftCrop = static_cast<sal_Int32>( rOldCrop.GetLeft() + nDiffLeft * fScaleX );
+        sal_Int32 nTopCrop = static_cast<sal_Int32>( rOldCrop.GetTop() + nDiffTop * fScaleY );
+        sal_Int32 nRightCrop = static_cast<sal_Int32>( rOldCrop.GetRight() - nDiffRight * fScaleX );
+        sal_Int32 nBottomCrop = static_cast<sal_Int32>( rOldCrop.GetBottom() - nDiffBottom * fScaleY );
+
+        SfxItemPool& rPool = getSdrDragView().GetModel()->GetItemPool();
+        SfxItemSet aSet( rPool, svl::Items<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP>{} );
+        aSet.Put( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
+        getSdrDragView().SetAttributes( aSet, false );
     }
 
-    sal_Int32 nLeftCrop = static_cast<sal_Int32>( rOldCrop.GetLeft() + nDiffLeft * fScaleX );
-    sal_Int32 nTopCrop = static_cast<sal_Int32>( rOldCrop.GetTop() + nDiffTop * fScaleY );
-    sal_Int32 nRightCrop = static_cast<sal_Int32>( rOldCrop.GetRight() - nDiffRight * fScaleX );
-    sal_Int32 nBottomCrop = static_cast<sal_Int32>( rOldCrop.GetBottom() - nDiffBottom * fScaleY );
-
-    SfxItemPool& rPool = getSdrDragView().GetModel()->GetItemPool();
-    SfxItemSet aSet( rPool, svl::Items<SDRATTR_GRAFCROP, SDRATTR_GRAFCROP>{} );
-    aSet.Put( SdrGrafCropItem( nLeftCrop, nTopCrop, nRightCrop, nBottomCrop ) );
-    getSdrDragView().SetAttributes( aSet, false );
-
-    if( bUndo )
+    if(bUndo)
+    {
         getSdrDragView().EndUndo();
+    }
 
     return true;
 }
