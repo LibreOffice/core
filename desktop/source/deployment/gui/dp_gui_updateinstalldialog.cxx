@@ -295,12 +295,12 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtensio
     sError = sError.replaceFirst("%NAME", sExtension);
     //We want to have an empty line between the error messages. However,
     //there shall be no empty line after the last entry.
-    if (m_bNoEntry)
+    if (m_bNoEntry){
         m_bNoEntry = false;
         sMsg += sError;
-    else
+    } else {
         sMsg += "\n" + sError;
-    // sMsg += sError;
+    }
     //Insert more information about the error
     if (!exceptionMessage.isEmpty())
         sMsg += m_sThisErrorOccurred + exceptionMessage + "\n";
