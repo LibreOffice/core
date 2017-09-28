@@ -173,7 +173,7 @@ def replace_zip_file(src, dst):
 
 
 def optimize_zip_layout(zip_list, sort_file=None):
-    """ Optimzie the zip layout by ordering the list of filename alphabetically
+    """ Optimize the zip layout by ordering the list of filename alphabetically
     or with provided sort file (can be partly).
 
     :type zip_list: dict
@@ -227,7 +227,7 @@ def create_zip_archive(zip_list, links, tmp_dir, tmp_zip_file, sort_file=None):
     :param links: All filenames to create links.txt file.
 
     :type tmp_dir: str
-    :param tmp_dir: Path to tempory saved files.
+    :param tmp_dir: Path to temporary saved files.
 
     :type tmp_zip_file: str
     :param tmp_zip_file: Filename/Path of temporary zip archive.
