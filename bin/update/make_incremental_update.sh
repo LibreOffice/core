@@ -102,10 +102,10 @@ fi
 workdir="$newdir.work"
 updatemanifestv2="$workdir/updatev2.manifest"
 updatemanifestv3="$workdir/updatev3.manifest"
-echo "updatev2.manifest" >> $workdir/files.txt
-echo "updatev3.manifest" >> $workdir/files.txt
 
 mkdir -p "$workdir"
+echo "updatev2.manifest" >> $workdir/files.txt
+echo "updatev3.manifest" >> $workdir/files.txt
 
 # Generate a list of all files in the target directory.
 pushd "$olddir"
