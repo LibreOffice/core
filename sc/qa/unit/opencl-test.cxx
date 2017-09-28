@@ -141,7 +141,6 @@ public:
     void testMathFormulaArcCos();
     void testMathFormulaSqrt();
     void testMathFormulaArcCosHyp();
-    void testFinancialXirrFormula();
     void testFinacialNPVFormula();
     void testStatisticalFormulaNormsdist();
     void testStatisticalFormulaNorminv();
@@ -370,7 +369,6 @@ public:
     CPPUNIT_TEST(testMathFormulaArcCos);
     CPPUNIT_TEST(testMathFormulaSqrt);
     CPPUNIT_TEST(testMathFormulaArcCosHyp);
-    CPPUNIT_TEST(testFinancialXirrFormula);
     CPPUNIT_TEST(testFinacialNPVFormula);
     CPPUNIT_TEST(testStatisticalFormulaNormsdist);
     CPPUNIT_TEST(testStatisticalFormulaNorminv);
@@ -2742,29 +2740,6 @@ void ScOpenCLTest:: testFinancialIPMTFormula()
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-}
-
-void ScOpenCLTest:: testFinancialXirrFormula()
-{
-    if(!initTestEnv("opencl/financial/XIRR.", FORMAT_ODS, false))
-        return;
-    ScDocument& rDoc = xDocSh->GetDocument();
-    rDoc.CalcAll();
-
-    for (SCROW i = 1; i <= 10; ++i)
-    {
-        double fFormula  = rDoc.GetValue(ScAddress(2, i, 0));
-        double fExpected = rDoc.GetValue(ScAddress(3, i, 0));
-        CPPUNIT_ASSERT(rtl::math::approxEqual(fExpected, fFormula));
-    }
-    for (SCROW i = 18; i <= 27; ++i)
-    {
-        double fFormula = rDoc.GetValue(ScAddress(2, i, 0));
-        double fExpected = rDoc.GetValue(ScAddress(3, i, 0));
-        CPPUNIT_ASSERT(rtl::math::approxEqual(fExpected, fFormula));
-    }
-
-
 }
 
 void ScOpenCLTest::testStatisticalFormulaChiSqDist()
