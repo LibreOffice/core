@@ -60,7 +60,7 @@ namespace drawinglayer
                 const EpsPrimitive2D& rCompare = static_cast<const EpsPrimitive2D&>(rPrimitive);
 
                 return (getEpsTransform() == rCompare.getEpsTransform()
-                    && getGfxLink().IsEqual(rCompare.getGfxLink())
+                    && getGfxLink() == rCompare.getGfxLink()
                     && getMetaFile() == rCompare.getMetaFile());
             }
 
