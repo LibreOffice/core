@@ -1513,7 +1513,7 @@ IMPL_LINK_NOARG(SvxColorWindow, OpenPickerClickHdl, Button*, void)
 
     if ( IsInPopupMode() )
         EndPopupMode();
-    mrPaletteManager.PopupColorPicker(maCommand);
+    mrPaletteManager.PopupColorPicker(maCommand, GetSelectEntryColor().first);
 }
 
 void SvxColorWindow::StartSelection()
