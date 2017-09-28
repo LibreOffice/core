@@ -1,0 +1,8 @@
+Verified+1: Jenkins <ci@libreoffice.org>
+Code-Review+1: Muhammet Kara <muhammet.kara@pardus.org.tr>
+Code-Review+2: Michael Stahl <mstahl@redhat.com>
+Submitted-by: Michael Stahl <mstahl@redhat.com>
+Submitted-at: Thu, 28 Sep 2017 13:06:57 +0200
+Reviewed-on: https://gerrit.libreoffice.org/42873
+Project: core
+Branch: refs/heads/master
