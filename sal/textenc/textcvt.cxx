@@ -22,6 +22,7 @@
 #include <cassert>
 
 #include "rtl/textcvt.h"
+#include "sal/log.hxx"
 
 #include "gettextencodingdata.hxx"
 #include "tenchelp.hxx"
@@ -183,6 +184,7 @@ sal_Size SAL_CALL rtl_convertTextToUnicode( rtl_TextToUnicodeConverter hConverte
        converter, because not all converters are implemented yet */
     if ( !pConverter )
     {
+        SAL_WARN("sal.textenc", "Missing rtl_TextToUnicodeConverter");
         return ImplDummyToUnicode( pSrcBuf, nSrcBytes,
                                    pDestBuf, nDestChars,
                                    nFlags, pInfo, pSrcCvtBytes );
@@ -280,6 +282,7 @@ sal_Size SAL_CALL rtl_convertUnicodeToText( rtl_UnicodeToTextConverter hConverte
        converter, because not all converters are implemented yet */
     if ( !pConverter )
     {
+        SAL_WARN("sal.textenc", "Missing rtl_UnicodeToTextConverter");
         return ImplUnicodeToDummy( pSrcBuf, nSrcChars,
                                    pDestBuf, nDestBytes,
                                    nFlags, pInfo, pSrcCvtChars );
