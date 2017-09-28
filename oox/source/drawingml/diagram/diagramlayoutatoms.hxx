@@ -196,7 +196,12 @@ class ChooseAtom
     : public LayoutAtom
 {
 public:
-    ChooseAtom(const LayoutNode& rLayoutNode) : LayoutAtom(rLayoutNode) {}
+    ChooseAtom(const LayoutNode& rLayoutNode)
+        : LayoutAtom(rLayoutNode)
+#if defined __clang__ && __clang_major__ == 3 && __clang_minor__ == 8
+        , maEmptyChildren()
+#endif
+    {}
     virtual void accept( LayoutAtomVisitor& ) override;
     virtual const std::vector<LayoutAtomPtr>& getChildren() const override;
 private:
