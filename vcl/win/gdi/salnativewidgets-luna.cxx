@@ -1512,22 +1512,16 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     // don't draw frame around each and every toolbar
     pSVData->maNWFData.mbDockingAreaAvoidTBFrames = true;
 
-    // check if vista or newer runs
-    // in Aero theme (and similar ?) the menu text color does not change
-    // for selected items; also on WinXP and earlier menus are not themed
     // FIXME get the color directly from the theme, not from the settings
-    if (aSalShlData.mbWVista)
-    {
-        Color aMenuBarTextColor = aStyleSettings.GetPersonaMenuBarTextColor().get_value_or( aStyleSettings.GetMenuTextColor() );
-        // in aero menuitem highlight text is drawn in the same color as normal
-        aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
-        aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarTextColor );
-        aStyleSettings.SetMenuBarHighlightTextColor( aMenuBarTextColor );
-        pSVData->maNWFData.mnMenuFormatBorderX = 2;
-        pSVData->maNWFData.mnMenuFormatBorderY = 2;
-        pSVData->maNWFData.maMenuBarHighlightTextColor = aMenuBarTextColor;
-        GetSalData()->mbThemeMenuSupport = true;
-    }
+    Color aMenuBarTextColor = aStyleSettings.GetPersonaMenuBarTextColor().get_value_or( aStyleSettings.GetMenuTextColor() );
+    // in aero menuitem highlight text is drawn in the same color as normal
+    aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
+    aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarTextColor );
+    aStyleSettings.SetMenuBarHighlightTextColor( aMenuBarTextColor );
+    pSVData->maNWFData.mnMenuFormatBorderX = 2;
+    pSVData->maNWFData.mnMenuFormatBorderY = 2;
+    pSVData->maNWFData.maMenuBarHighlightTextColor = aMenuBarTextColor;
+    GetSalData()->mbThemeMenuSupport = true;
 
     rSettings.SetStyleSettings( aStyleSettings );
 }

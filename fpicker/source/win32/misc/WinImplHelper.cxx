@@ -24,10 +24,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifdef _WIN32_WINNT_WINBLUE
-#include <VersionHelpers.h>
-#endif
-
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
@@ -50,32 +46,6 @@ const sal_Unicode   AMPERSAND_SIGN = L'&';
 // Windows 95       VER_PLATFORM_WIN32_WINDOWS  4       0
 // Windows 98       VER_PLATFORM_WIN32_WINDOWS  4       10
 // Windows ME       VER_PLATFORM_WIN32_WINDOWS  4       90
-
-
-// determine if we are running under Vista or newer OS
-
-bool SAL_CALL IsWindowsVistaOrNewer()
-{
-// the Win32 SDK 8.1 deprecates GetVersionEx()
-#ifdef _WIN32_WINNT_WINBLUE
-    return IsWindowsVistaOrGreater();
-#else
-    OSVERSIONINFO osvi;
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
-
-    if(!GetVersionEx(&osvi))
-        return false;
-
-    bool bRet = (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId) &&
-                (osvi.dwMajorVersion >= 6);
-
-    bRet = bRet &&
-        (osvi.dwMinorVersion >=
-         sal::static_int_cast< unsigned int >(0));
-
-    return bRet;
-#endif
-}
 
 
 void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, OUStringBuffer& aBuffer )

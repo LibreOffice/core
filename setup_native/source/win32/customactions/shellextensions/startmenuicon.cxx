@@ -29,37 +29,9 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 {
     std::wstring sOfficeMenuFolder = GetMsiPropertyW( handle, L"OfficeMenuFolder" );
     std::wstring sDesktopFile = sOfficeMenuFolder + L"Desktop.ini";
-    std::wstring sIconFile = GetMsiPropertyW( handle, L"INSTALLLOCATION" ) + L"program\\soffice.exe";
 
-// the Win32 SDK 8.1 deprecates GetVersionEx()
-#ifdef _WIN32_WINNT_WINBLUE
-    bool const bIsVistaOrLater = IsWindowsVistaOrGreater();
-#else
-    OSVERSIONINFOW osverinfo;
-    osverinfo.dwOSVersionInfoSize = sizeof(osverinfo);
-    GetVersionExW( &osverinfo );
-    bool const bIsVistaOrLater = (osverinfo.dwMajorVersion >= 6);
-#endif
-
-    if (!bIsVistaOrLater)
-    {
-        WritePrivateProfileStringW(
-            L".ShellClassInfo",
-            L"IconFile",
-            sIconFile.c_str(),
-            sDesktopFile.c_str() );
-
-        WritePrivateProfileStringW(
-            L".ShellClassInfo",
-            L"IconIndex",
-            L"0",
-            sDesktopFile.c_str() );
-    }
-    // else
-    // {
-    //     // at the moment there exists no Vista Icon, so we use the default folder icon.
-    //     // add the icon into desktop/util/verinfo.rc
-    // }
+    // at the moment there exists no Vista Icon, so we use the default folder icon.
+    // add the icon into desktop/util/verinfo.rc
 
     // The value '0' is to avoid a message like "You Are Deleting a System Folder" warning when deleting or moving the folder.
     WritePrivateProfileStringW(

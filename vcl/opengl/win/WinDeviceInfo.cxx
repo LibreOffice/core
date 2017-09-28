@@ -20,6 +20,7 @@
 #include <setupapi.h>
 #include <algorithm>
 #include <cstdint>
+#include <memory>
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
@@ -149,14 +150,14 @@ uint32_t ParseIDFromDeviceID(const OUString &key, const char *prefix, int length
 // OS version in 16.16 major/minor form
 // based on http://msdn.microsoft.com/en-us/library/ms724834(VS.85).aspx
 enum {
-    kWindowsUnknown = 0,
-    kWindowsXP =         0x00050001,
+    kWindowsUnknown    = 0,
+    kWindowsXP         = 0x00050001,
     kWindowsServer2003 = 0x00050002,
-    kWindowsVista =      0x00060000,
-    kWindows7 =          0x00060001,
-    kWindows8 =          0x00060002,
-    kWindows8_1 =        0x00060003,
-    kWindows10 =         0x000A0000  // Major 10 Minor 0
+    kWindowsVista      = 0x00060000,
+    kWindows7          = 0x00060001,
+    kWindows8          = 0x00060002,
+    kWindows8_1        = 0x00060003,
+    kWindows10         = 0x000A0000  // Major 10 Minor 0
 };
 
 
@@ -189,23 +190,38 @@ int32_t WindowsOSVersion()
 {
     static int32_t winVersion = kWindowsUnknown;
 
-    OSVERSIONINFO vinfo;
-
     if (winVersion == kWindowsUnknown)
     {
-        vinfo.dwOSVersionInfoSize = sizeof (vinfo);
-#pragma warning(push)
-#pragma warning(disable:4996)
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        if (!GetVersionEx(&vinfo))
-        SAL_WNODEPRECATED_DECLARATIONS_POP
+        // GetVersion(Ex) and VersionHelpers (based on VerifyVersionInfo) API are
+        // subject to manifest-based behavior since Windows 8.1, so give wrong results.
+        // Another approach would be to use NetWkstaGetInfo, but that has some small
+        // reported delays (some milliseconds), and might get slower in domains with
+        // poor network connections.
+        // So go with a solution described at https://msdn.microsoft.com/en-us/library/ms724429
+        HINSTANCE hLibrary = LoadLibraryW(L"kernel32.dll");
+        if (hLibrary != nullptr)
         {
-#pragma warning(pop)
-            winVersion = kWindowsUnknown;
-        }
-        else
-        {
-            winVersion = int32_t(vinfo.dwMajorVersion << 16) + vinfo.dwMinorVersion;
+            wchar_t szPath[MAX_PATH];
+            DWORD dwCount = GetModuleFileNameW(hLibrary, szPath, SAL_N_ELEMENTS(szPath));
+            FreeLibrary(hLibrary);
+            if (dwCount != 0 && dwCount < SAL_N_ELEMENTS(szPath))
+            {
+                dwCount = GetFileVersionInfoSizeW(szPath, NULL);
+                if (dwCount != 0)
+                {
+                    std::unique_ptr<char> ver(new char[dwCount]);
+                    if (GetFileVersionInfoW(szPath, 0, dwCount, ver.get()) != FALSE)
+                    {
+                        void* pBlock = nullptr;
+                        UINT dwBlockSz = 0;
+                        if (VerQueryValueW(ver.get(), L"\\", &pBlock, &dwBlockSz) != FALSE && dwBlockSz >= sizeof(VS_FIXEDFILEINFO))
+                        {
+                            VS_FIXEDFILEINFO *vinfo = reinterpret_cast<VS_FIXEDFILEINFO *>(pBlock);
+                            winVersion = int32_t(vinfo->dwProductVersionMS);
+                        }
+                    }
+                }
+            }
         }
     }
 
