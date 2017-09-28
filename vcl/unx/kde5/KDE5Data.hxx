@@ -22,16 +22,22 @@
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
 
-class KDE5Data : public X11SalData
+class KDE5SalInstance;
+class KDE5XLib;
+
+class KDE5Data //: public X11SalData
 {
     public:
-        explicit KDE5Data( SalInstance *pInstance )
-                        : X11SalData( SAL_DATA_KDE5, pInstance ) {}
-        virtual ~KDE5Data() override;
+        explicit KDE5Data( SalInstance *pInstance ) {}
+                       // : X11SalData( SAL_DATA_KDE5, pInstance ) {}
+        virtual ~KDE5Data();
 
-        virtual void Init() override;
-        virtual void initNWF() override;
-        virtual void deInitNWF() override;
+        virtual void Init() ;
+        virtual void initNWF() ;
+        virtual void deInitNWF() ;
+    private:
+        KDE5XLib *pXLib_;
+        QApplication* qMyApp;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
