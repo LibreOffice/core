@@ -1935,7 +1935,7 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
                 ESelection aToBeDelSel = pDragAndDropInfo->aBeginDragSel;
                 ESelection aNewSel( pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos,
                                     pDragAndDropInfo->aDropSel.nEndPara, pDragAndDropInfo->aDropSel.nEndPos );
-                bool bBeforeSelection = aDropPos.IsLess( pDragAndDropInfo->aBeginDragSel );
+                bool bBeforeSelection = aDropPos < pDragAndDropInfo->aBeginDragSel;
                 sal_Int32 nParaDiff = pDragAndDropInfo->aBeginDragSel.nEndPara - pDragAndDropInfo->aBeginDragSel.nStartPara;
                 if ( bBeforeSelection )
                 {
@@ -2192,7 +2192,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                 ESelection aDestSel( aP.nPara, aP.nIndex, aP.nPara, aP.nIndex);
                 ESelection aCurSel = pEditEngine->pImpEditEngine->CreateESel( GetEditSelection() );
                 aCurSel.Adjust();
-                if ( !aDestSel.IsLess( aCurSel ) && !aDestSel.IsGreater( aCurSel ) )
+                if ( !(aDestSel < aCurSel) && !(aDestSel > aCurSel) )
                 {
                     bAccept = false;
                 }

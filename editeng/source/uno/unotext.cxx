@@ -1955,7 +1955,7 @@ void SAL_CALL SvxUnoTextBase::setString( const OUString& aString )
 uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    if( maSelection.IsEqual(ESelection(0,0,0,0)) || maSelection.IsEqual(ESelection(EE_PARA_MAX_COUNT,0,0,0)) )
+    if( maSelection == ESelection(0,0,0,0) || maSelection == ESelection(EE_PARA_MAX_COUNT,0,0,0) )
     {
         ESelection aSelection;
         ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );

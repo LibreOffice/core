@@ -2957,7 +2957,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
             ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
             ESelection aSelection = pEditView->GetSelection();
             aSelection.Adjust();    // needed for IsLess/IsGreater
-            if ( aCompare.IsLess(aSelection) || aCompare.IsGreater(aSelection) )
+            if ( aCompare < aSelection || aCompare > aSelection )
             {
                 // clicked outside the selected text - deselect and move text cursor
                 MouseEvent aEvent( rPosPixel );
@@ -3006,7 +3006,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
             ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
             ESelection aSelection = pOlView->GetSelection();
             aSelection.Adjust();    // needed for IsLess/IsGreater
-            if ( aCompare.IsLess(aSelection) || aCompare.IsGreater(aSelection) )
+            if ( aCompare < aSelection || aCompare > aSelection )
             {
                 // clicked outside the selected text - deselect and move text cursor
                 // use DrawView to allow extra handling there (none currently)

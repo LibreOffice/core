@@ -249,7 +249,7 @@ IMPL_LINK_NOARG(SmEditWindow, CursorMoveTimerHdl, Timer *, void)
 
     ESelection aNewSelection(GetSelection());
 
-    if (!aNewSelection.IsEqual(aOldSelection))
+    if (aNewSelection != aOldSelection)
     {
         SmViewShell *pView = rCmdBox.GetView();
         if (pView)

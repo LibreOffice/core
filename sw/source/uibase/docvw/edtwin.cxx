@@ -5671,7 +5671,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
                 // make it a forward selection - otherwise the IsLess/IsGreater do not work :-(
                 aSelection.Adjust();
-                if(!aCompare.IsLess(aSelection)  && !aCompare.IsGreater(aSelection))
+                if(!(aCompare < aSelection) && !(aCompare > aSelection))
                 {
                     return;
                 }

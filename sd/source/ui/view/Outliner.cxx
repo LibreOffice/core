@@ -411,7 +411,7 @@ svx::SpellPortions SdOutliner::GetNextSpellSentence()
         {
             ESelection aCurrentSelection (pOutlinerView->GetSelection());
             if ( ! mbMatchMayExist
-                && maStartSelection.IsLess(aCurrentSelection))
+                && maStartSelection < aCurrentSelection)
                 EndOfSearch();
 
             // Advance to the next sentence.
@@ -1472,7 +1472,7 @@ bool SdOutliner::HasNoPreviousMatch()
 
     // Detect whether the cursor stands at the beginning
     // resp. at the end of the text.
-    return pOutlinerView->GetSelection().IsEqual(GetSearchStartPosition ());
+    return pOutlinerView->GetSelection() == GetSearchStartPosition();
 }
 
 bool SdOutliner::HandleFailedSearch()
