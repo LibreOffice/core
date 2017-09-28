@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_bdee27b2",
+        "filename": "shell/source/win32/shlxthandler/thumbviewer/thumbviewer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-09-28T14:29:26Z",
+      "side": 1,
+      "message": "Oh, thanks!",
+      "parentUuid": "1a430d35_fd07cf7e",
+      "revId": "af49e34cf9cfca7f5daaeb053f32840dcbc35d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_3d023770",
         "filename": "vcl/win/window/salframe.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-09-28T14:24:50Z",
       "side": 1,
       "message": "can drop this comment, Longhorn\u003d\u003dVista",
+      "revId": "af49e34cf9cfca7f5daaeb053f32840dcbc35d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9df32b9e",
+        "filename": "vcl/win/window/salframe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-09-28T14:29:26Z",
+      "side": 1,
+      "message": "I deliberately left this one, to emphasize that \"proper default value\" thing; but that\u0027s probably irrelevant, so I\u0027ll drop it.",
+      "parentUuid": "1a430d35_3d023770",
       "revId": "af49e34cf9cfca7f5daaeb053f32840dcbc35d0a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
