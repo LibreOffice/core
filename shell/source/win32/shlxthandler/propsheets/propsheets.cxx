@@ -29,9 +29,6 @@
 #pragma warning(push, 1)
 #endif
 #include <shellapi.h>
-#ifdef _WIN32_WINNT_WINBLUE
-#include <VersionHelpers.h>
-#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -170,19 +167,6 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
-// the Win32 SDK 8.1 deprecates GetVersionEx()
-#ifdef _WIN32_WINNT_WINBLUE
-    bool bIsVistaOrLater = IsWindowsVistaOrGreater();
-#else
-    // Get OS version (we don't need the summary page on Windows Vista or later)
-    OSVERSIONINFOW sInfoOS;
-
-    ZeroMemory( &sInfoOS, sizeof(sInfoOS) );
-    sInfoOS.dwOSVersionInfoSize = sizeof( sInfoOS );
-    GetVersionExW( &sInfoOS );
-    bool bIsVistaOrLater = (sInfoOS.dwMajorVersion >= 6);
-#endif
-
     std::wstring proppage_header;
 
     PROPSHEETPAGE psp;
@@ -196,27 +180,6 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
     psp.pfnCallback = reinterpret_cast<LPFNPSPCALLBACK>(CPropertySheet::PropPageSummaryCallback);
 
     HPROPSHEETPAGE hPage = nullptr;
-
-    if ( !bIsVistaOrLater )
-    {
-        proppage_header = GetResString(IDS_PROPPAGE_SUMMARY_TITLE);
-
-        psp.pszTemplate = MAKEINTRESOURCE(IDD_PROPPAGE_SUMMARY);
-        psp.pszTitle    = proppage_header.c_str();
-        psp.pfnDlgProc  = reinterpret_cast<DLGPROC>(CPropertySheet::PropPageSummaryProc);
-
-        hPage = CreatePropertySheetPage(&psp);
-
-        // keep this instance alive, will be released when the
-        // page is about to be destroyed in the callback function
-        if (hPage)
-        {
-            if (lpfnAddPage(hPage, lParam))
-                AddRef();
-            else
-                DestroyPropertySheetPage(hPage);
-        }
-    }
 
     // add the statistics property page
     proppage_header = GetResString(IDS_PROPPAGE_STATISTICS_TITLE);

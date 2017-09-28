@@ -67,13 +67,12 @@
 #include <gdiplus.h>
 #include <shlobj.h>
 
-#ifdef _WIN32_WINNT_WINBLUE
-#include <VersionHelpers.h>
-#endif
+#include "Lm.h"
 #include "postwin.h"
 
 #if defined _MSC_VER
 #pragma warning(pop)
+#pragma comment(lib, "Netapi32.lib")
 #endif
 
 void SalAbort( const OUString& rErrorText, bool )
@@ -359,35 +358,6 @@ SalInstance* CreateSalInstance()
 {
     SalData* pSalData = GetSalData();
 
-    // determine the windows version
-    aSalShlData.mbWXP        = 0;
-    aSalShlData.mbWVista     = 0;
-    aSalShlData.mbW7         = 0;
-// the Win32 SDK 8.1 deprecates GetVersionEx()
-#ifdef _WIN32_WINNT_WINBLUE
-    aSalShlData.mbWXP = IsWindowsXPOrGreater() ? 1 : 0;
-    aSalShlData.mbWVista = IsWindowsVistaOrGreater() ? 1 : 0;
-    aSalShlData.mbW7 = IsWindows7OrGreater() ? 1 : 0;
-#else
-    OSVERSIONINFO aVersionInfo;
-    memset( &aVersionInfo, 0, sizeof(aVersionInfo) );
-    aVersionInfo.dwOSVersionInfoSize = sizeof( aVersionInfo );
-    if (GetVersionEx( &aVersionInfo ))
-    {
-        // Windows XP ?
-        if (aVersionInfo.dwMajorVersion > 5 ||
-           (aVersionInfo.dwMajorVersion == 5 && aVersionInfo.dwMinorVersion >= 1))
-            aSalShlData.mbWXP = 1;
-        // Windows Vista ?
-        if (aVersionInfo.dwMajorVersion >= 6)
-            aSalShlData.mbWVista = 1;
-        // Windows 7 ?
-        if (aVersionInfo.dwMajorVersion > 6 ||
-           (aVersionInfo.dwMajorVersion == 6 && aVersionInfo.dwMinorVersion >= 1))
-            aSalShlData.mbW7 = 1;
-    }
-#endif
-
     pSalData->mnAppThreadId = GetCurrentThreadId();
 
     // register frame class
@@ -414,8 +384,7 @@ SalInstance* CreateSalInstance()
         return nullptr;
 
     // shadow effect for popups on XP
-    if( aSalShlData.mbWXP )
-        aWndClassEx.style       |= CS_DROPSHADOW;
+    aWndClassEx.style          |= CS_DROPSHADOW;
     aWndClassEx.lpszClassName   = SAL_TMPSUBFRAME_CLASSNAMEW;
     if ( !RegisterClassExW( &aWndClassEx ) )
         return nullptr;
@@ -865,50 +834,47 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 
     if (osl::FileBase::E_None == rc)
     {
-        if ( aSalShlData.mbW7 )
+        IShellItem* pShellItem = nullptr;
+
+        HRESULT hr = SHCreateItemFromParsingName(SAL_W(system_path.getStr()), nullptr, IID_PPV_ARGS(&pShellItem));
+
+        if ( SUCCEEDED(hr) && pShellItem )
         {
-            IShellItem* pShellItem = nullptr;
+            OUString sApplicationName;
 
-            HRESULT hr = SHCreateItemFromParsingName(SAL_W(system_path.getStr()), nullptr, IID_PPV_ARGS(&pShellItem));
+            if ( rDocumentService == "com.sun.star.text.TextDocument" ||
+                 rDocumentService == "com.sun.star.text.GlobalDocument" ||
+                 rDocumentService == "com.sun.star.text.WebDocument" ||
+                 rDocumentService == "com.sun.star.xforms.XMLFormDocument" )
+                sApplicationName = "Writer";
+            else if ( rDocumentService == "com.sun.star.sheet.SpreadsheetDocument" ||
+                 rDocumentService == "com.sun.star.chart2.ChartDocument" )
+                sApplicationName = "Calc";
+            else if ( rDocumentService == "com.sun.star.presentation.PresentationDocument" )
+                sApplicationName = "Impress";
+            else if ( rDocumentService == "com.sun.star.drawing.DrawingDocument" )
+                sApplicationName = "Draw";
+            else if ( rDocumentService == "com.sun.star.formula.FormulaProperties" )
+                sApplicationName = "Math";
+            else if ( rDocumentService == "com.sun.star.sdb.DatabaseDocument" ||
+                 rDocumentService == "com.sun.star.sdb.OfficeDatabaseDocument" ||
+                 rDocumentService == "com.sun.star.sdb.RelationDesign" ||
+                 rDocumentService == "com.sun.star.sdb.QueryDesign" ||
+                 rDocumentService == "com.sun.star.sdb.TableDesign" ||
+                 rDocumentService == "com.sun.star.sdb.DataSourceBrowser" )
+                sApplicationName = "Base";
 
-            if ( SUCCEEDED(hr) && pShellItem )
+            if ( !sApplicationName.isEmpty() )
             {
-                OUString sApplicationName;
+                OUString sApplicationID("TheDocumentFoundation.LibreOffice.");
+                sApplicationID += sApplicationName;
 
-                if ( rDocumentService == "com.sun.star.text.TextDocument" ||
-                     rDocumentService == "com.sun.star.text.GlobalDocument" ||
-                     rDocumentService == "com.sun.star.text.WebDocument" ||
-                     rDocumentService == "com.sun.star.xforms.XMLFormDocument" )
-                    sApplicationName = "Writer";
-                else if ( rDocumentService == "com.sun.star.sheet.SpreadsheetDocument" ||
-                     rDocumentService == "com.sun.star.chart2.ChartDocument" )
-                    sApplicationName = "Calc";
-                else if ( rDocumentService == "com.sun.star.presentation.PresentationDocument" )
-                    sApplicationName = "Impress";
-                else if ( rDocumentService == "com.sun.star.drawing.DrawingDocument" )
-                    sApplicationName = "Draw";
-                else if ( rDocumentService == "com.sun.star.formula.FormulaProperties" )
-                    sApplicationName = "Math";
-                else if ( rDocumentService == "com.sun.star.sdb.DatabaseDocument" ||
-                     rDocumentService == "com.sun.star.sdb.OfficeDatabaseDocument" ||
-                     rDocumentService == "com.sun.star.sdb.RelationDesign" ||
-                     rDocumentService == "com.sun.star.sdb.QueryDesign" ||
-                     rDocumentService == "com.sun.star.sdb.TableDesign" ||
-                     rDocumentService == "com.sun.star.sdb.DataSourceBrowser" )
-                    sApplicationName = "Base";
+                SHARDAPPIDINFO info;
+                info.psi = pShellItem;
+                info.pszAppID = SAL_W(sApplicationID.getStr());
 
-                if ( !sApplicationName.isEmpty() )
-                {
-                    OUString sApplicationID("TheDocumentFoundation.LibreOffice.");
-                    sApplicationID += sApplicationName;
-
-                    SHARDAPPIDINFO info;
-                    info.psi = pShellItem;
-                    info.pszAppID = SAL_W(sApplicationID.getStr());
-
-                    SHAddToRecentDocs ( SHARD_APPIDINFO, &info );
-                    return;
-                }
+                SHAddToRecentDocs ( SHARD_APPIDINFO, &info );
+                return;
             }
         }
         // For whatever reason, we could not use the SHARD_APPIDINFO semantics
@@ -958,36 +924,17 @@ int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POIN
 
 OUString WinSalInstance::getOSVersion()
 {
-    SalData* pSalData = GetSalData();
-    if ( !pSalData )
-        return OUString("unknown");
+    LPWKSTA_INFO_100 pWkstaInfo = nullptr;
+    if (NetWkstaGetInfo(nullptr, 100, reinterpret_cast<LPBYTE*>(&pWkstaInfo)) != NERR_Success)
+        return "unknown";
 
-    WORD nMajor = 0, nMinor = 0;
-#ifdef _WIN32_WINNT_WINBLUE
-    // Trying to hide the real version info behind an
-    // uber-lame non-forward-compatible, 'compatibility' API
-    // seems unlikely to help OS designers, or API users.
-    nMajor = 30;
-    while( !IsWindowsVersionOrGreater( nMajor, 0, 0 ) && nMajor > 0)
-        nMajor--;
-    nMinor = 30;
-    while( !IsWindowsVersionOrGreater( nMajor, nMinor, 0 ) && nMinor > 0)
-        nMinor--;
-#else
-    OSVERSIONINFO aVersionInfo;
-    memset( &aVersionInfo, 0, sizeof( aVersionInfo ) );
-    aVersionInfo.dwOSVersionInfoSize = sizeof( aVersionInfo );
-    if ( GetVersionEx( &aVersionInfo ) )
-    {
-        nMajor = aVersionInfo.dwMajorVersion;
-        nMinor = aVersionInfo.dwMinorVersion;
-    }
-#endif
     OUStringBuffer aVer;
     aVer.append( "Windows " );
-    aVer.append( (sal_Int32)nMajor );
+    aVer.append( (sal_Int32)pWkstaInfo->wki100_ver_major);
     aVer.append( "." );
-    aVer.append( (sal_Int32)nMinor );
+    aVer.append( (sal_Int32)pWkstaInfo->wki100_ver_minor);
+
+    NetApiBufferFree(pWkstaInfo);
 
     return aVer.makeStringAndClear();
 }

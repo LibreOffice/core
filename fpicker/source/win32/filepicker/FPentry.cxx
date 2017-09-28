@@ -44,9 +44,6 @@ static Reference< XInterface > SAL_CALL createInstance(
 {
     Reference< XInterface > xDlg;
 
-    if (!IsWindowsVistaOrNewer())
-        std::abort(); // not supported
-
     xDlg.set(static_cast<XFilePicker2*>(
             new ::fpicker::win32::vista::VistaFilePicker(rServiceManager)));
 
