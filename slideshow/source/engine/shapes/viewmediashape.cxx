@@ -50,15 +50,16 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #endif
 
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/media/XPlayerWindow.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 
 #include "viewmediashape.hxx"
 #include "mediashape.hxx"
@@ -460,6 +461,13 @@ namespace slideshow
                             {
                                 mpMediaWindow.disposeAndClear();
                                 mpMediaWindow = VclPtr<SystemChildWindow>::Create( pWindow, WB_CLIPCHILDREN );
+                                UnoViewSharedPtr xUnoView(std::dynamic_pointer_cast<UnoView>(mpViewLayer));
+                                if (xUnoView)
+                                {
+                                    awt::Rectangle aCanvasArea = xUnoView->getUnoView()->getCanvasArea();
+                                    aAWTRect.X += aCanvasArea.X;
+                                    aAWTRect.Y += aCanvasArea.Y;
+                                }
                                 mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                             }
