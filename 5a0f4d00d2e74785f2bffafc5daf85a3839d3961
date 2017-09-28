@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3da957e0",
+        "filename": "sd/source/ui/table/TableDesignPane.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000169
+      },
+      "writtenOn": "2017-09-28T06:29:50Z",
+      "side": 0,
+      "message": "Why did you change most of the flags? Which flag is about the hover effect?",
+      "revId": "5a0f4d00d2e74785f2bffafc5daf85a3839d3961",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
