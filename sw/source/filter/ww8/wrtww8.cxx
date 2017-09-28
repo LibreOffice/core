@@ -2414,6 +2414,15 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
 
         SAL_INFO( "sw.ww8.level2", "<tclength>" << ( m_rWW8Export.pO->size() - npOCount ) << "</tclength>" );
     }
+
+    int nWidthPercent = pFormat->GetFrameSize().GetWidthPercent();
+    // Width is in fiftieths of a percent. For sprmTTableWidth, must be non-negative and 600% max
+    if ( nWidthPercent > 0 && nWidthPercent <= 600 )
+    {
+        m_rWW8Export.InsUInt16( NS_sprm::sprmTTableWidth );
+        m_rWW8Export.pO->push_back( (sal_uInt8) /*ftsPercent*/ 2 );
+        m_rWW8Export.InsUInt16( (sal_uInt16) nWidthPercent * 50 );
+    }
 }
 
 ww8::GridColsPtr AttributeOutputBase::GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
