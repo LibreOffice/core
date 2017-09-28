@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5d7d431b",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1608,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-28T11:21:39Z",
+      "side": 1,
+      "message": "this can just be \n   return mpImplPolygon \u003d\u003d rPoly.mpImplPolygon;\nbecause cow_wrapper already does the same_object check.",
+      "revId": "480938c7c9a0788aa8014003f397f7ef33a01de2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
