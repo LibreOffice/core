@@ -18,7 +18,7 @@
  */
 
 #include <config_features.h>
-
+#include <osl/process.h>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

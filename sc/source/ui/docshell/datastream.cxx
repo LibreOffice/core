@@ -401,11 +401,7 @@ void DataStream::StartImport()
 
     if (!mxReaderThread.is())
     {
-        SvStream *pStream = nullptr;
-        if (mnSettings & SCRIPT_STREAM)
-            pStream = new SvScriptStream(msURL);
-        else
-            pStream = new SvFileStream(msURL, StreamMode::READ);
+        SvStream *pStream = new SvFileStream(msURL, StreamMode::READ);
         mxReaderThread = new datastreams::ReaderThread(pStream, maStartRange.aEnd.Col() - maStartRange.aStart.Col() + 1);
         mxReaderThread->launch();
     }
