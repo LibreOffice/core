@@ -58,6 +58,10 @@ class SwVirtFlyDrawObj : public SdrVirtObj
 private:
     SwFlyFrame *m_pFlyFrame;
 
+    // RotGrfFlyFrame: Helper to acces sthe rotation angle (in 10th degrees, left-handed)
+    // of a GraphicFrame
+    sal_uInt16 getPossibleRotationFromFraphicFrame() const;
+
 protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
     // not used but something own (top left of new SnapRect minus top left
@@ -101,6 +105,9 @@ public:
                                     const Fraction& yFact, bool bUnsetRelative = true) override;
     virtual       void       Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual       void       addCropHandles(SdrHdlList& rTarget) const override;
+
+    // FullDrag support
+    virtual SdrObject* getFullDragClone() const override;
 
     const SwFrameFormat *GetFormat() const;
           SwFrameFormat *GetFormat();
