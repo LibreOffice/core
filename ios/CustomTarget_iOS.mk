@@ -10,20 +10,20 @@ IOSGEN := $(SRCDIR)/ios/generated
 IOSRES := $(IOSGEN)/resources
 IOSKITXC := $(BUILDDIR)/ios/loKit.xcconfig
 IOSAPPXC := $(BUILDDIR)/ios/loApp.xcconfig
-IOSKITPRJ := $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/project.pbxproj
-IOSAPPPRJ := $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj/project.pbxproj
+IOSKITPRJ := $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj
+IOSAPPPRJ := $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj
 IOSAPP := $(INSTDIR)/LibreOfficeLight.app
 ifeq ($(ENABLE_DEBUG),TRUE)
-IOSKIT := $(IOSGEN)/iOSkit_$(CPUNAME)_debug.a
+IOSKIT := iOSkit_$(CPUNAME)_debug.a
 else
-IOSKIT := $(IOSGEN)/iOSkit_$(CPUNAME).a
+IOSKIT := iOSkit_$(CPUNAME).a
 endif
 
 
 #- Top level  -----------------------------------------------------------------
 $(eval $(call gb_CustomTarget_CustomTarget,ios/ios))
 
-$(call gb_CustomTarget_get_target,ios/ios): $(IOSKIT)
+$(call gb_CustomTarget_get_target,ios/ios): $(IOSGEN)/$(IOSKIT)
 
 
 #- Generate xcconfig files  ---------------------------------------------------
@@ -139,25 +139,28 @@ endif
 
 
 #- build  ---------------------------------------------------------------------
-$(IOSKIT): $(IOSKITPRJ) iosCopySetup
+$(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj iosCopySetup
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
+	mkdir -p $(WORKDIR)/ios
 	CC=; \
 	$(call gb_Helper_print_on_error, \
 	    xcodebuild \
 	        -xcconfig $(IOSKITXC) \
 	        -project $(IOSKITPRJ) \
-	        -target $(IOSKIT) \
+	        -target iOS_LO_Kit.a \
 	        -sdk $(XCODEBUILD_SDK) \
 	        -arch $(XCODE_ARCHS) \
 	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \
 	        build \
 	        , $(WORKDIR)/ios/build.log \
 	)
+	cp iOS_LO_kit.a $(IOSGEN)/$(IOSKIT)
 
 
 
-$(IOSAPP): $(IOSAPPPRJ) $(IOSKIT)
+$(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
+	mkdir -p $(WORKDIR)/ios
 	CC=; \
 	$(call gb_Helper_print_on_error, \
 	    xcodebuild \
