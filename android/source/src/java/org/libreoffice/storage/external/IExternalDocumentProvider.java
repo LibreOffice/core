@@ -1,5 +1,7 @@
 package org.libreoffice.storage.external;
 
+import android.content.Context;
+
 import org.libreoffice.storage.IDocumentProvider;
 
 
@@ -13,7 +15,8 @@ public interface IExternalDocumentProvider extends IDocumentProvider {
      * browsing using the internal DirectoryBrowser.
      *
      * @return a guess of the root file's URI.
+     * @param context
      */
-    String guessRootURI();
+    String guessRootURI(Context context);
 
 }

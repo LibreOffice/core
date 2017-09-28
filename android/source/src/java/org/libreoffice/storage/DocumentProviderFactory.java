@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.libreoffice.storage.external.ExtsdDocumentsProvider;
-import org.libreoffice.storage.external.LegacyExtSDDocumentsProvider;
 import org.libreoffice.storage.external.OTGDocumentsProvider;
 import org.libreoffice.storage.local.LocalDocumentsDirectoryProvider;
 import org.libreoffice.storage.local.LocalDocumentsProvider;
@@ -21,7 +20,6 @@ import org.libreoffice.storage.owncloud.OwnCloudProvider;
 
 import android.content.Context;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.os.Build;
 
 /**
  * Keeps the instances of the available IDocumentProviders in the system.
@@ -68,13 +66,7 @@ public final class DocumentProviderFactory {
             instance.providers[OTG_PROVIDER_INDEX] = new OTGDocumentsProvider(OTG_PROVIDER_INDEX, context);
             instance.providers[4] = new OwnCloudProvider(4, context);
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                instance.providers[EXTSD_PROVIDER_INDEX]
-                        = new ExtsdDocumentsProvider(EXTSD_PROVIDER_INDEX, context);
-            } else {
-                instance.providers[EXTSD_PROVIDER_INDEX]
-                        = new LegacyExtSDDocumentsProvider(EXTSD_PROVIDER_INDEX, context);
-            }
+            instance.providers[EXTSD_PROVIDER_INDEX] = new ExtsdDocumentsProvider(EXTSD_PROVIDER_INDEX, context);
 
             // initialize document provider names list
             instance.providerNames = new String[instance.providers.length];
@@ -121,7 +113,7 @@ public final class DocumentProviderFactory {
      * @return default provider.
      */
     public IDocumentProvider getDefaultProvider() {
-        return providers[1];
+        return providers[0];
     }
 
     public Set<OnSharedPreferenceChangeListener> getChangeListeners() {

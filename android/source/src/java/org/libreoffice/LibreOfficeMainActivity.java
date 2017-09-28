@@ -323,7 +323,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
                 try {
                     // rebuild the IFile object from the data passed in the Intent
                     IFile mStorageFile = DocumentProviderFactory.getInstance()
-                            .getProvider(providerId).createFromUri(documentUri);
+                            .getProvider(providerId).createFromUri(LibreOfficeMainActivity.this, documentUri);
                     // call document provider save operation
                     mStorageFile.saveDocument(mInputFile);
                 }

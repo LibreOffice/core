@@ -9,6 +9,8 @@
 
 package org.libreoffice.storage.local;
 
+import android.content.Context;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.net.URI;
@@ -75,7 +77,7 @@ public class LocalFile implements IFile {
     }
 
     @Override
-    public IFile getParent() {
+    public IFile getParent(Context context) {
         return new LocalFile(file.getParentFile());
     }
 
