@@ -112,7 +112,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
     // Four possible keys, locale rule based with break type, locale rule based
     // only, rule based only, locale based with break type. A fifth global key
     // for the initial lookup.
-    // Multiple gobal keys may map to identical value data.
+    // Multiple global keys may map to identical value data.
     // All enums used here should be in the range 0..9 so assert that and avoid
     // expensive numeric conversion in append() for faster construction of the
     // always used global key.
