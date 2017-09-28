@@ -169,6 +169,7 @@ class WW8TabDesc
     short m_nMaxRight;
     short m_nSwWidth;
     short m_nPreferredWidth;
+    short m_nPercentWidth;
 
     bool m_bOk;
     bool m_bClaimLineFormat;
@@ -1847,6 +1848,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     m_nMaxRight(0),
     m_nSwWidth(0),
     m_nPreferredWidth(0),
+    m_nPercentWidth(0),
     m_bOk(true),
     m_bClaimLineFormat(false),
     m_eOri(text::HoriOrientation::NONE),
@@ -1922,6 +1924,15 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         const sal_uInt8 b2 = pParams[2];
                         if (b0 == 3) // Twips
                             m_nPreferredWidth = b2 * 0x100 + b1;
+                        else if (b0 == 2) // percent in fiftieths of a percent
+                        {
+                            m_nPercentWidth = (b2 * 0x100 + b1);
+                            // MS documentation: non-negative, and 600% max
+                            if ( m_nPercentWidth >= 0 && m_nPercentWidth <= 30000 )
+                                m_nPercentWidth *= .02;
+                            else
+                                m_nPercentWidth = 100;
+                        }
                         }
                         break;
                     case sprmTTextFlow:
@@ -2537,8 +2548,11 @@ void WW8TabDesc::CreateSwTable()
     // total width of table
     if( m_nMaxRight - m_nMinLeft > MINLAY * m_nDefaultSwCols )
     {
-        m_pTable->GetFrameFormat()->SetFormatAttr(SwFormatFrameSize(ATT_FIX_SIZE, m_nSwWidth));
-        m_aItemSet.Put(SwFormatFrameSize(ATT_FIX_SIZE, m_nSwWidth));
+        SwFormatFrameSize aFrameSize(ATT_FIX_SIZE, m_nSwWidth);
+        if( m_nPercentWidth )
+            aFrameSize.SetWidthPercent(m_nPercentWidth);
+        m_pTable->GetFrameFormat()->SetFormatAttr(aFrameSize);
+        m_aItemSet.Put(aFrameSize);
     }
 
     SvxFrameDirectionItem aDirection(
