@@ -248,8 +248,6 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
                         GetOldItem(GetItemSet(), FN_PARAM_ELEM));
 
     SwElemItem aElem;
-    if(pOldAttr)
-        aElem = *pOldAttr;
     aElem.bTable                = m_pTableCB->IsChecked();
     aElem.bGraphic              = m_pGrfCB->IsChecked();
     aElem.bDrawing              = m_pDrwCB->IsChecked();
@@ -1341,13 +1339,17 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage( vcl::Window* pParent,
     get(m_pMathBaselineAlignmentCB, "mathbaseline");
 
     const SfxPoolItem* pItem = nullptr;
+    sal_uInt8 eMode = SwFillMode::FILL_TAB;
+    bool bIsOn = false;
 
-    SwShadowCursorItem aOpt;
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
-        aOpt = *static_cast<const SwShadowCursorItem*>(pItem);
-    m_pOnOffCB->Check( aOpt.IsOn() );
+    {
+        auto& aOpt = *static_cast<const SwShadowCursorItem*>(pItem);
+        eMode = aOpt.GetMode();
+        bIsOn = aOpt.IsOn();
+    }
+    m_pOnOffCB->Check( bIsOn );
 
-    sal_uInt8 eMode = aOpt.GetMode();
     m_pFillIndentRB->Check( FILL_INDENT == eMode );
     m_pFillMarginRB->Check( FILL_MARGIN == eMode );
     m_pFillTabRB->Check( FILL_TAB == eMode );
@@ -1459,8 +1461,6 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
                         GetOldItem(GetItemSet(), FN_PARAM_DOCDISP));
 
     SwDocDisplayItem aDisp;
-    if(pOldAttr)
-        aDisp = *pOldAttr;
 
     aDisp.bParagraphEnd         = m_pParaCB->IsChecked();
     aDisp.bTab                  = m_pTabCB->IsChecked();
@@ -1482,13 +1482,17 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem = nullptr;
+    sal_uInt8 eMode = SwFillMode::FILL_TAB;
+    bool bIsOn = false;
 
-    SwShadowCursorItem aOpt;
     if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
-        aOpt = *static_cast<const SwShadowCursorItem*>(pItem);
-    m_pOnOffCB->Check( aOpt.IsOn() );
+    {
+        auto& aOpt = *static_cast<const SwShadowCursorItem*>(pItem);
+        eMode = aOpt.GetMode();
+        bIsOn = aOpt.IsOn();
+    }
+    m_pOnOffCB->Check( bIsOn );
 
-    sal_uInt8 eMode = aOpt.GetMode();
     m_pFillIndentRB->Check( FILL_INDENT == eMode );
     m_pFillMarginRB->Check( FILL_MARGIN == eMode );
     m_pFillTabRB->Check( FILL_TAB == eMode );
