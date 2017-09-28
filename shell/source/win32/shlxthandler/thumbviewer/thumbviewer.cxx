@@ -40,9 +40,6 @@
 #pragma warning(push, 1)
 #endif
 #include <shellapi.h>
-#ifdef _WIN32_WINNT_WINBLUE
-#include <VersionHelpers.h>
-#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -67,28 +64,6 @@ namespace internal
         return zipfile->HasContent("META-INF/documentsignatures.xml");
     }
 
-    bool IsWindowsXP()
-    {
-// the Win32 SDK 8.1 deprecates GetVersionEx()
-#ifdef _WIN32_WINNT_WINBLUE
-        return IsWindowsXPOrGreater();
-#else
-        OSVERSIONINFOW osvi;
-        ZeroMemory(&osvi, sizeof(osvi));
-        osvi.dwOSVersionInfoSize = sizeof(osvi);
-        GetVersionExW(&osvi);
-
-        return ((osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
-                ((osvi.dwMajorVersion >= 5) && (osvi.dwMinorVersion >= 1)));
-#endif
-    }
-
-    /* Calculate where to position the signet image.
-       On Windows ME we need to shift the signet a
-       little bit to the left because Windows ME
-       puts an overlay icon to the lower right
-       corner of a thumbnail image so that our signet
-       we be hidden. */
     Gdiplus::Point CalcSignetPosition(
         const Gdiplus::Rect& canvas, const Gdiplus::Rect& thumbnail_border, const Gdiplus::Rect& signet)
     {
@@ -107,9 +82,6 @@ namespace internal
             x = thumbnail_border.GetRight() - signet.GetRight();
             y = thumbnail_border.GetBottom() - signet.GetBottom() + min(signet.GetBottom() / 2, voffset);
         }
-
-        if (!IsWindowsXP())
-            x -= 15;
 
         return Gdiplus::Point(x,y);
     }

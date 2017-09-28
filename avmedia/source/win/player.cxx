@@ -26,9 +26,6 @@
 #include <control.h>
 #include <uuids.h>
 #include <evcode.h>
-#ifdef _WIN32_WINNT_WINBLUE
-#include <VersionHelpers.h>
-#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -66,22 +63,6 @@ LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM
         bProcessed = false;
 
     return( bProcessed ? 0 : DefWindowProc( hWnd, nMsg, nPar1, nPar2 ) );
-}
-
-
-bool isWindowsVistaOrHigher()
-{
-// the Win32 SDK 8.1 deprecates GetVersionEx()
-#ifdef _WIN32_WINNT_WINBLUE
-    return IsWindowsVistaOrGreater();
-#else
-    // POST: return true if we are at least on Windows Vista
-    OSVERSIONINFO osvi;
-    ZeroMemory(&osvi, sizeof(osvi));
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
-    GetVersionEx(&osvi);
-    return  osvi.dwMajorVersion >= 6;
-#endif
 }
 
 
@@ -166,13 +147,6 @@ bool Player::create( const OUString& rURL )
         // Don't use the overlay mixer on Windows Vista
         // It disables the desktop composition as soon as RenderFile is called
         // also causes some other problems: video rendering is not reliable
-        if( !isWindowsVistaOrHigher() && SUCCEEDED( CoCreateInstance( CLSID_OverlayMixer, nullptr, CLSCTX_INPROC_SERVER, IID_IBaseFilter, reinterpret_cast<void**>(&mpOMF) ) ) )
-        {
-            mpGB->AddFilter( mpOMF, L"com_sun_star_media_OverlayMixerFilter" );
-
-            if( !SUCCEEDED( mpOMF->QueryInterface( IID_IDDrawExclModeVideo, reinterpret_cast<void**>(&mpEV) ) ) )
-                mpEV = nullptr;
-        }
 
         if( SUCCEEDED( hR = mpGB->RenderFile( reinterpret_cast<LPCWSTR>(rURL.getStr()), nullptr ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaControl, reinterpret_cast<void**>(&mpMC) ) ) &&

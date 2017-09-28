@@ -197,6 +197,28 @@ namespace
         return getHexString(pBuffer, RTL_DIGEST_LENGTH_MD5);
     }
 
+    OString getDeviceInfoString()
+    {
+#if defined( SAL_UNX ) && !defined( MACOSX ) && !defined( IOS )&& !defined( ANDROID )
+        const X11OpenGLDeviceInfo aInfo;
+        return aInfo.GetOS() +
+            aInfo.GetOSRelease() +
+            aInfo.GetRenderer() +
+            aInfo.GetVendor() +
+            aInfo.GetVersion();
+#elif defined( _WIN32 )
+        const WinOpenGLDeviceInfo aInfo;
+        return OUStringToOString(aInfo.GetAdapterVendorID(), RTL_TEXTENCODING_UTF8) +
+            OUStringToOString(aInfo.GetAdapterDeviceID(), RTL_TEXTENCODING_UTF8) +
+            OUStringToOString(aInfo.GetDriverVersion(), RTL_TEXTENCODING_UTF8) +
+            OString::number(aInfo.GetWindowsVersion());
+#else
+        return OString(reinterpret_cast<const char*>(glGetString(GL_VENDOR))) +
+            OString(reinterpret_cast<const char*>(glGetString(GL_RENDERER))) +
+            OString(reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+#endif
+    }
+
     OString getStringDigest( const OUString& rVertexShaderName,
                              const OUString& rFragmentShaderName,
                              const OString& rPreamble )
@@ -206,27 +228,7 @@ namespace
         OString aFragmentShaderSource = getShaderSource( rFragmentShaderName );
 
         // get info about the graphic device
-#if defined( SAL_UNX ) && !defined( MACOSX ) && !defined( IOS )&& !defined( ANDROID )
-        static const X11OpenGLDeviceInfo aInfo;
-        static const OString aDeviceInfo (
-                aInfo.GetOS() +
-                aInfo.GetOSRelease() +
-                aInfo.GetRenderer() +
-                aInfo.GetVendor() +
-                aInfo.GetVersion() );
-#elif defined( _WIN32 )
-        static const WinOpenGLDeviceInfo aInfo;
-        static const OString aDeviceInfo (
-                OUStringToOString( aInfo.GetAdapterVendorID(), RTL_TEXTENCODING_UTF8 ) +
-                OUStringToOString( aInfo.GetAdapterDeviceID(), RTL_TEXTENCODING_UTF8 ) +
-                OUStringToOString( aInfo.GetDriverVersion(), RTL_TEXTENCODING_UTF8 ) +
-                OString::number( aInfo.GetWindowsVersion() ) );
-#else
-        static const OString aDeviceInfo (
-                OString( reinterpret_cast<const char*>(glGetString(GL_VENDOR)) ) +
-                OString( reinterpret_cast<const char*>(glGetString(GL_RENDERER)) ) +
-                OString( reinterpret_cast<const char*>(glGetString(GL_VERSION)) ) );
-#endif
+        static const OString aDeviceInfo (getDeviceInfoString());
 
         OString aMessage;
         aMessage += rPreamble;
