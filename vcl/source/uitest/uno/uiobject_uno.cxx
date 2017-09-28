@@ -96,7 +96,15 @@ IMPL_LINK_NOARG(ExecuteWrapper, ExecuteActionHdl, Timer*, void)
             aIdle.Start();
         }
 
-        Scheduler::ProcessEventsToSignal(mbSignal);
+        for (;;) {
+            {
+                std::unique_lock<std::mutex> lock(mMutex);
+                if (mbSignal) {
+                    break;
+                }
+            }
+            Application::Reschedule();
+        }
         std::unique_lock<std::mutex> lock(mMutex);
         while (!mbSignal)
         {
