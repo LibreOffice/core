@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_INC_WIN_SALINST_H
 #define INCLUDED_VCL_INC_WIN_SALINST_H
 
+#include <sal/config.h>
+
+#include <osl/conditn.hxx>
+
 #include <salinst.hxx>
 
 class SalYieldMutex;
