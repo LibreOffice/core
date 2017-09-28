@@ -937,80 +937,79 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
     {
         throw UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
-    else
+
+    if( pEntry->nWID == WID_STYLE_HIDDEN )
     {
-        if( pEntry->nWID == WID_STYLE_HIDDEN )
+        bool bValue = false;
+        if ( aValue >>= bValue )
+            SetHidden( bValue );
+        return;
+    }
+    if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
+        return; // not yet implemented for styles
+
+    if( pEntry->nWID == WID_STYLE_FAMILY )
+        throw PropertyVetoException();
+
+    if( (pEntry->nWID == EE_PARA_NUMBULLET) && (GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) )
+    {
+        OUString aStr;
+        const sal_uInt32 nTempHelpId = GetHelpId( aStr );
+
+        if( (nTempHelpId >= HID_PSEUDOSHEET_OUTLINE2) && (nTempHelpId <= HID_PSEUDOSHEET_OUTLINE9) )
+            return;
+    }
+
+    SfxItemSet &rStyleSet = GetItemSet();
+
+    if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
+    {
+        BitmapMode eMode;
+        if( aValue >>= eMode )
         {
-            bool bValue = false;
-            if ( aValue >>= bValue )
-                SetHidden( bValue );
+            rStyleSet.Put( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
+            rStyleSet.Put( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
             return;
         }
-        if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
-            return; // not yet implemented for styles
-
-        if( pEntry->nWID == WID_STYLE_FAMILY )
-            throw PropertyVetoException();
-
-        if( (pEntry->nWID == EE_PARA_NUMBULLET) && (GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) )
-        {
-            OUString aStr;
-            const sal_uInt32 nTempHelpId = GetHelpId( aStr );
-
-            if( (nTempHelpId >= HID_PSEUDOSHEET_OUTLINE2) && (nTempHelpId <= HID_PSEUDOSHEET_OUTLINE9) )
-                return;
-        }
-
-        SfxItemSet &rStyleSet = GetItemSet();
-
-        if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
-        {
-            BitmapMode eMode;
-            if( aValue >>= eMode )
-            {
-                rStyleSet.Put( XFillBmpStretchItem( eMode == BitmapMode_STRETCH ) );
-                rStyleSet.Put( XFillBmpTileItem( eMode == BitmapMode_REPEAT ) );
-                return;
-            }
-            throw IllegalArgumentException();
-        }
-
-        SfxItemSet aSet( GetPool().GetPool(),   {{pEntry->nWID, pEntry->nWID}});
-        aSet.Put( rStyleSet );
-
-        if( !aSet.Count() )
-        {
-            if( EE_PARA_NUMBULLET == pEntry->nWID )
-            {
-                vcl::Font aBulletFont;
-                SdStyleSheetPool::PutNumBulletItem( this, aBulletFont );
-                aSet.Put( rStyleSet );
-            }
-            else
-            {
-                aSet.Put( GetPool().GetPool().GetDefaultItem( pEntry->nWID ) );
-            }
-        }
-
-        if( pEntry->nMemberId == MID_NAME &&
-            ( pEntry->nWID == XATTR_FILLBITMAP || pEntry->nWID == XATTR_FILLGRADIENT ||
-              pEntry->nWID == XATTR_FILLHATCH || pEntry->nWID == XATTR_FILLFLOATTRANSPARENCE ||
-              pEntry->nWID == XATTR_LINESTART || pEntry->nWID == XATTR_LINEEND || pEntry->nWID == XATTR_LINEDASH) )
-        {
-            OUString aTempName;
-            if(!(aValue >>= aTempName ))
-                throw IllegalArgumentException();
-
-            SvxShape::SetFillAttribute( pEntry->nWID, aTempName, aSet );
-        }
-        else if(!SvxUnoTextRangeBase::SetPropertyValueHelper( pEntry, aValue, aSet ))
-        {
-            SvxItemPropertySet_setPropertyValue( pEntry, aValue, aSet );
-        }
-
-        rStyleSet.Put( aSet );
-        Broadcast(SfxHint(SfxHintId::DataChanged));
+        throw IllegalArgumentException();
     }
+
+    SfxItemSet aSet( GetPool().GetPool(),   {{pEntry->nWID, pEntry->nWID}});
+    aSet.Put( rStyleSet );
+
+    if( !aSet.Count() )
+    {
+        if( EE_PARA_NUMBULLET == pEntry->nWID )
+        {
+            vcl::Font aBulletFont;
+            SdStyleSheetPool::PutNumBulletItem( this, aBulletFont );
+            aSet.Put( rStyleSet );
+        }
+        else
+        {
+            aSet.Put( GetPool().GetPool().GetDefaultItem( pEntry->nWID ) );
+        }
+    }
+
+    if( pEntry->nMemberId == MID_NAME &&
+        ( pEntry->nWID == XATTR_FILLBITMAP || pEntry->nWID == XATTR_FILLGRADIENT ||
+          pEntry->nWID == XATTR_FILLHATCH || pEntry->nWID == XATTR_FILLFLOATTRANSPARENCE ||
+          pEntry->nWID == XATTR_LINESTART || pEntry->nWID == XATTR_LINEEND || pEntry->nWID == XATTR_LINEDASH) )
+    {
+        OUString aTempName;
+        if(!(aValue >>= aTempName ))
+            throw IllegalArgumentException();
+
+        SvxShape::SetFillAttribute( pEntry->nWID, aTempName, aSet );
+    }
+    else if(!SvxUnoTextRangeBase::SetPropertyValueHelper( pEntry, aValue, aSet ))
+    {
+        SvxItemPropertySet_setPropertyValue( pEntry, aValue, aSet );
+    }
+
+    rStyleSet.Put( aSet );
+    Broadcast(SfxHint(SfxHintId::DataChanged));
+
 }
 
 Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
@@ -1024,99 +1023,98 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName )
     {
         throw UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
     }
-    else
+
+    Any aAny;
+
+    if( pEntry->nWID == WID_STYLE_FAMILY )
     {
-        Any aAny;
-
-        if( pEntry->nWID == WID_STYLE_FAMILY )
+        if( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
         {
-            if( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
-            {
-                const OUString aLayoutName( GetName() );
-                aAny <<= aLayoutName.copy( 0, aLayoutName.indexOf( SD_LT_SEPARATOR) );
-            }
-            else
-            {
-                aAny <<= GetFamilyString(nFamily);
-            }
-        }
-        else if( pEntry->nWID == WID_STYLE_DISPNAME )
-        {
-            OUString aDisplayName;
-            if ( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
-            {
-                const SdStyleSheet* pStyleSheet = GetPseudoStyleSheet();
-                if (pStyleSheet != nullptr)
-                    aDisplayName = pStyleSheet->GetDisplayName();
-            }
-
-            if (aDisplayName.isEmpty())
-                aDisplayName = GetDisplayName();
-
-            aAny <<= aDisplayName;
-        }
-        else if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
-        {
-            aAny <<= false;
-        }
-        else if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
-        {
-            SfxItemSet &rStyleSet = GetItemSet();
-
-            const XFillBmpStretchItem* pStretchItem = rStyleSet.GetItem<XFillBmpStretchItem>(XATTR_FILLBMP_STRETCH);
-            const XFillBmpTileItem* pTileItem = rStyleSet.GetItem<XFillBmpTileItem>(XATTR_FILLBMP_TILE);
-
-            if( pStretchItem && pTileItem )
-            {
-                if( pTileItem->GetValue() )
-                    aAny <<= BitmapMode_REPEAT;
-                else if( pStretchItem->GetValue() )
-                    aAny <<= BitmapMode_STRETCH;
-                else
-                    aAny <<= BitmapMode_NO_REPEAT;
-            }
-        }
-        else if( pEntry->nWID == WID_STYLE_HIDDEN )
-        {
-            aAny <<= IsHidden( );
+            const OUString aLayoutName( GetName() );
+            aAny <<= aLayoutName.copy( 0, aLayoutName.indexOf( SD_LT_SEPARATOR) );
         }
         else
         {
-            SfxItemSet aSet( GetPool().GetPool(),   {{pEntry->nWID, pEntry->nWID}});
-
-            const SfxPoolItem* pItem;
-            SfxItemSet& rStyleSet = GetItemSet();
-
-            if( rStyleSet.GetItemState( pEntry->nWID, true, &pItem ) == SfxItemState::SET )
-                aSet.Put(  *pItem );
-
-            if( !aSet.Count() )
-                aSet.Put( GetPool().GetPool().GetDefaultItem( pEntry->nWID ) );
-
-            if(SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pEntry, aAny ))
-                return aAny;
-
-            // Get value of ItemSet
-            aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
+            aAny <<= GetFamilyString(nFamily);
         }
-
-        if( pEntry->aType != aAny.getValueType() )
-        {
-            // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
-            if( ( pEntry->aType == ::cppu::UnoType<sal_Int16>::get()) && aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
-            {
-                sal_Int32 nValue = 0;
-                aAny >>= nValue;
-                aAny <<= (sal_Int16)nValue;
-            }
-            else
-            {
-                OSL_FAIL("SvxShape::GetAnyForItem() Returnvalue has wrong Type!" );
-            }
-        }
-
-        return aAny;
     }
+    else if( pEntry->nWID == WID_STYLE_DISPNAME )
+    {
+        OUString aDisplayName;
+        if ( nFamily == SD_STYLE_FAMILY_MASTERPAGE )
+        {
+            const SdStyleSheet* pStyleSheet = GetPseudoStyleSheet();
+            if (pStyleSheet != nullptr)
+                aDisplayName = pStyleSheet->GetDisplayName();
+        }
+
+        if (aDisplayName.isEmpty())
+            aDisplayName = GetDisplayName();
+
+        aAny <<= aDisplayName;
+    }
+    else if( pEntry->nWID == SDRATTR_TEXTDIRECTION )
+    {
+        aAny <<= false;
+    }
+    else if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
+    {
+        SfxItemSet &rStyleSet = GetItemSet();
+
+        const XFillBmpStretchItem* pStretchItem = rStyleSet.GetItem<XFillBmpStretchItem>(XATTR_FILLBMP_STRETCH);
+        const XFillBmpTileItem* pTileItem = rStyleSet.GetItem<XFillBmpTileItem>(XATTR_FILLBMP_TILE);
+
+        if( pStretchItem && pTileItem )
+        {
+            if( pTileItem->GetValue() )
+                aAny <<= BitmapMode_REPEAT;
+            else if( pStretchItem->GetValue() )
+                aAny <<= BitmapMode_STRETCH;
+            else
+                aAny <<= BitmapMode_NO_REPEAT;
+        }
+    }
+    else if( pEntry->nWID == WID_STYLE_HIDDEN )
+    {
+        aAny <<= IsHidden( );
+    }
+    else
+    {
+        SfxItemSet aSet( GetPool().GetPool(),   {{pEntry->nWID, pEntry->nWID}});
+
+        const SfxPoolItem* pItem;
+        SfxItemSet& rStyleSet = GetItemSet();
+
+        if( rStyleSet.GetItemState( pEntry->nWID, true, &pItem ) == SfxItemState::SET )
+            aSet.Put(  *pItem );
+
+        if( !aSet.Count() )
+            aSet.Put( GetPool().GetPool().GetDefaultItem( pEntry->nWID ) );
+
+        if(SvxUnoTextRangeBase::GetPropertyValueHelper( aSet, pEntry, aAny ))
+            return aAny;
+
+        // Get value of ItemSet
+        aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
+    }
+
+    if( pEntry->aType != aAny.getValueType() )
+    {
+        // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
+        if( ( pEntry->aType == ::cppu::UnoType<sal_Int16>::get()) && aAny.getValueType() == ::cppu::UnoType<sal_Int32>::get() )
+        {
+            sal_Int32 nValue = 0;
+            aAny >>= nValue;
+            aAny <<= (sal_Int16)nValue;
+        }
+        else
+        {
+            OSL_FAIL("SvxShape::GetAnyForItem() Returnvalue has wrong Type!" );
+        }
+    }
+
+    return aAny;
+
 }
 
 void SAL_CALL SdStyleSheet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) {}

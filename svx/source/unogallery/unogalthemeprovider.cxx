@@ -166,10 +166,8 @@ uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
     {
         throw container::NoSuchElementException();
     }
-    else
-    {
-        aRet <<= uno::Reference< gallery::XGalleryTheme >( new ::unogallery::GalleryTheme( rName ) );
-    }
+
+    aRet <<= uno::Reference< gallery::XGalleryTheme >( new ::unogallery::GalleryTheme( rName ) );
 
     return aRet;
 }
@@ -239,10 +237,8 @@ void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
     {
         throw container::NoSuchElementException();
     }
-    else
-    {
-        mpGallery->RemoveTheme( rName );
-    }
+
+    mpGallery->RemoveTheme( rName );
 }
 
 }

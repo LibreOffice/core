@@ -219,10 +219,7 @@ getCurrentDoc( const OUString& sKey )
             throw uno::RuntimeException(
                 "Can't extract model from basic ( it's obviously not set yet  therefore don't know the current document context)" );
         }
-        else
-        {
-            SAL_INFO("vbahelper", "Have model points to url " << xModel->getURL());
-        }
+        SAL_INFO("vbahelper", "Have model points to url " << xModel->getURL());
     }
     else
     {

@@ -208,13 +208,10 @@ VbaDocumentBase::Unprotect( const uno::Any &aPassword )
     uno::Reference< util::XProtectable > xProt( getModel(), uno::UNO_QUERY_THROW );
     if( !xProt->isProtected() )
         throw uno::RuntimeException("File is already unprotected" );
+    if( aPassword >>= rPassword )
+        xProt->unprotect( rPassword );
     else
-    {
-        if( aPassword >>= rPassword )
-            xProt->unprotect( rPassword );
-        else
-            xProt->unprotect( OUString() );
-    }
+        xProt->unprotect( OUString() );
 }
 
 void

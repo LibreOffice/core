@@ -11,13 +11,51 @@
 
 extern int foo();
 extern int bar();
+class Class {};
 
-int main() {
+void top1() {
     if (foo() == 1) { // expected-note {{if condition here [loplugin:flatten]}}
+        Class aClass;
+        (void)aClass;
     } else {
         throw std::exception(); // expected-error {{unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case [loplugin:flatten]}}
     }
+}
 
+void top2() {
+    if (foo() == 2) {
+        throw std::exception(); // expected-error {{unconditional throw in then branch, just flatten the else [loplugin:flatten]}}
+    } else {
+        Class aClass;
+        (void)aClass;
+    }
+}
+
+void top3() {
+    // no warning expected
+    if (foo() == 2) {
+        throw std::exception();
+    } else {
+        Class aClass;
+        (void)aClass;
+    }
+    int x = 1;
+    (void)x;
+}
+
+void top4() {
+    // no warning expected
+    if (foo() == 2) {
+        Class aClass;
+        (void)aClass;
+    } else {
+        throw std::exception();
+    }
+    int x = 1;
+    (void)x;
+}
+
+int main() {
     // no warning expected
     if (bar() == 3) {
         throw std::exception();

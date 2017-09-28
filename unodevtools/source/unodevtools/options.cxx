@@ -49,11 +49,10 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
         {
             throw CannotDumpException(
                 "incomplete option \"-" + aOpt + "\" given!");
-        } else {
-            SAL_INFO("unodevtools", "identified option -" << pOpt << " = " << *pValue);
-            ++(*pnIndex);
-            return true;
         }
+        SAL_INFO("unodevtools", "identified option -" << pOpt << " = " << *pValue);
+        ++(*pnIndex);
+        return true;
     } else if (aArg.indexOf(aOpt) == 1) {
         *pValue = aArg.copy(1 + aOpt.getLength());
         SAL_INFO("unodevtools", "identified option -" << pOpt << " = " << *pValue);

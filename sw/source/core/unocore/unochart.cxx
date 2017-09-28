@@ -1997,13 +1997,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
         SwTable* pTable = pTableFormat ? SwTable::FindTable( pTableFormat ) : nullptr;
         if (!pTableFormat || !pTable || pTable->IsTableComplex())
             throw uno::RuntimeException();
-        else
-        {
-            const OUString aCellRange( GetCellRangeName( *pTableFormat, *m_pTableCursor ) );
-            OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );
-            bOk = FillRangeDescriptor( aDesc, aCellRange );
-            OSL_ENSURE( bOk, "failed to get SwRangeDescriptor" );
-        }
+
+        const OUString aCellRange( GetCellRangeName( *pTableFormat, *m_pTableCursor ) );
+        OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );
+        bOk = FillRangeDescriptor( aDesc, aCellRange );
+        OSL_ENSURE( bOk, "failed to get SwRangeDescriptor" );
+
         if (bOk)
         {
             aDesc.Normalize();

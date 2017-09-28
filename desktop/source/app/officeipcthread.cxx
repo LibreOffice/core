@@ -346,8 +346,7 @@ void SAL_CALL RequestHandlerController::queryTermination( const EventObject& )
 
     if ( RequestHandler::AreRequestsPending() )
         throw TerminationVetoException();
-    else
-        RequestHandler::SetDowning();
+    RequestHandler::SetDowning();
 }
 
 void SAL_CALL RequestHandlerController::notifyTermination( const EventObject& )

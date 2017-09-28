@@ -902,12 +902,9 @@ sal_Bool SAL_CALL UIConfigurationManager::hasSettings( const OUString& ResourceU
     if (( nElementType == css::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= css::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
-    else
-    {
-        UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
-        if ( pDataSettings && !pDataSettings->bDefault )
-            return true;
-    }
+    UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
+    if ( pDataSettings && !pDataSettings->bDefault )
+        return true;
 
     return false;
 }
@@ -919,22 +916,20 @@ Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const OU
     if (( nElementType == css::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= css::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
-    else
+
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
+    if ( pDataSettings && !pDataSettings->bDefault )
     {
-        SolarMutexGuard g;
-
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
-        if ( pDataSettings && !pDataSettings->bDefault )
-        {
-            // Create a copy of our data if someone wants to change the data.
-            if ( bWriteable )
-                return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( pDataSettings->xSettings ) ), UNO_QUERY );
-            else
-                return pDataSettings->xSettings;
-        }
+        // Create a copy of our data if someone wants to change the data.
+        if ( bWriteable )
+            return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( pDataSettings->xSettings ) ), UNO_QUERY );
+        else
+            return pDataSettings->xSettings;
     }
 
     throw NoSuchElementException();

@@ -448,64 +448,62 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
 
     if (!pWin)
         throw RuntimeException();
-    else
+
+    // get accessible text
+    SmViewShell *pView = pWin->GetView();
+    SmDocShell  *pDoc  = pView ? pView->GetDoc() : nullptr;
+    if (!pDoc)
+        throw RuntimeException();
+    OUString aTxt( GetAccessibleText_Impl() );
+    if (!(0 <= nIndex  &&  nIndex <= aTxt.getLength()))   // aTxt.getLength() is valid
+        throw IndexOutOfBoundsException();
+
+    // find a reasonable rectangle for position aTxt.getLength().
+    bool bWasBehindText = (nIndex == aTxt.getLength());
+    if (bWasBehindText && nIndex)
+        --nIndex;
+
+    const SmNode *pTree = pDoc->GetFormulaTree();
+    const SmNode *pNode = pTree->FindNodeWithAccessibleIndex( nIndex );
+    //! pNode may be 0 if the index belongs to a char that was inserted
+    //! only for the accessible text!
+    if (pNode)
     {
-        // get accessible text
-        SmViewShell *pView = pWin->GetView();
-        SmDocShell  *pDoc  = pView ? pView->GetDoc() : nullptr;
-        if (!pDoc)
-            throw RuntimeException();
-        OUString aTxt( GetAccessibleText_Impl() );
-        if (!(0 <= nIndex  &&  nIndex <= aTxt.getLength()))   // aTxt.getLength() is valid
-            throw IndexOutOfBoundsException();
+        sal_Int32 nAccIndex = pNode->GetAccessibleIndex();
+        OSL_ENSURE( nAccIndex >= 0, "invalid accessible index" );
+        OSL_ENSURE( nIndex >= nAccIndex, "index out of range" );
 
-        // find a reasonable rectangle for position aTxt.getLength().
-        bool bWasBehindText = (nIndex == aTxt.getLength());
-        if (bWasBehindText && nIndex)
-            --nIndex;
-
-        const SmNode *pTree = pDoc->GetFormulaTree();
-        const SmNode *pNode = pTree->FindNodeWithAccessibleIndex( nIndex );
-        //! pNode may be 0 if the index belongs to a char that was inserted
-        //! only for the accessible text!
-        if (pNode)
+        OUStringBuffer aBuf;
+        pNode->GetAccessibleText(aBuf);
+        OUString aNodeText = aBuf.makeStringAndClear();
+        sal_Int32 nNodeIndex = nIndex - nAccIndex;
+        if (0 <= nNodeIndex  &&  nNodeIndex < aNodeText.getLength())
         {
-            sal_Int32 nAccIndex = pNode->GetAccessibleIndex();
-            OSL_ENSURE( nAccIndex >= 0, "invalid accessible index" );
-            OSL_ENSURE( nIndex >= nAccIndex, "index out of range" );
+            // get appropriate rectangle
+            Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
+            Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
+            aTLPos.X() -= 0;
+            Size  aSize (pNode->GetSize());
 
-            OUStringBuffer aBuf;
-            pNode->GetAccessibleText(aBuf);
-            OUString aNodeText = aBuf.makeStringAndClear();
-            sal_Int32 nNodeIndex = nIndex - nAccIndex;
-            if (0 <= nNodeIndex  &&  nNodeIndex < aNodeText.getLength())
-            {
-                // get appropriate rectangle
-                Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
-                Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
-                aTLPos.X() -= 0;
-                Size  aSize (pNode->GetSize());
+            long* pXAry = new long[ aNodeText.getLength() ];
+            pWin->SetFont( pNode->GetFont() );
+            pWin->GetTextArray( aNodeText, pXAry, 0, aNodeText.getLength() );
+            aTLPos.X()    += nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0;
+            aSize.Width()  = nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex];
+            delete[] pXAry;
 
-                long* pXAry = new long[ aNodeText.getLength() ];
-                pWin->SetFont( pNode->GetFont() );
-                pWin->GetTextArray( aNodeText, pXAry, 0, aNodeText.getLength() );
-                aTLPos.X()    += nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0;
-                aSize.Width()  = nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex];
-                delete[] pXAry;
-
-                aTLPos = pWin->LogicToPixel( aTLPos );
-                aSize  = pWin->LogicToPixel( aSize );
-                aRes.X = aTLPos.X();
-                aRes.Y = aTLPos.Y();
-                aRes.Width  = aSize.Width();
-                aRes.Height = aSize.Height();
-            }
+            aTLPos = pWin->LogicToPixel( aTLPos );
+            aSize  = pWin->LogicToPixel( aSize );
+            aRes.X = aTLPos.X();
+            aRes.Y = aTLPos.Y();
+            aRes.Width  = aSize.Width();
+            aRes.Height = aSize.Height();
         }
-
-        // take rectangle from last character and move it to the right
-        if (bWasBehindText)
-            aRes.X += aRes.Width;
     }
+
+    // take rectangle from last character and move it to the right
+    if (bWasBehindText)
+        aRes.X += aRes.Width;
 
     return aRes;
 }
@@ -701,24 +699,23 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
 
     if (!pWin)
         throw RuntimeException();
-    else
+
+    Reference< datatransfer::clipboard::XClipboard > xClipboard = pWin->GetClipboard();
+    if ( xClipboard.is() )
     {
-        Reference< datatransfer::clipboard::XClipboard > xClipboard = pWin->GetClipboard();
-        if ( xClipboard.is() )
-        {
-            OUString sText( getTextRange(nStartIndex, nEndIndex) );
+        OUString sText( getTextRange(nStartIndex, nEndIndex) );
 
-            vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
-            SolarMutexReleaser aReleaser;
-            xClipboard->setContents( pDataObj, nullptr );
+        vcl::unohelper::TextDataObject* pDataObj = new vcl::unohelper::TextDataObject( sText );
+        SolarMutexReleaser aReleaser;
+        xClipboard->setContents( pDataObj, nullptr );
 
-            Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
-            if( xFlushableClipboard.is() )
-                xFlushableClipboard->flushClipboard();
+        Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
+        if( xFlushableClipboard.is() )
+            xFlushableClipboard->flushClipboard();
 
-            bReturn = true;
-        }
+        bReturn = true;
     }
+
 
     return bReturn;
 }

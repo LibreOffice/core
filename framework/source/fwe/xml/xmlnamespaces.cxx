@@ -70,23 +70,21 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
         // for the default namespace - check and throw exception if check fails
         throw SAXException( "Clearing xml namespace only allowed for default namespace!", Reference< XInterface >(), Any() );
     }
+
+    if ( aNamespaceName.isEmpty() )
+        m_aDefaultNamespace = aValue;
     else
     {
-        if ( aNamespaceName.isEmpty() )
-            m_aDefaultNamespace = aValue;
+        p = m_aNamespaceMap.find( aNamespaceName );
+        if ( p != m_aNamespaceMap.end() )
+        {
+            // replace current namespace definition
+            m_aNamespaceMap.erase( p );
+            m_aNamespaceMap.emplace( aNamespaceName, aValue );
+        }
         else
         {
-            p = m_aNamespaceMap.find( aNamespaceName );
-            if ( p != m_aNamespaceMap.end() )
-            {
-                // replace current namespace definition
-                m_aNamespaceMap.erase( p );
-                m_aNamespaceMap.emplace( aNamespaceName, aValue );
-            }
-            else
-            {
-                m_aNamespaceMap.emplace( aNamespaceName, aValue );
-            }
+            m_aNamespaceMap.emplace( aNamespaceName, aValue );
         }
     }
 }

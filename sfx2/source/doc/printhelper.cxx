@@ -404,10 +404,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             {
                 throw css::lang::IllegalArgumentException();
             }
-            else
-            {
-                aSetPaperSize = impl_Size_Struct2Object(aTempSize);
-            }
+            aSetPaperSize = impl_Size_Struct2Object(aTempSize);
         }
 
         // PrinterTray-Property

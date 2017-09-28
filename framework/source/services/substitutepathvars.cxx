@@ -478,8 +478,7 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
             {
                 throw NoSuchElementException( "Endless recursion detected. Cannot substitute variables!", static_cast<cppu::OWeakObject *>(this) );
             }
-            else
-                aResult = rText;
+            aResult = rText;
         }
         else
         {
@@ -488,8 +487,7 @@ OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText
             {
                 throw NoSuchElementException( "Unknown variable found!", static_cast<cppu::OWeakObject *>(this) );
             }
-            else
-                aResult = aWorkText;
+            aResult = aWorkText;
         }
     }
 

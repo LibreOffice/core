@@ -210,49 +210,47 @@ void SAL_CALL SdUnoPageBackground::setPropertyValue( const OUString& aPropertyNa
     {
         throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
-    else
+
+    if( mpSet )
     {
-        if( mpSet )
+        if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
         {
-            if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
+            drawing::BitmapMode eMode;
+            if( aValue >>= eMode )
             {
-                drawing::BitmapMode eMode;
-                if( aValue >>= eMode )
-                {
-                    mpSet->Put( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
-                    mpSet->Put( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
-                    return;
-                }
+                mpSet->Put( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
+                mpSet->Put( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
+                return;
+            }
+            throw lang::IllegalArgumentException();
+        }
+
+        SfxItemPool& rPool = *mpSet->GetPool();
+        SfxItemSet aSet( rPool, {{pEntry->nWID, pEntry->nWID}});
+        aSet.Put( *mpSet );
+
+        if( !aSet.Count() )
+            aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
+
+        if( pEntry->nMemberId == MID_NAME && ( pEntry->nWID == XATTR_FILLBITMAP || pEntry->nWID == XATTR_FILLGRADIENT || pEntry->nWID == XATTR_FILLHATCH || pEntry->nWID == XATTR_FILLFLOATTRANSPARENCE ) )
+        {
+            OUString aName;
+            if(!(aValue >>= aName ))
                 throw lang::IllegalArgumentException();
-            }
 
-            SfxItemPool& rPool = *mpSet->GetPool();
-            SfxItemSet aSet( rPool, {{pEntry->nWID, pEntry->nWID}});
-            aSet.Put( *mpSet );
-
-            if( !aSet.Count() )
-                aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
-
-            if( pEntry->nMemberId == MID_NAME && ( pEntry->nWID == XATTR_FILLBITMAP || pEntry->nWID == XATTR_FILLGRADIENT || pEntry->nWID == XATTR_FILLHATCH || pEntry->nWID == XATTR_FILLFLOATTRANSPARENCE ) )
-            {
-                OUString aName;
-                if(!(aValue >>= aName ))
-                    throw lang::IllegalArgumentException();
-
-                SvxShape::SetFillAttribute( pEntry->nWID, aName, aSet );
-            }
-            else
-            {
-                SvxItemPropertySet_setPropertyValue( pEntry, aValue, aSet );
-            }
-
-            mpSet->Put( aSet );
+            SvxShape::SetFillAttribute( pEntry->nWID, aName, aSet );
         }
         else
         {
-            if(pEntry && pEntry->nWID)
-                mpPropSet->setPropertyValue( pEntry, aValue );
+            SvxItemPropertySet_setPropertyValue( pEntry, aValue, aSet );
         }
+
+        mpSet->Put( aSet );
+    }
+    else
+    {
+        if(pEntry && pEntry->nWID)
+            mpPropSet->setPropertyValue( pEntry, aValue );
     }
 }
 
@@ -267,43 +265,41 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
     {
         throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));
     }
-    else
+
+    if( mpSet )
     {
-        if( mpSet )
+        if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
         {
-            if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
+            const XFillBmpStretchItem* pStretchItem = mpSet->GetItem<XFillBmpStretchItem>(XATTR_FILLBMP_STRETCH);
+            const XFillBmpTileItem* pTileItem = mpSet->GetItem<XFillBmpTileItem>(XATTR_FILLBMP_TILE);
+
+            if( pStretchItem && pTileItem )
             {
-                const XFillBmpStretchItem* pStretchItem = mpSet->GetItem<XFillBmpStretchItem>(XATTR_FILLBMP_STRETCH);
-                const XFillBmpTileItem* pTileItem = mpSet->GetItem<XFillBmpTileItem>(XATTR_FILLBMP_TILE);
-
-                if( pStretchItem && pTileItem )
-                {
-                    if( pTileItem->GetValue() )
-                        aAny <<= drawing::BitmapMode_REPEAT;
-                    else if( pStretchItem->GetValue() )
-                        aAny <<= drawing::BitmapMode_STRETCH;
-                    else
-                        aAny <<= drawing::BitmapMode_NO_REPEAT;
-                }
-            }
-            else
-            {
-                SfxItemPool& rPool = *mpSet->GetPool();
-                SfxItemSet aSet( rPool, {{pEntry->nWID, pEntry->nWID}});
-                aSet.Put( *mpSet );
-
-                if( !aSet.Count() )
-                    aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
-
-                // get value from ItemSet
-                aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
+                if( pTileItem->GetValue() )
+                    aAny <<= drawing::BitmapMode_REPEAT;
+                else if( pStretchItem->GetValue() )
+                    aAny <<= drawing::BitmapMode_STRETCH;
+                else
+                    aAny <<= drawing::BitmapMode_NO_REPEAT;
             }
         }
         else
         {
-            if(pEntry && pEntry->nWID)
-                aAny = mpPropSet->getPropertyValue( pEntry );
+            SfxItemPool& rPool = *mpSet->GetPool();
+            SfxItemSet aSet( rPool, {{pEntry->nWID, pEntry->nWID}});
+            aSet.Put( *mpSet );
+
+            if( !aSet.Count() )
+                aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
+
+            // get value from ItemSet
+            aAny = SvxItemPropertySet_getPropertyValue( pEntry, aSet );
         }
+    }
+    else
+    {
+        if(pEntry && pEntry->nWID)
+            aAny = mpPropSet->getPropertyValue( pEntry );
     }
     return aAny;
 }

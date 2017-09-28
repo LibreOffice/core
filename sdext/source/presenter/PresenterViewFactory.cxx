@@ -150,15 +150,12 @@ void PresenterViewFactory::Register (const Reference<frame::XController>& rxCont
         {
             throw RuntimeException();
         }
-        else
-        {
-            mxConfigurationController->addResourceFactory(msCurrentSlidePreviewViewURL, this);
-            mxConfigurationController->addResourceFactory(msNextSlidePreviewViewURL, this);
-            mxConfigurationController->addResourceFactory(msNotesViewURL, this);
-            mxConfigurationController->addResourceFactory(msToolBarViewURL, this);
-            mxConfigurationController->addResourceFactory(msSlideSorterURL, this);
-            mxConfigurationController->addResourceFactory(msHelpViewURL, this);
-        }
+        mxConfigurationController->addResourceFactory(msCurrentSlidePreviewViewURL, this);
+        mxConfigurationController->addResourceFactory(msNextSlidePreviewViewURL, this);
+        mxConfigurationController->addResourceFactory(msNotesViewURL, this);
+        mxConfigurationController->addResourceFactory(msToolBarViewURL, this);
+        mxConfigurationController->addResourceFactory(msSlideSorterURL, this);
+        mxConfigurationController->addResourceFactory(msHelpViewURL, this);
     }
     catch (RuntimeException&)
     {

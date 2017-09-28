@@ -31,17 +31,21 @@ public:
     }
 
     bool TraverseCXXCatchStmt(CXXCatchStmt * );
-    bool VisitIfStmt(const IfStmt * );
+    bool VisitIfStmt(IfStmt const * );
 private:
-    bool rewrite(const IfStmt * );
+    bool rewrite1(IfStmt const * );
+    bool rewrite2(IfStmt const * );
     SourceRange ignoreMacroExpansions(SourceRange range);
     SourceRange extendOverComments(SourceRange range);
     std::string getSourceAsString(SourceRange range);
     std::string invertCondition(Expr const * condExpr, SourceRange conditionRange);
-    std::vector<std::pair<const char *, const char*>> mvModifiedRanges;
+    bool checkOverlap(SourceRange);
+    bool lastStmtInParent(Stmt const * stmt);
+
+    std::vector<std::pair<char const *, char const *>> mvModifiedRanges;
 };
 
-static const Stmt * containsSingleThrowExpr(const Stmt * stmt)
+static Stmt const * containsSingleThrowExpr(Stmt const * stmt)
 {
     if (auto compoundStmt = dyn_cast<CompoundStmt>(stmt)) {
         if (compoundStmt->size() != 1)
@@ -54,13 +58,40 @@ static const Stmt * containsSingleThrowExpr(const Stmt * stmt)
     return dyn_cast<CXXThrowExpr>(stmt);
 }
 
+static bool containsVarDecl(Stmt const * stmt)
+{
+    if (auto compoundStmt = dyn_cast<CompoundStmt>(stmt)) {
+        for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i) {
+            auto declStmt = dyn_cast<DeclStmt>(*i);
+            if (declStmt && isa<VarDecl>(*declStmt->decl_begin()))
+                return true;
+        }
+        return false;
+    }
+    auto declStmt = dyn_cast<DeclStmt>(stmt);
+    return declStmt && isa<VarDecl>(*declStmt->decl_begin());
+}
+
+bool Flatten::lastStmtInParent(Stmt const * stmt)
+{
+    auto parent = parentStmt(stmt);
+    if (!parent) {
+        return true;
+    }
+    auto parentCompound = dyn_cast<CompoundStmt>(parent);
+    if (!parentCompound) {
+        return true;
+    }
+    return parentCompound->body_back() == stmt;
+}
+
 bool Flatten::TraverseCXXCatchStmt(CXXCatchStmt* )
 {
     // ignore stuff inside catch statements, where doing a "if...else..throw" is more natural
     return true;
 }
 
-bool Flatten::VisitIfStmt(const IfStmt* ifStmt)
+bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
 {
     if (ignoreLocation(ifStmt))
         return true;
@@ -78,25 +109,51 @@ bool Flatten::VisitIfStmt(const IfStmt* ifStmt)
         return true;
 
     auto throwExpr = containsSingleThrowExpr(ifStmt->getElse());
-    if (!throwExpr)
-        return true;
-
-    // if both the "if" and the "else" contain throws, no improvement
-    if (containsSingleThrowExpr(ifStmt->getThen()))
-        return true;
-
-    if (!rewrite(ifStmt))
+    if (throwExpr)
     {
-        report(
-            DiagnosticsEngine::Warning,
-            "unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case",
-            throwExpr->getLocStart())
-            << throwExpr->getSourceRange();
-        report(
-            DiagnosticsEngine::Note,
-            "if condition here",
-            ifStmt->getLocStart())
-            << ifStmt->getSourceRange();
+        // if both the "if" and the "else" contain throws, no improvement
+        if (containsSingleThrowExpr(ifStmt->getThen()))
+            return true;
+        // if the "if" statement is not the last statement in it's block, and it contains
+        // var decls in it's then block, we cannot de-indent the then block without
+        // extending the lifetime of some variables, which may be problematic
+        if (!lastStmtInParent(ifStmt) && containsVarDecl(ifStmt->getThen()))
+            return true;
+
+        if (!rewrite1(ifStmt))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case",
+                throwExpr->getLocStart())
+                << throwExpr->getSourceRange();
+            report(
+                DiagnosticsEngine::Note,
+                "if condition here",
+                ifStmt->getLocStart())
+                << ifStmt->getSourceRange();
+        }
+    }
+    throwExpr = containsSingleThrowExpr(ifStmt->getThen());
+    if (throwExpr)
+    {
+        // if both the "if" and the "else" contain throws, no improvement
+        if (containsSingleThrowExpr(ifStmt->getElse()))
+            return true;
+        // if the "if" statement is not the last statement in it's block, and it contains
+        // var decls in it's else block, we cannot de-indent the else block without
+        // extending the lifetime of some variables, which may be problematic
+        if (!lastStmtInParent(ifStmt) && containsVarDecl(ifStmt->getElse()))
+            return true;
+
+        if (!rewrite2(ifStmt))
+        {
+            report(
+                DiagnosticsEngine::Warning,
+                "unconditional throw in then branch, just flatten the else",
+                throwExpr->getLocStart())
+                << throwExpr->getSourceRange();
+        }
     }
     return true;
 }
@@ -104,9 +161,9 @@ bool Flatten::VisitIfStmt(const IfStmt* ifStmt)
 static std::string stripOpenAndCloseBrace(std::string s);
 static std::string deindent(std::string const & s);
 static std::vector<std::string> split(std::string s);
-static bool startswith(const std::string& rStr, const char* pSubStr);
+static bool startswith(std::string const & rStr, char const * pSubStr);
 
-bool Flatten::rewrite(const IfStmt* ifStmt)
+bool Flatten::rewrite1(IfStmt const * ifStmt)
 {
     if (!rewriter)
         return false;
@@ -127,17 +184,8 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
 
     // If we overlap with a previous area we modified, we cannot perform this change
     // without corrupting the source
-    SourceManager& SM = compiler.getSourceManager();
-    const char *p1 = SM.getCharacterData( ifStmt->getSourceRange().getBegin() );
-    const char *p2 = SM.getCharacterData( ifStmt->getSourceRange().getEnd() );
-    for (std::pair<const char*, const char *> const & rPair : mvModifiedRanges)
-    {
-        if (rPair.first <= p1 && p1 <= rPair.second)
-            return false;
-        if (p1 <= rPair.second && rPair.first <= p2)
-            return false;
-    }
-    mvModifiedRanges.emplace_back(p1, p2);
+    if (!checkOverlap(ifStmt->getSourceRange()))
+        return false;
 
     thenRange = extendOverComments(thenRange);
     elseRange = extendOverComments(elseRange);
@@ -160,6 +208,7 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
     if (!replaceText(elseRange, thenString)) {
         return false;
     }
+    std::cout << "rewrite 3" << std::endl;
     if (!removeText(elseKeywordRange)) {
         return false;
     }
@@ -170,6 +219,71 @@ bool Flatten::rewrite(const IfStmt* ifStmt)
         return false;
     }
 
+    return true;
+}
+
+bool Flatten::rewrite2(IfStmt const * ifStmt)
+{
+    if (!rewriter)
+        return false;
+
+    auto conditionRange = ignoreMacroExpansions(ifStmt->getCond()->getSourceRange());
+    if (!conditionRange.isValid()) {
+        return false;
+    }
+    auto thenRange = ignoreMacroExpansions(ifStmt->getThen()->getSourceRange());
+    if (!thenRange.isValid()) {
+        return false;
+    }
+    auto elseRange = ignoreMacroExpansions(ifStmt->getElse()->getSourceRange());
+    if (!elseRange.isValid()) {
+        return false;
+    }
+    SourceRange elseKeywordRange = ifStmt->getElseLoc();
+
+    // If we overlap with a previous area we modified, we cannot perform this change
+    // without corrupting the source
+    if (!checkOverlap(ifStmt->getSourceRange()))
+        return false;
+
+    elseRange = extendOverComments(elseRange);
+    elseKeywordRange = extendOverComments(elseKeywordRange);
+
+    // in adjusting the formatting I assume that "{" starts on a new line
+
+    std::string elseString = getSourceAsString(elseRange);
+    if (auto compoundStmt = dyn_cast<CompoundStmt>(ifStmt->getElse())) {
+        if (compoundStmt->getLBracLoc().isValid()) {
+            elseString = stripOpenAndCloseBrace(elseString);
+        }
+    }
+    elseString = deindent(elseString);
+
+    if (!replaceText(elseRange, elseString)) {
+        return false;
+    }
+    if (!removeText(elseKeywordRange)) {
+        return false;
+    }
+
+    return true;
+}
+
+// If we overlap with a previous area we modified, we cannot perform this change
+// without corrupting the source
+bool Flatten::checkOverlap(SourceRange range)
+{
+    SourceManager& SM = compiler.getSourceManager();
+    char const  *p1 = SM.getCharacterData( range.getBegin() );
+    char const *p2 = SM.getCharacterData( range.getEnd() );
+    for (std::pair<char const *, char const *> const & rPair : mvModifiedRanges)
+    {
+        if (rPair.first <= p1 && p1 <= rPair.second)
+            return false;
+        if (p1 <= rPair.second && rPair.first <= p2)
+            return false;
+    }
+    mvModifiedRanges.emplace_back(p1, p2);
     return true;
 }
 
@@ -253,7 +367,7 @@ std::vector<std::string> split(std::string s)
     return rv;
 }
 
-static bool startswith(const std::string& rStr, const char* pSubStr)
+static bool startswith(std::string const & rStr, char const * pSubStr)
 {
     return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
 }
@@ -299,8 +413,8 @@ SourceRange Flatten::extendOverComments(SourceRange range)
     SourceManager& SM = compiler.getSourceManager();
     SourceLocation startLoc = range.getBegin();
     SourceLocation endLoc = range.getEnd();
-    const char *p1 = SM.getCharacterData( startLoc );
-    const char *p2 = SM.getCharacterData( endLoc );
+    char const *p1 = SM.getCharacterData( startLoc );
+    char const *p2 = SM.getCharacterData( endLoc );
 
     // scan backwards from the beginning to include any spaces on that line
     while (*(p1-1) == ' ')
@@ -338,13 +452,13 @@ std::string Flatten::getSourceAsString(SourceRange range)
     SourceManager& SM = compiler.getSourceManager();
     SourceLocation startLoc = range.getBegin();
     SourceLocation endLoc = range.getEnd();
-    const char *p1 = SM.getCharacterData( startLoc );
-    const char *p2 = SM.getCharacterData( endLoc );
+    char const *p1 = SM.getCharacterData( startLoc );
+    char const *p2 = SM.getCharacterData( endLoc );
     p2 += Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
     return std::string( p1, p2 - p1);
 }
 
-loplugin::Plugin::Registration< Flatten > X("flatten", false);
+loplugin::Plugin::Registration< Flatten > X("flatten", true);
 
 }
 

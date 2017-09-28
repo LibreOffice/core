@@ -3418,15 +3418,12 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::
                     //  name already exists
                     throw container::ElementExistException();
                 }
-                else
-                {
-                    SCTAB nPosition = rDoc.GetTableCount();
-                    bDone = pDocShell->GetDocFunc().InsertTable( nPosition, aName,
-                                                                 true, true );
-                    if (bDone)
-                        pSheetObj->InitInsertSheet( pDocShell, nPosition );
-                    //  set document and new range in the object
-                }
+                SCTAB nPosition = rDoc.GetTableCount();
+                bDone = pDocShell->GetDocFunc().InsertTable( nPosition, aName,
+                                                             true, true );
+                if (bDone)
+                    pSheetObj->InitInsertSheet( pDocShell, nPosition );
+                //  set document and new range in the object
             }
             else
                 bIllArg = true;

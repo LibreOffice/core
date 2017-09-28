@@ -3138,9 +3138,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
 
     if (nRet == -1)
         throw lang::IndexOutOfBoundsException();
-    else
-        return nRet;
-    //return nRet;
+     return nRet;
 }
 
 // #i71360#, #i108125# - adjustments for change tracking text markup

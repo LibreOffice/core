@@ -107,12 +107,9 @@ static bool readOption( OUString * pValue, const sal_Char * pOpt,
         {
             throw RuntimeException( "incomplete option \"-" + aOpt + "\" given!" );
         }
-        else
-        {
-            SAL_INFO("cpputools.unoexe", "> identified option -" << pOpt << " = " << aArg);
-            ++(*pnIndex);
-            return true;
-        }
+        SAL_INFO("cpputools.unoexe", "> identified option -" << pOpt << " = " << aArg);
+        ++(*pnIndex);
+        return true;
     }
       else if (aArg.indexOf(aOpt) == 1)
     {

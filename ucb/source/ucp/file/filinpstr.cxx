@@ -197,8 +197,7 @@ XInputStream_impl::getLength()
     sal_uInt64 uEndPos;
     if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
         throw io::IOException( THROW_WHERE );
-    else
-        return sal_Int64( uEndPos );
+    return sal_Int64( uEndPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

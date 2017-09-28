@@ -1128,17 +1128,15 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const OUString& Res
     if (( nElementType == css::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= css::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
-    else
-    {
-        SolarMutexGuard g;
 
-        if ( m_bDisposed )
-            throw DisposedException();
+    SolarMutexGuard g;
 
-        UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
-        if ( pDataSettings )
-            return true;
-    }
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
+    if ( pDataSettings )
+        return true;
 
     return false;
 }
@@ -1150,22 +1148,20 @@ Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( co
     if (( nElementType == css::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= css::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
-    else
+
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
+    if ( pDataSettings )
     {
-        SolarMutexGuard g;
-
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType );
-        if ( pDataSettings )
-        {
-            // Create a copy of our data if someone wants to change the data.
-            if ( bWriteable )
-                return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( pDataSettings->xSettings ) ), UNO_QUERY );
-            else
-                return pDataSettings->xSettings;
-        }
+        // Create a copy of our data if someone wants to change the data.
+        if ( bWriteable )
+            return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( pDataSettings->xSettings ) ), UNO_QUERY );
+        else
+            return pDataSettings->xSettings;
     }
 
     throw NoSuchElementException();
@@ -1474,17 +1470,15 @@ sal_Bool SAL_CALL ModuleUIConfigurationManager::isDefaultSettings( const OUStrin
     if (( nElementType == css::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= css::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
-    else
-    {
-        SolarMutexGuard g;
 
-        if ( m_bDisposed )
-            throw DisposedException();
+    SolarMutexGuard g;
 
-        UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
-        if ( pDataSettings && pDataSettings->bDefaultNode )
-            return true;
-    }
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    UIElementData* pDataSettings = impl_findUIElementData( ResourceURL, nElementType, false );
+    if ( pDataSettings && pDataSettings->bDefaultNode )
+        return true;
 
     return false;
 }
@@ -1496,25 +1490,23 @@ Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getDefaultSetti
     if (( nElementType == css::ui::UIElementType::UNKNOWN ) ||
         ( nElementType >= css::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
-    else
+
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
+    // preload list of element types on demand
+    impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
+
+    // Look into our default vector/unordered_map combination
+    UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
+    UIElementDataHashMap::iterator pIter = rDefaultHashMap.find( ResourceURL );
+    if ( pIter != rDefaultHashMap.end() )
     {
-        SolarMutexGuard g;
-
-        if ( m_bDisposed )
-            throw DisposedException();
-
-        // preload list of element types on demand
-        impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
-
-        // Look into our default vector/unordered_map combination
-        UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
-        UIElementDataHashMap::iterator pIter = rDefaultHashMap.find( ResourceURL );
-        if ( pIter != rDefaultHashMap.end() )
-        {
-            if ( !pIter->second.xSettings.is() )
-                impl_requestUIElementData( nElementType, LAYER_DEFAULT, pIter->second );
-            return pIter->second.xSettings;
-        }
+        if ( !pIter->second.xSettings.is() )
+            impl_requestUIElementData( nElementType, LAYER_DEFAULT, pIter->second );
+        return pIter->second.xSettings;
     }
 
     // Nothing has been found!

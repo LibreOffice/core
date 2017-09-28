@@ -2458,8 +2458,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
                 sal_Int8 nTmp = 0;
                 if (! ( aValue >>= nTmp ) )
                     throw IllegalArgumentException();
-                else
-                    nSepLineVertAlign = (style::VerticalAlignment)nTmp;
+                nSepLineVertAlign = (style::VerticalAlignment)nTmp;
             }
             else
                 nSepLineVertAlign = eAlign;

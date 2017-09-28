@@ -917,11 +917,10 @@ sal_Int32 ZipFile::readCEN()
                  nOffset == 0xffffffff ||
                  nCompressedSize == 0xffffffff ) {
                 throw ZipException("PK64 zip file entry" );
-            } else {
-                aEntry.nCompressedSize = nCompressedSize;
-                aEntry.nSize = nSize;
-                aEntry.nOffset = nOffset;
             }
+            aEntry.nCompressedSize = nCompressedSize;
+            aEntry.nSize = nSize;
+            aEntry.nOffset = nOffset;
 
             aEntry.nOffset += nLocPos;
             aEntry.nOffset *= -1;
@@ -1010,10 +1009,9 @@ void ZipFile::recover()
                             if ( nSize == 0xffffffff ||
                                  nCompressedSize == 0xffffffff ) {
                                 throw ZipException("PK64 zip file entry" );
-                            } else {
-                                aEntry.nCompressedSize = nCompressedSize;
-                                aEntry.nSize = nSize;
                             }
+                            aEntry.nCompressedSize = nCompressedSize;
+                            aEntry.nSize = nSize;
 
                             sal_Int32 nDescrLength =
                                 ( aEntry.nMethod == DEFLATED && ( aEntry.nFlag & 8 ) ) ? 16 : 0;

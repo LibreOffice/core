@@ -433,11 +433,9 @@ uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
 
     if (!xRes.is())
         throw NoSupportException();
-    else
-    {
-        xRes->setActive( true );
-        GetNameContainer().insertByName( rName, Any(xRes) );
-    }
+
+    xRes->setActive( true );
+    GetNameContainer().insertByName( rName, Any(xRes) );
     return xRes;
 }
 

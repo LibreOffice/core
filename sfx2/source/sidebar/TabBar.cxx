@@ -310,34 +310,31 @@ const ::rtl::OUString TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
 {
     if (nIndex<0 || static_cast<size_t>(nIndex)>=maItems.size())
         throw RuntimeException();
-    else
-        return maItems[nIndex].msDeckId;
+    return maItems[nIndex].msDeckId;
 }
 
 void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 {
     if (nIndex<0 || static_cast<size_t>(nIndex) >= maItems.size())
         throw RuntimeException();
-    else
+
+    maItems[nIndex].mbIsHidden = ! maItems[nIndex].mbIsHidden;
+
+    std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex].msDeckId);
+    if (xDeckDescriptor)
     {
-        maItems[nIndex].mbIsHidden = ! maItems[nIndex].mbIsHidden;
+        xDeckDescriptor->mbIsEnabled = ! maItems[nIndex].mbIsHidden;
 
-        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex].msDeckId);
-        if (xDeckDescriptor)
-        {
-            xDeckDescriptor->mbIsEnabled = ! maItems[nIndex].mbIsHidden;
+        Context aContext;
+        aContext.msApplication = pParentSidebarController->GetCurrentContext().msApplication;
+        // leave aContext.msContext on default 'any' ... this func is used only for decks
+        // and we don't have context-sensitive decks anyway
 
-            Context aContext;
-            aContext.msApplication = pParentSidebarController->GetCurrentContext().msApplication;
-            // leave aContext.msContext on default 'any' ... this func is used only for decks
-            // and we don't have context-sensitive decks anyway
-
-            xDeckDescriptor->maContextList.ToggleVisibilityForContext(
-                aContext, xDeckDescriptor->mbIsEnabled );
-        }
-
-        Layout();
+        xDeckDescriptor->maContextList.ToggleVisibilityForContext(
+            aContext, xDeckDescriptor->mbIsEnabled );
     }
+
+    Layout();
 }
 
 void TabBar::RestoreHideFlags()
