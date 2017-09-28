@@ -2414,6 +2414,19 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
 
         SAL_INFO( "sw.ww8.level2", "<tclength>" << ( m_rWW8Export.pO->size() - npOCount ) << "</tclength>" );
     }
+
+    // If actual width of table is relative, it should be exported as ftsPercent
+    int nWidthPercent = pFormat->GetFrameSize().GetWidthPercent();
+    if ( pFormat->GetHoriOrient().GetHoriOrient() == text::HoriOrientation::FULL )
+        nWidthPercent = 100;
+    // Width is in fiftieths of a percent. For sprmTTableWidth, must be non-negative and 600% max
+    if ( nWidthPercent > 0 && nWidthPercent <= 600 )
+    {
+        m_rWW8Export.InsUInt16( NS_sprm::sprmTTableWidth );
+        m_rWW8Export.pO->push_back( (sal_uInt8) /*ftsPercent*/ 2 );
+        m_rWW8Export.InsUInt16( (sal_uInt16) nWidthPercent * 50 );
+        m_rWW8Export.pO->push_back( (sal_uInt8) 0 );
+    }
 }
 
 ww8::GridColsPtr AttributeOutputBase::GetGridCols( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
