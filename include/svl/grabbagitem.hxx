@@ -37,7 +37,7 @@ public:
         return m_aMap;
     }
 
-    bool operator==(const SfxPoolItem&) const override;
+    bool operator==(const SfxPoolItem& rItem) const override;
     SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;

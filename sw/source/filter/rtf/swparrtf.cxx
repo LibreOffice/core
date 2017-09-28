@@ -40,10 +40,10 @@ using namespace ::com::sun::star;
 /// Glue class to call RtfImport as an internal filter, needed by copy&paste support.
 class SwRTFReader : public Reader
 {
-    ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
+    ErrCode Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam, const OUString& rFileName) override;
 };
 
-ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam, const OUString&)
+ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam, const OUString& /*rFileName*/)
 {
     if (!pStrm)
         return ERR_SWG_READ_ERROR;

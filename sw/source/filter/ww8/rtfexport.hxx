@@ -94,7 +94,7 @@ public:
     {
         /* no-op for rtf, most probably should not even be in MSWordExportBase */
     }
-    void WriteChar(sal_Unicode) override;
+    void WriteChar(sal_Unicode c) override;
 
     /// Write the numbering table.
     void WriteNumbering() override;
@@ -140,18 +140,18 @@ protected:
     bool DisallowInheritingOutlineNumbering(const SwFormat& rFormat) override;
 
     /// Output SwTextNode is depending on outline export mode
-    void OutputTextNode(SwTextNode&) override;
+    void OutputTextNode(SwTextNode& rNode) override;
 
     /// Output SwEndNode
-    void OutputEndNode(const SwEndNode&) override;
+    void OutputEndNode(const SwEndNode& rEndNode) override;
 
     /// Output SwGrfNode
-    void OutputGrfNode(const SwGrfNode&) override;
+    void OutputGrfNode(const SwGrfNode& rGrfNode) override;
 
     /// Output SwOLENode
-    void OutputOLENode(const SwOLENode&) override;
+    void OutputOLENode(const SwOLENode& rOLENode) override;
 
-    void OutputLinkedOLE(const OUString&) override;
+    void OutputLinkedOLE(const OUString& rLink) override;
 
     void AppendSection(const SwPageDesc* pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum) override;
 

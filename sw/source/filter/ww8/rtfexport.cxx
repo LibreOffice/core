@@ -165,12 +165,12 @@ void RtfExport::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos
 }
 
 //For i120928,to export graphic of bullet for RTF filter
-void RtfExport::ExportGrfBullet(const SwTextNode&)
+void RtfExport::ExportGrfBullet(const SwTextNode& /*rNd*/)
 {
     // Noop, would be too late, see WriteNumbering() instead.
 }
 
-void RtfExport::WriteChar(sal_Unicode)
+void RtfExport::WriteChar(sal_Unicode /*c*/)
 {
     /* WriteChar() has nothing to do for rtf. */
 }
@@ -342,7 +342,7 @@ void RtfExport::DoFormText(const SwInputField* pField)
     m_pAttrOutput->RunText().append(msfilter::rtfutil::OutString(sResult, m_eDefaultEncoding)).append("}}");
 }
 
-sal_uLong RtfExport::ReplaceCr(sal_uInt8)
+sal_uLong RtfExport::ReplaceCr(sal_uInt8 /*nChar*/)
 {
     // Completely unused for Rtf export... only here for code sharing
     // purpose with binary export
@@ -923,17 +923,17 @@ void RtfExport::OutputEndNode(const SwEndNode& rEndNode)
         AttrOutput().SectionBreaks(rEndNode);
 }
 
-void RtfExport::OutputGrfNode(const SwGrfNode&)
+void RtfExport::OutputGrfNode(const SwGrfNode& /*rGrfNode*/)
 {
     /* noop, see RtfAttributeOutput::FlyFrameGraphic */
 }
 
-void RtfExport::OutputOLENode(const SwOLENode&)
+void RtfExport::OutputOLENode(const SwOLENode& /*rOLENode*/)
 {
     /* noop, see RtfAttributeOutput::FlyFrameOLE */
 }
 
-void RtfExport::OutputLinkedOLE(const OUString&)
+void RtfExport::OutputLinkedOLE(const OUString& /*rLinked*/)
 {
 }
 

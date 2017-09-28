@@ -263,7 +263,7 @@ protected:
     void CharWeight(const SvxWeightItem& rWeight) override;
 
     /// Sfx item RES_CHRATR_AUTOKERN
-    void CharAutoKern(const SvxAutoKernItem&) override;
+    void CharAutoKern(const SvxAutoKernItem& rAutoKern) override;
 
     /// Sfx item RES_CHRATR_BLINK
     void CharAnimatedText(const SvxBlinkItem& rBlink) override;
@@ -302,10 +302,10 @@ protected:
     void CharWeightCTL(const SvxWeightItem& rWeight) override;
 
     /// Sfx item RES_CHRATR_BidiRTL
-    void CharBidiRTL(const SfxPoolItem&) override;
+    void CharBidiRTL(const SfxPoolItem& rItem) override;
 
     /// Sfx item RES_CHRATR_IdctHint
-    void CharIdctHint(const SfxPoolItem&) override;
+    void CharIdctHint(const SfxPoolItem& rItem) override;
 
     /// Sfx item RES_CHRATR_ROTATE
     void CharRotate(const SvxCharRotateItem& rRotate) override;
@@ -326,19 +326,19 @@ protected:
     void CharHidden(const SvxCharHiddenItem& rHidden) override;
 
     /// Sfx item RES_CHRATR_BOX
-    void CharBorder(const ::editeng::SvxBorderLine* pAllBorder, const sal_uInt16 nDist, const bool bShadow) override;
+    void CharBorder(const ::editeng::SvxBorderLine* pAllBorder, sal_uInt16 nDist, bool bShadow) override;
 
     /// Sfx item RES_CHRATR_HIGHLIGHT
-    void CharHighlight(const SvxBrushItem&) override;
+    void CharHighlight(const SvxBrushItem& rBrush) override;
 
     /// Sfx item RES_TXTATR_INETFMT
-    void TextINetFormat(const SwFormatINetFormat&) override;
+    void TextINetFormat(const SwFormatINetFormat& rURL) override;
 
     /// Sfx item RES_TXTATR_CHARFMT
-    void TextCharFormat(const SwFormatCharFormat&) override;
+    void TextCharFormat(const SwFormatCharFormat& rCharFormat) override;
 
     /// Sfx item RES_TXTATR_FTN
-    void TextFootnote_Impl(const SwFormatFootnote&) override;
+    void TextFootnote_Impl(const SwFormatFootnote& rFootnote) override;
 
     /// Sfx item RES_PARATR_LINESPACING
     void ParaLineSpacing_Impl(short nSpace, short nMulti) override;
@@ -356,31 +356,31 @@ protected:
     void ParaTabStop(const SvxTabStopItem& rTabStop) override;
 
     /// Sfx item RES_PARATR_HYPHENZONE
-    void ParaHyphenZone(const SvxHyphenZoneItem&) override;
+    void ParaHyphenZone(const SvxHyphenZoneItem& rHyphenZone) override;
 
     /// Sfx item RES_PARATR_NUMRULE
     void ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 nLvl, sal_Int32 nNumId) override;
 
     /// Sfx item RES_PARATR_SCRIPTSPACE
-    void ParaScriptSpace(const SfxBoolItem&) override;
+    void ParaScriptSpace(const SfxBoolItem& rScriptSpace) override;
 
     /// Sfx item RES_PARATR_HANGINGPUNCTUATION
-    void ParaHangingPunctuation(const SfxBoolItem&) override;
+    void ParaHangingPunctuation(const SfxBoolItem& rItem) override;
 
     /// Sfx item RES_PARATR_FORBIDDEN_RULES
-    void ParaForbiddenRules(const SfxBoolItem&) override;
+    void ParaForbiddenRules(const SfxBoolItem& rItem) override;
 
     /// Sfx item RES_PARATR_VERTALIGN
     void ParaVerticalAlign(const SvxParaVertAlignItem& rAlign) override;
 
     /// Sfx item RES_PARATR_SNAPTOGRID
-    void ParaSnapToGrid(const SvxParaGridItem&) override;
+    void ParaSnapToGrid(const SvxParaGridItem& rItem) override;
 
     /// Sfx item RES_FRM_SIZE
-    void FormatFrameSize(const SwFormatFrameSize&) override;
+    void FormatFrameSize(const SwFormatFrameSize& rSize) override;
 
     /// Sfx item RES_PAPER_BIN
-    void FormatPaperBin(const SvxPaperBinItem&) override;
+    void FormatPaperBin(const SvxPaperBinItem& rItem) override;
 
     /// Sfx item RES_LR_SPACE
     void FormatLRSpace(const SvxLRSpaceItem& rLRSpace) override;
@@ -389,52 +389,52 @@ protected:
     void FormatULSpace(const SvxULSpaceItem& rULSpace) override;
 
     /// Sfx item RES_SURROUND
-    void FormatSurround(const SwFormatSurround&) override;
+    void FormatSurround(const SwFormatSurround& rSurround) override;
 
     /// Sfx item RES_VERT_ORIENT
-    void FormatVertOrientation(const SwFormatVertOrient&) override;
+    void FormatVertOrientation(const SwFormatVertOrient& rFlyVert) override;
 
     /// Sfx item RES_HORI_ORIENT
-    void FormatHorizOrientation(const SwFormatHoriOrient&) override;
+    void FormatHorizOrientation(const SwFormatHoriOrient& rFlyHori) override;
 
     /// Sfx item RES_ANCHOR
-    void FormatAnchor(const SwFormatAnchor&) override;
+    void FormatAnchor(const SwFormatAnchor& rAnchor) override;
 
     /// Sfx item RES_BACKGROUND
-    void FormatBackground(const SvxBrushItem&) override;
+    void FormatBackground(const SvxBrushItem& rBrush) override;
 
     /// Sfx item RES_FILL_STYLE
-    void FormatFillStyle(const XFillStyleItem&) override;
+    void FormatFillStyle(const XFillStyleItem& rFillStyle) override;
 
     /// Sfx item RES_FILL_GRADIENT
-    void FormatFillGradient(const XFillGradientItem&) override;
+    void FormatFillGradient(const XFillGradientItem& rFillGradient) override;
 
     /// Sfx item RES_BOX
-    void FormatBox(const SvxBoxItem&) override;
+    void FormatBox(const SvxBoxItem& rBox) override;
 
     /// Sfx item RES_COL
     void FormatColumns_Impl(sal_uInt16 nCols, const SwFormatCol& rCol, bool bEven, SwTwips nPageSize) override;
 
     /// Sfx item RES_KEEP
-    void FormatKeep(const SvxFormatKeepItem&) override;
+    void FormatKeep(const SvxFormatKeepItem& rItem) override;
 
     /// Sfx item RES_TEXTGRID
-    void FormatTextGrid(const SwTextGridItem&) override;
+    void FormatTextGrid(const SwTextGridItem& rItem) override;
 
     /// Sfx item RES_LINENUMBER
-    void FormatLineNumbering(const SwFormatLineNumber&) override;
+    void FormatLineNumbering(const SwFormatLineNumber& rNumbering) override;
 
     /// Sfx item RES_FRAMEDIR
-    void FormatFrameDirection(const SvxFrameDirectionItem&) override;
+    void FormatFrameDirection(const SvxFrameDirectionItem& rDirection) override;
 
     /// Sfx item RES_PARATR_GRABBAG
-    void ParaGrabBag(const SfxGrabBagItem&) override;
+    void ParaGrabBag(const SfxGrabBagItem& rItem) override;
 
     /// Sfx item RES_CHRATR_GRABBAG
-    void CharGrabBag(const SfxGrabBagItem&) override;
+    void CharGrabBag(const SfxGrabBagItem& rItem) override;
 
     /// Sfx item RES_PARATR_OUTLINELEVEL
-    void ParaOutlineLevel(const SfxUInt16Item&) override;
+    void ParaOutlineLevel(const SfxUInt16Item& rItem) override;
 
     /// Write the expanded field
     void WriteExpand(const SwField* pField) override;
