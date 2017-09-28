@@ -973,7 +973,12 @@ void ScDPOutput::Output()
         const uno::Sequence<sheet::MemberResult>& rRes = pPageFields[nField].maResult;
         sal_Int32 n = rRes.getLength();
         if (n == 1)
-            aPageValue = rRes[0].Caption;
+        {
+            if (rRes[0].Caption.isEmpty())
+                aPageValue = ScGlobal::GetRscString(STR_EMPTYDATA);
+            else
+                aPageValue = rRes[0].Caption;
+        }
         else if (n > 1)
             aPageValue = ScResId(SCSTR_MULTIPLE);
 
