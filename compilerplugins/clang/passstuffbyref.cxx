@@ -216,7 +216,9 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     if (methodDecl && (methodDecl->isVirtual() || methodDecl->hasAttr<OverrideAttr>())) {
         return;
     }
-    if( !functionDecl->doesThisDeclarationHaveABody()) {
+    if( !functionDecl->doesThisDeclarationHaveABody()
+        || functionDecl->isLateTemplateParsed())
+    {
         return;
     }
 

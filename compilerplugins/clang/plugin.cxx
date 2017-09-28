@@ -206,7 +206,8 @@ bool ParentBuilder::VisitFunctionDecl( const FunctionDecl* function )
 {
 //    if( ignoreLocation( declaration ))
 //        return true; ???
-    if( function->doesThisDeclarationHaveABody())
+    if( function->doesThisDeclarationHaveABody()
+        && !function->isLateTemplateParsed())
     {
         const Stmt* body = function->getBody();
         (*parents)[ body ] = NULL; // no parent
