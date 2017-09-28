@@ -62,58 +62,11 @@ ScCalcConfig::ScCalcConfig() :
 
 void ScCalcConfig::setOpenCLConfigToDefault()
 {
-    // Keep in order of opcode value, is that clearest? (Random order,
-    // at least, would make no sense at all.)
-    static OpCodeSet pDefaultOpenCLSubsetOpCodes(new std::set<OpCode>({
-        ocAdd,
-        ocSub,
-        ocMul,
-        ocDiv,
-        ocRandom,
-        ocSin,
-        ocCos,
-        ocTan,
-        ocArcTan,
-        ocExp,
-        ocLn,
-        ocSqrt,
-        ocStdNormDist,
-        ocSNormInv,
-        ocRound,
-        ocPower,
-        ocSumProduct,
-        ocMin,
-        ocMax,
-        ocSum,
-        ocProduct,
-        ocAverage,
-        ocCount,
-        ocVar,
-        ocNormDist,
-        ocVLookup,
-        ocCorrel,
-        ocCovar,
-        ocPearson,
-        ocSlope,
-        ocSumIfs}));
-
-    // opcodes that are known to work well with the software interpreter
-    static OpCodeSet pDefaultSwInterpreterSubsetOpCodes(new std::set<OpCode>({
-        ocAdd,
-        ocSub,
-        ocMul,
-        ocDiv,
-        ocSum,
-        ocProduct}));
-
     // Note that these defaults better be kept in sync with those in
     // officecfg/registry/schema/org/openoffice/Office/Calc.xcs.
     // Crazy.
-    mbOpenCLSubsetOnly = true;
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 100;
-    mpOpenCLSubsetOpCodes = pDefaultOpenCLSubsetOpCodes;
-    mpSwInterpreterSubsetOpCodes = pDefaultSwInterpreterSubsetOpCodes;
 }
 
 void ScCalcConfig::reset()
@@ -143,67 +96,14 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
            meStringConversion == r.meStringConversion &&
            mbEmptyStringAsZero == r.mbEmptyStringAsZero &&
            mbHasStringRefSyntax == r.mbHasStringRefSyntax &&
-           mbOpenCLSubsetOnly == r.mbOpenCLSubsetOnly &&
            mbOpenCLAutoSelect == r.mbOpenCLAutoSelect &&
            maOpenCLDevice == r.maOpenCLDevice &&
-           mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize &&
-           *mpOpenCLSubsetOpCodes == *r.mpOpenCLSubsetOpCodes &&
-           *mpSwInterpreterSubsetOpCodes == *r.mpSwInterpreterSubsetOpCodes;
+           mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
 {
     return !operator==(r);
-}
-
-OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
-{
-    OUStringBuffer result;
-    formula::FormulaCompiler aCompiler;
-    formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
-
-    for (auto i = rOpCodes->cbegin(); i != rOpCodes->cend(); ++i)
-    {
-        if (i != rOpCodes->cbegin())
-            result.append(';');
-        result.append(pOpCodeMap->getSymbol(*i));
-    }
-
-    return result.toString();
-}
-
-ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
-{
-    ScCalcConfig::OpCodeSet result(new std::set< OpCode >);
-    formula::FormulaCompiler aCompiler;
-    formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
-
-    const formula::OpCodeHashMap& rHashMap(pOpCodeMap->getHashMap());
-
-    sal_Int32 fromIndex(0);
-    sal_Int32 semicolon;
-    OUString s(rOpCodes + ";");
-
-    while ((semicolon = s.indexOf(';', fromIndex)) >= 0)
-    {
-        if (semicolon > fromIndex)
-        {
-            OUString element(s.copy(fromIndex, semicolon - fromIndex));
-            sal_Int32 n = element.toInt32();
-            if (n > 0 || (n == 0 && element == "0"))
-                result->insert(static_cast<OpCode>(n));
-            else
-            {
-                auto opcode(rHashMap.find(element));
-                if (opcode != rHashMap.end())
-                    result->insert(opcode->second);
-                else
-                    SAL_WARN("sc.opencl", "Unrecognized OpCode " << element << " in OpCode set string");
-            }
-        }
-        fromIndex = semicolon+1;
-    }
-    return result;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

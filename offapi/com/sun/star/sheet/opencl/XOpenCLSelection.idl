@@ -75,17 +75,17 @@ interface XOpenCLSelection : com::sun::star::uno::XInterface
     sequence< OpenCLPlatform > getOpenCLPlatforms();
 
     /*
-     * Sets OpenCL to be considered only for formulas that use only a specific subset of opcodes.
+     * Obsolete, does nothing.
      */
     void enableOpcodeSubsetTest();
 
     /*
-     * Sets OpenCL to be considered for formulas regardless of what opcodes they contain.
+     * Obsolete, does nothing.
      */
     void disableOpcodeSubsetTest();
 
     /*
-     * Returns whether OpenCL is considered or not depending on the opcodes a formula uses.
+     * Obsole, always returns true.
      */
     boolean isOpcodeSubsetTested();
 

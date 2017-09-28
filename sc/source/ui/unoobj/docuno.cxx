@@ -3150,31 +3150,19 @@ uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
 #endif
 }
 
-namespace {
-
-/// @throws css::uno::RuntimeException
-void setOpcodeSubsetTest(bool bFlag)
-{
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Calc::Formula::Calculation::OpenCLSubsetOnly::set(bFlag, batch);
-    batch->commit();
-}
-
-}
-
 void ScModelObj::enableOpcodeSubsetTest()
 {
-    setOpcodeSubsetTest(true);
+    // Nothing, obsolete
 }
 
 void ScModelObj::disableOpcodeSubsetTest()
 {
-    setOpcodeSubsetTest(false);
+    // Nothing, obsolete
 }
 
 sal_Bool ScModelObj::isOpcodeSubsetTested()
 {
-    return officecfg::Office::Calc::Formula::Calculation::OpenCLSubsetOnly::get();
+    return true;
 }
 
 void ScModelObj::setFormulaCellNumberLimit( sal_Int32 number )

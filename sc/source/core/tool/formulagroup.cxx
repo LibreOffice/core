@@ -363,7 +363,6 @@ void FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
 
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
 
-    aConfig.mbOpenCLSubsetOnly = false;
     aConfig.mnOpenCLMinimumFormulaGroupSize = 2;
 
     ScInterpreter::SetGlobalConfig(aConfig);

@@ -1422,7 +1422,7 @@
 	-->
         <prop oor:name="OpenCLSubsetOnly" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Whether to use OpenCL only when a formula uses only a subset of operator and function opcodes.</desc>
+            <desc>Obsolete, ignored.</desc>
           </info>
           <value>true</value>
         </prop>
@@ -1434,12 +1434,9 @@
         </prop>
         <prop oor:name="OpenCLSubsetOpCodes" oor:type="xs:string" oor:nillable="false">
           <info>
-            <desc>The list of operator and function opcodes (in
-            English) for which to use OpenCL. If OpenCLSubsetOnly is
-            true, and a formula contains only these operators and
-            functions, it might be calculated using OpenCL.</desc>
+            <desc>Obsolete, ignored.</desc>
           </info>
-          <value>+;-;*;/;RAND;SIN;COS;TAN;ATAN;EXP;LN;SQRT;NORMSDIST;NORMSINV;ROUND;POWER;SUMPRODUCT;MIN;MAX;SUM;PRODUCT;AVERAGE;COUNT;VAR;NORMDIST;VLOOKUP;CORREL;COVAR;PEARSON;SLOPE;SUMIFS</value>
+          <value></value>
         </prop>
         <prop oor:name="OpenCLAutoSelect" oor:type="xs:boolean" oor:nillable="false">
           <info>

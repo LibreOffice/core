@@ -51,15 +51,11 @@ struct SC_DLLPUBLIC ScCalcConfig
     static bool isOpenCLEnabled();
     static bool isSwInterpreterEnabled();
 
-    bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;
     OUString maOpenCLDevice;
     sal_Int32 mnOpenCLMinimumFormulaGroupSize;
 
     typedef std::shared_ptr<std::set<OpCode>> OpCodeSet;
-
-    OpCodeSet mpOpenCLSubsetOpCodes;
-    OpCodeSet mpSwInterpreterSubsetOpCodes;
 
     ScCalcConfig();
 
@@ -72,9 +68,6 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool operator== (const ScCalcConfig& r) const;
     bool operator!= (const ScCalcConfig& r) const;
 };
-
-SC_DLLPUBLIC OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes);
-SC_DLLPUBLIC ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes);
 
 #endif
 
