@@ -595,21 +595,20 @@ void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
     {
         // do something special since the object size is in the polygon
         // break up matrix to get the scale
-        basegfx::B2DTuple aScale;
-        basegfx::B2DTuple aTranslate;
-        double fRotate, fShearX;
-        aObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+        const basegfx::tools::B2DHomMatrixBufferedDecompose aDecomp(aObjectTransform);
 
         // get polygon's position and size
         const basegfx::B2DRange aPolyRange(aObjectPolyPolygon.getB2DRange());
 
         // get the scaling factors (do not mirror, this is in the object transformation)
-        const double fScaleX(fabs(aScale.getX()) / (basegfx::fTools::equalZero(aPolyRange.getWidth()) ? 1.0 : aPolyRange.getWidth()));
-        const double fScaleY(fabs(aScale.getY()) / (basegfx::fTools::equalZero(aPolyRange.getHeight()) ? 1.0 : aPolyRange.getHeight()));
+        const double fScaleX(fabs(aDecomp.getScale().getX()) / (basegfx::fTools::equalZero(aPolyRange.getWidth()) ? 1.0 : aPolyRange.getWidth()));
+        const double fScaleY(fabs(aDecomp.getScale().getY()) / (basegfx::fTools::equalZero(aPolyRange.getHeight()) ? 1.0 : aPolyRange.getHeight()));
 
         // prepare transform matrix for polygon
-        basegfx::B2DHomMatrix aPolyTransform(basegfx::tools::createTranslateB2DHomMatrix(
-            -aPolyRange.getMinX(), -aPolyRange.getMinY()));
+        basegfx::B2DHomMatrix aPolyTransform(
+            basegfx::tools::createTranslateB2DHomMatrix(
+                -aPolyRange.getMinX(),
+                -aPolyRange.getMinY()));
         aPolyTransform.scale(fScaleX, fScaleY);
 
         // transform the polygon
@@ -3658,18 +3657,16 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     pObj->TRGetBaseGeometry(aOriginalMatrix, aPolyPolygon);
 
     {   // correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
-        basegfx::B2DTuple aScale, aTranslate;
-        double fRotate(0.0), fShearX(0.0);
-        aOriginalMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+        const basegfx::tools::B2DHomMatrixBufferedDecompose aDecomp(aOriginalMatrix);
 
-        if(!basegfx::fTools::equalZero(fShearX))
+        if(!basegfx::fTools::equalZero(aDecomp.getShearX()))
         {
             bShearCorrected = true;
             aOriginalMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aScale,
-                -fShearX,
-                fRotate,
-                aTranslate);
+                aDecomp.getScale(),
+                -aDecomp.getShearX(),
+                aDecomp.getRotate(),
+                aDecomp.getTranslate());
         }
     }
 
@@ -3743,17 +3740,13 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // aDiscreteChangeMatrix, go to concrete sizes now.
     // Create the unrotated original rectangle and the unrotated modified
     // rectangle as Ranges
-    basegfx::B2DTuple aScale, aTranslate;
-    double fRotate, fShearX;
-
-    // get access to scale and translate
-    aOriginalMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+    const basegfx::tools::B2DHomMatrixBufferedDecompose aDecomp(aOriginalMatrix);
 
     // prepare unsheared/unrotated versions of the old and new transformation
     const basegfx::B2DHomMatrix aOriginalMatrixNoShearNoRotate(
         basegfx::tools::createScaleTranslateB2DHomMatrix(
-            basegfx::absolute(aScale),
-            aTranslate));
+            basegfx::absolute(aDecomp.getScale()),
+            aDecomp.getTranslate()));
 
     // create the ranges for these
     basegfx::B2DRange aRangeOriginalNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
@@ -3791,16 +3784,13 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         if(bShearCorrected)
         {
             // back-correct shear
-            basegfx::B2DTuple aScale;
-            basegfx::B2DTuple aTranslate;
-            double fRotate(0.0), fShearX(0.0);
+            const basegfx::tools::B2DHomMatrixBufferedDecompose aDecomp(aNewObjectMatrix);
 
-            aNewObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
             aNewObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aScale,
-                -fShearX,
-                fRotate,
-                aTranslate);
+                aDecomp.getScale(),
+                -aDecomp.getShearX(),
+                aDecomp.getRotate(),
+                aDecomp.getTranslate());
         }
 
         // apply change to object by applying the unit coordinate change followed
