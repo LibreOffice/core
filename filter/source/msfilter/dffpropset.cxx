@@ -1330,8 +1330,7 @@ bool DffPropSet::SeekToContent( sal_uInt32 nRecType, SvStream& rStrm ) const
             sal_uInt16 nIndex = mpPropSetEntries[ nRecType ].nComplexIndexOrFlagsHAttr;
             if ( nIndex < maOffsets.size() )
             {
-                rStrm.Seek( maOffsets[ nIndex ] );
-                return true;
+                return checkSeek(rStrm, maOffsets[nIndex]);
             }
         }
     }
