@@ -3588,12 +3588,9 @@ void SvTreeListBox::StateChanged( StateChangedType eType )
 
 void SvTreeListBox::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    vcl::Font aFont;
-    aFont = rStyleSettings.GetFieldFont();
-    aFont.SetColor(rStyleSettings.GetWindowTextColor());
-    SetPointFont(rRenderContext, aFont);
+    SetPointFont(rRenderContext, GetPointFont(*this));
 
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetTextColor(rStyleSettings.GetFieldTextColor());
     rRenderContext.SetTextFillColor();
     rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
