@@ -37,8 +37,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-bool SAL_CALL IsWindowsVistaOrNewer();
-
 // converts a soffice label to a windows label
 // the following rules for character replacements
 // will be done:

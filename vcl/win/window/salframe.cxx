@@ -697,19 +697,7 @@ static UINT ImplSalGetWheelScrollChars()
     UINT nScrChars = 0;
     if( !SystemParametersInfo( SPI_GETWHEELSCROLLCHARS, 0, &nScrChars, 0 ) )
     {
-        // Depending on Windows version, use proper default or 1 (when
-        // driver emulates hscroll)
-        if (!aSalShlData.mbWVista)
-        {
-            // Windows 2000 & WinXP : emulating driver, use step size
-            // of 1
-            return 1;
-        }
-        else
-        {
-            // Longhorn or above: use proper default value of 3
-            return 3;
-        }
+        return 3;
     }
 
     // system settings successfully read
@@ -1159,7 +1147,7 @@ static void ImplSalShow( HWND hWnd, bool bVisible, bool bNoActivate )
         if( aDogTag.isDeleted() )
             return;
 
-        if ( aSalShlData.mbWXP && pFrame->mbFloatWin && !(pFrame->mnStyle & SalFrameStyleFlags::NOSHADOW))
+        if (pFrame->mbFloatWin && !(pFrame->mnStyle & SalFrameStyleFlags::NOSHADOW))
         {
             // erase the window immediately to improve XP shadow effect
             // otherwise the shadow may appears long time before the rest of the window
@@ -1839,39 +1827,36 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
 
 void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
 {
-    if ( aSalShlData.mbW7 )
+    // http://msdn.microsoft.com/en-us/library/windows/desktop/dd378430(v=vs.85).aspx
+    // A window's properties must be removed before the window is closed.
+
+    typedef HRESULT ( WINAPI *SHGETPROPERTYSTOREFORWINDOW )( HWND, REFIID, void ** );
+    SHGETPROPERTYSTOREFORWINDOW pSHGetPropertyStoreForWindow;
+    pSHGetPropertyStoreForWindow = reinterpret_cast<SHGETPROPERTYSTOREFORWINDOW>(GetProcAddress(
+                                   GetModuleHandleW (L"shell32.dll"), "SHGetPropertyStoreForWindow" ));
+
+    if( pSHGetPropertyStoreForWindow )
     {
-        // http://msdn.microsoft.com/en-us/library/windows/desktop/dd378430(v=vs.85).aspx
-        // A window's properties must be removed before the window is closed.
-
-        typedef HRESULT ( WINAPI *SHGETPROPERTYSTOREFORWINDOW )( HWND, REFIID, void ** );
-        SHGETPROPERTYSTOREFORWINDOW pSHGetPropertyStoreForWindow;
-        pSHGetPropertyStoreForWindow = reinterpret_cast<SHGETPROPERTYSTOREFORWINDOW>(GetProcAddress(
-                                       GetModuleHandleW (L"shell32.dll"), "SHGetPropertyStoreForWindow" ));
-
-        if( pSHGetPropertyStoreForWindow )
+        IPropertyStore *pps;
+        HRESULT hr = pSHGetPropertyStoreForWindow ( mhWnd, IID_PPV_ARGS(&pps) );
+        if ( SUCCEEDED(hr) )
         {
-            IPropertyStore *pps;
-            HRESULT hr = pSHGetPropertyStoreForWindow ( mhWnd, IID_PPV_ARGS(&pps) );
+            PROPVARIANT pv;
+            if ( !rApplicationID.isEmpty() )
+            {
+                hr = InitPropVariantFromString( SAL_W(rApplicationID.getStr()), &pv );
+                mbPropertiesStored = TRUE;
+            }
+            else
+                // if rApplicationID we remove the property from the window, if present
+                PropVariantInit( &pv );
+
             if ( SUCCEEDED(hr) )
             {
-                PROPVARIANT pv;
-                if ( !rApplicationID.isEmpty() )
-                {
-                    hr = InitPropVariantFromString( SAL_W(rApplicationID.getStr()), &pv );
-                    mbPropertiesStored = TRUE;
-                }
-                else
-                    // if rApplicationID we remove the property from the window, if present
-                    PropVariantInit( &pv );
-
-                if ( SUCCEEDED(hr) )
-                {
-                    hr = pps->SetValue( PKEY_AppUserModel_ID, pv );
-                    PropVariantClear( &pv );
-                }
-                pps->Release();
+                hr = pps->SetValue( PKEY_AppUserModel_ID, pv );
+                PropVariantClear( &pv );
             }
+            pps->Release();
         }
     }
 }
@@ -2704,23 +2689,19 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
     aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
     aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
-    if ( aSalShlData.mbWXP )
+    long bFlatMenus = 0;
+    SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenus, 0);
+    if( bFlatMenus )
     {
-        // only xp supports a different menu bar color
-        long bFlatMenus = 0;
-        SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenus, 0);
-        if( bFlatMenus )
-        {
-            aStyleSettings.SetUseFlatMenus( TRUE );
-            aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
-            aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
-            aStyleSettings.SetMenuBarRolloverColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
-            aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
+        aStyleSettings.SetUseFlatMenus( TRUE );
+        aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
+        aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
+        aStyleSettings.SetMenuBarRolloverColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
+        aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
 
-            // flat borders for our controls etc. as well in this mode (ie, no 3d borders)
-            // this is not active in the classic style appearance
-            aStyleSettings.SetUseFlatBorders( TRUE );
-        }
+        // flat borders for our controls etc. as well in this mode (ie, no 3d borders)
+        // this is not active in the classic style appearance
+        aStyleSettings.SetUseFlatBorders( TRUE );
     }
     aStyleSettings.SetCheckedColorSpecialCase( );
 
