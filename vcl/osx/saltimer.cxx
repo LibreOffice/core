@@ -40,7 +40,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SAL_WNODEPRECATED_DECLARATIONS_POP
                                location: NSZeroPoint
                                modifierFlags: 0
-                               timestamp: 0
+                               timestamp: [[NSProcessInfo processInfo] systemUptime]
                                windowNumber: 0
                                context: nil
                                subtype: nEventId
