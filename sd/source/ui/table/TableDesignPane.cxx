@@ -94,7 +94,7 @@ TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBas
     , mbOptionsChanged(false)
 {
     pParent->get(m_pValueSet, "previews");
-    m_pValueSet->SetStyle(m_pValueSet->GetStyle() | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_ITEMBORDER);
+    m_pValueSet->SetStyle(m_pValueSet->GetStyle() | WB_ITEMBORDER| WB_3DLOOK| WB_TABSTOP | WB_MENUSTYLEVALUESET);
     m_pValueSet->SetExtraSpacing(8);
     m_pValueSet->setModal(mbModal);
     if( !mbModal )
