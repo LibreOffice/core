@@ -922,7 +922,7 @@ bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
         return false;
 
     for ( sal_uInt16 i = 0; i < Count(); ++i )
-        if( !(*this)[i].IsEqual( rTSI[i] ) )
+        if( (*this)[i] != rTSI[i] )
             return false;
     return true;
 }
