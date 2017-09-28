@@ -102,7 +102,8 @@ fi
 workdir="$newdir.work"
 updatemanifestv2="$workdir/updatev2.manifest"
 updatemanifestv3="$workdir/updatev3.manifest"
-archivefiles="updatev2.manifest updatev3.manifest"
+echo "updatev2.manifest" >> $workdir/files.txt
+echo "updatev3.manifest" >> $workdir/files.txt
 
 mkdir -p "$workdir"
 
@@ -162,7 +163,7 @@ for ((i=0; $i<$num_oldfiles; i=$i+1)); do
       $BZIP2 -cz9 "$newdir/$f" > "$workdir/$f"
       copy_perm "$newdir/$f" "$workdir/$f"
       make_add_if_not_instruction "$f" "$updatemanifestv3"
-      archivefiles="$archivefiles \"$f\""
+      echo $f >> $workdir/files.txt
       continue 1
     fi
 
@@ -172,7 +173,7 @@ for ((i=0; $i<$num_oldfiles; i=$i+1)); do
       $BZIP2 -cz9 "$newdir/$f" > "$workdir/$f"
       copy_perm "$newdir/$f" "$workdir/$f"
       make_add_instruction "$f" "$updatemanifestv2" "$updatemanifestv3" 1
-      archivefiles="$archivefiles \"$f\""
+      echo $f >> $workdir/files.txt
       continue 1
     fi
 
@@ -219,11 +220,11 @@ for ((i=0; $i<$num_oldfiles; i=$i+1)); do
         make_patch_instruction "$f" "$updatemanifestv2" "$updatemanifestv3"
         mv -f "$patchfile" "$workdir/$f.patch"
         rm -f "$workdir/$f"
-        archivefiles="$archivefiles \"$f.patch\""
+        echo $f.patch >> $workdir/files.txt
       else
         make_add_instruction "$f" "$updatemanifestv2" "$updatemanifestv3"
         rm -f "$patchfile"
-        archivefiles="$archivefiles \"$f\""
+        echo $f >> $workdir/files.txt
       fi
     fi
   else
@@ -262,7 +263,7 @@ for ((i=0; $i<$num_newfiles; i=$i+1)); do
   fi
 
 
-  archivefiles="$archivefiles \"$f\""
+  echo $f >> $workdir/files.txt
 done
 
 notice ""
@@ -305,8 +306,8 @@ if [[ -n $CHANNEL_ID ]]
 then
   mar_command="$mar_command -H $CHANNEL_ID"
 fi
-mar_command="$mar_command -C \"$workdir\" -c output.mar"
-eval "$mar_command $archivefiles"
+mar_command="$mar_command -C \"$workdir\" -c output.mar -f $workdir/files.txt"
+eval "$mar_command"
 mv -f "$workdir/output.mar" "$archive"
 
 # cleanup
