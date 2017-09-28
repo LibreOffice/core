@@ -73,7 +73,7 @@ bool AndroidSalInstance::AnyInput( VclInputFlags nType )
 
     // Unfortunately there is no way to check for a specific type of
     // input being queued. That information is too hidden, sigh.
-    return SvpSalInstance::s_pDefaultInstance->PostedEventsInQueue();
+    return SvpSalInstance::s_pDefaultInstance->HasUserEvents();
 }
 
 class AndroidSalSystem : public SvpSalSystem {

@@ -79,10 +79,6 @@ public:
     void                    CloseWakeupPipe(bool log);
     void                    CreateWakeupPipe(bool log);
 
-#ifdef ANDROID
-    bool                    PostedEventsInQueue();
-#endif
-
     void                    StartTimer( sal_uLong nMS );
     void                    StopTimer();
 

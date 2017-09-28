@@ -157,18 +157,6 @@ void SvpSalInstance::TriggerUserEventProcessing()
     Wakeup();
 }
 
-#ifdef ANDROID
-bool SvpSalInstance::PostedEventsInQueue()
-{
-    bool result = false;
-    {
-        osl::MutexGuard g(m_aEventGuard);
-        result = !m_aUserEvents.empty();
-    }
-    return result;
-}
-#endif
-
 void SvpSalInstance::Wakeup()
 {
 #ifndef IOS
