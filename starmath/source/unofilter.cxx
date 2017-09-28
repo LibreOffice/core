@@ -115,7 +115,7 @@ uno::Sequence<OUString> MathTypeFilter::getSupportedServiceNames()
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Math_MathTypeFilter_get_implementation(uno::XComponentContext*, uno::Sequence<uno::Any> const&)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Math_MathTypeFilter_get_implementation(uno::XComponentContext* /*pCtx*/, uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new MathTypeFilter);
 }

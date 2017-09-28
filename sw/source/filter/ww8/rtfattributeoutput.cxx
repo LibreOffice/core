@@ -2525,11 +2525,11 @@ void RtfAttributeOutput::CharWeightCTL(const SvxWeightItem& rWeight)
         m_aStyles.append((sal_Int32)0);
 }
 
-void RtfAttributeOutput::CharBidiRTL(const SfxPoolItem&)
+void RtfAttributeOutput::CharBidiRTL(const SfxPoolItem& /*rItem*/)
 {
 }
 
-void RtfAttributeOutput::CharIdctHint(const SfxPoolItem&)
+void RtfAttributeOutput::CharIdctHint(const SfxPoolItem& /*rItem*/)
 {
 }
 
@@ -2892,12 +2892,12 @@ void RtfAttributeOutput::ParaScriptSpace(const SfxBoolItem& rScriptSpace)
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ASPALPHA);
 }
 
-void RtfAttributeOutput::ParaHangingPunctuation(const SfxBoolItem&)
+void RtfAttributeOutput::ParaHangingPunctuation(const SfxBoolItem& /*rItem*/)
 {
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
 
-void RtfAttributeOutput::ParaForbiddenRules(const SfxBoolItem&)
+void RtfAttributeOutput::ParaForbiddenRules(const SfxBoolItem& /*rItem*/)
 {
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
@@ -2945,7 +2945,7 @@ void RtfAttributeOutput::FormatFrameSize(const SwFormatFrameSize& rSize)
     }
 }
 
-void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem&)
+void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem& /*rItem*/)
 {
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }

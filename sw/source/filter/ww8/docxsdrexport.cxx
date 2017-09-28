@@ -977,8 +977,8 @@ OString lcl_ConvertTransparency(const Color& rColor)
         sal_Int32 nTransparencyPercent = 100 - float(rColor.GetTransparency()) / 2.55;
         return OString::number(nTransparencyPercent * oox::drawingml::PER_PERCENT);
     }
-    else
-        return OString();
+
+    return OString();
 }
 
 void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)

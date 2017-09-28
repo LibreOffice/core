@@ -128,10 +128,7 @@ bool isCompatible(SvStream& rInStream)
 
     sal_Int32 nMajor = OString(aFirstBytes[5]).toInt32();
     sal_Int32 nMinor = OString(aFirstBytes[7]).toInt32();
-    if (nMajor > 1 || (nMajor == 1 && nMinor > 4))
-        return false;
-
-    return true;
+    return !(nMajor > 1 || (nMajor == 1 && nMinor > 4));
 }
 
 /// Takes care of transparently downgrading the version of the PDF stream in
