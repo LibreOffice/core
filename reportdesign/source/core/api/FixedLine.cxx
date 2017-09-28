@@ -510,11 +510,10 @@ awt::Size SAL_CALL OFixedLine::getSize(  )
 
 void SAL_CALL OFixedLine::setSize( const awt::Size& aSize )
 {
-    const OUString hundredthmm(u"0\u2009\u00B5m"); // 0, thin space, µ (micro), m (meter)
     if ( aSize.Width < MIN_WIDTH && m_nOrientation == 1 )
-        throw beans::PropertyVetoException("Too small width for FixedLine; minimum is "  + OUString::number(MIN_WIDTH)  + hundredthmm, static_cast<cppu::OWeakObject*>(this));
+        throw beans::PropertyVetoException("Too small width for FixedLine; minimum is "  + OUString::number(MIN_WIDTH)  + "0 micrometer", static_cast<cppu::OWeakObject*>(this));
     else if ( aSize.Height < MIN_HEIGHT && m_nOrientation == 0 )
-        throw beans::PropertyVetoException("Too small height for FixedLine; minimum is " + OUString::number(MIN_HEIGHT) + hundredthmm, static_cast<cppu::OWeakObject*>(this));
+        throw beans::PropertyVetoException("Too small height for FixedLine; minimum is " + OUString::number(MIN_HEIGHT) + "0 micrometer", static_cast<cppu::OWeakObject*>(this));
     OShapeHelper::setSize(aSize,this);
 }
 
