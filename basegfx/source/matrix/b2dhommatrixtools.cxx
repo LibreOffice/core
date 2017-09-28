@@ -358,6 +358,48 @@ namespace basegfx
             return aRetval;
         }
 
+        BASEGFX_DLLPUBLIC B2DHomMatrix createRotateAroundCenterKeepAspectRatioStayInsideRange(
+            const basegfx::B2DRange& rTargetRange,
+            double fRotate)
+        {
+            basegfx::B2DHomMatrix aRetval;
+
+            // RotGrfFlyFrame: Take rotation into account. Rotation is in 10th degrees
+            if(0.0 != fRotate)
+            {
+                // Fit rotated graphic to center of available space, keeping page ratio:
+                // Adapt scaling ratio of unit object and rotate it
+                aRetval.scale(1.0, rTargetRange.getHeight() / rTargetRange.getWidth());
+                aRetval.rotate(fRotate);
+
+                // get the range to see where we are in unit coordinates
+                basegfx::B2DRange aFullRange(0.0, 0.0, 1.0, 1.0);
+                aFullRange.transform(aRetval);
+
+                // detect needed scales in X/Y and choose the smallest for staying inside the
+                // available space while keeping aspect ratio of the source
+                const double fScaleX(rTargetRange.getWidth() / aFullRange.getWidth());
+                const double fScaleY(rTargetRange.getHeight() / aFullRange.getHeight());
+                const double fScaleMin(std::min(fScaleX, fScaleY));
+
+                // TopLeft to zero, then scale, then move to center of available space
+                aRetval.translate(-aFullRange.getMinX(), -aFullRange.getMinY());
+                aRetval.scale(fScaleMin, fScaleMin);
+                aRetval.translate(
+                    rTargetRange.getCenterX() - (0.5 * fScaleMin * aFullRange.getWidth()),
+                    rTargetRange.getCenterY() - (0.5 * fScaleMin * aFullRange.getHeight()));
+            }
+            else
+            {
+                // just scale/translate needed
+                aRetval *= createScaleTranslateB2DHomMatrix(
+                    rTargetRange.getRange(),
+                    rTargetRange.getMinimum());
+            }
+
+            return aRetval;
+        }
+
         /// special for the case to map from source range to target range
         B2DHomMatrix createSourceRangeTargetRangeTransform(
             const B2DRange& rSourceRange,
