@@ -35,13 +35,6 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 }
 
 
-SfxPoolItem::SfxPoolItem( const SfxPoolItem& rCpy )
-    : m_nRefCount(0) // don't copy that
-    , m_nWhich(rCpy.m_nWhich)
-    , m_nKind(SfxItemKind::NONE)
-{}
-
-
 SfxPoolItem::~SfxPoolItem()
 {
     assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF)

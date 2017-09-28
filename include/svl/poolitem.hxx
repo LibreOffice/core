@@ -137,7 +137,8 @@ private:
 
 protected:
                              explicit SfxPoolItem( sal_uInt16 nWhich = 0 );
-                             SfxPoolItem( const SfxPoolItem& );
+                             SfxPoolItem( const SfxPoolItem& rCopy)
+                                 : SfxPoolItem(rCopy.m_nWhich) {}
 
 public:
     virtual                  ~SfxPoolItem();
