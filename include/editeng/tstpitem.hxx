@@ -35,10 +35,10 @@
 class EDITENG_DLLPUBLIC SvxTabStop
 {
 private:
-    sal_Int32 nTabPos;
-
+    sal_Int32       nTabPos;
     SvxTabAdjust    eAdjustment;
-    mutable sal_Unicode     m_cDecimal;
+    mutable sal_Unicode
+                    m_cDecimal;
     sal_Unicode     cFill;
 
     void fillDecimal() const;
@@ -50,11 +50,11 @@ public:
                 const sal_Unicode cDec = cDfltDecimalChar,
                 const sal_Unicode cFil = cDfltFillChar );
 
-    sal_Int32& GetTabPos() { return nTabPos; }
-    sal_Int32  GetTabPos() const { return nTabPos; }
+    sal_Int32&    GetTabPos() { return nTabPos; }
+    sal_Int32     GetTabPos() const { return nTabPos; }
 
-    SvxTabAdjust&   GetAdjustment() { return eAdjustment; }
-    SvxTabAdjust    GetAdjustment() const { return eAdjustment; }
+    SvxTabAdjust& GetAdjustment() { return eAdjustment; }
+    SvxTabAdjust  GetAdjustment() const { return eAdjustment; }
 
     sal_Unicode&  GetDecimal() { fillDecimal(); return m_cDecimal; }
     sal_Unicode   GetDecimal() const { fillDecimal(); return m_cDecimal; }
@@ -62,15 +62,17 @@ public:
     sal_Unicode&  GetFill() { return cFill; }
     sal_Unicode   GetFill() const { return cFill; }
 
-    // the "old" operator==()
-    bool          IsEqual( const SvxTabStop& rTS ) const
+    bool          operator==( const SvxTabStop& rTS ) const
                         {
                             return ( nTabPos     == rTS.nTabPos     &&
                                      eAdjustment == rTS.eAdjustment &&
                                      m_cDecimal    == rTS.m_cDecimal    &&
                                      cFill       == rTS.cFill );
                         }
-
+    bool          operator!=( const SvxTabStop& rTS ) const
+                        {
+                            return !operator==(rTS);
+                        }
     // For the SortedArray:
     bool            operator <( const SvxTabStop& rTS ) const
                         { return nTabPos < rTS.nTabPos; }
