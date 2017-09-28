@@ -78,7 +78,7 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
     if (ignoreLocation(pCXXMethodDecl)) {
         return true;
     }
-    if (!pCXXMethodDecl->isInstance() || pCXXMethodDecl->isVirtual() || !pCXXMethodDecl->hasBody()) {
+    if (!pCXXMethodDecl->isInstance() || pCXXMethodDecl->isVirtual() || !pCXXMethodDecl->doesThisDeclarationHaveABody() || pCXXMethodDecl->isLateTemplateParsed()) {
         return true;
     }
     if (pCXXMethodDecl->getOverloadedOperator() != OverloadedOperatorKind::OO_None || pCXXMethodDecl->hasAttr<OverrideAttr>()) {

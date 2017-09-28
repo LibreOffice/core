@@ -155,7 +155,9 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             return true;
         }
         if (!methodDecl->isExplicitlyDefaulted()) {
-            if (!methodDecl->doesThisDeclarationHaveABody()) {
+            if (!methodDecl->doesThisDeclarationHaveABody()
+                || methodDecl->isLateTemplateParsed())
+            {
                 return true;
             }
             auto stmt = dyn_cast<CompoundStmt>(methodDecl->getBody());
@@ -194,7 +196,9 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         return true;
     }
 
-    if (!methodDecl->doesThisDeclarationHaveABody()) {
+    if (!methodDecl->doesThisDeclarationHaveABody()
+        || methodDecl->isLateTemplateParsed())
+    {
         return true;
     }
 

@@ -57,7 +57,9 @@ public:
         if (ignoreLocation(pMethodDecl)) {
             return true;
         }
-        if (!pMethodDecl->isThisDeclarationADefinition()) {
+        if (!pMethodDecl->isThisDeclarationADefinition()
+            || pMethodDecl->isLateTemplateParsed())
+        {
             return true;
         }
         if (!pMethodDecl->isInstance()) {
