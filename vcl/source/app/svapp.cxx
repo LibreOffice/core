@@ -486,11 +486,6 @@ bool Application::Reschedule( bool i_bAllEvents )
     return ImplYield(false, i_bAllEvents);
 }
 
-void Scheduler::ProcessEventsToSignal(bool& bSignal)
-{
-    while (!bSignal && Application::Reschedule() );
-}
-
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1;
