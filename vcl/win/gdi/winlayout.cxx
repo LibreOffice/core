@@ -767,7 +767,7 @@ void WinSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
     if (!bUseOpenGL)
     {
         // no OpenGL, just classic rendering
-        DrawTextLayout(rLayout, hDC, !bForceGDI);
+        DrawTextLayout(rLayout, hDC, false);
     }
     else if (!bForceGDI && CacheGlyphs(rLayout) &&
              DrawCachedGlyphs(rLayout))
