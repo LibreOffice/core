@@ -83,7 +83,7 @@ public:
                         // pBuff = The Graphic data. This class takes ownership of this
                         GfxLink( std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nBufSize, GfxLinkType nType );
 
-    bool                IsEqual( const GfxLink& ) const;
+    bool                operator==( const GfxLink& ) const;
 
     GfxLinkType         GetType() const { return meType;}
 

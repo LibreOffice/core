@@ -41,7 +41,7 @@ GfxLink::GfxLink( std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkTy
     mpSwapInData = std::shared_ptr<sal_uInt8>(pBuf.release(), pBuf.get_deleter());  // std::move(pBuf) does not compile on Jenkins MacOSX (24 May 2016)
 }
 
-bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
+bool GfxLink::operator==( const GfxLink& rGfxLink ) const
 {
     bool bIsEqual = false;
 
