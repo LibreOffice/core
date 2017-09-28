@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_984c1972",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-28T21:31:27Z",
+      "side": 1,
+      "message": "that initing with a delegating ctor, via the global default is a bit redundant (several more occasions below). what\u0027s worse, it obfuscates more than it clarifies I think\n\nsome options:\n* initializer list (mpPoint/FlagAry(nullptr), mnPoints(0))\n* ImplInitSize(0)\n* default member initializers\n\nperhaps the latter two are the cleanest approach",
+      "revId": "f379ce63b2c6a6b20d41ec685a26a3de523b699a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d874e19d",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-28T21:31:27Z",
+      "side": 1,
+      "message": "note for future cleanups: at the very least mpPointAry should be unique_ptr - perhaps simply std::vector. but separate patch really",
+      "revId": "f379ce63b2c6a6b20d41ec685a26a3de523b699a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f877dd9c",
+        "filename": "tools/source/generic/poly.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-09-28T21:31:27Z",
+      "side": 1,
+      "message": "likewise",
+      "revId": "f379ce63b2c6a6b20d41ec685a26a3de523b699a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
