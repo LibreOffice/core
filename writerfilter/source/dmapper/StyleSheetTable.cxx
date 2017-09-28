@@ -1028,11 +1028,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         uno::Any aTwo = uno::makeAny(sal_Int8(2));
                         pEntry->pProperties->Insert(PROP_PARA_WIDOWS, aTwo, false);
                         pEntry->pProperties->Insert(PROP_PARA_ORPHANS, aTwo, false);
-
-                        // Left-to-right direction if not already set
-                        pEntry->pProperties->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
-                        // Left alignment if not already set
-                        pEntry->pProperties->Insert(PROP_PARA_ADJUST, uno::makeAny( sal_Int16(style::ParagraphAdjust_LEFT) ), false);
                     }
 
                     auto aPropValues = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pEntry->pProperties->GetPropertyValues());
@@ -1452,6 +1447,8 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
             ++aIt;
         }
     }
+
+    // create a map only once
     if(m_pImpl->m_aStyleNameMap.empty())
     {
         for( sal_uInt32 nPair = 0; nPair < SAL_N_ELEMENTS(aStyleNamePairs)/2; ++nPair)
@@ -1465,15 +1462,15 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
             }
         }
     }
+
+    // find style-name using map
     StringPairMap_t::iterator aIt = m_pImpl->m_aStyleNameMap.find( sRet );
-    bool bConverted = false;
+
     if (aIt != m_pImpl->m_aStyleNameMap.end())
     {
-        bConverted = true;
         sRet = aIt->second;
     }
-
-    if (!bConverted)
+    else
     {
         // SwStyleNameMapper doc says: If the UI style name equals a
         // programmatic name, then it must append " (user)" to the end.
@@ -1481,6 +1478,7 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
         if (aReservedIt != m_pImpl->m_aReservedStyleNames.end())
             sRet += " (user)";
     }
+
     return sRet;
 }
 
