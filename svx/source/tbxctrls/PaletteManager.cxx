@@ -303,13 +303,13 @@ void PaletteManager::SetColorSelectFunction(const std::function<void(const OUStr
     maColorSelectFunction = aColorSelectFunction;
 }
 
-void PaletteManager::PopupColorPicker(const OUString& aCommand)
+void PaletteManager::PopupColorPicker(const OUString& aCommand, const Color& rInitialColor)
 {
     // The calling object goes away during aColorDlg.Execute(), so we must copy this
     OUString aCommandCopy = aCommand;
     SvColorDialog aColorDlg( nullptr );
-    aColorDlg.SetColor ( mLastColor );
-    aColorDlg.SetMode( svtools::ColorPickerMode_MODIFY );
+    aColorDlg.SetColor(rInitialColor);
+    aColorDlg.SetMode(svtools::ColorPickerMode_MODIFY);
     if( aColorDlg.Execute() == RET_OK )
     {
         if (mpBtnUpdater)
