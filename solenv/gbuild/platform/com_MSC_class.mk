@@ -148,6 +148,8 @@ else
 MSC_SUBSYSTEM_VERSION=$(COMMA)5.01
 endif
 
+# the sort on the libraries is used to filter out duplicates to keep commanline
+# length in check - otherwise the dupes easily hit the limit when linking mergedlib
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs,\
@@ -176,10 +178,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		    $(if $(filter 80 81 10,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/$(WINDOWS_SDK_LIB_SUBDIR)/um/x64)) \
 		$(T_LDFLAGS) \
 		@$${RESPONSEFILE} \
-		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_ilibfilename,$(lib))) \
-		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
+		$(foreach lib,$(sort $(LINKED_LIBS)),$(call gb_Library_get_ilibfilename,$(lib))) \
+		$(foreach lib,$(sort $(LINKED_STATIC_LIBS)),$(call gb_StaticLibrary_get_filename,$(lib))) \
 		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),\
-			$(T_LIBS) user32.lib \
+			$(sort $(T_LIBS)) user32.lib \
 			-manifestfile:$(WORKDIR)/LinkTarget/$(2).manifest \
 			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/$(2))) \
 		$(if $(ILIBTARGET),-out:$(1) -implib:$(ILIBTARGET),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
