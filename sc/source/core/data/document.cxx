@@ -6771,42 +6771,6 @@ ScMutationGuard::~ScMutationGuard()
 
 thread_local ScDocumentThreadSpecific ScDocument::maThreadSpecific;
 
-bool ScDocument::IsInInterpreterTableOp() const
-{
-    if (!mbThreadedGroupCalcInProgress)
-        return maNonThreaded.nInterpreterTableOpLevel != 0;
-    else
-        return maThreadSpecific.nInterpreterTableOpLevel != 0;
-}
-
-void ScDocument::IncInterpreterTableOpLevel()
-{
-    if (!mbThreadedGroupCalcInProgress)
-    {
-        if (maNonThreaded.nInterpreterTableOpLevel < USHRT_MAX)
-            maNonThreaded.nInterpreterTableOpLevel++;
-    }
-    else
-    {
-        if (maThreadSpecific.nInterpreterTableOpLevel < USHRT_MAX)
-            maThreadSpecific.nInterpreterTableOpLevel++;
-    }
-}
-
-void ScDocument::DecInterpreterTableOpLevel()
-{
-    if (!mbThreadedGroupCalcInProgress)
-    {
-        if (maNonThreaded.nInterpreterTableOpLevel)
-            maNonThreaded.nInterpreterTableOpLevel--;
-    }
-    else
-    {
-        if (maThreadSpecific.nInterpreterTableOpLevel)
-            maThreadSpecific.nInterpreterTableOpLevel--;
-    }
-}
-
 ScRecursionHelper& ScDocument::GetRecursionHelper()
 {
     if (!mbThreadedGroupCalcInProgress)
@@ -6825,16 +6789,12 @@ ScRecursionHelper& ScDocument::GetRecursionHelper()
 
 void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData)
 {
-    nInterpreterTableOpLevel = rNonThreadedData.nInterpreterTableOpLevel;
-
     // What about the recursion helper?
     // Copy the lookup cache?
 }
 
 void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData)
 {
-    assert(nInterpreterTableOpLevel == rNonThreadedData.nInterpreterTableOpLevel);
-
     // What about recursion helper and lookup cache?
 }
 
