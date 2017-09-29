@@ -34,6 +34,7 @@
 class VCL_PLUGIN_PUBLIC SalTimer
 {
     SALTIMERPROC        m_pProc;
+
 public:
     SalTimer() : m_pProc( nullptr ) {}
     virtual ~SalTimer() COVERITY_NOEXCEPT_FALSE;
@@ -52,6 +53,49 @@ public:
     {
         if( m_pProc )
             m_pProc();
+    }
+};
+
+class VersionedEvent
+{
+    /**
+     * The "additional event data" members on macOS are integers, so we can't
+     * use an unsigned integer and rely on the defined unsigned overflow in
+     * InvalidateEvent().
+     */
+    sal_Int32 m_nEventVersion;
+    bool      m_bIsValidVersion;
+
+public:
+    VersionedEvent() : m_nEventVersion( 0 ), m_bIsValidVersion( false ) {}
+
+    sal_Int32 GetNextEventVersion()
+    {
+        InvalidateEvent();
+        m_bIsValidVersion = true;
+        return m_nEventVersion;
+    }
+
+    void InvalidateEvent()
+    {
+        if ( m_bIsValidVersion )
+        {
+            if ( m_nEventVersion == SAL_MAX_INT32 )
+                m_nEventVersion = 0;
+            else
+                ++m_nEventVersion;
+            m_bIsValidVersion = false;
+        }
+    }
+
+    bool ExistsValidEvent() const
+    {
+        return m_bIsValidVersion;
+    }
+
+    bool IsValidEventVersion( const sal_Int32 nEventVersion ) const
+    {
+        return m_bIsValidVersion && nEventVersion == m_nEventVersion;
     }
 };
 
