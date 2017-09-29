@@ -1337,16 +1337,28 @@ bool ScTokenArray::AddFormulaToken(
 
 void ScTokenArray::CheckToken( const FormulaToken& r )
 {
+    static const std::set<OpCode> aThreadedCalcBlackList({
+        ocMacro,
+        ocTableOp
+    });
+
     if (IsFormulaVectorDisabled())
         // It's already disabled.  No more checking needed.
         return;
 
     static const bool bThreadingRequested = std::getenv("CPU_THREADED_CALCULATION");
 
-    if (!ScCalcConfig::isOpenCLEnabled() && bThreadingRequested)
-        return;
-
     OpCode eOp = r.GetOpCode();
+
+    if (!ScCalcConfig::isOpenCLEnabled() && bThreadingRequested)
+    {
+        if (aThreadedCalcBlackList.count(eOp))
+        {
+            meVectorState = FormulaVectorDisabledNotInSubSet;
+            SAL_INFO("sc.core.formulagroup", "opcode " << formula::FormulaCompiler().GetOpCodeMap(sheet::FormulaLanguage::ENGLISH)->getSymbol(eOp) << " disables threaded calculation of formula group");
+        }
+        return;
+    }
 
     if (SC_OPCODE_START_FUNCTION <= eOp && eOp < SC_OPCODE_STOP_FUNCTION)
     {
