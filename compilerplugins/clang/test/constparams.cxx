@@ -24,4 +24,26 @@ struct Class3
     Class3(void * f2) : m_f2(static_cast<int*>(f2)) {}
 };
 
+int const * f1(int *); // expected-note {{canonical parameter declaration here [loplugin:constparams]}}
+int const * f2(int *);
+int const * f3(int *);
+void g() {
+    int const * (*p1)(int *);
+    int n = 0;
+    f1(&n);
+    p1 = f2;
+    typedef void (*P2)();
+    P2 p2;
+    p2 = (P2) (f3);
+}
+int const * f1(int * p) { // expected-error {{this parameter can be const [loplugin:constparams]}}
+    return p;
+}
+int const * f2(int * p) {
+    return p;
+}
+int const * f3(int * p) {
+    return p;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
