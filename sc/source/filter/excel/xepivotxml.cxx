@@ -760,13 +760,24 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         std::set<size_t> aUsedCachePositions;
         for (const auto & rMember : aMembers)
         {
-            auto it = std::find_if(iCacheFieldItems_begin, iCacheFieldItems_end,
-                [&rMember](const ScDPItemData& arg) -> bool { return arg.GetString() == rMember.maName; });
-            if (it != iCacheFieldItems_end)
+            for (auto it = iCacheFieldItems_begin; it != iCacheFieldItems_end; ++it)
             {
-                size_t nCachePos = it - iCacheFieldItems_begin;
-                aMemberSequence.emplace_back(nCachePos, !rMember.mbVisible);
-                aUsedCachePositions.insert(nCachePos);
+                OUString sFormattedName;
+                if (it->HasStringData() || it->IsEmpty())
+                {
+                    sFormattedName = it->GetString();
+                }
+                else
+                {
+                    sFormattedName = const_cast<ScDPObject&>(rDPObj).GetFormattedString(pDim->GetName(), it->GetValue());
+                }
+                if (sFormattedName == rMember.maName)
+                {
+                    size_t nCachePos = it - iCacheFieldItems_begin;
+                    aMemberSequence.emplace_back(nCachePos, !rMember.mbVisible);
+                    aUsedCachePositions.insert(nCachePos);
+                    break;
+                }
             }
         }
         // Now add all remaining cache items as hidden
