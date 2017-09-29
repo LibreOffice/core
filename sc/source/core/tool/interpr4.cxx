@@ -82,7 +82,8 @@ using ::std::unique_ptr;
 
 #define ADDIN_MAXSTRLEN 256
 
-//-----------------------------static data -----------------
+thread_local std::unique_ptr<ScTokenStack> ScInterpreter::pGlobalStack;
+thread_local bool ScInterpreter::bGlobalStackInUse = false;
 
 // document access functions
 
