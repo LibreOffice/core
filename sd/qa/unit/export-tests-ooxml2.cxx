@@ -118,6 +118,7 @@ public:
     void testTdf112086();
     void testTdf112647();
     void testGroupRotation();
+    void testTdf104788();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -161,6 +162,7 @@ public:
     CPPUNIT_TEST(testTdf112086);
     CPPUNIT_TEST(testTdf112647);
     CPPUNIT_TEST(testGroupRotation);
+    CPPUNIT_TEST(testTdf104788);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1217,6 +1219,23 @@ void SdOOXMLExportTest2::testGroupRotation()
     assertXPathNoAttribute(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:grpSpPr/a:xfrm", "rot");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[1]/p:spPr/a:xfrm", "rot", "20400000");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[2]/p:spPr/a:xfrm", "rot", "20400000");
+}
+
+void SdOOXMLExportTest2::testTdf104788()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf104788.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide6.xml");
+
+    OUString sVal = getXPath(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[2]/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[2]", "to");
+    CPPUNIT_ASSERT_EQUAL(OUString("-1.0"), sVal);
+
+    OUString sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[2]/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[2]/p:cBhvr/p:attrNameLst/p:attrName");
+    CPPUNIT_ASSERT_EQUAL(OUString("xshear"), sAttributeName);
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
