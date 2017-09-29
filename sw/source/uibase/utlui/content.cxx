@@ -1449,7 +1449,7 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 {
     assert(!m_bIsRoot || dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
     if (!m_bIsRoot
-        || (static_cast<SwTypeNumber*>(pParent->GetUserData())->GetTypeId() == CTYPE_CTT && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
+        || (lcl_IsContentType(pParent) && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
         || (m_nRootType == ContentTypeId::OUTLINE))
     {
         if(lcl_IsContentType(pParent))
@@ -1508,7 +1508,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
     assert(!m_bIsRoot || dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
     if (!m_bIsRoot
-        || (static_cast<SwTypeNumber*>(pParent->GetUserData())->GetTypeId() == CTYPE_CTT && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
+        || (lcl_IsContentType(pParent) && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
         || (m_nRootType == ContentTypeId::OUTLINE))
     {
         if(lcl_IsContentType(pParent))
@@ -2418,8 +2418,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 const auto nActLevel = static_cast<SwOutlineContent*>(
                         pCurrentEntry->GetUserData())->GetOutlineLevel();
                 pEntry = Next(pEntry);
-                while (pEntry && CTYPE_CNT ==
-                    static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId())
+                while (pEntry && lcl_IsContent(pEntry))
                 {
                     assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
                     if (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel())
@@ -2431,8 +2430,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                 if (nDir == 1)
                 {
                     // If the last entry is to be moved we're done
-                    if (pEntry && CTYPE_CNT ==
-                        static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId())
+                    if (pEntry && lcl_IsContent(pEntry))
                     {
                         // pEntry now points to the entry following the last
                         // selected entry.
@@ -2442,10 +2440,10 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                         while (pEntry)
                         {
                             pEntry = Next(pEntry);
-                            assert(pEntry == nullptr || static_cast<SwTypeNumber*>(pEntry->GetUserData()));
+                            assert(pEntry == nullptr || !lcl_IsContent(pEntry) || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
                             // nDest++ may only executed if pEntry != 0
                             if (pEntry && nDest++ &&
-                                (CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()
+                                (!lcl_IsContent(pEntry)
                                  || nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()))
                             {
                                 nDest--;
@@ -2467,9 +2465,9 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     {
                         nDest--;
                         pEntry = Prev(pEntry);
-                        assert(pEntry == nullptr || static_cast<SwTypeNumber*>(pEntry->GetUserData()));
+                        assert(pEntry == nullptr || !lcl_IsContent(pEntry) || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
                         if (pEntry &&
-                            (CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()
+                            (!lcl_IsContent(pEntry)
                              || nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()))
                         {
                             break;
