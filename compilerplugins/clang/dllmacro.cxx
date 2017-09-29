@@ -76,7 +76,8 @@ bool DllMacro::VisitNamedDecl(NamedDecl const * decl) {
                 << p->getSourceRange();
         }
     }
-    else if (a->getVisibility() == VisibilityAttr::Default) {
+    else if (a->getVisibility() == VisibilityAttr::Default && !a->isInherited())
+    {
         auto p = dyn_cast<CXXRecordDecl>(decl);
         if (p && p->isCompleteDefinition() && !p->getDescribedClassTemplate()) {
             // don't know what these macros mean, leave them alone
