@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libstaroffice,$(STAROFFICE_TARBALL)
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libstaroffice,0))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libstaroffice))
+
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
@@ -36,7 +38,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
-	external/libstaroffice/iOS.patch.0 \
 	external/libstaroffice/0001-clang-do-not-use-defined-__has_cpp_attribute-and-__h.patch.1 \
 ))
 

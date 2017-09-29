@@ -13,9 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libmspub,$(MSPUB_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libmspub,0))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libmspub))
+
 $(eval $(call gb_UnpackedTarball_add_patches,libmspub,\
     external/libmspub/ubsan.patch \
-    external/libmspub/automake.patch \
 ))
 
 ifeq ($(COM_IS_CLANG),TRUE)
@@ -26,7 +27,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmspub, \
 endif
 endif
 
-$(eval $(call gb_UnpackedTarball_add_patches,libmspub, \
-    external/libmspub/iOS.patch.0 \
-))
 # vim: set noet sw=4 ts=4:
