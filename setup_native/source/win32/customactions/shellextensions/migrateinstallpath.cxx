@@ -40,7 +40,7 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
     {
         if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
         {
-            szValue[std::min(unsigned int(SAL_N_ELEMENTS(szValue) - 1), unsigned int(nValueSize / sizeof(*szValue)))] = 0;
+            szValue[std::min(static_cast<unsigned int>(SAL_N_ELEMENTS(szValue) - 1), static_cast<unsigned int>(nValueSize / sizeof(*szValue)))] = 0;
             sInstDir = szValue;
             MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
             // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_CURRENT_USER", MB_OK );
@@ -52,7 +52,7 @@ extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
     {
         if ( ERROR_SUCCESS == RegQueryValueExW( hKey, L"INSTALLLOCATION", nullptr, nullptr, reinterpret_cast<LPBYTE>(szValue), &nValueSize ) )
         {
-            szValue[std::min(unsigned int(SAL_N_ELEMENTS(szValue) - 1), unsigned int(nValueSize / sizeof(*szValue)))] = 0;
+            szValue[std::min(static_cast<unsigned int>(SAL_N_ELEMENTS(szValue) - 1), static_cast<unsigned int>(nValueSize / sizeof(*szValue)))] = 0;
             sInstDir = szValue;
             MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstDir.c_str());
             // MessageBoxW( NULL, sInstDir.c_str(), L"Found in HKEY_LOCAL_MACHINE", MB_OK );
