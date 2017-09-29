@@ -738,7 +738,14 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     // OD 2004-03-15 #116561# - In online layout join the follows, if section
     // can grow.
     const SwViewShell *pSh = getRootFrame()->GetCurrShell();
-    if( pSh && pSh->GetViewOptions()->getBrowseMode() &&
+
+    // Split sections inside table cells: need to merge all follows of the
+    // section here, as later we won't attempt doing so.
+    bool bCanContainSplitSection = false;
+    if (IsInTab() && GetUpper())
+        bCanContainSplitSection = CanContainSplitSection(GetUpper());
+
+    if( pSh && (pSh->GetViewOptions()->getBrowseMode() || bCanContainSplitSection) &&
          ( Grow( LONG_MAX, true ) > 0 ) )
     {
         while( GetFollow() )
