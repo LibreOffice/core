@@ -96,9 +96,11 @@ void PluginHandler::handleOption( const std::string& option )
             ; // ok
         else
         {
+#if !defined _WIN32 //TODO, S_ISDIR
             struct stat st;
             if( stat(( SRCDIR "/" + scope ).c_str(), &st ) != 0 || !S_ISDIR( st.st_mode ))
                 report( DiagnosticsEngine::Fatal, "unknown scope %0 (no such module directory)" ) << scope;
+#endif
         }
     }
     else if( option.substr( 0, 14 ) == "warnings-only=" )
