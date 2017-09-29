@@ -2401,11 +2401,11 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                         while (pEntry)
                         {
                             pEntry = Next(pEntry);
-                            assert(pEntry == nullptr || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+                            assert(pEntry == nullptr || static_cast<SwTypeNumber*>(pEntry->GetUserData()));
                             // nDest++ may only executed if pEntry != 0
                             if (pEntry && nDest++ &&
-                                (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel() ||
-                                 CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()))
+                                (CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()
+                                 || nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()))
                             {
                                 nDest--;
                                 break;
@@ -2426,10 +2426,10 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     {
                         nDest--;
                         pEntry = Prev(pEntry);
-                        assert(pEntry == nullptr || dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+                        assert(pEntry == nullptr || static_cast<SwTypeNumber*>(pEntry->GetUserData()));
                         if (pEntry &&
-                            (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel() ||
-                             CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()))
+                            (CTYPE_CNT != static_cast<SwTypeNumber*>(pEntry->GetUserData())->GetTypeId()
+                             || nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel()))
                         {
                             break;
                         }
