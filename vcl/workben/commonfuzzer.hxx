@@ -19,6 +19,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
