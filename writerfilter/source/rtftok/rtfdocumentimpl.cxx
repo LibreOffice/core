@@ -34,6 +34,7 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -2790,7 +2791,7 @@ RTFError RTFDocumentImpl::popState()
                 }
                 catch (const uno::Exception& rException)
                 {
-                    SAL_WARN("writerfilter.rtf", "failed to set property " << rKey << ": " << rException.Message);
+                    SAL_WARN("writerfilter.rtf", "failed to set property " << rKey << ": " << rException);
                 }
             }
         }

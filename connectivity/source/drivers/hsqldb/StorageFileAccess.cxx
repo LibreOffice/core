@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "hsqldb/HStorageMap.hxx"
 #include <osl/diagnose.h>
+#include <cppuhelper/logging.hxx>
 
 
 using namespace ::com::sun::star::container;
@@ -80,7 +81,7 @@ extern "C" SAL_JNI_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_S
             OSL_FAIL("Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement");
             if (env->ExceptionCheck())
                 env->ExceptionClear();
-            SAL_WARN("connectivity.hsqldb", "forwarding Exception: " << e.Message);
+            SAL_WARN("connectivity.hsqldb", "forwarding Exception: " << e);
         }
     }
     return JNI_FALSE;
@@ -116,7 +117,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
         }
         catch(const Exception& e)
         {
-            SAL_WARN("connectivity.hsqldb", "Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement " << e.Message);
+            SAL_WARN("connectivity.hsqldb", "Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement " << e);
             StorageContainer::throwJavaException(e,env);
         }
     }

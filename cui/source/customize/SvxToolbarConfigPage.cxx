@@ -99,6 +99,7 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include "dlgname.hxx"
 
@@ -552,7 +553,7 @@ IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
                 }
                 catch ( css::uno::Exception& e)
                 {
-                    SAL_WARN("cui.customize", "Error replacing image: " << e.Message);
+                    SAL_WARN("cui.customize", "Error replacing image: " << e);
                 }
             }
         }
@@ -602,7 +603,7 @@ IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
         }
         catch ( css::uno::Exception& e )
         {
-            SAL_WARN("cui.customize", "Error resetting image: " << e.Message);
+            SAL_WARN("cui.customize", "Error resetting image: " << e);
         }
     }
     else if (sIdent == "restoreItem")
@@ -659,7 +660,7 @@ IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
         }
         catch ( css::uno::Exception& e )
         {
-            SAL_WARN("cui.customize", "Error restoring image: " << e.Message);
+            SAL_WARN("cui.customize", "Error restoring image: " << e);
         }
     }
     else

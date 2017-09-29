@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include "namecont.hxx"
 #include <basic/basicmanagerrepository.hxx>
@@ -421,7 +422,7 @@ BasicManager* SfxLibraryContainer::getBasicManager()
     }
     catch (const css::ucb::ContentCreationException& e)
     {
-        SAL_WARN( "basic", "SfxLibraryContainer::getBasicManager : Caught exception: " << e.Message );
+        SAL_WARN( "basic", "SfxLibraryContainer::getBasicManager: " << e );
     }
     return mpBasMgr;
 }
@@ -808,12 +809,12 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             }
             catch ( const xml::sax::SAXException& e )
             {
-                SAL_WARN("basic", e.Message);
+                SAL_WARN("basic", e);
                 return;
             }
             catch ( const io::IOException& e )
             {
-                SAL_WARN("basic", e.Message);
+                SAL_WARN("basic", e);
                 return;
             }
 
@@ -1177,7 +1178,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         catch(const Exception& e)
         {
             bCleanUp = true;
-            SAL_WARN("basic", "Upgrade of Basic installation failed somehow: " << e.Message);
+            SAL_WARN("basic", "Upgrade of Basic installation failed somehow: " << e);
         }
 
         // #i93163

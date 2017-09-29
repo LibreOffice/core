@@ -33,6 +33,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -155,7 +156,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             }
             catch(const uno::Exception& e)
             {
-                SAL_INFO("sdext.pdfimport", "subfilter exception: " << e.Message);
+                SAL_INFO("sdext.pdfimport", "subfilter: " << e);
             }
 
             SAL_INFO("sdext.pdfimport", "subfilter: " << xSubFilter.get() );

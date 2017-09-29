@@ -23,6 +23,7 @@
 
 #include <comphelper/unwrapargs.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <o3tl/any.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -1556,7 +1557,7 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter )
         }
         catch ( const uno::Exception& e )
         {
-            SAL_WARN("sc", "Bahhh, caught exception " << e.Message );
+            SAL_WARN("sc", "Bahhh, caught " << e );
         }
     }
     else

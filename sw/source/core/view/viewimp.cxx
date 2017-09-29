@@ -36,6 +36,7 @@
 #include <strings.hrc>
 #include <svx/svdundo.hxx>
 #include <comphelper/lok.hxx>
+#include <cppuhelper/logging.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
@@ -304,7 +305,7 @@ void SwViewShellImp::UpdateAccessible()
         }
         catch (uno::Exception const& e)
         {
-            SAL_WARN("sw.a11y", "exception: " << e.Message);
+            SAL_WARN("sw.a11y", e);
             assert(!"SwViewShellImp::UpdateAccessible: unhandled exception");
         }
     }

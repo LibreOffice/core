@@ -671,7 +671,7 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (const Exception & rExc)
     {
-        SAL_WARN("stoc", "### exception occurred: " << rExc.Message );
+        SAL_WARN("stoc", "### exception occurred: " << rExc );
     }
 
     Reference< XComponent >( xMgr, UNO_QUERY )->dispose();

@@ -48,6 +48,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <comphelper/string.hxx>
+#include <cppuhelper/logging.hxx>
 #include <rtl/tencinfo.h>
 #include <osl/diagnose.h>
 #include "oox/helper/attributelist.hxx"
@@ -58,6 +59,7 @@
 #include "oox/ole/axbinarywriter.hxx"
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+
 namespace oox {
 namespace ole {
 
@@ -174,7 +176,7 @@ bool lclExtractRangeFromName( CellRangeAddress& orRangeAddr, const Reference< XM
     }
     catch (const Exception& e)
     {
-        SAL_WARN("oox", "exception: " << e.Message);
+        SAL_WARN("oox", e);
     }
     return false;
 }
@@ -207,7 +209,7 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
     }
     catch (const Exception& e)
     {
-        SAL_WARN("oox", "exception: " << e.Message);
+        SAL_WARN("oox", e);
     }
     rConverter.setProperty( PROP_XLA1Representation, rAddressString );
     rConverter.setProperty( PROP_ReferenceSheet, nRefSheet );
@@ -351,7 +353,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
     }
     catch (const Exception& e)
     {
-        SAL_WARN("oox", "exception: " << e.Message);
+        SAL_WARN("oox", e);
     }
 
     // list entry source
@@ -383,7 +385,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
     }
     catch (const Exception& e)
     {
-        SAL_WARN("oox", "exception: " << e.Message);
+        SAL_WARN("oox", e);
     }
 }
 
@@ -2662,7 +2664,7 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
         }
         catch (const Exception& e)
         {
-            SAL_WARN("oox", "exception: " << e.Message);
+            SAL_WARN("oox", e);
         }
         mxModel->convertProperties( aPropMap, rConv );
         PropertySet aPropSet( rxCtrlModel );
@@ -2711,7 +2713,7 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
     }
     catch (const Exception& e)
     {
-        SAL_WARN("oox", "exception creating Control: " << e.Message);
+        SAL_WARN("oox", "exception creating Control: " << e);
     }
     return xRet;
 }
@@ -2737,7 +2739,7 @@ Reference< XIndexContainer > const & EmbeddedForm::createXForm()
         }
         catch (const Exception& e)
         {
-            SAL_WARN("oox", "exception creating Form: " << e.Message);
+            SAL_WARN("oox", "exception creating Form: " << e);
         }
         // always clear the forms supplier to not try to create the form again
         mxFormsSupp.clear();

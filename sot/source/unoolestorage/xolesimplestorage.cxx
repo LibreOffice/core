@@ -35,6 +35,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sot/storinfo.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace ::com::sun::star;
 

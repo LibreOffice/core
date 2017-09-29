@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/configmgr.hxx>
@@ -864,7 +865,7 @@ SdrModel::GetDocumentStream( OUString const& rURL,
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("svx", "exception: '" << e.Message << "'");
+        SAL_WARN("svx", "exception: '" << e << "'");
     }
     return nullptr;
 }

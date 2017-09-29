@@ -22,6 +22,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
 
@@ -927,7 +928,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                     }
                     catch ( uno::Exception& e )
                     {
-                        SAL_WARN("scripting", "event script raised " << e.Message );
+                        SAL_WARN("scripting", "event script raised " << e );
                     }
                }
            }

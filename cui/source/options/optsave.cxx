@@ -22,6 +22,7 @@
 #include "optsave.hxx"
 #include <dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <comphelper/sequence.hxx>
@@ -453,7 +454,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
         }
         catch(Exception& e)
         {
-            SAL_WARN( "cui.options", "exception in FilterFactory access: " << e.Message );
+            SAL_WARN( "cui.options", "exception in FilterFactory access: " << e );
         }
 
         pImpl->bInitialized = true;

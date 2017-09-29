@@ -41,6 +41,7 @@
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <o3tl/make_unique.hxx>
 
@@ -875,7 +876,7 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
         { throw; }
     catch(const css::uno::Exception& ex)
         {
-            SAL_WARN( "filter.config", ex.Message);
+            SAL_WARN( "filter.config", ex);
             aValue.clear();
         }
 

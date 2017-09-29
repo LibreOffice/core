@@ -51,6 +51,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
+#include <cppuhelper/logging.hxx>
 
 namespace utl {
 
@@ -521,9 +522,7 @@ bool MediaDescriptor::impl_addInputStream( bool bLockFile )
     }
     catch(const css::uno::Exception& ex)
     {
-        SAL_WARN(
-            "unotools.misc",
-            "invalid MediaDescriptor detected: " << ex.Message);
+        SAL_WARN("unotools.misc", "invalid MediaDescriptor detected: " << ex);
         return false;
     }
 }
@@ -632,17 +631,13 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         { throw; }
     catch(const css::ucb::ContentCreationException& e)
         {
-            SAL_WARN(
-                "unotools.misc",
-                "caught ContentCreationException \"" << e.Message
+            SAL_WARN("unotools.misc", "caught \"" << e
                     << "\" while opening <" << sURL << ">");
             return false; // TODO error handling
         }
     catch(const css::uno::Exception& e)
         {
-            SAL_WARN(
-                "unotools.misc",
-                "caught Exception \"" << e.Message << "\" while opening <"
+            SAL_WARN("unotools.misc", "caught \"" << e << "\" while opening <"
                     << sURL << ">");
             return false; // TODO error handling
         }
@@ -683,9 +678,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
                 // break this method.
                 if (!pInteraction->wasWriteError() || bModeRequestedExplicitly)
                 {
-                    SAL_WARN(
-                        "unotools.misc",
-                        "caught Exception \"" << e.Message
+                    SAL_WARN("unotools.misc", "caught \"" << e
                             << "\" while opening <" << sURL << ">");
                     // If the protocol is webdav, then we need to treat the stream as readonly, even if the
                     // operation was requested as read/write explicitly (the WebDAV UCB implementation is monodirectional
@@ -751,8 +744,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         {
             SAL_INFO(
                 "unotools.misc",
-                "caught Exception \"" << e.Message << "\" while opening <"
-                    << sURL << ">");
+                "caught " << e << " while opening <" << sURL << ">");
             return false;
         }
     }

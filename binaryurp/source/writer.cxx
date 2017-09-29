@@ -31,6 +31,7 @@
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/logging.hxx>
 #include "osl/mutex.hxx"
 #include "sal/log.hxx"
 #include "uno/dispatcher.hxx"
@@ -180,7 +181,7 @@ void Writer::execute() {
             }
         }
     } catch (const css::uno::Exception & e) {
-        SAL_INFO("binaryurp", "caught UNO exception " << e.Message);
+        SAL_INFO("binaryurp", "caught " << e);
     } catch (const std::exception & e) {
         SAL_INFO("binaryurp", "caught C++ exception " << e.what());
     }

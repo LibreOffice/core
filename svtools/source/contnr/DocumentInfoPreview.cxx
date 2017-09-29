@@ -27,6 +27,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/ustring.hxx>
+#include <cppuhelper/logging.hxx>
 #include <svl/inettype.hxx>
 #include <svtools/DocumentInfoPreview.hxx>
 #include <svtools/imagemgr.hxx>
@@ -112,7 +113,7 @@ void ODocumentInfoPreview::fill(
             value = conv->convertToSimpleType(aAny, css::uno::TypeClass_STRING).
                 get< OUString >();
         } catch (css::script::CannotConvertException & e) {
-            SAL_INFO("svtools.contnr", "ignored CannotConvertException " << e.Message);
+            SAL_INFO("svtools.contnr", "ignored " << e);
         }
         if (!value.isEmpty()) {
             insertEntry(name, value);

@@ -24,6 +24,7 @@
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -200,7 +201,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     }
     catch (const ucb::IllegalIdentifierException & exc)
     {
-        SAL_WARN( "ucb", exc.Message );
+        SAL_WARN( "ucb", exc );
         return -1;
     }
 }

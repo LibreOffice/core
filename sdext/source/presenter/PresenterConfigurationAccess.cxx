@@ -25,6 +25,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
@@ -67,7 +68,7 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
     }
     catch (const Exception& rException)
     {
-        SAL_WARN("sdext.presenter", "caught exception while opening configuration: " << rException.Message);
+        SAL_WARN("sdext.presenter", "caught exception while opening configuration: " << rException);
     }
 }
 
@@ -149,7 +150,7 @@ Any PresenterConfigurationAccess::GetConfigurationNode (
     }
     catch (const Exception& rException)
     {
-        SAL_WARN("sdext.presenter", "caught exception while getting configuration node " << sPathToNode << " : " << rException.Message);
+        SAL_WARN("sdext.presenter", "caught exception while getting configuration node " << sPathToNode << " : " << rException);
     }
 
     return Any();

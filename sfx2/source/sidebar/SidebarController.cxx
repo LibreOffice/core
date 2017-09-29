@@ -42,6 +42,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/logging.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -857,7 +858,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
     }
     catch(const Exception& rException)
     {
-        SAL_WARN("sfx.sidebar", "Cannot create panel " << rsImplementationURL << ": " << rException.Message);
+        SAL_WARN("sfx.sidebar", "Cannot create panel " << rsImplementationURL << ": " << rException);
         return nullptr;
     }
 }

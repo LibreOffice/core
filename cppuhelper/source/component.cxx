@@ -23,6 +23,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <cppuhelper/logging.hxx>
 
 using namespace osl;
 using namespace com::sun::star;
@@ -92,7 +93,7 @@ void OComponentHelper::release() throw()
                 catch (css::uno::RuntimeException & exc)
                 {
                     // release should not throw exceptions
-                    SAL_WARN( "cppuhelper", exc.Message );
+                    SAL_WARN( "cppuhelper", exc );
                 }
 
                 // only the alive ref holds the object

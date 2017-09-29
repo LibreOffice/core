@@ -44,6 +44,7 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <rtl/instance.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include "itemholder1.hxx"
 
@@ -298,7 +299,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
         }
         catch (const Exception& e)
         {
-            SAL_WARN("unotools.config", "SetPath: exception: " << e.Message);
+            SAL_WARN("unotools.config", "SetPath: " << e);
         }
     }
 }

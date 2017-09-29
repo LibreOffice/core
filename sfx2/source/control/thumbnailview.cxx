@@ -20,6 +20,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <cppuhelper/logging.hxx>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
@@ -1256,7 +1257,7 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
         {
             SAL_WARN("sfx",
                 "caught exception while trying to access Thumbnail/thumbnail.png of "
-                 << msURL << ": " << rException.Message);
+                 << msURL << ": " << rException);
         }
 
         try
@@ -1283,14 +1284,14 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
         {
             SAL_WARN("sfx",
                 "caught exception while trying to access Thumbnails/thumbnail.png of "
-                << msURL << ": " << rException.Message);
+                << msURL << ": " << rException);
         }
     }
     catch (const uno::Exception& rException)
     {
         SAL_WARN("sfx",
             "caught exception while trying to access thumbnail of "
-            << msURL << ": " << rException.Message);
+            << msURL << ": " << rException);
     }
 
     // Extract the image from the stream.

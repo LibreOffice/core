@@ -20,6 +20,7 @@
 #include <fstream>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/graph.hxx>
 #include <map>
@@ -589,7 +590,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
     }
     catch( const uno::Exception& e )
     {
-        SAL_INFO("sw.ww8","***** For some reason we have an exception " << e.Message );
+        SAL_INFO("sw.ww8","***** For some reason we have an " << e );
         bRes = false;
     }
     return bRes;

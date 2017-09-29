@@ -27,6 +27,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 
@@ -120,7 +121,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("filter.svg", "Fatal exception: " << e.Message);
+        SAL_WARN("filter.svg", "Fatal exception: " << e);
         return 1;
     }
     catch (const std::exception &e)

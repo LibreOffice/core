@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/servicedecl.hxx>
 
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
@@ -145,9 +146,7 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
         }
         catch (const css::ucb::ContentCreationException& e)
         {
-           SAL_WARN(
-            "desktop.deployment",
-            "ignoring ContentCreationException \"" << e.Message << "\"");
+           SAL_WARN("desktop.deployment", "ignoring " << e);
         }
     }
     return aLocationURL;
@@ -217,9 +216,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
                 dp_misc::getIdentifier(info.extension), info.extension->getName(),
                 uno::Reference<css_ucb::XCommandEnvironment>());
         } catch (const lang::IllegalArgumentException& e) {
-            SAL_WARN(
-                "desktop.deployment",
-                "ignoring IllegalArgumentException \"" << e.Message << "\"");
+            SAL_WARN("desktop.deployment", "ignoring " << e);
             continue;
         }
         OSL_ASSERT(extensions.getLength() == 3);

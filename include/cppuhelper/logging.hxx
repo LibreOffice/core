@@ -17,42 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_CPPUHELPER_LOGGING_HXX
+#define INCLUDED_CPPUHELPER_LOGGING_HXX
 
-#include <comphelper/flagguard.hxx>
-#include <osl/diagnose.h>
+#include <cppuhelper/cppuhelperdllapi.h>
 #include <com/sun/star/uno/Exception.hpp>
-#include <cppuhelper/logging.hxx>
+#include <ostream>
 
-namespace comphelper {
+/**
+    Provide an output operator for printing Exception information to SAL_WARN/SAL_INFO.
+*/
+CPPUHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream & os, com::sun::star::uno::Exception const & exception);
 
-ScopeGuard::~ScopeGuard()
-{
-    if (!m_func)
-        return;
-    try {
-        m_func();
-    }
-    catch (css::uno::Exception & exc) {
-        SAL_WARN( "comphelper", "UNO exception occurred: " << exc );
-    }
-    catch (...) {
-        OSL_FAIL( "unknown exception occurred!" );
-    }
-}
-
-void ScopeGuard::dismiss()
-{
-    m_func = nullptr;
-}
-
-FlagGuard::~FlagGuard()
-{
-}
-
-FlagRestorationGuard::~FlagRestorationGuard()
-{
-}
-
-} // namespace comphelper
+#endif // INCLUDED_CPPUHELPER_LOGGING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

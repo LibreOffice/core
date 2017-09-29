@@ -64,6 +64,7 @@
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <unotools/configmgr.hxx>
 
 #include <cassert>
@@ -3224,9 +3225,7 @@ Reference< XClipboard > Window::GetClipboard()
             }
             catch (DeploymentException & e)
             {
-                SAL_WARN(
-                    "vcl.window",
-                    "ignoring DeploymentException \"" << e.Message << "\"");
+                SAL_WARN("vcl.window", "ignoring " << e);
             }
         }
 
@@ -3267,9 +3266,7 @@ Reference< XClipboard > Window::GetPrimarySelection()
             }
             catch (RuntimeException & e)
             {
-                SAL_WARN(
-                    "vcl.window",
-                    "ignoring RuntimeException \"" << e.Message << "\"");
+                SAL_WARN("vcl.window", "ignoring " << e);
             }
         }
 

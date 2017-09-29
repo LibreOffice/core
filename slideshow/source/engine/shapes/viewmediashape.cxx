@@ -25,6 +25,7 @@
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <vcl/canvastools.hxx>
 #include <vcl/syschild.hxx>
@@ -105,7 +106,7 @@ namespace slideshow
             }
             catch (const uno::Exception &e)
             {
-                SAL_WARN("slideshow", "" << e.Message);
+                SAL_WARN("slideshow", e);
             }
         }
 

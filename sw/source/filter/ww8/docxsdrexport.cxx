@@ -32,6 +32,7 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 
@@ -1099,7 +1100,7 @@ void DocxSdrExport::writeDiagramRels(const uno::Sequence< uno::Sequence< uno::An
         }
         catch (const uno::Exception& rException)
         {
-            SAL_WARN("sw.ww8", "DocxSdrExport::writeDiagramRels Failed to copy grabbaged Image: " << rException.Message);
+            SAL_WARN("sw.ww8", "DocxSdrExport::writeDiagramRels Failed to copy grabbaged Image: " << rException);
         }
         dataImagebin->closeInput();
     }

@@ -51,6 +51,7 @@
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
 #include <comphelper/backupfilehelper.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include "additions.hxx"
 #include "components.hxx"
@@ -186,9 +187,7 @@ void Components::WriteThread::execute() {
             writeModFile(components_, url_, data_);
         } catch (css::uno::RuntimeException & e) {
             // Ignore write errors, instead of aborting:
-            SAL_WARN(
-                "configmgr",
-                "error writing modifications: \"" << e.Message << '"');
+            SAL_WARN("configmgr", "error writing modifications: " << e);
         }
     } catch (...) {
         reference_->clear();
@@ -404,8 +403,7 @@ void Components::insertModificationXcuFile(
     } catch (css::container::NoSuchElementException & e) {
         SAL_WARN(
             "configmgr",
-            "error inserting non-existing \"" << fileUri << "\": \""
-                << e.Message << '"');
+            "error inserting non-existing \"" << fileUri << "\": " << e);
     }
 }
 
@@ -433,8 +431,7 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
             // installed:
             SAL_WARN(
                 "configmgr",
-                "createInstance(" << name << ") failed with \"" << e.Message
-                    << '"');
+                "createInstance(" << name << ") failed with " << e);
         }
         css::uno::Reference< css::beans::XPropertySet > propset;
         if (service.is()) {
@@ -662,7 +659,7 @@ void Components::parseFileLeniently(
         // starting:
         SAL_WARN(
             "configmgr",
-            "error reading \"" << url << "\": \"" << e.Message << '"');
+            "error reading \"" << url << "\": " << e);
     }
 }
 
@@ -731,8 +728,7 @@ void Components::parseFileList(
             try {
                 parseFileLeniently(parseFile, url, layer, nullptr, nullptr, adds);
             } catch (css::container::NoSuchElementException & e) {
-                SAL_WARN(
-                    "configmgr", "file does not exist: \"" << e.Message << '"');
+                SAL_WARN("configmgr", "file does not exist: " << e);
                 if (adds != nullptr) {
                     data_.removeExtensionXcuAdditions(url);
                 }

@@ -32,6 +32,7 @@
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -409,7 +410,7 @@ OString DocxExport::WriteOLEObject(SwOLEObj& rObject, OUString & io_rProgID)
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("sw.ww8", "DocxExport::WriteOLEObject: exception: " << e.Message);
+        SAL_WARN("sw.ww8", "DocxExport::WriteOLEObject: " << e);
         return OString();
     }
 

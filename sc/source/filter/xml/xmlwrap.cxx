@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -211,7 +212,7 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
             nReturn = ERRCODE_SFX_WRONGPASSWORD;
         else
         {
-            SAL_WARN("sc.filter", "SAX parse exception caught while importing: " << r.Message);
+            SAL_WARN("sc.filter", "SAX parse exception caught while importing: " << r);
 
             OUString sErr = OUString::number( r.LineNumber ) +
                           "," +
@@ -242,26 +243,26 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
             nReturn = ERRCODE_SFX_WRONGPASSWORD;
         else
         {
-            SAL_WARN("sc.filter", "SAX exception caught while importing: " << r.Message);
+            SAL_WARN("sc.filter", "SAX exception caught while importing: " << r);
 
             nReturn = SCERR_IMPORT_FORMAT;
         }
     }
     catch( const packages::zip::ZipIOException& r )
     {
-        SAL_WARN("sc.filter", "Zip exception caught while importing: " << r.Message);
+        SAL_WARN("sc.filter", "Zip exception caught while importing: " << r);
 
         nReturn = ERRCODE_IO_BROKENPACKAGE;
     }
     catch( const io::IOException& r )
     {
-        SAL_WARN("sc.filter", "IO exception caught while importing: " << r.Message);
+        SAL_WARN("sc.filter", "IO exception caught while importing: " << r);
 
         nReturn = SCERR_IMPORT_OPEN;
     }
     catch( const uno::Exception& r )
     {
-        SAL_WARN("sc.filter", "uno exception caught while importing: " << r.Message);
+        SAL_WARN("sc.filter", "uno exception caught while importing: " << r);
 
         nReturn = SCERR_IMPORT_UNKNOWN;
     }

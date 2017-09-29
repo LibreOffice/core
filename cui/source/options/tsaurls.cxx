@@ -10,6 +10,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <svx/svxdlg.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include "tsaurls.hxx"
 
@@ -48,7 +49,7 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
     }
     catch (const uno::Exception &e)
     {
-        SAL_WARN("cui.options", "TSAURLsDialog::TSAURLsDialog(): caught exception" << e.Message);
+        SAL_WARN("cui.options", "TSAURLsDialog::TSAURLsDialog(): " << e);
     }
 
     if ( m_pURLListBox->GetSelectedEntryCount() == 0 )

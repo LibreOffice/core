@@ -45,6 +45,7 @@
 #include <unotools/securityoptions.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <dialmgr.hxx>
 #include "optinet2.hxx"
@@ -781,7 +782,7 @@ IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "cui.options", e.Message);
+        SAL_WARN( "cui.options", e);
     }
 }
 

@@ -40,6 +40,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
 #include <svl/stritem.hxx>
@@ -1173,7 +1174,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 }
                 catch (const Exception& rExcept)
                 {
-                    SAL_WARN("sw", rExcept.Message);
+                    SAL_WARN("sw", rExcept);
                 }
             }
 

@@ -22,7 +22,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-
+#include <cppuhelper/logging.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -377,7 +377,7 @@ void VCLSession::disposing() {
             listener.m_xListener->disposing(src);
             SAL_INFO("vcl.se.debug", "  call Listener disposing");
         } catch (css::uno::RuntimeException & e) {
-            SAL_WARN("vcl.se", "ignoring RuntimeException " << e.Message);
+            SAL_WARN("vcl.se", "ignoring " << e);
         }
     }
 }

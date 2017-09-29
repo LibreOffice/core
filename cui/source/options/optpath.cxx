@@ -49,6 +49,7 @@
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
+#include <cppuhelper/logging.hxx>
 #include <officecfg/Office/Common.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <vcl/help.hxx>
@@ -652,7 +653,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, Button*, void)
         }
         catch (const uno::Exception& rException)
         {
-            SAL_WARN("cui.options", "SvxPathTabPage::PathHdl_Impl: exception from file picker: " << rException.Message);
+            SAL_WARN("cui.options", "SvxPathTabPage::PathHdl_Impl: exception from file picker: " << rException);
         }
     }
 }
@@ -820,7 +821,7 @@ void SvxPathTabPage::SetPathList(
     }
     catch( const Exception& e )
     {
-        SAL_WARN("cui.options", "caught: " << e.Message);
+        SAL_WARN("cui.options", "caught: " << e);
     }
 }
 

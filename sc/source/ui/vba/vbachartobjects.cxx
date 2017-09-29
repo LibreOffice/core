@@ -31,6 +31,7 @@
 #include <vector>
 #include <basic/sberrors.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -146,7 +147,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
     }
     catch (const uno::Exception& ex)
     {
-        SAL_WARN("sc", "AddItem caught exception " << ex.Message );
+        SAL_WARN("sc", "AddItem caught " << ex );
     }
     return aNULL();
 }

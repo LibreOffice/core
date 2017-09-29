@@ -46,6 +46,7 @@
 #include <xmloff/XMLTextShapeStyleContext.hxx>
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <cppuhelper/logging.hxx>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
 #include "cellatr.hxx"
@@ -343,7 +344,7 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
         }
         catch (uno::Exception const& e)
         {
-            SAL_WARN("sw.xml", "exception when setting ParaStyleConditions: " << e.Message);
+            SAL_WARN("sw.xml", "exception when setting ParaStyleConditions: " << e);
         }
     }
     XMLTextStyleContext::Finish( bOverwrite );

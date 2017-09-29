@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -128,7 +129,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
         }
         catch(const css::uno::Exception& ex)
         {
-            SAL_INFO("fwk", "open config: " << ex.Message);
+            SAL_INFO("fwk", "open config: " << ex);
         }
 
         m_eMode = E_CLOSED;

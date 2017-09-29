@@ -27,6 +27,7 @@
 #include <memory>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/logging.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "com/sun/star/frame/Desktop.hpp"
@@ -133,7 +134,7 @@ void SAL_CALL InitUpdateCheckJobThread::run()
             aController->showDialog( true );
     } catch (const uno::Exception &e) {
         // fdo#64962 - don't bring the app down on some unexpected exception.
-        SAL_WARN("extensions.update", "Caught init update exception, thread terminated. " << e.Message );
+        SAL_WARN("extensions.update", "Caught init update exception, thread terminated. " << e );
     }
 }
 
@@ -236,7 +237,7 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
     }
     catch( const uno::Exception& e )
     {
-         SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e.Message);
+         SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e);
     }
 }
 
