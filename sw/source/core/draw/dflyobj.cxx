@@ -979,10 +979,10 @@ void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
     // RotGrfFlyFrame: Adapt to possible rotated Graphic contained in FlyFrame
     if(GetFlyFrame()->Frame().HasArea())
     {
-        const tools::Rectangle aOutRect(GetFlyFrame()->Frame().SVRect());
-        const basegfx::B2DRange aTargetRange(
-            aOutRect.Left(), aOutRect.Top(),
-            aOutRect.Right(), aOutRect.Bottom());
+        // Use InnerBound, OuterBound (same as GetFlyFrame()->Frame().SVRect())
+        // may have a distance to InnerBound which needs to be taken into acocunt.
+        // The Graphic is mapped to InnerBound, as is the rotated Graphic.
+        const basegfx::B2DRange aTargetRange(getInnerBound());
 
         if(!aTargetRange.isEmpty())
         {
