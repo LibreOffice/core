@@ -41,6 +41,7 @@
 #include <cppuhelper/implbase.hxx>
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
+#include <cppuhelper/logging.hxx>
 #include "osl/file.hxx"
 #include "osl/security.hxx"
 #include "rtl/string.h"
@@ -282,7 +283,7 @@ css::uno::Reference< css::uno::XInterface > createBackend(
         throw;
     } catch (const css::uno::Exception & e) {
         // Assuming these exceptions indicate that the service is not installed:
-        SAL_WARN("shell", "createInstance(" << name << ") failed with " << e.Message);
+        SAL_WARN("shell", "createInstance(" << name << ") failed with " << e);
         return css::uno::Reference< css::uno::XInterface >();
     }
 }

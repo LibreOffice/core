@@ -23,6 +23,7 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <comphelper/configuration.hxx>
+#include <cppuhelper/logging.hxx>
 #include "config_folders.h"
 #include "officecfg/Setup.hxx"
 #include <osl/file.h>
@@ -140,7 +141,7 @@ bool isCreated() {
     try {
         return officecfg::Setup::Office::ooSetupInstCompleted::get();
     } catch (css::uno::Exception & e) {
-        SAL_WARN("desktop.app", "ignoring Exception \"" << e.Message << "\"");
+        SAL_WARN("desktop.app", "ignoring " << e);
         return false;
     }
 }

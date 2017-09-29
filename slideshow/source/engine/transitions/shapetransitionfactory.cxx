@@ -22,6 +22,7 @@
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -112,7 +113,7 @@ ClippingAnimation::~ClippingAnimation()
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("slideshow", "" << e.Message);
+        SAL_WARN("slideshow", e);
     }
 }
 

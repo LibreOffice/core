@@ -54,6 +54,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <basic/sbx.hxx>
 #include <svtools/imagemgr.hxx>
@@ -182,7 +183,7 @@ void SFTreeListBox::Init( const OUString& language  )
     }
     catch( Exception& e )
     {
-        SAL_WARN("cui.dialogs", "Exception getting root browse node from factory: " << e.Message );
+        SAL_WARN("cui.dialogs", "Exception getting root browse node from factory: " << e );
         // TODO exception handling
     }
 
@@ -755,7 +756,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )
                         }
                         catch( Exception& e )
                         {
-                            SAL_WARN("cui.dialogs", "Caught exception trying to invoke " << e.Message );
+                            SAL_WARN("cui.dialogs", "Caught exception trying to invoke " << e );
                         }
                     }
                 }
@@ -932,7 +933,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         }
         catch( Exception& e )
         {
-            SAL_WARN("cui.dialogs", "Caught exception trying to Create " << e.Message );
+            SAL_WARN("cui.dialogs", "Caught exception trying to Create " << e );
         }
     }
     if ( aChildNode.is() )
@@ -1021,7 +1022,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         }
         catch( Exception& e )
         {
-            SAL_WARN("cui.dialogs", "Caught exception trying to Rename " << e.Message );
+            SAL_WARN("cui.dialogs", "Caught exception trying to Rename " << e );
         }
     }
     if ( aChildNode.is() )
@@ -1067,7 +1068,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
         }
         catch( Exception& e )
         {
-            SAL_WARN("cui.dialogs", "Caught exception trying to delete " << e.Message );
+            SAL_WARN("cui.dialogs", "Caught exception trying to delete " << e );
         }
     }
 

@@ -25,6 +25,7 @@
 #include "SchXMLTableContext.hxx"
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLTools.hxx"
+#include <cppuhelper/logging.hxx>
 #include <osl/diagnose.h>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -166,8 +167,7 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
     }
     catch(const uno::Exception& ex)
     {
-        OString aBStr(OUStringToOString(ex.Message, RTL_TEXTENCODING_ASCII_US));
-        SAL_INFO("xmloff.chart", "Exception caught while removing empty chart types: " << aBStr);
+        SAL_INFO("xmloff.chart", "Exception caught while removing empty chart types: " << ex);
     }
 }
 
@@ -303,8 +303,7 @@ void lcl_setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDo
     }
     catch (const uno::Exception & rEx)
     {
-        OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-        SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught: " << aBStr);
+        SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught: " << rEx);
     }
 }
 

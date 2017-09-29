@@ -30,6 +30,7 @@
 #include <unx/genprn.h>
 #include <unx/geninst.h>
 #include <headless/svpgdi.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/process.h>
@@ -3778,7 +3779,7 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::
     }
     catch(const uno::Exception& e)
     {
-        SAL_WARN( "vcl.gtk", "Exception in getting input method surrounding text: " << e.Message);
+        SAL_WARN( "vcl.gtk", "Exception in getting input method surrounding text: " << e);
     }
     return xText;
 }

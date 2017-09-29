@@ -66,6 +66,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <filter/msfilter/util.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -129,7 +130,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     }
     catch (const uno::Exception& rException)
     {
-        SAL_WARN("writerfilter", "DomainMapper::DomainMapper: failed to initialize RDF metadata: " << rException.Message);
+        SAL_WARN("writerfilter", "DomainMapper::DomainMapper: failed to initialize RDF metadata: " << rException);
     }
 
     if (eDocumentType == SourceDocumentType::OOXML) {
@@ -146,7 +147,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         }
         catch (const uno::Exception& rException)
         {
-            SAL_WARN("writerfilter", "DomainMapper::DomainMapper: failed to initialize default font: " << rException.Message);
+            SAL_WARN("writerfilter", "DomainMapper::DomainMapper: failed to initialize default font: " << rException);
         }
     }
 
@@ -3187,7 +3188,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
     }
     catch( const uno::RuntimeException& e )
     {
-        SAL_WARN("writerfilter", "failed. Message :" << e.Message);
+        SAL_WARN("writerfilter", "failed. Message :" << e);
     }
 }
 

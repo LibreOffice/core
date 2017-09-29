@@ -35,6 +35,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/ui/theUICategoryDescription.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include "helpids.h"
 #include <basic/sbx.hxx>
@@ -695,7 +696,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     }
     catch( Exception& e )
     {
-        SAL_INFO("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << e.Message);
+        SAL_INFO("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << e);
         // TODO exception handling
     }
 

@@ -21,6 +21,7 @@
 #include "helpids.h"
 #include <svtools/controldims.hxx>
 #include <svtools/strings.hrc>
+#include <cppuhelper/logging.hxx>
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"
@@ -724,7 +725,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             xFilePicker->appendFilter( iPos->first, iPos->second );
         }
         catch (const lang::IllegalArgumentException & exc) {
-            SAL_WARN( "desktop", exc.Message );
+            SAL_WARN( "desktop", exc );
         }
     }
     xFilePicker->setCurrentFilter( sDefaultFilter );
@@ -1377,7 +1378,7 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
     }
     catch ( const uno::RuntimeException & ) { throw; }
     catch (const uno::Exception & exc) {
-        SAL_WARN( "desktop", exc.Message );
+        SAL_WARN( "desktop", exc );
         bRegistered = false;
     }
 

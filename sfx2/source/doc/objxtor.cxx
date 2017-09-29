@@ -23,6 +23,7 @@
 #include <map>
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -662,7 +663,7 @@ BasicManager* SfxObjectShell::GetBasicManager() const
     }
     catch (const css::ucb::ContentCreationException& e)
     {
-        SAL_WARN("sfx.doc", "caught exception " << e.Message);
+        SAL_WARN("sfx.doc", "caught " << e);
     }
 #endif
     return pBasMgr;
@@ -729,7 +730,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
     }
     catch (const css::ucb::ContentCreationException& e)
     {
-        SAL_WARN("sfx.doc", "caught exception " << e.Message);
+        SAL_WARN("sfx.doc", "caught " << e);
     }
 
     SAL_WARN("sfx.doc", "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?");
@@ -753,7 +754,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
         }
         catch (const css::ucb::ContentCreationException& e)
         {
-            SAL_WARN("sfx.doc", "caught exception " << e.Message);
+            SAL_WARN("sfx.doc", "caught " << e);
         }
     }
     SAL_WARN("sfx.doc", "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?");
@@ -816,7 +817,7 @@ void SfxObjectShell::InitBasicManager_Impl()
     }
     catch (const css::ucb::ContentCreationException& e)
     {
-        SAL_WARN("sfx.doc", "caught exception " << e.Message);
+        SAL_WARN("sfx.doc", "caught " << e);
     }
     DBG_ASSERT( pImpl->aBasicManager.isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
     pImpl->bBasicInitialized = true;

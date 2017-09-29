@@ -23,6 +23,7 @@
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -217,8 +218,7 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
     // because it contains syntax errors, which was detected at runtime...
     catch(const css::uno::Exception& e)
     {
-        SAL_WARN(
-            "fwk.dispatch", "ignored UNO Exception \"" << e.Message << '"');
+        SAL_WARN("fwk.dispatch", "ignored " << e);
         xService.clear();
     }
 

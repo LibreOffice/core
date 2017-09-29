@@ -23,6 +23,7 @@
 #include "provprox.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#include <cppuhelper/logging.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
@@ -313,7 +314,7 @@ UcbContentProviderProxy::getContentProvider()
         }
         catch ( Exception const & e)
         {
-            SAL_INFO( "ucb.core", "Exception when getting content provider: " << e.Message );
+            SAL_INFO( "ucb.core", "Exception when getting content provider: " << e );
         }
 
         // registerInstance called at proxy, but not yet at original?

@@ -12,6 +12,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/diagnose.h>
 
 #include <sax/tools/documenthandleradapter.hxx>
@@ -152,9 +153,7 @@ OdfFlatXml::importer(
     }
     catch (const Exception &exc)
     {
-        SAL_WARN(
-            "filter.odfflatxml",
-            "caught exception \"" << exc.Message << "\"");
+        SAL_WARN("filter.odfflatxml", exc);
         return false;
     }
     return true;

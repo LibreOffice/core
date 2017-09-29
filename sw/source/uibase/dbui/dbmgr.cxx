@@ -39,6 +39,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <cppuhelper/logging.hxx>
 #include <vcl/errinf.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -1737,7 +1738,7 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
             }
             catch (const uno::Exception& e)
             {
-                SAL_WARN("sw.mailmerge", "Exception in getColumns(): " << e.Message);
+                SAL_WARN("sw.mailmerge", "Exception in getColumns(): " << e);
             }
             if(!xCols.is() || !xCols->hasByName(rColNm))
                 return nRet;
@@ -1829,7 +1830,7 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const
                     }
                     catch (const uno::Exception& e)
                     {
-                        SAL_WARN("sw.mailmerge", "illegal number format key: " << e.Message);
+                        SAL_WARN("sw.mailmerge", "illegal number format key: " << e);
                     }
                 }
             }
@@ -1952,7 +1953,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("sw.mailmerge", "Exception in SwDBManager::GetColumnSupplier: " << e.Message);
+        SAL_WARN("sw.mailmerge", "Exception in SwDBManager::GetColumnSupplier: " << e);
     }
 
     return xRet;
@@ -2019,7 +2020,7 @@ OUString SwDBManager::GetDBField(uno::Reference<beans::XPropertySet> const & xCo
             }
             catch (const uno::Exception& e)
             {
-                SAL_WARN("sw.mailmerge", "exception caught: " << e.Message);
+                SAL_WARN("sw.mailmerge", "exception caught: " << e);
             }
 
         }
@@ -2277,7 +2278,7 @@ static bool lcl_ToNextRecord( SwDSParam* pParam, const SwDBNextRecord action )
         bRet = false;
         // we allow merging with empty databases, so don't warn on init
         SAL_WARN_IF(action == SwDBNextRecord::NEXT,
-                    "sw.mailmerge", "exception in ToNextRecord(): " << e.Message);
+                    "sw.mailmerge", "exception in ToNextRecord(): " << e);
     }
     return bRet;
 }
@@ -3037,7 +3038,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
         }
         catch (const uno::Exception& e)
         {
-            SAL_WARN("sw.mailmerge", "exception caught: " << e.Message);
+            SAL_WARN("sw.mailmerge", "exception caught: " << e);
         }
     }
 }
@@ -3055,7 +3056,7 @@ uno::Reference<sdbc::XDataSource> SwDBManager::getDataSourceAsParent(const uno::
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("sw.mailmerge", "exception caught in getDataSourceAsParent(): " << e.Message);
+        SAL_WARN("sw.mailmerge", "exception caught in getDataSourceAsParent(): " << e);
     }
     return xSource;
 }
@@ -3094,7 +3095,7 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("sw.mailmerge", "Caught exception while creating a new RowSet: " << e.Message);
+        SAL_WARN("sw.mailmerge", "Caught exception while creating a new RowSet: " << e);
     }
     return xResultSet;
 }

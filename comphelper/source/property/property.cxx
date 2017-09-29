@@ -21,6 +21,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <osl/diagnose.h>
+#include <cppuhelper/logging.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
     #include <rtl/strbuf.hxx>
@@ -32,7 +33,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/genfunc.h>
-
+#include <rtl/ustrbuf.hxx>
 #include <algorithm>
 
 
@@ -90,15 +91,15 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
             catch (Exception&)
             {
 #if OSL_DEBUG_LEVEL > 0
-                OStringBuffer aBuffer;
+                OUStringBuffer aBuffer;
                 aBuffer.append( "::comphelper::copyProperties: could not copy property '" );
-                aBuffer.append( OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US ) );
+                aBuffer.append( pSourceProps->Name );
                 aBuffer.append( "' to the destination set (a '" );
 
                 Reference< XServiceInfo > xSI( _rxDest, UNO_QUERY );
                 if ( xSI.is() )
                 {
-                    aBuffer.append( OUStringToOString( xSI->getImplementationName(), osl_getThreadTextEncoding() ) );
+                    aBuffer.append( xSI->getImplementationName() );
                 }
                 else
                 {
@@ -108,20 +109,19 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
 
                 Any aException( ::cppu::getCaughtException() );
                 aBuffer.append( "Caught an exception of type '" );
-                OUString sExceptionType( aException.getValueTypeName() );
-                aBuffer.append( OString( sExceptionType.getStr(), sExceptionType.getLength(), RTL_TEXTENCODING_ASCII_US ) );
+                aBuffer.append( aException.getValueTypeName() );
                 aBuffer.append( "'" );
 
                 Exception aBaseException;
                 if ( ( aException >>= aBaseException ) && !aBaseException.Message.isEmpty() )
                 {
                     aBuffer.append( ", saying '" );
-                    aBuffer.append( OString( aBaseException.Message.getStr(), aBaseException.Message.getLength(), osl_getThreadTextEncoding() ) );
+                    aBuffer.append( aBaseException.Message );
                     aBuffer.append( "'" );
                 }
                 aBuffer.append( "." );
 
-                OSL_FAIL( aBuffer.getStr() );
+                SAL_WARN( "comphelper", aBuffer.makeStringAndClear() );
 #endif
             }
         }

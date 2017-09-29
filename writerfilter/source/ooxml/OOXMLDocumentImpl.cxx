@@ -39,6 +39,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <iostream>
@@ -84,7 +85,7 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     catch (uno::Exception const& e)
     {
         SAL_INFO("writerfilter.ooxml", "resolveFastSubStream: exception while "
-                "resolving stream " << nType << " : " << e.Message);
+                "resolving stream " << nType << " : " << e);
         return;
     }
     OOXMLStream::Pointer_t savedStream = mpStream;
@@ -142,7 +143,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
     catch (uno::Exception const& e)
     {
         SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
-                "importing stream " << nType << " : " << e.Message);
+                "importing stream " << nType << " : " << e);
         return xRet;
     }
 
@@ -160,7 +161,7 @@ uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::importSubStream(OOXMLStre
         catch (uno::Exception const& e)
         {
             SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
-                     "parsing stream " << nType << " : " << e.Message);
+                     "parsing stream " << nType << " : " << e);
             return xRet;
         }
     }
@@ -189,7 +190,7 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
     catch (uno::Exception const& e)
     {
         SAL_WARN("writerfilter.ooxml", "importSubStreamRelations: exception while "
-            "importing stream " << nType << " : " << e.Message);
+            "importing stream " << nType << " : " << e);
         return;
     }
 
@@ -210,7 +211,7 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
             catch (uno::Exception const& e)
             {
                 SAL_WARN("writerfilter.ooxml", "importSubStream: exception while "
-                         "parsing stream " << nType << " : " << e.Message);
+                         "parsing stream " << nType << " : " << e);
                 mxCustomXmlProsDom = xRelation;
             }
 
@@ -505,8 +506,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         // note: cannot throw anything other than SAXException out of here?
         catch (uno::Exception const& e)
         {
-            SAL_WARN("writerfilter.ooxml",
-                "OOXMLDocumentImpl::resolve(): exception: " << e.Message);
+            SAL_WARN("writerfilter.ooxml", "OOXMLDocumentImpl::resolve(): " << e);
             throw lang::WrappedTargetRuntimeException("", nullptr,
                     uno::makeAny(e));
         }
@@ -606,7 +606,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
     catch (uno::Exception const& e)
     {
         SAL_INFO("writerfilter.ooxml", "resolveGlossaryStream: exception while "
-                 "createStream for glossary" << OOXMLStream::GLOSSARY << " : " << e.Message);
+                 "createStream for glossary" << OOXMLStream::GLOSSARY << " : " << e);
         return;
     }
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
@@ -673,7 +673,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                   catch (uno::Exception const& e)
                   {
                       SAL_INFO("writerfilter.ooxml", "importSubStream: exception while "
-                      "parsing stream of Type" << nType << " : " << e.Message);
+                      "parsing stream of Type" << nType << " : " << e);
                       return;
                   }
 
@@ -758,7 +758,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                     catch (uno::Exception const& e)
                     {
                         SAL_INFO("writerfilter.ooxml", "resolveEmbeddingsStream: can't find header/footer whilst "
-                               "resolving stream " << streamType << " : " << e.Message);
+                               "resolving stream " << streamType << " : " << e);
                         return;
                     }
                 }

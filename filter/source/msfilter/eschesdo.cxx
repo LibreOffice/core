@@ -45,6 +45,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <comphelper/extract.hxx>
+#include <cppuhelper/logging.hxx>
 #include <vcl/fltcall.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
@@ -1234,7 +1235,7 @@ sal_uInt32 ImplEESdrObject::ImplGetText()
         }
         catch (const uno::RuntimeException& e)
         {
-            SAL_WARN("filter.ms", "ImplGetText exception: " << e.Message);
+            SAL_WARN("filter.ms", "ImplGetText: " << e);
         }
     }
     return mnTextSize;

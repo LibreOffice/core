@@ -35,6 +35,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
@@ -392,7 +393,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
         }
         catch (const io::IOException& rException)
         {
-            SAL_WARN_IF(nOpenMode != css::embed::ElementModes::READ, "xmlsecurity.helper", "DocumentSignatureHelper::OpenSignatureStream: " << rException.Message);
+            SAL_WARN_IF(nOpenMode != css::embed::ElementModes::READ, "xmlsecurity.helper", "DocumentSignatureHelper::OpenSignatureStream: " << rException);
         }
     }
 

@@ -20,6 +20,7 @@
 #include "DrawViewShell.hxx"
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/svdlayer.hxx>
@@ -330,7 +331,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     {
         // Eat the exception and log it
         // We can still continue if scanner manager is not available.
-        SAL_WARN("sd", "Scanner manager exception: " << exception.Message);
+        SAL_WARN("sd", "Scanner manager exception: " << exception);
     }
 
     mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );

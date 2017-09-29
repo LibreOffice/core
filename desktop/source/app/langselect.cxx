@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -90,9 +91,7 @@ bool prepareLocale() {
                     "", batch);
                 batch->commit();
             } catch (css::uno::Exception & e) {
-                SAL_WARN(
-                    "desktop.app",
-                    "ignoring Exception \"" << e.Message << "\"");
+                SAL_WARN("desktop.app", "ignoring " << e);
             }
         }
     }
@@ -125,8 +124,7 @@ bool prepareLocale() {
             officecfg::Setup::L10N::ooLocale::set(locale, batch);
             batch->commit();
         } catch (css::uno::Exception & e) {
-            SAL_WARN(
-                "desktop.app", "ignoring Exception \"" << e.Message << "\"");
+            SAL_WARN("desktop.app", "ignoring " << e);
         }
     }
     MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));

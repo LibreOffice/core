@@ -41,6 +41,7 @@
 #include <comphelper/container.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace dbtools;
 
@@ -445,7 +446,7 @@ namespace
                 {
                     SAL_WARN( "forms.component", "could not transfer the property named '"
                                 << sourceprop.Name
-                                << "'. " << e.Message );
+                                << "'. " << e );
                 }
             }
         }

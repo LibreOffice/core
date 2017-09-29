@@ -21,6 +21,7 @@
 #include <rtl/strbuf.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace ::com::sun::star;
 
@@ -69,7 +70,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
         }
         catch( const uno::RuntimeException& r )
         {
-            SAL_WARN("sc.ui", "Runtime exception caught while notifying shape. : " << r.Message);
+            SAL_WARN("sc.ui", "Runtime exception caught while notifying shape. : " << r);
         }
     }
 }

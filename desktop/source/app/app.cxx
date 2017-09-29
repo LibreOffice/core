@@ -87,6 +87,7 @@
 #include <comphelper/threadpool.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/backupfilehelper.hxx>
+#include <cppuhelper/logging.hxx>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -306,7 +307,7 @@ void SetRestartState() {
         officecfg::Setup::Office::OfficeRestartInProgress::set(true, batch);
         batch->commit();
     } catch (css::uno::Exception & e) {
-        SAL_WARN("desktop.app", "ignoring Exception \"" << e.Message << "\"");
+        SAL_WARN("desktop.app", "ignoring " << e);
     }
 }
 
@@ -325,7 +326,7 @@ void DoRestartActionsIfNecessary(bool quickstart) {
             }
         } catch (css::uno::Exception & e) {
             SAL_WARN(
-                "desktop.app", "ignoring Exception \"" << e.Message << "\"");
+                "desktop.app", "ignoring " << e);
         }
     }
 }
@@ -2087,7 +2088,7 @@ void Desktop::OpenClients()
         }
         catch(const css::uno::Exception& e)
         {
-            SAL_WARN( "desktop.app", "Could not disable AutoRecovery." << e.Message);
+            SAL_WARN( "desktop.app", "Could not disable AutoRecovery." << e);
         }
     }
     else
@@ -2114,7 +2115,7 @@ void Desktop::OpenClients()
             }
             catch(const css::uno::Exception& e)
             {
-                SAL_WARN( "desktop.app", "Error during recovery" << e.Message);
+                SAL_WARN( "desktop.app", "Error during recovery" << e);
             }
         }
         else if (bExistsRecoveryData && bDisableRecovery && !rArgs.HasModuleParam())
@@ -2131,7 +2132,7 @@ void Desktop::OpenClients()
         }
         catch(const css::uno::Exception& e)
         {
-            SAL_WARN( "desktop.app", "Registration of session listener failed" << e.Message);
+            SAL_WARN( "desktop.app", "Registration of session listener failed" << e);
         }
 
         if ( !bExistsRecoveryData && xSessionListener.is() )
@@ -2143,7 +2144,7 @@ void Desktop::OpenClients()
             }
             catch(const css::uno::Exception& e)
             {
-                SAL_WARN( "desktop.app", "Error in session management" << e.Message);
+                SAL_WARN( "desktop.app", "Error in session management" << e);
             }
         }
     }

@@ -59,6 +59,7 @@
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -3536,7 +3537,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             }
             catch( const css::uno::Exception& e)
             {
-                SAL_WARN( "editeng", "Unable to paste EDITENGINE_ODF_TEXT_FLAT " << e.Message );
+                SAL_WARN( "editeng", "Unable to paste EDITENGINE_ODF_TEXT_FLAT " << e );
             }
         }
 

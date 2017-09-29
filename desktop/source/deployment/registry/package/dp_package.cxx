@@ -32,6 +32,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <ucbhelper/content.hxx>
 #include <svl/inettype.hxx>
 #include <comphelper/anytostring.hxx>
@@ -1059,7 +1060,7 @@ void BackendImpl::PackageImpl::exportTo(
                                 ::cppu::getCaughtException() ) );
         }
         catch (const lang::IllegalArgumentException & exc) {
-            SAL_WARN( "desktop", exc.Message );
+            SAL_WARN( "desktop", exc );
         }
 
         std::vector< Sequence<beans::PropertyValue> > manifest;
@@ -1141,7 +1142,7 @@ void BackendImpl::PackageImpl::exportTo(
         catch (const css::ucb::ContentCreationException &e)
         {
             SAL_WARN(
-                "desktop.deployment", "exception on overwriting manifest: " << e.Message);
+                "desktop.deployment", "exception on overwriting manifest: " << e);
         }
 
         if (!bSuccess)

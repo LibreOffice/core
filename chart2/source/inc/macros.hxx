@@ -24,11 +24,9 @@
 #include <typeinfo>
 
 #include "sal/log.hxx"
+#include <cppuhelper/logging.hxx>
 
-#define ASSERT_EXCEPTION(ex)                   \
-  SAL_WARN("chart2", "Exception caught. Type: " <<\
-    typeid( ex ).name() << ", Message: " << \
-    ex.Message )
+#define ASSERT_EXCEPTION(ex)  SAL_WARN("chart2", "Exception caught. " << ex )
 
 #endif
 

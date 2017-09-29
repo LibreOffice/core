@@ -35,6 +35,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/logging.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <basic/sbuno.hxx>
@@ -1141,7 +1142,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
         }
         catch (const css::ucb::ContentCreationException& e)
         {
-            SAL_WARN("basic", "BasicManager::RemoveLib: Caught exception: " << e.Message);
+            SAL_WARN("basic", "BasicManager::RemoveLib: " << e);
         }
 
         if (xStorage.is() && xStorage->IsStorage(szBasicStorage))
@@ -1328,7 +1329,7 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName, const OUString& Pa
             }
             catch (const css::ucb::ContentCreationException& e)
             {
-                SAL_WARN("basic", "BasicManager::RemoveLib: Caught exception: " << e.Message);
+                SAL_WARN("basic", "BasicManager::RemoveLib: " << e);
             }
             DBG_ASSERT( pLib, "XML Import: Linked basic library could not be loaded");
         }

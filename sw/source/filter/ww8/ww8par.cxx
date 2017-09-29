@@ -23,6 +23,7 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
 
@@ -4930,7 +4931,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         }
         catch (const uno::Exception& rException)
         {
-            SAL_WARN("sw.ww8", "SwWW8ImplReader::CoreLoad: failed to initialize RDF metadata: " << rException.Message);
+            SAL_WARN("sw.ww8", "SwWW8ImplReader::CoreLoad: failed to initialize RDF metadata: " << rException);
         }
         ReadDocInfo();
     }

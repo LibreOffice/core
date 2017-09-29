@@ -22,6 +22,7 @@
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <event.hxx>
 #include <eventqueue.hxx>
@@ -75,7 +76,7 @@ namespace slideshow
                 }
                 catch (const uno::Exception& e)
                 {
-                    SAL_WARN("slideshow", "" << e.Message);
+                    SAL_WARN("slideshow", e);
                 }
                 maEvents.pop();
             }

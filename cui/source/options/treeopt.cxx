@@ -70,6 +70,7 @@
 #include <com/sun/star/setup/UpdateCheck.hpp>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/optitems.hxx>
 #include <editeng/unolingu.hxx>
@@ -2134,11 +2135,11 @@ void ExtensionsTabPage::CreateDialogWithHandler()
     }
     catch (const css::lang::IllegalArgumentException& e)
     {
-        SAL_WARN("cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): illegal argument:" << e.Message);
+        SAL_WARN("cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): illegal argument:" << e);
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler(): " << e.Message);
+        SAL_WARN( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler(): " << e);
     }
 }
 

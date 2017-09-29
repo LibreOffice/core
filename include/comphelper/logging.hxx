@@ -22,12 +22,15 @@
 
 #include <comphelper/comphelperdllapi.h>
 
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/logging/XLogHandler.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
 
 #include <boost/optional.hpp>
+#include <ostream>
 #include <memory>
+#include <typeinfo>
 
 namespace comphelper
 {
@@ -478,6 +481,10 @@ namespace comphelper
     };
 } // namespace comphelper
 
+/**
+    Provide an output operator for printing Exception information to SAL_WARN/SAL_INFO.
+*/
+COMPHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream & os, com::sun::star::uno::Exception const & exception);
 
 #endif // INCLUDED_COMPHELPER_LOGGING_HXX
 

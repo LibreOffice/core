@@ -13,6 +13,7 @@
 #include <sal/config.h>
 #include <rtl/instance.hxx>
 #include <rtl/string.hxx>
+#include <cppuhelper/logging.hxx>
 #include <salhelper/thread.hxx>
 #include <algorithm>
 #include <memory>
@@ -268,7 +269,7 @@ void ThreadTask::execAndDelete()
     }
     catch (const css::uno::Exception &e)
     {
-        SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e.Message);
+        SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e);
     }
 
     delete this;

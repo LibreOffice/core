@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
+#include <cppuhelper/logging.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svtools/apearcfg.hxx>
 #include <svtools/menuoptions.hxx>
@@ -59,7 +60,7 @@ ItemHolder2::ItemHolder2()
         if(bMessage)
         {
             bMessage = false;
-            SAL_WARN( "svtools", "CreateInstance with arguments exception: " << rEx.Message );
+            SAL_WARN( "svtools", "CreateInstance with arguments: " << rEx );
         }
     }
 #else

@@ -21,6 +21,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/logging.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -319,12 +320,12 @@ int GalApp::Main()
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("svx", "Fatal exception: " << e.Message);
+        SAL_WARN("svx", "Fatal: " << e);
         return EXIT_FAILURE;
     }
     catch (const std::exception &e)
     {
-        SAL_WARN("svx", "Fatal exception: " << e.what());
+        SAL_WARN("svx", "Fatal: " << e.what());
         return 1;
     }
 

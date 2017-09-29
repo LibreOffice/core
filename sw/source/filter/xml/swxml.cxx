@@ -21,6 +21,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -196,7 +197,7 @@ ErrCode ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-        SAL_WARN( "sw", "SAX parse exception caught while importing: " << r.Message );
+        SAL_WARN( "sw", "SAX parse exception caught while importing: " << r );
 
         const OUString sErr( OUString::number( r.LineNumber )
             + ","
@@ -226,22 +227,22 @@ ErrCode ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-        SAL_WARN( "sw", "SAX exception caught while importing: " << r.Message);
+        SAL_WARN( "sw", "SAX exception caught while importing: " << r);
         return ERR_SWG_READ_ERROR;
     }
     catch(const packages::zip::ZipIOException& r)
     {
-        SAL_WARN( "sw", "Zip exception caught while importing: " << r.Message);
+        SAL_WARN( "sw", "Zip exception caught while importing: " << r);
         return ERRCODE_IO_BROKENPACKAGE;
     }
     catch(const io::IOException& r)
     {
-        SAL_WARN( "sw", "IO exception caught while importing: " << r.Message);
+        SAL_WARN( "sw", "IO exception caught while importing: " << r);
         return ERR_SWG_READ_ERROR;
     }
     catch(const uno::Exception& r)
     {
-        SAL_WARN( "sw", "uno exception caught while importing: " << r.Message );
+        SAL_WARN( "sw", "uno exception caught while importing: " << r );
         return ERR_SWG_READ_ERROR;
     }
 

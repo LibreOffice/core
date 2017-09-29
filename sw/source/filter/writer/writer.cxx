@@ -20,6 +20,7 @@
 #include <memory>
 #include <hintids.hxx>
 
+#include <cppuhelper/logging.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>
@@ -254,7 +255,7 @@ ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
         }
         catch (const css::ucb::ContentCreationException &e)
         {
-            SAL_WARN("sw", "Writer::Write caught " << e.Message);
+            SAL_WARN("sw", "Writer::Write caught " << e);
         }
         return nResult;
     }

@@ -47,6 +47,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/logging.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -125,7 +126,7 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
                 }
                 catch( const uno::Exception& e )
                 {
-                    SAL_WARN("writerfilter", "Exception in OLE Handler: " << e.Message);
+                    SAL_WARN("writerfilter", "Exception in OLE Handler: " << e);
                 }
                 // No need to set the wrapping here as it's either set in oox or will be set later
             }
@@ -176,7 +177,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                 }
                 catch( const uno::Exception& e )
                 {
-                    SAL_WARN("writerfilter", "Exception in OLE Handler: " << e.Message);
+                    SAL_WARN("writerfilter", "Exception in OLE Handler: " << e);
                 }
             }
         }

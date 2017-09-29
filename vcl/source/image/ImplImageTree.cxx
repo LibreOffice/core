@@ -34,6 +34,7 @@
 #include "osl/diagnose.h"
 #include "rtl/bootstrap.hxx"
 #include "rtl/uri.hxx"
+#include <cppuhelper/logging.hxx>
 
 #include "tools/stream.hxx"
 #include "tools/urlobj.hxx"
@@ -246,7 +247,7 @@ OUString ImplImageTree::getImageUrl(OUString const & rName, OUString const & rSt
         }
         catch (const css::uno::Exception & e)
         {
-            SAL_INFO("vcl", "exception " << e.Message);
+            SAL_INFO("vcl", e);
         }
 
         aStyle = fallbackStyle(aStyle);
@@ -362,7 +363,7 @@ bool ImplImageTree::doLoadImage(ImageRequestParameters& rParameters)
     }
     catch (const css::uno::Exception& e)
     {
-        SAL_INFO("vcl", "ImplImageTree::doLoadImage exception " << e.Message);
+        SAL_INFO("vcl", "ImplImageTree::doLoadImage " << e);
     }
 
     if (bFound)
@@ -538,7 +539,7 @@ bool ImplImageTree::checkPathAccess()
         throw;
     }
     catch (const css::uno::Exception & e) {
-        SAL_INFO("vcl", "ImplImageTree::zip file location exception " << e.Message << " for " << rIconSet.maURL);
+        SAL_INFO("vcl", "ImplImageTree::zip file location " << e << " for " << rIconSet.maURL);
         return false;
     }
     return rNameAccess.is();
