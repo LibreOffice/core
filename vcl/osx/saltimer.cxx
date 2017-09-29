@@ -73,11 +73,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 void AquaSalTimer::queueDispatchTimerEvent( bool bAtStart )
 {
-    Stop();
-    m_nTimerStartTicks = tools::Time::GetMonotonicTicks() % SAL_MAX_INT32;
-    if ( 0 == m_nTimerStartTicks )
-        m_nTimerStartTicks++;
-    ImplNSAppPostEvent( AquaSalInstance::DispatchTimerEvent, bAtStart, m_nTimerStartTicks );
+    ImplNSAppPostEvent( AquaSalInstance::DispatchTimerEvent, bAtStart, GetNextEventVersion() );
 }
 
 void AquaSalTimer::Start( sal_uLong nMS )
@@ -134,7 +130,7 @@ void AquaSalTimer::Stop()
         [m_pRunningTimer release];
         m_pRunningTimer = nil;
     }
-    m_nTimerStartTicks = 0;
+    InvalidateEvent();
 }
 
 void AquaSalTimer::callTimerCallback()
@@ -158,7 +154,7 @@ void AquaSalTimer::handleTimerElapsed()
 
 void AquaSalTimer::handleDispatchTimerEvent( NSEvent *pEvent )
 {
-    if (m_nTimerStartTicks == [pEvent data1])
+    if ( IsValidEventVersion( [pEvent data1] ) )
         callTimerCallback();
 }
 
@@ -178,8 +174,8 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
 
 bool AquaSalTimer::IsTimerElapsed() const
 {
-    assert( !(m_nTimerStartTicks && m_pRunningTimer) );
-    if ( 0 != m_nTimerStartTicks )
+    assert( !(ExistsValidEvent() && m_pRunningTimer) );
+    if ( ExistsValidEvent() )
         return true;
     if ( !m_pRunningTimer )
         return false;
@@ -189,7 +185,6 @@ bool AquaSalTimer::IsTimerElapsed() const
 
 AquaSalTimer::AquaSalTimer( )
     : m_pRunningTimer( nil )
-    , m_nTimerStartTicks( 0 )
 {
 }
 
