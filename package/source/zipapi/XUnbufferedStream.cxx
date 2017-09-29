@@ -20,6 +20,7 @@
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <XUnbufferedStream.hxx>
 #include <EncryptionData.hxx>
@@ -137,7 +138,7 @@ XUnbufferedStream::XUnbufferedStream(
     } catch( Exception& e )
     {
         // in case of problem the size will stay set to 0
-        SAL_WARN("package", "ignoring Exception " + e.Message);
+        SAL_WARN("package", "ignoring " << e);
     }
 
     mnZipEnd = mnZipCurrent + mnZipSize;

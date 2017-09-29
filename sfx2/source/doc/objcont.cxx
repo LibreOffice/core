@@ -25,6 +25,7 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/fileurl.hxx>
+#include <cppuhelper/logging.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
@@ -444,7 +445,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             }
             catch (const Exception& e)
             {
-                SAL_INFO("sfx.doc", "caught exception" << e.Message);
+                SAL_INFO("sfx.doc", e);
             }
 
             // if modify date was read successfully

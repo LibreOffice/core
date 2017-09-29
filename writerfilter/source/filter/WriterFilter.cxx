@@ -32,6 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <dmapper/DomainMapperFactory.hxx>
 #include <oox/core/filterdetect.hxx>
@@ -211,8 +212,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
         }
         catch (uno::Exception const& e)
         {
-            SAL_WARN("writerfilter", "WriterFilter::filter(): "
-                     "failed with exception " << e.Message);
+            SAL_WARN("writerfilter", "WriterFilter::filter(): failed with " << e);
             throw lang::WrappedTargetRuntimeException("",
                     static_cast<OWeakObject*>(this), uno::makeAny(e));
         }

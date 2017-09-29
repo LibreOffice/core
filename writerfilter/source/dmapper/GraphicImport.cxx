@@ -46,6 +46,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/unoapi.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/string.hxx>
@@ -381,7 +382,7 @@ public:
         }
         catch( const uno::Exception& e )
         {
-            SAL_WARN("writerfilter", "failed. Message :" << e.Message);
+            SAL_WARN("writerfilter", "failed. Message :" << e);
         }
     }
 
@@ -1338,7 +1339,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN("writerfilter", "failed. Message :" << e.Message);
+        SAL_WARN("writerfilter", "failed. Message :" << e);
     }
     return xGraphicObject;
 }

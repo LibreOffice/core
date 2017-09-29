@@ -30,6 +30,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <cppuhelper/logging.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/security.hxx>
 
@@ -140,7 +141,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
     }
     catch (const uno::Exception & e)
     {
-        SAL_WARN("extensions.config", "LdapUserProfileBackend: access to configuration data failed: " << e.Message);
+        SAL_WARN("extensions.config", "LdapUserProfileBackend: access to configuration data failed: " << e);
         return false;
     }
 

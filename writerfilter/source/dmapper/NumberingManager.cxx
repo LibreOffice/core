@@ -38,6 +38,7 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace com::sun::star;
 
@@ -633,17 +634,17 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         }
         catch( const lang::IllegalArgumentException& e )
         {
-            SAL_WARN( "writerfilter", "Exception: " << e.Message );
+            SAL_WARN( "writerfilter", e );
              assert( !"Incorrect argument to UNO call" );
         }
         catch( const uno::RuntimeException& e )
         {
-            SAL_WARN( "writerfilter", "Exception: " << e.Message );
+            SAL_WARN( "writerfilter", e );
              assert( !"Incorrect argument to UNO call" );
         }
         catch( const uno::Exception& e )
         {
-            SAL_WARN( "writerfilter", "Exception: " << e.Message );
+            SAL_WARN( "writerfilter", e );
         }
     }
 

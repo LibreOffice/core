@@ -9,6 +9,7 @@
 
 #include <memory>
 
+#include <cppuhelper/logging.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -82,7 +83,7 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
     }
     catch (const uno::Exception& rException)
     {
-        SAL_WARN("starmath", "Exception caught: " << rException.Message);
+        SAL_WARN("starmath", "Exception caught: " << rException);
     }
     return bSuccess;
 }

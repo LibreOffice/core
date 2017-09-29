@@ -23,6 +23,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -64,15 +65,15 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
     }
     catch (SAXParseException& e)
     {
-        SAL_WARN("package", "ignoring SAXParseException " + e.Message);
+        SAL_WARN("package", "ignoring " << e);
     }
     catch (SAXException& e)
     {
-        SAL_WARN("package", "ignoring SAXException " + e.Message);
+        SAL_WARN("package", "ignoring " << e);
     }
     catch (IOException& e)
     {
-        SAL_WARN("package", "ignoring IOException " + e.Message);
+        SAL_WARN("package", "ignoring " << e);
     }
     xParser->setDocumentHandler ( Reference < XDocumentHandler > () );
     return aManifestSequence;

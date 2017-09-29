@@ -23,6 +23,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/diagnose.h>
 #include <tools/link.hxx>
 #include <svl/urihelper.hxx>
@@ -405,7 +406,7 @@ bool lcl_hasAllComponentsAvailable()
     {
         SAL_INFO(
             "sw.core",
-            "assuming Base to be missing; caught " << e.Message);
+            "assuming Base to be missing; caught " << e);
         return false;
     }
 }
@@ -428,7 +429,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
         {
             SAL_INFO(
                 "sw.core",
-                "trying to install LibreOffice Base, caught " << e.Message);
+                "trying to install LibreOffice Base, caught " << e);
         }
         return;
     }

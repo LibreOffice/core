@@ -24,6 +24,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -293,7 +294,7 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
     // TODO proper exception handling, should throw
     catch( const Exception& e )
     {
-        SAL_WARN("scripting", "Caught Exception " << e.Message );
+        SAL_WARN("scripting", "Caught " << e );
         locnBNs.resize( mspIndex );
         return locnBNs;
     }

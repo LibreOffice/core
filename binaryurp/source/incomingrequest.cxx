@@ -26,6 +26,7 @@
 #include "com/sun/star/bridge/XInstanceProvider.hpp"
 #include "com/sun/star/container/NoSuchElementException.hpp"
 #include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/logging.hxx>
 #include "o3tl/runtimetooustring.hxx"
 #include "rtl/byteseq.hxx"
 #include "rtl/ref.hxx"
@@ -102,7 +103,7 @@ void IncomingRequest::execute() const {
                 tid_, member_, setter_, isExc, ret, outArgs, false);
             return;
         } catch (const css::uno::RuntimeException & e) {
-            SAL_INFO("binaryurp", "caught UNO runtime exception " << e.Message);
+            SAL_INFO("binaryurp", "caught " << e);
         } catch (const std::exception & e) {
             SAL_INFO("binaryurp", "caught C++ exception " << e.what());
         }
@@ -146,10 +147,7 @@ bool IncomingRequest::execute_throw(
                 try {
                     ifc = prov->getInstance(oid_);
                 } catch (const css::container::NoSuchElementException & e) {
-                    SAL_INFO(
-                        "binaryurp",
-                        "initial element " << oid_
-                            << ": NoSuchElementException " << e.Message);
+                    SAL_INFO("binaryurp", "initial element " << oid_ << ": " << e);
                 }
             }
             if (ifc.is()) {

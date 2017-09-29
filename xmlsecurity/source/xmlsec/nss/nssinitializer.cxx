@@ -29,6 +29,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/types.h>
 #include <rtl/instance.hxx>
@@ -176,9 +177,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
     }
     catch (const uno::Exception &e)
     {
-        SAL_WARN(
-            "xmlsecurity.xmlsec",
-            "getMozillaCurrentProfile: caught exception " << e.Message);
+        SAL_WARN("xmlsecurity.xmlsec", "getMozillaCurrentProfile: caught " << e);
     }
 
     // third, dig around to see if there's one available

@@ -41,6 +41,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/instance.hxx>
+#include <cppuhelper/logging.hxx>
 #include <salhelper/thread.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -634,10 +635,7 @@ void SvtMatchContext_Impl::doExecute()
                                     try {
                                         proc2->releaseCommandIdentifier(id);
                                     } catch (css::uno::RuntimeException & e) {
-                                        SAL_WARN(
-                                            "svtools.control",
-                                            "ignoring UNO RuntimeException "
-                                            << e.Message);
+                                        SAL_WARN("svtools.control", "ignoring " << e);
                                     }
                                 }
                                 throw;
@@ -661,10 +659,7 @@ void SvtMatchContext_Impl::doExecute()
                                 res, css::uno::UNO_QUERY_THROW);
                             folder = row->getBoolean(1) && !row->wasNull();
                         } catch (css::uno::Exception & e) {
-                            SAL_WARN(
-                                "svtools.control",
-                                "ignoring UNO Exception " << typeid(*&e).name()
-                                << ": " << e.Message);
+                            SAL_WARN("svtools.control", "ignoring " << e);
                             return;
                         }
                     }

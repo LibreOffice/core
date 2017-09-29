@@ -20,6 +20,7 @@
 #include "rtfsdrexport.hxx"
 #include <memory>
 #include "rtfattributeoutput.hxx"
+#include <cppuhelper/logging.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/unitconv.hxx>
 #include <filter/msfilter/rtfutil.hxx>
@@ -454,7 +455,7 @@ void RtfSdrExport::impl_writeGraphic()
     catch (beans::UnknownPropertyException& rException)
     {
         // ATM groupshapes are not supported, just make sure we don't crash on them.
-        SAL_WARN("sw.rtf", "failed. Message: " << rException.Message);
+        SAL_WARN("sw.rtf", "failed. Message: " << rException);
         return;
     }
     OString aURLBS(OUStringToOString(sGraphicURL, RTL_TEXTENCODING_UTF8));

@@ -20,6 +20,7 @@
 #include <sal/main.h>
 
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -65,12 +66,12 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (const Exception& e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        SAL_WARN("vcl.app", "Fatal: " << e);
         return 1;
     }
     catch (const std::exception& e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        SAL_WARN("vcl.app", "Fatal: " << e.what());
         return 1;
     }
 

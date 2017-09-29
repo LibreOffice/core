@@ -18,6 +18,7 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <osl/file.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/tempfile.hxx>
@@ -159,7 +160,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, const uno::Reference<
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("avmedia.opengl", "Exception: '" << e.Message << "'");
+        SAL_WARN("avmedia.opengl", e);
         return;
     }
 

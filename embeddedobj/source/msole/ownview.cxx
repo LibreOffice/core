@@ -37,6 +37,7 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -151,8 +152,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
         }
         catch (uno::Exception const& e)
         {
-            SAL_WARN("embeddedobj.ole", "OwnView_Impl::CreateModelFromURL:"
-                    " exception caught: " << e.Message);
+            SAL_WARN("embeddedobj.ole", "OwnView_Impl::CreateModelFromURL:" << e);
         }
     }
 

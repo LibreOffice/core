@@ -32,6 +32,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include "XMLBase64Export.hxx"
 
@@ -424,7 +425,7 @@ OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl )
         }
     } catch( const Exception& e )
     {
-        SAL_WARN( "xmloff", "Exception when embedding a font file:" << e.Message );
+        SAL_WARN( "xmloff", "Exception when embedding a font file:" << e );
     }
     return OUString();
 }

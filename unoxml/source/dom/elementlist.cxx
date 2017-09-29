@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/diagnose.h>
 
 #include <element.hxx>
@@ -107,8 +108,7 @@ namespace DOM
             m_xEventListener = new WeakEventListener(this);
             xTarget->addEventListener("DOMSubtreeModified", m_xEventListener, false/*capture*/);
         } catch (const Exception &e){
-            SAL_WARN( "unoxml", "Exception caught while registering NodeList as listener: "
-                << e.Message);
+            SAL_WARN( "unoxml", "Exception caught while registering NodeList as listener: " << e);
         }
     }
 

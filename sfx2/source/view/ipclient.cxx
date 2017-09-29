@@ -954,9 +954,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                         }
                         catch (uno::Exception const& e)
                         {
-                            SAL_WARN("embeddedobj", "SfxInPlaceClient::DoVerb:"
-                                " -9 fallback path: exception caught: "
-                                << e.Message);
+                            SAL_WARN("embeddedobj", "SfxInPlaceClient::DoVerb: -9 fallback path: " << e);
                             nError = ERRCODE_SO_GENERALERROR;
                         }
                     }
@@ -969,7 +967,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 catch (uno::Exception const& e)
                 {
                     SAL_WARN("embeddedobj", "SfxInPlaceClient::DoVerb:"
-                            " exception caught: " << e.Message);
+                            " exception caught: " << e);
                     nError = ERRCODE_SO_GENERALERROR;
                     //TODO/LATER: better error handling
 

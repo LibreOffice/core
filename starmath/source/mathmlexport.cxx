@@ -29,6 +29,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/uno/Any.h>
+#include <cppuhelper/logging.hxx>
 
 #include <rtl/math.hxx>
 #include <sfx2/frame.hxx>
@@ -311,7 +312,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     }
     catch ( const uno::Exception& rEx )
     {
-        SAL_WARN("starmath", "Can't create output stream in package: " << rEx.Message );
+        SAL_WARN("starmath", "Can't create output stream in package: " << rEx );
         return false;
     }
 

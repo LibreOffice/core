@@ -17,6 +17,7 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -89,7 +90,7 @@ uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDoc
             }
             catch (const uno::SecurityException& rException)
             {
-                SAL_WARN("xmlsecurity.helper", "failed to verify certificate: " << rException.Message);
+                SAL_WARN("xmlsecurity.helper", "failed to verify certificate: " << rException);
                 rExternal.CertificateStatus = security::CertificateValidity::INVALID;
             }
         }

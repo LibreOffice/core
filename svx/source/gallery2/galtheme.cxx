@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/vcompat.hxx>
@@ -101,7 +102,7 @@ void GalleryTheme::ImplCreateSvDrawStorage()
     {
         SAL_WARN("svx", "failed to open: "
                   << GetSdvURL().GetMainURL(INetURLObject::DecodeMechanism::NONE)
-                  << "due to : " << e.Message);
+                  << "due to : " << e);
     }
 }
 
@@ -665,7 +666,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         {
             SAL_WARN("svx", "failed to open: "
                       << aTmpURL.GetMainURL(INetURLObject::DecodeMechanism::NONE)
-                      << "due to : " << e.Message);
+                      << "due to : " << e);
             nStorErr = ERRCODE_IO_GENERAL;
         }
 

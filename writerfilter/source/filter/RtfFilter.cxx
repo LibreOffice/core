@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/logging.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -156,7 +157,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescrip
     }
     catch (const uno::Exception& e)
     {
-        SAL_INFO("writerfilter", "Exception caught: " << e.Message);
+        SAL_INFO("writerfilter", "Exception caught: " << e);
     }
 
     if (xStatusIndicator.is())

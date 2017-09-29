@@ -33,6 +33,7 @@
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <typelib/typedescription.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -591,11 +592,11 @@ static void SAL_CALL typelib_callback(
             }
             catch (const container::NoSuchElementException & exc)
             {
-                SAL_INFO("cppuhelper", "typelibrary type not available: " << exc.Message );
+                SAL_INFO("cppuhelper", "typelibrary type not available: " << exc );
             }
             catch (const Exception & exc)
             {
-                SAL_INFO("cppuhelper", exc.Message );
+                SAL_INFO("cppuhelper", exc );
             }
         }
     }

@@ -29,6 +29,7 @@
 #include <svtools/filechangedchecker.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <memory>
 
@@ -96,7 +97,7 @@ void ExternalToolEditThread::execute()
     }
     catch (Exception const& e)
     {
-        SAL_WARN("svx", "ExternalToolEditThread: exception: " << e.Message);
+        SAL_WARN("svx", "ExternalToolEditThread: " << e);
     }
 }
 

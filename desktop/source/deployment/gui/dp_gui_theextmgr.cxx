@@ -30,6 +30,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
@@ -342,7 +343,7 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
         throw;
     }
     catch (const uno::Exception & exc) {
-        SAL_WARN( "desktop", exc.Message );
+        SAL_WARN( "desktop", exc );
         return NOT_AVAILABLE;
     }
 }

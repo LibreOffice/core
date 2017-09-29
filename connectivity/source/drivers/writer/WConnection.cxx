@@ -32,6 +32,7 @@
 #include <unotools/pathoptions.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/processfactory.hxx>
 
 typedef connectivity::file::OConnection OConnection_BASE;
@@ -138,7 +139,7 @@ uno::Reference<text::XTextDocument> const& OWriterConnection::acquireDoc()
             uno::Exception aLoaderError;
             OSL_VERIFY(aLoaderException >>= aLoaderError);
 
-            SAL_WARN("connectivity.writer", "empty m_xDoc, exception type: " << aLoaderException.getValueTypeName() << ", error message: " << aLoaderError.Message);
+            SAL_WARN("connectivity.writer", "empty m_xDoc, exception type: " << aLoaderException.getValueTypeName() << ", error message: " << aLoaderError);
         }
 
         const OUString sError(m_aResources.getResourceStringWithSubstitution(

@@ -649,7 +649,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN("sfx.doc", "ignoring UNO exception " << e.Message);
+        SAL_WARN("sfx.doc", "ignoring " << e);
     }
 
     return bDialogUsed;
@@ -1413,7 +1413,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
             catch (const lang::IllegalArgumentException& e)
             {
                 SAL_WARN("sfx.doc", "Ignoring parameters! "
-                    "ModelData considers this illegal:  " << e.Message);
+                    "ModelData considers this illegal:  " << e);
                 aModelData.GetStorable()->store();
             }
         }
@@ -1783,7 +1783,7 @@ void SfxStoringHelper::SetDocInfoState(
     }
     catch (const uno::Exception& e)
     {
-        SAL_INFO("sfx.doc", "SetDocInfoState: caught exception: " << e.Message);
+        SAL_INFO("sfx.doc", "SetDocInfoState: caught " << e);
     }
 
     // set the modified flag back if required

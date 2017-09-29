@@ -28,6 +28,7 @@
 #include <vcl/layout.hxx>
 #include <salhelper/thread.hxx>
 
+#include <cppuhelper/logging.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
@@ -2256,12 +2257,12 @@ public:
         }
         catch (const css::uno::Exception& e)
         {
-            SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+            SAL_WARN("vcl.app", "Fatal: " << e);
             return 1;
         }
         catch (const std::exception& e)
         {
-            SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+            SAL_WARN("vcl.app", "Fatal: " << e.what());
             return 1;
         }
         return 0;
