@@ -180,6 +180,12 @@ $(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
 $(call gb_CustomTarget_get_clean_target,ios/ios):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
 	rm -rf $(IOSGEN) $(IOSKITXC) $(IOSAPPXC)
+	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/project.xcworkspace
+	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/xcuserdata
+	rm -rf $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj/project.xcworkspace
+	rm -rf $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj/xcuserdata
+	rm -rf $(SRCDIR)/ios/LibreOfficeLight/build
+	rm -rf $(SRCDIR)/ios/LibreOfficeKit/build
 
 
 # vim: set noet sw=4 ts=4:
