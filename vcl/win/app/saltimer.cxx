@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <svsys.h>
 #include <win/saldata.hxx>
 #include <win/saltimer.h>
@@ -46,8 +48,9 @@ void WinSalTimer::ImplStop()
         return;
 
     m_nTimerId = nullptr;
-    m_nTimerStartTicks = 0;
     DeleteTimerQueueTimer( nullptr, hTimer, INVALID_HANDLE_VALUE );
+    // Keep both after DeleteTimerQueueTimer, because they are set in SalTimerProc
+    InvalidateEvent();
     m_bPollForMessage = false;
 
     // remove as many pending SAL_MSG_TIMER_CALLBACK messages as possible
@@ -71,18 +74,17 @@ void WinSalTimer::ImplStart( sal_uLong nMS )
 
     // keep the yield running, if a 0ms Idle is scheduled
     m_bPollForMessage = ( 0 == nMS );
-    m_nTimerStartTicks = tools::Time::GetMonotonicTicks() % SAL_MAX_UINT32;
     // probably WT_EXECUTEONLYONCE is not needed, but it enforces Period
     // to be 0 and should not hurt; also see
     // https://www.microsoft.com/msj/0499/pooling/pooling.aspx
     CreateTimerQueueTimer(&m_nTimerId, nullptr, SalTimerProc,
-                          (void*) m_nTimerStartTicks,
+                          reinterpret_cast<void*>(
+                              sal_IntPtr(GetNextEventVersion())),
                           nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
 }
 
 WinSalTimer::WinSalTimer()
     : m_nTimerId( nullptr )
-    , m_nTimerStartTicks( 0 )
     , m_bPollForMessage( false )
 {
 }
@@ -118,11 +120,10 @@ void WinSalTimer::Stop()
         ImplStop();
 }
 
-/** This gets invoked from a Timer Queue thread.
-
-Don't acquire the SolarMutex to avoid deadlocks, just wake up the main thread
-at better resolution than 10ms.
-*/
+/**
+ * This gets invoked from a Timer Queue thread.
+ * Don't acquire the SolarMutex to avoid deadlocks.
+ */
 static void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
 {
 #if defined ( __MINGW32__ ) && !defined ( _WIN64 )
