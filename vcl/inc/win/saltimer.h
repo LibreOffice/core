@@ -24,6 +24,9 @@
 
 class WinSalTimer : public SalTimer, protected VersionedEvent
 {
+    // for access to m_bPollForMessage
+    friend static void CALLBACK SalTimerProc(PVOID data, BOOLEAN);
+
     HANDLE       m_nTimerId;          ///< Windows timer id
     bool         m_bPollForMessage;   ///< Run yield until a message is caught (most likely the 0ms timer)
 
