@@ -4384,7 +4384,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
             virtual void doWork() override
             {
-                mpDocument->CalculateInColumnInThread(mrTopPos, mnLength, mnThisThread, mnThreadsTotal);
+                mpDocument->CalculateInColumnInThread(mrTopPos, mnLength, mnThisThread, mnThreadsTotal).MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
             }
 
         };
