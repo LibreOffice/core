@@ -175,6 +175,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nFormulaCodeInTree(0),
         nXMLImportedFormulaCount( 0 ),
         nInterpretLevel(0),
+        nMacroInterpretLevel(0),
         nSrcVer( SC_CURRENT_VERSION ),
         nFormulaTrackCount(0),
         eHardRecalcState(HardRecalcState::OFF),
