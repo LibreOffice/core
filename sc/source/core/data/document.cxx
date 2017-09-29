@@ -6771,30 +6771,6 @@ ScMutationGuard::~ScMutationGuard()
 
 thread_local ScDocumentThreadSpecific ScDocument::maThreadSpecific;
 
-sal_uInt16 ScDocument::GetMacroInterpretLevel()
-{
-    if (!mbThreadedGroupCalcInProgress)
-        return maNonThreaded.nMacroInterpretLevel;
-    else
-        return maThreadSpecific.nMacroInterpretLevel;
-}
-
-void ScDocument::IncMacroInterpretLevel()
-{
-    if (!mbThreadedGroupCalcInProgress)
-        maNonThreaded.nMacroInterpretLevel++;
-    else
-        maThreadSpecific.nMacroInterpretLevel++;
-}
-
-void ScDocument::DecMacroInterpretLevel()
-{
-    if (!mbThreadedGroupCalcInProgress)
-        maNonThreaded.nMacroInterpretLevel--;
-    else
-        maThreadSpecific.nMacroInterpretLevel--;
-}
-
 bool ScDocument::IsInInterpreterTableOp() const
 {
     if (!mbThreadedGroupCalcInProgress)
@@ -6849,7 +6825,6 @@ ScRecursionHelper& ScDocument::GetRecursionHelper()
 
 void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData)
 {
-    nMacroInterpretLevel = rNonThreadedData.nMacroInterpretLevel;
     nInterpreterTableOpLevel = rNonThreadedData.nInterpreterTableOpLevel;
 
     // What about the recursion helper?
@@ -6858,7 +6833,6 @@ void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSp
 
 void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData)
 {
-    assert(nMacroInterpretLevel == rNonThreadedData.nMacroInterpretLevel);
     assert(nInterpreterTableOpLevel == rNonThreadedData.nInterpreterTableOpLevel);
 
     // What about recursion helper and lookup cache?
