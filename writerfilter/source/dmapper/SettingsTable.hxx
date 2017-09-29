@@ -79,6 +79,8 @@ class SettingsTable : public LoggedProperties, public LoggedTable
 
     css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings() const;
 
+    css::uno::Sequence<css::beans::PropertyValue> GetDocumentProtectionSettings() const;
+
     void ApplyProperties(css::uno::Reference<css::text::XTextDocument> const& xDoc);
 
  private:

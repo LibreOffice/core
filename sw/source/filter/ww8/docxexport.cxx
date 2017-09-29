@@ -21,6 +21,7 @@
 #include "docxexportfilter.hxx"
 #include "docxattributeoutput.hxx"
 #include "docxsdrexport.hxx"
+#include "docxhelper.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -935,6 +936,7 @@ void DocxExport::WriteSettings()
     {
         pFS->singleElementNS( XML_w, XML_documentProtection, FSNS(XML_w, XML_edit), "forms", FSNS(XML_w, XML_enforcement), "1",  FSEND );
     }
+
     // Do not justify lines with manual break
     if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK ))
     {
@@ -942,6 +944,7 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_doNotExpandShiftReturn, FSEND );
         pFS->endElementNS( XML_w, XML_compat );
     }
+
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
     // Use the setting from the default style.
     SwTextFormatColl* pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
@@ -969,11 +972,12 @@ void DocxExport::WriteSettings()
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
         uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
+
         for( sal_Int32 i=0; i < propList.getLength(); ++i )
         {
             if ( propList[i].Name == "ThemeFontLangProps" )
@@ -1002,6 +1006,7 @@ void DocxExport::WriteSettings()
 
                 uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
                 propList[i].Value >>= aCompatSettingsSequence;
+
                 for(sal_Int32 j=0; j < aCompatSettingsSequence.getLength(); ++j)
                 {
                     uno::Sequence< beans::PropertyValue > aCompatSetting;
@@ -1025,7 +1030,42 @@ void DocxExport::WriteSettings()
                         FSNS( XML_w, XML_val ),  OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr(),
                         FSEND);
                 }
+
                 pFS->endElementNS( XML_w, XML_compat );
+            }
+            else if (propList[i].Name == "DocumentProtection")
+            {
+                sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
+
+                uno::Sequence< beans::PropertyValue > rAttributeList;
+                propList[i].Value >>= rAttributeList;
+
+                for (sal_Int32 j = 0; j < rAttributeList.getLength(); ++j)
+                {
+                    static DocxStringTokenMap const aTokens[] =
+                    {
+                        { "edit",                XML_edit },
+                        { "enforcement",         XML_enforcement },
+                        { "formatting",          XML_formatting },
+                        { "cryptProviderType",   XML_cryptProviderType },
+                        { "cryptAlgorithmClass", XML_cryptAlgorithmClass },
+                        { "cryptAlgorithmType",  XML_cryptAlgorithmType },
+                        { "cryptAlgorithmSid",   XML_cryptAlgorithmSid },
+                        { "cryptSpinCount",      XML_cryptSpinCount },
+                        { "hash",                XML_hash },
+                        { "salt",                XML_salt },
+                        { nullptr, 0 }
+                    };
+
+                    if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttributeList[j].Name))
+                        pAttributeList->add(FSNS(XML_w, nToken), rAttributeList[j].Value.get<OUString>().toUtf8());
+                }
+
+                if (rAttributeList.getLength())
+                {
+                    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
+                    pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
+                }
             }
         }
     }
