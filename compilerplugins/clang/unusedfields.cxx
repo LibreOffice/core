@@ -962,8 +962,8 @@ llvm::Optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
         return CalleeWrapper(functionDecl);
 
     // Extract the functionprototype from a type
-    Type const * calleeType = callExpr->getCallee()->getType().getTypePtr();
-    if (auto pointerType = calleeType->getUnqualifiedDesugaredType()->getAs<PointerType>()) {
+    clang::Type const * calleeType = callExpr->getCallee()->getType().getTypePtr();
+    if (auto pointerType = calleeType->getUnqualifiedDesugaredType()->getAs<clang::PointerType>()) {
         if (auto prototype = pointerType->getPointeeType()->getUnqualifiedDesugaredType()->getAs<FunctionProtoType>()) {
             return CalleeWrapper(prototype);
         }
