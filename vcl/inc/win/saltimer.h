@@ -34,7 +34,7 @@ class WinSalTimer final : public SalTimer, protected VersionedEvent
 
     void ImplStart( sal_uIntPtr nMS );
     void ImplStop();
-    void ImplEmitTimerCallback();
+    void ImplHandleTimerEvent( WPARAM aWPARAM );
 
 public:
     WinSalTimer();
@@ -43,15 +43,8 @@ public:
     virtual void Start(sal_uIntPtr nMS) override;
     virtual void Stop() override;
 
-    inline bool IsValidWPARAM( WPARAM wParam ) const;
-
     inline bool PollForMessage() const;
 };
-
-inline bool WinSalTimer::IsValidWPARAM( WPARAM aWPARAM ) const
-{
-    return IsValidEventVersion( static_cast<sal_Int32>( aWPARAM ) );
-}
 
 inline bool WinSalTimer::PollForMessage() const
 {
