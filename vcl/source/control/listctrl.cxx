@@ -45,6 +45,12 @@ void ListControl::dispose()
 
 void ListControl::RecalcAll()
 {
+    // avoid recalculating while we are disposing
+    // children. This just leads to complex invalid memory
+    // access patterns that are not fixable.
+    if (IsDisposed())
+        return;
+
     sal_Int32 nTotalHeight = 0;
     for (const auto& item : maEntries)
     {
