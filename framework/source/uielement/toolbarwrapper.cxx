@@ -124,16 +124,16 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
         UIConfigElementWrapperBase::initialize( aArguments );
 
         bool bPopupMode( false );
+        Reference< XWindow > xParentWindow;
         for ( sal_Int32 i = 0; i < aArguments.getLength(); i++ )
         {
             PropertyValue aPropValue;
             if ( aArguments[i] >>= aPropValue )
             {
                 if ( aPropValue.Name == "PopupMode" )
-                {
                     aPropValue.Value >>= bPopupMode;
-                    break;
-                }
+                else if ( aPropValue.Name == "ParentWindow" )
+                    xParentWindow.set( aPropValue.Value, UNO_QUERY );
             }
         }
 
@@ -145,7 +145,9 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments )
             ToolBarManager* pToolBarManager = nullptr;
             {
                 SolarMutexGuard aSolarMutexGuard;
-                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+                if ( !xParentWindow.is() )
+                    xParentWindow.set( xFrame->getContainerWindow() );
+                VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xParentWindow );
                 if ( pWindow )
                 {
                     sal_uLong nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
