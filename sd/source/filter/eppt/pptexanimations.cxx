@@ -1409,7 +1409,6 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
         }
     }
     else if ( rAttributeName == "Rotate"         // "r" or "style.rotation" ?
-            || rAttributeName == "SkewX"
             || rAttributeName == "Opacity"
             || rAttributeName == "CharHeight"
         )
