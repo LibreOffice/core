@@ -57,6 +57,20 @@ struct _LibreOfficeKitClass
                               LibreOfficeKitCallback pCallback,
                               void* pData);
 
+    /// @see lok::Office::getFilterTypes().
+    char* (*getFilterTypes) (LibreOfficeKit* pThis);
+
+    /// @see lok::Office::setOptionalFeatures().
+    void (*setOptionalFeatures)(LibreOfficeKit* pThis, uint64_t features);
+
+    /// @see lok::Office::setDocumentPassword().
+    void (*setDocumentPassword) (LibreOfficeKit* pThis,
+            char const* pURL,
+            char const* pPassword);
+
+    /// @see lok::Office::getVersionInfo().
+    char* (*getVersionInfo) (LibreOfficeKit* pThis);
+
     bool (*runMacro) (LibreOfficeKit *pThis, const char* pURL);
 #endif
 

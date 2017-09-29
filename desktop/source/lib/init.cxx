@@ -331,6 +331,13 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->freeError = lo_freeError;
             m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
             m_pOfficeClass->registerCallback = lo_registerCallback;
+            // These methods are not implemented in LibreOffice 5.0 and
+            // they are included just to have compatibility with
+            // LibreOfficeKit 5.2 interface.
+            m_pOfficeClass->getFilterTypes = nullptr;
+            m_pOfficeClass->setOptionalFeatures = nullptr;
+            m_pOfficeClass->setDocumentPassword = nullptr;
+            m_pOfficeClass->getVersionInfo = nullptr;
             m_pOfficeClass->runMacro = lo_runMacro;
 
             gOfficeClass = m_pOfficeClass;
