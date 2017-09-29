@@ -22,13 +22,14 @@
 
 #include <saltimer.hxx>
 
-class WinSalTimer : public SalTimer
+class WinSalTimer final : public SalTimer, protected VersionedEvent
 {
     // for access to Impl* functions
     friend LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef );
+    // for access to m_bPollForMessage
+    friend static void CALLBACK SalTimerProc( PVOID data, BOOLEAN );
 
     HANDLE       m_nTimerId;          ///< Windows timer id
-    sal_uInt32   m_nTimerStartTicks;  ///< system ticks at timer start % SAL_MAX_UINT32
     bool         m_bPollForMessage;   ///< Run yield until a message is caught (most likely the 0ms timer)
 
     void ImplStart( sal_uIntPtr nMS );
@@ -49,7 +50,7 @@ public:
 
 inline bool WinSalTimer::IsValidWPARAM( WPARAM aWPARAM ) const
 {
-    return aWPARAM == m_nTimerStartTicks;
+    return IsValidEventVersion( static_cast<sal_Int32>( aWPARAM ) );
 }
 
 inline bool WinSalTimer::PollForMessage() const
