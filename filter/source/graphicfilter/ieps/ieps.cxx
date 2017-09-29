@@ -169,7 +169,7 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
      *
      */
     OUString url;
-    OUString path(reinterpret_cast<const sal_Unicode*>(_wgetenv(L"PATH")));
+    OUString path(SAL_U(_wgetenv(L"PATH")));
 
     oslFileError err = osl_searchFileURL(rProgName.pData, path.pData, &url.pData);
     if (err != osl_File_E_None)

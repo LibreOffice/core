@@ -86,7 +86,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
     HKEY hCurKey;
 
     if(RegOpenKeyExW(
-           hKey, reinterpret_cast<wchar_t const *>(aKeyName.getStr()), 0,
+           hKey, SAL_W(aKeyName.getStr()), 0,
            KEY_READ, &hCurKey)
        == ERROR_SUCCESS)
     {
@@ -109,13 +109,9 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
 
                 //Make up full key name
                 if(aKeyName.isEmpty())
-                    aSubkeyName = aKeyName
-                        + OUString(
-                            reinterpret_cast<sal_Unicode const *>(buffKeyName));
+                    aSubkeyName = aKeyName + OUString(SAL_U(buffKeyName));
                 else
-                    aSubkeyName = aKeyName + "\\"
-                        + OUString(
-                            reinterpret_cast<sal_Unicode const *>(buffKeyName));
+                    aSubkeyName = aKeyName + "\\" + OUString(SAL_U(buffKeyName));
 
                 //Recursion, until no more subkeys are found
                 dumpWindowsRegistryKey(hKey, aSubkeyName, aFileHandle);
@@ -126,8 +122,8 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             // No more subkeys, we are at a leaf
             auto pValueName = std::unique_ptr<wchar_t[]>(
                 new wchar_t[nLongestValueNameLen + 1]);
-            auto pValue = std::unique_ptr<unsigned char[]>(
-                new unsigned char[(nLongestValueLen + 1) * sizeof (wchar_t)]);
+            auto pValue = std::unique_ptr<wchar_t[]>(
+                new wchar_t[nLongestValueLen/sizeof(wchar_t) + 1]);
 
             bool bFinal = false;
             OUString aValue;
@@ -138,18 +134,16 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 DWORD nValueNameLen = nLongestValueNameLen + 1;
                 DWORD nValueLen = nLongestValueLen + 1;
 
-                RegEnumValueW(hCurKey, i, pValueName.get(), &nValueNameLen, nullptr, nullptr, pValue.get(), &nValueLen);
+                RegEnumValueW(hCurKey, i, pValueName.get(), &nValueNameLen, nullptr, nullptr, reinterpret_cast<LPBYTE>(pValue.get()), &nValueLen);
                 const wchar_t wsValue[] = L"Value";
                 const wchar_t wsFinal[] = L"Final";
                 const wchar_t wsType[] = L"Type";
 
                 if(!wcscmp(pValueName.get(), wsValue))
-                    aValue = OUString(
-                        reinterpret_cast<sal_Unicode const *>(pValue.get()));
-                if (!wcscmp(pValueName.get(), wsType))
-                    aType = OUString(
-                        reinterpret_cast<sal_Unicode const *>(pValue.get()));
-                if(!wcscmp(pValueName.get(), wsFinal) && *reinterpret_cast<DWORD*>(pValue.get()) == 1)
+                    aValue = SAL_U(pValue.get());
+                else if (!wcscmp(pValueName.get(), wsType))
+                    aType = SAL_U(pValue.get());
+                else if(!wcscmp(pValueName.get(), wsFinal) && *reinterpret_cast<DWORD*>(pValue.get()) == 1)
                     bFinal = true;
             }
             sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');

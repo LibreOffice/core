@@ -518,7 +518,7 @@ static void do_msvcr_magic(OUString const &jvm_dll)
         return;
     }
 
-    FILE *f = _wfopen(reinterpret_cast<LPCWSTR>(Module.getStr()), L"rb");
+    FILE *f = _wfopen(SAL_W(Module.getStr()), L"rb");
 
     if (!f)
     {

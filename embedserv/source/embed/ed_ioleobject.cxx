@@ -44,10 +44,8 @@ STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLES
     // the code should be ignored for links
     if ( !m_aFileName.getLength() )
     {
-        m_pDocHolder->setTitle(
-            OUString(reinterpret_cast<sal_Unicode const *>(szContainerObj)));
-        m_pDocHolder->setContainerName(
-            OUString(reinterpret_cast<sal_Unicode const *>(szContainerApp)));
+        m_pDocHolder->setTitle(SAL_U(szContainerObj));
+        m_pDocHolder->setContainerName(SAL_U(szContainerApp));
     }
 
     return S_OK;
@@ -419,8 +417,7 @@ HRESULT EmbedDocument_Impl::SaveObject()
 
         // in case of links the containers does not provide client site sometimes
         hr = Save( static_cast<LPCOLESTR>(nullptr), FALSE ); // triggers saving to the link location
-        SaveCompleted(
-            reinterpret_cast<wchar_t const *>(aPreservFileName.getStr()));
+        SaveCompleted(SAL_W(aPreservFileName.getStr()));
     }
 
     notify( false );
