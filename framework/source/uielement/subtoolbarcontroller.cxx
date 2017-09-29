@@ -208,6 +208,7 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
 
         auto aPropSeq( comphelper::InitPropertySequence( {
             { "Frame", css::uno::makeAny( xFrame ) },
+            { "ParentWindow", css::uno::makeAny( m_xParentWindow ) },
             { "Persistent", css::uno::makeAny( false ) },
             { "PopupMode", css::uno::makeAny( true ) }
         } ) );
@@ -239,7 +240,6 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
                 if ( pTbxWindow && pTbxWindow->GetType() == WindowType::TOOLBOX )
                 {
                     ToolBox* pToolBar = static_cast< ToolBox* >( pTbxWindow.get() );
-                    pToolBar->SetParent( pToolBox );
                     // calc and set size for popup mode
                     Size aSize = pToolBar->CalcPopupWindowSizePixel();
                     pToolBar->SetSizePixel( aSize );

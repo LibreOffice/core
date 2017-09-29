@@ -59,42 +59,42 @@ Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
 {
     Reference< css::ui::XUIElement > xMenuBar(
             static_cast<OWeakObject *>(new MenuBarWrapper(m_xContext)), UNO_QUERY);
-    CreateUIElement(ResourceURL, Args, "MenuOnly", "private:resource/menubar/", xMenuBar, m_xContext);
+    CreateUIElement(ResourceURL, Args, "private:resource/menubar/", xMenuBar, m_xContext);
     return xMenuBar;
 }
 
 void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
                                      ,const Sequence< PropertyValue >& Args
-                                     ,const char* _pExtraMode
                                      ,const OUString& ResourceType
                                      ,const Reference< css::ui::XUIElement >& _xMenuBar
                                      ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
 {
+    sal_Int32 nConfigPropertyIndex( Args.getLength() );
+    sal_Int32 nURLPropertyIndex( Args.getLength() );
     Reference< XUIConfigurationManager > xCfgMgr;
-    Reference< XUIConfigurationManager > xConfigSource;
     Reference< XFrame >                  xFrame;
     OUString                        aResourceURL( ResourceURL );
-    bool                             bPersistent( true );
-    bool                             bExtraMode( false );
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
         if ( Args[n].Name == "ConfigurationSource" )
-            Args[n].Value >>= xConfigSource;
+        {
+            nConfigPropertyIndex = n;
+            Args[n].Value >>= xCfgMgr;
+        }
+        else if ( Args[n].Name == "ResourceURL" )
+        {
+            nURLPropertyIndex = n;
+            Args[n].Value >>= aResourceURL;
+        }
         else if ( Args[n].Name == "Frame" )
             Args[n].Value >>= xFrame;
-        else if ( Args[n].Name == "ResourceURL" )
-            Args[n].Value >>= aResourceURL;
-        else if ( Args[n].Name == "Persistent" )
-            Args[n].Value >>= bPersistent;
-        else if ( _pExtraMode && Args[n].Name.equalsAscii( _pExtraMode ))
-            Args[n].Value >>= bExtraMode;
     }
     if (!aResourceURL.startsWith(ResourceType))
         throw IllegalArgumentException();
 
     // Identify frame and determine document based ui configuration manager/module ui configuration manager
-    if ( xFrame.is() && !xConfigSource.is() )
+    if ( xFrame.is() && !xCfgMgr.is() )
     {
         bool bHasSettings( false );
         Reference< XModel > xModel;
@@ -127,25 +127,32 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
         }
     }
 
-    PropertyValue aPropValue;
-    Sequence< Any > aPropSeq( _pExtraMode ? 5 : 4);
-    aPropValue.Name = "Frame";
-    aPropValue.Value <<= xFrame;
-    aPropSeq[0] <<= aPropValue;
-    aPropValue.Name = "ConfigurationSource";
-    aPropValue.Value <<= xCfgMgr;
-    aPropSeq[1] <<= aPropValue;
-    aPropValue.Name = "ResourceURL";
-    aPropValue.Value <<= aResourceURL;
-    aPropSeq[2] <<= aPropValue;
-    aPropValue.Name = "Persistent";
-    aPropValue.Value <<= bPersistent;
-    aPropSeq[3] <<= aPropValue;
-    if ( _pExtraMode )
+    sal_Int32 nSeqLength( Args.getLength() );
+    if ( Args.getLength() == nConfigPropertyIndex )
+        nSeqLength++;
+    if ( Args.getLength() == nURLPropertyIndex )
+        nSeqLength++;
+    if ( nConfigPropertyIndex == nURLPropertyIndex )
+        nURLPropertyIndex++;
+
+    Sequence< Any > aPropSeq( nSeqLength );
+    for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
     {
-        aPropValue.Name = OUString::createFromAscii(_pExtraMode);
-        aPropValue.Value <<= bExtraMode;
-        aPropSeq[4] <<= aPropValue;
+        PropertyValue aPropValue;
+        if ( n == nURLPropertyIndex )
+        {
+            aPropValue.Name = "ResourceURL";
+            aPropValue.Value <<= aResourceURL;
+        }
+        else if ( n == nConfigPropertyIndex )
+        {
+            aPropValue.Name = "ConfigurationSource";
+            aPropValue.Value <<= xCfgMgr;
+        }
+        else
+            aPropValue = Args[n];
+
+        aPropSeq[n] <<= aPropValue;
     }
 
     SolarMutexGuard aGuard;
