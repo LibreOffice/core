@@ -17,6 +17,18 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,coinmp,\
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,coinmp,0))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,coinmp)
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,coinmp,\
+	BuildTools \
+	Cbc \
+	Cgl \
+	Clp \
+	CoinMP \
+	CoinUtils \
+	Data/Sample \
+	Osi \
+))
+
 $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/osi_cuts_iterator.patch.0 \
 	external/coinmp/no-binaries.patch.1 \
@@ -28,8 +40,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,coinmp,\
 	external/coinmp/ubsan.patch.0 \
 	external/coinmp/rpath.patch \
 	external/coinmp/libtool.patch \
-	external/coinmp/automake.patch \
-	external/coinmp/iOS.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
