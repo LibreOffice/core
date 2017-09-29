@@ -52,14 +52,14 @@ class StringPrinterHelper(object):
         if not encoding:
             encoding = ''
 
-        if use_lazy_string:
-            return data.lazy_string(encoding, length)
-
         # we need to determine length, if not given (for sal_Unicode*)
         if length < 0:
             length = 0
             while data[length] != 0 and length <= 512: # arbitrary limit
                 length += 1
+
+        if use_lazy_string:
+            return data.lazy_string(encoding, length)
 
         # The gdb.Value.string() conversion works on array of bytes, but
         # the length we have is the length of the string. So we must
