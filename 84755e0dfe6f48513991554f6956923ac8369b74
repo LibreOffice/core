@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_38b405d0",
+        "filename": "avmedia/source/win/player.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-29T11:27:38Z",
+      "side": 1,
+      "message": "maybe some comment here to indicate why this block is necessary?",
+      "revId": "84755e0dfe6f48513991554f6956923ac8369b74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_58cb9153",
+        "filename": "fpicker/source/win32/folderpicker/MtaFop.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-29T11:27:38Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "84755e0dfe6f48513991554f6956923ac8369b74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d8ddc115",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-29T11:27:38Z",
+      "side": 1,
+      "message": "this whole block should probably be using the osl_getTempDirURL and related APIs, but thats a change for another time",
+      "revId": "84755e0dfe6f48513991554f6956923ac8369b74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f8e0bdce",
+        "filename": "hwpfilter/source/mzstring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-29T11:27:38Z",
+      "side": 1,
+      "message": "this code just looks wrong (not your changes, just the original). Why is not just using sprintf?",
+      "revId": "84755e0dfe6f48513991554f6956923ac8369b74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_18e829b4",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/util.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-29T11:27:38Z",
+      "side": 1,
+      "message": "good catch!",
+      "revId": "84755e0dfe6f48513991554f6956923ac8369b74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
