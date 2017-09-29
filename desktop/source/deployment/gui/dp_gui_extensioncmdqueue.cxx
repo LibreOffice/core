@@ -392,6 +392,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     }
     else if (request >>= licExc)
     {
+        SolarMutexGuard guard;
         uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
             deployment::ui::LicenseDialog::create(
             m_xContext, VCLUnoHelper::GetInterface( m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr ),
