@@ -621,7 +621,7 @@ void Entity::saveException( const Any & e )
     // unexpectedly some 'startElements' produce an UNO_QUERY_THROW
     // for XComponent; and yet expect to continue parsing.
     SAL_WARN("sax", "Unexpected exception from XML parser "
-            << e.get<Exception>().Message);
+            << e.get<Exception>());
     maSavedException = e;
 }
 

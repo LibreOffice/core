@@ -216,7 +216,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     #if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     {
-        SAL_INFO("fwk", "Job::execute(): Got exception during job execution. Original Message was: \"" << ex.Message << "\"");
+        SAL_INFO("fwk", "Job::execute(): Got exception during job execution. Original Message was: \"" << ex << "\"");
     }
     #else
     catch(const css::uno::Exception&)

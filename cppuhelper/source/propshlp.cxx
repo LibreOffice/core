@@ -693,7 +693,7 @@ void OPropertySetHelper::fire
                     }
                     catch (RuntimeException & exc)
                     {
-                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc.Message);
+                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc);
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
                     }
@@ -745,7 +745,7 @@ void OPropertySetHelper::fire
                     }
                     catch (RuntimeException & exc)
                     {
-                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc.Message);
+                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc);
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
                     }
@@ -790,7 +790,7 @@ void OPropertySetHelper::fire
                     }
                     catch (RuntimeException & exc)
                     {
-                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc.Message);
+                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc);
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
                     }

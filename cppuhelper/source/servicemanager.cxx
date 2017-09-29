@@ -890,10 +890,7 @@ void cppuhelper::ServiceManager::disposing() {
         try {
             (*i)->dispose();
         } catch (css::uno::RuntimeException & e) {
-            SAL_WARN(
-                "cppuhelper",
-                "Ignoring RuntimeException \"" << e.Message
-                    << "\" while disposing singleton");
+            SAL_WARN("cppuhelper", "Ignoring " << e << " while disposing singleton");
         }
     }
     for (std::vector<

@@ -129,7 +129,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     }
     catch(const Exception& ex)
     {
-        SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << ex.Message);
+        SAL_WARN("dbaccess.core", "ORowSetCache: " << ex);
     }
     try
     {
@@ -139,7 +139,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     }
     catch(const SQLException& e)
     {
-        SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
+        SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
     }
 
     // check if all keys of the updateable table are fetched
@@ -185,7 +185,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
                 catch (const Exception& e)
                 {
-                    SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
+                    SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
                 }
                 m_xCacheSet.clear();
             }
@@ -225,7 +225,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         }
         catch (Exception const& e)
         {
-            SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
+            SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
         }
     }
 
@@ -253,7 +253,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         }
         catch (const SQLException& e)
         {
-            SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
+            SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
             bNeedKeySet = true;
         }
 
@@ -332,7 +332,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             }
             catch (const SQLException& e)
             {
-                SAL_WARN("dbaccess.core", "ORowSetCache: exception: " << e.Message);
+                SAL_WARN("dbaccess.core", "ORowSetCache: " << e);
                 // we couldn't create a keyset here so we have to create a static cache
                 m_xCacheSet = new OStaticSet(i_nMaxRows);
                 m_xCacheSet->construct(_xRs,i_sRowSetFilter);

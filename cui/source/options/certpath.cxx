@@ -103,7 +103,7 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
     }
     catch (const uno::Exception &e)
     {
-        SAL_WARN("cui.options", "CertPathDialog::CertPathDialog(): caught exception" << e.Message);
+        SAL_WARN("cui.options", "CertPathDialog::CertPathDialog(): " << e);
     }
 
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
@@ -123,7 +123,7 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl, Button*, void)
     }
     catch (const uno::Exception &e)
     {
-        SAL_WARN("cui.options", "CertPathDialog::OKHdl_Impl(): caught exception" << e.Message);
+        SAL_WARN("cui.options", "CertPathDialog::OKHdl_Impl(): " << e);
     }
 
     EndDialog(RET_OK);
@@ -230,7 +230,7 @@ IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl, Button*, void)
     }
     catch (uno::Exception & e)
     {
-        SAL_WARN("cui.options", "caught UNO exception: " << e.Message);
+        SAL_WARN("cui.options", e);
     }
 }
 

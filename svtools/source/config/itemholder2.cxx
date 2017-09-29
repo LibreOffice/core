@@ -59,7 +59,7 @@ ItemHolder2::ItemHolder2()
         if(bMessage)
         {
             bMessage = false;
-            SAL_WARN( "svtools", "CreateInstance with arguments exception: " << rEx.Message );
+            SAL_WARN( "svtools", "CreateInstance with arguments: " << rEx );
         }
     }
 #else

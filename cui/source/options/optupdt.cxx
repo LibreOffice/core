@@ -413,7 +413,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, Button*, void)
     }
     catch( const uno::Exception& e )
     {
-         SAL_WARN("cui.options", "Caught exception, thread terminated. " << e.Message);
+         SAL_WARN("cui.options", "Caught exception, thread terminated. " << e);
     }
 }
 

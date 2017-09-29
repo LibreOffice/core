@@ -146,7 +146,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
     }
     catch (const uno::Exception& ex)
     {
-        SAL_WARN("sc", "AddItem caught exception " << ex.Message );
+        SAL_WARN("sc", "AddItem caught " << ex );
     }
     return aNULL();
 }

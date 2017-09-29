@@ -311,7 +311,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(
     }
     catch ( const uno::Exception& rEx )
     {
-        SAL_WARN("starmath", "Can't create output stream in package: " << rEx.Message );
+        SAL_WARN("starmath", "Can't create output stream in package: " << rEx );
         return false;
     }
 

@@ -125,7 +125,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
             xComp->dispose();
     }
     catch (const RuntimeException & exc) {
-        SAL_WARN( "desktop", exc.Message );
+        SAL_WARN( "desktop", exc );
     }
 }
 

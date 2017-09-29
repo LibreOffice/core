@@ -436,8 +436,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     catch (const uno::Exception& e)
     {
         // ignore errors, no way of reporting them here
-        SAL_WARN("vcl.gdi",
-            "GDIMetaFile::ImplPlayWithRenderer: exception: " << e.Message);
+        SAL_WARN("vcl.gdi", "GDIMetaFile::ImplPlayWithRenderer: " << e);
     }
 
     return false;

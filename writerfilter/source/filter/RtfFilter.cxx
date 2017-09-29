@@ -156,7 +156,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& rDescrip
     }
     catch (const uno::Exception& e)
     {
-        SAL_INFO("writerfilter", "Exception caught: " << e.Message);
+        SAL_INFO("writerfilter", "Exception caught: " << e);
     }
 
     if (xStatusIndicator.is())

@@ -2102,7 +2102,7 @@ void SfxMedium::Transfer_Impl()
                     }
                     catch ( css::uno::Exception & e )
                     {
-                        SAL_WARN( "sfx.doc", "LOCK not working while re-issuing it. Exception message: " << e.Message );
+                        SAL_WARN( "sfx.doc", "LOCK not working while re-issuing it. Exception message: " << e );
                     }
                 }
                 catch ( const css::ucb::CommandAbortedException& )
@@ -3532,7 +3532,7 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
                 catch (const io::IOException& rException)
                 {
                     if (bODF)
-                        SAL_WARN("sfx.doc", "ODF stream is not a zip storage: " << rException.Message);
+                        SAL_WARN("sfx.doc", "ODF stream is not a zip storage: " << rException);
                 }
 
                 if ( !xWriteableZipStor.is() && bODF )

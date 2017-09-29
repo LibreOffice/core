@@ -356,7 +356,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(cons
     catch(const RuntimeException & runtimeException) {
         SAL_INFO(
             "stoc",
-            "could not init javaloader due to " << runtimeException.Message);
+            "could not init javaloader due to " << runtimeException);
         throw;
     }
 

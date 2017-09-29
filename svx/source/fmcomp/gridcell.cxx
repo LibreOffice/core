@@ -3539,7 +3539,7 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
     }
     catch (const Exception& e)
     {
-        SAL_WARN("svx.fmcomp", "PaintFieldToCell: caught an exception: " << e.Message);
+        SAL_WARN("svx.fmcomp", "PaintFieldToCell: caught " << e);
     }
 }
 

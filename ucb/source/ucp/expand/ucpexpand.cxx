@@ -200,7 +200,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     }
     catch (const ucb::IllegalIdentifierException & exc)
     {
-        SAL_WARN( "ucb", exc.Message );
+        SAL_WARN( "ucb", exc );
         return -1;
     }
 }

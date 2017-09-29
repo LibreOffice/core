@@ -974,7 +974,7 @@ try
                 catch(IllegalArgumentException const & exc)
                 {
                     SAL_WARN( "connectivity.commontools", "TransferFormComponentProperties : could not transfer the value for property \""
-                                << pResult->Name << "\" " << exc.Message);
+                                << pResult->Name << "\" " << exc);
                 }
             }
         }
@@ -1972,8 +1972,7 @@ void release(oslInterlockedCount& _refCount,
                 _pObject->dispose();
             } catch (css::uno::RuntimeException & e) {
                 SAL_WARN(
-                    "connectivity.commontools",
-                    "Caught exception during dispose, " << e.Message);
+                    "connectivity.commontools", "Caught exception during dispose, " << e);
             }
 
             // only the alive ref holds the object

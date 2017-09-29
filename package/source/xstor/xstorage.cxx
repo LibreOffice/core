@@ -296,7 +296,7 @@ OStorage_Impl::~OStorage_Impl()
             }
             catch ( const uno::Exception& rException )
             {
-                SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+                SAL_INFO("package.xstor", "Quiet exception: " << rException);
             }
             m_pAntiImpl = nullptr;
         }
@@ -311,7 +311,7 @@ OStorage_Impl::~OStorage_Impl()
                         pStorageIter->m_pPointer->InternalDispose( false );
                     } catch( const uno::Exception& rException )
                     {
-                        SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+                        SAL_INFO("package.xstor", "Quiet exception: " << rException);
                     }
             }
 
@@ -365,7 +365,7 @@ OStorage_Impl::~OStorage_Impl()
             }
             catch (const uno::Exception& rException)
             {
-                SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+                SAL_INFO("package.xstor", "Quiet exception: " << rException);
             }
         }
     }
@@ -390,7 +390,7 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
                 pStorageIter->m_pPointer->InternalDispose( false );
             } catch( const uno::Exception& rException )
             {
-                SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+                SAL_INFO("package.xstor", "Quiet exception: " << rException);
             }
 
             pStorageIter = m_aReadOnlyWrapVector.erase(pStorageIter);
@@ -535,7 +535,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
         }
         catch (css::uno::Exception & e)
         {
-            SAL_INFO("package.xstor", "caught Exception " << e.Message);
+            SAL_INFO("package.xstor", "caught " << e);
         }
     }
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
@@ -614,7 +614,7 @@ void OStorage_Impl::ReadContents()
         }
         catch( const container::NoSuchElementException& rNoSuchElementException )
         {
-            SAL_WARN( "package.xstor", "hasMoreElements() implementation has problems! " << rNoSuchElementException.Message);
+            SAL_WARN( "package.xstor", "hasMoreElements() implementation has problems! " << rNoSuchElementException);
             break;
         }
     }
@@ -688,7 +688,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
             }
             catch( const packages::NoEncryptionException& rNoEncryptionException )
             {
-                SAL_INFO("package.xstor", "No Encryption: " << rNoEncryptionException.Message);
+                SAL_INFO("package.xstor", "No Encryption: " << rNoEncryptionException);
             }
         }
     }
@@ -852,7 +852,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
             }
             catch( const packages::NoEncryptionException& rNoEncryptionException )
             {
-                SAL_INFO("package.xstor", "No Encryption: " << rNoEncryptionException.Message);
+                SAL_INFO("package.xstor", "No Encryption: " << rNoEncryptionException);
             }
 
             if (bHasCommonEncryptionData && ::package::PackageEncryptionDatasEqual(pElement->m_xStream->GetCachedEncryptionData(), aCommonEncryptionData))
@@ -906,7 +906,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
             }
             catch( const packages::WrongPasswordException& rWrongPasswordException )
             {
-                SAL_INFO("package.xstor", "Handled exception: " << rWrongPasswordException.Message);
+                SAL_INFO("package.xstor", "Handled exception: " << rWrongPasswordException);
 
                 // If the common storage password does not allow to open the stream
                 // it could be copied in raw way, the problem is that the StartKey should be the same
@@ -1188,7 +1188,7 @@ void OStorage_Impl::Commit()
                 throw aException;
             }
 
-            SAL_INFO("package.xstor", "Rethrow: " << aException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << aException);
             throw;
         }
     }
@@ -1812,7 +1812,7 @@ OStorage::~OStorage()
         }
         catch( const uno::RuntimeException& rRuntimeException )
         {
-            SAL_INFO("package.xstor", "Handled exception: " << rRuntimeException.Message);
+            SAL_INFO("package.xstor", "Handled exception: " << rRuntimeException);
         }
     }
 }
@@ -1857,7 +1857,7 @@ void SAL_CALL OStorage::InternalDispose( bool bNotifyImpl )
                             xTmp->dispose();
                         } catch( const uno::Exception& rException )
                         {
-                            SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+                            SAL_INFO("package.xstor", "Quiet exception: " << rException);
                         }
                     }
                 }
@@ -2209,32 +2209,32 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't copy storage!",
@@ -2281,37 +2281,37 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException(THROW_WHERE "Can't open stream element!",
@@ -2433,32 +2433,32 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't open storage!",
@@ -2495,37 +2495,37 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const OUStr
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't clone stream!",
@@ -2558,32 +2558,32 @@ void SAL_CALL OStorage::copyLastCommitTo(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't copy last commit version!",
@@ -2637,32 +2637,32 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't copy last commit element version!",
@@ -2695,27 +2695,27 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can't detect whether it is a stream!",
@@ -2753,27 +2753,27 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "can't detect whether it is a storage",
@@ -2822,37 +2822,37 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't remove element!",
@@ -2902,42 +2902,42 @@ void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUStr
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const container::ElementExistException& rElementExistException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't rename element!",
@@ -2987,42 +2987,42 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const container::ElementExistException& rElementExistException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't copy element!",
@@ -3075,42 +3075,42 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const container::ElementExistException& rElementExistException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't move element!",
@@ -3162,42 +3162,42 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const packages::NoEncryptionException& rNoEncryptionException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoEncryptionException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoEncryptionException);
         throw;
     }
     catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't open encrypted stream!",
@@ -3240,42 +3240,42 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const packages::NoEncryptionException& rNoEncryptionException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoEncryptionException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoEncryptionException);
         throw;
     }
     catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't clone encrypted stream!",
@@ -3335,37 +3335,37 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't get plain raw stream!",
@@ -3430,42 +3430,42 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const packages::NoEncryptionException& rNoEncryptionException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoEncryptionException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoEncryptionException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't get raw stream!",
@@ -3509,42 +3509,42 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const OUString& aStreamName,
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const packages::NoRawFormatException& rNoRawFormatException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoRawFormatException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoRawFormatException);
         throw;
     }
     catch( const container::ElementExistException& rElementExistException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't insert raw stream!",
@@ -3580,22 +3580,22 @@ void SAL_CALL OStorage::commit()
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Problems on commit!",
@@ -3644,22 +3644,22 @@ void SAL_CALL OStorage::revert()
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Problems on revert!",
@@ -3808,22 +3808,22 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const lang::WrappedTargetException& rWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetException( THROW_WHERE "Can not open storage!",
@@ -3850,12 +3850,12 @@ uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch ( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
@@ -3887,12 +3887,12 @@ sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch ( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
@@ -3933,12 +3933,12 @@ sal_Bool SAL_CALL OStorage::hasElements()
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
@@ -3964,12 +3964,12 @@ void SAL_CALL OStorage::dispose()
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open storage!",
@@ -4036,12 +4036,12 @@ void SAL_CALL OStorage::removeEncryption()
         }
         catch ( const uno::RuntimeException& rRuntimeException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
             throw;
         }
         catch ( const uno::Exception& rException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rException);
 
             uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
@@ -4063,14 +4063,14 @@ void SAL_CALL OStorage::removeEncryption()
         }
         catch( const uno::RuntimeException& rRException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rRException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rRException);
 
             SAL_WARN( "package.xstor", "The call must not fail, it is pretty simple!" );
             throw;
         }
         catch( const uno::Exception& rException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rException);
 
             SAL_WARN( "package.xstor", "The call must not fail, it is pretty simple!" );
             throw io::IOException( THROW_WHERE );
@@ -4104,12 +4104,12 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
         }
         catch ( const uno::RuntimeException& rRuntimeException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
             throw;
         }
         catch ( const uno::Exception& rException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rException);
 
             uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
@@ -4129,7 +4129,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
         }
         catch( const uno::Exception& rException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rException);
 
             throw io::IOException( THROW_WHERE );
         }
@@ -4169,12 +4169,12 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
         }
         catch ( const uno::RuntimeException& aRuntimeException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException);
             throw;
         }
         catch ( const uno::Exception& aException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << aException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << aException);
 
             uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
@@ -4190,12 +4190,12 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
         }
         catch ( const uno::RuntimeException& aRuntimeException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException);
             throw;
         }
         catch( const uno::Exception& aException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << aException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << aException);
 
             uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
@@ -4227,12 +4227,12 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
         }
         catch ( const uno::RuntimeException& aRuntimeException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException);
             throw;
         }
         catch ( const uno::Exception& aException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << aException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << aException);
 
             uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
@@ -4247,12 +4247,12 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
         }
         catch ( const uno::RuntimeException& aRuntimeException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException);
             throw;
         }
         catch( const uno::Exception& aException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << aException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << aException);
 
             uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( THROW_WHERE "Can not open package!",
@@ -4397,12 +4397,12 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
         }
         catch ( const uno::RuntimeException& rRuntimeException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
             throw;
         }
         catch ( const uno::Exception& rException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rException);
 
             uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetException(
@@ -4454,12 +4454,12 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
             }
             catch ( const uno::RuntimeException& rRuntimeException )
             {
-                SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+                SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
                 throw;
             }
             catch ( const uno::Exception& rException )
             {
-                SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+                SAL_INFO("package.xstor", "Rethrow: " << rException);
 
                 uno::Any aCaught( ::cppu::getCaughtException() );
                 throw lang::WrappedTargetException( THROW_WHERE "Can not open package!",
@@ -4556,7 +4556,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const OUString& sID )
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
     }
 
     return false;
@@ -4941,37 +4941,37 @@ void SAL_CALL OStorage::insertStreamElementDirect(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::ElementExistException& rElementExistException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't insert stream directly!",
@@ -5019,42 +5019,42 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const container::ElementExistException& rElementExistException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rElementExistException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't copy element direcly!",
@@ -5085,32 +5085,32 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't write and attach to stream!",
@@ -5155,32 +5155,32 @@ void SAL_CALL OStorage::attachToURL( const OUString& sURL,
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't attach to URL!",
@@ -5226,47 +5226,47 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rNoSuchElementException);
         throw;
     }
     catch( const beans::UnknownPropertyException& rUnknownPropertyException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rUnknownPropertyException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rUnknownPropertyException);
         throw;
     }
     catch( const beans::PropertyVetoException& rPropertyVetoException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rPropertyVetoException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rPropertyVetoException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't get element property!",
@@ -5305,37 +5305,37 @@ void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, cons
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rInvalidStorageException);
         throw;
     }
     catch( const lang::IllegalArgumentException& rIllegalArgumentException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIllegalArgumentException);
         throw;
     }
     catch( const packages::WrongPasswordException& rWrongPasswordException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException);
         throw;
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
 
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( THROW_WHERE "Can't copy stream data!",

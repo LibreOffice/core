@@ -375,7 +375,7 @@ void StyleSheetTable_Impl::SetPropertiesToDefault(const uno::Reference<style::XS
             }
             catch(const uno::Exception& rException)
             {
-                SAL_INFO("writerfilter", "setPropertyToDefault(" << aPropertyNames[i] << ") failed: " << rException.Message);
+                SAL_INFO("writerfilter", "setPropertyToDefault(" << aPropertyNames[i] << ") failed: " << rException);
             }
         }
     }
@@ -1209,7 +1209,7 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
     }
     catch( const uno::Exception& rException )
     {
-        SAL_WARN("writerfilter", "Styles could not be imported completely: " << rException.Message);
+        SAL_WARN("writerfilter", "Styles could not be imported completely: " << rException);
     }
 }
 

@@ -149,7 +149,7 @@ ErrCode ReadThroughComponent(
     catch (const SAXParseException& r)
     {
         SAL_WARN( "reportdesign", "SAX parse exception caught while importing: "
-                    << r.Message << " "
+                    << r << " "
                     << r.LineNumber << ',' << r.ColumnNumber );
         return ErrCode(1);
     }

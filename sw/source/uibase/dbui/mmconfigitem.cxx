@@ -891,7 +891,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
             }
             catch (const Exception& e)
             {
-                SAL_WARN("sw.ui", "exception caught: " << e.Message);
+                SAL_WARN("sw.ui", "exception caught: " << e);
             }
             xRowSet->execute();
             m_pImpl->m_xResultSet = xRowSet.get();
@@ -900,7 +900,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
         }
         catch (const Exception& e)
         {
-            SAL_WARN("sw.ui", "exception caught in: SwMailMergeConfigItem::GetResultSet() " << e.Message);
+            SAL_WARN("sw.ui", "exception caught in: SwMailMergeConfigItem::GetResultSet() " << e);
         }
     }
     return m_pImpl->m_xResultSet;
@@ -938,7 +938,7 @@ void  SwMailMergeConfigItem::SetFilter(OUString const & rFilter)
             }
             catch (const Exception& e)
             {
-                SAL_WARN("sw.ui", "exception caught in SwMailMergeConfigItem::SetFilter(): " << e.Message);
+                SAL_WARN("sw.ui", "exception caught in SwMailMergeConfigItem::SetFilter(): " << e);
             }
         }
     }

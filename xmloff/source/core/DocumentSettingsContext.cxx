@@ -762,7 +762,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
                             catch (uno::Exception const& e)
                             {
                                 SAL_WARN("xmloff.core",
-                                    "Exception while importing forbidden characters: " << e.Message);
+                                    "Exception while importing forbidden characters: " << e);
                             }
                         }
                     }

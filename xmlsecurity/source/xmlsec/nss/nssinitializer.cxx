@@ -176,9 +176,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
     }
     catch (const uno::Exception &e)
     {
-        SAL_WARN(
-            "xmlsecurity.xmlsec",
-            "getMozillaCurrentProfile: caught exception " << e.Message);
+        SAL_WARN("xmlsecurity.xmlsec", "getMozillaCurrentProfile: caught " << e);
     }
 
     // third, dig around to see if there's one available

@@ -778,7 +778,7 @@ void UCBStorageStream_Impl::ReadSourceWriteTemporary()
         }
         catch (const Exception &e)
         {
-            SAL_WARN( "sot", e.Message );
+            SAL_WARN( "sot", e );
         }
     }
 
@@ -813,7 +813,7 @@ sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
         }
         catch( const Exception & e )
         {
-            SAL_WARN( "sot", e.Message );
+            SAL_WARN( "sot", e );
         }
     }
 
@@ -861,7 +861,7 @@ std::size_t UCBStorageStream_Impl::GetData(void* pData, std::size_t const nSize)
         }
         catch (const Exception &e)
         {
-            SAL_WARN( "sot", e.Message );
+            SAL_WARN( "sot", e );
         }
 
         if( aResult < nSize )

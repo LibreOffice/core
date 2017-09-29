@@ -606,8 +606,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                 {
                     SAL_WARN(
                         "linguistic",
-                        "GrammarCheckingIterator::DequeueAndCheck ignoring UNO"
-                            " exception " << e.Message);
+                        "GrammarCheckingIterator::DequeueAndCheck ignoring " << e);
                 }
             }
 
@@ -874,7 +873,7 @@ void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
         catch (const ::uno::Exception &rE)
         {
             // ignore
-            SAL_WARN("linguistic", "processLinguServiceEvent: exception: " << rE.Message);
+            SAL_WARN("linguistic", "processLinguServiceEvent: exception: " << rE);
         }
     }
 }

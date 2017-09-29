@@ -255,7 +255,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): caught exception: " << e.Message);
+        SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): " << e);
     }
 }
 

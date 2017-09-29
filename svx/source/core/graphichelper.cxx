@@ -172,7 +172,7 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
     }
     catch( const Exception& e )
     {
-        SAL_WARN("sfx.doc", "ignoring UNO exception " << e.Message);
+        SAL_WARN("sfx.doc", "ignoring " << e);
     }
 
     return bStatus;

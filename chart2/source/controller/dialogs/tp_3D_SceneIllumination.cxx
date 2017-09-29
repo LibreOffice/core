@@ -141,7 +141,7 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
-                SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
+                SAL_WARN( "chart2", "Property Exception caught. Message: " << ex);
             }
         }
         return aResult;
@@ -167,7 +167,7 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
-                SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
+                SAL_WARN( "chart2", "Property Exception caught. Message: " << ex);
             }
         }
     }
@@ -182,7 +182,7 @@ namespace
         }
         catch( const uno::Exception & ex )
         {
-            SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
+            SAL_WARN( "chart2", "Property Exception caught. Message: " << ex);
         }
         return Color( nResult );
     }
@@ -198,7 +198,7 @@ namespace
         }
         catch( const uno::Exception & ex )
         {
-            SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
+            SAL_WARN( "chart2", "Property Exception caught. Message: " << ex);
         }
     }
 }

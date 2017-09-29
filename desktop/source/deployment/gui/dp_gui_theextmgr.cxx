@@ -342,7 +342,7 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
         throw;
     }
     catch (const uno::Exception & exc) {
-        SAL_WARN( "desktop", exc.Message );
+        SAL_WARN( "desktop", exc );
         return NOT_AVAILABLE;
     }
 }

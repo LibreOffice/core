@@ -386,9 +386,7 @@ Any OPoolCollection::getNodeValue(const OUString& _rPath,const Reference<XInterf
     }
     catch(NoSuchElementException& e)
     {
-        SAL_WARN("connectivity.cpool", "::getNodeValue: caught a "
-                 "NoSuchElementException while trying to open " <<
-                 e.Message << "!" );
+        SAL_WARN("connectivity.cpool", e );
     }
     return aReturn;
 }

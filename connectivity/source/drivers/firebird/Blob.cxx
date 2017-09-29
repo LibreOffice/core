@@ -125,7 +125,7 @@ void SAL_CALL Blob::disposing()
     catch (SQLException &e)
     {
         // we cannot throw any exceptions here...
-        SAL_WARN("connectivity.firebird", "isc_close_blob failed " << e.Message);
+        SAL_WARN("connectivity.firebird", "isc_close_blob failed " << e);
         assert(false);
     }
     Blob_BASE::disposing();

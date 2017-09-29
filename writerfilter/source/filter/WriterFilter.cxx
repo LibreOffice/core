@@ -211,8 +211,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& rDesc
         }
         catch (uno::Exception const& e)
         {
-            SAL_WARN("writerfilter", "WriterFilter::filter(): "
-                     "failed with exception " << e.Message);
+            SAL_WARN("writerfilter", "WriterFilter::filter(): failed with " << e);
             throw lang::WrappedTargetRuntimeException("",
                     static_cast<OWeakObject*>(this), uno::makeAny(e));
         }

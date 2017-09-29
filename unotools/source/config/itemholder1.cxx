@@ -64,7 +64,7 @@ ItemHolder1::ItemHolder1()
         if(bMessage)
         {
             bMessage = false;
-            SAL_WARN( "unotools", "CreateInstance with arguments exception: " <<  rEx.Message);
+            SAL_WARN( "unotools", "CreateInstance with arguments exception: " << rEx);
         }
     }
 #else

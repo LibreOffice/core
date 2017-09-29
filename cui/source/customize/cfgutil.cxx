@@ -695,7 +695,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     }
     catch( Exception& e )
     {
-        SAL_INFO("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << e.Message);
+        SAL_INFO("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << e);
         // TODO exception handling
     }
 

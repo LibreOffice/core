@@ -132,8 +132,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
                     || bRet;
             }
         } catch (const css::uno::Exception & e) {
-            SAL_WARN("sw.core",
-                    "SwEditShell::Undo(): exception caught: " << e.Message);
+            SAL_WARN("sw.core", "SwEditShell::Undo(): exception caught: " << e);
         }
 
         if (bRestoreCursor)
@@ -188,8 +187,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
                     || bRet;
             }
         } catch (const css::uno::Exception & e) {
-            SAL_WARN("sw.core",
-                    "SwEditShell::Redo(): exception caught: " << e.Message);
+            SAL_WARN("sw.core", "SwEditShell::Redo(): exception caught: " << e);
         }
 
         Pop((bRestoreCursor) ? PopMode::DeleteCurrent : PopMode::DeleteStack);
@@ -218,8 +216,7 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
         bRet = GetDoc()->GetIDocumentUndoRedo().Repeat( context, nCount )
             || bRet;
     } catch (const css::uno::Exception & e) {
-        SAL_WARN("sw.core",
-                "SwEditShell::Repeat(): exception caught: " << e.Message);
+        SAL_WARN("sw.core", "SwEditShell::Repeat(): exception caught: " << e);
     }
 
     EndAllAction();

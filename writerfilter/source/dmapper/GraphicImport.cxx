@@ -381,7 +381,7 @@ public:
         }
         catch( const uno::Exception& e )
         {
-            SAL_WARN("writerfilter", "failed. Message :" << e.Message);
+            SAL_WARN("writerfilter", "failed. Message :" << e);
         }
     }
 
@@ -1338,7 +1338,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN("writerfilter", "failed. Message :" << e.Message);
+        SAL_WARN("writerfilter", "failed. Message :" << e);
     }
     return xGraphicObject;
 }

@@ -3536,7 +3536,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             }
             catch( const css::uno::Exception& e)
             {
-                SAL_WARN( "editeng", "Unable to paste EDITENGINE_ODF_TEXT_FLAT " << e.Message );
+                SAL_WARN( "editeng", "Unable to paste EDITENGINE_ODF_TEXT_FLAT " << e );
             }
         }
 

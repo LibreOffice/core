@@ -276,7 +276,7 @@ void Shape::addShape(
     }
     catch( const Exception& e )
     {
-        SAL_WARN( "oox.drawingml", "Shape::addShape: Exception: " << e.Message );
+        SAL_WARN( "oox.drawingml", "Shape::addShape: " << e );
     }
 }
 
@@ -1229,7 +1229,7 @@ void Shape::keepDiagramCompatibilityInfo( XmlFilterBase const & rFilterBase )
     }
     catch( const Exception& e )
     {
-        SAL_WARN( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo: Exception: " << e.Message );
+        SAL_WARN( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo: " << e );
     }
 }
 
@@ -1298,7 +1298,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase const & rFilte
     }
     catch( const Exception& e )
     {
-        SAL_WARN( "oox.drawingml", "Shape::renderDiagramToGraphic: Exception: " << e.Message );
+        SAL_WARN( "oox.drawingml", "Shape::renderDiagramToGraphic: " << e );
     }
 
     return xShape;

@@ -2072,7 +2072,7 @@ void XMLParaContext::EndElement()
                     }
                     catch (uno::RuntimeException const& e)
                     {
-                        SAL_INFO("xmloff.text", "could not insert index mark, presumably in editengine text " << e.Message);
+                        SAL_INFO("xmloff.text", "could not insert index mark, presumably in editengine text " << e);
                     }
                 }
                 break;

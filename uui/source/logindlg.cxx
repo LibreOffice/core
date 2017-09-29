@@ -176,7 +176,7 @@ IMPL_LINK_NOARG(LoginDialog, PathHdl_Impl, Button*, void)
     }
     catch (uno::Exception & e)
     {
-        SAL_WARN("uui", "LoginDialog::PathHdl_Impl: caught UNO exception: " << e.Message);
+        SAL_WARN("uui", "LoginDialog::PathHdl_Impl: caught " << e);
     }
 }
 

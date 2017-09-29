@@ -137,7 +137,7 @@ XUnbufferedStream::XUnbufferedStream(
     } catch( Exception& e )
     {
         // in case of problem the size will stay set to 0
-        SAL_WARN("package", "ignoring Exception " + e.Message);
+        SAL_WARN("package", "ignoring " << e);
     }
 
     mnZipEnd = mnZipCurrent + mnZipSize;

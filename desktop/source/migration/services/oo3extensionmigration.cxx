@@ -287,7 +287,7 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
         SAL_WARN(
             "desktop.migration",
             "Ignoring UNO Exception while migrating extension from <"
-            << sSourceDir << ">: \"" << e.Message << "\"");
+            << sSourceDir << ">: " << e);
     }
 }
 

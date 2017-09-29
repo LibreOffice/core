@@ -355,7 +355,7 @@ void ChildWindow::init()
     }
     catch (const uno::Exception &e)
     {
-        SAL_INFO("slideshow", "Exception " << e.Message );
+        SAL_INFO("slideshow", e );
     }
 }
 
@@ -368,7 +368,7 @@ void ChildWindow::Paint( const Rectangle& /*rRect*/ )
     }
     catch (const uno::Exception &e)
     {
-        SAL_INFO("slideshow", "Exception " << e.Message );
+        SAL_INFO("slideshow", e );
     }
 }
 
@@ -454,7 +454,7 @@ void DemoWindow::init()
     }
     catch (const uno::Exception &e)
     {
-        SAL_INFO("slideshow", "Exception " << e.Message );
+        SAL_INFO("slideshow", e );
     }
 }
 

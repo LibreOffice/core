@@ -651,7 +651,7 @@ void OServiceManager::disposing()
         }
         catch (const RuntimeException & exc)
         {
-            SAL_INFO("stoc", "RuntimeException occurred upon disposing factory: " << exc.Message);
+            SAL_INFO("stoc", "RuntimeException occurred upon disposing factory: " << exc);
         }
     }
 
@@ -840,7 +840,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
         }
         catch (const lang::DisposedException & exc)
         {
-            SAL_INFO("stoc", "DisposedException occurred: " << exc.Message);
+            SAL_INFO("stoc", "DisposedException occurred: " << exc);
         }
     }
 
@@ -894,7 +894,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
         }
         catch (const lang::DisposedException & exc)
         {
-            SAL_INFO("stoc", "DisposedException occurred: " << exc.Message);
+            SAL_INFO("stoc", "DisposedException occurred: " << exc);
         }
     }
 

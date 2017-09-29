@@ -296,7 +296,7 @@ void Bridge::terminate(bool final) {
         try {
             connection_->close();
         } catch (const css::io::IOException & e) {
-            SAL_INFO("binaryurp", "caught IO exception '" << e.Message << '\'');
+            SAL_INFO("binaryurp", "caught IO exception '" << e << '\'');
         }
         assert(w.is());
         w->stop();
@@ -331,9 +331,7 @@ void Bridge::terminate(bool final) {
                     css::lang::EventObject(
                         static_cast< cppu::OWeakObject * >(this)));
             } catch (const css::uno::RuntimeException & e) {
-                SAL_WARN(
-                    "binaryurp",
-                    "caught runtime exception '" << e.Message << '\'');
+                SAL_WARN("binaryurp", "caught " << e);
             }
         }
     }
@@ -532,7 +530,7 @@ void Bridge::freeProxy(Proxy & proxy) {
         makeReleaseCall(proxy.getOid(), proxy.getType());
     } catch (const css::uno::RuntimeException & e) {
         SAL_INFO(
-            "binaryurp", "caught runtime exception '" << e.Message << '\'');
+            "binaryurp", "caught runtime exception '" << e << '\'');
     } catch (const std::exception & e) {
         SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
     }
@@ -642,8 +640,7 @@ void Bridge::handleRequestChangeReply(
         }
         SAL_WARN(
             "binaryurp",
-            "requestChange caught RuntimeException \'" << e.Message
-                << "' in state 'requested'");
+            "requestChange caught " << e << " in state 'requested'");
         mode_ = MODE_NORMAL;
         getWriter()->unblock();
         decrementCalls();

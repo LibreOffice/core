@@ -50,8 +50,7 @@ ItemHolder2::ItemHolder2()
         if(bMessage)
         {
             bMessage = false;
-            SAL_WARN( "svl", "CreateInstance with arguments exception: "
-                            << rEx.Message);
+            SAL_WARN( "svl", "CreateInstance with arguments exception: " << rEx);
         }
     }
 #else
