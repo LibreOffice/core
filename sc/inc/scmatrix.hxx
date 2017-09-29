@@ -155,16 +155,18 @@ public:
     /// The maximum number of elements a matrix may have at runtime.
     static size_t GetElementsMax()
     {
-        // TODO: Fix me.
-        return 0x08000000;
-#if 0
-        // Roughly 125MB in total, divided by 8+1 per element => 14M elements.
-        const size_t nMemMax = 0x08000000 / (sizeof(ScMatrixValue) + sizeof(ScMatValType));
-        // With MAXROWCOUNT==65536 and 128 columns => 8M elements ~72MB.
-        const size_t nArbitraryLimit = (size_t)MAXROWCOUNT * 128;
-        // Stuffed with a million rows would limit this to 14 columns.
-        return nMemMax < nArbitraryLimit ? nMemMax : nArbitraryLimit;
-#endif
+        // Arbitrarily assuming 12 bytes per element, 8 bytes double plus
+        // overhead. Stored as an array in an mdds container it's less, but for
+        // strings or mixed matrix it can be much more..
+        constexpr size_t nPerElem = 12;
+        // Arbitrarily assuming 1GB memory. Could be dynamic at some point.
+        constexpr size_t nMemMax = 0x40000000;
+        // With 1GB that's ~85M elements, or 85 whole columns.
+        constexpr size_t nElemMax = nMemMax / nPerElem;
+        // With MAXROWCOUNT==1048576 and 128 columns => 128M elements, 1.5GB
+        constexpr size_t nArbitraryLimit = (size_t)MAXROWCOUNT * 128;
+        // With the constant 1GB from above that's the actual value.
+        return nElemMax < nArbitraryLimit ? nElemMax : nArbitraryLimit;
     }
 
     /** Checks nC or nR for zero and uses GetElementsMax() whether a matrix of
