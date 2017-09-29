@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_fdbfcf5d",
+        "filename": "sw/qa/extras/ww8export/ww8export2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-09-29T15:27:07Z",
+      "side": 1,
+      "message": "this disappears in the next patch...",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 18
+      },
+      "revId": "65de8607aaf18e8817d50337637c07ac9185958f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b88f15cb",
+        "filename": "sw/source/filter/ww8/ww8par2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-09-29T15:27:07Z",
+      "side": 1,
+      "message": "0 is non-negative, and thus is a valid value. So yes, it should be \u003e\u003d, not just \u003e. If it IS 0, then it is ignored.\n\nIn the MSO user interface, entering a zero percent TURNS OFF preferred width - it doesn\u0027t set it to 100% (which is what the ELSE clause would do.) even though the table itself DOES increase to full size.\n\nThis seems to match what MSO does. Below, if percent \u003d\u003d 0, then we ignore it (and then the width is set to defaults and is not percent-related).",
+      "range": {
+        "startLine": 1931,
+        "startChar": 32,
+        "endLine": 1931,
+        "endChar": 53
+      },
+      "revId": "65de8607aaf18e8817d50337637c07ac9185958f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
