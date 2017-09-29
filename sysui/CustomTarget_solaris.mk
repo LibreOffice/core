@@ -50,6 +50,6 @@ $(solaris_WORKDIR)/%/prototype: $(solaris_SRCDIR)/prototype
 
 $(solaris_WORKDIR)/%-desktop-integration.tar.gz: $(solaris_WORKDIR)/%/copyright $(solaris_WORKDIR)/%/pkginfo $(solaris_WORKDIR)/%/depend $(solaris_WORKDIR)/%/mailcap $(solaris_WORKDIR)/%/postinstall $(solaris_WORKDIR)/%/postremove $(solaris_WORKDIR)/%/prototype $(call gb_CustomTarget_get_workdir,sysui/share)/%/openoffice.org.xml
 #	pkgmk -l 1073741824 -r $(solaris_WORKDIR) -f $(solaris_WORKDIR)/$*/prototype -o -d $(solaris_WORKDIR) ARCH=all VERSION=$(PKGVERSION.$*)
-	$(GNUTAR) -cf - -C $(solaris_WORKDIR) $*$(LIBO_MAJOR) -desktop-int | gzip > $@
+	$(GNUTAR) -cf - -C $(solaris_WORKDIR) $* | gzip > $@
 
 # vim: set noet sw=4 ts=4:
