@@ -8,6 +8,7 @@
  */
 
 #include <algorithm>
+#include <set>
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
@@ -61,15 +62,21 @@ public:
 
         for (const ParmVarDecl *pParmVarDecl : interestingSet) {
             if (cannotBeConstSet.find(pParmVarDecl) == cannotBeConstSet.end()) {
+                auto functionDecl = parmToFunction[pParmVarDecl];
+                auto canonicalDecl = functionDecl->getCanonicalDecl();
+                if (ignoredFunctions_.find(canonicalDecl)
+                    != ignoredFunctions_.end())
+                {
+                    continue;
+                }
                 report(
                     DiagnosticsEngine::Warning,
                     "this parameter can be const",
                     pParmVarDecl->getLocStart())
                     << pParmVarDecl->getSourceRange();
-                auto functionDecl = parmToFunction[pParmVarDecl];
-                if (functionDecl->getCanonicalDecl()->getLocation() != functionDecl->getLocation()) {
+                if (canonicalDecl->getLocation() != functionDecl->getLocation()) {
                     unsigned idx = pParmVarDecl->getFunctionScopeIndex();
-                    const ParmVarDecl* pOther = functionDecl->getCanonicalDecl()->getParamDecl(idx);
+                    const ParmVarDecl* pOther = canonicalDecl->getParamDecl(idx);
                     report(
                         DiagnosticsEngine::Note,
                         "canonical parameter declaration here",
@@ -78,6 +85,86 @@ public:
                 }
             }
         }
+    }
+
+    bool TraverseCallExpr(CallExpr * expr) {
+        auto const saved = callee_;
+        callee_ = expr->getCallee();
+        auto const ret = RecursiveASTVisitor::TraverseCallExpr(expr);
+        callee_ = saved;
+        return ret;
+    }
+
+    bool TraverseCXXOperatorCallExpr(CXXOperatorCallExpr * expr) {
+        auto const saved = callee_;
+        callee_ = expr->getCallee();
+        auto const ret = RecursiveASTVisitor::TraverseCXXOperatorCallExpr(expr);
+        callee_ = saved;
+        return ret;
+    }
+
+    bool TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr) {
+        auto const saved = callee_;
+        callee_ = expr->getCallee();
+        auto const ret = RecursiveASTVisitor::TraverseCXXMemberCallExpr(expr);
+        callee_ = saved;
+        return ret;
+    }
+
+    bool TraverseCUDAKernelCallExpr(CUDAKernelCallExpr * expr) {
+        auto const saved = callee_;
+        callee_ = expr->getCallee();
+        auto const ret = RecursiveASTVisitor::TraverseCUDAKernelCallExpr(expr);
+        callee_ = saved;
+        return ret;
+    }
+
+    bool TraverseUserDefinedLiteral(UserDefinedLiteral * expr) {
+        auto const saved = callee_;
+        callee_ = expr->getCallee();
+        auto const ret = RecursiveASTVisitor::TraverseUserDefinedLiteral(expr);
+        callee_ = saved;
+        return ret;
+    }
+
+    bool VisitImplicitCastExpr(ImplicitCastExpr const * expr) {
+        if (expr == callee_) {
+            return true;
+        }
+        if (ignoreLocation(expr)) {
+            return true;
+        }
+        if (expr->getCastKind() != CK_FunctionToPointerDecay) {
+            return true;
+        }
+        auto const dre = dyn_cast<DeclRefExpr>(
+            expr->getSubExpr()->IgnoreParens());
+        if (dre == nullptr) {
+            return true;
+        }
+        auto const fd = dyn_cast<FunctionDecl>(dre->getDecl());
+        if (fd == nullptr) {
+            return true;
+        }
+        ignoredFunctions_.insert(fd->getCanonicalDecl());
+        return true;
+    }
+
+    bool VisitUnaryAddrOf(UnaryOperator const * expr) {
+        if (ignoreLocation(expr)) {
+            return true;
+        }
+        auto const dre = dyn_cast<DeclRefExpr>(
+            expr->getSubExpr()->IgnoreParenImpCasts());
+        if (dre == nullptr) {
+            return true;
+        }
+        auto const fd = dyn_cast<FunctionDecl>(dre->getDecl());
+        if (fd == nullptr) {
+            return true;
+        }
+        ignoredFunctions_.insert(fd->getCanonicalDecl());
+        return true;
     }
 
     bool VisitFunctionDecl(const FunctionDecl *);
@@ -90,6 +177,8 @@ private:
     std::unordered_set<const ParmVarDecl*> interestingSet;
     std::unordered_map<const ParmVarDecl*, const FunctionDecl*> parmToFunction;
     std::unordered_set<const ParmVarDecl*> cannotBeConstSet;
+    std::set<FunctionDecl const *> ignoredFunctions_;
+    Expr const * callee_ = nullptr;
 };
 
 bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
@@ -128,65 +217,17 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
     if (functionDecl->getIdentifier())
     {
         StringRef name = functionDecl->getName();
-        if (name == "yyerror" // ignore lex/yacc callback
-                    // some function callbacks
-                    // TODO should really use a two-pass algorithm to detect and ignore these automatically
-            || name == "PDFSigningPKCS7PasswordCallback"
-            || name == "VCLExceptionSignal_impl"
-            || name == "parseXcsFile"
-            || name == "GraphicsExposePredicate"
-            || name == "ImplPredicateEvent"
-            || name == "timestamp_predicate"
-            || name == "signalScreenSizeChanged"
-            || name == "signalMonitorsChanged"
-            || name == "signalButton"
-            || name == "signalFocus"
-            || name == "signalDestroy"
-            || name == "signalSettingsNotify"
-            || name == "signalStyleSet"
-            || name == "signalIMCommit"
-            || name == "compressWheelEvents"
-            || name == "MenuBarSignalKey"
-            || name == "signalDragDropReceived"
-            || name == "memory_write"
-            || name == "file_write"
+        if (   name == "file_write"
             || name == "SalMainPipeExchangeSignal_impl"
             || name.startswith("SbRtl_")
-            || name == "my_if_errors"
-            || name == "my_eval_defined"
-            || name == "my_eval_variable"
-            || name == "ImpGetEscDir"
-            || name == "ImpGetPercent"
-            || name == "ImpGetAlign"
-            || name == "write_function"
-            || name == "PyUNO_getattr"
-            || name == "PyUNO_setattr"
-            || name == "PyUNOStruct_setattr"
-            || name == "PyUNOStruct_getattr"
             || name == "GoNext"
             || name == "GoPrevious"
-            || name == "lcl_SetOtherLineHeight"
-            || name == "BoxNmsToPtr"
-            || name == "PtrToBoxNms"
-            || name == "RelNmsToBoxNms"
-            || name == "RelBoxNmsToPtr"
-            || name == "BoxNmsToRelNm"
-            || name == "MakeFormula_"
-            || name == "GetFormulaBoxes"
-            || name == "HasValidBoxes_"
-            || name == "SplitMergeBoxNm_"
             || name.startswith("Read_F_")
-            || name == "UpdateFieldInformation"
-             // #ifdef win32
-            || name == "convert_slashes"
                 // UNO component entry points
             || name.endswith("component_getFactory")
-                // external API
-            || name == "Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_flush"
             || name == "egiGraphicExport"
             || name == "etiGraphicExport"
             || name == "epsGraphicExport"
-            || name == "releasePool" // vcl/osx/saldata.cxx
             )
                 return true;
     }
