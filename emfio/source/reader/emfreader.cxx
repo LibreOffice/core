@@ -22,6 +22,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/dibtools.hxx>
 #include <o3tl/make_unique.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 #include <memory>
 
@@ -1590,8 +1591,10 @@ namespace emfio
                             }
 
                             std::unique_ptr<long[]> pDXAry, pDYAry;
-                            sal_Int32 nDxSize = nLen * ((nOptions & ETO_PDY) ? 8 : 4);
-                            if ( offDx && (( nCurPos + offDx + nDxSize ) <= nNextPos ) && nNextPos <= mnEndPos )
+
+                            sal_Int32 nDxSize;
+                            bool bOverflow = o3tl::checked_multiply<sal_Int32>(nLen, (nOptions & ETO_PDY) ? 8 : 4, nDxSize);
+                            if (!bOverflow && offDx && ((nCurPos + offDx + nDxSize) <= nNextPos ) && nNextPos <= mnEndPos)
                             {
                                 mpInputStream->Seek( nCurPos + offDx );
                                 pDXAry.reset( new long[aText.getLength()] );
