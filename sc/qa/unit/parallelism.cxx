@@ -39,7 +39,6 @@ public:
     ScParallelismTest();
 
     virtual void setUp() override;
-    virtual void tearDown() override;
 
     void getNewDocShell(ScDocShellRef& rDocShellRef);
 
@@ -74,11 +73,6 @@ void ScParallelismTest::setUp()
     m_pDoc = &m_xDocShell->GetDocument();
 
     sc::FormulaGroupInterpreter::disableOpenCL_UnitTestsOnly();
-}
-
-void ScParallelismTest::tearDown()
-{
-    test::BootstrapFixture::tearDown();
 }
 
 void ScParallelismTest::getNewDocShell( ScDocShellRef& rDocShellRef )
