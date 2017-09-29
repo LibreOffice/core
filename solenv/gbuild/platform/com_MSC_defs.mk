@@ -224,7 +224,7 @@ gb_PCHWARNINGS = \
 gb_STDLIBS := \
 	advapi32.lib \
 
-gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-WX)
+gb_CFLAGS_WERROR = $(if $(ENABLE_WERROR),-WX)
 
 # there does not seem to be a way to force C++03 with MSVC
 gb_CXX03FLAGS :=
@@ -299,6 +299,28 @@ gb_CXXFLAGS += \
 	-Wundef \
 	-Wunused-macros \
 
+endif
+
+ifeq ($(COM_IS_CLANG),TRUE)
+gb_COMPILER_TEST_FLAGS := -Xclang -plugin-arg-loplugin -Xclang --unit-test-mode
+ifeq ($(COMPILER_PLUGIN_TOOL),)
+gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/obj/plugin.dll -Xclang -add-plugin -Xclang loplugin
+ifneq ($(COMPILER_PLUGIN_WARNINGS_ONLY),)
+gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang \
+    --warnings-only='$(COMPILER_PLUGIN_WARNINGS_ONLY)'
+endif
+else
+gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/obj/plugin.dll -Xclang -plugin -Xclang loplugin $(foreach plugin,$(COMPILER_PLUGIN_TOOL), -Xclang -plugin-arg-loplugin -Xclang $(plugin))
+ifneq ($(UPDATE_FILES),)
+gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --scope=$(UPDATE_FILES)
+endif
+endif
+gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS := \
+    -Xclang -plugin-arg-loplugin -Xclang --warnings-as-errors
+else
+gb_COMPILER_TEST_FLAGS :=
+gb_COMPILER_PLUGINS :=
+gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS :=
 endif
 
 # Helper class

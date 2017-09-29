@@ -6450,7 +6450,9 @@ else
 fi
 AC_SUBST(COMPILER_PLUGINS)
 AC_SUBST(COMPILER_PLUGINS_CXX)
+AC_SUBST(COMPILER_PLUGINS_CXX_LINKFLAGS)
 AC_SUBST(CLANGDIR)
+AC_SUBST(CLANGLIBDIR)
 
 # Plugin to help linker.
 # Add something like LD_PLUGIN=/usr/lib64/LLVMgold.so to your autogen.input.

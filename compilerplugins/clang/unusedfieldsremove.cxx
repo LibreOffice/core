@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#if !defined _WIN32 //TODO, #include <sys/mman.h>
+
 #include <cassert>
 #include <string>
 #include <iostream>
@@ -127,5 +129,7 @@ bool UnusedFieldsRemove::VisitFieldDecl( const FieldDecl* fieldDecl )
 loplugin::Plugin::Registration< UnusedFieldsRemove > X("unusedfieldsremove", false);
 
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
