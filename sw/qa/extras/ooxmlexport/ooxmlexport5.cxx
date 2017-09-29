@@ -963,6 +963,33 @@ DECLARE_OOXMLEXPORT_TEST(testSectionProtection, "sectionprot.odt")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf66398_permissions, "tdf66398_permissions.docx")
+{
+    // check document permission settings for the whole document
+    if (xmlDocPtr pXmlSettings = parseExport("word/settings.xml"))
+    {
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit",               "readOnly");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement",        "1");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptProviderType",  "rsaAES");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmClass","hash");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmType", "typeAny");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmSid",  "14");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptSpinCount",     "100000");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "hash",               "A0/Xy6KcXljJlZjP0TwJMPJuW2rc46UwXqn2ctxckc2nCECE5i89M85z2Noh3ZEA5NBQ9RJ5ycxiUH6nzmJaKw==");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "salt",               "B8k6wb1pkjUs4Nv/8QBk/w==");
+    }
+
+    // get bookmark interface
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+
+    // check: we have 2 bookmarks
+    CPPUNIT_ASSERT_EQUAL(xBookmarksByIdx->getCount(), static_cast<sal_Int32>(2));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("_GoBack"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("permission-for-group:267014232:everyone"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
