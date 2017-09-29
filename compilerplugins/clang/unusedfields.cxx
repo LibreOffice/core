@@ -83,15 +83,49 @@ public:
 };
 class CalleeWrapper
 {
-    const FunctionDecl * m_calleeFunctionDecl;
-    const CXXConstructorDecl * m_cxxConstructorDecl;
+    const FunctionDecl *       m_calleeFunctionDecl = nullptr;
+    const CXXConstructorDecl * m_cxxConstructorDecl = nullptr;
+    const FunctionProtoType *  m_functionPrototype = nullptr;
 public:
-    CalleeWrapper(const FunctionDecl * calleeFunctionDecl) : m_calleeFunctionDecl(calleeFunctionDecl), m_cxxConstructorDecl(nullptr) {}
-    CalleeWrapper(const CXXConstructExpr * cxxConstructExpr) : m_calleeFunctionDecl(nullptr), m_cxxConstructorDecl(cxxConstructExpr->getConstructor()) {}
-    unsigned getNumParams () const
-    { return m_calleeFunctionDecl ? m_calleeFunctionDecl->getNumParams() : m_cxxConstructorDecl->getNumParams(); }
-    const ParmVarDecl * getParamDecl (unsigned i) const
-    { return m_calleeFunctionDecl ? m_calleeFunctionDecl->getParamDecl(i) : m_cxxConstructorDecl->getParamDecl(i); }
+    explicit CalleeWrapper(const FunctionDecl * calleeFunctionDecl) : m_calleeFunctionDecl(calleeFunctionDecl) {}
+    explicit CalleeWrapper(const CXXConstructExpr * cxxConstructExpr) : m_cxxConstructorDecl(cxxConstructExpr->getConstructor()) {}
+    explicit CalleeWrapper(const FunctionProtoType * functionPrototype) : m_functionPrototype(functionPrototype) {}
+    unsigned getNumParams() const
+    {
+        if (m_calleeFunctionDecl)
+            return m_calleeFunctionDecl->getNumParams();
+        else if (m_cxxConstructorDecl)
+            return m_cxxConstructorDecl->getNumParams();
+        else if (m_functionPrototype->param_type_begin() == m_functionPrototype->param_type_end())
+            // FunctionProtoType will assert if we call getParamTypes() and it has no params
+            return 0;
+        else
+            return m_functionPrototype->getParamTypes().size();
+    }
+    const QualType getParamType(unsigned i) const
+    {
+        if (m_calleeFunctionDecl)
+            return m_calleeFunctionDecl->getParamDecl(i)->getType();
+        else if (m_cxxConstructorDecl)
+            return m_cxxConstructorDecl->getParamDecl(i)->getType();
+        else
+            return m_functionPrototype->getParamTypes()[i];
+    }
+    std::string getNameAsString() const
+    {
+        if (m_calleeFunctionDecl)
+            return m_calleeFunctionDecl->getNameAsString();
+        else if (m_cxxConstructorDecl)
+            return m_cxxConstructorDecl->getNameAsString();
+        else
+            return "";
+    }
+    CXXMethodDecl const * getAsCXXMethodDecl() const
+    {
+        if (m_calleeFunctionDecl)
+            return dyn_cast<CXXMethodDecl>(m_calleeFunctionDecl);
+        return nullptr;
+    }
 };
 
 class UnusedFields:
@@ -122,6 +156,7 @@ private:
     bool isSomeKindOfZero(const Expr* arg);
     bool IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * child, CallerWrapper callExpr,
                                         CalleeWrapper calleeFunctionDecl);
+    llvm::Optional<CalleeWrapper> getCallee(CallExpr const *);
 
     RecordDecl *   insideMoveOrCopyDeclParent;
     RecordDecl *   insideStreamOutputOperator;
@@ -492,12 +527,12 @@ void UnusedFields::checkWriteOnly(const FieldDecl* fieldDecl, const Expr* member
         else if (auto callExpr = dyn_cast<CallExpr>(parent))
         {
             // check for calls to ReadXXX() type methods and the operator>>= methods on Any.
-            const FunctionDecl * calleeFunctionDecl = callExpr->getDirectCallee();
-            if (calleeFunctionDecl)
+            auto callee = getCallee(callExpr);
+            if (callee)
             {
                 // FIXME perhaps a better solution here would be some kind of SAL_PARAM_WRITEONLY attribute
                 // which we could scatter around.
-                std::string name = calleeFunctionDecl->getNameAsString();
+                std::string name = callee->getNameAsString();
                 std::transform(name.begin(), name.end(), name.begin(), easytolower);
                 if (startswith(name, "read"))
                     // this is a write-only call
@@ -657,17 +692,17 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
         }
         else if (auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(parent))
         {
-            const FunctionDecl * calleeFunctionDecl = operatorCallExpr->getDirectCallee();
-            if (calleeFunctionDecl)
+            auto callee = getCallee(operatorCallExpr);
+            if (callee)
             {
                 // if calling a non-const operator on the field
-                auto calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
+                auto calleeMethodDecl = callee->getAsCXXMethodDecl();
                 if (calleeMethodDecl
                     && operatorCallExpr->getArg(0) == child && !calleeMethodDecl->isConst())
                 {
                     bPotentiallyWrittenTo = true;
                 }
-                else if (IsPassedByNonConst(fieldDecl, child, operatorCallExpr, calleeFunctionDecl))
+                else if (IsPassedByNonConst(fieldDecl, child, operatorCallExpr, *callee))
                 {
                     bPotentiallyWrittenTo = true;
                 }
@@ -692,7 +727,7 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
                     bPotentiallyWrittenTo = true;
                     break;
                 }
-                if (IsPassedByNonConst(fieldDecl, child, cxxMemberCallExpr, calleeMethodDecl))
+                if (IsPassedByNonConst(fieldDecl, child, cxxMemberCallExpr, CalleeWrapper(calleeMethodDecl)))
                     bPotentiallyWrittenTo = true;
             }
             else
@@ -701,15 +736,15 @@ void UnusedFields::checkReadOnly(const FieldDecl* fieldDecl, const Expr* memberE
         }
         else if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(parent))
         {
-            if (IsPassedByNonConst(fieldDecl, child, cxxConstructExpr, cxxConstructExpr))
+            if (IsPassedByNonConst(fieldDecl, child, cxxConstructExpr, CalleeWrapper(cxxConstructExpr)))
                 bPotentiallyWrittenTo = true;
             break;
         }
         else if (auto callExpr = dyn_cast<CallExpr>(parent))
         {
-            const FunctionDecl * calleeFunctionDecl = callExpr->getDirectCallee();
-            if (calleeFunctionDecl) {
-                if (IsPassedByNonConst(fieldDecl, child, callExpr, calleeFunctionDecl))
+            auto callee = getCallee(callExpr);
+            if (callee) {
+                if (IsPassedByNonConst(fieldDecl, child, callExpr, *callee))
                     bPotentiallyWrittenTo = true;
             } else
                 bPotentiallyWrittenTo = true; // conservative, could improve
@@ -807,14 +842,14 @@ bool UnusedFields::IsPassedByNonConst(const FieldDecl* fieldDecl, const Stmt * c
     {
         for (unsigned i = 0; i < len; ++i)
             if (callExpr.getArg(i) == child)
-                if (loplugin::TypeCheck(calleeFunctionDecl.getParamDecl(i)->getType()).Pointer().NonConst())
+                if (loplugin::TypeCheck(calleeFunctionDecl.getParamType(i)).Pointer().NonConst())
                     return true;
     }
     else
     {
         for (unsigned i = 0; i < len; ++i)
             if (callExpr.getArg(i) == child)
-                if (loplugin::TypeCheck(calleeFunctionDecl.getParamDecl(i)->getType()).LvalueReference().NonConst())
+                if (loplugin::TypeCheck(calleeFunctionDecl.getParamType(i)).LvalueReference().NonConst())
                     return true;
     }
     return false;
@@ -918,6 +953,49 @@ void UnusedFields::checkTouchedFromOutside(const FieldDecl* fieldDecl, const Exp
             touchedFromOutsideSet.insert(fieldInfo);
         }
     }
+}
+
+llvm::Optional<CalleeWrapper> UnusedFields::getCallee(CallExpr const * callExpr)
+{
+    FunctionDecl const * functionDecl = callExpr->getDirectCallee();
+    if (functionDecl)
+        return CalleeWrapper(functionDecl);
+
+    // Extract the functionprototype from a type
+    Type const * calleeType = callExpr->getCallee()->getType().getTypePtr();
+    if (auto pointerType = calleeType->getUnqualifiedDesugaredType()->getAs<PointerType>()) {
+        if (auto prototype = pointerType->getPointeeType()->getUnqualifiedDesugaredType()->getAs<FunctionProtoType>()) {
+            return CalleeWrapper(prototype);
+        }
+    }
+
+    llvm::Optional<CalleeWrapper> ret;
+    auto callee = callExpr->getCallee()->IgnoreParenImpCasts();
+    if (isa<CXXDependentScopeMemberExpr>(callee)) // template stuff
+        return ret;
+    if (isa<UnresolvedLookupExpr>(callee)) // template stuff
+        return ret;
+    if (isa<UnresolvedMemberExpr>(callee)) // template stuff
+        return ret;
+    calleeType = calleeType->getUnqualifiedDesugaredType();
+    if (isa<TemplateSpecializationType>(calleeType)) // template stuff
+        return ret;
+    if (auto builtinType = dyn_cast<BuiltinType>(calleeType)) {
+        if (builtinType->getKind() == BuiltinType::Kind::Dependent) // template stuff
+            return ret;
+        if (builtinType->getKind() == BuiltinType::Kind::BoundMember) // template stuff
+            return ret;
+    }
+    if (isa<TemplateTypeParmType>(calleeType)) // template stuff
+        return ret;
+
+    callExpr->dump();
+    callExpr->getCallee()->getType()->dump();
+    report(
+         DiagnosticsEngine::Warning, "can't get callee",
+        callExpr->getExprLoc())
+      << callExpr->getSourceRange();
+    return ret;
 }
 
 loplugin::Plugin::Registration< UnusedFields > X("unusedfields", false);
