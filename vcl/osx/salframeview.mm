@@ -221,7 +221,7 @@ static AquaSalFrame* getMouseContainerFrame()
 
 -(void)displayIfNeeded
 {
-    if( GetSalData() && GetSalData()->mpFirstInstance )
+    if( GetSalData() && GetSalData()->mpInstance )
     {
         SolarMutexGuard aGuard;
         [super displayIfNeeded];
@@ -528,13 +528,13 @@ private:
 
 -(void)drawRect: (NSRect)aRect
 {
-    if( GetSalData()->mpFirstInstance )
+    if( GetSalData()->mpInstance )
     {
         const bool bIsLiveResize = [self inLiveResize];
-        const bool bWasLiveResize = GetSalData()->mpFirstInstance->mbIsLiveResize;
+        const bool bWasLiveResize = GetSalData()->mpInstance->mbIsLiveResize;
         if ( bWasLiveResize != bIsLiveResize )
         {
-            GetSalData()->mpFirstInstance->mbIsLiveResize = bIsLiveResize;
+            GetSalData()->mpInstance->mbIsLiveResize = bIsLiveResize;
             Scheduler::ProcessTaskScheduling();
         }
     }

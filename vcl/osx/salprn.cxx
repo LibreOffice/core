@@ -358,7 +358,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
 
     bool bSuccess = false;
     bool bWasAborted = false;
-    AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
+    AquaSalInstance* pInst = GetSalData()->mpInstance;
     PrintAccessoryViewState aAccViewState;
     sal_Int32 nAllPages = 0;
 
