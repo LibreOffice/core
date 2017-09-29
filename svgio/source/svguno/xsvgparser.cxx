@@ -138,7 +138,7 @@ namespace svgio
                 }
                 catch(const uno::Exception& e)
                 {
-                    SAL_WARN( "svg", "Parse error! : " << e.Message);
+                    SAL_WARN( "svg", "Parse error! : " << e);
                 }
 
                 // decompose to primitives

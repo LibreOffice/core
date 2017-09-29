@@ -583,7 +583,7 @@ OUString PackageManagerImpl::detectMediaType(
         catch (const lang::IllegalArgumentException & exc) {
             if (throw_exc)
                 throw;
-            SAL_WARN( "desktop", exc.Message );
+            SAL_WARN( "desktop", exc );
         }
     }
     return mediaType;
@@ -1026,11 +1026,11 @@ PackageManagerImpl::getDeployedPackages_(
         }
         catch (const lang::IllegalArgumentException & exc) {
             // ignore
-            SAL_WARN( "desktop", exc.Message );
+            SAL_WARN( "desktop", exc );
         }
         catch (const deployment::DeploymentException& exc) {
             // ignore
-            SAL_WARN( "desktop", exc.Message );
+            SAL_WARN( "desktop", exc );
         }
     }
     return comphelper::containerToSequence(packages);
@@ -1265,7 +1265,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
         }
         catch( const uno::Exception & e )
         {
-            SAL_WARN("desktop.deployment", e.Message);
+            SAL_WARN("desktop.deployment", e);
         }
     }
     return bModified;
@@ -1403,7 +1403,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
         catch (const uno::Exception & e)
         {
             // Looks like exceptions being caught here is not an uncommon case.
-            SAL_WARN("desktop.deployment", e.Message);
+            SAL_WARN("desktop.deployment", e);
         }
     }
     return bModified;

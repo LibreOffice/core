@@ -507,7 +507,7 @@ void CreateCategories(
                                 }
                                 catch( const lang::IllegalArgumentException & ex )
                                 {
-                                    SAL_WARN("xmloff.chart", "IllegalArgumentException caught, Message: " << ex.Message );
+                                    SAL_WARN("xmloff.chart", "IllegalArgumentException caught, Message: " << ex );
                                 }
                                 aData.Categories.set( xLabeledSeq );
                                 if( pLSequencesPerIndex )
@@ -646,7 +646,7 @@ void setXMLRangePropertyAtDataSequence(
     }
     catch( const uno::Exception & ex )
     {
-        SAL_WARN("xmloff.chart", "Exception caught, Message: " << ex.Message );
+        SAL_WARN("xmloff.chart", "Exception caught, Message: " << ex );
     }
 }
 
@@ -673,7 +673,7 @@ bool getXMLRangePropertyFromDataSequence(
         }
         catch( const uno::Exception & ex )
         {
-            SAL_WARN("xmloff.chart", "Exception caught, Message: " << ex.Message );
+            SAL_WARN("xmloff.chart", "Exception caught, Message: " << ex );
         }
     }
     return bResult;

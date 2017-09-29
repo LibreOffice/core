@@ -2132,11 +2132,11 @@ void ExtensionsTabPage::CreateDialogWithHandler()
     }
     catch (const css::lang::IllegalArgumentException& e)
     {
-        SAL_WARN("cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): illegal argument:" << e.Message);
+        SAL_WARN("cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): illegal argument:" << e);
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler(): " << e.Message);
+        SAL_WARN( "cui.options", "ExtensionsTabPage::CreateDialogWithHandler(): exception of XDialogProvider2::createDialogWithHandler(): " << e);
     }
 }
 

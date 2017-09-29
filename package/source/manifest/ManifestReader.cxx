@@ -64,15 +64,15 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
     }
     catch (SAXParseException& e)
     {
-        SAL_WARN("package", "ignoring SAXParseException " + e.Message);
+        SAL_WARN("package", "ignoring " << e);
     }
     catch (SAXException& e)
     {
-        SAL_WARN("package", "ignoring SAXException " + e.Message);
+        SAL_WARN("package", "ignoring " << e);
     }
     catch (IOException& e)
     {
-        SAL_WARN("package", "ignoring IOException " + e.Message);
+        SAL_WARN("package", "ignoring " << e);
     }
     xParser->setDocumentHandler ( Reference < XDocumentHandler > () );
     return aManifestSequence;

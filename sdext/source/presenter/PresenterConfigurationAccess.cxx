@@ -67,7 +67,7 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
     }
     catch (const Exception& rException)
     {
-        SAL_WARN("sdext.presenter", "caught exception while opening configuration: " << rException.Message);
+        SAL_WARN("sdext.presenter", "caught exception while opening configuration: " << rException);
     }
 }
 
@@ -149,7 +149,7 @@ Any PresenterConfigurationAccess::GetConfigurationNode (
     }
     catch (const Exception& rException)
     {
-        SAL_WARN("sdext.presenter", "caught exception while getting configuration node " << sPathToNode << " : " << rException.Message);
+        SAL_WARN("sdext.presenter", "caught exception while getting configuration node " << sPathToNode << " : " << rException);
     }
 
     return Any();

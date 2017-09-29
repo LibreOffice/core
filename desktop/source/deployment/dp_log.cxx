@@ -78,7 +78,7 @@ void ProgressLogImpl::disposing()
         }
     }
     catch (const Exception & exc) {
-        SAL_WARN( "desktop", exc.Message );
+        SAL_WARN( "desktop", exc );
     }
 }
 
@@ -136,7 +136,7 @@ void ProgressLogImpl::log_write( OString const & text )
         }
     }
     catch (const io::IOException & exc) {
-        SAL_WARN( "desktop", exc.Message );
+        SAL_WARN( "desktop", exc );
     }
 }
 

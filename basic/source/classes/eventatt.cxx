@@ -51,6 +51,7 @@
 #include <eventatt.hxx>
 
 #include <cppuhelper/implbase.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -117,11 +118,11 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
         }
         catch ( const RuntimeException& re )
         {
-            SAL_INFO("basic", "Caught RuntimeException reason " << re.Message);
+            SAL_INFO("basic", "Caught RuntimeException reason " << re);
         }
         catch ( const Exception& e )
         {
-            SAL_INFO("basic", "Caught Exception reason " << e.Message);
+            SAL_INFO("basic", "Caught Exception reason " << e);
         }
 
 }

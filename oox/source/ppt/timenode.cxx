@@ -200,7 +200,7 @@ namespace oox { namespace ppt {
         }
         catch( const Exception& e )
         {
-            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::addNode() - " << e.Message );
+            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::addNode() - " << e );
         }
     }
 
@@ -558,7 +558,7 @@ namespace oox { namespace ppt {
         }
         catch( const Exception& e )
         {
-            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::setNode() - " << e.Message );
+            SAL_INFO("oox.ppt","OOX: exception raised in TimeNode::setNode() - " << e );
         }
     }
 
@@ -576,7 +576,7 @@ namespace oox { namespace ppt {
         }
         catch( const Exception& e )
         {
-            SAL_INFO("oox.ppt", "OOX: exception raised in TimeNode::createAndInsert() trying to create a service " << rServiceName << " = " << e.Message );
+            SAL_INFO("oox.ppt", "OOX: exception raised in TimeNode::createAndInsert() trying to create a service " << rServiceName << " = " << e );
         }
 
         return Reference< XAnimationNode >();

@@ -864,7 +864,7 @@ SdrModel::GetDocumentStream( OUString const& rURL,
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("svx", "exception: '" << e.Message << "'");
+        SAL_WARN("svx", "exception: '" << e << "'");
     }
     return nullptr;
 }

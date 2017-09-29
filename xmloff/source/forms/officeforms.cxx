@@ -57,7 +57,7 @@ namespace xmloff
             pRet = GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );
         } catch (const Exception& rException)
         {
-            SAL_WARN("xmloff.forms", "OFormsRootImport::CreateChildContext: " << rException.Message);
+            SAL_WARN("xmloff.forms", "OFormsRootImport::CreateChildContext: " << rException);
         }
         return pRet;
     }

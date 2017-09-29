@@ -836,7 +836,7 @@ void XMLShapeImportHelper::popGroupAndSort()
     }
     catch( const uno::Exception& rException )
     {
-        SAL_WARN("xmloff", "exception while sorting shapes, sorting failed: " << rException.Message);
+        SAL_WARN("xmloff", "exception while sorting shapes, sorting failed: " << rException);
     }
 
     // put parent on top and drop current context, we are done

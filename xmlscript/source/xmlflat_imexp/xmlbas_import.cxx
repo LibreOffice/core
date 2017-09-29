@@ -176,11 +176,11 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                     }
                     catch ( const container::ElementExistException& e )
                     {
-                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught ElementExceptionExist reason " << e.Message );
+                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught ElementExceptionExist reason " << e );
                     }
                     catch ( const lang::IllegalArgumentException& e )
                     {
-                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason " << e.Message );
+                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason " << e );
                     }
                 }
             }
@@ -216,7 +216,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                     }
                     catch ( const lang::IllegalArgumentException& e )
                     {
-                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason " << e.Message );
+                        SAL_INFO("xmlscript.xmlflat", "BasicLibrariesElement::startChildElement: caught IllegalArgumentException reason " << e );
                     }
                 }
             }
@@ -252,7 +252,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
         catch ( const lang::WrappedTargetException& e )
         {
-            SAL_INFO("xmlscript.xmlflat", "BasicEmbeddedLibraryElement CTOR: caught WrappedTargetException reason " << e.Message );
+            SAL_INFO("xmlscript.xmlflat", "BasicEmbeddedLibraryElement CTOR: caught WrappedTargetException reason " << e );
         }
     }
 
@@ -372,15 +372,15 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
         catch ( const container::ElementExistException& e )
         {
-            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught ElementExceptionExist reason " << e.Message );
+            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught ElementExceptionExist reason " << e );
         }
         catch ( const lang::IllegalArgumentException& e )
         {
-            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught IllegalArgumentException reason " << e.Message );
+            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught IllegalArgumentException reason " << e );
         }
         catch ( const lang::WrappedTargetException& e )
         {
-            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught WrappedTargetException reason " << e.Message );
+            SAL_INFO("xmlscript.xmlflat", "BasicSourceCodeElement::endElement: caught WrappedTargetException reason " << e );
         }
     }
 

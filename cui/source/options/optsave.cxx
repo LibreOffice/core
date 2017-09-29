@@ -453,7 +453,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
         }
         catch(Exception& e)
         {
-            SAL_WARN( "cui.options", "exception in FilterFactory access: " << e.Message );
+            SAL_WARN( "cui.options", "exception in FilterFactory access: " << e );
         }
 
         pImpl->bInitialized = true;

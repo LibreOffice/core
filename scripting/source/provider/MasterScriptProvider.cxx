@@ -209,7 +209,7 @@ void MasterScriptProvider::createPkgProvider()
     catch ( const Exception& e )
     {
         SAL_WARN("scripting.provider", "Exception creating MasterScriptProvider for uno_packages in context "
-                << m_sCtxString << ": " << e.Message );
+                << m_sCtxString << ": " << e );
     }
 }
 
@@ -504,8 +504,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
             }
             catch ( Exception& e )
             {
-                SAL_INFO(
-                    "scripting.provider", "ignoring Exception " << e.Message);
+                SAL_INFO("scripting.provider", "ignoring " << e);
             }
 
         }

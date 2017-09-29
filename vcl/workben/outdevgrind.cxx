@@ -731,12 +731,12 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (const css::uno::Exception& e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        SAL_WARN("vcl.app", "Fatal: " << e);
         return EXIT_FAILURE;
     }
     catch (const std::exception& e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        SAL_WARN("vcl.app", "Fatal: " << e.what());
         return EXIT_FAILURE;
     }
 

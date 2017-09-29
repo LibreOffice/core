@@ -319,12 +319,12 @@ int GalApp::Main()
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("svx", "Fatal exception: " << e.Message);
+        SAL_WARN("svx", "Fatal: " << e);
         return EXIT_FAILURE;
     }
     catch (const std::exception &e)
     {
-        SAL_WARN("svx", "Fatal exception: " << e.what());
+        SAL_WARN("svx", "Fatal: " << e.what());
         return 1;
     }
 

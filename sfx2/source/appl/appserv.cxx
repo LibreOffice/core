@@ -180,9 +180,7 @@ namespace
         }
         catch (Exception & e)
         {
-            SAL_INFO(
-                "sfx.appl",
-                "assuming Base to be missing; caught " << e.Message);
+            SAL_INFO("sfx.appl", "assuming Base to be missing; caught " << e);
             return false;
         }
     }
@@ -207,7 +205,7 @@ namespace
             {
                 SAL_INFO(
                     "sfx.appl",
-                    "trying to install LibreOffice Base, caught " << e.Message);
+                    "trying to install LibreOffice Base, caught " << e);
             }
             return;
         }
@@ -223,7 +221,7 @@ namespace
         catch (const Exception & e)
         {
             SAL_INFO( "sfx.appl",
-                      "trying to load bibliography database, caught " << e.Message);
+                      "trying to load bibliography database, caught " << e);
         }
     }
 }

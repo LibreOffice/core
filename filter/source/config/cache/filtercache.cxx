@@ -875,7 +875,7 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
         { throw; }
     catch(const css::uno::Exception& ex)
         {
-            SAL_WARN( "filter.config", ex.Message);
+            SAL_WARN( "filter.config", ex);
             aValue.clear();
         }
 

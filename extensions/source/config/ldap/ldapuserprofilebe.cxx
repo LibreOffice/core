@@ -140,7 +140,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
     }
     catch (const uno::Exception & e)
     {
-        SAL_WARN("extensions.config", "LdapUserProfileBackend: access to configuration data failed: " << e.Message);
+        SAL_WARN("extensions.config", "LdapUserProfileBackend: access to configuration data failed: " << e);
         return false;
     }
 

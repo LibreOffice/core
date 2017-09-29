@@ -254,7 +254,7 @@ ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
         }
         catch (const css::ucb::ContentCreationException &e)
         {
-            SAL_WARN("sw", "Writer::Write caught " << e.Message);
+            SAL_WARN("sw", "Writer::Write caught " << e);
         }
         return nResult;
     }

@@ -534,7 +534,7 @@ UpdateCheckThread::run()
 
     catch(const uno::Exception& e) {
         // Silently catch all errors
-        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e.Message );
+        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e );
     }
 }
 
@@ -549,7 +549,7 @@ ManualUpdateCheckThread::run()
     }
     catch(const uno::Exception& e) {
         // Silently catch all errors
-        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e.Message );
+        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e );
     }
 }
 

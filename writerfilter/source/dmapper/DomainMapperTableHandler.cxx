@@ -938,7 +938,7 @@ bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRow)
     }
     catch (const lang::IllegalArgumentException& e)
     {
-        SAL_WARN( "writerfilter.dmapper", "compareRegionStarts() failed: " << e.Message);
+        SAL_WARN( "writerfilter.dmapper", "compareRegionStarts() failed: " << e);
         return false;
     }
     return true;
@@ -1101,7 +1101,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
         catch ( const lang::IllegalArgumentException &e )
         {
             SAL_INFO("writerfilter.dmapper",
-                    "Conversion to table error: " << e.Message);
+                    "Conversion to table error: " << e);
 #ifdef DEBUG_WRITERFILTER
             TagLogger::getInstance().chars(std::string("failed to import table!"));
 #endif
@@ -1109,7 +1109,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
         catch ( const uno::Exception &e )
         {
             SAL_INFO("writerfilter.dmapper",
-                    "Exception during table creation: " << e.Message);
+                    "Exception during table creation: " << e);
         }
 
         // If we have a table with a start and an end position, we should make it a floating one.

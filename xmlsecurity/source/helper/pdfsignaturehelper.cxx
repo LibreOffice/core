@@ -89,7 +89,7 @@ uno::Sequence<security::DocumentSignatureInformation> PDFSignatureHelper::GetDoc
             }
             catch (const uno::SecurityException& rException)
             {
-                SAL_WARN("xmlsecurity.helper", "failed to verify certificate: " << rException.Message);
+                SAL_WARN("xmlsecurity.helper", "failed to verify certificate: " << rException);
                 rExternal.CertificateStatus = security::CertificateValidity::INVALID;
             }
         }

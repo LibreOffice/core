@@ -313,7 +313,7 @@ UcbContentProviderProxy::getContentProvider()
         }
         catch ( Exception const & e)
         {
-            SAL_INFO( "ucb.core", "Exception when getting content provider: " << e.Message );
+            SAL_INFO( "ucb.core", "Exception when getting content provider: " << e );
         }
 
         // registerInstance called at proxy, but not yet at original?

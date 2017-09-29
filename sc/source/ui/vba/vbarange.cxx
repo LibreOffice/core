@@ -1556,7 +1556,7 @@ ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter )
         }
         catch ( const uno::Exception& e )
         {
-            SAL_WARN("sc", "Bahhh, caught exception " << e.Message );
+            SAL_WARN("sc", "Bahhh, caught " << e );
         }
     }
     else

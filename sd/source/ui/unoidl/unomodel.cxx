@@ -322,7 +322,7 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
             }
             catch (const uno::RuntimeException& exc)
             { // don't break throw ()
-                SAL_WARN( "sd", exc.Message );
+                SAL_WARN( "sd", exc );
             }
         }
         SfxBaseModel::release();

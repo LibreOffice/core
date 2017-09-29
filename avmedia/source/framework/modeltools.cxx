@@ -159,7 +159,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, const uno::Reference<
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("avmedia.opengl", "Exception: '" << e.Message << "'");
+        SAL_WARN("avmedia.opengl", e);
         return;
     }
 

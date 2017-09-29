@@ -29,17 +29,17 @@ private:
         }
         catch( const RuntimeException &e )
         {
-            SAL_WARN("package", "RuntimeException from unbuffered Stream " << e.Message );
+            SAL_WARN("package", "RuntimeException from unbuffered Stream " << e );
             mxStream.saveException( new RuntimeException( e ) );
         }
         catch( const ZipIOException &e )
         {
-            SAL_WARN("package", "ZipIOException from unbuffered Stream " << e.Message );
+            SAL_WARN("package", "ZipIOException from unbuffered Stream " << e );
             mxStream.saveException( new ZipIOException( e ) );
         }
         catch( const Exception &e )
         {
-            SAL_WARN("package", "Unexpected exception " << e.Message );
+            SAL_WARN("package", "Unexpected " << e );
             mxStream.saveException( new Exception( e ) );
         }
 

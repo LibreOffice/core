@@ -2738,7 +2738,18 @@ void ExceptionType::dumpHppFile(
     out << "\n";
     addDefaultHxxIncludes(includes);
     includes.dump(out, &name_, true);
+
+    // for the output operator below
+    if (name_ == "com.sun.star.uno.Exception")
+    {
+        out << "#if defined LIBO_INTERNAL_ONLY\n";
+        out << "#include <ostream>\n";
+        out << "#include <typeinfo>\n";
+        out << "#endif\n";
+    }
+
     out << "\n";
+
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
         out << "\n";
     }
@@ -2837,10 +2848,30 @@ void ExceptionType::dumpHppFile(
     out << indent() << "return *this;\n";
     dec();
     out << indent() << "}\n#endif\n\n";
+
+    // Provide an output operator for printing Exception information to SAL_WARN/SAL_INFO.
+    if (name_ == "com.sun.star.uno.Exception")
+    {
+        out << "#if defined LIBO_INTERNAL_ONLY\n";
+        out << "template< typename charT, typename traits >\n";
+        out << "inline ::std::basic_ostream<charT, traits> & operator<<(\n";
+        out << "    ::std::basic_ostream<charT, traits> & os, ::com::sun::star::uno::Exception const & exception)\n";
+        out << "{\n";
+        out << "    // the class name is useful because exception throwing code does not always pass in a useful message\n";
+        out << "    os << typeid(exception).name();\n";
+        out << "    if (!exception.Message.isEmpty())\n";
+        out << "      os << \" msg: \" << exception.Message;\n";
+        out << "    return os;\n";
+        out << "}\n";
+        out << "#endif\n";
+        out << "\n";
+    }
+
     if (codemaker::cppumaker::dumpNamespaceClose(out, name_, false)) {
         out << "\n";
     }
     out << "\n";
+
     dumpGetCppuType(out);
     out << "\n#endif // "<< headerDefine << "\n";
 }

@@ -2790,7 +2790,7 @@ RTFError RTFDocumentImpl::popState()
                 }
                 catch (const uno::Exception& rException)
                 {
-                    SAL_WARN("writerfilter.rtf", "failed to set property " << rKey << ": " << rException.Message);
+                    SAL_WARN("writerfilter.rtf", "failed to set property " << rKey << ": " << rException);
                 }
             }
         }

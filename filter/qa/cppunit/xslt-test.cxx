@@ -76,7 +76,7 @@ private:
     virtual void SAL_CALL error(const uno::Any& e) override
     {
         notifyDone(); // set on error too, otherwise main thread waits forever
-        SAL_WARN("filter.xslt", "exception " << e);
+        SAL_WARN("filter.xslt", e);
         CPPUNIT_FAIL("exception while in XSLT");
     }
 

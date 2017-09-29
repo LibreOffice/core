@@ -352,7 +352,7 @@ namespace connectivity
         {
             if (env->ExceptionCheck())
                 env->ExceptionClear();
-            SAL_WARN("connectivity.hsqldb", "forwarding Exception: " << _aException.Message );
+            SAL_WARN("connectivity.hsqldb", "forwarding Exception: " << _aException );
             OString cstr( OUStringToOString(_aException.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
         }

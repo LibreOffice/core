@@ -424,7 +424,7 @@ OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl )
         }
     } catch( const Exception& e )
     {
-        SAL_WARN( "xmloff", "Exception when embedding a font file:" << e.Message );
+        SAL_WARN( "xmloff", "Exception when embedding a font file:" << e );
     }
     return OUString();
 }

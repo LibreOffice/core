@@ -1256,7 +1256,7 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
         {
             SAL_WARN("sfx",
                 "caught exception while trying to access Thumbnail/thumbnail.png of "
-                 << msURL << ": " << rException.Message);
+                 << msURL << ": " << rException);
         }
 
         try
@@ -1283,14 +1283,14 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
         {
             SAL_WARN("sfx",
                 "caught exception while trying to access Thumbnails/thumbnail.png of "
-                << msURL << ": " << rException.Message);
+                << msURL << ": " << rException);
         }
     }
     catch (const uno::Exception& rException)
     {
         SAL_WARN("sfx",
             "caught exception while trying to access thumbnail of "
-            << msURL << ": " << rException.Message);
+            << msURL << ": " << rException);
     }
 
     // Extract the image from the stream.

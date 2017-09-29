@@ -404,7 +404,7 @@ css::i18n::ParseResult CharClass::parseAnyToken(
     }
     catch ( const Exception& e )
     {
-        SAL_WARN( "unotools.i18n", "parseAnyToken: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "parseAnyToken: Exception caught " << e );
         return ParseResult();
     }
 }
@@ -429,7 +429,7 @@ css::i18n::ParseResult CharClass::parsePredefinedToken(
     }
     catch ( const Exception& e )
     {
-        SAL_WARN( "unotools.i18n", "parsePredefinedToken: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "parsePredefinedToken: Exception caught " << e );
         return ParseResult();
     }
 }

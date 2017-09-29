@@ -154,7 +154,7 @@ vcl::Window *ImplGetDefaultContextWindow()
             }
             catch (const css::uno::Exception& e)
             {
-                 SAL_WARN("vcl", "unable to create Default Window: " << e.Message);
+                 SAL_WARN("vcl", "unable to create Default Window: " << e);
             }
         }
     }
@@ -260,7 +260,7 @@ bool ImplInitAccessBridge()
              } catch (css::uno::DeploymentException & e) {
                  SAL_WARN(
                     "vcl",
-                    "got no IAccessible2 bridge" << e.Message);
+                    "got no IAccessible2 bridge" << e);
                  return false;
              }
         }

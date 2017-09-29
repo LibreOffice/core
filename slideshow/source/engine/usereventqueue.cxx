@@ -556,7 +556,7 @@ UserEventQueue::~UserEventQueue()
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("slideshow", "" << e.Message);
+        SAL_WARN("slideshow", e);
     }
 }
 

@@ -65,7 +65,7 @@ int pdfVerify(int nArgc, char** pArgv)
     }
     catch (const uno::RuntimeException& rException)
     {
-        SAL_WARN("xmlsecurity.pdfio", "cppu::defaultBootstrap_InitialComponentContext() failed: " << rException.Message);
+        SAL_WARN("xmlsecurity.pdfio", "cppu::defaultBootstrap_InitialComponentContext() failed: " << rException);
         return 1;
     }
     uno::Reference<lang::XMultiComponentFactory> xMultiComponentFactory = xComponentContext->getServiceManager();
@@ -87,7 +87,7 @@ int pdfVerify(int nArgc, char** pArgv)
     }
     catch (const uno::DeploymentException& rException)
     {
-        SAL_WARN("xmlsecurity.pdfio", "DeploymentException while creating SEInitializer: " << rException.Message);
+        SAL_WARN("xmlsecurity.pdfio", "DeploymentException while creating SEInitializer: " << rException);
         return 1;
     }
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());

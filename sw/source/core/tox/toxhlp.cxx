@@ -33,7 +33,7 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN( "sw.core", "IndexEntrySupplierWrapper: Caught exception: " << e.Message );
+        SAL_WARN( "sw.core", "IndexEntrySupplierWrapper: Caught " << e );
     }
 }
 
@@ -51,7 +51,7 @@ OUString IndexEntrySupplierWrapper::GetIndexKey( const OUString& rText,
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN( "sw.core", "getIndexKey: Caught exception: " << e.Message );
+        SAL_WARN( "sw.core", "getIndexKey: Caught " << e );
     }
     return sRet;
 }
@@ -64,7 +64,7 @@ OUString IndexEntrySupplierWrapper::GetFollowingText( bool bMorePages ) const
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN( "sw.core", "getIndexFollowPageWord: Caught exception: " << e.Message );
+        SAL_WARN( "sw.core", "getIndexFollowPageWord: Caught " << e );
     }
     return sRet;
 }
@@ -78,7 +78,7 @@ css::uno::Sequence< OUString > IndexEntrySupplierWrapper::GetAlgorithmList( cons
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN( "sw.core", "getAlgorithmList: Caught exception: " << e.Message );
+        SAL_WARN( "sw.core", "getAlgorithmList: Caught " << e );
     }
     return sRet;
 }
@@ -93,7 +93,7 @@ bool IndexEntrySupplierWrapper::LoadAlgorithm(
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN( "sw.core", "loadAlgorithm: Caught exception: " << e.Message );
+        SAL_WARN( "sw.core", "loadAlgorithm: Caught " << e );
     }
     return bRet;
 }
@@ -111,7 +111,7 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN( "sw.core", "compareIndexEntry: Caught exception: " << e.Message );
+        SAL_WARN( "sw.core", "compareIndexEntry: Caught " << e );
     }
     return nRet;
 }

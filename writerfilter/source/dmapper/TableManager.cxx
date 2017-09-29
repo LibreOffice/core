@@ -320,7 +320,7 @@ void TableManager::resolveCurrentTable()
         }
         catch (css::uno::Exception const& e)
         {
-            SAL_WARN("writerfilter", "resolving of current table failed with: " << e.Message);
+            SAL_WARN("writerfilter", "resolving of current table failed with: " << e);
         }
     }
     mState.resetTableProps();

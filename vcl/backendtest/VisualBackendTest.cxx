@@ -526,7 +526,7 @@ public:
         }
         catch (const css::uno::Exception& rException)
         {
-            SAL_WARN("vcl.app", "Fatal exception: " << rException.Message);
+            SAL_WARN("vcl.app", "Fatal exception: " << rException);
             return 1;
         }
         catch (const std::exception& rException)

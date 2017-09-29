@@ -365,17 +365,6 @@
 #include <cstddef>
 #include <iostream>
 
-namespace com { namespace sun { namespace star { namespace uno {
-
-std::ostream & operator <<(
-    std::ostream & out,
-    SAL_UNUSED_PARAMETER css::uno::Exception const &)
-{
-    return out << "<UNO exception>";
-}
-
-} } } }
-
 namespace test { namespace codemaker { namespace cppumaker {
 
 bool operator ==(

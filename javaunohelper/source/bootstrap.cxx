@@ -150,7 +150,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
         jclass c = jni_env->FindClass( "com/sun/star/uno/RuntimeException" );
         if (nullptr != c)
         {
-            SAL_WARN("javaunohelper", "forwarding RuntimeException: " << exc.Message );
+            SAL_WARN("javaunohelper", "forwarding RuntimeException: " << exc );
             OString cstr( OUStringToOString(
                               exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             jni_env->ThrowNew( c, cstr.getStr() );
@@ -161,7 +161,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
         jclass c = jni_env->FindClass( "com/sun/star/uno/Exception" );
         if (nullptr != c)
         {
-            SAL_WARN("javaunohelper",  "forwarding Exception: " << exc.Message );
+            SAL_WARN("javaunohelper",  "forwarding Exception: " << exc );
             OString cstr( OUStringToOString(
                               exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             jni_env->ThrowNew( c, cstr.getStr() );

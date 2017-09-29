@@ -3093,7 +3093,7 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                     }
                     catch (const Exception& rEx)
                     {
-                        SAL_WARN("starmath", "SmXMLImport::SetConfigurationSettings: Exception: " << rEx.Message );
+                        SAL_WARN("starmath", "SmXMLImport::SetConfigurationSettings: Exception: " << rEx );
                     }
                 }
 
