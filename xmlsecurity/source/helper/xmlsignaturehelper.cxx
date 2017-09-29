@@ -398,7 +398,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     }
     catch(const uno::Exception& rException)
     {
-        SAL_WARN("xmlsecurity.helper", "XMLSignatureHelper::ReadAndVerifySignatureStorageStream: " << rException.Message);
+        SAL_WARN("xmlsecurity.helper", "XMLSignatureHelper::ReadAndVerifySignatureStorageStream: " << rException);
     }
 
     mpXSecController->releaseSignatureReader();

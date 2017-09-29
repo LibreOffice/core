@@ -2841,6 +2841,25 @@ void ExceptionType::dumpHppFile(
         out << "\n";
     }
     out << "\n";
+
+    // Provide an output operator for printing Exception information to SAL_WARN/SAL_INFO.
+    if (headerDefine == "INCLUDED_COM_SUN_STAR_UNO_EXCEPTION_HPP")
+    {
+        out << "#if defined LIBO_INTERNAL_ONLY\n";
+        out << "#include <ostream>\n";
+        out << "#include <typeinfo>\n";
+        out << "inline std::ostream& operator<<(std::ostream & os, com::sun::star::uno::Exception const & exception)\n";
+        out << "{\n";
+        out << "// the class name is useful because sometimes code does bother to pass in a useful message\n";
+        out << "os << \"Exception:\" << typeid(exception).name();\n";
+        out << "if (!exception.Message.isEmpty())\n";
+        out << "os << \" msg: \" << exception.Message;\n";
+        out << "return os;\n";
+        out << "}\n";
+        out << "#endif\n";
+        out << "\n";
+    }
+
     dumpGetCppuType(out);
     out << "\n#endif // "<< headerDefine << "\n";
 }

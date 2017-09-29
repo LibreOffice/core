@@ -1178,7 +1178,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
     {
         // we'll just leave the box in its default setting and won't
         // even give it event handler...
-        SAL_WARN("cui.options", "ignoring Exception \"" << e.Message << "\"");
+        SAL_WARN("cui.options", "ignoring " << e);
     }
 
     m_pWesternLanguageLB->SetLanguageList( SvxLanguageListFlags::WESTERN | SvxLanguageListFlags::ONLY_KNOWN, true, false, true );
@@ -1363,7 +1363,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     {
         // we'll just leave the box in its default setting and won't
         // even give it event handler...
-        SAL_WARN("cui.options", "ignoring Exception \"" << e.Message << "\"");
+        SAL_WARN("cui.options", "ignoring Exception \"" << e << "\"");
     }
 
     LanguageTag aLanguageTag( pLangConfig->aSysLocaleOptions.GetLanguageTag());

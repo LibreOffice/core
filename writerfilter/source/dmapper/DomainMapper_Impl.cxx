@@ -1281,7 +1281,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
         }
         catch(const uno::Exception& e)
         {
-            SAL_WARN( "writerfilter.dmapper", "finishParagraph() exception: " << e.Message );
+            SAL_WARN( "writerfilter.dmapper", "finishParagraph() " << e );
         }
     }
 
@@ -1741,7 +1741,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN("writerfilter.dmapper", "exception in PushFootOrEndnote: " << e.Message);
+        SAL_WARN("writerfilter.dmapper", "exception in PushFootOrEndnote: " << e);
     }
 }
 
@@ -1859,7 +1859,7 @@ void DomainMapper_Impl::PushAnnotation()
     }
     catch( const uno::Exception& rException)
     {
-        SAL_WARN("writerfilter.dmapper", "exception in PushAnnotation: " << rException.Message);
+        SAL_WARN("writerfilter.dmapper", "exception in PushAnnotation: " << rException);
     }
 }
 
@@ -1927,7 +1927,7 @@ void DomainMapper_Impl::PopAnnotation()
     catch (uno::Exception const& e)
     {
         SAL_WARN("writerfilter.dmapper",
-                "Cannot insert annotation field: exception: " << e.Message);
+                "Cannot insert annotation field: " << e);
     }
 
     m_xAnnotationField.clear();
@@ -2120,7 +2120,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     }
     catch ( const uno::Exception& e )
     {
-        SAL_WARN("writerfilter.dmapper", "Exception when adding shape: " << e.Message);
+        SAL_WARN("writerfilter.dmapper", "Exception when adding shape: " << e);
     }
 }
 /*
@@ -2738,7 +2738,7 @@ void DomainMapper_Impl::ChainTextFrames()
     }
     catch (const uno::Exception& rException)
     {
-        SAL_WARN("writerfilter.dmapper", "failed. message: " << rException.Message);
+        SAL_WARN("writerfilter.dmapper", "failed. message: " << rException);
     }
 }
 
@@ -4432,7 +4432,7 @@ void DomainMapper_Impl::CloseFieldCommand()
         }
         catch( const uno::Exception& e )
         {
-            SAL_WARN( "writerfilter.dmapper", "Exception in CloseFieldCommand(): " << e.Message );
+            SAL_WARN( "writerfilter.dmapper", "Exception in CloseFieldCommand(): " << e );
         }
         pContext->SetCommandCompleted();
     }
@@ -4604,7 +4604,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
         catch (const uno::Exception& e)
         {
             SAL_WARN("writerfilter.dmapper",
-                "DomainMapper_Impl::SetFieldResult: exception: " << e.Message);
+                "DomainMapper_Impl::SetFieldResult: " << e);
         }
     }
 }
@@ -5084,7 +5084,7 @@ void DomainMapper_Impl::ExecuteFrameConversion()
         }
         catch( const uno::Exception& rEx)
         {
-            SAL_WARN( "writerfilter.dmapper", "Exception caught when converting to frame: " + rEx.Message );
+            SAL_WARN( "writerfilter.dmapper", "Exception caught when converting to frame: " << rEx );
         }
     }
     m_xFrameStartRange = nullptr;
@@ -5288,7 +5288,7 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
     catch (const uno::Exception& e)
     {
         SAL_WARN("writerfilter.dmapper",
-                "GetCurrentNumberingRules: exception caught: " << e.Message);
+                "GetCurrentNumberingRules: exception caught: " << e);
     }
     return xRet;
 }

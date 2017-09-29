@@ -200,7 +200,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     catch(const RuntimeException &e )
     {
         m_xConfigurationProvider.clear();
-        SAL_WARN("shell", "RuntimeException caught accessing configuration provider. " << e.Message );
+        SAL_WARN("shell", "RuntimeException caught accessing configuration provider. " << e );
         throw;
     }
 

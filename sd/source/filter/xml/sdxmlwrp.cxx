@@ -244,7 +244,7 @@ ErrCode ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-        SAL_WARN( "sd.filter", "SAX parse exception caught while importing:" << r.Message);
+        SAL_WARN( "sd.filter", "SAX parse exception caught while importing:" << r);
 
         OUString sErr( OUString::number( r.LineNumber ));
         sErr += ",";
@@ -274,22 +274,22 @@ ErrCode ReadThroughComponent(
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
-        SAL_WARN( "sd.filter", "SAX exception caught while importing:" << r.Message);
+        SAL_WARN( "sd.filter", "SAX exception caught while importing:" << r);
         return SD_XML_READERROR;
     }
     catch (const packages::zip::ZipIOException& r)
     {
-        SAL_WARN( "sd.filter", "Zip exception caught while importing:" << r.Message);
+        SAL_WARN( "sd.filter", "Zip exception caught while importing:" << r);
         return ERRCODE_IO_BROKENPACKAGE;
     }
     catch (const io::IOException& r)
     {
-        SAL_WARN( "sd.filter", "IO exception caught while importing:" << r.Message);
+        SAL_WARN( "sd.filter", "IO exception caught while importing:" << r);
         return SD_XML_READERROR;
     }
     catch (const uno::Exception& r)
     {
-        SAL_WARN( "sd.filter", "uno exception caught while importing:" << r.Message);
+        SAL_WARN( "sd.filter", "uno exception caught while importing:" << r);
         return SD_XML_READERROR;
     }
 
@@ -990,7 +990,7 @@ bool SdXMLFilter::Export()
     }
     catch (const uno::Exception &e)
     {
-        SAL_WARN( "sd.filter", "uno Exception caught while exporting:" << e.Message);
+        SAL_WARN( "sd.filter", "uno Exception caught while exporting:" << e);
         bDocRet = false;
     }
     if ( !bLocked )

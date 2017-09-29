@@ -827,12 +827,12 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
     }
     catch (const datatransfer::UnsupportedFlavorException& e)
     {
-        SAL_WARN("sc", "Caught UnsupportedFlavorException " << e.Message);
+        SAL_WARN("sc", "Caught " << e);
         return OString();
     }
     catch (const css::uno::Exception& e)
     {
-        SAL_WARN("sc", "Caught UNO Exception " << e.Message);
+        SAL_WARN("sc", "Caught " << e);
         return OString();
     }
 

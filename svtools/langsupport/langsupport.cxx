@@ -65,12 +65,12 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        SAL_WARN("vcl.app", "Fatal: " << e);
         return 1;
     }
     catch (const std::exception &e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        SAL_WARN("vcl.app", "Fatal: " << e.what());
         return 1;
     }
 

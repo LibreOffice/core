@@ -72,7 +72,7 @@ Reference< XComponentContext > createInitialComponentContext(
 
     catch( const Exception& rExc )
     {
-        SAL_WARN( "xmlscript", rExc.Message );
+        SAL_WARN( "xmlscript", rExc );
     }
 
     return xContext;
@@ -185,18 +185,18 @@ void MyApp::Main()
     }
     catch (const xml::sax::SAXException & rExc)
     {
-        OUString aStr( rExc.Message );
+        OUString aStr( rExc );
         uno::Exception exc;
         if (rExc.WrappedException >>= exc)
         {
             aStr += " >>> ";
-            aStr += exc.Message;
+            aStr += exc;
         }
         SAL_WARN( "xmlscript", aStr );
     }
     catch (const uno::Exception & rExc)
     {
-        SAL_WARN( "xmlscript", rExc.Message );
+        SAL_WARN( "xmlscript", rExc );
     }
 
     Reference< lang::XComponent > xComp( xContext, UNO_QUERY );

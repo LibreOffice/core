@@ -272,7 +272,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
         }
         catch (const RuntimeException& e)
         {
-            SAL_WARN( "cui.options", "CuiAboutConfigTabPage: exception " << e.Message);
+            SAL_WARN( "cui.options", "CuiAboutConfigTabPage: " << e);
         }
 
         if (bNotLeaf)

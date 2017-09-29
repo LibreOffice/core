@@ -298,7 +298,7 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const OUString& 
         }
         catch (const Exception& e)
         {
-            SAL_WARN("unotools.config", "SetPath: exception: " << e.Message);
+            SAL_WARN("unotools.config", "SetPath: " << e);
         }
     }
 }

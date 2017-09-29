@@ -182,7 +182,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("sw", e.Message);
+        SAL_WARN("sw", e);
         ScopedVclPtrInstance<MessageDialog>(this, e.Message)->Execute();
     }
 }

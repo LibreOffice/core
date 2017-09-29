@@ -304,7 +304,7 @@ void SwViewShellImp::UpdateAccessible()
         }
         catch (uno::Exception const& e)
         {
-            SAL_WARN("sw.a11y", "exception: " << e.Message);
+            SAL_WARN("sw.a11y", e);
             assert(!"SwViewShellImp::UpdateAccessible: unhandled exception");
         }
     }

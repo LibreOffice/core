@@ -21,7 +21,6 @@
 #define INCLUDED_TOOLKIT_HELPER_MACROS_HXX
 
 #include <string.h>
-
 #include <comphelper/servicehelper.hxx>
 
 #define IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
@@ -116,7 +115,7 @@ void ClassName::disposing( const css::lang::EventObject& ) \
 
 #if OSL_DEBUG_LEVEL > 0
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )    \
-        SAL_WARN( "toolkit", #ClassName "::" #MethodName ": caught an exception! " << e.Message);
+        SAL_WARN( "toolkit", #ClassName "::" #MethodName ": caught an exception! " << e);
 #else
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e ) (void)e;
 #endif

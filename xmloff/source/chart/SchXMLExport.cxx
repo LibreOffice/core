@@ -346,7 +346,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     }
     catch( const uno::Exception & ex )
     {
-        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
+        SAL_WARN("xmloff.chart", "Exception caught. " << ex);
     }
 
     return xResult;
@@ -453,7 +453,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     }
     catch( const uno::Exception & ex )
     {
-        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
+        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex);
     }
 
     return bResult;
@@ -876,7 +876,7 @@ lcl_TableData lcl_getDataForLocalTable(
     }
     catch( const uno::Exception & rEx )
     {
-        SAL_INFO("xmloff.chart", "something went wrong during table data collection: " << rEx.Message);
+        SAL_INFO("xmloff.chart", "something went wrong during table data collection: " << rEx);
     }
 
     return aResult;
@@ -922,8 +922,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
         }
         catch( const uno::Exception & rEx )
         {
-            OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-            SAL_INFO("xmloff.chart", "chart:exporting error bar ranges: " << aBStr );
+            SAL_INFO("xmloff.chart", "chart:exporting error bar ranges: " << rEx );
         }
     }
 
@@ -1465,7 +1464,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
             }
             catch( const uno::Exception & rEx )
             {
-                SAL_INFO("xmloff.chart", "AdditionalShapes not found: " << rEx.Message );
+                SAL_INFO("xmloff.chart", "AdditionalShapes not found: " << rEx );
             }
 
             if( mxAdditionalShapes.is())
@@ -1914,8 +1913,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             }
             catch( const uno::Exception & rEx )
             {
-                OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-                SAL_INFO("xmloff.chart", "chart:exportPlotAreaException caught: " << aBStr);
+                SAL_INFO("xmloff.chart", "chart:exportPlotAreaException caught: " << rEx);
             }
         }
 
@@ -2624,7 +2622,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                             }
                             catch( const uno::Exception & rEx )
                             {
-                                SAL_INFO("xmloff.chart", "Series not found or no XPropertySet: " << rEx.Message );
+                                SAL_INFO("xmloff.chart", "Series not found or no XPropertySet: " << rEx );
                                 continue;
                             }
                             if( xPropSet.is())
@@ -2640,7 +2638,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 }
                                 catch( const beans::UnknownPropertyException & rEx )
                                 {
-                                    SAL_INFO("xmloff.chart", "Required property not found in DataRowProperties: " << rEx.Message );
+                                    SAL_INFO("xmloff.chart", "Required property not found in DataRowProperties: " << rEx );
                                 }
 
                                 const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
@@ -2796,7 +2794,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         }
                         catch( const uno::Exception & rEx )
                         {
-                            SAL_INFO("xmloff.chart", "Exception caught during Export of series - optional DataMeanValueProperties not available: " << rEx.Message );
+                            SAL_INFO("xmloff.chart", "Exception caught during Export of series - optional DataMeanValueProperties not available: " << rEx );
                         }
 
                         if( xStatProp.is() )
@@ -3044,7 +3042,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
         }
         catch( const beans::UnknownPropertyException & rEx )
         {
-            SAL_INFO("xmloff.chart", "Required property not found in DataRowProperties: " << rEx.Message );
+            SAL_INFO("xmloff.chart", "Required property not found in DataRowProperties: " << rEx );
         }
 
         if( nErrorBarStyle != chart::ErrorBarStyle::NONE && (bNegative || bPositive))
@@ -3266,7 +3264,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 }
                 catch( const uno::Exception & rEx )
                 {
-                    SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx.Message );
+                    SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx );
                 }
             }
             else
@@ -3335,7 +3333,7 @@ void SchXMLExportHelper_Impl::exportDataPoints(
             }
             catch( const uno::Exception & rEx )
             {
-                SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx.Message );
+                SAL_INFO("xmloff.chart", "Exception caught during Export of data point: " << rEx );
             }
             if( xPropSet.is())
             {
@@ -3669,7 +3667,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
         }
         catch( const uno::Exception & ex )
         {
-            SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
+            SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex);
         }
 }
 

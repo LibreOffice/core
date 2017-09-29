@@ -251,7 +251,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         }
         catch (const Exception &e)
         {
-            SAL_WARN("xmlhelp", "Exception: " << e.Message);
+            SAL_WARN("xmlhelp", e);
         }
 
         ++iDir;

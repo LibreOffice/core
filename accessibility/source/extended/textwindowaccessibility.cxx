@@ -266,7 +266,7 @@ void SAL_CALL Paragraph::grabFocus()
     {
         SAL_INFO("accessibility",
                  "textwindowaccessibility.cxx: Paragraph::grabFocus: caught unexpected "
-                 << rEx.Message);
+                 << rEx);
     }
 }
 

@@ -90,9 +90,7 @@ bool prepareLocale() {
                     "", batch);
                 batch->commit();
             } catch (css::uno::Exception & e) {
-                SAL_WARN(
-                    "desktop.app",
-                    "ignoring Exception \"" << e.Message << "\"");
+                SAL_WARN("desktop.app", "ignoring " << e);
             }
         }
     }
@@ -125,8 +123,7 @@ bool prepareLocale() {
             officecfg::Setup::L10N::ooLocale::set(locale, batch);
             batch->commit();
         } catch (css::uno::Exception & e) {
-            SAL_WARN(
-                "desktop.app", "ignoring Exception \"" << e.Message << "\"");
+            SAL_WARN("desktop.app", "ignoring " << e);
         }
     }
     MsLangId::setConfiguredSystemUILanguage(tag.getLanguageType(false));

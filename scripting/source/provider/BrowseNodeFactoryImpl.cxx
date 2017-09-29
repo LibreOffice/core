@@ -293,7 +293,7 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
     // TODO proper exception handling, should throw
     catch( const Exception& e )
     {
-        SAL_WARN("scripting", "Caught Exception " << e.Message );
+        SAL_WARN("scripting", "Caught " << e );
         locnBNs.resize( mspIndex );
         return locnBNs;
     }

@@ -157,7 +157,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
             {
                 // no error handling needed...
                 // acceptor just won't come up
-                SAL_WARN( "desktop.app", "Acceptor could not be created: " << e.Message);
+                SAL_WARN( "desktop.app", "Acceptor could not be created: " << e);
             }
         }
         else

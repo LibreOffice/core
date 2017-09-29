@@ -3222,9 +3222,7 @@ Reference< XClipboard > Window::GetClipboard()
             }
             catch (DeploymentException & e)
             {
-                SAL_WARN(
-                    "vcl.window",
-                    "ignoring DeploymentException \"" << e.Message << "\"");
+                SAL_WARN("vcl.window", "ignoring " << e);
             }
         }
 
@@ -3265,9 +3263,7 @@ Reference< XClipboard > Window::GetPrimarySelection()
             }
             catch (RuntimeException & e)
             {
-                SAL_WARN(
-                    "vcl.window",
-                    "ignoring RuntimeException \"" << e.Message << "\"");
+                SAL_WARN("vcl.window", "ignoring " << e);
             }
         }
 

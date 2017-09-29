@@ -22,12 +22,15 @@
 
 #include <comphelper/comphelperdllapi.h>
 
+#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/logging/XLogHandler.hpp>
 #include <com/sun/star/logging/LogLevel.hpp>
 
 #include <boost/optional.hpp>
+#include <ostream>
 #include <memory>
+#include <typeinfo>
 
 namespace comphelper
 {
@@ -477,7 +480,6 @@ namespace comphelper
                     ) const;
     };
 } // namespace comphelper
-
 
 #endif // INCLUDED_COMPHELPER_LOGGING_HXX
 

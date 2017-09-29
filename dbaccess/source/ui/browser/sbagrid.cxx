@@ -964,7 +964,7 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
     }
     catch (const Exception& e)
     {
-        SAL_WARN("dbaccess", "SbaGridControl::getField Exception occurred: " << e.Message);
+        SAL_WARN("dbaccess", "SbaGridControl::getField Exception occurred: " << e);
     }
 
     return xEmptyReturn;
@@ -999,7 +999,7 @@ bool SbaGridControl::IsReadOnlyDB() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN("dbaccess", "SbaGridControl::IsReadOnlyDB Exception occurred: " << e.Message);
+        SAL_WARN("dbaccess", "SbaGridControl::IsReadOnlyDB Exception occurred: " << e);
     }
 
     return bDBIsReadOnly;

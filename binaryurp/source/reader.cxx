@@ -120,7 +120,7 @@ void Reader::execute() {
             block.done();
         }
     } catch (const css::uno::Exception & e) {
-        SAL_WARN("binaryurp", "caught UNO exception '" << e.Message << '\'');
+        SAL_WARN("binaryurp", "caught UNO exception '" << e << '\'');
     } catch (const std::exception & e) {
         SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
     }

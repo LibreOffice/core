@@ -48,7 +48,7 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
     }
     catch (const uno::Exception &e)
     {
-        SAL_WARN("cui.options", "TSAURLsDialog::TSAURLsDialog(): caught exception" << e.Message);
+        SAL_WARN("cui.options", "TSAURLsDialog::TSAURLsDialog(): " << e);
     }
 
     if ( m_pURLListBox->GetSelectedEntryCount() == 0 )

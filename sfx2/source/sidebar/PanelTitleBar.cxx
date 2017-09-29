@@ -148,7 +148,7 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
             }
             catch(Exception& rException)
             {
-                SAL_WARN("sfx", "caught exception: " << rException.Message);
+                SAL_WARN("sfx", "caught " << rException);
             }
         }
 }

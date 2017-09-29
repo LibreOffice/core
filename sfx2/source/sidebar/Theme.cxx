@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Paint.hxx>
 #include <sfx2/sidebar/Tools.hxx>
@@ -336,7 +337,7 @@ void Theme::UpdateTheme()
     }
     catch(beans::UnknownPropertyException& rException)
     {
-        SAL_WARN("sfx", "unknown property: " << rException.Message);
+        SAL_WARN("sfx", "unknown property: " << rException);
         OSL_ASSERT(false);
     }
 }

@@ -73,7 +73,7 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
     }
     catch (const css::ucb::ContentCreationException &e)
     {
-        SAL_WARN("sc", "hasStream caught " << e.Message);
+        SAL_WARN("sc", "hasStream caught " << e);
     }
 
     return false;

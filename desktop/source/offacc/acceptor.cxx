@@ -118,7 +118,7 @@ void Acceptor::run()
             osl::MutexGuard g(m_aMutex);
             m_bridges.add(rBridge);
         } catch (const Exception& e) {
-            SAL_WARN("desktop.offacc", "caught Exception \"" << e.Message << "\"");
+            SAL_WARN("desktop.offacc", "caught " << e);
             // connection failed...
             // something went wrong during connection setup.
             // just wait for a new connection to accept

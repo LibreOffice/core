@@ -394,7 +394,7 @@ static SvImageId GetImageId_Impl( const INetURLObject& rObject, bool bDetectFold
             }
             catch (const css::ucb::ContentCreationException& e)
             {
-                SAL_WARN("svtools.misc", "GetImageId_Impl: Caught exception: " << e.Message);
+                SAL_WARN("svtools.misc", "GetImageId_Impl: Caught " << e);
             }
 
             return nId;

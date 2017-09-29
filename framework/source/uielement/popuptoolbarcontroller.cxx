@@ -142,7 +142,7 @@ void SAL_CALL PopupMenuToolbarController::initialize(
     }
     catch (const css::uno::Exception& e)
     {
-        SAL_INFO( "fwk.uielement", "Caught an exception: " << e.Message );
+        SAL_INFO( "fwk.uielement", e );
     }
 
     SolarMutexGuard aSolarLock;
@@ -250,7 +250,7 @@ void PopupMenuToolbarController::createPopupMenuController()
         catch ( const css::uno::Exception &e )
         {
             m_xPopupMenu.clear();
-            SAL_INFO( "fwk.uielement", "Caught an exception: " << e.Message );
+            SAL_INFO( "fwk.uielement", e );
         }
     }
 }

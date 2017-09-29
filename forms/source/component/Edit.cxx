@@ -445,7 +445,7 @@ namespace
                 {
                     SAL_WARN( "forms.component", "could not transfer the property named '"
                                 << sourceprop.Name
-                                << "'. " << e.Message );
+                                << "'. " << e );
                 }
             }
         }

@@ -148,7 +148,7 @@ void TransliterationWrapper::loadModuleImpl() const
     }
     catch ( const Exception& e )
     {
-        SAL_WARN( "unotools.i18n", "loadModuleImpl: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "loadModuleImpl: Exception caught " << e );
     }
 
     bFirstCall = false;
@@ -169,7 +169,7 @@ void TransliterationWrapper::loadModuleByImplName(const OUString& rModuleName,
     }
     catch ( const Exception& e )
     {
-        SAL_WARN( "unotools.i18n", "loadModuleByImplName: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "loadModuleByImplName: Exception caught " << e );
     }
 
     bFirstCall = false;
@@ -188,7 +188,7 @@ bool TransliterationWrapper::equals(
     }
     catch ( const Exception& e )
     {
-        SAL_WARN( "unotools.i18n", "equals: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "equals: Exception caught " << e );
     }
     return false;
 }
@@ -204,7 +204,7 @@ sal_Int32 TransliterationWrapper::compareString( const OUString& rStr1, const OU
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "compareString: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "compareString: Exception caught " << e );
     }
     return 0;
 }

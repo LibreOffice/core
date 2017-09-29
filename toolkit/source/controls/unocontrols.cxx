@@ -2930,7 +2930,7 @@ void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
         }
         catch( const Exception& e )
         {
-            SAL_WARN( "toolkit", "UnoListBoxControl::itemStateChanged: caught an exception: " << e.Message);
+            SAL_WARN( "toolkit", "UnoListBoxControl::itemStateChanged: caught " << e);
         }
     }
 }
@@ -3266,7 +3266,7 @@ void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
         }
         catch( const Exception& e )
         {
-            SAL_WARN( "toolkit", "UnoComboBoxControl::itemStateChanged: caught an exception: " << e.Message);
+            SAL_WARN( "toolkit", "UnoComboBoxControl::itemStateChanged: caught " << e);
         }
     }
 }

@@ -93,7 +93,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("sw.rtf", "SwRTFReader::Read(): exception: " << e.Message);
+        SAL_WARN("sw.rtf", "SwRTFReader::Read(): " << e);
         ret = ERR_SWG_READ_ERROR;
     }
 

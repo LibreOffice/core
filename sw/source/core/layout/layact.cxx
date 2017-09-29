@@ -1923,7 +1923,7 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
                         pImp->GetShell()->InvalidateWindows( aRepaint );
                 } catch( const css::uno::RuntimeException& e) {
                     // handle smarttag problems gracefully and provide diagnostics
-                    SAL_WARN( "sw.core", "SMART_TAGS Exception:" << e.Message);
+                    SAL_WARN( "sw.core", "SMART_TAGS: " << e);
                 }
                 if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))
                     return true;

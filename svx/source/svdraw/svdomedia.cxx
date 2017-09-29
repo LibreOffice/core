@@ -320,7 +320,7 @@ static bool lcl_HandleJsonPackageURL(
     }
     catch (uno::Exception const& e)
     {
-        SAL_INFO("svx", "exception while copying glTF related files to temp directory '" << e.Message << "'");
+        SAL_INFO("svx", "exception while copying glTF related files to temp directory '" << e << "'");
     }
     return true;
 }
@@ -348,7 +348,7 @@ static bool lcl_CopyToTempFile(
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("svx", "exception: '" << e.Message << "'");
+        SAL_WARN("svx", "exception: '" << e << "'");
         return false;
     }
     o_rTempFileURL = tempFileURL;
@@ -396,7 +396,7 @@ static bool lcl_HandlePackageURL(
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("svx", "exception: '" << e.Message << "'");
+        SAL_WARN("svx", "exception: '" << e << "'");
         return false;
     }
     if (!xInStream.is())

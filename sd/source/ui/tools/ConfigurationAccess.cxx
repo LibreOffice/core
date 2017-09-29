@@ -106,7 +106,7 @@ Any ConfigurationAccess::GetConfigurationNode (
     }
     catch (const Exception& rException)
     {
-        SAL_WARN("sd", "caught exception while getting configuration node" << sPathToNode << ": " << rException.Message);
+        SAL_WARN("sd", "caught exception while getting configuration node" << sPathToNode << ": " << rException);
     }
 
     return Any();

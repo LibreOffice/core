@@ -1234,7 +1234,7 @@ sal_uInt32 ImplEESdrObject::ImplGetText()
         }
         catch (const uno::RuntimeException& e)
         {
-            SAL_WARN("filter.ms", "ImplGetText exception: " << e.Message);
+            SAL_WARN("filter.ms", "ImplGetText: " << e);
         }
     }
     return mnTextSize;

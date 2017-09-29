@@ -444,8 +444,7 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("sw.ui",
-            "ExportStoredChapterNumberingRules: exception: " << e.Message);
+        SAL_WARN("sw.ui", "ExportStoredChapterNumberingRules: " << e);
     }
 }
 
@@ -474,8 +473,7 @@ void ImportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("sw.ui",
-            "ImportStoredChapterNumberingRules: exception: " << e.Message);
+        SAL_WARN("sw.ui", "ImportStoredChapterNumberingRules: " << e);
     }
 }
 

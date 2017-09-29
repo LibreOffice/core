@@ -589,7 +589,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
     }
     catch( const uno::Exception& e )
     {
-        SAL_INFO("sw.ww8","***** For some reason we have an exception " << e.Message );
+        SAL_INFO("sw.ww8","***** For some reason we have an " << e );
         bRes = false;
     }
     return bRes;
