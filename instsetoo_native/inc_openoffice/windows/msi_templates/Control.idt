@@ -338,16 +338,16 @@ SetupType	Back	PushButton	164	243	66	17	3		OOO_CONTROL_251	Next
 SetupType	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 SetupType	BannerLine	Line	0	44	376	0	1				
 SetupType	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_254	RadioGroup	
-SetupType	CompleteIco	Icon	34	94	24	24	5242881		SetupCompleteIco		
-SetupType	CompText	Text	80	94	246	35	3		OOO_CONTROL_255		
-SetupType	CustomIco	Icon	34	154	24	24	5242881		SetupPartialIco		
-SetupType	CustText	Text	80	154	246	35	3		OOO_CONTROL_256		
+SetupType	CompleteIco	Icon	35	95	24	24	5242881		SetupCompleteIco		
+SetupType	CompText	Text	80	95	270	35	3		OOO_CONTROL_255		
+SetupType	CustomIco	Icon	35	155	24	24	5242881		SetupPartialIco		
+SetupType	CustText	Text	80	155	270	35	3		OOO_CONTROL_256		
 SetupType	DlgDesc	Text	21	23	249	25	65539		OOO_CONTROL_257		
 SetupType	DlgLine	Line	0	234	376	0	1				
 SetupType	DlgText	Text	21	51	326	10	3		OOO_CONTROL_258		
 SetupType	DlgTitle	Text	13	6	257	25	65539		OOO_CONTROL_259		
 SetupType	Next	PushButton	230	243	66	17	3		OOO_CONTROL_260	Cancel	
-SetupType	RadioGroup	RadioButtonGroup	21	79	264	120	3	_IsSetupTypeMin		Back	
+SetupType	RadioGroup	RadioButtonGroup	21	80	264	120	3	_IsSetupTypeMin		Back	
 SplashBitmap	Back	PushButton	164	243	66	17	1		OOO_CONTROL_262	Next	
 SplashBitmap	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_265	Back	
 SplashBitmap	DlgLine	Line	0	234	376	0	1				
