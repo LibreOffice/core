@@ -125,7 +125,7 @@ public:
 
     void            Insert( const XPolygon& rXPoly );
     void            Insert( const XPolyPolygon& rXPoly );
-    XPolygon        Remove( sal_uInt16 nPos );
+    void            Remove( sal_uInt16 nPos );
     const XPolygon& GetObject( sal_uInt16 nPos ) const;
 
     void            Clear();
