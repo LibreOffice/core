@@ -82,6 +82,7 @@ public:
     void testSwappedOutImageExport();
     void testOOoXMLAnimations();
     void testTdf80020();
+    void testTdf58129();
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
     void testTdf62176();
@@ -99,6 +100,7 @@ public:
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testOOoXMLAnimations);
     CPPUNIT_TEST(testTdf80020);
+    CPPUNIT_TEST(testTdf58129);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testTdf62176);
@@ -364,6 +366,44 @@ void SdExportTest::testTdf80020()
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
     uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf58129()
+{
+    const OUString documentTestString("My name is mungi");
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf58129.odp"), ODP);
+
+    // Import the original document
+    uno::Reference<lang::XComponent> xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+
+    // Check if the document contains the expected paragraph
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    CPPUNIT_ASSERT_EQUAL(documentTestString, xParagraph->getString());
+
+    // Export the document to ppt and load it
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[PPT].pFilterName), RTL_TEXTENCODING_UTF8);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    xComponent.set(xStorable, uno::UNO_QUERY);
+    xComponent->dispose();
+    xDocShRef = loadURL(aTempFile.GetURL(), PPT);
+
+    // Just in case: check if the document contains the expected paragraph
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE("Could not load ppt document", pDoc != nullptr);
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE("Could not load page", pPage != nullptr);
+    SdrObject *pObj = pPage->GetObj(0);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>(pObj);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    CPPUNIT_ASSERT_EQUAL(documentTestString, aEdit.GetText(0));
 
     xDocShRef->DoClose();
 }
