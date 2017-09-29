@@ -107,7 +107,7 @@ thread redirects using Qt::BlockingQueuedConnection.
 == General: processing all current events for DoYield ==
 
 This is easily implemented for all non-priority queue based implementations.
-Windows and MacOS both have a timestamp attached to their events / messages,
+Windows and macOS both have a timestamp attached to their events / messages,
 so simply get the current time and just process anything < timestamp.
 For the KDE backend this is already the default behaviour - single event
 processing isn't even supported. The headless backend accomplishes this by
@@ -130,10 +130,27 @@ may block the main thread until some events happen.
 Currently we wait on an extra conditional, which is cleared by the main event
 loop.
 
-== MacOS implementation details ==
+== General: invalidation of elapsed timer event messages ==
+
+Since the system timer to run the scheduler is single-shot, there should never
+be more then one elapsed timer event in system event queue. When stopping or
+restarting the timer, we eventually have to remove the now invalid event from
+the queue.
+
+But for the Windows and macOS backends this may fail as they have delayed
+posting of events, so a consecutive remove after a post will actually yield no
+remove. On Windows we even get unwanted processing of events outside of the
+main event loop, which may call the Scheduler, as timer management is handled
+in critical scheduler code.
+
+To prevent these problems, we don't even try to remove these events, but
+invalidate them by versioning the timer events. Timer events with invalid
+versions are processed but simply don't run the scheduler.
+
+== macOS implementation details ==
 
 Generally the Scheduler is handled as expected, except on resize, which is
-handled with different runloop-modes in MacOS. In case of a resize, the normal
+handled with different runloop-modes in macOS. In case of a resize, the normal
 runloop is suspended in sendEvent, so we can't call the scheduler via posted
 main loop-events. Instead the scheduler uses the timer again.
 
@@ -145,7 +162,7 @@ but we can prevent running any other SolarMutex based code. Those wakeup
 events must be ignored to prevent busy-locks. For more info read the "General:
 main thread deferral" section.
 
-We can neither rely on MacOS dispatch_sync code block execution nor the
+We can neither rely on macOS dispatch_sync code block execution nor the
 message handling, as both can't be prioritized or filtered and the first
 does also not allow nested execution and is just processed in sequence.
 
@@ -153,29 +170,25 @@ There is also a workaround for a problem for pushing tasks to an empty queue,
 as [NSApp postEvent: ... atStart: NO] doesn't append the event, if the
 message queue is empty.
 
-Probably that's the reason, why some code comments spoke of lost events and
-there was some distinct additional event processing implemented.
-
 == Windows implementation details ==
 
 Posted or sent event messages often trigger processing of WndProc in
 PeekMessage, GetMessage or DispatchMessage, independently from the message to
 fetch, remove or dispatch ("During this call, the system delivers pending,
 nonqueued messages..."). Additionally messages have an inherited priority
-based on the function used to generate them. Even if WM_TIMER should have been
-the lowest prio, a posted WM_TIMER is processed with the prio of a posted
-message.
+based on the function used to generate them. Even if WM_TIMER messages should
+have the lowest priority, a manually posted WM_TIMER is processed with the
+priority of a PostMessage message.
 
-Therefore the current solution always starts a (threaded) timer even for the
-instant Idles and syncs to this timer message in the main dispatch loop.
-Using SwitchToThread(), this seem to work reasonably well.
+Therefore the current solution always starts a (threaded) timer, even for the
+instant Idles, and syncs to this timer message in the main dispatch loop, to
+process the messages in the correct sequence. Using SwitchToThread(), this
+kind of polling seem to work reasonably well.
 
 An additional workaround is implemented for the delayed queuing of posted
 messages, where PeekMessage in WinSalTimer::Stop() won't be able remove the
-just posted timer callback message. We handle this by adding a timestamp to
-the timer callback message, which is checked before starting the Scheduler.
-This way we can end with multiple timer callback message in the queue, which
-we were asserting.
+just posted timer callback message. See "General: invalidation of elapsed
+timer event messages" for the details.
 
 To run the required GUI code in the main thread without unlocking the
 SolarMutex, we "disable" it. For more infos read the "General: main thread
@@ -233,7 +246,7 @@ mbStatic workaround from the Task class.
 
 == Run the LO application in its own thread ==
 
-This would probably get rid of most of the MacOS and Windows implementation
+This would probably get rid of most of the macOS and Windows implementation
 details / workarounds, but is quite probably a large amount of work.
 
 Instead of LO running in the main process / thread, we run it in a 2nd thread
@@ -243,7 +256,7 @@ and can process system events.
 That's just a theory - it definitely needs more analysis before even attending
 an implementation.
 
-== Re-evaluate the MacOS ImplNSAppPostEvent ==
+== Re-evaluate the macOS ImplNSAppPostEvent ==
 
 Probably a solution comparable to the Windows backends delayed PostMessage
 workaround using a validation timestamp is better then the current peek,
