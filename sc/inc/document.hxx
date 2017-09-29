@@ -276,14 +276,11 @@ const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink()
 // During threaded calculation fields being mutated are kept in this struct
 struct ScDocumentThreadSpecific
 {
-    sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
-
     ScRecursionHelper*      pRecursionHelper;               // information for recursive and iterative cell formulas
 
     ScLookupCacheMapImpl*   pLookupCacheMapImpl;            // cache for lookups like VLOOKUP and MATCH
 
     ScDocumentThreadSpecific() :
-        nInterpreterTableOpLevel(0),
         pRecursionHelper(nullptr),
         pLookupCacheMapImpl(nullptr)
     {
@@ -452,6 +449,7 @@ private:
     sal_uLong               nXMLImportedFormulaCount;        // progress count during XML import
     sal_uInt16              nInterpretLevel;                // >0 if in interpreter
     sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter
+    sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
 
     ScDocumentThreadSpecific maNonThreaded;
 
@@ -2204,9 +2202,17 @@ public:
                                 if ( nMacroInterpretLevel )
                                     nMacroInterpretLevel--;
                             }
-    bool                IsInInterpreterTableOp() const;
-    void                IncInterpreterTableOpLevel();
-    void                DecInterpreterTableOpLevel();
+    bool                IsInInterpreterTableOp() const { return nInterpreterTableOpLevel != 0; }
+    void                IncInterpreterTableOpLevel()
+                            {
+                                if ( nInterpreterTableOpLevel < USHRT_MAX )
+                                    nInterpreterTableOpLevel++;
+                            }
+    void                DecInterpreterTableOpLevel()
+                            {
+                                if ( nInterpreterTableOpLevel )
+                                    nInterpreterTableOpLevel--;
+                            }
 
     // add a formula to be remembered for TableOp broadcasts
     void                AddTableOpFormulaCell( ScFormulaCell* );
