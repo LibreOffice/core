@@ -41,21 +41,16 @@ void WinSalTimer::ImplStop()
     const WinSalInstance *pInst = pSalData->mpInstance;
     assert( !pInst || pSalData->mnAppThreadId == GetCurrentThreadId() );
 
-    const HANDLE hTimer = m_nTimerId;
-    if ( nullptr == hTimer )
-        return;
+    if ( nullptr != m_nTimerId )
+    {
+        const HANDLE hTimer = m_nTimerId;
+        m_nTimerId = nullptr;
+        DeleteTimerQueueTimer( nullptr, hTimer, INVALID_HANDLE_VALUE );
+    }
 
-    m_nTimerId = nullptr;
-    DeleteTimerQueueTimer( nullptr, hTimer, INVALID_HANDLE_VALUE );
-    // Keep both after DeleteTimerQueueTimer, because they are set in SalTimerProc
+    m_bDirectTimeout = false;
+    // Keep after DeleteTimerQueueTimer, because it's set in SalTimerProc
     InvalidateEvent();
-    m_bPollForMessage = false;
-
-    // remove as many pending SAL_MSG_TIMER_CALLBACK messages as possible
-    // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
-    MSG aMsg;
-    while ( PeekMessageW(&aMsg, pInst->mhComWnd, SAL_MSG_TIMER_CALLBACK,
-                         SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) );
 }
 
 void WinSalTimer::ImplStart( sal_uLong nMS )
@@ -70,20 +65,23 @@ void WinSalTimer::ImplStart( sal_uLong nMS )
     // cannot change a one-shot timer, so delete it and create a new one
     ImplStop();
 
-    // keep the yield running, if a 0ms Idle is scheduled
-    m_bPollForMessage = ( 0 == nMS );
+    // directly indicate an elapsed timer
+    m_bDirectTimeout = ( 0 == nMS );
     // probably WT_EXECUTEONLYONCE is not needed, but it enforces Period
     // to be 0 and should not hurt; also see
     // https://www.microsoft.com/msj/0499/pooling/pooling.aspx
-    CreateTimerQueueTimer(&m_nTimerId, nullptr, SalTimerProc,
-                          reinterpret_cast<void*>(
-                              sal_IntPtr(GetNextEventVersion())),
-                          nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
+    if ( !m_bDirectTimeout || m_bForceRealTimer )
+        CreateTimerQueueTimer(&m_nTimerId, nullptr, SalTimerProc, this,
+                              nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
+    else if ( m_bNeedsWakeupMessage )
+        PostMessageW( pSalData->mpInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK,
+                      static_cast<WPARAM>(GetNextEventVersion()), 0 );
 }
 
 WinSalTimer::WinSalTimer()
     : m_nTimerId( nullptr )
-    , m_bPollForMessage( false )
+    , m_bDirectTimeout( false )
+    , m_bForceRealTimer( false )
 {
 }
 
@@ -126,12 +124,10 @@ void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
 {
     __try
     {
-        // always post message when the timer fires, we will remove the ones
-        // that happened during execution of the callback later directly from
-        // the message queue
-        BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd,
-                                      SAL_MSG_TIMER_CALLBACK,
-                                      reinterpret_cast<WPARAM>(data), 0);
+        WinSalTimer *pTimer = reinterpret_cast<WinSalTimer*>( data );
+        BOOL const ret = PostMessageW(
+            GetSalData()->mpInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK,
+            static_cast<WPARAM>(pTimer->GetNextEventVersion()), 0 );
 #if OSL_DEBUG_LEVEL > 0
         if (0 == ret) // SEH prevents using SAL_WARN here?
             fputs("ERROR: PostMessage() failed!\n", stderr);
@@ -142,15 +138,51 @@ void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
     }
 }
 
-void WinSalTimer::ImplEmitTimerCallback()
+void WinSalTimer::ImplHandleElapsedTimer()
 {
     // Test for MouseLeave
     SalTestMouseLeave();
 
-    m_bPollForMessage = false;
+    m_bDirectTimeout = false;
     ImplSalYieldMutexAcquireWithWait();
     CallCallback();
     ImplSalYieldMutexRelease();
+}
+
+void WinSalTimer::ImplHandleTimerEvent( WPARAM aWPARAM )
+{
+    assert( aWPARAM <= SAL_MAX_INT32 );
+    if ( !IsValidEventVersion( static_cast<sal_Int32>( aWPARAM ) ) )
+        return;
+
+    ImplHandleElapsedTimer();
+}
+
+void WinSalTimer::SetForceRealTimer( bool bVal )
+{
+    if ( m_bForceRealTimer == bVal )
+        return;
+
+    m_bForceRealTimer = bVal;
+
+    ImplSchedulerContext &rSchedCtx = ImplGetSVData()->maSchedCtx;
+    if ( bVal )
+    {
+        rSchedCtx.meMaxTaskPriority = TaskPriority::POST_PAINT;
+        // we need a real timer, as m_bDirectTimeout won't be processed
+        if ( m_bDirectTimeout )
+            Start( 0 );
+    }
+    else
+    {
+        // we increase the potentially scheduled task list, so re-check
+        rSchedCtx.meMaxTaskPriority = TaskPriority::LOWEST;
+        if ( !m_bDirectTimeout )
+        {
+            rSchedCtx.mnTimerPeriod = 0;
+            Start( 0 );
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

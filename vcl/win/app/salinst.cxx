@@ -472,11 +472,11 @@ static void ImplSalDispatchMessage( MSG* pMsg )
         ImplSalPostDispatchMsg( pMsg, lResult );
 }
 
-static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
+bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents, WPARAM *pTimerVer = nullptr )
 {
     static sal_uInt32 nLastTicks = 0;
     MSG aMsg;
-    bool bWasMsg = false, bOneEvent = false;
+    bool bWasMsg = false, bOneEvent = false, bWasTimeoutMsg = false;
     ImplSVData *const pSVData = ImplGetSVData();
     WinSalTimer* pTimer = static_cast<WinSalTimer*>( pSVData->maSchedCtx.mpSalTimer );
 
@@ -491,6 +491,15 @@ static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
         if ( bOneEvent )
         {
             bWasMsg = true;
+            if ( !bWasTimeoutMsg )
+            {
+                bWasTimeoutMsg = (aMsg.message == SAL_MSG_TIMER_CALLBACK);
+                if ( pTimerVer )
+                {
+                    *pTimerVer = aMsg.wParam;
+                    break;
+                }
+            }
             TranslateMessage( &aMsg );
             ImplSalDispatchMessage( &aMsg );
             if ( bHandleAllCurrentEvents
@@ -499,31 +508,41 @@ static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
                 bHadNewerEvent = true;
             bOneEvent = !bHadNewerEvent;
         }
-        // busy loop to catch a message, eventually the 0ms timer.
-        // we don't need to loop, if we wait anyway.
-        if ( !bWait && !bWasMsg && pTimer && pTimer->PollForMessage() )
-        {
-            SwitchToThread();
-            continue;
-        }
+
         if ( !(bHandleAllCurrentEvents && bOneEvent) )
             break;
     }
     while( true );
 
+    // 0ms timeouts are handled out-of-bounds to prevent busy-locking the
+    // event loop
+    if ( (bHandleAllCurrentEvents || !bWasMsg)
+        && !bWasTimeoutMsg && pTimer && pTimer->IsDirectTimeout() )
+    {
+        pTimer->ImplHandleElapsedTimer();
+        bWasMsg = true;
+    }
+
     if ( bHandleAllCurrentEvents )
         nLastTicks = nCurTicks;
 
-    // Also check that we don't wait when application already has quit
-    if ( bWait && !bWasMsg && !pSVData->maAppData.mbAppQuit )
+    if ( bWait && !bWasMsg )
     {
+        pTimer->SetNeedsWakeupMessage( true );
         if ( GetMessageW( &aMsg, nullptr, 0, 0 ) )
         {
+            pTimer->SetNeedsWakeupMessage( false );
             bWasMsg = true;
             TranslateMessage( &aMsg );
             ImplSalDispatchMessage( &aMsg );
         }
+        else
+            pTimer->SetNeedsWakeupMessage( false );
     }
+
+    // we're back in the main loop after resize
+    if ( pTimer && !pTimerVer )
+        pTimer->SetForceRealTimer( false );
 
     return bWasMsg;
 }
@@ -540,8 +559,6 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     SolarMutexReleaser aReleaser;
     if ( !IsMainThread() )
     {
-        // If you change the SendMessageW function, you might need to update
-        // the PeekMessage( ... PM_QS_POSTMESSAGE) calls!
         bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD,
                                  (WPARAM) false, (LPARAM) bHandleAllCurrentEvents );
         if ( !bDidWork && bWait )
@@ -659,17 +676,9 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
         {
             WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
             assert( pTimer != nullptr );
-            MSG aMsg;
-            bool bValidMSG = pTimer->IsValidWPARAM( wParam );
-            // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
-            while ( PeekMessageW(&aMsg, pInst->mhComWnd, SAL_MSG_TIMER_CALLBACK,
-                                 SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
-            {
-                assert( !bValidMSG && "Unexpected non-last valid message" );
-                bValidMSG = pTimer->IsValidWPARAM( aMsg.wParam );
-            }
-            if ( bValidMSG )
-                pTimer->ImplEmitTimerCallback();
+            if ( pTimer->GetForceRealTimer() )
+                ImplSalYield( false, true, &wParam );
+            pTimer->ImplHandleTimerEvent( wParam );
             break;
         }
     }
@@ -696,9 +705,119 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     return nRet;
 }
 
+struct MsgRange
+{
+    UINT nStart;
+    UINT nEnd;
+};
+
+static std::vector<MsgRange> GetOtherRanges( VclInputFlags nType )
+{
+    assert( nType != VCL_INPUT_ANY );
+
+    const unsigned MAX_EXCL = 20;
+    // this array must be kept sorted!
+    const UINT nExclMessageIds[ MAX_EXCL ] =
+    {
+        0,
+
+        WM_MOVE, // 3
+        WM_SIZE, // 5
+        WM_PAINT, // 15
+        WM_TIMER, // 275
+
+        WM_MOUSEFIRST, // 512
+        513,
+        514,
+        515,
+        516,
+        517,
+        518,
+        519,
+        520,
+        WM_MOUSELAST, // 521
+
+        WM_KEYDOWN, // 656
+
+        SAL_MSG_POSTMOVE, // WM_USER+136
+        SAL_MSG_POSTCALLSIZE, // WM_USER+137
+
+        SAL_MSG_TIMER_CALLBACK, // WM_USER+162
+
+        UINT_MAX
+    };
+
+    bool aExclMessageList[ MAX_EXCL ] = { false, };
+    std::vector<MsgRange> aResult;
+
+    // set the excluded values
+    if ( !(nType & VclInputFlags::MOUSE) )
+    {
+        for ( unsigned i = 0; nExclMessageIds[ 5 + i ] <= WM_MOUSELAST; ++i )
+            aExclMessageList[ 5 + i ] = true;
+    }
+
+    if ( !(nType & VclInputFlags::KEYBOARD) )
+        aExclMessageList[ 15 ] = true;
+
+    if ( !(nType & VclInputFlags::PAINT) )
+    {
+        aExclMessageList[ 1 ] = true;
+        aExclMessageList[ 2 ] = true;
+        aExclMessageList[ 3 ] = true;
+        aExclMessageList[ 16 ] = true;
+        aExclMessageList[ 17 ] = true;
+    }
+
+    if ( !(nType & VclInputFlags::TIMER) )
+    {
+        aExclMessageList[ 4 ]  = true;
+        aExclMessageList[ 18 ]  = true;
+    }
+
+    // build the message ranges
+    MsgRange aRange = { 0, 0 };
+    bool doEnd = true;
+    for ( unsigned i = 1; i < MAX_EXCL; ++i )
+    {
+        if ( aExclMessageList[ i ] )
+        {
+            if ( !doEnd )
+            {
+                if ( nExclMessageIds[ i ] == aRange.nStart )
+                    ++aRange.nStart;
+                else
+                    doEnd = true;
+            }
+            if ( doEnd )
+            {
+                aRange.nEnd = nExclMessageIds[ i ] - 1;
+                aResult.push_back( aRange );
+                doEnd = false;
+                aRange.nStart = aRange.nEnd + 2;
+            }
+        }
+    }
+
+    if ( aRange.nStart != UINT_MAX )
+    {
+        aRange.nEnd = UINT_MAX;
+        aResult.push_back( aRange );
+    }
+
+    return aResult;
+}
+
 bool WinSalInstance::AnyInput( VclInputFlags nType )
 {
     MSG aMsg;
+
+    if ( nType & VclInputFlags::TIMER )
+    {
+        const WinSalTimer* pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+        if ( pTimer && pTimer->HasTimerElapsed() )
+            return true;
+    }
 
     if ( (nType & VCL_INPUT_ANY) == VCL_INPUT_ANY )
     {
@@ -756,20 +875,13 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
                 return true;
         }
 
-        if ( nType & VclInputFlags::TIMER )
-        {
-            // Test for timer input
-            if ( PeekMessageW( &aMsg, nullptr, WM_TIMER, WM_TIMER,
-                                  PM_NOREMOVE | PM_NOYIELD ) )
-                return true;
-
-        }
-
         if ( nType & VclInputFlags::OTHER )
         {
-            // Test for any input
-            if ( PeekMessageW( &aMsg, nullptr, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
-                return true;
+            std::vector<MsgRange> aMsgRangeList( GetOtherRanges( nType ) );
+            for ( MsgRange aRange : aMsgRangeList )
+                if ( PeekMessageW( &aMsg, nullptr, aRange.nStart,
+                                   aRange.nEnd, PM_NOREMOVE | PM_NOYIELD ) )
+                    return true;
         }
     }
 

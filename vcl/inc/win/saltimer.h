@@ -26,15 +26,20 @@ class WinSalTimer final : public SalTimer, protected VersionedEvent
 {
     // for access to Impl* functions
     friend LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef );
-    // for access to m_bPollForMessage
+    // for access to GetNextVersionedEvent
     friend void CALLBACK SalTimerProc( PVOID data, BOOLEAN );
+    // for access to ImplHandleElapsedTimer
+    friend bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents, WPARAM *pTimerVer );
 
-    HANDLE       m_nTimerId;          ///< Windows timer id
-    bool         m_bPollForMessage;   ///< Run yield until a message is caught (most likely the 0ms timer)
+    HANDLE       m_nTimerId;             ///< Windows timer id
+    bool         m_bDirectTimeout;       ///< timeout can be processed directly
+    bool         m_bForceRealTimer;      ///< enforce using a real timer for 0ms
+    bool         m_bNeedsWakeupMessage;  ///< needs a wakeup message
 
     void ImplStart( sal_uIntPtr nMS );
     void ImplStop();
-    void ImplEmitTimerCallback();
+    void ImplHandleTimerEvent( WPARAM aWPARAM );
+    void ImplHandleElapsedTimer();
 
 public:
     WinSalTimer();
@@ -43,19 +48,43 @@ public:
     virtual void Start(sal_uIntPtr nMS) override;
     virtual void Stop() override;
 
-    inline bool IsValidWPARAM( WPARAM wParam ) const;
+    inline bool IsDirectTimeout() const;
+    inline bool HasTimerElapsed() const;
 
-    inline bool PollForMessage() const;
+    /**
+     * Enforces the usage of a real timer instead of the message queue
+     *
+     * Needed for Window resize processing, as this starts a modal event loop.
+     */
+    void SetForceRealTimer( bool bVal );
+    inline bool GetForceRealTimer() const;
+
+    /**
+     * Enforces the posting of a message to run the main loop
+     *
+     * If we're currently sleeping in GetMessage(), we need a wakeup message.
+     */
+    inline void SetNeedsWakeupMessage( bool bVal );
 };
 
-inline bool WinSalTimer::IsValidWPARAM( WPARAM aWPARAM ) const
+inline bool WinSalTimer::IsDirectTimeout() const
 {
-    return IsValidEventVersion( static_cast<sal_Int32>( aWPARAM ) );
+    return m_bDirectTimeout;
 }
 
-inline bool WinSalTimer::PollForMessage() const
+inline bool WinSalTimer::HasTimerElapsed() const
 {
-    return m_bPollForMessage;
+    return m_bDirectTimeout || ExistsValidEvent();
+}
+
+inline bool WinSalTimer::GetForceRealTimer() const
+{
+    return m_bForceRealTimer;
+}
+
+inline void WinSalTimer::SetNeedsWakeupMessage( bool bVal )
+{
+    m_bNeedsWakeupMessage = bVal;
 }
 
 #endif
