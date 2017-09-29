@@ -171,7 +171,7 @@ void Scheduler::ImplDeInitScheduler()
     SAL_INFO( "vcl.schedule.deinit", "DeInit the scheduler - finished" );
     SAL_WARN_IF( 0 != nActiveTasks, "vcl.schedule.deinit", "DeInit active tasks: "
         << nActiveTasks << " (ignored: " << nIgnoredTasks << ")" );
-//    assert( nIgnoredTasks == nActiveTasks );
+    assert( nIgnoredTasks == nActiveTasks );
 #endif
 
     rSchedCtx.mpFirstSchedulerData = nullptr;
