@@ -559,6 +559,12 @@ StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
     // Only keep tree roots in rArr, child elements can be accessed through the hierarchy
     rArr.erase(std::remove_if(rArr.begin(), rArr.end(), [](StyleTree_Impl* pEntry) { return pEntry->HasParent(); }), rArr.end());
 
+    // tdf#91106 sort top level styles
+    std::sort(rArr.begin(), rArr.end(),
+        [&aSorter](StyleTree_Impl* pEntry1, StyleTree_Impl* pEntry2) {
+            return aSorter.compare(pEntry1->getName(), pEntry2->getName()) < 0;
+        });
+
     return rArr;
 }
 
