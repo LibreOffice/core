@@ -46,13 +46,8 @@ void WinSalTimer::ImplStop()
     m_nTimerId = nullptr;
     VersionedSalTimer::Stop();
     DeleteTimerQueueTimer( nullptr, hTimer, INVALID_HANDLE_VALUE );
+    // Keep it after DeleteTimerQueueTimer, because it can be set in SalTimerProc
     m_bPollForMessage = false;
-
-    // remove as many pending SAL_MSG_TIMER_CALLBACK messages as possible
-    // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
-    MSG aMsg;
-    while ( PeekMessageW(&aMsg, pInst->mhComWnd, SAL_MSG_TIMER_CALLBACK,
-                         SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) );
 }
 
 void WinSalTimer::ImplStart( sal_uLong nMS )
@@ -73,9 +68,7 @@ void WinSalTimer::ImplStart( sal_uLong nMS )
     // probably WT_EXECUTEONLYONCE is not needed, but it enforces Period
     // to be 0 and should not hurt; also see
     // https://www.microsoft.com/msj/0499/pooling/pooling.aspx
-    CreateTimerQueueTimer(&m_nTimerId, nullptr, SalTimerProc,
-                          reinterpret_cast<void*>(
-                              sal_IntPtr(GetEventVersion())),
+    CreateTimerQueueTimer(&m_nTimerId, nullptr, SalTimerProc, this,
                           nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
 }
 
@@ -125,16 +118,19 @@ static void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
 {
     __try
     {
-        // always post message when the timer fires, we will remove the ones
-        // that happened during execution of the callback later directly from
-        // the message queue
-        BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd,
-                                      SAL_MSG_TIMER_CALLBACK,
-                                      reinterpret_cast<WPARAM>(data), 0);
+        WinSalTimer *pTimer = reinterpret_cast<WinSalTimer*>( data );
+        sal_Int32 nVersion = pTimer->GetEventVersion();
+        if ( nVersion > 0 )
+        {
+            pTimer->m_bPollForMessage = true;
+            BOOL const ret = PostMessageW(GetSalData()->mpInstance->mhComWnd,
+                                          SAL_MSG_TIMER_CALLBACK,
+                                          static_cast<WPARAM>(nVersion), 0);
 #if OSL_DEBUG_LEVEL > 0
-        if (0 == ret) // SEH prevents using SAL_WARN here?
-            fputs("ERROR: PostMessage() failed!\n", stderr);
+            if (0 == ret) // SEH prevents using SAL_WARN here?
+                fputs("ERROR: PostMessage() failed!\n", stderr);
 #endif
+        }
     }
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
