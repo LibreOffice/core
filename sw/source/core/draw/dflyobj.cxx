@@ -48,6 +48,7 @@
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "wrtsh.hxx"
+#include <ndgrf.hxx>
 
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -958,10 +959,10 @@ SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
         if(0 != nRotation)
         {
             const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
-            const tools::Rectangle aOutRect(GetFlyFrame()->Frame().SVRect());
+            const tools::Rectangle aTmpOutRect(GetFlyFrame()->Frame().SVRect());
             const basegfx::B2DRange aTargetRange(
-                aOutRect.Left(), aOutRect.Top(),
-                aOutRect.Right(), aOutRect.Bottom());
+                aTmpOutRect.Left(), aTmpOutRect.Top(),
+                aTmpOutRect.Right(), aTmpOutRect.Bottom());
             const basegfx::B2DHomMatrix aTargetTransform(
                 basegfx::tools::createRotateAroundCenterKeepAspectRatioStayInsideRange(
                     aTargetRange,
@@ -979,10 +980,10 @@ void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
     // RotGrfFlyFrame: Adapt to possible rotated Graphic contained in FlyFrame
     if(GetFlyFrame()->Frame().HasArea())
     {
-        const tools::Rectangle aOutRect(GetFlyFrame()->Frame().SVRect());
-        const basegfx::B2DRange aTargetRange(
-            aOutRect.Left(), aOutRect.Top(),
-            aOutRect.Right(), aOutRect.Bottom());
+        // Use InnerBound, OuterBound (same as GetFlyFrame()->Frame().SVRect())
+        // may have a distance to InnerBound which needs to be taken into acocunt.
+        // The Graphic is mapped to InnerBound, as is the rotated Graphic.
+        const basegfx::B2DRange aTargetRange(getInnerBound());
 
         if(!aTargetRange.isEmpty())
         {
