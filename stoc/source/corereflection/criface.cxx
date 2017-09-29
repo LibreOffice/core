@@ -18,6 +18,11 @@
  */
 
 #include <sal/config.h>
+
+#include <cassert>
+#include <cstddef>
+#include <limits>
+
 #ifdef SAL_UNX
 #include <sal/alloca.h>
 #endif
@@ -39,6 +44,15 @@
 using namespace css::lang;
 using namespace css::reflection;
 using namespace css::uno;
+
+namespace {
+
+std::size_t multipleOf16(std::size_t n) {
+    assert(n <= std::numeric_limits<std::size_t>::max() - 15);
+    return (n + 15) & ~std::size_t(15);
+}
+
+}
 
 namespace stoc_corefl
 {
@@ -586,7 +600,12 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         TYPELIB_DANGER_GET(
             &pReturnType, getMethodTypeDescr()->pReturnTypeRef );
 
-        void * pUnoReturn = alloca( pReturnType->nSize );
+        // C/C++ ABIs typically assume that structs are padded at the end, and
+        // that those padding bytes may be written to (e.g., to write into the
+        // end of a "short" struct by writing the full contents of a "long"
+        // register); so create enough space here (assuming that no ABI requires
+        // padding larger than 16 byte boundaries):
+        void * pUnoReturn = alloca( multipleOf16(pReturnType->nSize) );
         void ** ppUnoArgs = static_cast<void **>(alloca( sizeof(void *) * nParams *2 ));
         typelib_TypeDescription ** ppParamTypes = reinterpret_cast<typelib_TypeDescription **>(ppUnoArgs + nParams);
 
