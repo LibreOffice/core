@@ -20,6 +20,7 @@
 #pragma once
 
 #include <memory>
+#include <cairo.h>
 
 #include <unx/saldisp.hxx>
 #include <unx/salframe.h>
@@ -39,8 +40,9 @@ class KDE5SalFrame : public SalFrame
         {
             std::unique_ptr<KDE5SalGraphics> pGraphics;
             bool bInUse;
+            cairo_surface_t* pSurface;
 
-            GraphicsHolder() : bInUse( false ) {}
+            GraphicsHolder() : bInUse( false ), pSurface(nullptr) {}
         };
 
         GraphicsHolder m_aGraphics[ nMaxGraphics ];

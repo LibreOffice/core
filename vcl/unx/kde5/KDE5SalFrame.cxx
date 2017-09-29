@@ -340,6 +340,7 @@ void KDE5SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
         if( m_aGraphics[i].pGraphics.get() == pGraphics )
         {
             m_aGraphics[i].bInUse = false;
+            cairo_surface_destroy( m_aGraphics[i].pSurface );
             break;
         }
     }
@@ -359,6 +360,7 @@ SalGraphics* KDE5SalFrame::AcquireGraphics()
 {
     if( GetWindow() )
     {
+        basegfx::B2IVector aSize( 142, 142 );
         for( int i = 0; i < nMaxGraphics; i++ )
         {
             if( ! m_aGraphics[i].bInUse )
@@ -367,6 +369,10 @@ SalGraphics* KDE5SalFrame::AcquireGraphics()
                 if( ! m_aGraphics[i].pGraphics )
                 {
                     m_aGraphics[i].pGraphics.reset( new KDE5SalGraphics( this, m_pWindow ) );
+
+                    //FIXME: those parameters are completely arbitrary, IDK what the right ones should be yet
+                    m_aGraphics[i].pSurface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aSize.getX(), aSize.getY() );
+                    m_aGraphics[i].pGraphics->setSurface( m_aGraphics[i].pSurface, aSize );
                     //m_aGraphics[i].pGraphics->Init( this, GetWindow(), GetScreenNumber() );
                 }
                 return m_aGraphics[i].pGraphics.get();
