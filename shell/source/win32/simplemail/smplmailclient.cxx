@@ -81,7 +81,7 @@ namespace /* private */
             lret = RegQueryValueW(hkey, nullptr, buff, &sz);
             if (lret == ERROR_SUCCESS)
             {
-                osl::FileBase::getFileURLFromSystemPath(reinterpret_cast<const sal_Unicode*>(buff), altSenddocUrl);
+                osl::FileBase::getFileURLFromSystemPath(SAL_U(buff), altSenddocUrl);
             }
             RegCloseKey(hkey);
         }

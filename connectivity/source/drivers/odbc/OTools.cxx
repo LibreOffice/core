@@ -113,7 +113,7 @@ void appendSQLWCHARs(OUStringBuffer & s, SQLWCHAR const * d, sal_Int32 n)
         sizeof (SQLWCHAR) == sizeof (sal_Unicode) || sizeof (SQLWCHAR) == 4,
         "bad SQLWCHAR");
     if (sizeof (SQLWCHAR) == sizeof (sal_Unicode)) {
-        s.append(reinterpret_cast<sal_Unicode const *>(d), n);
+        s.append(SAL_U(d), n);
     } else {
         for (sal_Int32 i = 0; i != n; ++i) {
             s.appendUtf32(d[i]);

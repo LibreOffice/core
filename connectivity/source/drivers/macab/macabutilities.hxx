@@ -57,7 +57,7 @@ namespace connectivity
             CFStringGetCharacters (sOrig, CFRangeMake(0,nStringLength), unichars);
             CFRelease(sOrig);
 
-            return OUString(reinterpret_cast<sal_Unicode *>(unichars));
+            return SAL_U(unichars);
         }
 
 
@@ -68,7 +68,7 @@ namespace connectivity
              * File was: fpicker/source/aqua/CFStringUtilities
              */
 
-            CFStringRef ref = CFStringCreateWithCharacters(kCFAllocatorDefault, reinterpret_cast<UniChar const *>(aString.getStr()), aString.getLength());
+            CFStringRef ref = CFStringCreateWithCharacters(kCFAllocatorDefault, SAL_W(aString.getStr()), aString.getLength());
 
             return ref;
         }

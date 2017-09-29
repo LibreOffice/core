@@ -89,7 +89,7 @@ OUString PromptNew(long hWnd)
     piTmpConnection->Release( );
     dlPrompt->Release( );
     CoUninitialize();
-    return OUString(reinterpret_cast<sal_Unicode const *>(_result));
+    return SAL_U(_result);
 }
 
 OUString PromptEdit(long hWnd, OUString const & connstr)
@@ -115,7 +115,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
 
 
     hr = piTmpConnection->put_ConnectionString(
-        const_cast<BSTR>(reinterpret_cast<wchar_t const *>(connstr.getStr())));
+        const_cast<BSTR>(SAL_W(connstr.getStr())));
     if( FAILED( hr ) )
     {
         piTmpConnection->Release( );
@@ -180,7 +180,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     piTmpConnection->Release( );
     dlPrompt->Release( );
     CoUninitialize();
-    return OUString(reinterpret_cast<sal_Unicode const *>(_result));
+    return SAL_U(_result);
 }
 
 }

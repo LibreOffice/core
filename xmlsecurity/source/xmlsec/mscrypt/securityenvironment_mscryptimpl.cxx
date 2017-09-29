@@ -299,7 +299,7 @@ static OUString get_system_name(const void *pvSystemStore,
     {
         ppwszSystemName = static_cast<LPCWSTR>(pvSystemStore);
     }
-    return reinterpret_cast<sal_Unicode const *>(ppwszSystemName);
+    return SAL_U(ppwszSystemName);
 }
 
 extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
@@ -309,7 +309,7 @@ extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
                                                          void *,
                                                          void *)
 {
-    OUString name(reinterpret_cast<sal_Unicode const *>(pwszStoreName));
+    OUString name(SAL_U(pwszStoreName));
     if (dwFlags & CERT_PHYSICAL_STORE_PREDEFINED_ENUM_FLAG)
         name += " (implicitly created)";
     SAL_INFO("xmlsecurity.xmlsec", "  Physical store: " << name);
