@@ -595,14 +595,14 @@ void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
     {
         // do something special since the object size is in the polygon
         // break up matrix to get the scale
-        const basegfx::tools::B2DHomMatrixBufferedDecompose aDecomp(aObjectTransform);
+        const basegfx::tools::B2DHomMatrixBufferedDecompose aTmpDecomp(aObjectTransform);
 
         // get polygon's position and size
         const basegfx::B2DRange aPolyRange(aObjectPolyPolygon.getB2DRange());
 
         // get the scaling factors (do not mirror, this is in the object transformation)
-        const double fScaleX(fabs(aDecomp.getScale().getX()) / (basegfx::fTools::equalZero(aPolyRange.getWidth()) ? 1.0 : aPolyRange.getWidth()));
-        const double fScaleY(fabs(aDecomp.getScale().getY()) / (basegfx::fTools::equalZero(aPolyRange.getHeight()) ? 1.0 : aPolyRange.getHeight()));
+        const double fScaleX(fabs(aTmpDecomp.getScale().getX()) / (basegfx::fTools::equalZero(aPolyRange.getWidth()) ? 1.0 : aPolyRange.getWidth()));
+        const double fScaleY(fabs(aTmpDecomp.getScale().getY()) / (basegfx::fTools::equalZero(aPolyRange.getHeight()) ? 1.0 : aPolyRange.getHeight()));
 
         // prepare transform matrix for polygon
         basegfx::B2DHomMatrix aPolyTransform(
@@ -3657,16 +3657,16 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     pObj->TRGetBaseGeometry(aOriginalMatrix, aPolyPolygon);
 
     {   // correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
-        const basegfx::tools::B2DHomMatrixBufferedDecompose aDecomp(aOriginalMatrix);
+        const basegfx::tools::B2DHomMatrixBufferedDecompose aTmpDecomp(aOriginalMatrix);
 
-        if(!basegfx::fTools::equalZero(aDecomp.getShearX()))
+        if(!basegfx::fTools::equalZero(aTmpDecomp.getShearX()))
         {
             bShearCorrected = true;
             aOriginalMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aDecomp.getScale(),
-                -aDecomp.getShearX(),
-                aDecomp.getRotate(),
-                aDecomp.getTranslate());
+                aTmpDecomp.getScale(),
+                -aTmpDecomp.getShearX(),
+                aTmpDecomp.getRotate(),
+                aTmpDecomp.getTranslate());
         }
     }
 
@@ -3740,13 +3740,13 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // aDiscreteChangeMatrix, go to concrete sizes now.
     // Create the unrotated original rectangle and the unrotated modified
     // rectangle as Ranges
-    const basegfx::tools::B2DHomMatrixBufferedDecompose aDecomp(aOriginalMatrix);
+    const basegfx::tools::B2DHomMatrixBufferedDecompose aOriginalMatrixDecomp(aOriginalMatrix);
 
     // prepare unsheared/unrotated versions of the old and new transformation
     const basegfx::B2DHomMatrix aOriginalMatrixNoShearNoRotate(
         basegfx::tools::createScaleTranslateB2DHomMatrix(
-            basegfx::absolute(aDecomp.getScale()),
-            aDecomp.getTranslate()));
+            basegfx::absolute(aOriginalMatrixDecomp.getScale()),
+            aOriginalMatrixDecomp.getTranslate()));
 
     // create the ranges for these
     basegfx::B2DRange aRangeOriginalNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
@@ -3784,13 +3784,13 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         if(bShearCorrected)
         {
             // back-correct shear
-            const basegfx::tools::B2DHomMatrixBufferedDecompose aDecomp(aNewObjectMatrix);
+            const basegfx::tools::B2DHomMatrixBufferedDecompose aTmpDecomp(aNewObjectMatrix);
 
             aNewObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aDecomp.getScale(),
-                -aDecomp.getShearX(),
-                aDecomp.getRotate(),
-                aDecomp.getTranslate());
+                aTmpDecomp.getScale(),
+                -aTmpDecomp.getShearX(),
+                aTmpDecomp.getRotate(),
+                aTmpDecomp.getTranslate());
         }
 
         // apply change to object by applying the unit coordinate change followed
