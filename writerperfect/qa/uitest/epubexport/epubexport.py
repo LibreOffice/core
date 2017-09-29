@@ -7,19 +7,18 @@
 from com.sun.star.beans import PropertyValue
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
+from uitest.uihelper.common import get_state_as_dict
 import uno
-
-
-def handleDialog(dialog):
-    # Select the second entry to request EPUB2, not EPUB3.
-    dialog.getChild("versionlb").executeAction("SELECT", mkPropertyValues({"POS": "1"}))
-    dialog.getChild("ok").executeAction("CLICK", tuple())
 
 
 # Test for EPUBExportDialog and EPUBExportUIComponent.
 class EPUBExportTest(UITestCase):
 
     def testUIComponent(self):
+        def handleDialog(dialog):
+            # Select the second entry to request EPUB2, not EPUB3.
+            dialog.getChild("versionlb").executeAction("SELECT", mkPropertyValues({"POS": "1"}))
+            dialog.getChild("ok").executeAction("CLICK", tuple())
 
         uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
 
@@ -52,5 +51,22 @@ class EPUBExportTest(UITestCase):
         filterData = [i.Value for i in propertyValues if i.Name == "FilterData"][0]
         epubVersion = [i.Value for i in filterData if i.Name == "EPUBVersion"][0]
         self.assertEqual(30, epubVersion)
+
+    def testDialogVersionInput(self):
+        def handleDialog(dialog):
+            versionlb = get_state_as_dict(dialog.getChild("versionlb"))
+            # Log the state of the versionlb widget and exit.
+            positions.append(versionlb["SelectEntryPos"])
+            dialog.getChild("ok").executeAction("CLICK", tuple())
+
+        uiComponent = self.ui_test._xContext.ServiceManager.createInstanceWithContext("com.sun.star.comp.Writer.EPUBExportUIComponent", self.ui_test._xContext)
+        positions = []
+        for version in (20, 30):
+            filterData = (PropertyValue(Name="EPUBVersion", Value=version),)
+            propertyValues = (PropertyValue(Name="FilterData", Value=uno.Any("[]com.sun.star.beans.PropertyValue", filterData)),)
+            uiComponent.setPropertyValues(propertyValues)
+            self.ui_test.execute_blocking_action(action=uiComponent.execute, dialog_handler=handleDialog)
+        # Make sure that initializing with 2 different versions results in 2 different widget states.
+        self.assertEqual(2, len(set(positions)))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
