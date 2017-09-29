@@ -626,6 +626,27 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                 GetItemState( n, false ))
                 {
                     CLEARCACHE
+
+                    if(RES_GRFATR_ROTATION == n)
+                    {
+                        // RotGrfFlyFrame: Update Handles in view, these may be rotation-dependent
+                        // (e.g. crop handles) and need a visualisation update
+                        if ( GetNode()->GetNodeType() == SwNodeType::Grf )
+                        {
+                            SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
+                            SwViewShell *pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+
+                            if(pVSh)
+                            {
+                                SdrView* pDrawView = pVSh->GetDrawView();
+
+                                if(pDrawView)
+                                {
+                                    pDrawView->AdjustMarkHdl(nullptr);
+                                }
+                            }
+                        }
+                    }
                     break;
                 }
             if( RES_GRFATR_END == n )           // not found
