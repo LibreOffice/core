@@ -21,6 +21,7 @@
 #include "docxexportfilter.hxx"
 #include "docxattributeoutput.hxx"
 #include "docxsdrexport.hxx"
+#include "docxhelper.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -855,12 +856,6 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
             OString::number( m_aSettings.defaultTabStop).getStr(), FSEND );
 
-    // Protect form
-    if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ))
-    {
-        pFS->singleElementNS( XML_w, XML_documentProtection, FSNS(XML_w, XML_edit), "forms", FSNS(XML_w, XML_enforcement), "1",  FSEND );
-    }
-
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
     // Use the setting from the default style.
     SwTextFormatColl* pColl = m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, /*bRegardLanguage=*/false);
@@ -887,12 +882,14 @@ void DocxExport::WriteSettings()
     // Has themeFontLang information
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
+    bool hasProtectionProperties = false;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
         uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
+
         for( sal_Int32 i=0; i < propList.getLength(); ++i )
         {
             if ( propList[i].Name == "ThemeFontLangProps" )
@@ -921,6 +918,7 @@ void DocxExport::WriteSettings()
 
                 uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
                 propList[i].Value >>= aCompatSettingsSequence;
+
                 for(sal_Int32 j=0; j < aCompatSettingsSequence.getLength(); ++j)
                 {
                     uno::Sequence< beans::PropertyValue > aCompatSetting;
@@ -947,18 +945,64 @@ void DocxExport::WriteSettings()
 
                 pFS->endElementNS( XML_w, XML_compat );
             }
+            else if (propList[i].Name == "DocumentProtection")
+            {
+
+                uno::Sequence< beans::PropertyValue > rAttributeList;
+                propList[i].Value >>= rAttributeList;
+
+                if (rAttributeList.getLength())
+                {
+                    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
+                    for (sal_Int32 j = 0; j < rAttributeList.getLength(); ++j)
+                    {
+                        static DocxStringTokenMap const aTokens[] =
+                        {
+                            { "edit",                XML_edit },
+                            { "enforcement",         XML_enforcement },
+                            { "formatting",          XML_formatting },
+                            { "cryptProviderType",   XML_cryptProviderType },
+                            { "cryptAlgorithmClass", XML_cryptAlgorithmClass },
+                            { "cryptAlgorithmType",  XML_cryptAlgorithmType },
+                            { "cryptAlgorithmSid",   XML_cryptAlgorithmSid },
+                            { "cryptSpinCount",      XML_cryptSpinCount },
+                            { "hash",                XML_hash },
+                            { "salt",                XML_salt },
+                            { nullptr, 0 }
+                        };
+
+                        if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttributeList[j].Name))
+                            pAttributeList->add(FSNS(XML_w, nToken), rAttributeList[j].Value.get<OUString>().toUtf8());
+                    }
+
+                    // we have document protection from from input DOCX file
+
+                    sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
+                    pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
+
+                    hasProtectionProperties = true;
+                }
+            }
         }
     }
 
+    // Protect form
     // Section-specific write protection
-    if ( m_pSections->DocumentIsProtected() )
+    if (! hasProtectionProperties)
     {
-        pFS->singleElementNS( XML_w, XML_documentProtection,
-                              FSNS( XML_w, XML_enforcement ), "true",
-                              FSNS( XML_w, XML_edit ), "forms",
-                              FSEND );
+        if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
+            m_pSections->DocumentIsProtected())
+        {
+            // we have form protection from Writer or from input ODT file
+
+            pFS->singleElementNS(XML_w, XML_documentProtection,
+                FSNS(XML_w, XML_edit), "forms",
+                FSNS(XML_w, XML_enforcement), "true",
+                FSEND);
+        }
     }
 
+    // finish settings.xml
     pFS->endElementNS( XML_w, XML_settings );
 }
 

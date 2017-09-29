@@ -692,7 +692,16 @@ protected:
 
 private:
 
-    void DoWriteBookmarks( );
+    void DoWriteBookmarkTagStart(const OUString & bookmarkName);
+    void DoWriteBookmarkTagEnd(const OUString & bookmarkName);
+    void DoWriteBookmarksStart();
+    void DoWriteBookmarksEnd();
+
+    void DoWritePermissionTagStart(const OUString & permission);
+    void DoWritePermissionTagEnd(const OUString & permission);
+    void DoWritePermissionsStart();
+    void DoWritePermissionsEnd();
+
     void DoWriteAnnotationMarks( );
     void WritePostponedGraphic();
     void WritePostponedMath(const SwOLENode* pObject);
@@ -772,6 +781,10 @@ private:
     /// Bookmarks to output
     std::vector<OUString> m_rBookmarksStart;
     std::vector<OUString> m_rBookmarksEnd;
+
+    /// Permissions to output
+    std::vector<OUString> m_rPermissionsStart;
+    std::vector<OUString> m_rPermissionsEnd;
 
     /// Annotation marks to output
     std::vector<OString> m_rAnnotationMarksStart;

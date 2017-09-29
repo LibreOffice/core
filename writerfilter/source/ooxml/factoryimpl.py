@@ -25,7 +25,7 @@ def createFastChildContextFromFactory(model):
 (OOXMLFastContextHandler* pHandler, OOXMLFactory_ns::Pointer_t pFactory, Token_t Element)
 {
     uno::Reference <xml::sax::XFastContextHandler> aResult;
-    Id nDefine = pHandler->getDefine();
+    const Id nDefine = pHandler->getDefine();
 
     if (pFactory.get() != NULL)
     {
@@ -33,7 +33,7 @@ def createFastChildContextFromFactory(model):
         Id nElementId;
         if (pFactory->getElementId(nDefine, Element, nResource, nElementId))
         {
-            Id nId = pFactory->getResourceId(nDefine, Element);
+            const Id nId = pFactory->getResourceId(nDefine, Element);
 
             switch (nResource)
             {""")
@@ -118,7 +118,6 @@ public:
 
 std::string fastTokenToId(sal_uInt32 nToken)
 {
-
     std::string sResult;
 #ifdef DEBUG_WRITERFILTER
 

@@ -12117,6 +12117,9 @@
         </attribute>
         <ref name="CT_MarkupRange"/>
       </define>
+      <define name="CT_MarkupRangePerm">
+        <ref name="CT_MarkupRange"/>
+      </define>
       <define name="CT_MarkupRangeCommentStart">
         <ref name="CT_Markup"/>
       </define>
@@ -12156,6 +12159,24 @@
         <attribute name="initials">
           <ref name="ST_String"/>
         </attribute>
+      </define>
+      <define name="CT_PermStart">
+        <ref name="CT_MarkupRangePerm"/>
+        <attribute name="ed">
+          <data type="string"/>
+        </attribute>
+        <attribute name="edGrp">
+          <data type="string"/>
+        </attribute>
+        <attribute name="colFirst">
+          <data type="ST_DecimalNumber"/>
+        </attribute>
+        <attribute name="colLast">
+          <data type="ST_DecimalNumber"/>
+        </attribute>
+      </define>
+      <define name="CT_PermEnd">
+        <ref name="CT_MarkupRangePerm"/>
       </define>
       <define name="CT_TrackChangeNumbering">
         <ref name="CT_TrackChange"/>
@@ -12244,6 +12265,12 @@
           </element>
           <element name="bookmarkEnd">
             <ref name="CT_MarkupRangeBookmark"/>
+          </element>
+          <element name="permStart">
+            <ref name="CT_PermStart"/>
+          </element>
+          <element name="permEnd">
+            <ref name="CT_PermEnd"/>
           </element>
           <element name="moveFromRangeStart">
             <ref name="CT_MoveBookmark"/>
@@ -13268,29 +13295,6 @@
       </define>
       <define name="CT_ProofErr">
         <attribute name="type">
-          <data type="string"/>
-        </attribute>
-      </define>
-      <define name="CT_Perm">
-        <attribute name="id">
-          <data type="string"/>
-        </attribute>
-        <attribute name="displacedByCustomXml">
-          <data type="string"/>
-        </attribute>
-      </define>
-      <define name="CT_PermStart">
-        <ref name="CT_Perm"/>
-        <attribute name="edGrp">
-          <data type="string"/>
-        </attribute>
-        <attribute name="ed">
-          <data type="string"/>
-        </attribute>
-        <attribute name="colFirst">
-          <data type="string"/>
-        </attribute>
-        <attribute name="colLast">
           <data type="string"/>
         </attribute>
       </define>
@@ -16255,12 +16259,6 @@
           <element name="proofErr">
             <ref name="CT_ProofErr"/>
           </element>
-          <element name="permStart">
-            <ref name="CT_PermStart"/>
-          </element>
-          <element name="permEnd">
-            <ref name="CT_Perm"/>
-          </element>
           <ref name="EG_RangeMarkupElements"/>
           <element name="ins">
             <ref name="CT_RunTrackChange"/>
@@ -17326,6 +17324,18 @@
     <resource name="CT_MarkupRangeBookmark" resource="Properties">
       <attribute name="id" tokenid="ooxml:CT_MarkupRangeBookmark_id"/>
     </resource>
+    <resource name="CT_PermStart" resource="Properties">
+      <attribute name="id" tokenid="ooxml:CT_PermStart_id"/>
+      <attribute name="colFirst" tokenid="ooxml:CT_PermStart_colFirst"/>
+      <attribute name="colLast" tokenid="ooxml:CT_PermStart_colLast"/>
+      <attribute name="ed" tokenid="ooxml:CT_PermStart_ed"/>
+      <attribute name="edGrp" tokenid="ooxml:CT_PermStart_edGrp"/>
+      <attribute name="displacedByCustomXml" tokenid="ooxml:CT_PermStart_displacedByCustomXml"/>
+    </resource>
+    <resource name="CT_PermEnd" resource="Properties">
+      <attribute name="id" tokenid="ooxml:CT_PermEnd_id"/>
+      <attribute name="displacedByCustomXml" tokenid="ooxml:CT_PermEnd_displacedByCustomXml"/>
+    </resource>
     <resource name="CT_MarkupRangeCommentStart" resource="Properties">
       <attribute name="id" tokenid="ooxml:EG_RangeMarkupElements_commentRangeStart"/>
     </resource>
@@ -17388,6 +17398,8 @@
     <resource name="EG_RangeMarkupElements" resource="Properties">
       <element name="bookmarkStart" tokenid="ooxml:EG_RangeMarkupElements_bookmarkStart"/>
       <element name="bookmarkEnd" tokenid="ooxml:EG_RangeMarkupElements_bookmarkEnd"/>
+      <element name="permStart" tokenid="ooxml:EG_RangeMarkupElements_PermStart"/>
+      <element name="permEnd" tokenid="ooxml:EG_RangeMarkupElements_PermEnd"/>
       <element name="moveFromRangeStart" tokenid="ooxml:EG_RangeMarkupElements_moveFromRangeStart"/>
       <element name="moveFromRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_moveFromRangeEnd"/>
       <element name="moveToRangeStart" tokenid="ooxml:EG_RangeMarkupElements_moveToRangeStart"/>

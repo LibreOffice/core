@@ -1224,8 +1224,13 @@ void DocxAttributeOutput::EndRun()
     // if there is some redlining in the document, output it
     StartRedline( m_pRedlineData );
 
-    DoWriteBookmarks( );
-    DoWriteAnnotationMarks( );
+    // XML_r node should be surrounded with bookmark-begin and bookmark-end nodes if it has bookmarks.
+    // The same is applied for permission ranges.
+    // But due to unit test "testFdo85542" let's output bookmark-begin with bookmark-end.
+    DoWriteBookmarksStart();
+    DoWriteBookmarksEnd();
+    DoWritePermissionsStart();
+    DoWriteAnnotationMarks();
 
     if( m_closeHyperlinkInThisRun && m_startedHyperlink && !m_hyperLinkAnchor.isEmpty() && m_hyperLinkAnchor.startsWith("_Toc"))
     {
@@ -1301,6 +1306,9 @@ void DocxAttributeOutput::EndRun()
 
     m_pSerializer->mergeTopMarks(Tag_StartRun_1);
 
+    // XML_r node should be surrounded with permission-begin and permission-end nodes if it has permission.
+    DoWritePermissionsEnd();
+
     for (std::vector<const SwOLENode*>::iterator it = m_aPostponedMaths.begin(); it != m_aPostponedMaths.end(); ++it)
         WritePostponedMath(*it);
     m_aPostponedMaths.clear();
@@ -1358,39 +1366,157 @@ void DocxAttributeOutput::EndRun()
     }
 }
 
-void DocxAttributeOutput::DoWriteBookmarks()
+void DocxAttributeOutput::DoWriteBookmarkTagStart(const OUString & bookmarkName)
 {
-    // Write the start bookmarks
-    for ( const auto & it : m_rBookmarksStart )
-    {
-        OString rName = OUStringToOString( BookmarkToWord( it ), RTL_TEXTENCODING_UTF8 ).getStr();
+    const OString rId   = OString::number(m_nNextBookmarkId);
+    const OString rName = OUStringToOString(BookmarkToWord(bookmarkName), RTL_TEXTENCODING_UTF8).getStr();
 
+    m_pSerializer->singleElementNS(XML_w, XML_bookmarkStart,
+        FSNS(XML_w, XML_id), rId.getStr(),
+        FSNS(XML_w, XML_name), rName.getStr(),
+        FSEND);
+}
+
+void DocxAttributeOutput::DoWriteBookmarkTagEnd(const OUString & bookmarkName)
+{
+    const auto nameToIdIter = m_rOpenedBookmarksIds.find(bookmarkName);
+    if (nameToIdIter != m_rOpenedBookmarksIds.end())
+    {
+        const sal_Int32 nId = nameToIdIter->second;
+        const OString   rId = OString::number(nId);
+
+        m_pSerializer->singleElementNS(XML_w, XML_bookmarkEnd,
+            FSNS(XML_w, XML_id), rId.getStr(),
+            FSEND);
+    }
+}
+
+/// Write the start bookmarks
+void DocxAttributeOutput::DoWriteBookmarksStart()
+{
+    for (const OUString & bookmarkName : m_rBookmarksStart)
+    {
         // Output the bookmark
-        const sal_Int32 nId = m_nNextBookmarkId++;
-        m_rOpenedBookmarksIds[it] = nId;
-        m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
-            FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
-            FSNS( XML_w, XML_name ), rName.getStr(),
-            FSEND );
-        m_sLastOpenedBookmark = rName;
+        DoWriteBookmarkTagStart(bookmarkName);
+
+        m_rOpenedBookmarksIds[bookmarkName] = m_nNextBookmarkId;
+        m_sLastOpenedBookmark = OUStringToOString(BookmarkToWord(bookmarkName), RTL_TEXTENCODING_UTF8).getStr();
+        m_nNextBookmarkId++;
     }
     m_rBookmarksStart.clear();
+}
 
-    // export the end bookmarks
-    for ( const auto & it : m_rBookmarksEnd )
+/// export the end bookmarks
+void DocxAttributeOutput::DoWriteBookmarksEnd()
+{
+    for (const OUString & bookmarkName : m_rBookmarksEnd)
     {
         // Get the id of the bookmark
-        auto pPos = m_rOpenedBookmarksIds.find(it);
-        if ( pPos != m_rOpenedBookmarksIds.end() )
+        auto pPos = m_rOpenedBookmarksIds.find(bookmarkName);
+        if (pPos != m_rOpenedBookmarksIds.end())
         {
-            const sal_Int32 nId = ( *pPos ).second;
-            m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
-                FSNS( XML_w, XML_id ), OString::number( nId ).getStr(),
-                FSEND );
-            m_rOpenedBookmarksIds.erase( it );
+            // Output the bookmark
+            DoWriteBookmarkTagEnd(bookmarkName);
+
+            m_rOpenedBookmarksIds.erase(bookmarkName);
         }
     }
     m_rBookmarksEnd.clear();
+}
+
+// For construction of the special bookmark name template for permissions:
+// see, PermInsertPosition::createBookmarkName()
+//
+// Syntax:
+// - "permission-for-user:<permission-id>:<permission-user-name>"
+// - "permission-for-group:<permission-id>:<permission-group-name>"
+//
+void DocxAttributeOutput::DoWritePermissionTagStart(const OUString & permission)
+{
+    OUString permissionIdAndName;
+
+    if (permission.startsWith("permission-for-group:", &permissionIdAndName))
+    {
+        const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
+        const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
+        const OUString permissionName = permissionIdAndName.copy(sparatorIndex + 1);
+
+        const OString rId   = OUStringToOString(BookmarkToWord(permissionId), RTL_TEXTENCODING_UTF8).getStr();
+        const OString rName = OUStringToOString(BookmarkToWord(permissionName), RTL_TEXTENCODING_UTF8).getStr();
+
+        m_pSerializer->singleElementNS(XML_w, XML_permStart,
+            FSNS(XML_w, XML_id), rId.getStr(),
+            FSNS(XML_w, XML_edGrp), rName.getStr(),
+            FSEND);
+    }
+    else // if (permission.startsWith("permission-for-user:", &permissionIdAndName))
+    {
+        const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
+        const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
+        const OUString permissionName = permissionIdAndName.copy(sparatorIndex + 1);
+
+        const OString rId   = OUStringToOString(BookmarkToWord(permissionId), RTL_TEXTENCODING_UTF8).getStr();
+        const OString rName = OUStringToOString(BookmarkToWord(permissionName), RTL_TEXTENCODING_UTF8).getStr();
+
+        m_pSerializer->singleElementNS(XML_w, XML_permStart,
+            FSNS(XML_w, XML_id), rId.getStr(),
+            FSNS(XML_w, XML_ed), rName.getStr(),
+            FSEND);
+    }
+}
+
+
+// For construction of the special bookmark name template for permissions:
+// see, PermInsertPosition::createBookmarkName()
+//
+// Syntax:
+// - "permission-for-user:<permission-id>:<permission-user-name>"
+// - "permission-for-group:<permission-id>:<permission-group-name>"
+//
+void DocxAttributeOutput::DoWritePermissionTagEnd(const OUString & permission)
+{
+    OUString permissionIdAndName;
+
+    if (permission.startsWith("permission-for-group:", &permissionIdAndName))
+    {
+        const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
+        const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
+        const OString rId             = OUStringToOString(BookmarkToWord(permissionId), RTL_TEXTENCODING_UTF8).getStr();
+
+        m_pSerializer->singleElementNS(XML_w, XML_permEnd,
+            FSNS(XML_w, XML_id), rId.getStr(),
+            FSEND);
+    }
+    else // if (permission.startsWith("permission-for-user:", &permissionIdAndName))
+    {
+        const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
+        const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
+        const OString rId             = OUStringToOString(BookmarkToWord(permissionId), RTL_TEXTENCODING_UTF8).getStr();
+
+        m_pSerializer->singleElementNS(XML_w, XML_permEnd,
+            FSNS(XML_w, XML_id), rId.getStr(),
+            FSEND);
+    }
+}
+
+/// Write the start permissions
+void DocxAttributeOutput::DoWritePermissionsStart()
+{
+    for (const OUString & permission : m_rPermissionsStart)
+    {
+        DoWritePermissionTagStart(permission);
+    }
+    m_rPermissionsStart.clear();
+}
+
+/// export the end permissions
+void DocxAttributeOutput::DoWritePermissionsEnd()
+{
+    for (const OUString & permission : m_rPermissionsEnd)
+    {
+        DoWritePermissionTagEnd(permission);
+    }
+    m_rPermissionsEnd.clear();
 }
 
 void DocxAttributeOutput::DoWriteAnnotationMarks()
@@ -1619,13 +1745,9 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     }
 
     // Write the bookmark start if any
-    OUString aBkmName( m_sFieldBkm );
-    if ( !aBkmName.isEmpty() )
+    if ( !m_sFieldBkm.isEmpty() )
     {
-        m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
-               FSNS( XML_w, XML_id ), OString::number( m_nNextBookmarkId ).getStr( ),
-               FSNS( XML_w, XML_name ), OUStringToOString( aBkmName, RTL_TEXTENCODING_UTF8 ).getStr( ),
-               FSEND );
+        DoWriteBookmarkTagStart(m_sFieldBkm);
     }
 
     if (rInfos.pField ) // For hyperlinks and TOX
@@ -1649,11 +1771,9 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     }
 
     // Write the bookmark end if any
-    if ( !aBkmName.isEmpty() )
+    if ( !m_sFieldBkm.isEmpty() )
     {
-        m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
-               FSNS( XML_w, XML_id ), OString::number( m_nNextBookmarkId ).getStr( ),
-               FSEND );
+        DoWriteBookmarkTagEnd(m_sFieldBkm);
 
         m_nNextBookmarkId++;
     }
@@ -6772,18 +6892,33 @@ void DocxAttributeOutput::WriteFormData_Impl( const ::sw::mark::IFieldmark& rFie
         m_Fields.begin()->pFieldmark = &rFieldmark;
 }
 
-void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
-        std::vector< OUString >& rEnds )
+void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds )
 {
-    for ( const auto & it : rStarts )
+    for ( const OUString & name : rStarts )
     {
-        m_rBookmarksStart.push_back( it );
+        if (name.startsWith("permission-for-group:") ||
+            name.startsWith("permission-for-user:"))
+        {
+            m_rPermissionsStart.push_back(name);
+        }
+        else
+        {
+            m_rBookmarksStart.push_back(name);
+        }
     }
     rStarts.clear();
 
-    for ( const auto & it : rEnds )
+    for ( const OUString & name : rEnds )
     {
-        m_rBookmarksEnd.push_back( it );
+        if (name.startsWith("permission-for-group:") ||
+            name.startsWith("permission-for-user:"))
+        {
+            m_rPermissionsEnd.push_back(name);
+        }
+        else
+        {
+            m_rBookmarksEnd.push_back(name);
+        }
     }
     rEnds.clear();
 }

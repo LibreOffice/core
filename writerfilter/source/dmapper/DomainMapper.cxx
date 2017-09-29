@@ -190,10 +190,14 @@ DomainMapper::~DomainMapper()
 
         // Grab-bag handling
         comphelper::SequenceAsHashMap aProperties;
+
         // Add the saved w:themeFontLang setting
         aProperties["ThemeFontLangProps"] = uno::makeAny(GetThemeFontLangProperties());
         // Add the saved compat settings
         aProperties["CompatSettings"] = uno::makeAny(GetCompatSettings());
+        // Add the saved DocumentProtection settings
+        aProperties["DocumentProtection"] <<= m_pImpl->GetSettingsTable()->GetDocumentProtectionSettings();
+
         uno::Reference<beans::XPropertySet> xDocProps(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
         if (xDocProps.is())
         {
@@ -1077,6 +1081,26 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Cnf_val:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "val", sStringValue);
             break;
+        case NS_ooxml::LN_CT_PermStart_ed:
+        {
+            m_pImpl->setPermissionRangeEd(sStringValue);
+            break;
+        }
+        case NS_ooxml::LN_CT_PermStart_edGrp:
+        {
+            m_pImpl->setPermissionRangeEdGrp(sStringValue);
+            break;
+        }
+        case NS_ooxml::LN_CT_PermStart_id:
+        {
+            m_pImpl->startOrEndPermissionRange(nIntValue);
+            break;
+        }
+        case NS_ooxml::LN_CT_PermEnd_id:
+        {
+            m_pImpl->startOrEndPermissionRange(nIntValue);
+            break;
+        }
         default:
             SAL_WARN("writerfilter", "DomainMapper::lcl_attribute: unhandled token: " << nName);
         }

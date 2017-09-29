@@ -261,6 +261,49 @@ struct BookmarkInsertPosition
      {}
 };
 
+struct PermInsertPosition
+{
+    bool        m_bIsStartOfText;
+    sal_Int32   m_Id;
+    OUString    m_Ed;
+    OUString    m_EdGrp;
+
+    css::uno::Reference<css::text::XTextRange> m_xTextRange;
+
+    PermInsertPosition(bool bIsStartOfText, sal_Int32 id, const OUString& ed, const OUString& edGrp, css::uno::Reference<css::text::XTextRange> const& xTextRange)
+        : m_bIsStartOfText(bIsStartOfText)
+        , m_Id(id)
+        , m_Ed(ed)
+        , m_EdGrp(edGrp)
+        , m_xTextRange(xTextRange)
+    {}
+
+    OUString createBookmarkName() const
+    {
+        OUString bookmarkName;
+
+        assert((!m_Ed.isEmpty()) || (!m_EdGrp.isEmpty()));
+
+        if (m_Ed.isEmpty())
+        {
+            bookmarkName += "permission-for-group:";
+            bookmarkName += OUString::number(m_Id);
+            bookmarkName += ":";
+            bookmarkName += m_EdGrp;
+        }
+        else
+        {
+            bookmarkName += "permission-for-user:";
+            bookmarkName += OUString::number(m_Id);
+            bookmarkName += ":";
+            bookmarkName += m_Ed;
+        }
+
+        //todo: make sure the name is not used already!
+        return bookmarkName;
+    }
+};
+
 /// Stores the start/end positions of an annotation before its insertion.
 struct AnnotationPosition
 {
@@ -339,6 +382,7 @@ class DomainMapper_Impl
 {
 public:
     typedef std::map < OUString, BookmarkInsertPosition > BookmarkMap_t;
+    typedef std::map < sal_Int32, PermInsertPosition >    PermMap_t;
 
 private:
     SourceDocumentType                                                              m_eDocumentType;
@@ -379,6 +423,11 @@ private:
     BookmarkMap_t                                                                   m_aBookmarkMap;
     OUString                                                                        m_sCurrentBkmkId;
     OUString                                                                        m_sCurrentBkmkName;
+
+    PermMap_t                                                                       m_aPermMap;
+    sal_Int32                                                                       m_sCurrentPermId;
+    OUString                                                                        m_sCurrentPermEd;
+    OUString                                                                        m_sCurrentPermEdGrp;
 
     PageMar                                                                        m_aPageMargins;
     SymbolData                                                                      m_aSymbolData;
@@ -695,6 +744,10 @@ public:
 
     void SetBookmarkName( const OUString& rBookmarkName );
     void StartOrEndBookmark( const OUString& rId );
+
+    void setPermissionRangeEd(const OUString& user);
+    void setPermissionRangeEdGrp(const OUString& group);
+    void startOrEndPermissionRange(sal_Int32 permissinId);
 
     void AddAnnotationPosition(
         const bool bStart,
