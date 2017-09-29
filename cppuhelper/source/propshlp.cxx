@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <memory>
 #include <sal/log.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace osl;
 using namespace com::sun::star::uno;
@@ -693,7 +694,7 @@ void OPropertySetHelper::fire
                     }
                     catch (RuntimeException & exc)
                     {
-                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc.Message);
+                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc);
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
                     }
@@ -745,7 +746,7 @@ void OPropertySetHelper::fire
                     }
                     catch (RuntimeException & exc)
                     {
-                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc.Message);
+                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc);
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
                     }
@@ -790,7 +791,7 @@ void OPropertySetHelper::fire
                     }
                     catch (RuntimeException & exc)
                     {
-                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc.Message);
+                        SAL_INFO("cppuhelper", "caught RuntimeException while firing listeners: " << exc);
                         if (! bIgnoreRuntimeExceptionsWhileFiring)
                             throw;
                     }

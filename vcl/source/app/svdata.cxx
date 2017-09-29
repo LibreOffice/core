@@ -22,6 +22,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/process.h>
+#include <cppuhelper/logging.hxx>
 #include <tools/gen.hxx>
 #include <unotools/resmgr.hxx>
 #include <uno/current_context.hxx>
@@ -154,7 +155,7 @@ vcl::Window *ImplGetDefaultContextWindow()
             }
             catch (const css::uno::Exception& e)
             {
-                 SAL_WARN("vcl", "unable to create Default Window: " << e.Message);
+                 SAL_WARN("vcl", "unable to create Default Window: " << e);
             }
         }
     }
@@ -260,7 +261,7 @@ bool ImplInitAccessBridge()
              } catch (css::uno::DeploymentException & e) {
                  SAL_WARN(
                     "vcl",
-                    "got no IAccessible2 bridge" << e.Message);
+                    "got no IAccessible2 bridge" << e);
                  return false;
              }
         }

@@ -43,6 +43,7 @@
 #include <comphelper/solarmutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -423,7 +424,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
                     "unotools.config",
                     "ignoring XHierarchicalNameAccess to /org.openoffice."
                         << sSubTree << "/" << pNames[i] << " Exception: "
-                        << rEx.Message);
+                        << rEx);
             }
         }
 
@@ -503,7 +504,7 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
             {
                 SAL_WARN(
                     "unotools.config",
-                    "Exception from PutProperties: " << e.Message);
+                    "Exception from PutProperties: " << e);
             }
         }
         try
@@ -515,7 +516,7 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         {
             SAL_WARN(
                 "unotools.config",
-                "Exception from commitChanges(): " << e.Message);
+                "Exception from commitChanges(): " << e);
         }
     }
 
@@ -645,7 +646,7 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode, ConfigNameF
         {
             SAL_WARN(
                 "unotools.config",
-                "Exception from GetNodeNames: " << e.Message);
+                "Exception from GetNodeNames: " << e);
         }
     }
     return aRet;
@@ -683,7 +684,7 @@ bool ConfigItem::ClearNodeSet(const OUString& rNode)
                 {
                     SAL_WARN(
                         "unotools.config",
-                         "Exception from removeByName(): " << e.Message);
+                         "Exception from removeByName(): " << e);
                 }
             }
             xBatch->commitChanges();
@@ -691,8 +692,7 @@ bool ConfigItem::ClearNodeSet(const OUString& rNode)
         }
         catch (css::uno::Exception & e)
         {
-            SAL_WARN(
-                "unotools.config", "Exception from ClearNodeSet" << e.Message);
+            SAL_WARN("unotools.config", "Exception from ClearNodeSet" << e);
         }
     }
     return bRet;
@@ -731,7 +731,7 @@ bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString > c
             {
                 SAL_WARN(
                     "unotools.config",
-                    "Exception from commitChanges(): " << e.Message);
+                    "Exception from commitChanges(): " << e);
             }
             bRet = true;
         }
@@ -739,7 +739,7 @@ bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString > c
         {
             SAL_WARN(
                 "unotools.config",
-                "Exception from GetNodeNames: " << e.Message);
+                "Exception from GetNodeNames: " << e);
         }
     }
     return bRet;
@@ -829,7 +829,7 @@ bool ConfigItem::SetSetProperties(
                 {
                     SAL_WARN(
                         "unotools.config",
-                        "Exception from commitChanges(): " << e.Message);
+                        "Exception from commitChanges(): " << e);
                 }
 
                 const PropertyValue* pProperties = rValues.getConstArray();
@@ -870,8 +870,7 @@ bool ConfigItem::SetSetProperties(
                     {
                         SAL_WARN(
                             "unotools.config",
-                            "Exception form insert/replaceByName(): "
-                                << e.Message);
+                            "Exception form insert/replaceByName(): " << e);
                     }
                 }
                 xBatch->commitChanges();
@@ -881,7 +880,7 @@ bool ConfigItem::SetSetProperties(
         {
             SAL_WARN(
                 "unotools.config",
-                "Exception from SetSetProperties: " << rEx.Message);
+                "Exception from SetSetProperties: " << rEx);
             bRet = false;
         }
     }
@@ -961,7 +960,7 @@ bool ConfigItem::ReplaceSetProperties(
                 {
                     SAL_WARN(
                         "unotools.config",
-                        "Exception from commitChanges(): " << e.Message);
+                        "Exception from commitChanges(): " << e);
                 }
             }
 
@@ -982,7 +981,7 @@ bool ConfigItem::ReplaceSetProperties(
                 {
                     SAL_WARN(
                         "unotools.config",
-                        "Exception from commitChanges(): " << e.Message);
+                        "Exception from commitChanges(): " << e);
                 }
 
                 const PropertyValue* pProperties = rValues.getConstArray();
@@ -1021,8 +1020,7 @@ bool ConfigItem::ReplaceSetProperties(
                     {
                         SAL_WARN(
                             "unotools.config",
-                            "Exception from insert/replaceByName(): "
-                                << e.Message);
+                            "Exception from insert/replaceByName(): " << e);
                     }
                 }
                 xBatch->commitChanges();
@@ -1031,8 +1029,7 @@ bool ConfigItem::ReplaceSetProperties(
         catch (const Exception& rEx)
         {
             SAL_WARN(
-                "unotools.config",
-                "Exception from ReplaceSetProperties: " << rEx.Message);
+                "unotools.config", "Exception from ReplaceSetProperties: " << rEx);
             bRet = false;
         }
     }
@@ -1076,9 +1073,7 @@ bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
                 }
                 catch (css::uno::Exception & e)
                 {
-                    SAL_WARN(
-                        "unotools.config",
-                        "Exception from commitChanges(): " << e.Message);
+                    SAL_WARN("unotools.config", "Exception from commitChanges(): " << e);
                 }
             }
             else
@@ -1091,17 +1086,14 @@ bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
                 }
                 catch (css::uno::Exception & e)
                 {
-                    SAL_WARN(
-                        "unotools.config",
-                        "Exception from AddNode(): " << e.Message);
+                    SAL_WARN("unotools.config", "Exception from AddNode(): " << e);
                 }
             }
             xBatch->commitChanges();
         }
         catch (const Exception& rEx)
         {
-            SAL_WARN(
-                "unotools.config", "Exception from AddNode(): " << rEx.Message);
+            SAL_WARN("unotools.config", "Exception from AddNode(): " << rEx);
             bRet = false;
         }
     }

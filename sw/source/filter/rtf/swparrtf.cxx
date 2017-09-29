@@ -31,6 +31,7 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -93,7 +94,7 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("sw.rtf", "SwRTFReader::Read(): exception: " << e.Message);
+        SAL_WARN("sw.rtf", "SwRTFReader::Read(): " << e);
         ret = ERR_SWG_READ_ERROR;
     }
 

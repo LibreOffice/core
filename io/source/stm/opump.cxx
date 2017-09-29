@@ -39,6 +39,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 
@@ -134,7 +135,7 @@ void Pump::fireError( const  Any & exception )
         }
         catch ( const RuntimeException &e )
         {
-            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
         }
     }
 }
@@ -162,7 +163,7 @@ void Pump::fireClose()
             }
             catch ( const RuntimeException &e )
             {
-                SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
+                SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
             }
         }
     }
@@ -179,7 +180,7 @@ void Pump::fireStarted()
         }
         catch ( const RuntimeException &e )
         {
-            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
         }
     }
 }
@@ -195,7 +196,7 @@ void Pump::fireTerminated()
         }
         catch ( const RuntimeException &e )
         {
-            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
         }
     }
 }
@@ -297,7 +298,7 @@ void Pump::run()
     {
         // we are the last on the stack.
         // this is to avoid crashing the program, when e.g. a bridge crashes
-        SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
+        SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
     }
 }
 

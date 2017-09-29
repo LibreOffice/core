@@ -27,6 +27,7 @@
 #include "SchXMLTools.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -117,8 +118,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
     }
     catch( const uno::Exception & rEx )
     {
-        OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-        SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << aBStr);
+        SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << rEx);
     }
 }
 
@@ -384,8 +384,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     }
     catch( const uno::Exception & rEx )
     {
-        OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-        SAL_INFO("xmloff.chart", "PlotAreaContext:EndElement(): Exception caught: " << aBStr);
+        SAL_INFO("xmloff.chart", "PlotAreaContext:EndElement(): Exception caught: " << rEx);
     }
     } // if
 
@@ -555,8 +554,7 @@ void SchXMLPlotAreaContext::EndElement()
             }
             catch( const uno::Exception & rEx )
             {
-                OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-                SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << aBStr);
+                SAL_INFO("xmloff.chart", "Exception caught for property NumberOfLines: " << rEx);
             }
         }
 
@@ -571,8 +569,7 @@ void SchXMLPlotAreaContext::EndElement()
             }
             catch( const uno::Exception & rEx )
             {
-                OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-                SAL_INFO("xmloff.chart", "Exception caught for property Volume: " << aBStr);
+                SAL_INFO("xmloff.chart", "Exception caught for property Volume: " << rEx);
             }
         }
     }

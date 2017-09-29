@@ -26,6 +26,7 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <sal/macros.h>
 
 using namespace ::com::sun::star;
@@ -331,7 +332,7 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
     catch (const Exception& rException)
     {
         SAL_WARN("sdext.minimizer", "caught exception while getting configuration node "
-                  << sPathToNode << " : " << rException.Message);
+                  << sPathToNode << " : " << rException);
     }
     return xNode;
 }

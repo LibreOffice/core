@@ -34,6 +34,7 @@
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/fileurl.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <memory>
 #include <string.h>
 
@@ -290,7 +291,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
                 osl_closeFile( aFile );
             }
         } catch (css::io::IOException & e) {
-            SAL_WARN("sdext.pdfimport", "caught IOException " + e.Message);
+            SAL_WARN("sdext.pdfimport", "caught " << e);
             return OUString();
         }
         OUString aEmbedMimetype;

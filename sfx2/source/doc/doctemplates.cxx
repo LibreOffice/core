@@ -31,6 +31,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -431,7 +432,7 @@ void SfxDocTplService_Impl::init_Impl()
                         ::comphelper::getProcessComponentContext()));
         } catch (uno::RuntimeException const& e) {
             SAL_WARN("sfx.doc", "SfxDocTplService_Impl::init_Impl: "
-                "cannot create DocumentProperties service:" << e.Message);
+                "cannot create DocumentProperties service:" << e);
         }
 
         OUString const aService = SERVICENAME_TYPEDETECTION;

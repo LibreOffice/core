@@ -21,6 +21,7 @@
 #include <osl/time.h>
 #include <vcl/vclmain.hxx>
 #include <vcl/layout.hxx>
+#include <cppuhelper/logging.hxx>
 #include <salhelper/thread.hxx>
 
 #include <tools/urlobj.hxx>
@@ -526,7 +527,7 @@ public:
         }
         catch (const css::uno::Exception& rException)
         {
-            SAL_WARN("vcl.app", "Fatal exception: " << rException.Message);
+            SAL_WARN("vcl.app", "Fatal exception: " << rException);
             return 1;
         }
         catch (const std::exception& rException)

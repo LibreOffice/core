@@ -24,6 +24,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <algorithm>
 #include <utility>
@@ -243,7 +244,7 @@ void OWeakObject::disposeWeakConnectionPoint()
             p->dispose();
         }
         catch (RuntimeException const& exc) {
-            SAL_WARN( "cppuhelper", exc.Message );
+            SAL_WARN( "cppuhelper", exc );
         }
         p->release();
     }

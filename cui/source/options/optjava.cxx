@@ -52,6 +52,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
+#include <cppuhelper/logging.hxx>
 #if HAVE_FEATURE_JAVA
 #include <jvmfwk/framework.hxx>
 #endif
@@ -255,7 +256,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl, Button*, void)
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): caught exception: " << e.Message);
+        SAL_WARN( "cui.options", "SvxJavaOptionsPage::AddHdl_Impl(): " << e);
     }
 }
 

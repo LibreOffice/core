@@ -441,3 +441,8 @@ GLIBCXX_3.4 {
         _ZGVNSt7num_put*; _ZNSt7num_put*;
         _ZNSs4_Rep20_S_empty_rep_storageE;
 };
+
+PRIVATE_1.1 { # LibO 6.0
+global:
+    _ZlsRSoRKN3com3sun4star3uno9ExceptionE; # std::ostream& operator<<(std::ostream & os, com::sun::star::uno::Exception const & exception);
+};

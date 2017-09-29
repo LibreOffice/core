@@ -31,6 +31,7 @@
 #include <unotest/bootstrapfixturebase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace ::pdfi;
 using namespace ::com::sun::star;
@@ -81,12 +82,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        SAL_WARN("vcl.app", "Fatal: " << e);
         return 1;
     }
     catch (const std::exception& e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        SAL_WARN("vcl.app", "Fatal: " << e.what());
         return 1;
     }
 

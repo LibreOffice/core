@@ -19,6 +19,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <sfx2/infobar.hxx>
 #include <sfx2/objsh.hxx>
@@ -392,7 +393,7 @@ void SfxClassificationHelper::Impl::parsePolicy()
     }
     catch (const xml::sax::SAXParseException& rException)
     {
-        SAL_WARN("sfx.view", "parsePolicy() failed: " << rException.Message);
+        SAL_WARN("sfx.view", "parsePolicy() failed: " << rException);
     }
     m_aCategories = xClassificationParser->m_aCategories;
     m_aMarkings = xClassificationParser->m_aMarkings;
@@ -450,7 +451,7 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
             }
             catch (const uno::Exception& rException)
             {
-                SAL_WARN("sfx.view", "pushDocumentProperties() failed for property " << rLabel.first << ": " << rException.Message);
+                SAL_WARN("sfx.view", "pushDocumentProperties() failed for property " << rLabel.first << ": " << rException);
             }
         }
     }

@@ -52,6 +52,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -606,8 +607,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                 {
                     SAL_WARN(
                         "linguistic",
-                        "GrammarCheckingIterator::DequeueAndCheck ignoring UNO"
-                            " exception " << e.Message);
+                        "GrammarCheckingIterator::DequeueAndCheck ignoring " << e);
                 }
             }
 
@@ -874,7 +874,7 @@ void SAL_CALL GrammarCheckingIterator::processLinguServiceEvent(
         catch (const ::uno::Exception &rE)
         {
             // ignore
-            SAL_WARN("linguistic", "processLinguServiceEvent: exception: " << rE.Message);
+            SAL_WARN("linguistic", "processLinguServiceEvent: exception: " << rE);
         }
     }
 }

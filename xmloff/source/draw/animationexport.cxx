@@ -50,6 +50,7 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <cppuhelper/logging.hxx>
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 
@@ -547,7 +548,7 @@ static OUString lcl_StoreMediaAndGetURL(SvXMLExport & rExport, OUString const& r
         }
         catch (uno::Exception const& e)
         {
-            SAL_INFO("xmloff", "exception while storing embedded media: '" << e.Message << "'");
+            SAL_INFO("xmloff", "exception while storing embedded media: '" << e << "'");
         }
         return OUString();
     }

@@ -17,6 +17,7 @@ $(eval $(call gb_Library_use_udk_api,cli_uno))
 
 $(eval $(call gb_Library_use_libraries,cli_uno,\
 	cppu \
+	cppuhelper \
 	sal \
 ))
 

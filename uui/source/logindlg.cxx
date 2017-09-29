@@ -32,6 +32,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace com::sun::star;
 
@@ -176,7 +177,7 @@ IMPL_LINK_NOARG(LoginDialog, PathHdl_Impl, Button*, void)
     }
     catch (uno::Exception & e)
     {
-        SAL_WARN("uui", "LoginDialog::PathHdl_Impl: caught UNO exception: " << e.Message);
+        SAL_WARN("uui", "LoginDialog::PathHdl_Impl: caught " << e);
     }
 }
 

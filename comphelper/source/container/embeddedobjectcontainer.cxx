@@ -37,6 +37,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
+#include <comphelper/logging.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -358,7 +359,7 @@ uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("comphelper.container", "EmbeddedObjectContainer::Get_Impl: exception caught: " << e.Message);
+        SAL_WARN("comphelper.container", "EmbeddedObjectContainer::Get_Impl: exception caught: " << e);
     }
 
     return xObj;
@@ -399,7 +400,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("comphelper.container", "EmbeddedObjectContainer::CreateEmbeddedObject: exception caught: " << e.Message);
+        SAL_WARN("comphelper.container", "EmbeddedObjectContainer::CreateEmbeddedObject: exception caught: " << e);
     }
 
     return xObj;
@@ -511,7 +512,7 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("comphelper.container", "EmbeddedObjectContainer::StoreEmbeddedObject: exception caught: " << e.Message);
+        SAL_WARN("comphelper.container", "EmbeddedObjectContainer::StoreEmbeddedObject: exception caught: " << e);
         // TODO/LATER: better error recovery should keep storage intact
         return false;
     }
@@ -572,7 +573,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
         catch (uno::Exception const& e)
         {
             // complete disaster!
-            SAL_WARN("comphelper.container", "EmbeddedObjectContainer::InsertEmbeddedObject: exception caught: " << e.Message);
+            SAL_WARN("comphelper.container", "EmbeddedObjectContainer::InsertEmbeddedObject: exception caught: " << e);
             return uno::Reference < embed::XEmbeddedObject >();
         }
     }
@@ -657,7 +658,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     catch (uno::Exception const& e)
     {
         SAL_WARN("comphelper.container", "EmbeddedObjectContainer::InsertEmbeddedLink: "
-                "exception caught: " << e.Message);
+                "exception caught: " << e);
     }
 
     return xObj;
@@ -1126,7 +1127,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
         catch (uno::Exception const& e)
         {
             SAL_INFO("comphelper.container",
-                "EmbeddedObjectContainer::GetGraphicStream(): exception: " << e.Message);
+                "EmbeddedObjectContainer::GetGraphicStream(): " << e);
         }
     }
 
@@ -1348,7 +1349,7 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
     {
         // TODO/LATER: error handling
         bResult = false;
-        SAL_WARN("comphelper.container", "failed. Message: " << e.Message);
+        SAL_WARN("comphelper.container", "failed. Message: " << e);
     }
 
     // the old SO6 format does not store graphical replacements

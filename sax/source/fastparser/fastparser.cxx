@@ -33,6 +33,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -621,7 +622,7 @@ void Entity::saveException( const Any & e )
     // unexpectedly some 'startElements' produce an UNO_QUERY_THROW
     // for XComponent; and yet expect to continue parsing.
     SAL_WARN("sax", "Unexpected exception from XML parser "
-            << e.get<Exception>().Message);
+            << e.get<Exception>());
     maSavedException = e;
 }
 

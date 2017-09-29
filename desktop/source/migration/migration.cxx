@@ -32,6 +32,7 @@
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
@@ -206,7 +207,7 @@ void Migration::migrateSettingsIfNecessary()
     try {
         bResult = aImpl.doMigration();
     } catch (const Exception& e) {
-        SAL_WARN( "desktop", "doMigration() exception: " << e.Message);
+        SAL_WARN( "desktop", "doMigration(): " << e);
     }
     OSL_ENSURE(bResult, "Migration has not been successful");
 }
@@ -294,7 +295,7 @@ bool MigrationImpl::doMigration()
     } catch (css::uno::Exception & e) {
         SAL_WARN(
             "desktop.migration",
-            "ignored Exception \"" << e.Message
+            "ignored Exception \"" << e
             << "\" while migrating from version \"" << m_aInfo.productname
             << "\" data \"" << m_aInfo.userdata << "\"");
     }
@@ -805,7 +806,7 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
                 sAccessSrvc, theArgs ), uno::UNO_QUERY_THROW );
     } catch (const css::uno::Exception& e) {
         SAL_WARN(
-            "desktop.migration", "ignoring Exception \"" << e.Message << "\"");
+            "desktop.migration", "ignoring Exception \"" << e << "\"");
     }
     return xNameAccess;
 }
@@ -884,7 +885,7 @@ void MigrationImpl::runServices()
             } catch (const Exception& e) {
                 SAL_WARN( "desktop", "Execution of migration service failed (Exception caught).\nService: "
                             << i_mig->service
-                            << "\nMessage: " << e.Message);
+                            << "\nMessage: " << e);
             } catch (...) {
                 SAL_WARN( "desktop", "Execution of migration service failed (Exception caught).\nService: "
                             << i_mig->service << "\nNo message available");

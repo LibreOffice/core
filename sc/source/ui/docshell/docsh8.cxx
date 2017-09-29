@@ -58,6 +58,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include "scerrors.hxx"
 #include "docsh.hxx"
@@ -1009,7 +1010,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
     {
         sal_Int32 nError = aException.ErrorCode;
         SAL_WARN("sc", "ScDocShell::DBaseExport: SQLException ErrorCode: " << nError << ", SQLState: " << aException.SQLState <<
-            ", Message: " << aException.Message << "\n");
+            ", Message: " << aException);
 
         if (nError == 22018 || nError == 22001)
         {

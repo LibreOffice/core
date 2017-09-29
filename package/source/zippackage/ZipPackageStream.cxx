@@ -49,6 +49,7 @@
 #include <comphelper/seekableinput.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
@@ -986,7 +987,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
     }
     catch ( Exception &ex )
     {
-        SAL_WARN( "package", "Exception is thrown during stream wrapping!" << ex.Message);
+        SAL_WARN( "package", "Exception is thrown during stream wrapping!" << ex);
         return uno::Reference < io::XInputStream > ();
     }
 }

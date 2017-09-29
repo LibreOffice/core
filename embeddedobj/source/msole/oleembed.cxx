@@ -44,6 +44,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -934,8 +935,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             }
             catch (uno::Exception const& e)
             {
-                SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::doVerb: "
-                    "-9 fallback path: exception caught: " << e.Message);
+                SAL_WARN("embeddedobj.ole", "OleEmbeddedObject::doVerb: -9 fallback path: " << e);
             }
         }
 

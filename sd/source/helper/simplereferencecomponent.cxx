@@ -21,6 +21,7 @@
 
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "osl/diagnose.h"
+#include <cppuhelper/logging.hxx>
 
 #include <new>
 
@@ -54,7 +55,7 @@ void SimpleReferenceComponent::release()
         }
         catch (RuntimeException & exc ) // don't break throw ()
         {
-            SAL_WARN( "sd", exc.Message );
+            SAL_WARN( "sd", exc );
         }
     }
 

@@ -66,6 +66,7 @@
 #include <tools/urlobj.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <comphelper/lok.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace com::sun::star;
 
@@ -360,7 +361,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             }
             catch (const uno::Exception& e)
             {
-                SAL_WARN( "sc", "Cannot Insert Chart: " << e.Message);
+                SAL_WARN( "sc", "Cannot Insert Chart: " << e);
             }
             break;
 

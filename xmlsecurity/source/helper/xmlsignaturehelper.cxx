@@ -48,6 +48,7 @@
 #include <tools/time.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 
 #define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
 #define NS_DOCUMENTSIGNATURES_ODF_1_2 "urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0"
@@ -398,7 +399,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     }
     catch(const uno::Exception& rException)
     {
-        SAL_WARN("xmlsecurity.helper", "XMLSignatureHelper::ReadAndVerifySignatureStorageStream: " << rException.Message);
+        SAL_WARN("xmlsecurity.helper", "XMLSignatureHelper::ReadAndVerifySignatureStorageStream: " << rException);
     }
 
     mpXSecController->releaseSignatureReader();

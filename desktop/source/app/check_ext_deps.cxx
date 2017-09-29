@@ -26,6 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/timer.hxx>
@@ -290,7 +291,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                 }
                 catch ( const uno::RuntimeException & ) { throw; }
                 catch (const uno::Exception & exc) {
-                   SAL_WARN( "desktop.app", "" <<  exc.Message );
+                   SAL_WARN( "desktop.app", exc );
                 }
 
                 if ( bRegistered )

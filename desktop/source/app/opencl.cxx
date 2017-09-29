@@ -28,6 +28,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <cppuhelper/logging.hxx>
 
 #if HAVE_FEATURE_OPENCL
 #include <opencl/openclwrapper.hxx>
@@ -96,7 +97,7 @@ bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &r
     }
     catch (const css::uno::Exception &e)
     {
-        SAL_WARN("opencl", "OpenCL testing failed - disabling: " << e.Message);
+        SAL_WARN("opencl", "OpenCL testing failed - disabling: " << e);
     }
 
     if (nKernelFailures != openclwrapper::kernelFailures)

@@ -31,6 +31,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <cppuhelper/logging.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -700,7 +701,7 @@ void XMLTextFrameContext_Impl::Create()
         }
         catch (lang::IllegalArgumentException const& e)
         {
-            SAL_WARN("xmloff.text", "Cannot import part of the text - probably an image in the text frame? " << e.Message);
+            SAL_WARN("xmloff.text", "Cannot import part of the text - probably an image in the text frame? " << e);
             return;
         }
     }
@@ -1234,7 +1235,7 @@ void XMLTextFrameContext_Impl::SetName()
             catch (uno::Exception const& e)
             {   // fdo#71698 document contains 2 frames with same draw:name
                 SAL_INFO("xmloff.text", "SetName(): exception setting \""
-                        << m_sOrigName << "\": " << e.Message);
+                        << m_sOrigName << "\": " << e);
             }
         }
     }
