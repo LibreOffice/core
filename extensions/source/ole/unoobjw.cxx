@@ -84,7 +84,7 @@ static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
     {
         pInfo->wCode = UNO_2_OLE_EXCEPTIONCODE;
         pInfo->bstrSource = SysAllocString(L"[automation bridge] ");
-        pInfo->bstrDescription = SysAllocString(reinterpret_cast<LPCOLESTR>(message.getStr()));
+        pInfo->bstrDescription = SysAllocString(SAL_W(message.getStr()));
     }
 }
 
@@ -219,7 +219,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 
         if (m_xInvocation.is() && (cNames > 0))
         {
-            OUString name(reinterpret_cast<const sal_Unicode*>(rgszNames[0]));
+            OUString name(SAL_U(rgszNames[0]));
             NameToIdMap::iterator iter = m_nameToDispIdMap.find(name);
 
             if (iter == m_nameToDispIdMap.end())
@@ -538,7 +538,7 @@ bool getType( const BSTR name, Type & type)
 {
     bool ret = false;
     typelib_TypeDescription * pDesc= nullptr;
-    OUString str( reinterpret_cast<const sal_Unicode*>(name));
+    OUString str(SAL_U(name));
     typelib_typedescription_getByName( &pDesc, str.pData );
     if( pDesc)
     {
@@ -1023,7 +1023,7 @@ HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * /*pdispparams*/, V
             pexcepinfo->wCode = UNO_2_OLE_EXCEPTIONCODE;
             pexcepinfo->bstrSource = SysAllocString(L"any ONE component");
             pexcepinfo->bstrDescription = SysAllocString(
-                reinterpret_cast<LPCOLESTR>(org.getValueType().getTypeName().getStr()));
+                SAL_W(org.getValueType().getTypeName().getStr()));
         }
         ret = DISP_E_EXCEPTION;
     }
@@ -1085,7 +1085,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             CComVariant arg;
             if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
             {
-                Reference<XIdlClass> classStruct= xRefl->forName( reinterpret_cast<const sal_Unicode*>(arg.bstrVal));
+                Reference<XIdlClass> classStruct= xRefl->forName(SAL_U(arg.bstrVal));
                 if( classStruct.is())
                 {
                     Any anyStruct;
@@ -1118,9 +1118,8 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             Type type;
             if (!getType(arg.bstrVal, type))
             {
-                writeExcepinfo(pexcepinfo,OUString(
-                                   "[automation bridge] A UNO type with the name " +
-                                   OUString(reinterpret_cast<const sal_Unicode*>(arg.bstrVal)) + " does not exist!"));
+                writeExcepinfo(pexcepinfo, "[automation bridge] A UNO type with the name " +
+                                           OUString(SAL_U(arg.bstrVal)) + " does not exist!");
                 return DISP_E_EXCEPTION;
             }
 
@@ -1256,7 +1255,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, OLECHA
 
     if (m_xInvocation.is() && (cNames > 0))
     {
-        OUString name(reinterpret_cast<const sal_Unicode*>(rgszNames[0]));
+        OUString name(SAL_U(rgszNames[0]));
         // has this name been determined as "bad"
         BadNameMap::iterator badIter= m_badNameMap.find( name);
         if( badIter == m_badNameMap.end() )

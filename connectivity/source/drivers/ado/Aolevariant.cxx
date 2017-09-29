@@ -46,7 +46,7 @@ OLEString::OLEString(const BSTR& _sBStr)
 }
 OLEString::OLEString(const OUString& _sBStr)
 {
-    m_sStr = ::SysAllocString(reinterpret_cast<LPCOLESTR>(_sBStr.getStr()));
+    m_sStr = ::SysAllocString(SAL_W(_sBStr.getStr()));
 }
 OLEString::~OLEString()
 {
@@ -57,7 +57,7 @@ OLEString& OLEString::operator=(const OUString& _rSrc)
 {
     if(m_sStr)
         ::SysFreeString(m_sStr);
-    m_sStr = ::SysAllocString(reinterpret_cast<LPCOLESTR>(_rSrc.getStr()));
+    m_sStr = ::SysAllocString(SAL_W(_rSrc.getStr()));
     return *this;
 }
 OLEString& OLEString::operator=(const OLEString& _rSrc)
@@ -79,7 +79,7 @@ OLEString& OLEString::operator=(const BSTR& _rSrc)
 }
 OUString OLEString::asOUString() const
 {
-    return (m_sStr != nullptr) ? OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : OUString();
+    return (m_sStr != nullptr) ? OUString(SAL_U(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : OUString();
 }
 BSTR OLEString::asBSTR() const
 {
@@ -121,7 +121,7 @@ OLEVariant::OLEVariant(const OUString& us)
 {
     ::VariantInit(this);
     vt      = VT_BSTR;
-    bstrVal = SysAllocString(reinterpret_cast<LPCOLESTR>(us.getStr()));
+    bstrVal = SysAllocString(SAL_W(us.getStr()));
 }
 OLEVariant::~OLEVariant()
 {
@@ -277,7 +277,7 @@ void OLEVariant::setString(const OUString& us)
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     vt = VT_BSTR;
-    bstrVal     = ::SysAllocString(reinterpret_cast<LPCOLESTR>(us.getStr()));
+    bstrVal     = ::SysAllocString(SAL_W(us.getStr()));
 }
 void OLEVariant::setNoArg()
 {
@@ -377,7 +377,7 @@ void OLEVariant::set(double n)
 OUString OLEVariant::getString() const
 {
     if (V_VT(this) == VT_BSTR)
-        return reinterpret_cast<const sal_Unicode*>(LPCOLESTR(V_BSTR(this)));
+        return SAL_U(LPCOLESTR(V_BSTR(this)));
 
     if(isNull())
         return OUString();
@@ -386,7 +386,7 @@ OUString OLEVariant::getString() const
 
     varDest.ChangeType(VT_BSTR, this);
 
-    return reinterpret_cast<const sal_Unicode*>(LPCOLESTR(V_BSTR(&varDest)));
+    return SAL_U(LPCOLESTR(V_BSTR(&varDest)));
 }
 
 
@@ -692,7 +692,7 @@ css::uno::Any OLEVariant::makeAny() const
          }
         case VT_BSTR:
         {
-            OUString b(reinterpret_cast<const sal_Unicode*>(bstrVal));
+            OUString b(SAL_U(bstrVal));
             aValue.setValue( &b, cppu::UnoType<decltype(b)>::get());
             break;
         }

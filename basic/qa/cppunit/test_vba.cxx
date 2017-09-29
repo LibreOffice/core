@@ -233,8 +233,7 @@ void VBATest::testMiscOLEStuff()
     sPath = sPath.replaceAll( "/", "\\" );
 
     aArgs[ 0 ] <<= sPath;
-    aArgs[ 1 ] <<= OUString(
-        reinterpret_cast<sal_Unicode const *>(pODBCDriverName));
+    aArgs[ 1 ] <<= OUString(SAL_U(pODBCDriverName));
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
     {

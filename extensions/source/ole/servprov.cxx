@@ -59,7 +59,7 @@ ProviderOleWrapper_Impl::ProviderOleWrapper_Impl(const Reference<XMultiServiceFa
 {
     m_guid = *pGuid;
 
-    Reference<XInterface> xInt = smgr->createInstance(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.BridgeSupplier"));
+    Reference<XInterface> xInt = smgr->createInstance("com.sun.star.bridge.oleautomation.BridgeSupplier");
 
     if (xInt.is())
     {
@@ -196,7 +196,7 @@ OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiS
 {
     m_guid = *pGuid;
 
-    Reference<XInterface> xInt = m_smgr->createInstance(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.BridgeSupplier"));
+    Reference<XInterface> xInt = m_smgr->createInstance("com.sun.star.bridge.oleautomation.BridgeSupplier");
 
     if (xInt.is())
     {
@@ -537,7 +537,7 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
     o2u_attachCurrentThread();
 
     result = CLSIDFromProgID(
-                  reinterpret_cast<LPCWSTR>(ServiceSpecifier.getStr()),     //Pointer to the ProgID
+                  SAL_W(ServiceSpecifier.getStr()), //Pointer to the ProgID
                   &classId);                        //Pointer to the CLSID
 
 
@@ -615,7 +615,7 @@ Reference< XInterface > OleClient_Impl::createComWrapperInstance( )
 OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
     m_smgr( smgr)
 {
-    Reference<XInterface> xInt = m_smgr->createInstance(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.BridgeSupplier"));
+    Reference<XInterface> xInt = m_smgr->createInstance("com.sun.star.bridge.oleautomation.BridgeSupplier");
 
     if (xInt.is())
     {
