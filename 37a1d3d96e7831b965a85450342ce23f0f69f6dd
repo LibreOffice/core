@@ -16,6 +16,24 @@
       "revId": "37a1d3d96e7831b965a85450342ce23f0f69f6dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d85ea1e8",
+        "filename": "vcl/osx/saltimer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-09-29T07:08:56Z",
+      "side": 1,
+      "message": "My guess is yes, as only the Scheduler or Start() calls Stop(), which both are deferred to the main thread, as the timer has to be created there.\n\nBut I\u0027ll add an assert, just in case it\u0027s not or someone changes the code in an unexpected way.",
+      "parentUuid": "1a430d35_1d6e5b01",
+      "revId": "37a1d3d96e7831b965a85450342ce23f0f69f6dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
