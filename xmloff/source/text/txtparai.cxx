@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -2072,7 +2073,7 @@ void XMLParaContext::EndElement()
                     }
                     catch (uno::RuntimeException const& e)
                     {
-                        SAL_INFO("xmloff.text", "could not insert index mark, presumably in editengine text " << e.Message);
+                        SAL_INFO("xmloff.text", "could not insert index mark, presumably in editengine text " << e);
                     }
                 }
                 break;

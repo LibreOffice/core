@@ -59,6 +59,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <cppuhelper/logging.hxx>
 
 namespace {
 
@@ -103,7 +104,7 @@ std::vector<OUString> getContents(OUString const & url) {
         SAL_INFO(
             "unotools.ucbhelper",
             "getContents(" << url << ") " << e.getValueType().getTypeName()
-                << " \"" << e.get<css::uno::Exception>().Message << '"');
+                << " \"" << e.get<css::uno::Exception>() << '"');
         return std::vector<OUString>();
     }
 }
@@ -152,7 +153,7 @@ bool utl::UCBContentHelper::IsDocument(OUString const & url) {
             "unotools.ucbhelper",
             "UCBContentHelper::IsDocument(" << url << ") "
                 << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>().Message << '"');
+                << e.get<css::uno::Exception>() << '"');
         return false;
     }
 }
@@ -173,7 +174,7 @@ css::uno::Any utl::UCBContentHelper::GetProperty(
             "unotools.ucbhelper",
             "UCBContentHelper::GetProperty(" << url << ", " << property << ") "
                 << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>().Message << '"');
+                << e.get<css::uno::Exception>() << '"');
         return css::uno::Any();
     }
 }
@@ -192,7 +193,7 @@ bool utl::UCBContentHelper::IsFolder(OUString const & url) {
             "unotools.ucbhelper",
             "UCBContentHelper::IsFolder(" << url << ") "
                 << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>().Message << '"');
+                << e.get<css::uno::Exception>() << '"');
         return false;
     }
 }
@@ -214,7 +215,7 @@ bool utl::UCBContentHelper::GetTitle(
             "unotools.ucbhelper",
             "UCBContentHelper::GetTitle(" << url << ") "
                 << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>().Message << '"');
+                << e.get<css::uno::Exception>() << '"');
         return false;
     }
 }
@@ -236,7 +237,7 @@ bool utl::UCBContentHelper::Kill(OUString const & url) {
             "unotools.ucbhelper",
             "UCBContentHelper::Kill(" << url << ") "
                 << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>().Message << '"');
+                << e.get<css::uno::Exception>() << '"');
         return false;
     }
 }
@@ -276,7 +277,7 @@ bool utl::UCBContentHelper::MakeFolder(
             SAL_INFO(
                 "unotools.ucbhelper",
                 "UCBContentHelper::MakeFolder(" << title
-                    << ") InteractiveIOException \"" << e.Message
+                    << ") InteractiveIOException \"" << e
                     << "\", code " << + (sal_Int32)e.Code);
         }
     } catch (css::ucb::NameClashException const &) {
@@ -292,7 +293,7 @@ bool utl::UCBContentHelper::MakeFolder(
             "unotools.ucbhelper",
             "UCBContentHelper::MakeFolder(" << title << ") "
                 << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>().Message << '"');
+                << e.get<css::uno::Exception>() << '"');
     }
     if (exists) {
         INetURLObject o(parent.getURL());
@@ -328,7 +329,7 @@ bool utl::UCBContentHelper::IsYounger(
             "unotools.ucbhelper",
             "UCBContentHelper::IsYounger(" << younger << ", " << older << ") "
                 << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>().Message << '"');
+                << e.get<css::uno::Exception>() << '"');
         return false;
     }
 }
@@ -420,7 +421,7 @@ bool utl::UCBContentHelper::IsSubPath(
             "unotools.ucbhelper",
             "UCBContentHelper::IsSubPath(" << parent << ", " << child << ") "
                 << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>().Message << '"');
+                << e.get<css::uno::Exception>() << '"');
     }
     return false;
 }

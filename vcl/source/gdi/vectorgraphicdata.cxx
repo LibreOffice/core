@@ -26,6 +26,7 @@
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
+#include <cppuhelper/logging.hxx>
 #include <vcl/canvastools.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
@@ -82,7 +83,7 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
         }
         catch (const uno::Exception& e)
         {
-            SAL_WARN("vcl", "Got no graphic::XPrimitive2DRenderer! : " << e.Message);
+            SAL_WARN("vcl", "Got no graphic::XPrimitive2DRenderer! : " << e);
         }
         catch (const std::exception& e)
         {

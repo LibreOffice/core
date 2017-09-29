@@ -31,6 +31,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -172,7 +173,7 @@ bool lcl_ExecuteFilterDialog( const Sequence< PropertyValue >& rPropsForDialog,
     }
     catch( const Exception& e )
     {
-        SAL_WARN("sfx.doc", "ignoring UNO exception " << e.Message);
+        SAL_WARN("sfx.doc", "ignoring " << e);
     }
 
     return bStatus;

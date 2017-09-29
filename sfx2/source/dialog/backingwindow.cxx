@@ -131,7 +131,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
+        SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e );
     }
 
     // fdo#34392: we do the layout dynamically, the layout depends on the font,

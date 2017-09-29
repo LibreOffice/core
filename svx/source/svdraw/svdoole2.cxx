@@ -911,8 +911,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
         }
         catch (const css::uno::Exception& e)
         {
-            SAL_WARN("svx", "SdrOle2Obj::CheckFileLink_Impl(),"
-                        "exception caught: " << e.Message);
+            SAL_WARN("svx", "SdrOle2Obj::CheckFileLink_Impl(), " << e);
         }
     }
 }

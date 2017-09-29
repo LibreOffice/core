@@ -66,6 +66,7 @@
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;

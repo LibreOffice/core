@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/asyncnotification.hxx>
 
+#include <cppuhelper/logging.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclmain.hxx>
@@ -337,7 +338,7 @@ bool InitVCL()
     }
     catch (const uno::Exception &e)
     {
-        SAL_INFO("vcl.app", "Unable to get ui language: '" << e.Message);
+        SAL_INFO("vcl.app", "Unable to get ui language: '" << e);
     }
 
     pSVData->mpDefInst->AfterAppInit();

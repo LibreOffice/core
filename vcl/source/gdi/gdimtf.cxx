@@ -20,6 +20,7 @@
 #include <rtl/crc.h>
 #include <cstdlib>
 #include <memory>
+#include <cppuhelper/logging.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/fract.hxx>
@@ -436,8 +437,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     catch (const uno::Exception& e)
     {
         // ignore errors, no way of reporting them here
-        SAL_WARN("vcl.gdi",
-            "GDIMetaFile::ImplPlayWithRenderer: exception: " << e.Message);
+        SAL_WARN("vcl.gdi", "GDIMetaFile::ImplPlayWithRenderer: " << e);
     }
 
     return false;

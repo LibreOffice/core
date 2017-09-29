@@ -30,6 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -287,7 +288,7 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
         SAL_WARN(
             "desktop.migration",
             "Ignoring UNO Exception while migrating extension from <"
-            << sSourceDir << ">: \"" << e.Message << "\"");
+            << sSourceDir << ">: " << e);
     }
 }
 

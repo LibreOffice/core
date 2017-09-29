@@ -45,6 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/logging.hxx>
 #include <editeng/editids.hrc>
 #include <sot/storage.hxx>
 #include <editeng/udlnitem.hxx>
@@ -2267,7 +2268,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
     }
     catch (const css::ucb::ContentCreationException &e)
     {
-        SAL_WARN("editeng", "SvxAutoCorrectLanguageLists::LoadWrdSttExceptList: Caught exception: " << e.Message);
+        SAL_WARN("editeng", "SvxAutoCorrectLanguageLists::LoadWrdSttExceptList: Caught " << e);
     }
     return pWrdStt_ExcptLst;
 }

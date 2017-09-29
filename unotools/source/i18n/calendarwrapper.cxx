@@ -22,6 +22,7 @@
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
+#include <cppuhelper/logging.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -49,7 +50,7 @@ void CalendarWrapper::loadDefaultCalendar( const css::lang::Locale& rLocale )
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "loadDefaultCalendar: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "loadDefaultCalendar: Exception caught " << e );
     }
 }
 
@@ -63,7 +64,7 @@ void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const css::lang::
     catch (const Exception& e)
     {
         SAL_WARN( "unotools.i18n", "loadCalendar: Exception caught requested: "
-            << rUniqueID << "   Locale: " << rLocale.Language << "_" << rLocale.Country << " " << e.Message );
+            << rUniqueID << "   Locale: " << rLocale.Language << "_" << rLocale.Country << " " << e );
     }
 }
 
@@ -76,7 +77,7 @@ css::uno::Sequence< OUString > CalendarWrapper::getAllCalendars( const css::lang
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getAllCalendars: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getAllCalendars: Exception caught " << e );
     }
 
     return css::uno::Sequence< OUString > (0);
@@ -91,7 +92,7 @@ OUString CalendarWrapper::getUniqueID() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getUniqueID: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getUniqueID: Exception caught " << e );
     }
     return OUString();
 }
@@ -105,7 +106,7 @@ void CalendarWrapper::setDateTime( double fTimeInDays )
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "setDateTime: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "setDateTime: Exception caught " << e );
     }
 }
 
@@ -118,7 +119,7 @@ double CalendarWrapper::getDateTime() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getDateTime: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getDateTime: Exception caught " << e );
     }
     return 0.0;
 }
@@ -134,7 +135,7 @@ void CalendarWrapper::setLocalDateTime( double fTimeInDays )
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n",  "setLocalDateTime: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n",  "setLocalDateTime: Exception caught " << e );
     }
 }
 
@@ -149,7 +150,7 @@ double CalendarWrapper::getLocalDateTime() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n",  "getLocalDateTime: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n",  "getLocalDateTime: Exception caught " << e );
     }
     return 0.0;
 }
@@ -163,7 +164,7 @@ void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n",  "setValue: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n",  "setValue: Exception caught " << e );
     }
 }
 
@@ -176,7 +177,7 @@ bool CalendarWrapper::isValid() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n",  "isValid: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n",  "isValid: Exception caught " << e );
     }
     return false;
 }
@@ -190,7 +191,7 @@ sal_Int16 CalendarWrapper::getValue( sal_Int16 nFieldIndex ) const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getValue: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getValue: Exception caught " << e );
     }
     return 0;
 }
@@ -204,7 +205,7 @@ sal_Int16 CalendarWrapper::getFirstDayOfWeek() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getFirstDayOfWeek: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getFirstDayOfWeek: Exception caught " << e );
     }
     return 0;
 }
@@ -218,7 +219,7 @@ sal_Int16 CalendarWrapper::getNumberOfMonthsInYear() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getNumberOfMonthsInYear: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getNumberOfMonthsInYear: Exception caught " << e );
     }
     return 0;
 }
@@ -232,7 +233,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getNumberOfDaysInWeek: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getNumberOfDaysInWeek: Exception caught " << e );
     }
     return 0;
 }
@@ -246,7 +247,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getMonths() cons
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getMonths: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getMonths: Exception caught " << e );
     }
     return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
 }
@@ -260,7 +261,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getDays() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getDays: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getDays: Exception caught " << e );
     }
     return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
 }
@@ -274,7 +275,7 @@ OUString CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_I
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getDisplayName: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getDisplayName: Exception caught " << e );
     }
     return OUString();
 }
@@ -290,7 +291,7 @@ OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getDisplayString: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getDisplayString: Exception caught " << e );
     }
     return OUString();
 }
@@ -306,7 +307,7 @@ css::i18n::Calendar2 CalendarWrapper::getLoadedCalendar() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getLoadedCalendar2: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getLoadedCalendar2: Exception caught " << e );
     }
     return css::i18n::Calendar2();
 }
@@ -320,7 +321,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonth
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getGenitiveMonths: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getGenitiveMonths: Exception caught " << e );
     }
     return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
 }
@@ -334,7 +335,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMont
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "getPartitiveMonths: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getPartitiveMonths: Exception caught " << e );
     }
     return css::uno::Sequence< css::i18n::CalendarItem2 > (0);
 }

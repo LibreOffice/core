@@ -13,6 +13,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/main.h>
+#include <cppuhelper/logging.hxx>
 #include <svtools/langtab.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 #include <vcl/svapp.hxx>
@@ -65,12 +66,12 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        SAL_WARN("vcl.app", "Fatal: " << e);
         return 1;
     }
     catch (const std::exception &e)
     {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        SAL_WARN("vcl.app", "Fatal: " << e.what());
         return 1;
     }
 

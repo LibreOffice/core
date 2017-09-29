@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
@@ -1635,7 +1636,7 @@ void SfxViewShell::CheckIPClient_Impl(
             }
             catch (const uno::Exception& e)
             {
-                SAL_WARN("sfx.view", "SfxViewShell::CheckIPClient_Impl exception: " << e.Message);
+                SAL_WARN("sfx.view", "SfxViewShell::CheckIPClient_Impl: " << e);
             }
         }
     }

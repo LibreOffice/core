@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <cppuhelper/logging.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -278,7 +279,7 @@ static Reference< XContent > getContentNoThrow(
     }
     catch ( IllegalIdentifierException const & e )
     {
-        SAL_WARN("ucbhelper", "getContentNoThrow: exception: " << e.Message);
+        SAL_WARN("ucbhelper", "getContentNoThrow: " << e);
     }
 
     return xContent;

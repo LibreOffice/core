@@ -35,6 +35,7 @@
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
+#include <cppuhelper/logging.hxx>
 #include "rtl/byteseq.h"
 #include "rtl/ustring.hxx"
 #include "sal/log.hxx"
@@ -120,7 +121,7 @@ void Reader::execute() {
             block.done();
         }
     } catch (const css::uno::Exception & e) {
-        SAL_WARN("binaryurp", "caught UNO exception '" << e.Message << '\'');
+        SAL_WARN("binaryurp", "caught UNO exception '" << e << '\'');
     } catch (const std::exception & e) {
         SAL_WARN("binaryurp", "caught C++ exception '" << e.what() << '\'');
     }

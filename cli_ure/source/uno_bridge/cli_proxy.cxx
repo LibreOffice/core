@@ -1096,7 +1096,7 @@ void SAL_CALL cli_proxy_dispatch(
             css::uno::XInterface >() );
         css::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), 0);
-        SAL_WARN( "cli", exc.Message);
+        SAL_WARN( "cli", exc);
     }
 }
 

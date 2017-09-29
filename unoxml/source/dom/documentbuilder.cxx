@@ -34,6 +34,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -200,7 +201,7 @@ namespace DOM
             memcpy(buffer, chunk.getConstArray(), nread);
             return nread;
         } catch (const css::uno::Exception& ex) {
-            SAL_WARN( "unoxml", ex.Message);
+            SAL_WARN( "unoxml", ex);
             return -1;
         }
     }
@@ -219,7 +220,7 @@ namespace DOM
                 delete pctx;
             return 0;
         } catch (const css::uno::Exception& ex) {
-            SAL_WARN( "unoxml", ex.Message);
+            SAL_WARN( "unoxml", ex);
             return -1;
         }
     }
@@ -295,9 +296,7 @@ namespace DOM
         catch (const css::uno::Exception &e)
         {
             // Protect lib2xml from UNO Exception
-            SAL_WARN("unoxml",
-                "DOM::warning_func: caught RuntimeException"
-                << e.Message);
+            SAL_WARN("unoxml", "DOM::warning_func: caught " << e);
         }
     }
 
@@ -329,9 +328,7 @@ namespace DOM
         catch (const css::uno::Exception &e)
         {
             // Protect lib2xml from UNO Exception
-            SAL_WARN("unoxml",
-                "DOM::error_func: caught RuntimeException"
-                << e.Message);
+            SAL_WARN("unoxml", "DOM::error_func: caught " << e);
         }
     }
     } // extern "C"

@@ -22,6 +22,7 @@
 
 #include <comphelper/lok.hxx>
 #include <comphelper/servicedecl.hxx>
+#include <cppuhelper/logging.hxx>
 #include <uno/environment.h>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -374,7 +375,7 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
                 return OUString(constFilterName);
         }
     } catch (css::io::IOException & e) {
-        SAL_WARN("filter.svg", "caught IOException " + e.Message);
+        SAL_WARN("filter.svg", "caught " << e);
     }
     return OUString();
 }

@@ -1391,7 +1391,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
             catch ( const css::uno::RuntimeException & rEx )
             {
                 // system child window could not be created
-                SAL_WARN("toolkit", "caught " << rEx.Message);
+                SAL_WARN("toolkit", "caught " << rEx);
                 pChildWindow.clear();
             }
         }
@@ -1786,7 +1786,7 @@ void VCLXToolkit::callTopWindowListeners(
                 }
                 catch (const css::uno::RuntimeException & rEx)
                 {
-                    SAL_WARN("toolkit", "caught " << rEx.Message);
+                    SAL_WARN("toolkit", "caught " << rEx);
                 }
             }
         }
@@ -1831,7 +1831,7 @@ bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             }
             catch (const css::uno::RuntimeException & rEx)
             {
-                SAL_WARN("toolkit", "caught " << rEx.Message);
+                SAL_WARN("toolkit", "caught " << rEx);
             }
         }
     }
@@ -1877,7 +1877,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                 }
                 catch (const css::uno::RuntimeException & rEx)
                 {
-                    SAL_WARN("toolkit", "caught " << rEx.Message);
+                    SAL_WARN("toolkit", "caught " << rEx);
                 }
             }
         }

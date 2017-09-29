@@ -18,6 +18,7 @@
  */
 
 
+#include <cppuhelper/logging.hxx>
 #include <svtools/embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svtools/strings.hrc>
@@ -342,7 +343,7 @@ void EmbeddedObjectRef::Clear()
                 }
                 catch (const uno::Exception& e)
                 {
-                    SAL_WARN("svtools.misc", "Error on switching of the object to loaded state and closing: \"" << e.Message << "\"");
+                    SAL_WARN("svtools.misc", "Error on switching of the object to loaded state and closing: \"" << e << "\"");
                 }
             }
         }
@@ -442,7 +443,7 @@ const Graphic* EmbeddedObjectRef::GetGraphic() const
     }
     catch( const uno::Exception& ex )
     {
-        SAL_WARN("svtools.misc", "Something went wrong on getting the graphic: " << ex.Message);
+        SAL_WARN("svtools.misc", "Something went wrong on getting the graphic: " << ex);
     }
 
     return mpImpl->pGraphic.get();
@@ -479,7 +480,7 @@ Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
             }
             catch (const uno::Exception& e)
             {
-                SAL_WARN("svtools.misc", "Something went wrong on getting of the size of the object: \"" << e.Message << "\"");
+                SAL_WARN("svtools.misc", "Something went wrong on getting of the size of the object: \"" << e << "\"");
             }
 
             try
@@ -488,7 +489,7 @@ Size EmbeddedObjectRef::GetSize( MapMode const * pTargetMapMode ) const
             }
             catch (const uno::Exception& e)
             {
-                SAL_WARN("svtools.misc", "Can not get the map mode: \"" << e.Message << "\"");
+                SAL_WARN("svtools.misc", "Can not get the map mode: \"" << e << "\"");
             }
         }
 
@@ -575,7 +576,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
             }
             catch (const uno::Exception& ex)
             {
-                SAL_WARN("svtools.misc", "discarding broken embedded object preview: " << ex.Message);
+                SAL_WARN("svtools.misc", "discarding broken embedded object preview: " << ex);
                 delete pStream;
                 xStream.clear();
             }

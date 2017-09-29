@@ -45,6 +45,7 @@
 #include <unotools/viewoptions.hxx>
 #include <unotools/options.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <cppuhelper/logging.hxx>
 
 ItemHolder1::ItemHolder1()
     : ItemHolderMutexBase()
@@ -64,7 +65,7 @@ ItemHolder1::ItemHolder1()
         if(bMessage)
         {
             bMessage = false;
-            SAL_WARN( "unotools", "CreateInstance with arguments exception: " <<  rEx.Message);
+            SAL_WARN( "unotools", "CreateInstance with arguments exception: " << rEx);
         }
     }
 #else

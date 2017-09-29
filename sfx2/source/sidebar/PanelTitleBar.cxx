@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cppuhelper/logging.hxx>
 #include <sfx2/sidebar/PanelTitleBar.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
@@ -148,7 +149,7 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
             }
             catch(Exception& rException)
             {
-                SAL_WARN("sfx", "caught exception: " << rException.Message);
+                SAL_WARN("sfx", "caught " << rException);
             }
         }
 }

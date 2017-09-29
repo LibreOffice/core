@@ -37,6 +37,7 @@ one go*/
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <cppuhelper/logging.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/character.hxx>
 #include <sfx2/frame.hxx>
@@ -3093,7 +3094,7 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                     }
                     catch (const Exception& rEx)
                     {
-                        SAL_WARN("starmath", "SmXMLImport::SetConfigurationSettings: Exception: " << rEx.Message );
+                        SAL_WARN("starmath", "SmXMLImport::SetConfigurationSettings: Exception: " << rEx );
                     }
                 }
 

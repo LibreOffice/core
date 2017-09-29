@@ -33,6 +33,7 @@
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/configitem.hxx>
 #include <mailmergehelper.hxx>
@@ -891,7 +892,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
             }
             catch (const Exception& e)
             {
-                SAL_WARN("sw.ui", "exception caught: " << e.Message);
+                SAL_WARN("sw.ui", "exception caught: " << e);
             }
             xRowSet->execute();
             m_pImpl->m_xResultSet = xRowSet.get();
@@ -900,7 +901,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
         }
         catch (const Exception& e)
         {
-            SAL_WARN("sw.ui", "exception caught in: SwMailMergeConfigItem::GetResultSet() " << e.Message);
+            SAL_WARN("sw.ui", "exception caught in: SwMailMergeConfigItem::GetResultSet() " << e);
         }
     }
     return m_pImpl->m_xResultSet;
@@ -938,7 +939,7 @@ void  SwMailMergeConfigItem::SetFilter(OUString const & rFilter)
             }
             catch (const Exception& e)
             {
-                SAL_WARN("sw.ui", "exception caught in SwMailMergeConfigItem::SetFilter(): " << e.Message);
+                SAL_WARN("sw.ui", "exception caught in SwMailMergeConfigItem::SetFilter(): " << e);
             }
         }
     }

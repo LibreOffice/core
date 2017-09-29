@@ -10,6 +10,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <libwps/libwps.h>
 
@@ -78,7 +79,7 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
     }
     catch (css::uno::Exception &e)
     {
-        SAL_WARN("writerperfect", "ignoring Exception " << e.Message);
+        SAL_WARN("writerperfect", "ignoring " << e);
     }
     return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator, "", fileEncoding.c_str());
 }

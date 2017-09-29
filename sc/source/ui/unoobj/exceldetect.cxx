@@ -12,6 +12,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
@@ -73,7 +74,7 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
     }
     catch (const css::ucb::ContentCreationException &e)
     {
-        SAL_WARN("sc", "hasStream caught " << e.Message);
+        SAL_WARN("sc", "hasStream caught " << e);
     }
 
     return false;

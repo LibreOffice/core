@@ -24,6 +24,7 @@
 #include <time.h>
 #include <typeinfo>
 
+#include <cppuhelper/logging.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
@@ -926,7 +927,7 @@ void ContextMenuSaveInData::Reset()
         }
         catch ( const css::uno::Exception& e )
         {
-            SAL_WARN("cui.customize", "Exception caught while resetting context menus: " << e.Message);
+            SAL_WARN("cui.customize", "Exception caught while resetting context menus: " << e);
         }
     }
     PersistChanges( GetConfigManager() );
@@ -941,7 +942,7 @@ void ContextMenuSaveInData::ResetContextMenu( const SvxConfigEntry* pEntry )
     }
     catch ( const css::uno::Exception& e )
     {
-        SAL_WARN("cui.customize", "Exception caught while resetting context menu: " << e.Message);
+        SAL_WARN("cui.customize", "Exception caught while resetting context menu: " << e);
     }
     PersistChanges( GetConfigManager() );
     m_pRootEntry.reset();
@@ -3517,7 +3518,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     }
     catch( uno::Exception& e )
     {
-        SAL_WARN("cui.customize", "Caught exception importing XGraphic: " << e.Message);
+        SAL_WARN("cui.customize", "Caught exception importing XGraphic: " << e);
     }
     return result;
 }

@@ -27,6 +27,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <cppuhelper/logging.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include "oox/core/xmlfilterbase.hxx"
@@ -228,7 +229,7 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
     }
     catch( Exception& e )
     {
-        SAL_WARN( "oox", "Drawing::createAndInsertXShape - error during shape object creation: " << e.Message );
+        SAL_WARN( "oox", "Drawing::createAndInsertXShape - error during shape object creation: " << e );
     }
     OSL_ENSURE( xShape.is(), "Drawing::createAndInsertXShape - cannot instantiate shape object" );
     return xShape;
@@ -251,7 +252,7 @@ Reference< XShape > Drawing::createAndInsertXControlShape( const ::oox::ole::Emb
     }
     catch (Exception const& e)
     {
-        SAL_WARN("oox", "exception inserting Shape: " << e.Message);
+        SAL_WARN("oox", "exception inserting Shape: " << e);
     }
     return xShape;
 }

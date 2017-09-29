@@ -26,6 +26,7 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <cppuhelper/logging.hxx>
 #include "xmlfilter.hxx"
 #include "xmlGroup.hxx"
 #include "xmlReport.hxx"
@@ -149,7 +150,7 @@ ErrCode ReadThroughComponent(
     catch (const SAXParseException& r)
     {
         SAL_WARN( "reportdesign", "SAX parse exception caught while importing: "
-                    << r.Message << " "
+                    << r << " "
                     << r.LineNumber << ',' << r.ColumnNumber );
         return ErrCode(1);
     }

@@ -18,6 +18,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace ::connectivity::firebird;
 
@@ -125,7 +126,7 @@ void SAL_CALL Blob::disposing()
     catch (SQLException &e)
     {
         // we cannot throw any exceptions here...
-        SAL_WARN("connectivity.firebird", "isc_close_blob failed " << e.Message);
+        SAL_WARN("connectivity.firebird", "isc_close_blob failed " << e);
         assert(false);
     }
     Blob_BASE::disposing();

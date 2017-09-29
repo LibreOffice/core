@@ -19,6 +19,7 @@
 
 #include "smdetect.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <sfx2/docfile.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -81,7 +82,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     }
     catch (const css::ucb::ContentCreationException &e)
     {
-        SAL_WARN("starmath", "SmFilterDetect::detect caught " << e.Message);
+        SAL_WARN("starmath", "SmFilterDetect::detect caught " << e);
     }
 
     if (!bStorageOk)

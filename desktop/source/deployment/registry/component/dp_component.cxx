@@ -30,6 +30,7 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 #include <ucbhelper/content.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
@@ -1394,13 +1395,11 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                 componentLiveInsertion(data, factories);
             } catch (css::uno::Exception & e) {
                 SAL_INFO(
-                    "desktop.deployment", "caught Exception " << e.Message);
+                    "desktop.deployment", "caught " << e);
                 try {
                     impreg->revokeImplementation(url, rdb);
                 } catch (css::uno::RuntimeException & e2) {
-                    SAL_WARN(
-                        "desktop.deployment",
-                        "ignored RuntimeException " << e2.Message);
+                    SAL_WARN("desktop.deployment", "ignored " << e2);
                 }
                 throw;
             }
