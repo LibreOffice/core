@@ -69,7 +69,7 @@ Reference< XUIElement > SAL_CALL ToolBarFactory::createUIElement(
 {
     Reference< css::ui::XUIElement > xToolBar(
            static_cast<OWeakObject *>(new ToolBarWrapper(m_xContext)), UNO_QUERY);
-    CreateUIElement(ResourceURL, Args, "PopupMode", "private:resource/toolbar/", xToolBar, m_xContext);
+    CreateUIElement(ResourceURL, Args, "private:resource/toolbar/", xToolBar, m_xContext);
     return xToolBar;
 }
 
