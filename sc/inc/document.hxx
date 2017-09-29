@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -273,6 +273,7 @@ const sal_uInt8 SC_DDE_ENGLISH       = 1;
 const sal_uInt8 SC_DDE_TEXT          = 2;
 const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
 
+// During threaded calculation fields being mutated are kept in this struct
 struct ScDocumentThreadSpecific
 {
     sal_uInt16              nInterpretLevel;                // >0 if in interpreter
@@ -292,6 +293,11 @@ struct ScDocumentThreadSpecific
     {
     }
 
+    // To be called in the thread at start
+    void SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData);
+
+    // To be called in the main thread after the thread has finished
+    void MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData);
 };
 
 enum class ScMutationGuardFlags
@@ -434,6 +440,7 @@ public:
     /// list of ScInterpreterTableOpParams currently in use
     std::vector<std::unique_ptr<ScInterpreterTableOpParams>> m_TableOpList;
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
+
 private:
 
     LanguageType        eLanguage;                      // default language
@@ -447,7 +454,12 @@ private:
 
     sal_uLong               nFormulaCodeInTree;             // formula RPN in the formula tree
     sal_uLong               nXMLImportedFormulaCount;        // progress count during XML import
-    static thread_local std::map<const ScDocument *, ScDocumentThreadSpecific> maThreadSpecific;
+    ScDocumentThreadSpecific maNonThreaded;
+
+    // There can be only one ScDocument being calculated in a thread at a time, so we can use a
+    // plain thread_local static member.
+    thread_local static ScDocumentThreadSpecific maThreadSpecific;
+
     sal_uInt16              nSrcVer;                        // file version (load/save)
     sal_uInt16              nFormulaTrackCount;
     HardRecalcState         eHardRecalcState;               // off, temporary, eternal
@@ -2040,7 +2052,7 @@ public:
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
-    void CalculateInColumnInThread( const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
+    ScDocumentThreadSpecific CalculateInColumnInThread( const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
     void HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen );
 
     /**

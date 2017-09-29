@@ -427,13 +427,20 @@ void ScDocument::SetFormulaResults(
     pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
 }
 
-void ScDocument::CalculateInColumnInThread( const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+ScDocumentThreadSpecific ScDocument::CalculateInColumnInThread( const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
     ScTable* pTab = FetchTable(rTopPos.Tab());
     if (!pTab)
-        return;
+        return maNonThreaded;
 
+    assert(mbThreadedGroupCalcInProgress);
+
+    maThreadSpecific.SetupFromNonThreadedData(maNonThreaded);
     pTab->CalculateInColumnInThread(rTopPos.Col(), rTopPos.Row(), nLen, nThisThread, nThreadsTotal);
+
+    assert(mbThreadedGroupCalcInProgress);
+
+    return maThreadSpecific;
 }
 
 void ScDocument::HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen )

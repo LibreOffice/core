@@ -6769,70 +6769,125 @@ ScMutationGuard::~ScMutationGuard()
 #endif
 }
 
-thread_local std::map<const ScDocument *, ScDocumentThreadSpecific> ScDocument::maThreadSpecific;
+thread_local ScDocumentThreadSpecific ScDocument::maThreadSpecific;
 
 bool ScDocument::IsInInterpreter() const
 {
-    if (maThreadSpecific.find(this) != maThreadSpecific.end())
-        return maThreadSpecific[this].nInterpretLevel != 0;
-    return false;
+    if (!mbThreadedGroupCalcInProgress)
+        return maNonThreaded.nInterpretLevel != 0;
+    else
+        return maThreadSpecific.nInterpretLevel != 0;
 }
 
 void ScDocument::IncInterpretLevel()
 {
-    if (maThreadSpecific[this].nInterpretLevel < USHRT_MAX)
-        maThreadSpecific[this].nInterpretLevel++;
+    if (!mbThreadedGroupCalcInProgress)
+        maNonThreaded.nInterpretLevel++;
+    else
+        maThreadSpecific.nInterpretLevel++;
 }
 
 void ScDocument::DecInterpretLevel()
 {
-    if (maThreadSpecific[this].nInterpretLevel)
-        maThreadSpecific[this].nInterpretLevel--;
+    if (!mbThreadedGroupCalcInProgress)
+        maNonThreaded.nInterpretLevel--;
+    else
+        maThreadSpecific.nInterpretLevel--;
 }
 
 sal_uInt16 ScDocument::GetMacroInterpretLevel()
 {
-    if (maThreadSpecific.find(this) != maThreadSpecific.end())
-        return maThreadSpecific[this].nMacroInterpretLevel;
-    return 0;
+    if (!mbThreadedGroupCalcInProgress)
+        return maNonThreaded.nMacroInterpretLevel;
+    else
+        return maThreadSpecific.nMacroInterpretLevel;
 }
 
 void ScDocument::IncMacroInterpretLevel()
 {
-    if (maThreadSpecific[this].nMacroInterpretLevel < USHRT_MAX)
-        maThreadSpecific[this].nMacroInterpretLevel++;
+    if (!mbThreadedGroupCalcInProgress)
+        maNonThreaded.nMacroInterpretLevel++;
+    else
+        maThreadSpecific.nMacroInterpretLevel++;
 }
 
 void ScDocument::DecMacroInterpretLevel()
 {
-    if (maThreadSpecific[this].nMacroInterpretLevel)
-        maThreadSpecific[this].nMacroInterpretLevel--;
+    if (!mbThreadedGroupCalcInProgress)
+        maNonThreaded.nMacroInterpretLevel--;
+    else
+        maThreadSpecific.nMacroInterpretLevel--;
 }
 
 bool ScDocument::IsInInterpreterTableOp() const
 {
-    if (maThreadSpecific.find(this) != maThreadSpecific.end())
-        return maThreadSpecific[this].nInterpreterTableOpLevel != 0;
-    return false;
+    if (!mbThreadedGroupCalcInProgress)
+        return maNonThreaded.nInterpreterTableOpLevel != 0;
+    else
+        return maThreadSpecific.nInterpreterTableOpLevel != 0;
 }
 
 void ScDocument::IncInterpreterTableOpLevel()
 {
-    if (maThreadSpecific[this].nInterpreterTableOpLevel < USHRT_MAX)
-        maThreadSpecific[this].nInterpreterTableOpLevel++;
+    if (!mbThreadedGroupCalcInProgress)
+    {
+        if (maNonThreaded.nInterpreterTableOpLevel < USHRT_MAX)
+            maNonThreaded.nInterpreterTableOpLevel++;
+    }
+    else
+    {
+        if (maThreadSpecific.nInterpreterTableOpLevel < USHRT_MAX)
+            maThreadSpecific.nInterpreterTableOpLevel++;
+    }
 }
 
 void ScDocument::DecInterpreterTableOpLevel()
 {
-    if (maThreadSpecific[this].nInterpreterTableOpLevel)
-        maThreadSpecific[this].nInterpreterTableOpLevel--;
+    if (!mbThreadedGroupCalcInProgress)
+    {
+        if (maNonThreaded.nInterpreterTableOpLevel)
+            maNonThreaded.nInterpreterTableOpLevel--;
+    }
+    else
+    {
+        if (maThreadSpecific.nInterpreterTableOpLevel)
+            maThreadSpecific.nInterpreterTableOpLevel--;
+    }
 }
 
 ScRecursionHelper& ScDocument::GetRecursionHelper()
 {
-    if (!maThreadSpecific[this].pRecursionHelper)
-        maThreadSpecific[this].pRecursionHelper = CreateRecursionHelperInstance();
-    return *maThreadSpecific[this].pRecursionHelper;
+    if (!mbThreadedGroupCalcInProgress)
+    {
+        if (!maNonThreaded.pRecursionHelper)
+            maNonThreaded.pRecursionHelper = CreateRecursionHelperInstance();
+        return *maNonThreaded.pRecursionHelper;
+    }
+    else
+    {
+        if (!maThreadSpecific.pRecursionHelper)
+            maThreadSpecific.pRecursionHelper = CreateRecursionHelperInstance();
+        return *maThreadSpecific.pRecursionHelper;
+    }
+}
+
+void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData)
+{
+    nInterpretLevel = rNonThreadedData.nInterpretLevel;
+    nMacroInterpretLevel = rNonThreadedData.nMacroInterpretLevel;
+    nInterpreterTableOpLevel = rNonThreadedData.nInterpreterTableOpLevel;
+
+    // What about the recursion helper?
+    // Copy the lookup cache?
+}
+
+void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData)
+{
+    assert(nInterpretLevel == rNonThreadedData.nInterpretLevel);
+    assert(nMacroInterpretLevel == rNonThreadedData.nMacroInterpretLevel);
+    assert(nInterpreterTableOpLevel == rNonThreadedData.nInterpreterTableOpLevel);
+
+    // What about recursion helper and lookup cache?
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
