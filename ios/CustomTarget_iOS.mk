@@ -48,8 +48,8 @@ $(IOSKITXC) : $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
 
 	@echo "OTHER_CFLAGS = $(gb_GLOBALDEFS)" >> $(IOSKITXC)
 	@echo "OTHER_CPLUSPLUSFLAGS = $(gb_GLOBALDEFS)" >> $(IOSKITXC)
-	@echo "LINK_LDFLAGS = -Wl,-lz,-liconv,-map,$(WORKDIR)/iosKit.map " \
-              "`$(SRCDIR)/bin/lo-all-static-libs`" >> $(IOSKITXC)
+	@echo PRELINK_LIBS = "`$(SRCDIR)/bin/lo-all-static-libs`" >> $(IOSKITXC)
+	@echo "LINK_LDFLAGS = -Wl,-lz,-liconv,-map,$(WORKDIR)/iosKit.map "
 	@echo "SYMROOT = $(WORKDIR)/ios/build\n" >> $(IOSKITXC)
 
 $(IOSAPPXC) : $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk 
