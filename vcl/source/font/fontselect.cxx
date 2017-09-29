@@ -114,7 +114,7 @@ size_t FontSelectPatternAttributes::hashCode() const
     {
         nHash = maSearchName.hashCode();
     }
-    nHash += 11 * mnHeight;
+    nHash += 11U * mnHeight;
     nHash += 19 * GetWeight();
     nHash += 29 * GetItalic();
     nHash += 37 * mnOrientation;
