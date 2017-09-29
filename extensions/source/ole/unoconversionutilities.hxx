@@ -42,13 +42,13 @@ typedef unsigned char   BYTE;
 #define INTERFACE_OLE_WRAPPER_IMPL      1
 #define UNO_OBJECT_WRAPPER_REMOTE_OPT   2
 
-#define INVOCATION_SERVICE reinterpret_cast<const sal_Unicode*>(L"com.sun.star.script.Invocation")
+#define INVOCATION_SERVICE "com.sun.star.script.Invocation"
 
 
 // classes for wrapping ole objects
 #define IUNKNOWN_WRAPPER_IMPL           1
 
-#define INTERFACE_ADAPTER_FACTORY  reinterpret_cast<const sal_Unicode*>(L"com.sun.star.script.InvocationAdapterFactory")
+#define INTERFACE_ADAPTER_FACTORY  "com.sun.star.script.InvocationAdapterFactory"
 // COM or JScript objects implementing UNO interfaces have to implement this property
 #define SUPPORTED_INTERFACES_PROP L"_implementedInterfaces"
 // Second property without leading underscore for use in VB
@@ -812,7 +812,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             if (rAny >>= value)
             {
                 pVariant->vt = VT_BSTR;
-                pVariant->bstrVal = SysAllocString(reinterpret_cast<LPCOLESTR>(value.getStr()));
+                pVariant->bstrVal = SysAllocString(SAL_W(value.getStr()));
             }
             else
             {
@@ -1507,7 +1507,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 }
                 case VT_BSTR:
                 {
-                    OUString b(reinterpret_cast<const sal_Unicode*>(var.bstrVal));
+                    OUString b(SAL_U(var.bstrVal));
                     rAny.setValue( &b, cppu::UnoType<decltype(b)>::get());
                     break;
                 }
@@ -1528,7 +1528,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                         {
                             throw CannotConvertException(
                                       "[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
-                                      "A UNO type with the name: " + OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName))) +
+                                      "A UNO type with the name: " + OUString(SAL_U(LPCOLESTR(sName))) +
                                 "does not exist!",
                                 nullptr, TypeClass_UNKNOWN, FailReason::TYPE_NOT_SUPPORTED,0);
                         }
@@ -1993,8 +1993,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         for( sal_Int32 i= 0; i< length; i++)
         {
             OUString ousIndex=OUString::number( i);
-            OLECHAR* sindex = reinterpret_cast<wchar_t *>(
-                const_cast<sal_Unicode *>(ousIndex.getStr()));
+            OLECHAR* sindex = const_cast<OLECHAR *>(SAL_W(ousIndex.getStr()));
 
             if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, &sindex , 1, LOCALE_USER_DEFAULT, &dispid)))
             {

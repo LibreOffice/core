@@ -387,8 +387,7 @@ void SbRtl_CurDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
     wchar_t pBuffer[ _MAX_PATH ];
     if ( _wgetdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr )
     {
-        rPar.Get(0)->PutString(
-            OUString( reinterpret_cast<sal_Unicode const *>(pBuffer) ) );
+        rPar.Get(0)->PutString( SAL_U(pBuffer) );
     }
     else
     {
