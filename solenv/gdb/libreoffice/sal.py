@@ -21,7 +21,7 @@ class RtlStringPrinter(StringPrinterHelper):
         super(RtlStringPrinter, self).__init__(typename, val, encoding)
 
     def data(self):
-        return self.val['buffer']
+        return self.val['buffer'].address
 
     def length(self):
         return self.val['length']
@@ -37,7 +37,7 @@ class StringPrinter(StringPrinterHelper):
 
     def data(self):
         assert self.val['pData']
-        return self.val['pData'].dereference()['buffer']
+        return self.val['pData'].dereference()['buffer'].address
 
     def length(self):
         assert self.val['pData']
