@@ -49,16 +49,18 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(EXTERNAL_CODE), \
 			$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
 			$(gb_DEFS_INTERNAL)) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
+		$(if $(filter -clr,$(2)),,$(if $(5),$(gb_COMPILER_PLUGINS))) \
+		$(if $(COMPILER_TEST),-fsyntax-only -ferror-limit=0 -Xclang -verify) \
 		-Fd$(PDBFILE) \
 		$(PCHFLAGS) \
-		$(gb_COMPILERDEPFLAGS) \
+		$(if $(COMPILER_TEST),,$(gb_COMPILERDEPFLAGS)) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
 		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
 		-c $(3) \
 		-Fo$(1)) $(if $(filter $(true),$(gb_SYMBOL)),/link /DEBUG:FASTLINK) \
-		$(call gb_create_deps,$(4),$(1),$(3))
+		$(if $(COMPILER_TEST),,$(call gb_create_deps,$(4),$(1),$(3)))
 endef
 
 # PrecompiledHeader class
