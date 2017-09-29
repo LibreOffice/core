@@ -276,7 +276,6 @@ const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink()
 // During threaded calculation fields being mutated are kept in this struct
 struct ScDocumentThreadSpecific
 {
-    sal_uInt16              nInterpretLevel;                // >0 if in interpreter
     sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter
     sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
 
@@ -285,7 +284,6 @@ struct ScDocumentThreadSpecific
     ScLookupCacheMapImpl*   pLookupCacheMapImpl;            // cache for lookups like VLOOKUP and MATCH
 
     ScDocumentThreadSpecific() :
-        nInterpretLevel(0),
         nMacroInterpretLevel(0),
         nInterpreterTableOpLevel(0),
         pRecursionHelper(nullptr),
@@ -454,6 +452,8 @@ private:
 
     sal_uLong               nFormulaCodeInTree;             // formula RPN in the formula tree
     sal_uLong               nXMLImportedFormulaCount;        // progress count during XML import
+    sal_uInt16              nInterpretLevel;                // >0 if in interpreter
+
     ScDocumentThreadSpecific maNonThreaded;
 
     // There can be only one ScDocument being calculated in a thread at a time, so we can use a
@@ -2178,9 +2178,20 @@ public:
     void                SetForcedFormulas( bool bVal ) { bHasForcedFormulas = bVal; }
     sal_uLong           GetFormulaCodeInTree() const { return nFormulaCodeInTree; }
 
-    bool                IsInInterpreter() const;
-    void                IncInterpretLevel();
-    void                DecInterpretLevel();
+    bool                IsInInterpreter() const { return nInterpretLevel != 0; }
+
+    void                IncInterpretLevel()
+                            {
+                                assert(!mbThreadedGroupCalcInProgress);
+                                if ( nInterpretLevel < USHRT_MAX )
+                                    nInterpretLevel++;
+                            }
+    void                DecInterpretLevel()
+                            {
+                                assert(!mbThreadedGroupCalcInProgress);
+                                if ( nInterpretLevel )
+                                    nInterpretLevel--;
+                            }
     sal_uInt16          GetMacroInterpretLevel();
     void                IncMacroInterpretLevel();
     void                DecMacroInterpretLevel();
