@@ -26,6 +26,7 @@
 #include <unotools/options.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/task.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
@@ -331,6 +332,7 @@ struct ImplSchedulerContext
     sal_uInt64              mnTimerPeriod = SAL_MAX_UINT64; ///< current timer period
     SchedulerMutex          maMutex;                        ///< lock counting mutex for scheduler locking
     bool                    mbActive = true;                ///< is the scheduler active?
+    TaskPriority            meMaxTaskPriority = TaskPriority::LOWEST;  ///< lowest task priority to schedule
 };
 
 struct ImplSVData

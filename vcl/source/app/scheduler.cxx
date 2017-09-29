@@ -172,7 +172,7 @@ void Scheduler::ImplDeInitScheduler()
     SAL_INFO( "vcl.schedule.deinit", "DeInit the scheduler - finished" );
     SAL_WARN_IF( 0 != nActiveTasks, "vcl.schedule.deinit", "DeInit active tasks: "
         << nActiveTasks << " (ignored: " << nIgnoredTasks << ")" );
-//    assert( nIgnoredTasks == nActiveTasks );
+    assert( nIgnoredTasks == nActiveTasks );
 #endif
 
     rSchedCtx.mpFirstSchedulerData = nullptr;
@@ -392,6 +392,10 @@ bool Scheduler::ProcessTaskScheduling()
 
         assert( pSchedulerData->mpTask );
         if ( !pSchedulerData->mpTask->IsActive() )
+            goto next_entry;
+
+        // skip tasks with currently too low priority
+        if ( pSchedulerData->mpTask->GetPriority() > rSchedCtx.meMaxTaskPriority )
             goto next_entry;
 
         // skip ready tasks with lower priority than the most urgent (numerical lower is higher)
