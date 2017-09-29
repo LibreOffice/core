@@ -570,10 +570,10 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         // handle available events
         NSEvent* pEvent = nil;
         NSTimeInterval now = [[NSProcessInfo processInfo] systemUptime];
+        AquaSalInstance *pInst = GetSalData()->mpInstance;
         do
         {
             SolarMutexReleaser aReleaser;
-
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
     // 'NSAnyEventMask' is deprecated: first deprecated in macOS 10.12
             pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask
@@ -591,6 +591,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
             [NSApp updateWindows];
 
+            if ( AquaSalInstance::AnyInput( VclInputFlags::TIMER ) && !pInst->mbNoYieldLock && !bHadEvent )
+                continue;
             if ( !bHandleAllCurrentEvents || !pEvent || now < [pEvent timestamp] )
                 break;
         }
@@ -618,7 +620,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         }
 
         // collect update rectangles
-        for( auto pSalFrame : GetSalData()->mpInstance->getFrames() )
+        for( auto pSalFrame : pInst->getFrames() )
         {
             AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
             if( pFrame->mbShown && ! pFrame->maInvalidRect.IsEmpty() )
