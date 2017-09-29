@@ -43,7 +43,7 @@ PyRef ustring2PyUnicode( const OUString & str )
     ret = PyRef( PyUnicode_FromUnicode( reinterpret_cast<const unsigned short *>(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
 #else
     static_assert(sizeof (wchar_t) == Py_UNICODE_SIZE, "bad assumption");
-    ret = PyRef( PyUnicode_FromUnicode( reinterpret_cast<wchar_t const *>(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
+    ret = PyRef( PyUnicode_FromUnicode( SAL_W(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
 #endif
 #else
     OString sUtf8(OUStringToOString(str, RTL_TEXTENCODING_UTF8));
@@ -64,8 +64,7 @@ OUString pyString2ustring( PyObject *pystr )
     if( PyUnicode_Check( pystr ) )
     {
 #if Py_UNICODE_SIZE == 2
-    ret = OUString(
-        reinterpret_cast<sal_Unicode const *>(PyUnicode_AS_UNICODE( pystr )) );
+    ret = SAL_U(PyUnicode_AS_UNICODE( pystr ));
 #else
 #if PY_MAJOR_VERSION >= 3
     Py_ssize_t size(0);

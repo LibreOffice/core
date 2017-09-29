@@ -169,7 +169,7 @@ OUString UpdateCheckConfig::getDownloadsDirectory()
 
     if (SHGetKnownFolderPath(FOLDERID_Downloads, 0, nullptr, &szPath) == S_OK)
     {
-        aRet = OUString( reinterpret_cast< sal_Unicode * >(szPath) );
+        aRet = SAL_U(szPath);
         CoTaskMemFree(szPath);
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
@@ -197,7 +197,7 @@ OUString UpdateCheckConfig::getAllUsersDirectory()
 
     if (TRUE == SHGetSpecialFolderPathW(nullptr, szPath, CSIDL_COMMON_DOCUMENTS, true))
     {
-        aRet = OUString( reinterpret_cast< sal_Unicode * >(szPath) );
+        aRet = SAL_U(szPath);
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
 #else

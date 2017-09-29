@@ -227,15 +227,11 @@ bool SbxDecimal::setString( OUString* pOUString )
                 pBuffer[i] = ',';
             i++;
         }
-        hResult = VarDecFromStr(
-            reinterpret_cast<wchar_t const *>(pBuffer.get()), nLANGID, 0,
-            &maDec );
+        hResult = VarDecFromStr( SAL_W(pBuffer.get()), nLANGID, 0, &maDec );
     }
     else
     {
-        hResult = VarDecFromStr(
-            reinterpret_cast<wchar_t const *>(pOUString->getStr()), nLANGID, 0,
-            &maDec );
+        hResult = VarDecFromStr( SAL_W(pOUString->getStr()), nLANGID, 0, &maDec );
     }
     bRet = ( hResult == S_OK );
     return bRet;
@@ -378,7 +374,7 @@ void SbxDecimal::getString( OUString& rString )
                     i++;
                 }
             }
-            rString = reinterpret_cast<const sal_Unicode*>(aBStr);
+            rString = SAL_U(aBStr);
         }
 
         SysFreeString( aBStr );
