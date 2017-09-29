@@ -31,7 +31,9 @@ tmplist = list() # set of tuple (count, sourceAndLine)
 for key, value in messages.iteritems():
     tmplist.append([value,key])
 
-for i in sorted(tmplist, key=lambda v: v[0]):
+print( "The top 20 warnings" )
+print
+for i in sorted(tmplist, key=lambda v: v[0])[-20:]:
     print( "%6d %s %s" % (i[0], i[1], sampleOfMessage[i[1]]) )
 
 
