@@ -22,6 +22,7 @@
 		3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8591E5B762A00BEA987 /* DocumentController.swift */; };
 		3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85B1E5B764A00BEA987 /* SideMenu.swift */; };
 		399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399648461E5B87DC00E73E83 /* ViewProperties.swift */; };
+		39AB2ECB1F7D6D7400E6FDA9 /* loApp.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 39AB2ECA1F7D6D7400E6FDA9 /* loApp.xcconfig */; };
 		39B08B9D1E5F0BB600682A59 /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E51E5F0BB400682A59 /* fundamentalrc */; };
 		39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E61E5F0BB400682A59 /* offapi.rdb */; };
 		39B08B9F1E5F0BB600682A59 /* oovbaapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E71E5F0BB400682A59 /* oovbaapi.rdb */; };
@@ -50,6 +51,7 @@
 		3992D8591E5B762A00BEA987 /* DocumentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DocumentController.swift; path = LibreOfficeLight/DocumentController.swift; sourceTree = SOURCE_ROOT; };
 		3992D85B1E5B764A00BEA987 /* SideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideMenu.swift; path = LibreOfficeLight/SideMenu.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
+		39AB2ECA1F7D6D7400E6FDA9 /* loApp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loApp.xcconfig; path = ../../../../../../../Users/jani/lo_ios/ios/loApp.xcconfig; sourceTree = "<group>"; };
 		39B084E51E5F0BB400682A59 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../generated/resources/fundamentalrc; sourceTree = SOURCE_ROOT; };
 		39B084E61E5F0BB400682A59 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../generated/resources/offapi.rdb; sourceTree = SOURCE_ROOT; };
 		39B084E71E5F0BB400682A59 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = ../generated/resources/oovbaapi.rdb; sourceTree = SOURCE_ROOT; };
@@ -74,6 +76,7 @@
 		3911D89F1E5993600050D6BC /* Support files */ = {
 			isa = PBXGroup;
 			children = (
+				39AB2ECA1F7D6D7400E6FDA9 /* loApp.xcconfig */,
 				39022C221EDC303200100066 /* InfoPlist.strings */,
 				39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */,
 				397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */,
@@ -231,6 +234,7 @@
 				39B091CE1E5F0BB800682A59 /* unorc in Resources */,
 				39022C1F1EDC2AB000100066 /* share in Resources */,
 				397E09031E597BD8001374E0 /* Main.storyboard in Resources */,
+				39AB2ECB1F7D6D7400E6FDA9 /* loApp.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,9 +288,9 @@
 /* Begin XCBuildConfiguration section */
 		397E09231E597BD8001374E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39AB2ECA1F7D6D7400E6FDA9 /* loApp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -295,7 +299,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
@@ -330,8 +334,8 @@
 					"$(LO_SRCDIR)/include",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
+					"$(LO_SRCDIR)/ios/generated",
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
-					"$(LO_WORKDIR)/ios/generated",
 				);
 				"HEADER_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
@@ -340,10 +344,10 @@
 					"$(LO_SRCDIR)/include",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
+					"$(LO_SRCDIR)/ios/generated",
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
-					"$(LO_WORKDIR)/ios/generated",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -355,15 +359,14 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 x86_64";
-				"VALID_ARCHS[sdk=*]" = arm64;
 			};
 			name = Debug;
 		};
 		397E09241E597BD8001374E0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39AB2ECA1F7D6D7400E6FDA9 /* loApp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -372,7 +375,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
@@ -402,7 +405,7 @@
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
-					"$(LO_WORKDIR)/ios/generated",
+					"$(LO_SRCDIR)/ios/generated",
 				);
 				"HEADER_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
@@ -412,9 +415,9 @@
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
-					"$(LO_WORKDIR)/ios/generated",
+					"$(LO_SRCDIR)/ios/generated",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
@@ -426,12 +429,12 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 x86_64";
-				"VALID_ARCHS[sdk=*]" = arm64;
 			};
 			name = Release;
 		};
 		397E09261E597BD8001374E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39AB2ECA1F7D6D7400E6FDA9 /* loApp.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -465,12 +468,13 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 2;
-				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				VALID_ARCHS = "arm64 x86_64";
 			};
 			name = Debug;
 		};
 		397E09271E597BD8001374E0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 39AB2ECA1F7D6D7400E6FDA9 /* loApp.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -493,7 +497,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "LibreOfficeLight/lokit-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 2;
-				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				VALID_ARCHS = "arm64 x86_64";
 			};
 			name = Release;
 		};

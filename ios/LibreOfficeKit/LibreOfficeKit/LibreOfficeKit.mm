@@ -5,8 +5,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
-#import "LibreOfficeKit.h"
-
 #include <stdio.h>
 #include <TargetConditionals.h>
 #define LOK_USE_UNSTABLE_API
@@ -22,21 +20,19 @@
 
 
 // Force reference to libreofficekit_hook
-#ifdef LINK_LOKIT
 extern "C" __attribute__((used)) void *libreofficekit_hook(const char *);
 static __attribute__((used)) void *(*foop)(const char *) = libreofficekit_hook;
 
 // pointers to our instance
 static LibreOfficeKit* kit;
 static LibreOfficeKitDocument* document;
-#endif
+
 
 
 
 // Bridge functions to LibreOfficeKit
 extern "C" int BridgeLOkit_Init(const char *path)
 {
-#ifdef LINK_LOKIT
     char bufUserPath[200];
     strcpy(bufUserPath, path);
     strcpy(bufUserPath + strlen(path), "/user");
@@ -44,16 +40,13 @@ extern "C" int BridgeLOkit_Init(const char *path)
     // Initialize LibreOfficeKit
     if (!kit)
       kit = lok_init_2(path, bufUserPath);
-#endif
     return 0;
 }
 
 int LOkit_open(char *file)
 {
-#ifdef LINK_LOKIT
     document = kit->pClass->documentLoad(kit, file);
     document->pClass->initializeForRendering(document, "");
-#endif
     return 0;
 }
 

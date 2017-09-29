@@ -27,7 +27,7 @@ $(call gb_CustomTarget_get_target,ios/ios): $(IOSGEN)/$(IOSKIT)
 
 
 #- Generate xcconfig files  ---------------------------------------------------
-$(IOSKITXC) : $(BUILDDIR)/config_host.mk
+$(IOSKITXC) : $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk 
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 	@echo "// Xcode configuration properties" > $(IOSKITXC)
 	@echo "// To avoid confusion, the LO-specific ones that aren't as such used" >> $(IOSKITXC)
@@ -52,7 +52,7 @@ $(IOSKITXC) : $(BUILDDIR)/config_host.mk
               "`$(SRCDIR)/bin/lo-all-static-libs`" >> $(IOSKITXC)
 	@echo "SYMROOT = $(WORKDIR)/ios/build\n" >> $(IOSKITXC)
 
-$(IOSAPPXC) : $(BUILDDIR)/config_host.mk
+$(IOSAPPXC) : $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk 
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 	@mkdir -p $(IOSGEN);
 	@echo "// Xcode configuration properties" > $(IOSAPPXC)
@@ -155,7 +155,7 @@ $(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj iosCopySetup
 	        build \
 	        , $(WORKDIR)/ios/build.log \
 	)
-	cp iOS_LO_kit.a $(IOSGEN)/$(IOSKIT)
+	cp $(WORKDIR)/ios/build/*/libLibreOfficeKit.a $(IOSGEN)/$(IOSKIT)
 
 
 
