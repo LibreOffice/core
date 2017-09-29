@@ -270,6 +270,7 @@ public:
     void testSectionInTableInTable2();
     void testTdf112160();
     void testLinesMoveBackwardsInSectionInTable();
+    void testTdf112741();
 #endif
     void testLinesInSectionInTable();
     void testParagraphOfTextRange();
@@ -426,6 +427,7 @@ public:
     CPPUNIT_TEST(testSectionInTableInTable2);
     CPPUNIT_TEST(testTdf112160);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
+    CPPUNIT_TEST(testTdf112741);
 #endif
     CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testParagraphOfTextRange);
@@ -5175,6 +5177,19 @@ void SwUiWriterTest::testTableInNestedSection()
     // Make sure the table is inside a section and spans over 2 pages.
     assertXPath(pXmlDoc, "//page[1]//section/tab", 1);
     assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
+}
+
+void SwUiWriterTest::testTdf112741()
+{
+    createDoc("tdf112741.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 5 pages.
+    assertXPath(pXmlDoc, "//page", 4);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row/cell/section", 1);
+    // This failed, 3rd page contained no sections.
+    assertXPath(pXmlDoc, "//page[3]/body/tab/row/cell/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "//page[4]/body/tab/row/cell/tab/row/cell/section", 1);
 }
 
 void SwUiWriterTest::testTableInSectionInTable()
