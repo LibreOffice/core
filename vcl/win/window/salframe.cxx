@@ -3901,8 +3901,8 @@ static void ImplCallMoveHdl( HWND hWnd )
     {
         pFrame->CallCallback( SalEvent::Move, nullptr );
         // to avoid doing Paint twice by VCL and SAL
-        //if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
-        //    UpdateWindow( hWnd );
+        if ( IsWindowVisible( hWnd ) && !pFrame->mbInShow )
+            UpdateWindow( hWnd );
     }
 }
 
@@ -3935,11 +3935,8 @@ static void ImplHandleMoveMsg( HWND hWnd )
                 pFrame->mbInMoveMsg = FALSE;
             }
 
-            // save state
             ImplSaveFrameState( pFrame );
 
-            // Call Hdl
-            //#93851 if we call this handler, VCL floating windows are not updated correctly
             ImplCallMoveHdl( hWnd );
 
             ImplSalYieldMutexRelease();
@@ -5451,39 +5448,45 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     static int  bInWheelMsg = FALSE;
     static int  bInQueryEnd = FALSE;
 
-    // By WM_CRETAE we connect the frame with the window handle
-    if ( nMsg == WM_CREATE )
-    {
-        // Save Window-Instance in Windowhandle
-        // Can also be used for the A-Version, because the struct
-        // to access lpCreateParams is the same structure
-        CREATESTRUCTW* pStruct = reinterpret_cast<CREATESTRUCTW*>(lParam);
-        WinSalFrame* pFrame = static_cast<WinSalFrame*>(pStruct->lpCreateParams);
-        if ( pFrame != nullptr )
-        {
-            SetWindowPtr( hWnd, pFrame );
-            // Set HWND already here, as data might be used already
-            // when messages are being sent by CreateWindow()
-            pFrame->mhWnd = hWnd;
-            pFrame->maSysData.hWnd = hWnd;
-        }
-        return 0;
-    }
-
     ImplSVData* pSVData = ImplGetSVData();
     // #i72707# TODO: the mbDeInit check will not be needed
     // once all windows that are not properly closed on exit got fixed
-    if( pSVData->mbDeInit )
+    if( pSVData->mbDeInit && nMsg != WM_CREATE )
+    {
+        SAL_WARN( "vcl", "Frame message after deinit!" );
+        rDef = FALSE;
         return 0;
+    }
 
-    if ( WM_USER_SYSTEM_WINDOW_ACTIVATED == nMsg )
+    // Handle global registered message AKA non-const
+    if ( nMsg == WM_USER_SYSTEM_WINDOW_ACTIVATED )
     {
         ImplHideSplash();
+        rDef = FALSE;
         return 0;
     }
 
     switch( nMsg )
     {
+        // By WM_CREATE we connect the frame with the window handle
+        case WM_CREATE:
+        {
+            // Save Window-Instance in Windowhandle
+            // Can also be used for the A-Version, because the struct
+            // to access lpCreateParams is the same structure
+            CREATESTRUCTW* pStruct = reinterpret_cast<CREATESTRUCTW*>(lParam);
+            WinSalFrame* pFrame = static_cast<WinSalFrame*>(pStruct->lpCreateParams);
+            if ( pFrame != nullptr )
+            {
+                SetWindowPtr( hWnd, pFrame );
+                // Set HWND already here, as data might be used already
+                // when messages are being sent by CreateWindow()
+                pFrame->mhWnd = hWnd;
+                pFrame->maSysData.hWnd = hWnd;
+            }
+            break;
+        }
+
         case WM_MOUSEMOVE:
         case WM_LBUTTONDOWN:
         case WM_MBUTTONDOWN:
