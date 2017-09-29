@@ -84,13 +84,13 @@ void AquaSalTimer::Start( sal_uLong nMS )
 {
     SalData* pSalData = GetSalData();
 
-    if( !pSalData->mpFirstInstance->IsMainThread() )
+    if( !pSalData->mpInstance->IsMainThread() )
     {
         ImplNSAppPostEvent( AquaSalInstance::AppStartTimerEvent, YES, nMS );
         return;
     }
 
-    if ( 0 == nMS && !pSalData->mpFirstInstance->mbIsLiveResize )
+    if ( 0 == nMS && !pSalData->mpInstance->mbIsLiveResize )
         queueDispatchTimerEvent( NO );
     else
     {
@@ -126,7 +126,7 @@ void AquaSalTimer::Start( sal_uLong nMS )
 
 void AquaSalTimer::Stop()
 {
-    assert( GetSalData()->mpFirstInstance->IsMainThread() );
+    assert( GetSalData()->mpInstance->IsMainThread() );
 
     if( m_pRunningTimer != nil )
     {
@@ -150,7 +150,7 @@ void AquaSalTimer::handleTimerElapsed()
     // Stop the timer, as it is just invalidated after the firing function
     Stop();
 
-    if ( GetSalData()->mpFirstInstance->mbIsLiveResize )
+    if ( GetSalData()->mpInstance->mbIsLiveResize )
         callTimerCallback();
     else
         queueDispatchTimerEvent( YES );

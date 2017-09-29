@@ -88,7 +88,7 @@ public:
 
     virtual void Invoke() override
     {
-        AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+        AquaSalInstance *pInst = GetSalData()->mpInstance;
         SalFrame *pAnyFrame = pInst->anyFrame();
         if( pAnyFrame )
             pAnyFrame->CallCallback( SalEvent::SettingsChanged, nullptr );
@@ -271,7 +271,7 @@ SalYieldMutex::~SalYieldMutex()
 
 void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 {
-    AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+    AquaSalInstance *pInst = GetSalData()->mpInstance;
     if ( pInst && pInst->IsMainThread() )
     {
         if ( pInst->mbNoYieldLock )
@@ -308,7 +308,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 
 sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 {
-    AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+    AquaSalInstance *pInst = GetSalData()->mpInstance;
     if ( pInst->mbNoYieldLock && pInst->IsMainThread() )
         return 1;
     sal_uInt32 nCount = comphelper::GenericSolarMutex::doRelease( bUnlockAll );
@@ -321,17 +321,17 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
 
 bool SalYieldMutex::IsCurrentThread() const
 {
-    if ( !GetSalData()->mpFirstInstance->mbNoYieldLock )
+    if ( !GetSalData()->mpInstance->mbNoYieldLock )
         return comphelper::GenericSolarMutex::IsCurrentThread();
     else
-        return GetSalData()->mpFirstInstance->IsMainThread();
+        return GetSalData()->mpInstance->IsMainThread();
 }
 
 // some convenience functions regarding the yield mutex, aka solar mutex
 
 bool ImplSalYieldMutexTryToAcquire()
 {
-    AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
+    AquaSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst )
         return pInst->mpSalYieldMutex->tryToAcquire();
     else
@@ -340,7 +340,7 @@ bool ImplSalYieldMutexTryToAcquire()
 
 void ImplSalYieldMutexRelease()
 {
-    AquaSalInstance* pInst = GetSalData()->mpFirstInstance;
+    AquaSalInstance* pInst = GetSalData()->mpInstance;
     if ( pInst )
         pInst->mpSalYieldMutex->release();
 }
@@ -353,11 +353,11 @@ SalInstance* CreateSalInstance()
         initNSApp();
 
     SalData* pSalData = GetSalData();
-    SAL_WARN_IF( pSalData->mpFirstInstance != nullptr, "vcl", "more than one instance created" );
+    SAL_WARN_IF( pSalData->mpInstance != nullptr, "vcl", "more than one instance created" );
     AquaSalInstance* pInst = new AquaSalInstance;
 
     // init instance (only one instance in this version !!!)
-    pSalData->mpFirstInstance = pInst;
+    pSalData->mpInstance = pInst;
     // this one is for outside AquaSalInstance::Yield
     SalData::ensureThreadAutoreleasePool();
     // no focus rects on NWF
@@ -459,7 +459,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     case AppleRemoteControlEvent: // Defined in <apple_remote/RemoteMainController.h>
     {
         MediaCommand nCommand;
-        AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+        AquaSalInstance *pInst = GetSalData()->mpInstance;
         bool bIsFullScreenMode = false;
 
         for( auto pSalFrame : pInst->getFrames() )
@@ -618,7 +618,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         }
 
         // collect update rectangles
-        for( auto pSalFrame : GetSalData()->mpFirstInstance->getFrames() )
+        for( auto pSalFrame : GetSalData()->mpInstance->getFrames() )
         {
             AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
             if( pFrame->mbShown && ! pFrame->maInvalidRect.IsEmpty() )

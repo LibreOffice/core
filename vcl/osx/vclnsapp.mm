@@ -317,7 +317,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     {
         SolarMutexGuard aGuard;
 
-        AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+        AquaSalInstance *pInst = GetSalData()->mpInstance;
         SalFrame *pAnyFrame = pInst->anyFrame();
         if( pAnyFrame )
         {
@@ -344,7 +344,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     (void)pNotification;
     SolarMutexGuard aGuard;
 
-    AquaSalInstance *pInst = GetSalData()->mpFirstInstance;
+    AquaSalInstance *pInst = GetSalData()->mpInstance;
     SalFrame *pAnyFrame = pInst->anyFrame();
     if(  pAnyFrame )
         pAnyFrame->CallCallback( SalEvent::SettingsChanged, nullptr );
@@ -355,7 +355,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     (void)pNotification;
     SolarMutexGuard aGuard;
 
-    for( auto pSalFrame : GetSalData()->mpFirstInstance->getFrames() )
+    for( auto pSalFrame : GetSalData()->mpInstance->getFrames() )
     {
         AquaSalFrame *pFrame = static_cast<AquaSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
         pFrame->screenParametersChanged();
@@ -365,13 +365,13 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 -(void)scrollbarVariantChanged: (NSNotification*) pNotification
 {
     (void)pNotification;
-    GetSalData()->mpFirstInstance->delayedSettingsChanged( true );
+    GetSalData()->mpInstance->delayedSettingsChanged( true );
 }
 
 -(void)scrollbarSettingsChanged: (NSNotification*) pNotification
 {
     (void)pNotification;
-    GetSalData()->mpFirstInstance->delayedSettingsChanged( false );
+    GetSalData()->mpInstance->delayedSettingsChanged( false );
 }
 
 -(void)addFallbackMenuItem: (NSMenuItem*)pNewItem

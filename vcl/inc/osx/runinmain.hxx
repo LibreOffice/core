@@ -140,13 +140,13 @@ union RuninmainResult
  */
 
 #define OSX_SALDATA_RUNINMAIN( command ) \
-    OSX_RUNINMAIN( GetSalData()->mpFirstInstance, command )
+    OSX_RUNINMAIN( GetSalData()->mpInstance, command )
 
 #define OSX_SALDATA_RUNINMAIN_POINTER( command, type ) \
-    OSX_RUNINMAIN_POINTER( GetSalData()->mpFirstInstance, command, type )
+    OSX_RUNINMAIN_POINTER( GetSalData()->mpInstance, command, type )
 
 #define OSX_SALDATA_RUNINMAIN_UNION( command, member ) \
-    OSX_RUNINMAIN_UNION( GetSalData()->mpFirstInstance, command, member )
+    OSX_RUNINMAIN_UNION( GetSalData()->mpInstance, command, member )
 
 #endif // INCLUDED_VCL_INC_OSX_RUNINMAIN_HXX
 

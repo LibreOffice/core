@@ -63,7 +63,7 @@ class SalData
 {
 public:
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
-    AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
+    AquaSalInstance                              *mpInstance;
     std::list<AquaSalFrame*>                      maPresentationFrames;  // list of frames in presentation mode
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev

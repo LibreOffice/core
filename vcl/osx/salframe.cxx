@@ -87,12 +87,12 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     initWindowAndView();
 
     SalData* pSalData = GetSalData();
-    pSalData->mpFirstInstance->insertFrame( this );
+    pSalData->mpInstance->insertFrame( this );
 }
 
 AquaSalFrame::~AquaSalFrame()
 {
-    assert( GetSalData()->mpFirstInstance->IsMainThread() );
+    assert( GetSalData()->mpInstance->IsMainThread() );
 
     // if the frame is destroyed and has the current menubar
     // set the default menubar
@@ -105,7 +105,7 @@ AquaSalFrame::~AquaSalFrame()
     [SalFrameView unsetMouseFrame: this];
 
     SalData* pSalData = GetSalData();
-    pSalData->mpFirstInstance->eraseFrame( this );
+    pSalData->mpInstance->eraseFrame( this );
     pSalData->maPresentationFrames.remove( this );
 
     SAL_WARN_IF( this == s_pCaptureFrame, "vcl", "capture frame destroyed" );
@@ -294,7 +294,7 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 
 bool AquaSalFrame::PostEvent(ImplSVEvent* pData)
 {
-    GetSalData()->mpFirstInstance->PostEvent( this, pData, SalEvent::UserEvent );
+    GetSalData()->mpInstance->PostEvent( this, pData, SalEvent::UserEvent );
     return TRUE;
 }
 

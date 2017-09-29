@@ -106,7 +106,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData const * pWi
 
 AquaSalObject::~AquaSalObject()
 {
-    assert( GetSalData()->mpFirstInstance->IsMainThread() );
+    assert( GetSalData()->mpInstance->IsMainThread() );
 
     if( maSysData.mpNSView )
     {
