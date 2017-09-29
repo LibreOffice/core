@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libzmf,$(ZMF_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libzmf,0))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libzmf))
+
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libzmf, \
@@ -22,7 +24,6 @@ endif
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libzmf, \
-    external/libzmf/iOS.patch \
     external/libzmf/android-workaround.patch.1 \
 ))
 

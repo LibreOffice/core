@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libwpd,$(WPD_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libwpd,0))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libwpd))
+
 $(eval $(call gb_UnpackedTarball_add_patches,libwpd,\
 	external/libwpd/libwpd-vs2013.patch.1 \
 	$(if $(SYSTEM_REVENGE),,external/libwpd/rpath.patch) \
@@ -25,9 +27,5 @@ $(eval $(call gb_UnpackedTarball_add_patches,libwpd,\
 ))
 endif
 endif
-
-$(eval $(call gb_UnpackedTarball_add_patches,libwpd,\
-	external/libwpd/iOS.patch.0 \
-))
 
 # vim: set noet sw=4 ts=4:

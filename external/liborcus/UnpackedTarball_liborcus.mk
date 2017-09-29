@@ -13,11 +13,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,liborcus,$(ORCUS_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
+
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/0001-workaround-a-linking-problem-on-windows.patch \
 	external/liborcus/rpath.patch.0 \
 	external/liborcus/visibility.patch.0 \
-	external/liborcus/iOS.patch \
 	external/liborcus/nullptr-in-ostringstream.patch.1 \
 	external/liborcus/orcus_allow_missing_xml_header.patch.1 \
 	external/liborcus/orcus_allow_underscore_in_names.patch.1 \
