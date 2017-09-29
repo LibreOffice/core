@@ -33,6 +33,7 @@ class VCL_DLLPUBLIC ListControl : public Control
 private:
     std::vector<VclPtr<Control>> maEntries;
     bool mbHasScrollBar;
+    bool mbInDispose;
     VclPtr<ScrollBar> mpScrollBar;
 
     void DoScroll(long nDiff);
