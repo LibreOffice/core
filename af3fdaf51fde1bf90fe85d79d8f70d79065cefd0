@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_783bed38",
+        "filename": "desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-29T12:01:11Z",
+      "side": 1,
+      "message": "This is erronous. Better keep it as it was.",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 303,
+        "endChar": 22
+      },
+      "revId": "af3fdaf51fde1bf90fe85d79d8f70d79065cefd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_38396542",
+        "filename": "sc/source/ui/optdlg/tpusrlst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-29T12:01:11Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 309,
+        "startChar": 8,
+        "endLine": 309,
+        "endChar": 114
+      },
+      "revId": "af3fdaf51fde1bf90fe85d79d8f70d79065cefd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_98f3399e",
+        "filename": "shell/source/win32/shlxthandler/infotips/infotips.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-29T12:01:11Z",
+      "side": 1,
+      "message": "I don\u0027t think this improves readability. It seems too long to me.",
+      "range": {
+        "startLine": 215,
+        "startChar": 12,
+        "endLine": 215,
+        "endChar": 114
+      },
+      "revId": "af3fdaf51fde1bf90fe85d79d8f70d79065cefd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b8ee35b2",
+        "filename": "shell/source/win32/shlxthandler/infotips/infotips.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-29T12:01:11Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 229,
+        "startChar": 12,
+        "endLine": 229,
+        "endChar": 118
+      },
+      "revId": "af3fdaf51fde1bf90fe85d79d8f70d79065cefd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d82b01ea",
+        "filename": "shell/source/win32/shlxthandler/infotips/infotips.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-29T12:01:11Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 237,
+        "startChar": 12,
+        "endLine": 237,
+        "endChar": 118
+      },
+      "revId": "af3fdaf51fde1bf90fe85d79d8f70d79065cefd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f82efdf8",
+        "filename": "shell/source/win32/shlxthandler/infotips/infotips.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-29T12:01:11Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 245,
+        "startChar": 12,
+        "endLine": 245,
+        "endChar": 125
+      },
+      "revId": "af3fdaf51fde1bf90fe85d79d8f70d79065cefd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_18366952",
+        "filename": "shell/source/win32/shlxthandler/infotips/infotips.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-09-29T12:01:11Z",
+      "side": 1,
+      "message": "Same here.",
+      "range": {
+        "startLine": 253,
+        "startChar": 12,
+        "endLine": 253,
+        "endChar": 149
+      },
+      "revId": "af3fdaf51fde1bf90fe85d79d8f70d79065cefd0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
