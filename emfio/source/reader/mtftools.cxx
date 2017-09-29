@@ -386,16 +386,24 @@ namespace emfio
                     break;
                     default :
                     {
-                        fX2 -= mnWinOrgX;
-                        fY2 -= mnWinOrgY;
-                        fX2 /= mnWinExtX;
-                        fY2 /= mnWinExtY;
-                        fX2 *= mnDevWidth;
-                        fY2 *= mnDevHeight;
-                        fX2 += mnDevOrgX;
-                        fY2 += mnDevOrgY;   // fX2, fY2 now in device units
-                        fX2 *= (double)mnMillX * 100.0 / (double)mnPixX;
-                        fY2 *= (double)mnMillY * 100.0 / (double)mnPixY;
+                        if (mnPixX == 0 || mnPixY == 0)
+                        {
+                            SAL_WARN("vcl.emf", "invalid scaling factor");
+                            return Point();
+                        }
+                        else
+                        {
+                            fX2 -= mnWinOrgX;
+                            fY2 -= mnWinOrgY;
+                            fX2 /= mnWinExtX;
+                            fY2 /= mnWinExtY;
+                            fX2 *= mnDevWidth;
+                            fY2 *= mnDevHeight;
+                            fX2 += mnDevOrgX;
+                            fY2 += mnDevOrgY;   // fX2, fY2 now in device units
+                            fX2 *= (double)mnMillX * 100.0 / (double)mnPixX;
+                            fY2 *= (double)mnMillY * 100.0 / (double)mnPixY;
+                        }
                     }
                     break;
                 }
@@ -1421,7 +1429,8 @@ namespace emfio
                 // #i121382# Map DXArray using WorldTransform
                 const Size aSizeX(ImplMap(Size(nSumX, 0)));
                 const basegfx::B2DVector aVectorX(aSizeX.Width(), aSizeX.Height());
-                pDXArry[i] = basegfx::fround(aVectorX.getLength()) * (nSumX >= 0 ? 1 : -1);
+                pDXArry[i] = basegfx::fround(aVectorX.getLength());
+                pDXArry[i] *= (nSumX >= 0 ? 1 : -1);
 
                 if (pDYArry)
                 {
@@ -1430,7 +1439,8 @@ namespace emfio
                     const Size aSizeY(ImplMap(Size(0, nSumY)));
                     const basegfx::B2DVector aVectorY(aSizeY.Width(), aSizeY.Height());
                     // Reverse Y
-                    pDYArry[i] = basegfx::fround(aVectorY.getLength()) * (nSumY >= 0 ? -1 : 1);
+                    pDYArry[i] = basegfx::fround(aVectorY.getLength());
+                    pDYArry[i] *= (nSumY >= 0 ? -1 : 1);
                 }
             }
         }
