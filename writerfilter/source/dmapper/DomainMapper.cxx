@@ -206,10 +206,16 @@ DomainMapper::~DomainMapper()
 
         // Grab-bag handling
         comphelper::SequenceAsHashMap aProperties;
+
         // Add the saved w:themeFontLang setting
         aProperties["ThemeFontLangProps"] <<= m_pImpl->GetSettingsTable()->GetThemeFontLangProperties();
+
         // Add the saved compat settings
         aProperties["CompatSettings"] <<= m_pImpl->GetSettingsTable()->GetCompatSettings();
+
+        // Add the saved DocumentProtection settings
+        aProperties["DocumentProtection"] <<= m_pImpl->GetSettingsTable()->GetDocumentProtectionSettings();
+
         uno::Reference<beans::XPropertySet> xDocProps(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
         if (xDocProps.is())
         {
@@ -2810,6 +2816,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pProperties->resolve(*this);
     }
     break;
+    case NS_ooxml::LN_EG_RunLevelElts_permStart: // 93164
+    case NS_ooxml::LN_EG_RunLevelElts_permEnd: // 93165
+    {
+        break;
+    }
     default:
         {
 #ifdef DEBUG_WRITERFILTER
