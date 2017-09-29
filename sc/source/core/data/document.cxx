@@ -6771,30 +6771,6 @@ ScMutationGuard::~ScMutationGuard()
 
 thread_local ScDocumentThreadSpecific ScDocument::maThreadSpecific;
 
-bool ScDocument::IsInInterpreter() const
-{
-    if (!mbThreadedGroupCalcInProgress)
-        return maNonThreaded.nInterpretLevel != 0;
-    else
-        return maThreadSpecific.nInterpretLevel != 0;
-}
-
-void ScDocument::IncInterpretLevel()
-{
-    if (!mbThreadedGroupCalcInProgress)
-        maNonThreaded.nInterpretLevel++;
-    else
-        maThreadSpecific.nInterpretLevel++;
-}
-
-void ScDocument::DecInterpretLevel()
-{
-    if (!mbThreadedGroupCalcInProgress)
-        maNonThreaded.nInterpretLevel--;
-    else
-        maThreadSpecific.nInterpretLevel--;
-}
-
 sal_uInt16 ScDocument::GetMacroInterpretLevel()
 {
     if (!mbThreadedGroupCalcInProgress)
@@ -6873,7 +6849,6 @@ ScRecursionHelper& ScDocument::GetRecursionHelper()
 
 void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData)
 {
-    nInterpretLevel = rNonThreadedData.nInterpretLevel;
     nMacroInterpretLevel = rNonThreadedData.nMacroInterpretLevel;
     nInterpreterTableOpLevel = rNonThreadedData.nInterpreterTableOpLevel;
 
@@ -6883,7 +6858,6 @@ void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSp
 
 void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData)
 {
-    assert(nInterpretLevel == rNonThreadedData.nInterpretLevel);
     assert(nMacroInterpretLevel == rNonThreadedData.nMacroInterpretLevel);
     assert(nInterpreterTableOpLevel == rNonThreadedData.nInterpreterTableOpLevel);
 
