@@ -396,10 +396,8 @@ ScDocument::~ScDocument()
     ScAddInListener::RemoveDocument( this );
     DELETEZ( pChartListenerCollection);   // before pBASM because of potential Listener!
 
-    if (maThreadSpecific.find(this) != maThreadSpecific.end())
-    {
-        DELETEZ( maThreadSpecific[this].pLookupCacheMapImpl ); // before pBASM because of listeners
-    }
+    DELETEZ(maNonThreaded.pLookupCacheMapImpl);  // before pBASM because of listeners
+    DELETEZ(maThreadSpecific.pLookupCacheMapImpl);
 
     // destroy BroadcastAreas first to avoid un-needed Single-EndListenings of Formula-Cells
     delete pBASM;       // BroadcastAreaSlotMachine
@@ -449,16 +447,14 @@ ScDocument::~ScDocument()
     mxPoolHelper.clear();
 
     delete pScriptTypeData;
-    if (maThreadSpecific.find(this) != maThreadSpecific.end())
-        delete maThreadSpecific[this].pRecursionHelper;
+    delete maNonThreaded.pRecursionHelper;
+    delete maThreadSpecific.pRecursionHelper;
 
     delete pPreviewFont;
     SAL_WARN_IF( pAutoNameCache, "sc.core", "AutoNameCache still set in dtor" );
 
     mpFormulaGroupCxt.reset();
     mpCellStringPool.reset();
-
-    maThreadSpecific.erase(this);
 }
 
 void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
@@ -1234,50 +1230,103 @@ ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
 ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 {
     ScLookupCache* pCache = nullptr;
-    if (!maThreadSpecific[this].pLookupCacheMapImpl)
-        maThreadSpecific[this].pLookupCacheMapImpl = new ScLookupCacheMapImpl;
-    auto it( maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.find( rRange));
-    if (it == maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.end())
+    if (!mbThreadedGroupCalcInProgress)
     {
-        pCache = new ScLookupCache( this, rRange);
-        AddLookupCache( *pCache);
+        if (!maNonThreaded.pLookupCacheMapImpl)
+            maNonThreaded.pLookupCacheMapImpl = new ScLookupCacheMapImpl;
+        auto it(maNonThreaded.pLookupCacheMapImpl->aCacheMap.find(rRange));
+        if (it == maNonThreaded.pLookupCacheMapImpl->aCacheMap.end())
+        {
+            pCache = new ScLookupCache(this, rRange);
+            AddLookupCache(*pCache);
+        }
+        else
+            pCache = (*it).second;
     }
     else
-        pCache = (*it).second;
+    {
+        if (!maThreadSpecific.pLookupCacheMapImpl)
+            maThreadSpecific.pLookupCacheMapImpl = new ScLookupCacheMapImpl;
+        auto it(maThreadSpecific.pLookupCacheMapImpl->aCacheMap.find(rRange));
+        if (it == maThreadSpecific.pLookupCacheMapImpl->aCacheMap.end())
+        {
+            pCache = new ScLookupCache(this, rRange);
+            AddLookupCache(*pCache);
+        }
+        else
+            pCache = (*it).second;
+    }
     return *pCache;
 }
 
 void ScDocument::AddLookupCache( ScLookupCache & rCache )
 {
-    if (!maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
-                ScLookupCache*>( rCache.getRange(), &rCache)).second)
+    if (!mbThreadedGroupCalcInProgress)
     {
-        OSL_FAIL( "ScDocument::AddLookupCache: couldn't add to hash map");
+        if (!maNonThreaded.pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
+                ScLookupCache*>(rCache.getRange(), &rCache)).second)
+        {
+            OSL_FAIL( "ScDocument::AddLookupCache: couldn't add to hash map");
+        }
+        else
+            StartListeningArea(rCache.getRange(), false, &rCache);
     }
     else
-        StartListeningArea( rCache.getRange(), false, &rCache);
+    {
+        if (!maThreadSpecific.pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
+                ScLookupCache*>(rCache.getRange(), &rCache)).second)
+        {
+            OSL_FAIL( "ScDocument::AddLookupCache: couldn't add to hash map");
+        }
+        else
+            StartListeningArea(rCache.getRange(), false, &rCache);
+    }
 }
 
 void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
 {
-    auto it( maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.find(
-                rCache.getRange()));
-    if (it == maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.end())
+    if (!mbThreadedGroupCalcInProgress)
     {
-        OSL_FAIL( "ScDocument::RemoveLookupCache: range not found in hash map");
+        auto it(maNonThreaded.pLookupCacheMapImpl->aCacheMap.find(rCache.getRange()));
+        if (it == maNonThreaded.pLookupCacheMapImpl->aCacheMap.end())
+        {
+            OSL_FAIL( "ScDocument::RemoveLookupCache: range not found in hash map");
+        }
+        else
+        {
+            ScLookupCache* pCache = (*it).second;
+            maNonThreaded.pLookupCacheMapImpl->aCacheMap.erase(it);
+            EndListeningArea(pCache->getRange(), false, &rCache);
+        }
     }
     else
     {
-        ScLookupCache* pCache = (*it).second;
-        maThreadSpecific[this].pLookupCacheMapImpl->aCacheMap.erase( it);
-        EndListeningArea( pCache->getRange(), false, &rCache);
+        auto it( maThreadSpecific.pLookupCacheMapImpl->aCacheMap.find(rCache.getRange()));
+        if (it == maThreadSpecific.pLookupCacheMapImpl->aCacheMap.end())
+        {
+            OSL_FAIL( "ScDocument::RemoveLookupCache: range not found in hash map");
+        }
+        else
+        {
+            ScLookupCache* pCache = (*it).second;
+            maThreadSpecific.pLookupCacheMapImpl->aCacheMap.erase(it);
+            EndListeningArea(pCache->getRange(), false, &rCache);
+        }
     }
 }
 
 void ScDocument::ClearLookupCaches()
 {
-    if( maThreadSpecific[this].pLookupCacheMapImpl )
-        maThreadSpecific[this].pLookupCacheMapImpl->clear();
+    if (!mbThreadedGroupCalcInProgress)
+    {
+        if (maNonThreaded.pLookupCacheMapImpl )
+            maNonThreaded.pLookupCacheMapImpl->clear();
+    }
+    else
+    {
+        if( maThreadSpecific.pLookupCacheMapImpl )
+            maThreadSpecific.pLookupCacheMapImpl->clear();
+    }
 }
 
 bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder)
