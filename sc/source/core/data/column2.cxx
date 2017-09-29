@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -2899,6 +2899,9 @@ void ScColumn::CalculateInThread( SCROW nRow, size_t nLen, unsigned nThisThread,
             continue;
 
         ScFormulaCell& rCell = **itCell;
+        // Here we don't call IncInterpretLevel() and DecInterpretLevel() as this call site is
+        // always in a threaded calculation.
+        assert(pDocument->mbThreadedGroupCalcInProgress);
         rCell.InterpretTail(ScFormulaCell::SCITP_NORMAL);
     }
 }

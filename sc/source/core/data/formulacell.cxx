@@ -1522,6 +1522,7 @@ void ScFormulaCell::Interpret()
     }
     else
     {
+        pDocument->IncInterpretLevel();
 #if DEBUG_CALCULATION
         aDC.enterGroup();
         bool bGroupInterpreted = InterpretFormulaGroup();
@@ -1532,6 +1533,7 @@ void ScFormulaCell::Interpret()
         if (!InterpretFormulaGroup())
             InterpretTail( SCITP_NORMAL);
 #endif
+        pDocument->DecInterpretLevel();
     }
 
     // While leaving a recursion or iteration stack, insert its cells to the
@@ -1592,8 +1594,10 @@ void ScFormulaCell::Interpret()
                 {
                     bResumeIteration = false;
                     // Close circle once.
+                    pDocument->IncInterpretLevel();
                     rRecursionHelper.GetList().back().pCell->InterpretTail(
                             SCITP_CLOSE_ITERATION_CIRCLE);
+                    pDocument->DecInterpretLevel();
                     // Start at 1, init things.
                     rRecursionHelper.StartIteration();
                     // Mark all cells being in iteration.
@@ -1622,7 +1626,9 @@ void ScFormulaCell::Interpret()
                                 pIterCell->GetSeenInIteration())
                         {
                             (*aIter).aPreviousResult = pIterCell->aResult;
+                            pDocument->IncInterpretLevel();
                             pIterCell->InterpretTail( SCITP_FROM_ITERATION);
+                            pDocument->DecInterpretLevel();
                         }
                         rDone = rDone && !pIterCell->IsDirtyOrInTableOpDirty();
                     }
@@ -1692,7 +1698,9 @@ void ScFormulaCell::Interpret()
                         ScFormulaCell* pCell = (*aIter).pCell;
                         if (pCell->IsDirtyOrInTableOpDirty())
                         {
+                            pDocument->IncInterpretLevel();
                             pCell->InterpretTail( SCITP_NORMAL);
+                            pDocument->DecInterpretLevel();
                             if (!pCell->IsDirtyOrInTableOpDirty() && !pCell->IsIterCell())
                                 pCell->bRunning = (*aIter).bOldRunning;
                         }
@@ -1728,16 +1736,14 @@ void ScFormulaCell::Interpret()
 namespace {
 class StackCleaner
 {
-    ScDocument*     pDoc;
     ScInterpreter*  pInt;
     public:
-    StackCleaner( ScDocument* pD, ScInterpreter* pI )
-        : pDoc(pD), pInt(pI)
+    StackCleaner( ScInterpreter* pI )
+        : pInt(pI)
         {}
     ~StackCleaner()
     {
         delete pInt;
-        pDoc->DecInterpretLevel();
     }
 };
 }
@@ -1769,9 +1775,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
     if( pCode->GetCodeLen() && pDocument )
     {
-        pDocument->IncInterpretLevel();
         ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, aPos, *pCode );
-        StackCleaner aStackCleaner( pDocument, pInterpreter);
+        StackCleaner aStackCleaner(pInterpreter);
         FormulaError nOldErrCode = aResult.GetResultError();
         if ( nSeenInIteration == 0 )
         {   // Only the first time
@@ -2163,9 +2168,8 @@ void ScFormulaCell::HandleStuffAfterParallelCalculation()
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 
-        pDocument->IncInterpretLevel();
         ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, aPos, *pCode );
-        StackCleaner aStackCleaner( pDocument, pInterpreter);
+        StackCleaner aStackCleaner(pInterpreter);
 
         switch (pInterpreter->GetVolatileType())
         {
