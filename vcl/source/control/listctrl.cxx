@@ -22,6 +22,7 @@
 ListControl::ListControl(vcl::Window* pParent, WinBits nBits):
     Control(pParent, nBits),
     mbHasScrollBar(false),
+    mbInDispose(false),
     mpScrollBar(VclPtr<ScrollBar>::Create(this, WB_VERT))
 {
     mpScrollBar->SetScrollHdl( LINK( this, ListControl, ScrollHdl ) );
@@ -35,6 +36,7 @@ ListControl::~ListControl()
 
 void ListControl::dispose()
 {
+    mbInDispose = true;
     mpScrollBar.disposeAndClear();
     for (auto& aEntry : maEntries)
         aEntry.disposeAndClear();
@@ -45,6 +47,12 @@ void ListControl::dispose()
 
 void ListControl::RecalcAll()
 {
+    // avoid recalculating while we are disposing
+    // children. This just leads to complex invalid memory
+    // access patterns that are not fixable.
+    if (mbInDispose)
+        return;
+
     sal_Int32 nTotalHeight = 0;
     for (const auto& item : maEntries)
     {
