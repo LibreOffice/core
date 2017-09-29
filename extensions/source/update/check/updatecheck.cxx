@@ -22,6 +22,7 @@
 #include "updatecheck.hxx"
 
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -534,7 +535,7 @@ UpdateCheckThread::run()
 
     catch(const uno::Exception& e) {
         // Silently catch all errors
-        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e.Message );
+        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e );
     }
 }
 
@@ -549,7 +550,7 @@ ManualUpdateCheckThread::run()
     }
     catch(const uno::Exception& e) {
         // Silently catch all errors
-        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e.Message );
+        SAL_WARN("extensions.update", "Caught exception, thread terminated. " << e );
     }
 }
 

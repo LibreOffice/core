@@ -34,6 +34,7 @@
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include "rtl/ref.hxx"
 #include "sal/log.hxx"
 #include "sal/types.h"
@@ -183,7 +184,7 @@ void BridgeFactory::disposing() {
             css::uno::Reference<css::lang::XComponent>(
                 *i, css::uno::UNO_QUERY_THROW)->dispose();
         } catch (css::uno::Exception & e) {
-            SAL_WARN("binaryurp", "ignoring Exception " << e.Message);
+            SAL_WARN("binaryurp", "ignoring " << e);
         }
     }
     for (BridgeMap::iterator i(l2.begin()); i != l2.end(); ++i) {
@@ -191,7 +192,7 @@ void BridgeFactory::disposing() {
             css::uno::Reference<css::lang::XComponent>(
                 i->second, css::uno::UNO_QUERY_THROW)->dispose();
         } catch (css::uno::Exception & e) {
-            SAL_WARN("binaryurp", "ignoring Exception " << e.Message);
+            SAL_WARN("binaryurp", "ignoring " << e);
         }
     }
 }

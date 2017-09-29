@@ -42,6 +42,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <memory>
 
@@ -341,7 +342,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
         SAL_WARN(
             "cppuhelper",
             "exception occurred raising singleton \"" << rName << "\": "
-            << exc.Message);
+            << exc);
     }
 
     SAL_WARN_IF(!xInstance.is(),
@@ -573,7 +574,7 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
         }
         catch (Exception & exc)
         {
-            SAL_WARN( "cppuhelper", exc.Message );
+            SAL_WARN( "cppuhelper", exc );
             xContext.clear();
         }
     }

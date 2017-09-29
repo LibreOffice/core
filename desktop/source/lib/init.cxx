@@ -28,6 +28,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1301,7 +1302,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     catch (const uno::Exception& exception)
     {
         pLib->maLastExceptionMsg = exception.Message;
-        SAL_INFO("lok", "Document can't be loaded - exception: " << exception.Message);
+        SAL_INFO("lok", "Document can't be loaded: " << exception);
     }
 
     return nullptr;

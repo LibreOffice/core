@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <ucbhelper/content.hxx>
@@ -648,9 +649,7 @@ void Package::processPackage_impl(
                 static_cast< OWeakObject * >(this), e);
         }
         catch (const RuntimeException &e) {
-            SAL_WARN(
-                "desktop.deployment",
-                "unexpected RuntimeException \"" << e.Message << '"');
+            SAL_WARN("desktop.deployment", "unexpected " << e);
             throw;
         }
         catch (const CommandFailedException &) {

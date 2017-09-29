@@ -43,6 +43,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <framework/documentundoguard.hxx>
 
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -161,7 +162,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                             SAL_WARN("scripting",
                                 "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
                                 "while dispatchFinished with failure of the execution "
-                                << e.Message );
+                                << e );
                         }
                     }
                     return;
@@ -291,7 +292,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         {
             SAL_WARN("scripting",
                 "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
-                "while dispatchFinished " << e.Message );
+                "while dispatchFinished " << e );
         }
     }
 }

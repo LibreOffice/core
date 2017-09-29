@@ -20,6 +20,7 @@
 #include <iterator>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/i18n/Transliteration.hpp>
@@ -251,7 +252,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         }
         catch (const Exception &e)
         {
-            SAL_WARN("xmlhelp", "Exception: " << e.Message);
+            SAL_WARN("xmlhelp", e);
         }
 
         ++iDir;

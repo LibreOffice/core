@@ -49,6 +49,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/container.hxx>
+#include <cppuhelper/logging.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
@@ -179,7 +180,7 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
             }
             catch (const Exception& e)
             {
-                SAL_WARN( "extensions.biblio", "::getColumns : caught an exception. " << e.Message);
+                SAL_WARN( "extensions.biblio", "::getColumns : caught an exception. " << e);
             }
 
         }
@@ -497,7 +498,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* p
     {
         SAL_WARN("extensions.biblio",
             "Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl "
-            << e.Message);
+            << e);
     }
 }
 

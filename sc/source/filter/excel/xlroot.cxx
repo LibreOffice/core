@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
@@ -148,7 +149,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     }
     catch( const Exception& e)
     {
-        SAL_WARN( "sc", "XclRootData::XclRootData - cannot get output device info: " << e.Message );
+        SAL_WARN( "sc", "XclRootData::XclRootData - cannot get output device info: " << e );
     }
 }
 

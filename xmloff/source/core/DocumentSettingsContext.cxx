@@ -31,6 +31,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <list>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -762,7 +763,7 @@ void XMLConfigItemMapIndexedContext::EndElement()
                             catch (uno::Exception const& e)
                             {
                                 SAL_WARN("xmloff.core",
-                                    "Exception while importing forbidden characters: " << e.Message);
+                                    "Exception while importing forbidden characters: " << e);
                             }
                         }
                     }

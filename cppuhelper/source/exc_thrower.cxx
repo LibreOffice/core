@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -253,6 +254,15 @@ Any SAL_CALL getCaughtException()
     return ret;
 }
 
+}
+
+CPPUHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream & os, com::sun::star::uno::Exception const & exception)
+{
+    // the class name is useful because sometimes code does bother to pass in a useful message
+    os << "Exception:" << typeid(exception).name();
+    if (!exception.Message.isEmpty())
+        os << " msg: " << exception.Message;
+    return os;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

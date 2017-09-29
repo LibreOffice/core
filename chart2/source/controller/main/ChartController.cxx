@@ -215,7 +215,7 @@ void ChartController::TheModel::tryTermination()
     }
     catch(const uno::Exception& ex)
     {
-        SAL_WARN( "chart2", "Termination of model failed: " << ex.Message );
+        SAL_WARN( "chart2", "Termination of model failed: " << ex );
     }
 }
 

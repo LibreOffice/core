@@ -20,6 +20,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <sax/tools/documenthandleradapter.hxx>
 
@@ -233,7 +234,7 @@ namespace XSLT
         Exception e;
         if (a >>= e)
         {
-            SAL_WARN("filter.xslt", "XSLTFilter::error was called: " << e.Message);
+            SAL_WARN("filter.xslt", "XSLTFilter::error was called: " << e);
         }
         m_bError = true;
         m_cTransformed.set();
@@ -402,7 +403,7 @@ namespace XSLT
                 catch( const Exception& exc)
                     {
                         // something went wrong
-                        SAL_WARN("filter.xslt", exc.Message);
+                        SAL_WARN("filter.xslt", exc);
                         return false;
                     }
             }

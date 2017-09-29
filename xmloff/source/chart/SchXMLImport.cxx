@@ -27,6 +27,7 @@
 #include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -406,7 +407,7 @@ void SchXMLImportHelper::DeleteDataSeries(
     }
     catch( const uno::Exception & ex )
     {
-       SAL_WARN("xmloff.chart",  "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
+       SAL_WARN("xmloff.chart",  "Exception caught. " << ex);
     }
 }
 
@@ -484,7 +485,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
     }
     catch( const uno::Exception & ex )
     {
-        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
+        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex);
     }
     return xResult;
 }
@@ -600,8 +601,7 @@ void SAL_CALL SchXMLImport::setTargetDocument(const uno::Reference<lang::XCompon
     }
     catch (const uno::Exception & rEx)
     {
-        OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
-        SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught: " << aBStr);
+        SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught: " << rEx);
     }
 }
 

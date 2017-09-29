@@ -31,6 +31,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <comphelper/string.hxx>
+#include <cppuhelper/logging.hxx>
 #include <svtools/treelistentry.hxx>
 
 #include <vector>
@@ -182,7 +183,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("sw", e.Message);
+        SAL_WARN("sw", e);
         ScopedVclPtrInstance<MessageDialog>(this, e.Message)->Execute();
     }
 }

@@ -40,6 +40,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <cppuhelper/logging.hxx>
 #include <uno/environment.hxx>
 
 #include "loadsharedlibcomponentfactory.hxx"
@@ -890,10 +891,7 @@ void cppuhelper::ServiceManager::disposing() {
         try {
             (*i)->dispose();
         } catch (css::uno::RuntimeException & e) {
-            SAL_WARN(
-                "cppuhelper",
-                "Ignoring RuntimeException \"" << e.Message
-                    << "\" while disposing singleton");
+            SAL_WARN("cppuhelper", "Ignoring " << e << " while disposing singleton");
         }
     }
     for (std::vector<

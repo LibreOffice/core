@@ -56,6 +56,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <osl/file.hxx>
 #include <rtl/uri.hxx>
@@ -413,7 +414,7 @@ namespace basctl
         }
         catch (const css::ucb::ContentCreationException& e)
         {
-            SAL_WARN( "basctl.basicide", "ScriptDocument::getBasicManager: Caught exception: " << e.Message );
+            SAL_WARN( "basctl.basicide", "ScriptDocument::getBasicManager: Caught exception: " << e );
         }
         return nullptr;
     }

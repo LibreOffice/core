@@ -24,6 +24,7 @@
 #include <osl/time.h>
 #include <osl/thread.h>
 #include <cppuhelper/compbase.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
@@ -78,7 +79,7 @@ void ProgressLogImpl::disposing()
         }
     }
     catch (const Exception & exc) {
-        SAL_WARN( "desktop", exc.Message );
+        SAL_WARN( "desktop", exc );
     }
 }
 
@@ -136,7 +137,7 @@ void ProgressLogImpl::log_write( OString const & text )
         }
     }
     catch (const io::IOException & exc) {
-        SAL_WARN( "desktop", exc.Message );
+        SAL_WARN( "desktop", exc );
     }
 }
 

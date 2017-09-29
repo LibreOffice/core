@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -138,7 +139,7 @@ namespace svgio
                 }
                 catch(const uno::Exception& e)
                 {
-                    SAL_WARN( "svg", "Parse error! : " << e.Message);
+                    SAL_WARN( "svg", "Parse error! : " << e);
                 }
 
                 // decompose to primitives

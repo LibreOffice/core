@@ -44,6 +44,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <dialmgr.hxx>
 
@@ -400,7 +401,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, ChangeSourceClickHdl, Button *, void )
         }
         catch (uno::Exception & e)
         {
-            SAL_WARN("cui.dialogs", "SvBaseLinksDlg: caught UNO exception: " << e.Message);
+            SAL_WARN("cui.dialogs", "SvBaseLinksDlg: " << e);
         }
     }
     else

@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
@@ -106,7 +107,7 @@ Any ConfigurationAccess::GetConfigurationNode (
     }
     catch (const Exception& rException)
     {
-        SAL_WARN("sd", "caught exception while getting configuration node" << sPathToNode << ": " << rException.Message);
+        SAL_WARN("sd", "caught exception while getting configuration node" << sPathToNode << ": " << rException);
     }
 
     return Any();

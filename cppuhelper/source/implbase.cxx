@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/string.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -77,7 +78,7 @@ void WeakComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                SAL_WARN( "cppuhelper", exc.Message );
+                SAL_WARN( "cppuhelper", exc );
             }
             OSL_ASSERT( rBHelper.bDisposed );
         }
@@ -201,7 +202,7 @@ void WeakAggComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                SAL_WARN( "cppuhelper", exc.Message );
+                SAL_WARN( "cppuhelper", exc );
             }
             OSL_ASSERT( rBHelper.bDisposed );
         }

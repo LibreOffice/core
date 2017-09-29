@@ -60,6 +60,7 @@
 #include <com/sun/star/util/DateWithTimezone.hpp>
 #include <com/sun/star/util/DateTimeWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -2039,7 +2040,7 @@ void SAL_CALL SfxDocumentMetaData::setModified( sal_Bool bModified )
             throw;
         } catch (const css::uno::Exception & e) {
             // ignore
-            SAL_WARN("sfx.doc", "setModified: exception: " << e.Message);
+            SAL_WARN("sfx.doc", "setModified: " << e);
         }
     } else {
         if (xMB.is()) {

@@ -35,6 +35,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlexp.hxx>
@@ -337,7 +338,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN("editeng", "exception during xml export: " << e.Message);
+        SAL_WARN("editeng", "exception during xml export: " << e);
     }
 }
 

@@ -31,6 +31,7 @@
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
@@ -181,7 +182,7 @@ RehearseTimingsActivity::~RehearseTimingsActivity()
     }
     catch (const uno::Exception& e)
     {
-        SAL_WARN("slideshow", "" << e.Message);
+        SAL_WARN("slideshow", e);
     }
 }
 

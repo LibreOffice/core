@@ -27,6 +27,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <cppuhelper/logging.hxx>
 #include <unotools/textsearch.hxx>
 #include <o3tl/make_unique.hxx>
 
@@ -272,7 +273,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
         }
         catch (const RuntimeException& e)
         {
-            SAL_WARN( "cui.options", "CuiAboutConfigTabPage: exception " << e.Message);
+            SAL_WARN( "cui.options", "CuiAboutConfigTabPage: " << e);
         }
 
         if (bNotLeaf)

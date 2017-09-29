@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <cppuhelper/logging.hxx>
 
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -130,7 +131,7 @@ void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
         }
         catch(Exception & e)
         {
-            SAL_WARN("oox",  "Exception " << e.Message );
+            SAL_WARN("oox",  e );
         }
     }
     else if ( sType == "slidenum" )

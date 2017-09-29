@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <cppuhelper/logging.hxx>
 #include <ucbhelper/content.hxx>
 
 using namespace com::sun::star::uno;
@@ -101,7 +102,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             return CSubmission::SUCCESS;
         }
     } catch (const Exception& e) {
-        SAL_WARN( "forms.xforms", "Exception during replace: " << e.Message);
+        SAL_WARN( "forms.xforms", "Exception during replace: " << e);
     }
     return CSubmission::UNKNOWN_ERROR;
 }

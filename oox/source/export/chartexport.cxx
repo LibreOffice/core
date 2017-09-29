@@ -89,6 +89,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/logging.hxx>
 #include <utility>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
@@ -185,7 +186,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     }
     catch( const uno::Exception & ex )
     {
-        SAL_WARN( "oox", "Exception caught. " << ex.Message);
+        SAL_WARN( "oox", "Exception caught. " << ex);
     }
 
     return xResult;
@@ -232,7 +233,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     }
     catch( const uno::Exception & ex )
     {
-        SAL_WARN( "oox", "Exception caught. " << ex.Message);
+        SAL_WARN( "oox", "Exception caught. " << ex);
     }
 
     return bResult;
@@ -540,7 +541,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
         }
         catch( const uno::Exception & ex )
         {
-            SAL_WARN( "oox", "Exception caught. " << ex.Message);
+            SAL_WARN( "oox", "Exception caught. " << ex);
         }
 }
 
@@ -1289,7 +1290,7 @@ void ChartExport::exportBitmapFill( const Reference< XPropertySet >& xPropSet )
         }
         catch (const uno::Exception & rEx)
         {
-            SAL_INFO("oox", "ChartExport::exportBitmapFill " << rEx.Message);
+            SAL_INFO("oox", "ChartExport::exportBitmapFill " << rEx);
         }
 
     }
@@ -1318,7 +1319,7 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
         catch (const uno::Exception & rEx)
         {
             SAL_INFO("oox",
-                "ChartExport::exportGradientFill " << rEx.Message);
+                "ChartExport::exportGradientFill " << rEx);
         }
 
     }
@@ -3036,7 +3037,7 @@ void ChartExport::exportDataPoints(
                 }
                 catch( const uno::Exception & rEx )
                 {
-                    SAL_WARN( "oox", "Exception caught during Export of data point: " << rEx.Message );
+                    SAL_WARN( "oox", "Exception caught during Export of data point: " << rEx );
                 }
             }
             else

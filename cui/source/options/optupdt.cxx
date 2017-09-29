@@ -24,6 +24,7 @@
 #include "optupdt.hxx"
 #include <dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
@@ -413,7 +414,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, Button*, void)
     }
     catch( const uno::Exception& e )
     {
-         SAL_WARN("cui.options", "Caught exception, thread terminated. " << e.Message);
+         SAL_WARN("cui.options", "Caught exception, thread terminated. " << e);
     }
 }
 

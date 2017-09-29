@@ -28,6 +28,7 @@
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
@@ -386,9 +387,7 @@ Any OPoolCollection::getNodeValue(const OUString& _rPath,const Reference<XInterf
     }
     catch(NoSuchElementException& e)
     {
-        SAL_WARN("connectivity.cpool", "::getNodeValue: caught a "
-                 "NoSuchElementException while trying to open " <<
-                 e.Message << "!" );
+        SAL_WARN("connectivity.cpool", e );
     }
     return aReturn;
 }

@@ -45,6 +45,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/logging.hxx>
 #include <osl/file.hxx>
 #include <vector>
 
@@ -116,7 +117,7 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
     }
     catch( const uno::Exception& e )
     {
-        SAL_WARN( "sfx.bastyp", "GetResultSet: Any other exception: " << e.Message );
+        SAL_WARN( "sfx.bastyp", "GetResultSet: " << e );
     }
 
     return aList;

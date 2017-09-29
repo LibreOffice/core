@@ -25,6 +25,7 @@
 #include <unotools/resmgr.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/logging.hxx>
 #include <comphelper/anytostring.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
@@ -125,7 +126,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
             xComp->dispose();
     }
     catch (const RuntimeException & exc) {
-        SAL_WARN( "desktop", exc.Message );
+        SAL_WARN( "desktop", exc );
     }
 }
 
