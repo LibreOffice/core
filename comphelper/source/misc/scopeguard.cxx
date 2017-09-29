@@ -32,7 +32,7 @@ ScopeGuard::~ScopeGuard()
         m_func();
     }
     catch (css::uno::Exception & exc) {
-        SAL_WARN( "comphelper", "UNO exception occurred: " << exc.Message );
+        SAL_WARN( "comphelper", "UNO exception occurred: " << exc );
     }
     catch (...) {
         OSL_FAIL( "unknown exception occurred!" );

@@ -228,7 +228,7 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
     }
     catch( Exception& e )
     {
-        SAL_WARN( "oox", "Drawing::createAndInsertXShape - error during shape object creation: " << e.Message );
+        SAL_WARN( "oox", "Drawing::createAndInsertXShape - error during shape object creation: " << e );
     }
     OSL_ENSURE( xShape.is(), "Drawing::createAndInsertXShape - cannot instantiate shape object" );
     return xShape;
@@ -251,7 +251,7 @@ Reference< XShape > Drawing::createAndInsertXControlShape( const ::oox::ole::Emb
     }
     catch (Exception const& e)
     {
-        SAL_WARN("oox", "exception inserting Shape: " << e.Message);
+        SAL_WARN("oox", "exception inserting Shape: " << e);
     }
     return xShape;
 }

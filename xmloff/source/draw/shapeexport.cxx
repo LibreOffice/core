@@ -3174,8 +3174,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
         }
         catch (uno::Exception const& e)
         {
-            SAL_INFO("xmloff", "exception while storing embedded media: '"
-                        << e.Message << "'");
+            SAL_INFO("xmloff", "exception while storing embedded media: " << e);
         }
         return OUString();
     }
@@ -3231,7 +3230,7 @@ static void lcl_StoreGltfExternals(
         }
         catch (uno::Exception const& e)
         {
-            SAL_INFO("xmloff", "exception while saving embedded model: '" << e.Message << "'");
+            SAL_INFO("xmloff", "exception while saving embedded model: '" << e << "'");
         }
     }
 }
@@ -3310,7 +3309,7 @@ static void lcl_StoreGltfFallback(
         }
         catch (uno::Exception const& e)
         {
-            SAL_INFO("xmloff", "exception while saving fallback image of glTF model: '" << e.Message << "'");
+            SAL_INFO("xmloff", "exception while saving fallback image of glTF model: '" << e << "'");
         }
     }
 }

@@ -84,7 +84,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
                         }
                         catch (const css::uno::Exception& e)
                         {
-                            SAL_INFO("sc.ui", "ScSolverUtil::GetImplementations: cannot instantiate: " << sName << ", because: " << e.Message);
+                            SAL_INFO("sc.ui", "ScSolverUtil::GetImplementations: cannot instantiate: " << sName << ", because: " << e);
                         }
                     }
                 }

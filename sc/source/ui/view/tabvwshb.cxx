@@ -360,7 +360,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             }
             catch (const uno::Exception& e)
             {
-                SAL_WARN( "sc", "Cannot Insert Chart: " << e.Message);
+                SAL_WARN( "sc", "Cannot Insert Chart: " << e);
             }
             break;
 

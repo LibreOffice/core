@@ -96,7 +96,7 @@ bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &r
     }
     catch (const css::uno::Exception &e)
     {
-        SAL_WARN("opencl", "OpenCL testing failed - disabling: " << e.Message);
+        SAL_WARN("opencl", "OpenCL testing failed - disabling: " << e);
     }
 
     if (nKernelFailures != openclwrapper::kernelFailures)

@@ -510,7 +510,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle( const un
     }
     catch ( const uno::Exception& rException )
     {
-        SAL_WARN( "writerfilter", "SectionPropertyMap::GetPageStyle() failed: " << rException.Message );
+        SAL_WARN( "writerfilter", "SectionPropertyMap::GetPageStyle() failed: " << rException );
     }
 
     return xRet;
@@ -796,7 +796,7 @@ void SectionPropertyMap::CopyHeaderFooterTextProperty( const uno::Reference< bea
     }
     catch ( const uno::Exception& e )
     {
-        SAL_INFO( "writerfilter", "An exception occurred in SectionPropertyMap::CopyHeaderFooterTextProperty( ) - " << e.Message );
+        SAL_INFO( "writerfilter", "An exception occurred in SectionPropertyMap::CopyHeaderFooterTextProperty( ) - " << e );
     }
 }
 

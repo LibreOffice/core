@@ -538,14 +538,14 @@ void initVMConfiguration(
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
     }
     catch(const css::uno::Exception & exception) {
-        SAL_INFO("stoc", "can not get INETProps because of >" << exception.Message << "<");
+        SAL_INFO("stoc", "can not get INETProps because of " << exception);
     }
 
     try {
         getDefaultLocaleFromConfig(&jvm, xSMgr,xCtx);
     }
     catch(const css::uno::Exception & exception) {
-        SAL_INFO("stoc", "can not get locale because of >" << exception.Message << "<");
+        SAL_INFO("stoc", "can not get locale because of " << exception);
     }
 
     try
@@ -553,7 +553,7 @@ void initVMConfiguration(
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
     }
     catch(const css::uno::Exception & exception) {
-        SAL_INFO("stoc", "couldn't get safety settings because of >" << exception.Message << "<");
+        SAL_INFO("stoc", "couldn't get safety settings because of " << exception);
     }
 
     *pjvm= jvm;
@@ -1333,7 +1333,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
         }
     }catch(const css::uno::Exception & e)
     {
-        SAL_INFO("stoc", "could not set up listener for Configuration because of >" << e.Message << "<");
+        SAL_INFO("stoc", "could not set up listener for Configuration because of >" << e << "<");
     }
 }
 

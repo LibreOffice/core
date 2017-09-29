@@ -552,7 +552,7 @@ IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
                 }
                 catch ( css::uno::Exception& e)
                 {
-                    SAL_WARN("cui.customize", "Error replacing image: " << e.Message);
+                    SAL_WARN("cui.customize", "Error replacing image: " << e);
                 }
             }
         }
@@ -602,7 +602,7 @@ IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
         }
         catch ( css::uno::Exception& e )
         {
-            SAL_WARN("cui.customize", "Error resetting image: " << e.Message);
+            SAL_WARN("cui.customize", "Error resetting image: " << e);
         }
     }
     else if (sIdent == "restoreItem")
@@ -659,7 +659,7 @@ IMPL_LINK( SvxToolbarConfigPage, ModifyItemHdl, MenuButton *, pButton, void )
         }
         catch ( css::uno::Exception& e )
         {
-            SAL_WARN("cui.customize", "Error restoring image: " << e.Message);
+            SAL_WARN("cui.customize", "Error restoring image: " << e);
         }
     }
     else

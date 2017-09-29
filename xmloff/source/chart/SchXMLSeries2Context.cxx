@@ -469,7 +469,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     }
     catch( const uno::Exception & ex )
     {
-        SAL_WARN("xmloff.chart", "Exception caught. Type: " << OUString::createFromAscii( typeid( ex ).name()) << ", Message: " << ex.Message);
+        SAL_WARN("xmloff.chart", "Exception caught. " << ex);
     }
 
     //init mbSymbolSizeIsMissingInFile:
@@ -859,7 +859,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
             }
             catch( const uno::Exception & rEx )
             {
-                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx.Message );
+                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx );
             }
         }
     }
@@ -930,7 +930,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
         }
         catch( const uno::Exception& rEx )
         {
-            SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx.Message );
+            SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx );
         }
 
     }
@@ -1001,7 +1001,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
             }
             catch( const uno::Exception & rEx )
             {
-                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx.Message );
+                SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx );
             }
         }
     }
@@ -1097,7 +1097,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
             }
             catch( const uno::Exception & rEx )
             {
-                SAL_INFO("xmloff.chart", "Exception caught during setting styles to data points: " << rEx.Message );
+                SAL_INFO("xmloff.chart", "Exception caught during setting styles to data points: " << rEx );
             }
         }
     }   // styles iterator

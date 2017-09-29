@@ -1635,7 +1635,7 @@ void SfxViewShell::CheckIPClient_Impl(
             }
             catch (const uno::Exception& e)
             {
-                SAL_WARN("sfx.view", "SfxViewShell::CheckIPClient_Impl exception: " << e.Message);
+                SAL_WARN("sfx.view", "SfxViewShell::CheckIPClient_Impl: " << e);
             }
         }
     }

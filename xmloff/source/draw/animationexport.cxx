@@ -547,7 +547,7 @@ static OUString lcl_StoreMediaAndGetURL(SvXMLExport & rExport, OUString const& r
         }
         catch (uno::Exception const& e)
         {
-            SAL_INFO("xmloff", "exception while storing embedded media: '" << e.Message << "'");
+            SAL_INFO("xmloff", "exception while storing embedded media: '" << e << "'");
         }
         return OUString();
     }

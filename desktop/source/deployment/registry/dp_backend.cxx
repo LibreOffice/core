@@ -648,9 +648,7 @@ void Package::processPackage_impl(
                 static_cast< OWeakObject * >(this), e);
         }
         catch (const RuntimeException &e) {
-            SAL_WARN(
-                "desktop.deployment",
-                "unexpected RuntimeException \"" << e.Message << '"');
+            SAL_WARN("desktop.deployment", "unexpected " << e);
             throw;
         }
         catch (const CommandFailedException &) {

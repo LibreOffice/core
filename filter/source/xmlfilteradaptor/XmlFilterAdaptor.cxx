@@ -161,7 +161,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
         if (xStatusIndicator.is())
                xStatusIndicator->end();
 
-        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: exception: " << e.Message);
+        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: " << e);
         return false;
     }
     if (xStatusIndicator.is()) {
@@ -272,7 +272,7 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::Property
     }
     catch (const Exception& e)
     {
-        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: exception: " << e.Message);
+        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: " << e);
         if (xStatusIndicator.is())
             xStatusIndicator->end();
         return false;

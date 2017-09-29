@@ -84,7 +84,7 @@ ErrCode SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM& r
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("sw.docx", "SwDOCXReader::Read(): exception: " << e.Message);
+        SAL_WARN("sw.docx", "SwDOCXReader::Read(): " << e);
         ret = ERR_SWG_READ_ERROR;
     }
     return ret;

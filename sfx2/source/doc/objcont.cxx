@@ -444,7 +444,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
             }
             catch (const Exception& e)
             {
-                SAL_INFO("sfx.doc", "caught exception" << e.Message);
+                SAL_INFO("sfx.doc", e);
             }
 
             // if modify date was read successfully

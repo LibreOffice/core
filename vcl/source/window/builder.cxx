@@ -147,7 +147,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     }
     catch (const css::uno::Exception &rExcept)
     {
-        SAL_WARN("vcl.layout", "Unable to read .ui file: " << rExcept.Message);
+        SAL_WARN("vcl.layout", "Unable to read .ui file: " << rExcept);
         CrashReporter::AddKeyValue("VclBuilderException", "Unable to read .ui file: " + rExcept.Message);
         throw;
     }

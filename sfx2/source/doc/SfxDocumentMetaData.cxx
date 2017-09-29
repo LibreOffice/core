@@ -2039,7 +2039,7 @@ void SAL_CALL SfxDocumentMetaData::setModified( sal_Bool bModified )
             throw;
         } catch (const css::uno::Exception & e) {
             // ignore
-            SAL_WARN("sfx.doc", "setModified: exception: " << e.Message);
+            SAL_WARN("sfx.doc", "setModified: " << e);
         }
     } else {
         if (xMB.is()) {

@@ -151,8 +151,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
         }
         catch (uno::Exception const& e)
         {
-            SAL_WARN("embeddedobj.ole", "OwnView_Impl::CreateModelFromURL:"
-                    " exception caught: " << e.Message);
+            SAL_WARN("embeddedobj.ole", "OwnView_Impl::CreateModelFromURL:" << e);
         }
     }
 

@@ -87,7 +87,7 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
         }
         catch( const uno::Exception& rEx )
         {
-            SAL_WARN("writerfilter", "exception while updating indexes: " << rEx.Message);
+            SAL_WARN("writerfilter", "exception while updating indexes: " << rEx);
         }
     }
 

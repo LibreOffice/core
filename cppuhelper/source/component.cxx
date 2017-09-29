@@ -92,7 +92,7 @@ void OComponentHelper::release() throw()
                 catch (css::uno::RuntimeException & exc)
                 {
                     // release should not throw exceptions
-                    SAL_WARN( "cppuhelper", exc.Message );
+                    SAL_WARN( "cppuhelper", exc );
                 }
 
                 // only the alive ref holds the object

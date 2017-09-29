@@ -268,7 +268,7 @@ void ThreadTask::execAndDelete()
     }
     catch (const css::uno::Exception &e)
     {
-        SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e.Message);
+        SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e);
     }
 
     delete this;

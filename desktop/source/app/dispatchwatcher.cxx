@@ -473,8 +473,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                     SAL_WARN(
                         "desktop.app",
                         "Desktop::OpenDefault() ignoring Exception while"
-                            " calling XNotifyingDispatch: \"" << e.Message
-                            << "\"");
+                            " calling XNotifyingDispatch: " << e);
                 }
             }
         }
@@ -546,14 +545,14 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 SAL_WARN(
                     "desktop.app",
                     "Dispatchwatcher IllegalArgumentException while calling"
-                        " loadComponentFromURL: \"" << iae.Message << "\"");
+                        " loadComponentFromURL: " << iae);
             }
             catch (const css::io::IOException& ioe)
             {
                 SAL_WARN(
                     "desktop.app",
                     "Dispatchwatcher IOException while calling"
-                        " loadComponentFromURL: \"" << ioe.Message << "\"");
+                        " loadComponentFromURL: " << ioe);
             }
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
                  aDispatchRequest.aRequestType == REQUEST_VIEW ||

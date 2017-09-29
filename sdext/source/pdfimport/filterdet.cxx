@@ -290,7 +290,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
                 osl_closeFile( aFile );
             }
         } catch (css::io::IOException & e) {
-            SAL_WARN("sdext.pdfimport", "caught IOException " + e.Message);
+            SAL_WARN("sdext.pdfimport", "caught " << e);
             return OUString();
         }
         OUString aEmbedMimetype;

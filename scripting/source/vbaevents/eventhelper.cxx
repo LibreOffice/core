@@ -927,7 +927,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                     }
                     catch ( uno::Exception& e )
                     {
-                        SAL_WARN("scripting", "event script raised " << e.Message );
+                        SAL_WARN("scripting", "event script raised " << e );
                     }
                }
            }

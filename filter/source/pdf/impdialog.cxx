@@ -1762,7 +1762,7 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect, Button*, void )
         }
         catch (const uno::Exception &e)
         {
-            SAL_INFO("filter.pdf", "TSAURLsDialog::TSAURLsDialog(): caught exception" << e.Message);
+            SAL_INFO("filter.pdf", "TSAURLsDialog::TSAURLsDialog(): " << e);
         }
 
         // If more than only the "None" entry is there, enable the ListBox

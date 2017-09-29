@@ -392,7 +392,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
         }
         catch (const io::IOException& rException)
         {
-            SAL_WARN_IF(nOpenMode != css::embed::ElementModes::READ, "xmlsecurity.helper", "DocumentSignatureHelper::OpenSignatureStream: " << rException.Message);
+            SAL_WARN_IF(nOpenMode != css::embed::ElementModes::READ, "xmlsecurity.helper", "DocumentSignatureHelper::OpenSignatureStream: " << rException);
         }
     }
 

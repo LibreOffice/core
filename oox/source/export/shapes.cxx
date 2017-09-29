@@ -289,7 +289,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("oox.shape", "oox::GetOLEObjectStream: exception: \"" << e.Message << "\"");
+        SAL_WARN("oox.shape", "oox::GetOLEObjectStream: " << e);
         return nullptr;
     }
     xTempStream->getOutputStream()->closeOutput();
@@ -329,7 +329,7 @@ uno::Reference<io::XInputStream> GetOLEObjectStream(
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("oox.shape", "oox::GetOLEObjectStream: exception: " << e.Message);
+        SAL_WARN("oox.shape", "oox::GetOLEObjectStream: " << e);
     }
     return xInStream;
 }
@@ -1968,7 +1968,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     }
     catch (uno::Exception const& e)
     {
-        SAL_WARN("oox.shape", "ShapeExport::WriteOLE2Shape: exception: " << e.Message);
+        SAL_WARN("oox.shape", "ShapeExport::WriteOLE2Shape: " << e);
         return *this;
     }
 
@@ -2037,7 +2037,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     try {
         ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
     } catch (uno::Exception const& e) {
-        SAL_WARN("oox.shape", "ShapeExport::WriteOLEObject: exception: " << e.Message);
+        SAL_WARN("oox.shape", "ShapeExport::WriteOLEObject: " << e);
     }
 
     OUString const sRelId = mpFB->addRelation(

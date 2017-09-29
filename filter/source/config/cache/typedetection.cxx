@@ -448,10 +448,8 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
     }
     catch(const css::uno::Exception& e)
     {
-        SAL_WARN(
-            "filter.config",
-            "caught Exception \"" << e.Message
-                << "\" while querying type of <" << sURL << ">");
+        SAL_WARN("filter.config", "caught " << e
+                << " while querying type of " << sURL);
         sType.clear();
     }
 

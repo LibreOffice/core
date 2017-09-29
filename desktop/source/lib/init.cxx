@@ -1299,7 +1299,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     catch (const uno::Exception& exception)
     {
         pLib->maLastExceptionMsg = exception.Message;
-        SAL_INFO("lok", "Document can't be loaded - exception: " << exception.Message);
+        SAL_INFO("lok", "Document can't be loaded: " << exception);
     }
 
     return nullptr;

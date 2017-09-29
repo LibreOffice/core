@@ -117,7 +117,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
     }
     catch ( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", rException.Message);
+        SAL_INFO("package.xstor", rException);
         SAL_INFO("package.xstor", "Can't set encryption");
         SAL_WARN( "package.xstor", "Can't write encryption related properties!" );
         throw io::IOException(); // TODO
@@ -135,7 +135,7 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
     }
     catch ( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", rException.Message);
+        SAL_INFO("package.xstor", rException);
         SAL_INFO("package.xstor", "Can't get encryption property");
 
         SAL_WARN( "package.xstor", "Can't get encryption related properties!" );
@@ -219,7 +219,7 @@ bool KillFile( const OUString& aURL, const uno::Reference< uno::XComponentContex
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", rException.Message);
+        SAL_INFO("package.xstor", rException);
         SAL_INFO("package.xstor", "Quiet exception");
     }
 
@@ -241,7 +241,7 @@ OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext >& rCon
     }
     catch ( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", rException.Message);
+        SAL_INFO("package.xstor", rException);
         SAL_INFO("package.xstor", "Quiet exception");
     }
 
@@ -471,7 +471,7 @@ void OWriteStream_Impl::DisposeWrappers()
         }
         catch ( const uno::RuntimeException& rRuntimeException )
         {
-            SAL_INFO("package.xstor", "Quiet exception: " << rRuntimeException.Message);
+            SAL_INFO("package.xstor", "Quiet exception: " << rRuntimeException);
         }
 
         m_pAntiImpl = nullptr;
@@ -516,13 +516,13 @@ OUString const & OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference<
         }
         catch( const packages::WrongPasswordException& rWrongPasswordException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException);
             KillFile( aTempURL, comphelper::getProcessComponentContext() );
             throw;
         }
         catch( const uno::Exception& rException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rException);
             KillFile( aTempURL, comphelper::getProcessComponentContext() );
             throw;
         }
@@ -633,7 +633,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
             }
             catch( const uno::Exception& rException )
             {
-                SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+                SAL_INFO("package.xstor", "Quiet exception: " << rException);
             }
         }
     }
@@ -670,7 +670,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
             }
             catch( const uno::Exception& rException )
             {
-                SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+                SAL_INFO("package.xstor", "Quiet exception: " << rException);
             }
         }
     }
@@ -1008,7 +1008,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
         }
         catch( const uno::Exception& rException )
         {
-            SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+            SAL_INFO("package.xstor", "Quiet exception: " << rException);
 
             m_nRelInfoStatus = RELINFO_BROKEN;
             m_bOrigRelInfoBroken = true;
@@ -1073,7 +1073,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
         }
         catch( const uno::Exception& rException )
         {
-            SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+            SAL_INFO("package.xstor", "Quiet exception: " << rException);
             SAL_WARN( "package.xstor", "A property can't be retrieved!" );
         }
     }
@@ -1180,12 +1180,12 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         catch( const packages::WrongPasswordException& rWrongPasswordException )
         {
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
-            SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rWrongPasswordException);
             throw;
         }
         catch ( const uno::Exception& rException )
         {
-            SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+            SAL_INFO("package.xstor", "Quiet exception: " << rException);
             SAL_WARN( "package.xstor", "Can't write encryption related properties!" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             throw io::IOException(); // TODO:
@@ -1217,7 +1217,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         }
         catch( const packages::NoEncryptionException& rNoEncryptionException )
         {
-            SAL_INFO("package.xstor", "Rethrow: " << rNoEncryptionException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rNoEncryptionException);
             throw packages::WrongPasswordException();
         }
 
@@ -1438,7 +1438,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         }
         catch( const packages::NoEncryptionException& rNoEncryptionException )
         {
-            SAL_INFO("package.xstor", "No Element: " << rNoEncryptionException.Message);
+            SAL_INFO("package.xstor", "No Element: " << rNoEncryptionException);
             throw packages::WrongPasswordException();
         }
 
@@ -1507,7 +1507,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         {
             SAL_WARN( "package.xstor", "Can't open encrypted stream!" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
-            SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+            SAL_INFO("package.xstor", "Rethrow: " << rException);
             throw;
         }
 
@@ -1673,7 +1673,7 @@ OWriteStream::~OWriteStream()
         }
         catch( const uno::RuntimeException& rRuntimeException )
         {
-            SAL_INFO("package.xstor", "Quiet exception: " << rRuntimeException.Message);
+            SAL_INFO("package.xstor", "Quiet exception: " << rRuntimeException);
         }
     }
 }
@@ -1756,7 +1756,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     }
     catch ( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Quiet exception: " << rException.Message);
+        SAL_INFO("package.xstor", "Quiet exception: " << rException);
         // TODO: set the stream in invalid state or dispose
         SAL_WARN( "package.xstor", "The stream become invalid during copiing!" );
         throw uno::RuntimeException();
@@ -2362,7 +2362,7 @@ void SAL_CALL OWriteStream::dispose()
             }
             catch( const uno::Exception& rException )
             {
-                SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+                SAL_INFO("package.xstor", "Rethrow: " << rException);
                 uno::Any aCaught( ::cppu::getCaughtException() );
                 throw lang::WrappedTargetRuntimeException("Can not commit/revert the storage!",
                                                 static_cast< OWeakObject* >( this ),
@@ -2486,12 +2486,12 @@ sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException( "Problems on hasEncryptionData!",
                                   static_cast< ::cppu::OWeakObject* >( this ),
@@ -2521,7 +2521,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
     }
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
-        SAL_INFO("package.xstor", "No Element: " << rNoSuchElementException.Message);
+        SAL_INFO("package.xstor", "No Element: " << rNoSuchElementException);
     }
 
     return false;
@@ -3156,22 +3156,22 @@ void SAL_CALL OWriteStream::commit()
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( "Problems on commit!",
                                   static_cast< ::cppu::OWeakObject* >( this ),
@@ -3211,22 +3211,22 @@ void SAL_CALL OWriteStream::revert()
     }
     catch( const io::IOException& rIOException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rIOException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rIOException);
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rStorageWrappedTargetException);
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rRuntimeException);
         throw;
     }
     catch( const uno::Exception& rException )
     {
-        SAL_INFO("package.xstor", "Rethrow: " << rException.Message);
+        SAL_INFO("package.xstor", "Rethrow: " << rException);
         uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( "Problems on revert!",
                                   static_cast< ::cppu::OWeakObject* >( this ),

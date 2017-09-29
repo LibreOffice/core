@@ -119,7 +119,7 @@ bool PropertySet::implGetPropertyValue( Any& orValue, const OUString& rPropName 
     catch( Exception& e)
     {
         SAL_WARN( "oox", "PropertySet::implGetPropertyValue - cannot get property \"" <<
-                  rPropName << "\" Error: " << e.Message);
+                  rPropName << "\" Error: " << e);
     }
     return false;
 }
@@ -134,7 +134,7 @@ bool PropertySet::implSetPropertyValue( const OUString& rPropName, const Any& rV
     catch( Exception& e)
     {
         SAL_WARN( "oox", "PropertySet::implSetPropertyValue - cannot set property \"" <<
-                  rPropName << "\" Error: " << e.Message);
+                  rPropName << "\" Error: " << e);
     }
     return false;
 }

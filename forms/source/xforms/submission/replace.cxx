@@ -101,7 +101,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             return CSubmission::SUCCESS;
         }
     } catch (const Exception& e) {
-        SAL_WARN( "forms.xforms", "Exception during replace: " << e.Message);
+        SAL_WARN( "forms.xforms", "Exception during replace: " << e);
     }
     return CSubmission::UNKNOWN_ERROR;
 }

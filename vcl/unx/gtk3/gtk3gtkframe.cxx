@@ -4086,7 +4086,7 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::
     }
     catch(const uno::Exception& e)
     {
-        SAL_WARN( "vcl.gtk3", "Exception in getting input method surrounding text: " << e.Message);
+        SAL_WARN( "vcl.gtk3", "Exception in getting input method surrounding text: " << e);
     }
     return xText;
 }

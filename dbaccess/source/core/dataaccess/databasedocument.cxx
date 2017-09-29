@@ -1659,7 +1659,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
         }
         catch (const uno::Exception& e)
         {
-            SAL_WARN("dbaccess", "exception setting Version: " << e.Message);
+            SAL_WARN("dbaccess", "exception setting Version: " << e);
         }
     }
 

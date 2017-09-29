@@ -87,7 +87,7 @@ bool ExcelFilter::importDocument()
         }
         catch( const Exception& e )
         {
-            SAL_WARN("sc", "exception when importing document properties " << e.Message);
+            SAL_WARN("sc", "exception when importing document properties " << e);
         }
         catch( ... )
         {

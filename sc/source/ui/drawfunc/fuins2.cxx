@@ -210,7 +210,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
                 // will be created nevertheless and the range string can be
                 // edited.
                 SAL_WARN("sc.ui",
-                        "lcl_ChartInit - caught IllegalArgumentException with message \"" << e.Message << "\","
+                        "lcl_ChartInit - caught IllegalArgumentException with message \"" << e << "\","
                         " might be due to aRangeString: " << aRangeString);
             }
 

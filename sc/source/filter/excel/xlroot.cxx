@@ -148,7 +148,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     }
     catch( const Exception& e)
     {
-        SAL_WARN( "sc", "XclRootData::XclRootData - cannot get output device info: " << e.Message );
+        SAL_WARN( "sc", "XclRootData::XclRootData - cannot get output device info: " << e );
     }
 }
 
