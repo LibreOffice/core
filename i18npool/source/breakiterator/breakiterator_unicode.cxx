@@ -289,7 +289,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
                     pBI.reset( icu::BreakIterator::createLineInstance(icuLocale, status) );
                     break;
             }
-            if ( !U_SUCCESS(status) ) {
+            if ( !U_SUCCESS(status) || !pBI ) {
                 throw uno::RuntimeException();
             }
             icuBI->mpValue.reset( new BI_ValueData);
