@@ -13,6 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libmwaw,$(MWAW_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libmwaw,0))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libmwaw))
+
 ifeq ($(COM_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
@@ -36,7 +38,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
-    external/libmwaw/iOS.patch.0 \
     external/libmwaw/0001-make-MWAW_FALLTHROUGH-decl.-more-verbose-again.patch.1 \
 ))
 
