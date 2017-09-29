@@ -997,6 +997,12 @@ void PowerPointExport::WriteAnimationAttributeName(const FSHelperPtr& pFS, const
         pFS->writeEscaped("style.color");
         pFS->endElementNS(XML_p, XML_attrName);
     }
+    if (rAttributeName == "SkewX")
+    {
+        pFS->startElementNS(XML_p, XML_attrName, FSEND);
+        pFS->writeEscaped("xshear");
+        pFS->endElementNS(XML_p, XML_attrName);
+    }
     else
     {
         SAL_WARN("sd.eppt", "unhandled animation attribute name: " << rAttributeName);
@@ -1058,6 +1064,7 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
     const char* pCalcMode = nullptr;
     const char* pValueType = nullptr;
     bool bSimple = (nXmlNodeType != XML_anim);
+    bool bTo = true;
 
     if (!bSimple)
     {
@@ -1083,6 +1090,8 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
             pValueType = "clr";
             break;
         }
+
+
     }
 
     if (nXmlNodeType == XML_animMotion)
@@ -1143,17 +1152,35 @@ void PowerPointExport::WriteAnimationNodeAnimate(const FSHelperPtr& pFS, const R
     }
     else
     {
-        pFS->startElementNS(XML_p, nXmlNodeType,
-                            XML_calcmode, pCalcMode,
-                            XML_valueType, pValueType,
-                            FSEND);
+        OUString sTo;
+        if (rXAnimate.is() && nXmlNodeType == XML_anim)
+        {
+            rXAnimate->getTo() >>= sTo;
+        }
+        if (!sTo.isEmpty())
+        {
+            pFS->startElementNS(XML_p, nXmlNodeType,
+                XML_calcmode, pCalcMode,
+                XML_valueType, pValueType,
+                XML_to, USS(sTo),
+                FSEND);
+
+            bTo = false;
+        }
+        else
+        {
+            pFS->startElementNS(XML_p, nXmlNodeType,
+                XML_calcmode, pCalcMode,
+                XML_valueType, pValueType,
+                FSEND);
+        }
     }
 
-    WriteAnimationNodeAnimateInside(pFS, rXNode, bMainSeqChild, bSimple);
+    WriteAnimationNodeAnimateInside(pFS, rXNode, bMainSeqChild, bSimple, bTo);
     pFS->endElementNS(XML_p, nXmlNodeType);
 }
 
-void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS, const Reference< XAnimationNode >& rXNode, bool bMainSeqChild, bool bSimple)
+void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS, const Reference< XAnimationNode >& rXNode, bool bMainSeqChild, bool bSimple, bool bWriteTo)
 {
     Reference< XAnimate > rXAnimate(rXNode, UNO_QUERY);
     if (!rXAnimate.is())
@@ -1191,7 +1218,8 @@ void PowerPointExport::WriteAnimationNodeAnimateInside(const FSHelperPtr& pFS, c
     WriteAnimationAttributeName(pFS, rXAnimate->getAttributeName());
     pFS->endElementNS(XML_p, XML_cBhvr);
     WriteAnimateValues(pFS, rXAnimate);
-    WriteAnimateTo(pFS, rXAnimate->getTo(), rXAnimate->getAttributeName());
+    if (bWriteTo)
+        WriteAnimateTo(pFS, rXAnimate->getTo(), rXAnimate->getAttributeName());
 }
 
 void PowerPointExport::WriteAnimationCondition(const FSHelperPtr& pFS, const char* pDelay, const char* pEvent, double fDelay, bool bHasFDelay)
