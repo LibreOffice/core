@@ -1,4 +1,4 @@
-cn  connectivity    :    shell  L10N:l10n comphelper SO:moz_prebuilt svl UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb qadevOOo officecfg LIBXSLT:libxslt apache-commons NULL
+cn  connectivity    :    shell  L10N:l10n comphelper SO:moz_prebuilt svl UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb qadevOOo officecfg LIBXSLT:libxslt APACHE_COMMONS:apache-commons NULL
 cn  connectivity                                    usr1    -   all cn_mkout NULL
 cn  connectivity\inc                                nmake   -   all cn_inc NULL
 cn  connectivity\java\sdbc_hsqldb                   nmake   -   all cn_jhsqldbdb cn_hsqldb cn_inc NULL
