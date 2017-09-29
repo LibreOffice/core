@@ -41,10 +41,9 @@ public:
     ~ReleasePoolHolder() { [mpPool release]; }
 };
 
-class AquaSalTimer : public SalTimer
+class AquaSalTimer : public VersionedSalTimer
 {
     NSTimer    *m_pRunningTimer;
-    sal_Int32   m_nTimerStartTicks;  ///< system ticks at timer start % SAL_MAX_INT32
 
     void queueDispatchTimerEvent( bool bAtStart );
     void callTimerCallback();

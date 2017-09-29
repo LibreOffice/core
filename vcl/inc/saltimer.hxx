@@ -34,6 +34,7 @@
 class VCL_PLUGIN_PUBLIC SalTimer
 {
     SALTIMERPROC        m_pProc;
+
 public:
     SalTimer() : m_pProc( nullptr ) {}
     virtual ~SalTimer() COVERITY_NOEXCEPT_FALSE;
@@ -52,6 +53,45 @@ public:
     {
         if( m_pProc )
             m_pProc();
+    }
+};
+
+class VCL_PLUGIN_PUBLIC VersionedSalTimer : public SalTimer
+{
+    sal_Int32 m_nTimerEventVersion; ///< Version of the valid timer event
+
+public:
+    VersionedSalTimer() : m_nTimerEventVersion( -1 ) {}
+
+    virtual void Start( sal_uLong )
+    {
+        Stop();
+        assert( m_nTimerEventVersion < 0 && m_nTimerEventVersion > SAL_MIN_INT32 );
+        m_nTimerEventVersion *= -1;
+    }
+
+    virtual void Stop()
+    {
+        if ( m_nTimerEventVersion > 0 )
+        {
+            if ( m_nTimerEventVersion == SAL_MAX_INT32 )
+                m_nTimerEventVersion = -1;
+            else
+            {
+                ++m_nTimerEventVersion;
+                m_nTimerEventVersion *= -1;
+            }
+        }
+    }
+
+    inline bool IsStarted()
+    {
+        return m_nTimerEventVersion > 0;
+    }
+
+    inline sal_Int32 GetEventVersion() const
+    {
+        return m_nTimerEventVersion;
     }
 };
 

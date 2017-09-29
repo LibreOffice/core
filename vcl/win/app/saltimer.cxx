@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <tools/time.hxx>
-
 #include <svsys.h>
 #include <win/saldata.hxx>
 #include <win/saltimer.h>
@@ -46,7 +44,7 @@ void WinSalTimer::ImplStop()
         return;
 
     m_nTimerId = nullptr;
-    m_nTimerStartTicks = 0;
+    VersionedSalTimer::Stop();
     DeleteTimerQueueTimer( nullptr, hTimer, INVALID_HANDLE_VALUE );
     m_bPollForMessage = false;
 
@@ -69,21 +67,20 @@ void WinSalTimer::ImplStart( sal_uLong nMS )
     // cannot change a one-shot timer, so delete it and create a new one
     ImplStop();
 
+    VersionedSalTimer::Start( nMS );
     // keep the yield running, if a 0ms Idle is scheduled
     m_bPollForMessage = ( 0 == nMS );
-    m_nTimerStartTicks = tools::Time::GetMonotonicTicks() % SAL_MAX_UINT32;
     // probably WT_EXECUTEONLYONCE is not needed, but it enforces Period
     // to be 0 and should not hurt; also see
     // https://www.microsoft.com/msj/0499/pooling/pooling.aspx
     CreateTimerQueueTimer(&m_nTimerId, nullptr, SalTimerProc,
                           reinterpret_cast<void*>(
-                              sal_uIntPtr(m_nTimerStartTicks)),
+                              sal_IntPtr(GetEventVersion())),
                           nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
 }
 
 WinSalTimer::WinSalTimer()
     : m_nTimerId( nullptr )
-    , m_nTimerStartTicks( 0 )
     , m_bPollForMessage( false )
 {
 }
