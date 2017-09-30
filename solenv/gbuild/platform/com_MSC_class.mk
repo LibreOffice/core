@@ -150,7 +150,7 @@ else
 MSC_SUBSYSTEM_VERSION=$(COMMA)5.01
 endif
 
-# the sort on the libraries is used to filter out duplicates to keep commanline
+# the sort on the libraries is used to filter out duplicates to keep commandline
 # length in check - otherwise the dupes easily hit the limit when linking mergedlib
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
