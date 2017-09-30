@@ -933,30 +933,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                     else if( pMethod->pParams[i].bOut )
                     {
                         CComObject<JScriptOutParam>* pParamObject;
-                        if( SUCCEEDED( CComObject<JScriptOutParam>::CreateInstance( &pParamObject)))
-                        {
-                            CComPtr<IUnknown> pUnk(pParamObject->GetUnknown());
-                            CComQIPtr<IDispatch> pDisp( pUnk);
-
-                            pVarParams[ parameterCount - i -1].vt= VT_DISPATCH;
-                            pVarParams[ parameterCount - i -1].pdispVal= pDisp;
-                            pVarParams[ parameterCount - i -1].pdispVal->AddRef();
-                            // if the param is in/out then put the parameter on index 0
-                            if( pMethod->pParams[i].bIn ) // in / out
-                            {
-                                CComVariant varParam;
-                                anyToVariant( &varParam, Params.getConstArray()[i]);
-                                CComDispatchDriver dispDriver( pDisp);
-                                if(FAILED( dispDriver.PutPropertyByName( L"0", &varParam)))
-                                    throw BridgeRuntimeError(
-                                              "[automation bridge]IUnknownWrapper_Impl::"
-                                              "invokeWithDispIdUnoTlb\n"
-                                              "Could not set property \"0\" for the in/out "
-                                              "param!");
-
-                            }
-                        }
-                        else
+                        if( !SUCCEEDED( CComObject<JScriptOutParam>::CreateInstance( &pParamObject)))
                         {
                             throw BridgeRuntimeError(
                                       "[automation bridge]IUnknownWrapper_Impl::"
@@ -965,6 +942,26 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                                 OUString::number((sal_Int32) i));
                         }
 
+                        CComPtr<IUnknown> pUnk(pParamObject->GetUnknown());
+                        CComQIPtr<IDispatch> pDisp( pUnk);
+
+                        pVarParams[ parameterCount - i -1].vt= VT_DISPATCH;
+                        pVarParams[ parameterCount - i -1].pdispVal= pDisp;
+                        pVarParams[ parameterCount - i -1].pdispVal->AddRef();
+                        // if the param is in/out then put the parameter on index 0
+                        if( pMethod->pParams[i].bIn ) // in / out
+                        {
+                            CComVariant varParam;
+                            anyToVariant( &varParam, Params.getConstArray()[i]);
+                            CComDispatchDriver dispDriver( pDisp);
+                            if(FAILED( dispDriver.PutPropertyByName( L"0", &varParam)))
+                                throw BridgeRuntimeError(
+                                    "[automation bridge]IUnknownWrapper_Impl::"
+                                    "invokeWithDispIdUnoTlb\n"
+                                    "Could not set property \"0\" for the in/out "
+                                    "param!");
+
+                        }
                     }
                 }
             }
@@ -2211,21 +2208,18 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
     {
         ITypeInfo* pType= getTypeInfo();
         FUNCDESC * pDesc = nullptr;
-        if (SUCCEEDED(pType->GetFuncDesc(itIndex->second, & pDesc)))
-        {
-            if (pDesc->invkind == INVOKE_FUNC)
-            {
-                (*pFuncDesc) = pDesc;
-            }
-            else
-            {
-                pType->ReleaseFuncDesc(pDesc);
-            }
-        }
-        else
+        if (!SUCCEEDED(pType->GetFuncDesc(itIndex->second, & pDesc)))
         {
             throw BridgeRuntimeError("[automation bridge] Could not get "
                                      "FUNCDESC for " + sFuncName);
+        }
+        if (pDesc->invkind == INVOKE_FUNC)
+        {
+            (*pFuncDesc) = pDesc;
+        }
+        else
+        {
+            pType->ReleaseFuncDesc(pDesc);
         }
     }
    //else no entry found for sFuncName, pFuncDesc will not be filled in
@@ -2464,49 +2458,43 @@ ITypeInfo* IUnknownWrapper_Impl::getTypeInfo()
         if( ! m_spTypeInfo)
         {
             CComPtr< ITypeInfo > spType;
-            if( SUCCEEDED( m_spDispatch->GetTypeInfo( 0, LOCALE_USER_DEFAULT, &spType.p)))
-
-            {
-                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-
-                //If this is a dual interface then TYPEATTR::typekind is usually TKIND_INTERFACE
-                //We need to get the type description for TKIND_DISPATCH
-                TypeAttr typeAttr(spType.p);
-                if( SUCCEEDED(spType->GetTypeAttr( &typeAttr)))
-                {
-                    if (typeAttr->typekind == TKIND_INTERFACE &&
-                            typeAttr->wTypeFlags & TYPEFLAG_FDUAL)
-                    {
-                        HREFTYPE refDispatch;
-                        if (SUCCEEDED(spType->GetRefTypeOfImplType(::sal::static_int_cast< UINT, int >( -1 ), &refDispatch)))
-                        {
-                            CComPtr<ITypeInfo> spTypeDisp;
-                            if (SUCCEEDED(spType->GetRefTypeInfo(refDispatch, & spTypeDisp)))
-                                m_spTypeInfo= spTypeDisp;
-                        }
-                        else
-                        {
-                            throw BridgeRuntimeError(
-                                "[automation bridge] Could not obtain type information "
-                                "for dispatch interface." );
-                        }
-                    }
-                    else if (typeAttr->typekind == TKIND_DISPATCH)
-                    {
-                        m_spTypeInfo= spType;
-                    }
-                    else
-                    {
-                        throw BridgeRuntimeError(
-                            "[automation bridge] Automation object does not "
-                            "provide type information.");
-                    }
-                }
-            }
-            else
+            if( !SUCCEEDED( m_spDispatch->GetTypeInfo( 0, LOCALE_USER_DEFAULT, &spType.p)))
             {
                 throw BridgeRuntimeError("[automation bridge]The dispatch object does not "
                                          "support ITypeInfo!");
+            }
+
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+
+            //If this is a dual interface then TYPEATTR::typekind is usually TKIND_INTERFACE
+            //We need to get the type description for TKIND_DISPATCH
+            TypeAttr typeAttr(spType.p);
+            if( SUCCEEDED(spType->GetTypeAttr( &typeAttr)))
+            {
+                if (typeAttr->typekind == TKIND_INTERFACE &&
+                    typeAttr->wTypeFlags & TYPEFLAG_FDUAL)
+                {
+                    HREFTYPE refDispatch;
+                    if (!SUCCEEDED(spType->GetRefTypeOfImplType(::sal::static_int_cast< UINT, int >( -1 ), &refDispatch)))
+                    {
+                        throw BridgeRuntimeError(
+                            "[automation bridge] Could not obtain type information "
+                            "for dispatch interface." );
+                    }
+                    CComPtr<ITypeInfo> spTypeDisp;
+                    if (SUCCEEDED(spType->GetRefTypeInfo(refDispatch, & spTypeDisp)))
+                        m_spTypeInfo= spTypeDisp;
+                }
+                else if (typeAttr->typekind == TKIND_DISPATCH)
+                {
+                    m_spTypeInfo= spType;
+                }
+                else
+                {
+                    throw BridgeRuntimeError(
+                        "[automation bridge] Automation object does not "
+                        "provide type information.");
+                }
             }
         }
     }

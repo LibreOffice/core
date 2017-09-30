@@ -1836,22 +1836,21 @@ Reference<XInterface> UnoConversionUtilities<T>::createAdapter(const Sequence<Ty
     if( xAdapterFac.is())
         xIntAdapted= xAdapterFac->createAdapter( xInv, seqTypes);
 
-    if( xIntAdapted.is())
-    {
-        // Put the pointer to the wrapper object and the interface pointer of the adapted interface
-        // in a global map. Thus we can determine in a call to createUnoObjectWrapper whether the UNO
-        // object is a wrapped COM object. In that case we extract the original COM object rather than
-        // creating a wrapper around the UNO object.
-        typedef std::unordered_map<sal_uInt64,sal_uInt64>::value_type VALUE;
-        AdapterToWrapperMap.insert( VALUE( reinterpret_cast<sal_uInt64>(xIntAdapted.get()), reinterpret_cast<sal_uInt64>(receiver.get())));
-        WrapperToAdapterMap.insert( VALUE( reinterpret_cast<sal_uInt64>(receiver.get()), reinterpret_cast<sal_uInt64>(xIntAdapted.get())));
-    }
-    else
+    if( !xIntAdapted.is())
     {
         throw BridgeRuntimeError(
                   "[automation bridge]UnoConversionUtilities<T>::createOleObjectWrapper \n"
                   "Could not create a proxy for COM object! Creation of adapter failed.");
     }
+
+    // Put the pointer to the wrapper object and the interface pointer of the adapted interface
+    // in a global map. Thus we can determine in a call to createUnoObjectWrapper whether the UNO
+    // object is a wrapped COM object. In that case we extract the original COM object rather than
+    // creating a wrapper around the UNO object.
+    typedef std::unordered_map<sal_uInt64,sal_uInt64>::value_type VALUE;
+    AdapterToWrapperMap.insert( VALUE( reinterpret_cast<sal_uInt64>(xIntAdapted.get()), reinterpret_cast<sal_uInt64>(receiver.get())));
+    WrapperToAdapterMap.insert( VALUE( reinterpret_cast<sal_uInt64>(receiver.get()), reinterpret_cast<sal_uInt64>(xIntAdapted.get())));
+
     return xIntAdapted;
 }
 // "convertValueObject" converts a JScriptValue object contained in "var" into
