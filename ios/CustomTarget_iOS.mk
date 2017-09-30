@@ -14,9 +14,9 @@ IOSKITPRJ := $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj
 IOSAPPPRJ := $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj
 IOSAPP := $(INSTDIR)/LibreOfficeLight.app
 ifeq ($(ENABLE_DEBUG),TRUE)
-IOSKIT := iOSkit_$(CPUNAME)_debug.a
+IOSKIT := libLibreOfficeKit_$(CPUNAME)_debug.a
 else
-IOSKIT := iOSkit_$(CPUNAME).a
+IOSKIT := libLibreOfficeKit_$(CPUNAME).a
 endif
 
 
