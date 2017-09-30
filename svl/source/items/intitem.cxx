@@ -153,11 +153,6 @@ SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_uInt32 nValue):
 {
 }
 
-SfxMetricItem::SfxMetricItem(const SfxMetricItem & rItem):
-    SfxInt32Item(rItem)
-{
-}
-
 // virtual
 void SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
 {

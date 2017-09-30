@@ -149,12 +149,6 @@ SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
 {
 }
 
-SfxVoidItem::SfxVoidItem( const SfxVoidItem& rCopy):
-    SfxPoolItem(rCopy)
-{
-}
-
-
 bool SfxVoidItem::operator==( const SfxPoolItem& rCmp ) const
 {
     assert(SfxPoolItem::operator==(rCmp));

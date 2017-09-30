@@ -33,7 +33,6 @@ public:
                              static SfxPoolItem* CreateDefault();
                              SfxPointItem();
                              SfxPointItem( sal_uInt16 nWhich, const Point& rVal );
-                             SfxPointItem( const SfxPointItem& );
 
     virtual bool             GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
