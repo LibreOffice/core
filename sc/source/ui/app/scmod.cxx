@@ -1670,6 +1670,12 @@ bool ScModule::IsFormulaMode()
     //      Just keep function autopilot here for references to other documents
     bool bIsFormula = false;
 
+    // formula mode in online is not usable in collaborative mode,
+    // this is a workaround for disabling formula mode in online
+    // when there is more than a single view
+    if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::GetActiveShells() > 1)
+            return false;
+
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );
