@@ -355,7 +355,7 @@ namespace frm
         }
 
         OUString sText( aText.makeStringAndClear() );
-        if ( m_aText.compareTo( sText ) )
+        if ( m_aText != sText )
         {
             m_aText = sText;
             TextEvent aEvt;
@@ -513,7 +513,7 @@ namespace frm
             default:
                 return true;
         }
-        if (m_aText.compareTo(aText))
+        if ( m_aText != aText )
         {
             // check the text with the SQL-Parser
             OUString aNewText(aText);

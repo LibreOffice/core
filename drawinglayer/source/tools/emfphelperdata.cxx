@@ -1225,7 +1225,7 @@ namespace emfplushelper
                                 font->family,                                    // font family
                                 emptyString,                                     // (no) font style
                                 font->Bold() ? 8u : 1u,                          // weight: 8 = bold
-                                font->family.compareTo("SYMBOL") == 0, // symbol
+                                font->family == "SYMBOL",                        // symbol
                                 stringFormat->DirectionVertical(),               // vertical
                                 font->Italic(),                                  // italic
                                 false,                                           // monospaced
@@ -1617,7 +1617,7 @@ namespace emfplushelper
                                 font->family,                                    // font family
                                 emptyString,                                     // (no) font style
                                 font->Bold() ? 8u : 1u,                          // weight: 8 = bold
-                                font->family.compareTo("SYMBOL") == 0,           // symbol
+                                font->family == "SYMBOL",                        // symbol
                                 optionFlags & 0x2,                               // vertical
                                 font->Italic(),                                  // italic
                                 false,                                           // monospaced

@@ -793,7 +793,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
         if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
         {
             if( pLevelSettings->sBulletFont.getLength() &&
-                pLevelSettings->sBulletFont.compareTo(rActBulletFont.GetFamilyName()))
+                pLevelSettings->sBulletFont != rActBulletFont.GetFamilyName() )
             {
                 //search for the font
                 if(!pList)

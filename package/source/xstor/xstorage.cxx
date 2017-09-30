@@ -1092,7 +1092,7 @@ void OStorage_Impl::Commit()
                 uno::Any aPackageElement = m_xPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
                 xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
             }
-            else if ( (*pElementIter)->m_aName.compareTo( (*pElementIter)->m_aOriginalName ) )
+            else if ( (*pElementIter)->m_aName != (*pElementIter)->m_aOriginalName )
             {
                 // this is the case when xNewPackageFolder refers to m_xPackageFolder
                 // in case the name was changed and it is not a changed storage - rename the element
