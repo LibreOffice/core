@@ -618,7 +618,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 bool bForceSaveAs = nId == SID_SAVEDOC && IsReadOnlyMedium();
                 const SfxSlot* pSlot = GetModule()->GetSlotPool()->GetSlot( bForceSaveAs ? SID_SAVEASDOC : nId );
                 if ( !pSlot )
-                    throw uno::Exception();
+                    throw uno::Exception("no slot", nullptr);
 
                 SfxStoringHelper aHelper;
 

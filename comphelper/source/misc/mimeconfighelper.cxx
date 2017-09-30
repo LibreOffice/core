@@ -773,7 +773,7 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                 if ( !( nFlags & SfxFilterFlags::IMPORT ) )
                 {
                     OSL_FAIL( "This is no import filter!" );
-                    throw uno::Exception();
+                    throw uno::Exception("this is no import filter", nullptr);
                 }
 
                 if ( nFlags & SfxFilterFlags::EXPORT )

@@ -215,7 +215,7 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
                 break;
 
             default:
-                                throw Exception();
+                throw Exception("unknown prop " + OUString::number(nHandle));
         }
     }
     OTable_TYPEDEF::setFastPropertyValue_NoBroadcast(nHandle,rValue);

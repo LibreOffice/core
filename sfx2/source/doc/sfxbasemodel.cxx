@@ -3486,7 +3486,7 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
     SfxModelGuard aGuard( *this );
 
     if ( !m_pData->m_pObjectShell.is() )
-        throw Exception(); // TODO: error handling
+        throw Exception("no object shell", nullptr); // TODO: error handling
 
     SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get(), false );
     if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !pViewFrm->GetFrame().IsInPlace() )
@@ -3513,7 +3513,7 @@ awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 /*nAspect*/ )
     SfxModelGuard aGuard( *this );
 
     if ( !m_pData->m_pObjectShell.is() )
-        throw Exception(); // TODO: error handling
+        throw Exception("no object shell", nullptr); // TODO: error handling
 
     tools::Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
 
@@ -3526,7 +3526,7 @@ sal_Int32 SAL_CALL SfxBaseModel::getMapUnit( sal_Int64 /*nAspect*/ )
     SfxModelGuard aGuard( *this );
 
     if ( !m_pData->m_pObjectShell.is() )
-        throw Exception(); // TODO: error handling
+        throw Exception("no object shell", nullptr); // TODO: error handling
 
     return VCLUnoHelper::VCL2UnoEmbedMapUnit( m_pData->m_pObjectShell->GetMapUnit() );
 }

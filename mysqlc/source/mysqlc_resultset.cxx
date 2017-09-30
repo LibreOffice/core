@@ -988,7 +988,7 @@ void OResultSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& 
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw Exception();
+            throw Exception("cannot set prop " + rtl::OUString::number(nHandle), nullptr);
         case PROPERTY_ID_FETCHDIRECTION:
             break;
         case PROPERTY_ID_FETCHSIZE:
