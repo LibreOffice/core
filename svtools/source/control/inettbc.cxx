@@ -407,7 +407,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                     if (
                         !nMatchLen ||
                         (bExectMatch && aMatchName == aTitle) ||
-                        (!bExectMatch && aMatchName.compareTo(aTitle, nMatchLen) == 0)
+                        (!bExectMatch && aTitle.startsWith(aMatchName))
                        )
                     {
                         // all names fit if matchstring is empty
