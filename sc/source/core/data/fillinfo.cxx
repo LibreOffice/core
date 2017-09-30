@@ -656,7 +656,7 @@ void ScDocument::FillInfo(
     if (pCondFormList)
         pCondFormList->endRendering();
 
-    //  bedingte Formatierung auswerten
+    // evaluate conditional formatting
     std::vector< std::unique_ptr<ScPatternAttr> > aAltPatterns;
     // favour preview over condition
     if (bAnyCondition || bAnyPreview)

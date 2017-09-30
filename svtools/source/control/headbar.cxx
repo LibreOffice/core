@@ -73,7 +73,7 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
     mbOutDrag       = false;
     mbItemMode      = false;
 
-    // StyleBits auswerten
+    // evaluate StyleBits
     if ( nWinStyle & WB_DRAG )
         mbDragable = true;
     else

@@ -682,7 +682,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 {
     const sal_Int32 nTextLen = ImplGetText().getLength();
 
-    // loeschen moeglich?
+    // deleting possible?
     if ( !rSelection.Len() &&
          (((rSelection.Min() == 0) && (nDirection == EDIT_DEL_LEFT)) ||
           ((rSelection.Max() == nTextLen) && (nDirection == EDIT_DEL_RIGHT))) )
@@ -1557,7 +1557,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         break;
                     };
 
-                    // Range wird in ImplSetSelection geprueft...
+                    // range is checked in ImplSetSelection ...
                     if ( bGoLeft && aSel.Max() )
                     {
                         if ( bWord )
@@ -1727,7 +1727,7 @@ void Edit::Resize()
     if ( !mpSubEdit && IsReallyVisible() )
     {
         Control::Resize();
-        // Wegen vertikaler Zentrierung...
+        // because of vertical centering...
         mnXOffset = 0;
         ImplAlign();
         Invalidate();
@@ -1768,7 +1768,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawF
         }
     }
 
-    // Inhalt
+    // Content
     if ( ( nFlags & DrawFlags::Mono ) || ( eOutDevType == OUTDEV_PRINTER ) )
         pDev->SetTextColor( Color( COL_BLACK ) );
     else
@@ -1877,7 +1877,7 @@ void Edit::GetFocus()
         }
         else if ( maSelection.Len() )
         {
-            // Selektion malen
+            // paint the selection
             if ( !HasPaintEvent() )
                 ImplInvalidateOrRepaint();
             else
@@ -1911,7 +1911,7 @@ void Edit::LoseFocus()
         }
 
         if ( !mbActivePopup && !( GetStyle() & WB_NOHIDESELECTION ) && maSelection.Len() )
-            ImplInvalidateOrRepaint();    // Selektion malen
+            ImplInvalidateOrRepaint();    // paint the selection
     }
 
     Control::LoseFocus();
@@ -2975,7 +2975,7 @@ void Edit::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE )
     }
     else
     {
-        // Alten Cursor wegzeichnen...
+        // draw the old cursor away...
         if ( !mpDDInfo->bVisCursor || ( nPrevDropPos != mpDDInfo->nDropPos ) )
         {
             ImplHideDDCursor();

@@ -65,7 +65,7 @@ class SwRevisionConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    AuthorCharAttr  aInsertAttr;    //Revision/TextDisplay/Insert/Attribute  // Redlining: Author-Zeichenattribute
+    AuthorCharAttr  aInsertAttr;    //Revision/TextDisplay/Insert/Attribute  // Redlining: author character attributes
                                     //Revision/TextDisplay/Insert/Color
     AuthorCharAttr  aDeletedAttr;   //Revision/TextDisplay/Delete/Attribute
                                     //Revision/TextDisplay/Delete/Color

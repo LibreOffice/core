@@ -1587,7 +1587,7 @@ bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage,
         aPropOpt.CreateShapeProperties( mXShape );
         aPropOpt.Commit( *mpStrm );
         mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-        mpStrm->WriteInt16( maRect.Top() ).WriteInt16( maRect.Left() ).WriteInt16( maRect.Right() ).WriteInt16( maRect.Bottom() );      // oben, links, rechts, unten ????
+        mpStrm->WriteInt16( maRect.Top() ).WriteInt16( maRect.Left() ).WriteInt16( maRect.Right() ).WriteInt16( maRect.Bottom() );      // top, left, right, bottom ????
         mpPptEscherEx->OpenContainer( ESCHER_ClientData );
         mpPptEscherEx->AddAtom( 8, EPP_OEPlaceholderAtom );
         mpStrm->WriteUInt32( 0 )                // PlacementID
