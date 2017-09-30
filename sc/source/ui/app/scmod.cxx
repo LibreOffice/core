@@ -1673,6 +1673,16 @@ bool ScModule::IsFormulaMode()
     //      Just keep function autopilot here for references to other documents
     bool bIsFormula = false;
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        if (pViewShell)
+        {
+            if (SfxViewShell::GetNext(*pViewShell))
+                return false;
+        }
+    }
+
     if ( nCurRefDlgId )
     {
         SfxChildWindow* pChildWnd = lcl_GetChildWinFromAnyView( nCurRefDlgId );

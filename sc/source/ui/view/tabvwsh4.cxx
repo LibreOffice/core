@@ -1734,6 +1734,24 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     //put things back as we found them
     if (bInstalledScTabViewObjAsTempController)
         GetViewData().GetDocShell()->GetModel()->setCurrentController(nullptr);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        if (pViewShell)
+        {
+            SfxViewShell* pViewShell2 = SfxViewShell::GetNext(*pViewShell, false);
+            if (pViewShell2 && pViewShell2 == this)
+            {
+                ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+                ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
+                if (pInputHdl && pInputHdl->IsFormulaMode())
+                {
+                    pInputHdl->SetMode(SC_INPUT_NONE);
+                }
+            }
+        }
+    }
 }
 
 ScTabViewShell::~ScTabViewShell()

@@ -2365,6 +2365,18 @@ void ScInputHandler::UpdateFormulaMode()
             (rText[0] == '=' || rText[0] == '+' || rText[0] == '-');
     }
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        if (pViewShell)
+        {
+            if (SfxViewShell::GetNext(*pViewShell, false))
+            {
+                bIsFormula = false;
+            }
+        }
+    }
+
     if ( bIsFormula )
     {
         if (!bFormulaMode)
