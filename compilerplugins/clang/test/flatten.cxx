@@ -56,13 +56,16 @@ void top4() {
 }
 
 void top5() {
-    // no warning expected
 #if 1
     if (foo() == 2) {
-        bar();
+        if (foo() == 3) { // expected-note {{if condition here [loplugin:flatten]}}
+            bar();
+        } else {
+            throw std::exception(); // expected-error {{unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case [loplugin:flatten]}}
+        }
     } else
 #endif
-        throw std::exception();
+        throw std::exception(); // no warning expected
 }
 
 int main() {
