@@ -206,7 +206,7 @@ int32_t WindowsOSVersion()
             FreeLibrary(hLibrary);
             if (dwCount != 0 && dwCount < SAL_N_ELEMENTS(szPath))
             {
-                dwCount = GetFileVersionInfoSizeW(szPath, NULL);
+                dwCount = GetFileVersionInfoSizeW(szPath, nullptr);
                 if (dwCount != 0)
                 {
                     std::unique_ptr<char> ver(new char[dwCount]);
@@ -216,7 +216,7 @@ int32_t WindowsOSVersion()
                         UINT dwBlockSz = 0;
                         if (VerQueryValueW(ver.get(), L"\\", &pBlock, &dwBlockSz) != FALSE && dwBlockSz >= sizeof(VS_FIXEDFILEINFO))
                         {
-                            VS_FIXEDFILEINFO *vinfo = reinterpret_cast<VS_FIXEDFILEINFO *>(pBlock);
+                            VS_FIXEDFILEINFO *vinfo = static_cast<VS_FIXEDFILEINFO *>(pBlock);
                             winVersion = int32_t(vinfo->dwProductVersionMS);
                         }
                     }
