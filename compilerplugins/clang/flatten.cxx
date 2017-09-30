@@ -37,6 +37,50 @@ public:
         return RecursiveASTVisitor::TraverseFunctionDecl(decl);
     }
 
+#if CLANG_VERSION >= 50000
+    bool TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl * decl) {
+        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
+            return true;
+        }
+        return RecursiveASTVisitor::TraverseCXXDeductionGuideDecl(decl);
+    }
+#endif
+
+    bool TraverseCXXMethodDecl(CXXMethodDecl * decl) {
+        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
+            return true;
+        }
+        return RecursiveASTVisitor::TraverseCXXMethodDecl(decl);
+    }
+
+    bool TraverseCXXConstructorDecl(CXXConstructorDecl * decl) {
+        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
+            return true;
+        }
+        return RecursiveASTVisitor::TraverseCXXConstructorDecl(decl);
+    }
+
+    bool TraverseCXXDestructorDecl(CXXDestructorDecl * decl) {
+        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
+            return true;
+        }
+        return RecursiveASTVisitor::TraverseCXXDestructorDecl(decl);
+    }
+
+    bool TraverseCXXConversionDecl(CXXConversionDecl * decl) {
+        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
+            return true;
+        }
+        return RecursiveASTVisitor::TraverseCXXConversionDecl(decl);
+    }
+
+    bool TraverseObjCMethodDecl(ObjCMethodDecl * decl) {
+        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
+            return true;
+        }
+        return RecursiveASTVisitor::TraverseObjCMethodDecl(decl);
+    }
+
     bool TraverseCXXCatchStmt(CXXCatchStmt * );
     bool VisitIfStmt(IfStmt const * );
 private:
