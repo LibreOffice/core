@@ -1333,6 +1333,37 @@ void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue 
 }
 
 
+// returns the number of current available shells of spec. type viewing the specified doc.
+size_t SfxViewShell::GetActiveShells ( bool bOnlyVisible )
+{
+    size_t nShells = 0;
+
+    // search for a SfxViewShell of the specified type
+    SfxViewShellArr_Impl &rShells = SfxGetpApp()->GetViewShells_Impl();
+    SfxViewFrameArr_Impl &rFrames = SfxGetpApp()->GetViewFrames_Impl();
+    for (SfxViewShell* pShell : rShells)
+    {
+        if ( pShell )
+        {
+            // sometimes dangling SfxViewShells exist that point to a dead SfxViewFrame
+            // these ViewShells shouldn't be accessible anymore
+            // a destroyed ViewFrame is not in the ViewFrame array anymore, so checking this array helps
+            for (SfxViewFrame* pFrame : rFrames)
+            {
+                if ( pFrame == pShell->GetViewFrame() )
+                {
+                    // only ViewShells with a valid ViewFrame will be returned
+                    if ( !bOnlyVisible || pFrame->IsVisible() )
+                        ++nShells;
+                }
+            }
+        }
+    }
+
+    return nShells;
+}
+
+
 // returns the first shell of spec. type viewing the specified doc.
 SfxViewShell* SfxViewShell::GetFirst
 (

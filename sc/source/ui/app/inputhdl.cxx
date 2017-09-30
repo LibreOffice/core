@@ -2360,6 +2360,18 @@ void ScInputHandler::UpdateFormulaMode()
             (rText[0] == '=' || rText[0] == '+' || rText[0] == '-');
     }
 
+    // formula mode in online is not usable in collaborative mode,
+    // this is a workaround for disabling formula mode in online
+    // when there is more than a single view
+    if (comphelper::LibreOfficeKit::isActive()
+        && SfxViewShell::GetActiveShells(/*only visible shells*/ false) > 1)
+    {
+        // we look for not visible shells, too, since this method can be
+        // invoked by a TabViewShell ctor and at such a stage the view
+        // is not yet visible,
+        bIsFormula = false;
+    }
+
     if ( bIsFormula )
     {
         if (!bFormulaMode)
