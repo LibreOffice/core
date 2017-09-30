@@ -73,27 +73,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 
-namespace
-{
-    FieldUnit lcl_GetFieldUnit()
-    {
-        FieldUnit eUnit = FUNIT_CM;
-        const SfxPoolItem* pItem = nullptr;
-        SfxViewFrame* pCurrent = SfxViewFrame::Current();
-        SfxItemState eState = pCurrent ? pCurrent->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem) : SfxItemState::UNKNOWN;
-        if (pItem && eState >= SfxItemState::DEFAULT)
-        {
-            eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>( pItem )->GetValue();
-        }
-        else
-        {
-            return SfxModule::GetCurrentFieldUnit();
-        }
-
-        return eUnit;
-    }
-}
-
 namespace sd { namespace sidebar {
 
 enum eFillStyle
@@ -144,7 +123,6 @@ SlideBackground::SlideBackground(
     mbTitle(false),
     mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) ),
     mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) ),
-    meFieldUnit(lcl_GetFieldUnit()),
     m_nPageLeftMargin(0),
     m_nPageRightMargin(0),
     m_nPageTopMargin(0),

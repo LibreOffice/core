@@ -131,7 +131,6 @@ private:
     bool         mbTitle;
     std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
     std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
-    FieldUnit meFieldUnit;
     long m_nPageLeftMargin;
     long m_nPageRightMargin;
     long m_nPageTopMargin;
