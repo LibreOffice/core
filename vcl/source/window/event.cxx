@@ -342,22 +342,6 @@ ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCalle
     return pSVEvent;
 }
 
-void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
-{
-    SAL_WARN_IF( nUserEvent->mpWindow.get() != this, "vcl",
-                "Window::RemoveUserEvent(): Event doesn't send to this window or is already removed" );
-    SAL_WARN_IF( !nUserEvent->mbCall, "vcl",
-                "Window::RemoveUserEvent(): Event is already removed" );
-
-    if ( nUserEvent->mpWindow )
-    {
-        nUserEvent->mpWindow = nullptr;
-    }
-
-    nUserEvent->mbCall = false;
-}
-
-
 static MouseEvent ImplTranslateMouseEvent( const MouseEvent& rE, vcl::Window const * pSource, vcl::Window const * pDest )
 {
     // the mouse event occurred in a different window, we need to translate the coordinates of
