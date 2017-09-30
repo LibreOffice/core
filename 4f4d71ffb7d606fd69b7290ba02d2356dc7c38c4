@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4cd596b7",
+        "filename": "vcl/inc/saltimer.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-09-30T10:30:52Z",
+      "side": 1,
+      "message": "you\u0027re effectively mixing a boolean bIsStarted field and the eventVersion field. Is that really necessary? If it\u0027s really necessary for efficientcy, then no problem, but otherwise seems like more complication than we need in an already complicated part of the system :-)",
+      "revId": "4f4d71ffb7d606fd69b7290ba02d2356dc7c38c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
