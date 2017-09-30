@@ -36,10 +36,7 @@ protected:
         , m_nValue(nValue)
     { }
 
-    SfxEnumItem(const SfxEnumItem & rItem)
-        : SfxEnumItemInterface(rItem)
-        , m_nValue(rItem.m_nValue)
-    { }
+    SfxEnumItem(const SfxEnumItem &) = default;
 
     SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
         : SfxEnumItemInterface(nWhich)
@@ -93,11 +90,6 @@ public:
     explicit SfxBoolItem(sal_uInt16 const nWhich = 0, bool const bValue = false)
         : SfxPoolItem(nWhich)
         , m_bValue(bValue)
-    { }
-
-    SfxBoolItem(SfxBoolItem const& rItem)
-        : SfxPoolItem(rItem)
-        , m_bValue(rItem.m_bValue)
     { }
 
     SfxBoolItem(sal_uInt16 nWhich, SvStream & rStream);
