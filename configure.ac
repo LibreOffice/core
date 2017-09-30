@@ -2872,12 +2872,12 @@ if test $_os = iOS; then
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
         versionmin=-mios-simulator-version-min=9.3
-        IOS_ARCHS=x86_64
+        IOS_ARCH=x86_64
         BITNESS=-fembed-bitcode
     else
         platform=iPhoneOS
         versionmin=-miphoneos-version-min=9.3
-        IOS_ARCHS=arm64
+        IOS_ARCH=arm64
         BITNESS=-fembed-bitcode
     fi
     xcode_developer=`xcode-select -print-path`
@@ -2909,11 +2909,10 @@ if test $_os = iOS; then
     # get compiled with it, to avoid ld warnings when linking all that together into one
     # executable.
 
-    IOS_CLANG_CXX_LIBRARY=libc++
-    stdlib="-stdlib=$IOS_CLANG_CXX_LIBRARY"
+    stdlib="-stdlib=libc++"
 
-    CC="`xcrun -find clang` -arch $IOS_ARCHS -fvisibility=hidden $BITNESS -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $IOS_ARCHS -fvisibility=hidden $stdlib $BITNESS -isysroot $sysroot $lto $versionmin"
+    CC="`xcrun -find clang` -arch $IOS_ARCH -fvisibility=hidden $BITNESS -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $IOS_ARCH -fvisibility=hidden $stdlib $BITNESS -isysroot $sysroot $lto $versionmin"
 
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
@@ -2923,8 +2922,7 @@ if test $_os = iOS; then
     RANLIB=`xcrun -find ranlib`
 fi
 
-AC_SUBST(IOS_CLANG_CXX_LIBRARY)
-AC_SUBST(IOS_ARCHS)
+AC_SUBST(IOS_ARCH)
 AC_SUBST(IOS_SDK)
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
@@ -3867,15 +3865,6 @@ if test -n "$with_android_ndk" -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" 
         AC_MSG_RESULT([yes])
     fi
 fi
-
-# Debug information format for iOS. Running dsymutil takes a long time... you really need a separate
-# .dSYM only if running Instruments, I think. (Not for normal debugging in Xcode.) To enable a
-# separate .dSYM, either use --enable-release-build or change manually to "DWARF with DSYM" in Xcode.
-IOS_DEBUG_INFORMATION_FORMAT=dwarf-with-dsym
-if test "$enable_release_build" != yes -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \); then
-    IOS_DEBUG_INFORMATION_FORMAT=dwarf
-fi
-AC_SUBST(IOS_DEBUG_INFORMATION_FORMAT)
 
 AC_MSG_CHECKING([whether to compile with optimization flags])
 if test -z "$enable_optimized"; then
