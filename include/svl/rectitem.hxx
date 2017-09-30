@@ -34,7 +34,6 @@ public:
                              static SfxPoolItem* CreateDefault();
                              SfxRectangleItem();
                              SfxRectangleItem( sal_uInt16 nWhich, const tools::Rectangle& rVal );
-                             SfxRectangleItem( const SfxRectangleItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

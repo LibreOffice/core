@@ -44,18 +44,6 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 }
 
 
-SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
-:   SfxPoolItem( rItem ),
-    _xVal( rItem._xVal )
-{
-}
-
-
-SfxLockBytesItem::~SfxLockBytesItem()
-{
-}
-
-
 bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
 {
     return static_cast<const SfxLockBytesItem&>(rItem)._xVal == _xVal;

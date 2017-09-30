@@ -30,13 +30,6 @@ SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
 }
 
 
-SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
-    SfxPoolItem( rItem ),
-    nVal( rItem.nVal )
-{
-}
-
-
 SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
 {
     rStream.WriteUInt16( nVal );

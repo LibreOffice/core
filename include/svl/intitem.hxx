@@ -51,10 +51,6 @@ public:
 
     SfxInt16Item(sal_uInt16 nWhich, SvStream & rStream);
 
-    SfxInt16Item(const SfxInt16Item & rItem):
-        SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
-    {}
-
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,

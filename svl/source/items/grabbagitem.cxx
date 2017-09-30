@@ -24,8 +24,6 @@ SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich) :
 {
 }
 
-SfxGrabBagItem::~SfxGrabBagItem() = default;
-
 bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
 {
     auto pItem = static_cast<const SfxGrabBagItem*>(&rItem);

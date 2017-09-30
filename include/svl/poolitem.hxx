@@ -243,12 +243,9 @@ inline bool IsInvalidItem(const SfxPoolItem *pItem)
 
 class SVL_DLLPUBLIC SfxVoidItem final: public SfxPoolItem
 {
-    SfxVoidItem & operator=( const SfxVoidItem& ) = delete;
 public:
                             static SfxPoolItem* CreateDefault();
                             explicit SfxVoidItem( sal_uInt16 nWhich );
-                            SfxVoidItem( const SfxVoidItem& );
-                            virtual ~SfxVoidItem() override;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
 

@@ -34,8 +34,6 @@ public:
     SfxIntegerListItem();
     SfxIntegerListItem( sal_uInt16 nWhich, const ::std::vector < sal_Int32 >& rList );
     SfxIntegerListItem( sal_uInt16 nWhich, const css::uno::Sequence < sal_Int32 >& rList );
-    SfxIntegerListItem( const SfxIntegerListItem& rItem );
-    virtual ~SfxIntegerListItem() override;
 
     const std::vector< sal_Int32 >& GetList() const { return m_aList; }
 

@@ -46,15 +46,6 @@ SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const css::uno::Sequen
         m_aList[n] = rList[n];
 }
 
-SfxIntegerListItem::SfxIntegerListItem( const SfxIntegerListItem& rItem )
-    : SfxPoolItem( rItem )
-    , m_aList( rItem.m_aList )
-{
-}
-
-SfxIntegerListItem::~SfxIntegerListItem()
-{
-}
 
 bool SfxIntegerListItem::operator==( const SfxPoolItem& rPoolItem ) const
 {

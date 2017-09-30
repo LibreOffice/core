@@ -20,9 +20,6 @@ class SVL_DLLPUBLIC SfxInt64Item : public SfxPoolItem
 public:
     SfxInt64Item( sal_uInt16 nWhich, sal_Int64 nVal );
     SfxInt64Item( sal_uInt16 nWhich, SvStream & rStream );
-    SfxInt64Item( const SfxInt64Item& rItem );
-
-    virtual ~SfxInt64Item() override;
 
     virtual bool operator== ( const SfxPoolItem& rItem ) const override;
 

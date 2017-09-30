@@ -43,13 +43,6 @@ SfxRectangleItem::SfxRectangleItem( sal_uInt16 nW, const tools::Rectangle& rVal 
 }
 
 
-SfxRectangleItem::SfxRectangleItem( const SfxRectangleItem& rItem ) :
-    SfxPoolItem( rItem ),
-    aVal( rItem.aVal )
-{
-}
-
-
 bool SfxRectangleItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,

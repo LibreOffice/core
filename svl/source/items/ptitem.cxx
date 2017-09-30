@@ -46,13 +46,6 @@ SfxPointItem::SfxPointItem( sal_uInt16 nW, const Point& rVal ) :
 }
 
 
-SfxPointItem::SfxPointItem( const SfxPointItem& rItem ) :
-    SfxPoolItem( rItem ),
-    aVal( rItem.aVal )
-{
-}
-
-
 bool SfxPointItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,

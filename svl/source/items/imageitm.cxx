@@ -44,7 +44,7 @@ SfxImageItem::SfxImageItem( sal_uInt16 which )
 
 SfxImageItem::SfxImageItem( const SfxImageItem& rItem )
     : SfxInt16Item( rItem ),
-      pImpl( new SfxImageItem_Impl( *(rItem.pImpl.get()) ) )
+      pImpl( new SfxImageItem_Impl( *rItem.pImpl ) )
 {
 }
 

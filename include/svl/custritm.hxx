@@ -37,10 +37,6 @@ public:
         SfxPoolItem(which), m_aValue(rTheValue)
     {}
 
-    CntUnencodedStringItem(const CntUnencodedStringItem & rItem):
-        SfxPoolItem(rItem), m_aValue(rItem.m_aValue)
-    {}
-
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,

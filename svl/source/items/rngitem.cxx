@@ -32,14 +32,6 @@ SfxRangeItem::SfxRangeItem( sal_uInt16 which, sal_uInt16 from, sal_uInt16 to ):
 }
 
 
-SfxRangeItem::SfxRangeItem( const SfxRangeItem& rItem ) :
-    SfxPoolItem( rItem )
-{
-    nFrom = rItem.nFrom;
-    nTo = rItem.nTo;
-}
-
-
 bool SfxRangeItem::GetPresentation
 (
     SfxItemPresentation     /*ePresentation*/,

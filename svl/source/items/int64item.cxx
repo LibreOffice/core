@@ -21,13 +21,6 @@ SfxInt64Item::SfxInt64Item( sal_uInt16 nWhich, SvStream& rStream ) :
     rStream.ReadInt64(mnValue);
 }
 
-SfxInt64Item::SfxInt64Item( const SfxInt64Item& rItem ) :
-    SfxPoolItem(rItem), mnValue(rItem.mnValue)
-{
-}
-
-SfxInt64Item::~SfxInt64Item() {}
-
 bool SfxInt64Item::operator== ( const SfxPoolItem& rItem ) const
 {
     return mnValue == static_cast<const SfxInt64Item&>(rItem).mnValue;

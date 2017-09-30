@@ -149,12 +149,6 @@ SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
 {
 }
 
-SfxVoidItem::SfxVoidItem( const SfxVoidItem& rCopy):
-    SfxPoolItem(rCopy)
-{
-}
-
-
 bool SfxVoidItem::operator==( const SfxPoolItem& rCmp ) const
 {
     assert(SfxPoolItem::operator==(rCmp));
@@ -215,10 +209,6 @@ bool SfxPoolItem::PutValue( const css::uno::Any&, sal_uInt8 )
 {
     OSL_FAIL("There is no implementation for PutValue for this item!");
     return false;
-}
-
-SfxVoidItem::~SfxVoidItem()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

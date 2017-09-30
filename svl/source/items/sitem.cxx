@@ -42,7 +42,7 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, std::unique_ptr<SfxItemSet> &&pS) :
 
 
 SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
-    SfxPoolItem(rCopy.Which()),
+    SfxPoolItem(rCopy),
     pSet(rCopy.pSet->Clone(true, pPool))
 {
 }

@@ -73,19 +73,6 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
     }
 }
 
-
-SfxStringListItem::SfxStringListItem( const SfxStringListItem& rItem ) :
-    SfxPoolItem( rItem ),
-    pImpl(rItem.pImpl)
-{
-}
-
-
-SfxStringListItem::~SfxStringListItem()
-{
-}
-
-
 std::vector<OUString>& SfxStringListItem::GetList()
 {
     if( !pImpl )
