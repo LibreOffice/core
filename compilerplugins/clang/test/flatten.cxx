@@ -55,6 +55,16 @@ void top4() {
     (void)x;
 }
 
+void top5() {
+    // no warning expected
+#if 1
+    if (foo() == 2) {
+        bar();
+    } else
+#endif
+        throw std::exception();
+}
+
 int main() {
     // no warning expected
     if (bar() == 3) {
