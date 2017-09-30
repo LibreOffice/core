@@ -66,12 +66,11 @@ sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::getSecurityEnvironmentNumber(
 css::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_MSCryptImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
 {
-    if (index == 0)
+    if (index != 0)
     {
-        return m_xSecurityEnvironment;
-    }
-    else
         throw RuntimeException() ;
+    }
+    return m_xSecurityEnvironment;
 }
 
 css::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
