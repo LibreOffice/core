@@ -70,7 +70,7 @@ class SvxEditModulesDlg : public ModalDialog
     SvxLinguData_Impl*  pDefaultLinguData;
     SvxLinguData_Impl&  rLinguData;
 
-    SvLBoxButtonData*   pCheckButtonData;
+    std::unique_ptr<SvLBoxButtonData>   pCheckButtonData;
 
     SvTreeListEntry*    CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 

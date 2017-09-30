@@ -1839,12 +1839,12 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     if( !pCheckButtonData )
     {
-        pCheckButtonData = new SvLBoxButtonData(m_pModulesCLB);
+        pCheckButtonData.reset(new SvLBoxButtonData(m_pModulesCLB));
         pCheckButtonData->SetLink( LINK( this, SvxEditModulesDlg, BoxCheckButtonHdl_Impl2 ) );
     }
 
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData.get()));
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));    // empty column
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
