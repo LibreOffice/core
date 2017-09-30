@@ -160,6 +160,7 @@ void Window::ImplGenerateMouseMove()
 
 IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl, void*, void)
 {
+    Application::RemoveUserEvent(mpWindowImpl->mpFrameData->mnMouseMoveId);
     mpWindowImpl->mpFrameData->mnMouseMoveId = nullptr;
     vcl::Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;
     if( ! pCaptureWin ||
