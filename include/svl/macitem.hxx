@@ -137,16 +137,11 @@ public:
 private:
     SvxMacroTableDtor aMacroTable;
 
-    inline SvxMacroItem( const SvxMacroItem& );
-    SvxMacroItem &operator=( const SvxMacroItem & ) = delete;
+    SvxMacroItem( const SvxMacroItem& ) = default;
 };
 
 inline SvxMacroItem::SvxMacroItem( const sal_uInt16 nId )
     : SfxPoolItem( nId )
-{}
-inline SvxMacroItem::SvxMacroItem( const SvxMacroItem &rCpy )
-    : SfxPoolItem( rCpy ),
-    aMacroTable( rCpy.GetMacroTable() )
 {}
 
 inline bool SvxMacroItem::HasMacro( SvMacroItemId nEvent ) const
