@@ -1744,6 +1744,32 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     //put things back as we found them
     if (bInstalledScTabViewObjAsTempController)
         GetViewData().GetDocShell()->GetModel()->setCurrentController(nullptr);
+
+    // formula mode in online is not usable in collaborative mode,
+    // this is a workaround for disabling formula mode in online
+    // when there is more than a single slide
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        // have we already one view ?
+        if (pViewShell)
+        {
+            // this view is not yet visible at this stage, so we look for not visible views, too
+            SfxViewShell* pViewShell2 = SfxViewShell::GetNext(*pViewShell, /*only visible shells*/ false);
+            // if the second view is not this one, it means that there is
+            // already more than one active view and so the formula mode
+            // has already been disabled
+            if (pViewShell2 && pViewShell2 == this)
+            {
+                ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+                ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
+                if (pInputHdl && pInputHdl->IsFormulaMode())
+                {
+                    pInputHdl->SetMode(SC_INPUT_NONE);
+                }
+            }
+        }
+    }
 }
 
 ScTabViewShell::~ScTabViewShell()
