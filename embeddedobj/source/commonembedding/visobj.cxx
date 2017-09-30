@@ -63,7 +63,7 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         changeState( embed::EmbedStates::LOADED );
 
     if ( !bSuccess )
-        throw uno::Exception(); // TODO:
+        throw uno::Exception("SetExtent failed", nullptr); // TODO:
 }
 
 awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
@@ -97,7 +97,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         changeState( embed::EmbedStates::LOADED );
 
     if ( !bSuccess )
-        throw uno::Exception(); // TODO:
+        throw uno::Exception("GetExtent failed", nullptr); // TODO:
 
     return aResult;
 }
@@ -136,7 +136,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         changeState( embed::EmbedStates::LOADED );
 
     if ( nResult < 0  )
-        throw uno::Exception(); // TODO:
+        throw uno::Exception("result " + OUString::number(nResult), nullptr); // TODO:
 
     return nResult;
 }

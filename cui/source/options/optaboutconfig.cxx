@@ -650,7 +650,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
 
                         //if the value is 0 and length is not 1, there is something wrong
                         if( ( nNumb==0 && sNewValue.getLength()!=1 ) || nNumb >= SAL_MAX_INT16 || nNumb <= SAL_MIN_INT16)
-                            throw uno::Exception();
+                            throw uno::Exception("out of range short", nullptr);
                         nShort = (sal_Int16) nNumb;
                         pProperty->Value <<= nShort;
                     }
@@ -658,28 +658,28 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     {
                         sal_Int32 nLong = sNewValue.toInt32();
                         if( ( nLong==0 && sNewValue.getLength()!=1 ) || nLong >= SAL_MAX_INT32 || nLong <= SAL_MIN_INT32)
-                            throw uno::Exception();
+                            throw uno::Exception("out of range long", nullptr);
                         pProperty->Value <<= nLong;
                     }
                     else if( sPropertyType == "hyper")
                     {
                         sal_Int64 nHyper = sNewValue.toInt64();
                         if( ( nHyper==0 && sNewValue.getLength()!=1 ) || nHyper >= SAL_MAX_INT32 || nHyper <= SAL_MIN_INT32)
-                            throw uno::Exception();
+                            throw uno::Exception("out of range hyper", nullptr);
                         pProperty->Value <<= nHyper;
                     }
                     else if( sPropertyType == "double")
                     {
                         double nDoub = sNewValue.toDouble();
                         if( ( nDoub ==0 && sNewValue.getLength()!=1 ) || nDoub >= SAL_MAX_INT32 || nDoub <= SAL_MIN_INT32)
-                            throw uno::Exception();
+                            throw uno::Exception("out of range double", nullptr);
                         pProperty->Value <<= nDoub;
                     }
                     else if( sPropertyType == "float")
                     {
                         float nFloat = sNewValue.toFloat();
                         if( ( nFloat ==0 && sNewValue.getLength()!=1 ) || nFloat >= SAL_MAX_INT32 || nFloat <= SAL_MIN_INT32)
-                            throw uno::Exception();
+                            throw uno::Exception("out of range float", nullptr);
                          pProperty->Value <<= nFloat;
                     }
                     else if( sPropertyType == "string" )
@@ -752,7 +752,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                         pProperty->Value <<= comphelper::containerToSequence( commaStringToSequence( sNewValue ));
                     }
                     else //unknown
-                        throw uno::Exception();
+                        throw uno::Exception("unknown property type " + sPropertyType, nullptr);
 
                     sDialogValue = sNewValue;
                 }
