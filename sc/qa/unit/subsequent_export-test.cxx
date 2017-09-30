@@ -4870,7 +4870,7 @@ void ScExportTest::testPivotTablePageFieldFilter()
 void ScExportTest::testPivotTableFirstHeaderRowXLSX()
 {
     // tdf#112733: We have different tables here, but have the same value as firstHeaderRow
-    // The documentation is not clear about thit firstHeaderRow actually measn, but MS Excel works on this way
+    // The documentation is not clear about what firstHeaderRow actually means, but MS Excel works on this way
     ScDocShellRef xShell = loadDoc("pivot_table_first_header_row.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xShell.is());
 
