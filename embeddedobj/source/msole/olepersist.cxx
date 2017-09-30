@@ -1013,16 +1013,16 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
 
     // TODO: use bStoreVisReplace
 
-    if ( xTempInStream.is() )
+    if ( !xTempInStream.is() )
     {
-        // write all the contents to XOutStream
-        uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY_THROW );
-        xTrunc->truncate();
-
-        ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
-    }
-    else
         throw io::IOException(); // TODO:
+    }
+
+    // write all the contents to XOutStream
+    uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY_THROW );
+    xTrunc->truncate();
+
+    ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
 
     // TODO: should the view replacement be in the stream ???
     //       probably it must be specified on storing

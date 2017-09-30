@@ -63,26 +63,23 @@ using namespace ::com::sun::star;
 
 void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
 {
-    if ( m_pOleComponent )
-    {
-        try
-        {
-            m_pOleComponent->RunObject();
-        }
-        catch( const embed::UnreachableStateException& )
-        {
-            GetRidOfComponent();
-            throw;
-        }
-        catch( const embed::WrongStateException& )
-        {
-            GetRidOfComponent();
-            throw;
-        }
-    }
-    else
+    if ( !m_pOleComponent )
     {
         throw embed::UnreachableStateException();
+    }
+    try
+    {
+        m_pOleComponent->RunObject();
+    }
+    catch( const embed::UnreachableStateException& )
+    {
+        GetRidOfComponent();
+        throw;
+    }
+    catch( const embed::WrongStateException& )
+    {
+        GetRidOfComponent();
+        throw;
     }
 }
 
