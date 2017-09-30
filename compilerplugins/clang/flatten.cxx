@@ -30,11 +30,11 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    bool TraverseFunctionDecl(FunctionDecl * decl) {
+    bool WalkUpFromFunctionDecl(FunctionDecl * decl) {
         if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
-            return true;
+            return false;
         }
-        return RecursiveASTVisitor::TraverseFunctionDecl(decl);
+        return RecursiveASTVisitor::WalkUpFromFunctionDecl(decl);
     }
 
     bool TraverseCXXCatchStmt(CXXCatchStmt * );
