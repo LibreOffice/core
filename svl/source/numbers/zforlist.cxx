@@ -4333,7 +4333,7 @@ sal_uInt16 NfCurrencyEntry::GetEffectivePositiveFormat( sal_uInt16 nIntlFormat,
 //! Call this only if nCurrFormat is really with parentheses!
 static sal_uInt16 lcl_MergeNegativeParenthesisFormat( sal_uInt16 nIntlFormat, sal_uInt16 nCurrFormat )
 {
-    short nSign = 0;        // -1:=Klammer 0:=links, 1:=mitte, 2:=rechts
+    short nSign = 0;        // -1:=bracket 0:=left, 1:=middle, 2:=right
     switch ( nIntlFormat )
     {
     case 0:                                         // ($1)

@@ -3821,7 +3821,7 @@ PPTCharSheet::PPTCharSheet( const PPTCharSheet& rAttr )
 
 void PPTCharSheet::Read( SvStream& rIn, sal_uInt32 nLevel)
 {
-    // Zeichenattribute
+    // character attributes
     sal_uInt32 nCMask;
     sal_uInt16 nVal16;
     rIn.ReadUInt32( nCMask );
@@ -3923,7 +3923,7 @@ void PPTParaSheet::Read( SdrPowerPointImport const &
                     , SvStream& rIn
                     , sal_uInt32 nLevel, bool bFirst )
 {
-    // Absatzattribute
+    // paragraph attributes
     sal_uInt16  nVal16, i, nMask16;
     sal_uInt32  nVal32, nPMask;
     rIn.ReadUInt32( nPMask );
