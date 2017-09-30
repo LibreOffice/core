@@ -299,18 +299,15 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 void SAL_CALL CXTDataObject::renderLocaleAndSetupStgMedium(
     FORMATETC const & fetc, STGMEDIUM& stgmedium )
 {
-    if ( m_FormatRegistrar.hasSynthesizedLocale( ) )
-    {
-        LCID lcid = CFormatRegistrar::getSynthesizedLocale( );
-        renderDataAndSetupStgMedium(
-            reinterpret_cast< sal_Int8* >( &lcid ),
-            fetc,
-            0,
-            sizeof( LCID ),
-            stgmedium );
-    }
-    else
+    if ( !m_FormatRegistrar.hasSynthesizedLocale( ) )
         throw CInvalidFormatEtcException( DV_E_FORMATETC );
+    LCID lcid = CFormatRegistrar::getSynthesizedLocale( );
+    renderDataAndSetupStgMedium(
+        reinterpret_cast< sal_Int8* >( &lcid ),
+        fetc,
+        0,
+        sizeof( LCID ),
+        stgmedium );
 }
 
 void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
