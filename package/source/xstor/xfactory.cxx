@@ -165,7 +165,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     else if ( !( aArguments[0] >>= xStream ) && !( aArguments[0] >>= xInputStream ) )
     {
         OSL_FAIL( "Wrong first argument!" );
-        throw uno::Exception(); // TODO: Illegal argument
+        throw uno::Exception("wrong first arg", nullptr); // TODO: Illegal argument
     }
 
     // retrieve mediadescriptor and set storage properties
@@ -230,7 +230,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         else
         {
             OSL_FAIL( "Wrong third argument!" );
-            throw uno::Exception(); // TODO: Illegal argument
+            throw uno::Exception("wrong 3rd arg", nullptr); // TODO: Illegal argument
         }
 
     }
@@ -240,7 +240,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     {
         // if xInputStream is set the storage should be open from it
         if ( nStorageMode & embed::ElementModes::WRITE )
-              throw uno::Exception(); // TODO: access denied
+              throw uno::Exception("storagemode==write", nullptr); // TODO: access denied
 
         uno::Reference< io::XSeekable > xSeekable( xInputStream, uno::UNO_QUERY );
         if ( !xSeekable.is() )
@@ -258,9 +258,9 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     }
     else if ( xStream.is() )
     {
-               if ( ( ( nStorageMode & embed::ElementModes::WRITE ) && !xStream->getOutputStream().is() )
-          || !xStream->getInputStream().is() )
-              throw uno::Exception(); // TODO: access denied
+        if ( ( ( nStorageMode & embed::ElementModes::WRITE ) && !xStream->getOutputStream().is() )
+             || !xStream->getInputStream().is() )
+              throw uno::Exception("access denied", nullptr); // TODO: access denied
 
         uno::Reference< io::XSeekable > xSeekable( xStream, uno::UNO_QUERY );
         if ( !xSeekable.is() )
@@ -277,7 +277,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                     uno::UNO_QUERY );
     }
 
-    throw uno::Exception(); // general error during creation
+    throw uno::Exception("no input stream or regular stream", nullptr); // general error during creation
 }
 
 OUString SAL_CALL OStorageFactory::getImplementationName()

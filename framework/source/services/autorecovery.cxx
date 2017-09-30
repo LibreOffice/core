@@ -2064,7 +2064,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             batch->commit();
 
 #ifdef TRIGGER_FULL_DISC_CHECK
-            throw css::uno::Exception();
+            throw css::uno::Exception("trigger full disk check");
 #else  // TRIGGER_FULL_DISC_CHECK
             nRetry = 0;
 #endif // TRIGGER_FULL_DISC_CHECK
@@ -3078,7 +3078,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
             xDocRecover->storeToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
 
 #ifdef TRIGGER_FULL_DISC_CHECK
-            throw css::uno::Exception();
+            throw css::uno::Exception("trigger full disk check");
 #else  // TRIGGER_FULL_DISC_CHECK
 
             bError = false;

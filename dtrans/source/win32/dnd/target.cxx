@@ -180,7 +180,7 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
             }
         }
         else
-            throw Exception();
+            throw Exception("OleInitialize failed with " + OUString::number(hr));
 
     }
 }

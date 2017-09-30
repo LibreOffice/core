@@ -1653,7 +1653,7 @@ bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
             while ( xResultSet->next() )
             {
                 if ( !::utl::UCBContentHelper::IsSubPath( aGroupTargetURL, xRow->getString( 1 ) ) )
-                    throw uno::Exception();
+                    throw uno::Exception("not sub path", nullptr);
             }
 
             bCanBeRenamed = true;

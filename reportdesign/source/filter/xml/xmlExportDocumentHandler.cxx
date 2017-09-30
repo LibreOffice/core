@@ -297,11 +297,11 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
     OSL_ENSURE(m_xDelegatee.is(),"No document handler available!");
     if ( !m_xDelegatee.is() || !m_xModel.is() )
-        throw uno::Exception();
+        throw uno::Exception("no delegatee and no model", nullptr);
 
     m_xDatabaseDataProvider.set(m_xModel->getDataProvider(),uno::UNO_QUERY_THROW);
     if ( !m_xDatabaseDataProvider->getActiveConnection().is() )
-        throw uno::Exception();
+        throw uno::Exception("no active connection", nullptr);
 
     uno::Reference< reflection::XProxyFactory > xProxyFactory = reflection::ProxyFactory::create( m_xContext );
     m_xProxy = xProxyFactory->createProxy(m_xDelegatee.get());

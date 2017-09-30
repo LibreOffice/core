@@ -933,7 +933,7 @@ void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw css::uno::Exception();
+            throw css::uno::Exception("cannot set prop " + OUString::number(nHandle), nullptr);
         case PROPERTY_ID_FETCHDIRECTION:
             setFetchDirection(comphelper::getINT32(rValue));
             break;

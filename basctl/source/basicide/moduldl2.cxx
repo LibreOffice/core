@@ -1517,7 +1517,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                 OUString aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
                 OUString sModuleCode;
                 if ( !rDocument.createModule( aLibName, aModName, true, sModuleCode ) )
-                    throw Exception();
+                    throw Exception("could not create module " + aModName, nullptr);
 
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
                 if (SfxDispatcher* pDispatcher = GetDispatcher())
