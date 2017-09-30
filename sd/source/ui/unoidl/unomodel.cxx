@@ -2704,82 +2704,80 @@ void SAL_CALL SdXImpressDocument::dispose()
 {
     if( !mbDisposed )
     {
+        ::SolarMutexGuard aGuard;
+
+        if( mpDoc )
         {
-            ::SolarMutexGuard aGuard;
-
-            if( mpDoc )
-            {
-                EndListening( *mpDoc );
-                mpDoc = nullptr;
-            }
-
-            // Call the base class dispose() before setting the mbDisposed flag
-            // to true.  The reason for this is that if close() has not yet been
-            // called this is done in SfxBaseModel::dispose().  At the end of
-            // that dispose() is called again.  It is important to forward this
-            // second dispose() to the base class, too.
-            // As a consequence the following code has to be able to be run twice.
-            SfxBaseModel::dispose();
-            mbDisposed = true;
-
-            uno::Reference< container::XNameAccess > xLinks( mxLinks );
-            if( xLinks.is() )
-            {
-                uno::Reference< lang::XComponent > xComp( xLinks, uno::UNO_QUERY );
-                if( xComp.is() )
-                    xComp->dispose();
-
-                xLinks = nullptr;
-            }
-
-            uno::Reference< drawing::XDrawPages > xDrawPagesAccess( mxDrawPagesAccess );
-            if( xDrawPagesAccess.is() )
-            {
-                uno::Reference< lang::XComponent > xComp( xDrawPagesAccess, uno::UNO_QUERY );
-                if( xComp.is() )
-                    xComp->dispose();
-
-                xDrawPagesAccess = nullptr;
-            }
-
-            uno::Reference< drawing::XDrawPages > xMasterPagesAccess( mxMasterPagesAccess );
-            if( xDrawPagesAccess.is() )
-            {
-                uno::Reference< lang::XComponent > xComp( xMasterPagesAccess, uno::UNO_QUERY );
-                if( xComp.is() )
-                    xComp->dispose();
-
-                xDrawPagesAccess = nullptr;
-            }
-
-            uno::Reference< container::XNameAccess > xLayerManager( mxLayerManager );
-            if( xLayerManager.is() )
-            {
-                uno::Reference< lang::XComponent > xComp( xLayerManager, uno::UNO_QUERY );
-                if( xComp.is() )
-                    xComp->dispose();
-
-                xLayerManager = nullptr;
-            }
-
-            uno::Reference< container::XNameContainer > xCustomPresentationAccess( mxCustomPresentationAccess );
-            if( xCustomPresentationAccess.is() )
-            {
-                uno::Reference< lang::XComponent > xComp( xCustomPresentationAccess, uno::UNO_QUERY );
-                if( xComp.is() )
-                    xComp->dispose();
-
-                xCustomPresentationAccess = nullptr;
-            }
-
-            mxDashTable = nullptr;
-            mxGradientTable = nullptr;
-            mxHatchTable = nullptr;
-            mxBitmapTable = nullptr;
-            mxTransGradientTable = nullptr;
-            mxMarkerTable = nullptr;
-            mxDrawingPool = nullptr;
+            EndListening( *mpDoc );
+            mpDoc = nullptr;
         }
+
+        // Call the base class dispose() before setting the mbDisposed flag
+        // to true.  The reason for this is that if close() has not yet been
+        // called this is done in SfxBaseModel::dispose().  At the end of
+        // that dispose() is called again.  It is important to forward this
+        // second dispose() to the base class, too.
+        // As a consequence the following code has to be able to be run twice.
+        SfxBaseModel::dispose();
+        mbDisposed = true;
+
+        uno::Reference< container::XNameAccess > xLinks( mxLinks );
+        if( xLinks.is() )
+        {
+            uno::Reference< lang::XComponent > xComp( xLinks, uno::UNO_QUERY );
+            if( xComp.is() )
+                xComp->dispose();
+
+            xLinks = nullptr;
+        }
+
+        uno::Reference< drawing::XDrawPages > xDrawPagesAccess( mxDrawPagesAccess );
+        if( xDrawPagesAccess.is() )
+        {
+            uno::Reference< lang::XComponent > xComp( xDrawPagesAccess, uno::UNO_QUERY );
+            if( xComp.is() )
+                xComp->dispose();
+
+            xDrawPagesAccess = nullptr;
+        }
+
+        uno::Reference< drawing::XDrawPages > xMasterPagesAccess( mxMasterPagesAccess );
+        if( xDrawPagesAccess.is() )
+        {
+            uno::Reference< lang::XComponent > xComp( xMasterPagesAccess, uno::UNO_QUERY );
+            if( xComp.is() )
+                xComp->dispose();
+
+            xDrawPagesAccess = nullptr;
+        }
+
+        uno::Reference< container::XNameAccess > xLayerManager( mxLayerManager );
+        if( xLayerManager.is() )
+        {
+            uno::Reference< lang::XComponent > xComp( xLayerManager, uno::UNO_QUERY );
+            if( xComp.is() )
+                xComp->dispose();
+
+            xLayerManager = nullptr;
+        }
+
+        uno::Reference< container::XNameContainer > xCustomPresentationAccess( mxCustomPresentationAccess );
+        if( xCustomPresentationAccess.is() )
+        {
+            uno::Reference< lang::XComponent > xComp( xCustomPresentationAccess, uno::UNO_QUERY );
+            if( xComp.is() )
+                xComp->dispose();
+
+            xCustomPresentationAccess = nullptr;
+        }
+
+        mxDashTable = nullptr;
+        mxGradientTable = nullptr;
+        mxHatchTable = nullptr;
+        mxBitmapTable = nullptr;
+        mxTransGradientTable = nullptr;
+        mxMarkerTable = nullptr;
+        mxDrawingPool = nullptr;
     }
 }
 

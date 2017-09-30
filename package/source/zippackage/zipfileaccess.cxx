@@ -56,16 +56,14 @@ OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& 
 
 OZipFileAccess::~OZipFileAccess()
 {
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
+    if ( !m_bDisposed )
     {
-        ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
-        if ( !m_bDisposed )
-        {
-            try {
-                m_refCount++; // dispose will use refcounting so the further destruction must be avoided
-                dispose();
-            } catch( uno::Exception& )
-            {}
-        }
+        try {
+            m_refCount++; // dispose will use refcounting so the further destruction must be avoided
+            dispose();
+        } catch( uno::Exception& )
+        {}
     }
 }
 

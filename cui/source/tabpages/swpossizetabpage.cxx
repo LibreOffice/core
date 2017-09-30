@@ -1820,24 +1820,20 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
     std::size_t nCount = ::lcl_GetFrmMapCount(_pMap);
     for (std::size_t i = 0; _pMap && i < nCount; ++i)
     {
-//      #61359# why not from the left/from inside or from the top?
-//      if (!bFormat || (pMap[i].eStrId != SwFPos::FROMLEFT && pMap[i].eStrId != SwFPos::FROMTOP))
+        SvxSwFramePosString::StringId eStrId = m_pHoriMirrorCB->IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
+        eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, m_bIsVerticalFrame, m_bIsInRightToLeft);
+        OUString sEntry(SvxSwFramePosString::GetString(eStrId));
+        if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
         {
-            SvxSwFramePosString::StringId eStrId = m_pHoriMirrorCB->IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
-            eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, m_bIsVerticalFrame, m_bIsInRightToLeft);
-            OUString sEntry(SvxSwFramePosString::GetString(eStrId));
-            if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
-            {
-                // don't insert duplicate entries at character wrapped borders
-                _rLB.InsertEntry(sEntry);
-            }
-            // #i22341# - add condition to handle map <aVCharMap>
-            // that is ambiguous in the alignment.
-            if ( _pMap[i].nAlign == _nAlign &&
-                 ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
-            {
-                sSelEntry = sEntry;
-            }
+            // don't insert duplicate entries at character wrapped borders
+            _rLB.InsertEntry(sEntry);
+        }
+        // #i22341# - add condition to handle map <aVCharMap>
+        // that is ambiguous in the alignment.
+        if ( _pMap[i].nAlign == _nAlign &&
+             ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
+        {
+            sSelEntry = sEntry;
         }
     }
 

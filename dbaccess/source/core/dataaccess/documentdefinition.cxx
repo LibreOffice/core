@@ -1300,78 +1300,75 @@ void ODocumentDefinition::saveAs()
     }
     try
     {
+        ::SolarMutexGuard aSolarGuard;
+
+        // the request
+        DocumentSaveRequest aRequest;
+        aRequest.Name = m_pImpl->m_aProps.aTitle;
+
+        aRequest.Content.set(m_xParentContainer,UNO_QUERY);
+        OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
+        Reference< XInteractionRequest > xRequest(pRequest);
+        // some knittings
+        // two continuations allowed: OK and Cancel
+        ODocumentSaveContinuation* pDocuSave = new ODocumentSaveContinuation;
+        pRequest->addContinuation(pDocuSave);
+        OInteraction< XInteractionDisapprove >* pDisApprove = new OInteraction< XInteractionDisapprove >;
+        pRequest->addContinuation(pDisApprove);
+        OInteractionAbort* pAbort = new OInteractionAbort;
+        pRequest->addContinuation(pAbort);
+
+        // create the handler, let it handle the request
+        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
+        xHandler->handle(xRequest);
+
+        if ( pAbort->wasSelected() )
+            return;
+        if  ( pDisApprove->wasSelected() )
+            return;
+        if ( pDocuSave->wasSelected() )
         {
-            ::SolarMutexGuard aSolarGuard;
-
-            // the request
-            DocumentSaveRequest aRequest;
-            aRequest.Name = m_pImpl->m_aProps.aTitle;
-
-            aRequest.Content.set(m_xParentContainer,UNO_QUERY);
-            OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
-            Reference< XInteractionRequest > xRequest(pRequest);
-            // some knittings
-            // two continuations allowed: OK and Cancel
-            ODocumentSaveContinuation* pDocuSave = new ODocumentSaveContinuation;
-            pRequest->addContinuation(pDocuSave);
-            OInteraction< XInteractionDisapprove >* pDisApprove = new OInteraction< XInteractionDisapprove >;
-            pRequest->addContinuation(pDisApprove);
-            OInteractionAbort* pAbort = new OInteractionAbort;
-            pRequest->addContinuation(pAbort);
-
-            // create the handler, let it handle the request
-            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, nullptr) );
-            xHandler->handle(xRequest);
-
-            if ( pAbort->wasSelected() )
-                return;
-            if  ( pDisApprove->wasSelected() )
-                return;
-            if ( pDocuSave->wasSelected() )
+            ::osl::MutexGuard aGuard(m_aMutex);
+            Reference<XNameContainer> xNC(pDocuSave->getContent(),UNO_QUERY);
+            if ( xNC.is() )
             {
-                ::osl::MutexGuard aGuard(m_aMutex);
-                Reference<XNameContainer> xNC(pDocuSave->getContent(),UNO_QUERY);
-                if ( xNC.is() )
+                if ( m_pImpl->m_aProps.aTitle != pDocuSave->getName() )
                 {
-                    if ( m_pImpl->m_aProps.aTitle != pDocuSave->getName() )
+                    try
                     {
-                        try
+                        Reference< XStorage> xStorage = getContainerStorage();
+
+                        OUString sPersistentName = ::dbtools::createUniqueName(xStorage,"Obj");
+                        xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
+
+                        OUString sOldName = m_pImpl->m_aProps.aTitle;
+                        rename(pDocuSave->getName());
+                        updateDocumentTitle();
+
+                        uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
                         {
-                            Reference< XStorage> xStorage = getContainerStorage();
-
-                            OUString sPersistentName = ::dbtools::createUniqueName(xStorage,"Obj");
-                            xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
-
-                            OUString sOldName = m_pImpl->m_aProps.aTitle;
-                            rename(pDocuSave->getName());
-                            updateDocumentTitle();
-
-                            uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
-                            {
-                                {PROPERTY_NAME, uno::Any(sOldName)}, // set as folder
-                                {PROPERTY_PERSISTENT_NAME, uno::Any(sPersistentName)},
-                                {PROPERTY_AS_TEMPLATE, uno::Any(m_pImpl->m_aProps.bAsTemplate)},
-                            }));
-                            Reference< XMultiServiceFactory > xORB( m_xParentContainer, UNO_QUERY_THROW );
-                            Reference< XInterface > xComponent( xORB->createInstanceWithArguments( SERVICE_SDB_DOCUMENTDEFINITION, aArguments ) );
-                            Reference< XNameContainer > xNameContainer( m_xParentContainer, UNO_QUERY_THROW );
-                            xNameContainer->insertByName( sOldName, makeAny( xComponent ) );
-                        }
-                        catch(const Exception&)
-                        {
-                            DBG_UNHANDLED_EXCEPTION();
-                        }
+                            {PROPERTY_NAME, uno::Any(sOldName)}, // set as folder
+                            {PROPERTY_PERSISTENT_NAME, uno::Any(sPersistentName)},
+                            {PROPERTY_AS_TEMPLATE, uno::Any(m_pImpl->m_aProps.bAsTemplate)},
+                        }));
+                        Reference< XMultiServiceFactory > xORB( m_xParentContainer, UNO_QUERY_THROW );
+                        Reference< XInterface > xComponent( xORB->createInstanceWithArguments( SERVICE_SDB_DOCUMENTDEFINITION, aArguments ) );
+                        Reference< XNameContainer > xNameContainer( m_xParentContainer, UNO_QUERY_THROW );
+                        xNameContainer->insertByName( sOldName, makeAny( xComponent ) );
                     }
-                    Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-                    if ( xPersist.is() )
+                    catch(const Exception&)
                     {
-                        xPersist->storeOwn();
-                        notifyDataSourceModified();
+                        DBG_UNHANDLED_EXCEPTION();
                     }
+                }
+                Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+                if ( xPersist.is() )
+                {
+                    xPersist->storeOwn();
+                    notifyDataSourceModified();
                 }
             }
         }
-
     }
     catch(const Exception&)
     {

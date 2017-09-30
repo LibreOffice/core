@@ -536,15 +536,13 @@ void SwWrtShell::EnterStdMode()
         // SwActContext opens and action which has to be
         // closed prior to the call of
         // GetChgLnk().Call()
-        {
-            SwActContext aActContext(this);
-            m_bSelWrd = m_bSelLn = false;
-            if( !IsRetainSelection() )
-                KillPams();
-            ClearMark();
-            m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
-            m_fnKillSel = &SwWrtShell::ResetSelect;
-        }
+        SwActContext aActContext(this);
+        m_bSelWrd = m_bSelLn = false;
+        if( !IsRetainSelection() )
+            KillPams();
+        ClearMark();
+        m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
+        m_fnKillSel = &SwWrtShell::ResetSelect;
     }
     Invalidate();
     SwTransferable::ClearSelection( *this );

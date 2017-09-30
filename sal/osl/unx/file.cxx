@@ -1019,22 +1019,20 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
             }
         }
 #else   /* F_SETLK */
+        struct flock aflock;
+
+        aflock.l_type = F_WRLCK;
+        aflock.l_whence = SEEK_SET;
+        aflock.l_start = 0;
+        aflock.l_len = 0;
+
+        if (fcntl(fd, F_SETLK, &aflock) == -1)
         {
-            struct flock aflock;
-
-            aflock.l_type = F_WRLCK;
-            aflock.l_whence = SEEK_SET;
-            aflock.l_start = 0;
-            aflock.l_len = 0;
-
-            if (fcntl(fd, F_SETLK, &aflock) == -1)
-            {
-                int saved_errno = errno;
-                SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETLK) failed: " << strerror(saved_errno));
-                eRet = oslTranslateFileError(OSL_FET_ERROR, saved_errno);
-                (void) close(fd);
-                return eRet;
-            }
+            int saved_errno = errno;
+            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETLK) failed: " << strerror(saved_errno));
+            eRet = oslTranslateFileError(OSL_FET_ERROR, saved_errno);
+            (void) close(fd);
+            return eRet;
         }
 #endif  /* F_SETLK */
     }

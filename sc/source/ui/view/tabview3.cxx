@@ -2334,10 +2334,8 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             //!if ( nCol1 > 0 && !aViewData.GetDocument()->IsBlockEmpty(
             //!                     aViewData.GetTabNo(),
             //!                     0, nRow1, nCol1-1, nRow2 ) )
-            {
-                long nMarkPixel = (long)( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
-                aStart.X() -= nMarkPixel * nLayoutSign;
-            }
+            long nMarkPixel = (long)( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
+            aStart.X() -= nMarkPixel * nLayoutSign;
         }
 
         pGridWin[i]->Invalidate( pGridWin[i]->PixelToLogic( tools::Rectangle( aStart,aEnd ) ) );

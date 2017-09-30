@@ -1277,10 +1277,8 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                         Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
                         if ( xE.is() && xE->hasMoreElements() )
                         {
-                            {
-                                Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
-                                aAny = xClickNode->getBegin();
-                            }
+                            Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
+                            aAny = xClickNode->getBegin();
                         }
                     }
                     else if ( nFlags & 0x40 )

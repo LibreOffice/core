@@ -11,6 +11,7 @@ $(eval $(call gb_CompilerTest_CompilerTest,compilerplugins_clang))
 
 $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/badstatics \
+    compilerplugins/clang/test/blockblock \
     compilerplugins/clang/test/casttovoid \
     compilerplugins/clang/test/constparams \
     $(if $(filter-out INTEL,$(CPU)),compilerplugins/clang/test/convertuintptr) \

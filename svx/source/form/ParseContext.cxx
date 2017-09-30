@@ -185,11 +185,9 @@ OParseContextClient::OParseContextClient()
 
 OParseContextClient::~OParseContextClient()
 {
-    {
-        ::osl::MutexGuard aGuard( getSafteyMutex() );
-        if ( 0 == osl_atomic_decrement( &getCounter() ) )
-            delete getSharedContext(nullptr,true);
-    }
+    ::osl::MutexGuard aGuard( getSafteyMutex() );
+    if ( 0 == osl_atomic_decrement( &getCounter() ) )
+        delete getSharedContext(nullptr,true);
 }
 
 const OSystemParseContext* OParseContextClient::getParseContext() const

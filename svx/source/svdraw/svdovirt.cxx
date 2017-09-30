@@ -430,14 +430,12 @@ const tools::Rectangle& SdrVirtObj::GetSnapRect() const
 
 void SdrVirtObj::SetSnapRect(const tools::Rectangle& rRect)
 {
-    {
-        tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-        tools::Rectangle aR(rRect);
-        aR-=aAnchor;
-        rRefObj.SetSnapRect(aR);
-        SetRectsDirty();
-        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
-    }
+    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
+    tools::Rectangle aR(rRect);
+    aR-=aAnchor;
+    rRefObj.SetSnapRect(aR);
+    SetRectsDirty();
+    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
 void SdrVirtObj::NbcSetSnapRect(const tools::Rectangle& rRect)

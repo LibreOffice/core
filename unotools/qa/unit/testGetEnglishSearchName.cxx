@@ -28,28 +28,27 @@ public:
 
 void Test::testSingleElement()
 {
-    {   // lowercase
-        OUString test1 = GetEnglishSearchFontName( "SYMBOL" );
-        CPPUNIT_ASSERT_EQUAL( OUString("symbol"),test1);
-        //trailing whitespaces
-        test1 = GetEnglishSearchFontName( "Symbol    " );
-        CPPUNIT_ASSERT_EQUAL(OUString("symbol"),test1);
-        //no longer remove script suffixes
-        test1 = GetEnglishSearchFontName( "Symbol(SIP)" );
-        CPPUNIT_ASSERT_EQUAL(OUString("symbol(sip)"),test1);
-        test1 = GetEnglishSearchFontName( "CM Roman CE" );
-        CPPUNIT_ASSERT_EQUAL( OUString("cmromance"),test1);
-        //remove special characters; leave semicolon, numbers
-        test1 = GetEnglishSearchFontName( "sy;mb?=ol129" );
-        CPPUNIT_ASSERT_EQUAL( OUString("sy;mbol129"),test1);
+    // lowercase
+    OUString test1 = GetEnglishSearchFontName( "SYMBOL" );
+    CPPUNIT_ASSERT_EQUAL( OUString("symbol"),test1);
+    //trailing whitespaces
+    test1 = GetEnglishSearchFontName( "Symbol    " );
+    CPPUNIT_ASSERT_EQUAL(OUString("symbol"),test1);
+    //no longer remove script suffixes
+    test1 = GetEnglishSearchFontName( "Symbol(SIP)" );
+    CPPUNIT_ASSERT_EQUAL(OUString("symbol(sip)"),test1);
+    test1 = GetEnglishSearchFontName( "CM Roman CE" );
+    CPPUNIT_ASSERT_EQUAL( OUString("cmromance"),test1);
+    //remove special characters; leave semicolon, numbers
+    test1 = GetEnglishSearchFontName( "sy;mb?=ol129" );
+    CPPUNIT_ASSERT_EQUAL( OUString("sy;mbol129"),test1);
 
-        //transformation
+    //transformation
 
-        sal_Unicode const transfor[] ={ 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
+    sal_Unicode const transfor[] ={ 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
 
-        test1 = GetEnglishSearchFontName(transfor );
-        CPPUNIT_ASSERT_EQUAL( OUString("hiraginomarugothicpron"),test1);
-    }
+    test1 = GetEnglishSearchFontName(transfor );
+    CPPUNIT_ASSERT_EQUAL( OUString("hiraginomarugothicpron"),test1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

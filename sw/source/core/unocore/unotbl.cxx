@@ -221,20 +221,18 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
         case  FN_TABLE_HEADLINE_REPEAT:
         case  FN_TABLE_HEADLINE_COUNT:
         {
+            SwTable* pTable = SwTable::FindTable( pFormat );
+            UnoActionContext aAction(pFormat->GetDoc());
+            if( pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
             {
-                SwTable* pTable = SwTable::FindTable( pFormat );
-                UnoActionContext aAction(pFormat->GetDoc());
-                if( pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
-                {
-                    pFormat->GetDoc()->SetRowsToRepeat( *pTable, aValue.get<bool>() ? 1 : 0 );
-                }
-                else
-                {
-                    sal_Int32 nRepeat = 0;
-                    aValue >>= nRepeat;
-                    if( nRepeat >= 0 && nRepeat < USHRT_MAX )
-                        pFormat->GetDoc()->SetRowsToRepeat( *pTable, (sal_uInt16) nRepeat );
-                }
+                pFormat->GetDoc()->SetRowsToRepeat( *pTable, aValue.get<bool>() ? 1 : 0 );
+            }
+            else
+            {
+                sal_Int32 nRepeat = 0;
+                aValue >>= nRepeat;
+                if( nRepeat >= 0 && nRepeat < USHRT_MAX )
+                    pFormat->GetDoc()->SetRowsToRepeat( *pTable, (sal_uInt16) nRepeat );
             }
         }
         break;

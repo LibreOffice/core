@@ -1143,56 +1143,54 @@ void DlgEditor::printPage( sal_Int32 nPage, Printer* pPrinter, const OUString& r
 
 void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not working yet
 {
+    MapMode aOldMap( pPrinter->GetMapMode());
+    vcl::Font aOldFont( pPrinter->GetFont() );
+
+    MapMode aMap( MapUnit::Map100thMM );
+    pPrinter->SetMapMode( aMap );
+    vcl::Font aFont;
+    aFont.SetAlignment( ALIGN_BOTTOM );
+    aFont.SetFontSize( Size( 0, 360 ));
+    pPrinter->SetFont( aFont );
+
+    Size aPaperSz = pPrinter->GetOutputSize();
+    aPaperSz.Width() -= (Print::nLeftMargin + Print::nRightMargin);
+    aPaperSz.Height() -= (Print::nTopMargin + Print::nBottomMargin);
+
+    lcl_PrintHeader( pPrinter, rTitle );
+
+    Bitmap aDlg;
+    Size aBmpSz( pPrinter->PixelToLogic( aDlg.GetSizePixel() ) );
+    double nPaperSzWidth = aPaperSz.Width();
+    double nPaperSzHeight = aPaperSz.Height();
+    double nBmpSzWidth = aBmpSz.Width();
+    double nBmpSzHeight = aBmpSz.Height();
+    double nScaleX = (nPaperSzWidth / nBmpSzWidth );
+    double nScaleY = (nPaperSzHeight / nBmpSzHeight );
+
+    Size aOutputSz;
+    if( nBmpSzHeight * nScaleX <= nPaperSzHeight )
     {
-        MapMode aOldMap( pPrinter->GetMapMode());
-        vcl::Font aOldFont( pPrinter->GetFont() );
-
-        MapMode aMap( MapUnit::Map100thMM );
-        pPrinter->SetMapMode( aMap );
-        vcl::Font aFont;
-        aFont.SetAlignment( ALIGN_BOTTOM );
-        aFont.SetFontSize( Size( 0, 360 ));
-        pPrinter->SetFont( aFont );
-
-        Size aPaperSz = pPrinter->GetOutputSize();
-        aPaperSz.Width() -= (Print::nLeftMargin + Print::nRightMargin);
-        aPaperSz.Height() -= (Print::nTopMargin + Print::nBottomMargin);
-
-        lcl_PrintHeader( pPrinter, rTitle );
-
-        Bitmap aDlg;
-        Size aBmpSz( pPrinter->PixelToLogic( aDlg.GetSizePixel() ) );
-        double nPaperSzWidth = aPaperSz.Width();
-        double nPaperSzHeight = aPaperSz.Height();
-        double nBmpSzWidth = aBmpSz.Width();
-        double nBmpSzHeight = aBmpSz.Height();
-        double nScaleX = (nPaperSzWidth / nBmpSzWidth );
-        double nScaleY = (nPaperSzHeight / nBmpSzHeight );
-
-        Size aOutputSz;
-        if( nBmpSzHeight * nScaleX <= nPaperSzHeight )
-        {
-            aOutputSz.Width() = (long)(nBmpSzWidth * nScaleX);
-            aOutputSz.Height() = (long)(nBmpSzHeight * nScaleX);
-        }
-        else
-        {
-            aOutputSz.Width() = (long)(nBmpSzWidth * nScaleY);
-            aOutputSz.Height() = (long)(nBmpSzHeight * nScaleY);
-        }
-
-        Point aPosOffs(
-            (aPaperSz.Width() / 2) - (aOutputSz.Width() / 2),
-            (aPaperSz.Height()/ 2) - (aOutputSz.Height() / 2));
-
-        aPosOffs.X() += Print::nLeftMargin;
-        aPosOffs.Y() += Print::nTopMargin;
-
-        pPrinter->DrawBitmap( aPosOffs, aOutputSz, aDlg );
-
-        pPrinter->SetMapMode( aOldMap );
-        pPrinter->SetFont( aOldFont );
+        aOutputSz.Width() = (long)(nBmpSzWidth * nScaleX);
+        aOutputSz.Height() = (long)(nBmpSzHeight * nScaleX);
     }
+    else
+    {
+        aOutputSz.Width() = (long)(nBmpSzWidth * nScaleY);
+        aOutputSz.Height() = (long)(nBmpSzHeight * nScaleY);
+    }
+
+    Point aPosOffs(
+        (aPaperSz.Width() / 2) - (aOutputSz.Width() / 2),
+        (aPaperSz.Height()/ 2) - (aOutputSz.Height() / 2));
+
+    aPosOffs.X() += Print::nLeftMargin;
+    aPosOffs.Y() += Print::nTopMargin;
+
+    pPrinter->DrawBitmap( aPosOffs, aOutputSz, aDlg );
+
+    pPrinter->SetMapMode( aOldMap );
+    pPrinter->SetFont( aOldFont );
 }
 
 

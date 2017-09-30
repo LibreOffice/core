@@ -1114,18 +1114,16 @@ TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
         // because we don't have the possibility to know how to create
         // such auto increment column later on
         // so until we know how to do it, we create a column without autoincrement
-        //  if ( !aIter->second->bAutoIncrement )
-        {   // therefore we have searched
-            if ( aIter->second->nType == DataType::INTEGER )
-            {
-                pTypeInfo = aIter->second; // alternative
-                break;
-            }
-            else if ( !pTypeInfo.get() && aIter->second->nType == DataType::DOUBLE )
-                pTypeInfo = aIter->second; // alternative
-            else if ( !pTypeInfo.get() && aIter->second->nType == DataType::REAL )
-                pTypeInfo = aIter->second; // alternative
+        // therefore we have searched
+        if ( aIter->second->nType == DataType::INTEGER )
+        {
+            pTypeInfo = aIter->second; // alternative
+            break;
         }
+        else if ( !pTypeInfo.get() && aIter->second->nType == DataType::DOUBLE )
+            pTypeInfo = aIter->second; // alternative
+        else if ( !pTypeInfo.get() && aIter->second->nType == DataType::REAL )
+            pTypeInfo = aIter->second; // alternative
     }
     if ( !pTypeInfo.get() ) // just a fallback
         pTypeInfo = queryTypeInfoByType(DataType::VARCHAR,_rTypeInfo);

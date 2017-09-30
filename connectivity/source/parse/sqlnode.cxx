@@ -1463,25 +1463,23 @@ OSQLParser::OSQLParser(const css::uno::Reference< css::uno::XComponentContext >&
 
 OSQLParser::~OSQLParser()
 {
+    ::osl::MutexGuard aGuard(getMutex());
+    OSL_ENSURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : has a refcount of 0 !");
+    if (!--s_nRefCount)
     {
-        ::osl::MutexGuard aGuard(getMutex());
-        OSL_ENSURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : has a refcount of 0 !");
-        if (!--s_nRefCount)
-        {
-            s_pScanner->setScanner(true);
-            delete s_pScanner;
-            s_pScanner = nullptr;
+        s_pScanner->setScanner(true);
+        delete s_pScanner;
+        s_pScanner = nullptr;
 
-            delete s_pGarbageCollector;
-            s_pGarbageCollector = nullptr;
-            // Is only set the first time, so we should delete it only when there are no more instances
-            s_xLocaleData = nullptr;
+        delete s_pGarbageCollector;
+        s_pGarbageCollector = nullptr;
+        // Is only set the first time, so we should delete it only when there are no more instances
+        s_xLocaleData = nullptr;
 
-            RuleIDMap aEmpty;
-            s_aReverseRuleIDLookup.swap( aEmpty );
-        }
-        m_pParseTree = nullptr;
+        RuleIDMap aEmpty;
+        s_aReverseRuleIDLookup.swap( aEmpty );
     }
+    m_pParseTree = nullptr;
 }
 
 void OSQLParseNode::substituteParameterNames(OSQLParseNode const * _pNode)

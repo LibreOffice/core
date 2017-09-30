@@ -387,16 +387,12 @@ void SAL_CALL SvxPixelCtlAccessible::disposing()
 {
     if( !rBHelper.bDisposed )
     {
+        ::osl::MutexGuard   aGuard( m_aMutex );
+        if ( mnClientId )
         {
-            ::osl::MutexGuard   aGuard( m_aMutex );
-            if ( mnClientId )
-            {
-                comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
-                mnClientId =  0;
-            }
+            comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
+            mnClientId =  0;
         }
-        //mxParent.clear();
-
     }
 }
 

@@ -414,13 +414,11 @@ void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ )
 void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event )
 {
     // create a new config entry
-    {
-        OUString sOldComposedName,sNewComposedName;
-        Event.ReplacedElement   >>= sOldComposedName;
-        Event.Accessor          >>= sNewComposedName;
+    OUString sOldComposedName,sNewComposedName;
+    Event.ReplacedElement   >>= sOldComposedName;
+    Event.Accessor          >>= sNewComposedName;
 
-        renameObject(sOldComposedName,sNewComposedName);
-    }
+    renameObject(sOldComposedName,sNewComposedName);
 }
 
 void SAL_CALL OTableContainer::disposing()

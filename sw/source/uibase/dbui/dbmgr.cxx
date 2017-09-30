@@ -571,32 +571,30 @@ void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
 {
     if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
     {
+        pSh->StartAllAction();
+        pSh->StartUndo();
+        bool bGroupUndo(pSh->DoesGroupUndo());
+        pSh->DoGroupUndo(false);
+
+        if( pSh->HasSelection() )
+            pSh->DelRight();
+
+        std::unique_ptr<SwWait> pWait;
+
         {
-            pSh->StartAllAction();
-            pSh->StartUndo();
-            bool bGroupUndo(pSh->DoesGroupUndo());
-            pSh->DoGroupUndo(false);
+            sal_uLong i = 0;
+            do {
 
-            if( pSh->HasSelection() )
-                pSh->DelRight();
+                ImportDBEntry(pSh);
+                if( 10 == ++i )
+                    pWait.reset(new SwWait( *pSh->GetView().GetDocShell(), true));
 
-            std::unique_ptr<SwWait> pWait;
-
-            {
-                sal_uLong i = 0;
-                do {
-
-                    ImportDBEntry(pSh);
-                    if( 10 == ++i )
-                        pWait.reset(new SwWait( *pSh->GetView().GetDocShell(), true));
-
-                } while(ToNextMergeRecord());
-            }
-
-            pSh->DoGroupUndo(bGroupUndo);
-            pSh->EndUndo();
-            pSh->EndAllAction();
+            } while(ToNextMergeRecord());
         }
+
+        pSh->DoGroupUndo(bGroupUndo);
+        pSh->EndUndo();
+        pSh->EndAllAction();
     }
 }
 

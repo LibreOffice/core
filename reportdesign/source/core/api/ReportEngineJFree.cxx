@@ -324,10 +324,8 @@ util::URL SAL_CALL OReportEngineJFree::createDocument( )
 
 void SAL_CALL OReportEngineJFree::interrupt(  )
 {
-    {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        ::connectivity::checkDisposed(ReportEngineBase::rBHelper.bDisposed);
-    }
+    ::osl::MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(ReportEngineBase::rBHelper.bDisposed);
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OReportEngineJFree::getPropertySetInfo(  )

@@ -1520,9 +1520,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         else if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
         {
             // mirrored window in LTR UI
-            {
-                nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
-            }
+            nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
         }
 
         // check maPos as well, as it could have been changed for client windows (ImplCallMove())

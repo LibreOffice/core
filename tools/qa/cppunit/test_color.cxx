@@ -61,21 +61,19 @@ void Test::test_asRGBColor()
 
 void Test::test_readAndWriteStream()
 {
-    {
-        SvMemoryStream aStream;
-        Color aWriteColor(0x12, 0x34, 0x56);
-        Color aReadColor;
+    SvMemoryStream aStream;
+    Color aWriteColor(0x12, 0x34, 0x56);
+    Color aReadColor;
 
-        WriteColor(aStream, aWriteColor);
+    WriteColor(aStream, aWriteColor);
 
-        aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-        ReadColor(aStream, aReadColor);
+    ReadColor(aStream, aReadColor);
 
-        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x12), aReadColor.GetRed());
-        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x34), aReadColor.GetGreen());
-        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x56), aReadColor.GetBlue());
-    }
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x12), aReadColor.GetRed());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x34), aReadColor.GetGreen());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x56), aReadColor.GetBlue());
 }
 
 OUString createTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, OUString const & sReference, sal_Int16 nTintShade)

@@ -404,67 +404,65 @@ uno::Sequence< sal_Int32 > const & OCommonEmbeddedObject::GetIntermediateStatesS
 
 void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 {
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( m_nObjectState == -1 )
+        throw embed::WrongStateException( "The object has no persistence!",
+                                          static_cast< ::cppu::OWeakObject* >(this) );
+
+    sal_Int32 nOldState = m_nObjectState;
+
+    if ( m_nTargetState != -1 )
     {
-        ::osl::ResettableMutexGuard aGuard( m_aMutex );
-        if ( m_bDisposed )
-            throw lang::DisposedException(); // TODO
-
-        if ( m_nObjectState == -1 )
-            throw embed::WrongStateException( "The object has no persistence!",
-                                              static_cast< ::cppu::OWeakObject* >(this) );
-
-        sal_Int32 nOldState = m_nObjectState;
-
-        if ( m_nTargetState != -1 )
-        {
-            // means that the object is currently trying to reach the target state
-            throw embed::StateChangeInProgressException( OUString(),
-                                                        uno::Reference< uno::XInterface >(),
-                                                        m_nTargetState );
-        }
-        else
-        {
-            TargetStateControl_Impl aControl( m_nTargetState, nNewState );
-
-            // in case the object is already in requested state
-            if ( m_nObjectState == nNewState )
-            {
-                // if active object is activated again, bring its window to top
-                if ( m_nObjectState == embed::EmbedStates::ACTIVE )
-                    m_xDocHolder->Show();
-
-                return;
-            }
-
-            // retrieve sequence of states that should be passed to reach desired state
-            uno::Sequence< sal_Int32 > aIntermediateStates = GetIntermediateStatesSequence_Impl( nNewState );
-
-            // notify listeners that the object is going to change the state
-            StateChangeNotification_Impl( true, nOldState, nNewState,aGuard );
-
-            try {
-                for ( sal_Int32 nInd = 0; nInd < aIntermediateStates.getLength(); nInd++ )
-                    SwitchStateTo_Impl( aIntermediateStates[nInd] );
-
-                SwitchStateTo_Impl( nNewState );
-            }
-            catch( const uno::Exception& )
-            {
-                if ( nOldState != m_nObjectState )
-                    // notify listeners that the object has changed the state
-                    StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
-
-                throw;
-            }
-        }
-
-        // notify listeners that the object has changed the state
-        StateChangeNotification_Impl( false, nOldState, nNewState, aGuard );
-
-        // let the object window be shown
-        if ( nNewState == embed::EmbedStates::UI_ACTIVE || nNewState == embed::EmbedStates::INPLACE_ACTIVE )
-            PostEvent_Impl( "OnVisAreaChanged" );
+        // means that the object is currently trying to reach the target state
+        throw embed::StateChangeInProgressException( OUString(),
+                                                    uno::Reference< uno::XInterface >(),
+                                                    m_nTargetState );
     }
+    else
+    {
+        TargetStateControl_Impl aControl( m_nTargetState, nNewState );
+
+        // in case the object is already in requested state
+        if ( m_nObjectState == nNewState )
+        {
+            // if active object is activated again, bring its window to top
+            if ( m_nObjectState == embed::EmbedStates::ACTIVE )
+                m_xDocHolder->Show();
+
+            return;
+        }
+
+        // retrieve sequence of states that should be passed to reach desired state
+        uno::Sequence< sal_Int32 > aIntermediateStates = GetIntermediateStatesSequence_Impl( nNewState );
+
+        // notify listeners that the object is going to change the state
+        StateChangeNotification_Impl( true, nOldState, nNewState,aGuard );
+
+        try {
+            for ( sal_Int32 nInd = 0; nInd < aIntermediateStates.getLength(); nInd++ )
+                SwitchStateTo_Impl( aIntermediateStates[nInd] );
+
+            SwitchStateTo_Impl( nNewState );
+        }
+        catch( const uno::Exception& )
+        {
+            if ( nOldState != m_nObjectState )
+                // notify listeners that the object has changed the state
+                StateChangeNotification_Impl( false, nOldState, m_nObjectState, aGuard );
+
+            throw;
+        }
+    }
+
+    // notify listeners that the object has changed the state
+    StateChangeNotification_Impl( false, nOldState, nNewState, aGuard );
+
+    // let the object window be shown
+    if ( nNewState == embed::EmbedStates::UI_ACTIVE || nNewState == embed::EmbedStates::INPLACE_ACTIVE )
+        PostEvent_Impl( "OnVisAreaChanged" );
 }
 
 

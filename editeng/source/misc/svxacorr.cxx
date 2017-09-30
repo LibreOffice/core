@@ -1195,14 +1195,11 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
             LANGUAGE_FRENCH_SWISS,
             LANGUAGE_FRENCH_LUXEMBOURG))
         {
+            OUString s( cNonBreakingSpace ); // UNICODE code for no break space
+            if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
             {
-                OUString s( cNonBreakingSpace );
-                    // UNICODE code for no break space
-                if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
-                {
-                    if( !bSttQuote )
-                        ++nInsPos;
-                }
+                if( !bSttQuote )
+                    ++nInsPos;
             }
         }
     }
