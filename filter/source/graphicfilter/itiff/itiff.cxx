@@ -1434,6 +1434,29 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                             bStatus = false;
                     }
                 }
+                else if ( nCompression == 5 )
+                {
+                    sal_uInt32 np = nPlanes - 1;
+                    if (np >= SAL_N_ELEMENTS(aMap))
+                        bStatus = false;
+                    sal_Int32 ny = nImageLength - 1;
+                    sal_uInt32 nStrip(0);
+                    nDiv = GetRowsPerStrip();
+                    if (bStatus)
+                        bStatus = nDiv != 0;
+                    if (bStatus)
+                    {
+                        nStrip = ny / nDiv + np * nStripsPerPlane;
+                        if (nStrip >= aStripOffsets.size())
+                            bStatus = false;
+                    }
+                    if (bStatus)
+                    {
+                        auto nStart = aStripOffsets[nStrip];
+                        if (nStart > nEndOfFile)
+                            bStatus = false;
+                    }
+                }
             }
 
             if ( bStatus )
