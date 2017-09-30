@@ -54,6 +54,7 @@
 #include "documentimport.hxx"
 #include "formulabuffer.hxx"
 #include <numformat.hxx>
+#include <sax/tools/converter.hxx>
 
 namespace oox {
 namespace xls {
@@ -215,15 +216,17 @@ void SheetDataBuffer::setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCod
 
 void SheetDataBuffer::setDateCell( const CellModel& rModel, const OUString& rDateString )
 {
-    ScDocument& rDoc = getScDocument();
-    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+    css::util::DateTime aDateTime;
+    if (!sax::Converter::parseDateTime( aDateTime, nullptr, rDateString))
+    {
+        SAL_WARN("sc.filter", "SheetDataBuffer::setDateCell - could not parse: " << rDateString);
+        // At least don't lose data.
+        setStringCell( rModel, rDateString);
+        return;
+    }
 
-    double fValue = 0.0;
-    sal_uInt32 nFormatIndex = 0;
-    bool bValid = pFormatter->IsNumberFormat( rDateString, nFormatIndex, fValue );
-
-    if(bValid)
-        setValueCell( rModel, fValue );
+    double fSerial = getUnitConverter().calcSerialFromDateTime( aDateTime);
+    setValueCell( rModel, fSerial);
 }
 
 void SheetDataBuffer::createSharedFormula(const ScAddress& rAddr, const ApiTokenSequence& rTokens)
