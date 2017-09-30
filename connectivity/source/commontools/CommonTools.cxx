@@ -134,7 +134,7 @@ namespace connectivity
             Any uaJVM = xVM->getJavaVM( processID );
             sal_Int64 nTemp;
             if (!(uaJVM >>= nTemp)) {
-                throw Exception(); // -5
+                throw Exception("cannot get result for getJavaVM", nullptr); // -5
             }
             aRet = reinterpret_cast<jvmaccess::VirtualMachine *>(
                 static_cast<sal_IntPtr>(nTemp));

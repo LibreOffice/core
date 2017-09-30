@@ -747,7 +747,7 @@ void ODatabaseMetaDataResultSet::setFastPropertyValue_NoBroadcast(
         case PROPERTY_ID_RESULTSETTYPE:
         case PROPERTY_ID_FETCHDIRECTION:
         case PROPERTY_ID_FETCHSIZE:
-            throw Exception();
+            throw Exception("cannot set prop " + OUString::number(nHandle), nullptr);
         default:
             OSL_FAIL("setFastPropertyValue_NoBroadcast: Illegal handle value!");
     }
