@@ -26,7 +26,6 @@ class SVL_DLLPUBLIC SfxMetricItem: public SfxInt32Item
 {
 public:
     explicit                 SfxMetricItem( sal_uInt16 nWhich, sal_uInt32 nValue );
-                             SfxMetricItem( const SfxMetricItem& );
 
     virtual void             ScaleMetrics( long lMult, long lDiv ) override;
     virtual bool             HasMetrics() const override;

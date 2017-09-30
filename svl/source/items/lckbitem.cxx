@@ -44,13 +44,6 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 }
 
 
-SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
-:   SfxPoolItem( rItem ),
-    _xVal( rItem._xVal )
-{
-}
-
-
 SfxLockBytesItem::~SfxLockBytesItem()
 {
 }
