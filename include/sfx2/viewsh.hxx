@@ -168,6 +168,7 @@ protected:
 
 public:
     // Iteration
+    static size_t               GetActiveShells( bool bOnlyVisible = true );
     static SfxViewShell*        GetFirst( bool bOnlyVisible = true, const std::function<bool ( const SfxViewShell* )>& isViewShell = nullptr );
     static SfxViewShell*        GetNext( const SfxViewShell& rPrev,
                                          bool bOnlyVisible = true,
