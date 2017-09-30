@@ -43,6 +43,7 @@
 #include "tablebuffer.hxx"
 #include "unitconverter.hxx"
 #include "worksheetbuffer.hxx"
+#include "dpobject.hxx"
 
 namespace oox {
 namespace xls {
@@ -227,6 +228,22 @@ OUString PivotCacheItem::getName() const
         case XML_e: return OUString();                                                              // !TODO
     }
     OSL_FAIL( "PivotCacheItem::getName - invalid data type" );
+    return OUString();
+}
+
+OUString PivotCacheItem::getFormattedName(const ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const DateTime& rNullDate) const
+{
+    switch( mnType )
+    {
+        case XML_m: return OUString();
+        case XML_s: return maValue.get< OUString >();
+        case XML_n: return pObj->GetFormattedString(rSaveDim.GetName(), maValue.get<double>());
+        case XML_i: return pObj->GetFormattedString(rSaveDim.GetName(), static_cast<double>(maValue.get< sal_Int32 >()));
+        case XML_b: return pObj->GetFormattedString(rSaveDim.GetName(), static_cast<double>(maValue.get< bool >()));
+        case XML_d: return pObj->GetFormattedString(rSaveDim.GetName(), maValue.get< css::util::DateTime >() - rNullDate);
+        case XML_e: return OUString();                                                              // !TODO
+    }
+    OSL_FAIL( "PivotCacheItem::getFormattedName - invalid data type" );
     return OUString();
 }
 
