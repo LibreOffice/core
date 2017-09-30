@@ -205,7 +205,7 @@ public:
 /*
  * Helper class for objects that need to depend on more than one SwClient
  */
-class SW_DLLPUBLIC SwDepend final : public SwClient
+class SwDepend final : public SwClient
 {
     SwClient *m_pToTell;
 

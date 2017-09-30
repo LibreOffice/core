@@ -13,7 +13,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 /// Stores options which are only relevant for clipboard documents.
-class SC_DLLPUBLIC ScClipOptions
+class ScClipOptions
 {
 public:
     /// Document properties.

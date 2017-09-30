@@ -27,7 +27,7 @@ namespace connectivity
 {
     namespace odbc
     {
-        class OOO_DLLPUBLIC_ODBCBASE OBoundParam
+        class OBoundParam
         {
 
         public:

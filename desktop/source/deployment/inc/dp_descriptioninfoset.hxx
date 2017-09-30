@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star {
 
 namespace dp_misc {
 
-struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC SimpleLicenseAttributes
+struct SimpleLicenseAttributes
 {
     OUString acceptBy;
     //Attribute suppress-on-update. Default is false.

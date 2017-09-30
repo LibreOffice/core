@@ -40,7 +40,7 @@ class PPDTranslator;
 
 enum PPDValueType { eInvocation, eQuoted, eSymbol, eString, eNo };
 
-struct VCL_DLLPUBLIC PPDValue
+struct PPDValue
 {
     PPDValueType     m_eType;
     //CustomOption stuff for fdo#43049

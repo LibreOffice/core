@@ -116,7 +116,7 @@ public:
 };
 
 
-class EDITENG_DLLPUBLIC SvxAutocorrWord
+class SvxAutocorrWord
 {
     OUString sShort, sLong;
     bool bIsTxtOnly;                // Is pure ASCII - Text

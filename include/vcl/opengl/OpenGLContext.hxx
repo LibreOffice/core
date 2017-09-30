@@ -52,7 +52,7 @@ struct VCL_DLLPUBLIC GLWindow
     virtual ~GLWindow();
 };
 
-struct VCL_DLLPUBLIC OpenGLCapabilitySwitch
+struct OpenGLCapabilitySwitch
 {
     bool mbLimitedShaderRegisters;
 

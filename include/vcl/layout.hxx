@@ -106,7 +106,7 @@ protected:
     virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const = 0;
 };
 
-class VCL_DLLPUBLIC VclVBox : public VclBox
+class VclVBox : public VclBox
 {
 public:
     VclVBox(vcl::Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
@@ -145,7 +145,7 @@ protected:
     }
 };
 
-class VCL_DLLPUBLIC VclHBox : public VclBox
+class VclHBox : public VclBox
 {
 public:
     VclHBox(vcl::Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
@@ -221,7 +221,7 @@ private:
     Size addReqGroups(const VclButtonBox::Requisition &rReq) const;
 };
 
-class VCL_DLLPUBLIC VclVButtonBox : public VclButtonBox
+class VclVButtonBox : public VclButtonBox
 {
 public:
     VclVButtonBox(vcl::Window *pParent)
@@ -260,7 +260,7 @@ protected:
     }
 };
 
-class VCL_DLLPUBLIC VclHButtonBox : public VclButtonBox
+class VclHButtonBox : public VclButtonBox
 {
 public:
     VclHButtonBox(vcl::Window *pParent)

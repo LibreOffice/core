@@ -32,7 +32,7 @@
 class SfxObjectShell;
 class SvxMacroTableDtor;
 
-struct SFX2_DLLPUBLIC SfxEventName
+struct SfxEventName
 {
     SvMacroItemId mnId;
     OUString      maEventName;

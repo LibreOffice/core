@@ -26,7 +26,7 @@
 
 namespace connectivity
 {
-    class OOO_DLLPUBLIC_DBTOOLS OColumn
+    class OColumn
     {
         OUString m_CatalogName;
         OUString m_SchemaName;

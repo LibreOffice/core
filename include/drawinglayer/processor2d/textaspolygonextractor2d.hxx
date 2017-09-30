@@ -34,7 +34,7 @@ namespace drawinglayer
     namespace processor2d
     {
         /// helper data structure for returning the result
-        struct DRAWINGLAYER_DLLPUBLIC TextAsPolygonDataNode
+        struct TextAsPolygonDataNode
         {
         private:
             basegfx::B2DPolyPolygon                 maB2DPolyPolygon;

@@ -295,7 +295,7 @@ public:
                             { return *pSet; }
 };
 
-class SVL_DLLPUBLIC SfxPoolItemHint: public SfxHint
+class SfxPoolItemHint: public SfxHint
 {
     SfxPoolItem* pObj;
 public:

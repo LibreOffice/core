@@ -224,7 +224,7 @@ namespace svt
         Technically, the class simply filters for the ->VclEventId::RadiobuttonToggle
         and the ->VclEventId::CheckboxToggle event.
     */
-    class SVT_DLLPUBLIC FilterForRadioOrCheckToggle : public IWindowEventFilter
+    class FilterForRadioOrCheckToggle : public IWindowEventFilter
     {
         const vcl::Window&   m_rWindow;
     public:
@@ -261,7 +261,7 @@ namespace svt
         With this, both <code>m_aLabelSelection</code> and <code>m_aListSelection</code> will
         be disabled if and only <code>m_aOptionSelectSomething</code> is checked.
     */
-    class SVT_DLLPUBLIC RadioDependentEnabler : public DialogController
+    class RadioDependentEnabler : public DialogController
     {
     public:
         RadioDependentEnabler( RadioButton& _rButton )

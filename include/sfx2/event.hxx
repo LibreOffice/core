@@ -107,7 +107,7 @@ enum class SfxEventHintId {
     SwEventLayoutFinished,
 };
 
-class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
+class SfxEventHint : public SfxHint
 {
     SfxObjectShell*     pObjShell;
     OUString            aEventName;
@@ -131,7 +131,7 @@ public:
 };
 
 
-class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
+class SfxViewEventHint : public SfxEventHint
 {
     css::uno::Reference< css::frame::XController2 > xViewController;
 

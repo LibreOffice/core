@@ -40,7 +40,7 @@ enum class NBType
     Bullets = 1, GraphicBullets
 };
 
-class  SVX_DLLPUBLIC NumSettings_Impl
+class NumSettings_Impl
 {
     public:
         SvxNumType      nNumberType;
@@ -73,7 +73,7 @@ class  SVX_DLLPUBLIC NumSettings_Impl
 
 typedef std::vector< std::shared_ptr<NumSettings_Impl> > NumSettingsArr_Impl;
 
-class  SVX_DLLPUBLIC BulletsSettings
+class BulletsSettings
 {
 public:
     bool            bIsCustomized;
@@ -84,7 +84,7 @@ public:
 };
 
 
-class  SVX_DLLPUBLIC NumberSettings_Impl
+class NumberSettings_Impl
 {
     public:
         bool              bIsCustomized;
@@ -99,7 +99,7 @@ class  SVX_DLLPUBLIC NumberSettings_Impl
 
 typedef std::vector< std::shared_ptr<NumberSettings_Impl> > NumberSettingsArr_Impl;
 
-class  SVX_DLLPUBLIC OutlineSettings_Impl
+class OutlineSettings_Impl
 {
     public:
         bool            bIsCustomized;

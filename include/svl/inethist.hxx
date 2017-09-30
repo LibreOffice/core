@@ -100,7 +100,7 @@ public:
 };
 
 // broadcasted from PutUrl().
-class SVL_DLLPUBLIC INetURLHistoryHint: public SfxHint
+class INetURLHistoryHint: public SfxHint
 {
     const INetURLObject* pObj;
 public:

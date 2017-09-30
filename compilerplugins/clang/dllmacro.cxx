@@ -80,6 +80,12 @@ bool DllMacro::VisitNamedDecl(NamedDecl const * decl) {
     {
         auto p = dyn_cast<CXXRecordDecl>(decl);
         if (p && p->isCompleteDefinition() && !p->getDescribedClassTemplate()) {
+            if (isInUnoIncludeFile(
+                    compiler.getSourceManager().getSpellingLoc(
+                        decl->getLocation())))
+            {
+                return true;
+            }
             // don't know what these macros mean, leave them alone
             auto macroLoc = a->getLocation();
             while (compiler.getSourceManager().isMacroBodyExpansion(macroLoc)) {
@@ -90,10 +96,15 @@ bool DllMacro::VisitNamedDecl(NamedDecl const * decl) {
                     return true;
                 if (macroName == "VCL_PLUGIN_PUBLIC")
                     return true;
+                if (macroName == "SAL_DLLPUBLIC_TEMPLATE")
+                    // e.g., OAnyEnumeration_BASE in
+                    // include/comphelper/enumhelper.hxx ("this is the way that
+                    // works for ENABLE_LTO with MSVC 2013")
+                    return true;
                 macroLoc = compiler.getSourceManager().getImmediateMacroCallerLoc(macroLoc);
             }
             for (auto it = p->method_begin(); it != p->method_end(); ++it) {
-                if (!it->hasInlineBody()) {
+                if (!(it->hasInlineBody() || it->isImplicit())) {
                     return true;
                 }
             }

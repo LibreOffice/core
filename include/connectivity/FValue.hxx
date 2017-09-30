@@ -506,7 +506,7 @@ namespace connectivity
 
     typedef ODeleteVector< ORowSetValue >               OValueVector;
 
-    class OOO_DLLPUBLIC_DBTOOLS OValueRefVector : public ODeleteVector< ORowSetValueDecoratorRef >
+    class OValueRefVector : public ODeleteVector< ORowSetValueDecoratorRef >
     {
     public:
         OValueRefVector(){}

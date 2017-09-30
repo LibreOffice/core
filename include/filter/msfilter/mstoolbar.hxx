@@ -321,7 +321,7 @@ public:
     bool IsMenuToolbar(){ return ( ( ltbtr & 0x2000000 ) == 0x2000000 ); }
 };
 
-class MSFILTER_DLLPUBLIC SRECT : public TBBase
+class SRECT : public TBBase
 {
 public:
     SRECT() : left(0), top(0), right(0), bottom(0) {}

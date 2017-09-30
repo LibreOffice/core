@@ -50,7 +50,7 @@ namespace comphelper
 
     //= ComponentDescription
 
-    struct COMPHELPER_DLLPUBLIC ComponentDescription
+    struct ComponentDescription
     {
         /// the implementation name of the component
         OUString                                     sImplementationName;

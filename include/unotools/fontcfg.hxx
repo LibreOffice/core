@@ -122,7 +122,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
     OUString getUserInterfaceFont( const LanguageTag& rLanguageTag ) const;
 };
 
-struct UNOTOOLS_DLLPUBLIC FontNameAttr
+struct FontNameAttr
 {
     OUString                            Name;
     ::std::vector< OUString >           Substitutions;

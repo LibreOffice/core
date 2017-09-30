@@ -31,7 +31,7 @@ namespace xmlscript
 // HACK C++ struct to transport info. Later the container
 // itself should do the export/import and use exported XML
 // functionality from xmlscript
-struct XMLSCRIPT_DLLPUBLIC ModuleDescriptor
+struct ModuleDescriptor
 {
     OUString aName;
     OUString aLanguage;

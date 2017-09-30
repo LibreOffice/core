@@ -51,7 +51,7 @@ namespace comphelper
         SharedMutex as member, but you need to move it into another base class,
         which is initialized before the mutex-requiring class is.
     */
-    class COMPHELPER_DLLPUBLIC SharedMutexBase
+    class SharedMutexBase
     {
     protected:
         SharedMutexBase()

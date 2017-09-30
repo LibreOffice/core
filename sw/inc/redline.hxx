@@ -330,7 +330,7 @@ public:
         { return m_aRedlineData; }
 };
 
-class SW_DLLPUBLIC SwRedlineHint : public SfxHint
+class SwRedlineHint : public SfxHint
 {
 };
 

@@ -771,7 +771,7 @@ struct CompareSvxMSDffShapeTxBxSort
 {
   bool operator()( SvxMSDffShapeOrder* const& lhs, SvxMSDffShapeOrder* const& rhs ) const { return (*lhs)<(*rhs); }
 };
-class MSFILTER_DLLPUBLIC SvxMSDffShapeTxBxSort : public std::set<SvxMSDffShapeOrder*,CompareSvxMSDffShapeTxBxSort> {};
+class SvxMSDffShapeTxBxSort : public std::set<SvxMSDffShapeOrder*,CompareSvxMSDffShapeTxBxSort> {};
 
 
 #endif

@@ -126,7 +126,7 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
     SvtLinguOptions();
 };
 
-struct UNOTOOLS_DLLPUBLIC SvtLinguConfigDictionaryEntry
+struct SvtLinguConfigDictionaryEntry
 {
     // the URL's pointing to the location of the files the dictionary consists of
     css::uno::Sequence< OUString >  aLocations;

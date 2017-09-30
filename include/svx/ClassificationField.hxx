@@ -25,7 +25,7 @@ enum class ClassificationType
     INTELLECTUAL_PROPERTY_PART
 };
 
-class SVX_DLLPUBLIC ClassificationField : public SvxFieldData
+class ClassificationField : public SvxFieldData
 {
 public:
     ClassificationType meType;
@@ -53,7 +53,7 @@ public:
     }
 };
 
-struct SVX_DLLPUBLIC ClassificationResult
+struct ClassificationResult
 {
     ClassificationType meType;
     OUString msString;
