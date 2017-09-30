@@ -1418,26 +1418,24 @@ sal_Int32 SwFramePage::FillPosLB(const FrameMap* _pMap,
     for (size_t i = 0; _pMap && i < nCount; ++i)
     {
 //      Why not from the left/from inside or from above?
+        SvxSwFramePosString::StringId eStrId = m_pMirrorPagesCB->IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
+        // --> OD 2009-08-31 #mongolianlayout#
+        eStrId = lcl_ChangeResIdToVerticalOrRTL( eStrId,
+                                                 m_bIsVerticalFrame,
+                                                 m_bIsVerticalL2R,
+                                                 m_bIsInRightToLeft);
+        OUString sEntry(SvxSwFramePosString::GetString(eStrId));
+        if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
         {
-            SvxSwFramePosString::StringId eStrId = m_pMirrorPagesCB->IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
-            // --> OD 2009-08-31 #mongolianlayout#
-            eStrId = lcl_ChangeResIdToVerticalOrRTL( eStrId,
-                                                     m_bIsVerticalFrame,
-                                                     m_bIsVerticalL2R,
-                                                     m_bIsInRightToLeft);
-            OUString sEntry(SvxSwFramePosString::GetString(eStrId));
-            if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
-            {
-                // don't insert entries when frames are character bound
-                _rLB.InsertEntry(sEntry);
-            }
-            // i#22341 - add condition to handle map <aVCharMap>
-            // that is ambiguous in the alignment.
-            if ( _pMap[i].nAlign == _nAlign &&
-                 ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
-            {
-                sSelEntry = sEntry;
-            }
+            // don't insert entries when frames are character bound
+            _rLB.InsertEntry(sEntry);
+        }
+        // i#22341 - add condition to handle map <aVCharMap>
+        // that is ambiguous in the alignment.
+        if ( _pMap[i].nAlign == _nAlign &&
+             ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
+        {
+            sSelEntry = sEntry;
         }
     }
 

@@ -530,39 +530,37 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         }
         if ( bChanged )
         {
+            // Force the chart to be loaded now, so it registers itself for UNO events.
+            // UNO broadcasts are done after UpdateChartRef, so the chart will get this
+            // reference change.
+
+            uno::Reference<embed::XEmbeddedObject> xIPObj =
+                FindOleObjectByName(pChartListener->GetName());
+
+            svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+
+            // After the change, chart keeps track of its own data source ranges,
+            // the listener doesn't need to listen anymore, except the chart has
+            // an internal data provider.
+            bool bInternalDataProvider = false;
+            if ( xIPObj.is() )
             {
-                // Force the chart to be loaded now, so it registers itself for UNO events.
-                // UNO broadcasts are done after UpdateChartRef, so the chart will get this
-                // reference change.
-
-                uno::Reference<embed::XEmbeddedObject> xIPObj =
-                    FindOleObjectByName(pChartListener->GetName());
-
-                svt::EmbeddedObjectRef::TryRunningState( xIPObj );
-
-                // After the change, chart keeps track of its own data source ranges,
-                // the listener doesn't need to listen anymore, except the chart has
-                // an internal data provider.
-                bool bInternalDataProvider = false;
-                if ( xIPObj.is() )
+                try
                 {
-                    try
-                    {
-                        uno::Reference< chart2::XChartDocument > xChartDoc( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
-                        bInternalDataProvider = xChartDoc->hasInternalDataProvider();
-                    }
-                    catch ( uno::Exception& )
-                    {
-                    }
+                    uno::Reference< chart2::XChartDocument > xChartDoc( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
+                    bInternalDataProvider = xChartDoc->hasInternalDataProvider();
                 }
-                if ( bInternalDataProvider )
+                catch ( uno::Exception& )
                 {
-                    pChartListener->ChangeListening( aNewRLR, bDataChanged );
                 }
-                else
-                {
-                    pChartListener->ChangeListening( new ScRangeList, bDataChanged );
-                }
+            }
+            if ( bInternalDataProvider )
+            {
+                pChartListener->ChangeListening( aNewRLR, bDataChanged );
+            }
+            else
+            {
+                pChartListener->ChangeListening( new ScRangeList, bDataChanged );
             }
         }
     }

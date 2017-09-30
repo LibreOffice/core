@@ -606,14 +606,12 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
             sTitle, css::ucb::NameClash::OVERWRITE ))
     {
         //the user may have cancelled the dialog because downloading took to long
-        {
-            SolarMutexGuard g;
-            if (m_stop) {
-                return m_stop;
-            }
-            //all errors should be handled by the command environment.
-            aUpdateData.sLocalURL = destFolder + "/" + sTitle;
+        SolarMutexGuard g;
+        if (m_stop) {
+            return m_stop;
         }
+        //all errors should be handled by the command environment.
+        aUpdateData.sLocalURL = destFolder + "/" + sTitle;
     }
 
     return m_stop;

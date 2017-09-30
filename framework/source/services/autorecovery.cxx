@@ -1127,7 +1127,7 @@ CacheLockGuard::~CacheLockGuard()
 
 void CacheLockGuard::lock(bool bLockForAddRemoveVectorItems)
 {
-    /* SAFE */ {
+    /* SAFE */
     osl::MutexGuard g(m_rSharedMutex);
 
     if (m_bLockedByThisGuard)
@@ -1153,12 +1153,12 @@ void CacheLockGuard::lock(bool bLockForAddRemoveVectorItems)
 
     ++m_rCacheLock;
     m_bLockedByThisGuard = true;
-    } /* SAFE */
+    /* SAFE */
 }
 
 void CacheLockGuard::unlock()
 {
-    /* SAFE */ {
+    /* SAFE */
     osl::MutexGuard g(m_rSharedMutex);
 
     if ( ! m_bLockedByThisGuard)
@@ -1174,7 +1174,7 @@ void CacheLockGuard::unlock()
                 "Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)",
                 m_xOwner);
     }
-    } /* SAFE */
+    /* SAFE */
 }
 
 DispatchParams::DispatchParams()
@@ -1659,7 +1659,7 @@ void SAL_CALL AutoRecovery::modified(const css::lang::EventObject& aEvent)
 
 void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
 {
-    /* SAFE */ {
+    /* SAFE */
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (aEvent.Source == m_xNewDocBroadcaster)
@@ -1684,7 +1684,7 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
         return;
     }
 
-    } /* SAFE */
+    /* SAFE */
 }
 
 void AutoRecovery::implts_openConfig()

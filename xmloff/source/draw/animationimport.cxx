@@ -874,21 +874,19 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             }
             case ANA_Target:
             {
-                {
-                    Any aTarget( mpHelper->convertTarget( rValue ) );
+                Any aTarget( mpHelper->convertTarget( rValue ) );
 
-                    if( xAnimate.is() )
-                    {
-                        xAnimate->setTarget( aTarget );
-                    }
-                    else if( xIter.is() )
-                    {
-                        xIter->setTarget( aTarget );
-                    }
-                    else if( xCommand.is() )
-                    {
-                        xCommand->setTarget( aTarget );
-                    }
+                if( xAnimate.is() )
+                {
+                    xAnimate->setTarget( aTarget );
+                }
+                else if( xIter.is() )
+                {
+                    xIter->setTarget( aTarget );
+                }
+                else if( xCommand.is() )
+                {
+                    xCommand->setTarget( aTarget );
                 }
             }
             break;

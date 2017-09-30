@@ -4409,19 +4409,17 @@ SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat,
 
 void SwShareBoxFormats::AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNew )
 {
+    sal_uInt16 nPos;
+    SwShareBoxFormat* pEntry;
+    if( !Seek_Entry( rOld, &nPos ))
     {
-        sal_uInt16 nPos;
-        SwShareBoxFormat* pEntry;
-        if( !Seek_Entry( rOld, &nPos ))
-        {
-            pEntry = new SwShareBoxFormat( rOld );
-            m_ShareArr.insert(m_ShareArr.begin() + nPos, std::unique_ptr<SwShareBoxFormat>(pEntry));
-        }
-        else
-            pEntry = m_ShareArr[ nPos ].get();
-
-        pEntry->AddFormat( rNew );
+        pEntry = new SwShareBoxFormat( rOld );
+        m_ShareArr.insert(m_ShareArr.begin() + nPos, std::unique_ptr<SwShareBoxFormat>(pEntry));
     }
+    else
+        pEntry = m_ShareArr[ nPos ].get();
+
+    pEntry->AddFormat( rNew );
 }
 
 void SwShareBoxFormats::ChangeFrameFormat( SwTableBox* pBox, SwTableLine* pLn,

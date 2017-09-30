@@ -1351,54 +1351,52 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         try
         {
+            //now apply this break at the first paragraph of this section
+            uno::Reference< beans::XPropertySet > xRangeProperties( lcl_GetRangeProperties( m_bIsFirstSection, rDM_Impl, m_xStartingRange ) );
+
+            // Handle page breaks with odd/even page numbering. We need to use an extra page style for setting the page style
+            // to left/right, because if we set it to the normal style, we'd set it to "First Page"/"Default Style", which would
+            // break them (all default pages would be only left or right).
+            if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage) || m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_oddPage) )
             {
-                //now apply this break at the first paragraph of this section
-                uno::Reference< beans::XPropertySet > xRangeProperties( lcl_GetRangeProperties( m_bIsFirstSection, rDM_Impl, m_xStartingRange ) );
-
-                // Handle page breaks with odd/even page numbering. We need to use an extra page style for setting the page style
-                // to left/right, because if we set it to the normal style, we'd set it to "First Page"/"Default Style", which would
-                // break them (all default pages would be only left or right).
-                if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage) || m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_oddPage) )
+                OUString* pageStyle = m_bTitlePage ? &m_sFirstPageStyleName : &m_sFollowPageStyleName;
+                OUString evenOddStyleName = lcl_FindUnusedPageStyleName( rDM_Impl.GetPageStyles()->getElementNames() );
+                uno::Reference< beans::XPropertySet > evenOddStyle(
+                    rDM_Impl.GetTextFactory()->createInstance( "com.sun.star.style.PageStyle" ),
+                    uno::UNO_QUERY );
+                // Unfortunately using setParent() does not work for page styles, so make a deep copy of the page style.
+                uno::Reference< beans::XPropertySet > pageProperties( m_bTitlePage ? m_aFirstPageStyle : m_aFollowPageStyle );
+                uno::Reference< beans::XPropertySetInfo > pagePropertiesInfo( pageProperties->getPropertySetInfo() );
+                uno::Sequence< beans::Property > propertyList( pagePropertiesInfo->getProperties() );
+                for ( int i = 0; i < propertyList.getLength(); ++i )
                 {
-                    OUString* pageStyle = m_bTitlePage ? &m_sFirstPageStyleName : &m_sFollowPageStyleName;
-                    OUString evenOddStyleName = lcl_FindUnusedPageStyleName( rDM_Impl.GetPageStyles()->getElementNames() );
-                    uno::Reference< beans::XPropertySet > evenOddStyle(
-                        rDM_Impl.GetTextFactory()->createInstance( "com.sun.star.style.PageStyle" ),
-                        uno::UNO_QUERY );
-                    // Unfortunately using setParent() does not work for page styles, so make a deep copy of the page style.
-                    uno::Reference< beans::XPropertySet > pageProperties( m_bTitlePage ? m_aFirstPageStyle : m_aFollowPageStyle );
-                    uno::Reference< beans::XPropertySetInfo > pagePropertiesInfo( pageProperties->getPropertySetInfo() );
-                    uno::Sequence< beans::Property > propertyList( pagePropertiesInfo->getProperties() );
-                    for ( int i = 0; i < propertyList.getLength(); ++i )
-                    {
-                        if ( (propertyList[i].Attributes & beans::PropertyAttribute::READONLY) == 0 )
-                            evenOddStyle->setPropertyValue( propertyList[i].Name, pageProperties->getPropertyValue( propertyList[i].Name ) );
-                    }
-                    evenOddStyle->setPropertyValue( "FollowStyle", uno::makeAny( *pageStyle ) );
-                    rDM_Impl.GetPageStyles()->insertByName( evenOddStyleName, uno::makeAny( evenOddStyle ) );
-                    evenOddStyle->setPropertyValue( "HeaderIsOn", uno::makeAny( false ) );
-                    evenOddStyle->setPropertyValue( "FooterIsOn", uno::makeAny( false ) );
-                    CopyHeaderFooter( pageProperties, evenOddStyle );
-                    *pageStyle = evenOddStyleName; // And use it instead of the original one (which is set as follow of this one).
-                    if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage) )
-                        evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::makeAny( style::PageStyleLayout_LEFT ) );
-                    else if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_oddPage) )
-                        evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::makeAny( style::PageStyleLayout_RIGHT ) );
+                    if ( (propertyList[i].Attributes & beans::PropertyAttribute::READONLY) == 0 )
+                        evenOddStyle->setPropertyValue( propertyList[i].Name, pageProperties->getPropertyValue( propertyList[i].Name ) );
                 }
+                evenOddStyle->setPropertyValue( "FollowStyle", uno::makeAny( *pageStyle ) );
+                rDM_Impl.GetPageStyles()->insertByName( evenOddStyleName, uno::makeAny( evenOddStyle ) );
+                evenOddStyle->setPropertyValue( "HeaderIsOn", uno::makeAny( false ) );
+                evenOddStyle->setPropertyValue( "FooterIsOn", uno::makeAny( false ) );
+                CopyHeaderFooter( pageProperties, evenOddStyle );
+                *pageStyle = evenOddStyleName; // And use it instead of the original one (which is set as follow of this one).
+                if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_evenPage) )
+                    evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::makeAny( style::PageStyleLayout_LEFT ) );
+                else if ( m_nBreakType == static_cast<sal_Int32>(NS_ooxml::LN_Value_ST_SectionMark_oddPage) )
+                    evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::makeAny( style::PageStyleLayout_RIGHT ) );
+            }
 
-                if ( xRangeProperties.is() && rDM_Impl.IsNewDoc() )
+            if ( xRangeProperties.is() && rDM_Impl.IsNewDoc() )
+            {
+                xRangeProperties->setPropertyValue(
+                    getPropertyName( PROP_PAGE_DESC_NAME ),
+                    uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName
+                        : m_sFollowPageStyleName ) );
+
+                if (0 <= m_nPageNumber)
                 {
-                    xRangeProperties->setPropertyValue(
-                        getPropertyName( PROP_PAGE_DESC_NAME ),
-                        uno::makeAny( m_bTitlePage ? m_sFirstPageStyleName
-                            : m_sFollowPageStyleName ) );
-
-                    if (0 <= m_nPageNumber)
-                    {
-                        sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
-                        xRangeProperties->setPropertyValue(getPropertyName(PROP_PAGE_NUMBER_OFFSET),
-                            uno::makeAny(nPageNumber));
-                    }
+                    sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
+                    xRangeProperties->setPropertyValue(getPropertyName(PROP_PAGE_NUMBER_OFFSET),
+                        uno::makeAny(nPageNumber));
                 }
             }
         }

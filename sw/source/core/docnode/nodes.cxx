@@ -1593,39 +1593,37 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     SwTextNode* const pEndSrcNd = aEndIdx.GetNode().GetTextNode();
     if ( pEndSrcNd )
     {
+        // at the end of this range a new TextNode will be created
+        if( !bSplitDestNd )
         {
-            // at the end of this range a new TextNode will be created
-            if( !bSplitDestNd )
+            if( rPos.nNode < rNodes.GetEndOfContent().GetIndex() )
             {
-                if( rPos.nNode < rNodes.GetEndOfContent().GetIndex() )
-                {
-                    ++rPos.nNode;
-                }
-
-                pDestNd =
-                    rNodes.MakeTextNode( rPos.nNode, pEndSrcNd->GetTextColl() );
-                --rPos.nNode;
-                rPos.nContent.Assign( pDestNd, 0 );
-            }
-            else
-            {
-                pDestNd = rPos.nNode.GetNode().GetTextNode();
+                ++rPos.nNode;
             }
 
-            if (pDestNd && pEnd->nContent.GetIndex())
-            {
-                // move the content into the new node
-                SwIndex aIdx( pEndSrcNd, 0 );
-                pEndSrcNd->CutText( pDestNd, rPos.nContent, aIdx,
-                                pEnd->nContent.GetIndex());
-            }
+            pDestNd =
+                rNodes.MakeTextNode( rPos.nNode, pEndSrcNd->GetTextColl() );
+            --rPos.nNode;
+            rPos.nContent.Assign( pDestNd, 0 );
+        }
+        else
+        {
+            pDestNd = rPos.nNode.GetNode().GetTextNode();
+        }
 
-            if (pDestNd && bCopyCollFormat)
-            {
-                SwDoc* const pInsDoc = pDestNd->GetDoc();
-                ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
-                pEndSrcNd->CopyCollFormat( *pDestNd );
-            }
+        if (pDestNd && pEnd->nContent.GetIndex())
+        {
+            // move the content into the new node
+            SwIndex aIdx( pEndSrcNd, 0 );
+            pEndSrcNd->CutText( pDestNd, rPos.nContent, aIdx,
+                            pEnd->nContent.GetIndex());
+        }
+
+        if (pDestNd && bCopyCollFormat)
+        {
+            SwDoc* const pInsDoc = pDestNd->GetDoc();
+            ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
+            pEndSrcNd->CopyCollFormat( *pDestNd );
         }
     }
     else

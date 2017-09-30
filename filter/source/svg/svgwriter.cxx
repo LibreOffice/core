@@ -1371,44 +1371,42 @@ void SVGTextWriter::implWriteBulletChars()
     for( ; it != end; ++it )
     {
         // <g id="?" > (used by animations)
+        // As id we use the id of the text portion placeholder with prefix
+        // bullet-char-*
+        sId = "bullet-char-" + it->first;
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletChar" );
+        SvXMLElementExport aBulletCharElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+
+        // <g transform="translate(x,y)" >
         {
-            // As id we use the id of the text portion placeholder with prefix
-            // bullet-char-*
-            sId = "bullet-char-" + it->first;
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletChar" );
-            SvXMLElementExport aBulletCharElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+            const BulletListItemInfo& rInfo = it->second;
 
-            // <g transform="translate(x,y)" >
+            // Add positioning attribute through a translation
+            sPosition = "translate(" +
+                        OUString::number( rInfo.aPos.X() ) +
+                        "," + OUString::number( rInfo.aPos.Y() ) + ")";
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sPosition );
+
+            mrAttributeWriter.AddPaintAttr( COL_TRANSPARENT, rInfo.aColor );
+
+            SvXMLElementExport aPositioningElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+
+            // <use transform="scale(font-size)" xlink:ref="/" >
             {
-                const BulletListItemInfo& rInfo = it->second;
+                // Add size attribute through a scaling
+                sScaling = "scale(" + OUString::number( rInfo.nFontSize ) +
+                           "," + OUString::number( rInfo.nFontSize )+ ")";
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sScaling );
 
-                // Add positioning attribute through a translation
-                sPosition = "translate(" +
-                            OUString::number( rInfo.aPos.X() ) +
-                            "," + OUString::number( rInfo.aPos.Y() ) + ")";
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sPosition );
+                // Add ref attribute
+                sRefId = "#bullet-char-template-" +
+                         OUString::number( ( rInfo.cBulletChar ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
-                mrAttributeWriter.AddPaintAttr( COL_TRANSPARENT, rInfo.aColor );
-
-                SvXMLElementExport aPositioningElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
-
-                // <use transform="scale(font-size)" xlink:ref="/" >
-                {
-                    // Add size attribute through a scaling
-                    sScaling = "scale(" + OUString::number( rInfo.nFontSize ) +
-                               "," + OUString::number( rInfo.nFontSize )+ ")";
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sScaling );
-
-                    // Add ref attribute
-                    sRefId = "#bullet-char-template-" +
-                             OUString::number( ( rInfo.cBulletChar ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
-
-                    SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
-                }
-            } // close aPositioningElem
-        } // close aBulletCharElem
+                SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
+            }
+        } // close aPositioningElem
     }
 
     // clear the map

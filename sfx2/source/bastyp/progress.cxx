@@ -258,12 +258,10 @@ void SfxProgress::SetState
                 const SfxBoolItem* pHiddenItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_HIDDEN, false);
                 if ( !pHiddenItem || !pHiddenItem->GetValue() )
                 {
-                    {
-                        const SfxUnoAnyItem* pIndicatorItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pMedium->GetItemSet(), SID_PROGRESS_STATUSBAR_CONTROL, false);
-                        Reference< XStatusIndicator > xInd;
-                        if ( pIndicatorItem && (pIndicatorItem->GetValue()>>=xInd) )
-                            pImpl->xStatusInd = xInd;
-                    }
+                    const SfxUnoAnyItem* pIndicatorItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pMedium->GetItemSet(), SID_PROGRESS_STATUSBAR_CONTROL, false);
+                    Reference< XStatusIndicator > xInd;
+                    if ( pIndicatorItem && (pIndicatorItem->GetValue()>>=xInd) )
+                        pImpl->xStatusInd = xInd;
                 }
             }
         }

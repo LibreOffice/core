@@ -1634,9 +1634,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     }
     if( aSet.Count() )
     {
-        {
-            pNewFormat->SetFormatAttr( aSet );
-        }
+        pNewFormat->SetFormatAttr( aSet );
     }
     return pNewFormat;
 }

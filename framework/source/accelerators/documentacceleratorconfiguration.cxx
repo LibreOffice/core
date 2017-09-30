@@ -101,20 +101,18 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
         const css::uno::Sequence< css::uno::Any >& lArguments)
     : DocumentAcceleratorConfiguration_BASE(xContext)
 {
+    SolarMutexGuard g;
+    css::uno::Reference<css::embed::XStorage> xRoot;
+    if (lArguments.getLength() == 1 && (lArguments[0] >>= xRoot))
     {
-        SolarMutexGuard g;
-        css::uno::Reference<css::embed::XStorage> xRoot;
-        if (lArguments.getLength() == 1 && (lArguments[0] >>= xRoot))
-        {
-            m_xDocumentRoot = xRoot;
-        }
-        else
-        {
-            ::comphelper::SequenceAsHashMap lArgs(lArguments);
-            m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
-                "DocumentRoot",
-                css::uno::Reference< css::embed::XStorage >());
-        }
+        m_xDocumentRoot = xRoot;
+    }
+    else
+    {
+        ::comphelper::SequenceAsHashMap lArgs(lArguments);
+        m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
+            "DocumentRoot",
+            css::uno::Reference< css::embed::XStorage >());
     }
 }
 

@@ -1176,14 +1176,11 @@ void SvXMLExport::ImplExportAutoStyles()
 
 void SvXMLExport::ImplExportMasterStyles()
 {
-    {
-        // <style:master-styles>
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,
-                                true, true );
+    // <style:master-styles>
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,
+                            true, true );
 
-        ExportMasterStyles_();
-    }
-
+    ExportMasterStyles_();
 }
 
 void SvXMLExport::ImplExportContent()

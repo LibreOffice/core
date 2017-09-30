@@ -111,13 +111,10 @@ static void lcl_addAspect(
         const XMLPropertyState **pStates,
         const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
+    sal_Int64 nAspect = rObj.GetViewAspect();
+    if ( nAspect )
     {
-        sal_Int64 nAspect = rObj.GetViewAspect();
-
-        if ( nAspect )
-        {
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), uno::makeAny( nAspect ) );
-        }
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), uno::makeAny( nAspect ) );
     }
 }
 
@@ -126,23 +123,21 @@ static void lcl_addOutplaceProperties(
         const XMLPropertyState **pStates,
         const rtl::Reference < XMLPropertySetMapper >& rMapper )
 {
+    MapMode aMode( MapUnit::Map100thMM ); // the API expects this map mode for the embedded objects
+    Size aSize = rObj.GetSize( &aMode ); // get the size in the requested map mode
+
+    if( aSize.Width() && aSize.Height() )
     {
-        MapMode aMode( MapUnit::Map100thMM ); // the API expects this map mode for the embedded objects
-        Size aSize = rObj.GetSize( &aMode ); // get the size in the requested map mode
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), Any(sal_Int32(0)) );
+        pStates++;
 
-        if( aSize.Width() && aSize.Height() )
-        {
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), Any(sal_Int32(0)) );
-            pStates++;
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), Any(sal_Int32(0)) );
+        pStates++;
 
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), Any(sal_Int32(0)) );
-            pStates++;
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), Any((sal_Int32)aSize.Width()) );
+        pStates++;
 
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), Any((sal_Int32)aSize.Width()) );
-            pStates++;
-
-            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), Any((sal_Int32)aSize.Height()) );
-        }
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), Any((sal_Int32)aSize.Height()) );
     }
 }
 

@@ -116,15 +116,13 @@ FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
 
 FSStorage::~FSStorage()
 {
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        m_refCount++; // to call dispose
-        try {
-            dispose();
-        }
-        catch( uno::RuntimeException& )
-        {}
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_refCount++; // to call dispose
+    try {
+        dispose();
     }
+    catch( uno::RuntimeException& )
+    {}
 }
 
 bool FSStorage::MakeFolderNoUI( const OUString& rFolder )

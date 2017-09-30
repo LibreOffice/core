@@ -131,19 +131,17 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
                 case 24 :
                 {
+                    BitmapColor aBitmapColor;
+                    for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
                     {
-                        BitmapColor aBitmapColor;
-                        for ( ny = 0; --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize )
+                        sal_uInt8* pTemp = rDesc.mpBuf;
+                        nxC = nxCount;
+                        for ( nx = 0; --nxC; nx++ )
                         {
-                            sal_uInt8* pTemp = rDesc.mpBuf;
-                            nxC = nxCount;
-                            for ( nx = 0; --nxC; nx++ )
-                            {
-                                aBitmapColor.SetRed( *pTemp++ );
-                                aBitmapColor.SetGreen( *pTemp++ );
-                                aBitmapColor.SetBlue( *pTemp++ );
-                                rDesc.mpAcc->SetPixel( ny, nx, aBitmapColor );
-                            }
+                            aBitmapColor.SetRed( *pTemp++ );
+                            aBitmapColor.SetGreen( *pTemp++ );
+                            aBitmapColor.SetBlue( *pTemp++ );
+                            rDesc.mpAcc->SetPixel( ny, nx, aBitmapColor );
                         }
                     }
                 }

@@ -5809,11 +5809,10 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
     if ( !bOverSelect )
     {
-        {   // create only temporary move context because otherwise
-            // the query against the content form doesn't work!!!
-            SwMvContext aMvContext( &rSh );
-            rSh.CallSetCursor(&aDocPos, false);
-        }
+        // create only temporary move context because otherwise
+        // the query against the content form doesn't work!!!
+        SwMvContext aMvContext( &rSh );
+        rSh.CallSetCursor(&aDocPos, false);
     }
     if( !bOverURLGrf )
     {

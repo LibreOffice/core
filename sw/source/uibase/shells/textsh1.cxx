@@ -1815,19 +1815,17 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case FN_NUM_CONTINUE:
             {
+                // #i86492#
+                // Search also for bullet list
+                OUString aDummy;
+                const SwNumRule* pRule =
+                        rSh.SearchNumRule( true, aDummy );
+                if ( !pRule )
                 {
-                    // #i86492#
-                    // Search also for bullet list
-                    OUString aDummy;
-                    const SwNumRule* pRule =
-                            rSh.SearchNumRule( true, aDummy );
-                    if ( !pRule )
-                    {
-                        pRule = rSh.SearchNumRule( false, aDummy );
-                    }
-                    if ( !pRule )
-                        rSet.DisableItem(nWhich);
+                    pRule = rSh.SearchNumRule( false, aDummy );
                 }
+                if ( !pRule )
+                    rSet.DisableItem(nWhich);
             }
             break;
             case SID_INSERT_RLM :

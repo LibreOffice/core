@@ -1559,25 +1559,23 @@ SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
     else
         rPoly.mpImplPolygon->ImplSetSize( nPoints, false );
 
-    {
-        // Determine whether we need to write through operators
+    // Determine whether we need to write through operators
 #if (SAL_TYPES_SIZEOFLONG) == 4
 #ifdef OSL_BIGENDIAN
-        if ( rIStream.GetEndian() == SvStreamEndian::BIG )
+    if ( rIStream.GetEndian() == SvStreamEndian::BIG )
 #else
-        if ( rIStream.GetEndian() == SvStreamEndian::LITTLE )
+    if ( rIStream.GetEndian() == SvStreamEndian::LITTLE )
 #endif
-            rIStream.ReadBytes(rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point));
-        else
+       rIStream.ReadBytes(rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point));
+    else
 #endif
+    {
+        for( i = 0; i < nPoints; i++ )
         {
-            for( i = 0; i < nPoints; i++ )
-            {
-                sal_Int32 nTmpX(0), nTmpY(0);
-                rIStream.ReadInt32( nTmpX ).ReadInt32( nTmpY );
-                rPoly.mpImplPolygon->mpPointAry[i].X() = nTmpX;
-                rPoly.mpImplPolygon->mpPointAry[i].Y() = nTmpY;
-            }
+            sal_Int32 nTmpX(0), nTmpY(0);
+            rIStream.ReadInt32( nTmpX ).ReadInt32( nTmpY );
+            rPoly.mpImplPolygon->mpPointAry[i].X() = nTmpX;
+            rPoly.mpImplPolygon->mpPointAry[i].Y() = nTmpY;
         }
     }
 
@@ -1592,26 +1590,24 @@ SvStream& WritePolygon( SvStream& rOStream, const tools::Polygon& rPoly )
     // Write number of points
     rOStream.WriteUInt16( nPoints );
 
-    {
-        // Determine whether we need to write through operators
+    // Determine whether we need to write through operators
 #if (SAL_TYPES_SIZEOFLONG) == 4
 #ifdef OSL_BIGENDIAN
-        if ( rOStream.GetEndian() == SvStreamEndian::BIG )
+    if ( rOStream.GetEndian() == SvStreamEndian::BIG )
 #else
-        if ( rOStream.GetEndian() == SvStreamEndian::LITTLE )
+    if ( rOStream.GetEndian() == SvStreamEndian::LITTLE )
 #endif
-        {
-            if ( nPoints )
-                rOStream.WriteBytes(rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point));
-        }
-        else
+    {
+        if ( nPoints )
+            rOStream.WriteBytes(rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point));
+    }
+    else
 #endif
+    {
+        for( i = 0; i < nPoints; i++ )
         {
-            for( i = 0; i < nPoints; i++ )
-            {
-                rOStream.WriteInt32( rPoly.mpImplPolygon->mpPointAry[i].X() )
-                        .WriteInt32( rPoly.mpImplPolygon->mpPointAry[i].Y() );
-            }
+            rOStream.WriteInt32( rPoly.mpImplPolygon->mpPointAry[i].X() )
+                    .WriteInt32( rPoly.mpImplPolygon->mpPointAry[i].Y() );
         }
     }
 

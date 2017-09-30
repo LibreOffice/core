@@ -214,21 +214,13 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
         SwOLENode* pOLENd = m_rDoc.GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
         if( pOLENd && pOLENd->GetOLEObj().IsOleRef() )
         {
-
-            // TODO: the old object closed the object and cleared all references to it, but didn't remove it from the container.
-            // I have no idea, why, nobody could explain it - so I do my very best to mimic this behavior
-            //uno::Reference < util::XCloseable > xClose( pOLENd->GetOLEObj().GetOleRef(), uno::UNO_QUERY );
-            //if ( xClose.is() )
+            try
             {
-                try
-                {
-                    pOLENd->GetOLEObj().GetOleRef()->changeState( embed::EmbedStates::LOADED );
-                }
-                catch ( uno::Exception& )
-                {
-                }
+                pOLENd->GetOLEObj().GetOleRef()->changeState( embed::EmbedStates::LOADED );
             }
-
+            catch ( uno::Exception& )
+            {
+            }
         }
     }
 

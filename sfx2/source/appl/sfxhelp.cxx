@@ -217,12 +217,10 @@ SfxHelp::SfxHelp() :
 {
     // read the environment variable "HELP_DEBUG"
     // if it's set, you will see debug output on active help
-    {
-        OUString sHelpDebug;
-        OUString sEnvVarName( "HELP_DEBUG"  );
-        osl_getEnvironment( sEnvVarName.pData, &sHelpDebug.pData );
-        bIsDebug = !sHelpDebug.isEmpty();
-    }
+    OUString sHelpDebug;
+    OUString sEnvVarName( "HELP_DEBUG"  );
+    osl_getEnvironment( sEnvVarName.pData, &sHelpDebug.pData );
+    bIsDebug = !sHelpDebug.isEmpty();
 }
 
 SfxHelp::~SfxHelp()

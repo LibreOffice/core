@@ -2053,22 +2053,20 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             SwContentNode* pNextNd = GetNodes()[ nNextNd ]->GetContentNode();
             if( pNextNd )
             {
+                SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
+                const SfxPoolItem *pItem;
+                if( SfxItemState::SET == pTableFormat->GetItemState( RES_PAGEDESC,
+                    false, &pItem ) )
                 {
-                    SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
-                    const SfxPoolItem *pItem;
-                    if( SfxItemState::SET == pTableFormat->GetItemState( RES_PAGEDESC,
-                        false, &pItem ) )
-                    {
-                        pNextNd->SetAttr( *pItem );
-                        bSavePageDesc = true;
-                    }
+                    pNextNd->SetAttr( *pItem );
+                    bSavePageDesc = true;
+                }
 
-                    if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
-                        false, &pItem ) )
-                    {
-                        pNextNd->SetAttr( *pItem );
-                        bSavePageBreak = true;
-                    }
+                if( SfxItemState::SET == pTableFormat->GetItemState( RES_BREAK,
+                    false, &pItem ) )
+                {
+                    pNextNd->SetAttr( *pItem );
+                    bSavePageBreak = true;
                 }
             }
             SwUndoDelete* pUndo = new SwUndoDelete( aPaM );

@@ -496,11 +496,9 @@ namespace svt { namespace table
                 // not (yet?) know about it.
                 // So, handle it gracefully.
             #if OSL_DEBUG_LEVEL > 0
-                {
-                    Reference< XGridColumnModel > const xColumnModel( m_pImpl->m_aColumnModel );
-                    OSL_ENSURE( xColumnModel.is() && i_col < xColumnModel->getColumnCount(),
-                        "UnoControlTableModel::getCellContent: request a column's value which the ColumnModel doesn't know about!" );
-                }
+                Reference< XGridColumnModel > const xColumnModel( m_pImpl->m_aColumnModel );
+                OSL_ENSURE( xColumnModel.is() && i_col < xColumnModel->getColumnCount(),
+                    "UnoControlTableModel::getCellContent: request a column's value which the ColumnModel doesn't know about!" );
             #endif
             }
             else

@@ -1832,35 +1832,33 @@ void CustomAnimationPane::onAdd()
 
     if( pDescriptor.get() )
     {
+        mpCustomAnimationList->SelectAll( false );
+
+        // gather shapes from the selection
+        std::vector< Any >::iterator aIter( aTargets.begin() );
+        const std::vector< Any >::iterator aEnd( aTargets.end() );
+        bool bFirst = true;
+        for( ; aIter != aEnd; ++aIter )
         {
-            mpCustomAnimationList->SelectAll( false );
+            CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
 
-            // gather shapes from the selection
-            std::vector< Any >::iterator aIter( aTargets.begin() );
-            const std::vector< Any >::iterator aEnd( aTargets.end() );
-            bool bFirst = true;
-            for( ; aIter != aEnd; ++aIter )
+            // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
+            if( bHasText && (aTargets.size() == 1) )
             {
-                CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
-
-                // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
-                if( bHasText && (aTargets.size() == 1) )
+                Reference< XShape > xShape( (*aIter), UNO_QUERY );
+                if( xShape.is() && !hasVisibleShape( xShape ) )
                 {
-                    Reference< XShape > xShape( (*aIter), UNO_QUERY );
-                    if( xShape.is() && !hasVisibleShape( xShape ) )
-                    {
-                        mpMainSequence->createTextGroup( pCreated, 1, -1.0, false, false );
-                    }
+                    mpMainSequence->createTextGroup( pCreated, 1, -1.0, false, false );
                 }
-
-                if( bFirst )
-                    bFirst = false;
-                else
-                    pCreated->setNodeType( EffectNodeType::WITH_PREVIOUS );
-
-                if( pCreated.get() )
-                    mpCustomAnimationList->select( pCreated );
             }
+
+            if( bFirst )
+                bFirst = false;
+            else
+                pCreated->setNodeType( EffectNodeType::WITH_PREVIOUS );
+
+            if( pCreated.get() )
+                mpCustomAnimationList->select( pCreated );
         }
     }
 
