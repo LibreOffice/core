@@ -2872,12 +2872,12 @@ if test $_os = iOS; then
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
         versionmin=-mios-simulator-version-min=9.3
-        XCODE_ARCHS=x86_64
+        IOS_ARCHS=x86_64
         BITNESS=-fembed-bitcode
     else
         platform=iPhoneOS
         versionmin=-miphoneos-version-min=9.3
-        XCODE_ARCHS=arm64
+        IOS_ARCHS=arm64
         BITNESS=-fembed-bitcode
     fi
     xcode_developer=`xcode-select -print-path`
@@ -2898,7 +2898,7 @@ if test $_os = iOS; then
 
     AC_MSG_RESULT($sysroot)
 
-    XCODEBUILD_SDK=`echo $platform | tr A-Z a-z`$ios_sdk
+    IOS_SDK=`echo $platform | tr A-Z a-z`$ios_sdk
 
     # LTO is not really recommended for iOS builds,
     # the link time will be astronomical
@@ -2909,11 +2909,11 @@ if test $_os = iOS; then
     # get compiled with it, to avoid ld warnings when linking all that together into one
     # executable.
 
-    XCODE_CLANG_CXX_LIBRARY=libc++
-    stdlib="-stdlib=$XCODE_CLANG_CXX_LIBRARY"
+    IOS_CLANG_CXX_LIBRARY=libc++
+    stdlib="-stdlib=$IOS_CLANG_CXX_LIBRARY"
 
-    CC="`xcrun -find clang` -arch $XCODE_ARCHS -fvisibility=hidden $BITNESS -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $XCODE_ARCHS -fvisibility=hidden $stdlib $BITNESS -isysroot $sysroot $lto $versionmin"
+    CC="`xcrun -find clang` -arch $IOS_ARCHS -fvisibility=hidden $BITNESS -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $IOS_ARCHS -fvisibility=hidden $stdlib $BITNESS -isysroot $sysroot $lto $versionmin"
 
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
@@ -2923,9 +2923,9 @@ if test $_os = iOS; then
     RANLIB=`xcrun -find ranlib`
 fi
 
-AC_SUBST(XCODE_CLANG_CXX_LIBRARY)
-AC_SUBST(XCODE_ARCHS)
-AC_SUBST(XCODEBUILD_SDK)
+AC_SUBST(IOS_CLANG_CXX_LIBRARY)
+AC_SUBST(IOS_ARCHS)
+AC_SUBST(IOS_SDK)
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
 
@@ -3871,11 +3871,11 @@ fi
 # Debug information format for iOS. Running dsymutil takes a long time... you really need a separate
 # .dSYM only if running Instruments, I think. (Not for normal debugging in Xcode.) To enable a
 # separate .dSYM, either use --enable-release-build or change manually to "DWARF with DSYM" in Xcode.
-XCODE_DEBUG_INFORMATION_FORMAT=dwarf-with-dsym
+IOS_DEBUG_INFORMATION_FORMAT=dwarf-with-dsym
 if test "$enable_release_build" != yes -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE_DEBUG" -o -n "$ENABLE_DBGUTIL" \); then
-    XCODE_DEBUG_INFORMATION_FORMAT=dwarf
+    IOS_DEBUG_INFORMATION_FORMAT=dwarf
 fi
-AC_SUBST(XCODE_DEBUG_INFORMATION_FORMAT)
+AC_SUBST(IOS_DEBUG_INFORMATION_FORMAT)
 
 AC_MSG_CHECKING([whether to compile with optimization flags])
 if test -z "$enable_optimized"; then

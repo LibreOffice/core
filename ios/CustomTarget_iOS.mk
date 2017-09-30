@@ -38,12 +38,12 @@ $(IOSKITXC) : $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
 	@echo "LO_SRCDIR = $(SRC_ROOT)" >> $(IOSKITXC)
 	@echo "LO_WORKDIR = $(WORKDIR)" >> $(IOSKITXC)
 	@echo "\n// These are actual Xcode-known settings. The corresponding autoconf" >> $(IOSKITXC)
-	@echo "// variables are prefixed with XCODE_ to make it clear in configure.ac" >> $(IOSKITXC)
+	@echo "// variables are prefixed with IOS_ to make it clear in configure.ac" >> $(IOSKITXC)
 	@echo "// what they will be used for." >> $(IOSKITXC)
-	@echo "ARCHS = $(XCODE_ARCHS)" >> $(IOSKITXC)
-	@echo "VALID_ARCHS = $(XCODE_ARCHS)" >> $(IOSKITXC)
-	@echo "CLANG_CXX_LIBRARY = $(XCODE_CLANG_CXX_LIBRARY)" >> $(IOSKITXC)
-	@echo "DEBUG_INFORMATION_FORMAT=$(XCODE_DEBUG_INFORMATION_FORMAT)" >> $(IOSKITXC)
+	@echo "ARCHS = $(IOS_ARCHS)" >> $(IOSKITXC)
+	@echo "VALID_ARCHS = $(IOS_ARCHS)" >> $(IOSKITXC)
+	@echo "CLANG_CXX_LIBRARY = $(IOS_CLANG_CXX_LIBRARY)" >> $(IOSKITXC)
+	@echo "DEBUG_INFORMATION_FORMAT=$(IOS_DEBUG_INFORMATION_FORMAT)" >> $(IOSKITXC)
 	@echo "\n// These settings are edited in CustomTarget_Lo_Xcconfig.mk." >> $(IOSKITXC)
 
 	@echo "OTHER_CFLAGS = $(gb_GLOBALDEFS)" >> $(IOSKITXC)
@@ -64,12 +64,12 @@ $(IOSAPPXC) : $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
 	@echo "LO_SRCDIR = $(SRC_ROOT)" >> $(IOSAPPXC)
 	@echo "LO_WORKDIR = $(WORKDIR)" >> $(IOSAPPXC)
 	@echo "\n// These are actual Xcode-known settings. The corresponding autoconf" >> $(IOSAPPXC)
-	@echo "// variables are prefixed with XCODE_ to make it clear in configure.ac" >> $(IOSAPPXC)
+	@echo "// variables are prefixed with IOS_ to make it clear in configure.ac" >> $(IOSAPPXC)
 	@echo "// what they will be used for." >> $(IOSAPPXC)
-	@echo "ARCHS = $(XCODE_ARCHS)" >> $(IOSAPPXC)
-	@echo "VALID_ARCHS = $(XCODE_ARCHS)" >> $(IOSAPPXC)
-	@echo "CLANG_CXX_LIBRARY = $(XCODE_CLANG_CXX_LIBRARY)" >> $(IOSAPPXC)
-	@echo "DEBUG_INFORMATION_FORMAT=$(XCODE_DEBUG_INFORMATION_FORMAT)" >> $(IOSAPPXC)
+	@echo "ARCHS = $(IOS_ARCHS)" >> $(IOSAPPXC)
+	@echo "VALID_ARCHS = $(IOS_ARCHS)" >> $(IOSAPPXC)
+	@echo "CLANG_CXX_LIBRARY = $(IOS_CLANG_CXX_LIBRARY)" >> $(IOSAPPXC)
+	@echo "DEBUG_INFORMATION_FORMAT=$(IOS_DEBUG_INFORMATION_FORMAT)" >> $(IOSAPPXC)
 	@echo "\n// These settings are edited in CustomTarget_Lo_Xcconfig.mk." >> $(IOSAPPXC)
 
 	@echo "OTHER_CFLAGS = $(gb_GLOBALDEFS)" >> $(IOSAPPXC)
@@ -149,8 +149,8 @@ $(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj iosCopySetup
 	        -xcconfig $(IOSKITXC) \
 	        -project $(IOSKITPRJ) \
 	        -target LibreOfficeKit \
-	        -sdk $(XCODEBUILD_SDK) \
-	        -arch $(XCODE_ARCHS) \
+	        -sdk $(IOS_SDK) \
+	        -arch $(IOS_ARCHS) \
 	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \
 	        build \
 	        , $(WORKDIR)/ios/build.log \
@@ -168,8 +168,8 @@ $(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
 	        -xcconfig $(IOSAPPXC) \
 	        -project $(IOSAPPPRJ) \
 	        -target LibreOfficeLight \
-	        -sdk $(XCODEBUILD_SDK) \
-	        -arch $(XCODE_ARCHS) \
+	        -sdk $(IOS_SDK) \
+	        -arch $(IOS_ARCHS) \
 	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \
 	        build \
 	        , $(WORKDIR)/ios/build.log \
