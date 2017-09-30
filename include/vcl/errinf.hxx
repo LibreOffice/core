@@ -182,7 +182,7 @@ private:
 
 };
 
-class SAL_WARN_UNUSED VCL_DLLPUBLIC TwoStringErrorInfo: public DynamicErrorInfo
+class SAL_WARN_UNUSED TwoStringErrorInfo: public DynamicErrorInfo
 {
 public:
     TwoStringErrorInfo(ErrCode nUserID, const OUString & rTheArg1,

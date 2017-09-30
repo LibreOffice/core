@@ -72,7 +72,7 @@ private:
     std::unique_ptr<ReaderData>   mpReaderData;
 };
 
-class VCL_DLLPUBLIC GraphicConversionParameters
+class GraphicConversionParameters
 {
 private:
     Size            maSizePixel;            // default is (0,0)

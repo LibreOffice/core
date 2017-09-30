@@ -38,7 +38,7 @@ namespace connectivity
     namespace sdbcx
     {
 
-        struct OOO_DLLPUBLIC_DBTOOLS KeyProperties
+        struct KeyProperties
         {
             ::std::vector< OUString> m_aKeyColumnNames;
             OUString m_ReferencedTable;

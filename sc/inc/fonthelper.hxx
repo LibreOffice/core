@@ -19,7 +19,7 @@
 
 class SvxFontItem;
 
-struct SC_DLLPUBLIC ScDxfFont
+struct ScDxfFont
 {
     boost::optional<const SvxFontItem*> pFontAttr;
     boost::optional<sal_uInt32> nFontHeight;

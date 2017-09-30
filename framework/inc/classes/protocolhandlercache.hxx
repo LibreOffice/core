@@ -44,7 +44,7 @@ namespace framework{
     This struct holds the information about one such registered protocol handler.
     A list of handler objects is defined as ProtocolHandlerHash. see below
 */
-struct FWI_DLLPUBLIC ProtocolHandler
+struct ProtocolHandler
 {
     /* member */
     public:

@@ -84,7 +84,7 @@ public:
     virtual bool        IsRecommendToOpenReadonly() const = 0;
 };
 
-class VCL_DLLPUBLIC AbstractScreenshotAnnotationDlg : public VclAbstractDialog
+class AbstractScreenshotAnnotationDlg : public VclAbstractDialog
 {
 protected:
     virtual             ~AbstractScreenshotAnnotationDlg() override = default;

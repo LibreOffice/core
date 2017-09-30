@@ -122,7 +122,7 @@ enum class SwFormatFieldHintWhich
     LANGUAGE   = 5
 };
 
-class SW_DLLPUBLIC SwFormatFieldHint : public SfxHint
+class SwFormatFieldHint : public SfxHint
 {
     const SwFormatField*   m_pField;
     SwFormatFieldHintWhich m_nWhich;

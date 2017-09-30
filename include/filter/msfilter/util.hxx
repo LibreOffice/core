@@ -111,7 +111,7 @@ public:
     OUString GetResult() const;
 };
 
-struct MSFILTER_DLLPUBLIC EquationResult
+struct EquationResult
 {
     OUString sResult;
     OUString sType;

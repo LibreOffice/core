@@ -74,7 +74,7 @@ enum class PptPlaceholder : sal_uInt8;
 
 #define PPT_IMPORTFLAGS_NO_TEXT_ASSERT  1
 
-struct MSFILTER_DLLPUBLIC PptCurrentUserAtom
+struct PptCurrentUserAtom
 {
     sal_uInt32  nMagic;
     sal_uInt32  nCurrentUserEdit;

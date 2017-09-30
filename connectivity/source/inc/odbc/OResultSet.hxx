@@ -68,7 +68,7 @@ namespace connectivity
         typedef std::allocator< TVoidPtr > TVoidAlloc;
         typedef std::vector<TVoidPtr> TVoidVector;
         /// Functor object for class ZZ returntype is void
-        struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare
+        struct TBookmarkPosMapCompare
         {
             bool operator()( const css::uno::Sequence<sal_Int8>& _rLH,
                                     const css::uno::Sequence<sal_Int8>& _rRH) const

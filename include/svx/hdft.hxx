@@ -121,7 +121,7 @@ public:
     SVX_DLLPRIVATE SvxFooterPage(   vcl::Window* pParent, const SfxItemSet& rSet );
 };
 
-class SVX_DLLPUBLIC DeleteHeaderDialog : public MessageDialog
+class DeleteHeaderDialog : public MessageDialog
 {
 public:
     DeleteHeaderDialog(vcl::Window *pParent)
@@ -131,7 +131,7 @@ public:
     }
 };
 
-class SVX_DLLPUBLIC DeleteFooterDialog : public MessageDialog
+class DeleteFooterDialog : public MessageDialog
 {
 public:
     DeleteFooterDialog(vcl::Window *pParent)

@@ -45,7 +45,7 @@
 namespace framework
 {
 
-struct FWE_DLLPUBLIC MergeMenuInstruction
+struct MergeMenuInstruction
 {
     OUString     aMergePoint;
     OUString     aMergeCommand;
@@ -56,7 +56,7 @@ struct FWE_DLLPUBLIC MergeMenuInstruction
 };
 typedef ::std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
 
-struct FWE_DLLPUBLIC MergeToolbarInstruction
+struct MergeToolbarInstruction
 {
     OUString     aMergeToolbar;
     OUString     aMergePoint;
@@ -69,7 +69,7 @@ struct FWE_DLLPUBLIC MergeToolbarInstruction
 
 typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
 
-struct FWE_DLLPUBLIC MergeStatusbarInstruction
+struct MergeStatusbarInstruction
 {
     ::rtl::OUString     aMergePoint;
     ::rtl::OUString     aMergeCommand;

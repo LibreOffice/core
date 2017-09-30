@@ -396,7 +396,7 @@ void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const OUStr
 
 typedef ::std::vector< OutlinerView* > ViewList;
 
-class EDITENG_DLLPUBLIC DrawPortionInfo
+class DrawPortionInfo
 {
 public:
     const Point&        mrStartPos;
@@ -464,7 +464,7 @@ public:
     {}
 };
 
-class EDITENG_DLLPUBLIC DrawBulletInfo
+class DrawBulletInfo
 {
 public:
     const GraphicObject maBulletGraphicObject;
@@ -481,7 +481,7 @@ public:
     {}
 };
 
-struct EDITENG_DLLPUBLIC PaintFirstLineInfo
+struct PaintFirstLineInfo
 {
     sal_Int32 mnPara;
     const Point& mrStartPos;

@@ -27,7 +27,7 @@
 #include <svl/style.hxx>
 #include <vector>
 
-struct SFX2_DLLPUBLIC SfxFilterTupel
+struct SfxFilterTupel
 {
     OUString aName;
     sal_uInt16 nFlags;

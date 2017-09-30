@@ -97,7 +97,7 @@ enum class SfxToolsModule
     LAST = Basic
 };
 
-class SFX2_DLLPUBLIC SfxLinkItem : public SfxPoolItem
+class SfxLinkItem : public SfxPoolItem
 {
     Link<SfxPoolItem*, void> aLink;
 public:

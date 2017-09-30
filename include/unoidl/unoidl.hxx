@@ -406,7 +406,7 @@ private:
     rtl::OUString type_;
 };
 
-struct SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ConstantValue {
+struct SAL_WARN_UNUSED ConstantValue {
     enum Type {
         TYPE_BOOLEAN, TYPE_BYTE, TYPE_SHORT, TYPE_UNSIGNED_SHORT, TYPE_LONG,
         TYPE_UNSIGNED_LONG, TYPE_HYPER, TYPE_UNSIGNED_HYPER, TYPE_FLOAT,

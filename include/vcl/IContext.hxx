@@ -16,7 +16,7 @@
 namespace vcl
 {
 
-class VCL_DLLPUBLIC IContext
+class IContext
 {
 protected:
     IContext()

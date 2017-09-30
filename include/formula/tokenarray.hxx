@@ -71,7 +71,7 @@ namespace o3tl
 namespace formula
 {
 
-class FORMULA_DLLPUBLIC MissingConvention
+class MissingConvention
 {
 public:
     enum Convention
@@ -112,7 +112,7 @@ public:
 
 typedef std::unordered_set<OpCode, std::hash<std::underlying_type<OpCode>::type> > unordered_opcode_set;
 
-class FORMULA_DLLPUBLIC FormulaTokenArrayStandardRange
+class FormulaTokenArrayStandardRange
 {
 private:
     FormulaToken** mpBegin;
@@ -136,7 +136,7 @@ public:
     }
 };
 
-class FORMULA_DLLPUBLIC FormulaTokenArrayReferencesIterator
+class FormulaTokenArrayReferencesIterator
 {
 private:
     FormulaToken** maIter;

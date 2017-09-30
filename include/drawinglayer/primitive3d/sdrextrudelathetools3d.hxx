@@ -47,7 +47,7 @@ namespace drawinglayer
         };
 
         /// class to hold one Slice3D
-        class DRAWINGLAYER_DLLPUBLIC Slice3D
+        class Slice3D
         {
         protected:
             basegfx::B3DPolyPolygon                 maPolyPolygon;

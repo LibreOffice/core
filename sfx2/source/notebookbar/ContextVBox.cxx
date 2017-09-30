@@ -28,7 +28,7 @@
  * This control can be used in the notebookbar .ui files
  */
 
-class SFX2_DLLPUBLIC ContextVBox : public VclVBox,
+class ContextVBox : public VclVBox,
                                    public NotebookbarContextControl
 {
 public:

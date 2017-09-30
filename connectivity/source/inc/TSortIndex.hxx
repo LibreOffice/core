@@ -101,7 +101,7 @@ namespace connectivity
         The class OKeySet is a refcountable vector which also has a state.
         This state gives information about if the keyset is fixed.
     */
-    class OOO_DLLPUBLIC_DBTOOLS OKeySet : public ORefVector<sal_Int32>
+    class OKeySet : public ORefVector<sal_Int32>
     {
         bool m_bFrozen;
     public:

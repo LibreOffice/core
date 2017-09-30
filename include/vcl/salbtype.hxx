@@ -247,7 +247,7 @@ public:
     bool IsGreyPalette() const;
 };
 
-struct VCL_DLLPUBLIC ColorMaskElement
+struct ColorMaskElement
 {
     sal_uInt32              mnMask;
     int                     mnShift;
@@ -325,7 +325,7 @@ public:
     inline void         SetColorFor32Bit( const BitmapColor& rColor, sal_uInt8* pPixel ) const;
 };
 
-struct VCL_DLLPUBLIC BitmapBuffer
+struct BitmapBuffer
 {
     ScanlineFormat       mnFormat;
     long            mnWidth;

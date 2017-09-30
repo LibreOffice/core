@@ -29,7 +29,7 @@ class SmartTagMgr;
 
 namespace editeng {
 
-class EDITENG_DLLPUBLIC IAutoCompleteString
+class IAutoCompleteString
 {
 private:
     OUString m_String;

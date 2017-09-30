@@ -89,7 +89,7 @@ public:
     void                SetComment( const OUString& r )   { aComment = r; }
 };
 
-class BASIC_DLLPUBLIC SbxHint : public SfxHint
+class SbxHint : public SfxHint
 {
     SbxVariable* pVar;
 public:

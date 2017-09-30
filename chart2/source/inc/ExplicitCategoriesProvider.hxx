@@ -29,7 +29,7 @@
 namespace chart
 {
 
-struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
+struct ComplexCategory
 {
     OUString Text;
     sal_Int32 Count;

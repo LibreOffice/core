@@ -113,7 +113,7 @@ typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
     - Type::PrivateDoShutdown - shutdown the app
 */
 
-class VCL_DLLPUBLIC ApplicationEvent
+class ApplicationEvent
 {
 public:
     enum class Type {
