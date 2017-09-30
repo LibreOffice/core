@@ -2365,6 +2365,18 @@ void ScInputHandler::UpdateFormulaMode()
             (rText[0] == '=' || rText[0] == '+' || rText[0] == '-');
     }
 
+    // formula mode in online is not usable in collaborative mode,
+    // this is a workaround for disabling formula mode in online
+    // when there is more than a single slide
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // we look for not visible shells, too, since this method can be
+        // invoked by a TabViewShell ctor and at such a stage the view
+        // is not yet visible,
+        if (SfxViewShell::GetActives(/*only visible shells*/ false) > 1)
+            bIsFormula = false;
+    }
+
     if ( bIsFormula )
     {
         if (!bFormulaMode)
