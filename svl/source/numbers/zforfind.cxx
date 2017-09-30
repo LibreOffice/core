@@ -2544,9 +2544,10 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
             }
             else if (nPos == 0 && rString.getLength() == 1 && MayBeIso8601())
             {
-                if (nStringPos == 5 && rString[0] == 'T')
+                if (    (nStringPos == 5 && rString[0] == 'T') ||
+                        (nStringPos == 6 && rString[0] == 'T' && sStrArray[0] == "-"))
                 {
-                    // ISO 8601 combined date and time, yyyy-mm-ddThh:mm
+                    // ISO 8601 combined date and time, yyyy-mm-ddThh:mm or -yyyy-mm-ddThh:mm
                     ++nPos;
                 }
                 else if (nStringPos == 7 && rString[0] == ':')
