@@ -355,7 +355,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 
         case WM_CREATE:
             {
-            // Window-Instanz am Windowhandle speichern
+            // Save the window instance at the window handle.
             // Can also be used for the A-Version, because the struct
             // to access lpCreateParams is the same structure
             CREATESTRUCTW* pStruct = reinterpret_cast<CREATESTRUCTW*>(lParam);

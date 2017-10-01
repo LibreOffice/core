@@ -546,7 +546,7 @@ void SvxSearchDialog::Construct_Impl()
 
 bool SvxSearchDialog::Close()
 {
-    // remember strings speichern
+    // remember strings
     if (!aSearchStrings.empty())
         StrArrToList_Impl( SID_SEARCHDLG_SEARCHSTRINGS, aSearchStrings );
 
