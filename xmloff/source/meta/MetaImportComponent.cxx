@@ -43,10 +43,8 @@ public:
 
 protected:
 
-    virtual SvXMLImportContext* CreateContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
@@ -68,25 +66,22 @@ XMLMetaImportComponent::XMLMetaImportComponent(
 {
 }
 
-SvXMLImportContext* XMLMetaImportComponent::CreateContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference<xml::sax::XAttributeList > & xAttrList )
+SvXMLImportContext *XMLMetaImportComponent::CreateFastContext( sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
-         IsXMLToken(rLocalName, XML_DOCUMENT_META) )
+    if (nElement == XML_ELEMENT( OFFICE, XML_DOCUMENT_META ))
     {
         if (!mxDocProps.is()) {
             throw uno::RuntimeException(
-                "XMLMetaImportComponent::CreateContext: setTargetDocument "
+                "XMLMetaImportComponent::CreateFastContext: setTargetDocument "
                 "has not been called", *this);
         }
         return new SvXMLMetaDocumentContext(
-                        *this, nPrefix, rLocalName, mxDocProps);
+                        *this, mxDocProps);
     }
     else
     {
-        return SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
+        return SvXMLImport::CreateFastContext(nElement, xAttrList);
     }
 }
 
