@@ -869,6 +869,14 @@ void SwNavigationPI::StateChanged(StateChangedType nStateChange)
         // space. Therefore hide this button.
         m_aContentToolBox->ShowItem(m_aContentToolBox->GetItemId("listbox"), SfxChildWindowContext::GetFloatingWindow(GetParent()));
     }
+    else if (nStateChange == StateChangedType::ControlFocus)
+    {
+        if (m_aContentTree)
+        {
+            // update documents listbox
+            UpdateListBox();
+        }
+    }
 }
 
 // Get the numeric field from the toolbox.
