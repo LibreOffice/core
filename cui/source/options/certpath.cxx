@@ -46,10 +46,9 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
 
     OUString sProfile(get<FixedText>("profile")->GetText());
     OUString sDirectory(get<FixedText>("dir")->GetText());
+    OUString sHeader = "\t" + sProfile + "\t" + sDirectory;
 
-    OUStringBuffer sHeader;
-    sHeader.append('\t').append(sProfile).append('\t').append(sDirectory);
-    m_pCertPathList->InsertHeaderEntry( sHeader.makeStringAndClear(), HEADERBAR_APPEND, HeaderBarItemBits::LEFT );
+    m_pCertPathList->InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT );
     m_pCertPathList->SetCheckButtonHdl( LINK( this, CertPathDialog, CheckHdl_Impl ) );
 
     m_pAddBtn->SetClickHdl( LINK( this, CertPathDialog, AddHdl_Impl ) );
@@ -75,9 +74,9 @@ CertPathDialog::CertPathDialog(vcl::Window* pParent)
             if (!profile.isEmpty())
             {
                 OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
-                OUStringBuffer sEntry;
-                sEntry.append('\t').appendAscii(productNames[i]).append(':').append(profile).append('\t').append(sProfilePath);
-                SvTreeListEntry *pEntry = m_pCertPathList->InsertEntry(sEntry.makeStringAndClear());
+                OUString sEntry = "\t" + OUString::createFromAscii(productNames[i]) + ":" + profile
+                                + "\t" + sProfilePath;
+                SvTreeListEntry *pEntry = m_pCertPathList->InsertEntry(sEntry);
                 OUString* pCertPath = new OUString(sProfilePath);
                 pEntry->SetUserData(pCertPath);
             }
