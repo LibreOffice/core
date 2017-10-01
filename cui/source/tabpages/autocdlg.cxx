@@ -453,11 +453,9 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     };
 
     m_pCheckLB->SvSimpleTable::SetTabs(aStaticTabs);
-    OUStringBuffer sHeader(get<vcl::Window>("m")->GetText());
-    sHeader.append('\t');
-    sHeader.append(get<vcl::Window>("t")->GetText());
-    sHeader.append('\t');
-    m_pCheckLB->InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND,
+    OUString sHeader = get<vcl::Window>("m")->GetText() + "\t"
+                     + get<vcl::Window>("t")->GetText() + "\t";
+    m_pCheckLB->InsertHeaderEntry(sHeader, HEADERBAR_APPEND,
                         HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);
 
     m_pEditPB->SetClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
