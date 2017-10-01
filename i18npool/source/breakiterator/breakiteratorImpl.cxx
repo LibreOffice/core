@@ -481,6 +481,9 @@ bool getCompatibilityScriptClassByBlock(sal_uInt32 currentChar, sal_Int16 &rScri
     //  0x20 & 0xA0 - Bug 102975, declare western space and non-break space as WEAK char.
     if( 0x01 == currentChar || 0x02 == currentChar || 0x20 == currentChar || 0xA0 == currentChar)
         rScriptType = ScriptType::WEAK;
+    // Few Spacing Modifier Letters that can be Bopomofo tonal marks.
+    else if ( 0x2CA == currentChar || 0x2CB == currentChar || 0x2C7 == currentChar || 0x2D9 == currentChar )
+        rScriptType = ScriptType::WEAK;
     // workaround for Coptic
     else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
         rScriptType = ScriptType::LATIN;
