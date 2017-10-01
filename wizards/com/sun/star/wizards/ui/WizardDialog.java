@@ -608,7 +608,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     public void setRightPaneHeaders(Resource _oResource, String ResNameBase, int StartResID, int _nMaxStep)
     {
         String[] sRightPaneHeaders = new String[_nMaxStep];
-        for (int i = 0; i < nMaxStep; ++i) {
+        for (int i = 0; i < _nMaxStep; ++i) {
             sRightPaneHeaders[i] = _oResource.getResText(ResNameBase + String.valueOf(i + StartResID));
         }
         setRightPaneHeaders(sRightPaneHeaders);
