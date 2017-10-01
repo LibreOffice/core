@@ -2355,6 +2355,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
     long nMaxWidth = nWidth - HAMBURGER_DIM;
     long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() + 1 : 0;
+    long nFullWidth = nShortcutsWidth;
+    long nMinWidth = nShortcutsWidth;
 
     const long nOffsetX = 2 + GetItemsOffset().X() + nShortcutsWidth;
     const long nOffsetY = 2 + GetItemsOffset().Y();
@@ -2370,8 +2372,16 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         if( it->mbEnabled )
         {
             long aSize = ImplGetItemSize( &(*it), nMaxWidth ).getWidth();
+            nMinWidth += aSize;
+
             if( !it->maText.isEmpty() && aSize < 100)
+            {
+                nFullWidth += 100;
                 aSize = 100;
+            }
+            else
+                nFullWidth += aSize;
+
             aWidths.push_back(aSize);
         }
         else
@@ -2388,9 +2398,6 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     long nX = nOffsetX;
     long nY = nOffsetY;
 
-    sal_uInt16 nLines = 0;
-    sal_uInt16 nCurLine = 0;
-
     long nLineWidthAry[100];
     sal_uInt16 nLinePosAry[101];
     nLineWidthAry[0] = 0;
@@ -2404,25 +2411,6 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     {
         Size aSize = ImplGetItemSize( &(*it), nMaxWidth );
 
-        bool bNewLine = false;
-        if (!aBreakIndexes.empty() && nIndex > aBreakIndexes.front())
-        {
-            aBreakIndexes.pop_front();
-            bNewLine = true;
-        }
-
-        if ( bNewLine && (nWidth > 2+nOffsetX) )
-        {
-            if ( nLines == 99 )
-                break;
-
-            nX = nOffsetX;
-            nY += aSize.Height();
-            nLines++;
-            nLineWidthAry[nLines] = 0;
-            nLinePosAry[nLines] = nPos;
-        }
-
         if ( !it->mbEnabled )
         {
             nPos++;
@@ -2430,8 +2418,11 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         }
 
         // set minimum tab size
-        if( !it->maText.isEmpty() && aSize.getWidth() < 100)
+        if( nFullWidth < nMaxWidth && !it->maText.isEmpty() && aSize.getWidth() < 100)
             aSize.Width() = 100;
+
+        if( nMinWidth > nMaxWidth && !it->maText.isEmpty() && aSize.getWidth() > 50 )
+            aSize.Width() = 50;
 
         if( !it->maText.isEmpty() && aSize.getHeight() < 28 )
             aSize.Height() = 28;
@@ -2441,97 +2432,32 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             mbSmallInvalidate = false;
 
         it->maRect = aNewRect;
-        it->mnLine = nLines;
+        it->mnLine = 0;
         it->mbFullVisible = true;
 
-        nLineWidthAry[nLines] += aSize.Width();
+        nLineWidthAry[0] += aSize.Width();
         nX += aSize.Width();
-
-        if ( it->mnId == mnCurPageId )
-            nCurLine = nLines;
 
         nPos++;
     }
 
-    if ( nLines )
-    { // two or more lines
-        long nLineHeightAry[100];
-        long nIH = mpTabCtrlData->maItemList[0].maRect.Bottom()-2;
-
-        for ( sal_uInt16 i = 0; i < nLines+1; i++ )
-        {
-            if ( i <= nCurLine )
-                nLineHeightAry[i] = nIH*(nLines-(nCurLine-i)) + GetItemsOffset().Y();
-            else
-                nLineHeightAry[i] = nIH*(i-nCurLine-1) + GetItemsOffset().Y();
-        }
-
-        nLinePosAry[nLines+1] = (sal_uInt16)mpTabCtrlData->maItemList.size();
-
-        long nDX = 0;
-        long nModDX = 0;
-        long nIDX = 0;
-
-        sal_uInt16 i = 0;
-        sal_uInt16 n = 0;
+    // only one line
+    if(ImplGetSVData()->maNWFData.mbCenteredTabs)
+    {
+        int nRightSpace = nMaxWidth;//space left on the right by the tabs
         for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-             it != mpTabCtrlData->maItemList.end(); ++it )
+                it != mpTabCtrlData->maItemList.end(); ++it )
         {
-            if ( i == nLinePosAry[n] )
-            {
-                if ( n == nLines+1 )
-                    break;
-
-                nIDX = 0;
-                if( nLinePosAry[n+1]-i > 0 )
-                {
-                    long nAvailableWidth = nWidth - nOffsetX - nLineWidthAry[n] - HAMBURGER_DIM;
-                    nDX = nAvailableWidth / ( nLinePosAry[n+1] - i );
-                    nModDX = nAvailableWidth % ( nLinePosAry[n+1] - i );
-                }
-                else
-                {
-                    // FIXME: this is a case of tabctrl way too small
-                    nDX = 0;
-                    nModDX = 0;
-                }
-                n++;
-            }
-
-            it->maRect.Left() += nIDX;
-            it->maRect.Right() += nIDX + nDX;
-            it->maRect.Top() = nLineHeightAry[n-1];
-            it->maRect.Bottom() = nLineHeightAry[n-1] + nIH;
-            nIDX += nDX;
-
-            if ( nModDX )
-            {
-                nIDX++;
-                it->maRect.Right()++;
-                nModDX--;
-            }
-
-            i++;
+            nRightSpace -= it->maRect.Right()-it->maRect.Left();
+        }
+        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+                it != mpTabCtrlData->maItemList.end(); ++it )
+        {
+            it->maRect.Left() += nRightSpace / 2;
+            it->maRect.Right() += nRightSpace / 2;
         }
     }
-    else
-    { // only one line
-        if(ImplGetSVData()->maNWFData.mbCenteredTabs)
-        {
-            int nRightSpace = nMaxWidth;//space left on the right by the tabs
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                 it != mpTabCtrlData->maItemList.end(); ++it )
-            {
-                nRightSpace -= it->maRect.Right()-it->maRect.Left();
-            }
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
-                 it != mpTabCtrlData->maItemList.end(); ++it )
-            {
-                it->maRect.Left() += nRightSpace / 2;
-                it->maRect.Right() += nRightSpace / 2;
-            }
-        }
-    }
+
 
     // position the shortcutbox
     m_pShortcuts->SetPosPixel(Point(0, 0));
