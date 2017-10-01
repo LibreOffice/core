@@ -631,10 +631,6 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                 SetMasterStyles( pStyleContext );
             }
             break;
-        case XML_TOK_DOC_META:
-            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = CreateMetaContext( rLocalName );
-            break;
         default:
             break;
     }
@@ -642,6 +638,23 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
     if ( !pContext )
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
 
+    return pContext;
+}
+
+SvXMLImportContext *ORptFilter::CreateFastContext( sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    switch (nElement)
+    {
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT_META ):
+            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = CreateMetaContext( nElement );
+            break;
+        default:
+            pContext = new SvXMLImportContext(*this);
+    }
     return pContext;
 }
 
@@ -974,14 +987,14 @@ void ORptFilter::insertFunction(const css::uno::Reference< css::report::XFunctio
     m_aFunctions.emplace(_xFunction->getName(),_xFunction);
 }
 
-SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName)
+SvXMLImportContext* ORptFilter::CreateMetaContext(const sal_Int32 /*nElement*/)
 {
     SvXMLImportContext* pContext = nullptr;
 
     if ( (getImportFlags() & SvXMLImportFlags::META) )
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
-        pContext = new SvXMLMetaDocumentContext(*this,XML_NAMESPACE_OFFICE, rLocalName,xDPS->getDocumentProperties());
+        pContext = new SvXMLMetaDocumentContext(*this, xDPS->getDocumentProperties());
     }
     return pContext;
 }
