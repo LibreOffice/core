@@ -45,9 +45,6 @@ namespace DOM
 {
 
     typedef std::stack< css::uno::Reference< css::xml::dom::XNode > > NodeStack;
-    typedef std::map< OUString, OUString > NSMap;
-    typedef std::map< OUString, OUString > AttrMap;
-    typedef std::stack< NSMap > NSStack;
 
     class  CSAXDocumentBuilder
         : public ::cppu::WeakImplHelper< css::xml::dom::XSAXDocumentBuilder2, css::lang::XServiceInfo >
@@ -59,7 +56,6 @@ namespace DOM
 
         css::xml::dom::SAXDocumentBuilderState m_aState;
         NodeStack m_aNodeStack;
-        NSStack m_aNSStack;
 
         css::uno::Reference< css::xml::dom::XDocument > m_aDocument;
         css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
@@ -81,18 +77,20 @@ namespace DOM
         virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
-        // XDocumentHandler
+        // XFastDocumentHandler
         virtual void SAL_CALL startDocument() override;
         virtual void SAL_CALL endDocument() override;
-        virtual void SAL_CALL startElement( const OUString& aName,
-             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
-        virtual void SAL_CALL endElement( const OUString& aName ) override;
-        virtual void SAL_CALL characters( const OUString& aChars ) override;
-        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
-        virtual void SAL_CALL processingInstruction( const OUString& aTarget,
-             const OUString& aData ) override;
+        virtual void SAL_CALL processingInstruction( const OUString& rTarget, const OUString& rData ) override;
         virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
+        // XFastContextHandler
+        virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
+        virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
+        virtual css::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual css::uno::Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual void SAL_CALL characters( const OUString& aChars ) override;
 
         // XSAXDocumentBuilder
         virtual css::xml::dom::SAXDocumentBuilderState SAL_CALL getState() override;

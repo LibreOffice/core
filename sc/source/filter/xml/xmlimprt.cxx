@@ -233,10 +233,6 @@ protected:
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
-    ScXMLDocContext_Impl( ScXMLImport& rImport,
-        sal_uInt16 nPrfx,
-        const OUString& rLName );
-
     ScXMLDocContext_Impl( ScXMLImport& rImport );
 
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
@@ -255,13 +251,6 @@ public:
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
-ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                                           const OUString& rLName ) :
-SvXMLImportContext( rImport, nPrfx, rLName )
-{
-
-}
-
 ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport ) :
 SvXMLImportContext( rImport )
 {
@@ -272,36 +261,21 @@ class ScXMLFlatDocContext_Impl
     : public ScXMLDocContext_Impl, public SvXMLMetaDocumentContext
 {
 public:
-    ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix, const OUString & i_rLName,
-        const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
-
-    virtual SvXMLImportContextRef CreateChildContext(
-        sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
-        const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
 
     virtual void SAL_CALL startFastElement (sal_Int32 nElement,
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
+
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( sal_Int32 nElement,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
-
-ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-                                                   sal_uInt16 i_nPrefix, const OUString & i_rLName,
-                                                   const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
-SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
-ScXMLDocContext_Impl(i_rImport, i_nPrefix, i_rLName),
-SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
-                         i_xDocProps)
-{
-}
 
 ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
                                                    const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
@@ -311,29 +285,14 @@ SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
 {
 }
 
-SvXMLImportContextRef ScXMLFlatDocContext_Impl::CreateChildContext(
-    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
-{
-    // behave like meta base class iff we encounter office:meta
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetDocElemTokenMap();
-    if ( XML_TOK_DOC_META == rTokenMap.Get( i_nPrefix, i_rLocalName ) ) {
-        return SvXMLMetaDocumentContext::CreateChildContext(
-            i_nPrefix, i_rLocalName, i_xAttrList );
-    } else {
-        return ScXMLDocContext_Impl::CreateChildContext(
-            i_nPrefix, i_rLocalName, i_xAttrList );
-    }
-}
-
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     ScXMLFlatDocContext_Impl::createFastChildContext( sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    if ( nElement != XML_ELEMENT( OFFICE, XML_META ) )
-        return ScXMLDocContext_Impl::createFastChildContext( nElement, xAttrList );
+    if ( nElement == XML_ELEMENT( OFFICE, XML_META ) )
+        return SvXMLMetaDocumentContext::createFastChildContext( nElement, xAttrList );
     else
-        return new SvXMLImportContext( GetImport() );
+        return ScXMLDocContext_Impl::createFastChildContext( nElement, xAttrList );
 }
 
 void SAL_CALL ScXMLFlatDocContext_Impl::startFastElement(sal_Int32 nElement,
@@ -345,6 +304,11 @@ void SAL_CALL ScXMLFlatDocContext_Impl::startFastElement(sal_Int32 nElement,
 void SAL_CALL ScXMLFlatDocContext_Impl::endFastElement(sal_Int32 nElement)
 {
     SvXMLMetaDocumentContext::endFastElement( nElement );
+}
+
+void SAL_CALL ScXMLFlatDocContext_Impl::characters(const OUString& rChars)
+{
+    SvXMLMetaDocumentContext::characters(rChars);
 }
 
 class ScXMLBodyContext_Impl : public ScXMLImportContext
@@ -658,29 +622,6 @@ sc::PivotTableSources& ScXMLImport::GetPivotTableSources()
     return *mpPivotSources;
 }
 
-SvXMLImportContext *ScXMLImport::CreateDocumentContext( sal_uInt16 nPrefix,
-                                               const OUString& rLocalName,
-                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList )
-{
-    SvXMLImportContext *pContext = nullptr;
-
-    if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-        ( IsXMLToken(rLocalName, XML_DOCUMENT_META)) ) {
-            pContext = CreateMetaContext(rLocalName);
-    } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-        ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                GetModel(), uno::UNO_QUERY_THROW);
-            // flat OpenDocument file format
-            pContext = new ScXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
-                xDPS->getDocumentProperties());
-    }
-    else
-        pContext = SvXMLImport::CreateDocumentContext( nPrefix, rLocalName, xAttrList );
-
-    return pContext;
-}
-
 SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
@@ -692,6 +633,10 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
     case XML_ELEMENT( OFFICE, XML_DOCUMENT_CONTENT ):
     case XML_ELEMENT( OFFICE, XML_DOCUMENT_SETTINGS ):
         pContext = new ScXMLDocContext_Impl( *this );
+        break;
+
+    case XML_ELEMENT( OFFICE, XML_DOCUMENT_META ):
+        pContext = CreateMetaContext(nElement);
         break;
 
     case XML_ELEMENT( OFFICE, XML_DOCUMENT ):
@@ -846,7 +791,7 @@ SvXMLImportContext *ScXMLImport::CreateBodyContext(const rtl::Reference<sax_fast
 }
 
 SvXMLImportContext *ScXMLImport::CreateMetaContext(
-    const OUString& rLocalName )
+    const sal_Int32 /*nElement*/ )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -856,14 +801,11 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
             GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> const xDocProps(
             (IsStylesOnlyMode()) ? nullptr : xDPS->getDocumentProperties());
-        pContext = new SvXMLMetaDocumentContext(*this,
-            XML_NAMESPACE_OFFICE, rLocalName,
-            xDocProps);
+        pContext = new SvXMLMetaDocumentContext(*this, xDocProps);
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( *this,
-        XML_NAMESPACE_OFFICE, rLocalName );
+        pContext = new SvXMLImportContext( *this );
 
     return pContext;
 }
