@@ -47,19 +47,6 @@ SvxZoomItem::SvxZoomItem
 }
 
 
-SvxZoomItem::SvxZoomItem( const SvxZoomItem& rOrig )
-:   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
-    nValueSet( rOrig.GetValueSet() ),
-    eType( rOrig.GetType() )
-{
-}
-
-
-SvxZoomItem::~SvxZoomItem()
-{
-}
-
-
 SfxPoolItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxZoomItem( *this );

@@ -38,20 +38,6 @@ SfxMacroInfoItem::SfxMacroInfoItem(
 {
 }
 
-
-// copy constructor
-
-SfxMacroInfoItem::SfxMacroInfoItem(const SfxMacroInfoItem& rCopy):
-    SfxPoolItem(rCopy),
-    pBasicManager(rCopy.pBasicManager),
-    aLibName(rCopy.aLibName),
-    aModuleName(rCopy.aModuleName),
-    aMethodName(rCopy.aMethodName),
-    aCommentText(rCopy.aCommentText)
-{
-}
-
-
 // op ==
 
 bool SfxMacroInfoItem::operator==( const SfxPoolItem& rCmp) const
