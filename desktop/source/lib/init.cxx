@@ -76,6 +76,7 @@
 #include <tools/resmgr.hxx>
 #include <tools/fract.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/langtab.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -1541,6 +1542,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:JustifyPara"),
         OUString(".uno:OutlineFont"),
         OUString(".uno:LeftPara"),
+        OUString(".uno:LanguageStatus"),
         OUString(".uno:RightPara"),
         OUString(".uno:Shadowed"),
         OUString(".uno:SubScript"),
@@ -1992,7 +1994,6 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
     if (pDoc)
     {
         doc_iniUnoCommands();
-
         pDoc->initializeForTiledRendering(
                 comphelper::containerToSequence(jsonToPropertyValuesVector(pArguments)));
     }
@@ -2048,7 +2049,9 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     }
 
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
         pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
+    }
 }
 
 /// Returns the JSON representation of all the comments in the document
@@ -2359,6 +2362,32 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
     pDoc->resetSelection();
 }
 
+static char* getLanguages(const char* pCommand)
+{
+    css::uno::Reference< css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference< css::linguistic2::XLinguServiceManager2 > xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
+    css::uno::Reference< css::linguistic2::XSpellChecker > xSpell(xLangSrv.is() ? xLangSrv->getSpellChecker() : nullptr, css::uno::UNO_QUERY);
+    css::uno::Reference< css::linguistic2::XSupportedLocales > xLocales(xSpell, css::uno::UNO_QUERY);
+    css::uno::Sequence< css::lang::Locale > aLocales(xLocales.is() ? xLocales->getLocales() : css::uno::Sequence< css::lang::Locale >());
+
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", pCommand);
+    boost::property_tree::ptree aValues;
+    for ( sal_Int32 itLocale = 0; itLocale < aLocales.getLength(); itLocale++ )
+    {
+        boost::property_tree::ptree aChild;
+        aChild.put("", SvtLanguageTable::GetLanguageString(LanguageTag::convertToLanguageType(aLocales[itLocale])).toUtf8());
+        aValues.push_back(std::make_pair("", aChild));
+    }
+    aTree.add_child("commandValues", aValues);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    strcpy(pJson, aStream.str().c_str());
+    pJson[aStream.str().size()] = '\0';
+    return pJson;
+}
+
 static char* getFonts (const char* pCommand)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -2664,7 +2693,11 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     static const OString aCellCursor(".uno:CellCursor");
     static const OString aFontSubset(".uno:FontSubset&name=");
 
-    if (!strcmp(pCommand, ".uno:CharFontName"))
+    if (!strcmp(pCommand, ".uno:LanguageStatus"))
+    {
+        return getLanguages(pCommand);
+    }
+    else if (!strcmp(pCommand, ".uno:CharFontName"))
     {
         return getFonts(pCommand);
     }
