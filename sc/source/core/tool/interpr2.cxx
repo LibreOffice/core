@@ -1592,29 +1592,29 @@ void ScInterpreter::ScISPMT()
 }
 
 // financial functions
-double ScInterpreter::ScGetBw(double fInterest, double fZzr, double fRmz,
-                              double fZw, bool bPayInAdvance)
+double ScInterpreter::ScGetBw(double fInterest, double fNper, double fPmt,
+                              double fFv, bool bPayInAdvance)
 {
-    double fBw;
+    double fPv;
     if (fInterest == 0.0)
-        fBw = fZw + fRmz * fZzr;
+        fPv = fFv + fPmt * fNper;
     else
     {
         if (bPayInAdvance)
-            fBw = (fZw * pow(1.0 + fInterest, -fZzr))
-                    + (fRmz * (1.0 - pow(1.0 + fInterest, -fZzr + 1.0)) / fInterest)
-                    + fRmz;
+            fPv = (fFv * pow(1.0 + fInterest, -fNper))
+                    + (fPmt * (1.0 - pow(1.0 + fInterest, -fNper + 1.0)) / fInterest)
+                    + fPmt;
         else
-            fBw = (fZw * pow(1.0 + fInterest, -fZzr))
-                    + (fRmz * (1.0 - pow(1.0 + fInterest, -fZzr)) / fInterest);
+            fPv = (fFv * pow(1.0 + fInterest, -fNper))
+                    + (fPmt * (1.0 - pow(1.0 + fInterest, -fNper)) / fInterest);
     }
-    return -fBw;
+    return -fPv;
 }
 
 void ScInterpreter::ScPV()
 {
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
-    double nRmz, nZzr, nInterest, nZw = 0;
+    double nPmt, nNper, nInterest, nFv = 0;
     bool bPayInAdvance = false;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
@@ -1622,11 +1622,11 @@ void ScInterpreter::ScPV()
     if (nParamCount == 5)
         bPayInAdvance = GetBool();
     if (nParamCount >= 4)
-        nZw   = GetDouble();
-    nRmz  = GetDouble();
-    nZzr  = GetDouble();
+        nFv   = GetDouble();
+    nPmt   = GetDouble();
+    nNper  = GetDouble();
     nInterest = GetDouble();
-    PushDouble(ScGetBw(nInterest, nZzr, nRmz, nZw, bPayInAdvance));
+    PushDouble(ScGetBw(nInterest, nNper, nPmt, nFv, bPayInAdvance));
 }
 
 void ScInterpreter::ScSYD()
@@ -1634,11 +1634,11 @@ void ScInterpreter::ScSYD()
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
-        double nZr = GetDouble();
+        double nPer = GetDouble();
         double nTimeLength = GetDouble();
         double nRest = GetDouble();
         double nValue = GetDouble();
-        double nDia = ((nValue - nRest) * (nTimeLength - nZr + 1.0)) /
+        double nDia = ((nValue - nRest) * (nTimeLength - nPer + 1.0)) /
                       ((nTimeLength * (nTimeLength + 1.0)) / 2.0);
         PushDouble(nDia);
     }
@@ -1920,7 +1920,7 @@ double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
 
 void ScInterpreter::ScPMT()
 {
-    double nInterest, nZzr, nBw, nZw = 0;
+    double nInterest, nNper, nPv, nFv = 0;
     bool bFlag = false;
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
@@ -1929,11 +1929,11 @@ void ScInterpreter::ScPMT()
     if (nParamCount == 5)
         bFlag = GetBool();
     if (nParamCount >= 4)
-        nZw   = GetDouble();
-    nBw   = GetDouble();
-    nZzr  = GetDouble();
+        nFv   = GetDouble();
+    nPv    = GetDouble();
+    nNper  = GetDouble();
     nInterest = GetDouble();
-    PushDouble(ScGetRmz(nInterest, nZzr, nBw, nZw, bFlag));
+    PushDouble(ScGetRmz(nInterest, nNper, nPv, nFv, bFlag));
 }
 
 void ScInterpreter::ScRRI()
@@ -1951,26 +1951,26 @@ void ScInterpreter::ScRRI()
     }
 }
 
-double ScInterpreter::ScGetZw(double fInterest, double fZzr, double fRmz,
-                              double fBw, bool bFlag)
+double ScInterpreter::ScGetZw(double fInterest, double fNper, double fPmt,
+                              double fPv, bool bFlag)
 {
-    double fZw;
+    double fFv;
     if (fInterest == 0.0)
-        fZw = fBw + fRmz * fZzr;
+        fFv = fPv + fPmt * fNper;
     else
     {
-        double fTerm = pow(1.0 + fInterest, fZzr);
+        double fTerm = pow(1.0 + fInterest, fNper);
         if (bFlag)
-            fZw = fBw * fTerm + fRmz*(1.0 + fInterest)*(fTerm - 1.0)/fInterest;
+            fFv = fPv * fTerm + fPmt*(1.0 + fInterest)*(fTerm - 1.0)/fInterest;
         else
-            fZw = fBw * fTerm + fRmz*(fTerm - 1.0)/fInterest;
+            fFv = fPv * fTerm + fPmt*(fTerm - 1.0)/fInterest;
     }
-    return -fZw;
+    return -fFv;
 }
 
 void ScInterpreter::ScFV()
 {
-    double nInterest, nZzr, nRmz, nBw = 0;
+    double nInterest, nNper, nPmt, nPv = 0;
     bool bFlag = false;
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
@@ -1979,11 +1979,11 @@ void ScInterpreter::ScFV()
     if (nParamCount == 5)
         bFlag = GetBool();
     if (nParamCount >= 4)
-        nBw   = GetDouble();
-    nRmz  = GetDouble();
-    nZzr  = GetDouble();
+        nPv   = GetDouble();
+    nPmt   = GetDouble();
+    nNper  = GetDouble();
     nInterest = GetDouble();
-    PushDouble(ScGetZw(nInterest, nZzr, nRmz, nBw, bFlag));
+    PushDouble(ScGetZw(nInterest, nNper, nPmt, nPv, bFlag));
 }
 
 void ScInterpreter::ScNper()
@@ -2173,32 +2173,32 @@ void ScInterpreter::ScRate()
     PushDouble(fGuess);
 }
 
-double ScInterpreter::ScGetCompoundInterest(double fInterest, double fZr, double fZzr, double fBw,
-                                 double fZw, bool bPayInAdvance, double& fRmz)
+double ScInterpreter::ScGetCompoundInterest(double fInterest, double fPer, double fNper, double fPv,
+                                 double fFv, bool bPayInAdvance, double& fPmt)
 {
-    fRmz = ScGetRmz(fInterest, fZzr, fBw, fZw, bPayInAdvance);     // for PPMT also if fZr == 1
+    fPmt = ScGetRmz(fInterest, fNper, fPv, fFv, bPayInAdvance);     // for PPMT also if fPer == 1
     double fCompoundInterest;
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
-    if (fZr == 1.0)
+    if (fPer == 1.0)
     {
         if (bPayInAdvance)
             fCompoundInterest = 0.0;
         else
-            fCompoundInterest = -fBw;
+            fCompoundInterest = -fPv;
     }
     else
     {
         if (bPayInAdvance)
-            fCompoundInterest = ScGetZw(fInterest, fZr-2.0, fRmz, fBw, true) - fRmz;
+            fCompoundInterest = ScGetZw(fInterest, fPer-2.0, fPmt, fPv, true) - fPmt;
         else
-            fCompoundInterest = ScGetZw(fInterest, fZr-1.0, fRmz, fBw, false);
+            fCompoundInterest = ScGetZw(fInterest, fPer-1.0, fPmt, fPv, false);
     }
     return fCompoundInterest * fInterest;
 }
 
 void ScInterpreter::ScIpmt()
 {
-    double nInterest, nZr, nZzr, nBw, nZw = 0;
+    double nInterest, nPer, nNper, nPv, nFv = 0;
     bool bPayInAdvance = false;
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
@@ -2207,23 +2207,23 @@ void ScInterpreter::ScIpmt()
     if (nParamCount == 6)
         bPayInAdvance = GetBool();
     if (nParamCount >= 5)
-        nZw   = GetDouble();
-    nBw   = GetDouble();
-    nZzr  = GetDouble();
-    nZr   = GetDouble();
+        nFv   = GetDouble();
+    nPv    = GetDouble();
+    nNper  = GetDouble();
+    nPer   = GetDouble();
     nInterest = GetDouble();
-    if (nZr < 1.0 || nZr > nZzr)
+    if (nPer < 1.0 || nPer > nNper)
         PushIllegalArgument();
     else
     {
-        double nRmz;
-        PushDouble(ScGetCompoundInterest(nInterest, nZr, nZzr, nBw, nZw, bPayInAdvance, nRmz));
+        double nPmt;
+        PushDouble(ScGetCompoundInterest(nInterest, nPer, nNper, nPv, nFv, bPayInAdvance, nPmt));
     }
 }
 
 void ScInterpreter::ScPpmt()
 {
-    double nInterest, nZr, nZzr, nBw, nZw = 0;
+    double nInterest, nPer, nNper, nPv, nFv = 0;
     bool bPayInAdvance = false;
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     sal_uInt8 nParamCount = GetByte();
@@ -2232,18 +2232,18 @@ void ScInterpreter::ScPpmt()
     if (nParamCount == 6)
         bPayInAdvance = GetBool();
     if (nParamCount >= 5)
-        nZw   = GetDouble();
-    nBw   = GetDouble();
-    nZzr  = GetDouble();
-    nZr   = GetDouble();
+        nFv   = GetDouble();
+    nPv    = GetDouble();
+    nNper  = GetDouble();
+    nPer   = GetDouble();
     nInterest = GetDouble();
-    if (nZr < 1.0 || nZr > nZzr)
+    if (nPer < 1.0 || nPer > nNper)
         PushIllegalArgument();
     else
     {
-        double nRmz;
-        double nInterestz = ScGetCompoundInterest(nInterest, nZr, nZzr, nBw, nZw, bPayInAdvance, nRmz);
-        PushDouble(nRmz - nInterestz);
+        double nPmt;
+        double nInterestPer = ScGetCompoundInterest(nInterest, nPer, nNper, nPv, nFv, bPayInAdvance, nPmt);
+        PushDouble(nPmt - nInterestPer);
     }
 }
 
@@ -2252,15 +2252,15 @@ void ScInterpreter::ScCumIpmt()
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
-        double fInterest, fZzr, fBw, fStart, fEnd;
+        double fInterest, fNper, fPv, fStart, fEnd;
         double fFlag = GetDoubleWithDefault( -1.0 );
         fEnd   = ::rtl::math::approxFloor(GetDouble());
         fStart = ::rtl::math::approxFloor(GetDouble());
-        fBw     = GetDouble();
-        fZzr    = GetDouble();
+        fPv    = GetDouble();
+        fNper  = GetDouble();
         fInterest   = GetDouble();
         if (fStart < 1.0 || fEnd < fStart || fInterest <= 0.0 ||
-            fEnd > fZzr  || fZzr <= 0.0 || fBw <= 0.0 ||
+            fEnd > fNper  || fNper <= 0.0 || fPv <= 0.0 ||
             ( fFlag != 0.0 && fFlag != 1.0 ))
             PushIllegalArgument();
         else
@@ -2268,20 +2268,20 @@ void ScInterpreter::ScCumIpmt()
             bool bPayInAdvance = ( bool ) fFlag;
             sal_uLong nStart = (sal_uLong) fStart;
             sal_uLong nEnd = (sal_uLong) fEnd ;
-            double fRmz = ScGetRmz(fInterest, fZzr, fBw, 0.0, bPayInAdvance);
+            double fPmt = ScGetRmz(fInterest, fNper, fPv, 0.0, bPayInAdvance);
             double fCompoundInterest = 0.0;
             if (nStart == 1)
             {
                 if (!bPayInAdvance)
-                    fCompoundInterest = -fBw;
+                    fCompoundInterest = -fPv;
                 nStart++;
             }
             for (sal_uLong i = nStart; i <= nEnd; i++)
             {
                 if (bPayInAdvance)
-                    fCompoundInterest += ScGetZw(fInterest, (double)(i-2), fRmz, fBw, true) - fRmz;
+                    fCompoundInterest += ScGetZw(fInterest, (double)(i-2), fPmt, fPv, true) - fPmt;
                 else
-                    fCompoundInterest += ScGetZw(fInterest, (double)(i-1), fRmz, fBw, false);
+                    fCompoundInterest += ScGetZw(fInterest, (double)(i-1), fPmt, fPv, false);
             }
             fCompoundInterest *= fInterest;
             PushDouble(fCompoundInterest);
@@ -2294,40 +2294,40 @@ void ScInterpreter::ScCumPrinc()
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
-        double fInterest, fZzr, fBw, fStart, fEnd;
+        double fInterest, fNper, fPv, fStart, fEnd;
         double fFlag = GetDoubleWithDefault( -1.0 );
         fEnd   = ::rtl::math::approxFloor(GetDouble());
         fStart = ::rtl::math::approxFloor(GetDouble());
-        fBw     = GetDouble();
-        fZzr    = GetDouble();
+        fPv    = GetDouble();
+        fNper  = GetDouble();
         fInterest   = GetDouble();
         if (fStart < 1.0 || fEnd < fStart || fInterest <= 0.0 ||
-            fEnd > fZzr  || fZzr <= 0.0 || fBw <= 0.0 ||
+            fEnd > fNper  || fNper <= 0.0 || fPv <= 0.0 ||
             ( fFlag != 0.0 && fFlag != 1.0 ))
             PushIllegalArgument();
         else
         {
             bool bPayInAdvance = ( bool ) fFlag;
-            double fRmz = ScGetRmz(fInterest, fZzr, fBw, 0.0, bPayInAdvance);
-            double fKapZ = 0.0;
+            double fPmt = ScGetRmz(fInterest, fNper, fPv, 0.0, bPayInAdvance);
+            double fPpmt = 0.0;
             sal_uLong nStart = (sal_uLong) fStart;
             sal_uLong nEnd = (sal_uLong) fEnd;
             if (nStart == 1)
             {
                 if (bPayInAdvance)
-                    fKapZ = fRmz;
+                    fPpmt = fPmt;
                 else
-                    fKapZ = fRmz + fBw * fInterest;
+                    fPpmt = fPmt + fPv * fInterest;
                 nStart++;
             }
             for (sal_uLong i = nStart; i <= nEnd; i++)
             {
                 if (bPayInAdvance)
-                    fKapZ += fRmz - (ScGetZw(fInterest, (double)(i-2), fRmz, fBw, true) - fRmz) * fInterest;
+                    fPpmt += fPmt - (ScGetZw(fInterest, (double)(i-2), fPmt, fPv, true) - fPmt) * fInterest;
                 else
-                    fKapZ += fRmz - ScGetZw(fInterest, (double)(i-1), fRmz, fBw, false) * fInterest;
+                    fPpmt += fPmt - ScGetZw(fInterest, (double)(i-1), fPmt, fPv, false) * fInterest;
             }
-            PushDouble(fKapZ);
+            PushDouble(fPpmt);
         }
     }
 }
