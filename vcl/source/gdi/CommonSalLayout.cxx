@@ -309,8 +309,11 @@ namespace {
 
     VerticalOrientation GetVerticalOrientation(sal_UCS4 cCh, const LanguageTag& rTag)
     {
-        // Override fullwidth colon and semi-colon orientation. Tu is preferred.
-        if ((cCh == 0xff1a || cCh == 0xff1b) && rTag.getLanguage() == "zh")
+        // Override orientation of fullwidth colon , semi-colon,
+        // and Bopomofo tonal marks.
+        if ((cCh == 0xff1a || cCh == 0xff1b
+           || cCh == 0x2ca || cCh == 0x2cb || cCh == 0x2c7 || cCh == 0x2d9)
+                && rTag.getLanguage() == "zh")
             return VerticalOrientation::TransformedUpright;
 
         uint8_t nRet = 1;
