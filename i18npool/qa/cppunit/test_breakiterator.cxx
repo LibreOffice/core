@@ -158,6 +158,22 @@ void TestBreakIterator::testLineBreaking()
             (void)m_xBreak->getLineBreak(aTest, 0, aLocale, 0, aHyphOptions, aUserOptions);
         }
     }
+
+    //See https://bugs.documentfoundation.org/show_bug.cgi?id=96197
+    {
+        const sal_Unicode HANGUL[] = { 0xc560, 0xad6D, 0xac00, 0xc758, 0x0020, 0xac00,
+                                       0xc0ac, 0xb294};
+        OUString aTest(HANGUL, SAL_N_ELEMENTS(HANGUL));
+
+        aLocale.Language = "ko";
+        aLocale.Country = "KR";
+
+        {
+            i18n::LineBreakResults aResult = m_xBreak->getLineBreak(aTest, aTest.getLength()-2, aLocale, 0,
+                aHyphOptions, aUserOptions);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected a break don't split the Korean word!", static_cast<sal_Int32>(5), aResult.breakIndex);
+        }
+    }
 }
 
 //See https://bugs.libreoffice.org/show_bug.cgi?id=49629
