@@ -91,44 +91,6 @@ namespace emfplushelper
     {
     }
 
-//    OutDevState::OutDevState() :
-//        clip(),
-//        clipRect(),
-//        xClipPoly(),
-//
-//        lineColor(),
-//        fillColor(),
-//        textColor(),
-//        textFillColor(),
-//        textLineColor(),
-//
-//        xFont(),
-//        transform(),
-//        mapModeTransform(),
-//        fontRotation(0.0),
-//
-//        textEmphasisMarkStyle(FontEmphasisMark::NONE),
-//        pushFlags(PushFlags::ALL),
-//        textDirection(css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
-//        textAlignment(0), // TODO(Q2): Synchronize with implrenderer
-//                            // and possibly new rendering::TextAlignment
-//        textReliefStyle(FontRelief::NONE),
-//        textOverlineStyle(LINESTYLE_NONE),
-//        textUnderlineStyle(LINESTYLE_NONE),
-//        textStrikeoutStyle(STRIKEOUT_NONE),
-//        textReferencePoint(ALIGN_BASELINE),
-//
-//        isTextOutlineModeSet(false),
-//        isTextEffectShadowSet(false),
-//        isTextWordUnderlineSet(false),
-//
-//        isLineColorSet(false),
-//        isFillColorSet(false),
-//        isTextFillColorSet(false),
-//        isTextLineColorSet(false)
-//    {
-//    }
-
     void EmfPlusHelperData::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream)
     {
         sal_uInt32 index;
@@ -717,8 +679,6 @@ namespace emfplushelper
         mbMultipart(false),
         mMFlags(0),
         mMStream(),
-//        mGSStack(),
-//        mGSContainerStack(),
         mrTargetHolders(rTargetHolders),
         mrPropertyHolders(rPropertyHolders)
     {
@@ -893,17 +853,9 @@ namespace emfplushelper
 
                         ::basegfx::B2DPolyPolygon polyPolygon(polygon);
                         if (type == EmfPlusRecordTypeFillPie)
-                        {
                             EMFPPlusFillPolygon(polyPolygon, flags & 0x8000, brushIndexOrColor);
-    //                        EMFPPlusFillPolygon(polyPolygon,
-    //                            rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
-                        }
                         else
-                        {
                             EMFPPlusDrawPolygon(polyPolygon, flags & 0xff);
-    //                        EMFPPlusDrawPolygon(polyPolygon,
-    //                            rFactoryParms, rState, rCanvas, flags & 0xff);
-                        }
                     }
                     break;
                     case EmfPlusRecordTypeFillPath:
@@ -914,7 +866,6 @@ namespace emfplushelper
                         SAL_INFO("cppcanvas.emf", "EMF+ FillPath slot: " << index);
 
                         EMFPPlusFillPolygon(static_cast<EMFPPath*>(maEMFPObjects[index].get())->GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
-    //                    EMFPPlusFillPolygon(static_cast<EMFPPath*>(maEMFPObjects[index])->GetPolygon(*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
                     }
                     break;
                     case EmfPlusRecordTypeDrawEllipse:
@@ -941,17 +892,9 @@ namespace emfplushelper
                                 ::basegfx::utils::createPolygonFromEllipse(mappedCenter, mappedSize.getX(), mappedSize.getY())));
 
                         if (type == EmfPlusRecordTypeFillEllipse)
-                        {
                             EMFPPlusFillPolygon(polyPolygon, flags & 0x8000, brushIndexOrColor);
-    //                        EMFPPlusFillPolygon(polyPolygon,
-    //                            rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
-                        }
                         else
-                        {
                             EMFPPlusDrawPolygon(polyPolygon, flags & 0xff);
-    //                        EMFPPlusDrawPolygon(polyPolygon,
-    //                            rFactoryParms, rState, rCanvas, flags & 0xff);
-                        }
                     }
                     break;
                     case EmfPlusRecordTypeFillRects:
@@ -991,17 +934,9 @@ namespace emfplushelper
 
                             ::basegfx::B2DPolyPolygon polyPolygon(polygon);
                             if (type == EmfPlusRecordTypeFillRects)
-                            {
                                 EMFPPlusFillPolygon(polyPolygon, isColor, brushIndexOrColor);
-    //                            EMFPPlusFillPolygon(polyPolygon,
-    //                                rFactoryParms, rState, rCanvas, isColor, brushIndexOrColor);
-                            }
                             else
-                            {
                                 EMFPPlusDrawPolygon(polyPolygon, flags & 0xff);
-    //                            EMFPPlusDrawPolygon(polyPolygon,
-    //                                rFactoryParms, rState, rCanvas, flags & 0xff);
-                            }
                         }
                         break;
                     }
@@ -1020,7 +955,6 @@ namespace emfplushelper
                         path.Read(rMS, flags, *this);
 
                         EMFPPlusFillPolygon(path.GetPolygon(*this), flags & 0x8000, brushIndexOrColor);
-    //                    EMFPPlusFillPolygon(path.GetPolygon(*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
 
                         break;
                     }
@@ -1035,7 +969,6 @@ namespace emfplushelper
                         // 0x2000 bit indicates whether to draw an extra line between the last point
                         // and the first point, to close the shape.
                         EMFPPlusDrawPolygon(path.GetPolygon(*this, true, (flags & 0x2000)), flags);
-    //                    EMFPPlusDrawPolygon(path.GetPolygon(*this, true, (flags & 0x2000)), rFactoryParms, rState, rCanvas, flags);
 
                         break;
                     }
@@ -1049,7 +982,6 @@ namespace emfplushelper
                         SAL_WARN_IF(!path, "cppcanvas.emf", "EmfPlusRecordTypeDrawPath missing path");
 
                         EMFPPlusDrawPolygon(path->GetPolygon(*this), penIndex);
-    //                    EMFPPlusDrawPolygon(path->GetPolygon(*this), rFactoryParms, rState, rCanvas, penIndex);
 
                         break;
                     }
@@ -1091,8 +1023,7 @@ namespace emfplushelper
                             cubicBezier.adaptiveSubdivideByDistance(aPolygon, 10.0);
 
                             EMFPPlusDrawPolygon(::basegfx::B2DPolyPolygon(aPolygon), flags & 0xff);
-    //                        EMFPPlusDrawPolygon(::basegfx::B2DPolyPolygon(aPolygon), rFactoryParms,
-    //                            rState, rCanvas, flags & 0xff);
+
                             // The ending coordinate of one Bezier curve is the starting coordinate of the next.
                             x1 = x4;
                             y1 = y4;
