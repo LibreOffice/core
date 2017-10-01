@@ -54,6 +54,8 @@
 #include <xmloff/formlayerimport.hxx>
 #include <comphelper/attributelist.hxx>
 #include <sax/fastattribs.hxx>
+#include <rtl/ustring.hxx>
+#include <unordered_map>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 
@@ -225,6 +227,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
     static css::uno::Reference< css::xml::sax::XFastTokenHandler > xTokenHandler;
     static std::unordered_map< sal_Int32, std::pair< OUString, OUString > > aNamespaceMap;
+    static std::unordered_map< OUString, OUString, OUStringHash > aNamespaceURIPrefixMap;
     static bool bIsNSMapsInitialized;
 
     static void initializeNamespaceMaps();
@@ -377,6 +380,8 @@ public:
 
     static const OUString getNameFromToken( sal_Int32 nToken );
     static const OUString getNamespacePrefixFromToken( sal_Int32 nToken );
+    static const OUString getNamespaceURIFromToken( sal_Int32 nToken );
+    static const OUString getNamespacePrefixFromURI( const OUString& rURI );
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *mpNamespaceMap; }
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
