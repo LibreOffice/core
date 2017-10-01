@@ -85,6 +85,8 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
     return BreakIterator_Unicode::getWordBoundary(text, anyPos, nLocale, wordType, bDirection);
 }
 
+#define isHangul(cCh) ((cCh>=0xAC00&&cCh<=0xD7AF)||(cCh>=0x1100&&cCh<=0x11FF))
+
 LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
         const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale& /*rLocale*/, sal_Int32 /*nMinBreakPos*/,
@@ -93,15 +95,32 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
 {
     LineBreakResults lbr;
 
+    const sal_Int32 nOldStartPos = nStartPos;
+
     if (bOptions.allowPunctuationOutsideMargin &&
             hangingCharacters.indexOf(Text[nStartPos]) != -1 &&
             (Text.iterateCodePoints( &nStartPos ), nStartPos == Text.getLength())) {
         ; // do nothing
     } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
+
         while (nStartPos > 0 &&
                 (bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 ||
                  bOptions.forbiddenEndCharacters.indexOf(Text[nStartPos-1]) != -1))
             Text.iterateCodePoints( &nStartPos, -1);
+    }
+
+    // Prevent cutting Korean words in the middle.
+    if ( nOldStartPos == nStartPos && isHangul( Text[nStartPos] ) )
+    {
+        while ( nStartPos >= 0 && isHangul( Text[nStartPos] ) )
+            --nStartPos;
+
+        // beginning of the last Korean word.
+        if ( nStartPos < nOldStartPos )
+            ++nStartPos;
+
+        if ( nStartPos == 0 )
+            nStartPos = nOldStartPos;
     }
 
     lbr.breakIndex = nStartPos;
