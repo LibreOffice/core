@@ -21,7 +21,7 @@
 
 
 
-#include <malloc.h>
+#include <stdlib.h>
 #include <hash_map>
 
 #include <rtl/alloc.h>
