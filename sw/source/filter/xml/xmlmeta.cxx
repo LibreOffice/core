@@ -52,7 +52,7 @@ SwXMLImport::GetDocumentProperties() const
 }
 
 SvXMLImportContext *SwXMLImport::CreateMetaContext(
-                                       const OUString& rLocalName )
+                                       const sal_Int32 /*nElement*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -60,13 +60,11 @@ SvXMLImportContext *SwXMLImport::CreateMetaContext(
     {
         uno::Reference<document::XDocumentProperties> const xDocProps(
                 GetDocumentProperties());
-        pContext = new SvXMLMetaDocumentContext(*this,
-                    XML_NAMESPACE_OFFICE, rLocalName, xDocProps);
+        pContext = new SvXMLMetaDocumentContext(*this, xDocProps);
     }
 
     if( !pContext )
-        pContext = new SvXMLImportContext( *this,
-                        XML_NAMESPACE_OFFICE, rLocalName );
+        pContext = new SvXMLImportContext( *this );
 
     return pContext;
 }
