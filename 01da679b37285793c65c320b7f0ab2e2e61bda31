@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_8fcdb05f",
+        "filename": "sc/source/ui/docshell/macromgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-01T14:03:31Z",
+      "side": 1,
+      "message": "you shouldn\u0027t remove_if here, you can just use remove, since the normal comparator is the \u003d\u003d comparator",
+      "revId": "01da679b37285793c65c320b7f0ab2e2e61bda31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_afdc2c13",
+        "filename": "sc/source/ui/docshell/macromgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-01T14:03:31Z",
+      "side": 1,
+      "message": "these two lines are weird, as far as I can tell, they are simply doing:\n  rCells \u003d rCellList;",
+      "revId": "01da679b37285793c65c320b7f0ab2e2e61bda31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
