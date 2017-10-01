@@ -59,6 +59,7 @@
 
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -74,7 +75,9 @@
 #include <vcl/svapp.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/fract.hxx>
+#include <linguistic/misc.hxx>
 #include <svtools/ctrltool.hxx>
+#include <svtools/langtab.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -1492,7 +1495,36 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
     return false;
 }
 
-static void doc_iniUnoCommands ()
+static void doc_iniUnoCommand(const SfxViewShell* pViewShell, const OUString& aUnoCommand)
+{
+    OUStringBuffer aBuffer;
+
+    if (aUnoCommand.endsWith("LanguageStatus"))
+    {
+        uno::Reference< css::linguistic2::XLinguServiceManager2 > xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
+        uno::Reference< css::linguistic2::XSpellChecker > xSpell(xLangSrv.is() ? xLangSrv->getSpellChecker() : nullptr, uno::UNO_QUERY);
+        uno::Reference< css::linguistic2::XSupportedLocales > xLocales(xSpell, uno::UNO_QUERY);
+        uno::Sequence< css::lang::Locale > aLocales(xLocales.is() ? xLocales->getLocales() : uno::Sequence< css::lang::Locale >());
+
+        aBuffer.append(aUnoCommand);
+        aBuffer.append("?[");
+        for ( sal_Int32 itLocale = 0; itLocale < aLocales.getLength(); itLocale++ )
+        {
+            aBuffer.append("\"" + SvtLanguageTable::GetLanguageString(LanguageTag::convertToLanguageType(aLocales[itLocale])) + "\"");
+            if (itLocale + 1 != aLocales.getLength())
+                aBuffer.append(",");
+        }
+        aBuffer.append("]");
+    }
+
+    if (pViewShell && !aBuffer.isEmpty())
+    {
+        OUString payload = aBuffer.makeStringAndClear();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
+    }
+}
+
+static void doc_iniUnoCommands (const SfxViewShell* pViewShell)
 {
     SolarMutexGuard aGuard;
 
@@ -1520,6 +1552,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:JustifyPara"),
         OUString(".uno:OutlineFont"),
         OUString(".uno:LeftPara"),
+        OUString(".uno:LanguageStatus"),
         OUString(".uno:RightPara"),
         OUString(".uno:Shadowed"),
         OUString(".uno:SubScript"),
@@ -1580,7 +1613,6 @@ static void doc_iniUnoCommands ()
     };
 
     util::URL aCommandURL;
-    SfxViewShell* pViewShell = SfxViewShell::Current();
     SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): nullptr;
 
     // check if Frame-Controller were created.
@@ -1614,7 +1646,11 @@ static void doc_iniUnoCommands ()
         if (pSlot)
         {
             // Initialize slot to dispatch .uno: Command.
-            pViewFrame->GetBindings().GetDispatch(pSlot, aCommandURL, false);
+            uno::Reference<frame::XDispatch> xDispatch(pViewFrame->GetBindings().GetDispatch(pSlot, aCommandURL, false));
+            if (xDispatch.is())
+            {
+                doc_iniUnoCommand(pViewShell, sUnoCommand);
+            }
         }
     }
 }
@@ -1964,8 +2000,6 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
     {
-        doc_iniUnoCommands();
-
         pDoc->initializeForTiledRendering(
                 comphelper::containerToSequence(jsonToPropertyValuesVector(pArguments)));
     }
@@ -2021,7 +2055,10 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     }
 
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
         pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
+        doc_iniUnoCommands(pViewShell);
+    }
 }
 
 /// Returns the JSON representation of all the comments in the document
