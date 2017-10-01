@@ -741,9 +741,7 @@ namespace emfplushelper
         sal_uInt64 length = rMS.GetSize();
 
         if (length < 12)
-        {
-            SAL_INFO("cppcanvas.emf", "length is less than required header size");
-        }
+            SAL_WARN("cppcanvas.emf", "length is less than required header size");
 
         // 12 is minimal valid EMF+ record size; remaining bytes are padding
         while (length >= 12)
@@ -757,17 +755,12 @@ namespace emfplushelper
             next = rMS.Tell() + (size - 12);
 
             if (size < 12)
-            {
-                SAL_INFO("cppcanvas.emf", "Size field is less than 12 bytes");
-            }
+                SAL_WARN("cppcanvas.emf", "Size field is less than 12 bytes");
             else if (size > length)
-            {
-                SAL_INFO("cppcanvas.emf", "Size field is greater than bytes left");
-            }
+                SAL_WARN("cppcanvas.emf", "Size field is greater than bytes left");
+
             if (dataSize > (size - 12))
-            {
-                SAL_INFO("cppcanvas.emf", "DataSize field is greater than Size-12");
-            }
+                SAL_WARN("cppcanvas.emf", "DataSize field is greater than Size-12");
 
             SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
 
