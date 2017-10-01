@@ -227,14 +227,23 @@ OString lcl_getParagraphBodyText(const uno::Reference<text::XTextContent>& xText
     return strBuf.makeStringAndClear().trim().toUtf8();
 }
 
+/// Returns RDF (key, value) pair associated with the field, if any.
+std::pair<OUString, OUString> lcl_getFieldRDF(const uno::Reference<frame::XModel>& xModel,
+                                               const uno::Reference<css::text::XTextField>& xField,
+                                               const OUString& rRDFName)
+{
+    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
+    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
+    const auto it = aStatements.find(rRDFName);
+    return it != aStatements.end() ? std::make_pair(it->first, it->second) : std::make_pair(OUString(), OUString());
+}
+
 /// Returns true iff the field in question is paragraph signature.
 /// Note: must have associated RDF, since signatures are othewise just metadata fields.
 bool lcl_IsParagraphSignatureField(const uno::Reference<frame::XModel>& xModel,
                                    const uno::Reference<css::text::XTextField>& xField)
 {
-    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
-    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
-    return aStatements.find(ParagraphSignatureRDFName) != aStatements.end();
+    return lcl_getFieldRDF(xModel, xField, ParagraphSignatureRDFName).first == ParagraphSignatureRDFName;
 }
 
 /// Validate and return validation result and signature field display text.
@@ -329,10 +338,8 @@ bool lcl_IsParagraphClassificationField(const uno::Reference<frame::XModel>& xMo
                                         const uno::Reference<css::text::XTextField>& xField,
                                         const OUString& sKey = OUString())
 {
-    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
-    std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
-    const auto it = aStatements.find(ParagraphClassificationRDFName);
-    return it != aStatements.end() && (sKey.isEmpty() || it->second == sKey);
+    const std::pair<OUString, OUString> rdfPair = lcl_getFieldRDF(xModel, xField, ParagraphClassificationRDFName);
+    return rdfPair.first == ParagraphClassificationRDFName && (sKey.isEmpty() || rdfPair.second == sKey);
 }
 
 uno::Reference<text::XTextField> lcl_FindParagraphClassificationField(const uno::Reference<frame::XModel>& xModel,
