@@ -109,6 +109,9 @@ protected:
                   const OUString& rLocalName,
                   const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
     virtual XMLTextImportHelper* CreateTextImport() override;
 
     virtual XMLShapeImportHelper* CreateShapeImport() override;
@@ -138,7 +141,7 @@ public:
 
     // NB: in contrast to other CreateFooContexts, this particular one handles
     //     the root element (i.e. office:document-meta)
-    SvXMLImportContext *CreateMetaContext( const OUString& rLocalName );
+    SvXMLImportContext *CreateMetaContext( const sal_Int32 nElement );
     SvXMLImportContext *CreateScriptContext( const OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(
                 const OUString& rLocalName,
