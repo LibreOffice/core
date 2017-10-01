@@ -21,7 +21,6 @@
 #define INCLUDED_FILTER_SOURCE_CONFIG_CACHE_CACHEITEM_HXX
 
 #include <deque>
-#include <list>
 #include <unordered_map>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -194,7 +193,7 @@ struct FlatDetectionInfo
     FlatDetectionInfo();
 };
 
-typedef ::std::list< FlatDetectionInfo > FlatDetection;
+typedef ::std::vector< FlatDetectionInfo > FlatDetection;
 
     } // namespace config
 } // namespace filter
