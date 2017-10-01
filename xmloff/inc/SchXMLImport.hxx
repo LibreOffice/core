@@ -159,6 +159,9 @@ protected:
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
 public:
     SchXMLImport(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
