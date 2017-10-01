@@ -421,10 +421,9 @@ void BrwString_Impl::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Rend
         OptionsUserData aData(reinterpret_cast<sal_uLong>(rEntry.GetUserData()));
         if (aData.HasNumericValue())
         {
-            OUStringBuffer sTxt;
-            sTxt.append(' ').append(static_cast<sal_Int32>(aData.GetNumericValue()));
+            OUString sTxt = " " + OUString::number(aData.GetNumericValue());
             rRenderContext.SetFont(aFont);
-            rRenderContext.DrawText(aNewPos, sTxt.makeStringAndClear());
+            rRenderContext.DrawText(aNewPos, sTxt);
         }
 
         rRenderContext.Pop();
