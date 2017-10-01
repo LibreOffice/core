@@ -75,6 +75,7 @@ using namespace ::xmloff::token;
 
 css::uno::Reference< css::xml::sax::XFastTokenHandler > SvXMLImport::xTokenHandler( new FastTokenHandler() );
 std::unordered_map< sal_Int32, std::pair< OUString, OUString > > SvXMLImport::aNamespaceMap;
+std::unordered_map< OUString, OUString, OUStringHash > SvXMLImport::aNamespaceURIPrefixMap;
 bool SvXMLImport::bIsNSMapsInitialized = false;
 
 class SvXMLImportEventListener : public cppu::WeakImplHelper< css::lang::XEventListener >
@@ -2038,14 +2039,35 @@ const OUString SvXMLImport::getNamespacePrefixFromToken( sal_Int32 nToken )
         return OUString();
 }
 
+const OUString SvXMLImport::getNamespaceURIFromToken( sal_Int32 nToken )
+{
+    sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
+    auto aIter( aNamespaceMap.find( nNamespaceToken ) );
+    if( aIter != aNamespaceMap.end() )
+        return (*aIter).second.second;
+    else
+        return OUString();
+}
+
+const OUString SvXMLImport::getNamespacePrefixFromURI( const OUString& rURI )
+{
+    auto aIter( aNamespaceURIPrefixMap.find(rURI) );
+    if( aIter != aNamespaceURIPrefixMap.end() )
+        return (*aIter).second;
+    else
+        return OUString();
+}
+
 void SvXMLImport::initializeNamespaceMaps()
 {
     auto mapTokenToNamespace = [&]( sal_Int32 nToken, sal_Int32 nPrefix, sal_Int32 nNamespace )
     {
         if ( nToken >= 0 )
         {
-            aNamespaceMap[ nToken + 1 ] = std::make_pair( GetXMLToken( static_cast<XMLTokenEnum>( nPrefix ) ),
-                                                      GetXMLToken( static_cast<XMLTokenEnum>( nNamespace ) ) );
+            const OUString& sNamespace = GetXMLToken( static_cast<XMLTokenEnum>( nNamespace ) );
+            const OUString& sPrefix = GetXMLToken( static_cast<XMLTokenEnum>( nPrefix ) );
+            aNamespaceMap[ nToken + 1 ] = std::make_pair( sPrefix, sNamespace );
+            aNamespaceURIPrefixMap.emplace( sNamespace, sPrefix );
         }
     };
 
@@ -2156,6 +2178,12 @@ void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comp
 
 void SvXMLImportFastNamespaceHandler::registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
 {
+    // Elements with default namespace parsed by FastParser have namepsace prefix.
+    // A default namespace needs to be registered with the prefix, to maintan the compatibility.
+    if ( rNamespacePrefix.isEmpty() )
+        m_aNamespaceDefines.push_back( o3tl::make_unique<NamespaceDefine>(
+                                    SvXMLImport::getNamespacePrefixFromURI( rNamespaceURI ), rNamespaceURI) );
+
     m_aNamespaceDefines.push_back( o3tl::make_unique<NamespaceDefine>(
                                     rNamespacePrefix, rNamespaceURI) );
 }

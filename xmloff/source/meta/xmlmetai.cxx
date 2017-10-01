@@ -41,57 +41,48 @@ private:
     css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
 
 public:
-    XMLDocumentBuilderContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
+    XMLDocumentBuilderContext(SvXMLImport& rImport, sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         const css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2>& rDocBuilder);
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual void startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs ) override;
+    virtual void endFastElement( sal_Int32 nElement ) override;
+    virtual void characters( const OUString& rChars ) override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual css::uno::Reference< XFastContextHandler > createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs ) override;
 
-    virtual void Characters( const OUString& rChars ) override;
-
-    virtual void EndElement() override;
 };
 
 XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
-        const uno::Reference<xml::sax::XAttributeList>&,
+        sal_Int32 /*nElement*/, const uno::Reference<xml::sax::XFastAttributeList>&,
         const uno::Reference<xml::dom::XSAXDocumentBuilder2>& rDocBuilder) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    SvXMLImportContext( rImport ),
     mxDocBuilder(rDocBuilder)
 {
 }
 
-SvXMLImportContextRef
-XMLDocumentBuilderContext::CreateChildContext( sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList>& rAttrs)
+void SAL_CALL XMLDocumentBuilderContext::startFastElement( sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
 {
-    return new XMLDocumentBuilderContext(
-                GetImport(), nPrefix, rLocalName, rAttrs, mxDocBuilder);
+    mxDocBuilder->startFastElement(nElement, xAttribs);
 }
 
-void XMLDocumentBuilderContext::StartElement(
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SAL_CALL XMLDocumentBuilderContext::endFastElement( sal_Int32 nElement )
 {
-    mxDocBuilder->startElement(
-      GetImport().GetNamespaceMap().GetQNameByKey(GetPrefix(), GetLocalName()),
-      xAttrList);
+    mxDocBuilder->endFastElement(nElement);
 }
 
-void XMLDocumentBuilderContext::Characters( const OUString& rChars )
+void SAL_CALL XMLDocumentBuilderContext::characters( const OUString& rChars )
 {
     mxDocBuilder->characters(rChars);
 }
 
-void XMLDocumentBuilderContext::EndElement()
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL XMLDocumentBuilderContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
-    mxDocBuilder->endElement(
-      GetImport().GetNamespaceMap().GetQNameByKey(GetPrefix(), GetLocalName()));
+    return new XMLDocumentBuilderContext( GetImport(), nElement, xAttrList, mxDocBuilder );
 }
 
 static void
@@ -150,19 +141,6 @@ lcl_initGenerator(SvXMLImport & rImport,
 }
 
 SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
-            sal_uInt16 nPrfx, const OUString& rLName,
-            const uno::Reference<document::XDocumentProperties>& xDocProps) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    mxDocProps(xDocProps),
-    mxDocBuilder(
-        xml::dom::SAXDocumentBuilder::create(
-            comphelper::getProcessComponentContext()))
-{
-// #i103539#: must always read meta.xml for generator, xDocProps unwanted then
-//    OSL_ENSURE(xDocProps.is(), "SvXMLMetaDocumentContext: no document props");
-}
-
-SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
             const uno::Reference<document::XDocumentProperties>& xDocProps) :
     SvXMLImportContext( rImport ),
     mxDocProps(xDocProps),
@@ -178,39 +156,18 @@ SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
 {
 }
 
-SvXMLImportContextRef SvXMLMetaDocumentContext::CreateChildContext(
-             sal_uInt16 nPrefix, const OUString& rLocalName,
-             const uno::Reference<xml::sax::XAttributeList>& rAttrs)
-{
-    if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
-         IsXMLToken(rLocalName, XML_META) )
-    {
-        return new XMLDocumentBuilderContext(
-                GetImport(), nPrefix, rLocalName, rAttrs, mxDocBuilder);
-    }
-    else
-    {
-        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
-    }
-}
-
-void SvXMLMetaDocumentContext::StartElement(
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+void SAL_CALL SvXMLMetaDocumentContext::startFastElement( sal_Int32 nElement,
+            const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     mxDocBuilder->startDocument();
     // hardcode office:document-meta (necessary in case of flat file ODF)
-    mxDocBuilder->startElement(
-        GetImport().GetNamespaceMap().GetQNameByKey(GetPrefix(),
-            GetXMLToken(XML_DOCUMENT_META)), xAttrList);
-
+    mxDocBuilder->startFastElement( ( nElement & NMSP_MASK ) | XML_DOCUMENT_META, xAttrList );
 }
 
-void SvXMLMetaDocumentContext::EndElement()
+void SAL_CALL SvXMLMetaDocumentContext::endFastElement( sal_Int32 nElement )
 {
     // hardcode office:document-meta (necessary in case of flat file ODF)
-    mxDocBuilder->endElement(
-        GetImport().GetNamespaceMap().GetQNameByKey(GetPrefix(),
-            GetXMLToken(XML_DOCUMENT_META)));
+    mxDocBuilder->endFastElement( ( nElement & NMSP_MASK ) | XML_DOCUMENT_META );
     mxDocBuilder->endDocument();
     if (mxDocProps.is())
     {
@@ -220,6 +177,20 @@ void SvXMLMetaDocumentContext::EndElement()
     {
         lcl_initGenerator(GetImport(), mxDocBuilder);
     }
+}
+
+void SAL_CALL SvXMLMetaDocumentContext::characters( const OUString& /*rChars*/ )
+{
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLMetaDocumentContext::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    if ( nElement == ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_META ) )
+        return new XMLDocumentBuilderContext(
+                GetImport(), nElement, xAttrList, mxDocBuilder);
+    else
+        return new SvXMLImportContext( GetImport() );
 }
 
 void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno::Reference<beans::XPropertySet>& xImportInfo )

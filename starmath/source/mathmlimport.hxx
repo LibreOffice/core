@@ -98,6 +98,9 @@ public:
         const OUString &rLocalName,
         const css::uno::Reference <
         css::xml::sax::XAttributeList> &xAttrList) override;
+    SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
+        const css::uno::Reference<
+        css::xml::sax::XFastAttributeList >& xAttrList ) override;
     SvXMLImportContext *CreateRowContext(sal_uInt16 nPrefix,
         const OUString &rLocalName);
     SvXMLImportContext *CreateEncloseContext(sal_uInt16 nPrefix,

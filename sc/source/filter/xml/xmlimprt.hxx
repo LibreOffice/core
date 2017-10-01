@@ -645,10 +645,6 @@ protected:
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
-                                      const OUString& rLocalName,
-                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
-
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
@@ -668,7 +664,7 @@ public:
     // NB: in contrast to other CreateFooContexts, this particular one handles
     //     the root element (i.e. office:document-meta)
     SvXMLImportContext *CreateMetaContext(
-                                    const OUString& rLocalName );
+                                    const sal_Int32 nElement );
     SvXMLImportContext *CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
                                      const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext(
