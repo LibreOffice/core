@@ -1128,7 +1128,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
 
         sal_Int32 nPos = 0;
 
-        // No it is *no* good idea to call GetToken within Point-Konstr. immediately,
+        // No it is *not* a good idea to call GetToken within Point constr. immediately,
         // because which parameter is evaluated first?
         long nX = rUserData.getToken( 0, ';', nPos ).toInt32(),
              nY = rUserData.getToken( 0, ';', nPos ).toInt32();

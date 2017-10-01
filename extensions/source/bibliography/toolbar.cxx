@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 
-// Konstanten -------------------------------------------------------------
+// Constants --------------------------------------------------------------
 
 
 BibToolBarListener::BibToolBarListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
@@ -343,7 +343,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
         uno::Reference< util::XURLTransformer >  xTrans( util::URLTransformer::create(comphelper::getProcessComponentContext()) );
         if( xTrans.is() )
         {
-            // Datei laden
+            // load the file
             util::URL aURL;
             aURL.Complete = aCommand;
 
