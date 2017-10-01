@@ -116,6 +116,9 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
     if( !xHandler.is() )
         return;
 
+    if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(xHandler.get()))
+        xHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
+
     try
     {
         Reference < XModifiable2 > xModifiable2( rComp, UNO_QUERY_THROW );
