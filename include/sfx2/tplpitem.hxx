@@ -33,7 +33,6 @@ public:
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
                      const OUString &rStyle );
-    SfxTemplateItem( const SfxTemplateItem& );
 
     const OUString&         GetStyleName() const { return aStyle; }
 

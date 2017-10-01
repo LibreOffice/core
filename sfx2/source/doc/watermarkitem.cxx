@@ -26,16 +26,6 @@ SfxPoolItem* SfxWatermarkItem::CreateDefault()
     return new SfxWatermarkItem();
 }
 
-SfxWatermarkItem::SfxWatermarkItem( const SfxWatermarkItem& rCopy )
-: SfxPoolItem( rCopy )
-, m_aText( rCopy.m_aText )
-, m_aFont( rCopy.m_aFont )
-, m_nAngle( rCopy.m_nAngle )
-, m_nTransparency( rCopy.m_nTransparency )
-, m_nColor( rCopy.m_nColor )
-{
-}
-
 bool SfxWatermarkItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return ( SfxPoolItem::operator==( rCmp ) &&

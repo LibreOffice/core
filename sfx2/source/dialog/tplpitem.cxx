@@ -37,17 +37,6 @@ SfxTemplateItem::SfxTemplateItem
 {
 }
 
-
-// copy constuctor
-SfxTemplateItem::SfxTemplateItem( const SfxTemplateItem& rCopy ) :
-
-    SfxFlagItem( rCopy ),
-
-    aStyle( rCopy.aStyle )
-{
-}
-
-
 // op ==
 
 bool SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const

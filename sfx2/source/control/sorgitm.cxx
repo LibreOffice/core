@@ -34,21 +34,6 @@ SfxScriptOrganizerItem::SfxScriptOrganizerItem() :
 }
 
 
-SfxScriptOrganizerItem::SfxScriptOrganizerItem( const SfxScriptOrganizerItem& rItem ) :
-
-    SfxStringItem( rItem ),
-
-    aLanguage( rItem.aLanguage )
-
-{
-}
-
-
-SfxScriptOrganizerItem::~SfxScriptOrganizerItem()
-{
-}
-
-
 SfxPoolItem* SfxScriptOrganizerItem::Clone( SfxItemPool * ) const
 {
     return new SfxScriptOrganizerItem( *this );

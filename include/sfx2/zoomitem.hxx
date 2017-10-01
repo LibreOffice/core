@@ -62,8 +62,6 @@ public:
 
     SvxZoomItem( SvxZoomType eZoomType = SvxZoomType::PERCENT,
                  sal_uInt16 nVal = 0, sal_uInt16 nWhich = SID_ATTR_ZOOM );
-    SvxZoomItem( const SvxZoomItem& );
-    virtual ~SvxZoomItem() override;
 
     void                    SetValueSet( SvxZoomEnableFlags nValues ) { nValueSet = nValues; }
     SvxZoomEnableFlags      GetValueSet() const { return nValueSet; }
