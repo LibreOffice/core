@@ -874,7 +874,7 @@ void ControlHelper::createFilterControl()
 
     NSMenu *menu = [m_pFilterControl menu];
 
-    for (NSStringList::iterator iter = m_pFilterHelper->getFilterNames()->begin(); iter != m_pFilterHelper->getFilterNames()->end(); iter++) {
+    for (NSStringList::iterator iter = m_pFilterHelper->getFilterNames()->begin(); iter != m_pFilterHelper->getFilterNames()->end(); ++iter) {
         NSString *filterName = *iter;
         SAL_INFO("fpicker.aqua","adding filter name: " << [filterName UTF8String]);
         if ([filterName isEqualToString:@"-"]) {

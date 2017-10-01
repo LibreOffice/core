@@ -1561,7 +1561,7 @@ property :
                     pDecl = (*iter);
                     if ( !pDecl )
                     {
-                        iter++;
+                        ++iter;
                         continue;
                     }
 
@@ -1569,14 +1569,14 @@ property :
 
                     if ( !pType )
                     {
-                        iter++;
+                        ++iter;
                         continue;
                     }
 
                     pAttr = new AstAttribute(NT_property, $1, pType, pDecl->getName(), pScope);
 
                     pScope->addDeclaration(pAttr);
-                    iter++;
+                    ++iter;
                     delete pDecl;
                 }
             }
@@ -1641,7 +1641,7 @@ service_export :
                     {
                         ErrorHandler::lookupError(ErrorCode::InterfaceMemberLookup, *iter, scopeAsDecl(pScope));
                     }
-                    iter++;
+                    ++iter;
                 }
             }
         }
@@ -1683,7 +1683,7 @@ service_export :
                 {
                     ErrorHandler::lookupError(ErrorCode::ServiceMemberLookup, *iter, scopeAsDecl(pScope));
                 }
-                iter++;
+                ++iter;
             }
         }
         delete $2;
@@ -1723,7 +1723,7 @@ service_export :
                     {
                         ErrorHandler::lookupError(ErrorCode::InterfaceMemberLookup, *iter, scopeAsDecl(pScope));
                     }
-                    iter++;
+                    ++iter;
                 }
             }
         }
@@ -1764,7 +1764,7 @@ service_export :
                     {
                         ErrorHandler::lookupError(ErrorCode::ServiceMemberLookup, *iter, scopeAsDecl(pScope));
                     }
-                    iter++;
+                    ++iter;
                 }
             }
         }
@@ -2042,7 +2042,7 @@ type_declarator :
                 pDecl = (*iter);
                 if ( !pDecl )
                 {
-                    iter++;
+                    ++iter;
                     continue;
                 }
 
@@ -2050,14 +2050,14 @@ type_declarator :
 
                 if ( !pType )
                 {
-                    iter++;
+                    ++iter;
                     continue;
                 }
 
                 pTypeDef = new AstTypeDef(pType, pDecl->getName(), pScope);
 
                 pScope->addDeclaration(pTypeDef);
-                iter++;
+                ++iter;
                 delete pDecl;
             }
             delete pList;
@@ -2551,7 +2551,7 @@ member :
                 pDecl = (*iter);
                 if ( !pDecl )
                 {
-                    iter++;
+                    ++iter;
                     continue;
                 }
 
@@ -2559,7 +2559,7 @@ member :
 
                 if ( !pType )
                 {
-                    iter++;
+                    ++iter;
                     continue;
                 }
 
@@ -2571,7 +2571,7 @@ member :
                 }
 
                 pScope->addDeclaration(pMember);
-                iter++;
+                ++iter;
                 delete pDecl;
             }
             delete pList;

@@ -1098,7 +1098,7 @@ namespace svxform
                                 else
                                 {
                                     xNum->nextElement();
-                                    nIter++;
+                                    ++nIter;
                                 }
                             }
                         }

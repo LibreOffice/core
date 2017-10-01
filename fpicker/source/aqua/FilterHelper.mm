@@ -183,7 +183,7 @@ FilterHelper::~FilterHelper()
 
     if (nullptr != m_pFilterNames) {
         //we called retain when we added the strings to the list, so we should release them now
-        for (NSStringList::iterator iter = m_pFilterNames->begin(); iter != m_pFilterNames->end(); iter++) {
+        for (NSStringList::iterator iter = m_pFilterNames->begin(); iter != m_pFilterNames->end(); ++iter) {
             [*iter release];
         }
         delete m_pFilterNames;
@@ -345,7 +345,7 @@ bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 
     {
         rtl::OUString aName = [sFilename OUString];
-        for(OUStringList::iterator iter = suffixList.begin(); iter != suffixList.end(); iter++) {
+        for(OUStringList::iterator iter = suffixList.begin(); iter != suffixList.end(); ++iter) {
             if (*iter == ".*" || aName.endsWithIgnoreAsciiCase(*iter)) {
                 return true;
             }
@@ -377,7 +377,7 @@ NSStringList* FilterHelper::getFilterNames()
     if (nullptr == m_pFilterNames) {
         //build filter names list
         m_pFilterNames = new NSStringList;
-        for (FilterList::iterator iter = m_pFilterList->begin(); iter != m_pFilterList->end(); iter++) {
+        for (FilterList::iterator iter = m_pFilterList->begin(); iter != m_pFilterList->end(); ++iter) {
             m_pFilterNames->push_back([[NSString stringWithOUString:iter->getTitle()] retain]);
         }
     }
@@ -399,7 +399,7 @@ int FilterHelper::getCurrentFilterIndex()
     int result = 0;//default to first filter
     if (m_aCurrentFilter.getLength() > 0) {
         int i = 0;
-        for (FilterList::iterator iter = m_pFilterList->begin(); iter != m_pFilterList->end(); iter++, i++) {
+        for (FilterList::iterator iter = m_pFilterList->begin(); iter != m_pFilterList->end(); ++iter, ++i) {
             rtl::OUString aTitle = iter->getTitle();
             if (m_aCurrentFilter.equals(aTitle)) {
                 result = i;
@@ -421,7 +421,7 @@ OUStringList FilterHelper::getCurrentFilterSuffixList()
 {
     OUStringList retVal;
     if (m_aCurrentFilter.getLength() > 0) {
-        for (FilterList::iterator iter = m_pFilterList->begin(); iter != m_pFilterList->end(); iter++) {
+        for (FilterList::iterator iter = m_pFilterList->begin(); iter != m_pFilterList->end(); ++iter) {
             rtl::OUString aTitle = iter->getTitle();
             if (m_aCurrentFilter.equals(aTitle)) {
                 retVal = iter->getFilterSuffixList();
