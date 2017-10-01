@@ -529,16 +529,7 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY);
         // mst@: right now, this seems to be not supported, so it is untested
-        if (xDPS.is()) {
-            pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
-                ? new SvXMLMetaDocumentContext(*this,
-                            XML_NAMESPACE_OFFICE, rLocalName,
-                            xDPS->getDocumentProperties())
-                // flat OpenDocument file format
-                : new SchXMLFlatDocContext_Impl(
-                            *maImportHelper.get(), *this, nPrefix, rLocalName,
-                            xDPS->getDocumentProperties());
-        } else {
+        if (!xDPS.is()) {
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
                 ? SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList )
                 : new SchXMLDocContext( *maImportHelper.get(), *this,
@@ -548,6 +539,36 @@ SvXMLImportContext *SchXMLImport::CreateContext( sal_uInt16 nPrefix, const OUStr
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
     }
 
+    return pContext;
+}
+
+SvXMLImportContext *SchXMLImport::CreateFastContext( sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    SvXMLImportContext* pContext = nullptr;
+
+    switch (nElement)
+    {
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT ):
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT_META ):
+        {
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                GetModel(), uno::UNO_QUERY);
+            // mst@: right now, this seems to be not supported, so it is untested
+            if (xDPS.is()) {
+                pContext = (nElement == XML_ELEMENT( OFFICE, XML_DOCUMENT_META ))
+                    ? new SvXMLMetaDocumentContext(*this,
+                                xDPS->getDocumentProperties())
+                    // flat OpenDocument file format
+                    : new SchXMLFlatDocContext_Impl(
+                                *maImportHelper.get(), *this, nElement,
+                                xDPS->getDocumentProperties());
+            }
+        }
+        break;
+        default:
+            pContext = new SvXMLImportContext( *this );
+    }
     return pContext;
 }
 
