@@ -16,6 +16,24 @@
       "revId": "398e67fca9b5bdf317f7da0f16b1754cc3218b47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_4f1028a9",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-10-01T15:27:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_bd8c6780",
+      "revId": "398e67fca9b5bdf317f7da0f16b1754cc3218b47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
