@@ -382,6 +382,7 @@ public:
 
     /// Apply the classification to the paragraph at cursor.
     void ApplyParagraphClassification(std::vector<svx::ClassificationResult> aResult);
+    std::vector<svx::ClassificationResult> CollectParagraphClassification();
 
     /// Returns true iff the cursor is within a paragraph metadata field.
     /// Currently there are two variants: signature and classification.

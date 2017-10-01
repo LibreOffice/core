@@ -1186,7 +1186,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 pShell->SignParagraph();
             }));
 
-            std::vector<svx::ClassificationResult> aInput = pShell->CollectAdvancedClassification();
+            std::vector<svx::ClassificationResult> aInput = pShell->CollectParagraphClassification();
             pDialog->setupValues(aInput);
 
             if (RET_OK == pDialog->Execute())
