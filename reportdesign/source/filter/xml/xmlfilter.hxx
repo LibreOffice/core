@@ -99,7 +99,7 @@ public:
     using SvXMLImport::SetMasterStyles;
     SvXMLImportContext* CreateStylesContext(const OUString& rLocalName,
                                             const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );
-    SvXMLImportContext* CreateMetaContext(const OUString& rLocalName);
+    SvXMLImportContext* CreateMetaContext(const sal_Int32 nElement);
     SvXMLImportContext* CreateFontDeclsContext(const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList );
 protected:
@@ -107,6 +107,9 @@ protected:
     virtual SvXMLImportContext *CreateDocumentContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual XMLShapeImportHelper* CreateShapeImport() override;
 

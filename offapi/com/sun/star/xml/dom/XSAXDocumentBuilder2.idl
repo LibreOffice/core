@@ -20,7 +20,7 @@
 #ifndef __com_sun_star_xml_dom_XSAXDocumentBuilder2_idl
 #define __com_sun_star_xml_dom_XSAXDocumentBuilder2_idl
 
-#include <com/sun/star/xml/sax/XDocumentHandler.idl>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.idl>
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder.idl>
 
 module com {  module sun {  module star {  module xml { module dom {
@@ -33,7 +33,7 @@ module com {  module sun {  module star {  module xml { module dom {
 interface XSAXDocumentBuilder2
 {
     interface XSAXDocumentBuilder;
-    interface com::sun::star::xml::sax::XDocumentHandler;
+    interface com::sun::star::xml::sax::XFastDocumentHandler;
 };
 
 };};};};};
