@@ -123,15 +123,15 @@ double SAL_CALL AnalysisAddIn::getEffect( double fNominal, sal_Int32 nPeriods )
 double SAL_CALL AnalysisAddIn::getCumprinc( double fRate, sal_Int32 nNumPeriods, double fVal,
     sal_Int32 nStartPer, sal_Int32 nEndPer, sal_Int32 nPayType )
 {
-    double fRmz, fKapZ;
+    double fPmt, fPpmt;
 
     if( nStartPer < 1 || nEndPer < nStartPer || fRate <= 0.0 || nEndPer > nNumPeriods  || nNumPeriods <= 0 ||
         fVal <= 0.0 || ( nPayType != 0 && nPayType != 1 ) )
         throw css::lang::IllegalArgumentException();
 
-    fRmz = GetRmz( fRate, nNumPeriods, fVal, 0.0, nPayType );
+    fPmt = GetRmz( fRate, nNumPeriods, fVal, 0.0, nPayType );
 
-    fKapZ = 0.0;
+    fPpmt = 0.0;
 
     sal_uInt32  nStart = sal_uInt32( nStartPer );
     sal_uInt32  nEnd = sal_uInt32( nEndPer );
@@ -139,9 +139,9 @@ double SAL_CALL AnalysisAddIn::getCumprinc( double fRate, sal_Int32 nNumPeriods,
     if( nStart == 1 )
     {
         if( nPayType <= 0 )
-            fKapZ = fRmz + fVal * fRate;
+            fPpmt = fPmt + fVal * fRate;
         else
-            fKapZ = fRmz;
+            fPpmt = fPmt;
 
         nStart++;
     }
@@ -149,27 +149,27 @@ double SAL_CALL AnalysisAddIn::getCumprinc( double fRate, sal_Int32 nNumPeriods,
     for( sal_uInt32 i = nStart ; i <= nEnd ; i++ )
     {
         if( nPayType > 0 )
-            fKapZ += fRmz - ( GetZw( fRate, double( i - 2 ), fRmz, fVal, 1 ) - fRmz ) * fRate;
+            fPpmt += fPmt - ( GetZw( fRate, double( i - 2 ), fPmt, fVal, 1 ) - fPmt ) * fRate;
         else
-            fKapZ += fRmz - GetZw( fRate, double( i - 1 ), fRmz, fVal, 0 ) * fRate;
+            fPpmt += fPmt - GetZw( fRate, double( i - 1 ), fPmt, fVal, 0 ) * fRate;
     }
 
-    RETURN_FINITE( fKapZ );
+    RETURN_FINITE( fPpmt );
 }
 
 
 double SAL_CALL AnalysisAddIn::getCumipmt( double fRate, sal_Int32 nNumPeriods, double fVal,
     sal_Int32 nStartPer, sal_Int32 nEndPer, sal_Int32 nPayType )
 {
-    double fRmz, fZinsZ;
+    double fPmt, fIpmt;
 
     if( nStartPer < 1 || nEndPer < nStartPer || fRate <= 0.0 || nEndPer > nNumPeriods  || nNumPeriods <= 0 ||
         fVal <= 0.0 || ( nPayType != 0 && nPayType != 1 ) )
         throw css::lang::IllegalArgumentException();
 
-    fRmz = GetRmz( fRate, nNumPeriods, fVal, 0.0, nPayType );
+    fPmt = GetRmz( fRate, nNumPeriods, fVal, 0.0, nPayType );
 
-    fZinsZ = 0.0;
+    fIpmt = 0.0;
 
     sal_uInt32  nStart = sal_uInt32( nStartPer );
     sal_uInt32  nEnd = sal_uInt32( nEndPer );
@@ -177,7 +177,7 @@ double SAL_CALL AnalysisAddIn::getCumipmt( double fRate, sal_Int32 nNumPeriods, 
     if( nStart == 1 )
     {
         if( nPayType <= 0 )
-            fZinsZ = -fVal;
+            fIpmt = -fVal;
 
         nStart++;
     }
@@ -185,14 +185,14 @@ double SAL_CALL AnalysisAddIn::getCumipmt( double fRate, sal_Int32 nNumPeriods, 
     for( sal_uInt32 i = nStart ; i <= nEnd ; i++ )
     {
         if( nPayType > 0 )
-            fZinsZ += GetZw( fRate, double( i - 2 ), fRmz, fVal, 1 ) - fRmz;
+            fIpmt += GetZw( fRate, double( i - 2 ), fPmt, fVal, 1 ) - fPmt;
         else
-            fZinsZ += GetZw( fRate, double( i - 1 ), fRmz, fVal, 0 );
+            fIpmt += GetZw( fRate, double( i - 1 ), fPmt, fVal, 0 );
     }
 
-    fZinsZ *= fRate;
+    fIpmt *= fRate;
 
-    RETURN_FINITE( fZinsZ );
+    RETURN_FINITE( fIpmt );
 }
 
 
