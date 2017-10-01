@@ -27,6 +27,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <xmloff/xmlimp.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <osl/file.hxx>
@@ -43,6 +44,8 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
     m_xDocHdl( xDocHdl )
 {
     OSL_PRECOND(m_xDocHdl.is(), "SaxEmitter(): invalid doc handler");
+    if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(m_xDocHdl.get()))
+        m_xDocHdl.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
     try
     {
         m_xDocHdl->startDocument();

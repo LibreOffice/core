@@ -188,15 +188,31 @@ public:
     SwXMLDocContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName );
 
+    SwXMLDocContext_Impl( SwXMLImport& rImport );
+
     virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+}
+
+SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport ) :
+    SvXMLImportContext( rImport )
+{
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLDocContext_Impl::createFastChildContext(
+    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return new SvXMLImportContext( GetImport() );
 }
 
 SvXMLImportContextRef SwXMLDocContext_Impl::CreateChildContext(
@@ -263,24 +279,30 @@ class SwXMLOfficeDocContext_Impl :
 public:
 
     SwXMLOfficeDocContext_Impl( SwXMLImport& rImport,
-                sal_uInt16 nPrfx,
-                const OUString& rLName,
                 const Reference< document::XDocumentProperties >& xDocProps);
 
     virtual SvXMLImportContextRef CreateChildContext(
                 sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList ) override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
 };
 
 SwXMLOfficeDocContext_Impl::SwXMLOfficeDocContext_Impl(
                 SwXMLImport& rImport,
-                sal_uInt16 nPrfx,
-                const OUString& rLName,
                 const Reference< document::XDocumentProperties >& xDocProps) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
-    SwXMLDocContext_Impl( rImport, nPrfx, rLName ),
-    SvXMLMetaDocumentContext( rImport, nPrfx, rLName, xDocProps)
+    SvXMLImportContext( rImport ),
+    SwXMLDocContext_Impl( rImport ),
+    SvXMLMetaDocumentContext( rImport, xDocProps )
 {
 }
 
@@ -289,25 +311,46 @@ SvXMLImportContextRef SwXMLOfficeDocContext_Impl::CreateChildContext(
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
+    return SwXMLDocContext_Impl::CreateChildContext(
+                nPrefix, rLocalName, xAttrList );
+}
 
+void SAL_CALL SwXMLOfficeDocContext_Impl::startFastElement( sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLMetaDocumentContext::startFastElement( nElement, xAttrList );
+}
+
+void SAL_CALL SwXMLOfficeDocContext_Impl::endFastElement( sal_Int32 nElement )
+{
+    SvXMLMetaDocumentContext::endFastElement( nElement );
+}
+
+void SAL_CALL SwXMLOfficeDocContext_Impl::characters(const OUString& rChars)
+{
+    SvXMLMetaDocumentContext::characters(rChars);
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SwXMLOfficeDocContext_Impl::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
     // assign paragraph styles to list levels of outline style after all styles
     // are imported and finished. This is the case, when <office:body> starts
     // in flat OpenDocument file format.
     {
-        if ( rTokenMap.Get( nPrefix, rLocalName ) == XML_TOK_DOC_BODY )
+        if( nElement == XML_ELEMENT( OFFICE, XML_BODY ) )
         {
             GetImport().GetTextImport()->SetOutlineStyles( true );
         }
     }
 
     // behave like meta base class iff we encounter office:meta
-    if ( XML_TOK_DOC_META == rTokenMap.Get( nPrefix, rLocalName ) ) {
-        return SvXMLMetaDocumentContext::CreateChildContext(
-                    nPrefix, rLocalName, xAttrList );
+    if ( nElement == XML_ELEMENT( OFFICE, XML_META ) ) {
+        return SvXMLMetaDocumentContext::createFastChildContext(
+                    nElement, xAttrList );
     } else {
-        return SwXMLDocContext_Impl::CreateChildContext(
-                    nPrefix, rLocalName, xAttrList );
+        return SwXMLDocContext_Impl::createFastChildContext(
+                    nElement, xAttrList );
     }
 }
 
@@ -362,27 +405,37 @@ SvXMLImportContext *SwXMLImport::CreateContext(
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
         pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName );
     else if ( XML_NAMESPACE_OFFICE==nPrefix &&
-              IsXMLToken( rLocalName, XML_DOCUMENT_META ) )
-    {
-        pContext = CreateMetaContext(rLocalName);
-    }
-    else if ( XML_NAMESPACE_OFFICE==nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
     {
         pContext = new SwXMLDocStylesContext_Impl( *this, nPrefix, rLocalName );
     }
-    else if ( XML_NAMESPACE_OFFICE==nPrefix &&
-              IsXMLToken( rLocalName, XML_DOCUMENT ) )
-    {
-        uno::Reference<document::XDocumentProperties> const xDocProps(
-            GetDocumentProperties());
-        // flat OpenDocument file format
-        pContext = new SwXMLOfficeDocContext_Impl( *this, nPrefix, rLocalName,
-                        xDocProps);
-    }
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
 
+    return pContext;
+}
+
+SvXMLImportContext *SwXMLImport::CreateFastContext( sal_Int32 nElement,
+        const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    switch (nElement)
+    {
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT_META ):
+            pContext = CreateMetaContext(nElement);
+        break;
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT ):
+        {
+            uno::Reference<document::XDocumentProperties> const xDocProps(
+                GetDocumentProperties());
+            // flat OpenDocument file format
+            pContext = new SwXMLOfficeDocContext_Impl( *this, xDocProps );
+        }
+        break;
+        default:
+            pContext = new SvXMLImportContext( *this );
+    }
     return pContext;
 }
 
