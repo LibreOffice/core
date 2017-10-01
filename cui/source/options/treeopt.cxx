@@ -1049,12 +1049,10 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     }
 
     {
-        OUStringBuffer sTitleBuf(sTitle);
-        sTitleBuf.append(" - ");
-        sTitleBuf.append(pTreeLB->GetEntryText(pParent));
-        sTitleBuf.append(" - ");
-        sTitleBuf.append(pTreeLB->GetEntryText(pEntry));
-        SetText(sTitleBuf.makeStringAndClear());
+        OUString sTitleText = sTitle
+                            + " - " + pTreeLB->GetEntryText(pParent)
+                            + " - " + pTreeLB->GetEntryText(pEntry);
+        SetText(sTitleText);
     }
 
     pCurrentPageEntry = pEntry;

@@ -454,11 +454,9 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     };
 
     m_pCheckLB->SvSimpleTable::SetTabs(aStaticTabs);
-    OUStringBuffer sHeader(get<vcl::Window>("m")->GetText());
-    sHeader.append('\t');
-    sHeader.append(get<vcl::Window>("t")->GetText());
-    sHeader.append('\t');
-    m_pCheckLB->InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND,
+    OUString sHeader = get<vcl::Window>("m")->GetText() + "\t"
+                     + get<vcl::Window>("t")->GetText() + "\t";
+    m_pCheckLB->InsertHeaderEntry(sHeader, HEADERBAR_APPEND,
                         HeaderBarItemBits::CENTER | HeaderBarItemBits::VCENTER | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED);
 
     m_pEditPB->SetClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
@@ -2389,21 +2387,20 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
     {
         rtl::Reference<TransferDataContainer> pCntnr = new TransferDataContainer;
 
-        OStringBuffer sData;
+        OString sData;
 
         rtl_TextEncoding nEncode = osl_getThreadTextEncoding();
 
         for( sal_Int32 n = 0; n < nSelCnt; ++n )
         {
-            sData.append(OUStringToOString(m_pLBEntries->GetSelectedEntry(n),
-                nEncode));
+            sData += OUStringToOString(m_pLBEntries->GetSelectedEntry(n), nEncode);
 #if defined(_WIN32)
-            sData.append("\015\012");
+            sData += "\015\012";
 #else
-            sData.append("\012");
+            sData += "\012";
 #endif
         }
-        pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData.makeStringAndClear() );
+        pCntnr->CopyByteString( SotClipboardFormatId::STRING, sData );
         pCntnr->CopyToClipboard( static_cast<vcl::Window*>(const_cast<OfaAutoCompleteTabPage *>(this)) );
     }
 }

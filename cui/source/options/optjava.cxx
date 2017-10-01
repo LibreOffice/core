@@ -455,15 +455,10 @@ void SvxJavaOptionsPage::LoadJREs()
 void SvxJavaOptionsPage::AddJRE( JavaInfo const * _pInfo )
 {
 #if HAVE_FEATURE_JAVA
-    OUStringBuffer sEntry;
-    sEntry.append('\t');
-    sEntry.append(_pInfo->sVendor);
-    sEntry.append('\t');
-    sEntry.append(_pInfo->sVersion);
-    sEntry.append('\t');
+    OUString sEntry = "\t" + _pInfo->sVendor + "\t" + _pInfo->sVersion + "\t";
     if ( ( _pInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE ) == JFW_FEATURE_ACCESSBRIDGE )
-        sEntry.append(m_sAccessibilityText);
-    SvTreeListEntry* pEntry = m_pJavaList->InsertEntry(sEntry.makeStringAndClear());
+        sEntry += m_sAccessibilityText;
+    SvTreeListEntry* pEntry = m_pJavaList->InsertEntry(sEntry);
     INetURLObject aLocObj( _pInfo->sLocation );
     OUString* pLocation = new OUString( aLocObj.getFSysPath( FSysStyle::Detect ) );
     pEntry->SetUserData( pLocation );
