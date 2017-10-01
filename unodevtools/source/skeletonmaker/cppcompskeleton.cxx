@@ -758,7 +758,7 @@ OString generateClassDefinition(std::ostream& o,
 //             printType(o, options, manager, iter->second.first.replace('.','/'),
 //                       1, false);
 //             o << " m_" << iter->first << ";\n";
-//             iter++;
+//             ++iter;
 //         }
 //     }
 //     if (!attributes.empty())
@@ -770,7 +770,7 @@ OString generateClassDefinition(std::ostream& o,
 //             printType(o, options, manager, iter->second.first.replace('.','/'),
 //                       1, false);
 //             o << " m_" << iter->first << ";\n";
-//             iter++;
+//             ++iter;
 //         }
 //     }
 

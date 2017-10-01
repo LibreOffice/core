@@ -79,9 +79,9 @@ public:
 
         rValue = maIter;
         if( maIter < maEnd )
-            maIter++;
+            ++maIter;
         else
-            maIter--;
+            --maIter;
         return true;
     }
 

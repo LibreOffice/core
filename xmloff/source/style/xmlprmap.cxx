@@ -131,7 +131,7 @@ XMLPropertySetMapper::XMLPropertySetMapper(
                     XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
                     mpImpl->maMapEntries.push_back( aEntry );
                 }
-                pIter++;
+                ++pIter;
             }
         }
         else
@@ -140,7 +140,7 @@ XMLPropertySetMapper::XMLPropertySetMapper(
             {
                 XMLPropertySetMapperEntry_Impl aEntry( *pIter, rFactory );
                 mpImpl->maMapEntries.push_back( aEntry );
-                pIter++;
+                ++pIter;
             }
         }
     }
