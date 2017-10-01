@@ -48,6 +48,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
@@ -1770,8 +1771,13 @@ SfxDocumentMetaData::loadFromStorage(
         css::uno::UNO_QUERY_THROW);
     xImp->setTargetDocument(css::uno::Reference<css::lang::XComponent>(this));
     xParser->setDocumentHandler(xDocHandler);
+    css::uno::Reference< css::xml::sax::XFastParser > xFastParser = dynamic_cast<
+                            css::xml::sax::XFastParser* >( xDocHandler.get() );
     try {
-        xParser->parseStream(input);
+        if( xFastParser.is() )
+            xFastParser->parseStream(input);
+        else
+            xParser->parseStream(input);
     } catch (const css::xml::sax::SAXException &) {
         throw css::io::WrongFormatException(
                 "SfxDocumentMetaData::loadFromStorage:"

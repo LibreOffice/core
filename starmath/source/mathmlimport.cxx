@@ -24,6 +24,7 @@ one go*/
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
@@ -286,10 +287,16 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
     Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
 
+    uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
+                            xml::sax::XFastParser* >( xFilter.get() );
+
     // finally, parser the stream
     try
     {
-        xParser->parseStream( aParserInput );
+        if( xFastParser.is() )
+            xFastParser->parseStream( aParserInput );
+        else
+            xParser->parseStream( aParserInput );
 
         uno::Reference<lang::XUnoTunnel> xFilterTunnel( xFilter, uno::UNO_QUERY );
         SmXMLImport *pFilter = reinterpret_cast< SmXMLImport * >(
@@ -1935,11 +1942,20 @@ public:
 class SmXMLOfficeContext_Impl : public virtual SvXMLImportContext
 {
 public:
-    SmXMLOfficeContext_Impl( SmXMLImport &rImport, sal_uInt16 nPrfx,
-        const OUString& rLName)
-        : SvXMLImportContext(rImport,nPrfx,rLName) {}
+    SmXMLOfficeContext_Impl( SmXMLImport &rImport )
+        : SvXMLImportContext(rImport) {}
+
+    virtual void SAL_CALL characters( const OUString& /*aChars*/ ) override {}
+
+    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
+
+    virtual void SAL_CALL endFastElement( sal_Int32 /*nElement*/ ) override {}
 
     virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 SvXMLImportContextRef SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPrefix,
@@ -1965,6 +1981,12 @@ SvXMLImportContextRef SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPr
     return pContext;
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLOfficeContext_Impl::createFastChildContext(
+    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+{
+    return new SvXMLImportContext( GetImport() );
+}
+
 
 // context for flat file xml format
 class SmXMLFlatDocContext_Impl
@@ -1972,40 +1994,58 @@ class SmXMLFlatDocContext_Impl
 {
 public:
     SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual SvXMLImportContextRef CreateChildContext(sal_uInt16 i_nPrefix, const OUString& i_rLocalName, const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
-    SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
-    SmXMLOfficeContext_Impl(i_rImport, i_nPrefix, i_rLName),
-    SvXMLMetaDocumentContext(i_rImport, i_nPrefix, i_rLName,
-        i_xDocProps)
+    SvXMLImportContext(i_rImport),
+    SmXMLOfficeContext_Impl(i_rImport),
+    SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
 {
 }
 
-SvXMLImportContextRef SmXMLFlatDocContext_Impl::CreateChildContext(
-    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
-    const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
+void SAL_CALL SmXMLFlatDocContext_Impl::startFastElement( sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLMetaDocumentContext::startFastElement(nElement, xAttrList);
+}
+
+void SAL_CALL SmXMLFlatDocContext_Impl::endFastElement( sal_Int32 nElement )
+{
+    SvXMLMetaDocumentContext::endFastElement(nElement);
+}
+
+void SAL_CALL SmXMLFlatDocContext_Impl::characters( const OUString& rChars )
+{
+    SvXMLMetaDocumentContext::characters(rChars);
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLFlatDocContext_Impl::createFastChildContext(
+    sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {
     // behave like meta base class iff we encounter office:meta
-    if ( XML_NAMESPACE_OFFICE == i_nPrefix &&
-            i_rLocalName == GetXMLToken(XML_META) )
+    if ( nElement == XML_ELEMENT(OFFICE, XML_META) )
     {
-        return SvXMLMetaDocumentContext::CreateChildContext(
-                    i_nPrefix, i_rLocalName, i_xAttrList );
+        return SvXMLMetaDocumentContext::createFastChildContext(
+                    nElement, xAttrList );
     }
     else
     {
-        return SmXMLOfficeContext_Impl::CreateChildContext(
-                    i_nPrefix, i_rLocalName, i_xAttrList );
+        return SmXMLOfficeContext_Impl::createFastChildContext(
+                    nElement, xAttrList );
     }
 }
-
 
 static const SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
 {
@@ -2823,28 +2863,40 @@ SvXMLImportContext *SmXMLImport::CreateDocumentContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
     const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
-    if ( XML_NAMESPACE_OFFICE == nPrefix )
+    SvXMLImportContext *pContext = nullptr;
+    if ( XML_NAMESPACE_OFFICE != nPrefix )
+        pContext = new SmXMLDocContext_Impl(*this,nPrefix,rLocalName);
+
+    return pContext;
+}
+
+SvXMLImportContext *SmXMLImport::CreateFastContext(sal_Int32 nElement,
+    const uno::Reference <xml::sax::XFastAttributeList> & /*xAttrList*/)
+{
+    SvXMLImportContext *pContext = nullptr;
+
+    switch (nElement)
     {
-        if ( IsXMLToken(rLocalName, XML_DOCUMENT) ||
-             IsXMLToken(rLocalName, XML_DOCUMENT_META) )
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT ):
+        case XML_ELEMENT( OFFICE, XML_DOCUMENT_META ):
         {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
-            return IsXMLToken(rLocalName, XML_DOCUMENT_META)
-                ? new SvXMLMetaDocumentContext(*this,
-                        XML_NAMESPACE_OFFICE, rLocalName,
-                        xDPS->getDocumentProperties())
+            pContext = ( (nElement & TOKEN_MASK) == XML_DOCUMENT_META )
+                ? new SvXMLMetaDocumentContext( *this,
+                        xDPS->getDocumentProperties() )
                 // flat OpenDocument file format -- this has not been tested...
-                : new SmXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
-                            xDPS->getDocumentProperties());
+                : new SmXMLFlatDocContext_Impl( *this,
+                            xDPS->getDocumentProperties() );
         }
-        else
-        {
-            return new SmXMLOfficeContext_Impl( *this,nPrefix,rLocalName);
-        }
+        break;
+        default:
+            if ((nElement & NMSP_MASK) == NAMESPACE_TOKEN(XML_NAMESPACE_OFFICE))
+                pContext = new SmXMLOfficeContext_Impl(*this);
+            else
+                pContext = new SvXMLImportContext(*this);
     }
-    else
-        return new SmXMLDocContext_Impl(*this,nPrefix,rLocalName);
+    return pContext;
 }
 
 SvXMLImportContext *SmXMLImport::CreateRowContext(sal_uInt16 nPrefix,

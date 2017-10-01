@@ -23,6 +23,8 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <sax/fastattribs.hxx>
+#include <xmloff/xmlimp.hxx>
 
 using namespace css::lang;
 using namespace css::uno;
@@ -90,7 +92,6 @@ namespace DOM
         m_aDocument.clear();
         m_aFragment.clear();
         while (!m_aNodeStack.empty()) m_aNodeStack.pop();
-        while (!m_aNSStack.empty()) m_aNSStack.pop();
         m_aState = SAXDocumentBuilderState_READY;
     }
 
@@ -144,9 +145,8 @@ namespace DOM
         m_aState = SAXDocumentBuilderState_FRAGMENT_FINISHED;
     }
 
-    // document handler
-
-    void SAL_CALL  CSAXDocumentBuilder::startDocument()
+    //XFastDocumentHandler
+    void SAL_CALL CSAXDocumentBuilder::startDocument()
     {
         ::osl::MutexGuard g(m_Mutex);
 
@@ -177,7 +177,29 @@ namespace DOM
         m_aState = SAXDocumentBuilderState_DOCUMENT_FINISHED;
     }
 
-    void SAL_CALL CSAXDocumentBuilder::startElement(const OUString& aName, const Reference< XAttributeList>& attribs)
+    void SAL_CALL CSAXDocumentBuilder::processingInstruction( const OUString& rTarget, const OUString& rData )
+    {
+        ::osl::MutexGuard g(m_Mutex);
+
+        //  append PI node to the current top
+        if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
+             m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
+            throw SAXException();
+
+        Reference< XProcessingInstruction > aInstruction = m_aDocument->createProcessingInstruction(
+                rTarget, rData);
+        m_aNodeStack.top()->appendChild(aInstruction);
+    }
+
+    void SAL_CALL CSAXDocumentBuilder::setDocumentLocator( const Reference< XLocator >& xLocator )
+    {
+        ::osl::MutexGuard g(m_Mutex);
+
+        // set the document locator...
+        m_aLocator = xLocator;
+    }
+
+    void SAL_CALL CSAXDocumentBuilder::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& xAttribs  )
     {
         ::osl::MutexGuard g(m_Mutex);
 
@@ -187,97 +209,114 @@ namespace DOM
             throw SAXException();
         }
 
-        // start with mappings in effect for last level
-        NSMap aNSMap;
-        if (!m_aNSStack.empty())
-            aNSMap = NSMap(m_aNSStack.top());
-
-        // handle xmlns: attributes and add to mappings
-        OUString attr_qname;
-        OUString attr_value;
-        OUString newprefix;
-        AttrMap aAttrMap;
-        sal_Int32 idx=-1;
-        sal_Int16 nAttributes = attribs->getLength();
-        for (sal_Int16 i=0; i<nAttributes; i++)
-        {
-            attr_qname = attribs->getNameByIndex(i);
-            attr_value = attribs->getValueByIndex(i);
-            // new prefix mapping
-            if (attr_qname.startsWith("xmlns:"))
-            {
-                newprefix = attr_qname.copy(attr_qname.indexOf(':')+1);
-                aNSMap.emplace(newprefix, attr_value);
-            }
-            else if ( attr_qname == "xmlns" )
-            {
-                // new default prefix
-                aNSMap.emplace(OUString(), attr_value);
-            }
-            else
-            {
-                aAttrMap.emplace(attr_qname, attr_value);
-            }
-        }
-
-        // does the element have a prefix?
-        OUString aPrefix;
-        OUString aURI;
         Reference< XElement > aElement;
-        idx = aName.indexOf(':');
-        if (idx != -1)
-        {
-            aPrefix = aName.copy(0, idx);
-        }
-        else
-            aPrefix.clear();
+        const OUString& aPrefix( SvXMLImport::getNamespacePrefixFromToken( nElement ) );
+        const OUString& aURI( SvXMLImport::getNamespaceURIFromToken( nElement ) );
+        OUString aQualifiedName( SvXMLImport::getNameFromToken( nElement ) );
+        if( !aPrefix.isEmpty() )
+            aQualifiedName = aPrefix + SvXMLImport::aNamespaceSeparator + aQualifiedName;
 
-        NSMap::const_iterator result = aNSMap.find(aPrefix);
-        if ( result != aNSMap.end())
+        if ( !aURI.isEmpty() )
         {
             // found a URI for prefix
             // qualified name
-            aElement = m_aDocument->createElementNS( result->second, aName);
+            aElement = m_aDocument->createElementNS( aURI, aQualifiedName );
         }
         else
         {
             // no URI for prefix
-            aElement = m_aDocument->createElement(aName);
+            aElement = m_aDocument->createElement( aQualifiedName );
         }
         aElement.set( m_aNodeStack.top()->appendChild(aElement), UNO_QUERY);
         m_aNodeStack.push(aElement);
 
-        // set non xmlns attributes
-        aPrefix.clear();
-        aURI.clear();
-        AttrMap::const_iterator a = aAttrMap.begin();
-        while (a != aAttrMap.end())
-        {
-            attr_qname = a->first;
-            attr_value = a->second;
-            idx = attr_qname.indexOf(':');
-            if (idx != -1)
-                aPrefix = attr_qname.copy(0, idx);
-            else
-                aPrefix.clear();
-
-            result = aNSMap.find(aPrefix);
-            if (result != aNSMap.end())
-            {
-                // set attribute with namespace
-                aElement->setAttributeNS(result->second, attr_qname, attr_value);
-            }
-            else
-            {
-                // set attribute without namespace
-                aElement->setAttribute(attr_qname, attr_value);
-            }
-            ++a;
-        }
-        m_aNSStack.push(aNSMap);
+        if (xAttribs.is())
+            setElementFastAttributes(aElement, xAttribs);
     }
 
-    void SAL_CALL CSAXDocumentBuilder::endElement(const OUString& aName)
+    // For arbitrary meta elements
+    void SAL_CALL CSAXDocumentBuilder::startUnknownElement( const OUString& rNamespace, const OUString& rName, const Reference< XFastAttributeList >& xAttribs )
+    {
+        ::osl::MutexGuard g(m_Mutex);
+
+        if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
+             m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
+        {
+            throw SAXException();
+        }
+
+        Reference< XElement > aElement;
+        if ( !rNamespace.isEmpty() )
+            aElement = m_aDocument->createElementNS( rNamespace, rName );
+        else
+            aElement = m_aDocument->createElement( rName );
+
+        aElement.set( m_aNodeStack.top()->appendChild(aElement), UNO_QUERY);
+        m_aNodeStack.push(aElement);
+
+        if (xAttribs.is())
+        {
+            setElementFastAttributes(aElement, xAttribs);
+            Sequence< css::xml::Attribute > unknownAttribs = xAttribs->getUnknownAttributes();
+            sal_Int32 len = unknownAttribs.getLength();
+            for ( sal_Int32 i = 0; i < len; i++ )
+            {
+                const OUString& rAttrValue = unknownAttribs[i].Value;
+                const OUString& rAttrName = unknownAttribs[i].Name;
+                const OUString& rAttrNamespace = unknownAttribs[i].NamespaceURL;
+                if ( !rAttrNamespace.isEmpty() )
+                    aElement->setAttributeNS( rAttrNamespace, rAttrName, rAttrValue );
+                else
+                    aElement->setAttribute( rAttrName, rAttrValue );
+            }
+        }
+    }
+
+    void CSAXDocumentBuilder::setElementFastAttributes(const Reference< XElement >& aElement, const Reference< XFastAttributeList >& xAttribs)
+    {
+        sax_fastparser::FastAttributeList *pAttribList =
+            sax_fastparser::FastAttributeList::castToFastAttributeList( xAttribs );
+
+        for (auto &it : *pAttribList)
+        {
+            sal_Int32 nAttrToken = it.getToken();
+            const OUString& aAttrPrefix( SvXMLImport::getNamespacePrefixFromToken( nAttrToken ) );
+            const OUString& aAttrURI( SvXMLImport::getNamespaceURIFromToken( nAttrToken ) );
+            OUString aAttrQualifiedName( SvXMLImport::getNameFromToken( nAttrToken ) );
+            if( !aAttrPrefix.isEmpty() )
+                aAttrQualifiedName = aAttrPrefix + SvXMLImport::aNamespaceSeparator + aAttrQualifiedName;
+
+            if ( !aAttrURI.isEmpty() )
+                aElement->setAttributeNS( aAttrURI, aAttrQualifiedName, it.toString() );
+            else
+                aElement->setAttribute( aAttrQualifiedName, it.toString() );
+        }
+    }
+
+    void SAL_CALL CSAXDocumentBuilder::endFastElement( sal_Int32 nElement )
+    {
+        ::osl::MutexGuard g(m_Mutex);
+
+        // pop the current element from the stack
+        if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
+             m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
+            throw SAXException();
+
+        Reference< XNode > aNode(m_aNodeStack.top());
+        if (aNode->getNodeType() != NodeType_ELEMENT_NODE)
+            throw SAXException();
+
+        Reference< XElement > aElement(aNode, UNO_QUERY);
+        if( aElement->getPrefix() != SvXMLImport::getNamespacePrefixFromToken( nElement ) ||
+            aElement->getTagName() != SvXMLImport::getNameFromToken( nElement ) ) // consistency check
+            throw SAXException();
+
+        // pop it
+        m_aNodeStack.pop();
+    }
+
+
+    void SAL_CALL CSAXDocumentBuilder::endUnknownElement( const OUString& /*rNamespace*/, const OUString& rName )
     {
         ::osl::MutexGuard g(m_Mutex);
 
@@ -292,20 +331,30 @@ namespace DOM
 
         Reference< XElement > aElement(aNode, UNO_QUERY);
         OUString aRefName;
-        OUString aPrefix = aElement->getPrefix();
+        const OUString& aPrefix = aElement->getPrefix();
         if (!aPrefix.isEmpty())
-            aRefName = aPrefix + ":" + aElement->getTagName();
+            aRefName = aPrefix + SvXMLImport::aNamespaceSeparator + aElement->getTagName();
         else
             aRefName = aElement->getTagName();
-        if (aRefName != aName) // consistency check
+        if (aRefName != rName) // consistency check
             throw SAXException();
 
         // pop it
         m_aNodeStack.pop();
-        m_aNSStack.pop();
     }
 
-    void SAL_CALL CSAXDocumentBuilder::characters(const OUString& aChars)
+    Reference< XFastContextHandler > SAL_CALL CSAXDocumentBuilder::createFastChildContext( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* xAttribs */ )
+    {
+        return nullptr;
+    }
+
+
+    Reference< XFastContextHandler > SAL_CALL CSAXDocumentBuilder::createUnknownChildContext( const OUString&/* rNamespace */, const OUString&/* rName */, const Reference< XFastAttributeList >&/* xAttribs */ )
+    {
+        return nullptr;
+    }
+
+    void SAL_CALL CSAXDocumentBuilder::characters( const OUString& rChars )
     {
         ::osl::MutexGuard g(m_Mutex);
 
@@ -314,40 +363,8 @@ namespace DOM
              m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
             throw SAXException();
 
-         Reference< XText > aText = m_aDocument->createTextNode(aChars);
+         Reference< XText > aText = m_aDocument->createTextNode(rChars);
          m_aNodeStack.top()->appendChild(aText);
-    }
-
-    void SAL_CALL CSAXDocumentBuilder::ignorableWhitespace(const OUString& )
-    {
-        ::osl::MutexGuard g(m_Mutex);
-
-        //  ignore ignorable whitespace
-        if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
-             m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
-            throw SAXException();
-    }
-
-    void SAL_CALL CSAXDocumentBuilder::processingInstruction(const OUString& aTarget, const OUString& aData)
-    {
-        ::osl::MutexGuard g(m_Mutex);
-
-        //  append PI node to the current top
-        if ( m_aState != SAXDocumentBuilderState_BUILDING_DOCUMENT &&
-             m_aState != SAXDocumentBuilderState_BUILDING_FRAGMENT)
-            throw SAXException();
-
-        Reference< XProcessingInstruction > aInstruction = m_aDocument->createProcessingInstruction(
-                aTarget, aData);
-        m_aNodeStack.top()->appendChild(aInstruction);
-    }
-
-    void SAL_CALL CSAXDocumentBuilder::setDocumentLocator(const Reference< XLocator >& aLocator)
-    {
-        ::osl::MutexGuard g(m_Mutex);
-
-        // set the document locator...
-        m_aLocator = aLocator;
     }
 }
 
