@@ -40,22 +40,20 @@ private:
     css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
 
 public:
-    SvXMLMetaDocumentContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const OUString& rLName,
-        const css::uno::Reference< css::document::XDocumentProperties>& xDocProps);
-
     SvXMLMetaDocumentContext(SvXMLImport& rImport,
         const css::uno::Reference< css::document::XDocumentProperties>& xDocProps);
 
     virtual ~SvXMLMetaDocumentContext() override;
 
-    virtual SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList ) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void EndElement() override;
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 public:
     static void setBuildId(const OUString & rGenerator,
