@@ -318,7 +318,7 @@ struct SortByPriority
         // All things being equal, sort them alphabetically.
         return r1.sType > r2.sType;
     }
-};
+} objSortByPriority;
 
 struct SortByType
 
@@ -327,7 +327,7 @@ struct SortByType
     {
         return r1.sType > r2.sType;
     }
-};
+} objSortByType;
 
 struct EqualByType
 {
@@ -335,7 +335,7 @@ struct EqualByType
     {
         return r1.sType == r2.sType;
     }
-};
+} objEqualByType;
 
 class FindByType
 {
@@ -408,8 +408,8 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         // <- SAFE ----------------------------------
 
         // Properly prioritize all candidate types.
-        lFlatTypes.sort(SortByPriority());
-        lFlatTypes.unique(EqualByType());
+        std::sort(lFlatTypes.begin(), lFlatTypes.end(), objSortByPriority);
+        std::unique(lFlatTypes.begin(), lFlatTypes.end(), objEqualByType);
 
         OUString sLastChance;
 
@@ -854,8 +854,8 @@ void TypeDetection::impl_getAllFormatTypes(
     }
 
     // Remove duplicates.
-    rFlatTypes.sort(SortByType());
-    rFlatTypes.unique(EqualByType());
+    std::sort(rFlatTypes.begin(), rFlatTypes.end(), objSortByType);
+    std::unique(rFlatTypes.begin(), rFlatTypes.end(), objEqualByType);
 
     // Mark pre-selected type (if any) to have it prioritized.
     OUString sSelectedType = rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_TYPENAME(), OUString());
