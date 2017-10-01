@@ -380,6 +380,9 @@ public:
     /// Validate paragraph signatures, if any, at the cursor.
     void ValidateParagraphSignatures(bool updateDontRemove);
 
+    /// Apply the classification to the paragraph at cursor.
+    void ApplyParagraphClassification(std::vector<svx::ClassificationResult> aResult);
+
     /// Returns true iff the cursor is within a paragraph metadata field.
     /// Currently there are two variants: signature and classification.
     bool IsCursorInParagraphMetadataField() const;
