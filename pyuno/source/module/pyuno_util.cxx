@@ -20,6 +20,7 @@
 #include "pyuno_impl.hxx"
 
 #include <time.h>
+#include <sal/types.h>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 
@@ -64,7 +65,7 @@ OUString pyString2ustring( PyObject *pystr )
     if( PyUnicode_Check( pystr ) )
     {
 #if Py_UNICODE_SIZE == 2
-    ret = SAL_U(PyUnicode_AS_UNICODE( pystr ));
+    ret = OUString(reinterpret_cast<sal_Unicode const *>(PyUnicode_AS_UNICODE( pystr )) );
 #else
 #if PY_MAJOR_VERSION >= 3
     Py_ssize_t size(0);
