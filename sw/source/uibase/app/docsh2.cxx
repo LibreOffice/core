@@ -1190,7 +1190,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             pDialog->setupValues(aInput);
 
             if (RET_OK == pDialog->Execute())
-                pShell->ApplyAdvancedClassification(pDialog->getResult());
+                pShell->ApplyParagraphClassification(pDialog->getResult());
 
             pDialog.disposeAndClear();
         }
