@@ -1159,6 +1159,14 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
             aBuffer.append(OUString::number(aSize.Width) + " x " + OUString::number(aSize.Height));
         }
     }
+    else if (aEvent.FeatureURL.Path == "LanguageStatus")
+    {
+        css::uno::Sequence< OUString > aSeq;
+        if (aEvent.IsEnabled && (aEvent.State >>= aSeq))
+        {
+            aBuffer.append(aSeq[0]);
+        }
+    }
     else
     {
         return;
