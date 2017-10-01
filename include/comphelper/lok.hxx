@@ -10,7 +10,10 @@
 #ifndef INCLUDED_COMPHELPER_LOK_HXX
 #define INCLUDED_COMPHELPER_LOK_HXX
 
+#include <com/sun/star/lang/Locale.hpp>
+
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/sequence.hxx>
 
 // Interface between the LibreOfficeKit implementation called by LibreOfficeKit clients and other
 // LibreOffice code.
@@ -63,6 +66,8 @@ COMPHELPER_DLLPUBLIC bool isTiledAnnotations();
 COMPHELPER_DLLPUBLIC void statusIndicatorStart();
 COMPHELPER_DLLPUBLIC void statusIndicatorSetValue(int percent);
 COMPHELPER_DLLPUBLIC void statusIndicatorFinish();
+
+COMPHELPER_DLLPUBLIC css::uno::Sequence< css::lang::Locale > getSpellLanguages();
 
 }
 }
