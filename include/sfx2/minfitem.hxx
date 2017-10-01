@@ -43,8 +43,6 @@ public:
                     const OUString &rMethodName,
                     const OUString &rComment);
 
-    SfxMacroInfoItem( const SfxMacroInfoItem& );
-
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     const OUString&         GetMethod() const
