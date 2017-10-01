@@ -851,6 +851,74 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     }
 }
 
+std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassification()
+{
+    std::vector<svx::ClassificationResult> aResult;
+
+    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    if (!pDocShell)
+        return aResult;
+
+    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+    if (pNode == nullptr)
+        return aResult;
+
+    uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
+    uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
+
+    uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParent, uno::UNO_QUERY);
+    if (!xTextPortionEnumerationAccess.is())
+        return aResult;
+
+    uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
+
+    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(getPolicyType());
+    const sal_Int32 nParagraph = 1;
+
+    while (xTextPortions->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xTextPortion(xTextPortions->nextElement(), uno::UNO_QUERY);
+        OUString aTextPortionType;
+        xTextPortion->getPropertyValue(UNO_NAME_TEXT_PORTION_TYPE) >>= aTextPortionType;
+        if (aTextPortionType != UNO_NAME_TEXT_FIELD)
+            continue;
+
+        uno::Reference<lang::XServiceInfo> xField;
+        xTextPortion->getPropertyValue(UNO_NAME_TEXT_FIELD) >>= xField;
+        if (!xField->supportsService(MetadataFieldServiceName))
+            continue;
+
+        uno::Reference<text::XTextField> xTextField(xField, uno::UNO_QUERY);
+        const std::pair<OUString, OUString> rdfPair = lcl_getFieldRDF(xModel, xTextField, ParagraphClassificationRDFName);
+
+        uno::Reference<text::XTextRange> xTextRange(xField, uno::UNO_QUERY);
+        const OUString aName = rdfPair.second;
+        if (aName.startsWith(sPolicy + "Marking:Text:"))
+        {
+            const OUString aValue = xTextRange->getString();
+            aResult.push_back({ svx::ClassificationType::TEXT, aValue, nParagraph });
+        }
+        else if (aName.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
+        {
+            const OUString aValue = xTextRange->getString();
+            aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, nParagraph });
+        }
+        else if (aName.startsWith(sPolicy + "Extension:Marking"))
+        {
+            const OUString aValue = xTextRange->getString();
+            aResult.push_back({ svx::ClassificationType::MARKING, aValue, nParagraph });
+        }
+        else if (aName.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
+        {
+            const OUString aValue = xTextRange->getString();
+            aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, nParagraph });
+        }
+    }
+
+    return aResult;
+}
+
 sal_Int16 lcl_GetAngle(const drawing::HomogenMatrix3& rMatrix)
 {
     basegfx::B2DHomMatrix aTransformation;
