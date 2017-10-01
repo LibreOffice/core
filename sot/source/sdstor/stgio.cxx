@@ -89,6 +89,7 @@ void StgIo::SetupStreams()
     m_pDataStrm = nullptr;
     m_pFAT      = nullptr;
     ResetError();
+
     short nPhysPageSize = 1 << m_aHdr.GetPageSize();
     SetPhysPageSize(nPhysPageSize);
     sal_Int32 nFatStrmSize;
@@ -98,12 +99,11 @@ void StgIo::SetupStreams()
         SetError(SVSTREAM_FILEFORMAT_ERROR);
         m_pFAT = nullptr;
         m_pTOC = nullptr;
+        return;
     }
-    else
-    {
-        m_pFAT = new StgFATStrm(*this, nFatStrmSize);
-        m_pTOC = new StgDirStrm( *this );
-    }
+
+    m_pFAT = new StgFATStrm(*this, nFatStrmSize);
+    m_pTOC = new StgDirStrm(*this);
     if( !GetError() )
     {
         StgDirEntry* pRoot = m_pTOC->GetRoot();
