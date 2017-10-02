@@ -91,6 +91,7 @@ namespace
 static const OUString MetaFilename("bails.rdf");
 static const OUString MetaNS("urn:bails");
 static const OUString ParagraphSignatureRDFName = "loext:paragraph:signature";
+static const OUString ParagraphSignatureUsageRDFName = "loext:paragraph:signature:usage";
 static const OUString ParagraphClassificationRDFName = "loext:paragraph:classification";
 static const OUString MetadataFieldServiceName = "com.sun.star.text.textfield.MetadataField";
 static const OUString DocInfoServiceName = "com.sun.star.text.TextField.DocInfo.Custom";
@@ -271,7 +272,9 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
             valid = svl::crypto::Signing::Verify(data, false, sig, aInfo);
             valid = valid && aInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
-            msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", " + aInfo.ouDateTime + ": ";
+            const auto it2 = aStatements.find(ParagraphSignatureUsageRDFName);
+            msg = (it2 != aStatements.end() ? (it2->second + ", ") : OUString());
+            msg += SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", " + aInfo.ouDateTime + ": ";
             if (valid)
                 msg += SwResId(STR_VALID);
             else
@@ -285,7 +288,8 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
 /// Creates and inserts Paragraph Signature Metadata field and creates the RDF entry
 uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Reference<frame::XModel>& xModel,
                                                               const uno::Reference<text::XTextContent>& xParent,
-                                                              const OUString& signature)
+                                                              const OUString& signature,
+                                                              const OUString& usage)
 {
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
     auto xField = uno::Reference<text::XTextField>(xMultiServiceFactory->createInstance(MetadataFieldServiceName), uno::UNO_QUERY);
@@ -295,6 +299,7 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Referen
 
     const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphSignatureRDFName, signature);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphSignatureUsageRDFName, usage);
 
     return xField;
 }
@@ -1222,6 +1227,10 @@ SwUndoParagraphSigning::SwUndoParagraphSigning(const SwPosition& rPos,
     if (it != aStatements.end())
         m_signature = it->second;
 
+    const auto it2 = aStatements.find(ParagraphSignatureUsageRDFName);
+    if (it2 != aStatements.end())
+        m_usage = it->second;
+
     uno::Reference<css::text::XTextRange> xText(m_xField, uno::UNO_QUERY);
     m_display = xText->getString();
 }
@@ -1261,7 +1270,7 @@ void SwUndoParagraphSigning::Insert()
             m_pDoc->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 
-    m_xField = lcl_InsertParagraphSignature(m_pDoc->GetDocShell()->GetBaseModel(), m_xParent, m_signature);
+    m_xField = lcl_InsertParagraphSignature(m_pDoc->GetDocShell()->GetBaseModel(), m_xParent, m_signature, m_usage);
 
     uno::Reference<css::text::XTextRange> xText(m_xField, uno::UNO_QUERY);
     xText->setString(m_display);
@@ -1309,7 +1318,8 @@ void SwEditShell::SignParagraph()
             comphelper::getProcessComponentContext(), "1.2" ) );
 
     OUString aDescription;
-    uno::Reference<security::XCertificate> xCertificate = xSigner->chooseCertificate(aDescription);
+    OUString aUsage;
+    uno::Reference<security::XCertificate> xCertificate = xSigner->chooseCertificateWithUsage(aDescription, aUsage);
     if (!xCertificate.is())
         return;
 
@@ -1333,7 +1343,7 @@ void SwEditShell::SignParagraph()
     GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 
     const uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
-    uno::Reference<css::text::XTextField> xField = lcl_InsertParagraphSignature(xModel, xParent, signature);
+    uno::Reference<css::text::XTextField> xField = lcl_InsertParagraphSignature(xModel, xParent, signature, aUsage);
 
     lcl_UpdateParagraphSignatureField(GetDoc(), xModel, xField, utf8Text);
 

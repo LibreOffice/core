@@ -445,7 +445,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     return bFound;
 }
 
-Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateImpl(OUString& rDescription, UserAction eAction)
+Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateImpl(OUString& rDescription, UserAction eAction, OUString& rUsageText)
 {
     std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
 
@@ -462,6 +462,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 
     Reference< css::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
     rDescription = aChooser->GetDescription();
+    rUsageText = aChooser->GetUsageText();
 
     if ( !xCert.is() )
         return Reference< css::security::XCertificate >(nullptr);
@@ -471,17 +472,25 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription)
 {
-    return chooseCertificateImpl( rDescription, UserAction::Sign );
+    OUString aUsage;
+    return chooseCertificateImpl( rDescription, UserAction::Sign, aUsage );
 }
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSigningCertificate(OUString& rDescription)
 {
-    return chooseCertificateImpl( rDescription, UserAction::Sign );
+    OUString aUsage;
+    return chooseCertificateImpl( rDescription, UserAction::Sign, aUsage );
 }
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseEncryptionCertificate(OUString& rDescription)
 {
-    return chooseCertificateImpl( rDescription, UserAction::Encrypt );
+    OUString aUsage;
+    return chooseCertificateImpl( rDescription, UserAction::Encrypt, aUsage );
+}
+
+css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateWithUsage(OUString& rDescription, OUString& rUsageText)
+{
+    return chooseCertificateImpl( rDescription, UserAction::Sign, rUsageText );
 }
 
 sal_Bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location )

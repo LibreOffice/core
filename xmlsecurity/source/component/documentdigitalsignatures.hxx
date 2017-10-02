@@ -62,7 +62,7 @@ private:
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::security::DocumentSignatureInformation > ImplVerifySignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< css::io::XInputStream >& xSignStream, DocumentSignatureMode eMode );
 
-    css::uno::Reference< css::security::XCertificate > chooseCertificateImpl(OUString& rDescription, UserAction eAction);
+    css::uno::Reference< css::security::XCertificate > chooseCertificateImpl(OUString& rDescription, UserAction eAction, OUString& rUsageText);
 
 public:
     explicit DocumentDigitalSignatures( const css::uno::Reference< css::uno::XComponentContext>& rxCtx );
@@ -106,6 +106,7 @@ public:
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificate(OUString& rDescription) override;
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseSigningCertificate(OUString& rDescription) override;
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseEncryptionCertificate(OUString& rDescription) override;
+    css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificateWithUsage(OUString& rDescription, OUString& rUsageText) override;
 };
 
 /// @throws css::uno::Exception
