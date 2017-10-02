@@ -79,11 +79,11 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 ProcessEvent( aEvent );
         }
         while( true );
-    }
 
-    osl::MutexGuard aGuard( m_aUserEventsMutex );
-    if ( !HasUserEvents() )
-        TriggerAllUserEventsProcessed();
+        osl::MutexGuard aGuard( m_aUserEventsMutex );
+        if ( !HasUserEvents() )
+            TriggerAllUserEventsProcessed();
+    }
 
     return bWasEvent;
 }
