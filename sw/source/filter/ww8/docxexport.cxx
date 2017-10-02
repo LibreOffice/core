@@ -965,6 +965,7 @@ void DocxExport::WriteSettings()
     // Has themeFontLang information
     uno::Reference< beans::XPropertySet > xPropSet( m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
 
+    bool hasProtectionProperties = false;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
@@ -1057,8 +1058,12 @@ void DocxExport::WriteSettings()
 
                 if (rAttributeList.getLength())
                 {
+                    // we have document protection from from input DOCX file
+
                     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
                     pFS->singleElementNS(XML_w, XML_documentProtection, xAttributeList);
+
+                    hasProtectionProperties = true;
                 }
             }
         }
@@ -1066,13 +1071,18 @@ void DocxExport::WriteSettings()
 
     // Protect form
     // Section-specific write protection
-    if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
-        m_pSections->DocumentIsProtected())
+    if (! hasProtectionProperties)
     {
-        pFS->singleElementNS(XML_w, XML_documentProtection,
-            FSNS(XML_w, XML_edit), "forms",
-            FSNS(XML_w, XML_enforcement), "true",
-            FSEND);
+        if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
+            m_pSections->DocumentIsProtected())
+        {
+            // we have form protection from Writer or from input ODT file
+
+            pFS->singleElementNS(XML_w, XML_documentProtection,
+                FSNS(XML_w, XML_edit), "forms",
+                FSNS(XML_w, XML_enforcement), "true",
+                FSEND);
+        }
     }
 
     // finish settings.xml
