@@ -52,6 +52,7 @@
 #include "dpdimsave.hxx"
 #include "document.hxx"
 #include "documentimport.hxx"
+#include "workbooksettings.hxx"
 
 namespace oox {
 namespace xls {
@@ -549,7 +550,10 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
             {
                 if( const PivotCacheItem* pSharedItem = pCacheField->getCacheItem( nCacheItem ) )
                 {
-                    OUString aSelectedPage = pSharedItem->getName();
+                    ScDPObject* pDPObj = mrPivotTable.getDPObject();
+                    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+                    ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(pCacheField->getName());
+                    OUString aSelectedPage = pSharedItem->getFormattedName(*pDim, pDPObj, DateTime(getWorkbookSettings().getNullDate()));
                     aPropSet.setProperty( PROP_SelectedPage, aSelectedPage );
                 }
             }
@@ -752,7 +756,7 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
 
                         try
                         {
-                            ScDPSaveMember* pMem = pDim->GetMemberByName(pSharedItem->getName());
+                            ScDPSaveMember* pMem = pDim->GetMemberByName(pSharedItem->getFormattedName(*pDim, pDPObj, DateTime(getWorkbookSettings().getNullDate())));
                             pMem->SetShowDetails(aIt->mbShowDetails);
                             pMem->SetIsVisible(!aIt->mbHidden);
                         }
