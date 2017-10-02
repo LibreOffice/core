@@ -309,11 +309,10 @@ void CGM::ImplDoClass4()
 
                 if ( mpBitmapInUse )
                 {
-                    CGMBitmap* pBmpDesc = mpBitmapInUse->GetNext();
-                    if ( pBmpDesc ) // we possibly get a bitmap back which does not fit to
+                    std::unique_ptr<CGMBitmap> xBmpDesc(mpBitmapInUse->GetNext());
+                    if (xBmpDesc) // we possibly get a bitmap back which does not fit to
                     {               // to the previous -> we need to delete this one too
-                        mpOutAct->DrawBitmap( pBmpDesc->GetBitmap() );
-                        delete pBmpDesc;
+                        mpOutAct->DrawBitmap(xBmpDesc->GetBitmap());
                     }
                 }
                 else

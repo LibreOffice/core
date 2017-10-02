@@ -83,7 +83,7 @@ public:
     explicit CGMBitmap( CGM& rCGM );
     ~CGMBitmap();
     CGMBitmapDescriptor*    GetBitmap() { return pCGMBitmapDescriptor.get();}
-    CGMBitmap*              GetNext();
+    std::unique_ptr<CGMBitmap> GetNext();
 };
 #endif
 
