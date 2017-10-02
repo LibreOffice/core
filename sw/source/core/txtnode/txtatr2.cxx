@@ -205,7 +205,7 @@ SwTextRuby::SwTextRuby( SwFormatRuby& rAttr,
     , SwClient( nullptr )
     , m_pTextNode( nullptr )
 {
-    rAttr.pTextAttr  = this;
+    rAttr.m_pTextAttr  = this;
 }
 
 SwTextRuby::~SwTextRuby()
