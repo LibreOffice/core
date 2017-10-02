@@ -1101,7 +1101,16 @@ void Test::testIsNumberFormat()
         { "5-12-14", false },
         { "005-12-14", true },
         { "15-10-30", true },
-        { "2015-10-30", true }
+        { "2015-10-30", true },
+        { "1999-11-23T12:34:56", true },
+        { "1999-11-23 12:34:56", true },
+        { "1999-11-23T12:34:56.789", true },
+        { "1999-11-23T12:34:56,789", true },    // ISO 8601 defines both dot and comma as fractional separator
+        { "1999-11-23 12:34:56.789", true },
+        { "1999-11-23 12:34:56,789", false },   // comma not in en-US if 'T' separator is not present,
+                                                // debatable, 'T' "may be omitted by mutual consent of those
+                                                // interchanging data, if ambiguity can be avoided."
+        { "1999-11-23T12:34:56/789", false }
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
