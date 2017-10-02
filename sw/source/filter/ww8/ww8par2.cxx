@@ -1016,17 +1016,21 @@ WW8LvlType GetNumType(sal_uInt8 nWwLevelNo)
     return nRet;
 }
 
-SwNumRule *ANLDRuleMap::GetNumRule(sal_uInt8 nNumType)
+SwNumRule *ANLDRuleMap::GetNumRule(SwDoc& rDoc, sal_uInt8 nNumType)
 {
-    return (WW8_Numbering == nNumType ? mpNumberingNumRule : mpOutlineNumRule);
+    const OUString& rNumRule = WW8_Numbering == nNumType ? msNumberingNumRule : msOutlineNumRule;
+    if (rNumRule.isEmpty())
+        return nullptr;
+    return rDoc.FindNumRulePtr(rNumRule);
 }
 
 void ANLDRuleMap::SetNumRule(SwNumRule *pRule, sal_uInt8 nNumType)
 {
+    OUString sNumRule = pRule ? pRule->GetName() : OUString();
     if (WW8_Numbering == nNumType)
-        mpNumberingNumRule = pRule;
+        msNumberingNumRule = sNumRule;
     else
-        mpOutlineNumRule = pRule;
+        msOutlineNumRule = sNumRule;
 }
 
 // StartAnl is called at the beginning of a row area that contains
@@ -1040,7 +1044,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         return;
 
     m_nWwNumType = nT;
-    SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_nWwNumType);
+    SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_rDoc, m_nWwNumType);
 
     // check for COL numbering:
     SprmResult aS12; // sprmAnld
@@ -1108,7 +1112,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     if (!m_bAnl)
         return;
 
-    SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_nWwNumType);
+    SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_rDoc, m_nWwNumType);
 
     // pNd->UpdateNum without a set of rules crashes at the latest whilst storing as sdw3
 
@@ -1116,7 +1120,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     if (*pSprm13 == 10 || *pSprm13 == 11)
     {
         m_nSwNumLevel = 0;
-        if (!pNumRule->GetNumFormat(m_nSwNumLevel))
+        if (pNumRule && !pNumRule->GetNumFormat(m_nSwNumLevel))
         {
             // not defined yet
             // sprmAnld o. 0
@@ -1129,7 +1133,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     {
         m_nSwNumLevel = *pSprm13 - 1;             // outline
         // undefined
-        if (!pNumRule->GetNumFormat(m_nSwNumLevel))
+        if (pNumRule && !pNumRule->GetNumFormat(m_nSwNumLevel))
         {
             if (m_xNumOlst)                       // there was a OLST
             {
@@ -1183,7 +1187,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
     else
         m_pCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_FLTR_NUMRULE);
 
-    m_aANLDRules.mpNumberingNumRule = nullptr;
+    m_aANLDRules.msNumberingNumRule.clear();
     /*
      #i18816#
      my take on this problem is that moving either way from an outline to a
@@ -1193,7 +1197,7 @@ void SwWW8ImplReader::StopAnlToRestart(sal_uInt8 nNewType, bool bGoBack)
         (((m_nWwNumType == WW8_Outline) && (nNewType == WW8_Numbering)) ||
         ((m_nWwNumType == WW8_Numbering) && (nNewType == WW8_Outline)));
     if (!bNumberingNotStopOutline)
-        m_aANLDRules.mpOutlineNumRule = nullptr;
+        m_aANLDRules.msOutlineNumRule.clear();
 
     m_nSwNumLevel = 0xff;
     m_nWwNumType = WW8_None;
