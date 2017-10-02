@@ -432,7 +432,6 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
     , sDelSpaceAtSttEnd(CuiResId(RID_SVXSTR_DEL_SPACES_AT_STT_END))
     , sDelSpaceBetweenLines(CuiResId(RID_SVXSTR_DEL_SPACES_BETWEEN_LINES))
     , nPercent(50)
-    , pCheckButtonData(nullptr)
 {
     get(m_pEditPB, "edit");
 
@@ -468,10 +467,10 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    if ( !pCheckButtonData )
+    if (!m_xCheckButtonData)
     {
-        pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
-        m_pCheckLB->SetCheckButtonData( pCheckButtonData );
+        m_xCheckButtonData.reset(new SvLBoxButtonData(m_pCheckLB));
+        m_pCheckLB->SetCheckButtonData(m_xCheckButtonData.get());
     }
 
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
@@ -479,12 +478,12 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
     if (nCol == CBCOL_SECOND)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
     else
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
 
     if (nCol == CBCOL_FIRST)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
     else
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
     pEntry->AddItem(o3tl::make_unique<OfaImpBrwString>(rTxt));
 
     return pEntry;
@@ -502,8 +501,7 @@ void OfaSwAutoFmtOptionsPage::dispose()
         delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( REPLACE_BULLETS ));
         delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( APPLY_NUMBERING ));
         delete static_cast<ImpUserData*>(m_pCheckLB->GetUserData( MERGE_SINGLE_LINE_PARA ));
-        delete pCheckButtonData;
-        pCheckButtonData = nullptr;
+        m_xCheckButtonData.reset();
     }
     m_pCheckLB.disposeAndClear();
     m_pEditPB.clear();
@@ -1787,10 +1785,10 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    if ( !pCheckButtonData )
+    if (!m_xCheckButtonData)
     {
-        pCheckButtonData = new SvLBoxButtonData(m_pSwCheckLB);
-        m_pSwCheckLB->SetCheckButtonData(pCheckButtonData);
+        m_xCheckButtonData.reset(new SvLBoxButtonData(m_pSwCheckLB));
+        m_pSwCheckLB->SetCheckButtonData(m_xCheckButtonData.get());
     }
 
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
@@ -1798,12 +1796,12 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
     if (nCol == CBCOL_SECOND)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
     else
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
 
     if (nCol == CBCOL_FIRST)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));
     else
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
 
     pEntry->AddItem(o3tl::make_unique<OfaImpBrwString>(rTxt));
 
@@ -1814,7 +1812,6 @@ OfaQuoteTabPage::OfaQuoteTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "ApplyLocalizedPage", "cui/ui/applylocalizedpage.ui", &rSet)
     , sNonBrkSpace(CuiResId(RID_SVXSTR_NON_BREAK_SPACE))
     , sOrdinal(CuiResId(RID_SVXSTR_ORDINAL))
-    , pCheckButtonData(nullptr)
     , cSglStartQuote(0)
     , cSglEndQuote(0)
     , cStartQuote(0)
@@ -1886,8 +1883,7 @@ OfaQuoteTabPage::~OfaQuoteTabPage()
 
 void OfaQuoteTabPage::dispose()
 {
-    delete pCheckButtonData;
-    pCheckButtonData = nullptr;
+    m_xCheckButtonData.reset();
     m_pSwCheckLB.disposeAndClear();
     m_pCheckLB.disposeAndClear();
     m_pSingleTypoCB.clear();

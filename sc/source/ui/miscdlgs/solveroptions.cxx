@@ -115,7 +115,6 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
                         const uno::Sequence<beans::PropertyValue>& rProperties )
     : ModalDialog(pParent, "SolverOptionsDialog",
         "modules/scalc/ui/solveroptionsdialog.ui")
-    , mpCheckButtonData(nullptr)
     , maImplNames(rImplNames)
     , maDescriptions(rDescriptions)
     , maEngine(rEngine)
@@ -172,7 +171,7 @@ ScSolverOptionsDialog::~ScSolverOptionsDialog()
 
 void ScSolverOptionsDialog::dispose()
 {
-    delete mpCheckButtonData;
+    m_xCheckButtonData.reset();
     m_pLbEngine.clear();
     m_pLbSettings.clear();
     m_pBtnEdit.clear();
@@ -252,8 +251,8 @@ void ScSolverOptionsDialog::FillListBox()
     m_pLbSettings->SetUpdateMode(false);
     m_pLbSettings->Clear();
 
-    if (!mpCheckButtonData)
-        mpCheckButtonData = new SvLBoxButtonData(m_pLbSettings);
+    if (!m_xCheckButtonData)
+        m_xCheckButtonData.reset(new SvLBoxButtonData(m_pLbSettings));
 
     SvTreeList* pModel = m_pLbSettings->GetModel();
     SvTreeListEntry* pEntry = nullptr;
@@ -268,13 +267,13 @@ void ScSolverOptionsDialog::FillListBox()
         {
             // check box entry
             pEntry = new SvTreeListEntry;
-            std::unique_ptr<SvLBoxButton> pButton(new SvLBoxButton(
-                SvLBoxButtonKind::EnabledCheckbox, mpCheckButtonData));
+            std::unique_ptr<SvLBoxButton> xButton(new SvLBoxButton(
+                SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
             if ( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
-                pButton->SetStateChecked();
+                xButton->SetStateChecked();
             else
-                pButton->SetStateUnchecked();
-            pEntry->AddItem(std::move(pButton));
+                xButton->SetStateUnchecked();
+            pEntry->AddItem(std::move(xButton));
             pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
             pEntry->AddItem(o3tl::make_unique<SvLBoxString>(aVisName));
         }
