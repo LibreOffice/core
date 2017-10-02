@@ -80,11 +80,6 @@
    http://support.microsoft.com/default.aspx?scid=KB;en-us;q221435
  */
 
-
-/* It must be safe to include this file in plain C code, so only C style
- * comments are used. Do NOT use // C++ style comments. */
-
-/* disable typedef for usage in svtools/source/misc/langtab.src */
 #include <sal/types.h>
 #include <o3tl/strong_int.hxx>
 #include <ostream>
