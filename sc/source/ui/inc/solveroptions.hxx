@@ -39,7 +39,7 @@ class ScSolverOptionsDialog : public ModalDialog
     VclPtr<SvxCheckListBox> m_pLbSettings;
     VclPtr<PushButton> m_pBtnEdit;
 
-    SvLBoxButtonData* mpCheckButtonData;
+    std::unique_ptr<SvLBoxButtonData> m_xCheckButtonData;
     css::uno::Sequence<OUString> maImplNames;
     css::uno::Sequence<OUString> maDescriptions;
     OUString        maEngine;

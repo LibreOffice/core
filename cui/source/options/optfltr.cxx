@@ -149,8 +149,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet
     sChgToFromWriter(CuiResId(RID_SVXSTR_CHG_WRITER)),
     sChgToFromCalc(CuiResId(RID_SVXSTR_CHG_CALC)),
     sChgToFromImpress(CuiResId(RID_SVXSTR_CHG_IMPRESS)),
-    sChgToFromSmartArt(CuiResId(RID_SVXSTR_CHG_SMARTART)),
-    pCheckButtonData(nullptr)
+    sChgToFromSmartArt(CuiResId(RID_SVXSTR_CHG_SMARTART))
 {
     get(m_pCheckLBContainer, "checklbcontainer");
 
@@ -181,8 +180,7 @@ OfaMSFilterTabPage2::~OfaMSFilterTabPage2()
 
 void OfaMSFilterTabPage2::dispose()
 {
-    delete pCheckButtonData;
-    pCheckButtonData = nullptr;
+    m_xCheckButtonData.reset();
     m_pCheckLB.disposeAndClear();
     m_pCheckLBContainer.clear();
     aHighlightingRB.clear();
@@ -334,18 +332,18 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    if( !pCheckButtonData )
-        pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
+    if (!m_xCheckButtonData)
+        m_xCheckButtonData.reset(new SvLBoxButtonData(m_pCheckLB));
 
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(
         Image(), Image(), false));
     pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(
         SvLBoxButtonKind::EnabledCheckbox,
-               pCheckButtonData));
+               m_xCheckButtonData.get()));
     pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(
         saveEnabled ? SvLBoxButtonKind::EnabledCheckbox
                                      : SvLBoxButtonKind::DisabledCheckbox,
-               pCheckButtonData));
+               m_xCheckButtonData.get()));
     pEntry->AddItem(o3tl::make_unique<SvLBoxString>(_rTxt));
 
     pEntry->SetUserData( reinterpret_cast<void*>(_nType) );

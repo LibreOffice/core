@@ -158,25 +158,25 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     vcl::Font        aByInputBulletFont;
     sal_uInt16       nPercent;
 
-    SvLBoxButtonData*   pCheckButtonData;
+    std::unique_ptr<SvLBoxButtonData> m_xCheckButtonData;
 
-        DECL_LINK(SelectHdl, SvTreeListBox*, void);
-        DECL_LINK(EditHdl, Button*, void);
-        DECL_LINK(DoubleClickEditHdl, SvTreeListBox*, bool);
-        SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
+    DECL_LINK(SelectHdl, SvTreeListBox*, void);
+    DECL_LINK(EditHdl, Button*, void);
+    DECL_LINK(DoubleClickEditHdl, SvTreeListBox*, bool);
+    SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
 
-        OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
-                            const SfxItemSet& rSet );
-        virtual ~OfaSwAutoFmtOptionsPage() override;
-        virtual void dispose() override;
+    OfaSwAutoFmtOptionsPage( vcl::Window* pParent,
+                        const SfxItemSet& rSet );
+    virtual ~OfaSwAutoFmtOptionsPage() override;
+    virtual void dispose() override;
 
 public:
-        static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
-                                const SfxItemSet* rAttrSet);
-        virtual bool        FillItemSet( SfxItemSet* rSet ) override;
-        virtual void        Reset( const SfxItemSet* rSet ) override;
-        virtual void        ActivatePage( const SfxItemSet& ) override;
+    static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
+                            const SfxItemSet* rAttrSet);
+    virtual bool        FillItemSet( SfxItemSet* rSet ) override;
+    virtual void        Reset( const SfxItemSet* rSet ) override;
+    virtual void        ActivatePage( const SfxItemSet& ) override;
 };
 
 // class AutoCorrEdit ----------------------------------------------------
@@ -365,7 +365,7 @@ private:
     OUString        sNonBrkSpace;
     OUString        sOrdinal;
 
-    SvLBoxButtonData*   pCheckButtonData;
+    std::unique_ptr<SvLBoxButtonData> m_xCheckButtonData;
 
     VclPtr<CheckBox>   m_pSingleTypoCB;
     VclPtr<PushButton> m_pSglStartQuotePB;

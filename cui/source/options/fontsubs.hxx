@@ -79,7 +79,7 @@ class SvxFontSubstTabPage : public SfxTabPage
 
     Color           aTextColor;
 
-    SvLBoxButtonData*   pCheckButtonData;
+    std::unique_ptr<SvLBoxButtonData> m_xCheckButtonData;
 
     DECL_LINK(SelectEditHdl, Edit&, void);
     DECL_LINK(SelectComboBoxHdl, ComboBox&, void);

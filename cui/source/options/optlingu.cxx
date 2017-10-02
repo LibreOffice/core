@@ -1715,11 +1715,11 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    if( !pCheckButtonData )
-        pCheckButtonData.reset(new SvLBoxButtonData(m_pLinguOptionsCLB));
+    if (!m_xCheckButtonData)
+        m_xCheckButtonData.reset(new SvLBoxButtonData(m_pLinguOptionsCLB));
 
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData.get()));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));    // empty column
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
@@ -1765,8 +1765,6 @@ SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rD
     m_pModulesCLB->set_width_request(aListSize.Width());
     get(m_pLanguageLB, "language");
     m_pLanguageLB->SetStyle(m_pLanguageLB->GetStyle() | WB_SORT);
-
-    pCheckButtonData = nullptr;
 
     pDefaultLinguData = new SvxLinguData_Impl( rLinguData );
 
@@ -1837,14 +1835,14 @@ void SvxEditModulesDlg::dispose()
 SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    if( !pCheckButtonData )
+    if (!m_xCheckButtonData )
     {
-        pCheckButtonData.reset(new SvLBoxButtonData(m_pModulesCLB));
-        pCheckButtonData->SetLink( LINK( this, SvxEditModulesDlg, BoxCheckButtonHdl_Impl2 ) );
+        m_xCheckButtonData.reset(new SvLBoxButtonData(m_pModulesCLB));
+        m_xCheckButtonData->SetLink( LINK( this, SvxEditModulesDlg, BoxCheckButtonHdl_Impl2 ) );
     }
 
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData.get()));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem(o3tl::make_unique<SvLBoxString>(""));    // empty column
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
