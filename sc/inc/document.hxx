@@ -71,7 +71,6 @@ struct ColumnBlockPosition;
 struct RefUpdateContext;
 class EditTextIterator;
 struct NoteEntry;
-struct FormulaGroupContext;
 class DocumentStreamAccess;
 class DocumentLinkManager;
 class CellValues;
