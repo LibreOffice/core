@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a2ae0383",
+        "filename": "vcl/source/window/mouse.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-10-02T10:10:39Z",
+      "side": 1,
+      "message": "I\u0027m not so sure about this. Here in ImplGenerateMouseMoveHdl we\u0027ve been successfully dispatched from ImplHandleUserEvent and right after this call that will delete pSVEvent. RemoveUserEvent just clears all the references that the pSVEvent has, the delete after this will make doing this unnecessary.\n\nThe other RemoveUserEvent calls are used when an event wasn\u0027t dispatched by the time the window that would receive it is disposed, so the pending event gets RemoveUserEvent called on it which clears references to the widget that is getting destroyed.\n\nLooks that the event stays on the event queue and eventually will get ImplHandleUserEvent called on it, just with bCall now false, so its not dispatched but will get deleted.\n\nSo I\u0027m not sure that the event is getting leaked, just maybe its delete isn\u0027t getting captured by the snapshot method Telesto is using",
+      "revId": "288bea1e2e44491b3168d4ebffe8e5250c042889",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
