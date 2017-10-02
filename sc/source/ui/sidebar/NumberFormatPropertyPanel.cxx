@@ -53,6 +53,7 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     get(mpEdDecimals,     "decimalplaces");
     get(mpFtDenominator,  "denominatorplaceslabel");
     get(mpEdDenominator,  "denominatorplaces");
+    get(mpFtLeadZeroes,   "leadingzeroeslabel");
     get(mpEdLeadZeroes,   "leadingzeroes");
     get(mpBtnNegRed,      "negativenumbersred");
     get(mpBtnThousand,    "thousandseparator");
@@ -74,6 +75,7 @@ void NumberFormatPropertyPanel::dispose()
     mpEdDecimals.clear();
     mpFtDenominator.clear();
     mpEdDenominator.clear();
+    mpFtLeadZeroes.clear();
     mpEdLeadZeroes.clear();
     mpBtnNegRed.clear();
     mpBtnThousand.clear();
@@ -220,6 +222,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                     mpEdDecimals->Show(!bIsFraction);
                     mpFtDecimals->Enable(!bIsFraction);
                     mpEdDecimals->Enable(!bIsFraction);
+                    mpFtLeadZeroes->Enable();
                     mpEdLeadZeroes->Enable();
                 }
                 else
@@ -294,6 +297,7 @@ void NumberFormatPropertyPanel::DisableControls()
     mpEdDecimals->Show();
     mpFtDecimals->Disable();
     mpEdDecimals->Disable();
+    mpFtLeadZeroes->Disable();
     mpEdLeadZeroes->Disable();
 }
 
