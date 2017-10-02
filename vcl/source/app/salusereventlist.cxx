@@ -23,6 +23,7 @@
 #include <algorithm>
 
 SalUserEventList::SalUserEventList()
+    : m_bAllUserEventProcessedSignaled( false )
 {
 }
 
@@ -79,11 +80,14 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
                 ProcessEvent( aEvent );
         }
         while( true );
-    }
 
-    osl::MutexGuard aGuard( m_aUserEventsMutex );
-    if ( !HasUserEvents() )
-        TriggerAllUserEventsProcessed();
+        osl::MutexGuard aGuard( m_aUserEventsMutex );
+        if ( !m_bAllUserEventProcessedSignaled && !HasUserEvents() )
+        {
+            m_bAllUserEventProcessedSignaled = true;
+            TriggerAllUserEventsProcessed();
+        }
+    }
 
     return bWasEvent;
 }
@@ -110,8 +114,11 @@ bool SalUserEventList::RemoveEvent( SalFrame* pFrame, void* pData, SalEvent nEve
         }
     }
 
-    if ( bResult && !HasUserEvents() )
+    if ( bResult && !m_bAllUserEventProcessedSignaled && !HasUserEvents() )
+    {
+        m_bAllUserEventProcessedSignaled = true;
         TriggerAllUserEventsProcessed();
+    }
 
     return bResult;
 }

@@ -67,6 +67,7 @@ protected:
     mutable osl::Mutex         m_aUserEventsMutex;
     std::list< SalUserEvent >  m_aUserEvents;
     std::list< SalUserEvent >  m_aProcessingUserEvents;
+    bool                       m_bAllUserEventProcessedSignaled;
     SalFrameSet                m_aFrames;
 
     virtual void ProcessEvent( SalUserEvent aEvent ) = 0;
@@ -113,6 +114,7 @@ inline void SalUserEventList::PostEvent( SalFrame* pFrame, void* pData, SalEvent
 {
     osl::MutexGuard aGuard( m_aUserEventsMutex );
     m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
+    m_bAllUserEventProcessedSignaled = false;
     TriggerUserEventProcessing();
 }
 
