@@ -41,7 +41,6 @@
 #include <cairo.h>
 #include <ostream>
 #include <config_features.h>
-#include <vcl/scheduler.hxx>
 
 #include <lib/init.hxx>
 
