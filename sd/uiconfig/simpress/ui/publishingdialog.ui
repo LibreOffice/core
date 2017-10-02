@@ -1604,7 +1604,7 @@
             </child>
             <child>
               <object class="GtkButton" id="lastPageButton">
-                <property name="label" translatable="yes" context="publishingdialog|lastPageButton">&lt;&lt; Back</property>
+                <property name="label" translatable="yes" context="publishingdialog|lastPageButton">&lt; Back</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -1618,7 +1618,7 @@
             </child>
             <child>
               <object class="GtkButton" id="nextPageButton">
-                <property name="label" translatable="yes" context="publishingdialog|nextPageButton">Ne_xt &gt;&gt;</property>
+                <property name="label" translatable="yes" context="publishingdialog|nextPageButton">Ne_xt &gt;</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

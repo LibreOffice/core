@@ -240,8 +240,8 @@
 #define STR_SVT_PRNDLG_JOBCOUNT                 NC_("STR_SVT_PRNDLG_JOBCOUNT", "%d documents")
 
 #define STR_WIZDLG_FINISH                       NC_("STR_WIZDLG_FINISH", "~Finish")
-#define STR_WIZDLG_NEXT                         NC_("STR_WIZDLG_NEXT", "~Next >>")
-#define STR_WIZDLG_PREVIOUS                     NC_("STR_WIZDLG_PREVIOUS", "<< Bac~k")
+#define STR_WIZDLG_NEXT                         NC_("STR_WIZDLG_NEXT", "~Next >")
+#define STR_WIZDLG_PREVIOUS                     NC_("STR_WIZDLG_PREVIOUS", "< Bac~k")
 #define STR_WIZDLG_ROADMAP_TITLE                NC_("STR_WIZDLG_ROADMAP_TITLE", "Steps")
 
 #define STR_NO_FIELD_SELECTION                  NC_("STR_NO_FIELD_SELECTION", "<none>")

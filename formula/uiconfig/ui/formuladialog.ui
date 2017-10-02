@@ -54,7 +54,7 @@
             </child>
             <child>
               <object class="GtkButton" id="back">
-                <property name="label" translatable="yes" context="formuladialog|back">&lt;&lt; _Back</property>
+                <property name="label" translatable="yes" context="formuladialog|back">&lt; _Back</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -69,7 +69,7 @@
             </child>
             <child>
               <object class="GtkButton" id="next">
-                <property name="label" translatable="yes" context="formuladialog|next">_Next &gt;&gt;</property>
+                <property name="label" translatable="yes" context="formuladialog|next">_Next &gt;</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
