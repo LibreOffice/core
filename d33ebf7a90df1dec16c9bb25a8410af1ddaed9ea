@@ -22,6 +22,30 @@
       "revId": "d33ebf7a90df1dec16c9bb25a8410af1ddaed9ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_022fd7f6",
+        "filename": "cui/source/tabpages/autocdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2403,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2017-10-02T11:44:19Z",
+      "side": 1,
+      "message": "I\u0027ll revert this part, but I don\u0027t understand what\u0027s wrong with replacing appends in loops. Can you clarify this?",
+      "parentUuid": "1a430d35_821ca714",
+      "range": {
+        "startLine": 2390,
+        "startChar": 8,
+        "endLine": 2403,
+        "endChar": 70
+      },
+      "revId": "d33ebf7a90df1dec16c9bb25a8410af1ddaed9ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
