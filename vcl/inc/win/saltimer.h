@@ -24,9 +24,16 @@
 
 class WinSalTimer : public SalTimer
 {
+    // for access to Impl* functions
+    friend LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef );
+
     HANDLE       m_nTimerId;          ///< Windows timer id
     sal_uInt32   m_nTimerStartTicks;  ///< system ticks at timer start % SAL_MAX_UINT32
     bool         m_bPollForMessage;   ///< Run yield until a message is caught (most likely the 0ms timer)
+
+    void ImplStart( sal_uIntPtr nMS );
+    void ImplStop();
+    void ImplEmitTimerCallback();
 
 public:
     WinSalTimer();
@@ -38,14 +45,6 @@ public:
     inline bool IsValidWPARAM( WPARAM wParam ) const;
 
     inline bool PollForMessage() const;
-
-    // The Impl functions are just public to be called from the static
-    // SalComWndProc on main thread redirect! Otherwise they would be private.
-    // They must be called from the main application thread only!
-
-    void ImplStart( sal_uIntPtr nMS );
-    void ImplStop();
-    void ImplEmitTimerCallback();
 };
 
 inline bool WinSalTimer::IsValidWPARAM( WPARAM aWPARAM ) const
