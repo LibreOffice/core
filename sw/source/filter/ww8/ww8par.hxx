@@ -971,11 +971,10 @@ struct ApoTestResults
 
 struct ANLDRuleMap
 {
-    SwNumRule* mpOutlineNumRule;    // WinWord 6 numbering, variant 1
-    SwNumRule* mpNumberingNumRule;  // WinWord 6 numbering, variant 2
-    SwNumRule* GetNumRule(sal_uInt8 nNumType);
+    OUString msOutlineNumRule;    // WinWord 6 numbering, variant 1
+    OUString msNumberingNumRule;  // WinWord 6 numbering, variant 2
+    SwNumRule* GetNumRule(SwDoc& rDoc, sal_uInt8 nNumType);
     void SetNumRule(SwNumRule*, sal_uInt8 nNumType);
-    ANLDRuleMap() : mpOutlineNumRule(nullptr), mpNumberingNumRule(nullptr) {}
 };
 
 struct SprmReadInfo;
