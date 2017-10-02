@@ -268,30 +268,28 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( SwViewOption::IsTableBoundaries() ); break;
             case SID_TOGGLE_NOTES:
             {
-                aBool.SetValue( pOpt->IsPostIts());
                 if (!GetPostItMgr()->HasNotes())
                 {
-                    aBool.SetWhich( nWhich );
-                    rSet.Put( aBool );
                     rSet.DisableItem(nWhich);
                     nWhich = 0;
                 }
+                else
+                    aBool.SetValue( pOpt->IsPostIts());
                 break;
             }
             case FN_VIEW_HIDDEN_PARA:
                 aBool.SetValue( pOpt->IsShowHiddenPara()); break;
             case FN_VIEW_HIDE_WHITESPACE:
             {
-                if (pOpt->getBrowseMode() ||
-                    !pOpt->CanHideWhitespace())
+                if (pOpt->getBrowseMode() || !pOpt->CanHideWhitespace())
                 {
                     rSet.DisableItem(nWhich);
                     nWhich = 0;
                 }
                 else
                     aBool.SetValue(pOpt->IsHideWhitespaceMode());
+                break;
             }
-            break;
             case SID_GRID_VISIBLE:
                 aBool.SetValue( pOpt->IsGridVisible() ); break;
             case SID_GRID_USE:
