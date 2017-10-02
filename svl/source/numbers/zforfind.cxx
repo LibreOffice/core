@@ -120,6 +120,7 @@ void ImpSvNumberInputScan::Reset()
     nStringScanSign = 0;
     nMatchedAllStrings = nMatchedVirgin;
     nMayBeIso8601 = 0;
+    bIso8601Tsep = false;
     nMayBeMonthDate = 0;
     nAcceptedDatePattern = -2;
     nDatePatternStart = 0;
@@ -805,6 +806,18 @@ inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal
 {
     if ( rString.getLength() > nPos )
     {
+        if (bIso8601Tsep)
+        {
+            // ISO 8601 specifies both '.' dot and ',' comma as fractional
+            // separator.
+            if (rString[nPos] == '.' || rString[nPos] == ',')
+            {
+                ++nPos;
+                return true;
+            }
+        }
+        // Even in an otherwise ISO 8601 string be lenient and accept the
+        // locale defined separator.
         const OUString& rSep = pFormatter->GetLocaleData()->getTime100SecSep();
         if ( rString.match( rSep, nPos ))
         {
@@ -2549,6 +2562,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                 {
                     // ISO 8601 combined date and time, yyyy-mm-ddThh:mm or -yyyy-mm-ddThh:mm
                     ++nPos;
+                    bIso8601Tsep = true;
                 }
                 else if (nStringPos == 7 && rString[0] == ':')
                 {
