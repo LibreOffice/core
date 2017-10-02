@@ -88,7 +88,7 @@ gtv_lok_dialog_draw(GtkWidget* pDialogDrawingArea, cairo_t* pCairo, gpointer)
     GtvLokDialogPrivate* priv = getPrivate(pDialog);
 
 
-    g_info("panting dialog");
+    g_info("painting dialog");
     int nWidth = 1024;
     int nHeight = 768;
     cairo_surface_t* pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);

@@ -293,7 +293,7 @@ void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
 static gboolean deleteLokDialog(GtkWidget* pWidget, GdkEvent* /*event*/, gpointer userdata)
 {
     GtvApplicationWindow* window = GTV_APPLICATION_WINDOW(userdata);
-    g_info("deletLokDialog");
+    g_info("deleteLokDialog");
     gtv_application_window_unregister_child_window(window, GTK_WINDOW(pWidget));
 
     return FALSE;
