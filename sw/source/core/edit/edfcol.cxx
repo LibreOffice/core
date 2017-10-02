@@ -239,7 +239,7 @@ std::pair<OUString, OUString> lcl_getFieldRDF(const uno::Reference<frame::XModel
 }
 
 /// Returns true iff the field in question is paragraph signature.
-/// Note: must have associated RDF, since signatures are othewise just metadata fields.
+/// Note: must have associated RDF, since signatures are otherwise just metadata fields.
 bool lcl_IsParagraphSignatureField(const uno::Reference<frame::XModel>& xModel,
                                    const uno::Reference<css::text::XTextField>& xField)
 {
@@ -333,7 +333,7 @@ void lcl_RemoveParagraphMetadataField(const uno::Reference<css::text::XTextField
 }
 
 /// Returns true iff the field in question is paragraph classification.
-/// Note: must have associated RDF, since classifications are othewise just metadata fields.
+/// Note: must have associated RDF, since classifications are otherwise just metadata fields.
 bool lcl_IsParagraphClassificationField(const uno::Reference<frame::XModel>& xModel,
                                         const uno::Reference<css::text::XTextField>& xField,
                                         const OUString& sKey = OUString())
