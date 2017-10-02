@@ -40,7 +40,6 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
                                 const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptFontsPage", "cui/ui/optfontspage.ui", &rSet)
     , pConfig(new SvtFontSubstConfig)
-    , pCheckButtonData(nullptr)
 {
     get(m_pUseTableCB, "usetable");
     get(m_pReplacements, "replacements");
@@ -119,13 +118,13 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rF
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    if( !pCheckButtonData )
-        pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
+    if (!m_xCheckButtonData)
+        m_xCheckButtonData.reset(new SvLBoxButtonData(m_pCheckLB));
 
     pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false)); // otherwise boom!
 
-    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
-    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, pCheckButtonData));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(SvLBoxButtonKind::EnabledCheckbox, m_xCheckButtonData.get()));
 
     pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rFont1));
     pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rFont2));
@@ -140,8 +139,7 @@ SvxFontSubstTabPage::~SvxFontSubstTabPage()
 
 void SvxFontSubstTabPage::dispose()
 {
-    delete pCheckButtonData;
-    pCheckButtonData = nullptr;
+    m_xCheckButtonData.reset();
     delete pConfig;
     pConfig = nullptr;
     m_pCheckLB.disposeAndClear();
