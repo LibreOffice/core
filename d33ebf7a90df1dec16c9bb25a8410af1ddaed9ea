@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_821ca714",
+        "filename": "cui/source/tabpages/autocdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2403,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-02T07:58:57Z",
+      "side": 1,
+      "message": "Let\u0027s not touch the appends in loops.",
+      "range": {
+        "startLine": 2390,
+        "startChar": 8,
+        "endLine": 2403,
+        "endChar": 70
+      },
+      "revId": "d33ebf7a90df1dec16c9bb25a8410af1ddaed9ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
