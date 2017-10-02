@@ -789,6 +789,15 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
             SetParagraphSignatureValidation(bOldValidationFlag);
         });
 
+    // Remove all paragraph classification fields.
+    for (;;)
+    {
+        uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParent);
+        if (!xTextField.is())
+            break;
+        lcl_RemoveParagraphMetadataField(xTextField);
+    }
+
     // Since we always insert at the start of the paragraph,
     // need to insert in reverse order.
     std::reverse(aResults.begin(), aResults.end());
@@ -800,11 +809,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
             case svx::ClassificationType::TEXT:
             {
                 const OUString sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber++);
-
-                uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParent, sKey);
-                if (!xTextField.is())
-                    xTextField = lcl_InsertParagraphClassification(xModel, xParent);
-
+                uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
                 lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString);
             }
             break;
@@ -812,11 +817,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
             case svx::ClassificationType::CATEGORY:
             {
                 const OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
-
-                uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParent, sKey);
-                if (!xTextField.is())
-                    xTextField = lcl_InsertParagraphClassification(xModel, xParent);
-
+                uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
                 lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString);
             }
             break;
@@ -824,11 +825,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
             case svx::ClassificationType::MARKING:
             {
                 const OUString sKey = sPolicy + "Extension:Marking";
-
-                uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParent, sKey);
-                if (!xTextField.is())
-                    xTextField = lcl_InsertParagraphClassification(xModel, xParent);
-
+                uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
                 lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString);
             }
             break;
@@ -836,11 +833,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             {
                 const OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
-
-                uno::Reference<text::XTextField> xTextField = lcl_FindParagraphClassificationField(xModel, xParent, sKey);
-                if (!xTextField.is())
-                    xTextField = lcl_InsertParagraphClassification(xModel, xParent);
-
+                uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
                 lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString);
             }
             break;
