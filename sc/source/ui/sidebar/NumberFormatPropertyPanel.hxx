@@ -71,6 +71,7 @@ private:
     VclPtr<NumericField>                           mpEdDecimals;
     VclPtr<FixedText>                              mpFtDenominator;
     VclPtr<NumericField>                           mpEdDenominator;
+    VclPtr<FixedText>                              mpFtLeadZeroes;
     VclPtr<NumericField>                           mpEdLeadZeroes;
     VclPtr<CheckBox>                               mpBtnNegRed;
     VclPtr<CheckBox>                               mpBtnThousand;
