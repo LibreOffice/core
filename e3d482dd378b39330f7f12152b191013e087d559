@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a207e31a",
+        "filename": "external/python3/ExternalProject_python3.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-10-02T15:38:04Z",
+      "side": 1,
+      "message": "Probably nitpicking again ;-)\n\nThe original configure.ac had already 10.12, so I assume these functions are available since 10.12 and that\u0027s why this list ended with 10.11. So if your target OS \u003e 10.11, you don\u0027t need to disable them.\n\nMy guess is you can drop this hunk all together, but I don\u0027t know.",
+      "revId": "e3d482dd378b39330f7f12152b191013e087d559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
