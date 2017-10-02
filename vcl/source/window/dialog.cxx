@@ -36,8 +36,6 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
-#include "window.h"
-
 #include <vcl/builder.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
