@@ -1014,8 +1014,13 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
         {
             pFCell->SetHybridDouble(fValue);
             if (mbPossibleEmptyDisplay && fValue == 0.0)
+            {
+                // Needs to be recalculated to propagate, otherwise would be
+                // propagated as empty string. So don't ResetDirty().
                 pFCell->SetHybridEmptyDisplayedAsString();
-            pFCell->ResetDirty();
+            }
+            else
+                pFCell->ResetDirty();
         }
     }
 }
