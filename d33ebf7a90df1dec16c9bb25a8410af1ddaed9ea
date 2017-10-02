@@ -46,6 +46,30 @@
       "revId": "d33ebf7a90df1dec16c9bb25a8410af1ddaed9ea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_0216f7a6",
+        "filename": "cui/source/tabpages/autocdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2403,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-02T11:57:28Z",
+      "side": 1,
+      "message": "Sure. This kind of stuff is where OUStringBuffer (append) is useful. Because of our \u0027smart\u0027 operator+, the performance might not be hit much (if at all), but it is topic of another discussion, and a matter of taste. So I would stick to straightforward changes where op+ is undoubtedly better than append.\n\nThis bug report targets unnecessary appends which can be replaced by simple op+. Not the ones in loops.",
+      "parentUuid": "1a430d35_022fd7f6",
+      "range": {
+        "startLine": 2390,
+        "startChar": 8,
+        "endLine": 2403,
+        "endChar": 70
+      },
+      "revId": "d33ebf7a90df1dec16c9bb25a8410af1ddaed9ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
