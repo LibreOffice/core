@@ -384,6 +384,7 @@ namespace emfio
         , mnRecordCount(0)
         , mbRecordPath(false)
         , mbEMFPlus(false)
+        ,mbEMFPlusDualMode(false)
     {
     }
 
@@ -441,6 +442,14 @@ namespace emfio
             {
                 bHaveDC = true;
                 SAL_INFO ("vcl.emf", "\t\tEMF+ lock DC (device context)");
+            }
+
+
+            // look for the "dual mode" in header
+            // it indicates that either EMF or EMF+ records should be processed
+            if ( type == 0x4001 && flags & 1 )
+            {
+                mbEMFPlusDualMode = true;
             }
 
             // Get the length of the remaining data of this record based
@@ -697,7 +706,7 @@ namespace emfio
                     }
                 }
             }
-            else if( !mbEMFPlus || bHaveDC || nRecType == EMR_EOF )
+            else if( !mbEMFPlus || bHaveDC || mbEMFPlusDualMode || nRecType == EMR_EOF )
             {
                 switch( nRecType )
                 {

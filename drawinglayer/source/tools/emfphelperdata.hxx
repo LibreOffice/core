@@ -225,6 +225,11 @@ namespace emfplushelper
         wmfemfhelper::TargetHolders&    mrTargetHolders;
         wmfemfhelper::PropertyHolders&  mrPropertyHolders;
 
+        // indicator for dual mode:
+        // if set, EMF+ records should NOT be processed
+        // instead, there is an EMF fallback
+        bool                        mbDualMode;
+
         // readers
         void processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_uInt32 dataSize, bool bUseWholeStream = false);
         static void ReadPoint(SvStream& s, float& x, float& y, sal_uInt32 flags);

@@ -681,7 +681,8 @@ namespace emfplushelper
         mMFlags(0),
         mMStream(),
         mrTargetHolders(rTargetHolders),
-        mrPropertyHolders(rPropertyHolders)
+        mrPropertyHolders(rPropertyHolders),
+        mbDualMode(false)
     {
         rMS.ReadInt32(mnFrameLeft).ReadInt32(mnFrameTop).ReadInt32(mnFrameRight).ReadInt32(mnFrameBottom);
         SAL_INFO("cppcanvas.emf", "EMF+ picture frame: " << mnFrameLeft << "," << mnFrameTop << " - " << mnFrameRight << "," << mnFrameBottom);
@@ -712,6 +713,19 @@ namespace emfplushelper
             sal_uInt64 next;
 
             rMS.ReadUInt16(type).ReadUInt16(flags).ReadUInt32(size).ReadUInt32(dataSize);
+
+            // check the header for a dual mode flag
+            if ( type == EmfPlusRecordTypeHeader && flags & 1 )
+            {
+                mbDualMode = true;
+            }
+
+            // if there was a dual mode flag, we should not process any EMF+ records, stop here!
+            // dual mode indicates, there was a fallback EMF record implementation
+            if (mbDualMode)
+            {
+                return;
+            }
 
             next = rMS.Tell() + (size - 12);
 
