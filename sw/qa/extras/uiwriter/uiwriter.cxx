@@ -205,6 +205,7 @@ public:
     void testTdf78727();
     void testTdf104814();
     void testTdf105417();
+    void testTdf112025();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -309,6 +310,7 @@ public:
     CPPUNIT_TEST(testTdf78727);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf105417);
+    CPPUNIT_TEST(testTdf112025);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3756,6 +3758,28 @@ void SwUiWriterTest::testTdf105417()
     // This never returned, it kept trying to hyphenate the last word
     // (greenbacks) again and again.
     aWrap.SpellDocument();
+}
+
+void SwUiWriterTest::testTdf112025()
+{
+    load(DATA_DIRECTORY, "fdo112025.odt");
+    const int numberOfParagraphs = getParagraphs();
+    CPPUNIT_ASSERT_EQUAL(1, numberOfParagraphs);
+
+    // get a page cursor
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToEndOfPage();
+
+    OUString insertFileid = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo112025-insert.docx";
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({{ "Name", uno::makeAny(insertFileid) }}));
+    lcl_dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
+    // something has been inserted + an additional paragraph
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle, "IsLandscape"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
