@@ -31,6 +31,7 @@ namespace emfio
 
         bool        mbRecordPath : 1;
         bool        mbEMFPlus : 1;
+        bool        mbEMFPlusDualMode : 1;
 
         bool        ReadHeader();
         // reads and converts the rectangle

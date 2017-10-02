@@ -384,6 +384,7 @@ namespace emfio
         , mnRecordCount(0)
         , mbRecordPath(false)
         , mbEMFPlus(false)
+        ,mbEMFPlusDualMode(false)
     {
     }
 
@@ -441,6 +442,15 @@ namespace emfio
             {
                 bHaveDC = true;
                 SAL_INFO ("vcl.emf", "\t\tEMF+ lock DC (device context)");
+            }
+
+            // look for the "dual mode" in header
+            // it indicates that either EMF or EMF+ records should be processed
+            // 0x4001    = EMF+ header
+            // flags & 1 = dual mode active
+            if ( type == 0x4001 && flags & 1 )
+            {
+                mbEMFPlusDualMode = true;
             }
 
             // Get the length of the remaining data of this record based
@@ -696,6 +706,14 @@ namespace emfio
                         SAL_INFO ("vcl.emf", "\t\tunknown id: 0x" << std::hex << nCommentId << std::dec);
                     }
                 }
+            }
+            else if ( !bHaveDC && mbEMFPlusDualMode && nRecType != EMR_HEADER && nRecType != EMR_EOF )
+            {
+                // skip content (EMF record) in dual mode
+                // we process only EMR_COMMENT (see above) to access EMF+ data
+                // with 2 exceptions, according to EMF+ specification:
+                // EMR_HEADER and EMR_EOF
+                // if a device context is given (bHaveDC) process the following EMF record, too.
             }
             else if( !mbEMFPlus || bHaveDC || nRecType == EMR_EOF )
             {
