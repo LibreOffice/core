@@ -2178,6 +2178,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                     else
                     {
                         ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
+                        pDoc->getIDocumentContentOperations().SplitNode(*m_pWrtShell->GetCursor()->GetPoint(), false);
                         uno::Reference<text::XTextRange> const xInsertPosition(
                             SwXTextRange::CreateXTextRange(*pDoc,
                                 *m_pWrtShell->GetCursor()->GetPoint(), nullptr));
