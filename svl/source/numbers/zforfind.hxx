@@ -136,6 +136,9 @@ private:
      */
     sal_uInt8    nMayBeIso8601;
 
+    /** Whether the 'T' time separator was detected in an ISO 8601 string. */
+    bool        bIso8601Tsep;
+
     /** State of dd-month-yy or yy-month-dd detection, with month name.
 
         0:= don't know yet
