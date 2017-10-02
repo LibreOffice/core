@@ -250,36 +250,41 @@ void SlideBackground::HandleContextChange(
         return;
     maContext = rContext;
 
-    if ( maContext == maImpressMasterContext )
+    if ( IsImpress() )
     {
-        mpCloseMaster->Show();
-        mpEditMaster->Hide();
-        mpMasterSlide->Disable();
-        mpDspMasterBackground->Disable();
-        mpDspMasterObjects->Disable();
-        mpFillStyle->Show();
-        mpBackgroundLabel->Show();
-        mpInsertImage->Show();
-    }
-    else if ( maContext == maImpressHandoutContext )
-    {
-        mpFillStyle->Hide();
-        mpFillLB->Hide();
-        mpFillAttr->Hide();
-        mpFillGrad->Hide();
-        mpBackgroundLabel->Hide();
-        mpInsertImage->Hide();
-    }
-    else if (maContext == maImpressOtherContext )
-    {
-        mpCloseMaster->Hide();
-        mpEditMaster->Show();
-        mpMasterSlide->Enable();
-        mpDspMasterBackground->Enable();
-        mpDspMasterObjects->Enable();
-        mpFillStyle->Show();
-        mpBackgroundLabel->Show();
-        mpInsertImage->Show();
+        mpMarginSelectBox->Hide();
+
+        if ( maContext == maImpressMasterContext )
+        {
+            mpCloseMaster->Show();
+            mpEditMaster->Hide();
+            mpMasterSlide->Disable();
+            mpDspMasterBackground->Disable();
+            mpDspMasterObjects->Disable();
+            mpFillStyle->Show();
+            mpBackgroundLabel->Show();
+            mpInsertImage->Show();
+        }
+        else if ( maContext == maImpressHandoutContext )
+        {
+            mpFillStyle->Hide();
+            mpFillLB->Hide();
+            mpFillAttr->Hide();
+            mpFillGrad->Hide();
+            mpBackgroundLabel->Hide();
+            mpInsertImage->Hide();
+        }
+        else if (maContext == maImpressOtherContext )
+        {
+            mpCloseMaster->Hide();
+            mpEditMaster->Show();
+            mpMasterSlide->Enable();
+            mpDspMasterBackground->Enable();
+            mpDspMasterObjects->Enable();
+            mpFillStyle->Show();
+            mpBackgroundLabel->Show();
+            mpInsertImage->Show();
+        }
     }
     // else Draw or something else, do nothing
 }
