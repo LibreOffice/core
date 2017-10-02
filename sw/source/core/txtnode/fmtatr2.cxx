@@ -396,22 +396,22 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 SwFormatRuby::SwFormatRuby( const OUString& rRubyText )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
-    sRubyText( rRubyText ),
-    pTextAttr( nullptr ),
-    nCharFormatId( 0 ),
-    nPosition( 0 ),
-    nAdjustment( css::text::RubyAdjust_LEFT )
+    m_sRubyText( rRubyText ),
+    m_pTextAttr( nullptr ),
+    m_nCharFormatId( 0 ),
+    m_nPosition( 0 ),
+    m_eAdjustment( css::text::RubyAdjust_LEFT )
 {
 }
 
 SwFormatRuby::SwFormatRuby( const SwFormatRuby& rAttr )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
-    sRubyText( rAttr.sRubyText ),
-    sCharFormatName( rAttr.sCharFormatName ),
-    pTextAttr( nullptr ),
-    nCharFormatId( rAttr.nCharFormatId),
-    nPosition( rAttr.nPosition ),
-    nAdjustment( rAttr.nAdjustment )
+    m_sRubyText( rAttr.m_sRubyText ),
+    m_sCharFormatName( rAttr.m_sCharFormatName ),
+    m_pTextAttr( nullptr ),
+    m_nCharFormatId( rAttr.m_nCharFormatId),
+    m_nPosition( rAttr.m_nPosition ),
+    m_eAdjustment( rAttr.m_eAdjustment )
 {
 }
 
@@ -421,23 +421,23 @@ SwFormatRuby::~SwFormatRuby()
 
 SwFormatRuby& SwFormatRuby::operator=( const SwFormatRuby& rAttr )
 {
-    sRubyText = rAttr.sRubyText;
-    sCharFormatName = rAttr.sCharFormatName;
-    nCharFormatId = rAttr.nCharFormatId;
-    nPosition = rAttr.nPosition;
-    nAdjustment = rAttr.nAdjustment;
-    pTextAttr =  nullptr;
+    m_sRubyText = rAttr.m_sRubyText;
+    m_sCharFormatName = rAttr.m_sCharFormatName;
+    m_nCharFormatId = rAttr.m_nCharFormatId;
+    m_nPosition = rAttr.m_nPosition;
+    m_eAdjustment = rAttr.m_eAdjustment;
+    m_pTextAttr =  nullptr;
     return *this;
 }
 
 bool SwFormatRuby::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return sRubyText == static_cast<const SwFormatRuby&>(rAttr).sRubyText &&
-           sCharFormatName == static_cast<const SwFormatRuby&>(rAttr).sCharFormatName &&
-           nCharFormatId == static_cast<const SwFormatRuby&>(rAttr).nCharFormatId &&
-           nPosition == static_cast<const SwFormatRuby&>(rAttr).nPosition &&
-           nAdjustment == static_cast<const SwFormatRuby&>(rAttr).nAdjustment;
+    return m_sRubyText == static_cast<const SwFormatRuby&>(rAttr).m_sRubyText &&
+           m_sCharFormatName == static_cast<const SwFormatRuby&>(rAttr).m_sCharFormatName &&
+           m_nCharFormatId == static_cast<const SwFormatRuby&>(rAttr).m_nCharFormatId &&
+           m_nPosition == static_cast<const SwFormatRuby&>(rAttr).m_nPosition &&
+           m_eAdjustment == static_cast<const SwFormatRuby&>(rAttr).m_eAdjustment;
 }
 
 SfxPoolItem* SwFormatRuby::Clone( SfxItemPool* ) const
@@ -452,18 +452,18 @@ bool SwFormatRuby::QueryValue( uno::Any& rVal,
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        case MID_RUBY_TEXT: rVal <<= sRubyText;                    break;
-        case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)nAdjustment;    break;
+        case MID_RUBY_TEXT: rVal <<= m_sRubyText;                    break;
+        case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)m_eAdjustment;    break;
         case MID_RUBY_CHARSTYLE:
         {
             OUString aString;
-            SwStyleNameMapper::FillProgName(sCharFormatName, aString, SwGetPoolIdFromName::ChrFmt, true );
+            SwStyleNameMapper::FillProgName(m_sCharFormatName, aString, SwGetPoolIdFromName::ChrFmt, true );
             rVal <<= aString;
         }
         break;
         case MID_RUBY_ABOVE:
         {
-            rVal <<= static_cast<bool>(!nPosition);
+            rVal <<= static_cast<bool>(!m_nPosition);
         }
         break;
         default:
@@ -482,7 +482,7 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
         {
             OUString sTmp;
             bRet = rVal >>= sTmp;
-            sRubyText = sTmp;
+            m_sRubyText = sTmp;
         }
         break;
          case MID_RUBY_ADJUST:
@@ -490,7 +490,7 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= (sal_Int16)text::RubyAdjust_LEFT && nSet <= (sal_Int16)text::RubyAdjust_INDENT_BLOCK)
-                nAdjustment = (text::RubyAdjust)nSet;
+                m_eAdjustment = (text::RubyAdjust)nSet;
             else
                 bRet = false;
         }
@@ -501,7 +501,7 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
             if(rVal.hasValue() && rVal.getValueType() == rType)
             {
                 bool bAbove = *o3tl::doAccess<bool>(rVal);
-                nPosition = bAbove ? 0 : 1;
+                m_nPosition = bAbove ? 0 : 1;
             }
         }
         break;
@@ -510,7 +510,7 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
             OUString sTmp;
             bRet = rVal >>= sTmp;
             if(bRet)
-                sCharFormatName = SwStyleNameMapper::GetUIName(sTmp, SwGetPoolIdFromName::ChrFmt );
+                m_sCharFormatName = SwStyleNameMapper::GetUIName(sTmp, SwGetPoolIdFromName::ChrFmt );
         }
         break;
         default:
