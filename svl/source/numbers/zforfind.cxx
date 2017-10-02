@@ -2353,6 +2353,14 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
             return MatchedReturn();
         }
         nDecPos = 2;                                // . in mid string
+
+        // If this is exactly an ISO 8601 fractional seconds separator, bail
+        // out early to not get confused by later checks for group separator or
+        // other.
+        if (bIso8601Tsep && nPos == rString.getLength() &&
+                eScannedType == css::util::NumberFormat::DATETIME && (rString == "." || rString == ","))
+            return true;
+
         SkipBlanks(rString, nPos);
     }
 
