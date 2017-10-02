@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_65b0a544",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4398,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-02T16:57:45Z",
+      "side": 0,
+      "message": "there\u0027s this unrelated change - is that intentional?",
+      "revId": "86910087fa41956aad6a22943bfbeb158e205dcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
