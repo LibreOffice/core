@@ -347,27 +347,26 @@ void CGMBitmap::ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& r
     rDest.mndy += rSource.mndy;
 };
 
-CGMBitmap* CGMBitmap::GetNext()
+std::unique_ptr<CGMBitmap> CGMBitmap::GetNext()
 {
-    if ( pCGMBitmapDescriptor->mpBitmap && pCGMBitmapDescriptor->mbStatus )
+    std::unique_ptr<CGMBitmap> xCGMTempBitmap;
+    if (pCGMBitmapDescriptor->mpBitmap && pCGMBitmapDescriptor->mbStatus)
     {
-        CGMBitmap* pCGMTempBitmap = new CGMBitmap( *mpCGM );
-        if ( ( (long)pCGMTempBitmap->pCGMBitmapDescriptor->mnOrientation == (long)pCGMBitmapDescriptor->mnOrientation ) &&
-            ( ( ( pCGMTempBitmap->pCGMBitmapDescriptor->mnR.X == pCGMBitmapDescriptor->mnQ.X ) &&
-                    ( pCGMTempBitmap->pCGMBitmapDescriptor->mnR.Y == pCGMBitmapDescriptor->mnQ.Y ) ) ||
-            ( ( pCGMTempBitmap->pCGMBitmapDescriptor->mnQ.X == pCGMBitmapDescriptor->mnR.X ) &&
-                    ( pCGMTempBitmap->pCGMBitmapDescriptor->mnQ.Y == pCGMBitmapDescriptor->mnR.Y ) ) ) )
+        xCGMTempBitmap.reset(new CGMBitmap(*mpCGM));
+        if ( ( (long)xCGMTempBitmap->pCGMBitmapDescriptor->mnOrientation == (long)pCGMBitmapDescriptor->mnOrientation ) &&
+            ( ( ( xCGMTempBitmap->pCGMBitmapDescriptor->mnR.X == pCGMBitmapDescriptor->mnQ.X ) &&
+                    ( xCGMTempBitmap->pCGMBitmapDescriptor->mnR.Y == pCGMBitmapDescriptor->mnQ.Y ) ) ||
+            ( ( xCGMTempBitmap->pCGMBitmapDescriptor->mnQ.X == pCGMBitmapDescriptor->mnR.X ) &&
+                    ( xCGMTempBitmap->pCGMBitmapDescriptor->mnQ.Y == pCGMBitmapDescriptor->mnR.Y ) ) ) )
         {
-            ImplInsert( *(pCGMTempBitmap->pCGMBitmapDescriptor), *(pCGMBitmapDescriptor) );
-            delete pCGMTempBitmap;
-            return nullptr;
+            ImplInsert( *(xCGMTempBitmap->pCGMBitmapDescriptor), *(pCGMBitmapDescriptor) );
+            xCGMTempBitmap.reset();
+            return xCGMTempBitmap;
         }
 
-        pCGMBitmapDescriptor.swap(pCGMTempBitmap->pCGMBitmapDescriptor);
-        return pCGMTempBitmap;
+        pCGMBitmapDescriptor.swap(xCGMTempBitmap->pCGMBitmapDescriptor);
     }
-    else
-        return nullptr;
+    return xCGMTempBitmap;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
