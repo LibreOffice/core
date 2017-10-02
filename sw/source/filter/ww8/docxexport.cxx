@@ -931,12 +931,6 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
             OString::number( m_aSettings.defaultTabStop).getStr(), FSEND );
 
-    // Protect form
-    if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ))
-    {
-        pFS->singleElementNS( XML_w, XML_documentProtection, FSNS(XML_w, XML_edit), "forms", FSNS(XML_w, XML_enforcement), "1",  FSEND );
-    }
-
     // Do not justify lines with manual break
     if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK ))
     {
@@ -1070,14 +1064,18 @@ void DocxExport::WriteSettings()
         }
     }
 
+    // Protect form
     // Section-specific write protection
-    if ( m_pSections->DocumentIsProtected() )
+    if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM) ||
+        m_pSections->DocumentIsProtected())
     {
-        pFS->singleElementNS( XML_w, XML_documentProtection,
-                              FSNS( XML_w, XML_enforcement ), "true",
-                              FSNS( XML_w, XML_edit ), "forms",
-                              FSEND );
+        pFS->singleElementNS(XML_w, XML_documentProtection,
+            FSNS(XML_w, XML_edit), "forms",
+            FSNS(XML_w, XML_enforcement), "true",
+            FSEND);
     }
+
+    // finish settings.xml
     pFS->endElementNS( XML_w, XML_settings );
 }
 
