@@ -77,7 +77,9 @@ public:
 
         // Remove duplicates.
         std::sort(rCellList.begin(), rCellList.end());
-        std::unique(rCellList.begin(), rCellList.end());
+        auto last = std::unique(rCellList.begin(), rCellList.end());
+        rCellList.erase(last, rCellList.end());
+
         // exception safe copy
         vector<ScFormulaCell*> temp(rCellList);
         rCells.swap(temp);
