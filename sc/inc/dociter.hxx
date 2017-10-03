@@ -45,6 +45,7 @@ struct ScQueryParam;
 struct ScDBQueryParamInternal;
 struct ScDBQueryParamMatrix;
 class ScFormulaCell;
+struct ScInterpreterContext;
 
 class ScValueIterator            // walk through all values in an area
 {
@@ -84,7 +85,7 @@ public:
         ScDocument* pDocument, const ScRange& rRange, SubtotalFlags nSubTotalFlags = SubtotalFlags::NONE,
         bool bTextAsZero = false );
 
-    void GetCurNumFmtInfo( short& nType, sal_uLong& nIndex );
+    void GetCurNumFmtInfo( const ScInterpreterContext& rContext, short& nType, sal_uLong& nIndex );
 
     /// Does NOT reset rValue if no value found!
     bool GetFirst( double& rValue, FormulaError& rErr );
@@ -125,7 +126,7 @@ private:
     {
         typedef std::pair<sc::CellStoreType::const_iterator,size_t> PositionType;
     public:
-        DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument* pDoc);
+        DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument* pDoc, const ScInterpreterContext& rContext);
         virtual ~DataAccessInternal() override;
         virtual bool getCurrent(Value& rValue) override;
         virtual bool getFirst(Value& rValue) override;
@@ -139,6 +140,7 @@ private:
         PositionType maCurPos;
         ScDBQueryParamInternal* mpParam;
         ScDocument*         mpDoc;
+        const ScInterpreterContext& mrContext;
         const ScAttrArray*  pAttrArray;
         sal_uLong               nNumFormat;     // for CalcAsShown
         sal_uLong               nNumFmtIndex;
@@ -171,7 +173,7 @@ private:
     ::std::unique_ptr<DataAccess>         mpData;
 
 public:
-                    ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
+                    ScDBQueryDataIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, ScDBQueryParamBase* pParam);
     /// Does NOT reset rValue if no value found!
     bool            GetFirst(Value& rValue);
     /// Does NOT reset rValue if no value found!
@@ -266,6 +268,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
 
     std::unique_ptr<ScQueryParam> mpParam;
     ScDocument*     pDoc;
+    const ScInterpreterContext& mrContext;
     SCTAB           nTab;
     SCCOL           nCol;
     SCROW           nRow;
@@ -292,7 +295,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     bool BinarySearch();
 
 public:
-                    ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
+                    ScQueryCellIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, SCTAB nTable,
                                         const ScQueryParam& aParam, bool bMod);
                                         // when !bMod, the QueryParam has to be filled
                                         // (bIsString)

@@ -30,7 +30,7 @@
 #include <svl/listener.hxx>
 
 #include "types.hxx"
-
+#include "interpretercontext.hxx"
 #include "formularesult.hxx"
 
 namespace sc {
@@ -150,7 +150,7 @@ public:
                         SCITP_FROM_ITERATION,
                         SCITP_CLOSE_ITERATION_CIRCLE
                     };
-    void            InterpretTail( ScInterpretTailParameter );
+                    void InterpretTail( const ScInterpreterContext&, ScInterpretTailParameter );
 
     void            HandleStuffAfterParallelCalculation();
 

@@ -502,6 +502,7 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
 SvNumberFormatter* ScDocument::GetFormatTable() const
 {
+    assert(!mbThreadedGroupCalcInProgress);
     return mxPoolHelper->GetFormTable();
 }
 

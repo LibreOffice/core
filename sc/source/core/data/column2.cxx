@@ -2877,8 +2877,10 @@ void ScColumn::SetFormulaResults( SCROW nRow, const formula::FormulaConstTokenRe
     }
 }
 
-void ScColumn::CalculateInThread( SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+void ScColumn::CalculateInThread( const ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
+    assert(pDocument->mbThreadedGroupCalcInProgress);
+
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
     sc::CellStoreType::iterator it = aPos.first;
     if (it->type != sc::element_type_formula)
@@ -2901,8 +2903,7 @@ void ScColumn::CalculateInThread( SCROW nRow, size_t nLen, unsigned nThisThread,
         ScFormulaCell& rCell = **itCell;
         // Here we don't call IncInterpretLevel() and DecInterpretLevel() as this call site is
         // always in a threaded calculation.
-        assert(pDocument->mbThreadedGroupCalcInProgress);
-        rCell.InterpretTail(ScFormulaCell::SCITP_NORMAL);
+        rCell.InterpretTail(rContext, ScFormulaCell::SCITP_NORMAL);
     }
 }
 

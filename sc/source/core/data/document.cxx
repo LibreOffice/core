@@ -3702,13 +3702,13 @@ sal_uInt32 ScDocument::GetNumberFormat( const ScRange& rRange ) const
     return nFormat;
 }
 
-sal_uInt32 ScDocument::GetNumberFormat( const ScAddress& rPos ) const
+sal_uInt32 ScDocument::GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
     if (!TableExists(nTab))
         return 0;
 
-    return maTabs[nTab]->GetNumberFormat( rPos );
+    return maTabs[nTab]->GetNumberFormat( rContext, rPos );
 }
 
 void ScDocument::SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat )
@@ -3720,14 +3720,14 @@ void ScDocument::SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberForma
     maTabs[nTab]->SetNumberFormat(rPos.Col(), rPos.Row(), nNumberFormat);
 }
 
-void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
+void ScDocument::GetNumberFormatInfo( const ScInterpreterContext& rContext, short& nType, sal_uLong& nIndex,
             const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
     if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
-        nIndex = maTabs[nTab]->GetNumberFormat( rPos );
-        nType = GetFormatTable()->GetType( nIndex );
+        nIndex = maTabs[nTab]->GetNumberFormat( rContext, rPos );
+        nType = rContext.GetFormatTable()->GetType( nIndex );
     }
     else
     {
@@ -6767,6 +6767,13 @@ ScMutationGuard::~ScMutationGuard()
         }
     }
 #endif
+}
+
+ScInterpreterContext ScDocument::GetNonThreadedContext() const
+{
+    // GetFormatTable() asserts that we are not in a threaded calculation
+    ScInterpreterContext aResult(*this, GetFormatTable());
+    return aResult;
 }
 
 thread_local ScDocumentThreadSpecific ScDocument::maThreadSpecific;
