@@ -198,12 +198,11 @@
 					"$(LO_SRCDIR)/ios/generated",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_GENERATE_MAP_FILE = YES;
+				LD_MAP_FILE_PATH = ./iosKit.map;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(LINK_LDFLAGS)",
-					"-lstdc++",
-				);
+				PRELINK_FLAGS = "-Wl -ios_version_min 10.3 -lz -liconv";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "x86_64 arm64";
 			};
@@ -261,12 +260,11 @@
 					"$(LO_SRCDIR)/ios/generated",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_GENERATE_MAP_FILE = YES;
+				LD_MAP_FILE_PATH = ./iosKit.map;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(LINK_LDFLAGS)",
-					"-lstdc++",
-				);
+				PRELINK_FLAGS = "-Wl -ios_version_min 10.3 -lz -liconv";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "x86_64 arm64";
@@ -276,7 +274,9 @@
 		39B5D21F1F78130F008FB162 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
+				PRELINK_FLAGS = "-ios_version_min 9.3";
+				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -285,7 +285,9 @@
 		39B5D2201F78130F008FB162 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "";
+				PRELINK_FLAGS = "-ios_version_min 9.3";
+				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};

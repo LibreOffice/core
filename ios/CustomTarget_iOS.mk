@@ -36,7 +36,6 @@ $(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	    -e "s'@WORKDIR@'$(WORKDIR)'g" \
 	    -e "s'@CFLAGS@'$(gb_GLOBALDEFS)'g" \
 	    -e "s'@CPLUSPLUSFLAGS@'$(gb_GLOBALDEFS)'g" \
-	    -e "s'@LDFLAGS@'-Wl,-lz,-liconv,-map,$(WORKDIR)/ios/iosKit.map 'g" \
 	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
 	    -e "s'@PRELINK@'`$(SRCDIR)/bin/lo-all-static-libs`'g" \
 	    $(SRCDIR)/ios/loKit.xcconfig.in > $(WORKDIR)/ios/loKit.xcconfig
@@ -46,7 +45,6 @@ $(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	    -e "s'@WORKDIR@'$(WORKDIR)'g" \
 	    -e "s'@CFLAGS@'$(gb_GLOBALDEFS)'g" \
 	    -e "s'@CPLUSPLUSFLAGS@'$(gb_GLOBALDEFS)'g" \
-	    -e "s'@LDFLAGS@'-Wl,-lz,-liconv,-map,$(WORKDIR)/ios/iosKit.map 'g" \
 	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
 	    $(SRCDIR)/ios/loApp.xcconfig.in > $(WORKDIR)/ios/loApp.xcconfig
 
