@@ -150,6 +150,13 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
      */
     com::sun::star::security::XCertificate chooseEncryptionCertificate( [out] string Description );
 
+    /**  This method shows the CertificateChooser dialog, used by document and PDF signing
+         Shows only private certificates and returns usage string in addition to description.
+
+         @since LibreOffice 6.0
+     */
+    com::sun::star::security::XCertificate chooseCertificateWithProps( [out] sequence<::com::sun::star::beans::PropertyValue> Properties);
+
 } ;
 
 } ; } ; } ; } ;
