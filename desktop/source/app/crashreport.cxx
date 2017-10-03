@@ -122,8 +122,7 @@ void CrashReporter::updateMinidumpLocation()
     mpExceptionHandler->set_minidump_descriptor(descriptor);
 #elif defined WNT
     OUString aURL = getCrashDirectory();
-    mpExceptionHandler->set_dump_path(
-        reinterpret_cast<wchar_t const *>(aURL.getStr()));
+    mpExceptionHandler->set_dump_path(SAL_W(aURL.getStr()));
 #endif
 }
 

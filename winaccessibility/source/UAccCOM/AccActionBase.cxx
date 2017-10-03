@@ -117,7 +117,7 @@ STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *de
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString(reinterpret_cast<wchar_t const *>(ouStr.getStr()));
+    *description = SysAllocString(SAL_W(ouStr.getStr()));
 
     return S_OK;
 
@@ -176,8 +176,7 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
     {
         auto const wString = GetkeyBindingStrByXkeyBinding( (binding.get())->getAccessibleKeyBinding(index) );
 
-        (*keyBinding)[index] = SysAllocString(
-            reinterpret_cast<wchar_t const *>(wString.getStr()));
+        (*keyBinding)[index] = SysAllocString(SAL_W(wString.getStr()));
     }
 
     *nBinding = nCount;

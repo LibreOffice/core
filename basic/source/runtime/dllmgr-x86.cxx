@@ -688,7 +688,7 @@ Dll * SbiDllMgr::Impl::getDll(OUString const & name) {
     Dlls::iterator i(dlls.find(name));
     if (i == dlls.end()) {
         i = dlls.emplace(name, new Dll).first;
-        HMODULE h = LoadLibraryW(reinterpret_cast<LPCWSTR>(name.getStr()));
+        HMODULE h = LoadLibraryW(SAL_W(name.getStr()));
         if (h == 0) {
             dlls.erase(i);
             return 0;

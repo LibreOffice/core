@@ -132,7 +132,7 @@ STDMETHODIMP CAccTable::get_columnDescription(long column, BSTR * description)
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);//??
-    *description = SysAllocString(reinterpret_cast<wchar_t const *>(ouStr.getStr()));
+    *description = SysAllocString(SAL_W(ouStr.getStr()));
     if(description==nullptr)
         return E_FAIL;
     return S_OK;
@@ -351,7 +351,7 @@ STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR * description)
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString(reinterpret_cast<wchar_t const *>(ouStr.getStr()));
+    *description = SysAllocString(SAL_W(ouStr.getStr()));
     if(description==nullptr)
         return E_FAIL;
 
