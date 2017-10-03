@@ -433,7 +433,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
         security::DocumentDigitalSignatures::createWithVersion(
             comphelper::getProcessComponentContext(), "1.2" ) );
 
-    // The use may provide a description while choosing a certificate.
+    // The user may provide a description while choosing a certificate.
     OUString aDescription;
     uno::Reference< security::XCertificate > xSignCertificate=
         xSigner->chooseEncryptionCertificate(aDescription);
