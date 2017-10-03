@@ -2871,12 +2871,12 @@ if test $_os = iOS; then
     AC_MSG_CHECKING([what iOS SDK to use])
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
-        versionmin=-mios-simulator-version-min=9.3
+        versionmin=-mios-simulator-version-min=10.3
         IOS_ARCH=x86_64
         BITNESS=-fembed-bitcode
     else
         platform=iPhoneOS
-        versionmin=-miphoneos-version-min=9.3
+        versionmin=-miphoneos-version-min=10.3
         IOS_ARCH=arm64
         BITNESS=-fembed-bitcode
     fi
