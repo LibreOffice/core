@@ -1155,7 +1155,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
         if (rXP.GetPointCount()<=2) {
             XPolygon aXPoly(rXP);
             aXPoly[(sal_uInt16)rDrag.GetHdl()->GetPointNum()]=rDrag.GetNow();
-            aRetval.Insert(aXPoly);
+            aRetval.Insert(std::move(aXPoly));
             return aRetval.getB2DPolyPolygon();
         }
         // copy certain data locally to use less code and have faster access times
@@ -1241,11 +1241,11 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::getSpecialDragPoly(const SdrDra
                 }
             }
         }
-        aRetval.Insert(aXPoly);
-        if (aLine1.GetPointCount()>1) aRetval.Insert(aLine1);
-        if (aLine2.GetPointCount()>1) aRetval.Insert(aLine2);
-        if (aLine3.GetPointCount()>1) aRetval.Insert(aLine3);
-        if (aLine4.GetPointCount()>1) aRetval.Insert(aLine4);
+        aRetval.Insert(std::move(aXPoly));
+        if (aLine1.GetPointCount()>1) aRetval.Insert(std::move(aLine1));
+        if (aLine2.GetPointCount()>1) aRetval.Insert(std::move(aLine2));
+        if (aLine3.GetPointCount()>1) aRetval.Insert(std::move(aLine3));
+        if (aLine4.GetPointCount()>1) aRetval.Insert(std::move(aLine4));
     }
 
     return aRetval.getB2DPolyPolygon();
@@ -1462,7 +1462,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
                 rXPoly[nActPoint]=rXPoly[0];
                 XPolygon aXP;
                 aXP[0]=rStat.GetNow();
-                aPathPolygon.Insert(aXP);
+                aPathPolygon.Insert(std::move(aXP));
             }
         }
     }

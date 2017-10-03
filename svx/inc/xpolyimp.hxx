@@ -51,12 +51,12 @@ public:
     void Remove( sal_uInt16 nPos, sal_uInt16 nCount );
 };
 
-typedef ::std::vector< XPolygon* > XPolygonList;
+typedef ::std::vector< XPolygon > XPolygonVector;
 
 class ImpXPolyPolygon
 {
 public:
-    XPolygonList aXPolyList;
+    XPolygonVector aXPolyList;
 
                 ImpXPolyPolygon() {}
                 ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly );
