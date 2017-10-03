@@ -22,10 +22,12 @@
 #include <i18nutil/unicode.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 IndexEntrySupplier_Unicode::IndexEntrySupplier_Unicode(
     const css::uno::Reference < css::uno::XComponentContext >& rxContext ) :
@@ -280,6 +282,6 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm)
     table_count = j;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

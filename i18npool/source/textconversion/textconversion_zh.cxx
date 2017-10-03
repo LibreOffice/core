@@ -35,7 +35,7 @@ using namespace com::sun::star::linguistic2;
 using namespace com::sun::star::uno;
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 TextConversion_zh::TextConversion_zh( const Reference < XComponentContext >& xContext )
     : TextConversionService("com.sun.star.i18n.TextConversion_zh")
@@ -327,6 +327,6 @@ TextConversion_zh::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /
     return false;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

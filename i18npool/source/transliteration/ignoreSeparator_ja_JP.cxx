@@ -19,9 +19,9 @@
 
 #include <transliteration_Ignore.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
-OneToOneMappingTable_t const ignoreSeparatorTable[] = {
+i18nutil::OneToOneMappingTable_t const ignoreSeparatorTable[] = {
     { 0x0021, 0xFFFF },  // EXCLAMATION MARK
     { 0x0023, 0xFFFF },  // NUMBER SIGN
     { 0x0024, 0xFFFF },  // DOLLAR SIGN
@@ -99,7 +99,7 @@ OneToOneMappingTable_t const ignoreSeparatorTable[] = {
 
 ignoreSeparator_ja_JP::ignoreSeparator_ja_JP()
 {
-    static oneToOneMapping _table(ignoreSeparatorTable, sizeof(ignoreSeparatorTable));
+    static i18nutil::oneToOneMapping _table(ignoreSeparatorTable, sizeof(ignoreSeparatorTable));
     func = nullptr;
     table = &_table;
     map = nullptr;
@@ -107,6 +107,6 @@ ignoreSeparator_ja_JP::ignoreSeparator_ja_JP()
     implementationName = "com.sun.star.i18n.Transliteration.ignoreSeparator_ja_JP";
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

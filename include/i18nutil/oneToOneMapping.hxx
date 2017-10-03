@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <i18nutil/i18nutildllapi.h>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18nutil {
 
 class widthfolding;
 
@@ -84,7 +84,7 @@ protected:
     bool                  mbHasIndex;
 };
 
-} } } }
+}
 
 #endif // _I18N_TRANSLITERATION_ONETOONEMAPPING_HXX_
 

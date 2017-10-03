@@ -32,7 +32,7 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class DefaultNumberingProvider : public cppu::WeakImplHelper
 <
@@ -81,7 +81,9 @@ private:
     /// @throws css::uno::RuntimeException
     bool SAL_CALL isScriptFlagEnabled(const OUString& aName );
 };
-} } } }
+
+}
+
 
 #endif
 

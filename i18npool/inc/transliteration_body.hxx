@@ -22,7 +22,7 @@
 #include <transliteration_commonclass.hxx>
 #include <i18nutil/casefolding.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class Transliteration_body : public transliteration_commonclass
 {
@@ -96,7 +96,7 @@ public:
     virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >& offset  ) override;
 };
 
-} } } }
+}
 
 #endif
 

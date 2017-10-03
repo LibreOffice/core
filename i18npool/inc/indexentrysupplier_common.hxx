@@ -28,7 +28,7 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class IndexEntrySupplier_Common
@@ -91,7 +91,7 @@ protected:
         const OUString& PhoneticEntry, const css::lang::Locale& rLocale );
 };
 
-} } } }
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

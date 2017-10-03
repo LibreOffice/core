@@ -60,9 +60,9 @@ namespace o3tl {
 }
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
-class cclass_Unicode : public cppu::WeakImplHelper < XCharacterClassification, css::lang::XServiceInfo >
+class cclass_Unicode : public cppu::WeakImplHelper < css::i18n::XCharacterClassification, css::lang::XServiceInfo >
 {
 public:
     cclass_Unicode(const css::uno::Reference < css::uno::XComponentContext >& rxContext );
@@ -81,10 +81,10 @@ public:
         const css::lang::Locale& rLocale ) override;
     virtual sal_Int32 SAL_CALL getStringType( const OUString& text, sal_Int32 nPos, sal_Int32 nCount,
         const css::lang::Locale& rLocale ) override;
-    virtual ParseResult SAL_CALL parseAnyToken( const OUString& Text, sal_Int32 nPos,
+    virtual css::i18n::ParseResult SAL_CALL parseAnyToken( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& rLocale, sal_Int32 nStartCharFlags, const OUString& userDefinedCharactersStart,
         sal_Int32 nContCharFlags, const OUString& userDefinedCharactersCont ) override;
-    virtual ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType, const OUString& Text,
+    virtual css::i18n::ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType, const OUString& Text,
         sal_Int32 nPos, const css::lang::Locale& rLocale, sal_Int32 nStartCharFlags,
         const OUString& userDefinedCharactersStart, sal_Int32 nContCharFlags,
         const OUString& userDefinedCharactersCont ) override;
@@ -126,7 +126,7 @@ private:
 
     /// used for parser only
     css::lang::Locale    aParserLocale;
-    css::uno::Reference < XLocaleData4 > mxLocaleData;
+    css::uno::Reference < css::i18n::XLocaleData4 > mxLocaleData;
     css::uno::Reference < css::i18n::XNativeNumberSupplier > xNatNumSup;
     OUString             aStartChars;
     OUString             aContChars;
@@ -168,7 +168,7 @@ private:
     void destroyParserTable();
 
     /// Parse a text.
-    void parseText( ParseResult& r, const OUString& rText, sal_Int32 nPos,
+    void parseText( css::i18n::ParseResult& r, const OUString& rText, sal_Int32 nPos,
         sal_Int32 nTokenType = 0xffffffff );
 
     /// Setup International class, new'ed only if different from existing.
@@ -179,7 +179,7 @@ private:
 
 };
 
-} } } }
+}
 
 #endif
 

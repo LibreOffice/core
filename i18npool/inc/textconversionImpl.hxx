@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class TextConversion
@@ -72,10 +72,7 @@ private:
     void SAL_CALL getLocaleSpecificTextConversion( const css::lang::Locale& rLocale );
 };
 
-} // i18n
-} // star
-} // sun
-} // com
+} // i18npool
 
 
 #endif

@@ -34,14 +34,14 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class BreakIterator
 
 class BreakIteratorImpl : public cppu::WeakImplHelper
 <
-    XBreakIterator,
+    css::i18n::XBreakIterator,
     css::lang::XServiceInfo
 >
 {
@@ -57,11 +57,11 @@ public:
         const css::lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
         sal_Int32& nDone ) override;
 
-    virtual Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    virtual Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    virtual Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
+    virtual css::i18n::Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection ) override;
 
     virtual sal_Bool SAL_CALL isBeginWord( const OUString& Text, sal_Int32 nPos,
@@ -76,9 +76,10 @@ public:
     virtual sal_Int32 SAL_CALL endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale ) override;
 
-    virtual LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
-        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions ) override;
+        const css::i18n::LineBreakHyphenationOptions& hOptions,
+        const css::i18n::LineBreakUserOptions& bOptions ) override;
 
     virtual sal_Int16 SAL_CALL getScriptType( const OUString& Text, sal_Int32 nPos ) override;
     virtual sal_Int32 SAL_CALL beginOfScript( const OUString& Text, sal_Int32 nStartPos,
@@ -106,7 +107,7 @@ public:
 
     static sal_Int16 SAL_CALL getScriptClass(sal_uInt32 currentChar);
 protected:
-    Boundary result; // for word break iterator
+    css::i18n::Boundary result; // for word break iterator
 
 private:
 
@@ -127,10 +128,7 @@ private:
 
 };
 
-} // i18n
-} // star
-} // sun
-} // com
+} // i18npool
 
 
 #endif // INCLUDED_I18NPOOL_INC_BREAKITERATORIMPL_HXX

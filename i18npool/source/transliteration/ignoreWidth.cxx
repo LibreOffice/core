@@ -26,7 +26,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 OUString SAL_CALL
 ignoreWidth::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
@@ -51,14 +51,14 @@ ignoreWidth::transliterateChar2Char( sal_Unicode inChar)
     return t1->transliterateChar2Char(inChar);
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_Transliteration_IGNORE_WIDTH_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::ignoreWidth());
+    return cppu::acquire(new i18npool::ignoreWidth());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,7 @@
 #include <indexentrysupplier_common.hxx>
 #include <osl/module.h>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class IndexEntrySupplier_asian
@@ -51,7 +51,7 @@ private:
 #endif
 };
 
-} } } }
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

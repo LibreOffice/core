@@ -26,7 +26,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class Breakiterator_th
@@ -146,6 +146,6 @@ void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 const 
     }
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

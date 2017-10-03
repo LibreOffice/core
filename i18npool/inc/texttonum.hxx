@@ -22,7 +22,7 @@
 
 #include <transliteration_Numeric.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 #define TRANSLITERATION_TEXTTONUM( name ) \
 class TextToNum##name : public transliteration_Numeric \
@@ -46,7 +46,7 @@ TRANSLITERATION_TEXTTONUM(KanjiLongTraditional_ja_JP)
 
 #undef TRANSLITERATION_TEXTTONUM
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_INC_TEXTTONUM_HXX
 

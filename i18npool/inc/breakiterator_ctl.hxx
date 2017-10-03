@@ -22,7 +22,7 @@
 #include <breakiterator_unicode.hxx>
 #include <xdictionary.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class BreakIterator_CTL
@@ -33,14 +33,15 @@ public:
     BreakIterator_CTL();
     virtual ~BreakIterator_CTL() override;
     virtual sal_Int32 SAL_CALL previousCharacters(const OUString& text, sal_Int32 start,
-        const lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
+        const css::lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
         sal_Int32& nDone) override;
     virtual sal_Int32 SAL_CALL nextCharacters(const OUString& text, sal_Int32 start,
-        const lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
+        const css::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
         sal_Int32& nDone) override;
-    virtual LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
-        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions ) override;
+        const css::i18n::LineBreakHyphenationOptions& hOptions,
+        const css::i18n::LineBreakUserOptions& bOptions ) override;
 protected:
     OUString cachedText; // for cell index
     sal_Int32* nextCellIndex;
@@ -51,7 +52,7 @@ protected:
     virtual void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos);
 };
 
-} } } }
+}
 
 #endif
 

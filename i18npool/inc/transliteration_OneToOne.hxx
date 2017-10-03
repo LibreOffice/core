@@ -22,7 +22,7 @@
 #include <transliteration_commonclass.hxx>
 #include <i18nutil/oneToOneMapping.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 typedef sal_Unicode (*TransFunc)(const sal_Unicode);
 
@@ -50,7 +50,7 @@ public:
 
 protected:
         TransFunc func;
-        oneToOneMapping *table;
+        i18nutil::oneToOneMapping *table;
 };
 
 #define TRANSLITERATION_ONETOONE( name ) \
@@ -108,7 +108,7 @@ TRANSLITERATION_ONETOONE(smallToLarge_ja_JP)
 
 #undef TRANSLITERATION_ONETOONE
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_INC_TRANSLITERATION_ONETOONE_HXX
 

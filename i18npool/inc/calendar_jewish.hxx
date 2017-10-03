@@ -25,7 +25,7 @@
 //  class Calendar_jewish
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class Calendar_jewish : public Calendar_gregorian
 {
@@ -41,7 +41,7 @@ protected:
     void mapFromGregorian() override;
 };
 
-} } } }
+}
 
 #endif
 

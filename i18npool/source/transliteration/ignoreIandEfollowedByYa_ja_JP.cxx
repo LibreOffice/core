@@ -24,9 +24,9 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
-OneToOneMappingTable_t const IandE[] = {
+i18nutil::OneToOneMappingTable_t const IandE[] = {
     { 0x30A3, 0x0000 },  // KATAKANA LETTER SMALL I
     { 0x30A4, 0x0000 },  // KATAKANA LETTER I
     { 0x30A7, 0x0000 },  // KATAKANA LETTER SMALL E
@@ -86,7 +86,7 @@ ignoreIandEfollowedByYa_ja_JP::folding( const OUString& inStr, sal_Int32 startPo
     sal_Unicode currentChar;
 
     // One to one mapping
-    oneToOneMapping aTable(IandE, sizeof(IandE));
+    i18nutil::oneToOneMapping aTable(IandE, sizeof(IandE));
 
     // Translation
     while (-- nCount > 0) {
@@ -128,6 +128,6 @@ ignoreIandEfollowedByYa_ja_JP::folding( const OUString& inStr, sal_Int32 startPo
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

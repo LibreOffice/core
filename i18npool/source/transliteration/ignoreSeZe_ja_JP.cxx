@@ -22,7 +22,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 static const transliteration_Ignore::Mapping SeZe[] = {
     // SI + E --> SE
@@ -46,6 +46,6 @@ ignoreSeZe_ja_JP::ignoreSeZe_ja_JP()
     implementationName = "com.sun.star.i18n.Transliteration.ignoreSeZe_ja_JP";
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

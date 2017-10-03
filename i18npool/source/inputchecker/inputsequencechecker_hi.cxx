@@ -21,10 +21,7 @@
 #include <inputsequencechecker_hi.hxx>
 
 
-namespace com {
-namespace sun {
-namespace star {
-namespace i18n {
+namespace i18npool {
 
 InputSequenceChecker_hi::InputSequenceChecker_hi()
     : InputSequenceCheckerImpl("com.sun.star.i18n.InputSequenceChecker_hi")
@@ -132,6 +129,6 @@ InputSequenceChecker_hi::correctInputSequence(OUString& Text,
         nStartPos=Text.getLength();
     return nStartPos;
 }
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

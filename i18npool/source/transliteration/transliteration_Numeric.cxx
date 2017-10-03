@@ -24,10 +24,11 @@
 #include <comphelper/string.hxx>
 #include <rtl/ref.hxx>
 
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 sal_Int16 SAL_CALL transliteration_Numeric::getType()
 {
@@ -135,6 +136,6 @@ transliteration_Numeric::transliterateChar2Char( sal_Unicode inChar )
         return rtl::Reference<NativeNumberSupplierService>(new NativeNumberSupplierService)->getNativeNumberChar( inChar, aLocale, nNativeNumberMode );
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

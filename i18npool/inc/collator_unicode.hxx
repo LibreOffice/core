@@ -30,9 +30,9 @@
 //      class Collator_Unicode
 //      ----------------------------------------------------
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
-class Collator_Unicode : public cppu::WeakImplHelper < XCollator, css::lang::XServiceInfo >
+class Collator_Unicode : public cppu::WeakImplHelper < css::i18n::XCollator, css::lang::XServiceInfo >
 {
 public:
     // Constructors
@@ -45,15 +45,15 @@ public:
 
     sal_Int32 SAL_CALL compareString( const OUString& s1, const OUString& s2) override;
 
-    sal_Int32 SAL_CALL loadCollatorAlgorithm( const OUString& impl, const lang::Locale& rLocale,
+    sal_Int32 SAL_CALL loadCollatorAlgorithm( const OUString& impl, const css::lang::Locale& rLocale,
         sal_Int32 collatorOptions) override;
 
 
     // following 4 methods are implemented in collatorImpl.
-    sal_Int32 SAL_CALL loadDefaultCollator( const lang::Locale&,  sal_Int32) override {throw css::uno::RuntimeException();}
-    void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const OUString&, const lang::Locale&,
+    sal_Int32 SAL_CALL loadDefaultCollator( const css::lang::Locale&,  sal_Int32) override {throw css::uno::RuntimeException();}
+    void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const OUString&, const css::lang::Locale&,
         const css::uno::Sequence< sal_Int32 >&) override {throw css::uno::RuntimeException();}
-    css::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const lang::Locale&) override {throw css::uno::RuntimeException();}
+    css::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const css::lang::Locale&) override {throw css::uno::RuntimeException();}
     css::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& ) override {throw css::uno::RuntimeException();}
 
     //XServiceInfo
@@ -70,7 +70,7 @@ private:
 #endif
 };
 
-} } } }
+}
 
 #endif
 

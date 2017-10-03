@@ -29,10 +29,12 @@
 #include <breakiteratorImpl.hxx>
 #include <rtl/ref.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 //  class cclass_Unicode
 //  ----------------------------------------------------;
@@ -291,14 +293,14 @@ Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_CharacterClassification_Unicode_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::cclass_Unicode(context));
+    return cppu::acquire(new i18npool::cclass_Unicode(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

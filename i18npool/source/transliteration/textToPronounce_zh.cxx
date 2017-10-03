@@ -25,9 +25,10 @@
 
 #include <textToPronounce_zh.hxx>
 
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 sal_Int16 SAL_CALL TextToPronounce_zh::getType()
 {
@@ -187,6 +188,6 @@ TextToPronounce_zh::~TextToPronounce_zh()
     if (hModule) osl_unloadModule(hModule);
 #endif
 }
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

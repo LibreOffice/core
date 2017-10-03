@@ -12,7 +12,7 @@
 #include <unicode/translit.h>
 #include <unicode/uchar.h>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 ignoreDiacritics_CTL::ignoreDiacritics_CTL()
 {
@@ -93,6 +93,6 @@ ignoreDiacritics_CTL::folding(const OUString& rInStr, sal_Int32 nStartPos,
     }
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

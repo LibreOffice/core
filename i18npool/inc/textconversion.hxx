@@ -28,7 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/module.h>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class TextConversionService
@@ -159,10 +159,7 @@ private:
         css::lang::Locale aLocale;
 };
 
-} // i18n
-} // star
-} // sun
-} // com
+} // i18npool
 
 #endif
 

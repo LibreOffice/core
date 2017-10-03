@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class IndexEntrySupplier
@@ -87,7 +87,7 @@ protected:
     OUString          aSortAlgorithm;
 };
 
-} } } }
+}
 
 #endif
 
