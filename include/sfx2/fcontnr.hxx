@@ -41,8 +41,6 @@ class SfxFilterContainer_Impl;
 class SfxFrame;
 
 
-typedef sal_uIntPtr (*SfxDetectFilter)( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust, SfxFilterFlags nDont );
-
 class SFX2_DLLPUBLIC SfxFilterContainer
 {
     std::unique_ptr<SfxFilterContainer_Impl> pImpl;
