@@ -754,7 +754,7 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
 
         if( SUCCEEDED(hres) )
         {
-            hres = ppf->Save( reinterpret_cast<LPCOLESTR>(rAbsShortcut.getStr()), TRUE );
+            hres = ppf->Save( SAL_W(rAbsShortcut.getStr()), TRUE );
             ppf->Release();
         } else return FALSE;
         psl->Release();

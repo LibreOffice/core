@@ -47,7 +47,7 @@ bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
 
 bool createUnoTypeWrapper(const OUString& sTypeName, VARIANT * pVar)
 {
-    CComBSTR bstr(reinterpret_cast<LPCOLESTR>(sTypeName.getStr()));
+    CComBSTR bstr(SAL_W(sTypeName.getStr()));
     return createUnoTypeWrapper(bstr, pVar);
 }
 

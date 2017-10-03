@@ -88,11 +88,11 @@ namespace fs
             return std::string(tmp.getStr());
         }
 #ifdef _WIN32
-        wchar_t const * native_file_string_w() const
+        std::wstring native_file_string_w() const
         {
             OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            return reinterpret_cast<wchar_t const *>(ustrSystemPath.getStr());
+            return std::wstring(SAL_W(ustrSystemPath.getStr()));
         }
 #endif
         std::string toUTF8() const

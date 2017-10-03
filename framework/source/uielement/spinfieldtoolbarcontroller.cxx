@@ -459,12 +459,11 @@ OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
 
         aBuffer[0] = 0;
         if ( m_bFloat )
-            _snwprintf( reinterpret_cast<wchar_t *>(aBuffer), 128, reinterpret_cast<const wchar_t *>(m_aOutFormat.getStr()), fValue );
+            _snwprintf( SAL_W(aBuffer), SAL_N_ELEMENTS(aBuffer), SAL_W(m_aOutFormat.getStr()), fValue );
         else
-            _snwprintf( reinterpret_cast<wchar_t *>(aBuffer), 128, reinterpret_cast<const wchar_t *>(m_aOutFormat.getStr()), sal_Int32( fValue ));
+            _snwprintf( SAL_W(aBuffer), SAL_N_ELEMENTS(aBuffer), SAL_W(m_aOutFormat.getStr()), sal_Int32( fValue ));
 
-        sal_Int32 nSize = rtl_ustr_getLength( aBuffer );
-        return OUString( aBuffer, nSize );
+        return aBuffer;
 #else
         // Currently we have no support for a format string using sal_Unicode. wchar_t
         // is 32 bit on Unix platform!

@@ -78,8 +78,13 @@ IMediaDet* implCreateMediaDet( const OUString& rURL )
         if( osl::FileBase::getSystemPathFromFileURL( rURL, aLocalStr )
             == osl::FileBase::E_None )
         {
-            if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( reinterpret_cast<LPCOLESTR>(aLocalStr.getStr()) ) ) ) )
+            BSTR bstrFilename = SysAllocString(SAL_W(aLocalStr.getStr()));
+            if( !SUCCEEDED( pDet->put_Filename( bstrFilename ) ) )
             {
+                // Shouldn't we free this string unconditionally, not only in case of failure?
+                // I cannot find information why do we pass a newly allocated BSTR to the put_Filename
+                // and if it frees the string internally
+                SysFreeString(bstrFilename);
                 pDet->Release();
                 pDet = nullptr;
             }

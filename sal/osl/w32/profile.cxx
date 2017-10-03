@@ -1977,7 +1977,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
         while ((strPath[i] != L'"') && (strPath[i] != L'\0'))
             i++;
 
-        WideCharToMultiByte(CP_ACP,0, reinterpret_cast<LPCWSTR>(strPath), i, Product, sizeof(Product), nullptr, nullptr);
+        WideCharToMultiByte(CP_ACP,0, SAL_W(strPath), i, Product, sizeof(Product), nullptr, nullptr);
         Product[i] = '\0';
         strPath += i;
 
@@ -2121,12 +2121,12 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                         ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
                         int nLen = 0;
 
-                        if ((nLen = WideCharToMultiByte(CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr)) > 0)
+                        if ((nLen = WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr)) > 0)
                         {
                             strcpy(aTmpPath + nLen, SVERSION_USER);
                             if (access(aTmpPath, 0) >= 0)
                             {
-                                dwPathLen += MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, reinterpret_cast<LPWSTR>(aPath + dwPathLen), aPath.getBufSizeInSymbols() - dwPathLen );
+                                dwPathLen += MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, SAL_W(aPath + dwPathLen), aPath.getBufSizeInSymbols() - dwPathLen );
                             }
                         }
                     }
@@ -2180,7 +2180,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
         /* if we have no product identification use the executable file name */
         if (*Product == 0)
         {
-            WideCharToMultiByte(CP_ACP,0, reinterpret_cast<LPCWSTR>(strExecutable->buffer + nPos + 1), -1, Product, sizeof(Product), nullptr, nullptr);
+            WideCharToMultiByte(CP_ACP,0, SAL_W(strExecutable->buffer + nPos + 1), -1, Product, sizeof(Product), nullptr, nullptr);
 
             /* remove extension */
             if ((pChr = strrchr(Product, '.')) != nullptr)
@@ -2203,7 +2203,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
         {
             ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
 
-            WideCharToMultiByte(CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
+            WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
 
             /* if file not exists, remove any specified subdirectories
                like "bin" or "program" */
@@ -2227,7 +2227,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                             }
                             else
                             {
-                                dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, reinterpret_cast<LPWSTR>(aPath + nPos + 1), aPath.getBufSizeInSymbols() - (nPos + 1) );
+                                dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, SAL_W(aPath + nPos + 1), aPath.getBufSizeInSymbols() - (nPos + 1) );
                             }
                         }
                         else
@@ -2252,7 +2252,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
         {
             ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
 
-            WideCharToMultiByte(CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
+            WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
 
             if ((access(aTmpPath, 0) < 0) && (Product[0] != '\0'))
             {
@@ -2301,7 +2301,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                         if (Buffer[0] != '\0')
                         {
                             dwPathLen = MultiByteToWideChar(
-                                CP_ACP, 0, Buffer, -1, ::osl::mingw_reinterpret_cast<LPWSTR>(aPath), aPath.getBufSizeInSymbols() );
+                                CP_ACP, 0, Buffer, -1, SAL_W(aPath), aPath.getBufSizeInSymbols() );
                             dwPathLen -=1;
 
                             /* build full path */
@@ -2322,7 +2322,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                                 int n;
 
                                 if ((n = WideCharToMultiByte(
-                                         CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath2,
+                                         CP_ACP,0, SAL_W(aPath), -1, aTmpPath2,
                                          aTmpPath2.getBufSizeInSymbols(), nullptr, nullptr))
                                     > 0)
                                 {
@@ -2331,7 +2331,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                                     {
                                         dwPathLen += MultiByteToWideChar(
                                             CP_ACP, 0, SVERSION_USER, -1,
-                                            reinterpret_cast<LPWSTR>(aPath + dwPathLen),
+                                            SAL_W(aPath + dwPathLen),
                                             aPath.getBufSizeInSymbols() - dwPathLen );
                                     }
                                 }

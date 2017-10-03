@@ -56,7 +56,7 @@ STDMETHODIMP CAccImage::get_description(BSTR * description)
 
     ::rtl::OUString ouStr = GetXInterface()->getAccessibleImageDescription();
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString(reinterpret_cast<wchar_t const *>(ouStr.getStr()));
+    *description = SysAllocString(SAL_W(ouStr.getStr()));
 
     return S_OK;
 
