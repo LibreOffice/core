@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_a530cd02",
+        "filename": "avmedia/source/win/framegrabber.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-03T12:15:20Z",
+      "side": 1,
+      "message": "hmmm, according this:\n    https://msdn.microsoft.com/en-us/library/xda6xzx7.aspx\nwe should be freeing stuff allocated with SysAllocString?",
+      "revId": "1ee36a9cb75d76894d021bd385c1c6b34ca88175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_2513fd67",
+        "filename": "winaccessibility/source/UAccCOM/AccTextBase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-03T12:15:20Z",
+      "side": 1,
+      "message": "indentation?",
+      "revId": "1ee36a9cb75d76894d021bd385c1c6b34ca88175",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
