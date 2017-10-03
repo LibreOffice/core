@@ -69,9 +69,7 @@ enum class SdrAnimationMode
 };
 
 
-// Typedefs and defines
-typedef unsigned char SDR_TRISTATE;
-#define FUZZY                   (2)
+// defines
 #define SDR_ANYFORMAT           (0xFFFFFFFF)
 #define SDR_ANYITEM             (0xFFFF)
 #define SDRVIEWWIN_NOTFOUND     (0xFFFF)

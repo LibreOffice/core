@@ -48,12 +48,12 @@ public:
     // which one wished to check,set or delete
     // possible values for nThisEsc are:
     // SdrEscapeDirection::LEFT, SdrEscapeDirection::RIGHT, SdrEscapeDirection::TOP and SdrEscapeDirection::BOTTOM
-    SDR_TRISTATE IsMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc) const;
+    TriState IsMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc) const;
     void SetMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc, bool bOn);
 
     // check/set, if the GluePoints are relative to the
     // object size (Percent=sal_True) or not (Percent=sal_False)
-    SDR_TRISTATE IsMarkedGluePointsPercent() const;
+    TriState IsMarkedGluePointsPercent() const;
     void SetMarkedGluePointsPercent(bool bOn);
 
     // bVert=FALSE: check/set hotizontal alignment

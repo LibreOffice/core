@@ -479,7 +479,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         SfxItemState::DEFAULT == rSet.GetItemState( SID_GLUE_VERTALIGN_BOTTOM ) )
     {
         // percent
-        SDR_TRISTATE eState = mpDrawView->IsMarkedGluePointsPercent();
+        TriState eState = mpDrawView->IsMarkedGluePointsPercent();
         if( eState == TRISTATE_INDET )
             rSet.InvalidateItem( SID_GLUE_PERCENT );
         else
