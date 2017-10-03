@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4571e9df",
+        "filename": "cui/source/options/certpath.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-03T11:25:28Z",
+      "side": 1,
+      "message": "best to leave these declarations alone, we prefer static data to be const char, rather than OUString, is more efficient at startup time",
+      "revId": "ba289442a3f6dbd20af6fea37997f3adf380693d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
