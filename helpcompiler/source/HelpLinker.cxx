@@ -38,6 +38,17 @@
 #include <expat.h>
 #include <memory>
 
+namespace {
+FILE* fopen_impl(const fs::path& rPath, const char* szMode)
+{
+#ifdef _WIN32     //We need _wfopen to support long file paths on Windows XP
+    return _wfopen(rPath.native_file_string_w().c_str(), SAL_W(OUString::createFromAscii(szMode).getStr()));
+#else
+    return fopen(rPath.native_file_string().c_str(), sMode);
+#endif
+}
+}
+
 IndexerPreProcessor::IndexerPreProcessor
     ( const fs::path& fsIndexBaseDir,
       const fs::path& idxCaptionStylesheet, const fs::path& idxContentStylesheet )
@@ -87,13 +98,7 @@ void IndexerPreProcessor::processDocument
         if( pResNodeCaption )
         {
             fs::path fsCaptionPureTextFile_docURL = m_fsCaptionFilesDirName / aStdStr_EncodedDocPathURL;
-#ifdef _WIN32     //We need _wfopen to support long file paths on Windows XP
-            FILE* pFile_docURL = _wfopen(
-                fsCaptionPureTextFile_docURL.native_file_string_w(), L"w" );
-#else
-            FILE* pFile_docURL = fopen(
-                fsCaptionPureTextFile_docURL.native_file_string().c_str(), "w" );
-#endif
+            FILE* pFile_docURL = fopen_impl( fsCaptionPureTextFile_docURL, "w" );
             if( pFile_docURL )
             {
                 fprintf( pFile_docURL, "%s\n", pResNodeCaption->content );
@@ -110,13 +115,7 @@ void IndexerPreProcessor::processDocument
         if( pResNodeContent )
         {
             fs::path fsContentPureTextFile_docURL = m_fsContentFilesDirName / aStdStr_EncodedDocPathURL;
-#ifdef _WIN32     //We need _wfopen to support long file paths on Windows XP
-            FILE* pFile_docURL = _wfopen(
-                fsContentPureTextFile_docURL.native_file_string_w(), L"w" );
-#else
-            FILE* pFile_docURL = fopen(
-                fsContentPureTextFile_docURL.native_file_string().c_str(), "w" );
-#endif
+            FILE* pFile_docURL = fopen_impl( fsContentPureTextFile_docURL, "w" );
             if( pFile_docURL )
             {
                 fprintf( pFile_docURL, "%s\n", pResNodeContent->content );
@@ -186,11 +185,7 @@ public:
 
     void dump_DBHelp( const fs::path& rFileName )
     {
-#ifdef _WIN32     //We need _wfopen to support long file paths on Windows XP
-        FILE* pFile = _wfopen( rFileName.native_file_string_w(), L"wb" );
-#else
-        FILE* pFile = fopen( rFileName.native_file_string().c_str(), "wb" );
-#endif
+        FILE* pFile = fopen_impl( rFileName, "wb" );
         if( pFile == nullptr )
             return;
 
@@ -296,25 +291,10 @@ void HelpLinker::link()
         bUse_ = false;
 
     fs::path helpTextFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".ht_" : ".ht")));
-#ifdef _WIN32
-    //We need _wfopen to support long file paths on Windows XP
-    FILE* pFileHelpText_DBHelp = _wfopen
-        ( helpTextFileName_DBHelp.native_file_string_w(), L"wb" );
-#else
-
-    FILE* pFileHelpText_DBHelp = fopen
-        ( helpTextFileName_DBHelp.native_file_string().c_str(), "wb" );
-#endif
+    FILE* pFileHelpText_DBHelp = fopen_impl( helpTextFileName_DBHelp, "wb" );
 
     fs::path dbBaseFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".db_" : ".db")));
-#ifdef _WIN32
-    //We need _wfopen to support long file paths on Windows XP
-    FILE* pFileDbBase_DBHelp = _wfopen
-        ( dbBaseFileName_DBHelp.native_file_string_w(), L"wb" );
-#else
-    FILE* pFileDbBase_DBHelp = fopen
-        ( dbBaseFileName_DBHelp.native_file_string().c_str(), "wb" );
-#endif
+    FILE* pFileDbBase_DBHelp = fopen_impl( dbBaseFileName_DBHelp, "wb" );
 
     fs::path keyWordFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".key_" : ".key")));
 

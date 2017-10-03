@@ -505,7 +505,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& 
 
     WideCharToMultiByteEx(
         GetACP( ),
-        reinterpret_cast<LPCWSTR>( aUnicodeText.getStr( ) ),
+        SAL_W( aUnicodeText.getStr( ) ),
         aUnicodeText.getLength( ),
         stgTransfHelper );
 

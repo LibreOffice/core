@@ -78,7 +78,7 @@ IMediaDet* implCreateMediaDet( const OUString& rURL )
         if( osl::FileBase::getSystemPathFromFileURL( rURL, aLocalStr )
             == osl::FileBase::E_None )
         {
-            if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( reinterpret_cast<LPCOLESTR>(aLocalStr.getStr()) ) ) ) )
+            if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( SAL_W(aLocalStr.getStr()) ) ) ) )
             {
                 pDet->Release();
                 pDet = nullptr;

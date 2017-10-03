@@ -364,10 +364,10 @@ bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
     // pre SHBrowseFroFolder
 
     m_bi.pidlRoot       = nullptr;
-    m_bi.pszDisplayName = reinterpret_cast<LPWSTR>(m_pathBuff);
+    m_bi.pszDisplayName = SAL_W(m_pathBuff);
 
     if ( m_Description.getLength( ) )
-        m_bi.lpszTitle = reinterpret_cast<LPCWSTR>(m_Description.getStr( ));
+        m_bi.lpszTitle = SAL_W(m_Description.getStr( ));
 
     lpiid = SHBrowseForFolderW( &m_bi );
     bRet = ( nullptr != lpiid );
@@ -409,7 +409,7 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& a
         pIShellFolder->ParseDisplayName(
             nullptr,
             nullptr,
-            reinterpret_cast<LPWSTR>(const_cast< sal_Unicode* >( aDirectory.getStr( ) )),
+            const_cast<LPWSTR>(SAL_W( aDirectory.getStr( ) )),
             nullptr,
             &lpItemIdList,
             nullptr );
