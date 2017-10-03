@@ -1167,22 +1167,22 @@ void DrawViewShell::ResetActualLayer()
 
                         // Set page bits for modified tab name display
 
-                        TabBarPageBits nBits = 0;
+                        TabBarPageBits nBits = TabBarPageBits::NONE;
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
                         if (pPV)
                         {
                             if (!pPV->IsLayerVisible(aName))
                             {
-                                nBits |= TPB_DISPLAY_NAME_BLUE;
+                                nBits |= TabBarPageBits::Blue;
                             }
                             if (pPV->IsLayerLocked(aName))
                             {
-                                nBits |= TPB_DISPLAY_NAME_ITALIC;
+                                nBits |= TabBarPageBits::Italic;
                             }
                             if (!pPV->IsLayerPrintable(aName))
                             {
-                                nBits |= TPB_DISPLAY_NAME_UNDERLINE;
+                                nBits |= TabBarPageBits::Underline;
                             }
                         }
 
@@ -1200,19 +1200,19 @@ void DrawViewShell::ResetActualLayer()
 
                         // Set page bits for modified tab name display
 
-                        TabBarPageBits nBits = 0;
+                        TabBarPageBits nBits = TabBarPageBits::NONE;
 
                         if (!mpDrawView->GetSdrPageView()->IsLayerVisible(aName))
                         {
-                            nBits = TPB_DISPLAY_NAME_BLUE;
+                            nBits = TabBarPageBits::Blue;
                         }
                         if (mpDrawView->GetSdrPageView()->IsLayerLocked(aName))
                         {
-                            nBits |= TPB_DISPLAY_NAME_ITALIC;
+                            nBits |= TabBarPageBits::Italic;
                         }
                         if (!mpDrawView->GetSdrPageView()->IsLayerPrintable(aName))
                         {
-                            nBits |= TPB_DISPLAY_NAME_UNDERLINE;
+                            nBits |= TabBarPageBits::Underline;
                         }
 
                         // Save the bits

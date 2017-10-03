@@ -190,19 +190,19 @@ void DrawViewShell::ModifyLayer (
 
         // Set page bits for modified tab name display
 
-        TabBarPageBits nBits = 0;
+        TabBarPageBits nBits = TabBarPageBits::NONE;
 
         if (!bIsVisible)
         {
-            nBits = TPB_DISPLAY_NAME_BLUE;
+            nBits = TabBarPageBits::Blue;
         }
         if (bIsLocked)
         {
-            nBits |= TPB_DISPLAY_NAME_ITALIC;
+            nBits |= TabBarPageBits::Italic;
         }
         if (!bIsPrintable)
         {
-            nBits |= TPB_DISPLAY_NAME_UNDERLINE;
+            nBits |= TabBarPageBits::Underline;
         }
 
         // Save the bits
