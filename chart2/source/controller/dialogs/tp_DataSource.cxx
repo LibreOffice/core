@@ -241,8 +241,8 @@ DataSourceTabPage::DataSourceTabPage(
     m_pEDT_CATEGORIES->SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
 
     // #i75179# enable setting the background to a different color
-    m_pEDT_RANGE->SetStyle( m_pEDT_RANGE->GetStyle() | WB_FORCECTRLBACKGROUND );
-    m_pEDT_CATEGORIES->SetStyle( m_pEDT_CATEGORIES->GetStyle() | WB_FORCECTRLBACKGROUND );
+    m_pEDT_RANGE->SetForceControlBackground(true);
+    m_pEDT_CATEGORIES->SetForceControlBackground(true);
 
     // set symbol font for arrows
     // note: StarSymbol is substituted to OpenSymbol for OOo

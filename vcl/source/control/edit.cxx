@@ -282,6 +282,7 @@ void Edit::ImplInitEditData()
     mbClickedInSelection    = false;
     mbActivePopup           = false;
     mbIsSubEdit             = false;
+    mbForceControlBackground = false;
     mpDDInfo                = nullptr;
     mpIMEInfos              = nullptr;
     mcEchoChar              = 0;
@@ -512,7 +513,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
         rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
 
     // Set background color of the normal text
-    if ((GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground())
+    if (mbForceControlBackground && IsControlBackground())
     {
         // check if we need to set ControlBackground even in NWF case
         rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
@@ -584,7 +585,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
             // Set background color when part of the text is selected
             if (ImplUseNativeBorder(rRenderContext, GetStyle()))
             {
-                if( (GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground() )
+                if( mbForceControlBackground && IsControlBackground() )
                     rRenderContext.SetTextFillColor(GetControlBackground());
                 else
                     rRenderContext.SetTextFillColor();
