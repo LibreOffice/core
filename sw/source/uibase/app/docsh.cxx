@@ -467,9 +467,14 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
             m_pDoc->SetContainsMSVBasic( false );
         }
 
-        // End TableBox Edit!
         if (m_pWrtShell)
+        {
+            // End TableBox Edit!
             m_pWrtShell->EndAllTableBoxEdit();
+
+            // Remove invalid signatures.
+            m_pWrtShell->ValidateParagraphSignatures(false);
+        }
 
         // Remember and preserve Modified-Flag without calling the Link
         // (for OLE; after Statement from MM)
