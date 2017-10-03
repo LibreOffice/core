@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_65a425a6",
+        "filename": "offapi/com/sun/star/security/XDocumentDigitalSignatures.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-10-03T07:40:58Z",
+      "side": 1,
+      "message": "As discussed, it would be better to return a sequence\u003cPropertyValue\u003e to avoid the need for incompatible changes later, when a 3rd property has to be exposed.",
+      "revId": "d0f4dcfe739e59d42b0ec9fb053b3c9bed963cc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
