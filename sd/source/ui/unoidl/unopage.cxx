@@ -1490,6 +1490,7 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
                 break;
             // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
             case PRESOBJ_NONE:
+            case PRESOBJ_IMAGE:
             case PRESOBJ_MAX:
                 break;
             }

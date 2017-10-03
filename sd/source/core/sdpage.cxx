@@ -225,6 +225,7 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
                 case PRESOBJ_ORGCHART:
                 case PRESOBJ_TABLE:
                 case PRESOBJ_CALC:
+                case PRESOBJ_IMAGE:
                 case PRESOBJ_MEDIA:
                     bFound = true;
                     break;

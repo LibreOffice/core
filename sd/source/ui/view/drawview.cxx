@@ -549,6 +549,7 @@ void DrawView::DeleteMarked()
                     case PRESOBJ_ORGCHART:
                     case PRESOBJ_TABLE:
                     case PRESOBJ_CALC:
+                    case PRESOBJ_IMAGE:
                     case PRESOBJ_MEDIA:
                         ePresObjKind = PRESOBJ_OUTLINE;
                         break;
