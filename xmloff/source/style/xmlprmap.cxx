@@ -68,6 +68,12 @@ struct XMLPropertySetMapperEntry_Impl
     XMLPropertySetMapperEntry_Impl(
         const XMLPropertySetMapperEntry_Impl& rEntry );
 
+    XMLPropertySetMapperEntry_Impl(XMLPropertySetMapperEntry_Impl&& property) = default;
+    XMLPropertySetMapperEntry_Impl& operator=(const XMLPropertySetMapperEntry_Impl& property) = default;
+    XMLPropertySetMapperEntry_Impl& operator=(XMLPropertySetMapperEntry_Impl&& property) = default;
+
+    ~XMLPropertySetMapperEntry_Impl();
+
     sal_uInt32 GetPropType() const { return nType & XML_TYPE_PROP_MASK; }
 };
 
@@ -99,6 +105,16 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     pHdl( rEntry.pHdl)
 {
     assert(pHdl);
+}
+
+XMLPropertySetMapperEntry_Impl::~XMLPropertySetMapperEntry_Impl()
+{
+    // only case when the pointer has been created from a plain new instead of
+    // retrieving a pointer from unique_ptr (made with o3tl::make_unique)
+    // see OControlPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType)
+    // from xmloff/source/forms/controlpropertyhdl.cxx
+    if (nType == XML_TYPE_TEXT_LINE_MODE)
+        delete pHdl;
 }
 
 struct XMLPropertySetMapper::Impl
