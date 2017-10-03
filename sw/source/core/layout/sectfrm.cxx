@@ -1470,7 +1470,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
     // if no columns or pages (except dummy pages) lie in between.
     // In case of linked frames and in footnotes the shortcut would get
     // even more costly
-    if( pSect->HasFollow() && pSect->IsInDocBody() )
+    if( pSect->HasFollow() && pSect->IsInDocBody() && !pSect->IsInTab() )
     {
         if( pSect->GetFollow() == pSect->GetNext() )
         {
