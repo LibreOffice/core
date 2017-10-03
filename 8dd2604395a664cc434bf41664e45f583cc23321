@@ -16,6 +16,24 @@
       "revId": "8dd2604395a664cc434bf41664e45f583cc23321",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_80149f44",
+        "filename": "avmedia/source/win/framegrabber.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-10-03T12:55:09Z",
+      "side": 1,
+      "message": "Not sure we should. Why would we need to use the newly allocated string for that, if the API didn\u0027t make use of it internally? We could just pass the pointer to const string then that we now pass to SysAllocString",
+      "parentUuid": "1a430d35_400ab722",
+      "revId": "8dd2604395a664cc434bf41664e45f583cc23321",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
