@@ -306,8 +306,8 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
 
     get(m_pCloseBtn, "close");
 
-    get(m_pIgnoreDiacritics, "ignorediacritics");
-    get(m_pIgnoreKashida, "ignorekashida");
+    get(m_pIncludeDiacritics, "includediacritics");
+    get(m_pIncludeKashida, "includekashida");
     get(m_pSelectionBtn, "selection");
     get(m_pReplaceBackwardsCB, "replace_backwards");
     get(m_pRegExpBtn, "regexp");
@@ -386,8 +386,8 @@ void SvxSearchDialog::dispose()
     m_pSearchFormattedCB.clear();
     m_pWordBtn.clear();
     m_pCloseBtn.clear();
-    m_pIgnoreDiacritics.clear();
-    m_pIgnoreKashida.clear();
+    m_pIncludeDiacritics.clear();
+    m_pIncludeKashida.clear();
     m_pSelectionBtn.clear();
     m_pReplaceBackwardsCB.clear();
     m_pRegExpBtn.clear();
@@ -477,10 +477,10 @@ void SvxSearchDialog::Construct_Impl()
     SvtCTLOptions aCTLOptions;
     if(!aCTLOptions.IsCTLFontEnabled())
     {
-        m_pIgnoreDiacritics->Check( false );
-        m_pIgnoreDiacritics->Hide();
-        m_pIgnoreKashida->Check( false );
-        m_pIgnoreKashida->Hide();
+        m_pIncludeDiacritics->Check( false );
+        m_pIncludeDiacritics->Hide();
+        m_pIncludeKashida->Check( false );
+        m_pIncludeKashida->Hide();
     }
     //component extension - show component search buttons if the commands
     // vnd.sun.star::SearchViaComponent1 and 2 are supported
@@ -563,8 +563,8 @@ bool SvxSearchDialog::Close()
     aOpt.SetSimilaritySearch        ( m_pSimilarityBox->IsChecked() );
     aOpt.SetUseAsianOptions         ( m_pJapOptionsCB->IsChecked() );
     aOpt.SetNotes                   ( m_pNotesBtn->IsChecked() );
-    aOpt.SetIgnoreDiacritics_CTL    ( m_pIgnoreDiacritics->IsChecked() );
-    aOpt.SetIgnoreKashida_CTL       ( m_pIgnoreKashida->IsChecked() );
+    aOpt.SetIgnoreDiacritics_CTL    ( !m_pIncludeDiacritics->IsChecked() );
+    aOpt.SetIgnoreKashida_CTL       ( !m_pIncludeKashida->IsChecked() );
     aOpt.SetSearchFormatted         ( m_pSearchFormattedCB->IsChecked() );
     aOpt.Commit();
 
@@ -665,8 +665,8 @@ void SvxSearchDialog::InitControls_Impl()
     m_pSimilarityBox->SetClickHdl( aLink2 );
     m_pJapOptionsCB->SetClickHdl( aLink2 );
     m_pJapMatchFullHalfWidthCB->SetClickHdl( aLink2 );
-    m_pIgnoreDiacritics->SetClickHdl( aLink2 );
-    m_pIgnoreKashida->SetClickHdl( aLink2 );
+    m_pIncludeDiacritics->SetClickHdl( aLink2 );
+    m_pIncludeKashida->SetClickHdl( aLink2 );
     m_pLayoutBtn->SetClickHdl( LINK( this, SvxSearchDialog, TemplateHdl_Impl ) );
     m_pFormatBtn->SetClickHdl( LINK( this, SvxSearchDialog, FormatHdl_Impl ) );
     m_pNoFormatBtn->SetClickHdl(
@@ -719,8 +719,8 @@ void SvxSearchDialog::ShowOptionalControls_Impl()
     m_pSimilarityBox->Show();
     m_pSimilarityBtn->Show();
     m_pSelectionBtn->Show();
-    m_pIgnoreDiacritics->Show(aCTLOptions.IsCTLFontEnabled());
-    m_pIgnoreKashida->Show(aCTLOptions.IsCTLFontEnabled());
+    m_pIncludeDiacritics->Show(aCTLOptions.IsCTLFontEnabled());
+    m_pIncludeKashida->Show(aCTLOptions.IsCTLFontEnabled());
     m_pJapMatchFullHalfWidthCB->Show(aCJKOptions.IsCJKFontEnabled());
     m_pJapOptionsCB->Show(aCJKOptions.IsJapaneseFindEnabled());
     m_pJapOptionsBtn->Show(aCJKOptions.IsJapaneseFindEnabled());
@@ -799,10 +799,10 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     m_pSimilarityBox->Check( pSearchItem->IsLevenshtein() );
     if( m_pJapOptionsCB->IsVisible() )
         m_pJapOptionsCB->Check( pSearchItem->IsUseAsianOptions() );
-    if (m_pIgnoreDiacritics->IsVisible())
-        m_pIgnoreDiacritics->Check( aOpt.IsIgnoreDiacritics_CTL() );
-    if (m_pIgnoreKashida->IsVisible())
-        m_pIgnoreKashida->Check( aOpt.IsIgnoreKashida_CTL() );
+    if (m_pIncludeDiacritics->IsVisible())
+        m_pIncludeDiacritics->Check( !aOpt.IsIgnoreDiacritics_CTL() );
+    if (m_pIncludeKashida->IsVisible())
+        m_pIncludeKashida->Check( !aOpt.IsIgnoreKashida_CTL() );
     ApplyTransliterationFlags_Impl( pSearchItem->GetTransliterationFlags() );
 
     ShowOptionalControls_Impl();
@@ -1329,9 +1329,9 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         if( !pSearchItem->IsUseAsianOptions())
             nFlags &= (TransliterationFlags::IGNORE_CASE |
                        TransliterationFlags::IGNORE_WIDTH );
-        if (GetCheckBoxValue(m_pIgnoreDiacritics))
+        if (!GetCheckBoxValue(m_pIncludeDiacritics))
             nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
-        if (GetCheckBoxValue(m_pIgnoreKashida))
+        if (!GetCheckBoxValue(m_pIncludeKashida))
             nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
         pSearchItem->SetTransliterationFlags( nFlags );
 
@@ -2287,17 +2287,17 @@ void SvxSearchDialog::SaveToModule_Impl()
     pSearchItem->SetUseAsianOptions(GetCheckBoxValue(m_pJapOptionsCB));
 
     SvtSearchOptions aOpt;
-    aOpt.SetIgnoreDiacritics_CTL(GetCheckBoxValue(m_pIgnoreDiacritics));
-    aOpt.SetIgnoreKashida_CTL(GetCheckBoxValue(m_pIgnoreKashida));
+    aOpt.SetIgnoreDiacritics_CTL(!GetCheckBoxValue(m_pIncludeDiacritics));
+    aOpt.SetIgnoreKashida_CTL(!GetCheckBoxValue(m_pIncludeKashida));
     aOpt.Commit();
 
     TransliterationFlags nFlags = GetTransliterationFlags();
     if( !pSearchItem->IsUseAsianOptions())
         nFlags &= (TransliterationFlags::IGNORE_CASE |
                    TransliterationFlags::IGNORE_WIDTH );
-    if (GetCheckBoxValue(m_pIgnoreDiacritics))
+    if (!GetCheckBoxValue(m_pIncludeDiacritics))
         nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
-    if (GetCheckBoxValue(m_pIgnoreKashida))
+    if (!GetCheckBoxValue(m_pIncludeKashida))
         nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
     pSearchItem->SetTransliterationFlags( nFlags );
 
