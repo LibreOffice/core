@@ -1433,6 +1433,13 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         if (nStart > nEndOfFile)
                             bStatus = false;
                     }
+
+                    if (bStatus)
+                    {
+                        sal_uLong nTargetBits = nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes;
+                        if (nTargetBits > SAL_MAX_UINT16)
+                            bStatus = false;
+                    }
                 }
                 else if ( nCompression == 5 )
                 {
