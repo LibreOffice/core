@@ -229,7 +229,6 @@ void OReportSection::fill()
 
     m_pView->SetDesignMode();
 
-    m_pView->StartListening( *m_pModel  );
     m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
     const Size aPageSize = m_pPage->GetSize();
     m_pView->SetWorkArea( tools::Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
