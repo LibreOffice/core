@@ -262,14 +262,14 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
     }
 }
 
-void ScValueIterator::GetCurNumFmtInfo( short& nType, sal_uLong& nIndex )
+void ScValueIterator::GetCurNumFmtInfo( const ScInterpreterContext& rContext, short& nType, sal_uLong& nIndex )
 {
     if (!bNumValid && mnTab < pDoc->GetTableCount())
     {
         SCROW nCurRow = GetRow();
         const ScColumn* pCol = &(pDoc->maTabs[mnTab])->aCol[mnCol];
-        nNumFmtIndex = pCol->GetNumberFormat(nCurRow);
-        nNumFmtType = pDoc->GetFormatTable()->GetType( nNumFmtIndex );
+        nNumFmtIndex = pCol->GetNumberFormat(rContext, nCurRow);
+        nNumFmtType = rContext.GetFormatTable()->GetType( nNumFmtIndex );
         bNumValid = true;
     }
 
@@ -334,11 +334,12 @@ bool ScDBQueryDataIterator::IsQueryValid(
     return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, pCell);
 }
 
-ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument* pDoc)
+ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument* pDoc, const ScInterpreterContext& rContext)
     : DataAccess()
     , mpCells(nullptr)
     , mpParam(pParam)
     , mpDoc(pDoc)
+    , mrContext(rContext)
     , pAttrArray(nullptr)
     , nNumFormat(0) // Initialized in GetNumberFormat
     , nNumFmtIndex(0)
@@ -432,7 +433,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                         rValue.mfValue = aCell.mpFormula->GetValue();
                         rValue.mbIsNumber = true;
                         mpDoc->GetNumberFormatInfo(
-                            nNumFmtType, nNumFmtIndex, ScAddress(nCol, nRow, nTab));
+                            mrContext, nNumFmtType, nNumFmtIndex, ScAddress(nCol, nRow, nTab));
                         rValue.mnError = aCell.mpFormula->GetErrCode();
                         return true; // Found it!
                     }
@@ -744,7 +745,7 @@ ScDBQueryDataIterator::Value::Value() :
     ::rtl::math::setNan(&mfValue);
 }
 
-ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam) :
+ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, ScDBQueryParamBase* pParam) :
     mpParam (pParam)
 {
     switch (mpParam->GetType())
@@ -752,7 +753,7 @@ ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryPar
         case ScDBQueryParamBase::INTERNAL:
         {
             ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pParam);
-            mpData.reset(new DataAccessInternal(p, pDocument));
+            mpData.reset(new DataAccessInternal(p, pDocument, rContext));
         }
         break;
         case ScDBQueryParamBase::MATRIX:
@@ -1046,10 +1047,11 @@ bool ScCellIterator::next()
     return getCurrent();
 }
 
-ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
+ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, SCTAB nTable,
              const ScQueryParam& rParam, bool bMod ) :
     mpParam(new ScQueryParam(rParam)),
     pDoc( pDocument ),
+    mrContext( rContext ),
     nTab( nTable),
     nStopOnMismatch( nStopOnMismatchDisabled ),
     nTestEqualCondition( nTestEqualConditionDisabled ),
@@ -1681,7 +1683,7 @@ bool ScQueryCellIterator::BinarySearch()
         if (aPos.first->type == sc::element_type_string || aPos.first->type == sc::element_type_edittext)
         {
             aCell = sc::toRefCell(aPos.first, aPos.second);
-            sal_uLong nFormat = pCol->GetNumberFormat(nRow);
+            sal_uLong nFormat = pCol->GetNumberFormat(mrContext, nRow);
             OUString aCellStr;
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
             sal_Int32 nTmp = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
@@ -1715,7 +1717,7 @@ bool ScQueryCellIterator::BinarySearch()
     aCell = aCellData.first;
     if (aCell.hasString())
     {
-        sal_uLong nFormat = pCol->GetNumberFormat(aCellData.second);
+        sal_uLong nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
         OUString aStr;
         ScCellFormat::GetInputString(aCell, nFormat, aStr, rFormatter, pDoc);
         aLastInRangeString = aStr;
@@ -1814,7 +1816,7 @@ bool ScQueryCellIterator::BinarySearch()
         else if (bStr && bByString)
         {
             OUString aCellStr;
-            sal_uLong nFormat = pCol->GetNumberFormat(aCellData.second);
+            sal_uLong nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter, pDoc);
 
             nRes = pCollator->compareString(aCellStr, rEntry.GetQueryItem().maString.getString());

@@ -106,6 +106,7 @@ class ScDocumentImport;
 class ScHint;
 enum class ScMF;
 struct ScFilterEntries;
+struct ScInterpreterContext;
 
 struct ScNeededSizeOptions
 {
@@ -447,7 +448,7 @@ public:
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
 
-    sal_uInt32 GetNumberFormat( SCROW nRow ) const;
+    sal_uInt32 GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const;
     sal_uInt32  GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const;
 
     void        MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, bool bDeep ) const;
@@ -582,7 +583,7 @@ public:
     void SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen );
     void SetFormulaResults( SCROW nRow, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
-    void CalculateInThread( SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
+    void CalculateInThread( const ScInterpreterContext& rContext, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal );
     void HandleStuffAfterParallelCalculation( SCROW nRow, size_t nLen );
 
     void SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat );
