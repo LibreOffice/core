@@ -98,8 +98,6 @@ public:
     virtual SfxBindings& GetBindings() = 0;
 };
 
-typedef sal_IntPtr (*PLinkStub)( void*, void* );
-
 class AbstractSearchProgress :public VclAbstractRefreshableDialog
 {
 protected:
