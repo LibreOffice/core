@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_400ab722",
+        "filename": "avmedia/source/win/framegrabber.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-03T12:53:23Z",
+      "side": 1,
+      "message": "ah, sorry, that was just an observation, didn\u0027t mean to say you had to fix it :-)\nBut since you did.... we should free it unconditionally, even if put_Filename succeeded",
+      "revId": "8dd2604395a664cc434bf41664e45f583cc23321",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
