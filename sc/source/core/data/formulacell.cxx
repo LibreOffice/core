@@ -1528,10 +1528,10 @@ void ScFormulaCell::Interpret()
         bool bGroupInterpreted = InterpretFormulaGroup();
         aDC.leaveGroup();
         if (!bGroupInterpreted)
-            InterpretTail( SCITP_NORMAL);
+            InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
 #else
         if (!InterpretFormulaGroup())
-            InterpretTail( SCITP_NORMAL);
+            InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
 #endif
         pDocument->DecInterpretLevel();
     }
@@ -1595,8 +1595,8 @@ void ScFormulaCell::Interpret()
                     bResumeIteration = false;
                     // Close circle once.
                     pDocument->IncInterpretLevel();
-                    rRecursionHelper.GetList().back().pCell->InterpretTail(
-                            SCITP_CLOSE_ITERATION_CIRCLE);
+                    rRecursionHelper.GetList().back().pCell->InterpretTail( pDocument->GetNonThreadedContext(),
+                                                                            SCITP_CLOSE_ITERATION_CIRCLE);
                     pDocument->DecInterpretLevel();
                     // Start at 1, init things.
                     rRecursionHelper.StartIteration();
@@ -1627,7 +1627,7 @@ void ScFormulaCell::Interpret()
                         {
                             (*aIter).aPreviousResult = pIterCell->aResult;
                             pDocument->IncInterpretLevel();
-                            pIterCell->InterpretTail( SCITP_FROM_ITERATION);
+                            pIterCell->InterpretTail( pDocument->GetNonThreadedContext(), SCITP_FROM_ITERATION);
                             pDocument->DecInterpretLevel();
                         }
                         rDone = rDone && !pIterCell->IsDirtyOrInTableOpDirty();
@@ -1699,7 +1699,7 @@ void ScFormulaCell::Interpret()
                         if (pCell->IsDirtyOrInTableOpDirty())
                         {
                             pDocument->IncInterpretLevel();
-                            pCell->InterpretTail( SCITP_NORMAL);
+                            pCell->InterpretTail( pDocument->GetNonThreadedContext(), SCITP_NORMAL);
                             pDocument->DecInterpretLevel();
                             if (!pCell->IsDirtyOrInTableOpDirty() && !pCell->IsIterCell())
                                 pCell->bRunning = (*aIter).bOldRunning;
@@ -1744,7 +1744,7 @@ class StackCleaner
 };
 }
 
-void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
+void ScFormulaCell::InterpretTail( const ScInterpreterContext& rContext, ScInterpretTailParameter eTailParam )
 {
     RecursionCounter aRecursionCounter( pDocument->GetRecursionHelper(), this);
     nSeenInIteration = pDocument->GetRecursionHelper().GetIteration();
@@ -1771,7 +1771,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
     if( pCode->GetCodeLen() && pDocument )
     {
-        ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, aPos, *pCode );
+        ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, rContext, aPos, *pCode );
         StackCleaner aStackCleaner(pInterpreter);
         FormulaError nOldErrCode = aResult.GetResultError();
         if ( nSeenInIteration == 0 )
@@ -1977,7 +1977,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             }
 
             if (bSetFormat && (bForceNumberFormat || ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)))
-                nFormatIndex = ScGlobal::GetStandardFormat(*pDocument->GetFormatTable(),
+                nFormatIndex = ScGlobal::GetStandardFormat(*rContext.GetFormatTable(),
                         nFormatIndex, nFormatType);
 
             // Do not replace a General format (which was the reason why
@@ -2164,7 +2164,7 @@ void ScFormulaCell::HandleStuffAfterParallelCalculation()
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
 
-        ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, aPos, *pCode );
+        ScInterpreter* pInterpreter = new ScInterpreter( this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode );
         StackCleaner aStackCleaner(pInterpreter);
 
         switch (pInterpreter->GetVolatileType())
@@ -4324,6 +4324,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
     static const bool bThreadingRequested = std::getenv("CPU_THREADED_CALCULATION");
 
+    // To temporarilu use threading for sc unit tests regardless of the size of the formula group,
+    // add the condition !std::getenv("LO_TESTNAME") below (with &&), and run with
+    // CPU_THREADED_CALCULATION=yes
     if (GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
@@ -4363,6 +4366,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             const unsigned mnThisThread;
             const unsigned mnThreadsTotal;
             ScDocument* mpDocument;
+            SvNumberFormatter* mpFormatter;
             const ScAddress& mrTopPos;
             SCROW mnLength;
 
@@ -4371,12 +4375,14 @@ bool ScFormulaCell::InterpretFormulaGroup()
                      unsigned nThisThread,
                      unsigned nThreadsTotal,
                      ScDocument* pDocument2,
+                     SvNumberFormatter* pFormatter,
                      const ScAddress& rTopPos,
                      SCROW nLength) :
                 comphelper::ThreadTask(rTag),
                 mnThisThread(nThisThread),
                 mnThreadsTotal(nThreadsTotal),
                 mpDocument(pDocument2),
+                mpFormatter(pFormatter),
                 mrTopPos(rTopPos),
                 mnLength(nLength)
             {
@@ -4384,10 +4390,14 @@ bool ScFormulaCell::InterpretFormulaGroup()
 
             virtual void doWork() override
             {
-                mpDocument->CalculateInColumnInThread(mrTopPos, mnLength, mnThisThread, mnThreadsTotal).MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
+                ScInterpreterContext aContext(*mpDocument, mpFormatter);
+
+                mpDocument->CalculateInColumnInThread(aContext, mrTopPos, mnLength, mnThisThread, mnThreadsTotal).MergeBackIntoNonThreadedData(mpDocument->maNonThreaded);
             }
 
         };
+
+        SvNumberFormatter* pNonThreadedFormatter = pDocument->GetNonThreadedContext().GetFormatTable();
 
         comphelper::ThreadPool& rThreadPool(comphelper::ThreadPool::getSharedOptimalPool());
         sal_Int32 nThreadCount = rThreadPool.getWorkerCount();
@@ -4404,7 +4414,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
             for (int i = 0; i < nThreadCount; ++i)
             {
-                rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, mxGroup->mpTopCell->aPos, mxGroup->mnLength));
+                rThreadPool.pushTask(new Executor(aTag, i, nThreadCount, pDocument, pNonThreadedFormatter, mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }
 
             SAL_INFO("sc.threaded", "Joining threads");
@@ -4602,14 +4612,14 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
 
         ScCompiler aComp(pDocument, aPos, aCode, pDocument->GetGrammar());
         aComp.CompileTokenArray(); // Create RPN token array.
-        ScInterpreter aInterpreter(this, pDocument, aPos, aCode);
+        ScInterpreter aInterpreter(this, pDocument, pDocument->GetNonThreadedContext(), aPos, aCode);
         aInterpreter.Interpret();
         aResult.SetToken(aInterpreter.GetResultToken().get());
     }
     else
     {
         // Formula contains no references.
-        ScInterpreter aInterpreter(this, pDocument, aPos, *pCode);
+        ScInterpreter aInterpreter(this, pDocument, pDocument->GetNonThreadedContext(), aPos, *pCode);
         aInterpreter.Interpret();
         aResult.SetToken(aInterpreter.GetResultToken().get());
     }

@@ -1700,7 +1700,7 @@ bool ScColumn::ParseString(
     if (!aParam.mpNumFormatter)
         aParam.mpNumFormatter = pDocument->GetFormatTable();
 
-    nIndex = nOldIndex = GetNumberFormat( nRow );
+    nIndex = nOldIndex = GetNumberFormat( pDocument->GetNonThreadedContext(), nRow );
     if ( rString.getLength() > 1
             && aParam.mpNumFormatter->GetType(nIndex) != css::util::NumberFormat::TEXT )
         cFirstChar = rString[0];
@@ -1922,7 +1922,7 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
 
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, rArray, eGram);
-    sal_uInt32 nCellFormat = GetNumberFormat(nRow);
+    sal_uInt32 nCellFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
@@ -1939,7 +1939,7 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
 
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, rFormula, eGram);
-    sal_uInt32 nCellFormat = GetNumberFormat(nRow);
+    sal_uInt32 nCellFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
@@ -1954,7 +1954,7 @@ ScFormulaCell* ScColumn::SetFormulaCell(
     SCROW nRow, ScFormulaCell* pCell, sc::StartListeningType eListenType )
 {
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
-    sal_uInt32 nCellFormat = GetNumberFormat(nRow);
+    sal_uInt32 nCellFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
         pCell->SetNeedNumberFormat(true);
     it = maCells.set(it, nRow, pCell);
@@ -1971,7 +1971,7 @@ void ScColumn::SetFormulaCell(
     sc::StartListeningType eListenType )
 {
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
-    sal_uInt32 nCellFormat = GetNumberFormat(nRow);
+    sal_uInt32 nCellFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
         pCell->SetNeedNumberFormat(true);
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pCell);
@@ -2002,7 +2002,7 @@ bool ScColumn::SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells 
         for (size_t i = 0, n = rCells.size(); i < n; ++i)
         {
             SCROW nThisRow = nRow + i;
-            sal_uInt32 nFmt = GetNumberFormat(nThisRow);
+            sal_uInt32 nFmt = GetNumberFormat(pDocument->GetNonThreadedContext(), nThisRow);
             if ((nFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                 rCells[i]->SetNeedNumberFormat(true);
         }
@@ -2055,7 +2055,7 @@ class FilterEntriesHandler
     {
         SvNumberFormatter* pFormatter = mrColumn.GetDoc().GetFormatTable();
         OUString aStr;
-        sal_uLong nFormat = mrColumn.GetNumberFormat(nRow);
+        sal_uLong nFormat = mrColumn.GetNumberFormat(mrColumn.GetDoc().GetNonThreadedContext(), nRow);
         ScCellFormat::GetInputString(rCell, nFormat, aStr, *pFormatter, &mrColumn.GetDoc());
 
         if (rCell.hasString())
@@ -2543,7 +2543,7 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
     if (aCell.meType == CELLTYPE_FORMULA)
         aCell.mpFormula->MaybeInterpret();
 
-    sal_uLong nFormat = GetNumberFormat(nRow);
+    sal_uLong nFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
     Color* pColor = nullptr;
     ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()), pDocument);
 }
@@ -2564,7 +2564,7 @@ double* ScColumn::GetValueCell( SCROW nRow )
 void ScColumn::GetInputString( SCROW nRow, OUString& rString ) const
 {
     ScRefCellValue aCell = GetCellValue(nRow);
-    sal_uLong nFormat = GetNumberFormat(nRow);
+    sal_uLong nFormat = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
     ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()), pDocument);
 }
 

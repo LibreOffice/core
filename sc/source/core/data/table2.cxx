@@ -1899,17 +1899,17 @@ const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich )
         return nullptr;
 }
 
-sal_uInt32 ScTable::GetNumberFormat( const ScAddress& rPos ) const
+sal_uInt32 ScTable::GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& rPos ) const
 {
     return ValidColRow(rPos.Col(),rPos.Row()) ?
-        aCol[rPos.Col()].GetNumberFormat( rPos.Row() ) :
+        aCol[rPos.Col()].GetNumberFormat( rContext, rPos.Row() ) :
         0;
 }
 
 sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol,nRow))
-        return aCol[nCol].GetNumberFormat( nRow );
+        return aCol[nCol].GetNumberFormat( pDocument->GetNonThreadedContext(), nRow );
     else
         return 0;
 }

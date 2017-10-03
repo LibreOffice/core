@@ -29,6 +29,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <scdll.hxx>
 #include <scdllapi.h>
+#include <interpretercontext.hxx>
 #include <types.hxx>
 #include <externalrefmgr.hxx>
 #include <calcconfig.hxx>
@@ -198,6 +199,7 @@ private:
     formula::FormulaTokenIterator aCode;
     ScAddress   aPos;
     ScTokenArray& rArr;
+    const ScInterpreterContext& mrContext;
     ScDocument* pDok;
     sfx2::LinkManager* mpLinkManager;
     svl::SharedStringPool& mrStrPool;
@@ -988,7 +990,7 @@ private:
     double GetTInv( double fAlpha, double fSize, int nType );
 
 public:
-    ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
+    ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, const ScInterpreterContext& rContext,
                     const ScAddress&, ScTokenArray& );
     ~ScInterpreter();
 
