@@ -203,7 +203,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
                 if (pFCell->IsValue())
                 {
                     fValue = pFCell->GetValue();
-                    pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
+                    pDok->GetNumberFormatInfo( mrContext, nCurFmtType, nCurFmtIndex,
                         rPos );
                 }
                 else
@@ -221,7 +221,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
         case CELLTYPE_VALUE:
         {
             fValue = rCell.mfValue;
-            nCurFmtIndex = pDok->GetNumberFormat( rPos );
+            nCurFmtIndex = pDok->GetNumberFormat( mrContext, rPos );
             nCurFmtType = pFormatter->GetType( nCurFmtIndex );
             if ( bCalcAsShown && fValue != 0.0 )
                 fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex );
@@ -697,7 +697,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
     {
         bool bInherited = (aCell.meType == CELLTYPE_FORMULA);
         if (pRetTypeExpr && pRetIndexExpr)
-            pDok->GetNumberFormatInfo(*pRetTypeExpr, *pRetIndexExpr, rAddress);
+            pDok->GetNumberFormatInfo(mrContext, *pRetTypeExpr, *pRetIndexExpr, rAddress);
         PushTempToken( new ScEmptyCellToken( bInherited, bDisplayEmptyAsString));
         return;
     }
@@ -2503,7 +2503,7 @@ void ScInterpreter::ScDBGet()
     }
 
     pQueryParam->mbSkipString = false;
-    ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
+    ScDBQueryDataIterator aValIter(pDok, mrContext, pQueryParam.release());
     ScDBQueryDataIterator::Value aValue;
     if (!aValIter.GetFirst(aValue) || aValue.mnError != FormulaError::NONE)
     {
@@ -3782,18 +3782,19 @@ void ScInterpreter::ScTTT()
     PushError(FormulaError::NoValue);
 }
 
-ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
+ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc, const ScInterpreterContext& rContext,
         const ScAddress& rPos, ScTokenArray& r )
     : aCode(r)
     , aPos(rPos)
     , rArr(r)
+    , mrContext(rContext)
     , pDok(pDoc)
     , mpLinkManager(pDok->GetLinkManager())
     , mrStrPool(pDoc->GetSharedStringPool())
     , pJumpMatrix(nullptr)
     , pTokenMatrixMap(nullptr)
     , pMyFormulaCell(pCell)
-    , pFormatter(pDoc->GetFormatTable())
+    , pFormatter(rContext.GetFormatTable())
     , pCur(nullptr)
     , nGlobalError(FormulaError::NONE)
     , sp(0)

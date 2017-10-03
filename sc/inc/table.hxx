@@ -116,6 +116,7 @@ class ScRangeName;
 class ScDBData;
 class ScDocumentImport;
 class ScHint;
+struct ScInterpreterContext;
 
 class ScColumnsRange final
 {
@@ -672,7 +673,7 @@ public:
     const ScPatternAttr*    GetPattern( SCCOL nCol, SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
 
-    sal_uInt32 GetNumberFormat( const ScAddress& rPos ) const;
+    sal_uInt32 GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& rPos ) const;
     sal_uInt32 GetNumberFormat( SCCOL nCol, SCROW nRow ) const;
     sal_uInt32 GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
 
@@ -997,7 +998,7 @@ public:
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen );
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
-    void CalculateInColumnInThread( SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
+    void CalculateInColumnInThread( const ScInterpreterContext& rContext, SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
     void HandleStuffAfterParallelCalculation( SCCOL nCol, SCROW nRow, size_t nLen);
 
     /**

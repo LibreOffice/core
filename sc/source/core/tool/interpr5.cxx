@@ -3224,7 +3224,7 @@ void ScInterpreter::ScMatRef()
             else
             {
                 // Determine nFuncFmtType type before PushDouble().
-                pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr);
+                pDok->GetNumberFormatInfo(mrContext, nCurFmtType, nCurFmtIndex, aAdr);
                 nFuncFmtType = nCurFmtType;
                 nFuncFmtIndex = nCurFmtIndex;
                 PushDouble(nMatVal.fVal);  // handles DoubleError
@@ -3234,7 +3234,7 @@ void ScInterpreter::ScMatRef()
     else
     {
         // Determine nFuncFmtType type before PushDouble().
-        pDok->GetNumberFormatInfo(nCurFmtType, nCurFmtIndex, aAdr);
+        pDok->GetNumberFormatInfo(mrContext, nCurFmtType, nCurFmtIndex, aAdr);
         nFuncFmtType = nCurFmtType;
         nFuncFmtIndex = nCurFmtIndex;
         // If not a result matrix, obtain the cell value.

@@ -251,7 +251,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 
         ScCompiler aComp(&rDoc, aTmpPos, aCode2);
         aComp.CompileTokenArray();
-        ScInterpreter aInterpreter(pDest, &rDoc, aTmpPos, aCode2);
+        ScInterpreter aInterpreter(pDest, &rDoc, rDoc.GetNonThreadedContext(), aTmpPos, aCode2);
         aInterpreter.Interpret();
         aResults.push_back(aInterpreter.GetResultToken());
     } // for loop end (xGroup->mnLength)

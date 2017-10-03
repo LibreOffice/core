@@ -2338,12 +2338,12 @@ void ScTable::SetFormulaResults(
     aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
 }
 
-void ScTable::CalculateInColumnInThread( SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
+void ScTable::CalculateInColumnInThread( const ScInterpreterContext& rContext, SCCOL nCol, SCROW nRow, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal)
 {
     if (!ValidCol(nCol))
         return;
 
-    aCol[nCol].CalculateInThread( nRow, nLen, nThisThread, nThreadsTotal );
+    aCol[nCol].CalculateInThread( rContext, nRow, nLen, nThisThread, nThreadsTotal );
 }
 
 void ScTable::HandleStuffAfterParallelCalculation( SCCOL nCol, SCROW nRow, size_t nLen)
