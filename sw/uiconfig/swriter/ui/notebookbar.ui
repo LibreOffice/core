@@ -389,11 +389,11 @@
                         <property name="margin_right">3</property>
                         <child>
                           <object class="GtkButton" id="NewSW">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label" translatable="yes" context="notebookbar|NewSW"> </property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Text Document</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|NewSW|tooltip_text">Text Document</property>
                             <property name="action_name">private:factory/swriter</property>
                             <property name="image">ODTImg</property>
                             <property name="relief">none</property>
@@ -406,11 +406,11 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="NewSC">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label" translatable="yes" context="notebookbar|NewSC"> </property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Spreadsheet</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|NewSC|tooltip_text">Spreadsheet</property>
                             <property name="action_name">private:factory/scalc</property>
                             <property name="image">ODSImg</property>
                             <property name="relief">none</property>
@@ -423,11 +423,11 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="NewSI">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label" translatable="yes" context="notebookbar|NewSI"> </property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Presentation</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|NewSI|tooltip_text">Presentation</property>
                             <property name="action_name">.uno:NewPresentation</property>
                             <property name="image">ODPImg</property>
                             <property name="relief">none</property>
@@ -440,11 +440,11 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="NewSD">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label" translatable="yes" context="notebookbar|NewSD"> </property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Drawing</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|NewSD|tooltip_text">Drawing</property>
                             <property name="action_name">private:factory/sdraw</property>
                             <property name="image">ODGImg</property>
                             <property name="relief">none</property>
@@ -456,11 +456,11 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="NewSF">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label" translatable="yes" context="notebookbar|NewSF"> </property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Formula</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|NewSF|tooltip_text">Formula</property>
                             <property name="action_name">private:factory/smath</property>
                             <property name="image">ODFImg</property>
                             <property name="relief">none</property>
@@ -472,11 +472,11 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="NewSB">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label" translatable="yes" context="notebookbar|NewSB"> </property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Database</property>
+                            <property name="tooltip_text" translatable="yes" context="notebookbar|NewSB|tooltip_text">Database</property>
                             <property name="action_name">private:factory/sdatabase?Interactive</property>
                             <property name="image">ODBImg</property>
                             <property name="relief">none</property>
@@ -495,7 +495,7 @@
                               <object class="GtkToolButton" id="NewSDB">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Spreadsheet</property>
+                                <property name="tooltip_text" translatable="yes" context="notebookbar|NewSDB|tooltip_text">Spreadsheet</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">private:factory/scalc</property>
                               </object>
