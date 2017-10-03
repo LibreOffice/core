@@ -521,9 +521,8 @@ namespace dxcanvas
             // TODO(F2): Proper layout (BiDi, CTL)! IMHO must use
             // DrawDriverString here, and perform layouting myself...
             ENSURE_OR_THROW(
-                Gdiplus::Ok == pGraphics->DrawString( reinterpret_cast<LPCWSTR>(
-                                                          text.Text.copy( text.StartPosition,
-                                                                          text.Length ).getStr()),
+                Gdiplus::Ok == pGraphics->DrawString( SAL_W(text.Text.copy( text.StartPosition,
+                                                                            text.Length ).getStr()),
                                                       text.Length,
                                                       pFont->getFont().get(),
                                                       aPoint,

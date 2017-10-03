@@ -61,7 +61,7 @@ namespace dxcanvas
         std::vector< sal_Unicode > pStrBuf(nLen+1,0);
         std::copy(pStr,pStr+nLen,&pStrBuf[0]);
 
-        mpFontFamily.reset( new Gdiplus::FontFamily(reinterpret_cast<LPCWSTR>(&pStrBuf[0]),nullptr) );
+        mpFontFamily.reset( new Gdiplus::FontFamily(SAL_W(&pStrBuf[0]),nullptr) );
         if( !mpFontFamily->IsAvailable() )
             mpFontFamily.reset( new Gdiplus::FontFamily(L"Arial",nullptr) );
 
