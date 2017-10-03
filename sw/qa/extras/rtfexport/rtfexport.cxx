@@ -1233,7 +1233,20 @@ DECLARE_RTFEXPORT_TEST(testTdf104937, "tdf104937.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), aSeparators.getLength());
     // This was 3174, i.e. last cell was wider than expected, while others were
     // narrower.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4651), aSeparators[7].Position);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int16>(4500), aSeparators[7].Position);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf112507, "tdf112507.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    auto aSeparators = getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators");
+    // First table's second row had 3 cells (so 2 separators).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeparators.getLength());
+    // This was 3333, i.e. the B2 cell was too narrow and the text needed 2 lines.
+    CPPUNIT_ASSERT_GREATER(5000, aSeparators[1].Position - aSeparators[0].Position);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf107480, "tdf107480.rtf")

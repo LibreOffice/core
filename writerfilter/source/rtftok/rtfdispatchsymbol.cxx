@@ -236,16 +236,15 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         m_bAfterCellBeforeRow = false;
         if (m_aStates.top().nTableRowWidthAfter > 0)
         {
-            // nTableRowWidthAfter is an absolute value, gridCol wants a
-            // relative value, so count the delta from the last cellx.
-            int& rCurrentCellX((Destination::NESTEDTABLEPROPERTIES == m_aStates.top().eDestination) ? m_nNestedCurrentCellX : m_nTopLevelCurrentCellX);
-            int nCellX = m_aStates.top().nTableRowWidthAfter - rCurrentCellX;
-
             // Add fake cellx / cell, RTF equivalent of
             // OOXMLFastContextHandlerTextTableRow::handleGridAfter().
-            auto pXValue = std::make_shared<RTFValue>(nCellX);
+            auto pXValue = std::make_shared<RTFValue>(m_aStates.top().nTableRowWidthAfter);
             m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue, RTFOverwrite::NO_APPEND);
             dispatchSymbol(RTF_CELL);
+
+            // Adjust total width, which is done in the \cellx handler for normal cells.
+            m_nTopLevelCurrentCellX += m_aStates.top().nTableRowWidthAfter;
+
             m_aStates.top().nTableRowWidthAfter = 0;
         }
 
