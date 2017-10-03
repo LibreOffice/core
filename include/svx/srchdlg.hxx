@@ -179,8 +179,8 @@ private:
     VclPtr<CheckBox>       m_pWordBtn;
 
     VclPtr<PushButton>     m_pCloseBtn;
-    VclPtr<CheckBox>       m_pIgnoreDiacritics;
-    VclPtr<CheckBox>       m_pIgnoreKashida;
+    VclPtr<CheckBox>       m_pIncludeDiacritics;
+    VclPtr<CheckBox>       m_pIncludeKashida;
     VclPtr<CheckBox>       m_pSelectionBtn;
     VclPtr<CheckBox>       m_pRegExpBtn;
     VclPtr<CheckBox>       m_pWildcardBtn;
