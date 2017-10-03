@@ -21,7 +21,7 @@
 
 #include <transliteration_commonclass.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class transliteration_Numeric : public transliteration_commonclass {
 public:
@@ -54,7 +54,7 @@ private:
                              css::uno::Sequence< sal_Int32 >& offset );
 };
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_INC_TRANSLITERATION_NUMERIC_HXX
 

@@ -119,6 +119,9 @@ bool FpComparison::ignore(FunctionDecl* function)
         || (dc.Function("lcl_getNANInsteadDBL_MIN").AnonymousNamespace()
             .GlobalNamespace())
             // chart2/source/controller/chartapiwrapper/ChartDataWrapper.cxx
+        || dc.Function("compareSubstring").Class("ChapterCollator").Namespace("i18npool").GlobalNamespace()
+        || dc.Function("setDateTime").Class("Calendar_gregorian").Namespace("i18npool").GlobalNamespace()
+        || dc.Function("setLocalDateTime").Class("Calendar_gregorian").Namespace("i18npool").GlobalNamespace()
         //TODO:
         || dc.Function("ImpCheckCondition").Class("SvNumberformat").GlobalNamespace()
         || dc.Function("GetTimeFormat").Class("SvNumberFormatter").GlobalNamespace()

@@ -27,9 +27,10 @@
 #include "transliteration_caseignore.hxx"
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 Transliteration_caseignore::Transliteration_caseignore()
 {
@@ -120,15 +121,15 @@ Transliteration_caseignore::compare(
     const sal_Unicode *unistr1 = const_cast<sal_Unicode*>(str1.getStr()) + pos1;
     const sal_Unicode *unistr2 = const_cast<sal_Unicode*>(str2.getStr()) + pos2;
     sal_Unicode c1, c2;
-    MappingElement e1, e2;
+    i18nutil::MappingElement e1, e2;
     nMatch1 = nMatch2 = 0;
 
 #define NOT_END_OF_STR1 (nMatch1 < nCount1 || e1.current < e1.element.nmap)
 #define NOT_END_OF_STR2 (nMatch2 < nCount2 || e2.current < e2.element.nmap)
 
     while (NOT_END_OF_STR1 && NOT_END_OF_STR2) {
-        c1 = casefolding::getNextChar(unistr1, nMatch1, nCount1, e1, aLocale, nMappingType, moduleLoaded);
-        c2 = casefolding::getNextChar(unistr2, nMatch2, nCount2, e2, aLocale, nMappingType, moduleLoaded);
+        c1 = i18nutil::casefolding::getNextChar(unistr1, nMatch1, nCount1, e1, aLocale, nMappingType, moduleLoaded);
+        c2 = i18nutil::casefolding::getNextChar(unistr2, nMatch2, nCount2, e2, aLocale, nMappingType, moduleLoaded);
         if (c1 != c2) {
         nMatch1--; nMatch2--;
         return c1 > c2 ? 1 : -1;
@@ -139,14 +140,14 @@ Transliteration_caseignore::compare(
                 : (NOT_END_OF_STR1 ? 1 : -1);
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_Transliteration_IGNORE_CASE_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::Transliteration_caseignore());
+    return cppu::acquire(new i18npool::Transliteration_caseignore());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

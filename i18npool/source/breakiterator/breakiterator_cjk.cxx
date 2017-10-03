@@ -24,9 +24,10 @@
 #include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 //      ----------------------------------------------------
 //      class BreakIterator_CJK
@@ -39,7 +40,7 @@ BreakIterator_CJK::BreakIterator_CJK()
 
 Boundary SAL_CALL
 BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
-        const lang::Locale& nLocale, sal_Int16 wordType)
+        const css::lang::Locale& nLocale, sal_Int16 wordType)
 {
     if (m_xDict) {
         result = m_xDict->previousWord(text, anyPos, wordType);
@@ -56,7 +57,7 @@ BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
 
 Boundary SAL_CALL
 BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
-        const lang::Locale& nLocale, sal_Int16 wordType)
+        const css::lang::Locale& nLocale, sal_Int16 wordType)
 {
     if (m_xDict) {
         result = m_xDict->nextWord(text, anyPos, wordType);
@@ -73,7 +74,7 @@ BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
 
 Boundary SAL_CALL
 BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
-        const lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection )
+        const css::lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection )
 {
     if (m_xDict) {
         result = m_xDict->getWordBoundary(text, anyPos, wordType, bDirection);
@@ -87,7 +88,7 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
 
 LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
         const OUString& Text, sal_Int32 nStartPos,
-        const lang::Locale& /*rLocale*/, sal_Int32 /*nMinBreakPos*/,
+        const css::lang::Locale& /*rLocale*/, sal_Int32 /*nMinBreakPos*/,
         const LineBreakHyphenationOptions& /*hOptions*/,
         const LineBreakUserOptions& bOptions )
 {
@@ -109,7 +110,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
     return lbr;
 }
 
-#define LOCALE(language, country) lang::Locale(language, country, OUString())
+#define LOCALE(language, country) css::lang::Locale(language, country, OUString())
 //      ----------------------------------------------------
 //      class BreakIterator_zh
 //      ----------------------------------------------------;
@@ -150,6 +151,6 @@ BreakIterator_ko::BreakIterator_ko()
     cBreakIterator = "com.sun.star.i18n.BreakIterator_ko";
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

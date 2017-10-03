@@ -26,7 +26,7 @@
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class transliteration_commonclass : public cppu::WeakImplHelper<
                                                                   css::i18n::XExtendedTransliteration,
@@ -38,10 +38,10 @@ public:
 
         // Methods which are shared.
         void SAL_CALL
-        loadModule( TransliterationModules modName, const css::lang::Locale& rLocale ) override;
+        loadModule( css::i18n::TransliterationModules modName, const css::lang::Locale& rLocale ) override;
 
         void SAL_CALL
-        loadModuleNew( const css::uno::Sequence< TransliterationModulesNew >& modName, const css::lang::Locale& rLocale ) override;
+        loadModuleNew( const css::uno::Sequence< css::i18n::TransliterationModulesNew >& modName, const css::lang::Locale& rLocale ) override;
 
         void SAL_CALL
         loadModuleByImplName( const OUString& implName, const css::lang::Locale& rLocale ) override;
@@ -94,7 +94,7 @@ protected:
         bool useOffset;
 };
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_INC_TRANSLITERATION_COMMONCLASS_HXX
 

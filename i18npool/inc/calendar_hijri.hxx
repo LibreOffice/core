@@ -25,7 +25,7 @@
 //  class Calendar_hijri
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class Calendar_hijri : public Calendar_gregorian
 {
@@ -70,7 +70,7 @@ private:
     static double getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year);
 };
 
-} } } }
+}
 
 #endif
 

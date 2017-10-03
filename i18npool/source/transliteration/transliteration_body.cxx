@@ -34,9 +34,10 @@
 #include <memory>
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 Transliteration_body::Transliteration_body()
 {
@@ -107,7 +108,7 @@ Transliteration_body::transliterate(
             if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
                 nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
-            const Mapping &map = casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
+            const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             nOffCount += map.nmap;
         }
         rtl_uString* pStr = rtl_uString_alloc(nOffCount);
@@ -125,7 +126,7 @@ Transliteration_body::transliterate(
             if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
                 nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
-            const Mapping &map = casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
+            const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             for (sal_Int32 k = 0; k < map.nmap; k++)
             {
                 pArr[j] = i + startPos;
@@ -165,7 +166,7 @@ Transliteration_body::transliterate(
             if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
                 nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
-            const Mapping &map = casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
+            const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             for (sal_Int32 k = 0; k < map.nmap; k++)
             {
                 out[j++] = map.map[k];
@@ -180,7 +181,7 @@ Transliteration_body::transliterate(
 OUString SAL_CALL
 Transliteration_body::transliterateChar2String( sal_Unicode inChar )
 {
-    const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
+    const i18nutil::Mapping &map = i18nutil::casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
     rtl_uString* pStr = rtl_uString_alloc(map.nmap);
     sal_Unicode* out = pStr->buffer;
     sal_Int32 i;
@@ -195,7 +196,7 @@ Transliteration_body::transliterateChar2String( sal_Unicode inChar )
 sal_Unicode SAL_CALL
 Transliteration_body::transliterateChar2Char( sal_Unicode inChar )
 {
-    const Mapping &map = casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
+    const i18nutil::Mapping &map = i18nutil::casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
     if (map.nmap > 1)
         throw MultipleCharsOutputException();
     return map.map[0];
@@ -326,6 +327,6 @@ OUString SAL_CALL Transliteration_sentencecase::transliterate(
     return transliterate_titlecase_Impl( inStr, startPos, nCount, aLocale, offset );
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

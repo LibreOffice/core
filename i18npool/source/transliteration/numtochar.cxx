@@ -21,7 +21,7 @@
 
 #include <numtochar.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 #define TRANSLITERATION_NUMTOCHAR( name, number ) \
 NumToChar##name::NumToChar##name() \
@@ -52,6 +52,6 @@ TRANSLITERATION_NUMTOCHAR( _th, NATNUM1 )
 
 #undef TRANSLITERATION_NUMTOCHAR
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

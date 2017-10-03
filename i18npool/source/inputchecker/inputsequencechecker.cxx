@@ -24,9 +24,10 @@
 #include <i18nutil/unicode.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 InputSequenceCheckerImpl::InputSequenceCheckerImpl( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
@@ -118,13 +119,13 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char const * rLanguage)
                 return cachedItem->xISC;
         }
 
-        Reference < uno::XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
+        Reference < XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
                 "com.sun.star.i18n.InputSequenceChecker_" +
                 OUString::createFromAscii(rLanguage),
                 m_xContext);
 
         if ( xI.is() ) {
-            Reference< XExtendedInputSequenceChecker > xISC( xI, uno::UNO_QUERY );
+            Reference< XExtendedInputSequenceChecker > xISC( xI, UNO_QUERY );
             if (xISC.is()) {
                 lookupTable.push_back(cachedItem = new lookupTableItem(rLanguage, xISC));
                 return cachedItem->xISC;
@@ -153,14 +154,14 @@ InputSequenceCheckerImpl::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_InputSequenceChecker_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::InputSequenceCheckerImpl(context));
+    return cppu::acquire(new i18npool::InputSequenceCheckerImpl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

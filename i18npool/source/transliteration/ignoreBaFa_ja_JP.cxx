@@ -21,7 +21,7 @@
 
 using namespace com::sun::star::uno;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 static const transliteration_Ignore::Mapping BaFa[] = {
     { 0x30F4, 0x30A1, 0x30D0, true },
@@ -40,6 +40,6 @@ ignoreBaFa_ja_JP::ignoreBaFa_ja_JP()
     implementationName = "com.sun.star.i18n.Transliteration.ignoreBaFa_ja_JP";
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

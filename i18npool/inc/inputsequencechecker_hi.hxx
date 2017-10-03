@@ -21,10 +21,7 @@
 
 #include <inputsequencechecker.hxx>
 
-namespace com {
-namespace sun {
-namespace star {
-namespace i18n {
+namespace i18npool {
 
 
 //  class InputSequenceChecker_hi
@@ -42,7 +39,7 @@ public:
         sal_Unicode inputChar, sal_Int16 inputCheckMode) override;
 };
 
-} } } }
+}
 
 #endif
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
 #define INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 static const sal_Int16 NumberChar_HalfWidth     = 0;
 static const sal_Int16 NumberChar_FullWidth     = 1;
@@ -264,7 +264,7 @@ static const sal_Unicode MultiplierChar_7_CJK[][ExponentCount_7_CJK] = {
     {0x4EAC, 0x5146, 0x5104, 0x842C, 0x9621, 0x767E, 0x62FE}    // Japanese Traditional
 };
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_SOURCE_NATIVENUMBER_DATA_NUMBERCHAR_H
 

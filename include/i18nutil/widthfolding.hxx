@@ -24,7 +24,7 @@
 #include <i18nutil/oneToOneMapping.hxx>
 #include <i18nutil/i18nutildllapi.h>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18nutil {
 
 #define WIDTHFOLDNIG_DONT_USE_COMBINED_VU 0x01
 
@@ -47,7 +47,7 @@ public:
 };
 
 
-} } } }
+}
 
 #endif
 

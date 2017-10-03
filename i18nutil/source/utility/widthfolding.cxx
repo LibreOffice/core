@@ -24,7 +24,7 @@
 using namespace com::sun::star::uno;
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18nutil {
 
 sal_Unicode widthfolding::decompose_ja_voiced_sound_marksChar2Char (sal_Unicode inChar)
 {
@@ -284,6 +284,6 @@ oneToOneMapping& widthfolding::gethalfKana2fullKanaTable()
     return table;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

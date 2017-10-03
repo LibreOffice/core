@@ -33,7 +33,7 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 OrdinalSuffixService::OrdinalSuffixService()
@@ -152,14 +152,14 @@ Sequence< OUString > SAL_CALL OrdinalSuffixService::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_OrdinalSuffix_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::OrdinalSuffixService());
+    return cppu::acquire(new i18npool::OrdinalSuffixService());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

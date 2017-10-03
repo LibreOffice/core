@@ -21,7 +21,7 @@
 
 using namespace com::sun::star::uno;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 #define TRANSLITERATION_TEXTTONUM( name ) \
 TextToNum##name::TextToNum##name() \
@@ -47,6 +47,6 @@ TRANSLITERATION_TEXTTONUM( KanjiLongModern_ja_JP)
 
 #undef TRANSLITERATION_TEXTTONUM
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

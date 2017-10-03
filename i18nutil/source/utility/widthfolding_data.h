@@ -21,7 +21,7 @@
 
 #include <i18nutil/oneToOneMapping.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18nutil {
 
 /*
   Unicode Normalization Forms
@@ -946,7 +946,7 @@ UnicodePairWithFlag half2fullJISException[] = {
  };
 
 
-} } } }
+}
 
 #endif
 

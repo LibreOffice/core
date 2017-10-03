@@ -23,7 +23,7 @@
 
 using namespace com::sun::star::uno;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 #ifndef DISABLE_DYNLOADING
 
@@ -89,6 +89,6 @@ TextConversionService::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

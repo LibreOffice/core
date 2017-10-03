@@ -25,7 +25,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 IndexEntrySupplier_Common::IndexEntrySupplier_Common(const Reference < uno::XComponentContext >& rxContext)
 {
@@ -133,6 +133,6 @@ IndexEntrySupplier_Common::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,10 +26,11 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 CollatorImpl::CollatorImpl( const Reference < XComponentContext >& rxContext ) : m_xContext(rxContext)
 {
@@ -225,14 +226,14 @@ CollatorImpl::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_Collator_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::CollatorImpl(context));
+    return cppu::acquire(new i18npool::CollatorImpl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

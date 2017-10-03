@@ -19,9 +19,10 @@
 
 #include <transliteration_Ignore.hxx>
 
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 inline sal_Int32 Min( sal_Int32 a, sal_Int32 b ) { return a > b ? b : a; }
 
@@ -201,6 +202,6 @@ transliteration_Ignore::transliterateChar2Char( sal_Unicode inChar)
     return func ? func( inChar) : table ? (*table)[ inChar ] : inChar;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

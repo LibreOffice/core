@@ -27,7 +27,7 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class InputSequenceCheckerImpl
@@ -73,7 +73,7 @@ private:
     static sal_Char* SAL_CALL getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
 };
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_INC_INPUTSEQUENCECHECKER_HXX
 

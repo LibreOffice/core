@@ -29,7 +29,9 @@
 #include <string.h>
 #include <breakiteratorImpl.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+using namespace com::sun::star::i18n;
+
+namespace i18npool {
 
 #ifdef DICT_JA_ZH_IN_DATAFILE
 
@@ -198,7 +200,7 @@ bool xdictionary::exists(const sal_uInt32 c)
     // 0x1FFF is the hardcoded limit in gendict for data.existMarks
     bool exist = data.existMark && (c>>3) < 0x1FFF && (data.existMark[c>>3] & (1<<(c&0x07))) != 0;
     if (!exist && japaneseWordBreak)
-        return BreakIteratorImpl::getScriptClass(c) == ScriptType::ASIAN;
+        return BreakIteratorImpl::getScriptClass(c) == css::i18n::ScriptType::ASIAN;
     else
         return exist;
 }
@@ -474,6 +476,6 @@ Boundary const & xdictionary::getWordBoundary(const OUString& rText, sal_Int32 a
         return boundary;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

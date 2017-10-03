@@ -19,7 +19,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_WTT_H
 #define INCLUDED_I18NPOOL_INC_WTT_H
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 /*
  * Thai character type definition.
@@ -61,7 +61,7 @@ static const sal_uInt16 thaiCT[128] = {     // Thai character type
 
 #define getCharType(x) ((x >= 0x0E00 && x < 0x0E60) ? thaiCT[x - 0x0E00] : CT_NON)
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_INC_WTT_H
 

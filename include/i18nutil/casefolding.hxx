@@ -43,7 +43,7 @@ namespace o3tl {
     template<> struct typed_flags<MappingType> : is_typed_flags<MappingType, 0xff> {};
 }
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18nutil {
 
 struct Value
 {
@@ -82,7 +82,7 @@ public:
 
 };
 
-} } } }
+}
 
 #endif
 

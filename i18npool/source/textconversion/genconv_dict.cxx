@@ -117,7 +117,7 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
     }
     fprintf(cfp, "\n};\n");
 
-    fprintf(cfp, "\nstatic const com::sun::star::i18n::Hangul_Index Hangul2HanjaIndex[] = {\n");
+    fprintf(cfp, "\nstatic const i18npool::Hangul_Index Hangul2HanjaIndex[] = {\n");
     for (i = 0; i < count; i++)
         fprintf(cfp, "\t{ 0x%04x, 0x%04x, 0x%02x },\n",
                         Hangul2HanjaData[i][0],
@@ -164,8 +164,8 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
 
     // create function to return arrays
     fprintf (cfp, "\tconst sal_Unicode* getHangul2HanjaData() { return Hangul2HanjaData; }\n");
-    fprintf (cfp, "\tconst com::sun::star::i18n::Hangul_Index* getHangul2HanjaIndex() { return Hangul2HanjaIndex; }\n");
-    fprintf (cfp, "\tsal_Int16 getHangul2HanjaIndexCount() { return sizeof(Hangul2HanjaIndex) / sizeof(com::sun::star::i18n::Hangul_Index); }\n");
+    fprintf (cfp, "\tconst i18npool::Hangul_Index* getHangul2HanjaIndex() { return Hangul2HanjaIndex; }\n");
+    fprintf (cfp, "\tsal_Int16 getHangul2HanjaIndexCount() { return sizeof(Hangul2HanjaIndex) / sizeof(i18npool::Hangul_Index); }\n");
     fprintf (cfp, "\tconst sal_uInt16* getHanja2HangulIndex() { return Hanja2HangulIndex; }\n");
     fprintf (cfp, "\tconst sal_Unicode* getHanja2HangulData() { return Hanja2HangulData; }\n");
 }

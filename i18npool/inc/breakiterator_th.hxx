@@ -20,7 +20,7 @@
 #define INCLUDED_I18NPOOL_INC_BREAKITERATOR_TH_HXX
 #include <breakiterator_ctl.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 
 //  class BreakIterator_th
@@ -35,7 +35,7 @@ protected:
     void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) override;
 };
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_INC_BREAKITERATOR_TH_HXX
 

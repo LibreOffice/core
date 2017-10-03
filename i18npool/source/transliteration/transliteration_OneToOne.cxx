@@ -19,9 +19,10 @@
 
 #include <transliteration_OneToOne.hxx>
 
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 sal_Int16 SAL_CALL transliteration_OneToOne::getType()
 {
@@ -86,6 +87,6 @@ transliteration_OneToOne::transliterateChar2Char( sal_Unicode inChar)
     return func ? func( inChar) : (*table)[ inChar ];
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

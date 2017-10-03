@@ -22,7 +22,7 @@
 #include <collatorImpl.hxx>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 //      ----------------------------------------------------
 //      class ChapterCollator
@@ -46,10 +46,10 @@ public:
 
 private:
     // CharacterClassification Implementation
-    css::uno::Reference< XCharacterClassification > cclass;
+    css::uno::Reference< css::i18n::XCharacterClassification > cclass;
 };
 
-} } } }
+}
 
 #endif
 

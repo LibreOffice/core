@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 static const sal_Unicode table_AIUFullWidth_ja_JP[] = {
     0x30A2, // KATAKANA LETTER A
@@ -320,6 +320,6 @@ static const sal_Unicode table_DiZi_zh[] = {
     0x5b50,0x4e11,0x5bc5,0x536f,0x8fb0,0x5df3,0x5348,0x672a,0x7533,0x9149,0x620c,0x4ea5
 };
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

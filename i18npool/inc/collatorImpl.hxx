@@ -30,13 +30,14 @@
 
 #include <vector>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
+
 //      ----------------------------------------------------
 //      class CollatorImpl
 //      ----------------------------------------------------
 class CollatorImpl : public cppu::WeakImplHelper
 <
-    XCollator,
+    css::i18n::XCollator,
     css::lang::XServiceInfo
 >
 {
@@ -53,15 +54,15 @@ public:
     virtual sal_Int32 SAL_CALL compareString( const OUString& s1,
         const OUString& s2) override;
 
-    virtual sal_Int32 SAL_CALL loadDefaultCollator( const lang::Locale& rLocale,  sal_Int32 collatorOptions) override;
+    virtual sal_Int32 SAL_CALL loadDefaultCollator( const css::lang::Locale& rLocale,  sal_Int32 collatorOptions) override;
 
-    virtual sal_Int32 SAL_CALL loadCollatorAlgorithm(  const OUString& impl, const lang::Locale& rLocale,
+    virtual sal_Int32 SAL_CALL loadCollatorAlgorithm(  const OUString& impl, const css::lang::Locale& rLocale,
         sal_Int32 collatorOptions) override;
 
-    virtual void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const OUString& impl, const lang::Locale& rLocale,
+    virtual void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const OUString& impl, const css::lang::Locale& rLocale,
         const css::uno::Sequence< sal_Int32 >& collatorOptions) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const lang::Locale& rLocale ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const css::lang::Locale& rLocale ) override;
 
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& collatorAlgorithmName ) override;
 
@@ -71,16 +72,16 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
-    lang::Locale nLocale;
+    css::lang::Locale nLocale;
 private:
     struct lookupTableItem {
-        lang::Locale aLocale;
+        css::lang::Locale aLocale;
         OUString algorithm;
         OUString service;
         css::uno::Reference < XCollator > xC;
-        lookupTableItem(const lang::Locale& rLocale, const OUString& _algorithm, const OUString& _service,
+        lookupTableItem(const css::lang::Locale& rLocale, const OUString& _algorithm, const OUString& _service,
                         css::uno::Reference < XCollator > const & _xC) : aLocale(rLocale), algorithm(_algorithm), service(_service), xC(_xC) {}
-        bool SAL_CALL equals(const lang::Locale& rLocale, const OUString& _algorithm) {
+        bool SAL_CALL equals(const css::lang::Locale& rLocale, const OUString& _algorithm) {
         return aLocale.Language == rLocale.Language &&
             aLocale.Country == rLocale.Country &&
             aLocale.Variant == rLocale.Variant &&
@@ -93,16 +94,16 @@ private:
     // Service Factory
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     // lang::Locale Data
-    css::uno::Reference < XLocaleData4 >                mxLocaleData;
+    css::uno::Reference < css::i18n::XLocaleData4 >     mxLocaleData;
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL createCollator(const lang::Locale& rLocale, const OUString& serviceName,
+    bool SAL_CALL createCollator(const css::lang::Locale& rLocale, const OUString& serviceName,
         const OUString& rSortAlgorithm);
     /// @throws css::uno::RuntimeException
-    void SAL_CALL loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm);
+    void SAL_CALL loadCachedCollator(const css::lang::Locale& rLocale, const OUString& rSortAlgorithm);
 };
 
-} } } }
+}
 
 #endif
 

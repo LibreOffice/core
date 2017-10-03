@@ -23,7 +23,7 @@
 
 #include <memory>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class Index;
 
@@ -101,7 +101,7 @@ public:
     sal_Int16 compare(sal_Unicode c1, sal_Unicode c2);
 };
 
-} } } }
+}
 
 #endif
 

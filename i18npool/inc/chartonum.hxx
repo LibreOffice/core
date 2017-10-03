@@ -22,7 +22,7 @@
 
 #include <transliteration_Numeric.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 #define TRANSLITERATION_CHARTONUM( name ) \
 class CharToNum##name : public transliteration_Numeric \
@@ -48,7 +48,7 @@ TRANSLITERATION_CHARTONUM(_th)
 
 #undef TRANSLITERATION_CHARTONUM
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_INC_CHARTONUM_HXX
 
