@@ -2420,7 +2420,11 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
 
 static char* getLanguages(const char* pCommand)
 {
-    uno::Sequence< css::lang::Locale > aLocales(comphelper::LibreOfficeKit::getSpellLanguages());
+    css::uno::Reference< css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    css::uno::Reference< css::linguistic2::XLinguServiceManager2 > xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
+    css::uno::Reference< css::linguistic2::XSpellChecker > xSpell(xLangSrv.is() ? xLangSrv->getSpellChecker() : nullptr, css::uno::UNO_QUERY);
+    css::uno::Reference< css::linguistic2::XSupportedLocales > xLocales(xSpell, css::uno::UNO_QUERY);
+    css::uno::Sequence< css::lang::Locale > aLocales(xLocales.is() ? xLocales->getLocales() : css::uno::Sequence< css::lang::Locale >());
 
     boost::property_tree::ptree aTree;
     aTree.put("commandName", pCommand);
