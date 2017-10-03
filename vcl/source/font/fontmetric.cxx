@@ -419,15 +419,18 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
     GetTTFontMetrics(rHheaData, rOS2Data, &rInfo);
 
     // Try hhea table first.
-    if (rInfo.ascender || rInfo.descender)
+    // tdf#107605: Some fonts have weird values here, so check that ascender is
+    // +ve and descender is -ve as they normally should.
+    if (rInfo.ascender >= 0 && rInfo.descender <= 0)
     {
-        fAscent     = rInfo.ascender  * fScale;
+        fAscent     =  rInfo.ascender  * fScale;
         fDescent    = -rInfo.descender * fScale;
-        fExtLeading = rInfo.linegap   * fScale;
+        fExtLeading =  rInfo.linegap   * fScale;
     }
 
     // But if OS/2 is present, prefer it.
-    if (rInfo.winAscent || rInfo.winDescent || rInfo.typoAscender || rInfo.typoDescender)
+    if (rInfo.winAscent || rInfo.winDescent ||
+        rInfo.typoAscender || rInfo.typoDescender)
     {
         if (fAscent == 0 && fDescent == 0)
         {
@@ -437,7 +440,8 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
         }
 
         const uint16_t kUseTypoMetricsMask = 1 << 7;
-        if (rInfo.fsSelection & kUseTypoMetricsMask)
+        if (rInfo.fsSelection & kUseTypoMetricsMask &&
+            rInfo.typoAscender >= 0 && rInfo.typoDescender <= 0)
         {
             fAscent     =  rInfo.typoAscender  * fScale;
             fDescent    = -rInfo.typoDescender * fScale;
