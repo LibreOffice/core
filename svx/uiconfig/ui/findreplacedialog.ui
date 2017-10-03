@@ -730,8 +730,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="ignorediacritics">
-                                    <property name="label" translatable="yes" context="findreplacedialog|ignorediacritics">Ignore diac_ritics</property>
+                                  <object class="GtkCheckButton" id="includediacritics">
+                                    <property name="label" translatable="yes" context="findreplacedialog|includediacritics">Include diac_ritics</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -745,8 +745,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="ignorekashida">
-                                    <property name="label" translatable="yes" context="findreplacedialog|ignorekashida">Ignore _kashida</property>
+                                  <object class="GtkCheckButton" id="includekashida">
+                                    <property name="label" translatable="yes" context="findreplacedialog|includekashida">Include _kashida</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
