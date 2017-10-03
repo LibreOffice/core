@@ -29,8 +29,6 @@
 class GraphCtrlUserCall;
 class SvxGraphCtrlAccessibleContext;
 
-#define WB_SDRMODE      ((WinBits)0x0080)
-
 class SVX_DLLPUBLIC GraphCtrl : public Control
 {
     friend class GraphCtrlView;
@@ -45,11 +43,10 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
     Size                aGraphSize;
     Point               aMousePos;
     GraphCtrlUserCall*  pUserCall;
-    WinBits             nWinStyle;
     SdrObjKind          eObjKind;
     sal_uInt16          nPolyEdit;
     bool                bEditMode;
-    bool                bSdrMode;
+    bool                mbSdrMode;
     bool                mbInIdleUpdate;
 
                         DECL_LINK( UpdateHdl, Timer*, void );
@@ -82,8 +79,6 @@ public:
     virtual ~GraphCtrl() override;
     virtual void dispose() override;
 
-    void                SetWinStyle( WinBits nWinBits );
-
     void                SetGraphic( const Graphic& rGraphic, bool bNewModel = true );
     const Graphic&      GetGraphic() const { return aGraphic; }
     const Size&         GetGraphicSize() const { return aGraphSize; }
@@ -100,7 +95,7 @@ public:
     SdrModel*           GetSdrModel() const { return pModel; }
     SdrView*            GetSdrView() const { return pView; }
     SdrObject*          GetSelectedSdrObject() const;
-    bool                IsChanged() const { return bSdrMode && pModel->IsChanged(); }
+    bool                IsChanged() const { return mbSdrMode && pModel->IsChanged(); }
 
     void                SetMousePosLink( const Link<GraphCtrl*,void>& rLink ) { aMousePosLink = rLink; }
 
@@ -108,6 +103,8 @@ public:
 
     void                SetUpdateLink( const Link<GraphCtrl*,void>& rLink ) { aUpdateLink = rLink; }
     void                QueueIdleUpdate();
+
+    void                SetSdrMode(bool b);
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 };

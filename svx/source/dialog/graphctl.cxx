@@ -58,11 +58,10 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             Control         ( pParent, nStyle ),
             aUpdateIdle     ( "svx GraphCtrl Update" ),
             aMap100         ( MapUnit::Map100thMM ),
-            nWinStyle       ( 0 ),
             eObjKind        ( OBJ_NONE ),
             nPolyEdit       ( 0 ),
             bEditMode       ( false ),
-            bSdrMode        ( false ),
+            mbSdrMode       ( false ),
             mbInIdleUpdate  ( false ),
             pModel          ( nullptr ),
             pView           ( nullptr )
@@ -99,10 +98,9 @@ void GraphCtrl::dispose()
     Control::dispose();
 }
 
-void GraphCtrl::SetWinStyle( WinBits nWinBits )
+void GraphCtrl::SetSdrMode(bool bSdrMode)
 {
-    nWinStyle = nWinBits;
-    bSdrMode = ( nWinStyle & WB_SDRMODE ) == WB_SDRMODE;
+    mbSdrMode = bSdrMode;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     SetBackground( Wallpaper( rStyleSettings.GetWindowColor() ) );
@@ -114,7 +112,7 @@ void GraphCtrl::SetWinStyle( WinBits nWinBits )
     delete pModel;
     pModel = nullptr;
 
-    if ( bSdrMode )
+    if ( mbSdrMode )
         InitSdrModel();
 
     QueueIdleUpdate();
@@ -190,7 +188,7 @@ void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
     else
         aGraphSize = OutputDevice::LogicToLogic( aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), aMap100 );
 
-    if ( bSdrMode && bNewModel )
+    if ( mbSdrMode && bNewModel )
         InitSdrModel();
 
     aGraphSizeLink.Call( this );
@@ -247,7 +245,7 @@ void GraphCtrl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
     // even to the buffered view
     const bool bGraphicValid(GraphicType::NONE != aGraphic.GetType());
 
-    if (bSdrMode)
+    if (mbSdrMode)
     {
         SdrPaintWindow* pPaintWindow = pView->BeginCompleteRedraw(&rRenderContext);
 
@@ -302,7 +300,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
         case KEY_DELETE:
         case KEY_BACKSPACE:
         {
-            if ( bSdrMode )
+            if ( mbSdrMode )
             {
                 pView->DeleteMarked();
                 bProc = true;
@@ -314,7 +312,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
         case KEY_ESCAPE:
         {
-            if ( bSdrMode )
+            if ( mbSdrMode )
             {
                 bool bGrabFocusToFirstControl = true;
                 if ( pView->IsAction() )
@@ -343,7 +341,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
         case KEY_F11:
         case KEY_TAB:
         {
-            if( bSdrMode )
+            if( mbSdrMode )
             {
                 if( !aCode.IsMod1() && !aCode.IsMod2() )
                 {
@@ -606,7 +604,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
 void GraphCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( bSdrMode && ( rMEvt.GetClicks() < 2 ) )
+    if ( mbSdrMode && ( rMEvt.GetClicks() < 2 ) )
     {
         const Point aLogPt( PixelToLogic( rMEvt.GetPosPixel() ) );
 
@@ -649,7 +647,7 @@ void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
 {
     const Point aLogPos( PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( bSdrMode )
+    if ( mbSdrMode )
     {
         pView->MouseMove( rMEvt, this );
 
@@ -680,7 +678,7 @@ void GraphCtrl::MouseMove(const MouseEvent& rMEvt)
 
 void GraphCtrl::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    if ( bSdrMode )
+    if ( mbSdrMode )
     {
         if ( pView->IsInsObjPoint() )
             pView->EndInsObjPoint( SdrCreateCmd::ForceEnd );
@@ -700,7 +698,7 @@ SdrObject* GraphCtrl::GetSelectedSdrObject() const
 {
     SdrObject* pSdrObj = nullptr;
 
-    if ( bSdrMode )
+    if ( mbSdrMode )
     {
         const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
 
@@ -713,7 +711,7 @@ SdrObject* GraphCtrl::GetSelectedSdrObject() const
 
 void GraphCtrl::SetEditMode( const bool _bEditMode )
 {
-    if ( bSdrMode )
+    if ( mbSdrMode )
     {
         bEditMode = _bEditMode;
         pView->SetEditMode( bEditMode );
@@ -728,7 +726,7 @@ void GraphCtrl::SetEditMode( const bool _bEditMode )
 
 void GraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
 {
-    if ( bSdrMode && ( _nPolyEdit != nPolyEdit ) )
+    if ( mbSdrMode && ( _nPolyEdit != nPolyEdit ) )
     {
         nPolyEdit = _nPolyEdit;
         pView->SetFrameDragSingles( nPolyEdit == 0 );
@@ -741,7 +739,7 @@ void GraphCtrl::SetPolyEditMode( const sal_uInt16 _nPolyEdit )
 
 void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
 {
-    if ( bSdrMode )
+    if ( mbSdrMode )
     {
         bEditMode = false;
         pView->SetEditMode( bEditMode );

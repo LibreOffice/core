@@ -60,7 +60,7 @@ IMapWindow::IMapWindow( vcl::Window* pParent, WinBits nBits, const Reference< XF
             DropTargetHelper( this ),
             mxDocumentFrame( rxDocumentFrame )
 {
-    SetWinStyle( WB_SDRMODE );
+    SetSdrMode(true);
 
     pItemInfo = new SfxItemInfo[ 1 ];
     memset( pItemInfo, 0, sizeof( SfxItemInfo ) );

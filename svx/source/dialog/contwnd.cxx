@@ -40,7 +40,7 @@ ContourWindow::ContourWindow(vcl::Window* pParent, WinBits nBits)
     , bWorkplaceMode(false)
     , bClickValid(false)
 {
-    SetWinStyle(WB_SDRMODE);
+    SetSdrMode(true);
 }
 
 void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
