@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e0e3a331",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2017-10-03T15:05:13Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be a good moment to change the prefix n to f for the doubles in this function too?",
+      "range": {
+        "startLine": 1721,
+        "startChar": 20,
+        "endLine": 1721,
+        "endChar": 21
+      },
+      "revId": "614d11f3951e7e483f5e89efe2badf191230e155",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
