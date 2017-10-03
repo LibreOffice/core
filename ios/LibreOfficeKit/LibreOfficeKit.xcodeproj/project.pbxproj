@@ -25,7 +25,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		39AB2EC91F7D6D3D00E6FDA9 /* loKit.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loKit.xcconfig; path = /Users/jani/lo_ios/ios/loKit.xcconfig; sourceTree = "<group>"; };
+		3908315E1F8395EB003F2A29 /* loKit.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loKit.xcconfig; path = ../../../../../../../Users/jani/lo_ios/workdir/ios/loKit.xcconfig; sourceTree = "<group>"; };
 		39B5D2151F78130F008FB162 /* libLibreOfficeKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLibreOfficeKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		39B5D2181F78130F008FB162 /* LibreOfficeKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibreOfficeKit.h; sourceTree = "<group>"; };
 		39B5D2191F78130F008FB162 /* LibreOfficeKit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LibreOfficeKit.mm; sourceTree = "<group>"; };
@@ -69,7 +69,7 @@
 		39B5D2171F78130F008FB162 /* LibreOfficeKit */ = {
 			isa = PBXGroup;
 			children = (
-				39AB2EC91F7D6D3D00E6FDA9 /* loKit.xcconfig */,
+				3908315E1F8395EB003F2A29 /* loKit.xcconfig */,
 				39B5D2181F78130F008FB162 /* LibreOfficeKit.h */,
 				39B5D2191F78130F008FB162 /* LibreOfficeKit.mm */,
 			);
@@ -142,10 +142,12 @@
 /* Begin XCBuildConfiguration section */
 		39B5D21C1F78130F008FB162 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39AB2EC91F7D6D3D00E6FDA9 /* loKit.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = (
+					x86_64,
+					arm64,
+				);
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -203,16 +205,18 @@
 					"-lstdc++",
 				);
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "arm64 x86_64";
+				VALID_ARCHS = "x86_64 arm64";
 			};
 			name = Debug;
 		};
 		39B5D21D1F78130F008FB162 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39AB2EC91F7D6D3D00E6FDA9 /* loKit.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = (
+					x86_64,
+					arm64,
+				);
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -271,7 +275,6 @@
 		};
 		39B5D21F1F78130F008FB162 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39AB2EC91F7D6D3D00E6FDA9 /* loKit.xcconfig */;
 			buildSettings = {
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -281,7 +284,6 @@
 		};
 		39B5D2201F78130F008FB162 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39AB2EC91F7D6D3D00E6FDA9 /* loKit.xcconfig */;
 			buildSettings = {
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

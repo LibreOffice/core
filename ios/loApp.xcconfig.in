@@ -1,0 +1,17 @@
+//
+// This file is part of the LibreOffice project.
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+//
+// Xcode configuration properties
+LO_BUILDDIR = @BUILDDIR@
+LO_INSTDIR = @INSTDIR@
+LO_SRCDIR = @SRCDIR@
+LO_WORKDIR = @WORKDIR@
+OTHER_CFLAGS = @CFLAGS@
+OTHER_CPLUSPLUSFLAGS = @CPLUSPLUSFLAGS@
+LINK_LDFLAGS = @LDFLAGS@
+SYMROOT = @SYMROOT@
+

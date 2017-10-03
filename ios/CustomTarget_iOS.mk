@@ -8,8 +8,8 @@
 #- Env ------------------------------------------------------------------------
 IOSGEN := $(SRCDIR)/ios/generated
 IOSRES := $(IOSGEN)/resources
-IOSKITXC := $(BUILDDIR)/ios/loKit.xcconfig
-IOSAPPXC := $(BUILDDIR)/ios/loApp.xcconfig
+IOSKITXC := $(WORKDIR)/ios/loKit.xcconfig
+IOSAPPXC := $(WORKDIR)/ios/loApp.xcconfig
 IOSKITPRJ := $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj
 IOSAPPPRJ := $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj
 IOSAPP := $(INSTDIR)/LibreOfficeLight.app
@@ -27,36 +27,29 @@ $(call gb_CustomTarget_get_target,ios/ios): $(IOSGEN)/$(IOSKIT)
 
 
 #- Generate xcconfig files  ---------------------------------------------------
-$(IOSKITXC) : $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk 
+$(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk 
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
-	@echo "// Xcode configuration properties" > $(IOSKITXC)
-	@echo "LO_BUILDDIR = $(BUILDDIR)" >> $(IOSKITXC)
-	@echo "LO_INSTDIR = $(INSTDIR)" >> $(IOSKITXC)
-	@echo "LO_SRCDIR = $(SRC_ROOT)" >> $(IOSKITXC)
-	@echo "LO_WORKDIR = $(WORKDIR)" >> $(IOSKITXC)
-	@echo "OTHER_CFLAGS = $(gb_GLOBALDEFS)" >> $(IOSKITXC)
-	@echo "OTHER_CPLUSPLUSFLAGS = $(gb_GLOBALDEFS)" >> $(IOSKITXC)
-	@echo "PRELINK_LIBS = `$(SRCDIR)/bin/lo-all-static-libs`" >> $(IOSKITXC)
-	@echo "LINK_LDFLAGS = -Wl,-lz,-liconv,-map,$(WORKDIR)/iosKit.map "  >> $(IOSKITXC)
-	@echo "SYMROOT = $(WORKDIR)/ios/build\n" >> $(IOSKITXC)
+	@mkdir -p $(IOSGEN) $(WORKDIR)/ios;
+	sed -e "s'@BUILDDIR@'$(BUILDDIR)'g" \
+	    -e "s'@INSTDIR@'$(INSTDIR)'g" \
+	    -e "s'@SRCDIR@'$(SRC_ROOT)'g" \
+	    -e "s'@WORKDIR@'$(WORKDIR)'g" \
+	    -e "s'@CFLAGS@'$(gb_GLOBALDEFS)'g" \
+	    -e "s'@CPLUSPLUSFLAGS@'$(gb_GLOBALDEFS)'g" \
+	    -e "s'@LDFLAGS@'-Wl,-lz,-liconv,-map,$(WORKDIR)/ios/iosKit.map 'g" \
+	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
+	    -e "s'@PRELINK@'`$(SRCDIR)/bin/lo-all-static-libs`'g" \
+	    $(SRCDIR)/ios/loKit.xcconfig.in > $(WORKDIR)/ios/loKit.xcconfig
+	sed -e "s'@BUILDDIR@'$(BUILDDIR)'g" \
+	    -e "s'@INSTDIR@'$(INSTDIR)'g" \
+	    -e "s'@SRCDIR@'$(SRC_ROOT)'g" \
+	    -e "s'@WORKDIR@'$(WORKDIR)'g" \
+	    -e "s'@CFLAGS@'$(gb_GLOBALDEFS)'g" \
+	    -e "s'@CPLUSPLUSFLAGS@'$(gb_GLOBALDEFS)'g" \
+	    -e "s'@LDFLAGS@'-Wl,-lz,-liconv,-map,$(WORKDIR)/ios/iosKit.map 'g" \
+	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
+	    $(SRCDIR)/ios/loApp.xcconfig.in > $(WORKDIR)/ios/loApp.xcconfig
 
-$(IOSAPPXC) : $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk 
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
-	@mkdir -p $(IOSGEN);
-	@echo "// Xcode configuration properties" > $(IOSAPPXC)
-	@echo "LO_BUILDDIR = $(BUILDDIR)" >> $(IOSAPPXC)
-	@echo "LO_INSTDIR = $(INSTDIR)" >> $(IOSAPPXC)
-	@echo "LO_SRCDIR = $(SRC_ROOT)" >> $(IOSAPPXC)
-	@echo "LO_WORKDIR = $(WORKDIR)" >> $(IOSAPPXC)
-	@echo "OTHER_CFLAGS = $(gb_GLOBALDEFS)" >> $(IOSAPPXC)
-	@echo "OTHER_CPLUSPLUSFLAGS = $(gb_GLOBALDEFS)" >> $(IOSAPPXC)
-	@echo "LINK_LDFLAGS = -Wl,-lz,-liconv,-map,$(WORKDIR)/iosApp.map " >> $(IOSAPPXC)
-	@echo "SYMROOT = $(WORKDIR)/ios/build\n" >> $(IOSAPPXC)
-
-
-#- Generate ios  ------------------------------------------------------------
-.PHONY : iosCopySetup
-iosCopySetup: $(IOSKITXC) $(IOSAPPXC)
 ifeq ("$(wildcard $(IOSRES))","")
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 
@@ -116,9 +109,8 @@ endif
 
 
 #- build  ---------------------------------------------------------------------
-$(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj iosCopySetup
+$(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj $(IOSKITXC) $(IOSAPPXC)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
-	mkdir -p $(WORKDIR)/ios
 	CC=; \
 	$(call gb_Helper_print_on_error, \
 	    xcodebuild \
@@ -137,7 +129,6 @@ $(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj iosCopySetup
 
 $(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
-	mkdir -p $(WORKDIR)/ios
 	CC=; \
 	$(call gb_Helper_print_on_error, \
 	    xcodebuild \
@@ -155,13 +146,12 @@ $(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/ios):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
-	rm -rf $(IOSGEN) $(IOSKITXC) $(IOSAPPXC)
+	rm -rf $(IOSGEN)
 	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/project.xcworkspace
 	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/xcuserdata
 	rm -rf $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj/project.xcworkspace
 	rm -rf $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj/xcuserdata
-	rm -rf $(SRCDIR)/ios/LibreOfficeLight/build
-	rm -rf $(SRCDIR)/ios/LibreOfficeKit/build
+	rm -rf $(WORKDIR)/ios
 
 
 # vim: set noet sw=4 ts=4:
