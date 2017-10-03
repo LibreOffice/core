@@ -112,7 +112,7 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
     m_pIB_Range->SetClickHdl( LINK( this, RangeChooserTabPage, ChooseRangeHdl ));
 
     // #i75179# enable setting the background to a different color
-    m_pED_Range->SetStyle( m_pED_Range->GetStyle() | WB_FORCECTRLBACKGROUND );
+    m_pED_Range->SetForceControlBackground(true);
 
     m_pED_Range->SetUpdateDataHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ));
     m_pED_Range->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlEditedHdl ));

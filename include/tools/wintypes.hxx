@@ -198,7 +198,6 @@ WinBits const WB_EARLYTOGGLE =          SAL_CONST_INT64(0x4000000000);
 WinBits const WB_PASSWORD =             0x01000000;
 WinBits const WB_READONLY =             0x02000000;
 WinBits const WB_NOHIDESELECTION =      SAL_CONST_INT64(0x1000000000);
-WinBits const WB_FORCECTRLBACKGROUND =  0x80000000;
 
 // Window-Bits for MultiLineEdit
 WinBits const WB_IGNORETAB =            0x20000000;

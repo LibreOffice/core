@@ -89,7 +89,8 @@ private:
                         mbInsertMode:1,
                         mbClickedInSelection:1,
                         mbIsSubEdit:1,
-                        mbActivePopup:1;
+                        mbActivePopup:1,
+                        mbForceControlBackground:1;
     Link<Edit&,void>    maModifyHdl;
     Link<Edit&,void>    maUpdateDataHdl;
     Link<Edit&,void>    maAutocompleteHdl;
@@ -266,6 +267,8 @@ public:
     // returns the minimum size a bordered Edit should have given the current
     // global style settings (needed by sc's inputwin.cxx)
     static Size GetMinimumEditSize();
+
+    void SetForceControlBackground(bool b) { mbForceControlBackground = b; }
 };
 
 #endif // INCLUDED_VCL_EDIT_HXX
