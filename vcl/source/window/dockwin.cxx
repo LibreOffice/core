@@ -316,8 +316,6 @@ void DockingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbDockable              = (nStyle & WB_DOCKABLE) != 0;
     mnFloatBits             = WB_BORDER | (nStyle & DOCKWIN_FLOATSTYLES);
     nStyle                 &= ~(DOCKWIN_FLOATSTYLES | WB_BORDER);
-    if ( nStyle & WB_DOCKBORDER )
-        nStyle |= WB_BORDER;
 
     Window::ImplInit( pParent, nStyle, nullptr );
 

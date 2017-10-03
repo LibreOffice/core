@@ -213,9 +213,6 @@ WinBits const WB_SCALE =                0x08000000;
 WinBits const WB_LINESPACING =          0x01000000;
 WinBits const WB_SCROLL =               0x02000000;
 
-// Window-Bits for DockingWindows
-WinBits const WB_DOCKBORDER =           0x00001000;
-
 // Window-Bits for SplitWindow
 WinBits const WB_NOSPLITDRAW =          0x01000000;
 

@@ -108,7 +108,7 @@ public:
 };
 
 IFrameWindow_Impl::IFrameWindow_Impl( vcl::Window *pParent, bool bHasBorder )
-    : Window( pParent, WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_DOCKBORDER )
+    : Window( pParent, WB_CLIPCHILDREN | WB_NODIALOGCONTROL )
 {
     if ( !bHasBorder )
         SetBorderStyle( WindowBorderStyle::NOBORDER );
