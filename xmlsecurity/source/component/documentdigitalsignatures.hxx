@@ -27,6 +27,7 @@
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <certificatechooser.hxx>
 #include <documentsignaturehelper.hxx>
 
@@ -62,7 +63,7 @@ private:
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::security::DocumentSignatureInformation > ImplVerifySignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< css::io::XInputStream >& xSignStream, DocumentSignatureMode eMode );
 
-    css::uno::Reference< css::security::XCertificate > chooseCertificateImpl(OUString& rDescription, UserAction eAction);
+    css::uno::Reference< css::security::XCertificate > chooseCertificateImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction);
 
 public:
     explicit DocumentDigitalSignatures( const css::uno::Reference< css::uno::XComponentContext>& rxCtx );
@@ -106,6 +107,7 @@ public:
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificate(OUString& rDescription) override;
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseSigningCertificate(OUString& rDescription) override;
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseEncryptionCertificate(OUString& rDescription) override;
+    css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificateWithProps(css::uno::Sequence<::com::sun::star::beans::PropertyValue>& Properties) override;
 };
 
 /// @throws css::uno::Exception

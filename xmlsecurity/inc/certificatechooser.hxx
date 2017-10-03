@@ -97,6 +97,9 @@ public:
     /// Gets the description string provided when selecting the certificate.
     OUString GetDescription();
 
+    /// Returns the usage string of the selected certificate, if any.
+    OUString GetUsageText();
+
     OUString UsageInClearText(int bits);
 };
 

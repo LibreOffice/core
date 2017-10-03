@@ -255,6 +255,12 @@ OUString CertificateChooser::GetDescription()
     return m_pDescriptionED->GetText();
 }
 
+OUString CertificateChooser::GetUsageText()
+{
+    uno::Reference<css::security::XCertificate> xCert = GetSelectedCertificate();
+    return xCert.is() ? UsageInClearText(xCert->getCertificateUsage()) : OUString();
+}
+
 IMPL_LINK_NOARG(CertificateChooser, CertificateHighlightHdl, SvTreeListBox*, void)
 {
     bool bEnable = GetSelectedCertificate().is();

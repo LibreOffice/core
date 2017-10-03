@@ -37,6 +37,7 @@ private:
     uno::Reference<text::XTextField> m_xField;
     uno::Reference<text::XTextContent> m_xParent;
     OUString m_signature;
+    OUString m_usage;
     OUString m_display;
     const bool m_bRemove;
 

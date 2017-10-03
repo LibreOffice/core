@@ -43,6 +43,8 @@
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -445,7 +447,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     return bFound;
 }
 
-Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateImpl(OUString& rDescription, UserAction eAction)
+Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateImpl(std::map<OUString, OUString>& rProperties, const UserAction eAction)
 {
     std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
 
@@ -461,7 +463,8 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
         return Reference< css::security::XCertificate >(nullptr);
 
     Reference< css::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
-    rDescription = aChooser->GetDescription();
+    rProperties["Description"] = aChooser->GetDescription();
+    rProperties["Usage"] = aChooser->GetUsageText();
 
     if ( !xCert.is() )
         return Reference< css::security::XCertificate >(nullptr);
@@ -471,17 +474,38 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription)
 {
-    return chooseCertificateImpl( rDescription, UserAction::Sign );
+    return chooseSigningCertificate( rDescription );
 }
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSigningCertificate(OUString& rDescription)
 {
-    return chooseCertificateImpl( rDescription, UserAction::Sign );
+    std::map<OUString, OUString> aProperties;
+    Reference< css::security::XCertificate > xCert = chooseCertificateImpl( aProperties, UserAction::Sign );
+    rDescription = aProperties["Description"];
+    return xCert;
 }
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseEncryptionCertificate(OUString& rDescription)
 {
-    return chooseCertificateImpl( rDescription, UserAction::Encrypt );
+    std::map<OUString, OUString> aProperties;
+    Reference< css::security::XCertificate > xCert = chooseCertificateImpl( aProperties, UserAction::Encrypt );
+    rDescription = aProperties["Description"];
+    return xCert;
+}
+
+css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateWithProps(Sequence<::com::sun::star::beans::PropertyValue>& rProperties)
+{
+    std::map<OUString, OUString> aProperties;
+    auto xCert = chooseCertificateImpl( aProperties, UserAction::Sign );
+
+    std::vector<css::beans::PropertyValue> vec;
+    for (const auto& pair : aProperties)
+    {
+        vec.emplace_back(comphelper::makePropertyValue(pair.first, pair.second));
+    }
+
+    rProperties = comphelper::containerToSequence(vec);
+    return xCert;
 }
 
 sal_Bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location )
