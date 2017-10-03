@@ -1,11 +1,13 @@
+import platform
+import re
 import unittest
 
 from os import getenv, path
 
 try:
-    from urllib.parse import quote
+    from urllib.request import pathname2url
 except ImportError:
-    from urllib import quote
+    from urllib import pathname2url
 
 from org.libreoffice.unotest import pyuno, mkPropertyValue
 
@@ -28,7 +30,10 @@ class InsertRemoveCells(unittest.TestCase):
           ('ReadOnly', False)
         ))
         tdoc_dir = getenv('TDOC')
-        url = 'file://' + quote(path.join(tdoc_dir, 'fdo74824.ods'))
+        tdoc_path = pathname2url(path.join(tdoc_dir, 'fdo74824.ods'))
+        if platform.system() == 'Windows':
+            tdoc_path = re.sub(r'^//(/[A-Za-z]:/)/', r'\1', tdoc_path)
+        url = 'file://' + tdoc_path
         doc = desktop.loadComponentFromURL(url, "_blank", 0, load_props)
 
         sheet = doc.Sheets.Sheet1
