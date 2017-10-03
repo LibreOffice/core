@@ -862,16 +862,10 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly )
     : aXPolyList( rImpXPolyPoly.aXPolyList )
 {
-    // duplicate elements
-    for (XPolygon*& rp : aXPolyList)
-        rp = new XPolygon( *rp );
 }
 
 ImpXPolyPolygon::~ImpXPolyPolygon()
 {
-    for (XPolygon* p : aXPolyList)
-        delete p;
-    aXPolyList.clear();
 }
 
 XPolyPolygon::XPolyPolygon()
@@ -895,8 +889,7 @@ XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
     for(sal_uInt32 a(0); a < rPolyPolygon.count(); a++)
     {
         const basegfx::B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
-        XPolygon aNewPoly(aCandidate);
-        Insert(aNewPoly);
+        Insert(XPolygon(aCandidate));
     }
 }
 
@@ -904,10 +897,9 @@ XPolyPolygon::~XPolyPolygon()
 {
 }
 
-void XPolyPolygon::Insert( const XPolygon& rXPoly )
+void XPolyPolygon::Insert( XPolygon&& rXPoly )
 {
-    XPolygon* pXPoly = new XPolygon( rXPoly );
-    pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
+    pImpXPolyPolygon->aXPolyList.emplace_back( std::move(rXPoly) );
 }
 
 /// insert all XPolygons of a XPolyPolygon
@@ -915,30 +907,22 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly )
 {
     for ( size_t i = 0; i < rXPolyPoly.Count(); i++)
     {
-        XPolygon* pXPoly = new XPolygon( rXPolyPoly[i] );
-
-        pImpXPolyPolygon->aXPolyList.push_back( pXPoly );
+        pImpXPolyPolygon->aXPolyList.emplace_back( rXPolyPoly[i] );
     }
 }
 
 void XPolyPolygon::Remove( sal_uInt16 nPos )
 {
-    XPolygonList::iterator it = pImpXPolyPolygon->aXPolyList.begin();
-    ::std::advance( it, nPos );
-    XPolygon* pTmpXPoly = *it;
-    pImpXPolyPolygon->aXPolyList.erase( it );
-    delete pTmpXPoly;
+    pImpXPolyPolygon->aXPolyList.erase( pImpXPolyPolygon->aXPolyList.begin() + nPos );
 }
 
 const XPolygon& XPolyPolygon::GetObject( sal_uInt16 nPos ) const
 {
-    return *(pImpXPolyPolygon->aXPolyList[ nPos ]);
+    return pImpXPolyPolygon->aXPolyList[ nPos ];
 }
 
 void XPolyPolygon::Clear()
 {
-    for(XPolygon* p : pImpXPolyPolygon->aXPolyList)
-        delete p;
     pImpXPolyPolygon->aXPolyList.clear();
 }
 
@@ -954,8 +938,8 @@ tools::Rectangle XPolyPolygon::GetBoundRect() const
 
     for ( size_t n = 0; n < nXPoly; n++ )
     {
-        const XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList[ n ];
-        aRect.Union( pXPoly->GetBoundRect() );
+        XPolygon const & rXPoly = pImpXPolyPolygon->aXPolyList[ n ];
+        aRect.Union( rXPoly.GetBoundRect() );
     }
 
     return aRect;
@@ -963,7 +947,7 @@ tools::Rectangle XPolyPolygon::GetBoundRect() const
 
 XPolygon& XPolyPolygon::operator[]( sal_uInt16 nPos )
 {
-    return *( pImpXPolyPolygon->aXPolyList[ nPos ] );
+    return pImpXPolyPolygon->aXPolyList[ nPos ];
 }
 
 XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
@@ -992,7 +976,7 @@ void XPolyPolygon::Distort(const tools::Rectangle& rRefRect,
                            const XPolygon& rDistortedRect)
 {
     for (size_t i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList[ i ]->Distort(rRefRect, rDistortedRect);
+        pImpXPolyPolygon->aXPolyList[ i ].Distort(rRefRect, rDistortedRect);
 }
 
 basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const

@@ -123,7 +123,7 @@ public:
 
                     ~XPolyPolygon();
 
-    void            Insert( const XPolygon& rXPoly );
+    void            Insert( XPolygon&& rXPoly );
     void            Insert( const XPolyPolygon& rXPoly );
     void            Remove( sal_uInt16 nPos );
     const XPolygon& GetObject( sal_uInt16 nPos ) const;
