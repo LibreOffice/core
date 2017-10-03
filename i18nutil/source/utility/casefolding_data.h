@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18nutil {
 
 static const sal_Int8 CaseMappingIndex[] = {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05,   -1,   -1, // 0000 - 07ff
@@ -851,7 +851,7 @@ static Mapping CaseMappingExtra[] = {
     0x0069, 0x00CC, 0x00CD, 0x0128, 0x012E, 0x0130, 0x0049, 0x004A, 0x0307, 0x03A3,
 */
 
-} } } }
+}
 
 #endif
 

@@ -28,6 +28,7 @@
 #include <memory>
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
 typedef struct {
@@ -55,7 +56,7 @@ typedef struct {
 #define NUMBER_OMIT_ONE_67 (NUMBER_OMIT_ONE_6|NUMBER_OMIT_ONE_7)
 #define NUMBER_OMIT_ZERO_ONE_67 ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE_67 )
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh);
 
@@ -1051,14 +1052,14 @@ NativeNumberSupplierService::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_NativeNumberSupplier_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::NativeNumberSupplierService());
+    return cppu::acquire(new i18npool::NativeNumberSupplierService());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

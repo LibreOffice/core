@@ -63,9 +63,10 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 static const sal_Unicode table_Alphabet_ar[] = {
     0x0623, 0x0628, 0x062A, 0x062B, 0x062C, 0x062D, 0x062E,
@@ -1061,14 +1062,14 @@ Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_text_DefaultNumberingProvider_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::DefaultNumberingProvider(context));
+    return cppu::acquire(new i18npool::DefaultNumberingProvider(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

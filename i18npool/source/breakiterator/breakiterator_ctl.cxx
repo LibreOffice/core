@@ -21,10 +21,12 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <breakiterator_ctl.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 /**
  * Constructor.
@@ -125,6 +127,6 @@ LineBreakResults SAL_CALL BreakIterator_CTL::getLineBreak(
     return lbr;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

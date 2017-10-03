@@ -19,7 +19,7 @@
 
 #include <transliteration_Ignore.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 sal_Unicode
 ignoreMiddleDot_ja_JP_translator (const sal_Unicode c)
@@ -42,6 +42,6 @@ ignoreMiddleDot_ja_JP::ignoreMiddleDot_ja_JP()
     implementationName = "com.sun.star.i18n.Transliteration.ignoreMiddleDot_ja_JP";
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

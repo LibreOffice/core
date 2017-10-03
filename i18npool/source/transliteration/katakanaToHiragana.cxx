@@ -19,7 +19,7 @@
 
 #include <transliteration_OneToOne.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 // see http://charts.unicode.org/Web/U3040.html Hiragana (U+3040..U+309F)
 // see http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
@@ -40,6 +40,6 @@ katakanaToHiragana::katakanaToHiragana()
     implementationName = "com.sun.star.i18n.Transliteration.KATAKANA_HIRAGANA";
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

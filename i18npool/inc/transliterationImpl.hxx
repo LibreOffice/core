@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/types.h>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class TransliterationImpl : public cppu::WeakImplHelper
 <
@@ -44,8 +44,8 @@ public:
     virtual OUString SAL_CALL getName(  ) override ;
     virtual sal_Int16 SAL_CALL getType(  ) override ;
 
-    virtual void SAL_CALL loadModule( TransliterationModules modName, const css::lang::Locale& rLocale ) override ;
-    virtual void SAL_CALL loadModuleNew( const css::uno::Sequence< TransliterationModulesNew >& modName,
+    virtual void SAL_CALL loadModule( css::i18n::TransliterationModules modName, const css::lang::Locale& rLocale ) override ;
+    virtual void SAL_CALL loadModuleNew( const css::uno::Sequence< css::i18n::TransliterationModulesNew >& modName,
         const css::lang::Locale& rLocale ) override ;
     virtual void SAL_CALL loadModuleByImplName( const OUString& implName,
         const css::lang::Locale& rLocale ) override;
@@ -87,7 +87,7 @@ private:
     sal_Int16 numCascade;
     bool caseignoreOnly;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
-    css::uno::Reference< XLocaleData4 > mxLocaledata;
+    css::uno::Reference< css::i18n::XLocaleData4 > mxLocaledata;
     css::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 
     /// @throws css::uno::RuntimeException
@@ -106,7 +106,7 @@ private:
         sal_Int32 length, const sal_Int16 _nCascade);
 };
 
-} } } }
+}
 
 #endif
 

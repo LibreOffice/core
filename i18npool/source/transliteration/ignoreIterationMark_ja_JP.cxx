@@ -25,9 +25,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
-OneToOneMappingTable_t const ignoreIterationMark_ja_JP_mappingTable[] = {
+i18nutil::OneToOneMappingTable_t const ignoreIterationMark_ja_JP_mappingTable[] = {
     { 0x3046, 0x3094 },  // HIRAGANA LETTER U --> HIRAGANA LETTER VU
     { 0x304B, 0x304C },  // HIRAGANA LETTER KA --> HIRAGANA LETTER GA
     { 0x304D, 0x304E },  // HIRAGANA LETTER KI --> HIRAGANA LETTER GI
@@ -82,7 +82,7 @@ OneToOneMappingTable_t const ignoreIterationMark_ja_JP_mappingTable[] = {
 OUString SAL_CALL
 ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
 {
-    oneToOneMapping aTable(ignoreIterationMark_ja_JP_mappingTable, sizeof(ignoreIterationMark_ja_JP_mappingTable));
+    i18nutil::oneToOneMapping aTable(ignoreIterationMark_ja_JP_mappingTable, sizeof(ignoreIterationMark_ja_JP_mappingTable));
 
     // Create a string buffer which can hold nCount + 1 characters.
     // The reference count is 1 now.
@@ -139,6 +139,6 @@ ignoreIterationMark_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, s
 
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

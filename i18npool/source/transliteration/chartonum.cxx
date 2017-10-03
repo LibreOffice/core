@@ -23,7 +23,7 @@
 
 using namespace com::sun::star::uno;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 #define TRANSLITERATION_CHARTONUM( name ) \
 CharToNum##name::CharToNum##name() \
@@ -50,6 +50,6 @@ TRANSLITERATION_CHARTONUM( _th)
 
 #undef TRANSLITERATION_CHARTONUM
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

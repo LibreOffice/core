@@ -25,10 +25,11 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 
 #define GREGORIAN_CROSSOVER 2299161
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 // not used
 //static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
@@ -327,6 +328,6 @@ Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
     return (double) intgr;
 }
 
-}}}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

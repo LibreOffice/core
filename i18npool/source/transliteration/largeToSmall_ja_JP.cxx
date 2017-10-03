@@ -24,7 +24,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 // ftp://ftp.unicode.org/Public/3.0-Update/UnicodeData-3.0.0.txt
 // ftp://ftp.unicode.org/Public/3.0-Update/UnicodeData-3.0.0.html
@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 // http://charts.unicode.org/Web/U30A0.html Katakana (U+30A0..U+30FF)
 // http://charts.unicode.org/Web/UFF00.html
 
-OneToOneMappingTable_t const large2small[] = {
+i18nutil::OneToOneMappingTable_t const large2small[] = {
     { 0x3041, 0x3042 },  // HIRAGANA LETTER SMALL A --> HIRAGANA LETTER A
     { 0x3043, 0x3044 },  // HIRAGANA LETTER SMALL I --> HIRAGANA LETTER I
     { 0x3045, 0x3046 },  // HIRAGANA LETTER SMALL U --> HIRAGANA LETTER U
@@ -68,13 +68,13 @@ OneToOneMappingTable_t const large2small[] = {
 
 largeToSmall_ja_JP::largeToSmall_ja_JP()
 {
-    static oneToOneMapping _table(large2small, sizeof(large2small));
+    static i18nutil::oneToOneMapping _table(large2small, sizeof(large2small));
     func = nullptr;
     table = &_table;
     transliterationName = "largeToSmall_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.largeToSmall_ja_JP";
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

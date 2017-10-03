@@ -27,6 +27,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 
+namespace i18npool {
+
 ChapterCollator::ChapterCollator( const Reference < XComponentContext >& rxContext ) : CollatorImpl(rxContext)
 {
     cclass = CharacterClassification::create( rxContext );
@@ -91,4 +93,5 @@ ChapterCollator::getSupportedServiceNames()
     return aRet;
 }
 
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

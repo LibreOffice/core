@@ -23,10 +23,12 @@
 #include <data/indexdata_ja_phonetic.h>
 #include <string.h>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+using namespace ::com::sun::star::i18n;
+
+namespace i18npool {
 
 OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexCharacter( const OUString& rIndexEntry,
-    const lang::Locale& /*rLocale*/, const OUString& /*rSortAlgorithm*/ )
+    const css::lang::Locale& /*rLocale*/, const OUString& /*rSortAlgorithm*/ )
 {
     sal_Unicode ch=rIndexEntry.toChar();
     sal_uInt16 first = idx[ ch >> 8 ];
@@ -40,14 +42,14 @@ OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexCharacter( const OUStr
 }
 
 OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexKey( const OUString& IndexEntry,
-    const OUString& PhoneticEntry, const lang::Locale& rLocale )
+    const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
 {
     return getIndexCharacter( PhoneticEntry.isEmpty() ? IndexEntry : PhoneticEntry , rLocale, OUString());
 }
 
 sal_Int16 SAL_CALL IndexEntrySupplier_ja_phonetic::compareIndexEntry(
-    const OUString& IndexEntry1, const OUString& PhoneticEntry1, const lang::Locale& rLocale1,
-    const OUString& IndexEntry2, const OUString& PhoneticEntry2, const lang::Locale& rLocale2 )
+    const OUString& IndexEntry1, const OUString& PhoneticEntry1, const css::lang::Locale& rLocale1,
+    const OUString& IndexEntry2, const OUString& PhoneticEntry2, const css::lang::Locale& rLocale2 )
 {
     sal_Int16 result = sal::static_int_cast<sal_Int16>( collator->compareString(
         IndexEntrySupplier_ja_phonetic::getIndexKey(IndexEntry1, PhoneticEntry1, rLocale1),
@@ -88,6 +90,6 @@ sal_Bool SAL_CALL IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant:
     return collator->loadCollatorAlgorithm(last, rLocale, collatorOptions) == 0;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

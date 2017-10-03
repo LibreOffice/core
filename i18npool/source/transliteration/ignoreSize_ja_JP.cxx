@@ -24,7 +24,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 OUString SAL_CALL
 ignoreSize_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
@@ -50,6 +50,6 @@ ignoreSize_ja_JP::transliterateChar2Char( sal_Unicode inChar)
     return t1->transliterateChar2Char(inChar);
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,10 +24,12 @@
 #include <i18nutil/unicode.hxx>
 #include <rtl/ustrbuf.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 BreakIteratorImpl::BreakIteratorImpl( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
@@ -630,14 +632,14 @@ BreakIteratorImpl::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_BreakIterator_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::BreakIteratorImpl(context));
+    return cppu::acquire(new i18npool::BreakIteratorImpl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

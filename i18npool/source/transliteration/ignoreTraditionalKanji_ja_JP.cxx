@@ -19,10 +19,10 @@
 
 #include <transliteration_Ignore.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 // traditional Kanji characters --> modern Kanji characters
-OneToOneMappingTable_t const traditionalKanji2updateKanji[] = {
+i18nutil::OneToOneMappingTable_t const traditionalKanji2updateKanji[] = {
     { 0x4E17, 0x4E16 },
     { 0x4E55, 0x864E },
     { 0x4E58, 0x4E57 },
@@ -721,7 +721,7 @@ OneToOneMappingTable_t const traditionalKanji2updateKanji[] = {
 
 ignoreTraditionalKanji_ja_JP::ignoreTraditionalKanji_ja_JP()
 {
-    static oneToOneMapping _table(traditionalKanji2updateKanji, sizeof(traditionalKanji2updateKanji));
+    static i18nutil::oneToOneMapping _table(traditionalKanji2updateKanji, sizeof(traditionalKanji2updateKanji));
     func = nullptr;
     table = &_table;
     map = nullptr;
@@ -729,6 +729,6 @@ ignoreTraditionalKanji_ja_JP::ignoreTraditionalKanji_ja_JP()
     implementationName = "com.sun.star.i18n.Transliteration.ignoreTraditionalKanji_ja_JP";
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,12 +25,12 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 halfwidthToFullwidth::halfwidthToFullwidth()
 {
     func = nullptr;
-    table = &widthfolding::gethalf2fullTable();
+    table = &i18nutil::widthfolding::gethalf2fullTable();
     transliterationName = "halfwidthToFullwidth";
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH";
 }
@@ -45,13 +45,13 @@ halfwidthToFullwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
     useOffset = _useOffset;
 
     // Composition: KA + voice-mark --> GA
-    return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
+    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
 }
 
 halfwidthKatakanaToFullwidthKatakana::halfwidthKatakanaToFullwidthKatakana()
 {
     func = nullptr;
-    table = &widthfolding::gethalfKana2fullKanaTable();
+    table = &i18nutil::widthfolding::gethalfKana2fullKanaTable();
     transliterationName = "halfwidthKatakanaToFullwidthKatakana";
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTHKATAKANA_FULLWIDTHKATAKANA";
 }
@@ -66,13 +66,13 @@ halfwidthKatakanaToFullwidthKatakana::transliterate( const OUString& inStr, sal_
     useOffset = _useOffset;
 
     // Composition: KA + voice-mark --> GA
-    return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
+    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
 }
 
 halfwidthToFullwidthLikeJIS::halfwidthToFullwidthLikeJIS()
 {
     func = nullptr;
-    table = &widthfolding::gethalf2fullTableForJIS();
+    table = &i18nutil::widthfolding::gethalf2fullTableForJIS();
     transliterationName = "halfwidthToFullwidthLikeJIS";
     implementationName = "com.sun.star.i18n.Transliteration.HALFWIDTH_FULLWIDTH_LIKE_JIS";
 }
@@ -87,10 +87,10 @@ halfwidthToFullwidthLikeJIS::transliterate( const OUString& inStr, sal_Int32 sta
     useOffset = _useOffset;
 
     // Composition: KA + voice-mark --> GA
-    return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset, WIDTHFOLDNIG_DONT_USE_COMBINED_VU );
+    return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset, WIDTHFOLDNIG_DONT_USE_COMBINED_VU );
 }
 
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

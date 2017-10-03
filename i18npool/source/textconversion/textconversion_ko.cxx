@@ -35,7 +35,7 @@ using namespace com::sun::star::linguistic2;
 using namespace com::sun::star::uno;
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 #define SCRIPT_OTHERS   0
 #define SCRIPT_HANJA    1
@@ -348,6 +348,6 @@ TextConversion_ko::interactiveConversion( const Locale& /*rLocale*/, sal_Int16 /
     return true;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

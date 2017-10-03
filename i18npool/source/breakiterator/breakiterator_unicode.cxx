@@ -35,9 +35,10 @@ extern const char OpenOffice_dat[];
 U_CDECL_END
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 // Cache map of breakiterators, stores state information so has to be
 // thread_local.
@@ -585,14 +586,14 @@ BreakIterator_Unicode::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_BreakIterator_Unicode_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::BreakIterator_Unicode());
+    return cppu::acquire(new i18npool::BreakIterator_Unicode());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

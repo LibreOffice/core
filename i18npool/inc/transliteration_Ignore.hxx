@@ -25,7 +25,7 @@
 
 typedef sal_Unicode (*TransFunc)(const sal_Unicode);
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class transliteration_Ignore : public transliteration_commonclass
 {
@@ -65,7 +65,7 @@ public:
 
 protected:
         TransFunc func;
-        oneToOneMapping *table;
+        i18nutil::oneToOneMapping *table;
         const Mapping *map;
 };
 
@@ -151,7 +151,7 @@ TRANSLITERATION_IGNORE(Size_ja_JP)
 
 #undef TRANSLITERATION_IGNORE
 
-} } } }
+}
 
 #endif // INCLUDED_I18NPOOL_INC_TRANSLITERATION_IGNORE_HXX
 

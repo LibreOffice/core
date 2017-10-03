@@ -22,7 +22,7 @@
 #include <transliteration_Ignore.hxx>
 #include <indexentrysupplier_asian.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class TextToPronounce_zh : public transliteration_Ignore
 {
@@ -68,7 +68,7 @@ TRANSLITERATION_TextToPronounce_zh( TextToChuyin_zh_TW)
 
 #undef TRANSLITERATION_TextToPronounce_zh
 
-} } } }
+}
 
 #endif
 

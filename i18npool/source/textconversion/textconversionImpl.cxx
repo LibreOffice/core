@@ -24,9 +24,10 @@
 #include <localedata.hxx>
 
 using namespace com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 using namespace com::sun::star::uno;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 TextConversionResult SAL_CALL
 TextConversionImpl::getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
@@ -121,14 +122,14 @@ TextConversionImpl::getSupportedServiceNames()
     return aRet;
 }
 
-} } } }
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_i18n_TextConversion_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::TextConversionImpl(context));
+    return cppu::acquire(new i18npool::TextConversionImpl(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,7 +22,7 @@
 #include <wtt.h>
 
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 InputSequenceChecker_th::InputSequenceChecker_th()
     : InputSequenceCheckerImpl("com.sun.star.i18n.InputSequenceChecker_th")
@@ -139,6 +139,6 @@ http://www.openoffice.org/issues/show_bug.cgi?id=42661
     return nStartPos;
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,7 +19,7 @@
 
 #include <i18nutil/oneToOneMapping.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18nutil {
 
 oneToOneMapping::oneToOneMapping( OneToOneMappingTable_t const *rpTable, const size_t rnBytes, const size_t rnUnitSize )
     : mpTable( rpTable ),
@@ -149,6 +149,6 @@ sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const
 }
 
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

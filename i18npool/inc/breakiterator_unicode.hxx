@@ -25,7 +25,7 @@
 #include <memory>
 #include <unordered_map>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 #define LOAD_CHARACTER_BREAKITERATOR    0
 #define LOAD_WORD_BREAKITERATOR         1
@@ -48,11 +48,11 @@ public:
         const css::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
         sal_Int32& nDone ) override;
 
-    virtual Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    virtual Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType) override;
-    virtual Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
+    virtual css::i18n::Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection ) override;
 
     virtual sal_Int32 SAL_CALL beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
@@ -60,9 +60,10 @@ public:
     virtual sal_Int32 SAL_CALL endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale ) override;
 
-    virtual LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
+    virtual css::i18n::LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
-        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions ) override;
+        const css::i18n::LineBreakHyphenationOptions& hOptions,
+        const css::i18n::LineBreakUserOptions& bOptions ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -103,7 +104,7 @@ public:
     typedef std::unordered_map< OString, std::shared_ptr< BI_ValueData >, OStringHash > BIMap;
 };
 
-} } } }
+}
 
 #endif
 

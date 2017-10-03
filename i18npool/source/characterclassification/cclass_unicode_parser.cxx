@@ -33,11 +33,12 @@
 #include <string.h>
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
 #define TOKEN_DIGIT_FLAGS (ParserFlags::CHAR_VALUE | ParserFlags::VALUE | ParserFlags::VALUE_EXP | ParserFlags::VALUE_EXP_VALUE | ParserFlags::VALUE_DIGIT)
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 // Default identifier/name specification is [A-Za-z_][A-Za-z0-9_]*
 
@@ -592,7 +593,6 @@ ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c)
         return ParserFlags::VALUE;
     else if ( c == cDecimalSep )
         return ParserFlags::CHAR_VALUE | ParserFlags::VALUE;
-    using namespace i18n;
     bool bStart = (eState == ssGetChar || eState == ssGetWordFirstChar ||
             eState == ssRewindFromValue || eState == ssIgnoreLeadingInRewind);
     sal_Int32 nTypes = (bStart ? nStartTypes : nContTypes);
@@ -690,7 +690,6 @@ ParserFlags cclass_Unicode::getContCharsFlags( sal_Unicode c )
 void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32 nPos, sal_Int32 nTokenType )
 {
     assert(r.LeadingWhiteSpace == 0);
-    using namespace i18n;
     eState = ssGetChar;
 
     //! All the variables below (plus ParseResult) have to be resetted on ssRewindFromValue!
@@ -1035,6 +1034,6 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     }
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

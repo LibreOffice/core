@@ -19,9 +19,9 @@
 
 #include <transliteration_Ignore.hxx>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
-OneToOneMappingTable_t const ignoreSpace_ja_JP_mappingTable[] = {
+i18nutil::OneToOneMappingTable_t const ignoreSpace_ja_JP_mappingTable[] = {
     { 0x0020, 0xffff },  // SPACE
     { 0x00A0, 0xffff },  // NO-BREAK SPACE
     { 0x2002, 0xffff },  // EN SPACE
@@ -43,12 +43,12 @@ OneToOneMappingTable_t const ignoreSpace_ja_JP_mappingTable[] = {
 ignoreSpace_ja_JP::ignoreSpace_ja_JP()
 {
     func = nullptr;
-    table = new oneToOneMapping(ignoreSpace_ja_JP_mappingTable, sizeof(ignoreSpace_ja_JP_mappingTable));
+    table = new i18nutil::oneToOneMapping(ignoreSpace_ja_JP_mappingTable, sizeof(ignoreSpace_ja_JP_mappingTable));
     map = nullptr;
     transliterationName = "ignoreSpace_ja_JP";
     implementationName = "com.sun.star.i18n.Transliteration.ignoreSpace_ja_JP";
 }
 
-} } } }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

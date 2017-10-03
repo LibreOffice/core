@@ -25,7 +25,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 #ifndef DISABLE_DYNLOADING
 
@@ -204,6 +204,8 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
     }
     return OUString();
 }
-} } } }
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

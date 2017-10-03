@@ -26,11 +26,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace i18npool {
 
 class CharacterClassificationImpl : public cppu::WeakImplHelper
 <
-    XCharacterClassification,
+    css::i18n::XCharacterClassification,
     css::lang::XServiceInfo
 >
 {
@@ -52,11 +52,11 @@ public:
         const css::lang::Locale& rLocale ) override;
     virtual sal_Int32 SAL_CALL getStringType( const OUString& text, sal_Int32 nPos,
         sal_Int32 nCount, const css::lang::Locale& rLocale ) override;
-    virtual ParseResult SAL_CALL parseAnyToken( const OUString& Text, sal_Int32 nPos,
+    virtual css::i18n::ParseResult SAL_CALL parseAnyToken( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& rLocale, sal_Int32 nStartCharFlags,
         const OUString& userDefinedCharactersStart, sal_Int32 nContCharFlags,
         const OUString& userDefinedCharactersCont ) override;
-    virtual ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType,
+    virtual css::i18n::ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType,
         const OUString& Text, sal_Int32 nPos, const css::lang::Locale& rLocale,
         sal_Int32 nStartCharFlags, const OUString& userDefinedCharactersStart,
         sal_Int32 nContCharFlags, const OUString& userDefinedCharactersCont ) override;
@@ -92,7 +92,7 @@ private:
 
 };
 
-} } } }
+}
 
 #endif
 
