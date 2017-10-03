@@ -23,6 +23,7 @@
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
 #include <vcl/window.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include <memory>
 #include <vector>
 
@@ -49,13 +50,13 @@ Allowed PageBits
 
 Setting page bits modify the display attributes of the tab name
 
-TPB_DISPLAY_NAME_BLUE
+TabBarPageBits::Blue
                 - Display tab name in light blue, used in draw for
                   invisible layers and in calc for scenario pages
-TPB_DISPLAY_NAME_ITALIC
+TabBarPageBits::Italic
                 - Display tab name italic, used in draw for
                   locked layers
-TPB_DISPLAY_NAME_UNDERLINE
+TabBarPageBits::Underline
                 - Display tab name underlined, used in draw for
                   non-printable layers
 
@@ -276,15 +277,19 @@ class Button;
 
 // Page bits
 
-typedef sal_uInt16 TabBarPageBits;
-
-#define TPB_DISPLAY_NAME_BLUE      ((TabBarPageBits)0x0001)
-#define TPB_DISPLAY_NAME_ITALIC    ((TabBarPageBits)0x0002)
-#define TPB_DISPLAY_NAME_UNDERLINE ((TabBarPageBits)0x0004)
+enum class TabBarPageBits {
+    NONE       = 0x00,
+    Blue       = 0x01,
+    Italic     = 0x02,
+    Underline  = 0x04,
+};
+namespace o3tl {
+    template<> struct typed_flags<TabBarPageBits> : is_typed_flags<TabBarPageBits, 0x07> {};
+};
 
     // interface checks only, do not use in regular control flow
 
-#define TPB_DISPLAY_NAME_ALLFLAGS  ((TabBarPageBits)(TPB_DISPLAY_NAME_BLUE | TPB_DISPLAY_NAME_ITALIC | TPB_DISPLAY_NAME_UNDERLINE))
+#define TPB_DISPLAY_NAME_ALLFLAGS  (TabBarPageBits::Blue | TabBarPageBits::Italic | TabBarPageBits::Underline)
 
 // - TabBar-Types - used in TabBar::AllowRenaming
 
@@ -403,7 +408,7 @@ public:
     virtual void    Mirror();
 
     void            InsertPage( sal_uInt16 nPageId, const OUString& rText,
-                                TabBarPageBits nBits = 0,
+                                TabBarPageBits nBits = TabBarPageBits::NONE,
                                 sal_uInt16 nPos = TabBar::APPEND );
     void            RemovePage( sal_uInt16 nPageId );
     void            MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos );

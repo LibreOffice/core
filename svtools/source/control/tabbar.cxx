@@ -1199,17 +1199,17 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
 
             // Special display of tab name depending on page bits
 
-            if (pItem->mnBits & TPB_DISPLAY_NAME_BLUE)
+            if (pItem->mnBits & TabBarPageBits::Blue)
             {
                 rRenderContext.SetTextColor(Color(COL_LIGHTBLUE));
             }
-            if (pItem->mnBits & TPB_DISPLAY_NAME_ITALIC)
+            if (pItem->mnBits & TabBarPageBits::Italic)
             {
                 vcl::Font aSpecialFont = rRenderContext.GetFont();
                 aSpecialFont.SetItalic(FontItalic::ITALIC_NORMAL);
                 rRenderContext.SetFont(aSpecialFont);
             }
-            if (pItem->mnBits & TPB_DISPLAY_NAME_UNDERLINE)
+            if (pItem->mnBits & TabBarPageBits::Underline)
             {
                 vcl::Font aSpecialFont = rRenderContext.GetFont();
                 aSpecialFont.SetUnderline(LINESTYLE_SINGLE);
@@ -1792,7 +1792,7 @@ TabBarPageBits TabBar::GetPageBits(sal_uInt16 nPageId) const
     if (nPos != PAGE_NOT_FOUND)
         return mpImpl->mpItemList[nPos]->mnBits;
     else
-        return 0;
+        return TabBarPageBits::NONE;
 }
 
 sal_uInt16 TabBar::GetPageCount() const
@@ -2091,7 +2091,7 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
             aForegroundColor = aFaceTextColor;
             aBackgroundColor = aFaceColor;
         }
-        if (GetPageBits( mnEditId ) & TPB_DISPLAY_NAME_BLUE)
+        if (GetPageBits( mnEditId ) & TabBarPageBits::Blue)
         {
             aForegroundColor = Color(COL_LIGHTBLUE);
         }
