@@ -341,7 +341,7 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
         if( rDoc.HasValueData( aPos.Col(), aPos.Row(), aPos.Tab() ) )
         {
             double fValue = rDoc.GetValue( aPos );
-            short nFmtType = rFormatter.GetType( rDoc.GetNumberFormat( aPos ) );
+            short nFmtType = rFormatter.GetType( rDoc.GetNumberFormat( rDoc.GetNonThreadedContext(), aPos ) );
             if( nFmtType == css::util::NumberFormat::LOGICAL )
                 InsertOrigBoolItem( fValue != 0, aText );
             else if( nFmtType & css::util::NumberFormat::DATETIME )

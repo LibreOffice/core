@@ -44,7 +44,7 @@ void ScSimpleFormulaCalculator::Calculate()
         return;
 
     mbCalculated = true;
-    ScInterpreter aInt(nullptr, mpDoc, maAddr, *mpCode.get());
+    ScInterpreter aInt(nullptr, mpDoc, mpDoc->GetNonThreadedContext(), maAddr, *mpCode.get());
 
     std::unique_ptr<sfx2::LinkManager> pNewLinkMgr( new sfx2::LinkManager(mpDoc->GetDocumentShell()) );
     aInt.SetLinkManager( pNewLinkMgr.get() );

@@ -418,9 +418,9 @@ sal_uInt32 ScColumn::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
     return nFormat;
 }
 
-sal_uInt32 ScColumn::GetNumberFormat( SCROW nRow ) const
+sal_uInt32 ScColumn::GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const
 {
-    return pAttrArray->GetPattern( nRow )->GetNumberFormat( pDocument->GetFormatTable() );
+    return pAttrArray->GetPattern( nRow )->GetNumberFormat( rContext.GetFormatTable() );
 }
 
 SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged )
@@ -1151,7 +1151,7 @@ void ScColumn::CopyStaticToDocument(
     // Dont' forget to copy the number formats over.  Charts may reference them.
     for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
     {
-        sal_uInt32 nNumFmt = GetNumberFormat(nRow);
+        sal_uInt32 nNumFmt = GetNumberFormat(pDocument->GetNonThreadedContext(), nRow);
         SvNumberFormatterMergeMap::const_iterator itNum = rMap.find(nNumFmt);
         if (itNum != rMap.end())
             nNumFmt = itNum->second;
@@ -2890,7 +2890,7 @@ public:
 
     void operator() (size_t nRow, ScFormulaCell* pCell)
     {
-        sal_uInt32 nFormat = mrCol.GetNumberFormat(nRow);
+        sal_uInt32 nFormat = mrCol.GetNumberFormat(mrCol.GetDoc().GetNonThreadedContext(), nRow);
         if( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
             // Non-default number format is set.
             pCell->SetNeedNumberFormat(false);

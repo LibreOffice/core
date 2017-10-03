@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/vclptr.hxx>
 #include "scdllapi.h"
+#include "interpretercontext.hxx"
 #include "rangelst.hxx"
 #include "rangenam.hxx"
 #include "tabopparams.hxx"
@@ -558,6 +559,8 @@ public:
     void              GetDocStat( ScDocStat& rDocStat );
 
     SC_DLLPUBLIC void  InitDrawLayer( SfxObjectShell* pDocShell = nullptr );
+
+    SC_DLLPUBLIC ScInterpreterContext     GetNonThreadedContext() const;
 
     SC_DLLPUBLIC sfx2::LinkManager*       GetLinkManager();
     SC_DLLPUBLIC const sfx2::LinkManager* GetLinkManager() const;
@@ -1111,10 +1114,10 @@ public:
     SC_DLLPUBLIC void                         GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                                                sal_uInt32& rFormat ) const;
     sal_uInt32                                GetNumberFormat( const ScRange& rRange ) const;
-    SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( const ScAddress& ) const;
+    SC_DLLPUBLIC sal_uInt32                   GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& ) const;
     void                                      SetNumberFormat( const ScAddress& rPos, sal_uInt32 nNumberFormat );
 
-    void                                      GetNumberFormatInfo( short& nType, sal_uLong& nIndex, const ScAddress& rPos ) const;
+    void                                      GetNumberFormatInfo( const ScInterpreterContext& rContext, short& nType, sal_uLong& nIndex, const ScAddress& rPos ) const;
     SC_DLLPUBLIC const ScFormulaCell*         GetFormulaCell( const ScAddress& rPos ) const;
     SC_DLLPUBLIC ScFormulaCell*               GetFormulaCell( const ScAddress& rPos );
     SC_DLLPUBLIC void                         GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rFormula ) const;
@@ -2049,7 +2052,7 @@ public:
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
     void SC_DLLPUBLIC SetFormulaResults( const ScAddress& rTopPos, const formula::FormulaConstTokenRef* pResults, size_t nLen );
 
-    ScDocumentThreadSpecific CalculateInColumnInThread( const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
+    ScDocumentThreadSpecific CalculateInColumnInThread( const ScInterpreterContext& rContext, const ScAddress& rTopPos, size_t nLen, unsigned nThisThread, unsigned nThreadsTotal);
     void HandleStuffAfterParallelCalculation( const ScAddress& rTopPos, size_t nLen );
 
     /**
