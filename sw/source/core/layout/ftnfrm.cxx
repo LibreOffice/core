@@ -807,6 +807,7 @@ bool SwFrame::IsFootnoteAllowed() const
     {
         // no footnotes in repeated headlines
         const SwTabFrame *pTab = const_cast<SwFrame*>(this)->ImplFindTabFrame();
+        assert(pTab);
         if ( pTab->IsFollow() )
             return !pTab->IsInHeadline( *this );
     }
