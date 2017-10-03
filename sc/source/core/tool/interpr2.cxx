@@ -1647,7 +1647,7 @@ void ScInterpreter::ScSYD()
 double ScInterpreter::ScGetGDA(double fValue, double fRest, double fTimeLength,
                 double fPeriod, double fFactor)
 {
-    double fGda, fInterest, fOldValue, fNewValue;
+    double fDdb, fInterest, fOldValue, fNewValue;
     fInterest = fFactor / fTimeLength;
     if (fInterest >= 1.0)
     {
@@ -1662,12 +1662,12 @@ double ScInterpreter::ScGetGDA(double fValue, double fRest, double fTimeLength,
     fNewValue = fValue * pow(1.0 - fInterest, fPeriod);
 
     if (fNewValue < fRest)
-        fGda = fOldValue - fRest;
+        fDdb = fOldValue - fRest;
     else
-        fGda = fOldValue - fNewValue;
-    if (fGda < 0.0)
-        fGda = 0.0;
-    return fGda;
+        fDdb = fOldValue - fNewValue;
+    if (fDdb < 0.0)
+        fDdb = 0.0;
+    return fDdb;
 }
 
 void ScInterpreter::ScDDB()
@@ -1718,9 +1718,9 @@ void ScInterpreter::ScDB()
     double nOffRate = 1.0 - pow(nRest / nValue, 1.0 / nTimeLength);
     nOffRate = ::rtl::math::approxFloor((nOffRate * 1000.0) + 0.5) / 1000.0;
     double nFirstOffRate = nValue * nOffRate * nMonths / 12.0;
-    double nGda2 = 0.0;
+    double nDb = 0.0;
     if (::rtl::math::approxFloor(nPeriod) == 1)
-        nGda2 = nFirstOffRate;
+        nDb = nFirstOffRate;
     else
     {
         double nSumOffRate = nFirstOffRate;
@@ -1729,13 +1729,13 @@ void ScInterpreter::ScDB()
         sal_uInt16 iMax = (sal_uInt16)::rtl::math::approxFloor(nMin);
         for (sal_uInt16 i = 2; i <= iMax; i++)
         {
-            nGda2 = (nValue - nSumOffRate) * nOffRate;
-            nSumOffRate += nGda2;
+            nDb = (nValue - nSumOffRate) * nOffRate;
+            nSumOffRate += nDb;
         }
         if (nPeriod > nTimeLength)
-            nGda2 = ((nValue - nSumOffRate) * nOffRate * (12.0 - nMonths)) / 12.0;
+            nDb = ((nValue - nSumOffRate) * nOffRate * (12.0 - nMonths)) / 12.0;
     }
-    PushDouble(nGda2);
+    PushDouble(nDb);
 }
 
 double ScInterpreter::ScInterVDB(double fValue,double fRest,double fTimeLength,
@@ -1745,34 +1745,34 @@ double ScInterpreter::ScInterVDB(double fValue,double fRest,double fTimeLength,
     double fIntEnd   = ::rtl::math::approxCeil(fPeriod);
     sal_uLong nLoopEnd   = (sal_uLong) fIntEnd;
 
-    double fTerm, fLia;
+    double fTerm, fSln;
     double fSalvageValue = fValue - fRest;
-    bool bNowLia = false;
+    bool bNowSln = false;
 
-    double fGda;
+    double fDdb;
     sal_uLong i;
-    fLia=0;
+    fSln=0;
     for ( i = 1; i <= nLoopEnd; i++)
     {
-        if(!bNowLia)
+        if(!bNowSln)
         {
-            fGda = ScGetGDA(fValue, fRest, fTimeLength, (double) i, fFactor);
-            fLia = fSalvageValue/ (fTimeLength1 - (double) (i-1));
+            fDdb = ScGetGDA(fValue, fRest, fTimeLength, (double) i, fFactor);
+            fSln = fSalvageValue/ (fTimeLength1 - (double) (i-1));
 
-            if (fLia > fGda)
+            if (fSln > fDdb)
             {
-                fTerm = fLia;
-                bNowLia = true;
+                fTerm = fSln;
+                bNowSln = true;
             }
             else
             {
-                fTerm = fGda;
-                fSalvageValue -= fGda;
+                fTerm = fDdb;
+                fSalvageValue -= fDdb;
             }
         }
         else
         {
-            fTerm = fLia;
+            fTerm = fSln;
         }
 
         if ( i == nLoopEnd)
