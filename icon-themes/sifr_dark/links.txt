@@ -149,6 +149,7 @@ cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
 # calc function dialog
 cmd/lc_functiondialog.png cmd/lc_insertformula.png
 cmd/sc_functiondialog.png cmd/sc_insertformula.png
+formula/res/fx.png cmd/sc_dbviewfunctions.png
 
 # text background colour Impress/Draw
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
