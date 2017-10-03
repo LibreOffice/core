@@ -210,6 +210,7 @@ public:
     void testSectionInTableInTable2();
     void testTdf112160();
     void testTdf112741();
+    void testTdf112860();
     void testLinesInSectionInTable();
     void testLinesMoveBackwardsInSectionInTable();
 
@@ -327,6 +328,7 @@ public:
     CPPUNIT_TEST(testTdf112160);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
     CPPUNIT_TEST(testTdf112741);
+    CPPUNIT_TEST(testTdf112860);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3867,6 +3869,14 @@ void SwUiWriterTest::testTdf112741()
     // This failed, 3rd page contained no sections.
     assertXPath(pXmlDoc, "//page[3]/body/tab/row/cell/tab/row/cell/section", 1);
     assertXPath(pXmlDoc, "//page[4]/body/tab/row/cell/tab/row/cell/section", 1);
+}
+
+void SwUiWriterTest::testTdf112860()
+{
+    // The document has a split section inside a nested table, and also a table
+    // in the footer.
+    // This crashed the layout.
+    createDoc("tdf112860.fodt");
 }
 
 void SwUiWriterTest::testTableInSectionInTable()
