@@ -51,7 +51,6 @@ namespace xmloff
     */
     class OElementNameMap : public OControlElement
     {
-    protected:
         typedef std::map<OUString, ElementType> MapString2Element;
         static MapString2Element    s_sElementTranslations;
 
@@ -302,7 +301,6 @@ namespace xmloff
     //= OReferredControlImport
     class OReferredControlImport : public OControlImport
     {
-    protected:
         OUString m_sReferringControls;   // the list of ids of controls referring to the one being imported
 
     public:
@@ -614,7 +612,6 @@ namespace xmloff
     //= OColumnWrapperImport
     class OColumnWrapperImport : public SvXMLImportContext
     {
-    protected:
         css::uno::Reference< css::xml::sax::XAttributeList >
                                 m_xOwnAttributes;
         css::uno::Reference< css::container::XNameContainer >
@@ -632,7 +629,7 @@ namespace xmloff
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
         virtual void StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-    protected:
+    private:
         OControlImport* implCreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
             OControlElement::ElementType _eType);
@@ -668,7 +665,7 @@ namespace xmloff
             const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer
         );
 
-    protected:
+    private:
         // SvXMLImportContext overridables
         virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,

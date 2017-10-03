@@ -32,9 +32,8 @@ class XMLBackgroundImageExport
 {
     SvXMLExport&        rExport;
 
-protected:
-
     SvXMLExport& GetExport() { return rExport; }
+
 public:
 
     XMLBackgroundImageExport( SvXMLExport& rExport );

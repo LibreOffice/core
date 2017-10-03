@@ -27,7 +27,6 @@
 
 class XMLPageMasterExportPropMapper : public SvXMLExportPropertyMapper
 {
-protected:
     XMLBackgroundImageExport aBackgroundImageExport;
     XMLTextColumnsExport aTextColumnsExport;
     XMLFootnoteSeparatorExport aFootnoteSeparatorExport;

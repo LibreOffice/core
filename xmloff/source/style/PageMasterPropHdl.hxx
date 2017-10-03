@@ -104,7 +104,6 @@ public:
 
 class XMLPMPropHdl_Print : public XMLPropertyHandler
 {
-protected:
     OUString         sAttrValue;
 
 public:

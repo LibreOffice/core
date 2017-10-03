@@ -60,7 +60,7 @@ public:
     virtual void SAL_CALL initialize(
         const css::uno::Sequence<css::uno::Any> & rArguments ) override;
 
-protected:
+private:
 
     /// export the events off all autotexts
     virtual ErrCode exportDoc(

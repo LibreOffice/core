@@ -25,7 +25,6 @@ class SchXMLExport;
 
 class SchXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 {
-protected:
     SchXMLExport& mrSchXMLExport;
 
     virtual void exportStyleAttributes(

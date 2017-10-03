@@ -36,7 +36,6 @@ namespace xmloff
     //= OFormEventsImportContext
     class OFormEventsImportContext : public XMLEventsImportContext
     {
-    protected:
         IEventAttacher& m_rEventAttacher;
 
     public:

@@ -67,7 +67,7 @@ public:
 
     virtual ~XMLSectionImportContext() override;
 
-protected:
+private:
 
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;

@@ -572,9 +572,6 @@ public:
 
 class SdXMLCustomShapeContext : public SdXMLShapeContext
 {
-
-protected:
-
     OUString maCustomShapeEngine;
     OUString maCustomShapeData;
 

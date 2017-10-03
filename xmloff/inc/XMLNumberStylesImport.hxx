@@ -30,7 +30,6 @@ class SdXMLImport;
 
 class SdXMLNumberFormatImportContext : public SvXMLNumFormatContext
 {
-private:
     friend class SdXMLNumberFormatMemberImportContext;
 
     bool    mbTimeStyle;
@@ -42,7 +41,6 @@ private:
 
     bool compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const;
 
-protected:
     void add( OUString const & rNumberStyle, bool bLong, bool bTextual, bool bDecimal02, OUString const & rText );
 
 public:

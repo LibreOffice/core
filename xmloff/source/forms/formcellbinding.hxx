@@ -37,7 +37,6 @@ namespace xmloff
     */
     class FormCellBindingHelper
     {
-    protected:
         css::uno::Reference< css::beans::XPropertySet >
                     m_xControlModel;    // the model we work for
         css::uno::Reference< css::sheet::XSpreadsheetDocument >
@@ -66,7 +65,6 @@ namespace xmloff
             const css::uno::Reference< css::frame::XModel >& _rxDocument
         );
 
-    public:
         /** gets a cell binding for the given address
             @precond
                 isCellBindingAllowed returns <TRUE/>
@@ -178,7 +176,7 @@ namespace xmloff
                             const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
                         );
 
-    protected:
+    private:
         /** creates an address object from a string representation of a cell address
         */
         bool            convertStringAddress(

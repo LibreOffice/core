@@ -47,7 +47,7 @@ class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper
                 XMLPropertyState* pCharPropHeightState,
                 XMLPropertyState* pCharDiffHeightState );
 
-protected:
+private:
 //  SvXMLUnitConverter& mrUnitConverter;
 //  const Reference< xml::sax::XDocumentHandler > & mrHandler;
     XMLTextDropCapExport maDropCapExport;

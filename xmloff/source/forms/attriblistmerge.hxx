@@ -39,7 +39,6 @@ namespace xmloff
     */
     class OAttribListMerger : public OAttribListMerger_Base
     {
-    protected:
         typedef std::vector< css::uno::Reference< css::xml::sax::XAttributeList > > AttributeListArray;
         AttributeListArray  m_aLists;
 
@@ -58,7 +57,7 @@ namespace xmloff
         virtual OUString SAL_CALL getValueByIndex( sal_Int16 i ) override;
         virtual OUString SAL_CALL getValueByName( const OUString& aName ) override;
 
-    protected:
+    private:
         bool seekToIndex(sal_Int16 _nGlobalIndex, css::uno::Reference< css::xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex);
         bool seekToName(const OUString& _rName, css::uno::Reference< css::xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex);
     };

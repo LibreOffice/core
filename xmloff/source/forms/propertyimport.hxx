@@ -157,7 +157,6 @@ namespace xmloff
     */
     class OPropertyElementsContext : public SvXMLImportContext
     {
-    protected:
         OPropertyImportRef  m_xPropertyImporter;    // to add the properties
 
     public:

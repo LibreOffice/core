@@ -51,7 +51,6 @@ namespace xmloff
     {
         friend class OFormLayerXMLImport;
 
-    protected:
         SvXMLImport&                        m_rImporter;
         OAttribute2Property                 m_aAttributeMetaData;
 
@@ -60,7 +59,6 @@ namespace xmloff
                                             m_xCurrentPageFormsSupp;
         rtl::Reference<SvXMLStylesContext>  m_xAutoStyles;
 
-    protected:
         typedef std::map< OUString, css::uno::Reference< css::beans::XPropertySet > > MapString2PropertySet;
         typedef std::map<css::uno::Reference<css::drawing::XDrawPage>, MapString2PropertySet, ODrawPageCompare> MapDrawPage2Map;
 
@@ -131,7 +129,7 @@ namespace xmloff
 
         ~OFormLayerXMLImport_Impl() override;
 
-    protected:
+    private:
         explicit OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
 
         /** start importing the forms of the given page
