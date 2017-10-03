@@ -1380,14 +1380,14 @@ void ScTable::FillAutoSimple(
                         return;
                     }
                     bBooleanCell = (pDocument->GetFormatTable()->GetType(
-                                aCol[rCol].GetNumberFormat( nSource)) == css::util::NumberFormat::LOGICAL);
+                                aCol[rCol].GetNumberFormat( pDocument->GetNonThreadedContext(), nSource)) == css::util::NumberFormat::LOGICAL);
 
                 }
                 else                // rInner&:=nCol, rOuter&:=nRow
                 {
                     aSrcCell = aCol[nSource].GetCellValue(rRow);
                     bBooleanCell = (pDocument->GetFormatTable()->GetType(
-                                aCol[nSource].GetNumberFormat( rRow)) == css::util::NumberFormat::LOGICAL);
+                                aCol[nSource].GetNumberFormat( pDocument->GetNonThreadedContext(), rRow)) == css::util::NumberFormat::LOGICAL);
                 }
 
                 bGetCell = false;

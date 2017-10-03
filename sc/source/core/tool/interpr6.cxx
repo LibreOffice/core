@@ -319,13 +319,14 @@ public:
 
 class FuncCount : public sc::ColumnSpanSet::ColumnAction
 {
+    const ScInterpreterContext& mrContext;
     sc::ColumnBlockConstPosition maPos;
     ScColumn* mpCol;
     size_t mnCount;
     sal_uInt32 mnNumFmt;
 
 public:
-    FuncCount() : mpCol(nullptr), mnCount(0), mnNumFmt(0) {}
+    FuncCount(const ScInterpreterContext& rContext) : mrContext(rContext), mpCol(nullptr), mnCount(0), mnNumFmt(0) {}
 
     virtual void startColumn(ScColumn* pCol) override
     {
@@ -341,7 +342,7 @@ public:
         NumericCellCounter aFunc;
         maPos.miCellPos = sc::ParseBlock(maPos.miCellPos, mpCol->GetCellStore(), aFunc, nRow1, nRow2);
         mnCount += aFunc.getCount();
-        mnNumFmt = mpCol->GetNumberFormat(nRow2);
+        mnNumFmt = mpCol->GetNumberFormat(mrContext, nRow2);
     };
 
     size_t getCount() const { return mnCount; }
@@ -350,6 +351,7 @@ public:
 
 class FuncSum : public sc::ColumnSpanSet::ColumnAction
 {
+    const ScInterpreterContext& mrContext;
     sc::ColumnBlockConstPosition maPos;
     ScColumn* mpCol;
     double mfSum;
@@ -357,7 +359,7 @@ class FuncSum : public sc::ColumnSpanSet::ColumnAction
     sal_uInt32 mnNumFmt;
 
 public:
-    FuncSum() : mpCol(nullptr), mfSum(0.0), mnError(FormulaError::NONE), mnNumFmt(0) {}
+    FuncSum(const ScInterpreterContext& rContext) : mrContext(rContext), mpCol(nullptr), mfSum(0.0), mnError(FormulaError::NONE), mnNumFmt(0) {}
 
     virtual void startColumn(ScColumn* pCol) override
     {
@@ -389,7 +391,7 @@ public:
             mfSum += aFunc.getRest();
         }
 
-        mnNumFmt = mpCol->GetNumberFormat(nRow2);
+        mnNumFmt = mpCol->GetNumberFormat(mrContext, nRow2);
     };
 
     FormulaError getError() const { return mnError; }
@@ -821,7 +823,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
 
                     if ( eFunc == ifSUM )
                     {
-                        FuncSum aAction;
+                        FuncSum aAction(mrContext);
                         aSet.executeColumnAction( *pDok, aAction, fMem );
                         FormulaError nErr = aAction.getError();
                         if ( nErr != FormulaError::NONE )
@@ -836,7 +838,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     }
                     else
                     {
-                        FuncCount aAction;
+                        FuncCount aAction(mrContext);
                         aSet.executeColumnAction(*pDok, aAction);
                         nCount += aAction.getCount();
 
@@ -853,7 +855,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if (aValIter.GetFirst(fVal, nErr))
                     {
                         // placed the loop on the inside for performance reasons:
-                        aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
+                        aValIter.GetCurNumFmtInfo( mrContext, nFuncFmtType, nFuncFmtIndex );
                         switch( eFunc )
                         {
                             case ifAVERAGE:

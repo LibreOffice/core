@@ -173,7 +173,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
         {
-            sal_uLong nNumFmt = rDoc.getDoc().GetNumberFormat(aScPos);
+            sal_uLong nNumFmt = rDoc.getDoc().GetNumberFormat(rDoc.getDoc().GetNonThreadedContext(), aScPos);
             SvNumberFormatter* pFormatter = rDoc.getDoc().GetFormatTable();
             Color* pColor;
             OUString aDisplText;

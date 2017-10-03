@@ -3550,7 +3550,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 {
                     if (nMin > nVal)
                         nMin = nVal;
-                    aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
+                    aValIter.GetCurNumFmtInfo( mrContext, nFuncFmtType, nFuncFmtIndex );
                     while ((nErr == FormulaError::NONE) && aValIter.GetNext(nVal, nErr))
                     {
                         if (nMin > nVal)
@@ -3707,7 +3707,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 {
                     if (nMax < nVal)
                         nMax = nVal;
-                    aValIter.GetCurNumFmtInfo( nFuncFmtType, nFuncFmtIndex );
+                    aValIter.GetCurNumFmtInfo( mrContext, nFuncFmtType, nFuncFmtIndex );
                     while ((nErr == FormulaError::NONE) && aValIter.GetNext(nVal, nErr))
                     {
                         if (nMax < nVal)
@@ -4864,7 +4864,7 @@ void ScInterpreter::ScMatch()
                 rParam.bByRow = false;
                 rParam.nRow2 = nRow1;
                 rEntry.nField = nCol1;
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
+                ScQueryCellIterator aCellIter(pDok, mrContext, nTab1, rParam, false);
                 // Advance Entry.nField in Iterator if column changed
                 aCellIter.SetAdvanceQueryParamEntryField( true );
                 if (fTyp == 0.0)
@@ -5343,7 +5343,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
             else
             {
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
+                ScQueryCellIterator aCellIter(pDok, mrContext, nTab1, rParam, false);
                 // Increment Entry.nField in iterator when switching to next column.
                 aCellIter.SetAdvanceQueryParamEntryField( true );
                 if ( aCellIter.GetFirst() )
@@ -5605,7 +5605,7 @@ void ScInterpreter::ScCountIf()
                 }
                 else
                 {
-                    ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
+                    ScQueryCellIterator aCellIter(pDok, mrContext, nTab1, rParam, false);
                     // Keep Entry.nField in iterator on column change
                     aCellIter.SetAdvanceQueryParamEntryField( true );
                     if ( aCellIter.GetFirst() )
@@ -5898,7 +5898,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
             else
             {
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
+                ScQueryCellIterator aCellIter(pDok, mrContext, nTab1, rParam, false);
                 // Increment Entry.nField in iterator when switching to next column.
                 aCellIter.SetAdvanceQueryParamEntryField( true );
                 if ( aCellIter.GetFirst() )
@@ -6724,7 +6724,7 @@ void ScInterpreter::ScLookup()
     if (rItem.meType == ScQueryEntry::ByString)
         aParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
 
-    ScQueryCellIterator aCellIter(pDok, nTab1, aParam, false);
+    ScQueryCellIterator aCellIter(pDok, mrContext, nTab1, aParam, false);
     SCCOL nC;
     SCROW nR;
     // Advance Entry.nField in iterator upon switching columns if
@@ -7071,7 +7071,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
             rEntry.eOp = SC_LESS_EQUAL;
         if ( bHLookup )
         {
-            ScQueryCellIterator aCellIter(pDok, nTab1, aParam, false);
+            ScQueryCellIterator aCellIter(pDok, mrContext, nTab1, aParam, false);
             // advance Entry.nField in Iterator upon switching columns
             aCellIter.SetAdvanceQueryParamEntryField( true );
             if ( bSorted )
@@ -7447,7 +7447,7 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
             SetError(FormulaError::NoValue);
             return;
         }
-        ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
+        ScDBQueryDataIterator aValIter(pDok, mrContext, pQueryParam.release());
         ScDBQueryDataIterator::Value aValue;
         if ( aValIter.GetFirst(aValue) && aValue.mnError == FormulaError::NONE )
         {
@@ -7535,7 +7535,7 @@ void ScInterpreter::ScDBCount()
             // so the source range has to be restricted, like before the introduction
             // of ScDBQueryParamBase.
             p->nCol1 = p->nCol2 = p->mnField;
-            ScQueryCellIterator aCellIter( pDok, nTab, *p, true);
+            ScQueryCellIterator aCellIter( pDok, mrContext, nTab, *p, true);
             if ( aCellIter.GetFirst() )
             {
                 do
@@ -7551,7 +7551,7 @@ void ScInterpreter::ScDBCount()
                 SetError(FormulaError::NoValue);
                 return;
             }
-            ScDBQueryDataIterator aValIter( pDok, pQueryParam.release());
+            ScDBQueryDataIterator aValIter( pDok, mrContext, pQueryParam.release());
             ScDBQueryDataIterator::Value aValue;
             if ( aValIter.GetFirst(aValue) && aValue.mnError == FormulaError::NONE )
             {
@@ -7582,7 +7582,7 @@ void ScInterpreter::ScDBCount2()
         }
         sal_uLong nCount = 0;
         pQueryParam->mbSkipString = false;
-        ScDBQueryDataIterator aValIter( pDok, pQueryParam.release());
+        ScDBQueryDataIterator aValIter( pDok, mrContext, pQueryParam.release());
         ScDBQueryDataIterator::Value aValue;
         if ( aValIter.GetFirst(aValue) && aValue.mnError == FormulaError::NONE )
         {
@@ -7636,7 +7636,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
             SetError(FormulaError::NoValue);
             return;
         }
-        ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
+        ScDBQueryDataIterator aValIter(pDok, mrContext, pQueryParam.release());
         ScDBQueryDataIterator::Value aValue;
         if (aValIter.GetFirst(aValue) && aValue.mnError == FormulaError::NONE)
         {
@@ -9297,11 +9297,11 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rS
     return utl::SearchParam::SearchType::Normal;
 }
 
-static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc,
+static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc, const ScInterpreterContext& rContext,
         const ScQueryParam & rParam, const ScQueryEntry & rEntry )
 {
     bool bFound = false;
-    ScQueryCellIterator aCellIter( pDoc, rParam.nTab, rParam, false);
+    ScQueryCellIterator aCellIter( pDoc, rContext, rParam.nTab, rParam, false);
     if (rEntry.eOp != SC_EQUAL)
     {
         // range lookup <= or >=
@@ -9338,7 +9338,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
      * direct lookups here. We could even further attribute volatility per
      * parameter so it would affect only the lookup range parameter. */
     if (!bColumnsMatch || GetVolatileType() != NOT_VOLATILE)
-        bFound = lcl_LookupQuery( o_rResultPos, pDok, rParam, rEntry);
+        bFound = lcl_LookupQuery( o_rResultPos, pDok, mrContext, rParam, rEntry);
     else
     {
         ScRange aLookupRange( rParam.nCol1, rParam.nRow1, rParam.nTab,
@@ -9351,7 +9351,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         {
             case ScLookupCache::NOT_CACHED :
             case ScLookupCache::CRITERIA_DIFFERENT :
-                bFound = lcl_LookupQuery( o_rResultPos, pDok, rParam, rEntry);
+                bFound = lcl_LookupQuery( o_rResultPos, pDok, mrContext, rParam, rEntry);
                 if (eCacheResult == ScLookupCache::NOT_CACHED)
                     rCache.insert( o_rResultPos, aCriteria, aPos, bFound);
                 break;
