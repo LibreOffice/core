@@ -834,7 +834,7 @@ public:
                                const OUString& sLocalName,
                                sal_uInt16 nToken);
 
-protected:
+private:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue ) override;
@@ -1097,7 +1097,7 @@ public:
                                       sal_uInt16 nPrfx,
                                       const OUString& sLocalName);
 
-protected:
+private:
     /// process attributes (fill aValues)
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;

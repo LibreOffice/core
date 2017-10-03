@@ -71,7 +71,7 @@ public:
         const css::uno::Reference<css::beans::XPropertySet> & rPropSet,
         bool bAutoStyles);
 
-protected:
+private:
 
     /// export attributes of table-of-content index marks
     void ExportTOCMarkAttributes(

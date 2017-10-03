@@ -47,7 +47,7 @@ public:
                               css::uno::Reference<css::xforms::XDataTypeRepository> const & rRepository,
                               const OUString& sTypeName );
 
-protected:
+private:
     // create mxDataType (if not already present)
     void CreateDataType();
 

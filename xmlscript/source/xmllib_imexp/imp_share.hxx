@@ -185,7 +185,6 @@ class LibrariesElement : public LibElementBase
 {
     friend class LibraryElement;
 
-protected:
     std::vector< LibDescriptor > mLibDescriptors;
 
 public:
@@ -204,7 +203,6 @@ public:
 
 class LibraryElement : public LibElementBase
 {
-protected:
     std::vector< OUString > mElements;
 
 public:

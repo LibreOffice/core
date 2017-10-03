@@ -47,7 +47,6 @@ namespace xmloff
     */
     class OEventDescriptorMapper : public OEventDescriptorMapper_Base
     {
-    protected:
         typedef std::map< OUString, css::uno::Sequence < css::beans::PropertyValue > > MapString2PropertyValueSequence;
         MapString2PropertyValueSequence m_aMappedEvents;
 

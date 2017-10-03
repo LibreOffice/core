@@ -132,7 +132,7 @@ public:
     void ExportMasterDocHeadingDummies();
 
 
-protected:
+private:
 
     SvXMLExport& GetExport() { return rExport; }
     XMLTextParagraphExport& GetParaExport() { return rParaExport; }

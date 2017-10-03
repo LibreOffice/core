@@ -65,7 +65,6 @@ namespace xmloff
     {
         friend class OFormLayerXMLExport;
 
-    protected:
         SvXMLExport&        m_rContext;
         SvXMLNumFmtExport*  m_pControlNumberStyles;
 
@@ -123,7 +122,7 @@ namespace xmloff
         explicit OFormLayerXMLExport_Impl(SvXMLExport& _rContext);
         virtual ~OFormLayerXMLExport_Impl();
 
-    protected:
+    private:
         /** exports one single grid column
         */
         void    exportGridColumn(
@@ -231,7 +230,6 @@ namespace xmloff
         */
         void exportAutoStyles();
 
-    protected:
         static bool impl_isFormPageContainingForms(
             const css::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage,
             css::uno::Reference< css::container::XIndexAccess >& _rxForms);

@@ -45,10 +45,9 @@ public:
     virtual void EndElement() override;
     virtual void ExportContent() override;
 
-protected:
+private:
     void AddContent( rtl::Reference<XMLAxisOOoContext> const & pContent );
 
-private:
     XMLAxisContextVector m_aChildContexts;
 };
 

@@ -95,7 +95,6 @@ private:
 
     sal_uInt16   mnCurLevel;
 
-protected:
     DECL_LINK(RadioButtonHdl, Button*, void);
 
 public:

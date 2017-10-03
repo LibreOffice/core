@@ -68,7 +68,7 @@ public:
         /// the container containing the image map elements
         const css::uno::Reference< css::container::XIndexContainer> & rContainer);
 
-protected:
+private:
 
     /**
      * Export a single, named map entry.

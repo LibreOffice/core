@@ -85,10 +85,8 @@ private:
     bool                                            mbExportTables;
     bool                                            mbWriter;
 
-protected:
     SvXMLExport& GetExport() { return mrExport; }
     const SvXMLExport& GetExport() const  { return mrExport; }
-private:
 
     SAL_DLLPRIVATE void ImpExportText( const css::uno::Reference < css::table::XCell >& xCell );
 

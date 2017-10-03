@@ -29,8 +29,6 @@ class XMLBase64Export
 {
     SvXMLExport&        rExport;
 
-protected:
-
     SvXMLExport& GetExport() { return rExport; }
 
 public:

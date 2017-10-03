@@ -36,8 +36,6 @@ class XMLTextColumnsExport
     const OUString sAutomaticDistance;
     const OUString sSeparatorLineStyle;
 
-protected:
-
     SvXMLExport& GetExport() { return rExport; }
 
 public:

@@ -47,7 +47,7 @@ namespace xmloff
         virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList ) override;
         virtual void EndElement() override;
 
-    protected:
+    private:
         void implImportBool(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttributes,
             OfficeFormsAttributes _eAttribute,
