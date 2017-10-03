@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="sc_insertcolumnsafter.svg"
+   inkscape:version="0.92.1 r15371"
+   inkscape:export-filename="/home/matthias/GIT/icons/sifr_svg/sc_insertcolumnsafter.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     id="namedview7"
+     showgrid="true"
+     inkscape:zoom="7.375"
+     inkscape:cx="-41.04555"
+     inkscape:cy="-4.6618927"
+     inkscape:window-x="0"
+     inkscape:window-y="44"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4486" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7838">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>The Document Foundation</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Matthias Freund</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <path
+     sodipodi:nodetypes="ccccc"
+     inkscape:connector-curvature="0"
+     id="path7409-8"
+     d="M 15,2 V 3 H 12.45841 L 14,2 Z"
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <rect
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     id="rect7415-3"
+     width="1"
+     height="13"
+     x="14"
+     y="-15"
+     transform="rotate(90)"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <rect
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     id="rect7417-1"
+     width="1"
+     height="13"
+     x="14"
+     y="2"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <rect
+     y="2"
+     x="2"
+     height="13"
+     width="1"
+     id="rect7419-4"
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <rect
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     id="rect7421-9"
+     width="1"
+     height="11"
+     x="10"
+     y="4"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <rect
+     y="2"
+     x="6"
+     height="13"
+     width="1"
+     id="rect7423-2"
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <path
+     style="display:inline;opacity:0.35;fill:#555753;fill-opacity:1;stroke:none"
+     d="M 6,3 H 8.53133 L 10,4 V 14 H 6 Z"
+     id="rect7425-0"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     d="M 2,2 V 3 H 8.53133 L 7,2 Z"
+     id="path7427-6"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccc"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <path
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:'Bitstream Vera Sans';-inkscape-font-specification:'Bitstream Vera Sans';text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-anchor:start;display:inline;overflow:visible;visibility:visible;fill:#555753;fill-opacity:1;stroke:none;stroke-width:1.41420364;marker:none;enable-background:accumulate"
+     d="m 12.99996,3e-5 v 0.74999 c -2e-5,0.19898 -0.0621,0.39793 -0.1875,0.53906 L 10.99999,3 H 10 L 8.18747,1.28905 C 8.062,1.14792 8,0.94896 8,0.74999 L 7.99999,0 h 5 z"
+     id="path7431-3-1-6-2-5-8"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccsccc" />
+  <rect
+     transform="matrix(0,1,1,0,0,0)"
+     y="2"
+     x="6"
+     height="5"
+     width="1"
+     id="rect7413-4-7-2"
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <rect
+     transform="matrix(0,1,1,0,0,0)"
+     y="10"
+     x="6"
+     height="5"
+     width="1"
+     id="rect7413-4-7-9"
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <rect
+     transform="matrix(0,1,1,0,0,0)"
+     y="10"
+     x="10"
+     height="5"
+     width="1"
+     id="rect7413-4-7-3"
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+  <rect
+     transform="matrix(0,1,1,0,0,0)"
+     y="2"
+     x="10"
+     height="5"
+     width="1"
+     id="rect7413-4-7-90"
+     style="display:inline;fill:#555753;fill-opacity:1;stroke:none"
+     inkscape:export-filename="/home/matthias/GIT/icons/exported-sifr/cmd/sc_insertcolumnsbefore.png"
+     inkscape:export-xdpi="89"
+     inkscape:export-ydpi="89" />
+</svg>
