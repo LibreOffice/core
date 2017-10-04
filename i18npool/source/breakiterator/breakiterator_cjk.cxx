@@ -86,7 +86,12 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
     return BreakIterator_Unicode::getWordBoundary(text, anyPos, nLocale, wordType, bDirection);
 }
 
-#define isHangul(cCh) ((cCh>=0xAC00&&cCh<=0xD7AF)||(cCh>=0x1100&&cCh<=0x11FF))
+namespace {
+inline bool isHangul( sal_Unicode cCh )
+{
+    return (cCh >= 0xAC00 && cCh <= 0xD7AF) || (cCh >= 0x1100 && cCh <= 0x11FF);
+}
+}
 
 LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
         const OUString& Text, sal_Int32 nStartPos,
