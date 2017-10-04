@@ -308,11 +308,11 @@ public:
     explicit OOXMLFastContextHandlerPropertyTable(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerPropertyTable() override;
 
-protected:
+private:
     OOXMLTable mTable;
 
     virtual void lcl_endFastElement(Token_t Element) override;
- };
+};
 
 class OOXMLFastContextHandlerValue :
     public OOXMLFastContextHandler
@@ -333,7 +333,7 @@ public:
     virtual void setDefaultHexValue() override;
     virtual void setDefaultStringValue() override;
 
-protected:
+private:
     OOXMLValue::Pointer_t mpValue;
 };
 
@@ -346,7 +346,7 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext (Token_t Element,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
-protected:
+private:
     OOXMLTable mTable;
 
     css::uno::Reference<css::xml::sax::XFastContextHandler> mCurrentChild;
@@ -431,11 +431,11 @@ protected:
 
 class OOXMLFastContextHandlerShape: public OOXMLFastContextHandlerProperties
 {
-private:
     bool m_bShapeSent;
     bool m_bShapeStarted;
     /// Is it necessary to pop the stack in the dtor?
     bool m_bShapeContextPushed;
+    css::uno::Reference<css::xml::sax::XFastShapeContextHandler> mrShapeContext;
 
 public:
     explicit OOXMLFastContextHandlerShape(OOXMLFastContextHandler * pContext);
@@ -459,8 +459,6 @@ public:
     bool isShapeSent( ) { return m_bShapeSent; }
 
 protected:
-    css::uno::Reference<css::xml::sax::XFastShapeContextHandler> mrShapeContext;
-
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void lcl_endFastElement(Token_t Element) override;
