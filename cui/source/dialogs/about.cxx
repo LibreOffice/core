@@ -53,6 +53,7 @@
 #include <opencl/openclwrapper.hxx>
 #endif
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -334,18 +335,30 @@ OUString AboutDialog::GetVersionString()
         sVersion += m_aLocaleStr.replaceAll("$LOCALE", aLocaleStr);
     }
 
-#if HAVE_FEATURE_OPENCL
     OUString aCalcMode = "Calc: "; // Calc calculation mode
+
+#if HAVE_FEATURE_OPENCL
     bool bSWInterp = officecfg::Office::Common::Misc::UseSwInterpreter::get();
     bool bOpenCL = openclwrapper::GPUEnv::isOpenCLEnabled();
     if (bOpenCL)
         aCalcMode += "CL";
     else if (bSWInterp)
         aCalcMode += "group";
-    else
-        aCalcMode += "single";
-    sVersion += "; " + aCalcMode;
+#else
+    const bool bOpenCL = false;
 #endif
+
+    static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
+    bool bThreadedCalc = officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get();
+
+    if (!bThreadingProhibited && !bOpenCL && bThreadedCalc)
+    {
+        if (!aCalcMode.endsWith(" "))
+            aCalcMode += " ";
+        aCalcMode += "threaded";
+    }
+
+    sVersion += "; " + aCalcMode;
 
     return sVersion;
 }
