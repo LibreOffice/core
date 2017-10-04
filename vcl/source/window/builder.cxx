@@ -1178,7 +1178,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     VclPtr<vcl::Window> xWindow;
     if (name == "GtkDialog")
     {
-        WinBits nBits = WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
+        WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         xWindow = VclPtr<Dialog>::Create(pParent, nBits);
