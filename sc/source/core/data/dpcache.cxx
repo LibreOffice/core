@@ -155,7 +155,7 @@ void initFromCell(
 
     if (rCell.hasError())
     {
-        rData.SetErrorStringInterned(internString(rStrPool, aDocStr));
+        rData.SetErrorStringInterned(internString(rStrPool, pDoc->GetString(rPos.Col(), rPos.Row(), rPos.Tab())));
     }
     else if (rCell.hasNumeric())
     {
