@@ -1158,13 +1158,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             m_aChildren.emplace_back(sTabPageId, pPage, false);
             pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 
-            //And give the page one container as a child to make it a layout enabled
-            //tab page
-            VclPtrInstance<VclBin> pContainer(pPage);
-            pContainer->Show();
-            m_aChildren.emplace_back(OString(), pContainer, false);
-            pContainer->SetHelpId(m_sHelpRoot + sTabPageId + OString("-bin"));
-            pParent = pContainer;
+            pParent = pPage;
 
             pTabControl->SetTabPage(nNewPageId, pPage);
         }
