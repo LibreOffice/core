@@ -65,7 +65,6 @@ static inline void copy_ustr_n( void *dest, const void *source, size_t length ) 
 #define SVERSION_SECTION    "Versions"
 #define SVERSION_SOFFICE    "StarOffice"
 #define SVERSION_PROFILE    "soffice.ini"
-#define SVERSION_OPTION     "userid:"
 #define SVERSION_DIRS       { "bin", "program" }
 #define SVERSION_USER       "user"
 
@@ -1966,7 +1965,6 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
 
     ::osl::LongPathBuffer< sal_Unicode > aPath( MAX_LONG_PATH );
     aPath[0] = 0;
-    DWORD dwPathLen = 0;
 
     if (*strPath == L'"')
     {
@@ -2083,273 +2081,218 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
         }
     }
 
-    /* if we have an userid option eg. "-userid:rh[/usr/home/rh/staroffice]",
-       this will supersede all other locations */
+    rtl_uString * strExecutable = nullptr;
+    rtl_uString * strTmp = nullptr;
+    sal_Int32 nPos;
+
+    /* try to find the file in the directory of the executable */
+    if (osl_getExecutableFile(&strTmp) != osl_Process_E_None)
+        return false;
+
+    /* convert to native path */
+    if (osl_getSystemPathFromFileURL(strTmp, &strExecutable) != osl_File_E_None)
     {
-        sal_uInt32 n, nArgs = osl_getCommandArgCount();
-
-        for (n = 0; n < nArgs; n++)
-        {
-            rtl_uString * strCommandArg = nullptr;
-            osl_getCommandArg( n, &strCommandArg );
-            if (((strCommandArg->buffer[0] == L'-') || (strCommandArg->buffer[0] == L'+')) &&
-                (rtl_ustr_ascii_compare_WithLength(strCommandArg->buffer, RTL_CONSTASCII_LENGTH(SVERSION_OPTION), SVERSION_OPTION)))
-            {
-                sal_Unicode *pCommandArg = strCommandArg->buffer + RTL_CONSTASCII_LENGTH(SVERSION_OPTION);
-                sal_Int32 nStart, nEnd;
-
-                if (((nStart = rtl_ustr_indexOfChar(pCommandArg, L'[')) != -1) &&
-                    ((nEnd = rtl_ustr_indexOfChar(pCommandArg + nStart + 1, L']')) != -1))
-                {
-                    dwPathLen = nEnd;
-                    copy_ustr_n(aPath, pCommandArg + nStart + 1, dwPathLen);
-                    aPath[dwPathLen] = 0;
-
-                    /* build full path */
-                    if ((aPath[dwPathLen - 1] != L'/') && (aPath[dwPathLen - 1] != L'\\'))
-                    {
-                        copy_ustr_n(aPath + dwPathLen++, L"/", 2);
-                    }
-
-                    if (*strPath)
-                    {
-                        copy_ustr_n(aPath + dwPathLen, strPath, rtl_ustr_getLength(strPath)+1);
-                        dwPathLen += rtl_ustr_getLength(strPath);
-                    }
-                    else
-                    {
-                        ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
-                        int nLen = 0;
-
-                        if ((nLen = WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr)) > 0)
-                        {
-                            strcpy(aTmpPath + nLen, SVERSION_USER);
-                            if (access(aTmpPath, 0) >= 0)
-                            {
-                                dwPathLen += MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, SAL_W(aPath + dwPathLen), aPath.getBufSizeInSymbols() - dwPathLen );
-                            }
-                        }
-                    }
-
-                    break;
-                }
-            }
-        }
+        rtl_uString_release(strTmp);
+        return false;
     }
 
-    if (dwPathLen == 0)
+    rtl_uString_release(strTmp);
+
+    DWORD dwPathLen = 0;
+
+    /* separate path from filename */
+    if ((nPos = rtl_ustr_lastIndexOfChar(strExecutable->buffer, L'\\')) == -1)
     {
-        rtl_uString * strExecutable = nullptr;
-        rtl_uString * strTmp = nullptr;
-        sal_Int32 nPos;
-
-        /* try to find the file in the directory of the executable */
-        if (osl_getExecutableFile(&strTmp) != osl_Process_E_None)
-            return false;
-
-        /* convert to native path */
-        if (osl_getSystemPathFromFileURL(strTmp, &strExecutable) != osl_File_E_None)
+        if ((nPos = rtl_ustr_lastIndexOfChar(strExecutable->buffer, L':')) == -1)
         {
-            rtl_uString_release(strTmp);
             return false;
-        }
-
-        rtl_uString_release(strTmp);
-
-        /* separate path from filename */
-        if ((nPos = rtl_ustr_lastIndexOfChar(strExecutable->buffer, L'\\')) == -1)
-        {
-            if ((nPos = rtl_ustr_lastIndexOfChar(strExecutable->buffer, L':')) == -1)
-            {
-                return false;
-            }
-            else
-            {
-                copy_ustr_n(aPath, strExecutable->buffer, nPos);
-                aPath[nPos] = 0;
-                dwPathLen = nPos;
-            }
         }
         else
         {
             copy_ustr_n(aPath, strExecutable->buffer, nPos);
+            aPath[nPos] = 0;
             dwPathLen = nPos;
-            aPath[dwPathLen] = 0;
         }
+    }
+    else
+    {
+        copy_ustr_n(aPath, strExecutable->buffer, nPos);
+        dwPathLen = nPos;
+        aPath[dwPathLen] = 0;
+    }
 
-        /* if we have no product identification use the executable file name */
-        if (*Product == 0)
+    /* if we have no product identification use the executable file name */
+    if (*Product == 0)
+    {
+        WideCharToMultiByte(CP_ACP,0, SAL_W(strExecutable->buffer + nPos + 1), -1, Product, sizeof(Product), nullptr, nullptr);
+
+        /* remove extension */
+        if ((pChr = strrchr(Product, '.')) != nullptr)
+            *pChr = '\0';
+    }
+
+    rtl_uString_release(strExecutable);
+
+    /* remember last subdir */
+    nPos = rtl_ustr_lastIndexOfChar(aPath, L'\\');
+
+    copy_ustr_n(aPath + dwPathLen++, L"\\", 2);
+
+    if (*strPath)
+    {
+        copy_ustr_n(aPath + dwPathLen, strPath, rtl_ustr_getLength(strPath)+1);
+        dwPathLen += rtl_ustr_getLength(strPath);
+    }
+
+    {
+        ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
+
+        WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
+
+        /* if file not exists, remove any specified subdirectories
+           like "bin" or "program" */
+
+        if (((access(aTmpPath, 0) < 0) && (nPos != -1)) || (*strPath == 0))
         {
-            WideCharToMultiByte(CP_ACP,0, SAL_W(strExecutable->buffer + nPos + 1), -1, Product, sizeof(Product), nullptr, nullptr);
+            static const sal_Char *SubDirs[] = SVERSION_DIRS;
 
-            /* remove extension */
-            if ((pChr = strrchr(Product, '.')) != nullptr)
-                *pChr = '\0';
-        }
+            unsigned i = 0;
+            sal_Char *pStr = aTmpPath + nPos;
 
-        rtl_uString_release(strExecutable);
-
-        /* remember last subdir */
-        nPos = rtl_ustr_lastIndexOfChar(aPath, L'\\');
-
-        copy_ustr_n(aPath + dwPathLen++, L"\\", 2);
-
-        if (*strPath)
-        {
-            copy_ustr_n(aPath + dwPathLen, strPath, rtl_ustr_getLength(strPath)+1);
-            dwPathLen += rtl_ustr_getLength(strPath);
-        }
-
-        {
-            ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
-
-            WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
-
-            /* if file not exists, remove any specified subdirectories
-               like "bin" or "program" */
-
-            if (((access(aTmpPath, 0) < 0) && (nPos != -1)) || (*strPath == 0))
-            {
-                static const sal_Char *SubDirs[] = SVERSION_DIRS;
-
-                unsigned i = 0;
-                sal_Char *pStr = aTmpPath + nPos;
-
-                for (i = 0; i < SAL_N_ELEMENTS(SubDirs); i++)
-                    if (strnicmp(pStr + 1, SubDirs[i], strlen(SubDirs[i])) == 0)
+            for (i = 0; i < SAL_N_ELEMENTS(SubDirs); i++)
+                if (strnicmp(pStr + 1, SubDirs[i], strlen(SubDirs[i])) == 0)
+                {
+                    if ( *strPath == 0)
                     {
-                        if ( *strPath == 0)
+                        strcpy(pStr + 1,SVERSION_USER);
+                        if ( access(aTmpPath, 0) < 0 )
                         {
-                            strcpy(pStr + 1,SVERSION_USER);
-                            if ( access(aTmpPath, 0) < 0 )
-                            {
-                                *(pStr+1)='\0';
-                            }
-                            else
-                            {
-                                dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, SAL_W(aPath + nPos + 1), aPath.getBufSizeInSymbols() - (nPos + 1) );
-                            }
+                            *(pStr+1)='\0';
                         }
                         else
                         {
-                            copy_ustr_n(aPath + nPos + 1, strPath, rtl_ustr_getLength(strPath)+1);
-                            dwPathLen = nPos + 1 + rtl_ustr_getLength(strPath);
+                            dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, SAL_W(aPath + nPos + 1), aPath.getBufSizeInSymbols() - (nPos + 1) );
                         }
-
-                        break;
                     }
-            }
-        }
-
-        if ((aPath[dwPathLen - 1] != L'/') && (aPath[dwPathLen - 1] != L'\\'))
-        {
-            aPath[dwPathLen++] = L'\\';
-            aPath[dwPathLen] = 0;
-        }
-
-        copy_ustr_n(aPath + dwPathLen, strFile, rtl_ustr_getLength(strFile)+1);
-
-        {
-            ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
-
-            WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
-
-            if ((access(aTmpPath, 0) < 0) && (Product[0] != '\0'))
-            {
-                rtl_uString * strSVFallback = nullptr;
-                rtl_uString * strSVProfile  = nullptr;
-                rtl_uString * strSVLocation = nullptr;
-                rtl_uString * strSVName     = nullptr;
-                oslProfile hProfile;
-
-                rtl_uString_newFromAscii(&strSVFallback, SVERSION_FALLBACK);
-                rtl_uString_newFromAscii(&strSVLocation, SVERSION_LOCATION);
-                rtl_uString_newFromAscii(&strSVName, SVERSION_NAME);
-
-                /* open sversion.ini in the system directory, and try to locate the entry
-                   with the highest version for StarOffice */
-                if (osl_getProfileName(strSVLocation, strSVName, &strSVProfile))
-                {
-                    hProfile = osl_openProfile(
-                        strSVProfile, osl_Profile_READLOCK);
-                    if (hProfile)
+                    else
                     {
-                        osl_readProfileString(
-                            hProfile, SVERSION_SECTION, Product, Buffer,
-                            sizeof(Buffer), "");
-                        osl_closeProfile(hProfile);
-
-                        /* if not found, try the fallback */
-                        if (Buffer[0] == '\0')
-                        {
-                            if (osl_getProfileName(
-                                    strSVFallback, strSVName, &strSVProfile))
-                            {
-                                hProfile = osl_openProfile(
-                                    strSVProfile, osl_Profile_READLOCK);
-                                if (hProfile)
-                                {
-                                    osl_readProfileString(
-                                        hProfile, SVERSION_SECTION, Product,
-                                        Buffer, sizeof(Buffer), "");
-                                }
-                            }
-
-                            osl_closeProfile(hProfile);
-                        }
-
-                        if (Buffer[0] != '\0')
-                        {
-                            dwPathLen = MultiByteToWideChar(
-                                CP_ACP, 0, Buffer, -1, SAL_W(aPath), aPath.getBufSizeInSymbols() );
-                            dwPathLen -=1;
-
-                            /* build full path */
-                            if ((aPath[dwPathLen - 1] != L'/')
-                                && (aPath[dwPathLen - 1] != L'\\'))
-                            {
-                                copy_ustr_n(aPath + dwPathLen++, L"\\", 2);
-                            }
-
-                            if (*strPath)
-                            {
-                                copy_ustr_n(aPath + dwPathLen, strPath, rtl_ustr_getLength(strPath)+1);
-                                dwPathLen += rtl_ustr_getLength(strPath);
-                            }
-                            else
-                            {
-                                ::osl::LongPathBuffer< sal_Char > aTmpPath2( MAX_LONG_PATH );
-                                int n;
-
-                                if ((n = WideCharToMultiByte(
-                                         CP_ACP,0, SAL_W(aPath), -1, aTmpPath2,
-                                         aTmpPath2.getBufSizeInSymbols(), nullptr, nullptr))
-                                    > 0)
-                                {
-                                    strcpy(aTmpPath2 + n, SVERSION_USER);
-                                    if (access(aTmpPath2, 0) >= 0)
-                                    {
-                                        dwPathLen += MultiByteToWideChar(
-                                            CP_ACP, 0, SVERSION_USER, -1,
-                                            SAL_W(aPath + dwPathLen),
-                                            aPath.getBufSizeInSymbols() - dwPathLen );
-                                    }
-                                }
-                            }
-                        }
+                        copy_ustr_n(aPath + nPos + 1, strPath, rtl_ustr_getLength(strPath)+1);
+                        dwPathLen = nPos + 1 + rtl_ustr_getLength(strPath);
                     }
 
-                    rtl_uString_release(strSVProfile);
+                    break;
                 }
-
-                rtl_uString_release(strSVFallback);
-                rtl_uString_release(strSVLocation);
-                rtl_uString_release(strSVName);
-            }
         }
+    }
 
+    if ((aPath[dwPathLen - 1] != L'/') && (aPath[dwPathLen - 1] != L'\\'))
+    {
+        aPath[dwPathLen++] = L'\\';
         aPath[dwPathLen] = 0;
     }
+
+    copy_ustr_n(aPath + dwPathLen, strFile, rtl_ustr_getLength(strFile)+1);
+
+    {
+        ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
+
+        WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
+
+        if ((access(aTmpPath, 0) < 0) && (Product[0] != '\0'))
+        {
+            rtl_uString * strSVFallback = nullptr;
+            rtl_uString * strSVProfile  = nullptr;
+            rtl_uString * strSVLocation = nullptr;
+            rtl_uString * strSVName     = nullptr;
+            oslProfile hProfile;
+
+            rtl_uString_newFromAscii(&strSVFallback, SVERSION_FALLBACK);
+            rtl_uString_newFromAscii(&strSVLocation, SVERSION_LOCATION);
+            rtl_uString_newFromAscii(&strSVName, SVERSION_NAME);
+
+            /* open sversion.ini in the system directory, and try to locate the entry
+               with the highest version for StarOffice */
+            if (osl_getProfileName(strSVLocation, strSVName, &strSVProfile))
+            {
+                hProfile = osl_openProfile(
+                    strSVProfile, osl_Profile_READLOCK);
+                if (hProfile)
+                {
+                    osl_readProfileString(
+                        hProfile, SVERSION_SECTION, Product, Buffer,
+                        sizeof(Buffer), "");
+                    osl_closeProfile(hProfile);
+
+                    /* if not found, try the fallback */
+                    if (Buffer[0] == '\0')
+                    {
+                        if (osl_getProfileName(
+                                strSVFallback, strSVName, &strSVProfile))
+                        {
+                            hProfile = osl_openProfile(
+                                strSVProfile, osl_Profile_READLOCK);
+                            if (hProfile)
+                            {
+                                osl_readProfileString(
+                                    hProfile, SVERSION_SECTION, Product,
+                                    Buffer, sizeof(Buffer), "");
+                            }
+                        }
+
+                        osl_closeProfile(hProfile);
+                    }
+
+                    if (Buffer[0] != '\0')
+                    {
+                        dwPathLen = MultiByteToWideChar(
+                            CP_ACP, 0, Buffer, -1, SAL_W(aPath), aPath.getBufSizeInSymbols() );
+                        dwPathLen -=1;
+
+                        /* build full path */
+                        if ((aPath[dwPathLen - 1] != L'/')
+                            && (aPath[dwPathLen - 1] != L'\\'))
+                        {
+                            copy_ustr_n(aPath + dwPathLen++, L"\\", 2);
+                        }
+
+                        if (*strPath)
+                        {
+                            copy_ustr_n(aPath + dwPathLen, strPath, rtl_ustr_getLength(strPath)+1);
+                            dwPathLen += rtl_ustr_getLength(strPath);
+                        }
+                        else
+                        {
+                            ::osl::LongPathBuffer< sal_Char > aTmpPath2( MAX_LONG_PATH );
+                            int n;
+
+                            if ((n = WideCharToMultiByte(
+                                     CP_ACP,0, SAL_W(aPath), -1, aTmpPath2,
+                                     aTmpPath2.getBufSizeInSymbols(), nullptr, nullptr))
+                                > 0)
+                            {
+                                strcpy(aTmpPath2 + n, SVERSION_USER);
+                                if (access(aTmpPath2, 0) >= 0)
+                                {
+                                    dwPathLen += MultiByteToWideChar(
+                                        CP_ACP, 0, SVERSION_USER, -1,
+                                        SAL_W(aPath + dwPathLen),
+                                        aPath.getBufSizeInSymbols() - dwPathLen );
+                                }
+                            }
+                        }
+                    }
+                }
+
+                rtl_uString_release(strSVProfile);
+            }
+
+            rtl_uString_release(strSVFallback);
+            rtl_uString_release(strSVLocation);
+            rtl_uString_release(strSVName);
+        }
+    }
+
+    aPath[dwPathLen] = 0;
 
     /* copy filename */
     copy_ustr_n(strProfile, aPath, dwPathLen+1);
