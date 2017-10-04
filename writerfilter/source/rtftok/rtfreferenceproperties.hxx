@@ -10,7 +10,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCEPROPERTIES_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFREFERENCEPROPERTIES_HXX
 
-#include <rtfsprm.hxx>
+#include "rtfsprm.hxx"
 
 namespace writerfilter
 {

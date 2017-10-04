@@ -15,7 +15,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 
 #include <dmapper/GraphicZOrderHelper.hxx>
-#include <rtfdocumentimpl.hxx>
+#include "rtfdocumentimpl.hxx"
 
 namespace writerfilter
 {

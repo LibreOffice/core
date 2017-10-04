@@ -11,8 +11,8 @@
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLOOKAHEAD_HXX
 
 #include <memory>
-#include <rtflistener.hxx>
-#include <rtftokenizer.hxx>
+#include "rtflistener.hxx"
+#include "rtftokenizer.hxx"
 
 class SvStream;
 

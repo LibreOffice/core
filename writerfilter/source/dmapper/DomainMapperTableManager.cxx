@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <boost/optional.hpp>
-#include <DomainMapperTableManager.hxx>
-#include <BorderHandler.hxx>
-#include <CellColorHandler.hxx>
-#include <CellMarginHandler.hxx>
-#include <ConversionHelper.hxx>
-#include <MeasureHandler.hxx>
-#include <TDefTableHandler.hxx>
+#include "DomainMapperTableManager.hxx"
+#include "BorderHandler.hxx"
+#include "CellColorHandler.hxx"
+#include "CellMarginHandler.hxx"
+#include "ConversionHelper.hxx"
+#include "MeasureHandler.hxx"
+#include "TDefTableHandler.hxx"
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
@@ -31,7 +31,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <o3tl/numeric.hxx>
 #include <ooxml/resourceids.hxx>
-#include <DomainMapper.hxx>
+#include "DomainMapper.hxx"
 #include <rtl/math.hxx>
 
 namespace writerfilter {

@@ -42,7 +42,7 @@
 #include <unotools/mediadescriptor.hxx>
 
 #include <iostream>
-#include "sfx2/objsh.hxx"
+#include <sfx2/objsh.hxx>
 
 // this extern variable is declared in OOXMLStreamImpl.hxx
 OUString customTarget;

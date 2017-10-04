@@ -7,15 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtfdocumentimpl.hxx>
+#include "rtfdocumentimpl.hxx"
 
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <svl/lngmisc.hxx>
 
 #include <ooxml/resourceids.hxx>
 
-#include <rtfreferenceproperties.hxx>
-#include <rtfskipdestination.hxx>
+#include "rtfreferenceproperties.hxx"
+#include "rtfskipdestination.hxx"
 
 using namespace com::sun::star;
 

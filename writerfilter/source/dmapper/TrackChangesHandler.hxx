@@ -12,7 +12,7 @@
 #include "LoggedResources.hxx"
 #include <memory>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <DomainMapper_Impl.hxx>
+#include "DomainMapper_Impl.hxx"
 
 namespace writerfilter {
 namespace dmapper

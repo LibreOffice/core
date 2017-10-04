@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <SdtHelper.hxx>
+#include "SdtHelper.hxx"
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

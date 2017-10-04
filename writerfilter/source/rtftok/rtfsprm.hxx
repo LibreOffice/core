@@ -15,7 +15,7 @@
 #include <vector>
 
 #include <boost/intrusive_ptr.hpp>
-#include <rtfvalue.hxx>
+#include "rtfvalue.hxx"
 
 namespace writerfilter
 {

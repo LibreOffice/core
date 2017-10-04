@@ -6,8 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <TablePositionHandler.hxx>
-#include <ConversionHelper.hxx>
+#include "TablePositionHandler.hxx"
+#include "ConversionHelper.hxx"
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

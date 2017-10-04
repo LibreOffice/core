@@ -10,7 +10,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSKIPDESTINATION_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSKIPDESTINATION_HXX
 
-#include <rtflistener.hxx>
+#include "rtflistener.hxx"
 
 namespace writerfilter
 {

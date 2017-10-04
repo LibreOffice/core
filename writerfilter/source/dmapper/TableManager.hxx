@@ -29,8 +29,8 @@
 #include "TagLogger.hxx"
 
 #include <rtl/strbuf.hxx>
-#include <PropertyMap.hxx>
-#include <TableData.hxx>
+#include "PropertyMap.hxx"
+#include "TableData.hxx"
 
 namespace writerfilter
 {

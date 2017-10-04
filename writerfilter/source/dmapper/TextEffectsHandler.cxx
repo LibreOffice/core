@@ -12,7 +12,7 @@
 
 #include <map>
 
-#include <TextEffectsHandler.hxx>
+#include "TextEffectsHandler.hxx"
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>

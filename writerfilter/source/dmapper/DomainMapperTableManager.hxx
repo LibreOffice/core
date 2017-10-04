@@ -22,7 +22,7 @@
 #include "TablePropertiesHandler.hxx"
 #include "TablePositionHandler.hxx"
 
-#include <TableManager.hxx>
+#include "TableManager.hxx"
 #include "PropertyMap.hxx"
 #include "StyleSheetTable.hxx"
 #include <com/sun/star/text/XTextRange.hpp>

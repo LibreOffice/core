@@ -36,7 +36,7 @@
 
 #include <ooxml/resourceids.hxx>
 
-#include <DomainMapper.hxx>
+#include "DomainMapper.hxx"
 #include "DomainMapperTableManager.hxx"
 #include "DomainMapperTableHandler.hxx"
 #include "PropertyMap.hxx"

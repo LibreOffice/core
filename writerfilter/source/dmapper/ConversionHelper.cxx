@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <ConversionHelper.hxx>
+#include "ConversionHelper.hxx"
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/lang/Locale.hpp>

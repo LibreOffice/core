@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <TblStylePrHandler.hxx>
-#include <PropertyMap.hxx>
+#include "TblStylePrHandler.hxx"
+#include "PropertyMap.hxx"
 #include <ooxml/resourceids.hxx>
 #include <comphelper/sequence.hxx>
 

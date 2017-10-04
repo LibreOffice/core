@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtfcharsets.hxx>
+#include "rtfcharsets.hxx"
 #include <sal/macros.h>
 
 namespace writerfilter

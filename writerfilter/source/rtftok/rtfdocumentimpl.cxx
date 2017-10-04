@@ -43,12 +43,12 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <rtl/uri.hxx>
 #include <dmapper/DomainMapperFactory.hxx>
-#include <rtfsdrimport.hxx>
-#include <rtflookahead.hxx>
-#include <rtfcharsets.hxx>
-#include <rtfreferenceproperties.hxx>
-#include <rtfskipdestination.hxx>
-#include <rtffly.hxx>
+#include "rtfsdrimport.hxx"
+#include "rtflookahead.hxx"
+#include "rtfcharsets.hxx"
+#include "rtfreferenceproperties.hxx"
+#include "rtfskipdestination.hxx"
+#include "rtffly.hxx"
 
 using namespace com::sun::star;
 

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtfdocumentimpl.hxx>
+#include "rtfdocumentimpl.hxx"
 
 #include <com/sun/star/text/WrapTextMode.hpp>
 
@@ -20,10 +20,10 @@
 
 #include <ooxml/resourceids.hxx>
 
-#include <rtfcharsets.hxx>
-#include <rtffly.hxx>
-#include <rtfreferenceproperties.hxx>
-#include <rtfskipdestination.hxx>
+#include "rtfcharsets.hxx"
+#include "rtffly.hxx"
+#include "rtfreferenceproperties.hxx"
+#include "rtfskipdestination.hxx"
 
 #include "officecfg/Setup.hxx"
 #include "officecfg/Office/Linguistic.hxx"

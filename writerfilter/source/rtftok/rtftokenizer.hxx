@@ -10,7 +10,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFTOKENIZER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFTOKENIZER_HXX
 
-#include <rtflistener.hxx>
+#include "rtflistener.hxx"
 
 #include <vector>
 

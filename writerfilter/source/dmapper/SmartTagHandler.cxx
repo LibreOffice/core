@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <SmartTagHandler.hxx>
+#include "SmartTagHandler.hxx"
 
 #include <com/sun/star/rdf/Literal.hpp>
 #include <com/sun/star/rdf/URI.hpp>

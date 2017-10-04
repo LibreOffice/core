@@ -16,9 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <TDefTableHandler.hxx>
-#include <PropertyMap.hxx>
-#include <ConversionHelper.hxx>
+#include "TDefTableHandler.hxx"
+#include "PropertyMap.hxx"
+#include "ConversionHelper.hxx"
 #include <ooxml/resourceids.hxx>
 #include <filter/msfilter/util.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>

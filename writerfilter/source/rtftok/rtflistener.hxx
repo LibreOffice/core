@@ -10,7 +10,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLISTENER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFLISTENER_HXX
 
-#include <rtfcontrolwords.hxx>
+#include "rtfcontrolwords.hxx"
 
 namespace writerfilter
 {

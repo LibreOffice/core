@@ -16,9 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <DomainMapperTableHandler.hxx>
-#include <DomainMapper_Impl.hxx>
-#include <StyleSheetTable.hxx>
+#include "DomainMapperTableHandler.hxx"
+#include "DomainMapper_Impl.hxx"
+#include "StyleSheetTable.hxx"
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
@@ -32,14 +32,14 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <TablePositionHandler.hxx>
-#include <ConversionHelper.hxx>
-#include <util.hxx>
+#include "TablePositionHandler.hxx"
+#include "ConversionHelper.hxx"
+#include "util.hxx"
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 
 #ifdef DEBUG_WRITERFILTER
-#include <PropertyMapHelper.hxx>
+#include "PropertyMapHelper.hxx"
 #include <rtl/ustring.hxx>
 #endif
 

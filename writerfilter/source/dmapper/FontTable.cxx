@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <FontTable.hxx>
+#include "FontTable.hxx"
 #include <ooxml/resourceids.hxx>
 #include <vector>
 #include <osl/file.hxx>
