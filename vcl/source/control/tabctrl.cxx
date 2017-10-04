@@ -1891,9 +1891,6 @@ void TabControl::SetTabPage( sal_uInt16 nPageId, TabPage* pTabPage )
     {
         if ( pTabPage )
         {
-            SAL_WARN_IF( pTabPage->IsVisible() && !isLayoutEnabled(pTabPage), "vcl",
-                "TabControl::SetTabPage() - Non-Layout Enabled Page is visible" );
-
             if ( IsDefaultSize() )
                 SetTabPageSizePixel( pTabPage->GetSizePixel() );
 

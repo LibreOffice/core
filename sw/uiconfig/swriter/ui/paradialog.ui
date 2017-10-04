@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="ParagraphPropertiesDialog">
@@ -91,7 +91,13 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="labelTP_PARA_STD">
@@ -104,14 +110,23 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="labelTP_PARA_ALIGN">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0.4699999988079071</property>
                 <property name="label" translatable="yes" context="paradialog|labelTP_PARA_ALIGN">Alignment</property>
+                <property name="xalign">0.4699999988079071</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -119,14 +134,23 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">2</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="textflow">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0.46000000834465027</property>
                 <property name="label" translatable="yes" context="paradialog|textflow">Text Flow</property>
+                <property name="xalign">0.46000000834465027</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -134,7 +158,16 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">3</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="labelTP_PARA_ASIAN">
@@ -148,7 +181,16 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">4</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="labelTP_NUMPARA">
@@ -162,7 +204,16 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">5</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="labelTP_TABULATOR">
@@ -176,7 +227,16 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">6</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="labelTP_DROPCAPS">
@@ -190,7 +250,16 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">7</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="labelTP_BORDER">
@@ -204,7 +273,16 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">8</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="area">
@@ -218,7 +296,16 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">9</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="transparence">

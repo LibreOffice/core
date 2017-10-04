@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.12"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkWindow" id="emojictrl">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
@@ -22,12 +23,23 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <object class="sfxlo-EmojiView" id="emoji_view">
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="sfxlo-EmojiView" id="emoji_view">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin">0</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                   </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="people">
@@ -35,21 +47,30 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
-                <property name="label" translatable="no">1f603</property>
+                <property name="label">1f603</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="nature">
                 <property name="width_request">40</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f43c</property>
+                <property name="label">1f43c</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -57,14 +78,23 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">2</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="food">
                 <property name="width_request">40</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f34f</property>
+                <property name="label">1f34f</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -72,13 +102,22 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">3</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="activity">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f3c8</property>
+                <property name="label">1f3c8</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -86,13 +125,22 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">4</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="travel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f697</property>
+                <property name="label">1f697</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -100,13 +148,22 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">5</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="objects">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f4f1</property>
+                <property name="label">1f4f1</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -114,13 +171,22 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">6</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="symbols">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f499</property>
+                <property name="label">1f499</property>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -128,13 +194,22 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">7</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="flags">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f1ee-1f1f3</property>
+                <property name="label">1f1ee-1f1f3</property>
               </object>
               <packing>
                 <property name="position">7</property>
@@ -142,13 +217,22 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkGrid">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="position">8</property>
+              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="unicode9">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="no">1f939</property>
+                <property name="label">1f939</property>
               </object>
               <packing>
                 <property name="position">8</property>
