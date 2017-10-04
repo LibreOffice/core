@@ -18,6 +18,8 @@
 
 package helper;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  *
  * Interface to get a Manager to access the application to check
@@ -27,7 +29,7 @@ public interface AppProvider {
     /**
      * Method to get the desired Manager
      */
-    Object getManager(lib.TestParameters param);
+    Object getManager(lib.TestParameters param) throws UnsupportedEncodingException;
 
     /**
      * Method to dispose the desired Manager

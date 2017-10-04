@@ -20,7 +20,9 @@ package mod._forms;
 import ifc.form._XDatabaseParameterBroadcaster;
 import ifc.sdb._XCompletedExecution;
 
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import lib.StatusException;
 import lib.TestCase;
@@ -756,7 +758,12 @@ public class ODatabaseForm extends TestCase {
      */
     private static class ParameterListenerImpl implements _XDatabaseParameterBroadcaster.CheckParameterListener {
         private boolean listenerWasCalled = false;
-        private PrintWriter log = new PrintWriter(System.out);
+
+        private PrintWriter log;
+
+        ParameterListenerImpl() throws UnsupportedEncodingException {
+            log = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"));
+        }
 
         /**
          * Return true, if the listener was called, false otherwise.
@@ -818,7 +825,11 @@ public class ODatabaseForm extends TestCase {
      */
     private static class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
         private boolean handlerWasUsed = false;
-        private PrintWriter log = new PrintWriter(System.out);
+        private PrintWriter log;
+
+        InteractionHandlerImpl() throws UnsupportedEncodingException {
+            log = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"));
+        }
 
         public boolean checkInteractionHandler() {
             return handlerWasUsed;

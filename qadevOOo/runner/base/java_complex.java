@@ -29,6 +29,7 @@ import share.LogWriter;
 import stats.Summarizer;
 import lib.TestParameters;
 import util.PropertyName;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Test base for executing a java complex test.
@@ -107,6 +108,10 @@ public class java_complex implements TestBase
                     param.put("ServiceFactory", msf);
                 }
                 catch (IllegalArgumentException e)
+                {
+                    office = null;
+                }
+                catch (UnsupportedEncodingException e)
                 {
                     office = null;
                 }
