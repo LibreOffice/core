@@ -25,23 +25,28 @@
 
 
 SwDocFac::SwDocFac( SwDoc *pDc )
-    : mxDoc( pDc )
+    : pDoc( pDc )
 {
+    if( pDoc )
+        pDoc->acquire();
 }
 
 
 SwDocFac::~SwDocFac()
 {
+    if( pDoc && !pDoc->release() )
+        delete pDoc;
 }
 
 
 SwDoc *SwDocFac::GetDoc()
 {
-    if( !mxDoc.is() )
+    if( !pDoc )
     {
-        mxDoc = new SwDoc;
+        pDoc = new SwDoc;
+        pDoc->acquire();
     }
-    return mxDoc.get();
+    return pDoc;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

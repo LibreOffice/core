@@ -88,11 +88,11 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     GetDoc();
 
     // while reading, do not call OLE-Modified
-    Link<bool,void> aOLELink( mxDoc->GetOle2Link() );
-    mxDoc->SetOle2Link( Link<bool,void>() );
+    Link<bool,void> aOLELink( pDoc->GetOle2Link() );
+    pDoc->SetOle2Link( Link<bool,void>() );
 
-    mxDoc->SetInReading( true );
-    mxDoc->SetInXMLImport( dynamic_cast< XMLReader* >(po) !=  nullptr );
+    pDoc->SetInReading( true );
+    pDoc->SetInXMLImport( dynamic_cast< XMLReader* >(po) !=  nullptr );
 
     SwPaM *pPam;
     if( pCursor )
@@ -100,13 +100,13 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     else
     {
         // if the Reader was not called by a Shell, create a PaM ourselves
-        SwNodeIndex nNode( mxDoc->GetNodes().GetEndOfContent(), -1 );
+        SwNodeIndex nNode( pDoc->GetNodes().GetEndOfContent(), -1 );
         pPam = new SwPaM( nNode );
         // For Web documents the default template was set already by InitNew,
         // unless the filter is not HTML,
         // or a SetTemplateName was called in ConvertFrom.
-        if( !mxDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) || ReadHTML != po || !po->mxTemplate.is()  )
-            po->SetTemplate( *mxDoc );
+        if( !pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) || ReadHTML != po || !po->mxTemplate.is()  )
+            po->SetTemplate( *pDoc );
     }
 
     // Pams are connected like rings; stop when we return to the 1st element
@@ -114,7 +114,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     SwUndoInsDoc* pUndo = nullptr;
 
     bool bReadPageDescs = false;
-    bool const bDocUndo = mxDoc->GetIDocumentUndoRedo().DoesUndo();
+    bool const bDocUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     bool bSaveUndo = bDocUndo && pCursor;
     if( bSaveUndo )
     {
@@ -123,19 +123,19 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         if( bReadPageDescs )
         {
             bSaveUndo = false;
-            mxDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+            pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
         }
         else
         {
-            mxDoc->GetIDocumentUndoRedo().ClearRedo();
-            mxDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSDOKUMENT, nullptr );
+            pDoc->GetIDocumentUndoRedo().ClearRedo();
+            pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSDOKUMENT, nullptr );
         }
     }
-    mxDoc->GetIDocumentUndoRedo().DoUndo(false);
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
-    SwNodeIndex aSplitIdx( mxDoc->GetNodes() );
+    SwNodeIndex aSplitIdx( pDoc->GetNodes() );
 
-    RedlineFlags eOld = mxDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     RedlineFlags ePostReadRedlineFlags( RedlineFlags::Ignore );
 
     // Array of FlyFormats
@@ -148,7 +148,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         if( bSaveUndo )
             pUndo = new SwUndoInsDoc( *pPam );
 
-        mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
 
         SwPaM* pUndoPam = nullptr;
         if( bDocUndo || pCursor )
@@ -161,8 +161,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         // store for now all Fly's
         if( pCursor )
         {
-            std::copy(mxDoc->GetSpzFrameFormats()->begin(),
-                mxDoc->GetSpzFrameFormats()->end(), std::back_inserter(aFlyFrameArr));
+            std::copy(pDoc->GetSpzFrameFormats()->begin(),
+                pDoc->GetSpzFrameFormats()->end(), std::back_inserter(aFlyFrameArr));
         }
 
         const sal_Int32 nSttContent = pPam->GetPoint()->nContent.GetIndex();
@@ -172,21 +172,21 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         sal_Int32 nEndContent = pCNd ? pCNd->Len() - nSttContent : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
 
-        mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
-        nError = po->Read( *mxDoc, sBaseURL, *pPam, aFileName );
+        nError = po->Read( *pDoc, sBaseURL, *pPam, aFileName );
 
         // an ODF document may contain redline mode in settings.xml; save it!
-        ePostReadRedlineFlags = mxDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+        ePostReadRedlineFlags = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
 
-        mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
+        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
 
         if( !IsError( nError ))     // set the End position already
         {
             --aEndPos;
             pCNd = aEndPos.GetNode().GetContentNode();
             if( !pCNd && nullptr == ( pCNd = SwNodes::GoPrevious( &aEndPos ) ))
-                pCNd = mxDoc->GetNodes().GoNext( &aEndPos );
+                pCNd = pDoc->GetNodes().GoNext( &aEndPos );
 
             pPam->GetPoint()->nNode = aEndPos;
             const sal_Int32 nLen = pCNd->Len();
@@ -202,7 +202,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                 SwTableBox* pBox = pTableBoxStart->GetTableBox();
                 if ( pBox )
                 {
-                    mxDoc->ChkBoxNumFormat( *pBox, true );
+                    pDoc->ChkBoxNumFormat( *pBox, true );
                 }
             }
         }
@@ -222,9 +222,9 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                    rNd.FindFooterStartNode();
 
             // search all new Fly's, and store them as individual Undo Objects
-            for( SwFrameFormats::size_type n = 0; n < mxDoc->GetSpzFrameFormats()->size(); ++n )
+            for( SwFrameFormats::size_type n = 0; n < pDoc->GetSpzFrameFormats()->size(); ++n )
             {
-                SwFrameFormat* pFrameFormat = (*mxDoc->GetSpzFrameFormats())[ n ];
+                SwFrameFormat* pFrameFormat = (*pDoc->GetSpzFrameFormats())[ n ];
                 const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
                 // ok, here IsAlive is a misnomer...
                 if (!aFlyFrameArr.IsAlive(pFrameFormat))
@@ -257,20 +257,20 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                         {
                             // DrawObjects are not allowed in Headers/Footers!
                             pFrameFormat->DelFrames();
-                            mxDoc->DelFrameFormat( pFrameFormat );
+                            pDoc->DelFrameFormat( pFrameFormat );
                             --n;
                         }
                         else
                         {
                             if( bSaveUndo )
                             {
-                                mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+                                pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
                                 // UGLY: temp. enable undo
-                                mxDoc->GetIDocumentUndoRedo().DoUndo(true);
-                                mxDoc->GetIDocumentUndoRedo().AppendUndo(
+                                pDoc->GetIDocumentUndoRedo().DoUndo(true);
+                                pDoc->GetIDocumentUndoRedo().AppendUndo(
                                     new SwUndoInsLayFormat( pFrameFormat,0,0 ) );
-                                mxDoc->GetIDocumentUndoRedo().DoUndo(false);
-                                mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
+                                pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                                pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
                             }
                             if( pFrameFormat->HasWriterListeners() )
                             {
@@ -286,7 +286,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                 }
                                 else if( pCursor )
                                 {
-                                    mxDoc->SetContainsAtPageObjWithContentAnchor( true );
+                                    pDoc->SetContainsAtPageObjWithContentAnchor( true );
                                 }
                             }
                             else
@@ -298,22 +298,22 @@ sal_uLong SwReader::Read( const Reader& rOptions )
             if( !aFlyFrameArr.empty() )
                 aFlyFrameArr.clear();
 
-            mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
-            if( mxDoc->getIDocumentRedlineAccess().IsRedlineOn() )
-                mxDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pUndoPam ), true);
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+            if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+                pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_INSERT, *pUndoPam ), true);
             else
-                mxDoc->getIDocumentRedlineAccess().SplitRedline( *pUndoPam );
-            mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
+                pDoc->getIDocumentRedlineAccess().SplitRedline( *pUndoPam );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
         }
         if( bSaveUndo )
         {
-            mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
             pUndo->SetInsertRange( *pUndoPam, false );
             // UGLY: temp. enable undo
-            mxDoc->GetIDocumentUndoRedo().DoUndo(true);
-            mxDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
-            mxDoc->GetIDocumentUndoRedo().DoUndo(false);
-            mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
+            pDoc->GetIDocumentUndoRedo().DoUndo(true);
+            pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
+            pDoc->GetIDocumentUndoRedo().DoUndo(false);
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
         }
 
         delete pUndoPam;
@@ -338,25 +338,25 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         }
     }
 
-    mxDoc->SetInReading( false );
-    mxDoc->SetInXMLImport( false );
+    pDoc->SetInReading( false );
+    pDoc->SetInXMLImport( false );
 
-    mxDoc->InvalidateNumRules();
-    mxDoc->UpdateNumRule();
-    mxDoc->ChkCondColls();
-    mxDoc->SetAllUniqueFlyNames();
-    mxDoc->getIDocumentState().SetLoaded();
+    pDoc->InvalidateNumRules();
+    pDoc->UpdateNumRule();
+    pDoc->ChkCondColls();
+    pDoc->SetAllUniqueFlyNames();
+    pDoc->getIDocumentState().SetLoaded();
     // Clear unassigned cell styles, because they aren't needed anymore.
-    mxDoc->GetCellStyles().clear();
+    pDoc->GetCellStyles().clear();
 
-    mxDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
+    pDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
     if (!bReadPageDescs)
     {
         if( bSaveUndo )
         {
-            mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
-            mxDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSDOKUMENT, nullptr );
-            mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+            pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::INSDOKUMENT, nullptr );
+            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
         }
     }
 
@@ -368,26 +368,26 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         // #i42634# Moved common code of SwReader::Read() and
         // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     // ATM still with Update
-        mxDoc->getIDocumentLinksAdministration().UpdateLinks();
+        pDoc->getIDocumentLinksAdministration().UpdateLinks();
 
         // not insert: set the redline mode read from settings.xml
         eOld = ePostReadRedlineFlags & ~RedlineFlags::Ignore;
 
-        mxDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, nullptr, 0);
+        pDoc->getIDocumentFieldsAccess().SetFieldsDirty(false, nullptr, 0);
     }
 
-    mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
-    mxDoc->SetOle2Link( aOLELink );
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+    pDoc->SetOle2Link( aOLELink );
 
     if( pCursor )                 // the document is now modified
-        mxDoc->getIDocumentState().SetModified();
+        pDoc->getIDocumentState().SetModified();
     // #i38810# - If links have been updated, the document
     // have to be modified. During update of links the OLE link at the document
     // isn't set. Thus, the document's modified state has to be set again after
-    // the OLE link is restored - see above <mxDoc->SetOle2Link( aOLELink )>.
-    if ( mxDoc->getIDocumentLinksAdministration().LinksUpdated() )
+    // the OLE link is restored - see above <pDoc->SetOle2Link( aOLELink )>.
+    if ( pDoc->getIDocumentLinksAdministration().LinksUpdated() )
     {
-        mxDoc->getIDocumentState().SetModified();
+        pDoc->getIDocumentState().SetModified();
     }
 
     po->SetReadUTF8( false );
