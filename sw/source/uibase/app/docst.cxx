@@ -165,7 +165,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     SfxTemplateItem aItem(nWhich, aName);
 
                     sal_uInt16 nMask = 0;
-                    if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
+                    if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
@@ -191,7 +191,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_FAMILY3:
 
-                if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
+                if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -207,7 +207,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY4:
             {
                 SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-                if (m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
+                if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -671,7 +671,7 @@ sal_uInt16 SwDocShell::Edit(
     SfxStyleSheetBase *pStyle = nullptr;
 
     sal_uInt16 nRet = nMask;
-    bool bModified = m_pDoc->getIDocumentState().IsModified();
+    bool bModified = m_xDoc->getIDocumentState().IsModified();
 
     SwUndoId nNewStyleUndoId(SwUndoId::EMPTY);
 
@@ -862,11 +862,11 @@ sal_uInt16 SwDocShell::Edit(
             if( bNew )
             {
                 GetWrtShell()->Undo();
-                m_pDoc->GetIDocumentUndoRedo().ClearRedo();
+                m_xDoc->GetIDocumentUndoRedo().ClearRedo();
             }
 
             if( !bModified )
-                m_pDoc->getIDocumentState().ResetModified();
+                m_xDoc->getIDocumentState().ResetModified();
         }
 
         nRet = aApplyStyleHelper.getRet();
@@ -900,10 +900,10 @@ sal_uInt16 SwDocShell::Edit(
         if( bNew )
             m_xBasePool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetCreated, *xTmp.get() ) );
 
-        m_pDoc->getIDocumentState().SetModified();
+        m_xDoc->getIDocumentState().SetModified();
         if( !bModified )        // Bug 57028
         {
-            m_pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+            m_xDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
         }
         GetWrtShell()->EndAllAction();
     }
@@ -1332,7 +1332,7 @@ SfxStyleFamily SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily 
 
 std::set<Color> SwDocShell::GetDocColors()
 {
-    return m_pDoc->GetDocColors();
+    return m_xDoc->GetDocColors();
 }
 
 void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
@@ -1363,7 +1363,7 @@ void SwDocShell::LoadStyles_( SfxObjectShell& rSource, bool bPreserveCurrentDocu
         // of the template, update all the Source's
         // FixFields once.
         if(!bPreserveCurrentDocument)
-            static_cast<SwDocShell&>(rSource).m_pDoc->getIDocumentFieldsAccess().SetFixFields(nullptr);
+            static_cast<SwDocShell&>(rSource).m_xDoc->getIDocumentFieldsAccess().SetFixFields(nullptr);
         if (m_pWrtShell)
         {
             // rhbz#818557, fdo#58893: EndAllAction will call SelectShell(),
@@ -1372,18 +1372,18 @@ void SwDocShell::LoadStyles_( SfxObjectShell& rSource, bool bPreserveCurrentDocu
             // setting g_bNoInterrupt appears to avoid the problem.
             ::comphelper::FlagRestorationGuard g(g_bNoInterrupt, true);
             m_pWrtShell->StartAllAction();
-            m_pDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).m_pDoc );
+            m_xDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).m_xDoc );
             m_pWrtShell->EndAllAction();
         }
         else
         {
-            bool bModified = m_pDoc->getIDocumentState().IsModified();
-            m_pDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).m_pDoc );
-            if (!bModified && m_pDoc->getIDocumentState().IsModified() && !m_pView)
+            bool bModified = m_xDoc->getIDocumentState().IsModified();
+            m_xDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).m_xDoc );
+            if (!bModified && m_xDoc->getIDocumentState().IsModified() && !m_pView)
             {
                 // the View is created later, but overwrites the Modify-Flag.
                 // Undo doesn't work anymore anyways.
-                m_pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+                m_xDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
             }
         }
     }

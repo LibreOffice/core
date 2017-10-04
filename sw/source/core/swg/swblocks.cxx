@@ -90,7 +90,7 @@ SwImpBlocks::SwImpBlocks( const OUString& rFile )
     : m_aFile( rFile ),
     m_aDateModified( Date::EMPTY ),
     m_aTimeModified( tools::Time::EMPTY ),
-    m_pDoc( nullptr ), m_nCurrentIndex( USHRT_MAX ),
+    m_nCurrentIndex( USHRT_MAX ),
     m_bReadOnly( true ), m_bInPutMuchBlocks( false ),
     m_bInfoChanged(false)
 {
@@ -111,7 +111,7 @@ SwImpBlocks::~SwImpBlocks()
  */
 void SwImpBlocks::ClearDoc()
 {
-    m_pDoc->ClearDoc();
+    m_xDoc->ClearDoc();
 }
 
 /**
@@ -119,7 +119,7 @@ void SwImpBlocks::ClearDoc()
  */
 SwPaM* SwImpBlocks::MakePaM()
 {
-    SwPaM* pPam = new SwPaM( m_pDoc->GetNodes().GetEndOfContent() );
+    SwPaM* pPam = new SwPaM( m_xDoc->GetNodes().GetEndOfContent() );
     pPam->Move( fnMoveBackward, GoInDoc );
     pPam->SetMark();
     pPam->Move( fnMoveForward, GoInDoc );
@@ -512,7 +512,7 @@ sal_uInt16 SwTextBlocks::PutText( const OUString& rShort, const OUString& rName,
 SwDoc* SwTextBlocks::GetDoc()
 {
     if( pImp )
-        return pImp->m_pDoc;
+        return pImp->m_xDoc.get();
     return nullptr;
 }
 

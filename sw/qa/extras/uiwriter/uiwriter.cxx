@@ -812,15 +812,15 @@ void SwUiWriterTest::testExportRTF()
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
 
     // Create the clipboard document.
-    std::shared_ptr<SwDoc> pClpDoc(new SwDoc());
-    pClpDoc->SetClipBoard(true);
-    pWrtShell->Copy(pClpDoc.get());
+    std::shared_ptr<SwDoc> xClpDoc(new SwDoc());
+    xClpDoc->SetClipBoard(true);
+    pWrtShell->Copy(xClpDoc.get());
 
     // And finally export it as RTF.
     WriterRef xWrt;
     SwReaderWriter::GetWriter("RTF", OUString(), xWrt);
     SvMemoryStream aStream;
-    SwWriter aWrt(aStream, *pClpDoc);
+    SwWriter aWrt(aStream, *xClpDoc);
     aWrt.Write(xWrt);
 
     OString aData(static_cast<const sal_Char*>(aStream.GetBuffer()), aStream.GetSize());
@@ -2405,10 +2405,9 @@ void SwUiWriterTest::testTdf77342()
     IDocumentFieldsAccess& rField(pDoc->getIDocumentFieldsAccess());
     rField.UpdateExpFields(nullptr, true);
     //creating new clipboard doc
-    SwDoc* pClpDoc = new SwDoc();
-    pClpDoc->acquire();
-    pClpDoc->SetClipBoard(true);
-    pClpDoc->getIDocumentFieldsAccess().LockExpFields();
+    rtl::Reference<SwDoc> xClpDoc(new SwDoc());
+    xClpDoc->SetClipBoard(true);
+    xClpDoc->getIDocumentFieldsAccess().LockExpFields();
     //selecting reference field 2 and reference field 3 and footnote 1 and footnote 2
     //selection is such that more than one and not all footnotes and ref fields are selected
     pCursor->Move(fnMoveBackward);
@@ -2419,7 +2418,7 @@ void SwUiWriterTest::testTdf77342()
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //copying the selection to clipboard
-    pWrtShell->Copy(pClpDoc);
+    pWrtShell->Copy(xClpDoc.get());
     //deleting selection mark after copy
     pCursor->DeleteMark();
     //checking that the footnotes reference fields have same values after copy operation
@@ -2449,7 +2448,7 @@ void SwUiWriterTest::testTdf77342()
     //moving cursor to the end of the document
     pWrtShell->EndDoc();
     //pasting the copied selection at current cursor position
-    pWrtShell->Paste(pClpDoc);
+    pWrtShell->Paste(xClpDoc.get());
     //checking the fields, both new and old, for proper values
     pWrtShell->SttDoc();
     //old reference field 1
@@ -2521,7 +2520,7 @@ void SwUiWriterTest::testTdf77342()
     //moving the cursor to the starting of document
     pWrtShell->SttDoc();
     //pasting the selection again at current cursor position
-    pWrtShell->Paste(pClpDoc);
+    pWrtShell->Paste(xClpDoc.get());
     //checking the fields, both new and old, for proper values
     pWrtShell->SttDoc();
     //new reference field 1
@@ -2659,10 +2658,9 @@ void SwUiWriterTest::testTdf63553()
     IDocumentFieldsAccess& rField(pDoc->getIDocumentFieldsAccess());
     rField.UpdateExpFields(nullptr, true);
     //creating new clipboard doc
-    SwDoc* pClpDoc = new SwDoc();
-    pClpDoc->acquire();
-    pClpDoc->SetClipBoard(true);
-    pClpDoc->getIDocumentFieldsAccess().LockExpFields();
+    rtl::Reference<SwDoc> xClpDoc( new SwDoc() );
+    xClpDoc->SetClipBoard(true);
+    xClpDoc->getIDocumentFieldsAccess().LockExpFields();
     //selecting reference field 2 and 3 and sequence field 1 and 2
     //selection is such that more than one and not all sequence fields and reference fields are selected
     //ref1-[ref2-ref3-seq1-seq2]-seq3
@@ -2675,7 +2673,7 @@ void SwUiWriterTest::testTdf63553()
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //copying the selection to clipboard
-    pWrtShell->Copy(pClpDoc);
+    pWrtShell->Copy(xClpDoc.get());
     //deleting selection mark after copy
     pCursor->DeleteMark();
     //checking whether the sequence and reference fields have same values after copy operation
@@ -2720,7 +2718,7 @@ void SwUiWriterTest::testTdf63553()
     //moving cursor to the end of the document
     pWrtShell->EndDoc();
     //pasting the copied selection at current cursor position
-    pWrtShell->Paste(pClpDoc);
+    pWrtShell->Paste(xClpDoc.get());
     //checking the fields, both new and old, for proper values
     pWrtShell->SttDoc();
     //now we have ref1-ref2-ref3-seq1-seq2-seq3-nref1-nref2-nseq1-nseq2
@@ -2786,7 +2784,7 @@ void SwUiWriterTest::testTdf63553()
     //moving the cursor to the starting of document
     pWrtShell->SttDoc();
     //pasting the selection again at current cursor position
-    pWrtShell->Paste(pClpDoc);
+    pWrtShell->Paste(xClpDoc.get());
     //checking the fields, both new and old, for proper values
     pWrtShell->SttDoc();
     //now we have [nnref1-nnref2-nnseq1-nnseq2]-ref1-[ref2-ref3-seq1-seq2]-seq3-[nref1-nref2-nseq1-nseq2]

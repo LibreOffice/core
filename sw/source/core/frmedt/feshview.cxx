@@ -2459,7 +2459,7 @@ bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame
              /* FLYCNTTYPE_OLE */   SwNodeType::Ole
             };
 
-    const SwFlyFrameFormat* pFlyFormat = mpDoc->FindFlyByName( rName, aChkArr[ eType]);
+    const SwFlyFrameFormat* pFlyFormat = mxDoc->FindFlyByName( rName, aChkArr[ eType]);
     if( pFlyFormat )
     {
         SET_CURR_SHELL( this );
@@ -2566,7 +2566,7 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
                             // set FlyProtectFlags::Pos if it is a Math object anchored 'as char' and baseline alignment is activated
                             const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
                                     && RndStdIds::FLY_AS_CHAR == pFly->GetFormat()->GetAnchor().GetAnchorId()
-                                    && mpDoc->GetDocumentSettingManager().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
+                                    && mxDoc->GetDocumentSettingManager().get( DocumentSettingId::MATH_BASELINE_ALIGNMENT );
                             if ((FlyProtectFlags::Pos & eType) && bProtectMathPos)
                                 nChk |= FlyProtectFlags::Pos;
                         }

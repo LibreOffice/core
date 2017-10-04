@@ -183,7 +183,7 @@ protected:
     static vcl::DeleteOnDeinit< VclPtr<vcl::Window> > mpCareWindow;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
-    SwDoc                   *mpDoc;          ///< The document; never 0.
+    rtl::Reference<SwDoc>   mxDoc;          ///< The document; never 0.
 
     sal_uInt16 mnStartAction; ///< != 0 if at least one Action is active.
     sal_uInt16 mnLockPaint;   ///< != 0 if Paint is locked.
@@ -286,7 +286,7 @@ public:
 
     const Size GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const;
 
-    SwDoc *GetDoc()  const { return mpDoc; }  //Never 0.
+    SwDoc *GetDoc()  const { return mxDoc.get(); }  //Never 0.
 
     /** Provides access to the document setting interface
      */

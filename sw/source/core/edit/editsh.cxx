@@ -292,7 +292,7 @@ void SwEditShell::ReRead( const OUString& rGrfName, const OUString& rFltName,
                     const Graphic* pGraphic )
 {
     StartAllAction();
-    mpDoc->getIDocumentContentOperations().ReRead( *GetCursor(), rGrfName, rFltName, pGraphic, nullptr );
+    mxDoc->getIDocumentContentOperations().ReRead( *GetCursor(), rGrfName, rFltName, pGraphic, nullptr );
     EndAllAction();
 }
 
@@ -570,7 +570,7 @@ OUString SwEditShell::Calculate()
 
 sfx2::LinkManager& SwEditShell::GetLinkManager()
 {
-    return mpDoc->getIDocumentLinksAdministration().GetLinkManager();
+    return mxDoc->getIDocumentLinksAdministration().GetLinkManager();
 }
 
 void *SwEditShell::GetIMapInventor() const

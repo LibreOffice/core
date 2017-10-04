@@ -888,7 +888,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     rDrawObj.SetLayer( getIDocumentDrawModelAccess().GetHeavenId() );
 
     // find anchor position
-    SwPaM aPam( mpDoc->GetNodes() );
+    SwPaM aPam( mxDoc->GetNodes() );
     {
         SwCursorMoveState aState( MV_SETONLYTEXT );
         Point aTmpPt( rInsertPosition );
@@ -924,7 +924,7 @@ void SwFEShell::GetPageObjs( std::vector<SwFrameFormat*>& rFillArr )
 {
     rFillArr.clear();
 
-    for( auto pFormat : *mpDoc->GetSpzFrameFormats() )
+    for( auto pFormat : *mxDoc->GetSpzFrameFormats() )
     {
         if (RndStdIds::FLY_AT_PAGE == pFormat->GetAnchor().GetAnchorId())
         {
@@ -947,7 +947,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr )
     bool bTmpAssert = false;
     for( auto pFormat : rFillArr )
     {
-        if (mpDoc->GetSpzFrameFormats()->IsAlive(pFormat))
+        if (mxDoc->GetSpzFrameFormats()->IsAlive(pFormat))
         {
             // FlyFormat is still valid, therefore process
 
@@ -967,7 +967,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr )
                 bTmpAssert = true;
             }
             aNewAnchor.SetPageNum( sal_uInt16(nNewPage) );
-            mpDoc->SetAttr( aNewAnchor, *pFormat );
+            mxDoc->SetAttr( aNewAnchor, *pFormat );
         }
     }
 
@@ -1379,11 +1379,11 @@ SwFrameFormat* SwFEShell::WizardGetFly()
 {
     // do not search the Fly via the layout. Now we can delete a frame
     // without a valid layout. ( e.g. for the wizards )
-    SwFrameFormats& rSpzArr = *mpDoc->GetSpzFrameFormats();
+    SwFrameFormats& rSpzArr = *mxDoc->GetSpzFrameFormats();
     if( !rSpzArr.empty() )
     {
         SwNodeIndex& rCursorNd = GetCursor()->GetPoint()->nNode;
-        if( rCursorNd.GetIndex() > mpDoc->GetNodes().GetEndOfExtras().GetIndex() )
+        if( rCursorNd.GetIndex() > mxDoc->GetNodes().GetEndOfExtras().GetIndex() )
             // Cursor is in the body area!
             return nullptr;
 
@@ -1739,7 +1739,7 @@ bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
         SwFrameFormat *pFormat = FindFrameFormat( pObj );
 
         // store attributes, then set the graphic
-        SfxItemSet aFrameSet( mpDoc->GetAttrPool(),
+        SfxItemSet aFrameSet( mxDoc->GetAttrPool(),
                             pFormat->GetAttrSet().GetRanges() );
         aFrameSet.Set( pFormat->GetAttrSet() );
 
@@ -1813,21 +1813,21 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
     SwFrameFormat * pOldChainPrev = static_cast<SwFrameFormat *>(rChain.GetPrev());
 
     if (pOldChainNext)
-        mpDoc->Unchain(rFormat);
+        mxDoc->Unchain(rFormat);
 
     if (pOldChainPrev)
-        mpDoc->Unchain(*pOldChainPrev);
+        mxDoc->Unchain(*pOldChainPrev);
 
-    const size_t nCnt = mpDoc->GetFlyCount(FLYCNTTYPE_FRM);
+    const size_t nCnt = mxDoc->GetFlyCount(FLYCNTTYPE_FRM);
 
     /* potential successors resp. predecessors */
     std::vector< const SwFrameFormat * > aTmpSpzArray;
 
-    mpDoc->FindFlyByName(rReference);
+    mxDoc->FindFlyByName(rReference);
 
     for (size_t n = 0; n < nCnt; ++n)
     {
-        const SwFrameFormat & rFormat1 = *(mpDoc->GetFlyNum(n, FLYCNTTYPE_FRM));
+        const SwFrameFormat & rFormat1 = *(mxDoc->GetFlyNum(n, FLYCNTTYPE_FRM));
 
         /*
            pFormat is a potential successor of rFormat if it is chainable after
@@ -1840,9 +1840,9 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
         SwChainRet nChainState;
 
         if (bSuccessors)
-            nChainState = mpDoc->Chainable(rFormat, rFormat1);
+            nChainState = mxDoc->Chainable(rFormat, rFormat1);
         else
-            nChainState = mpDoc->Chainable(rFormat1, rFormat);
+            nChainState = mxDoc->Chainable(rFormat1, rFormat);
 
         if (nChainState == SwChainRet::OK)
         {
@@ -1889,10 +1889,10 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
     }
 
     if (pOldChainNext)
-        mpDoc->Chain(rFormat, *pOldChainNext);
+        mxDoc->Chain(rFormat, *pOldChainNext);
 
     if (pOldChainPrev)
-        mpDoc->Chain(*pOldChainPrev, rFormat);
+        mxDoc->Chain(*pOldChainPrev, rFormat);
 
     EndAction();
 }

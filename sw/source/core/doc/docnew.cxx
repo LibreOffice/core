@@ -856,12 +856,12 @@ void SwDoc::ReplaceCompatibilityOptions(const SwDoc& rSource)
 SfxObjectShell* SwDoc::CreateCopy( bool bCallInitNew, bool bEmpty ) const
 {
     SAL_INFO( "sw.pageframe", "(SwDoc::CreateCopy in" );
-    SwDoc* pRet = new SwDoc;
+    rtl::Reference<SwDoc> xRet( new SwDoc );
 
     // we have to use pointer here, since the callee has to decide whether
     // SfxObjectShellLock or SfxObjectShellRef should be used sometimes the
     // object will be returned with refcount set to 0 ( if no DoInitNew is done )
-    SfxObjectShell* pRetShell = new SwDocShell( pRet, SfxObjectCreateMode::STANDARD );
+    SfxObjectShell* pRetShell = new SwDocShell( xRet.get(), SfxObjectCreateMode::STANDARD );
     if( bCallInitNew )
     {
         // it could happen that DoInitNew creates model,
@@ -869,30 +869,26 @@ SfxObjectShell* SwDoc::CreateCopy( bool bCallInitNew, bool bEmpty ) const
         pRetShell->DoInitNew();
     }
 
-    (void)pRet->acquire();
+    xRet->ReplaceDefaults(*this);
 
-    pRet->ReplaceDefaults(*this);
+    xRet->ReplaceCompatibilityOptions(*this);
 
-    pRet->ReplaceCompatibilityOptions(*this);
-
-    pRet->ReplaceStyles(*this);
+    xRet->ReplaceStyles(*this);
 
     if( !bEmpty )
     {
 #ifdef DBG_UTIL
         SAL_INFO( "sw.createcopy", "CC-Nd-Src: " << CNTNT_DOC( this ) );
-        SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
+        SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( xRet ) );
 #endif
-        pRet->AppendDoc(*this, 0, bCallInitNew, 0, 0);
+        xRet->AppendDoc(*this, 0, bCallInitNew, 0, 0);
 #ifdef DBG_UTIL
-        SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
+        SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( xRet ) );
 #endif
     }
 
     // remove the temporary shell if it is there as it was done before
-    pRet->SetTmpDocShell( nullptr );
-
-    (void)pRet->release();
+    xRet->SetTmpDocShell( nullptr );
 
     SAL_INFO( "sw.pageframe", "SwDoc::CreateCopy out)" );
     return pRetShell;
