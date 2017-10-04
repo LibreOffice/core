@@ -322,8 +322,14 @@ SfxTabDialog::SfxTabDialog
     , m_pExampleSet(nullptr)
 {
     Init_Impl(bEditFmt);
-}
 
+    sal_uInt16 nPageCount = m_pTabCtrl->GetPageCount();
+    for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+    {
+        sal_uInt16 nPageId = m_pTabCtrl->GetPageId(nPage);
+        m_pTabCtrl->SetTabPage(nPageId, nullptr);
+    }
+}
 
 SfxTabDialog::~SfxTabDialog()
 {
