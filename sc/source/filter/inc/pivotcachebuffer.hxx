@@ -81,7 +81,7 @@ public:
     /** Returns the string representation of the item. */
     OUString     getName() const;
 
-    /** Returns the string representation of the item, using the actual formating. */
+    /** Returns the string representation of the item, using the actual formatting. */
     OUString     getFormattedName(const ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const DateTime& rNullDate) const;
     /** Returns true if the item is unused. */
     bool         isUnused() const { return mbUnused; }

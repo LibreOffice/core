@@ -31,14 +31,14 @@ class XMLRenameElemTransformerContext : public XMLTransformerContext
     OUString m_aAttrValue;
 
 public:
-    // The following consutructor renames the element names "rQName"
+    // The following constructor renames the element names "rQName"
     // to bPrefix/eToken
     XMLRenameElemTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken  );
 
-    // The following consutructor renames the element names "rQName"
+    // The following constructor renames the element names "rQName"
     // to bPrefix/eToken and adds an attribute nAPrefix/eAToken that has
     // the value eVToken.
     XMLRenameElemTransformerContext( XMLTransformerBase& rTransformer,
