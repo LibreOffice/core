@@ -25,6 +25,7 @@
 #include <tools/mempool.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>
+#include <officecfg/Office/Calc.hxx>
 
 #include <token.hxx>
 #include <tokenarray.hxx>
@@ -1346,11 +1347,11 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
         // It's already disabled.  No more checking needed.
         return;
 
-    static const bool bThreadingRequested = std::getenv("CPU_THREADED_CALCULATION");
+    static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
 
     OpCode eOp = r.GetOpCode();
 
-    if (!ScCalcConfig::isOpenCLEnabled() && bThreadingRequested)
+    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
     {
         if (aThreadedCalcBlackList.count(eOp))
         {
