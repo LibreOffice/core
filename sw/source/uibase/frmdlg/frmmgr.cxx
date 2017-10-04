@@ -577,9 +577,9 @@ void SwFlyFrameAttrMgr::SetHeightSizeType( SwFrameSize eType )
 void SwFlyFrameAttrMgr::SetRotation(sal_uInt16 nOld, sal_uInt16 nNew, const Size& rUnrotatedSize)
 {
     // RotGrfFlyFrame: Central handling of real change of rotation here, all adaptions use this.
-    // Adaption of pos/size may be wanted in the future. Already tried to keep last SIze in
+    // Adaption of pos/size may be wanted in the future. Already tried to keep last Size in
     // UnrotatedSize in the SwRotationGrf Item, but this will lead to various problems. Also tried
-    // to use m_aSet.Put(...) as in other methods (also read methods for Rotation/UnrotatedSize) but
+    // to use m_aSet.Put(...) as in other methods (also tried read methods for Rotation/UnrotatedSize) but
     // somehow the needed ID (RES_GRFATR_ROTATION) is *not* in the SfxItemSet of the Frame, so for
     // now set directly. Undo/Redo is preserved by AttributeChange
     if(nOld != nNew)
