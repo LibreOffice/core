@@ -204,7 +204,6 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/config_host/*.h \
         $(BUILDDIR)/configure \
         $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
-        $(BUILDDIR)/ios/lo.xcconfig \
         $(BUILDDIR)/lo.xcent \
         $(BUILDDIR)/sysui/desktop/macosx/Info.plist
 	$(FIND) $(SRCDIR)/solenv/gdb -name \*.pyc -exec rm {} \;
