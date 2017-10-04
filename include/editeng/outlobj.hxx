@@ -41,7 +41,7 @@ struct OutlinerParaObjData
     ParagraphDataVector              maParagraphDataVector;
     bool                             mbIsEditDoc;
 
-    // constuctor
+    // constructor
     OutlinerParaObjData( EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc );
 
     OutlinerParaObjData( const OutlinerParaObjData& r );
