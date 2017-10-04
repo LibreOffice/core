@@ -364,7 +364,8 @@ namespace basegfx
         {
             basegfx::B2DHomMatrix aRetval;
 
-            // RotGrfFlyFrame: Take rotation into account. Rotation is in 10th degrees
+            // RotGrfFlyFrame: Create a transformation that maps the range inside of itself
+            // so that it fits, takes as much space as possible and keeps the aspect ratio
             if(0.0 != fRotate)
             {
                 // Fit rotated graphic to center of available space, keeping page ratio:

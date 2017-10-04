@@ -2097,18 +2097,28 @@ bool SdrDragRotate::BeginSdrDrag()
 {
     SdrHdl* pH=GetHdlList().GetHdl(SdrHdlKind::Ref1);
 
-    if (pH!=nullptr)
+    if (nullptr != pH)
     {
         Show();
         DragStat().Ref1()=pH->GetPos();
         nAngle0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
         return true;
     }
-    else
+
+    // RotGrfFlyFrame: Support rotation around center *without* Ref1 (normally
+    // the rotation point)
+    const tools::Rectangle aLocalMarkRect(getSdrDragView().GetMarkedObjRect());
+
+    if(!aLocalMarkRect.IsEmpty())
     {
-        OSL_FAIL("SdrDragRotate::BeginSdrDrag(): No reference point handle found.");
-        return false;
+        Show();
+        DragStat().Ref1() = aLocalMarkRect.Center();
+        nAngle0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
+        return true;
     }
+
+    OSL_FAIL("SdrDragRotate::BeginSdrDrag(): No reference point handle found.");
+    return false;
 }
 
 basegfx::B2DHomMatrix SdrDragRotate::getCurrentTransformation()
