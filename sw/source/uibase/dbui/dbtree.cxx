@@ -196,7 +196,11 @@ void SwDBTreeList::InitTreeList()
     for(long i = 0; i < nCount; i++)
     {
         OUString sDBName(pDBNames[i]);
-        InsertEntry(sDBName, aImg, aImg, nullptr, true);
+        Reference<XConnection> xConnection = pImpl->GetConnection(sDBName);
+        if (xConnection.is())
+        {
+            InsertEntry(sDBName, aImg, aImg, nullptr, true);
+        }
     }
     Select(OUString(), OUString(), OUString());
 
@@ -360,11 +364,6 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                             pQueryEntry->SetUserData(reinterpret_cast<void*>(1));
                         }
                     }
-                }
-                else
-                {
-                    // Defunct connection entry
-                    RemoveEntry(pParent);
                 }
             }
             catch (const Exception&)
