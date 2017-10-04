@@ -35,6 +35,8 @@ class KDE5Data //: public X11SalData
         virtual void Init() ;
         virtual void initNWF() ;
         virtual void deInitNWF() ;
+
+        KDE5XLib* GetLib() { return pXLib_; }
     private:
         KDE5XLib *pXLib_;
         QApplication* qMyApp;
