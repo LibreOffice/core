@@ -123,6 +123,27 @@ void SwGrfShell::Execute(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     switch(nSlot)
     {
+        case SID_OBJECT_ROTATE:
+        {
+            // RotGrfFlyFrame: start rotation when possible
+            SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
+
+            if(rSh.IsRotationOfSwGrfNodePossible() && pSdrView->IsRotateAllowed())
+            {
+                if(GetView().IsDrawRotate())
+                {
+                    rSh.SetDragMode(SdrDragMode::Move);
+                }
+                else
+                {
+                    rSh.SetDragMode(SdrDragMode::Rotate);
+                }
+
+                GetView().FlipDrawRotate();
+            }
+        }
+        break;
+
         case SID_TWAIN_TRANSFER:
         {
             GetView().ExecuteScan( rReq );
@@ -721,6 +742,23 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         bool bDisable = bParentCntProt;
         switch( nWhich )
         {
+        case SID_OBJECT_ROTATE:
+        {
+            // RotGrfFlyFrame: steer rotation state
+            const bool bIsRotate(GetView().IsDrawRotate());
+            SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
+
+            if(!bIsRotate && !pSdrView->IsRotateAllowed())
+            {
+                rSet.DisableItem(nWhich);
+            }
+            else
+            {
+                rSet.Put(SfxBoolItem(nWhich, bIsRotate));
+            }
+
+            break;
+        }
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         case SID_TWAIN_TRANSFER:

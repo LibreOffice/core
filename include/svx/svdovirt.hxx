@@ -68,6 +68,9 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
+    // RotGrfFlyFrame: If true, this SdrObject supports only limited rotation
+    virtual bool HasLimitedRotation() const override;
+
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual sal_uInt32 GetHdlCount() const override;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
