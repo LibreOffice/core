@@ -195,7 +195,11 @@ void SwDBTreeList::InitTreeList()
     for(long i = 0; i < nCount; i++)
     {
         OUString sDBName(pDBNames[i]);
-        InsertEntry(sDBName, aImg, aImg, nullptr, true);
+        Reference<XConnection> xConnection = pImpl->GetConnection(sDBName);
+        if (xConnection.is())
+        {
+            InsertEntry(sDBName, aImg, aImg, nullptr, true);
+        }
     }
     OUString sDBName(sDefDBName.getToken(0, DB_DELIM));
     OUString sTableName(sDefDBName.getToken(1, DB_DELIM));
