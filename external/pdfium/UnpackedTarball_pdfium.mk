@@ -9,8 +9,6 @@
 
 pdfium_patches :=
 pdfium_patches += visibility.patch.1
-# To support macOS 10.9 baseline.
-pdfium_patches += macos.patch.1
 pdfium_patches += ubsan.patch
 pdfium_patches += freetype.patch.1
 
