@@ -478,6 +478,14 @@ namespace o3tl
  *! LANGUAGE_SYSTEM and then to effective system language */
 #define LANGUAGE_PROCESS_OR_USER_DEFAULT    LanguageType(0x0400)
 
+/* Number format code modifier attribute for system time.
+ * Primary language 0x000, sublanguage 0x3D. */
+#define LANGUAGE_NF_SYSTEM_TIME             LanguageType(0xF400)
+
+/* Number format code modifier attribute for system date.
+ * Primary language 0x000, sublanguage 0x3E. */
+#define LANGUAGE_NF_SYSTEM_DATE             LanguageType(0xF800)
+
 
 /* And now the extensions we define,
  * with primary language IDs from 0x200 to 0x3FF valid in blocks from
