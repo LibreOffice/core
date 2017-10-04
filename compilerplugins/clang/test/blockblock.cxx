@@ -8,12 +8,14 @@
  */
 
 int f(bool b1, bool b2) {
-    if (b1 || b2) {
+    if (b1 || b2) { // no warning
 #if 0
         if (b1)
 #endif
-        {
-            return 0;
+        { // expected-error {{block directly inside block [loplugin:blockblock]}}
+            { // expected-note {{inner block here [loplugin:blockblock]}}
+                return 0;
+            }
         }
     }
     return 1;

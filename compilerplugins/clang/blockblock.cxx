@@ -35,48 +35,6 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    bool TraverseFunctionDecl(FunctionDecl * decl) {
-        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
-            return true;
-        }
-        return RecursiveASTVisitor::TraverseFunctionDecl(decl);
-    }
-
-    bool TraverseCXXMethodDecl(CXXMethodDecl * decl) {
-        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
-            return true;
-        }
-        return RecursiveASTVisitor::TraverseCXXMethodDecl(decl);
-    }
-
-    bool TraverseCXXConstructorDecl(CXXConstructorDecl * decl) {
-        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
-            return true;
-        }
-        return RecursiveASTVisitor::TraverseCXXConstructorDecl(decl);
-    }
-
-    bool TraverseCXXDestructorDecl(CXXDestructorDecl * decl) {
-        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
-            return true;
-        }
-        return RecursiveASTVisitor::TraverseCXXDestructorDecl(decl);
-    }
-
-    bool TraverseCXXConversionDecl(CXXConversionDecl * decl) {
-        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
-            return true;
-        }
-        return RecursiveASTVisitor::TraverseCXXConversionDecl(decl);
-    }
-
-    bool TraverseObjCMethodDecl(ObjCMethodDecl * decl) {
-        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
-            return true;
-        }
-        return RecursiveASTVisitor::TraverseObjCMethodDecl(decl);
-    }
-
     bool VisitCompoundStmt(CompoundStmt const * );
 };
 
@@ -93,6 +51,9 @@ bool BlockBlock::VisitCompoundStmt(CompoundStmt const * compound)
         return true;
     if (compiler.getSourceManager().isMacroBodyExpansion(inner->getLocStart()))
         return true;
+    if (containsPreprocessingConditionalInclusion(compound->getSourceRange())) {
+        return true;
+    }
     report(
         DiagnosticsEngine::Warning,
         "block directly inside block",
