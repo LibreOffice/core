@@ -340,7 +340,8 @@ void KDE5SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
         if( m_aGraphics[i].pGraphics.get() == pGraphics )
         {
             m_aGraphics[i].bInUse = false;
-            cairo_surface_destroy( m_aGraphics[i].pSurface );
+            if ( m_aGraphics[i].pSurface != nullptr )
+                cairo_surface_destroy( m_aGraphics[i].pSurface );
             break;
         }
     }
