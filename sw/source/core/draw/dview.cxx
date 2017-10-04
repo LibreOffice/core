@@ -44,6 +44,7 @@
 #include "doc.hxx"
 #include "mdiexp.hxx"
 #include <ndole.hxx>
+#include <ndgrf.hxx>
 #include <fmtanchr.hxx>
 #include "shellres.hxx"
 #include <IDocumentUndoRedo.hxx>
@@ -816,6 +817,8 @@ void SwDrawView::CheckPossibilities()
     const SdrMarkList &rMrkList = GetMarkedObjectList();
     bool bProtect = false;
     bool bSzProtect = false;
+    bool bRotate(false);
+
     for ( size_t i = 0; !bProtect && i < rMrkList.GetMarkCount(); ++i )
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
@@ -828,10 +831,18 @@ void SwDrawView::CheckPossibilities()
                 pFrame = pFly->GetAnchorFrame();
                 if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
                 {
-                    SwOLENode *pNd = const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(pFly->Lower()))->GetNode()->GetOLENode();
-                    if ( pNd )
+                    // SwNoTextNode& rNoTNd = const_cast<SwNoTextNode&>(*static_cast<const SwNoTextNode*>((static_cast<const SwContentFrame*>(pFly->Lower()))->GetNode()));
+                    // SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
+                    // SwOLENode* pOLENd = rNoTNd.GetOLENode();
+
+                    const SwContentFrame* pCntFr = const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(pFly->Lower()));
+                    const SwOLENode* pOLENd = pCntFr->GetNode()->GetOLENode();
+                    const SwGrfNode* pGrfNd = pCntFr->GetNode()->GetGrfNode();
+
+                    if ( pOLENd )
                     {
-                        uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
+                        const uno::Reference < embed::XEmbeddedObject > xObj = const_cast< SwOLEObj& >(pOLENd->GetOLEObj()).GetOleRef();
+
                         if ( xObj.is() )
                         {
                             // --> improvement for the future, when more
@@ -848,6 +859,13 @@ void SwDrawView::CheckPossibilities()
                             if (bProtectMathPos)
                                 bMoveProtect = true;
                         }
+                    }
+                    else if(pGrfNd)
+                    {
+                        // RotGrfFlyFrame: GraphicNode allows rotation(s). The loop ew are in stops
+                        // as soon as bMoveProtect is set, but since rotation is valid only with
+                        // a single object selected this makes no difference
+                        bRotate = true;
                     }
                 }
             }
@@ -876,6 +894,10 @@ void SwDrawView::CheckPossibilities()
     }
     bMoveProtect    |= bProtect;
     bResizeProtect  |= bProtect || bSzProtect;
+
+    // RotGrfFlyFrame: allow rotation when SwGrfNode is selected and not size protected
+    bRotateFreeAllowed |= bRotate && !bProtect;
+    bRotate90Allowed |= bRotateFreeAllowed;
 }
 
 /// replace marked <SwDrawVirtObj>-objects by its reference object for delete marked objects.

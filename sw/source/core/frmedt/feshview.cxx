@@ -991,6 +991,29 @@ bool SwFEShell::IsObjSelected( const SdrObject& rObj ) const
                     ->IsObjMarked( const_cast< SdrObject * >( &rObj ) );
 }
 
+bool SwFEShell::IsRotationOfSwGrfNodePossible() const
+{
+    // RotGrfFlyFrame: check if RotationMode is possibe
+    const SdrView *pSdrView = Imp()->GetDrawView();
+
+    if(pSdrView)
+    {
+        const SdrMarkList& rList(pSdrView->GetMarkedObjectList());
+
+        if(1 == rList.GetMarkCount())
+        {
+            const SwVirtFlyDrawObj* pVirtFlyDraw(dynamic_cast< const SwVirtFlyDrawObj* >(rList.GetMark(0)->GetMarkedSdrObj()));
+
+            if(nullptr != pVirtFlyDraw)
+            {
+                return pVirtFlyDraw->ContainsSwGrfNode();
+            }
+        }
+    }
+
+    return false;
+}
+
 bool SwFEShell::IsObjSameLevelWithMarked(const SdrObject* pObj) const
 {
     if (pObj)
