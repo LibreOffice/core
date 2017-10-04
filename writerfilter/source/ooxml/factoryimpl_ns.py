@@ -235,7 +235,6 @@ def printValueData(values):
                 output_else = "else "
             print("            else { return false; }")
             print("            return true;")
-            print("            break;")
     print("        }")
 
 
@@ -258,7 +257,6 @@ def factoryGetListValue(nsNode):
             appendValueData(values, valueData, idToLabel(valueNode.getAttribute("tokenid")))
         printValueData(values)
         print("        return false;")
-        print("        break;")
 
     print("""    default:
         break;
@@ -376,7 +374,6 @@ def factoryCreateElementMap(files, nsNode):
             print("        default: return false;")
             print("        }")
             print("        return true;")
-            print("        break;")
     print("    default:")
     print("        switch (nId)")
     print("        {")
@@ -384,10 +381,7 @@ def factoryCreateElementMap(files, nsNode):
     print("""        default: return false;
         }
         return true;
-        break;
     }
-
-    return false;
 }
 """)
 
