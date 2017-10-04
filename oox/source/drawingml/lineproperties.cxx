@@ -221,16 +221,16 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         double fArrowLength = 1.0;
         switch( nLength )
         {
-            case OOX_ARROWSIZE_SMALL:   fArrowLength = (bIsArrow ? 3.5 : 2.0); break;
-            case OOX_ARROWSIZE_MEDIUM:  fArrowLength = (bIsArrow ? 4.5 : 3.0); break;
-            case OOX_ARROWSIZE_LARGE:   fArrowLength = (bIsArrow ? 6.0 : 5.0); break;
+            case OOX_ARROWSIZE_SMALL:   fArrowLength = (bIsArrow ? 2.5 : 2.0); break;
+            case OOX_ARROWSIZE_MEDIUM:  fArrowLength = (bIsArrow ? 3.5 : 3.0); break;
+            case OOX_ARROWSIZE_LARGE:   fArrowLength = (bIsArrow ? 5.5 : 5.0); break;
         }
         double fArrowWidth = 1.0;
         switch( nWidth )
         {
-            case OOX_ARROWSIZE_SMALL:   fArrowWidth = (bIsArrow ? 3.5 : 2.0);  break;
-            case OOX_ARROWSIZE_MEDIUM:  fArrowWidth = (bIsArrow ? 4.5 : 3.0);  break;
-            case OOX_ARROWSIZE_LARGE:   fArrowWidth = (bIsArrow ? 6.0 : 5.0);  break;
+            case OOX_ARROWSIZE_SMALL:   fArrowWidth = (bIsArrow ? 2.5 : 2.0);  break;
+            case OOX_ARROWSIZE_MEDIUM:  fArrowWidth = (bIsArrow ? 3.5 : 3.0);  break;
+            case OOX_ARROWSIZE_LARGE:   fArrowWidth = (bIsArrow ? 5.5 : 5.0);  break;
         }
         // set arrow width relative to line width
         sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 70 );
