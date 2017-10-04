@@ -63,11 +63,10 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     if( !pDocSh->DoInitNew() )
         return;
     m_bReadOnly = true;
-    m_pDoc = pDocSh->GetDoc();
+    m_xDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
-    m_pDoc->SetOle2Link( Link<bool,void>() );
-    m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
-    m_pDoc->acquire();
+    m_xDoc->SetOle2Link( Link<bool,void>() );
+    m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
     uno::Reference< embed::XStorage > refStg;
     if( !m_aDateModified.GetDate() || !m_aTimeModified.GetTime() )
         Touch(); // If it's created anew -> get a new timestamp
@@ -106,11 +105,10 @@ SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg
     if( !pDocSh->DoInitNew() )
         return;
     m_bReadOnly = false;
-    m_pDoc = pDocSh->GetDoc();
+    m_xDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
-    m_pDoc->SetOle2Link( Link<bool,void>() );
-    m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
-    m_pDoc->acquire();
+    m_xDoc->SetOle2Link( Link<bool,void>() );
+    m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     InitBlockMode ( rStg );
     ReadInfo();
@@ -125,17 +123,15 @@ SwXMLTextBlocks::~SwXMLTextBlocks()
     if(xDocShellRef.is())
         xDocShellRef->DoClose();
     xDocShellRef = nullptr;
-    if( m_pDoc && !m_pDoc->release() )
-        delete m_pDoc;
 }
 
 void SwXMLTextBlocks::ClearDoc()
 {
-    SwDocShell * pDocShell = m_pDoc->GetDocShell();
+    SwDocShell * pDocShell = m_xDoc->GetDocShell();
     pDocShell->InvalidateModel();
     pDocShell->ReactivateModel();
 
-    m_pDoc->ClearDoc();
+    m_xDoc->ClearDoc();
     pDocShell->ClearEmbeddedObjects();
 }
 
@@ -322,13 +318,13 @@ ErrCode SwXMLTextBlocks::PutBlock()
 
     WriterRef xWrt;
     ::GetXMLWriter ( OUString(), GetBaseURL(), xWrt);
-    SwWriter aWriter (xRoot, *m_pDoc );
+    SwWriter aWriter (xRoot, *m_xDoc );
 
     xWrt->bBlock = true;
     nRes = aWriter.Write ( xWrt );
     xWrt->bBlock = false;
     // Save OLE objects if there are some
-    SwDocShell *pDocSh = m_pDoc->GetDocShell();
+    SwDocShell *pDocSh = m_xDoc->GetDocShell();
 
     bool bHasChildren = pDocSh && pDocSh->GetEmbeddedObjectContainer().HasEmbeddedObjects();
     if( !nRes && bHasChildren )
@@ -562,10 +558,10 @@ ErrCode SwXMLTextBlocks::PutText( const OUString& rShort, const OUString& rName,
 
 void SwXMLTextBlocks::MakeBlockText( const OUString& rText )
 {
-    SwTextNode* pTextNode = m_pDoc->GetNodes()[ m_pDoc->GetNodes().GetEndOfContent().
+    SwTextNode* pTextNode = m_xDoc->GetNodes()[ m_xDoc->GetNodes().GetEndOfContent().
                                         GetIndex() - 1 ]->GetTextNode();
-    if( pTextNode->GetTextColl() == m_pDoc->GetDfltTextFormatColl() )
-        pTextNode->ChgFormatColl( m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
+    if( pTextNode->GetTextColl() == m_xDoc->GetDfltTextFormatColl() )
+        pTextNode->ChgFormatColl( m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
 
     sal_Int32 nPos = 0;
     do

@@ -88,7 +88,7 @@ public:
     virtual bool PutMuchEntries( bool bOn ) override;
 
 public:
-    SwDoc* GetDoc() const { return m_pDoc; }
+    SwDoc* GetDoc() const { return m_xDoc.get(); }
     //void  SetDoc( SwDoc * pNewDoc);
     ErrCode StartPutBlock( const OUString& rShort, const OUString& rPackageName );
     ErrCode PutBlock();

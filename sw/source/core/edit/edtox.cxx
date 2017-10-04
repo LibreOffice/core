@@ -85,7 +85,7 @@ void SwEditShell::DeleteTOXMark( SwTOXMark const * pMark )
     SET_CURR_SHELL( this );
     StartAllAction();
 
-    mpDoc->DeleteTOXMark( pMark );
+    mxDoc->DeleteTOXMark( pMark );
 
     EndAllAction();
 }
@@ -136,7 +136,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     ::SetProgressText( STR_STATSTR_TOX_INSERT, pDocSh );
 
     // Insert listing
-    const SwTOXBaseSection* pTOX = mpDoc->InsertTableOf(
+    const SwTOXBaseSection* pTOX = mxDoc->InsertTableOf(
                                         *GetCursor()->GetPoint(), rTOX, pSet, true );
     OSL_ENSURE(pTOX, "No current TOx");
 
@@ -210,7 +210,7 @@ bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 
 const SwTOXType* SwEditShell::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
 {
-    return mpDoc->GetTOXType(eTyp, nId);
+    return mxDoc->GetTOXType(eTyp, nId);
 }
 
 // manage keys for the alphabetical index

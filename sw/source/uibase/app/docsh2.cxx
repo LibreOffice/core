@@ -195,7 +195,7 @@ void SwDocShell::ToggleLayoutMode(SwView* pView)
 // update text fields on document properties changes
 void SwDocShell::DoFlushDocInfo()
 {
-    if (!m_pDoc) return;
+    if (!m_xDoc.get()) return;
 
     bool bUnlockView(true);
     if (m_pWrtShell)
@@ -205,7 +205,7 @@ void SwDocShell::DoFlushDocInfo()
         m_pWrtShell->StartAllAction();
     }
 
-    m_pDoc->getIDocumentStatistics().DocInfoChgd(IsEnableSetModified());
+    m_xDoc->getIDocumentStatistics().DocInfoChgd(IsEnableSetModified());
 
     if (m_pWrtShell)
     {
@@ -239,13 +239,13 @@ static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVB
 // Notification on DocInfo changes
 void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if (!m_pDoc)
+    if (!m_xDoc.get())
     {
         return ;
     }
 
     uno::Reference< script::vba::XVBAEventProcessor > const xVbaEvents =
-        m_pDoc->GetVbaEventProcessor();
+        m_xDoc->GetVbaEventProcessor();
     if( xVbaEvents.is() )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
 
@@ -278,7 +278,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         switch( nAction )
         {
         case 2:
-            m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Filename )->UpdateFields();
+            m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Filename )->UpdateFields();
             break;
         // #i38126# - own action for event LOADFINISHED
         // in order to avoid a modified document.
@@ -291,14 +291,14 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if ( bResetModified )
                     EnableSetModified( false );
                 // #i41679#
-                const bool bIsDocModified = m_pDoc->getIDocumentState().IsModified();
+                const bool bIsDocModified = m_xDoc->getIDocumentState().IsModified();
                 // TODO: is the ResetModified() below because of only the direct call from DocInfoChgd, or does UpdateFields() set it too?
 
-                m_pDoc->getIDocumentStatistics().DocInfoChgd(false);
+                m_xDoc->getIDocumentStatistics().DocInfoChgd(false);
 
                 // #i41679#
                 if ( !bIsDocModified )
-                    m_pDoc->getIDocumentState().ResetModified();
+                    m_xDoc->getIDocumentState().ResetModified();
                 if ( bResetModified )
                     EnableSetModified();
             }
@@ -322,10 +322,10 @@ bool SwDocShell::PrepareClose( bool bUI )
     if( bRet )
         EndListening( *this );
 
-    if (m_pDoc && IsInPrepareClose())
+    if (m_xDoc && IsInPrepareClose())
     {
         uno::Reference< script::vba::XVBAEventProcessor > const xVbaEvents =
-            m_pDoc->GetVbaEventProcessor();
+            m_xDoc->GetVbaEventProcessor();
         if( xVbaEvents.is() )
         {
             using namespace com::sun::star::script::vba::VBAEventId;
@@ -709,7 +709,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 xDocSh->DoInitNew();
 
                 bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
-                m_pDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );
+                m_xDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );
                 if( bImpress )
                 {
                     WriterRef xWrt;
@@ -835,12 +835,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
             //pWrtShell is not set in page preview
             if (m_pWrtShell)
                 m_pWrtShell->StartAllAction();
-            m_pDoc->getIDocumentFieldsAccess().UpdateFields( false );
-            m_pDoc->getIDocumentLinksAdministration().EmbedAllLinks();
+            m_xDoc->getIDocumentFieldsAccess().UpdateFields( false );
+            m_xDoc->getIDocumentLinksAdministration().EmbedAllLinks();
             m_IsRemovedInvisibleContent
                 = officecfg::Office::Security::HiddenContent::RemoveHiddenContent::get();
             if (m_IsRemovedInvisibleContent)
-                m_pDoc->RemoveInvisibleContent();
+                m_xDoc->RemoveInvisibleContent();
             if (m_pWrtShell)
                 m_pWrtShell->EndAllAction();
         }
@@ -852,7 +852,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     m_pWrtShell->StartAllAction();
                 //try to undo the removal of invisible content
                 if (m_IsRemovedInvisibleContent)
-                    m_pDoc->RestoreInvisibleContent();
+                    m_xDoc->RestoreInvisibleContent();
                 if (m_pWrtShell)
                     m_pWrtShell->EndAllAction();
         }
@@ -962,7 +962,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         uno::Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
 
                         bool    bOutline[MAXLEVEL] = {false};
-                        const SwOutlineNodes& rOutlNds = m_pDoc->GetNodes().GetOutLineNds();
+                        const SwOutlineNodes& rOutlNds = m_xDoc->GetNodes().GetOutLineNds();
                         if( !rOutlNds.empty() )
                         {
                             for( size_t n = 0; n < rOutlNds.size(); ++n )
@@ -975,7 +975,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             }
                         }
 
-                        const sal_uInt16 nStyleCount = m_pDoc->GetTextFormatColls()->size();
+                        const sal_uInt16 nStyleCount = m_xDoc->GetTextFormatColls()->size();
                         Sequence<OUString> aListBoxEntries( MAXLEVEL + nStyleCount);
                         OUString* pEntries = aListBoxEntries.getArray();
                         sal_Int32   nIdx = 0 ;
@@ -990,7 +990,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         OUString    sStyle( SwResId(STR_FDLG_STYLE) );
                         for(sal_uInt16 i = 0; i < nStyleCount; ++i)
                         {
-                            SwTextFormatColl &rTextColl = *(*m_pDoc->GetTextFormatColls())[ i ];
+                            SwTextFormatColl &rTextColl = *(*m_xDoc->GetTextFormatColls())[ i ];
                             if( !rTextColl.IsDefault() && rTextColl.IsAtDocNodeSet() )
                             {
                                 pEntries[nIdx++] = sStyle + rTextColl.GetName();
@@ -1060,17 +1060,17 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         if ( bCreateByOutlineLevel )
                         {
                             bDone = bCreateHtml
-                                ? m_pDoc->GenerateHTMLDoc( aFileName, nTemplateOutlineLevel )
-                                : m_pDoc->GenerateGlobalDoc( aFileName, nTemplateOutlineLevel );
+                                ? m_xDoc->GenerateHTMLDoc( aFileName, nTemplateOutlineLevel )
+                                : m_xDoc->GenerateGlobalDoc( aFileName, nTemplateOutlineLevel );
                         }
                         else
                         {
                             const SwTextFormatColl* pSplitColl = nullptr;
                             if ( !aTemplateName.isEmpty() )
-                                pSplitColl = m_pDoc->FindTextFormatCollByName(aTemplateName);
+                                pSplitColl = m_xDoc->FindTextFormatCollByName(aTemplateName);
                             bDone = bCreateHtml
-                                ? m_pDoc->GenerateHTMLDoc( aFileName, pSplitColl )
-                                : m_pDoc->GenerateGlobalDoc( aFileName, pSplitColl );
+                                ? m_xDoc->GenerateHTMLDoc( aFileName, pSplitColl )
+                                : m_xDoc->GenerateGlobalDoc( aFileName, pSplitColl );
                         }
                         if( bDone )
                         {
@@ -1126,7 +1126,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pViewShell = pVFrame ? pVFrame->GetViewShell() : nullptr;
                     pCurrView = dynamic_cast<SwView*>( pViewShell );
                 }
-                m_pDoc->GetNumberFormatter()->SetYear2000(nYear2K);
+                m_xDoc->GetNumberFormatter()->SetYear2000(nYear2K);
             }
         break;
         case FN_OPEN_FILE:
@@ -1250,27 +1250,27 @@ void SwDocShell::Execute(SfxRequest& rReq)
 bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
                              uno::Any & rValue )
 {
-    return m_pDoc->getIDocumentLinksAdministration().GetData( rItem, rMimeType, rValue );
+    return m_xDoc->getIDocumentLinksAdministration().GetData( rItem, rMimeType, rValue );
 }
 
 bool SwDocShell::DdeSetData( const OUString& rItem, const OUString& rMimeType,
                              const uno::Any & rValue )
 {
-    return m_pDoc->getIDocumentLinksAdministration().SetData( rItem, rMimeType, rValue );
+    return m_xDoc->getIDocumentLinksAdministration().SetData( rItem, rMimeType, rValue );
 }
 
 #endif
 
 ::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const OUString& rItem )
 {
-    return m_pDoc->getIDocumentLinksAdministration().CreateLinkSource( rItem );
+    return m_xDoc->getIDocumentLinksAdministration().CreateLinkSource( rItem );
 }
 
 void SwDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 {
-    if (m_pDoc)
+    if (m_xDoc)
     {
-        ::sfx2::LinkManager& rLinkManager = m_pDoc->getIDocumentLinksAdministration().GetLinkManager();
+        ::sfx2::LinkManager& rLinkManager = m_xDoc->getIDocumentLinksAdministration().GetLinkManager();
         rLinkManager.ReconnectDdeLink(rServer);
     }
 }
@@ -1297,7 +1297,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     }
 // #FIXME check with new Event handling
 #if 0
-    uno::Reference< document::XVbaEventsHelper > xVbaEventsHelper = m_pDoc->GetVbaEventsHelper();
+    uno::Reference< document::XVbaEventsHelper > xVbaEventsHelper = m_xDoc->GetVbaEventsHelper();
     if( xVbaEventsHelper.is() )
         lcl_processCompatibleSfxHint( xVbaEventsHelper, rHint );
 #endif
@@ -1312,20 +1312,20 @@ void SwDocShell::SetModified( bool bSet )
     SfxObjectShell::SetModified( bSet );
     if( IsEnableSetModified())
     {
-         if (!m_pDoc->getIDocumentState().IsInCallModified())
+         if (!m_xDoc->getIDocumentState().IsInCallModified())
          {
             EnableSetModified( false );
             if( bSet )
             {
-                bool const bOld = m_pDoc->getIDocumentState().IsModified();
-                m_pDoc->getIDocumentState().SetModified();
+                bool const bOld = m_xDoc->getIDocumentState().IsModified();
+                m_xDoc->getIDocumentState().SetModified();
                 if( !bOld )
                 {
-                    m_pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+                    m_xDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
                 }
             }
             else
-                m_pDoc->getIDocumentState().ResetModified();
+                m_xDoc->getIDocumentState().ResetModified();
 
             EnableSetModified();
          }
@@ -1416,7 +1416,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
         }
     }
 #endif
-    bool bWasBrowseMode = m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE);
+    bool bWasBrowseMode = m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE);
     RemoveLink();
 
     // now also the UNO-Model has to be informed about the new Doc #51535#
@@ -1427,7 +1427,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     AddLink();
     //#116402# update font list when new document is created
     UpdateFontList();
-    m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bWasBrowseMode);
+    m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
 
     const OUString& rMedname = GetMedium()->GetName();
@@ -1447,7 +1447,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     // the base URL has to be set to the filename of the document <rMedname>
     // and not to the base URL of the temporary file <aMed> in order to get
     // the URLs of the linked graphics correctly resolved.
-    SwReloadFromHtmlReader aReader( aMed, rMedname, m_pDoc );
+    SwReloadFromHtmlReader aReader( aMed, rMedname, m_xDoc.get() );
 
     aReader.Read( *ReadHTML );
 
@@ -1469,7 +1469,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     if(bModified && !IsReadOnly())
         SetModified();
     else
-        m_pDoc->getIDocumentState().ResetModified();
+        m_xDoc->getIDocumentState().ResetModified();
 }
 
 ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
@@ -1525,7 +1525,7 @@ ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
         // insert the styles!
         if( bUnoCall )
         {
-            SwNodeIndex aIdx( m_pDoc->GetNodes().GetEndOfContent(), -1 );
+            SwNodeIndex aIdx( m_xDoc->GetNodes().GetEndOfContent(), -1 );
             pPam.reset(new SwPaM( aIdx ));
             pReader.reset(new SwReader( aMed, rURL, *pPam ));
         }
@@ -1542,7 +1542,7 @@ ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
 
         if( bUnoCall )
         {
-            UnoActionContext aAction( m_pDoc );
+            UnoActionContext aAction( m_xDoc.get() );
             nErr = pReader->Read( *pRead );
         }
         else

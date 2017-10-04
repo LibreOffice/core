@@ -379,11 +379,11 @@ void SwCursorShell::MarkListLevel( const OUString& sListId,
          nListLevel != m_nMarkedListLevel)
     {
         if ( !m_sMarkedListId.isEmpty() )
-            mpDoc->MarkListLevel( m_sMarkedListId, m_nMarkedListLevel, false );
+            mxDoc->MarkListLevel( m_sMarkedListId, m_nMarkedListLevel, false );
 
         if ( !sListId.isEmpty() )
         {
-            mpDoc->MarkListLevel( sListId, nListLevel, true );
+            mxDoc->MarkListLevel( sListId, nListLevel, true );
         }
 
         m_sMarkedListId = sListId;
@@ -1437,7 +1437,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
     // then the table mode is active (also if it is already active: m_pTableCursor)
     SwPaM* pTstCursor = getShellCursor( true );
     if( pTstCursor->HasMark() && !m_pBlockCursor &&
-        mpDoc->IsIdxInTable( pTstCursor->GetPoint()->nNode ) &&
+        mxDoc->IsIdxInTable( pTstCursor->GetPoint()->nNode ) &&
           ( m_pTableCursor ||
             pTstCursor->GetNode().StartOfSectionNode() !=
             pTstCursor->GetNode( false ).StartOfSectionNode() ) && !mbSelectAll)
@@ -1613,8 +1613,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
         if( pSectNd && ( pSectNd->GetSection().IsHiddenFlag() ||
             ( !IsReadOnlyAvailable() &&
               pSectNd->GetSection().IsProtectFlag() &&
-             ( !mpDoc->GetDocShell() ||
-               !mpDoc->GetDocShell()->IsReadOnly() || m_bAllProtect )) ) )
+             ( !mxDoc->GetDocShell() ||
+               !mxDoc->GetDocShell()->IsReadOnly() || m_bAllProtect )) ) )
         {
             if( !FindValidContentNode( !HasDrawView() ||
                     0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
@@ -1710,8 +1710,8 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             if( !IsReadOnlyAvailable() && pFrame->IsProtected() &&
                 ( !Imp()->GetDrawView() ||
                   !Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ) &&
-                (!mpDoc->GetDocShell() ||
-                 !mpDoc->GetDocShell()->IsReadOnly() || m_bAllProtect ) )
+                (!mxDoc->GetDocShell() ||
+                 !mxDoc->GetDocShell()->IsReadOnly() || m_bAllProtect ) )
             {
                 // look for a valid position
                 bool bChgState = true;
@@ -2832,7 +2832,7 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
     // first check for frames
     SwNodeIndex& rNdIdx = m_pCurrentCursor->GetPoint()->nNode;
     sal_uLong nNdIdx = rNdIdx.GetIndex(); // keep backup
-    SwNodes& rNds = mpDoc->GetNodes();
+    SwNodes& rNds = mxDoc->GetNodes();
     SwContentNode* pCNd = rNdIdx.GetNode().GetContentNode();
     const SwContentFrame * pFrame;
 
@@ -2863,8 +2863,8 @@ bool SwCursorShell::FindValidContentNode( bool bOnlyText )
     else if( bOnlyText && pCNd && pCNd->IsNoTextNode() )
     {
         // set to beginning of document
-        rNdIdx = mpDoc->GetNodes().GetEndOfExtras();
-        m_pCurrentCursor->GetPoint()->nContent.Assign( mpDoc->GetNodes().GoNext(
+        rNdIdx = mxDoc->GetNodes().GetEndOfExtras();
+        m_pCurrentCursor->GetPoint()->nContent.Assign( mxDoc->GetNodes().GoNext(
                                                             &rNdIdx ), 0 );
         nNdIdx = rNdIdx.GetIndex();
     }
@@ -3108,7 +3108,7 @@ SvxFrameDirection SwCursorShell::GetTextDirection( const Point* pPt ) const
         GetLayout()->GetCursorOfst( &aPos, aPt, &aTmpState );
     }
 
-    return mpDoc->GetTextDirection( aPos, &aPt );
+    return mxDoc->GetTextDirection( aPos, &aPt );
 }
 
 bool SwCursorShell::IsInVerticalText( const Point* pPt ) const

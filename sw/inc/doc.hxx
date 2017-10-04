@@ -337,7 +337,7 @@ private:
     sal_uInt32  mnRsid;              //< current session ID of the document
     sal_uInt32  mnRsidRoot;          //< session ID when the document was created
 
-    sal_Int32   mReferenceCount;
+    oslInterlockedCount  mReferenceCount;
 
     bool mbDtor                  : 1;    /**< TRUE: is in SwDoc DTOR.
                                                and unfortunately temporarily also in
@@ -446,6 +446,9 @@ public:
     SwNodes      & GetNodes()       { return *m_pNodes; }
     SwNodes const& GetNodes() const { return *m_pNodes; }
 
+private:
+    friend class ::rtl::Reference<SwDoc>;
+
     /** Acquire a reference to an instance. A caller shall release
         the instance by calling 'release' when it is no longer needed.
         'acquire' and 'release' calls need to be balanced.
@@ -466,6 +469,7 @@ public:
     /** Returns the current reference count. This method should be used for
         debugging purposes. Using it otherwise is a signal of a design flaw.
     */
+public:
     sal_Int32 getReferenceCount() const;
 
     // IDocumentSettingAccess

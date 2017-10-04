@@ -64,7 +64,7 @@ class SW_DLLPUBLIC SwDocShell
     : public SfxObjectShell
     , public SfxListener
 {
-    SwDoc*      m_pDoc;               ///< Document.
+    rtl::Reference< SwDoc >                 m_xDoc;      ///< Document.
     rtl::Reference< SfxStyleSheetBasePool > m_xBasePool; ///< Passing through for formats.
     FontList*   m_pFontList;          ///< Current Fontlist.
     bool        m_IsInUpdateFontList; ///< prevent nested calls of UpdateFontList
@@ -192,8 +192,8 @@ public:
     void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = nullptr );
 
     /// returns Doc. But be careful!
-    SwDoc*                   GetDoc() { return m_pDoc; }
-    const SwDoc*             GetDoc() const { return m_pDoc; }
+    SwDoc*                   GetDoc() { return m_xDoc.get(); }
+    const SwDoc*             GetDoc() const { return m_xDoc.get(); }
     IDocumentDeviceAccess&          getIDocumentDeviceAccess();
     IDocumentChartDataProviderAccess& getIDocumentChartDataProviderAccess();
 

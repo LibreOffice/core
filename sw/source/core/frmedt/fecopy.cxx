@@ -464,10 +464,10 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     pDestShell->GetDoc()->getIDocumentFieldsAccess().LockExpFields();
 
     // Shift references
-    bool bCopyIsMove = mpDoc->IsCopyIsMove();
+    bool bCopyIsMove = mxDoc->IsCopyIsMove();
     if( bIsMove )
         // set a flag in Doc, handled in TextNodes
-        mpDoc->SetCopyIsMove( true );
+        mxDoc->SetCopyIsMove( true );
 
     RedlineFlags eOldRedlMode = pDestShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
     pDestShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOldRedlMode | RedlineFlags::DeleteRedlines );
@@ -652,7 +652,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
     }
 
     pDestShell->GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOldRedlMode );
-    mpDoc->SetCopyIsMove( bCopyIsMove );
+    mxDoc->SetCopyIsMove( bCopyIsMove );
 
     // have new table formulas been inserted?
     if( pTableFieldTyp->HasWriterListeners() )
@@ -1392,7 +1392,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                 if( dynamic_cast<const SwVirtFlyDrawObj*>( pOldObj) !=  nullptr )
                 {
                     // store attributes, then set SdrObject
-                    SfxItemSet aFrameSet( mpDoc->GetAttrPool(),
+                    SfxItemSet aFrameSet( mxDoc->GetAttrPool(),
                                             svl::Items<RES_SURROUND, RES_ANCHOR>{} );
                     aFrameSet.Set( pFormat->GetAttrSet() );
 

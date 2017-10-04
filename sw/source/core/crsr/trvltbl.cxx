@@ -91,7 +91,7 @@ bool SwCursorShell::GoNextCell( bool bAppendLine )
 
                 // the document might change; w/o Action views would not be notified
                 static_cast<SwEditShell*>(this)->StartAllAction();
-                bRet = mpDoc->InsertRow( SwTable::SelLineFromBox( pTableBox, aBoxes, false ));
+                bRet = mxDoc->InsertRow( SwTable::SelLineFromBox( pTableBox, aBoxes, false ));
                 static_cast<SwEditShell*>(this)->EndAllAction();
             }
         }
