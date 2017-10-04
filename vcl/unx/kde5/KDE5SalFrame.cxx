@@ -383,4 +383,18 @@ SalGraphics* KDE5SalFrame::AcquireGraphics()
     return nullptr;
 }
 
+cairo_t* KDE5SalFrame::getCairoContext() const
+{
+    for( int i = 0; i < nMaxGraphics; i++ )
+    {
+        if( ! m_aGraphics[i].bInUse )
+        {
+            cairo_t* cr = cairo_create( m_aGraphics[i].pSurface );
+            assert(cr);
+            return cr;
+        }
+    }
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

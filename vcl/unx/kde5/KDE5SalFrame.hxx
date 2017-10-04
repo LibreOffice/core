@@ -111,6 +111,7 @@ class KDE5SalFrame : public SalFrame
 
         virtual void Flush() override { return; }
 
+        cairo_t* getCairoContext() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
