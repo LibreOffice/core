@@ -552,6 +552,9 @@ public:
     /// Return the format for a format index
     const SvNumberformat* GetEntry( sal_uInt32 nKey ) const;
 
+    /// Obtain substituted GetFormatEntry(), i.e. system formats.
+    const SvNumberformat* GetSubstitutedEntry( sal_uInt32 nKey, sal_uInt32 & o_rNewKey ) const;
+
     /// Return the format index of the standard default number format for language/country
     sal_uInt32 GetStandardIndex(LanguageType eLnge = LANGUAGE_DONTKNOW);
 
@@ -903,6 +906,9 @@ private:
 
     // return position of a special character
     sal_Int32 ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos = 0 );
+
+    // Substitute a format during GetFormatEntry(), i.e. system formats.
+    SvNumberformat* ImpSubstituteEntry( SvNumberformat* pFormat, sal_uInt32 * o_pRealKey = nullptr );
 
 public:
 
