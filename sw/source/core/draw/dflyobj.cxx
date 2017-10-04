@@ -49,6 +49,7 @@
 #include "rootfrm.hxx"
 #include "wrtsh.hxx"
 #include <ndgrf.hxx>
+#include <frmmgr.hxx>
 
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -368,6 +369,64 @@ basegfx::B2DRange SwVirtFlyDrawObj::getInnerBound() const
     return aInnerRange;
 }
 
+bool SwVirtFlyDrawObj::ContainsSwGrfNode() const
+{
+    // RotGrfFlyFrame: Check if this is a SwGrfNode
+    const SwFlyFrame* pFlyFrame(GetFlyFrame());
+
+    if(nullptr != pFlyFrame && pFlyFrame->Lower() && pFlyFrame->Lower()->IsNoTextFrame())
+    {
+        const SwContentFrame* pCntFr(static_cast<const SwContentFrame*>(pFlyFrame->Lower()));
+
+        if(nullptr != pCntFr)
+        {
+            const SwGrfNode* pGrfNd(pCntFr->GetNode()->GetGrfNode());
+
+            return nullptr != pGrfNd;
+        }
+    }
+
+    return false;
+}
+
+bool SwVirtFlyDrawObj::HasLimitedRotation() const
+{
+    // RotGrfFlyFrame: If true, this SdrObject supports only limited rotation.
+    // This is the case for SwGrfNode instances
+    return ContainsSwGrfNode();
+}
+
+void SwVirtFlyDrawObj::Rotate(const Point& rRef, long nAngle, double sn, double cs)
+{
+    if(ContainsSwGrfNode())
+    {
+        // RotGrfFlyFrame: Here is where the positively completed rotate interaction is executed.
+        // Rotation is in 1/100th degree and may be signed (!)
+        nAngle /= 10;
+
+        while(nAngle < 0)
+        {
+            nAngle += 3600;
+        }
+
+        if(0 != nAngle)
+        {
+            // RotGrfFlyFrame: Add transformation to placeholder object
+            Size aSize;
+            const sal_uInt16 nOldRot(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(aSize));
+            SwWrtShell *pSh = dynamic_cast<SwWrtShell*>( GetFlyFrame()->getRootFrame()->GetCurrShell() );
+            SwFlyFrameAttrMgr aMgr(false, pSh, Frmmgr_Type::NONE);
+
+            aMgr.SetRotation(nOldRot, (nOldRot + static_cast<sal_uInt16>(nAngle)) % 3600, aSize);
+        }
+    }
+    else
+    {
+        // call parent
+        SdrVirtObj::Rotate(rRef, nAngle, sn, cs);
+    }
+}
+
 sdr::contact::ViewContact* SwVirtFlyDrawObj::CreateObjectSpecificViewContact()
 {
     // need an own ViewContact (VC) to allow creation of a specialized primitive
@@ -491,7 +550,9 @@ void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
     rInfo.bSelectAllowed     = rInfo.bMoveAllowed =
     rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = true;
 
-    rInfo.bRotateFreeAllowed = rInfo.bRotate90Allowed =
+    // RotGrfFlyFrame: Some rotation may be allowed
+    rInfo.bRotateFreeAllowed = rInfo.bRotate90Allowed = HasLimitedRotation();
+
     rInfo.bMirrorFreeAllowed = rInfo.bMirror45Allowed =
     rInfo.bMirror90Allowed   = rInfo.bShearAllowed    =
     rInfo.bCanConvToPath     = rInfo.bCanConvToPoly   =
@@ -938,7 +999,7 @@ void SwVirtFlyDrawObj::Crop(const Point& rRef, const Fraction& xFact, const Frac
 }
 
 // RotGrfFlyFrame: Helper to access possible rotation of Graphic contained in FlyFrame
-sal_uInt16 SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame() const
+sal_uInt16 SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(Size& rSize) const
 {
     sal_uInt16 nRetval(0);
     const SwNoTextFrame* pNoTx = dynamic_cast< const SwNoTextFrame* >(GetFlyFrame()->Lower());
@@ -953,6 +1014,7 @@ sal_uInt16 SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame() const
             const SwAttrSet& rSet = pGrfNd->GetSwAttrSet();
             const SwRotationGrf& rRotation = rSet.GetRotationGrf();
 
+            rSize = rRotation.GetUnrotatedSize();
             nRetval = rRotation.GetValue();
         }
     }
@@ -965,25 +1027,19 @@ SdrObject* SwVirtFlyDrawObj::getFullDragClone() const
     // call parent
     SdrObject* pRetval = SdrVirtObj::getFullDragClone();
 
-    if(pRetval)
+    if(pRetval && ContainsSwGrfNode())
     {
         // RotGrfFlyFrame: Add transformation to placeholder object
-        const sal_uInt16 nRotation(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame());
+        Size aSize;
+        const sal_uInt16 nRotation(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(aSize));
+        const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
+        const basegfx::B2DRange aTargetRange(getInnerBound());
+        const basegfx::B2DHomMatrix aTargetTransform(
+            basegfx::tools::createRotateAroundCenterKeepAspectRatioStayInsideRange(
+                aTargetRange,
+                fRotate));
 
-        if(0 != nRotation)
-        {
-            const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
-            const Rectangle aTmpOutRect(GetFlyFrame()->Frame().SVRect());
-            const basegfx::B2DRange aTargetRange(
-                aTmpOutRect.Left(), aTmpOutRect.Top(),
-                aTmpOutRect.Right(), aTmpOutRect.Bottom());
-            const basegfx::B2DHomMatrix aTargetTransform(
-                basegfx::tools::createRotateAroundCenterKeepAspectRatioStayInsideRange(
-                    aTargetRange,
-                    fRotate));
-
-            pRetval->TRSetBaseGeometry(aTargetTransform, basegfx::B2DPolyPolygon());
-        }
+        pRetval->TRSetBaseGeometry(aTargetTransform, basegfx::B2DPolyPolygon());
     }
 
     return pRetval;
@@ -1001,7 +1057,8 @@ void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
 
         if(!aTargetRange.isEmpty())
         {
-            const sal_uInt16 nRotation(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame());
+            Size aSize;
+            const sal_uInt16 nRotation(SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(aSize));
             const double fRotate(static_cast< double >(-nRotation) * (M_PI/1800.0));
             const basegfx::B2DHomMatrix aTargetTransform(
                 basegfx::tools::createRotateAroundCenterKeepAspectRatioStayInsideRange(
@@ -1076,14 +1133,6 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
         }
     }
     return SdrObject::CheckMacroHit( rRec );
-}
-
-// Dragging
-
-bool SwVirtFlyDrawObj::supportsFullDrag() const
-{
-    // call parent
-    return SdrVirtObj::supportsFullDrag();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

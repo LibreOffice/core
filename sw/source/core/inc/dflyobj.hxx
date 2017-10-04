@@ -64,7 +64,7 @@ private:
 
     // RotGrfFlyFrame: Helper to acces sthe rotation angle (in 10th degrees, left-handed)
     // of a GraphicFrame
-    sal_uInt16 getPossibleRotationFromFraphicFrame() const;
+    sal_uInt16 getPossibleRotationFromFraphicFrame(Size& rSize) const;
 
 protected:
     // AW: Need own sdr::contact::ViewContact since AnchorPos from parent is
@@ -81,6 +81,8 @@ public:
     basegfx::B2DRange getOuterBound() const;
     basegfx::B2DRange getInnerBound() const;
 
+    // RotGrfFlyFrame: Check if this is a SwGrfNode
+    bool ContainsSwGrfNode() const;
 
     SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrame* pFly);
     virtual ~SwVirtFlyDrawObj();
@@ -109,6 +111,7 @@ public:
                                     const Fraction& yFact, bool bUnsetRelative = true) override;
     virtual       void       Crop(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual       void       addCropHandles(SdrHdlList& rTarget) const override;
+    virtual       void       Rotate(const Point& rRef, long nAngle, double sn, double cs) override;
 
     // FullDrag support
     virtual SdrObject* getFullDragClone() const override;
@@ -127,8 +130,8 @@ public:
     virtual SdrObject* CheckMacroHit       (const SdrObjMacroHitRec& rRec) const override;
     virtual Pointer    GetMacroPointer     (const SdrObjMacroHitRec& rRec) const override;
 
-    // FullDrag support
-    virtual bool supportsFullDrag() const override;
+    // RotGrfFlyFrame: If true, this SdrObject supports only limited rotation.
+    virtual bool HasLimitedRotation() const override;
 };
 
 #endif
