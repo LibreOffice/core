@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_7b96824d",
+        "filename": "i18npool/source/breakiterator/breakiterator_cjk.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-04T10:54:14Z",
+      "side": 1,
+      "message": "Nitpick: it would help readability to donate some spaces, like\n\n ((cCh \u003e\u003d 0xAC00 \u0026\u0026 cCh \u003c\u003d 0xD7AF) || (cCh \u003e\u003d 0x1100 \u0026\u0026 cCh \u003c\u003d 0x11FF))\n\nI\u0027ll do in a follow-up.",
+      "range": {
+        "startLine": 88,
+        "startChar": 22,
+        "endLine": 88,
+        "endChar": 78
+      },
+      "revId": "a0a8d0ed556264e98aba6992f6f619b5fe133907",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
