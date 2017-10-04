@@ -54,6 +54,7 @@
 #include <svl/intitem.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/strbuf.hxx>
+#include <officecfg/Office/Calc.hxx>
 #include <formulagroup.hxx>
 #include <listenercontext.hxx>
 #include <types.hxx>
@@ -4326,11 +4327,10 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
-    static const bool bThreadingRequested = std::getenv("CPU_THREADED_CALCULATION");
+    static const bool bThreadingProhibited = std::getenv("SC_NO_THREADED_CALCULATION");
 
     // To temporarilu use threading for sc unit tests regardless of the size of the formula group,
-    // add the condition !std::getenv("LO_TESTNAME") below (with &&), and run with
-    // CPU_THREADED_CALCULATION=yes
+    // add the condition !std::getenv("LO_TESTNAME") below (with &&)
     if (GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
@@ -4345,7 +4345,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
-    if (!ScCalcConfig::isOpenCLEnabled() && bThreadingRequested)
+    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
     {
         // iterate over code in the formula ...
         // ensure all input is pre-calculated -

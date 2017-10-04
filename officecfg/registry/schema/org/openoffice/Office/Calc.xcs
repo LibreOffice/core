@@ -1416,6 +1416,12 @@
         <info>
           <desc>Contains settings for how to calculate formulae.</desc>
         </info>
+	<prop oor:name="UseThreadedCalculationForFormulaGroups" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Whether to use threaded calculation of forumula groups when applicable.</desc>
+          </info>
+          <value>true</value>
+	</prop>
 	<!-- Note: The default values below probably must correspond
 	to those assigned in setOpenCLConfigToDefault() in
 	sc/source/core/tool/calcconfig.cxx
