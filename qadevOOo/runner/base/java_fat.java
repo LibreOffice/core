@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import lib.MultiMethodTest;
 import lib.TestCase;
@@ -446,7 +447,7 @@ public class java_fat implements TestBase {
         return ifc.run(entry, tEnv, param);
     }
 
-    private AppProvider startOffice(lib.TestParameters param) {
+    private AppProvider startOffice(lib.TestParameters param) throws UnsupportedEncodingException {
         if (m_aDynamicClassLoader == null) {
             m_aDynamicClassLoader = new DynamicClassLoader();
         }

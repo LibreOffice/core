@@ -19,6 +19,8 @@ package helper;
 
 import java.io.InputStream;
 import java.io.File;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.PrintWriter;
 import java.io.PrintStream;
 import java.io.LineNumberReader;
@@ -128,7 +130,7 @@ public class ProcessHandler
      * log stream where debug info and output
      * of external command is printed out.
      */
-    public ProcessHandler(String cmdLine, PrintWriter log)
+    public ProcessHandler(String cmdLine, PrintWriter log) throws UnsupportedEncodingException
     {
         this(cmdLine, log, null, null);
     }
@@ -157,7 +159,7 @@ public class ProcessHandler
      *                      Waits for the process to end regulary
      *
      */
-    private ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars)
+    private ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars) throws UnsupportedEncodingException
     {
         this.cmdLine = cmdLine;
         this.workDir = workDir;
@@ -165,7 +167,7 @@ public class ProcessHandler
         this.envVars = envVars;
         if (log == null)
         {
-            this.log = new PrintWriter(System.out);
+            this.log = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"));
         }
         else
         {

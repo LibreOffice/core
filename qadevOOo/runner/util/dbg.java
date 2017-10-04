@@ -29,6 +29,8 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 
 /**
@@ -125,8 +127,8 @@ public class dbg {
      * @param name The name of the property.
      * @see com.sun.star.beans.XPropertySet
      */
-    public static void printPropertyInfo(XPropertySet PS, String name) {
-            printPropertyInfo(PS, name, new PrintWriter(System.out)) ;
+    public static void printPropertyInfo(XPropertySet PS, String name) throws UnsupportedEncodingException {
+            printPropertyInfo(PS, name, new PrintWriter(new OutputStreamWriter(System.out, "UTF-8")));
     }
 
     /**

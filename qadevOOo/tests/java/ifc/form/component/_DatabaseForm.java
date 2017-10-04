@@ -23,6 +23,7 @@ import util.dbg;
 
 import com.sun.star.form.TabulatorCycle;
 import com.sun.star.uno.Enum;
+import java.io.UnsupportedEncodingException;
 
 /**
 * Testing <code>com.sun.star.form.component.DatabaseForm</code>
@@ -45,7 +46,7 @@ public class _DatabaseForm extends MultiPropertyTest {
     * In this property test only debugging information output
     * is customized.
     */
-    public void _NavigationBarMode() {
+    public void _NavigationBarMode() throws UnsupportedEncodingException {
         dbg.printPropertyInfo(oObj, "NavigationBarMode");
         testProperty("NavigationBarMode", new PropertyTester() {
             @Override
@@ -64,7 +65,7 @@ public class _DatabaseForm extends MultiPropertyTest {
     * This property new value is always fixed and debugging
     * information output is customized.
     */
-    public void _Cycle() {
+    public void _Cycle() throws UnsupportedEncodingException {
         dbg.printPropertyInfo(oObj, "Cycle");
         testProperty("Cycle", new PropertyTester() {
             @Override
