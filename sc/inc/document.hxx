@@ -564,7 +564,11 @@ public:
 
     SC_DLLPUBLIC void  InitDrawLayer( SfxObjectShell* pDocShell = nullptr );
 
-    SC_DLLPUBLIC ScInterpreterContext     GetNonThreadedContext() const;
+    ScInterpreterContext GetNonThreadedContext() const
+    {
+        // GetFormatTable() asserts that we are not in a threaded calculation
+        return ScInterpreterContext(*this, GetFormatTable());
+    }
 
     SC_DLLPUBLIC sfx2::LinkManager*       GetLinkManager();
     SC_DLLPUBLIC const sfx2::LinkManager* GetLinkManager() const;
