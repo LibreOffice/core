@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9b224e00",
+        "filename": "i18npool/qa/cppunit/test_breakiterator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-10-04T13:06:46Z",
+      "side": 1,
+      "message": "The full uri is possibly better replaced by simple tdf#XXXXX?",
+      "range": {
+        "startLine": 162,
+        "startChar": 10,
+        "endLine": 162,
+        "endChar": 67
+      },
+      "revId": "441fded7f7fc8a2564075406933226a6eea73dd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
