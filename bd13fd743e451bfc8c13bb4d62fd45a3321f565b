@@ -16,6 +16,24 @@
       "revId": "bd13fd743e451bfc8c13bb4d62fd45a3321f565b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5b454615",
+        "filename": "vcl/inc/saltimer.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2017-10-04T09:44:34Z",
+      "side": 1,
+      "message": "ExistsValidEvent just tells you, if there is / will be an valid event in the system event queue.\n\nIsValidEventVersion is the function to verify an event by its version.\n\nAn IsValidEvent would be / is system specific, as the backends do additional checks to detect elapsed timers.",
+      "parentUuid": "1a430d35_1bd49e45",
+      "revId": "bd13fd743e451bfc8c13bb4d62fd45a3321f565b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
