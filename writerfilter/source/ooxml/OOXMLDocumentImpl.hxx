@@ -66,7 +66,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     OUString m_rBaseURL;
     css::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
 
-protected:
+private:
     void resolveFastSubStream(Stream & rStream,
                                       OOXMLStream::StreamType_t nType);
 

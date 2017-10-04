@@ -121,11 +121,6 @@ typedef std::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
 class TableStyleSheetEntry :
     public StyleSheetEntry
 {
-private:
-    typedef std::map<TblStyleType, PropertyMapPtr> TblStylePrs;
-
-    TblStylePrs m_aStyles;
-
 public:
     // Adds a new tblStylePr to the table style entry. This method
     // fixes some possible properties conflicts, like borders ones.
@@ -141,7 +136,9 @@ public:
     TableStyleSheetEntry( StyleSheetEntry& aEntry );
     virtual ~TableStyleSheetEntry( ) override;
 
-protected:
+private:
+    typedef std::map<TblStyleType, PropertyMapPtr> TblStylePrs;
+    TblStylePrs m_aStyles;
     PropertyMapPtr GetLocalPropertiesFromMask( sal_Int32 nMask );
 };
 

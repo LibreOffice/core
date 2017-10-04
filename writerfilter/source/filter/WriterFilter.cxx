@@ -90,8 +90,6 @@ class WriterFilter : public cppu::WeakImplHelper
     lang::XServiceInfo
     >
 {
-
-protected:
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<lang::XComponent> m_xSrcDoc, m_xDstDoc;
 

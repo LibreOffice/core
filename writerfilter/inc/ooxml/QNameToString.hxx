@@ -40,7 +40,6 @@ class QNameToString
 
     Map mMap;
 
-protected:
     /**
        Generated.
      */
