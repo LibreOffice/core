@@ -22,6 +22,30 @@
       "revId": "a0a8d0ed556264e98aba6992f6f619b5fe133907",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1b8c9e34",
+        "filename": "i18npool/source/breakiterator/breakiterator_cjk.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-04T10:59:56Z",
+      "side": 1,
+      "message": "Actually changing this from define to inline method is better because on each cCh it results in a Text[nStartPos] access, so maybe four times instead of only one needed.",
+      "parentUuid": "1a430d35_7b96824d",
+      "range": {
+        "startLine": 88,
+        "startChar": 22,
+        "endLine": 88,
+        "endChar": 78
+      },
+      "revId": "a0a8d0ed556264e98aba6992f6f619b5fe133907",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
