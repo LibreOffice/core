@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1b301e9e",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-04T10:16:38Z",
+      "side": 1,
+      "message": "I\u0027d rather prefer if these \u0027n\u0027 to \u0027f\u0027 were not mixed in with this patch. Actually I think they aren\u0027t necessary at all, but also don\u0027t harm, but if done should be kept separate from the \"real\" renaming from German to English.",
+      "revId": "a27e475675b8b958942b2dfc1e4ebe694c6ca082",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3b279a65",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1650,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-04T10:16:38Z",
+      "side": 1,
+      "message": "fGda might be a German abbreviation, but what is fDdb? If already renaming, wouldn\u0027t it be better to have some \"speaking\" names?",
+      "revId": "a27e475675b8b958942b2dfc1e4ebe694c6ca082",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7b21224d",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-04T10:16:38Z",
+      "side": 1,
+      "message": "Same here, fDb is what?",
+      "revId": "a27e475675b8b958942b2dfc1e4ebe694c6ca082",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9b1c0e15",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1748,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-04T10:16:38Z",
+      "side": 1,
+      "message": "And fSln?",
+      "revId": "a27e475675b8b958942b2dfc1e4ebe694c6ca082",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
