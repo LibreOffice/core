@@ -34,7 +34,6 @@ class WordPerfectImportFilter : public cppu::WeakImplHelper
     css::lang::XServiceInfo
     >
 {
-protected:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::lang::XComponent > mxDoc;
 

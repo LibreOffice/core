@@ -74,7 +74,6 @@ public:
 
 class OOXMLBinaryValue : public OOXMLValue
 {
-protected:
     mutable OOXMLBinaryObjectReference::Pointer_t mpBinaryObj;
 public:
     explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t const & pBinaryObj);
@@ -89,7 +88,6 @@ public:
 
 class OOXMLBooleanValue : public OOXMLValue
 {
-protected:
     bool mbValue;
     explicit OOXMLBooleanValue(bool bValue);
 public:
@@ -108,7 +106,6 @@ public:
 
 class OOXMLStringValue : public OOXMLValue
 {
-protected:
     OUString mStr;
 public:
     explicit OOXMLStringValue(const OUString & rStr);
@@ -124,7 +121,6 @@ public:
 
 class OOXMLInputStreamValue : public OOXMLValue
 {
-protected:
     css::uno::Reference<css::io::XInputStream> mxInputStream;
 
 public:
@@ -199,7 +195,6 @@ public:
 
 class OOXMLIntegerValue : public OOXMLValue
 {
-protected:
     sal_Int32 mnValue;
     explicit OOXMLIntegerValue(sal_Int32 nValue);
 public:
@@ -216,7 +211,6 @@ public:
 
 class OOXMLHexValue : public OOXMLValue
 {
-protected:
     sal_uInt32 mnValue;
 public:
     explicit OOXMLHexValue(sal_uInt32 nValue);
@@ -264,7 +258,6 @@ typedef OOXMLNthPtMeasureValue<2> OOXMLHpsMeasureValue;
 
 class OOXMLMeasurementOrPercentValue : public OOXMLValue
 {
-protected:
     int mnValue;
 public:
     explicit OOXMLMeasurementOrPercentValue(const char * pValue);
@@ -281,7 +274,6 @@ public:
 
 class OOXMLShapeValue : public OOXMLValue
 {
-protected:
     css::uno::Reference<css::drawing::XShape> mrShape;
 public:
     explicit OOXMLShapeValue(css::uno::Reference<css::drawing::XShape> const & rShape);
@@ -296,7 +288,6 @@ public:
 
 class OOXMLStarMathValue : public OOXMLValue
 {
-protected:
     css::uno::Reference< css::embed::XEmbeddedObject > component;
 public:
     explicit OOXMLStarMathValue( css::uno::Reference< css::embed::XEmbeddedObject > const & component );
