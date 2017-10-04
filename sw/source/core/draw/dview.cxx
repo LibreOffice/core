@@ -44,6 +44,7 @@
 #include "doc.hxx"
 #include "mdiexp.hxx"
 #include <ndole.hxx>
+#include <ndgrf.hxx>
 #include <fmtanchr.hxx>
 #include "shellres.hxx"
 #include <IDocumentUndoRedo.hxx>
