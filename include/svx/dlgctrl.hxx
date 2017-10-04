@@ -229,22 +229,6 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FillAttrLB : public ListBox
-{
-private:
-    BitmapEx        maBitmapEx;
-
-public:
-    FillAttrLB( vcl::Window* pParent, WinBits aWB );
-
-    void Fill( const XHatchListRef    &pList );
-    void Fill( const XGradientListRef &pList );
-    void Fill( const XBitmapListRef   &pList );
-    void Fill( const XPatternListRef  &pList );
-};
-
-/************************************************************************/
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FillTypeLB : public ListBox
 {
 

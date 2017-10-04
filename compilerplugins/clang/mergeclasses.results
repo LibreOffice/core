@@ -31,7 +31,6 @@ merge EscherPersistTable with EscherEx
 merge ExcBoolRecord with Exc1904
 merge ExportTyp with ExportBiff5
 merge FailTest with testMathMalformedXml
-merge FillAttrLB with SvxFillAttrBox
 merge FillTypeLB with SvxFillTypeBox
 merge FmGridListener with FmXGridPeer::GridListenerDelegator
 merge FmXDisposeListener with DisposeListenerGridBridge

@@ -461,7 +461,7 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
 }
 
 SvxFillAttrBox::SvxFillAttrBox( vcl::Window* pParent ) :
-    FillAttrLB( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP ),
+    ListBox(pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_TABSTOP),
     nCurPos( 0 )
 {
     SetPosPixel( Point( 90, 0 ) );
@@ -478,13 +478,13 @@ bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
     if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
         nCurPos = GetSelectedEntryPos();
 
-    return FillAttrLB::PreNotify( rNEvt );
+    return ListBox::PreNotify( rNEvt );
 }
 
 
 bool SvxFillAttrBox::EventNotify( NotifyEvent& rNEvt )
 {
-    bool bHandled = FillAttrLB::EventNotify( rNEvt );
+    bool bHandled = ListBox::EventNotify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -519,6 +519,144 @@ void SvxFillAttrBox::ReleaseFocus_Impl()
         if ( pShellWnd )
             pShellWnd->GrabFocus();
     }
+}
+
+// Fills the listbox (provisional) with strings
+
+void SvxFillAttrBox::Fill( const XHatchListRef &pList )
+{
+    long nCount = pList->Count();
+    ListBox::SetUpdateMode( false );
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XHatchEntry* pEntry = pList->GetHatch(i);
+        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
+            ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
+        else
+            InsertEntry( pEntry->GetName() );
+    }
+
+    AdaptDropDownLineCountToMaximum();
+    ListBox::SetUpdateMode( true );
+}
+
+// Fills the listbox (provisional) with strings
+
+void SvxFillAttrBox::Fill( const XGradientListRef &pList )
+{
+    long nCount = pList->Count();
+    ListBox::SetUpdateMode( false );
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XGradientEntry* pEntry = pList->GetGradient(i);
+        const Bitmap aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
+            ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
+        else
+            InsertEntry( pEntry->GetName() );
+    }
+
+    AdaptDropDownLineCountToMaximum();
+    ListBox::SetUpdateMode( true );
+}
+
+namespace
+{
+    void formatBitmapExToSize(BitmapEx& rBitmapEx, const Size& rSize)
+    {
+        if(!rBitmapEx.IsEmpty() && rSize.Width() > 0 && rSize.Height() > 0)
+        {
+            ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
+            pVirtualDevice->SetOutputSizePixel(rSize);
+
+            if(rBitmapEx.IsTransparent())
+            {
+                const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+                if(rStyleSettings.GetPreviewUsesCheckeredBackground())
+                {
+                    const Point aNull(0, 0);
+                    static const sal_uInt32 nLen(8);
+                    static const Color aW(COL_WHITE);
+                    static const Color aG(0xef, 0xef, 0xef);
+
+                    pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
+                }
+                else
+                {
+                    pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
+                    pVirtualDevice->Erase();
+                }
+            }
+
+            if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
+            {
+                rBitmapEx.Scale(rSize);
+                pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
+            }
+            else
+            {
+                const Size aBitmapSize(rBitmapEx.GetSizePixel());
+
+                for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
+                {
+                    for(long x(0); x < rSize.Width(); x += aBitmapSize.Width())
+                    {
+                        pVirtualDevice->DrawBitmapEx(
+                            Point(x, y),
+                            rBitmapEx);
+                    }
+                }
+            }
+
+            rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
+        }
+    }
+} // end of anonymous namespace
+
+void SvxFillAttrBox::Fill( const XBitmapListRef &pList )
+{
+    const long nCount(pList->Count());
+    const XBitmapEntry* pEntry;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
+
+    ListBox::SetUpdateMode(false);
+
+    for(long i(0); i < nCount; i++)
+    {
+        pEntry = pList->GetBitmap( i );
+        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
+        formatBitmapExToSize(maBitmapEx, aSize);
+        ListBox::InsertEntry(pEntry->GetName(), Image(maBitmapEx));
+    }
+
+    AdaptDropDownLineCountToMaximum();
+    ListBox::SetUpdateMode(true);
+}
+
+void SvxFillAttrBox::Fill( const XPatternListRef &pList )
+{
+    const long nCount(pList->Count());
+    const XBitmapEntry* pEntry;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
+
+    ListBox::SetUpdateMode(false);
+
+    for(long i(0); i < nCount; i++)
+    {
+        pEntry = pList->GetBitmap( i );
+        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
+        formatBitmapExToSize(maBitmapEx, aSize);
+        ListBox::InsertEntry(pEntry->GetName(), Image(maBitmapEx));
+    }
+
+    AdaptDropDownLineCountToMaximum();
+    ListBox::SetUpdateMode(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

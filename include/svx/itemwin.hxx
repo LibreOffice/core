@@ -108,19 +108,22 @@ private:
     static void     ReleaseFocus_Impl();
 };
 
-// class SvxFillAttrBox --------------------------------------------------
-
-class SVX_DLLPUBLIC SvxFillAttrBox : public FillAttrLB
+class SVX_DLLPUBLIC SvxFillAttrBox : public ListBox
 {
 public:
     SvxFillAttrBox( vcl::Window* pParent );
 
+    void Fill( const XHatchListRef    &pList );
+    void Fill( const XGradientListRef &pList );
+    void Fill( const XBitmapListRef   &pList );
+    void Fill( const XPatternListRef  &pList );
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
     virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 
 private:
     sal_uInt16      nCurPos;
+    BitmapEx        maBitmapEx;
 
     static void     ReleaseFocus_Impl();
 };
