@@ -26,12 +26,9 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <memory>
 
-class SfxImpStringList;
-
 class SVL_DLLPUBLIC SfxStringListItem : public SfxPoolItem
 {
-protected:
-    std::shared_ptr<SfxImpStringList>   pImpl;
+    std::shared_ptr<std::vector<OUString>> mpList;
 
 public:
     static SfxPoolItem* CreateDefault();
