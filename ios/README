@@ -1,9 +1,9 @@
-iOS experimental app and LibreOfficeKit.
+iOS app and LibreOfficeKit.
 
--- experiments/LibreOfficeKit
+-- LibreOfficeKit
 prelink all LO libraries into one to facilitate easier linking
 
--- experiments/LibreOfficeLight
+-- LibreOfficeLight
 a swift based UI, very much work in progress
 
 -- support
@@ -47,9 +47,9 @@ Due to the multiple workdirs a distinct directory setup is needed
    ./ios-arm64, ./ios-arm64-debug, ./ios-simulator
    Correct as per above, add your local setup (e.g. location of tarballs)
 2) run ../core/autogen.sh in ios-arm64, ios-arm64-debug and ios-simulator
-   this will generate ./*/ios/lo.xcconfig and prepare LO to be compiled
 3) run make in ios-arm64, ios-arm64-debug and ios-simulator
    this will build LO is 3 configurations and store the LibreOfficeKit
+   including generate ./*/ios/lo.xcconfig which prepares LO to be compiled
    libraries in ./ios-app/libraries as:
            ./ios-app/Library/LibreOfficeKit-arm64.a
            ./ios-app/Library/LibreOfficeKit-arm64-debug.a
