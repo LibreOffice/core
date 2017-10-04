@@ -6747,6 +6747,7 @@ ScMutationGuard::ScMutationGuard(ScDocument* pDocument, ScMutationGuardFlags nFl
     mpDocument(pDocument),
     mnFlags(nFlags)
 {
+    (void) mpDocument;
     for (unsigned b = 0; b < static_cast<std::size_t>(ScMutationGuardFlags::N); b++)
     {
         if (static_cast<std::size_t>(mnFlags) & (1 << b))
