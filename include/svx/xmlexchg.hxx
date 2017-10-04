@@ -42,7 +42,7 @@ namespace svx
     //= OXFormsDescriptor
 
 
-    struct OXFormsDescriptor {
+    struct SVX_DLLPUBLIC OXFormsDescriptor {
 
         OUString szName;
         OUString szServiceName;

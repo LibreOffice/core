@@ -32,7 +32,7 @@ namespace comphelper
 
 
 // infos about one single property
-struct PropertyDescription
+struct COMPHELPER_DLLPUBLIC PropertyDescription
 {
     // the possibilities where a property holding object may be located
     enum class LocationType

@@ -55,7 +55,7 @@ public:
 /** This exception is thrown, when the arithmetic expression
     parser failed to parse a string.
     */
-struct ParseError
+struct OOO_DLLPUBLIC_DBTOOLS ParseError
 {
     ParseError( const char* ) {}
 };

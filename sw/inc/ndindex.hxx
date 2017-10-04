@@ -129,7 +129,7 @@ inline std::ostream &operator <<(std::ostream& s, const SwNodeIndex& index)
 
 // SwRange
 
-class SwNodeRange
+class SW_DLLPUBLIC SwNodeRange
 {
 public:
     SwNodeIndex aStart;

@@ -50,7 +50,7 @@ template< typename T >
     <p>In case no number can be generated from the Any, NaN (see
     rtl::math::SetNAN()) is returned.</p>
 */
-struct AnyToDouble
+struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble
 {
     double operator() ( const css::uno::Any & rAny )
     {
@@ -64,7 +64,7 @@ struct AnyToDouble
 /** unary function to convert css::uno::Any into an
     OUString.
 */
-struct AnyToString
+struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString
 {
     OUString operator() ( const css::uno::Any & rAny )
     {
@@ -93,7 +93,7 @@ struct AnyToString
 
     <p>For conversion rtl::math::StringToDouble is used.</p>
  */
-struct OUStringToDouble
+struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble
 {
     double operator() ( const OUString & rStr )
     {
@@ -111,7 +111,7 @@ struct OUStringToDouble
 
     <p>For conversion rtl::math::DoubleToOUString is used.</p>
  */
-struct DoubleToOUString
+struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString
 {
     OUString operator() ( double fNumber )
     {

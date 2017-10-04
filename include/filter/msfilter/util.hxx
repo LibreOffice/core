@@ -70,7 +70,7 @@ MSFILTER_DLLPUBLIC OString ConvertColor( const Color &rColor, bool bAutoColor = 
 
 
 /** Paper size in 1/100 millimeters. */
-struct ApiPaperSize
+struct MSFILTER_DLLPUBLIC ApiPaperSize
 {
     sal_Int32           mnWidth;
     sal_Int32           mnHeight;

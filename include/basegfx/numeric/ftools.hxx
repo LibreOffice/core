@@ -148,7 +148,7 @@ namespace basegfx
      */
     BASEGFX_DLLPUBLIC double snapToNearestMultiple(double v, const double fStep);
 
-    class fTools
+    class BASEGFX_DLLPUBLIC fTools
     {
     public:
         /// Get threshold value for equalZero and friends

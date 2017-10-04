@@ -117,7 +117,7 @@ struct SdHyperlinkEntry
 };
 
 // Helper class for reading the PPT InteractiveInfoAtom
-struct PptInteractiveInfoAtom
+struct MSFILTER_DLLPUBLIC PptInteractiveInfoAtom
 {
     sal_uInt32          nSoundRef;
     sal_uInt32          nExHyperlinkId;

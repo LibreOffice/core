@@ -71,7 +71,7 @@ typedef void (*damageHandler)(void* handle,
                               sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                               sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight);
 
-struct DamageHandler
+struct VCL_DLLPUBLIC DamageHandler
 {
     void *handle;
     damageHandler damaged;

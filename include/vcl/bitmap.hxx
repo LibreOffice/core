@@ -110,7 +110,7 @@ enum class BmpFilter
     Unknown = 65535
 };
 
-class BmpFilterParam
+class VCL_DLLPUBLIC BmpFilterParam
 {
 public:
 

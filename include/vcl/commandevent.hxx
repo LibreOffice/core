@@ -206,7 +206,7 @@ enum class ShowDialogId
     About             = 2,
 };
 
-class CommandDialogData
+class VCL_DLLPUBLIC CommandDialogData
 {
     ShowDialogId   m_nDialogId;
 public:
@@ -242,7 +242,7 @@ enum class MediaCommand
     NextTrackHold         = 21,// Button Right holding pressed.
 };
 
-class CommandMediaData
+class VCL_DLLPUBLIC CommandMediaData
 {
     MediaCommand m_nMediaId;
     bool m_bPassThroughToOS;
@@ -270,7 +270,7 @@ public:
     sal_uLong          GetEnd() const { return mnEnd; }
 };
 
-class CommandSwipeData
+class VCL_DLLPUBLIC CommandSwipeData
 {
     double mnVelocityX;
 public:
@@ -286,7 +286,7 @@ public:
 };
 
 
-class CommandLongPressData
+class VCL_DLLPUBLIC CommandLongPressData
 {
     double mnX;
     double mnY;

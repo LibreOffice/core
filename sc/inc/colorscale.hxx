@@ -91,7 +91,7 @@ enum ScAxisPosition
 
 }
 
-struct ScDataBarFormatData
+struct SC_DLLPUBLIC ScDataBarFormatData
 {
     ScDataBarFormatData():
         maAxisColor(COL_BLACK),
