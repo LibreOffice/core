@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface domain="svx">
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkNotebook" id="RedlineControl">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <child>
-      <placeholder/>
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
     </child>
     <child type="tab">
       <object class="GtkLabel" id="view">
@@ -20,7 +27,16 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="position">1</property>
+      </packing>
     </child>
     <child type="tab">
       <object class="GtkLabel" id="filter">
