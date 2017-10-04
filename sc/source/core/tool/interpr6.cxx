@@ -846,7 +846,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         nFuncFmtIndex = aAction.getNumberFormat();
                     }
 
-                    nFuncFmtType = pDok->GetFormatTable()->GetType( nFuncFmtIndex );
+                    nFuncFmtType = mrContext.GetFormatTable()->GetType( nFuncFmtIndex );
                 }
                 else
                 {
