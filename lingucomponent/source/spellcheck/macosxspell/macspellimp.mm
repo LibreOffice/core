@@ -57,7 +57,6 @@ MacSpellChecker::MacSpellChecker() :
     numdict = 0;
     NSApplicationLoad();
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    macSpell = [NSSpellChecker sharedSpellChecker];
     macTag = [NSSpellChecker uniqueSpellDocumentTag];
     [pool release];
 }
@@ -117,7 +116,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         for (NSUInteger i = 0; i < [aLocales count]; i++)
         {
             NSString* pLangStr = (NSString*)[aLocales objectAtIndex:i];
-            if( [macSpell setLanguage:pLangStr ] )
+            if( [[NSSpellChecker sharedSpellChecker] setLanguage:pLangStr ] )
             {
                 postspdict.push_back( pLangStr );
             }
@@ -241,7 +240,7 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
         }
 
         NSInteger aCount;
-        NSRange range = [macSpell checkSpellingOfString:aNSStr startingAt:0 language:aLang wrap:false inSpellDocumentWithTag:macTag wordCount:&aCount];
+        NSRange range = [[NSSpellChecker sharedSpellChecker] checkSpellingOfString:aNSStr startingAt:0 language:aLang wrap:false inSpellDocumentWithTag:macTag wordCount:&aCount];
         int rVal = 0;
         if(range.length>0)
         {
@@ -339,8 +338,8 @@ Reference< XSpellAlternatives >
             NSString* aTaggedCountry = [@"_" stringByAppendingString:aCountry];
             aLang = [aLang  stringByAppendingString:aTaggedCountry];
         }
-        [macSpell setLanguage:aLang];
-        NSArray *guesses = [macSpell guessesForWordRange:NSMakeRange(0, [aNSStr length]) inString:aNSStr language:aLang inSpellDocumentWithTag:0];
+        [[NSSpellChecker sharedSpellChecker] setLanguage:aLang];
+        NSArray *guesses = [[NSSpellChecker sharedSpellChecker] guessesForWordRange:NSMakeRange(0, [aNSStr length]) inString:aNSStr language:aLang inSpellDocumentWithTag:0];
         count = [guesses count];
         if (count)
         {

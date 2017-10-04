@@ -63,7 +63,6 @@ class MacSpellChecker :
     Locale *                aDLocs;
     OUString *              aDNames;
     sal_Int32               numdict;
-    NSSpellChecker *        macSpell;
     int                     macTag;   // unique tag for this doc
 
     ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
