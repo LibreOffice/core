@@ -78,9 +78,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 
 SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
-
-    SfxPoolItem( rItem.Which() ),
-
+    SfxPoolItem  ( rItem ),
     pFormatter   ( rItem.pFormatter ),
     eValueType   ( rItem.eValueType ),
     aStringVal   ( rItem.aStringVal ),

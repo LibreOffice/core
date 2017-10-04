@@ -30,17 +30,9 @@ struct SvxClipboardFormatItem_Impl
     std::vector<SotClipboardFormatId> aFmtIds;
 
     SvxClipboardFormatItem_Impl() {}
-    SvxClipboardFormatItem_Impl( const SvxClipboardFormatItem_Impl& );
 };
 
 SfxPoolItem* SvxClipboardFormatItem::CreateDefault() { return new  SvxClipboardFormatItem(0); };
-
-SvxClipboardFormatItem_Impl::SvxClipboardFormatItem_Impl(
-                            const SvxClipboardFormatItem_Impl& rCpy )
-    : aFmtNms(rCpy.aFmtNms)
-    , aFmtIds(rCpy.aFmtIds)
-{
-}
 
 SvxClipboardFormatItem::SvxClipboardFormatItem( sal_uInt16 nId )
     : SfxPoolItem( nId ), pImpl( new SvxClipboardFormatItem_Impl )

@@ -32,7 +32,6 @@ private:
 
 public:
                              OfaPtrItem( sal_uInt16 nWhich, void *pPtr );
-                             OfaPtrItem( const OfaPtrItem& );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -50,9 +49,6 @@ class OfaRefItem : public SfxPoolItem
 public:
     OfaRefItem( sal_uInt16 _nWhich, const rtl::Reference<reference_type> &xRef )
         : SfxPoolItem( _nWhich ), mxRef( xRef )
-    {}
-    OfaRefItem( const OfaRefItem& rItem )
-        : SfxPoolItem( rItem.Which() ), mxRef( rItem.mxRef )
     {}
     virtual bool operator==( const SfxPoolItem& rItem ) const override
     {

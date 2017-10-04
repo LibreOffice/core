@@ -48,7 +48,6 @@ private:
 public:
     static SfxPoolItem* CreateDefault();
     SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId);
-    SvxLongLRSpaceItem(const SvxLongLRSpaceItem &);
     SvxLongLRSpaceItem();
 
     long GetLeft() const { return mlLeft;}
@@ -81,7 +80,6 @@ private:
 public:
     static SfxPoolItem* CreateDefault();
     SvxLongULSpaceItem(long lUpper, long lLower, sal_uInt16 nId);
-    SvxLongULSpaceItem(const SvxLongULSpaceItem &);
     SvxLongULSpaceItem();
 
     long GetUpper() const { return mlLeft;}
@@ -112,7 +110,6 @@ private:
 public:
     static SfxPoolItem* CreateDefault();
     SvxPagePosSizeItem(const Point &rPos, long lWidth, long lHeight);
-    SvxPagePosSizeItem(const SvxPagePosSizeItem &);
     SvxPagePosSizeItem();
 
     const Point &GetPos() const { return aPos; }
@@ -130,8 +127,6 @@ struct SVX_DLLPUBLIC SvxColumnDescription
     long nEndMax; //max. possible position of end
 
     SvxColumnDescription();
-
-    SvxColumnDescription(const SvxColumnDescription &rCopy);
 
     SvxColumnDescription(long start, long end, bool bVis);
 
@@ -184,10 +179,6 @@ public:
     // nLeft, nRight each the distance to the surrounding frame
     SvxColumnItem(sal_uInt16 nAct = 0);
     SvxColumnItem(sal_uInt16 nActCol, sal_uInt16 nLeft, sal_uInt16 nRight); // Table with borders
-    SvxColumnItem(const SvxColumnItem& aItem);
-    virtual ~SvxColumnItem() override;
-
-    SvxColumnItem &operator=(const SvxColumnItem &);
 
     SvxColumnDescription&       operator[](sal_uInt16 index);
     const SvxColumnDescription& operator[](sal_uInt16 index) const;
@@ -239,7 +230,6 @@ public:
     static SfxPoolItem* CreateDefault();
     SvxObjectItem(long nStartX, long nEndX,
                   long nStartY, long nEndY);
-    SvxObjectItem(const SvxObjectItem& rCopy);
 
     long GetStartX() const { return nStartX;}
     long GetEndX() const { return nEndX;}

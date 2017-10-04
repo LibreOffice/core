@@ -187,17 +187,6 @@ SvxMarginItem::SvxMarginItem( sal_Int16 nLeft,
 }
 
 
-SvxMarginItem::SvxMarginItem( const SvxMarginItem& rItem ) :
-
-    SfxPoolItem( rItem.Which() )
-{
-    nLeftMargin = rItem.nLeftMargin;
-    nTopMargin = rItem.nTopMargin;
-    nRightMargin = rItem.nRightMargin;
-    nBottomMargin = rItem.nBottomMargin;
-}
-
-
 bool SvxMarginItem::GetPresentation
 (
     SfxItemPresentation ePres,
