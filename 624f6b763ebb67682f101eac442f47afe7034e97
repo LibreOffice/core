@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bb562ad0",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2845,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-04T09:51:41Z",
+      "side": 1,
+      "message": "oh, only seeing the call to dumpNamespaceClose below now---these #includes go into a namespace? move them up to the head then",
+      "revId": "624f6b763ebb67682f101eac442f47afe7034e97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
