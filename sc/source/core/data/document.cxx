@@ -6769,13 +6769,6 @@ ScMutationGuard::~ScMutationGuard()
 #endif
 }
 
-ScInterpreterContext ScDocument::GetNonThreadedContext() const
-{
-    // GetFormatTable() asserts that we are not in a threaded calculation
-    ScInterpreterContext aResult(*this, GetFormatTable());
-    return aResult;
-}
-
 thread_local ScDocumentThreadSpecific ScDocument::maThreadSpecific;
 
 ScRecursionHelper& ScDocument::GetRecursionHelper()
