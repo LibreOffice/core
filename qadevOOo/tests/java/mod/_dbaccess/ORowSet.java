@@ -20,7 +20,9 @@ package mod._dbaccess;
 
 import ifc.sdb._XCompletedExecution;
 
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import lib.StatusException;
 import lib.TestCase;
@@ -535,8 +537,13 @@ public class ORowSet extends TestCase {
      * @see ifc.sdb._XCompletedExecution
      */
     private static class InteractionHandlerImpl implements _XCompletedExecution.CheckInteractionHandler {
+
         private boolean handlerWasUsed = false;
-        private PrintWriter log = new PrintWriter(System.out);
+        private PrintWriter log;
+
+        InteractionHandlerImpl() throws UnsupportedEncodingException {
+            log = new PrintWriter(new OutputStreamWriter(System.out, "UTF-8"));
+        }
 
         public boolean checkInteractionHandler() {
             return handlerWasUsed;

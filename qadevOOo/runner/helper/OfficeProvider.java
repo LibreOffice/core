@@ -31,6 +31,7 @@ import com.sun.star.util.XStringSubstitution;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import lib.TestParameters;
 
@@ -146,7 +147,7 @@ public class OfficeProvider implements AppProvider
     /**
      * Method to get the ServiceManager of an Office
      */
-    public Object getManager(lib.TestParameters param)
+    public Object getManager(lib.TestParameters param) throws UnsupportedEncodingException
     {
         String errorMessage = null;
         boolean bAppExecutionHasWarning = false;
