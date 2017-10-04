@@ -136,7 +136,6 @@
 
 using namespace ::com::sun::star;
 
-/* IInterface */
 sal_Int32 SwDoc::acquire()
 {
     assert(mReferenceCount >= 0);
