@@ -231,7 +231,7 @@ namespace
 }
 
 // These are Win 3.1 bitmap fonts using "FON" font format
-// which is not supported with "Direct Write" so let's substitute them
+// which is not supported with DirectWrite so let's substitute them
 // with a font that is supported and always available.
 // Based on:
 // https://dxr.mozilla.org/mozilla-esr10/source/gfx/thebes/gfxDWriteFontList.cpp#1057

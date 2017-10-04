@@ -83,7 +83,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 
     if (!pTxt->BindFont(aHDC.get()))
     {
-        SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by Direct Write.");
+        SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by DirectWrite.");
         return false;
     }
 
