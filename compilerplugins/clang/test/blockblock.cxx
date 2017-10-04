@@ -9,7 +9,7 @@
 
 int f(bool b1, bool b2) {
     if (b1 || b2) {
-#if 1
+#if 0
         if (b1)
 #endif
         {

@@ -35,6 +35,13 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
+    bool TraverseFunctionDecl(FunctionDecl * decl) {
+        if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
+            return true;
+        }
+        return RecursiveASTVisitor::TraverseFunctionDecl(decl);
+    }
+
     bool TraverseCXXMethodDecl(CXXMethodDecl * decl) {
         if (containsPreprocessingConditionalInclusion(decl->getSourceRange())) {
             return true;
