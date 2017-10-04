@@ -9,16 +9,16 @@
   <LineStart/>
   <LineEnd>
    <pointSequence>
-    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
-    <point positionX="450" positionY="422" polygonFlags="NORMAL"/>
-    <point positionX="422" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="243" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="243" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="206" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="206" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="27" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="0" positionY="422" polygonFlags="NORMAL"/>
-    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
   <Transformation>
@@ -71,16 +71,16 @@
   <LineStart/>
   <LineEnd>
    <pointSequence>
-    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
-    <point positionX="450" positionY="422" polygonFlags="NORMAL"/>
-    <point positionX="422" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="243" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="243" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="206" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="206" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="27" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="0" positionY="422" polygonFlags="NORMAL"/>
-    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
   <Transformation>
@@ -133,16 +133,16 @@
   <LineStart/>
   <LineEnd>
    <pointSequence>
-    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
-    <point positionX="450" positionY="422" polygonFlags="NORMAL"/>
-    <point positionX="422" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="243" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="243" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="206" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="206" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="27" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="0" positionY="422" polygonFlags="NORMAL"/>
-    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
   <Transformation>
@@ -195,16 +195,16 @@
   <LineStart/>
   <LineEnd>
    <pointSequence>
-    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
-    <point positionX="450" positionY="422" polygonFlags="NORMAL"/>
-    <point positionX="422" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="243" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="243" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="206" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="206" positionY="102" polygonFlags="NORMAL"/>
-    <point positionX="27" positionY="450" polygonFlags="NORMAL"/>
-    <point positionX="0" positionY="422" polygonFlags="NORMAL"/>
-    <point positionX="225" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
+    <point positionX="350" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="322" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="193" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="156" positionY="102" polygonFlags="NORMAL"/>
+    <point positionX="27" positionY="350" polygonFlags="NORMAL"/>
+    <point positionX="0" positionY="322" polygonFlags="NORMAL"/>
+    <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
   <Transformation>
