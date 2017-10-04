@@ -23,6 +23,7 @@ import static org.junit.Assert.fail;
 import helper.OfficeProvider;
 import helper.ProcessHandler;
 
+import java.io.UnsupportedEncodingException;
 import java.util.StringTokenizer;
 import lib.TestParameters;
 
@@ -110,13 +111,17 @@ public class CheckAPI  {
                 handler.kill();
                 util.utils.pause(10000);
                 OfficeProvider op = new OfficeProvider();
-                xMSF = (XMultiServiceFactory)op.getManager(param);
-                param.put("ServiceFactory",xMSF);
                 try {
+                    xMSF = (XMultiServiceFactory)op.getManager(param);
+                    param.put("ServiceFactory",xMSF);
+
                     oObj = xMSF.createInstance("org.openoffice.RunnerService");
                 }
                 catch(com.sun.star.uno.Exception e) {
                     fail("Could not create Instance of 'org.openoffice.RunnerService'");
+                }
+                catch (UnsupportedEncodingException e) {
+                    office = null;
                 }
             }
             System.out.println(erg);
