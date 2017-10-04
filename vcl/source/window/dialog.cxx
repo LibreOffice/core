@@ -629,8 +629,8 @@ bool Dialog::EventNotify( NotifyEvent& rNEvt )
             // have re-enabled input for our parent
             if( mbInExecute && mbModalMode )
             {
-                SetModalInputMode( false );
-                SetModalInputMode( true );
+                ImplSetModalInputMode( false );
+                ImplSetModalInputMode( true );
 
                 // #93022# def-button might have changed after show
                 if( !mnMousePositioned )
@@ -825,7 +825,6 @@ bool Dialog::ImplStartExecuteModal()
         GetParent()->CompatNotify( aNEvt );
     }
     mbInExecute = true;
-    ImplGetFrame()->SetModal(true);
     SetModalInputMode(true);
 
     // FIXME: no layouting, workaround some clipping issues
@@ -1097,7 +1096,6 @@ void Dialog::EndDialog( long nResult )
     if ( mbInExecute )
     {
         SetModalInputMode(false);
-        ImplGetFrame()->SetModal(false);
 
         // remove dialog from the list of dialogs which are being executed
         ImplSVData* pSVData = ImplGetSVData();
@@ -1185,6 +1183,15 @@ void Dialog::SetModalInputMode( bool bModal )
     if ( bModal == mbModalMode )
         return;
 
+    ImplGetFrame()->SetModal(bModal);
+    ImplSetModalInputMode(bModal);
+}
+
+void Dialog::ImplSetModalInputMode( bool bModal )
+{
+    if ( bModal == mbModalMode )
+        return;
+
     mbModalMode = bModal;
     if ( bModal )
     {
@@ -1232,8 +1239,8 @@ void Dialog::SetModalInputMode( bool bModal )
             ( pPrevModalDlg == mpPrevExecuteDlg.get()
                 || !pPrevModalDlg->IsWindowOrChild( this, true ) ) )
             {
-                mpPrevExecuteDlg->SetModalInputMode( false );
-                mpPrevExecuteDlg->SetModalInputMode( true );
+                mpPrevExecuteDlg->ImplSetModalInputMode( false );
+                mpPrevExecuteDlg->ImplSetModalInputMode( true );
             }
         }
     }

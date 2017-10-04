@@ -157,6 +157,7 @@ public:
 private:
     bool            ImplStartExecuteModal();
     static void     ImplEndExecuteModal();
+    void            ImplSetModalInputMode(bool bModal);
 public:
 
     // Dialog::Execute replacement API
