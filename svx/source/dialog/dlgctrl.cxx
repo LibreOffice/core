@@ -1044,27 +1044,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeHatchingLB(VclPtr<vcl::Window>
 
 // Fills the listbox (provisional) with strings
 
-void FillAttrLB::Fill( const XHatchListRef &pList )
-{
-    long nCount = pList->Count();
-    ListBox::SetUpdateMode( false );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        const XHatchEntry* pEntry = pList->GetHatch(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
-            ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
-        else
-            InsertEntry( pEntry->GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    ListBox::SetUpdateMode( true );
-}
-
-// Fills the listbox (provisional) with strings
-
 GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
 : ListBox( pParent, aWB )
 {
@@ -1080,27 +1059,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeGradientLB(VclPtr<vcl::Window>
     VclPtrInstance<GradientLB> pListBox(pParent, nWinStyle);
     pListBox->EnableAutoSize(true);
     rRet = pListBox;
-}
-
-// Fills the listbox (provisional) with strings
-
-void FillAttrLB::Fill( const XGradientListRef &pList )
-{
-    long nCount = pList->Count();
-    ListBox::SetUpdateMode( false );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        const XGradientEntry* pEntry = pList->GetGradient(i);
-        const Bitmap aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
-            ListBox::InsertEntry(pEntry->GetName(), Image(aBitmap));
-        else
-            InsertEntry( pEntry->GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    ListBox::SetUpdateMode( true );
 }
 
 // BitmapLB Constructor
@@ -1120,107 +1078,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL makeBitmapLB(VclPtr<vcl::Window> &
     VclPtrInstance<BitmapLB> pListBox(pParent, nWinStyle);
     pListBox->EnableAutoSize(true);
     rRet = pListBox;
-}
-
-namespace
-{
-    void formatBitmapExToSize(BitmapEx& rBitmapEx, const Size& rSize)
-    {
-        if(!rBitmapEx.IsEmpty() && rSize.Width() > 0 && rSize.Height() > 0)
-        {
-            ScopedVclPtrInstance< VirtualDevice > pVirtualDevice;
-            pVirtualDevice->SetOutputSizePixel(rSize);
-
-            if(rBitmapEx.IsTransparent())
-            {
-                const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-                if(rStyleSettings.GetPreviewUsesCheckeredBackground())
-                {
-                    const Point aNull(0, 0);
-                    static const sal_uInt32 nLen(8);
-                    static const Color aW(COL_WHITE);
-                    static const Color aG(0xef, 0xef, 0xef);
-
-                    pVirtualDevice->DrawCheckered(aNull, rSize, nLen, aW, aG);
-                }
-                else
-                {
-                    pVirtualDevice->SetBackground(rStyleSettings.GetFieldColor());
-                    pVirtualDevice->Erase();
-                }
-            }
-
-            if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())
-            {
-                rBitmapEx.Scale(rSize);
-                pVirtualDevice->DrawBitmapEx(Point(0, 0), rBitmapEx);
-            }
-            else
-            {
-                const Size aBitmapSize(rBitmapEx.GetSizePixel());
-
-                for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
-                {
-                    for(long x(0); x < rSize.Width(); x += aBitmapSize.Width())
-                    {
-                        pVirtualDevice->DrawBitmapEx(
-                            Point(x, y),
-                            rBitmapEx);
-                    }
-                }
-            }
-
-            rBitmapEx = pVirtualDevice->GetBitmap(Point(0, 0), rSize);
-        }
-    }
-} // end of anonymous namespace
-
-FillAttrLB::FillAttrLB(vcl::Window* pParent, WinBits aWB)
-    : ListBox(pParent, aWB)
-{
-}
-
-void FillAttrLB::Fill( const XBitmapListRef &pList )
-{
-    const long nCount(pList->Count());
-    const XBitmapEntry* pEntry;
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
-
-    ListBox::SetUpdateMode(false);
-
-    for(long i(0); i < nCount; i++)
-    {
-        pEntry = pList->GetBitmap( i );
-        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
-        formatBitmapExToSize(maBitmapEx, aSize);
-        ListBox::InsertEntry(pEntry->GetName(), Image(maBitmapEx));
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    ListBox::SetUpdateMode(true);
-}
-
-void FillAttrLB::Fill( const XPatternListRef &pList )
-{
-    const long nCount(pList->Count());
-    const XBitmapEntry* pEntry;
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
-
-    ListBox::SetUpdateMode(false);
-
-    for(long i(0); i < nCount; i++)
-    {
-        pEntry = pList->GetBitmap( i );
-        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
-        formatBitmapExToSize(maBitmapEx, aSize);
-        ListBox::InsertEntry(pEntry->GetName(), Image(maBitmapEx));
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    ListBox::SetUpdateMode(true);
 }
 
 void FillTypeLB::Fill()
