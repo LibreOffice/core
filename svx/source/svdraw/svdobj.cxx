@@ -931,6 +931,12 @@ bool SdrObject::LineGeometryUsageIsNecessary() const
     return (eXLS != drawing::LineStyle_NONE);
 }
 
+bool SdrObject::HasLimitedRotation() const
+{
+    // RotGrfFlyFrame: Default is false, support full rotation
+    return false;
+}
+
 SdrObject* SdrObject::Clone() const
 {
     return CloneHelper< SdrObject >();
