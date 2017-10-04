@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1bd49e45",
+        "filename": "vcl/inc/saltimer.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-04T09:32:10Z",
+      "side": 1,
+      "message": "should be IsValidEvent() ? ExistsValidEvent sounds like it is  checking a set of events",
+      "revId": "bd13fd743e451bfc8c13bb4d62fd45a3321f565b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
