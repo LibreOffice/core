@@ -62,7 +62,6 @@ merge IDocumentTimerAccess with sw::DocumentTimerManager
 merge IDocumentUndoRedo with sw::UndoManager
 merge IFinishedThreadListener with ThreadListener
 merge IGrammarContact with SwGrammarContact
-merge IInterface with SwDoc
 merge IStyleAccess with SwStyleManager
 merge IStylePoolIteratorAccess with (anonymous namespace)::Iterator
 merge ISwFrameControl with SwFrameMenuButtonBase

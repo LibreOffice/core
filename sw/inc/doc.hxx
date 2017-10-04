@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_DOC_HXX
 
 // SwDoc interfaces
-#include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -230,8 +229,7 @@ void StartGrammarChecking( SwDoc &rDoc );
 using SwRubyList = std::vector<std::unique_ptr<SwRubyListEntry>>;
 
 // Represents the model of a Writer document.
-class SW_DLLPUBLIC SwDoc :
-    public IInterface
+class SW_DLLPUBLIC SwDoc
 {
     friend class ::sw::DocumentContentOperationsManager;
 
@@ -438,7 +436,7 @@ public:
 
     // Life cycle
     SwDoc();
-    virtual ~SwDoc() override;
+    virtual ~SwDoc();
 
     bool IsInDtor() const { return mbDtor; }
 
@@ -448,10 +446,27 @@ public:
     SwNodes      & GetNodes()       { return *m_pNodes; }
     SwNodes const& GetNodes() const { return *m_pNodes; }
 
-    // IInterface
-    virtual sal_Int32 acquire() override;
-    virtual sal_Int32 release() override;
-    virtual sal_Int32 getReferenceCount() const override;
+    /** Acquire a reference to an instance. A caller shall release
+        the instance by calling 'release' when it is no longer needed.
+        'acquire' and 'release' calls need to be balanced.
+
+        @returns
+        the current reference count of the instance for debugging purposes.
+    */
+    sal_Int32 acquire();
+    /** Releases a reference to an instance. A caller has to call
+        'release' when a before acquired reference to an instance
+        is no longer needed. 'acquire' and 'release' calls need to
+        be balanced.
+
+    @returns
+        the current reference count of the instance for debugging purposes.
+    */
+    sal_Int32 release();
+    /** Returns the current reference count. This method should be used for
+        debugging purposes. Using it otherwise is a signal of a design flaw.
+    */
+    sal_Int32 getReferenceCount() const;
 
     // IDocumentSettingAccess
     IDocumentSettingAccess const & getIDocumentSettingAccess() const; //The IDocumentSettingAccess interface
