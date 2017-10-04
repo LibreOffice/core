@@ -143,13 +143,6 @@ SvxLongLRSpaceItem::SvxLongLRSpaceItem() :
     mlRight     (0)
 {}
 
-SvxLongLRSpaceItem::SvxLongLRSpaceItem(const SvxLongLRSpaceItem &rCpy) :
-    SfxPoolItem (rCpy),
-    mlLeft      (rCpy.mlLeft),
-    mlRight     (rCpy.mlRight)
-{}
-
-
 void SvxLongLRSpaceItem::SetLeft(long lArgLeft)
 {
     mlLeft = lArgLeft;
@@ -261,12 +254,6 @@ SvxLongULSpaceItem::SvxLongULSpaceItem(long lLeft, long lRight, sal_uInt16 nId) 
     SfxPoolItem (nId),
     mlLeft       (lLeft),
     mlRight      (lRight)
-{}
-
-SvxLongULSpaceItem::SvxLongULSpaceItem(const SvxLongULSpaceItem &rCpy) :
-    SfxPoolItem (rCpy),
-    mlLeft      (rCpy.mlLeft),
-    mlRight     (rCpy.mlRight)
 {}
 
 SvxLongULSpaceItem::SvxLongULSpaceItem() :
@@ -385,13 +372,6 @@ SvxPagePosSizeItem::SvxPagePosSizeItem(const Point &rP, long lW, long lH) :
     lHeight     (lH)
 {}
 
-SvxPagePosSizeItem::SvxPagePosSizeItem(const SvxPagePosSizeItem &rCpy) :
-    SfxPoolItem (rCpy),
-    aPos        (rCpy.aPos),
-    lWidth      (rCpy.lWidth),
-    lHeight     (rCpy.lHeight)
-{}
-
 SvxPagePosSizeItem::SvxPagePosSizeItem() :
     SfxPoolItem (0),
     aPos        (0, 0),
@@ -439,21 +419,6 @@ SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 ri
     bOrtho      (true)
 {}
 
-SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
-    SfxPoolItem (rCopy),
-    nLeft       (rCopy.nLeft),
-    nRight      (rCopy.nRight),
-    nActColumn  (rCopy.nActColumn),
-    bTable      (rCopy.bTable),
-    bOrtho      (rCopy.bOrtho)
-{
-    aColumns.resize(rCopy.aColumns.size());
-    std::copy(rCopy.aColumns.begin(), rCopy.aColumns.end(), aColumns.begin());
-}
-
-SvxColumnItem::~SvxColumnItem()
-{}
-
 bool SvxColumnItem::GetPresentation(
                         SfxItemPresentation /*ePres*/,
                         MapUnit             /*eCoreUnit*/,
@@ -467,19 +432,6 @@ bool SvxColumnItem::GetPresentation(
 SfxPoolItem* SvxColumnItem::Clone(SfxItemPool* /*pPool*/) const
 {
     return new SvxColumnItem(*this);
-}
-
-SvxColumnItem& SvxColumnItem::operator=(const SvxColumnItem& rCopy)
-{
-    nLeft = rCopy.nLeft;
-    nRight = rCopy.nRight;
-    bTable = rCopy.bTable;
-    nActColumn = rCopy.nActColumn;
-    aColumns.resize(rCopy.aColumns.size());
-
-    std::copy(rCopy.aColumns.begin(), rCopy.aColumns.end(), aColumns.begin());
-
-    return *this;
 }
 
 bool SvxColumnItem::CalcOrtho() const
@@ -624,14 +576,6 @@ SvxColumnDescription::SvxColumnDescription() :
     nEndMax  (0)
 {}
 
-SvxColumnDescription::SvxColumnDescription(const SvxColumnDescription &rCopy) :
-    nStart   (rCopy.nStart),
-    nEnd     (rCopy.nEnd),
-    bVisible (rCopy.bVisible),
-    nEndMin  (rCopy.nEndMin),
-    nEndMax  (rCopy.nEndMax)
-{}
-
 SvxColumnDescription::SvxColumnDescription(long start, long end, bool bVis) :
     nStart   (start),
     nEnd     (end),
@@ -712,15 +656,6 @@ SvxObjectItem::SvxObjectItem( long nSX, long nEX,
     nStartY     (nSY),
     nEndY       (nEY),
     bLimits     (false)
-{}
-
-SvxObjectItem::SvxObjectItem( const SvxObjectItem& rCopy ) :
-    SfxPoolItem (rCopy),
-    nStartX     (rCopy.nStartX),
-    nEndX       (rCopy.nEndX),
-    nStartY     (rCopy.nStartY),
-    nEndY       (rCopy.nEndY),
-    bLimits     (rCopy.bLimits)
 {}
 
 bool SvxObjectItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const

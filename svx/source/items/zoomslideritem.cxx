@@ -40,20 +40,6 @@ SvxZoomSliderItem::SvxZoomSliderItem( sal_uInt16 nCurrentZoom, sal_uInt16 nMinZo
 }
 
 
-SvxZoomSliderItem::SvxZoomSliderItem( const SvxZoomSliderItem& rOrig )
-: SfxUInt16Item( rOrig.Which(), rOrig.GetValue() )
-, maValues( rOrig.maValues )
-, mnMinZoom( rOrig.mnMinZoom )
-, mnMaxZoom( rOrig.mnMaxZoom )
-{
-}
-
-
-SvxZoomSliderItem::~SvxZoomSliderItem()
-{
-}
-
-
 SfxPoolItem* SvxZoomSliderItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxZoomSliderItem( *this );

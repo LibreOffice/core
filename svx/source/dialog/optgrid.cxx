@@ -58,23 +58,6 @@ SvxOptionsGrid::SvxOptionsGrid() :
 {
 }
 
-SvxGridItem::SvxGridItem( const SvxGridItem& rItem )
-:   SvxOptionsGrid()
-,   SfxPoolItem(rItem)
-{
-    bUseGridsnap = rItem.bUseGridsnap ;
-    bSynchronize = rItem.bSynchronize ;
-    bGridVisible = rItem.bGridVisible ;
-    bEqualGrid   = rItem.bEqualGrid   ;
-    nFldDrawX    = rItem.nFldDrawX    ;
-    nFldDivisionX= rItem.nFldDivisionX;
-    nFldDrawY    = rItem.nFldDrawY    ;
-    nFldDivisionY= rItem.nFldDivisionY;
-    nFldSnapX    = rItem.nFldSnapX    ;
-    nFldSnapY    = rItem.nFldSnapY    ;
-
-};
-
 SfxPoolItem*  SvxGridItem::Clone( SfxItemPool* ) const
 {
     return new SvxGridItem( *this );

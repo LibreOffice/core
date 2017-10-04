@@ -79,7 +79,6 @@ public:
     SvxMarginItem( sal_Int16 nLeft, sal_Int16 nTop /*= 0*/,
                    sal_Int16 nRight /*= 0*/, sal_Int16 nBottom /*= 0*/,
                    const sal_uInt16 nId  );
-    SvxMarginItem( const SvxMarginItem& );
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

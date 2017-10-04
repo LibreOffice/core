@@ -25,10 +25,6 @@ SvxGraphicItem::SvxGraphicItem( const Graphic& rGraphic )
 {
 
 }
-SvxGraphicItem::SvxGraphicItem( const SvxGraphicItem& rItem)
-    : SfxPoolItem( rItem.Which() ), aGraphic( rItem.aGraphic )
-{
-}
 
 bool SvxGraphicItem::operator==( const SfxPoolItem& rItem) const
 {
