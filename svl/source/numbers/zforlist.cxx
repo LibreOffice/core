@@ -1065,7 +1065,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
                                        double& fOutNumber)
 {
     short FType;
-    const SvNumberformat* pFormat = GetFormatEntry(F_Index);
+    const SvNumberformat* pFormat = ImpSubstituteEntry( GetFormatEntry(F_Index));
     if (!pFormat)
     {
         ChangeIntl(IniLnge);
@@ -1472,7 +1472,8 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            OUString& sOutString)
 {
     Color* pColor;
-    SvNumberformat* pFormat = GetFormatEntry( nFIndex );
+    sal_uInt32 nRealKey = nFIndex;
+    SvNumberformat* pFormat = ImpSubstituteEntry( GetFormatEntry( nFIndex ), &nRealKey);
     if (!pFormat)
     {
         pFormat = GetFormatEntry(ZF_STANDARD);
@@ -1507,8 +1508,8 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         bPrecChanged = true;
     }
 
-    sal_uInt32 nKey = GetEditFormat( fOutNumber, nFIndex, eType, eLang, pFormat);
-    if ( nKey != nFIndex )
+    sal_uInt32 nKey = GetEditFormat( fOutNumber, nRealKey, eType, eLang, pFormat);
+    if ( nKey != nRealKey )
     {
         pFormat = GetFormatEntry( nKey );
     }
@@ -1534,6 +1535,8 @@ void SvNumberFormatter::GetOutputString(const OUString& sString,
                                         bool bUseStarFormat )
 {
     SvNumberformat* pFormat = GetFormatEntry( nFIndex );
+    // ImpSubstituteEntry() is unnecessary here because so far only numeric
+    // (time and date) are substituted.
     if (!pFormat)
     {
         pFormat = GetFormatEntry(ZF_STANDARD_TEXT);
@@ -1569,7 +1572,7 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
         sOutString.clear();
         return;
     }
-    SvNumberformat* pFormat = GetFormatEntry( nFIndex );
+    SvNumberformat* pFormat = ImpSubstituteEntry( GetFormatEntry( nFIndex ));
     if (!pFormat)
         pFormat = GetFormatEntry(ZF_STANDARD);
     ChangeIntl(pFormat->GetLanguage());
@@ -2214,6 +2217,40 @@ const SvNumberformat* SvNumberFormatter::GetEntry( sal_uInt32 nKey ) const
     if (it != aFTable.end())
         return it->second;
     return nullptr;
+}
+
+const SvNumberformat* SvNumberFormatter::GetSubstitutedEntry( sal_uInt32 nKey, sal_uInt32 & o_rNewKey ) const
+{
+    // A tad ugly, but GetStandardFormat() and GetFormatIndex() in
+    // ImpSubstituteEntry() may have to add the LANGUAGE_SYSTEM formats if not
+    // already present (which in practice most times they are).
+    SvNumberFormatter* pThis = const_cast<SvNumberFormatter*>(this);
+    return pThis->ImpSubstituteEntry( pThis->GetFormatEntry( nKey), &o_rNewKey);
+}
+
+SvNumberformat* SvNumberFormatter::ImpSubstituteEntry( SvNumberformat* pFormat, sal_uInt32 * o_pRealKey )
+{
+    if (!pFormat || !pFormat->IsSubstituted())
+        return pFormat;
+
+    // XXX NOTE: substitution can not be done in GetFormatEntry() as otherwise
+    // to be substituted formats would "vanish", i.e. from the number formatter
+    // dialog or when exporting to Excel.
+
+    sal_uInt32 nKey;
+    if (pFormat->IsSystemTimeFormat())
+        /* TODO: should we have NF_TIME_SYSTEM for consistency? */
+        nKey = GetStandardFormat( css::util::NumberFormat::TIME, LANGUAGE_SYSTEM);
+    else if (pFormat->IsSystemLongDateFormat())
+        /* TODO: either that above, or have a long option for GetStandardFormat() */
+        nKey = GetFormatIndex( NF_DATE_SYSTEM_LONG, LANGUAGE_SYSTEM);
+    else
+        return pFormat;
+
+    if (o_pRealKey)
+        *o_pRealKey = nKey;
+    SvNumberFormatTable::const_iterator it = aFTable.find( nKey);
+    return it == aFTable.end() ? nullptr : it->second;
 }
 
 void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditionalFormats )
