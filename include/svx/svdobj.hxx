@@ -410,6 +410,10 @@ public:
     void SingleObjectPainter(OutputDevice& rOut) const;
     bool LineGeometryUsageIsNecessary() const;
 
+    // RotGrfFlyFrame: If true, this SdrObject supports only limited rotation, that
+    // means no change of the rotation point (only centered) and no shear allowed
+    virtual bool HasLimitedRotation() const;
+
     // Returns a copy of the object. Every inherited class must reimplement this (in class Foo
     // it should be sufficient to do "virtual Foo* Clone() const { return CloneHelper< Foo >(); }".
     // Note that this function uses operator= internally.

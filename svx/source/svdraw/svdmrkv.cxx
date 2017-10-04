@@ -658,14 +658,22 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         const size_t nMarkCount=GetMarkedObjectCount();
         bool bStdDrag=meDragMode==SdrDragMode::Move;
         bool bSingleTextObjMark=false;
+        bool bLimitedRotation(false);
 
         if (nMarkCount==1)
         {
             mpMarkedObj=GetMarkedObjectByIndex(0);
-            bSingleTextObjMark =
-                mpMarkedObj &&
-                dynamic_cast<const SdrTextObj*>( mpMarkedObj) !=  nullptr &&
-                static_cast<SdrTextObj*>(mpMarkedObj)->IsTextFrame();
+
+            if(nullptr != mpMarkedObj)
+            {
+                bSingleTextObjMark =
+                    mpMarkedObj &&
+                    dynamic_cast<const SdrTextObj*>( mpMarkedObj) !=  nullptr &&
+                    static_cast<SdrTextObj*>(mpMarkedObj)->IsTextFrame();
+
+                // RotGrfFlyFrame: we may have limited rotation
+                bLimitedRotation = SdrDragMode::Rotate == meDragMode && mpMarkedObj->HasLimitedRotation();
+            }
         }
 
         bool bFrmHdl=ImpIsFrameHandles();
@@ -831,27 +839,59 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 }
                 else
                 {
-                    bool bWdt0=aRect.Left()==aRect.Right();
-                    bool bHgt0=aRect.Top()==aRect.Bottom();
+                    const bool bWdt0(aRect.Left() == aRect.Right());
+                    const bool bHgt0(aRect.Top() == aRect.Bottom());
+
                     if (bWdt0 && bHgt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(),SdrHdlKind::UpperLeft));
+                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(), SdrHdlKind::UpperLeft));
                     }
                     else if (!bStdDrag && (bWdt0 || bHgt0))
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft()    ,SdrHdlKind::UpperLeft));
-                        maHdlList.AddHdl(new SdrHdl(aRect.BottomRight(),SdrHdlKind::LowerRight));
+                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(), SdrHdlKind::UpperLeft));
+                        maHdlList.AddHdl(new SdrHdl(aRect.BottomRight(), SdrHdlKind::LowerRight));
                     }
                     else
                     {
-                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopLeft()     ,SdrHdlKind::UpperLeft));
-                        if (          !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopCenter()   ,SdrHdlKind::Upper));
-                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.TopRight()    ,SdrHdlKind::UpperRight));
-                        if (!bWdt0          ) maHdlList.AddHdl(new SdrHdl(aRect.LeftCenter()  ,SdrHdlKind::Left ));
-                        if (!bWdt0          ) maHdlList.AddHdl(new SdrHdl(aRect.RightCenter() ,SdrHdlKind::Right));
-                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomLeft()  ,SdrHdlKind::LowerLeft));
-                        if (          !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomCenter(),SdrHdlKind::Lower));
-                        if (!bWdt0 && !bHgt0) maHdlList.AddHdl(new SdrHdl(aRect.BottomRight() ,SdrHdlKind::LowerRight));
+                        if (!bWdt0 && !bHgt0)
+                        {
+                            maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(), SdrHdlKind::UpperLeft));
+                        }
+
+                        if (!bLimitedRotation && !bHgt0)
+                        {
+                            maHdlList.AddHdl(new SdrHdl(aRect.TopCenter(), SdrHdlKind::Upper));
+                        }
+
+                        if (!bWdt0 && !bHgt0)
+                        {
+                            maHdlList.AddHdl(new SdrHdl(aRect.TopRight(), SdrHdlKind::UpperRight));
+                        }
+
+                        if (!bLimitedRotation && !bWdt0)
+                        {
+                            maHdlList.AddHdl(new SdrHdl(aRect.LeftCenter(), SdrHdlKind::Left ));
+                        }
+
+                        if (!bLimitedRotation && !bWdt0)
+                        {
+                            maHdlList.AddHdl(new SdrHdl(aRect.RightCenter(), SdrHdlKind::Right));
+                        }
+
+                        if (!bWdt0 && !bHgt0)
+                        {
+                            maHdlList.AddHdl(new SdrHdl(aRect.BottomLeft(), SdrHdlKind::LowerLeft));
+                        }
+
+                        if (!bLimitedRotation && !bHgt0)
+                        {
+                            maHdlList.AddHdl(new SdrHdl(aRect.BottomCenter(), SdrHdlKind::Lower));
+                        }
+
+                        if (!bWdt0 && !bHgt0)
+                        {
+                            maHdlList.AddHdl(new SdrHdl(aRect.BottomRight(), SdrHdlKind::LowerRight));
+                        }
                     }
                 }
             }
@@ -945,7 +985,10 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         }
 
         // rotation point/axis of reflection
-        AddDragModeHdl(meDragMode);
+        if(!bLimitedRotation)
+        {
+            AddDragModeHdl(meDragMode);
+        }
 
         // sort handles
         maHdlList.Sort();

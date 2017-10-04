@@ -166,6 +166,12 @@ OUString SdrVirtObj::TakeObjNamePlural() const
     return sName.makeStringAndClear();
 }
 
+bool SdrVirtObj::HasLimitedRotation() const
+{
+    // RotGrfFlyFrame: If true, this SdrObject supports only limited rotation
+    return rRefObj.HasLimitedRotation();
+}
+
 basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aPolyPolygon(rRefObj.TakeXorPoly());

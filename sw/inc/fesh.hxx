@@ -505,6 +505,9 @@ public:
     // Start cropping the selected image
     void StartCropImage();
 
+    // RotGrfFlyFrame: check if RotationMode is possibe
+    bool IsRotationOfSwGrfNodePossible() const;
+
     size_t IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
     bool IsObjSelected( const SdrObject& rObj ) const;
     bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;
