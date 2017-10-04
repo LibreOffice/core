@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5ba9c6de",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2846,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-04T08:58:28Z",
+      "side": 1,
+      "message": "would look more natural to use\n\n  name_ \u003d\u003d \"com.sun.star.uno.Exception\"",
+      "revId": "fdf24cd22e4c0b8d8970164c7986d4acc7164f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_bbbaaa21",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2851,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-04T08:58:28Z",
+      "side": 1,
+      "message": "* see the operator\u003c\u003c in include/rtl/ustring.hxx as a blueprint for such functions: put it into namespace com::sun::star::uno, and template\u0027ize it over std::basic_ostream\n* use fully-qualified names (::std::basic_ostream, etc.) as is customary in these generated files, to avoid ambiguities with names of UNOIDL entities",
+      "revId": "fdf24cd22e4c0b8d8970164c7986d4acc7164f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7bb04244",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2853,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-04T08:58:28Z",
+      "side": 1,
+      "message": "* \"does\" -\u003e \"does not\"?\n* better emit some indentation",
+      "revId": "fdf24cd22e4c0b8d8970164c7986d4acc7164f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_9bab2ed6",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2854,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-04T08:58:28Z",
+      "side": 1,
+      "message": "missing space after \"Exception:\" (and I\u0027d leave that out altogether, given the exception name will typically include \"Exception\" anyway)",
+      "revId": "fdf24cd22e4c0b8d8970164c7986d4acc7164f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_fb827251",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-04T08:58:28Z",
+      "side": 1,
+      "message": "is this include still needed?",
+      "revId": "fdf24cd22e4c0b8d8970164c7986d4acc7164f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_dbb5b631",
+        "filename": "include/comphelper/logging.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-04T08:58:28Z",
+      "side": 1,
+      "message": "are any changes to this file still needed?",
+      "revId": "fdf24cd22e4c0b8d8970164c7986d4acc7164f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_1b865e65",
+        "filename": "include/toolkit/helper/macros.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-04T08:58:28Z",
+      "side": 1,
+      "message": "why randomly drop an empty line here?",
+      "revId": "fdf24cd22e4c0b8d8970164c7986d4acc7164f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
