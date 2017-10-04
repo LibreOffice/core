@@ -116,7 +116,7 @@ $(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj $(IOSKITXC) $(IOSAPPXC)
 	        -project $(IOSKITPRJ) \
 	        -target LibreOfficeKit \
 	        -sdk $(IOS_SDK) \
-	        -arch $(IOS_ARCH) \
+	        -arch $(CPU_NAME) \
 	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \
 	        build \
 	        , $(WORKDIR)/ios/build.log \
@@ -134,7 +134,7 @@ $(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
 	        -project $(IOSAPPPRJ) \
 	        -target LibreOfficeLight \
 	        -sdk $(IOS_SDK) \
-	        -arch $(IOS_ARCH) \
+	        -arch $(CPU_NAME) \
 	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \
 	        build \
 	        , $(WORKDIR)/ios/build.log \

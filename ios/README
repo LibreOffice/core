@@ -23,7 +23,8 @@ Because the main work is done on the UI, where it is convenient to
 switch fast between arm64 and simulator, it is advantageous to compile
 the 3 configurations of LO first, and then link against those.
 
-Due to the multiple workdirs a distinct directory setup is needed
+Due to the multiple workdirs a separate work directories are needed as follows:
+(names/locations can be changes, they are "linked" together by running autogen.sh)
    ./core - libreoffice git clone (name can be changed)
    ./ios-arm64 - workdir for production, autogen.input:
                         standard +
@@ -39,7 +40,7 @@ Due to the multiple workdirs a distinct directory setup is needed
                         standard +
                         --enable-debug
                         --enable-ios-simulator
-                        --host=arm64-apple-darwin
+                        #--host=arm64-apple-darwin
    ./ios-app - workdir for UI, NO autogen.input
 
 -- Steps to generate
@@ -48,10 +49,15 @@ Due to the multiple workdirs a distinct directory setup is needed
    Correct as per above, add your local setup (e.g. location of tarballs)
 2) run ../core/autogen.sh in ios-arm64, ios-arm64-debug and ios-simulator
 3) run make in ios-arm64, ios-arm64-debug and ios-simulator
-   this will build LO is 3 configurations and store the LibreOfficeKit
-   including generate ./*/ios/lo.xcconfig which prepares LO to be compiled
-   libraries in ./ios-app/libraries as:
-           ./ios-app/Library/LibreOfficeKit-arm64.a
-           ./ios-app/Library/LibreOfficeKit-arm64-debug.a
-           ./ios-app/Library/LibreOfficeKit-simulator.a
-4) open xcode with LibreOfficeLight and enjoy
+   this will generate ./*/ios/lo[Kit|App].xcconfig which prepares LO to be compiled
+   and build LOkit is 3 configurations and store the LibreOfficeKit
+   libraries in ./core/ios/generated as:
+           LibreOfficeKit-arm64.a
+           LibreOfficeKit-arm64-debug.a
+           LibreOfficeKit-simulator.a
+   *note* run "make build-nocheck" in ios-simulator for the time being
+4) run ../core/autogen.sh in ios-app
+5) open xcode with LibreOfficeLight add ./ios-app/ios/loApp.xconfig to the project.
+6) enjoy
+
+

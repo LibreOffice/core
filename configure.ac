@@ -620,7 +620,11 @@ darwin*) # Mac OS X or iOS
     test_freetype=no
     test_fontconfig=no
     test_dbus=no
-    if test "$host_cpu" = "arm64"; then
+    if test -n "$LODE_HOME" ; then
+        mac_sanitize_path
+        AC_MSG_NOTICE([sanitized the PATH to $PATH])
+    fi
+    if test "$host_cpu" = "arm64" -o "$enable_ios_simulator" = "yes"; then
         _os=iOS
         test_gtk=no
         test_cups=no
@@ -635,10 +639,6 @@ darwin*) # Mac OS X or iOS
         with_ppds=no
     else
         _os=Darwin
-        if test -n "$LODE_HOME" ; then
-            mac_sanitize_path
-            AC_MSG_NOTICE([sanitized the PATH to $PATH])
-        fi
         INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
         INSTROOTCONTENTSUFFIX=/Contents
         SDKDIRNAME=AC_PACKAGE_NAME${PRODUCTVERSION}_SDK
@@ -2872,18 +2872,16 @@ if test $_os = iOS; then
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
         versionmin=-mios-simulator-version-min=10.3
-        IOS_ARCH=x86_64
         BITNESS=-fembed-bitcode
     else
         platform=iPhoneOS
         versionmin=-miphoneos-version-min=10.3
-        IOS_ARCH=arm64
         BITNESS=-fembed-bitcode
     fi
     xcode_developer=`xcode-select -print-path`
 
     current_sdk_ver=10.2
-    for sdkver in 10.3 10.2 10.1 10.0 9.3; do
+    for sdkver in 11.0 10.3 10.2 10.1; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
             ios_sdk=$sdkver
@@ -2911,8 +2909,8 @@ if test $_os = iOS; then
 
     stdlib="-stdlib=libc++"
 
-    CC="`xcrun -find clang` -arch $IOS_ARCH -fvisibility=hidden $BITNESS -isysroot $sysroot $lto $versionmin"
-    CXX="`xcrun -find clang++` -arch $IOS_ARCH -fvisibility=hidden $stdlib $BITNESS -isysroot $sysroot $lto $versionmin"
+    CC="`xcrun -find clang` -arch $host_cpu -fvisibility=hidden $BITNESS -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $host_cpu -fvisibility=hidden $stdlib $BITNESS -isysroot $sysroot $lto $versionmin"
 
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
     AR=`xcrun -find ar`
@@ -2922,7 +2920,6 @@ if test $_os = iOS; then
     RANLIB=`xcrun -find ranlib`
 fi
 
-AC_SUBST(IOS_ARCH)
 AC_SUBST(IOS_SDK)
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
@@ -3079,9 +3076,7 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 if test "$_os" = "iOS"; then
-    if test "$host_cpu" = "arm64" ; then
-        cross_compiling="yes"
-    fi
+    cross_compiling="yes"
 fi
 
 if test "$cross_compiling" = "yes"; then
@@ -3945,9 +3940,7 @@ darwin*)
     arm64)
         OS=IOS
         if test "$enable_ios_simulator" = "yes"; then
-            CPUNAME=X86_64
-            RTL_ARCH=X86_64
-            PLATFORMID=macosx_x86_64
+            AC_MSG_ERROR([iOS simulator is only available in OSX not iOS])
         else
             CPUNAME=ARM64
             RTL_ARCH=ARM_EABI
@@ -3958,6 +3951,9 @@ darwin*)
         AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
         ;;
     x86_64)
+        if test "$enable_ios_simulator" = "yes"; then
+            OS=IOS
+        fi
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=macosx_x86_64
@@ -5571,16 +5567,13 @@ dnl ===================================================================
 if test "$_os" != "WINNT"; then
 
 if test "$_os" == "iOS"; then
-if test "$host_cpu" == "arm64"; then
-  ac_cv_sizeof_long=8
-  ac_cv_sizeof_short=2
-  ac_cv_sizeof_int=4
-  ac_cv_sizeof_long_long=8
-  ac_cv_sizeof_double=8
-  ac_cv_sizeof_voidp=8
-fi
-AC_MSG_CHECKING([iOS setting sizes long, short, int, long long, double, voidp])
-
+    AC_MSG_CHECKING([iOS setting sizes long, short, int, long long, double, voidp])
+    ac_cv_sizeof_long=8
+    ac_cv_sizeof_short=2
+    ac_cv_sizeof_int=4
+    ac_cv_sizeof_long_long=8
+    ac_cv_sizeof_double=8
+    ac_cv_sizeof_voidp=8
 else
     AC_CHECK_SIZEOF(long)
     AC_CHECK_SIZEOF(short)
