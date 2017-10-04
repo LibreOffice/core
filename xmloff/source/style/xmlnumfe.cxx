@@ -1040,14 +1040,14 @@ static bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, bool bSystem
 
 //  export one part (condition)
 
-void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey,
+void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey, sal_uInt32 nRealKey,
                                             sal_uInt16 nPart, bool bDefPart )
 {
     //! for the default part, pass the conditions from the other parts!
 
     //  element name
 
-    NfIndexTableOffset eBuiltIn = pFormatter->GetIndexTableOffset( nKey );
+    NfIndexTableOffset eBuiltIn = pFormatter->GetIndexTableOffset( nRealKey );
 
     short nFmtType = 0;
     bool bThousand = false;
@@ -1768,7 +1768,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
 //  export one format
 
-void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey )
+void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey, sal_uInt32 nRealKey )
 {
     const sal_uInt16 XMLNUM_MAX_PARTS = 4;
     bool bParts[XMLNUM_MAX_PARTS] = { false, false, false, false };
@@ -1812,7 +1812,7 @@ void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uI
         if (bParts[nPart])
         {
             bool bDefault = ( nPart+1 == nUsedParts );          // last = default
-            ExportPart_Impl( rFormat, nKey, nPart, bDefault );
+            ExportPart_Impl( rFormat, nKey, nRealKey, nPart, bDefault );
         }
     }
 }
@@ -1829,9 +1829,12 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
     bool bNext(pUsedList->GetFirstUsed(nKey));
     while(bNext)
     {
-        pFormat = pFormatter->GetEntry(nKey);
+        // ODF has its notation of system formats, so obtain the "real" already
+        // substituted format but use the original key for style name.
+        sal_uInt32 nRealKey = nKey;
+        pFormat = pFormatter->GetSubstitutedEntry( nKey, nRealKey);
         if(pFormat)
-            ExportFormat_Impl( *pFormat, nKey );
+            ExportFormat_Impl( *pFormat, nKey, nRealKey );
         bNext = pUsedList->GetNextUsed(nKey);
     }
     if (!bIsAutoStyle)
@@ -1853,8 +1856,14 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
                 if (!pUsedList->IsUsed(nKey))
                 {
                     DBG_ASSERT((pFormat->GetType() & css::util::NumberFormat::DEFINED), "a not user defined numberformat found");
+                    sal_uInt32 nRealKey = nKey;
+                    if (pFormat->IsSubstituted())
+                    {
+                        pFormat = pFormatter->GetSubstitutedEntry( nKey, nRealKey); // export the "real" format
+                        assert(pFormat);
+                    }
                     //  user-defined and used formats are exported
-                    ExportFormat_Impl( *pFormat, nKey );
+                    ExportFormat_Impl( *pFormat, nKey, nRealKey );
                     // if it is a user-defined Format it will be added else nothing will happen
                     pUsedList->SetUsed(nKey);
                 }

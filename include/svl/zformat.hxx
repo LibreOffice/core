@@ -141,9 +141,17 @@ class SVL_DLLPUBLIC SvNumberformat
 {
     struct LocaleType
     {
+        enum class Substitute : sal_uInt8
+        {
+            NONE,
+            TIME,
+            LONGDATE
+        };
+
+        LanguageType meLanguage;
+        Substitute meSubstitute;
         sal_uInt8 mnNumeralShape;
         sal_uInt8 mnCalendarType;
-        LanguageType meLanguage;
 
         OUString generateCode() const;
 
@@ -183,6 +191,28 @@ public:
     bool IsAdditionalBuiltin() const            { return bAdditionalBuiltin; }
 
     LanguageType GetLanguage() const            { return maLocale.meLanguage;}
+
+    /** If the format is a placeholder and needs to be substituted. */
+    bool IsSubstituted() const
+        {
+            return maLocale.meSubstitute != LocaleType::Substitute::NONE;
+        }
+
+    /** If the format is a placeholder for the sytem time format and needs to
+        be substituted during formatting time.
+     */
+    bool IsSystemTimeFormat() const
+        {
+            return maLocale.meSubstitute == LocaleType::Substitute::TIME && maLocale.meLanguage == LANGUAGE_SYSTEM;
+        }
+
+    /** If the format is a placeholder for the sytem long date format and needs
+        to be substituted during formatting time.
+     */
+    bool IsSystemLongDateFormat() const
+        {
+            return maLocale.meSubstitute == LocaleType::Substitute::LONGDATE && maLocale.meLanguage == LANGUAGE_SYSTEM;
+        }
 
     const OUString& GetFormatstring() const   { return sFormatstring; }
 

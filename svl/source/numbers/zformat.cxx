@@ -1208,6 +1208,24 @@ SvNumberformat::SvNumberformat(OUString& rString,
         }
     }
 
+    if (!nCheckPos && IsSubstituted())
+    {
+        // For to be substituted formats the scanned type must match the
+        // substitute type.
+        if (IsSystemTimeFormat())
+        {
+            if ((eType & ~css::util::NumberFormat::DEFINED) != css::util::NumberFormat::TIME)
+                nCheckPos = std::max( sBuff.indexOf(']') + 1, 1);
+        }
+        else if (IsSystemLongDateFormat())
+        {
+            if ((eType & ~css::util::NumberFormat::DEFINED) != css::util::NumberFormat::DATE)
+                nCheckPos = std::max( sBuff.indexOf(']') + 1, 1);
+        }
+        else
+            assert(!"unhandled substitute");
+    }
+
     if ( bCondition && !nCheckPos )
     {
         if ( nIndex == 1 && NumFor[0].GetCount() == 0 &&
@@ -1437,6 +1455,21 @@ OUString SvNumberformat::LocaleType::generateCode() const
 #endif
 
     sal_uInt16 n16 = static_cast<sal_uInt16>(meLanguage);
+    if (meLanguage == LANGUAGE_SYSTEM)
+    {
+        switch (meSubstitute)
+        {
+            case Substitute::NONE:
+                ;   // nothing
+                break;
+            case Substitute::TIME:
+                n16 = static_cast<sal_uInt16>(LANGUAGE_NF_SYSTEM_TIME);
+                break;
+            case Substitute::LONGDATE:
+                n16 = static_cast<sal_uInt16>(LANGUAGE_NF_SYSTEM_DATE);
+                break;
+        }
+    }
     for (sal_uInt8 i = 0; i < 4; ++i)
     {
         sal_uInt8 n = static_cast<sal_uInt8>((n16 & 0xF000) >> 12);
@@ -1452,18 +1485,30 @@ OUString SvNumberformat::LocaleType::generateCode() const
 }
 
 SvNumberformat::LocaleType::LocaleType()
-    : mnNumeralShape(0)
+    : meLanguage(LANGUAGE_DONTKNOW)
+    , meSubstitute(Substitute::NONE)
+    , mnNumeralShape(0)
     , mnCalendarType(0)
-    , meLanguage(LANGUAGE_DONTKNOW)
 {
 }
 
 SvNumberformat::LocaleType::LocaleType(sal_uInt32 nRawNum)
-    : mnNumeralShape(0)
+    : meLanguage(LANGUAGE_DONTKNOW)
+    , meSubstitute(Substitute::NONE)
+    , mnNumeralShape(0)
     , mnCalendarType(0)
-    , meLanguage(LANGUAGE_DONTKNOW)
 {
     meLanguage = static_cast<LanguageType>(nRawNum & 0x0000FFFF);
+    if (meLanguage == LANGUAGE_NF_SYSTEM_TIME)
+    {
+        meSubstitute = Substitute::TIME;
+        meLanguage = LANGUAGE_SYSTEM;
+    }
+    else if (meLanguage == LANGUAGE_NF_SYSTEM_DATE)
+    {
+        meSubstitute = Substitute::LONGDATE;
+        meLanguage = LANGUAGE_SYSTEM;
+    }
     nRawNum = (nRawNum >> 16);
     mnCalendarType = static_cast<sal_uInt8>(nRawNum & 0xFF);
     nRawNum = (nRawNum >> 8);
@@ -4913,6 +4958,14 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                                                 LanguageType nOriginalLang /* =LANGUAGE_DONTKNOW */ ) const
 {
     OUStringBuffer aStr;
+    if (maLocale.meSubstitute != LocaleType::Substitute::NONE)
+    {
+        // XXX: theoretically this could clash with the first subformat's
+        // lcl_insertLCID() below, in practice as long as it is used for system
+        // time and date modifiers it shouldn't (i.e. there is no calendar or
+        // numeral specified as well).
+        aStr.append("[$-").append( maLocale.generateCode()).append(']');
+    }
     bool bDefault[4];
     // 1 subformat matches all if no condition specified,
     bDefault[0] = ( NumFor[1].GetCount() == 0 && eOp1 == NUMBERFORMAT_OP_NO );

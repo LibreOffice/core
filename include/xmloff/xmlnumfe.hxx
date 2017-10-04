@@ -92,10 +92,10 @@ private:
     SAL_DLLPRIVATE void WriteRepeatedElement_Impl( sal_Unicode ch );
     SAL_DLLPRIVATE bool WriteTextWithCurrency_Impl( const OUString& rString,
                             const css::lang::Locale& rLocale );
-    SAL_DLLPRIVATE void ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey,
+    SAL_DLLPRIVATE void ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey, sal_uInt32 nRealKey,
                                 sal_uInt16 nPart, bool bDefPart );
 
-    SAL_DLLPRIVATE void ExportFormat_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey );
+    SAL_DLLPRIVATE void ExportFormat_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey, sal_uInt32 nRealKey );
 
 public:
     SvXMLNumFmtExport( SvXMLExport& rExport,
