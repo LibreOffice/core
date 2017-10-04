@@ -357,7 +357,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     for( auto pSalFrame : GetSalData()->mpInstance->getFrames() )
     {
-        AquaSalFrame *pFrame = static_cast<AquaSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
+        AquaSalFrame *pFrame = static_cast<AquaSalFrame*>( pSalFrame );
         pFrame->screenParametersChanged();
     }
 }

@@ -97,7 +97,7 @@ public:
         {
             for( auto pSalFrame : pInst->getFrames() )
             {
-                AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
+                AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( pSalFrame );
                 if( pFrame->mbShown )
                     pFrame->SendPaintEvent();
             }
@@ -620,7 +620,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         // collect update rectangles
         for( auto pSalFrame : GetSalData()->mpInstance->getFrames() )
         {
-            AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( const_cast<SalFrame*>( pSalFrame ) );
+            AquaSalFrame* pFrame = static_cast<AquaSalFrame*>( pSalFrame );
             if( pFrame->mbShown && ! pFrame->maInvalidRect.IsEmpty() )
             {
                 pFrame->Flush( pFrame->maInvalidRect );
