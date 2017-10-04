@@ -22,7 +22,7 @@
 
 #include "PropertyMap.hxx"
 
-#include <TableManager.hxx>
+#include "TableManager.hxx"
 #include <dmapper/resourcemodel.hxx>
 
 #include <memory>

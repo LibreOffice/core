@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtfreferenceproperties.hxx>
-#include <rtfdocumentimpl.hxx>
+#include "rtfreferenceproperties.hxx"
+#include "rtfdocumentimpl.hxx"
 
 using namespace com::sun::star;
 

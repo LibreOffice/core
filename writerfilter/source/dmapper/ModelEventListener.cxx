@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <ModelEventListener.hxx>
-#include <PropertyIds.hxx>
+#include "ModelEventListener.hxx"
+#include "PropertyIds.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>

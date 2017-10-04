@@ -21,10 +21,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <DomainMapper_Impl.hxx>
-#include <ConversionHelper.hxx>
-#include <SdtHelper.hxx>
-#include <DomainMapperTableHandler.hxx>
+#include "DomainMapper_Impl.hxx"
+#include "ConversionHelper.hxx"
+#include "SdtHelper.hxx"
+#include "DomainMapperTableHandler.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -71,7 +71,7 @@
 
 #include <oox/mathml/import.hxx>
 #include <rtl/uri.hxx>
-#include <GraphicHelpers.hxx>
+#include "GraphicHelpers.hxx"
 #include <dmapper/GraphicZOrderHelper.hxx>
 
 #include <oox/token/tokens.hxx>

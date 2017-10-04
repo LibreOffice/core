@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SettingsTable.hxx>
+#include "SettingsTable.hxx"
 
 #include <vector>
 
@@ -29,8 +29,8 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <comphelper/sequence.hxx>
 #include <ooxml/resourceids.hxx>
-#include <ConversionHelper.hxx>
-#include <DomainMapper.hxx>
+#include "ConversionHelper.hxx"
+#include "DomainMapper.hxx"
 #include "util.hxx"
 
 using namespace com::sun::star;

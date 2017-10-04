@@ -32,7 +32,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <oox/token/tokens.hxx>
-#include <DomainMapper.hxx>
+#include "DomainMapper.hxx"
 
 using namespace com::sun::star;
 using namespace oox;

@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <string>
-#include <util.hxx>
+#include "util.hxx"
 
 namespace writerfilter
 {

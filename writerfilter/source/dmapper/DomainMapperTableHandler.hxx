@@ -19,8 +19,8 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEHANDLER_HXX
 
-#include <TableManager.hxx>
-#include <PropertyMap.hxx>
+#include "TableManager.hxx"
+#include "PropertyMap.hxx"
 #include <vector>
 
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>

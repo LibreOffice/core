@@ -16,10 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <CellColorHandler.hxx>
-#include <PropertyMap.hxx>
-#include <ConversionHelper.hxx>
-#include <TDefTableHandler.hxx>
+#include "CellColorHandler.hxx"
+#include "PropertyMap.hxx"
+#include "ConversionHelper.hxx"
+#include "TDefTableHandler.hxx"
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>

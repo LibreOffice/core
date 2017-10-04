@@ -24,10 +24,10 @@
 #include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <rtftok/RTFDocument.hxx>
-#include <rtfreferencetable.hxx>
-#include <rtfsprm.hxx>
-#include <rtflistener.hxx>
+#include "rtftok/RTFDocument.hxx"
+#include "rtfreferencetable.hxx"
+#include "rtfsprm.hxx"
+#include "rtflistener.hxx"
 
 class SvStream;
 

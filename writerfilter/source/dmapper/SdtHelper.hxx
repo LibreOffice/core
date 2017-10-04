@@ -17,7 +17,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
 
-#include <DomainMapper_Impl.hxx>
+#include "DomainMapper_Impl.hxx"
 
 namespace com
 {

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtfdocumentimpl.hxx>
+#include "rtfdocumentimpl.hxx"
 
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -19,10 +19,10 @@
 #include <dmapper/DomainMapperFactory.hxx>
 #include <ooxml/resourceids.hxx>
 
-#include <rtflookahead.hxx>
-#include <rtfreferenceproperties.hxx>
-#include <rtfsdrimport.hxx>
-#include <rtfskipdestination.hxx>
+#include "rtflookahead.hxx"
+#include "rtfreferenceproperties.hxx"
+#include "rtfsdrimport.hxx"
+#include "rtfskipdestination.hxx"
 
 using namespace com::sun::star;
 

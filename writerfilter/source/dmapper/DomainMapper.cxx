@@ -19,12 +19,12 @@
 #include "PageBordersHandler.hxx"
 
 #include "util.hxx"
-#include <SdtHelper.hxx>
-#include <TDefTableHandler.hxx>
-#include <DomainMapper_Impl.hxx>
-#include <ConversionHelper.hxx>
-#include <ModelEventListener.hxx>
-#include <MeasureHandler.hxx>
+#include "SdtHelper.hxx"
+#include "TDefTableHandler.hxx"
+#include "DomainMapper_Impl.hxx"
+#include "ConversionHelper.hxx"
+#include "ModelEventListener.hxx"
+#include "MeasureHandler.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/paper.hxx>
 #include <oox/token/tokens.hxx>
@@ -70,10 +70,10 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <unotools/mediadescriptor.hxx>
 
-#include <TextEffectsHandler.hxx>
-#include <CellColorHandler.hxx>
-#include <SectionColumnHandler.hxx>
-#include <GraphicHelpers.hxx>
+#include "TextEffectsHandler.hxx"
+#include "CellColorHandler.hxx"
+#include "SectionColumnHandler.hxx"
+#include "GraphicHelpers.hxx"
 #include <dmapper/GraphicZOrderHelper.hxx>
 
 using namespace ::com::sun::star;

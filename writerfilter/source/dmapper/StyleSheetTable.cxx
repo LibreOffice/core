@@ -16,13 +16,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <StyleSheetTable.hxx>
+#include "StyleSheetTable.hxx"
 #include "util.hxx"
-#include <NumberingManager.hxx>
-#include <ConversionHelper.hxx>
-#include <TblStylePrHandler.hxx>
-#include <BorderHandler.hxx>
-#include <LatentStyleHandler.hxx>
+#include "NumberingManager.hxx"
+#include "ConversionHelper.hxx"
+#include "TblStylePrHandler.hxx"
+#include "BorderHandler.hxx"
+#include "LatentStyleHandler.hxx"
 #include <ooxml/resourceids.hxx>
 #include <vector>
 #include <iterator>

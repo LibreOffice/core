@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtfskipdestination.hxx>
+#include "rtfskipdestination.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 

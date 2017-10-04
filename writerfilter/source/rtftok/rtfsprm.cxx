@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtfsprm.hxx>
+#include "rtfsprm.hxx"
 #include <ooxml/resourceids.hxx>
 #include <ooxml/QNameToString.hxx>
 #include <rtl/strbuf.hxx>

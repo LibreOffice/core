@@ -22,7 +22,7 @@
 
 #include "TablePropertiesHandler.hxx"
 
-#include <DomainMapper.hxx>
+#include "DomainMapper.hxx"
 #include "LoggedResources.hxx"
 #include <memory>
 #include <vector>

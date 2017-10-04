@@ -7,14 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtftokenizer.hxx>
+#include "rtftokenizer.hxx"
 #include <unotools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <rtl/strbuf.hxx>
-#include <rtfskipdestination.hxx>
+#include "rtfskipdestination.hxx"
 #include <rtl/character.hxx>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 

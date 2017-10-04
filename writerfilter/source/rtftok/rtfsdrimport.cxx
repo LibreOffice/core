@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtfsdrimport.hxx>
+#include "rtfsdrimport.hxx"
 #include <cmath>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -35,7 +35,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <rtfreferenceproperties.hxx>
+#include "rtfreferenceproperties.hxx"
 #include <oox/vml/vmlformatting.hxx>
 #include <oox/helper/modelobjecthelper.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>

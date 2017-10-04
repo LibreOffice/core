@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ThemeTable.hxx>
+#include "ThemeTable.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <ooxml/resourceids.hxx>
 

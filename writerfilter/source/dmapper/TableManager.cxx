@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <TableManager.hxx>
-#include <DomainMapperTableHandler.hxx>
-#include <DomainMapper_Impl.hxx>
-#include <util.hxx>
+#include "TableManager.hxx"
+#include "DomainMapperTableHandler.hxx"
+#include "DomainMapper_Impl.hxx"
+#include "util.hxx"
 
 namespace writerfilter
 {
