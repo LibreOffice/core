@@ -58,6 +58,10 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_uiwriter,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_uiwriter))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_uiwriter, \
+    modules/swriter \
+))
+
 $(call gb_CppunitTest_get_target,sw_uiwriter): \
     $(call gb_Library_get_target,textconv_dict)
 
