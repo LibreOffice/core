@@ -60,7 +60,7 @@ protected:
     SwBlockNames m_aNames;                // List of all Blocks
     Date m_aDateModified;                 // For aligning the Actions
     tools::Time m_aTimeModified;
-    SwDoc* m_pDoc;                        // Document to be switched
+    rtl::Reference<SwDoc> m_xDoc;                        // Document to be switched
     sal_uInt16 m_nCurrentIndex;                    // Current Index
     bool m_bReadOnly : 1;
     bool m_bInPutMuchBlocks : 1;          // Put several block entries

@@ -2060,7 +2060,7 @@ OutputDevice& SwViewShell::GetRefDev() const
 
 const SwNodes& SwViewShell::GetNodes() const
 {
-    return mpDoc->GetNodes();
+    return mxDoc->GetNodes();
 }
 
 void SwViewShell::DrawSelChanged()
@@ -2133,7 +2133,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     if( mpOpt->IsShowHiddenField() != rOpt.IsShowHiddenField() )
     {
-        static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
+        static_cast<SwHiddenTextFieldType*>(mxDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
                                             SetHiddenFlag( !rOpt.IsShowHiddenField() );
         bReformat = true;
     }
@@ -2225,13 +2225,13 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     *mpOpt = rOpt;   // First the options are taken.
     mpOpt->SetUIOptions(rOpt);
 
-    mpDoc->GetDocumentSettingManager().set(DocumentSettingId::HTML_MODE, 0 != ::GetHtmlMode(mpDoc->GetDocShell()));
+    mxDoc->GetDocumentSettingManager().set(DocumentSettingId::HTML_MODE, 0 != ::GetHtmlMode(mxDoc->GetDocShell()));
 
     if( bBrowseModeChanged || bHideWhitespaceModeChanged )
     {
         // #i44963# Good occasion to check if page sizes in
         // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
-        mpDoc->CheckDefaultPageFormat();
+        mxDoc->CheckDefaultPageFormat();
         InvalidateLayout( true );
     }
 
@@ -2360,7 +2360,7 @@ uno::Reference< css::accessibility::XAccessible > SwViewShell::CreateAccessible(
     OSL_ENSURE( mpLayout, "no layout, no access" );
     OSL_ENSURE( GetWin(), "no window, no access" );
 
-    if( mpDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && GetWin() )
+    if( mxDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && GetWin() )
         xAcc = Imp()->GetAccessibleMap().GetDocumentView();
 
     return xAcc;
@@ -2556,36 +2556,36 @@ SwPostItMgr* SwViewShell::GetPostItMgr()
 /*
  * Document Interface Access
  */
-const IDocumentSettingAccess& SwViewShell::getIDocumentSettingAccess() const { return mpDoc->GetDocumentSettingManager(); }
-IDocumentSettingAccess& SwViewShell::getIDocumentSettingAccess() { return mpDoc->GetDocumentSettingManager(); }
-const IDocumentDeviceAccess& SwViewShell::getIDocumentDeviceAccess() const { return mpDoc->getIDocumentDeviceAccess(); }
-IDocumentDeviceAccess& SwViewShell::getIDocumentDeviceAccess() { return mpDoc->getIDocumentDeviceAccess(); }
-const IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() const { return mpDoc->getIDocumentMarkAccess(); }
-IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() { return mpDoc->getIDocumentMarkAccess(); }
-const IDocumentDrawModelAccess& SwViewShell::getIDocumentDrawModelAccess() const { return mpDoc->getIDocumentDrawModelAccess(); }
-IDocumentDrawModelAccess& SwViewShell::getIDocumentDrawModelAccess() { return mpDoc->getIDocumentDrawModelAccess(); }
-const IDocumentRedlineAccess& SwViewShell::getIDocumentRedlineAccess() const { return mpDoc->getIDocumentRedlineAccess(); }
-IDocumentRedlineAccess& SwViewShell::getIDocumentRedlineAccess() { return mpDoc->getIDocumentRedlineAccess(); }
-const IDocumentLayoutAccess& SwViewShell::getIDocumentLayoutAccess() const { return mpDoc->getIDocumentLayoutAccess(); }
-IDocumentLayoutAccess& SwViewShell::getIDocumentLayoutAccess() { return mpDoc->getIDocumentLayoutAccess(); }
-IDocumentContentOperations& SwViewShell::getIDocumentContentOperations() { return mpDoc->getIDocumentContentOperations(); }
-IDocumentStylePoolAccess& SwViewShell::getIDocumentStylePoolAccess() { return mpDoc->getIDocumentStylePoolAccess(); }
-const IDocumentStatistics& SwViewShell::getIDocumentStatistics() const { return mpDoc->getIDocumentStatistics(); }
+const IDocumentSettingAccess& SwViewShell::getIDocumentSettingAccess() const { return mxDoc->GetDocumentSettingManager(); }
+IDocumentSettingAccess& SwViewShell::getIDocumentSettingAccess() { return mxDoc->GetDocumentSettingManager(); }
+const IDocumentDeviceAccess& SwViewShell::getIDocumentDeviceAccess() const { return mxDoc->getIDocumentDeviceAccess(); }
+IDocumentDeviceAccess& SwViewShell::getIDocumentDeviceAccess() { return mxDoc->getIDocumentDeviceAccess(); }
+const IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() const { return mxDoc->getIDocumentMarkAccess(); }
+IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() { return mxDoc->getIDocumentMarkAccess(); }
+const IDocumentDrawModelAccess& SwViewShell::getIDocumentDrawModelAccess() const { return mxDoc->getIDocumentDrawModelAccess(); }
+IDocumentDrawModelAccess& SwViewShell::getIDocumentDrawModelAccess() { return mxDoc->getIDocumentDrawModelAccess(); }
+const IDocumentRedlineAccess& SwViewShell::getIDocumentRedlineAccess() const { return mxDoc->getIDocumentRedlineAccess(); }
+IDocumentRedlineAccess& SwViewShell::getIDocumentRedlineAccess() { return mxDoc->getIDocumentRedlineAccess(); }
+const IDocumentLayoutAccess& SwViewShell::getIDocumentLayoutAccess() const { return mxDoc->getIDocumentLayoutAccess(); }
+IDocumentLayoutAccess& SwViewShell::getIDocumentLayoutAccess() { return mxDoc->getIDocumentLayoutAccess(); }
+IDocumentContentOperations& SwViewShell::getIDocumentContentOperations() { return mxDoc->getIDocumentContentOperations(); }
+IDocumentStylePoolAccess& SwViewShell::getIDocumentStylePoolAccess() { return mxDoc->getIDocumentStylePoolAccess(); }
+const IDocumentStatistics& SwViewShell::getIDocumentStatistics() const { return mxDoc->getIDocumentStatistics(); }
 
 IDocumentUndoRedo      & SwViewShell::GetIDocumentUndoRedo()
-{ return mpDoc->GetIDocumentUndoRedo(); }
+{ return mxDoc->GetIDocumentUndoRedo(); }
 IDocumentUndoRedo const& SwViewShell::GetIDocumentUndoRedo() const
-{ return mpDoc->GetIDocumentUndoRedo(); }
+{ return mxDoc->GetIDocumentUndoRedo(); }
 
 // --> OD 2007-11-14 #i83479#
 const IDocumentListItems* SwViewShell::getIDocumentListItemsAccess() const
 {
-    return &mpDoc->getIDocumentListItems();
+    return &mxDoc->getIDocumentListItems();
 }
 
 const IDocumentOutlineNodes* SwViewShell::getIDocumentOutlineNodesAccess() const
 {
-    return &mpDoc->getIDocumentOutlineNodes();
+    return &mxDoc->getIDocumentOutlineNodes();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

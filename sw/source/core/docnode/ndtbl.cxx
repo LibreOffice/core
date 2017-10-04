@@ -4352,20 +4352,18 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             GetIDocumentUndoRedo().DoUndo(false);
         }
 
-        SwDoc* pCpyDoc = const_cast<SwDoc*>(pSrcTableNd->GetDoc());
-        bool bDelCpyDoc = pCpyDoc == this;
+        rtl::Reference<SwDoc> xCpyDoc( const_cast<SwDoc*>(pSrcTableNd->GetDoc()) );
+        bool bDelCpyDoc = xCpyDoc == this;
 
         if( bDelCpyDoc )
         {
             // Copy the Table into a temporary Doc
-            pCpyDoc = new SwDoc;
-            pCpyDoc->acquire();
+            xCpyDoc = new SwDoc;
 
-            SwPosition aPos( SwNodeIndex( pCpyDoc->GetNodes().GetEndOfContent() ));
-            if( !pSrcTableNd->GetTable().MakeCopy( pCpyDoc, aPos, rBoxes, true ))
+            SwPosition aPos( SwNodeIndex( xCpyDoc->GetNodes().GetEndOfContent() ));
+            if( !pSrcTableNd->GetTable().MakeCopy( xCpyDoc.get(), aPos, rBoxes, true ))
             {
-                if( pCpyDoc->release() == 0 )
-                    delete pCpyDoc;
+                xCpyDoc.clear();
 
                 if( pUndo )
                 {
@@ -4413,11 +4411,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                                                     aNdIdx, pUndo );
         }
 
-        if( bDelCpyDoc )
-        {
-            if( pCpyDoc->release() == 0 )
-                delete pCpyDoc;
-        }
+        xCpyDoc.clear();
 
         if( pUndo )
         {

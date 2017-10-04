@@ -667,7 +667,7 @@ bool SwCursorShell::MoveFieldType(
         if( SwFieldIds::Input == pFieldType->Which() && bAddSetExpressionFieldsToInputFields )
         {
             // there are hidden input fields in the set exp. fields
-            const SwFieldTypes& rFieldTypes = *mpDoc->getIDocumentFieldsAccess().GetFieldTypes();
+            const SwFieldTypes& rFieldTypes = *mxDoc->getIDocumentFieldsAccess().GetFieldTypes();
             const size_t nSize = rFieldTypes.size();
             for( size_t i=0; i < nSize; ++i )
             {
@@ -681,7 +681,7 @@ bool SwCursorShell::MoveFieldType(
     }
     else
     {
-        const SwFieldTypes& rFieldTypes = *mpDoc->getIDocumentFieldsAccess().GetFieldTypes();
+        const SwFieldTypes& rFieldTypes = *mxDoc->getIDocumentFieldsAccess().GetFieldTypes();
         const size_t nSize = rFieldTypes.size();
         for( size_t i=0; i < nSize; ++i )
         {
@@ -716,10 +716,10 @@ bool SwCursorShell::MoveFieldType(
         {
             // create dummy for the search
             SwFormatField* pFormatField = new SwFormatField( SwDateTimeField(
-                static_cast<SwDateTimeFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DateTime ) ) ) );
+                static_cast<SwDateTimeFieldType*>(mxDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DateTime ) ) ) );
 
             pTextField = new SwTextField( *pFormatField, rPos.nContent.GetIndex(),
-                        mpDoc->IsClipBoard() );
+                        mxDoc->IsClipBoard() );
             pTextField->ChgTextNode( pTNd );
         }
         else
@@ -932,7 +932,7 @@ bool SwCursorShell::GotoOutline( const OUString& rName )
     SwCursorSaveState aSaveState( *pCursor );
 
     bool bRet = false;
-    if( mpDoc->GotoOutline( *pCursor->GetPoint(), rName ) && !pCursor->IsSelOvr() )
+    if( mxDoc->GotoOutline( *pCursor->GetPoint(), rName ) && !pCursor->IsSelOvr() )
     {
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
         bRet = true;
@@ -1819,7 +1819,7 @@ bool SwCursorShell::GotoINetAttr( const SwTextINetFormat& rAttr )
 
 const SwFormatINetFormat* SwCursorShell::FindINetAttr( const OUString& rName ) const
 {
-    return mpDoc->FindINetAttr( rName );
+    return mxDoc->FindINetAttr( rName );
 }
 
 bool SwCursorShell::GetShadowCursorPos( const Point& rPt, SwFillMode eFillMode,

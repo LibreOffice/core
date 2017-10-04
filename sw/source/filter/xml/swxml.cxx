@@ -739,7 +739,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
         }
     }
 
-    (void)rDoc.acquire(); // prevent deletion
+    rtl::Reference<SwDoc> aHoldRef(&rDoc); // prevent deletion
     ErrCode nRet = ERRCODE_NONE;
 
     // save redline mode into import info property set
@@ -894,7 +894,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     xObjectResolver = nullptr;
-    (void)rDoc.release();
+    aHoldRef.clear();
 
     if ( !bOASIS )
     {

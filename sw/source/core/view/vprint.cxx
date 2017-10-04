@@ -625,10 +625,10 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
 bool SwViewShell::IsAnyFieldInDoc() const
 {
     const SfxPoolItem* pItem;
-    sal_uInt32 nMaxItems = mpDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
+    sal_uInt32 nMaxItems = mxDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( nullptr != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
+        if( nullptr != (pItem = mxDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
         {
             const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();
@@ -639,10 +639,10 @@ bool SwViewShell::IsAnyFieldInDoc() const
         }
     }
 
-    nMaxItems = mpDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
+    nMaxItems = mxDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INPUTFIELD );
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( nullptr != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n )))
+        if( nullptr != (pItem = mxDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n )))
         {
             const SwFormatField* pFormatField = static_cast<const SwFormatField*>(pItem);
             const SwTextField* pTextField = pFormatField->GetTextField();

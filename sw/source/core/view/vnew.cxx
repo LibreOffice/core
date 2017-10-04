@@ -73,8 +73,8 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         }
     }
 
-    SwDocShell* pDShell = mpDoc->GetDocShell();
-    mpDoc->GetDocumentSettingManager().set(DocumentSettingId::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
+    SwDocShell* pDShell = mxDoc->GetDocShell();
+    mxDoc->GetDocumentSettingManager().set(DocumentSettingId::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
     // set readonly flag at ViewOptions before creating layout. Otherwise,
     // one would have to reformat again.
 
@@ -96,7 +96,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
     // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
     if ( !bBrowseMode )
     {
-        mpDoc->CheckDefaultPageFormat();
+        mxDoc->CheckDefaultPageFormat();
     }
 
     SAL_INFO( "sw.core", "View::Init - after InitPrt" );
@@ -121,9 +121,9 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         if( !mpLayout )
         {
             // switched to two step construction because creating the layout in SwRootFrame needs a valid pLayout set
-            mpLayout = SwRootFramePtr(new SwRootFrame(mpDoc->GetDfltFrameFormat(), this),
+            mpLayout = SwRootFramePtr(new SwRootFrame(mxDoc->GetDfltFrameFormat(), this),
                                     &SwFrame::DestroyFrame);
-            mpLayout->Init( mpDoc->GetDfltFrameFormat() );
+            mpLayout->Init( mxDoc->GetDfltFrameFormat() );
         }
     }
     SizeChgNotify();
@@ -158,7 +158,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     mbHeaderFooterEdit( false ),
     mpTargetPaintWindow(nullptr),
     mpBufferedOut(nullptr),
-    mpDoc( &rDocument ),
+    mxDoc( &rDocument ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
     mbSelectAll(false),
@@ -177,8 +177,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
 
     // i#38810 Do not reset modified state of document,
     // if it's already been modified.
-    const bool bIsDocModified( mpDoc->getIDocumentState().IsModified() );
-    mpDoc->acquire();
+    const bool bIsDocModified( mxDoc->getIDocumentState().IsModified() );
     pOutput = mpOut;
     Init( pNewOpt );    // may change the Outdev (InitPrt())
     mpOut = pOutput;
@@ -193,14 +192,14 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
 
     SET_CURR_SHELL( this );
 
-    static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
+    static_cast<SwHiddenTextFieldType*>(mxDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
         SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
     // In Init a standard FrameFormat is created.
-    if (   !mpDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
+    if (   !mxDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
         && !bIsDocModified )
     {
-        mpDoc->getIDocumentState().ResetModified();
+        mxDoc->getIDocumentState().ResetModified();
     }
 
     // extend format cache.
@@ -231,7 +230,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     mbHeaderFooterEdit( false ),
     mpTargetPaintWindow(nullptr),
     mpBufferedOut(nullptr),
-    mpDoc( rShell.GetDoc() ),
+    mxDoc( rShell.GetDoc() ),
     mnStartAction( 0 ),
     mnLockPaint( 0 ),
     mbSelectAll(false),
@@ -253,8 +252,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
 
     SET_CURR_SHELL( this );
 
-    mpDoc->acquire();
-    bool bModified = mpDoc->getIDocumentState().IsModified();
+    bool bModified = mxDoc->getIDocumentState().IsModified();
 
     pOutput = mpOut;
     Init( rShell.GetViewOptions() ); // might change Outdev (InitPrt())
@@ -263,13 +261,13 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     if ( mbPreview )
         mpImp->InitPagePreviewLayout();
 
-    static_cast<SwHiddenTextFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
+    static_cast<SwHiddenTextFieldType*>(mxDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::HiddenText ))->
             SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
     // In Init a standard FrameFormat is created.
-    if( !bModified && !mpDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
+    if( !bModified && !mxDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
     {
-        mpDoc->getIDocumentState().ResetModified();
+        mxDoc->getIDocumentState().ResetModified();
     }
 
     // extend format cache.
@@ -284,6 +282,8 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
 
 SwViewShell::~SwViewShell()
 {
+    IDocumentLayoutAccess * const pLayoutAccess = mxDoc.get() ? &mxDoc->getIDocumentLayoutAccess() : nullptr;
+
     {
         SET_CURR_SHELL( this );
         mbPaintWorks = false;
@@ -291,9 +291,9 @@ SwViewShell::~SwViewShell()
         // i#9684 Stopping the animated graphics is not
         // necessary during printing or pdf export, because the animation
         // has not been started in this case.
-        if( mpDoc && GetWin() )
+        if( mxDoc.get() && GetWin() )
         {
-            SwNodes& rNds = mpDoc->GetNodes();
+            SwNodes& rNds = mxDoc->GetNodes();
 
             SwStartNode *pStNd;
             SwNodeIndex aIdx( *rNds.GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -322,14 +322,11 @@ SwViewShell::~SwViewShell()
         delete mpImp; // Delete first, so that the LayoutViews are destroyed.
         mpImp = nullptr;   // Set to zero, because ~SwFrame relies on it.
 
-        if ( mpDoc )
+        if ( mxDoc.get() )
         {
-            if( !mpDoc->release() )
-            {
-                delete mpDoc;
-                mpDoc = nullptr;
-            }
-            else
+            auto x = mxDoc->getReferenceCount();
+            mxDoc.clear();
+            if( x > 1 )
                 GetLayout()->ResetNewLayout();
         }
 
@@ -345,18 +342,17 @@ SwViewShell::~SwViewShell()
         OSL_ENSURE( !mnStartAction, "EndAction() pending." );
     }
 
-    if ( mpDoc )
+    if ( pLayoutAccess )
     {
         GetLayout()->DeRegisterShell( this );
-        auto& rLayoutAccess(mpDoc->getIDocumentLayoutAccess());
-        if(rLayoutAccess.GetCurrentViewShell()==this)
+        if(pLayoutAccess->GetCurrentViewShell()==this)
         {
-            rLayoutAccess.SetCurrentViewShell(nullptr);
+            pLayoutAccess->SetCurrentViewShell(nullptr);
             for(SwViewShell& rShell : GetRingContainer())
             {
                 if(&rShell != this)
                 {
-                    rLayoutAccess.SetCurrentViewShell(&rShell);
+                    pLayoutAccess->SetCurrentViewShell(&rShell);
                     break;
                 }
             }

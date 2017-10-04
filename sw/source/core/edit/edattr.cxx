@@ -409,7 +409,7 @@ bool SwEditShell::SetCurFootnote( const SwFormatFootnote& rFillFootnote )
     for(SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
         bChgd |=
-            mpDoc->SetCurFootnote( rCursor, rFillFootnote.GetNumStr(), rFillFootnote.GetNumber(), rFillFootnote.IsEndNote() );
+            mxDoc->SetCurFootnote( rCursor, rFillFootnote.GetNumStr(), rFillFootnote.GetNumber(), rFillFootnote.IsEndNote() );
 
     }
 
@@ -419,7 +419,7 @@ bool SwEditShell::SetCurFootnote( const SwFormatFootnote& rFillFootnote )
 
 bool SwEditShell::HasFootnotes( bool bEndNotes ) const
 {
-    const SwFootnoteIdxs &rIdxs = mpDoc->GetFootnoteIdxs();
+    const SwFootnoteIdxs &rIdxs = mxDoc->GetFootnoteIdxs();
     for ( auto pIdx : rIdxs )
     {
         const SwFormatFootnote &rFootnote = pIdx->GetFootnote();
@@ -434,11 +434,11 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
 {
     rList.Clear();
 
-    const size_t nFootnoteCnt = mpDoc->GetFootnoteIdxs().size();
+    const size_t nFootnoteCnt = mxDoc->GetFootnoteIdxs().size();
     SwTextFootnote* pTextFootnote;
     for( size_t n = 0; n < nFootnoteCnt; ++n )
     {
-        pTextFootnote = mpDoc->GetFootnoteIdxs()[ n ];
+        pTextFootnote = mxDoc->GetFootnoteIdxs()[ n ];
         const SwFormatFootnote& rFootnote = pTextFootnote->GetFootnote();
         if ( rFootnote.IsEndNote() != bEndNotes )
             continue;
@@ -449,11 +449,11 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
             SwNodeIndex aIdx( *pIdx, 1 );
             SwTextNode* pTextNd = aIdx.GetNode().GetTextNode();
             if( !pTextNd )
-                pTextNd = static_cast<SwTextNode*>(mpDoc->GetNodes().GoNext( &aIdx ));
+                pTextNd = static_cast<SwTextNode*>(mxDoc->GetNodes().GoNext( &aIdx ));
 
             if( pTextNd )
             {
-                OUString sText( rFootnote.GetViewNumStr( *mpDoc ));
+                OUString sText( rFootnote.GetViewNumStr( *mxDoc ));
                 if( !sText.isEmpty() )
                     sText += " ";
                 sText += pTextNd->GetExpandText();

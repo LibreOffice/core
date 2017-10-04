@@ -91,7 +91,7 @@ void SwEditShell::FillByEx(SwCharFormat* pCharFormat)
         else
             nStt = nEnd = pPam->GetPoint()->nContent.GetIndex();
 
-        SfxItemSet aSet( mpDoc->GetAttrPool(),
+        SfxItemSet aSet( mxDoc->GetAttrPool(),
                             pCharFormat->GetAttrSet().GetRanges() );
         pTextNode->GetAttr( aSet, nStt, nEnd );
         pCharFormat->SetFormatAttr( aSet );
@@ -140,22 +140,22 @@ SwPageDesc* SwEditShell::GetPageDescFromPool( sal_uInt16 nId )
 
 bool SwEditShell::IsUsed( const SwModify& rModify ) const
 {
-    return mpDoc->IsUsed( rModify );
+    return mxDoc->IsUsed( rModify );
 }
 
 const SwFlyFrameFormat* SwEditShell::FindFlyByName( const OUString& rName ) const
 {
-    return mpDoc->FindFlyByName(rName);
+    return mxDoc->FindFlyByName(rName);
 }
 
 SwCharFormat* SwEditShell::FindCharFormatByName( const OUString& rName ) const
 {
-    return mpDoc->FindCharFormatByName( rName );
+    return mxDoc->FindCharFormatByName( rName );
 }
 
 SwTextFormatColl* SwEditShell::FindTextFormatCollByName( const OUString& rName ) const
 {
-    return mpDoc->FindTextFormatCollByName( rName );
+    return mxDoc->FindTextFormatCollByName( rName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

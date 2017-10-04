@@ -187,12 +187,12 @@ SwFrameFormat *SwEditShell::GetTableFormat() // fastest test on a table
 // TODO: Why is this called 3x for a new document?
 sal_uInt16 SwEditShell::GetTOXTypeCount(TOXTypes eTyp) const
 {
-    return mpDoc->GetTOXTypeCount(eTyp);
+    return mxDoc->GetTOXTypeCount(eTyp);
 }
 
 void SwEditShell::InsertTOXType(const SwTOXType& rTyp)
 {
-    mpDoc->InsertTOXType(rTyp);
+    mxDoc->InsertTOXType(rTyp);
 }
 
 void SwEditShell::DoUndo( bool bOn )

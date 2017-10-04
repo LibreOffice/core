@@ -64,7 +64,7 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
         {
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
             xMedium = new SfxMedium( xRoot, GetBaseURL(), OUString( "writer8" ) );
-            SwReader aReader( *xMedium, aFolderName, m_pDoc );
+            SwReader aReader( *xMedium, aFolderName, m_xDoc.get() );
             ReadXML->SetBlockMode( true );
             aReader.Read( *ReadXML );
             ReadXML->SetBlockMode( false );
@@ -73,7 +73,7 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             OUString sObjReplacements( "ObjectReplacements" );
             if ( xRoot->hasByName( sObjReplacements ) )
             {
-                uno::Reference< document::XStorageBasedDocument > xDocStor( m_pDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
+                uno::Reference< document::XStorageBasedDocument > xDocStor( m_xDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
                 uno::Reference< embed::XStorage > xStr( xDocStor->getDocumentStorage() );
                 if ( xStr.is() )
                 {
@@ -513,7 +513,7 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
 
     // Get model
     uno::Reference< lang::XComponent > xModelComp(
-        m_pDoc->GetDocShell()->GetModel(), UNO_QUERY );
+        m_xDoc->GetDocShell()->GetModel(), UNO_QUERY );
     OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;

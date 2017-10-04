@@ -167,7 +167,7 @@ bool SwEditShell::SelectionHasNumber() const
                 }
                 for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
                 {
-                    pTextNd = mpDoc->GetNodes()[nPos]->GetTextNode();
+                    pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
                     if (pTextNd && pTextNd->Len()!=0)
                     {
                         bResult = pTextNd->HasNumber();
@@ -213,7 +213,7 @@ bool SwEditShell::SelectionHasBullet() const
                 }
                 for (sal_uInt32 nPos = nStt; nPos<=nEnd; nPos++)
                 {
-                    pTextNd = mpDoc->GetNodes()[nPos]->GetTextNode();
+                    pTextNd = mxDoc->GetNodes()[nPos]->GetTextNode();
                     if (pTextNd && pTextNd->Len()!=0)
                     {
                         bResult = pTextNd->HasBullet();

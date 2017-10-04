@@ -145,7 +145,10 @@ sal_Int32 SwDoc::acquire()
 sal_Int32 SwDoc::release()
 {
     assert(mReferenceCount >= 1);
-    return osl_atomic_decrement(&mReferenceCount);
+    auto x = osl_atomic_decrement(&mReferenceCount);
+    if (x == 0)
+        delete this;
+    return x;
 }
 
 sal_Int32 SwDoc::getReferenceCount() const

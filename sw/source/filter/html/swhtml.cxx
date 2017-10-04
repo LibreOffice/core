@@ -211,7 +211,7 @@ ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
     }
 
     // so nobody steals the document!
-    rDoc.acquire();
+    rtl::Reference<SwDoc> aHoldRef(&rDoc);
     ErrCode nRet = ERRCODE_NONE;
     tools::SvRef<SwHTMLParser> xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
                                             rName, rBaseURL, !bInsertMode, pMedium,
