@@ -6794,13 +6794,13 @@ ScRecursionHelper& ScDocument::GetRecursionHelper()
     }
 }
 
-void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSpecific& rNonThreadedData)
+void ScDocumentThreadSpecific::SetupFromNonThreadedData(const ScDocumentThreadSpecific& /*rNonThreadedData*/)
 {
     // What about the recursion helper?
     // Copy the lookup cache?
 }
 
-void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& rNonThreadedData)
+void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpecific& /*rNonThreadedData*/)
 {
     // What about recursion helper and lookup cache?
 }
