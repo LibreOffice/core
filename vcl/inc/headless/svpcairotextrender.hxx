@@ -16,7 +16,6 @@ class SvpSalGraphics;
 
 class SvpCairoTextRender : public CairoTextRender
 {
-protected:
     SvpSalGraphics& mrParent;
 
 public:

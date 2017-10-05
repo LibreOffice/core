@@ -47,8 +47,6 @@ namespace x11 {
 
         X11Clipboard( SelectionManager& rManager, Atom aSelection );
 
-    protected:
-
         friend class SelectionManager;
 
         void fireChangedContentsEvent();

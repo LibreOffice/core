@@ -88,8 +88,6 @@ static ::osl::Mutex& getListMutex()
 
 class ImpFilterOutputStream : public ::cppu::WeakImplHelper< css::io::XOutputStream >
 {
-protected:
-
     SvStream&               mrStm;
 
     virtual void SAL_CALL   writeBytes( const css::uno::Sequence< sal_Int8 >& rData ) override

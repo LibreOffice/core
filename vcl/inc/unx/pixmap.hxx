@@ -35,7 +35,7 @@ public:
     int GetWidth() const { return mnWidth; };
     int GetHeight() const { return mnHeight; };
 
-protected:
+private:
     int             mnWidth;
     int             mnHeight;
 };

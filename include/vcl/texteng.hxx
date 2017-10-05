@@ -93,7 +93,6 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     friend class        TextUndoInsertChars;
     friend class        TextUndoRemoveChars;
 
-private:
     TextDoc*            mpDoc;
     TEParaPortions*     mpTEParaPortions;
     VclPtr<OutputDevice> mpRefDev;
@@ -136,8 +135,6 @@ private:
     bool                mbDowning           : 1;
     bool                mbRightToLeft       : 1;
     bool                mbHasMultiLineParas : 1;
-
-protected:
 
     void                CursorMoved( sal_uInt32 nNode );
     void                TextModified();

@@ -89,7 +89,6 @@ public:
     ImplLayoutRuns      maRuns;
     ImplLayoutRuns      maFallbackRuns;
 
-public:
                 ImplLayoutArgs( const OUString& rStr,
                                 int nMinCharPos, int nEndCharPos, SalLayoutFlags nFlags,
                                 const LanguageTag& rLanguageTag,
@@ -111,7 +110,7 @@ public:
                     { return !maFallbackRuns.IsEmpty(); }
     bool        PrepareFallback();
 
-protected:
+private:
     void        AddRun( int nMinCharPos, int nEndCharPos, bool bRTL );
 };
 

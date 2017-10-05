@@ -84,13 +84,11 @@ class VCL_DLLPUBLIC TextView : public vcl::unohelper::DragAndDropClient
     friend class        TextUndoManager;
     friend class        TextSelFunctionSet;
 
-private:
     std::unique_ptr<ImpTextView>  mpImpl;
 
                         TextView( const TextView& ) = delete;
     TextView&           operator=( const TextView& ) = delete;
 
-protected:
     bool                ImpIndentBlock( bool bRight );
     void                ShowSelection();
     void                HideSelection();

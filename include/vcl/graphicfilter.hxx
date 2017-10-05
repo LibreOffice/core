@@ -304,11 +304,10 @@ public:
 
     ErrCode         compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream);
 
-protected:
+private:
     OUString        aFilterPath;
     FilterConfigCache*  pConfig;
 
-private:
     void            ImplInit();
     ErrCode         ImplSetError( ErrCode nError, const SvStream* pStm = nullptr );
     ErrCode         ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );

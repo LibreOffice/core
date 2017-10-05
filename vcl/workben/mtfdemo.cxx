@@ -104,7 +104,7 @@ public:
         return 0;
     }
 
-protected:
+private:
     uno::Reference<lang::XMultiServiceFactory> xMSF;
     void Init() override
     {

@@ -65,11 +65,9 @@ public:
 
 class TextNode
 {
-private:
     OUString            maText;
     TextCharAttribList  maCharAttribs;
 
-protected:
     void                ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNewChars );
     void                CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDelChars );
 
@@ -95,11 +93,9 @@ public:
 
 class TextDoc
 {
-private:
     std::vector<TextNode*>  maTextNodes;
     sal_uInt16              mnLeftMargin;
 
-protected:
     void                DestroyTextNodes();
 
 public:
