@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_910f8f2d",
+        "filename": "writerfilter/source/dmapper/SettingsTable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-05T16:09:25Z",
+      "side": 1,
+      "message": "nice description - can you please format for doxygen?\n\nLike so:\n\n/** \u003ctitle line\u003e\n\n\u003ctext text text\u003e\n*/",
+      "revId": "bf06123c65f174d203e1cb4a55e87288b8ea3bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
