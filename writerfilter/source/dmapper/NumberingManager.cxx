@@ -754,16 +754,19 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         }
         break;
         case NS_ooxml::LN_CT_Ind_left:
-            pCurrentLvl->Insert(
-                PROP_INDENT_AT, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+            if ( pCurrentLvl.get( ) )
+                pCurrentLvl->Insert(
+                    PROP_INDENT_AT, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
-            pCurrentLvl->Insert(
-                PROP_FIRST_LINE_INDENT, uno::makeAny( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
+            if ( pCurrentLvl.get( ) )
+                pCurrentLvl->Insert(
+                    PROP_FIRST_LINE_INDENT, uno::makeAny( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Ind_firstLine:
-            pCurrentLvl->Insert(
-                PROP_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+            if ( pCurrentLvl.get( ) )
+                pCurrentLvl->Insert(
+                    PROP_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Lvl_ilvl: //overrides previous level - unsupported
         case NS_ooxml::LN_CT_Lvl_tplc: //template code - unsupported
