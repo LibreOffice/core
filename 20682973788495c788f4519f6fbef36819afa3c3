@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_36833106",
+        "filename": "canvas/source/directx/dx_canvashelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:06:07Z",
+      "side": 1,
+      "message": "in a block of includes that is already sorted lexicographically, I\u0027d insert a new one at the proper place",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_56afdd93",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:06:07Z",
+      "side": 1,
+      "message": "* Every source file should by convention start with #include \u003csal/config.h\u003e.\n* I see nothing here that requires #include \u003csal/types.h\u003e.",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f6a1a9aa",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:06:07Z",
+      "side": 1,
+      "message": "* This isn\u0027t part of the stable URI API, so no need for the LIBO_INTERNAL_ONLY or the following @cond INTERNAL.\n* This is a C++-only .hxx include file, so no need for the __cplusplus.",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_96914555",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:06:07Z",
+      "side": 1,
+      "message": "what\u0027s non-conformant about that?",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b6a001a1",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:06:07Z",
+      "side": 1,
+      "message": "OUString stores UTF-16 code units, in whatever endian the respective platform uses; it doesn\u0027t make sense to talk about the UTF-16LE character encoding scheme here",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d69bcd70",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:06:07Z",
+      "side": 1,
+      "message": "c++ -\u003e C++",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_168c7534",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:06:07Z",
+      "side": 1,
+      "message": "C-style casts would be eradicated via loplugin:cstylecast anyway, so not much need to mention them here :)",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7696994d",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:06:07Z",
+      "side": 1,
+      "message": "I\u0027d pull a single instance of that static_assert out of the four functions.",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
