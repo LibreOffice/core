@@ -51,12 +51,10 @@
 
 class VCL_DLLPUBLIC MnemonicGenerator
 {
-private:
     // 0 == Mnemonic; >0 == count of characters
     sal_uInt8               maMnemonics[MAX_MNEMONICS];
     css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
 
-protected:
     SAL_DLLPRIVATE static sal_uInt16 ImplGetMnemonicIndex( sal_Unicode c );
     SAL_DLLPRIVATE static sal_Unicode ImplFindMnemonic( const OUString& rKey );
 

@@ -30,9 +30,8 @@ public:
     explicit    ConverterCache();
                 ~ConverterCache();
     sal_uInt16  convertOne( int nSelect, sal_Unicode );
-protected:
-    void        ensureConverter( int nSelect );
 private:
+    void        ensureConverter( int nSelect );
     rtl_UnicodeToTextConverter maConverterCache[ MAX_CVT_SELECT+1 ];
     rtl_UnicodeToTextContext maContexts[ MAX_CVT_SELECT+1 ];
 };

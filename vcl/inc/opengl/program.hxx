@@ -112,7 +112,7 @@ public:
                          GLenum eType, GLboolean bNormalized, GLsizei aStride,
                          const GLvoid* pPointer);
 
-protected:
+private:
     GLuint GetUniformLocation( const OString& rName );
 };
 

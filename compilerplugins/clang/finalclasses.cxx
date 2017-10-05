@@ -57,7 +57,11 @@ public:
 
     bool shouldVisitTemplateInstantiations () const { return true; }
 
+    bool shouldVisitImplicitCode() const { return true; }
+
     bool VisitCXXRecordDecl( const CXXRecordDecl* decl);
+private:
+    void checkBase(QualType qt);
 };
 
 bool startsWith(const std::string& rStr, const char* pSubStr) {
@@ -81,23 +85,18 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     if (ignoreLocation(decl))
         return true;
     decl = decl->getCanonicalDecl();
-    if (!decl->isThisDeclarationADefinition())
+    if (!decl->hasDefinition())
         return true;
 
     for (auto it = decl->bases_begin(); it != decl->bases_end(); ++it)
     {
         const CXXBaseSpecifier spec = *it;
-        // need to look through typedefs, hence the getUnqualifiedDesugaredType
-        QualType baseType = spec.getType().getDesugaredType(compiler.getASTContext());
-        std::string x;
-        // so that we get just the template name, excluding the template parameters
-        if (baseType->isRecordType())
-            x = baseType->getAsCXXRecordDecl()->getQualifiedNameAsString();
-        else if (auto templateType = baseType->getAs<TemplateSpecializationType>())
-            x = templateType->getTemplateName().getAsTemplateDecl()->getQualifiedNameAsString();
-        else
-            x = baseType.getAsString();
-        inheritedFromSet.insert( x );
+        checkBase(spec.getType());
+    }
+    for (auto it = decl->vbases_begin(); it != decl->vbases_end(); ++it)
+    {
+        const CXXBaseSpecifier spec = *it;
+        checkBase(spec.getType());
     }
 
     bool bFoundProtected = false;
@@ -133,6 +132,21 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
         + std::to_string(compiler.getSourceManager().getSpellingLineNumber(spellingLocation));
     definitionMap.insert( std::pair<std::string,std::string>(s, sourceLocation) );
     return true;
+}
+
+void FinalClasses::checkBase(QualType baseType)
+{
+    // need to look through typedefs, hence the getUnqualifiedDesugaredType
+    baseType = baseType.getDesugaredType(compiler.getASTContext());
+    std::string x;
+    // so that we get just the template name, excluding the template parameters
+    if (baseType->isRecordType())
+        x = baseType->getAsCXXRecordDecl()->getQualifiedNameAsString();
+    else if (auto templateType = baseType->getAs<TemplateSpecializationType>())
+        x = templateType->getTemplateName().getAsTemplateDecl()->getQualifiedNameAsString();
+    else
+        x = baseType.getAsString();
+    inheritedFromSet.insert( x );
 }
 
 loplugin::Plugin::Registration< FinalClasses > X("finalclasses", false);

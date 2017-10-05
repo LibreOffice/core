@@ -41,7 +41,6 @@ class ImplFontMetricData;
 
 class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
 {
- protected:
     psp::JobData*           m_pJobData;
     psp::PrinterGfx*        m_pPrinterGfx;
 

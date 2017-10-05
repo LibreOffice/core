@@ -60,9 +60,6 @@ namespace {
 
 class MyWorkWindow : public WorkWindow
 {
-private:
-
-protected:
     double mnStartTime;
     int mnPaintCount;
 

@@ -47,7 +47,6 @@ namespace vcl
 
 class VCL_DLLPUBLIC I18nHelper
 {
-private:
     ::osl::Mutex                    maMutex;
     LanguageTag                     maLanguageTag;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
@@ -58,8 +57,6 @@ private:
     bool                            mbTransliterateIgnoreCase;
 
     SAL_DLLPRIVATE void             ImplDestroyWrappers();
-
-protected:
 
     SAL_DLLPRIVATE utl::TransliterationWrapper&    ImplGetTransliterationWrapper() const;
     SAL_DLLPRIVATE LocaleDataWrapper&              ImplGetLocaleDataWrapper() const;

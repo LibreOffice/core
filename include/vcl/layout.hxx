@@ -488,13 +488,12 @@ public:
     //set to true to disable the built-in scrolling callbacks to allow the user
     //to override it
     void setUserManagedScrolling(bool bUserManagedScrolling) { m_bUserManagedScrolling = bUserManagedScrolling;}
-protected:
+private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
     DECL_LINK(ScrollBarHdl, ScrollBar*, void);
     void InitScrollBars(const Size &rRequest);
     virtual bool EventNotify(NotifyEvent& rNEvt) override;
-private:
     bool m_bUserManagedScrolling;
     VclPtr<ScrollBar> m_pVScroll;
     VclPtr<ScrollBar> m_pHScroll;

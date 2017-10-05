@@ -30,7 +30,6 @@ struct ImplMoreButtonData;
 
 class VCL_DLLPUBLIC MoreButton : public PushButton
 {
-private:
     ImplMoreButtonData* mpMBData;
     bool                mbState;
 
@@ -38,7 +37,6 @@ private:
                         MoreButton& operator=( const MoreButton & ) = delete;
     SAL_DLLPRIVATE void ShowState();
 
-protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 

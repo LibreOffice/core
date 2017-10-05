@@ -266,7 +266,7 @@ public:
     static const int NMAXSTACK = 48;    // see CFF.appendixB
     static const int NMAXHINTS = 2*96;  // see CFF.appendixB
     static const int NMAXTRANS = 32;    // see CFF.appendixB
-public:
+
     explicit CffSubsetterContext( const U8* pBasePtr, int nBaseLen);
 
     bool    initialCffRead();
@@ -274,9 +274,8 @@ public:
                 const sal_GlyphId* pGlyphIds, const U8* pEncoding,
                 GlyphWidth* pGlyphWidths, int nGlyphCount, FontSubsetInfo& );
 
-protected:
-    int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
 private:
+    int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
     void    convertOneTypeOp();
     void    convertOneTypeEsc();
     void    callType2Subr( bool bGlobal, int nSubrNumber);
@@ -293,11 +292,9 @@ private:
     bool    mbIgnoreHints;
     sal_Int32 mnCntrMask;
 
-private:
     int     seekIndexData( int nIndexBase, int nDataIndex);
     void    seekIndexEnd( int nIndexBase);
 
-private:
     CffLocal    maCffLocal[256];
     CffLocal*   mpCffLocal;
 
