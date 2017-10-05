@@ -44,6 +44,7 @@ public:
     bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
     long                    mnWidth;
     long                    mnHeight;
+    bool                    mbUsesOpenGL;
 
     WinSalVirtualDevice();
     virtual ~WinSalVirtualDevice();

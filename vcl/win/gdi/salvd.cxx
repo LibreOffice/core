@@ -31,6 +31,7 @@
 HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppData)
 {
     HBITMAP hBitmap;
+    SAL_INFO("vcl.gdi", "ImplCreateVirDevBitmap: " << nDX << "x" << nDY);
 
      if ( nBitCount == 1 )
      {
@@ -72,6 +73,11 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        const SystemGraphicsData* pData )
 {
     WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
+    bool bOpenGL = false;
+    if (dynamic_cast<WinOpenGLSalGraphicsImpl *>(pGraphics->GetImpl()))
+        bOpenGL = true;
+
+    SAL_INFO("vcl.gdi", "CreateVirtualDevice: " << nDX << "x" << nDY);
 
     sal_uInt16 nBitCount;
     switch (eFormat)
@@ -84,9 +90,53 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
             break;
     }
 
-    HDC     hDC = NULL;
+    HDC  hDC = NULL;
+    bool bOk = FALSE;
+
+    if (bOpenGL)
+    {
+        if (pData)
+        {
+            hDC = (pData->hDC) ? pData->hDC : GetDC(pData->hWnd);
+            bOk = (hDC != NULL);
+            if (bOk)
+            {
+                nDX = GetDeviceCaps( hDC, HORZRES );
+                nDY = GetDeviceCaps( hDC, VERTRES );
+            }
+            else
+            {
+                nDX = 0;
+                nDY = 0;
+            }
+        }
+        else
+        {
+            hDC = CreateCompatibleDC( pGraphics->getHDC() );
+            if (!hDC)
+                ImplWriteLastError( GetLastError(), "CreateCompatibleDC in CreateVirtualDevice" );
+        }
+
+        WinSalVirtualDevice* pVDev = new WinSalVirtualDevice;
+        WinSalGraphics* pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE, pGraphics->isScreen(), 0, pVDev);
+        pVirGraphics->SetLayout(SalLayoutFlags::NONE);
+        pVirGraphics->setHDC(hDC);
+        pVirGraphics->InitGraphics();
+        pVDev->mnWidth = nDX;
+        pVDev->mnHeight = nDY;
+        pVDev->setHDC(hDC);
+        pVDev->mhBmp = NULL;
+        pVDev->mhDefBmp = NULL;
+        pVDev->mpGraphics   = pVirGraphics;
+        pVDev->mnBitCount   = nBitCount;
+        pVDev->mbGraphics   = FALSE;
+        pVDev->mbUsesOpenGL = true;
+        pVDev->mbForeignDC  = (pData != NULL && pData->hDC != NULL );
+
+        return pVDev;
+    }
+
     HBITMAP hBmp = NULL;
-    bool    bOk = FALSE;
 
     if( pData )
     {
@@ -178,16 +228,20 @@ WinSalVirtualDevice::WinSalVirtualDevice()
     mbForeignDC = FALSE;        // uses a foreign DC instead of a bitmap
     mnWidth = 0;
     mnHeight = 0;
+    mbUsesOpenGL = false;
 }
 
 WinSalVirtualDevice::~WinSalVirtualDevice()
 {
     // remove VirDev from list of virtual devices
     SalData* pSalData = GetSalData();
-    WinSalVirtualDevice** ppVirDev = &pSalData->mpFirstVD;
-    for(; (*ppVirDev != this) && *ppVirDev; ppVirDev = &(*ppVirDev)->mpNext );
-    if( *ppVirDev )
-        *ppVirDev = mpNext;
+    if (!mbUsesOpenGL)
+    {
+        WinSalVirtualDevice** ppVirDev = &pSalData->mpFirstVD;
+        for(; (*ppVirDev != this) && *ppVirDev; ppVirDev = &(*ppVirDev)->mpNext );
+        if( *ppVirDev )
+            *ppVirDev = mpNext;
+    }
 
     // destroy saved DC
     if( mpGraphics->getDefPal() )
@@ -221,6 +275,20 @@ void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {
+    if (mbUsesOpenGL)
+    {
+        mnWidth = nDX;
+        mnHeight = nDY;
+
+        if (mpGraphics)
+        {
+            WinOpenGLSalGraphicsImpl* pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->GetImpl());
+            if (pImpl)
+                pImpl->Init();
+        }
+        return TRUE;
+    }
+
     if( mbForeignDC || !mhBmp )
         return TRUE;    // ???
     else
@@ -238,8 +306,7 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 
             if (mpGraphics)
             {
-                WinOpenGLSalGraphicsImpl *pImpl;
-                pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->GetImpl());
+                WinOpenGLSalGraphicsImpl* pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->GetImpl());
                 if (pImpl)
                     pImpl->Init();
             }
