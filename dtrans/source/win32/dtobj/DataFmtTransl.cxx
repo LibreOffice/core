@@ -26,6 +26,7 @@
 #include "MimeAttrib.hxx"
 #include "DTransHelper.hxx"
 #include <rtl/string.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include "Fetc.hxx"
 #include <com/sun/star/datatransfer/DataFormatTranslator.hpp>
 
@@ -87,7 +88,7 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
                     aFormat >>= aClipFmtName;
 
                     OSL_ASSERT( aClipFmtName.getLength( ) );
-                    cf = RegisterClipboardFormatW( SAL_W(aClipFmtName.getStr( )) );
+                    cf = RegisterClipboardFormatW( o3tl::toW(aClipFmtName.getStr( )) );
 
                     OSL_ENSURE( CF_INVALID != cf, "RegisterClipboardFormat failed" );
                 }
@@ -163,7 +164,7 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const 
     if ( !aClipFmtName.getLength( ) )
         return CFormatEtc( CF_INVALID );
 
-    CLIPFORMAT cf = sal::static_int_cast<CLIPFORMAT>(RegisterClipboardFormatW( SAL_W(aClipFmtName.getStr( )) ));
+    CLIPFORMAT cf = sal::static_int_cast<CLIPFORMAT>(RegisterClipboardFormatW( o3tl::toW(aClipFmtName.getStr( )) ));
     return getFormatEtcForClipformat( cf );
 }
 
@@ -172,7 +173,7 @@ OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
     OSL_PRECOND( CF_INVALID != aClipformat, "Invalid clipboard format" );
 
     sal_Unicode wBuff[ MAX_CLIPFORMAT_NAME + 1 ]; // Null terminator isn't counted, apparently.
-    sal_Int32   nLen = GetClipboardFormatNameW( aClipformat, SAL_W(wBuff), MAX_CLIPFORMAT_NAME );
+    sal_Int32   nLen = GetClipboardFormatNameW( aClipformat, o3tl::toW(wBuff), MAX_CLIPFORMAT_NAME );
 
     return OUString( wBuff, nLen );
 }

@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include "XTDataObject.hxx"
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -26,8 +27,8 @@
 #include "TxtCnvtHlp.hxx"
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
-#include "com/sun/star/awt/AsyncCallback.hpp"
-#include "com/sun/star/awt/XCallback.hpp"
+#include <com/sun/star/awt/AsyncCallback.hpp>
+#include <com/sun/star/awt/XCallback.hpp>
 #include "FmtFilter.hxx"
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -505,7 +506,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& 
 
     WideCharToMultiByteEx(
         GetACP( ),
-        SAL_W( aUnicodeText.getStr( ) ),
+        o3tl::toW( aUnicodeText.getStr( ) ),
         aUnicodeText.getLength( ),
         stgTransfHelper );
 

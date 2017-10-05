@@ -44,6 +44,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #define AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.FrameGrabber_DirectX"
 #define AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME "com.sun.star.media.FrameGrabber_DirectX"
@@ -78,7 +79,7 @@ IMediaDet* implCreateMediaDet( const OUString& rURL )
         if( osl::FileBase::getSystemPathFromFileURL( rURL, aLocalStr )
             == osl::FileBase::E_None )
         {
-            BSTR bstrFilename = SysAllocString(SAL_W(aLocalStr.getStr()));
+            BSTR bstrFilename = SysAllocString(o3tl::toW(aLocalStr.getStr()));
             if( !SUCCEEDED( pDet->put_Filename( bstrFilename ) ) )
             {
                 // Shouldn't we free this string unconditionally, not only in case of failure?

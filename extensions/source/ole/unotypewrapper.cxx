@@ -20,7 +20,7 @@
 #include "unotypewrapper.hxx"
 #include "rtl/ustring.hxx"
 #include <osl/diagnose.h>
-
+#include <o3tl/char16_t2wchar_t.hxx>
 
 bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
 {
@@ -47,7 +47,7 @@ bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
 
 bool createUnoTypeWrapper(const OUString& sTypeName, VARIANT * pVar)
 {
-    CComBSTR bstr(SAL_W(sTypeName.getStr()));
+    CComBSTR bstr(o3tl::toW(sTypeName.getStr()));
     return createUnoTypeWrapper(bstr, pVar);
 }
 

@@ -26,6 +26,7 @@
 #include <unotools/datetime.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/zcodec.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #if HAVE_FEATURE_NSS && !defined(_WIN32)
 // NSS headers for PDF signing
@@ -1573,7 +1574,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         aTsPara.cExtension = 0;
         aTsPara.rgExtension = nullptr;
 
-        if (!CryptRetrieveTimeStamp(SAL_W(m_aSignTSA.getStr()),
+        if (!CryptRetrieveTimeStamp(o3tl::toW(m_aSignTSA.getStr()),
                      0,
                      10000,
                      szOID_NIST_sha256,
@@ -1946,7 +1947,7 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
         return subjectName;
     }
 
-    subjectName = SAL_U(szName);
+    subjectName = o3tl::toU(szName);
     LocalFree(szName);
 
     return subjectName;

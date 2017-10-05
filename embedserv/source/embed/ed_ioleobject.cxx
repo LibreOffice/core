@@ -19,6 +19,7 @@
 
 #include "embeddoc.hxx"
 #include <osl/diagnose.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 
@@ -44,8 +45,8 @@ STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLES
     // the code should be ignored for links
     if ( !m_aFileName.getLength() )
     {
-        m_pDocHolder->setTitle(SAL_U(szContainerObj));
-        m_pDocHolder->setContainerName(SAL_U(szContainerApp));
+        m_pDocHolder->setTitle(o3tl::toU(szContainerObj));
+        m_pDocHolder->setContainerName(o3tl::toU(szContainerApp));
     }
 
     return S_OK;
@@ -417,7 +418,7 @@ HRESULT EmbedDocument_Impl::SaveObject()
 
         // in case of links the containers does not provide client site sometimes
         hr = Save( static_cast<LPCOLESTR>(nullptr), FALSE ); // triggers saving to the link location
-        SaveCompleted(SAL_W(aPreservFileName.getStr()));
+        SaveCompleted(o3tl::toW(aPreservFileName.getStr()));
     }
 
     notify( false );

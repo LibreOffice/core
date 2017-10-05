@@ -28,6 +28,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 using namespace cppu;
 using namespace osl;
@@ -537,7 +538,7 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
     o2u_attachCurrentThread();
 
     result = CLSIDFromProgID(
-                  SAL_W(ServiceSpecifier.getStr()), //Pointer to the ProgID
+                  o3tl::toW(ServiceSpecifier.getStr()), //Pointer to the ProgID
                   &classId);                        //Pointer to the CLSID
 
 

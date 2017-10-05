@@ -25,6 +25,7 @@
 #include <svl/svdde.hxx>
 #include <osl/thread.h>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 enum DdeItemType
 {
@@ -97,7 +98,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
                             while( -1 != n )
                             {
                                 OUString s( sTopics.getToken( 0, '\t', n ));
-                                if( s == SAL_U(chTopicBuf) )
+                                if( s == o3tl::toU(chTopicBuf) )
                                     ++nTopics;
                             }
                         }
@@ -124,7 +125,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
                     {
                         OUString s( sTopics.getToken( 0, '\t', n ));
                         s = s.replaceAll("\n", "").replaceAll("\r", "");
-                        if( !hText1 || s == SAL_U(chTopicBuf) )
+                        if( !hText1 || s == o3tl::toU(chTopicBuf) )
                         {
                             DdeString aDStr( pInst->hDdeInstSvr, s );
                             pTopic = FindTopic( *pService, aDStr.getHSZ() );
@@ -423,7 +424,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
         // Let's query our subclass
         WCHAR chBuf[250];
         DdeQueryStringW(pInst->hDdeInstSvr,hItem,chBuf,SAL_N_ELEMENTS(chBuf),CP_WINUNICODE );
-        bContinue = rTopic.MakeItem( SAL_U(chBuf) );
+        bContinue = rTopic.MakeItem( o3tl::toU(chBuf) );
         // We need to search again
     }
     while( bContinue );
@@ -914,7 +915,7 @@ OUString DdeService::Formats()
             {
                 WCHAR buf[128];
                 GetClipboardFormatNameW( (UINT)f, buf, SAL_N_ELEMENTS(buf) );
-                s += SAL_U(buf);
+                s += o3tl::toU(buf);
             }
             break;
         }

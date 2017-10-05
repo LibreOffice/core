@@ -18,12 +18,12 @@
  */
 
 #include "ole2uno.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
-
-#include "osl/diagnose.h"
-#include "osl/doublecheckedlocking.h"
-#include "osl/thread.h"
+#include <osl/diagnose.h>
+#include <osl/doublecheckedlocking.h>
+#include <osl/thread.h>
 
 #include <memory>
 #include <com/sun/star/script/CannotConvertException.hpp>
@@ -32,8 +32,8 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 
-#include "com/sun/star/bridge/oleautomation/NamedArgument.hpp"
-#include "com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp"
+#include <com/sun/star/bridge/oleautomation/NamedArgument.hpp>
+#include <com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp>
 
 #include <typelib/typedescription.hxx>
 #include <rtl/uuid.h>
@@ -459,7 +459,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
 
                 if ( SUCCEEDED( pInfo->GetDocumentation( -1, &sName, nullptr, nullptr, nullptr  ) ) )
                 {
-                    OUString sTmp( SAL_U(LPCOLESTR(sName)));
+                    OUString sTmp( o3tl::toU(LPCOLESTR(sName)));
                     if ( sTmp.startsWith("_") )
                        sTmp = sTmp.copy(1);
                     // do we own the memory for pTypeLib, msdn doc is vague
@@ -470,7 +470,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
                     {
                         if ( SUCCEEDED( pTypeLib->GetDocumentation( -1, &sName, nullptr, nullptr, nullptr  ) ) )
                         {
-                            OUString sLibName( SAL_U(LPCOLESTR(sName)));
+                            OUString sLibName( o3tl::toU(LPCOLESTR(sName)));
                             m_sTypeName = sLibName.concat( "." ).concat( sTmp );
 
                         }
@@ -538,13 +538,13 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
         case DISP_E_BADPARAMCOUNT:
         case DISP_E_BADVARTYPE:
         case DISP_E_EXCEPTION:
-            throw RuntimeException(OUString(SAL_U(excepinfo.bstrDescription)));
+            throw RuntimeException(OUString(o3tl::toU(excepinfo.bstrDescription)));
             break;
         case DISP_E_MEMBERNOTFOUND:
-            throw UnknownPropertyException(OUString(SAL_U(excepinfo.bstrDescription)));
+            throw UnknownPropertyException(OUString(o3tl::toU(excepinfo.bstrDescription)));
             break;
         default:
-            throw RuntimeException(OUString(SAL_U(excepinfo.bstrDescription)));
+            throw RuntimeException(OUString(o3tl::toU(excepinfo.bstrDescription)));
             break;
         }
     }
@@ -1184,7 +1184,7 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
             CComBSTR defaultMemberName;
             if ( SUCCEEDED( pType->GetDocumentation(0, &defaultMemberName, nullptr, nullptr, nullptr ) ) )
             {
-                OUString usName(SAL_U(LPCOLESTR(defaultMemberName)));
+                OUString usName(o3tl::toU(LPCOLESTR(defaultMemberName)));
                 FuncDesc aDescGet(pType);
                 FuncDesc aDescPut(pType);
                 VarDesc aVarDesc(pType);
@@ -1280,7 +1280,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
 
             std::unique_ptr<OLECHAR*[]> saNames(new OLECHAR*[nSizeAr]);
             OLECHAR ** pNames = saNames.get();
-            pNames[0] = const_cast<OLECHAR*>(SAL_W(aName.getStr()));
+            pNames[0] = const_cast<OLECHAR*>(o3tl::toW(aName.getStr()));
 
             int cNamedArg = 0;
             for ( size_t nInd = 0; nInd < dispparams.cArgs; nInd++ )
@@ -1292,7 +1292,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
                     //We put the parameter names in reverse order into the array,
                     //so we can use the DISPID array for DISPPARAMS::rgdispidNamedArgs
                     //The first name in the array is the method name
-                    pNames[nSizeAr - 1 - cNamedArg++] = const_cast<OLECHAR*>(SAL_W(arg.Name.getStr()));
+                    pNames[nSizeAr - 1 - cNamedArg++] = const_cast<OLECHAR*>(o3tl::toW(arg.Name.getStr()));
                 }
             }
 
@@ -1419,7 +1419,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
                 break;
             case DISP_E_EXCEPTION:
                     message = "[automation bridge]: ";
-                    message += OUString(SAL_U(excepinfo.bstrDescription),
+                    message += OUString(o3tl::toU(excepinfo.bstrDescription),
                         ::SysStringLen(excepinfo.bstrDescription));
                     throw InvocationTargetException(message, Reference<XInterface>(), Any());
                     break;
@@ -1719,7 +1719,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
 
         std::unique_ptr<OLECHAR*[]> saNames(new OLECHAR*[nSizeAr]);
         OLECHAR ** arNames = saNames.get();
-        arNames[0] = const_cast<OLECHAR*>(SAL_W(sFuncName.getStr()));
+        arNames[0] = const_cast<OLECHAR*>(o3tl::toW(sFuncName.getStr()));
 
         int cNamedArg = 0;
         for (size_t iParams = 0; iParams < dispparams.cArgs; iParams ++)
@@ -1731,7 +1731,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                 //We put the parameter names in reverse order into the array,
                 //so we can use the DISPID array for DISPPARAMS::rgdispidNamedArgs
                 //The first name in the array is the method name
-                arNames[nSizeAr - 1 - cNamedArg++] = const_cast<OLECHAR*>(SAL_W(arg.Name.getStr()));
+                arNames[nSizeAr - 1 - cNamedArg++] = const_cast<OLECHAR*>(o3tl::toW(arg.Name.getStr()));
             }
         }
 
@@ -2045,7 +2045,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
             break;
         case DISP_E_EXCEPTION:
                 message = "[automation bridge]: ";
-                message += OUString(SAL_U(excepinfo.bstrDescription),
+                message += OUString(o3tl::toU(excepinfo.bstrDescription),
                                     ::SysStringLen(excepinfo.bstrDescription));
 
                 throw InvocationTargetException(message, Reference<XInterface>(), Any());
@@ -2154,7 +2154,7 @@ void IUnknownWrapper_Impl::getFuncDescForInvoke(const OUString & sFuncName,
 bool IUnknownWrapper_Impl::getDispid(const OUString& sFuncName, DISPID * id)
 {
     OSL_ASSERT(m_spDispatch);
-    LPOLESTR lpsz = const_cast<LPOLESTR> (SAL_W(sFuncName.getStr()));
+    LPOLESTR lpsz = const_cast<LPOLESTR> (o3tl::toW(sFuncName.getStr()));
     HRESULT hr = m_spDispatch->GetIDsOfNames(IID_NULL, &lpsz, 1, LOCALE_USER_DEFAULT, id);
     return hr == S_OK;
 }
@@ -2181,7 +2181,7 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
                 //get the associated index and add an entry to the map
                 //with the name sFuncName which differs in the casing of the letters to
                 //the actual name as obtained from ITypeInfo
-                OUString sRealName(SAL_U(LPCOLESTR(memberName)));
+                OUString sRealName(o3tl::toU(LPCOLESTR(memberName)));
                 cit itOrg  = m_mapComFunc.find(sRealName);
                 OSL_ASSERT(itOrg != m_mapComFunc.end());
                 // maybe this is a property, if so we need
@@ -2246,7 +2246,7 @@ void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** p
                 //As opposed to getFuncDesc, we do not add the value because we would
                 // need to find the get and set description for the property. This would
                 //mean to iterate over all FUNCDESCs again.
-                p = m_mapComFunc.equal_range(OUString(SAL_U(LPCOLESTR(memberName))));
+                p = m_mapComFunc.equal_range(OUString(o3tl::toU(LPCOLESTR(memberName))));
             }
         }
     }
@@ -2387,7 +2387,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                             unsigned int pcNames=0;
                             if( SUCCEEDED(pType->GetNames( funcDesc->memid, & memberName, 1, &pcNames)))
                             {
-                                OUString usName(SAL_U(LPCOLESTR(memberName)));
+                                OUString usName(o3tl::toU(LPCOLESTR(memberName)));
                                 m_mapComFunc.emplace(usName, i);
                             }
                             else
@@ -2414,7 +2414,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                             {
                                 if (varDesc->varkind == VAR_DISPATCH)
                                 {
-                                    OUString usName(SAL_U(LPCOLESTR(memberName)));
+                                    OUString usName(o3tl::toU(LPCOLESTR(memberName)));
                                     m_mapComFunc.emplace(usName, i);
                                 }
                             }

@@ -11,6 +11,7 @@
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <config_version.h>
 #include <config_folders.h>
@@ -122,7 +123,7 @@ void CrashReporter::updateMinidumpLocation()
     mpExceptionHandler->set_minidump_descriptor(descriptor);
 #elif defined WNT
     OUString aURL = getCrashDirectory();
-    mpExceptionHandler->set_dump_path(SAL_W(aURL.getStr()));
+    mpExceptionHandler->set_dump_path(o3tl::toW(aURL.getStr()));
 #endif
 }
 

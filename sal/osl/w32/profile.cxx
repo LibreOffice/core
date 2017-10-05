@@ -30,6 +30,7 @@
 #include <osl/file.h>
 #include <rtl/alloc.h>
 #include <sal/macros.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <algorithm>
 #include <vector>
 using std::min;
@@ -382,12 +383,12 @@ DWORD GetPrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
         OSL_ASSERT(pDefault);
     }
 
-    LPCWSTR pWSection = (pSection ? SAL_W(rtl_uString_getStr(pSection)) : nullptr),
-            pWEntry   = (pEntry   ? SAL_W(rtl_uString_getStr(pEntry))   : nullptr),
-            pWDefault = (pDefault ? SAL_W(rtl_uString_getStr(pDefault)) : nullptr);
+    LPCWSTR pWSection = (pSection ? o3tl::toW(rtl_uString_getStr(pSection)) : nullptr),
+            pWEntry   = (pEntry   ? o3tl::toW(rtl_uString_getStr(pEntry))   : nullptr),
+            pWDefault = (pDefault ? o3tl::toW(rtl_uString_getStr(pDefault)) : nullptr);
 
     std::vector<wchar_t> aBuf(MaxLen + 1);
-    GetPrivateProfileStringW(pWSection, pWEntry, pWDefault, &aBuf[0], MaxLen, SAL_W(rtl_uString_getStr(pProfile->m_strFileName)));
+    GetPrivateProfileStringW(pWSection, pWEntry, pWDefault, &aBuf[0], MaxLen, o3tl::toW(rtl_uString_getStr(pProfile->m_strFileName)));
 
     if (pDefault)
         rtl_uString_release(pDefault);
@@ -419,11 +420,11 @@ BOOL WritePrivateProfileStringWrapper(const osl_TProfileImpl* pProfile,
         OSL_ASSERT(pString);
     }
 
-    LPCWSTR pWSection = SAL_W(pSection->buffer),
-            pWEntry   = (pEntry   ? SAL_W(rtl_uString_getStr(pEntry))   : nullptr),
-            pWString  = (pString  ? SAL_W(rtl_uString_getStr(pString))  : nullptr);
+    LPCWSTR pWSection = o3tl::toW(pSection->buffer),
+            pWEntry   = (pEntry   ? o3tl::toW(rtl_uString_getStr(pEntry))   : nullptr),
+            pWString  = (pString  ? o3tl::toW(rtl_uString_getStr(pString))  : nullptr);
 
-    BOOL bResult = WritePrivateProfileStringW(pWSection, pWEntry, pWString, SAL_W(rtl_uString_getStr(pProfile->m_strFileName)));
+    BOOL bResult = WritePrivateProfileStringW(pWSection, pWEntry, pWString, o3tl::toW(rtl_uString_getStr(pProfile->m_strFileName)));
 
     if (pString)
         rtl_uString_release(pString);
@@ -897,7 +898,7 @@ bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName, rtl
         else if ((rtl_ustr_ascii_compare_WithLength(pPath, RTL_CONSTASCII_LENGTH(STR_INI_METASYS), STR_INI_METASYS) == 0) &&
             ((nLen == RTL_CONSTASCII_LENGTH(STR_INI_METASYS)) || (pPath[RTL_CONSTASCII_LENGTH(STR_INI_METASYS)] == '/')))
         {
-            if (((nPathLen = GetWindowsDirectoryW(SAL_W(aPath), aPath.getBufSizeInSymbols())) == 0) || (nPathLen >= aPath.getBufSizeInSymbols()))
+            if (((nPathLen = GetWindowsDirectoryW(o3tl::toW(aPath), aPath.getBufSizeInSymbols())) == 0) || (nPathLen >= aPath.getBufSizeInSymbols()))
                 return false;
 
             if (nLen > RTL_CONSTASCII_LENGTH(STR_INI_METASYS))
@@ -1008,7 +1009,7 @@ sal_uInt32 SAL_CALL osl_getProfileSections(oslProfile Profile, sal_Char* pszBuff
     else
     {
         std::vector<wchar_t> aBuf(MaxLen + 1);
-        GetPrivateProfileSectionNamesW(&aBuf[0], MaxLen, SAL_W(rtl_uString_getStr(pProfile->m_strFileName)));
+        GetPrivateProfileSectionNamesW(&aBuf[0], MaxLen, o3tl::toW(rtl_uString_getStr(pProfile->m_strFileName)));
 
         n = WideCharToMultiByte(CP_ACP, 0, &aBuf[0], -1, pszBuffer, MaxLen, nullptr, nullptr);
     }
@@ -1076,7 +1077,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
 
     if (! bWriteable)
     {
-        pFile->m_Handle = CreateFileW( SAL_W(rtl_uString_getStr( strFileName )), GENERIC_READ,
+        pFile->m_Handle = CreateFileW( o3tl::toW(rtl_uString_getStr( strFileName )), GENERIC_READ,
                                           FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                           OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
@@ -1089,7 +1090,7 @@ static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption Profi
         SAL_INFO("sal.osl", "opening read/write " << pszFilename);
 #endif
 
-        if ((pFile->m_Handle = CreateFileW( SAL_W(rtl_uString_getStr( strFileName )), GENERIC_READ | GENERIC_WRITE,
+        if ((pFile->m_Handle = CreateFileW( o3tl::toW(rtl_uString_getStr( strFileName )), GENERIC_READ | GENERIC_WRITE,
                                                FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                                OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr))
             == INVALID_HANDLE_VALUE)
@@ -1819,13 +1820,13 @@ static bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
     ustrExtension=nullptr;
 
     /* unlink bak */
-    DeleteFileW( SAL_W(rtl_uString_getStr( ustrBakFile )) );
+    DeleteFileW( o3tl::toW(rtl_uString_getStr( ustrBakFile )) );
 
     /* rename ini bak */
-    MoveFileExW( SAL_W(rtl_uString_getStr( ustrIniFile )), SAL_W(rtl_uString_getStr( ustrBakFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
+    MoveFileExW( o3tl::toW(rtl_uString_getStr( ustrIniFile )), o3tl::toW(rtl_uString_getStr( ustrBakFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
 
     /* rename tmp ini */
-    MoveFileExW( SAL_W(rtl_uString_getStr( ustrTmpFile )), SAL_W(rtl_uString_getStr( ustrIniFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
+    MoveFileExW( o3tl::toW(rtl_uString_getStr( ustrTmpFile )), o3tl::toW(rtl_uString_getStr( ustrIniFile )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH );
 
     return false;
 }
@@ -1975,7 +1976,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
         while ((strPath[i] != L'"') && (strPath[i] != L'\0'))
             i++;
 
-        WideCharToMultiByte(CP_ACP,0, SAL_W(strPath), i, Product, sizeof(Product), nullptr, nullptr);
+        WideCharToMultiByte(CP_ACP,0, o3tl::toW(strPath), i, Product, sizeof(Product), nullptr, nullptr);
         Product[i] = '\0';
         strPath += i;
 
@@ -2124,7 +2125,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
     /* if we have no product identification use the executable file name */
     if (*Product == 0)
     {
-        WideCharToMultiByte(CP_ACP,0, SAL_W(strExecutable->buffer + nPos + 1), -1, Product, sizeof(Product), nullptr, nullptr);
+        WideCharToMultiByte(CP_ACP,0, o3tl::toW(strExecutable->buffer + nPos + 1), -1, Product, sizeof(Product), nullptr, nullptr);
 
         /* remove extension */
         if ((pChr = strrchr(Product, '.')) != nullptr)
@@ -2147,7 +2148,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
     {
         ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
 
-        WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
+        WideCharToMultiByte(CP_ACP,0, o3tl::toW(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
 
         /* if file not exists, remove any specified subdirectories
            like "bin" or "program" */
@@ -2171,7 +2172,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                         }
                         else
                         {
-                            dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, SAL_W(aPath + nPos + 1), aPath.getBufSizeInSymbols() - (nPos + 1) );
+                            dwPathLen = nPos + MultiByteToWideChar( CP_ACP, 0, SVERSION_USER, -1, o3tl::toW(aPath + nPos + 1), aPath.getBufSizeInSymbols() - (nPos + 1) );
                         }
                     }
                     else
@@ -2196,7 +2197,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
     {
         ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
 
-        WideCharToMultiByte(CP_ACP,0, SAL_W(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
+        WideCharToMultiByte(CP_ACP,0, o3tl::toW(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), nullptr, nullptr);
 
         if ((access(aTmpPath, 0) < 0) && (Product[0] != '\0'))
         {
@@ -2245,7 +2246,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                     if (Buffer[0] != '\0')
                     {
                         dwPathLen = MultiByteToWideChar(
-                            CP_ACP, 0, Buffer, -1, SAL_W(aPath), aPath.getBufSizeInSymbols() );
+                            CP_ACP, 0, Buffer, -1, o3tl::toW(aPath), aPath.getBufSizeInSymbols() );
                         dwPathLen -=1;
 
                         /* build full path */
@@ -2266,7 +2267,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                             int n;
 
                             if ((n = WideCharToMultiByte(
-                                     CP_ACP,0, SAL_W(aPath), -1, aTmpPath2,
+                                     CP_ACP,0, o3tl::toW(aPath), -1, aTmpPath2,
                                      aTmpPath2.getBufSizeInSymbols(), nullptr, nullptr))
                                 > 0)
                             {
@@ -2275,7 +2276,7 @@ static bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *strFile
                                 {
                                     dwPathLen += MultiByteToWideChar(
                                         CP_ACP, 0, SVERSION_USER, -1,
-                                        SAL_W(aPath + dwPathLen),
+                                        o3tl::toW(aPath + dwPathLen),
                                         aPath.getBufSizeInSymbols() - dwPathLen );
                                 }
                             }

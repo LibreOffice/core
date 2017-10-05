@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <vector>
 
 /*
@@ -44,7 +45,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     oslModule ret = nullptr;
     oslFileError    nError;
 
-    SAL_INFO( "sal.osl", "osl_loadModule: " << OUString(strModuleName->buffer, wcslen(SAL_W(strModuleName->buffer))) );
+    SAL_INFO( "sal.osl", "osl_loadModule: " << OUString(strModuleName->buffer, wcslen(o3tl::toW(strModuleName->buffer))) );
     OSL_ASSERT(strModuleName);
 
     nError = osl_getSystemPathFromFileURL(strModuleName, &Module);
@@ -52,10 +53,10 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     if ( osl_File_E_None != nError )
         rtl_uString_assign(&Module, strModuleName);
 
-    h = LoadLibraryW(SAL_W(Module->buffer));
+    h = LoadLibraryW(o3tl::toW(Module->buffer));
 
     if (h == nullptr)
-        h = LoadLibraryExW(SAL_W(Module->buffer), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+        h = LoadLibraryExW(o3tl::toW(Module->buffer), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
 
     // In case of long path names (\\?\c:\...) try to shorten the filename.
     // LoadLibrary cannot handle file names which exceed 260 letters.
@@ -65,7 +66,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
     if (h == nullptr && Module->length > 260)
     {
         std::vector<WCHAR> vec(Module->length + 1);
-        DWORD len = GetShortPathNameW(SAL_W(Module->buffer), &vec[0], Module->length + 1);
+        DWORD len = GetShortPathNameW(o3tl::toW(Module->buffer), &vec[0], Module->length + 1);
         if (len )
         {
             h = LoadLibraryW(&vec[0]);
@@ -113,7 +114,7 @@ oslModule osl_loadModuleRelativeAscii(
 sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
-    LPCWSTR pName = pModuleName ? SAL_W(pModuleName->buffer) : nullptr;
+    LPCWSTR pName = pModuleName ? o3tl::toW(pModuleName->buffer) : nullptr;
     HMODULE h = GetModuleHandleW(pName);
     if( h )
     {
@@ -254,19 +255,19 @@ static bool SAL_CALL osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustr
             ::osl::LongPathBuffer< sal_Unicode > aModuleFileName( MAX_LONG_PATH );
             LPWSTR lpSearchPath = nullptr;
 
-            if ( GetModuleFileNameW( nullptr, SAL_W(aModuleFileName), aModuleFileName.getBufSizeInSymbols() ) )
+            if ( GetModuleFileNameW( nullptr, o3tl::toW(aModuleFileName), aModuleFileName.getBufSizeInSymbols() ) )
             {
-                wchar_t *pLastBkSlash = wcsrchr( SAL_W(aModuleFileName), L'\\' );
+                wchar_t *pLastBkSlash = wcsrchr( o3tl::toW(aModuleFileName), L'\\' );
 
                 if (
                     pLastBkSlash &&
-                    pLastBkSlash > SAL_W(aModuleFileName)
+                    pLastBkSlash > o3tl::toW(aModuleFileName)
                     && *(pLastBkSlash - 1) != L':'
                     && *(pLastBkSlash - 1) != L'\\'
                     )
                 {
                     *pLastBkSlash = 0;
-                    lpSearchPath = SAL_W(aModuleFileName);
+                    lpSearchPath = o3tl::toW(aModuleFileName);
                 }
             }
 
@@ -288,7 +289,7 @@ static bool SAL_CALL osl_addressGetModuleURL_NT4_( void *pv, rtl_uString **pustr
                 {
                     rtl_uString *ustrSysPath = nullptr;
 
-                    rtl_uString_newFromStr( &ustrSysPath, SAL_U(ModuleInfo.LoadedImageName) );
+                    rtl_uString_newFromStr( &ustrSysPath, o3tl::toU(ModuleInfo.LoadedImageName) );
                     OSL_ASSERT(ustrSysPath != nullptr);
                     osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
                     rtl_uString_release( ustrSysPath );
@@ -365,7 +366,7 @@ static bool SAL_CALL osl_addressGetModuleURL_NT_( void *pv, rtl_uString **pustrU
                     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
                     rtl_uString *ustrSysPath = nullptr;
 
-                    GetModuleFileNameW( lpModules[iModule], SAL_W(aBuffer), aBuffer.getBufSizeInSymbols() );
+                    GetModuleFileNameW( lpModules[iModule], o3tl::toW(aBuffer), aBuffer.getBufSizeInSymbols() );
 
                     rtl_uString_newFromStr( &ustrSysPath, aBuffer );
                     osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );

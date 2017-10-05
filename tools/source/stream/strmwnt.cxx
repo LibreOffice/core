@@ -31,6 +31,7 @@
 
 #include <osl/thread.h>
 #include <tools/stream.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 // class FileBase
 #include <osl/file.hxx>
@@ -317,7 +318,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     }
 
     pInstanceData->hFile = CreateFileW(
-        SAL_W(aFilename.getStr()),
+        o3tl::toW(aFilename.getStr()),
         nAccessMode,
         nShareMode,
         nullptr,
@@ -351,7 +352,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
             nOpenAction = OPEN_EXISTING;
             SetLastError( ERROR_SUCCESS );
             pInstanceData->hFile = CreateFileW(
-                SAL_W(aFilename.getStr()),
+                o3tl::toW(aFilename.getStr()),
                 GENERIC_READ,
                 nShareMode,
                 nullptr,

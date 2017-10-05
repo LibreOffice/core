@@ -30,21 +30,22 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 
-#include <platform.h>
+#include "platform.h"
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
-#include <graphconvert.hxx>
-#include <olecomponent.hxx>
-#include <olepersist.hxx>
-#include <olewrapclient.hxx>
-#include <advisesink.hxx>
+#include "graphconvert.hxx"
+#include "olecomponent.hxx"
+#include "olepersist.hxx"
+#include "olewrapclient.hxx"
+#include "advisesink.hxx"
 #include <oleembobj.hxx>
-#include <mtnotification.hxx>
+#include "mtnotification.hxx"
 #include <memory>
 #include <string>
 
@@ -262,7 +263,7 @@ HRESULT OpenIStorageFromURL_Impl( const OUString& aURL, IStorage** ppIStorage )
     if ( !ppIStorage || ::osl::FileBase::getSystemPathFromFileURL( aURL, aFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happened
 
-    return StgOpenStorage( SAL_W(aFilePath.getStr()),
+    return StgOpenStorage( o3tl::toW(aFilePath.getStr()),
                              nullptr,
                              STGM_READWRITE | STGM_TRANSACTED, // | STGM_DELETEONRELEASE,
                              nullptr,
@@ -546,7 +547,7 @@ void OleComponent::CreateNewIStorage_Impl()
     if ( ::osl::FileBase::getSystemPathFromFileURL( aTempURL, aTempFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happened
 
-    HRESULT hr = StgCreateDocfile( SAL_W(aTempFilePath.getStr()), STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED | STGM_DELETEONRELEASE, 0, &m_pNativeImpl->m_pIStorage );
+    HRESULT hr = StgCreateDocfile( o3tl::toW(aTempFilePath.getStr()), STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED | STGM_DELETEONRELEASE, 0, &m_pNativeImpl->m_pIStorage );
     if ( FAILED( hr ) || !m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO: transport error code?
 }
@@ -827,7 +828,7 @@ void OleComponent::CreateObjectFromFile( const OUString& aFileURL )
         throw uno::RuntimeException(); // TODO: something dangerous happened
 
     HRESULT hr = OleCreateFromFile( CLSID_NULL,
-                                    SAL_W(aFilePath.getStr()),
+                                    o3tl::toW(aFilePath.getStr()),
                                     IID_IUnknown,
                                     OLERENDER_DRAW, // OLERENDER_FORMAT
                                     nullptr,
@@ -856,7 +857,7 @@ void OleComponent::CreateLinkFromFile( const OUString& aFileURL )
     if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happened
 
-    HRESULT hr = OleCreateLinkToFile( SAL_W(aFilePath.getStr()),
+    HRESULT hr = OleCreateLinkToFile( o3tl::toW(aFilePath.getStr()),
                                         IID_IUnknown,
                                         OLERENDER_DRAW, // OLERENDER_FORMAT
                                         nullptr,
@@ -1036,7 +1037,7 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
                     for( sal_uInt32 nInd = 0; nInd < nNum; nInd++ )
                     {
                         m_aVerbList[nSeqSize-nNum+nInd].VerbID = szEle[ nInd ].lVerb;
-                        m_aVerbList[nSeqSize-nNum+nInd].VerbName = WinAccToVcl_Impl( SAL_U(szEle[ nInd ].lpszVerbName) );
+                        m_aVerbList[nSeqSize-nNum+nInd].VerbName = WinAccToVcl_Impl( o3tl::toU(szEle[ nInd ].lpszVerbName) );
                         m_aVerbList[nSeqSize-nNum+nInd].VerbFlags = szEle[ nInd ].fuFlags;
                         m_aVerbList[nSeqSize-nNum+nInd].VerbAttributes = szEle[ nInd ].grfAttribs;
                     }
@@ -1076,7 +1077,7 @@ void OleComponent::SetHostName( const OUString&,
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
 
-    m_pNativeImpl->m_pOleObject->SetHostNames( L"app name", SAL_W( aEmbDocName.getStr() ) );
+    m_pNativeImpl->m_pOleObject->SetHostNames( L"app name", o3tl::toW( aEmbDocName.getStr() ) );
 }
 
 

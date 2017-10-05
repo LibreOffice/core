@@ -28,6 +28,7 @@
 #include <osl/process.h>
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <cassert>
 #include <string.h>
@@ -167,7 +168,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     {
         SetLastError(ERROR_SUCCESS);
 
-        pPipe->m_NamedObject = CreateMutexW(nullptr, FALSE, SAL_W(name->buffer));
+        pPipe->m_NamedObject = CreateMutexW(nullptr, FALSE, o3tl::toW(name->buffer));
 
         if (pPipe->m_NamedObject)
         {
@@ -178,7 +179,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
                 /* try to open system pipe */
                 pPipe->m_File = CreateNamedPipeW(
-                    SAL_W(path->buffer),
+                    o3tl::toW(path->buffer),
                     PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
                     PIPE_WAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE,
                     PIPE_UNLIMITED_INSTANCES,
@@ -208,13 +209,13 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
         do
         {
             /* free instance should be available first */
-            bPipeAvailable = WaitNamedPipeW(SAL_W(path->buffer), NMPWAIT_WAIT_FOREVER);
+            bPipeAvailable = WaitNamedPipeW(o3tl::toW(path->buffer), NMPWAIT_WAIT_FOREVER);
 
             /* first try to open system pipe */
             if (bPipeAvailable)
             {
                 pPipe->m_File = CreateFileW(
-                    SAL_W(path->buffer),
+                    o3tl::toW(path->buffer),
                     GENERIC_READ|GENERIC_WRITE,
                     FILE_SHARE_READ | FILE_SHARE_WRITE,
                     nullptr,
@@ -344,7 +345,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 
     // prepare for next accept
     pPipe->m_File =
-        CreateNamedPipeW(SAL_W(path->buffer),
+        CreateNamedPipeW(o3tl::toW(path->buffer),
             PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
             PIPE_WAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE,
             PIPE_UNLIMITED_INSTANCES,

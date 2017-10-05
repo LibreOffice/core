@@ -13,6 +13,7 @@
 #include <prewin.h>
 #include <postwin.h>
 #include <rtl/ustring.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 namespace {
 
@@ -29,7 +30,7 @@ inline OUString WindowsErrorString(DWORD nErrorCode)
                        nullptr) == 0)
         return OUString::number(nErrorCode, 16);
 
-    OUString result(SAL_U(pMsgBuf));
+    OUString result(o3tl::toU(pMsgBuf));
     result.endsWith("\r\n", &result);
 
     LocalFree(pMsgBuf);

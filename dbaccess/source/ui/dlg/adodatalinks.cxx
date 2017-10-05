@@ -31,6 +31,8 @@
 #pragma warning(push, 1)
 #endif
 
+#include <o3tl/char16_t2wchar_t.hxx>
+
 #include <initguid.h>
 #include <adoid.h>
 #include <adoint.h>
@@ -89,7 +91,7 @@ OUString PromptNew(long hWnd)
     piTmpConnection->Release( );
     dlPrompt->Release( );
     CoUninitialize();
-    return SAL_U(_result);
+    return o3tl::toU(_result);
 }
 
 OUString PromptEdit(long hWnd, OUString const & connstr)
@@ -115,7 +117,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
 
 
     hr = piTmpConnection->put_ConnectionString(
-        const_cast<BSTR>(SAL_W(connstr.getStr())));
+        const_cast<BSTR>(o3tl::toW(connstr.getStr())));
     if( FAILED( hr ) )
     {
         piTmpConnection->Release( );
@@ -180,7 +182,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     piTmpConnection->Release( );
     dlPrompt->Release( );
     CoUninitialize();
-    return SAL_U(_result);
+    return o3tl::toU(_result);
 }
 
 }
