@@ -27,6 +27,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -1073,6 +1074,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103090, "tdf103090.odt")
     expectedFieldName += " \\h ";
     CPPUNIT_ASSERT_EQUAL(expectedFieldName, fieldName);
 }
+
+DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
+{
+    uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xShape->getAnchor() != nullptr);
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY_THROW);
+    xCtrl->select(uno::makeAny(xShape->getAnchor()));
+
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextViewCursor> xTextCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XPageCursor> xPageCursor(xTextCursor.get(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(1), xPageCursor->getPage());
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
