@@ -198,7 +198,7 @@ public:
             return maLocale.meSubstitute != LocaleType::Substitute::NONE;
         }
 
-    /** If the format is a placeholder for the sytem time format and needs to
+    /** If the format is a placeholder for the system time format and needs to
         be substituted during formatting time.
      */
     bool IsSystemTimeFormat() const
@@ -206,7 +206,7 @@ public:
             return maLocale.meSubstitute == LocaleType::Substitute::TIME && maLocale.meLanguage == LANGUAGE_SYSTEM;
         }
 
-    /** If the format is a placeholder for the sytem long date format and needs
+    /** If the format is a placeholder for the system long date format and needs
         to be substituted during formatting time.
      */
     bool IsSystemLongDateFormat() const
