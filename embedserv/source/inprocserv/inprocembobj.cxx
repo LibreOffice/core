@@ -150,34 +150,32 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
         HRESULT hr = OleCreateDefaultHandler( m_guid, nullptr, IID_IUnknown, reinterpret_cast<void**>(&m_pDefHandler) );
         if ( SUCCEEDED( hr ) )
         {
+            if ( m_nInitMode == INIT_FROM_STORAGE )
             {
-                    if ( m_nInitMode == INIT_FROM_STORAGE )
-                    {
-                        ComSmart< IPersistStorage > pPersist;
-                        hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, reinterpret_cast<void**>(&pPersist) );
+                ComSmart< IPersistStorage > pPersist;
+                hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, reinterpret_cast<void**>(&pPersist) );
 
-                        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
-                        if ( SUCCEEDED( hr ) && pPersist && m_pStorage )
-                            hr = pPersist->InitNew( m_pStorage );
-                    }
-                    else if ( m_nInitMode == LOAD_FROM_STORAGE )
-                    {
-                        ComSmart< IPersistStorage > pPersist;
-                        hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, reinterpret_cast<void**>(&pPersist) );
+                ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+                if ( SUCCEEDED( hr ) && pPersist && m_pStorage )
+                    hr = pPersist->InitNew( m_pStorage );
+            }
+            else if ( m_nInitMode == LOAD_FROM_STORAGE )
+            {
+                ComSmart< IPersistStorage > pPersist;
+                hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, reinterpret_cast<void**>(&pPersist) );
 
-                        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
-                        if ( SUCCEEDED( hr ) && pPersist && m_pStorage )
-                            hr = pPersist->Load( m_pStorage );
-                    }
-                    else if ( m_nInitMode == LOAD_FROM_FILE )
-                    {
-                        ComSmart< IPersistFile > pPersistFile;
-                        hr = m_pDefHandler->QueryInterface( IID_IPersistFile, reinterpret_cast<void**>(&pPersistFile) );
+                ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+                if ( SUCCEEDED( hr ) && pPersist && m_pStorage )
+                    hr = pPersist->Load( m_pStorage );
+            }
+            else if ( m_nInitMode == LOAD_FROM_FILE )
+            {
+                ComSmart< IPersistFile > pPersistFile;
+                hr = m_pDefHandler->QueryInterface( IID_IPersistFile, reinterpret_cast<void**>(&pPersistFile) );
 
-                        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
-                        if ( SUCCEEDED( hr ) && pPersistFile && m_pFileName )
-                            hr = pPersistFile->Load( m_pFileName, m_nFileOpenMode );
-                    }
+                ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
+                if ( SUCCEEDED( hr ) && pPersistFile && m_pFileName )
+                    hr = pPersistFile->Load( m_pFileName, m_nFileOpenMode );
             }
         }
 
