@@ -1399,7 +1399,13 @@ void GtkSalFrame::Center()
 
 Size GtkSalFrame::calcDefaultSize()
 {
-    return bestmaxFrameSizeForScreenSize(getDisplay()->GetScreenSize(GetDisplayScreen()));
+    Size aScreenSize(getDisplay()->GetScreenSize(GetDisplayScreen()));
+#if GTK_CHECK_VERSION(3,10,0)
+    int scale = gtk_widget_get_scale_factor(m_pWindow);
+    aScreenSize.Width() /= scale;
+    aScreenSize.Height() /= scale;
+#endif
+    return bestmaxFrameSizeForScreenSize(aScreenSize);
 }
 
 void GtkSalFrame::SetDefaultSize()
