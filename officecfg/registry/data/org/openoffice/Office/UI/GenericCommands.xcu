@@ -2779,7 +2779,7 @@
           <value xml:lang="en-US">Styles</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">St~yles</value>
+          <value xml:lang="en-US">Manage St~yles</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Show the Styles Sidebar</value>
