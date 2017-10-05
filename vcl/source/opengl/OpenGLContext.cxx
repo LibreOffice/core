@@ -35,7 +35,7 @@
 
 using namespace com::sun::star;
 
-#define MAX_FRAMEBUFFER_COUNT 30
+#define MAX_FRAMEBUFFER_COUNT 4
 
 static sal_Int64 nBufferSwapCounter = 0;
 
