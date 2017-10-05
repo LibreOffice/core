@@ -29,6 +29,7 @@
 #include <osl/thread.h>
 #include <rtl/process.h>
 #include <rtl/strbuf.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 using namespace osl;
 using namespace rtl;
@@ -366,11 +367,11 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
     lpszSystemInfo = wchBuffer;
     if( GetUserNameW(lpszSystemInfo, &cchBuff) )
-        strUserName = SAL_U(lpszSystemInfo);
+        strUserName = o3tl::toU(lpszSystemInfo);
 
     cchBuff = BUFSIZE;
     if( GetComputerNameW(lpszSystemInfo, &cchBuff) )
-        strComputerName = SAL_U(lpszSystemInfo);
+        strComputerName = o3tl::toU(lpszSystemInfo);
 
     /// Get user home directory.
     HKEY hRegKey;
@@ -382,7 +383,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         DWORD Type;
 
         lRet = RegQueryValueExW(hRegKey, L"AppData", nullptr, &Type, reinterpret_cast<unsigned char *>(PathW), &lSize);
-        if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _waccess( SAL_W(PathW), 0 ) == 0 ) )
+        if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _waccess( o3tl::toW(PathW), 0 ) == 0 ) )
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
                                     ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( PathW, strConfigDirectory ) );
@@ -390,7 +391,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
         lSize = sizeof(PathW);
         lRet = RegQueryValueExW(hRegKey, L"Personal", nullptr, &Type, reinterpret_cast<unsigned char *>(PathW), &lSize);
-        if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _waccess( SAL_W(PathW), 0 ) == 0 ) )
+        if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _waccess( o3tl::toW(PathW), 0 ) == 0 ) )
         {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
                                     ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( PathW, strHomeDirectory ) );
@@ -411,7 +412,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     SID_NAME_USE eSidType;
     DWORD dwErrorCode = 0;
 
-    LPCWSTR wszAccName = SAL_W(strUserName.getStr( ));
+    LPCWSTR wszAccName = o3tl::toW(strUserName.getStr( ));
 
     // Create buffers for the SID and the domain name.
     PSID pSid = static_cast<PSID>(new BYTE[dwSidBufferSize]);
@@ -524,7 +525,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
                     *GetSidSubAuthority(pSid, dwCounter) );
     }
 
-    strUserID = SAL_U(Ident);
+    strUserID = o3tl::toU(Ident);
 
     free(Ident);
     delete [] static_cast<BYTE*>(pSid);

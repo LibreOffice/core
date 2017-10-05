@@ -24,8 +24,9 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 
-#include "rtl/ustring.hxx"
-#include "osl/file.hxx"
+#include <rtl/ustring.hxx>
+#include <osl/file.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #ifdef _WIN32
 #   if !defined WIN32_LEAN_AND_MEAN
@@ -192,7 +193,7 @@ OString convertIncPathtoShortWindowsPath(const OString& incPath) {
     std::vector<sal_Unicode> vec(path.getLength() + 1);
     //GetShortPathNameW only works if the file can be found!
     const DWORD len = GetShortPathNameW(
-        SAL_W(path.getStr()), SAL_W(&vec[0]), path.getLength() + 1);
+        o3tl::toW(path.getStr()), o3tl::toW(&vec[0]), path.getLength() + 1);
 
     if (len > 0)
     {

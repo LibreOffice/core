@@ -18,6 +18,7 @@
  */
 
 #include <vcl/errcode.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
@@ -227,11 +228,11 @@ bool SbxDecimal::setString( OUString* pOUString )
                 pBuffer[i] = ',';
             i++;
         }
-        hResult = VarDecFromStr( SAL_W(pBuffer.get()), nLANGID, 0, &maDec );
+        hResult = VarDecFromStr( o3tl::toW(pBuffer.get()), nLANGID, 0, &maDec );
     }
     else
     {
-        hResult = VarDecFromStr( SAL_W(pOUString->getStr()), nLANGID, 0, &maDec );
+        hResult = VarDecFromStr( o3tl::toW(pOUString->getStr()), nLANGID, 0, &maDec );
     }
     bRet = ( hResult == S_OK );
     return bRet;
@@ -374,7 +375,7 @@ void SbxDecimal::getString( OUString& rString )
                     i++;
                 }
             }
-            rString = SAL_U(aBStr);
+            rString = o3tl::toU(aBStr);
         }
 
         SysFreeString( aBStr );

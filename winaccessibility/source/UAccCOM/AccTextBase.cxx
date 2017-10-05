@@ -25,6 +25,7 @@
 #include "AccTextBase.h"
 
 #include <vcl/svapp.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -183,7 +184,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
     // #CHECK#
     if(*textAttributes)
         SysFreeString(*textAttributes);
-    *textAttributes = SysAllocString(SAL_W(strAttrs.makeStringAndClear().getStr()));
+    *textAttributes = SysAllocString(o3tl::toW(strAttrs.makeStringAndClear().getStr()));
 
     if( offset < GetXInterface()->getCharacterCount() )
     {
@@ -491,7 +492,7 @@ STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * tex
     }
 
     SysFreeString(*text);
-    *text = SysAllocString(SAL_W(ouStr.getStr()));
+    *text = SysAllocString(o3tl::toW(ouStr.getStr()));
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -576,7 +577,7 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
     TextSegment segment = GetXInterface()->getTextBeforeIndex( offset, sal_Int16(lUnoBoundaryType));
     ::rtl::OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
-    *text = SysAllocString(SAL_W(ouStr.getStr()));
+    *text = SysAllocString(o3tl::toW(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
 
@@ -662,7 +663,7 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
     TextSegment segment = GetXInterface()->getTextBehindIndex( offset, sal_Int16(lUnoBoundaryType));
     ::rtl::OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
-    *text = SysAllocString(SAL_W(ouStr.getStr()));
+    *text = SysAllocString(o3tl::toW(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
 
@@ -749,7 +750,7 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
     TextSegment segment = GetXInterface()->getTextAtIndex( offset, sal_Int16(lUnoBoundaryType));
     ::rtl::OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
-    *text = SysAllocString(SAL_W(ouStr.getStr()));
+    *text = SysAllocString(o3tl::toW(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
 

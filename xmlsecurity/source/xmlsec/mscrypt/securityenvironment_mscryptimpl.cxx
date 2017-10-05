@@ -50,6 +50,7 @@
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
@@ -299,7 +300,7 @@ static OUString get_system_name(const void *pvSystemStore,
     {
         ppwszSystemName = static_cast<LPCWSTR>(pvSystemStore);
     }
-    return SAL_U(ppwszSystemName);
+    return o3tl::toU(ppwszSystemName);
 }
 
 extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
@@ -309,7 +310,7 @@ extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
                                                          void *,
                                                          void *)
 {
-    OUString name(SAL_U(pwszStoreName));
+    OUString name(o3tl::toU(pwszStoreName));
     if (dwFlags & CERT_PHYSICAL_STORE_PREDEFINED_ENUM_FLAG)
         name += " (implicitly created)";
     SAL_INFO("xmlsecurity.xmlsec", "  Physical store: " << name);
@@ -433,7 +434,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const
     encoding = osl_getTextEncodingFromLocale( pLocale ) ;
 
     //Create cert info from issue and serial
-    LPCWSTR pszName = SAL_W( issuerName.getStr() );
+    LPCWSTR pszName = o3tl::toW( issuerName.getStr() );
 
     if( ! ( CertStrToNameW(
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,

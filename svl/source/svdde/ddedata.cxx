@@ -25,6 +25,7 @@
 #include <string.h>
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <osl/thread.h>
 
@@ -134,7 +135,7 @@ sal_uLong DdeData::GetExternalFormat(SotClipboardFormatId nFmt)
 #if defined(_WIN32)
             OUString aName( SotExchange::GetFormatName( nFmt ) );
             if( !aName.isEmpty() )
-                return RegisterClipboardFormatW( SAL_W(aName.getStr()) );
+                return RegisterClipboardFormatW( o3tl::toW(aName.getStr()) );
 #endif
         }
     }
@@ -158,7 +159,7 @@ SotClipboardFormatId DdeData::GetInternalFormat(sal_uLong nFmt)
             WCHAR szName[ 256 ];
 
             if(GetClipboardFormatNameW( nFmt, szName, SAL_N_ELEMENTS(szName) ))
-                return SotExchange::RegisterFormatName( SAL_U(szName) );
+                return SotExchange::RegisterFormatName( o3tl::toU(szName) );
         }
 #endif
         break;

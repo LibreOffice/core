@@ -34,6 +34,7 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <rtl/tencinfo.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 /* XXX NOTE:
  * http://msdn.microsoft.com/en-us/library/windows/desktop/dd373848.aspx
@@ -167,10 +168,10 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     /* copy in parameters to structure */
     if( pLocale && pLocale->Language && pLocale->Language->length < ELP_LANGUAGE_FIELD_LENGTH )
     {
-        wcscpy( params.Language, SAL_W(pLocale->Language->buffer) );
+        wcscpy( params.Language, o3tl::toW(pLocale->Language->buffer) );
 
         if( pLocale->Country && pLocale->Country->length < ELP_COUNTRY_FIELD_LENGTH )
-            wcscpy( params.Country, SAL_W(pLocale->Country->buffer) );
+            wcscpy( params.Country, o3tl::toW(pLocale->Country->buffer) );
 
         /* save pointer to local structure in TLS */
         TlsSetValue( g_dwTLSLocaleEncId, &params );
@@ -200,7 +201,7 @@ void imp_getProcessLocale( rtl_Locale ** ppLocale )
     if( GetLocaleInfoW( localeId, LOCALE_SISO639LANGNAME , langCode, ELP_LANGUAGE_FIELD_LENGTH )  &&
         GetLocaleInfoW( localeId, LOCALE_SISO3166CTRYNAME , ctryCode, ELP_COUNTRY_FIELD_LENGTH ) )
     {
-        *ppLocale = rtl_locale_register( SAL_U(langCode), SAL_U(ctryCode), u"" );
+        *ppLocale = rtl_locale_register( o3tl::toU(langCode), o3tl::toU(ctryCode), u"" );
     }
     else
     {

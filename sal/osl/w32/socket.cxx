@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include "sockimpl.hxx"
 
@@ -357,7 +358,7 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
     if (strDottedAddr && strDottedAddr->length)
     {
         IN_ADDR addr;
-        INT ret = InetPtonW(AF_INET, SAL_W(strDottedAddr->buffer), & addr);
+        INT ret = InetPtonW(AF_INET, o3tl::toW(strDottedAddr->buffer), & addr);
         if (1 == ret)
         {
             nAddr = addr.S_un.S_addr;
@@ -403,7 +404,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     sal_uInt32 Addr;
 
     IN_ADDR addr;
-    INT ret = InetPtonW(AF_INET, SAL_W(strDottedAddr->buffer), & addr);
+    INT ret = InetPtonW(AF_INET, o3tl::toW(strDottedAddr->buffer), & addr);
     Addr = ret == 1 ? addr.S_un.S_addr : OSL_INADDR_NONE;
 
     oslSocketAddr pAddr = nullptr;
@@ -493,7 +494,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
 
     PADDRINFOW pAddrInfo = nullptr;
     int ret = GetAddrInfoW(
-                SAL_W(strHostname->buffer), nullptr, nullptr, & pAddrInfo);
+                o3tl::toW(strHostname->buffer), nullptr, nullptr, & pAddrInfo);
     if (0 == ret)
     {
         oslHostAddr pRet = nullptr;
@@ -503,7 +504,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
             {
                 pRet = static_cast<oslHostAddr>(
                     rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
-                rtl_uString_newFromStr(&pRet->pHostName, SAL_U(pIter->ai_canonname));
+                rtl_uString_newFromStr(&pRet->pHostName, o3tl::toU(pIter->ai_canonname));
                 pRet->pSockAddr = createSocketAddr();
                 memcpy(& pRet->pSockAddr->m_sockaddr,
                        pIter->ai_addr, pIter->ai_addrlen);
@@ -541,7 +542,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
         {
             oslHostAddr pRet = static_cast<oslHostAddr>(
                     rtl_allocateZeroMemory(sizeof(struct oslHostAddrImpl)));
-            rtl_uString_newFromStr(&pRet->pHostName, SAL_U(buf));
+            rtl_uString_newFromStr(&pRet->pHostName, o3tl::toU(buf));
             pRet->pSockAddr = createSocketAddr();
             memcpy(& pRet->pSockAddr->m_sockaddr,
                    & pAddr->m_sockaddr, sizeof(struct sockaddr));
@@ -764,7 +765,7 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
         SAL_INFO("sal.osl", "InetNtopW failed: " << WSAGetLastError());
         return osl_Socket_Error;
     }
-    rtl_uString_newFromStr(strDottedInetAddr, SAL_U(ret));
+    rtl_uString_newFromStr(strDottedInetAddr, o3tl::toU(ret));
     OSL_ASSERT(*strDottedInetAddr != nullptr);
 
     return osl_Socket_Ok;
@@ -1602,7 +1603,7 @@ void SAL_CALL osl_getLastSocketErrorDescription (
         {
             sal_Unicode message[128];
 
-            wsprintfW(SAL_W(message), L"Unknown WinSock Error Number %d", error);
+            wsprintfW(o3tl::toW(message), L"Unknown WinSock Error Number %d", error);
             rtl_uString_newFromStr (strError, message);
         }
 

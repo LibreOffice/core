@@ -27,6 +27,7 @@
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #include <com/sun/star/system/XSimpleMailMessage2.hpp>
 #include <osl/file.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
@@ -81,7 +82,7 @@ namespace /* private */
             lret = RegQueryValueW(hkey, nullptr, buff, &sz);
             if (lret == ERROR_SUCCESS)
             {
-                osl::FileBase::getFileURLFromSystemPath(SAL_U(buff), altSenddocUrl);
+                osl::FileBase::getFileURLFromSystemPath(o3tl::toU(buff), altSenddocUrl);
             }
             RegCloseKey(hkey);
         }

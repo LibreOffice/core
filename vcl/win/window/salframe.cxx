@@ -41,6 +41,7 @@
 
 #include <tools/debug.hxx>
 #include <o3tl/enumarray.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
@@ -1070,7 +1071,7 @@ void WinSalFrame::SetTitle( const OUString& rTitle )
 {
     static_assert( sizeof( WCHAR ) == sizeof( sal_Unicode ), "must be the same size" );
 
-    SetWindowTextW( mhWnd, SAL_W(rTitle.getStr()) );
+    SetWindowTextW( mhWnd, o3tl::toW(rTitle.getStr()) );
 }
 
 void WinSalFrame::SetIcon( sal_uInt16 nIcon )
@@ -1844,7 +1845,7 @@ void WinSalFrame::SetApplicationID( const OUString &rApplicationID )
             PROPVARIANT pv;
             if ( !rApplicationID.isEmpty() )
             {
-                hr = InitPropVariantFromString( SAL_W(rApplicationID.getStr()), &pv );
+                hr = InitPropVariantFromString( o3tl::toW(rApplicationID.getStr()), &pv );
                 mbPropertiesStored = TRUE;
             }
             else
@@ -2303,7 +2304,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
         else
         {
             nKeyLen = aRet.getLength();
-            wcscpy( aKeyBuf, SAL_W( aRet.getStr() ));
+            wcscpy( aKeyBuf, o3tl::toW( aRet.getStr() ));
         }
     }
 
@@ -2554,7 +2555,7 @@ static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Fon
     // 6 Point is the smallest one
     if ( rFont.GetFontHeight() < 8 )
     {
-        if ( rtl_ustr_compareIgnoreAsciiCase( SAL_U(rLogFont.lfFaceName), SAL_U(L"MS Sans Serif") ) == 0 )
+        if ( rtl_ustr_compareIgnoreAsciiCase( o3tl::toU(rLogFont.lfFaceName), o3tl::toU(L"MS Sans Serif") ) == 0 )
             rFont.SetFontHeight( 8 );
         else if ( rFont.GetFontHeight() < 6 )
             rFont.SetFontHeight( 6 );
@@ -4453,7 +4454,7 @@ static int ImplMeasureItem( HWND hWnd, WPARAM wParam, LPARAM lParam )
             aStr += " ";
             aStr += pSalMenuItem->mAccelText;
         }
-        GetTextExtentPoint32W( hdc, SAL_W(aStr.getStr()),
+        GetTextExtentPoint32W( hdc, o3tl::toW(aStr.getStr()),
                                 aStr.getLength(), &strSize );
 
         // image
@@ -4590,7 +4591,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
         SIZE strSize;
         OUString aStr( pSalMenuItem->mText );
-        GetTextExtentPoint32W( pDI->hDC, SAL_W(aStr.getStr()),
+        GetTextExtentPoint32W( pDI->hDC, o3tl::toW(aStr.getStr()),
                                 aStr.getLength(), &strSize );
 
         if(!DrawStateW( pDI->hDC, nullptr, nullptr,
@@ -4603,7 +4604,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         {
             SIZE strSizeA;
             aStr = pSalMenuItem->mAccelText;
-            GetTextExtentPoint32W( pDI->hDC, SAL_W(aStr.getStr()),
+            GetTextExtentPoint32W( pDI->hDC, o3tl::toW(aStr.getStr()),
                                     aStr.getLength(), &strSizeA );
             TEXTMETRICW tm;
             GetTextMetricsW( pDI->hDC, &tm );
@@ -4969,7 +4970,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             auto pTextBuf = std::unique_ptr<WCHAR[]>(new WCHAR[nTextLen]);
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf.get(), nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = OUString( SAL_U(pTextBuf.get()), (sal_Int32)nTextLen );
+            aEvt.maText = OUString( o3tl::toU(pTextBuf.get()), (sal_Int32)nTextLen );
         }
 
         aEvt.mnCursorPos = aEvt.maText.getLength();
@@ -4995,7 +4996,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
             {
                 auto pTextBuf = std::unique_ptr<WCHAR>(new WCHAR[nTextLen]);
                 ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf.get(), nTextLen*sizeof( WCHAR ) );
-                aEvt.maText = OUString( SAL_U(pTextBuf.get()), (sal_Int32)nTextLen );
+                aEvt.maText = OUString( o3tl::toU(pTextBuf.get()), (sal_Int32)nTextLen );
             }
 
             std::unique_ptr<BYTE> pAttrBuf;

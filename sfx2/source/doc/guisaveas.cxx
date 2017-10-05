@@ -67,6 +67,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
@@ -1195,7 +1196,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
             if( SUCCEEDED(hRes) )
             {
                 OUString sTempINetFiles;
-                if( osl::FileBase::getFileURLFromSystemPath(SAL_U(sPath), sTempINetFiles) == osl::FileBase::E_None )
+                if( osl::FileBase::getFileURLFromSystemPath(o3tl::toU(sPath), sTempINetFiles) == osl::FileBase::E_None )
                     bIsInTempPath = !sTempINetFiles.isEmpty() && sLocationURL.startsWith( sTempINetFiles );
             }
         }

@@ -33,6 +33,7 @@
 #include <comphelper/sequence.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -521,7 +522,7 @@ namespace dxcanvas
             // TODO(F2): Proper layout (BiDi, CTL)! IMHO must use
             // DrawDriverString here, and perform layouting myself...
             ENSURE_OR_THROW(
-                Gdiplus::Ok == pGraphics->DrawString( SAL_W(text.Text.copy( text.StartPosition,
+                Gdiplus::Ok == pGraphics->DrawString( o3tl::toW(text.Text.copy( text.StartPosition,
                                                                             text.Length ).getStr()),
                                                       text.Length,
                                                       pFont->getFont().get(),

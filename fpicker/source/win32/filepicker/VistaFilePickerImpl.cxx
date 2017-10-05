@@ -30,6 +30,7 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include "../misc/WinImplHelper.hxx"
 
 #include <shlguid.h>
@@ -59,7 +60,7 @@ bool createFolderItem(OUString const & url, ComPtr<IShellItem> & folder) {
         return false;
     }
     HRESULT res = SHCreateItemFromParsingName(
-        SAL_W(path.getStr()), nullptr,
+        o3tl::toW(path.getStr()), nullptr,
         IID_PPV_ARGS(&folder));
     return SUCCEEDED(res);
 }
@@ -104,11 +105,11 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
         if ( FAILED(hr) )
             return OUString();
 
-        sURL = SAL_U(pStr);
+        sURL = o3tl::toU(pStr);
     }
     else
     {
-        ::osl::FileBase::getFileURLFromSystemPath( SAL_U(pStr), sURL );
+        ::osl::FileBase::getFileURLFromSystemPath( o3tl::toU(pStr), sURL );
     }
 
     CoTaskMemFree (pStr);
@@ -126,8 +127,8 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
     {
         COMDLG_FILTERSPEC aSpec;
 
-        aSpec.pszName = SAL_W(aFilter.first.getStr()) ;
-        aSpec.pszSpec = SAL_W(aFilter.second.getStr());
+        aSpec.pszName = o3tl::toW(aFilter.first.getStr()) ;
+        aSpec.pszSpec = o3tl::toW(aFilter.second.getStr());
 
         lList.push_back(aSpec);
     }
@@ -495,7 +496,7 @@ static void setLabelToControl(TFileDialogCustomize iCustom, sal_uInt16 nControlI
 {
     OUString aLabel = CResourceProvider::getResString(nControlId);
     aLabel = SOfficeToWindowsLabel(aLabel);
-    iCustom->SetControlLabel(nControlId, SAL_W(aLabel.getStr()) );
+    iCustom->SetControlLabel(nControlId, o3tl::toW(aLabel.getStr()) );
 }
 
 
@@ -660,7 +661,7 @@ void VistaFilePickerImpl::impl_sta_SetTitle(const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    iDialog->SetTitle(SAL_W(sTitle.getStr()));
+    iDialog->SetTitle(o3tl::toW(sTitle.getStr()));
 }
 
 
@@ -674,7 +675,7 @@ void VistaFilePickerImpl::impl_sta_SetFileName(const RequestRef& rRequest)
     aLock.clear();
     // <- SYNCHRONIZED
 
-    iDialog->SetFileName(SAL_W(sFileName.getStr()));
+    iDialog->SetFileName(o3tl::toW(sFileName.getStr()));
 }
 
 
@@ -747,7 +748,7 @@ void VistaFilePickerImpl::impl_sta_SetDefaultName(const RequestRef& rRequest)
             sFilename = sFilename.copy(0, nSepPos);
     }
 
-    iDialog->SetFileName (SAL_W(sFilename.getStr()));
+    iDialog->SetFileName (o3tl::toW(sFilename.getStr()));
     m_sFilename = sFilename;
 }
 
@@ -920,7 +921,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
 
                             lpFilterExt = wcsrchr( lpFilterExt, '.' );
                             if ( lpFilterExt )
-                                aFileURL += SAL_U(lpFilterExt);
+                                aFileURL += o3tl::toU(lpFilterExt);
                         }
                     }
                 }
@@ -930,7 +931,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                 osl_getSystemPathFromFileURL( aFileURL.pData, &aSystemPath.pData );
 
                 WIN32_FIND_DATAW aFindFileData;
-                HANDLE  hFind = FindFirstFileW( SAL_W(aSystemPath.getStr()), &aFindFileData );
+                HANDLE  hFind = FindFirstFileW( o3tl::toW(aSystemPath.getStr()), &aFindFileData );
                 if (hFind != INVALID_HANDLE_VALUE)
                     iDialog->SetFolder(pFolder);
                 else
@@ -1067,7 +1068,7 @@ void VistaFilePickerImpl::impl_sta_SetControlValue(const RequestRef& rRequest)
                             for (::sal_Int32 i=0; i<lItems.getLength(); ++i)
                             {
                                 const OUString& sItem = lItems[i];
-                                hResult = iCustom->AddControlItem(nId, i, SAL_W(sItem.getStr()));
+                                hResult = iCustom->AddControlItem(nId, i, o3tl::toW(sItem.getStr()));
                             }
                         }
                         break;
@@ -1137,7 +1138,7 @@ void VistaFilePickerImpl::impl_sta_SetControlLabel(const RequestRef& rRequest)
     TFileDialogCustomize iCustom = impl_getCustomizeInterface();
     if ( ! iCustom.is())
         return;
-    iCustom->SetControlLabel (nId, SAL_W(sLabel.getStr()));
+    iCustom->SetControlLabel (nId, o3tl::toW(sLabel.getStr()));
 }
 
 
@@ -1183,7 +1184,7 @@ void VistaFilePickerImpl::impl_SetDefaultExtension( const OUString& currentFilte
             posOfSemiColon = FilterExt.getLength() - 1;
 
         FilterExt = OUString(pFirstExtStart, posOfSemiColon - posOfPoint);
-        iDialog->SetDefaultExtension ( SAL_W(FilterExt.getStr()) );
+        iDialog->SetDefaultExtension ( o3tl::toW(FilterExt.getStr()) );
    }
 }
 
@@ -1205,7 +1206,7 @@ void VistaFilePickerImpl::onAutoExtensionChanged (bool bChecked)
     PCWSTR pExt = nullptr;
     if ( bChecked )
     {
-        pExt = SAL_W(sExt.getStr());
+        pExt = o3tl::toW(sExt.getStr());
         pExt = wcsrchr( pExt, '.' );
         if ( pExt )
             pExt++;

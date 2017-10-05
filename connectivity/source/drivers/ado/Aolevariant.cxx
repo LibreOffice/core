@@ -20,6 +20,7 @@
 #include "ado/Aolevariant.hxx"
 #include <connectivity/dbconversion.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -46,7 +47,7 @@ OLEString::OLEString(const BSTR& _sBStr)
 }
 OLEString::OLEString(const OUString& _sBStr)
 {
-    m_sStr = ::SysAllocString(SAL_W(_sBStr.getStr()));
+    m_sStr = ::SysAllocString(o3tl::toW(_sBStr.getStr()));
 }
 OLEString::~OLEString()
 {
@@ -57,7 +58,7 @@ OLEString& OLEString::operator=(const OUString& _rSrc)
 {
     if(m_sStr)
         ::SysFreeString(m_sStr);
-    m_sStr = ::SysAllocString(SAL_W(_rSrc.getStr()));
+    m_sStr = ::SysAllocString(o3tl::toW(_rSrc.getStr()));
     return *this;
 }
 OLEString& OLEString::operator=(const OLEString& _rSrc)
@@ -79,7 +80,7 @@ OLEString& OLEString::operator=(const BSTR& _rSrc)
 }
 OUString OLEString::asOUString() const
 {
-    return (m_sStr != nullptr) ? OUString(SAL_U(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : OUString();
+    return (m_sStr != nullptr) ? OUString(o3tl::toU(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : OUString();
 }
 BSTR OLEString::asBSTR() const
 {
@@ -121,7 +122,7 @@ OLEVariant::OLEVariant(const OUString& us)
 {
     ::VariantInit(this);
     vt      = VT_BSTR;
-    bstrVal = SysAllocString(SAL_W(us.getStr()));
+    bstrVal = SysAllocString(o3tl::toW(us.getStr()));
 }
 OLEVariant::~OLEVariant()
 {
@@ -277,7 +278,7 @@ void OLEVariant::setString(const OUString& us)
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     vt = VT_BSTR;
-    bstrVal     = ::SysAllocString(SAL_W(us.getStr()));
+    bstrVal     = ::SysAllocString(o3tl::toW(us.getStr()));
 }
 void OLEVariant::setNoArg()
 {
@@ -377,7 +378,7 @@ void OLEVariant::set(double n)
 OUString OLEVariant::getString() const
 {
     if (V_VT(this) == VT_BSTR)
-        return SAL_U(LPCOLESTR(V_BSTR(this)));
+        return o3tl::toU(LPCOLESTR(V_BSTR(this)));
 
     if(isNull())
         return OUString();
@@ -386,7 +387,7 @@ OUString OLEVariant::getString() const
 
     varDest.ChangeType(VT_BSTR, this);
 
-    return SAL_U(LPCOLESTR(V_BSTR(&varDest)));
+    return o3tl::toU(LPCOLESTR(V_BSTR(&varDest)));
 }
 
 
@@ -692,7 +693,7 @@ css::uno::Any OLEVariant::makeAny() const
          }
         case VT_BSTR:
         {
-            OUString b(SAL_U(bstrVal));
+            OUString b(o3tl::toU(bstrVal));
             aValue.setValue( &b, cppu::UnoType<decltype(b)>::get());
             break;
         }

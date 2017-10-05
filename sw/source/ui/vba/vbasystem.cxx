@@ -23,6 +23,7 @@
 #include <tools/config.hxx>
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #ifdef _WIN32
 #if defined _MSC_VER
@@ -106,7 +107,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
             if( ERROR_SUCCESS == lResult )
             {
                 OUString sUValName = OStringToOUString(maKey, RTL_TEXTENCODING_DONTKNOW);
-                LPCWSTR lpValueName = SAL_W(sUValName.getStr());
+                LPCWSTR lpValueName = o3tl::toW(sUValName.getStr());
                 WCHAR szBuffer[1024];
                 DWORD cbData = sizeof(szBuffer);
                 lResult = RegQueryValueExW( hKey, lpValueName, nullptr, nullptr, reinterpret_cast<LPBYTE>(szBuffer), &cbData );
@@ -114,7 +115,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
                 // https://msdn.microsoft.com/en-us/ms724911 mentions that
                 // "the string may not have been stored with the proper terminating null characters"
                 szBuffer[std::min(size_t(cbData / sizeof(szBuffer[0])), SAL_N_ELEMENTS(szBuffer)-1)] = 0;
-                sValue = SAL_U(szBuffer);
+                sValue = o3tl::toU(szBuffer);
             }
         }
 #else
@@ -153,7 +154,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
             {
                 DWORD cbData = sizeof(WCHAR) * (aValue.getLength() + 1);
                 OUString sUValName = OStringToOUString(maKey, RTL_TEXTENCODING_DONTKNOW);
-                LPCWSTR lpValueName = SAL_W(sUValName.getStr());
+                LPCWSTR lpValueName = o3tl::toW(sUValName.getStr());
                 lResult = RegSetValueExW( hKey, lpValueName, 0 /* Reserved */, REG_SZ, reinterpret_cast<BYTE const *>(aValue.getStr()), cbData );
                 RegCloseKey( hKey );
             }

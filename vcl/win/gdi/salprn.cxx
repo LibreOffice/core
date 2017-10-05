@@ -25,6 +25,7 @@
 #include <svsys.h>
 
 #include <osl/module.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <tools/urlobj.hxx>
 
@@ -162,7 +163,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
             for ( i = 0; i < nInfoPrn4; i++ )
             {
                 SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
-                pInfo->maPrinterName = SAL_U(pWinInfo4[i].pPrinterName);
+                pInfo->maPrinterName = o3tl::toU(pWinInfo4[i].pPrinterName);
                 pInfo->mnStatus      = PrintQueueFlags::NONE;
                 pInfo->mnJobs        = 0;
                 pInfo->mpSysData     = nullptr;
@@ -176,7 +177,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
 {
     HANDLE hPrinter = nullptr;
-    LPWSTR pPrnName = const_cast<LPWSTR>(SAL_W(pInfo->maPrinterName.getStr()));
+    LPWSTR pPrnName = const_cast<LPWSTR>(o3tl::toW(pInfo->maPrinterName.getStr()));
     if( OpenPrinterW( pPrnName, &hPrinter, nullptr ) )
     {
         DWORD               nBytes = 0;
@@ -187,18 +188,18 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
             if( GetPrinterW( hPrinter, 2, reinterpret_cast<LPBYTE>(pWinInfo2), nBytes, &nBytes ) )
             {
                 if( pWinInfo2->pDriverName )
-                    pInfo->maDriver = SAL_U(pWinInfo2->pDriverName);
+                    pInfo->maDriver = o3tl::toU(pWinInfo2->pDriverName);
                 OUString aPortName;
                 if ( pWinInfo2->pPortName )
-                    aPortName = SAL_U(pWinInfo2->pPortName);
+                    aPortName = o3tl::toU(pWinInfo2->pPortName);
                 // pLocation can be 0 (the Windows docu doesn't describe this)
                 if ( pWinInfo2->pLocation && *pWinInfo2->pLocation )
-                    pInfo->maLocation = SAL_U(pWinInfo2->pLocation);
+                    pInfo->maLocation = o3tl::toU(pWinInfo2->pLocation);
                 else
                     pInfo->maLocation = aPortName;
                 // pComment can be 0 (the Windows docu doesn't describe this)
                 if ( pWinInfo2->pComment )
-                    pInfo->maComment = SAL_U(pWinInfo2->pComment);
+                    pInfo->maComment = o3tl::toU(pWinInfo2->pComment);
                 pInfo->mnStatus      = ImplWinQueueStatusToSal( pWinInfo2->Status );
                 pInfo->mnJobs        = pWinInfo2->cJobs;
                 if( ! pInfo->mpSysData )
@@ -226,7 +227,7 @@ OUString WinSalInstance::GetDefaultPrinter()
         OUString aDefPrt;
         if( GetDefaultPrinterW( pStr, &nChars ) )
         {
-            aDefPrt = SAL_U(pStr);
+            aDefPrt = o3tl::toU(pStr);
         }
         rtl_freeMemory( pStr );
         if( !aDefPrt.isEmpty() )
@@ -243,7 +244,7 @@ OUString WinSalInstance::GetDefaultPrinter()
         wchar_t* pTmp = pBuf;
         while ( *pTmp && (*pTmp != ',') )
             pTmp++;
-        return OUString( SAL_U(pBuf), static_cast<sal_Int32>(pTmp-pBuf) );
+        return OUString( o3tl::toU(pBuf), static_cast<sal_Int32>(pTmp-pBuf) );
     }
     else
         return OUString();
@@ -258,8 +259,8 @@ static DWORD ImplDeviceCaps( WinSalInfoPrinter const * pPrinter, WORD nCaps,
     else
         pDevMode = SAL_DEVMODE_W( pSetupData );
 
-    return DeviceCapabilitiesW( SAL_W(pPrinter->maDeviceName.getStr()),
-                                SAL_W(pPrinter->maPortName.getStr()),
+    return DeviceCapabilitiesW( o3tl::toW(pPrinter->maDeviceName.getStr()),
+                                o3tl::toW(pPrinter->maPortName.getStr()),
                                 nCaps, reinterpret_cast<LPWSTR>(pOutput), pDevMode );
 }
 
@@ -288,7 +289,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
             // can avoid potential driver crashes as their jobsetups are often not compatible
             // #110800#, #111151#, #112381#, #i16580#, #i14173# and perhaps #112375#
             HANDLE hPrn;
-            LPWSTR pPrinterNameW = const_cast<LPWSTR>(SAL_W(pPrinter->maDeviceName.getStr()));
+            LPWSTR pPrinterNameW = const_cast<LPWSTR>(o3tl::toW(pPrinter->maDeviceName.getStr()));
             if ( !OpenPrinterW( pPrinterNameW, &hPrn, nullptr ) )
                 return FALSE;
 
@@ -350,7 +351,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
                                    bool bIn, WinSalFrame* pVisibleDlgParent )
 {
     HANDLE hPrn;
-    LPWSTR pPrinterNameW = const_cast<LPWSTR>(SAL_W(pPrinter->maDeviceName.getStr()));
+    LPWSTR pPrinterNameW = const_cast<LPWSTR>(o3tl::toW(pPrinter->maDeviceName.getStr()));
     if ( !OpenPrinterW( pPrinterNameW, &hPrn, nullptr ) )
         return FALSE;
     // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
@@ -418,13 +419,13 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     // fill up string buffers with 0 so they do not influence a JobSetup's memcmp
     if( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmSize >= 64 )
     {
-        sal_Int32 nLen = rtl_ustr_getLength( SAL_U(reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName) );
+        sal_Int32 nLen = rtl_ustr_getLength( o3tl::toU(reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName) );
         if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName ) )
             memset( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName+nLen, 0, sizeof( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmDeviceName )-(nLen*sizeof(sal_Unicode)) );
     }
     if( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmSize >= 166 )
     {
-        sal_Int32 nLen = rtl_ustr_getLength( SAL_U(reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName) );
+        sal_Int32 nLen = rtl_ustr_getLength( o3tl::toU(reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName) );
         if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName ) )
             memset( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName+nLen, 0, sizeof( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmFormName )-(nLen*sizeof(sal_Unicode)) );
     }
@@ -1023,8 +1024,8 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter const * pPrinter, const ImplJob
     memset( pDriverName+pPrinter->maDriverName.getLength(), 0, 32 );
     memcpy( pDeviceName, pPrinter->maDeviceName.getStr(), pPrinter->maDeviceName.getLength()*sizeof(sal_Unicode));
     memset( pDeviceName+pPrinter->maDeviceName.getLength(), 0, 32 );
-    hDC = ImplCreateICW_WithCatch( SAL_W(pDriverName),
-                                   SAL_W(pDeviceName),
+    hDC = ImplCreateICW_WithCatch( o3tl::toW(pDriverName),
+                                   o3tl::toW(pDeviceName),
                                    pDevMode );
     return hDC;
 }
@@ -1438,8 +1439,8 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     sal_Unicode aDevBuf[4096];
     memcpy( aDrvBuf, mpInfoPrinter->maDriverName.getStr(), (mpInfoPrinter->maDriverName.getLength()+1)*sizeof(sal_Unicode));
     memcpy( aDevBuf, mpInfoPrinter->maDeviceName.getStr(), (mpInfoPrinter->maDeviceName.getLength()+1)*sizeof(sal_Unicode));
-    hDC = CreateDCW( SAL_W(aDrvBuf),
-                     SAL_W(aDevBuf),
+    hDC = CreateDCW( o3tl::toW(aDrvBuf),
+                     o3tl::toW(aDevBuf),
                      nullptr,
                      pDevModeW );
 
@@ -1493,12 +1494,12 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     DOCINFOW aInfo;
     memset( &aInfo, 0, sizeof( DOCINFOW ) );
     aInfo.cbSize = sizeof( aInfo );
-    aInfo.lpszDocName = SAL_W(rJobName.getStr());
+    aInfo.lpszDocName = o3tl::toW(rJobName.getStr());
     if ( pFileName || aOutFileName.getLength() )
     {
         if ( (pFileName && !pFileName->isEmpty()) || aOutFileName.getLength() )
         {
-            aInfo.lpszOutput = SAL_W((pFileName && !pFileName->isEmpty()) ? pFileName->getStr() : aOutFileName.getStr());
+            aInfo.lpszOutput = o3tl::toW((pFileName && !pFileName->isEmpty()) ? pFileName->getStr() : aOutFileName.getStr());
         }
         else
             aInfo.lpszOutput = L"FILE:";

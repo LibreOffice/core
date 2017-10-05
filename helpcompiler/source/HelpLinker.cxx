@@ -34,6 +34,7 @@
 #include <sal/types.h>
 #include <osl/time.h>
 #include <rtl/bootstrap.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <expat.h>
 #include <memory>
@@ -42,7 +43,7 @@ namespace {
 FILE* fopen_impl(const fs::path& rPath, const char* szMode)
 {
 #ifdef _WIN32     //We need _wfopen to support long file paths on Windows XP
-    return _wfopen(rPath.native_file_string_w().c_str(), SAL_W(OUString::createFromAscii(szMode).getStr()));
+    return _wfopen(rPath.native_file_string_w().c_str(), o3tl::toW(OUString::createFromAscii(szMode).getStr()));
 #else
     return fopen(rPath.native_file_string().c_str(), szMode);
 #endif

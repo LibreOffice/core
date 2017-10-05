@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include "ImplHelper.hxx"
 #include <rtl/tencinfo.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <string.h>
 #include <memory>
 
@@ -107,7 +108,7 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
         OSL_ASSERT(nResult);
 
         if (nResult)
-            winCP = SAL_U( buff.get() );
+            winCP = o3tl::toU( buff.get() );
 
     }
 

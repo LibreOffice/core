@@ -19,6 +19,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include "MtaFop.hxx"
 #include <wchar.h>
@@ -364,10 +365,10 @@ bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
     // pre SHBrowseFroFolder
 
     m_bi.pidlRoot       = nullptr;
-    m_bi.pszDisplayName = SAL_W(m_pathBuff);
+    m_bi.pszDisplayName = o3tl::toW(m_pathBuff);
 
     if ( m_Description.getLength( ) )
-        m_bi.lpszTitle = SAL_W(m_Description.getStr( ));
+        m_bi.lpszTitle = o3tl::toW(m_Description.getStr( ));
 
     lpiid = SHBrowseForFolderW( &m_bi );
     bRet = ( nullptr != lpiid );
@@ -409,7 +410,7 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& a
         pIShellFolder->ParseDisplayName(
             nullptr,
             nullptr,
-            const_cast<LPWSTR>(SAL_W( aDirectory.getStr( ) )),
+            const_cast<LPWSTR>(o3tl::toW( aDirectory.getStr( ) )),
             nullptr,
             &lpItemIdList,
             nullptr );
@@ -425,7 +426,7 @@ OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemI
 
     if ( lpItemIdList )
     {
-        bool bRet = SHGetPathFromIDListW( lpItemIdList, SAL_W(m_pathBuff) );
+        bool bRet = SHGetPathFromIDListW( lpItemIdList, o3tl::toW(m_pathBuff) );
         if ( bRet )
             path = m_pathBuff;
     }
@@ -506,7 +507,7 @@ int CALLBACK CMtaFolderPicker::FolderPickerCallback( HWND hwnd, UINT uMsg, LPARA
         case BFFM_INITIALIZED:
             pImpl->m_hwnd = hwnd;
             pImpl->onInitialized( );
-            SetWindowTextW( hwnd, SAL_W(pImpl->m_dialogTitle.getStr()) );
+            SetWindowTextW( hwnd, o3tl::toW(pImpl->m_dialogTitle.getStr()) );
         break;
 
         case BFFM_SELCHANGED:

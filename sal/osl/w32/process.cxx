@@ -31,6 +31,7 @@
 #include <memory>
 
 #include <osl/nlsupport.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <filetime.hxx>
 #include <nlsupport.hxx>
@@ -286,7 +287,7 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
     DWORD buflen = 0;
 
-    if ((buflen = GetModuleFileNameW (nullptr, SAL_W(aBuffer), aBuffer.getBufSizeInSymbols())) > 0)
+    if ((buflen = GetModuleFileNameW (nullptr, o3tl::toW(aBuffer), aBuffer.getBufSizeInSymbols())) > 0)
     {
         rtl_uString * pAbsPath = nullptr;
         rtl_uString_newFromStr_WithLength (&pAbsPath, aBuffer, buflen);
@@ -336,7 +337,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
         for (i = 0; i < nArgs; i++)
         {
             /* Convert to unicode */
-            rtl_uString_newFromStr( &(ppArgs[i]), SAL_U(wargv[i]) );
+            rtl_uString_newFromStr( &(ppArgs[i]), o3tl::toU(wargv[i]) );
         }
         if (ppArgs[0] != nullptr)
         {
@@ -345,7 +346,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
             DWORD dwResult = 0;
 
             dwResult = SearchPathW (
-                nullptr, SAL_W(ppArgs[0]->buffer), L".exe", aBuffer.getBufSizeInSymbols(), SAL_W(aBuffer), nullptr);
+                nullptr, o3tl::toW(ppArgs[0]->buffer), L".exe", aBuffer.getBufSizeInSymbols(), o3tl::toW(aBuffer), nullptr);
             if ((0 < dwResult) && (dwResult < aBuffer.getBufSizeInSymbols()))
             {
                 /* Replace argv[0] with its absolute path */
@@ -445,9 +446,9 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 {
     WCHAR buff[ENV_BUFFER_SIZE];
 
-    if (GetEnvironmentVariableW(SAL_W(ustrVar->buffer), buff, ENV_BUFFER_SIZE) > 0)
+    if (GetEnvironmentVariableW(o3tl::toW(ustrVar->buffer), buff, ENV_BUFFER_SIZE) > 0)
     {
-        rtl_uString_newFromStr(ustrValue, SAL_U(buff));
+        rtl_uString_newFromStr(ustrValue, o3tl::toU(buff));
         return osl_Process_E_None;
     }
     return osl_Process_E_Unknown;
@@ -456,8 +457,8 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
 {
     // set Windows environment variable
-    LPCWSTR lpName = SAL_W(ustrVar->buffer);
-    LPCWSTR lpValue = SAL_W(ustrValue->buffer);
+    LPCWSTR lpName = o3tl::toW(ustrVar->buffer);
+    LPCWSTR lpValue = o3tl::toW(ustrValue->buffer);
     if (SetEnvironmentVariableW(lpName, lpValue))
     {
         auto buffer = std::unique_ptr<wchar_t[]>(
@@ -475,7 +476,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
 {
     // delete the variable from the current process environment
     // by setting SetEnvironmentVariable's second parameter to NULL
-    LPCWSTR lpName = SAL_W(ustrVar->buffer);
+    LPCWSTR lpName = o3tl::toW(ustrVar->buffer);
     if (SetEnvironmentVariableW(lpName, nullptr))
     {
         auto buffer = std::unique_ptr<wchar_t[]>(
@@ -494,7 +495,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
     DWORD   dwLen = 0;
 
     osl_acquireMutex( g_CurrentDirectoryMutex );
-    dwLen = GetCurrentDirectoryW( aBuffer.getBufSizeInSymbols(), SAL_W(aBuffer) );
+    dwLen = GetCurrentDirectoryW( aBuffer.getBufSizeInSymbols(), o3tl::toW(aBuffer) );
     osl_releaseMutex( g_CurrentDirectoryMutex );
 
     if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )
