@@ -176,92 +176,90 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
     uTemp=pInsertFct(&io);
 
-    if ( OLEUI_OK == uTemp )
+    if ( OLEUI_OK != uTemp )
+        throw ucb::CommandAbortedException();
+
+    if (io.dwFlags & IOF_SELECTCREATENEW)
     {
-        if (io.dwFlags & IOF_SELECTCREATENEW)
-        {
-            uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );
+        uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );
 
-            uno::Sequence< sal_Int8 > aClassID = MimeConfigurationHelper::GetSequenceClassID( io.clsid.Data1,
-                                                                     io.clsid.Data2,
-                                                                     io.clsid.Data3,
-                                                                     io.clsid.Data4[0],
-                                                                     io.clsid.Data4[1],
-                                                                     io.clsid.Data4[2],
-                                                                     io.clsid.Data4[3],
-                                                                     io.clsid.Data4[4],
-                                                                     io.clsid.Data4[5],
-                                                                     io.clsid.Data4[6],
-                                                                     io.clsid.Data4[7] );
+        uno::Sequence< sal_Int8 > aClassID = MimeConfigurationHelper::GetSequenceClassID( io.clsid.Data1,
+                                                                                          io.clsid.Data2,
+                                                                                          io.clsid.Data3,
+                                                                                          io.clsid.Data4[0],
+                                                                                          io.clsid.Data4[1],
+                                                                                          io.clsid.Data4[2],
+                                                                                          io.clsid.Data4[3],
+                                                                                          io.clsid.Data4[4],
+                                                                                          io.clsid.Data4[5],
+                                                                                          io.clsid.Data4[6],
+                                                                                          io.clsid.Data4[7] );
 
-            aClassID = GetRelatedInternalID_Impl( aClassID );
+        aClassID = GetRelatedInternalID_Impl( aClassID );
 
-            //TODO: retrieve ClassName
-            aObjectInfo.Object.set( xEmbCreator->createInstanceInitNew( aClassID, OUString(), xStorage, sEntName, aObjArgs ),
-                                    uno::UNO_QUERY );
-        }
-        else
-        {
-            OUString aFileName = OStringToOUString( OString( szFile ), osl_getThreadTextEncoding() );
-            OUString aFileURL;
-            if ( osl::FileBase::getFileURLFromSystemPath( aFileName, aFileURL ) != osl::FileBase::E_None )
-                throw uno::RuntimeException();
-
-            uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-            aMediaDescr[0].Name = "URL";
-            aMediaDescr[0].Value <<= aFileURL;
-
-            // TODO: use config helper for type detection
-            uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator;
-            ::comphelper::MimeConfigurationHelper aHelper( comphelper::getComponentContext(m_xFactory) );
-
-            if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) )
-                xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );
-            else
-                xEmbCreator = embed::OLEEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
-
-            if ( !xEmbCreator.is() )
-                throw uno::RuntimeException();
-
-            aObjectInfo.Object.set( xEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aMediaDescr, aObjArgs ),
-                                    uno::UNO_QUERY );
-        }
-
-        if ( ( io.dwFlags & IOF_CHECKDISPLAYASICON) && io.hMetaPict != nullptr )
-        {
-            METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock( io.hMetaPict ));
-            if ( pMF )
-            {
-                sal_uInt32 nBufSize = GetMetaFileBitsEx( pMF->hMF, 0, nullptr );
-                uno::Sequence< sal_Int8 > aMetafile( nBufSize + 22 );
-                sal_Int8* pBuf = aMetafile.getArray();
-                *reinterpret_cast<long*>( pBuf ) = 0x9ac6cdd7L;
-                *reinterpret_cast<short*>( pBuf+6 ) = ( SHORT ) 0;
-                *reinterpret_cast<short*>( pBuf+8 ) = ( SHORT ) 0;
-                *reinterpret_cast<short*>( pBuf+10 ) = ( SHORT ) pMF->xExt;
-                *reinterpret_cast<short*>( pBuf+12 ) = ( SHORT ) pMF->yExt;
-                *reinterpret_cast<short*>( pBuf+14 ) = ( USHORT ) 2540;
-
-                if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
-                {
-                    datatransfer::DataFlavor aFlavor(
-                        "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
-                        "Image WMF",
-                        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
-
-                    aObjectInfo.Options.realloc( 2 );
-                    aObjectInfo.Options[0].Name = "Icon";
-                    aObjectInfo.Options[0].Value <<= aMetafile;
-                    aObjectInfo.Options[1].Name = "IconFormat";
-                    aObjectInfo.Options[1].Value <<= aFlavor;
-                }
-
-                GlobalUnlock( io.hMetaPict );
-            }
-        }
+        //TODO: retrieve ClassName
+        aObjectInfo.Object.set( xEmbCreator->createInstanceInitNew( aClassID, OUString(), xStorage, sEntName, aObjArgs ),
+                                uno::UNO_QUERY );
     }
     else
-        throw ucb::CommandAbortedException();
+    {
+        OUString aFileName = OStringToOUString( OString( szFile ), osl_getThreadTextEncoding() );
+        OUString aFileURL;
+        if ( osl::FileBase::getFileURLFromSystemPath( aFileName, aFileURL ) != osl::FileBase::E_None )
+            throw uno::RuntimeException();
+
+        uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
+        aMediaDescr[0].Name = "URL";
+        aMediaDescr[0].Value <<= aFileURL;
+
+        // TODO: use config helper for type detection
+        uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator;
+        ::comphelper::MimeConfigurationHelper aHelper( comphelper::getComponentContext(m_xFactory) );
+
+        if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) )
+            xEmbCreator = embed::EmbeddedObjectCreator::create( comphelper::getComponentContext(m_xFactory) );
+        else
+            xEmbCreator = embed::OLEEmbeddedObjectFactory::create( comphelper::getComponentContext(m_xFactory) );
+
+        if ( !xEmbCreator.is() )
+            throw uno::RuntimeException();
+
+        aObjectInfo.Object.set( xEmbCreator->createInstanceInitFromMediaDescriptor( xStorage, sEntName, aMediaDescr, aObjArgs ),
+                                uno::UNO_QUERY );
+    }
+
+    if ( ( io.dwFlags & IOF_CHECKDISPLAYASICON) && io.hMetaPict != nullptr )
+    {
+        METAFILEPICT* pMF = static_cast<METAFILEPICT*>(GlobalLock( io.hMetaPict ));
+        if ( pMF )
+        {
+            sal_uInt32 nBufSize = GetMetaFileBitsEx( pMF->hMF, 0, nullptr );
+            uno::Sequence< sal_Int8 > aMetafile( nBufSize + 22 );
+            sal_Int8* pBuf = aMetafile.getArray();
+            *reinterpret_cast<long*>( pBuf ) = 0x9ac6cdd7L;
+            *reinterpret_cast<short*>( pBuf+6 ) = ( SHORT ) 0;
+            *reinterpret_cast<short*>( pBuf+8 ) = ( SHORT ) 0;
+            *reinterpret_cast<short*>( pBuf+10 ) = ( SHORT ) pMF->xExt;
+            *reinterpret_cast<short*>( pBuf+12 ) = ( SHORT ) pMF->yExt;
+            *reinterpret_cast<short*>( pBuf+14 ) = ( USHORT ) 2540;
+
+            if ( nBufSize && nBufSize == GetMetaFileBitsEx( pMF->hMF, nBufSize, pBuf+22 ) )
+            {
+                datatransfer::DataFlavor aFlavor(
+                    "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
+                    "Image WMF",
+                    cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+
+                aObjectInfo.Options.realloc( 2 );
+                aObjectInfo.Options[0].Name = "Icon";
+                aObjectInfo.Options[0].Value <<= aMetafile;
+                aObjectInfo.Options[1].Name = "IconFormat";
+                aObjectInfo.Options[1].Value <<= aFlavor;
+            }
+
+            GlobalUnlock( io.hMetaPict );
+        }
+    }
 
     OSL_ENSURE( aObjectInfo.Object.is(), "No object was created!" );
     if ( !aObjectInfo.Object.is() )

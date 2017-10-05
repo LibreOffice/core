@@ -1563,19 +1563,17 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
 
         uno::Reference< io::XOutputStream > xTempOutStream = xTempFileStream->getOutputStream();
         uno::Reference< io::XInputStream > xTempInStream = xTempFileStream->getInputStream();
-        if ( xTempOutStream.is() && xTempInStream.is() )
-        {
-            OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
-            if ( !m_pUnoOleObject )
-                throw uno::RuntimeException();
-
-            m_pUnoOleObject->StoreObjectToStream( xTempOutStream );
-
-            xTempOutStream->closeOutput();
-            xTempOutStream.clear();
-        }
-        else
+        if ( !(xTempOutStream.is() && xTempInStream.is()) )
             throw io::IOException(); // TODO:
+
+        OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
+        if ( !m_pUnoOleObject )
+            throw uno::RuntimeException();
+
+        m_pUnoOleObject->StoreObjectToStream( xTempOutStream );
+
+        xTempOutStream->closeOutput();
+        xTempOutStream.clear();
 
         aResult <<= xTempInStream;
     }
