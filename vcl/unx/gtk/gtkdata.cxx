@@ -835,7 +835,9 @@ void GtkSalData::TriggerUserEventProcessing()
     else // nothing pending anyway
     {
         m_pUserEvent = g_idle_source_new();
-        g_source_set_priority (m_pUserEvent, G_PRIORITY_HIGH);
+        // tdf#112890 some dialog don't appear under gtk2, use the same
+        // priority for user-events as gtk3 does since tdf#110737
+        g_source_set_priority (m_pUserEvent,  G_PRIORITY_HIGH_IDLE + 30);
         g_source_set_can_recurse (m_pUserEvent, TRUE);
         g_source_set_callback (m_pUserEvent, call_userEventFn,
                                static_cast<gpointer>(this), nullptr);
