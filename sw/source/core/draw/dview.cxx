@@ -829,11 +829,7 @@ void SwDrawView::CheckPossibilities()
                 pFrame = pFly->GetAnchorFrame();
                 if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
                 {
-                    // SwNoTextNode& rNoTNd = const_cast<SwNoTextNode&>(*static_cast<const SwNoTextNode*>((static_cast<const SwContentFrame*>(pFly->Lower()))->GetNode()));
-                    // SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
-                    // SwOLENode* pOLENd = rNoTNd.GetOLENode();
-
-                    const SwContentFrame* pCntFr = const_cast<SwContentFrame*>(static_cast<const SwContentFrame*>(pFly->Lower()));
+                    const SwContentFrame* pCntFr(static_cast<const SwContentFrame*>(pFly->Lower()));
                     const SwOLENode* pOLENd = pCntFr->GetNode()->GetOLENode();
                     const SwGrfNode* pGrfNd = pCntFr->GetNode()->GetGrfNode();
 
