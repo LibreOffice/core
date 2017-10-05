@@ -26,7 +26,7 @@
 #include <win/saltimer.h>
 #include <win/salinst.h>
 
-static void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
+void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
 
 // See http://msdn.microsoft.com/en-us/library/windows/desktop/ms687003%28v=vs.85%29.aspx
 // (and related pages) for details about the Timer Queues.
@@ -122,7 +122,7 @@ void WinSalTimer::Stop()
  * This gets invoked from a Timer Queue thread.
  * Don't acquire the SolarMutex to avoid deadlocks.
  */
-static void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
+void CALLBACK SalTimerProc(PVOID data, BOOLEAN)
 {
     __try
     {
