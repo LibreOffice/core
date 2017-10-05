@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d6a66d52",
+        "filename": "include/sfx2/zoomitem.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T13:56:40Z",
+      "side": 1,
+      "message": "is it a good idea to remove the virtual dtor of a DLLPUBLIC class?  does that have negative implications on where ancillary data for that class (e.g., vtable) are emitted?",
+      "revId": "b18545688a6399dbf89b05dae585e15a75b8302a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
