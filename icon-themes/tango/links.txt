@@ -613,3 +613,15 @@ cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
 # writer epub export
 cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
 cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
+
+# menu bar submenus
+cmd/sc_shapesmenu.png cmd/sc_basicshapes.rectangle.png
+cmd/sc_shapeslinemenu.png cmd/sc_line.png
+cmd/sc_formattextmenu.png cmd/sc_text.png
+cmd/sc_formatspacingmenu.png cmd/sc_spacepara15.png
+cmd/sc_textalign.png cmd/sc_alignblock.png
+cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
+cmd/sc_numberformatmenu.png cmd/sc_numberformatdecimal.png
+cmd/sc_formatimagemenu.png cmd/sc_insertgraphic.png
+cmd/sc_formatframemenu.png cmd/sc_inserttextframe.png
+

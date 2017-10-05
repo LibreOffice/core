@@ -3451,16 +3451,10 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Frame</value>
         </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
       </node>
       <node oor:name=".uno:InsertFootnotesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Footnote and Endno~te</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:FormatImageMenu" oor:op="replace">
@@ -3509,9 +3503,6 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">St~yles</value>
         </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
       </node>
       <node oor:name=".uno:FormatFrameMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -3524,9 +3515,6 @@
       <node oor:name=".uno:FormatFormMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Form</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertGraphic" oor:op="replace">
@@ -6074,6 +6062,9 @@
       <node oor:name=".uno:TextAlign" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Alig~n</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:PolyFormen" oor:op="replace">
