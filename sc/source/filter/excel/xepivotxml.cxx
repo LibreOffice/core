@@ -290,7 +290,8 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         std::set<ScDPItemData::Type> aDPTypesWithoutBlank = aDPTypes;
         aDPTypesWithoutBlank.erase(ScDPItemData::Empty);
 
-        bool isContainsString = aDPTypesWithoutBlank.find(ScDPItemData::String) != aDPTypesWithoutBlank.end();
+        bool isContainsString = aDPTypesWithoutBlank.find(ScDPItemData::String) != aDPTypesWithoutBlank.end() ||
+                                aDPTypesWithoutBlank.find(ScDPItemData::Error) != aDPTypesWithoutBlank.end();
         bool isContainsBlank = aDPTypes.find(ScDPItemData::Empty) != aDPTypeEnd;
         bool isContainsNumber = !isContainsDate && aDPTypesWithoutBlank.find(ScDPItemData::Value) != aDPTypesWithoutBlank.end();
         bool isContainsNonDate = !(isContainsDate && aDPTypesWithoutBlank.size() <= 1);

@@ -157,7 +157,7 @@ void PivotCacheItem::readBool( const AttributeList& rAttribs )
 
 void PivotCacheItem::readError( const AttributeList& rAttribs, const UnitConverter& rUnitConverter )
 {
-    maValue <<= static_cast< sal_Int32 >( rUnitConverter.calcBiffErrorCode( rAttribs.getXString( XML_v, OUString() ) ) );
+    maValue <<= rAttribs.getXString( XML_v, OUString() );
     mnType = XML_e;
 }
 
@@ -243,7 +243,7 @@ OUString PivotCacheItem::getFormattedName(const ScDPSaveDimension& rSaveDim, ScD
         case XML_i: return pObj->GetFormattedString(rSaveDim.GetName(), static_cast<double>(maValue.get< sal_Int32 >()));
         case XML_b: return pObj->GetFormattedString(rSaveDim.GetName(), static_cast<double>(maValue.get< bool >()));
         case XML_d: return pObj->GetFormattedString(rSaveDim.GetName(), maValue.get< css::util::DateTime >() - rNullDate);
-        case XML_e: return OUString();                                                              // !TODO
+        case XML_e: return maValue.get< OUString >();
     }
     OSL_FAIL( "PivotCacheItem::getFormattedName - invalid data type" );
     return OUString();
