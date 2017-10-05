@@ -213,6 +213,7 @@ public:
     void testPivotTableDateFieldFilterXLSX();
     void testPivotTableBoolFieldFilterXLSX();
     void testPivotTableRowColPageFieldFilterXLSX();
+    void testPivotTableErrorItemFilterXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -326,6 +327,7 @@ public:
     CPPUNIT_TEST(testPivotTableDateFieldFilterXLSX);
     CPPUNIT_TEST(testPivotTableBoolFieldFilterXLSX);
     CPPUNIT_TEST(testPivotTableRowColPageFieldFilterXLSX);
+    CPPUNIT_TEST(testPivotTableErrorItemFilterXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5120,6 +5122,36 @@ void ScExportTest::testPivotTableRowColPageFieldFilterXLSX()
         CPPUNIT_ASSERT(pMember);
         CPPUNIT_ASSERT(pMember->HasIsVisible() && pMember->GetIsVisible());
     }*/
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableErrorItemFilterXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("pivottable_error_item_filter.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    // Reload and check whether filtering is preserved
+    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName("b");
+    CPPUNIT_ASSERT(pSaveDim);
+    const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+    CPPUNIT_ASSERT_EQUAL(size_t(4), rMembers.size());
+    ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("#DIV/0!");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
 
     xDocSh->DoClose();
 }
