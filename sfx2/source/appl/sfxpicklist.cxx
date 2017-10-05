@@ -117,12 +117,8 @@ void SfxPickListImpl::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if ( aURL.GetProtocol() == INetProtocol::VndSunStarHelp )
         return;
 
+    // add no document that forbids this
     if ( !pMed->IsUpdatePickList() )
-        return;
-
-    // add no document that forbids this (for example Message-Body)
-    const SfxBoolItem* pPicklistItem = SfxItemSet::GetItem<SfxBoolItem>(pMed->GetItemSet(), SID_PICKLIST, false);
-    if ( pPicklistItem && !pPicklistItem->GetValue() )
         return;
 
     // ignore hidden documents
