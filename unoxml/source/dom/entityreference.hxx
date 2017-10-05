@@ -39,7 +39,6 @@ namespace DOM
     private:
         friend class CDocument;
 
-    protected:
         CEntityReference(
             CDocument const& rDocument, ::osl::Mutex const& rMutex,
             xmlNodePtr const pNode);

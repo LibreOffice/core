@@ -172,7 +172,6 @@ private:
             }
     };
 
-protected:
     XNamedVec mXNamedVec;
     typename XNamedVec::iterator cachePos;
 public:

@@ -41,10 +41,8 @@ namespace DOM
     private:
         friend class CDocument;
 
-    private:
         xmlEntityPtr m_aEntityPtr;
 
-    protected:
         CEntity(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlEntityPtr const pEntity);
 

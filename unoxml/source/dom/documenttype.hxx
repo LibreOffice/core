@@ -43,10 +43,8 @@ namespace DOM
     private:
         friend class CDocument;
 
-    private:
         xmlDtdPtr m_aDtdPtr;
 
-    protected:
         CDocumentType(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlDtdPtr const pDtd);
 

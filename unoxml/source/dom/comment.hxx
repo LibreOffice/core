@@ -34,10 +34,8 @@ namespace DOM
     class CComment
         : public CComment_Base
     {
-    private:
         friend class CDocument;
 
-    protected:
         CComment(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlNodePtr const pNode);
 

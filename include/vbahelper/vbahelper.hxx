@@ -176,7 +176,6 @@ public:
 
 class VBAHELPER_DLLPUBLIC ShapeHelper
 {
-protected:
     css::uno::Reference< css::drawing::XShape > xShape;
 public:
     /// @throws css::script::BasicErrorException

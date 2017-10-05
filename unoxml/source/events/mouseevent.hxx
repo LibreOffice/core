@@ -35,7 +35,6 @@ typedef ::cppu::ImplInheritanceHelper< CUIEvent, css::xml::dom::events::XMouseEv
 class CMouseEvent
     : public CMouseEvent_Base
 {
-protected:
     sal_Int32 m_screenX;
     sal_Int32 m_screenY;
     sal_Int32 m_clientX;

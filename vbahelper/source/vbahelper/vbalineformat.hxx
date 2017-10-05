@@ -33,7 +33,6 @@ private:
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
     sal_Int32 m_nLineDashStyle;
     double m_nLineWeight;
-protected:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     static sal_Int32 convertLineStartEndNameToArrowheadStyle( const OUString& sLineName );

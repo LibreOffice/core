@@ -39,7 +39,6 @@ namespace DOM
     private:
         friend class CDocument;
 
-    protected:
         CProcessingInstruction(
                 CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlNodePtr const pNode);
