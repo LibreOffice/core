@@ -16,6 +16,24 @@
       "revId": "b18545688a6399dbf89b05dae585e15a75b8302a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f618c986",
+        "filename": "include/sfx2/zoomitem.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-10-05T15:20:35Z",
+      "side": 1,
+      "message": "when removing dtors I checked if class is complete and members have DLLPUBLIC dtor.\nFor enums I assumed this is the case.\nI\u0027m not sure about negative implications, guess the dtors are inlined. And as you see many pool items don\u0027t have an explicit virtual dtor. If you think that\u0027s bad I would support a uniform solution.\n\nso far I didn\u0027t encounter a pool item with non DLLPUBLIC member.\nonly saw this once with an other class which gave me a linking error, so I had to define the dtor in the source.",
+      "parentUuid": "1a430d35_d6a66d52",
+      "revId": "b18545688a6399dbf89b05dae585e15a75b8302a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
