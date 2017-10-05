@@ -57,7 +57,7 @@
 #include <expfld.hxx>
 #include <fmtfld.hxx>
 #include <flddropdown.hxx>
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8par.hxx"

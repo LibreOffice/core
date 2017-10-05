@@ -76,7 +76,7 @@
 #include <ndole.hxx>
 #include <unodraw.hxx>
 #include <pagedesc.hxx>
-#include <ww8par.hxx>
+#include "ww8par.hxx"
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include "ww8attributeoutput.hxx"

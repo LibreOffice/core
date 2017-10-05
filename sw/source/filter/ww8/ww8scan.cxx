@@ -27,7 +27,7 @@
 #include <algorithm>
 
 #include <i18nlangtag/mslangid.hxx>
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 #include <rtl/tencinfo.h>
 #include <sal/macros.h>
 

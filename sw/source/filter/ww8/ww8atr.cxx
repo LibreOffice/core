@@ -123,7 +123,7 @@
 #include <fmthdft.hxx>
 #include <authfld.hxx>
 
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 
 #include <fmtcntnt.hxx>
 #include "writerhelper.hxx"

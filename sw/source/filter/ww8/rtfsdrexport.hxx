@@ -28,7 +28,7 @@
 #include <memory>
 #include <set>
 
-#include <wrtww8.hxx>
+#include "wrtww8.hxx"
 
 class RtfExport;
 class RtfAttributeOutput;

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtfexportfilter.hxx>
-#include <rtfexport.hxx>
+#include "rtfexportfilter.hxx"
+#include "rtfexport.hxx"
 
 #include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>

@@ -35,7 +35,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <doc.hxx>
-#include <wrtww8.hxx>
+#include "wrtww8.hxx"
 #include <docary.hxx>
 #include <poolfmt.hxx>
 #include <fmtpdsc.hxx>
@@ -60,7 +60,7 @@
 #include <msfilter.hxx>
 #include <swmodule.hxx>
 
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

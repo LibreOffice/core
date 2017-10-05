@@ -73,8 +73,8 @@
 #include <pagedesc.hxx>
 #include <IMark.hxx>
 #include <swtable.hxx>
-#include <wrtww8.hxx>
-#include <ww8par.hxx>
+#include "wrtww8.hxx"
+#include "ww8par.hxx"
 #include <fltini.hxx>
 #include <swmodule.hxx>
 #include <section.hxx>
@@ -92,7 +92,7 @@
 #include <fmtfsize.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

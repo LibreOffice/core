@@ -54,7 +54,7 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <docsh.hxx>
 #include <ndtxt.hxx>
-#include <wrtww8.hxx>
+#include "wrtww8.hxx"
 #include <fltini.hxx>
 #include <fmtline.hxx>
 #include <fmtpdsc.hxx>
