@@ -47,9 +47,6 @@ SalKDEDisplay::~SalKDEDisplay()
 
 void SalKDEDisplay::Yield()
 {
-    if( DispatchInternalEvent() )
-        return;
-
     // Prevent blocking from Drag'n'Drop events, which may have already have processed the event
     if (XEventsQueued( pDisp_, QueuedAfterReading ) == 0)
         return;

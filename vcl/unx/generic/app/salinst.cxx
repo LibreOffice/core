@@ -147,7 +147,8 @@ bool X11SalInstance::AnyInput(VclInputFlags nType)
 
     if( (nType & VclInputFlags::TIMER) && (mpXLib && mpXLib->CheckTimeout(false)) )
         bRet = true;
-    else if (XPending(pDisplay) )
+
+    if( !bRet && XPending(pDisplay) )
     {
         PredicateReturn aInput;
         XEvent          aEvent;

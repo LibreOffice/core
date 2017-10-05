@@ -179,7 +179,7 @@ public:
     virtual void    StartTimer( sal_uLong nMS );
     virtual void    StopTimer();
 
-    bool            CheckTimeout( bool bExecuteTimers = true );
+    virtual bool    CheckTimeout( bool bExecuteTimers = true );
 
     SalI18N_InputMethod* GetInputMethod() const { return m_pInputMethod; }
     Display*             GetDisplay() const { return m_pDisplay; }

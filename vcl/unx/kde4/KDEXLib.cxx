@@ -53,6 +53,7 @@ KDEXLib::KDEXLib() :
     m_nFakeCmdLineArgs( 0 ),
     m_isGlibEventLoopType(false), m_allowKdeDialogs(false),
     m_timerEventId( -1 ), m_postUserEventId( -1 )
+    , m_bTimedOut( false )
 {
     m_timerEventId = QEvent::registerEventType();
     m_postUserEventId = QEvent::registerEventType();
@@ -269,22 +270,24 @@ void KDEXLib::socketNotifierActivated( int fd )
 
 bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
+    bool bWasEvent = false;
     if( !m_isGlibEventLoopType )
     {
-        bool wasEvent = false;
         if( qApp->thread() == QThread::currentThread())
         {
             // even if we use the LO event loop, still process Qt's events,
             // otherwise they can remain unhandled for quite a long while
-            wasEvent = processYield( false, bHandleAllCurrentEvents );
+            bWasEvent = processYield( false, bHandleAllCurrentEvents );
         }
-        return SalXLib::Yield(bWait, bHandleAllCurrentEvents) || wasEvent;
+        return SalXLib::Yield(bWait, bHandleAllCurrentEvents) || bWasEvent;
     }
     // if we are the main thread (which is where the event processing is done),
     // good, just do it
     if( qApp->thread() == QThread::currentThread())
     {
-        return processYield( bWait, bHandleAllCurrentEvents );
+        bWasEvent = processYield( bWait, bHandleAllCurrentEvents );
+        if ( bWasEvent )
+            m_aWaitingYieldCond.set();
     }
     else
     {
@@ -292,23 +295,40 @@ bool KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // release the yield lock to prevent deadlock with the main thread
         // (it's ok to release it here, since even normal processYield() would
         // temporarily do it while checking for new events)
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT processYieldSignal( bWait, bHandleAllCurrentEvents );
+        {
+            SolarMutexReleaser aReleaser;
+            bWasEvent = Q_EMIT processYieldSignal( false, bHandleAllCurrentEvents );
+        }
+        if ( !bWasEvent && bWait )
+        {
+            m_aWaitingYieldCond.reset();
+            SolarMutexReleaser aReleaser;
+            m_aWaitingYieldCond.wait();
+            bWasEvent = true;
+        }
     }
+    return bWasEvent;
 }
 
-/**
- * Quoting the Qt docs: [QAbstractEventDispatcher::processEvents] processes
- * pending events that match flags until there are no more events to process.
- */
-bool KDEXLib::processYield( bool bWait, bool )
+bool KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
     bool wasEvent = false;
-    if ( bWait )
+    if ( m_isGlibEventLoopType )
+    {
+        wasEvent = SalKDEDisplay::self()->DispatchInternalEvent( bHandleAllCurrentEvents );
+        if ( !bHandleAllCurrentEvents && wasEvent )
+            return true;
+    }
+
+    /**
+     * Quoting the Qt docs: [QAbstractEventDispatcher::processEvents] processes
+     * pending events that match flags until there are no more events to process.
+     */
+    QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
+    if ( bWait && !wasEvent )
         wasEvent = dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
     else
-        wasEvent = dispatcher->processEvents( QEventLoop::AllEvents );
+        wasEvent = dispatcher->processEvents( QEventLoop::AllEvents ) || wasEvent;
     return wasEvent;
 }
 
@@ -336,18 +356,28 @@ void KDEXLib::StopTimer()
     timeoutTimer.stop();
 }
 
+bool KDEXLib::CheckTimeout( bool bExecuteTimers )
+{
+    if( !m_isGlibEventLoopType )
+        return SalXLib::CheckTimeout( bExecuteTimers );
+    assert( !bExecuteTimers );
+    return m_bTimedOut;
+}
+
 void KDEXLib::timeoutActivated()
 {
     // don't potentially wait in timeout, as QTimer is non-recursive
+    m_bTimedOut = true;
     QApplication::postEvent(this, new QEvent(QEvent::Type( m_timerEventId )));
 }
 
 void KDEXLib::customEvent(QEvent* e)
 {
     if( e->type() == m_timerEventId )
+    {
+        m_bTimedOut = false;
         X11SalData::Timeout();
-    else if( e->type() == m_postUserEventId )
-        SalKDEDisplay::self()->DispatchInternalEvent();
+    }
 }
 
 void KDEXLib::Wakeup()
