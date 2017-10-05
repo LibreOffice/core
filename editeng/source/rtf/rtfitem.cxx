@@ -307,7 +307,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_LEVEL:
                 if( aPardMap.nOutlineLvl )
                 {
-                    pSet->Put( SfxUInt16Item( aPardMap.nOutlineLvl,
+                    pSet->Put( SfxInt16Item( aPardMap.nOutlineLvl,
                                                 (sal_uInt16)nTokenValue ));
                 }
                 break;
