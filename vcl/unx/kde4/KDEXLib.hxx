@@ -30,13 +30,14 @@
 #include <QtCore/QTimer>
 
 #include <unx/salinst.h>
+#include <osl/conditn.hxx>
 
 class VCLKDEApplication;
 
 class KDEXLib : public QObject, public SalXLib
 {
     Q_OBJECT
-    private:
+
         bool m_bStartupDone;
         std::unique_ptr<VCLKDEApplication> m_pApplication;
         std::unique_ptr<char*[]> m_pFreeCmdLineArgs;
@@ -56,23 +57,24 @@ class KDEXLib : public QObject, public SalXLib
         bool m_allowKdeDialogs;
         int m_timerEventId;
         int m_postUserEventId;
+    osl::Condition m_aWaitingYieldCond;
+    bool m_bTimedOut;
 
-    private:
-        void setupEventLoop();
+    void setupEventLoop();
 
-    private Q_SLOTS:
+private Q_SLOTS:
         void socketNotifierActivated( int fd );
         void timeoutActivated();
         void startTimeoutTimer();
-        static bool processYield( bool bWait, bool bHandleAllCurrentEvents );
+        bool processYield( bool bWait, bool bHandleAllCurrentEvents );
 
-    Q_SIGNALS:
+Q_SIGNALS:
         void startTimeoutTimerSignal();
         bool processYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
         css::uno::Reference< css::ui::dialogs::XFilePicker2 >
             createFilePickerSignal( const css::uno::Reference< css::uno::XComponentContext >& );
 
-    public:
+public:
         KDEXLib();
         virtual ~KDEXLib() override;
 
@@ -82,6 +84,7 @@ class KDEXLib : public QObject, public SalXLib
         virtual void Remove( int fd ) override;
         virtual void StartTimer( sal_uLong nMS ) override;
         virtual void StopTimer() override;
+        virtual bool CheckTimeout( bool bExecuteTimers = true ) override;
         virtual void Wakeup() override;
         void TriggerUserEventProcessing();
 
@@ -90,7 +93,7 @@ class KDEXLib : public QObject, public SalXLib
 
         virtual void customEvent(QEvent* e) override;
 
-    public Q_SLOTS:
+public Q_SLOTS:
         css::uno::Reference< css::ui::dialogs::XFilePicker2 >
             createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& );
 };

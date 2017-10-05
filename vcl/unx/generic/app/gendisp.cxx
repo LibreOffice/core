@@ -47,9 +47,9 @@ void SalGenericDisplay::emitDisplayChanged()
         pAnyFrame->CallCallback( SalEvent::DisplayChanged, nullptr );
 }
 
-bool SalGenericDisplay::DispatchInternalEvent()
+bool SalGenericDisplay::DispatchInternalEvent( bool bHandleAllCurrentEvent )
 {
-    return DispatchUserEvents( false );
+    return DispatchUserEvents( bHandleAllCurrentEvent );
 }
 
 void SalGenericDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
