@@ -38,10 +38,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-// Please look at sfx2/inc/sfxsids.hrc the values are defined there. Due to build dependencies
-// we cannot include the header file.
-const sal_uInt16 SID_HELPMENU            = (SID_SFX_START + 410);
-
 namespace framework
 {
 
@@ -101,13 +97,10 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
 {
     if ( pMergeMenuBar )
     {
-        PopupMenu* pHelpMenu = pMergeMenuBar->GetPopupMenu( SID_HELPMENU );
-        if ( !pHelpMenu )
-        {
-            sal_uInt16 nId = FindMenuId(pMergeMenuBar, ".uno:HelpMenu");
-            if ( nId != USHRT_MAX )
-                pHelpMenu = pMergeMenuBar->GetPopupMenu( nId );
-        }
+        PopupMenu* pHelpMenu(nullptr);
+        sal_uInt16 nId = FindMenuId(pMergeMenuBar, ".uno:HelpMenu");
+        if ( nId != USHRT_MAX )
+            pHelpMenu = pMergeMenuBar->GetPopupMenu( nId );
 
         if ( pHelpMenu )
         {
@@ -118,7 +111,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
             AddonsOptions aOptions;
 
             // try to detect the about menu item with the command URL
-            sal_uInt16 nId = FindMenuId(pHelpMenu, ".uno:About");
+            nId = FindMenuId(pHelpMenu, ".uno:About");
             sal_uInt16 nInsPos = pHelpMenu->GetItemPos( nId );
 
             const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();

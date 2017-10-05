@@ -817,12 +817,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     // Prevent entry in the Pick-lists
     if ( rReq.IsAPI() )
         GetMedium()->SetUpdatePickList( false );
-    else if ( rReq.GetArgs() )
-    {
-        const SfxBoolItem* pPicklistItem = rReq.GetArgs()->GetItem<SfxBoolItem>(SID_PICKLIST, false);
-        if ( pPicklistItem )
-            GetMedium()->SetUpdatePickList( pPicklistItem->GetValue() );
-    }
 
     // Ignore()-branches have already returned
     rReq.Done();

@@ -1834,24 +1834,6 @@ SfxVoidItem HelpIndex SID_HELPINDEX
 ]
 
 
-SfxVoidItem HelpMenu SID_HELPMENU
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Application;
-]
-
-
 SfxBoolItem HelpTip SID_HELPTIPS
 
 [
@@ -3124,24 +3106,6 @@ SfxStringItem DocPath SID_DOCPATH
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = ;
-]
-
-
-SfxVoidItem PickList SID_PICKLIST
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-        MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Application;
 ]
 
 
@@ -4616,24 +4580,6 @@ SfxBoolItem ViewDataSourceBrowser SID_VIEW_DATA_SOURCE_BROWSER
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
 ]
-
-SfxVoidItem WindowList SID_MDIWINDOWLIST
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::View;
-]
-
 
 SfxVoidItem ZoomMinus SID_ZOOM_IN
 ()
