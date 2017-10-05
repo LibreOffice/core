@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <docxsdrexport.hxx>
+#include "docxsdrexport.hxx"
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
@@ -27,8 +27,8 @@
 #include <txatbase.hxx>
 #include <fmtfsize.hxx>
 #include <drawdoc.hxx>
-#include <docxattributeoutput.hxx>
-#include <docxexportfilter.hxx>
+#include "docxattributeoutput.hxx"
+#include "docxexportfilter.hxx"
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>

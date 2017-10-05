@@ -31,7 +31,7 @@
 #include <unotools/fontcfg.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 
 #include "ww8attributeoutput.hxx"
 #include "writerhelper.hxx"

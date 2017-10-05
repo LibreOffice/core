@@ -84,7 +84,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <oox/export/vmlexport.hxx>
 
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"

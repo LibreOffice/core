@@ -38,7 +38,7 @@
 #include <boost/optional.hpp>
 #include <oox/export/vmlexport.hxx>
 #include <oox/export/drawingml.hxx>
-#include <docxtablestyleexport.hxx>
+#include "docxtablestyleexport.hxx"
 
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

@@ -93,7 +93,7 @@
 #include <charfmt.hxx>
 #include <unocrsr.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 
 #include <fltini.hxx>
 

@@ -32,7 +32,7 @@
 #include <hintids.hxx>
 #include <svx/svdoole2.hxx>
 #include <filter/msfilter/msdffimp.hxx>
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 #include <svx/unoapi.hxx>
 
 #include <sot/exchange.hxx>

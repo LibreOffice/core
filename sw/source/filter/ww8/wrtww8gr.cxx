@@ -51,7 +51,7 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 
 #include <doc.hxx>
 #include "writerhelper.hxx"

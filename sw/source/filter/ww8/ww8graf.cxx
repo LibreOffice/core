@@ -95,7 +95,7 @@
 #include <o3tl/enumrange.hxx>
 #include <memory>
 #include <filter/msfilter/escherex.hxx>
-#include <sprmids.hxx>
+#include "sprmids.hxx"
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

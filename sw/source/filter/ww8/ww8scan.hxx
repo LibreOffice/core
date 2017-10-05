@@ -38,7 +38,7 @@
 #include "sortedarray.hxx"
 
 #include "ww8struc.hxx"
-#include <types.hxx>
+#include "types.hxx"
 
 #include <unomid.h>
 
