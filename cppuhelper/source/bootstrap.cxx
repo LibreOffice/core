@@ -31,6 +31,7 @@
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/findsofficepath.h>
@@ -94,7 +95,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         }
         rtl::OUString p2;
 #if defined(_WIN32)
-        p2 = SAL_U(p1);
+        p2 = o3tl::toU(p1);
         free(p1);
 #else
         bool bOk = rtl_convertStringToUString(

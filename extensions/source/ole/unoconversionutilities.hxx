@@ -20,16 +20,17 @@
 #define INCLUDED_EXTENSIONS_SOURCE_OLE_UNOCONVERSIONUTILITIES_HXX
 
 #include <memory>
-#include "com/sun/star/script/XInvocationAdapterFactory.hpp"
-#include "com/sun/star/script/XInvocationAdapterFactory2.hpp"
-#include "com/sun/star/script/XTypeConverter.hpp"
-#include "com/sun/star/script/FailReason.hpp"
-#include "com/sun/star/bridge/oleautomation/Date.hpp"
-#include "com/sun/star/bridge/oleautomation/Currency.hpp"
-#include "com/sun/star/bridge/oleautomation/SCode.hpp"
-#include "com/sun/star/bridge/oleautomation/Decimal.hpp"
-#include "typelib/typedescription.hxx"
+#include <com/sun/star/script/XInvocationAdapterFactory.hpp>
+#include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
+#include <com/sun/star/script/FailReason.hpp>
+#include <com/sun/star/bridge/oleautomation/Date.hpp>
+#include <com/sun/star/bridge/oleautomation/Currency.hpp>
+#include <com/sun/star/bridge/oleautomation/SCode.hpp>
+#include <com/sun/star/bridge/oleautomation/Decimal.hpp>
+#include <typelib/typedescription.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include "ole2uno.hxx"
 #include <cppuhelper/weakref.hxx>
 
@@ -812,7 +813,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             if (rAny >>= value)
             {
                 pVariant->vt = VT_BSTR;
-                pVariant->bstrVal = SysAllocString(SAL_W(value.getStr()));
+                pVariant->bstrVal = SysAllocString(o3tl::toW(value.getStr()));
             }
             else
             {
@@ -1507,7 +1508,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 }
                 case VT_BSTR:
                 {
-                    OUString b(SAL_U(var.bstrVal));
+                    OUString b(o3tl::toU(var.bstrVal));
                     rAny.setValue( &b, cppu::UnoType<decltype(b)>::get());
                     break;
                 }
@@ -1528,7 +1529,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                         {
                             throw CannotConvertException(
                                       "[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
-                                      "A UNO type with the name: " + OUString(SAL_U(LPCOLESTR(sName))) +
+                                      "A UNO type with the name: " + OUString(o3tl::toU(LPCOLESTR(sName))) +
                                 "does not exist!",
                                 nullptr, TypeClass_UNKNOWN, FailReason::TYPE_NOT_SUPPORTED,0);
                         }
@@ -1992,7 +1993,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
         for( sal_Int32 i= 0; i< length; i++)
         {
             OUString ousIndex=OUString::number( i);
-            OLECHAR* sindex = const_cast<OLECHAR *>(SAL_W(ousIndex.getStr()));
+            OLECHAR* sindex = const_cast<OLECHAR *>(o3tl::toW(ousIndex.getStr()));
 
             if( FAILED( hr= pdispEx->GetIDsOfNames(IID_NULL, &sindex , 1, LOCALE_USER_DEFAULT, &dispid)))
             {

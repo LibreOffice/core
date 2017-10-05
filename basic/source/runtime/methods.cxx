@@ -61,6 +61,7 @@
 #include <memory>
 #include <random>
 #include <o3tl/make_unique.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 using namespace comphelper;
 using namespace osl;
@@ -387,7 +388,7 @@ void SbRtl_CurDir(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
     wchar_t pBuffer[ _MAX_PATH ];
     if ( _wgetdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr )
     {
-        rPar.Get(0)->PutString( SAL_U(pBuffer) );
+        rPar.Get(0)->PutString( o3tl::toU(pBuffer) );
     }
     else
     {
@@ -2957,7 +2958,7 @@ void SbRtl_GetAttr(StarBASIC * pBasic, SbxArray & rPar, bool bWrite)
             OUString aPathURL = getFullPath( rPar.Get(1)->GetOUString() );
             OUString aPath;
             FileBase::getSystemPathFromFileURL( aPathURL, aPath );
-            DWORD nRealFlags = GetFileAttributesW (SAL_W(aPath.getStr()));
+            DWORD nRealFlags = GetFileAttributesW (o3tl::toW(aPath.getStr()));
             if (nRealFlags != 0xffffffff)
             {
                 if (nRealFlags == FILE_ATTRIBUTE_NORMAL)

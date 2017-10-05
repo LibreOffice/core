@@ -18,6 +18,7 @@
  */
 
 #include <vcl/errcode.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
@@ -213,25 +214,21 @@ bool SbxDecimal::setString( OUString* pOUString )
         pBuffer[nLen] = 0;
 
         const sal_Unicode* pSrc = pOUString->getStr();
-        int i;
-        for( i = 0 ; i < nLen ; ++i )
-            pBuffer[i] = pSrc[i];
-
-        sal_Unicode c;
-        i = 0;
-        while( (c = pBuffer[i]) != 0 )
+        for( int i = 0 ; i < nLen ; ++i )
         {
-            if( c == cDecimalSep )
-                pBuffer[i] = '.';
-            else if( c == cThousandSep )
-                pBuffer[i] = ',';
-            i++;
+            sal_Unicode c = pSrc[i];
+            if (c == cDecimalSep)
+                c = '.';
+            else if (c == cThousandSep)
+                c = ',';
+
+            pBuffer[i] = c;
         }
-        hResult = VarDecFromStr( SAL_W(pBuffer.get()), nLANGID, 0, &maDec );
+        hResult = VarDecFromStr( o3tl::toW(pBuffer.get()), nLANGID, 0, &maDec );
     }
     else
     {
-        hResult = VarDecFromStr( SAL_W(pOUString->getStr()), nLANGID, 0, &maDec );
+        hResult = VarDecFromStr( o3tl::toW(pOUString->getStr()), nLANGID, 0, &maDec );
     }
     bRet = ( hResult == S_OK );
     return bRet;
@@ -349,35 +346,31 @@ void SbxDecimal::getString( OUString& rString )
 #ifdef _WIN32
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
 
-    OLECHAR sz[100];
-    BSTR aBStr = SysAllocString( sz );
-    if( aBStr != nullptr )
+    BSTR pBStr = nullptr;
+    // VarBstrFromDec allocates new BSTR that needs to be released with SysFreeString
+    HRESULT hResult = VarBstrFromDec( &maDec, nLANGID, 0, &pBStr );
+    if( hResult == S_OK )
     {
-        HRESULT hResult = VarBstrFromDec( &maDec, nLANGID, 0, &aBStr );
-        if( hResult == S_OK )
+        // Convert delimiter
+        sal_Unicode cDecimalSep;
+        sal_Unicode cThousandSep;
+        ImpGetIntntlSep( cDecimalSep, cThousandSep );
+
+        if( cDecimalSep != '.' || cThousandSep != ',' )
         {
-            // Convert delimiter
-            sal_Unicode cDecimalSep;
-            sal_Unicode cThousandSep;
-            ImpGetIntntlSep( cDecimalSep, cThousandSep );
-
-            if( cDecimalSep != '.' || cThousandSep != ',' )
+            sal_Unicode c;
+            int i = 0;
+            while( (c = pBStr[i]) != 0 )
             {
-                sal_Unicode c;
-                int i = 0;
-                while( (c = aBStr[i]) != 0 )
-                {
-                    if( c == '.' )
-                        aBStr[i] = cDecimalSep;
-                    else if( c == ',' )
-                        aBStr[i] = cThousandSep;
-                    i++;
-                }
+                if( c == '.' )
+                    pBStr[i] = cDecimalSep;
+                else if( c == ',' )
+                    pBStr[i] = cThousandSep;
+                i++;
             }
-            rString = SAL_U(aBStr);
         }
-
-        SysFreeString( aBStr );
+        rString = o3tl::toU( pBStr );
+        SysFreeString( pBStr );
     }
 #else
     (void)rString;

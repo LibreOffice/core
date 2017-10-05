@@ -28,6 +28,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #define WIN32_LEAN_AND_MEAN
 #if defined _MSC_VER
@@ -297,8 +298,8 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     ZeroMemory(&sei, sizeof( sei));
 
     sei.cbSize       = sizeof(sei);
-    sei.lpFile       = SAL_W(preprocessed_command.getStr());
-    sei.lpParameters = SAL_W(aParameter.getStr());
+    sei.lpFile       = o3tl::toW(preprocessed_command.getStr());
+    sei.lpParameters = o3tl::toW(aParameter.getStr());
     sei.nShow        = SW_SHOWNORMAL;
 
     if (NO_SYSTEM_ERROR_MESSAGE & nFlags)

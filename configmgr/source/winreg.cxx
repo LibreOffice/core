@@ -27,6 +27,7 @@
 #include <sal/log.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include "winreg.hxx"
 #include "writemodfile.hxx"
 
@@ -86,7 +87,7 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
     HKEY hCurKey;
 
     if(RegOpenKeyExW(
-           hKey, SAL_W(aKeyName.getStr()), 0,
+           hKey, o3tl::toW(aKeyName.getStr()), 0,
            KEY_READ, &hCurKey)
        == ERROR_SUCCESS)
     {
@@ -109,9 +110,9 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
 
                 //Make up full key name
                 if(aKeyName.isEmpty())
-                    aSubkeyName = aKeyName + OUString(SAL_U(buffKeyName));
+                    aSubkeyName = aKeyName + OUString(o3tl::toU(buffKeyName));
                 else
-                    aSubkeyName = aKeyName + "\\" + OUString(SAL_U(buffKeyName));
+                    aSubkeyName = aKeyName + "\\" + OUString(o3tl::toU(buffKeyName));
 
                 //Recursion, until no more subkeys are found
                 dumpWindowsRegistryKey(hKey, aSubkeyName, aFileHandle);
@@ -140,9 +141,9 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 const wchar_t wsType[] = L"Type";
 
                 if(!wcscmp(pValueName.get(), wsValue))
-                    aValue = SAL_U(pValue.get());
+                    aValue = o3tl::toU(pValue.get());
                 else if (!wcscmp(pValueName.get(), wsType))
-                    aType = SAL_U(pValue.get());
+                    aType = o3tl::toU(pValue.get());
                 else if(!wcscmp(pValueName.get(), wsFinal) && *reinterpret_cast<DWORD*>(pValue.get()) == 1)
                     bFinal = true;
             }

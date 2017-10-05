@@ -34,6 +34,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontcfg.hxx>
@@ -527,7 +528,7 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
     aDFA.SetSymbolFlag(rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get the font face name
-    aDFA.SetFamilyName(SAL_U(rLogFont.lfFaceName));
+    aDFA.SetFamilyName(o3tl::toU(rLogFont.lfFaceName));
 
     // use the face's style name only if it looks reasonable
     const wchar_t* pStyleName = rEnumFont.elfStyle;
@@ -537,7 +538,7 @@ static FontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rEnumFont
         if( *p < 0x0020 )
             break;
     if( p < pEnd )
-        aDFA.SetStyleName(SAL_U(pStyleName));
+        aDFA.SetStyleName(o3tl::toU(pStyleName));
 
     // heuristics for font quality
     // -   opentypeTT > truetype
@@ -571,7 +572,7 @@ static WinFontFace* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogFont,
 
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
-    OUString aFontName( SAL_U(rLogFont.lfFaceName) );
+    OUString aFontName( o3tl::toU(rLogFont.lfFaceName) );
     if (!aFontName.isEmpty())
     {
         rFont.SetFamilyName( aFontName );
@@ -945,7 +946,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
 
     wchar_t aFaceName[LF_FACESIZE+60];
     if( GetTextFaceW( getHDC(), SAL_N_ELEMENTS(aFaceName), aFaceName ) )
-        rxFontMetric->SetFamilyName(SAL_U(aFaceName));
+        rxFontMetric->SetFamilyName(o3tl::toU(aFaceName));
 
     const DWORD nHheaTag = CalcTag("hhea");
     const DWORD nOS2Tag = CalcTag("OS/2");
@@ -1019,7 +1020,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         // Ignore vertical fonts
         if ( pLogFont->elfLogFont.lfFaceName[0] != '@' )
         {
-            OUString aName = SAL_U(pLogFont->elfLogFont.lfFaceName);
+            OUString aName = o3tl::toU(pLogFont->elfLogFont.lfFaceName);
             pInfo->mpName = &aName;
             memcpy(pInfo->mpLogFont->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.getLength()+1)*sizeof(wchar_t));
             pInfo->mpLogFont->lfCharSet = pLogFont->elfLogFont.lfCharSet;
@@ -1037,7 +1038,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         {
             if ((nFontType & RASTER_FONTTYPE) && !(nFontType & DEVICE_FONTTYPE))
             {
-                SAL_INFO("vcl.gdi", "Unsupported printer font ignored: " << OUString(SAL_U(pLogFont->elfLogFont.lfFaceName)));
+                SAL_INFO("vcl.gdi", "Unsupported printer font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
                 return 1;
             }
         }
@@ -1046,7 +1047,7 @@ int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
                  !(pMetric->ntmTm.ntmFlags & NTM_PS_OPENTYPE) &&
                  !(pMetric->ntmTm.ntmFlags & NTM_TT_OPENTYPE))
         {
-            SAL_INFO("vcl.gdi", "Unsupported font ignored: " << OUString(SAL_U(pLogFont->elfLogFont.lfFaceName)));
+            SAL_INFO("vcl.gdi", "Unsupported font ignored: " << OUString(o3tl::toU(pLogFont->elfLogFont.lfFaceName)));
             return 1;
         }
 
@@ -1072,7 +1073,7 @@ bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
     OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
-    nRet = AddFontResourceExW( SAL_W(aUSytemPath.getStr()), FR_PRIVATE, nullptr );
+    nRet = AddFontResourceExW( o3tl::toW(aUSytemPath.getStr()), FR_PRIVATE, nullptr );
 
     if ( !nRet )
     {
@@ -1089,7 +1090,7 @@ bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
         DeleteFileW( aResourceName );
 
         // TODO: font should be private => need to investigate why it doesn't work then
-        if( !CreateScalableFontResourceW( 0, aResourceName, SAL_W(aUSytemPath.getStr()), nullptr ) )
+        if( !CreateScalableFontResourceW( 0, aResourceName, o3tl::toW(aUSytemPath.getStr()), nullptr ) )
             return false;
         ++nCounter;
 
@@ -1097,7 +1098,7 @@ bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
         if( nRet > 0 )
         {
             TempFontItem* pNewItem = new TempFontItem;
-            pNewItem->maResourcePath = SAL_U( aResourceName );
+            pNewItem->maResourcePath = o3tl::toU( aResourceName );
             pNewItem->maFontFilePath = aUSytemPath;
             pNewItem->mpNextItem = rSalData.mpTempFontItem;
             rSalData.mpTempFontItem = pNewItem;
@@ -1115,13 +1116,13 @@ void ImplReleaseTempFonts( SalData& rSalData )
         ++nCount;
         if( p->maResourcePath.getLength() )
         {
-            const wchar_t* pResourcePath = SAL_W(p->maResourcePath.getStr());
+            const wchar_t* pResourcePath = o3tl::toW(p->maResourcePath.getStr());
             RemoveFontResourceW( pResourcePath );
             DeleteFileW( pResourcePath );
         }
         else
         {
-            RemoveFontResourceW( SAL_W(p->maFontFilePath.getStr()) );
+            RemoveFontResourceW( o3tl::toW(p->maFontFilePath.getStr()) );
         }
 
         rSalData.mpTempFontItem = p->mpNextItem;
@@ -1152,10 +1153,10 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
     DeleteFileW( aResourceName );
 
     // Create font resource file (typically with a .fot file name extension).
-    CreateScalableFontResourceW( 0, aResourceName, SAL_W(aUSytemPath.getStr()), nullptr );
+    CreateScalableFontResourceW( 0, aResourceName, o3tl::toW(aUSytemPath.getStr()), nullptr );
 
     // Open and read the font resource file
-    OUString aFotFileName = SAL_U( aResourceName );
+    OUString aFotFileName = o3tl::toU( aResourceName );
     osl::FileBase::getFileURLFromSystemPath( aFotFileName, aFotFileName );
     osl::File aFotFile( aFotFileName );
     osl::FileBase::RC aError = aFotFile.open( osl_File_OpenFlag_Read );

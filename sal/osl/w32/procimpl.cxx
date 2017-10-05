@@ -35,6 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "secimpl.hxx"
 #include <osl/file.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -112,7 +113,7 @@ namespace /* private */
 
         while (size_t l = wcslen(p))
         {
-            environment->push_back(SAL_U(p));
+            environment->push_back(o3tl::toU(p));
             p += l + 1;
         }
         FreeEnvironmentStringsW(env);
@@ -279,7 +280,7 @@ namespace /* private */
             std::vector<sal_Unicode> vec(path.getLength() + 1);
             //GetShortPathNameW only works if the file can be found!
             const DWORD len = GetShortPathNameW(
-                SAL_W(path.getStr()), SAL_W(&vec[0]), path.getLength() + 1);
+                o3tl::toW(path.getStr()), o3tl::toW(&vec[0]), path.getLength() + 1);
 
             if (!len && GetLastError() == ERROR_FILE_NOT_FOUND
                 && extension.getLength())
@@ -288,7 +289,7 @@ namespace /* private */
                 std::vector<sal_Unicode> vec2(
                     extPath.getLength() + 1);
                 const DWORD len2 = GetShortPathNameW(
-                    SAL_W(extPath.getStr()), SAL_W(&vec2[0]), extPath.getLength() + 1);
+                    o3tl::toW(extPath.getStr()), o3tl::toW(&vec2[0]), extPath.getLength() + 1);
                 ret = rtl::OUString(&vec2[0], len2);
             }
             else
@@ -468,7 +469,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     if (ustrDirectory && ustrDirectory->length && (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(ustrDirectory, cwd)))
            return osl_Process_E_InvalidError;
 
-    LPCWSTR p_cwd = (cwd.getLength()) ? SAL_W(cwd.getStr()) : nullptr;
+    LPCWSTR p_cwd = (cwd.getLength()) ? o3tl::toW(cwd.getStr()) : nullptr;
 
     if ((Options & osl_Process_DETACHED) && !(flags & CREATE_NEW_CONSOLE))
         flags |= DETACHED_PROCESS;
@@ -533,14 +534,14 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     {
         bRet = CreateProcessAsUserW(
             static_cast<oslSecurityImpl*>(Security)->m_hToken,
-            nullptr, const_cast<LPWSTR>(SAL_W(cmdline.getStr())), nullptr,  nullptr,
+            nullptr, const_cast<LPWSTR>(o3tl::toW(cmdline.getStr())), nullptr,  nullptr,
             b_inherit_handles, flags, p_environment, p_cwd,
             &startup_info, &process_info);
     }
     else
     {
         bRet = CreateProcessW(
-            nullptr, const_cast<LPWSTR>(SAL_W(cmdline.getStr())), nullptr,  nullptr,
+            nullptr, const_cast<LPWSTR>(o3tl::toW(cmdline.getStr())), nullptr,  nullptr,
             b_inherit_handles, flags, p_environment, p_cwd,
             &startup_info, &process_info);
     }

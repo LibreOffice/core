@@ -9,6 +9,7 @@
 #include "basictest.hxx"
 #include <comphelper/processfactory.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #ifdef _WIN32
 #include <string.h>
@@ -233,7 +234,7 @@ void VBATest::testMiscOLEStuff()
     sPath = sPath.replaceAll( "/", "\\" );
 
     aArgs[ 0 ] <<= sPath;
-    aArgs[ 1 ] <<= OUString(SAL_U(pODBCDriverName));
+    aArgs[ 1 ] <<= OUString(o3tl::toU(pODBCDriverName));
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
     {

@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
@@ -56,12 +57,7 @@ namespace dxcanvas
         maFontRequest( rFontRequest ),
         maFontMatrix( fontMatrix )
     {
-        const sal_Int32            nLen(rFontRequest.FontDescription.FamilyName.getLength());
-        const sal_Unicode*         pStr(rFontRequest.FontDescription.FamilyName.getStr());
-        std::vector< sal_Unicode > pStrBuf(nLen+1,0);
-        std::copy(pStr,pStr+nLen,&pStrBuf[0]);
-
-        mpFontFamily.reset( new Gdiplus::FontFamily(SAL_W(&pStrBuf[0]),nullptr) );
+        mpFontFamily.reset( new Gdiplus::FontFamily(o3tl::toW(rFontRequest.FontDescription.FamilyName.getStr()),nullptr) );
         if( !mpFontFamily->IsAvailable() )
             mpFontFamily.reset( new Gdiplus::FontFamily(L"Arial",nullptr) );
 

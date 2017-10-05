@@ -682,21 +682,6 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 /// @endcond
 
-#if defined LIBO_INTERNAL_ONLY && defined __cplusplus && defined SAL_W32
-/// @cond INTERNAL
-// Temporary scaffolding for the MSVC sal_Unicode wchar_t -> char16_t change; to
-// be removed again:
-inline wchar_t * SAL_W(char16_t * p)
-{ return reinterpret_cast<wchar_t *>(p); }
-inline wchar_t const * SAL_W(char16_t const * p)
-{ return reinterpret_cast<wchar_t const *>(p); }
-inline char16_t * SAL_U(wchar_t * p)
-{ return reinterpret_cast<char16_t *>(p); }
-inline char16_t const * SAL_U(wchar_t const * p)
-{ return reinterpret_cast<char16_t const *>(p); }
-/// @endcond
-#endif
-
 /// @cond INTERNAL
 /** Annotate pointer-returning functions to indicate that such a pointer
     is never nullptr.

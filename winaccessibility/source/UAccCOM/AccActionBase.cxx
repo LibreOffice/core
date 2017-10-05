@@ -29,6 +29,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 #include <vcl/svapp.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include "AccessibleKeyStroke.h"
 
@@ -117,7 +118,7 @@ STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *de
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString(SAL_W(ouStr.getStr()));
+    *description = SysAllocString(o3tl::toW(ouStr.getStr()));
 
     return S_OK;
 
@@ -176,7 +177,7 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
     {
         auto const wString = GetkeyBindingStrByXkeyBinding( (binding.get())->getAccessibleKeyBinding(index) );
 
-        (*keyBinding)[index] = SysAllocString(SAL_W(wString.getStr()));
+        (*keyBinding)[index] = SysAllocString(o3tl::toW(wString.getStr()));
     }
 
     *nBinding = nCount;

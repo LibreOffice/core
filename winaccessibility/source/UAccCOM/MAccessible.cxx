@@ -44,6 +44,7 @@
 #include "AccHyperLink.h"
 
 #include <vcl/svapp.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -737,7 +738,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
                     }
 
                     SAFE_SYSFREESTRING(*pszKeyboardShortcut);
-                    *pszKeyboardShortcut = SysAllocString(SAL_W(wString.getStr()));
+                    *pszKeyboardShortcut = SysAllocString(o3tl::toW(wString.getStr()));
 
                     return S_OK;
                 }
@@ -2958,7 +2959,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
                 pvData->vt = VT_BSTR;
                 ::rtl::OUString val;
                 rAnyVal >>= val;
-                pvData->bstrVal = SysAllocString(SAL_W(val.getStr()));
+                pvData->bstrVal = SysAllocString(o3tl::toW(val.getStr()));
                 break;
             }
 
@@ -3011,7 +3012,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
         case TypeClass::TypeClass_MAKE_FIXED_SIZE:
             // Output the type string, if there is other uno value type.
             pvData->vt = VT_BSTR;
-            pvData->bstrVal = SysAllocString(SAL_W(rAnyVal.getValueTypeName().getStr()));
+            pvData->bstrVal = SysAllocString(o3tl::toW(rAnyVal.getValueTypeName().getStr()));
             break;
 
         default:
@@ -3125,9 +3126,9 @@ STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
         return E_FAIL;
 
     css::lang::Locale unoLoc = m_xContext.get()->getLocale();
-    locale->language = SysAllocString(SAL_W(unoLoc.Language.getStr()));
-    locale->country = SysAllocString(SAL_W(unoLoc.Country.getStr()));
-    locale->variant = SysAllocString(SAL_W(unoLoc.Variant.getStr()));
+    locale->language = SysAllocString(o3tl::toW(unoLoc.Language.getStr()));
+    locale->country = SysAllocString(o3tl::toW(unoLoc.Country.getStr()));
+    locale->variant = SysAllocString(o3tl::toW(unoLoc.Variant.getStr()));
 
     return S_OK;
 
@@ -3214,7 +3215,7 @@ STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 
         if(*pAttr)
             SAFE_SYSFREESTRING(*pAttr);
-        *pAttr = SysAllocString(SAL_W(val.getStr()));
+        *pAttr = SysAllocString(o3tl::toW(val.getStr()));
 
         return S_OK;
     }

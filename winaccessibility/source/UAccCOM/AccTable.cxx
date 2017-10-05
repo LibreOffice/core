@@ -33,6 +33,7 @@
 #endif
 
 #include <vcl/svapp.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "MAccessible.h"
@@ -132,7 +133,7 @@ STDMETHODIMP CAccTable::get_columnDescription(long column, BSTR * description)
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);//??
-    *description = SysAllocString(SAL_W(ouStr.getStr()));
+    *description = SysAllocString(o3tl::toW(ouStr.getStr()));
     if(description==nullptr)
         return E_FAIL;
     return S_OK;
@@ -351,7 +352,7 @@ STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR * description)
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString(SAL_W(ouStr.getStr()));
+    *description = SysAllocString(o3tl::toW(ouStr.getStr()));
     if(description==nullptr)
         return E_FAIL;
 

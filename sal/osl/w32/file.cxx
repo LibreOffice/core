@@ -22,6 +22,7 @@
 #include <osl/file.hxx>
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include "file_url.hxx"
 #include "file_error.hxx"
@@ -717,7 +718,7 @@ oslFileError SAL_CALL osl_openFile(
         dwCreation |= OPEN_EXISTING;
 
     HANDLE hFile = CreateFileW(
-        SAL_W(rtl_uString_getStr(strSysPath)),
+        o3tl::toW(rtl_uString_getStr(strSysPath)),
         dwAccess, dwShare, nullptr, dwCreation, 0, nullptr);
 
     // @@@ ERROR HANDLING @@@
@@ -1073,7 +1074,7 @@ oslFileError SAL_CALL osl_removeFile(rtl_uString* strPath)
 
     if (error == osl_File_E_None)
     {
-        if (DeleteFileW(SAL_W(rtl_uString_getStr(strSysPath))))
+        if (DeleteFileW(o3tl::toW(rtl_uString_getStr(strSysPath))))
             error = osl_File_E_None;
         else
             error = oslTranslateFileError(GetLastError());
@@ -1093,8 +1094,8 @@ oslFileError SAL_CALL osl_copyFile(rtl_uString* strPath, rtl_uString *strDestPat
 
     if (error == osl_File_E_None)
     {
-        LPCWSTR src = SAL_W(rtl_uString_getStr(strSysPath));
-        LPCWSTR dst = SAL_W(rtl_uString_getStr(strSysDestPath));
+        LPCWSTR src = o3tl::toW(rtl_uString_getStr(strSysPath));
+        LPCWSTR dst = o3tl::toW(rtl_uString_getStr(strSysDestPath));
 
         if (CopyFileW(src, dst, FALSE))
             error = osl_File_E_None;
@@ -1120,8 +1121,8 @@ oslFileError SAL_CALL osl_moveFile(rtl_uString* strPath, rtl_uString *strDestPat
 
     if (error == osl_File_E_None)
     {
-        LPCWSTR src = SAL_W(rtl_uString_getStr(strSysPath));
-        LPCWSTR dst = SAL_W(rtl_uString_getStr(strSysDestPath));
+        LPCWSTR src = o3tl::toW(rtl_uString_getStr(strSysPath));
+        LPCWSTR dst = o3tl::toW(rtl_uString_getStr(strSysDestPath));
 
         if (MoveFileExW(src, dst, MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH | MOVEFILE_REPLACE_EXISTING))
             error = osl_File_E_None;

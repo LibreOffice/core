@@ -37,6 +37,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #undef max
 
@@ -688,7 +689,7 @@ Dll * SbiDllMgr::Impl::getDll(OUString const & name) {
     Dlls::iterator i(dlls.find(name));
     if (i == dlls.end()) {
         i = dlls.emplace(name, new Dll).first;
-        HMODULE h = LoadLibraryW(SAL_W(name.getStr()));
+        HMODULE h = LoadLibraryW(o3tl::toW(name.getStr()));
         if (h == 0) {
             dlls.erase(i);
             return 0;

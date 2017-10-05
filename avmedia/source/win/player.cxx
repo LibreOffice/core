@@ -34,6 +34,7 @@
 #include "framegrabber.hxx"
 #include "window.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #define AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_DirectX"
 #define AVMEDIA_WIN_PLAYER_SERVICENAME "com.sun.star.media.Player_DirectX"
@@ -148,7 +149,7 @@ bool Player::create( const OUString& rURL )
         // It disables the desktop composition as soon as RenderFile is called
         // also causes some other problems: video rendering is not reliable
 
-        if( SUCCEEDED( hR = mpGB->RenderFile( SAL_W(rURL.getStr()), nullptr ) ) &&
+        if( SUCCEEDED( hR = mpGB->RenderFile( o3tl::toW(rURL.getStr()), nullptr ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaControl, reinterpret_cast<void**>(&mpMC) ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaEventEx, reinterpret_cast<void**>(&mpME) ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaSeeking, reinterpret_cast<void**>(&mpMS) ) ) &&

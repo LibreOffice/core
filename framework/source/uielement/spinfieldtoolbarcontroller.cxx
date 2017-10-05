@@ -31,6 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -459,9 +460,9 @@ OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
 
         aBuffer[0] = 0;
         if ( m_bFloat )
-            _snwprintf( SAL_W(aBuffer), SAL_N_ELEMENTS(aBuffer), SAL_W(m_aOutFormat.getStr()), fValue );
+            _snwprintf( o3tl::toW(aBuffer), SAL_N_ELEMENTS(aBuffer), o3tl::toW(m_aOutFormat.getStr()), fValue );
         else
-            _snwprintf( SAL_W(aBuffer), SAL_N_ELEMENTS(aBuffer), SAL_W(m_aOutFormat.getStr()), sal_Int32( fValue ));
+            _snwprintf( o3tl::toW(aBuffer), SAL_N_ELEMENTS(aBuffer), o3tl::toW(m_aOutFormat.getStr()), sal_Int32( fValue ));
 
         return aBuffer;
 #else

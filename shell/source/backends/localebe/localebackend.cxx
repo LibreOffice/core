@@ -27,6 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/time.h>
 #include <rtl/character.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <stdio.h>
 
@@ -54,7 +55,7 @@ css::beans::Optional<css::uno::Any> ImplGetLocale(LCID lcid)
             // #i50822# minus character must be written before cp
             *(cp - 1) = '-';
 
-        return {true, css::uno::Any(OUString(SAL_U(buffer)))};
+        return {true, css::uno::Any(OUString(o3tl::toU(buffer)))};
     }
 
     return {false, {}};

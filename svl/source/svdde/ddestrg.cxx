@@ -20,11 +20,12 @@
 
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 DdeString::DdeString( DWORD hDdeInst, const OUString& r)
     : m_aString(r)
 {
-    hString = DdeCreateStringHandleW( hDdeInst, SAL_W(r.getStr()), CP_WINUNICODE );
+    hString = DdeCreateStringHandleW( hDdeInst, o3tl::toW(r.getStr()), CP_WINUNICODE );
     hInst = hDdeInst;
 }
 
