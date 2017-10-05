@@ -57,7 +57,7 @@ public:
     /** Reads the boolean value from a pivot cache item. */
     void                readBool( const AttributeList& rAttribs );
     /** Reads the error code value from a pivot cache item. */
-    void                readError( const AttributeList& rAttribs, const UnitConverter& rUnitConverter );
+    void                readError( const AttributeList& rAttribs );
     /** Reads the index of a shared item. */
     void                readIndex( const AttributeList& rAttribs );
 
