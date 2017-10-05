@@ -8561,7 +8561,7 @@ SfxVoidItem TwainTransfer SID_TWAIN_TRANSFER
 ]
 
 
-SvxTextLineItem Underline SID_ATTR_CHAR_UNDERLINE
+SvxUnderlineItem Underline SID_ATTR_CHAR_UNDERLINE
 
 [
     AutoUpdate = TRUE,
@@ -8580,7 +8580,7 @@ SvxTextLineItem Underline SID_ATTR_CHAR_UNDERLINE
 ]
 
 
-SvxTextLineItem Overline SID_ATTR_CHAR_OVERLINE
+SvxOverlineItem Overline SID_ATTR_CHAR_OVERLINE
 
 [
     AutoUpdate = TRUE,

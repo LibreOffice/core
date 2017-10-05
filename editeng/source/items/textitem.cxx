@@ -105,6 +105,8 @@ SfxPoolItem* SvxPostureItem::CreateDefault() { return new SvxPostureItem(ITALIC_
 SfxPoolItem* SvxWeightItem::CreateDefault() {return new SvxWeightItem(WEIGHT_NORMAL, 0);}
 SfxPoolItem* SvxFontHeightItem::CreateDefault() {return new SvxFontHeightItem(240, 100, 0);}
 SfxPoolItem* SvxTextLineItem::CreateDefault() {return new SvxTextLineItem(LINESTYLE_NONE, 0);}
+SfxPoolItem* SvxUnderlineItem::CreateDefault() {return new SvxUnderlineItem(LINESTYLE_NONE, 0);}
+SfxPoolItem* SvxOverlineItem::CreateDefault() {return new SvxOverlineItem(LINESTYLE_NONE, 0);}
 SfxPoolItem* SvxCrossedOutItem::CreateDefault() {return new SvxCrossedOutItem(STRIKEOUT_NONE, 0);}
 SfxPoolItem* SvxShadowedItem::CreateDefault() {return new SvxShadowedItem(false, 0);}
 SfxPoolItem* SvxAutoKernItem::CreateDefault() {return new SvxAutoKernItem(false, 0);}
@@ -1233,6 +1235,7 @@ bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 // class SvxUnderlineItem ------------------------------------------------
+
 
 SvxUnderlineItem::SvxUnderlineItem( const FontLineStyle eSt, const sal_uInt16 nId )
     : SvxTextLineItem( eSt, nId )

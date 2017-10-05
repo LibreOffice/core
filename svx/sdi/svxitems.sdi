@@ -225,7 +225,8 @@ struct SvxTextLine
     BOOL            HasColor    MID_TL_HASCOLOR;
     INT32           Color       MID_TL_COLOR;
 };
-item SvxTextLine SvxTextLineItem;
+item SvxTextLine SvxUnderlineItem;
+item SvxTextLine SvxOverlineItem;
 
 struct SvxBrush
 {
