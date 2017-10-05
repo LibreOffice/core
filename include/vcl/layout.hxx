@@ -16,6 +16,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/split.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
@@ -198,7 +199,7 @@ class VCL_DLLPUBLIC VclButtonBox : public VclBox
 {
 public:
     VclButtonBox(vcl::Window *pParent)
-        : VclBox(pParent, false, 0/*nSpacing*/)
+        : VclBox(pParent, false, Application::GetSettings().GetStyleSettings().GetDialogStyle().button_spacing)
         , m_eLayoutStyle(VclButtonBoxStyle::Default)
     {
     }
