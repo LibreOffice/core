@@ -25,6 +25,7 @@
 #include <osl/file.hxx>
 #include <tools/time.hxx>
 #include <comphelper/solarmutex.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <vcl/inputtypes.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -88,7 +89,7 @@ void SalAbort( const OUString& rErrorText, bool )
         CrashReporter::AddKeyValue("AbortMessage", rErrorText);
         // make sure crash reporter is triggered
         RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, nullptr );
-        FatalAppExitW( 0, SAL_W(rErrorText.getStr()) );
+        FatalAppExitW( 0, o3tl::toW(rErrorText.getStr()) );
     }
 }
 
@@ -834,7 +835,7 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
     {
         IShellItem* pShellItem = nullptr;
 
-        HRESULT hr = SHCreateItemFromParsingName(SAL_W(system_path.getStr()), nullptr, IID_PPV_ARGS(&pShellItem));
+        HRESULT hr = SHCreateItemFromParsingName(o3tl::toW(system_path.getStr()), nullptr, IID_PPV_ARGS(&pShellItem));
 
         if ( SUCCEEDED(hr) && pShellItem )
         {
@@ -869,7 +870,7 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 
                 SHARDAPPIDINFO info;
                 info.psi = pShellItem;
-                info.pszAppID = SAL_W(sApplicationID.getStr());
+                info.pszAppID = o3tl::toW(sApplicationID.getStr());
 
                 SHAddToRecentDocs ( SHARD_APPIDINFO, &info );
                 return;

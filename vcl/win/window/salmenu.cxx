@@ -21,6 +21,7 @@
 
 #include <vcl/menu.hxx>
 #include <vcl/sysdata.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
@@ -93,7 +94,7 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 
         pSalMenuItem->mInfo.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
         pSalMenuItem->mInfo.fType = MFT_STRING;
-        pSalMenuItem->mInfo.dwTypeData = SAL_W(const_cast<sal_Unicode *>(pSalMenuItem->mText.getStr()));
+        pSalMenuItem->mInfo.dwTypeData = o3tl::toW(const_cast<sal_Unicode *>(pSalMenuItem->mText.getStr()));
         pSalMenuItem->mInfo.cch = pSalMenuItem->mText.getLength();
 
         pSalMenuItem->mInfo.wID = pItemData->nId;
@@ -307,7 +308,7 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
         {
             aStr += "\t" + pWItem->mAccelText;
         }
-        pWItem->mInfo.dwTypeData = SAL_W(const_cast<sal_Unicode *>(aStr.getStr()));
+        pWItem->mInfo.dwTypeData = o3tl::toW(const_cast<sal_Unicode *>(aStr.getStr()));
         pWItem->mInfo.cch = aStr.getLength();
 
         if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWItem->mInfo ))
@@ -332,7 +333,7 @@ void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
         {
             aStr += "\t" + pWItem->mAccelText;
         }
-        pWItem->mInfo.dwTypeData = SAL_W(const_cast<sal_Unicode *>(aStr.getStr()));
+        pWItem->mInfo.dwTypeData = o3tl::toW(const_cast<sal_Unicode *>(aStr.getStr()));
         pWItem->mInfo.cch = aStr.getLength();
 
         if(!::SetMenuItemInfoW( mhMenu, nPos, TRUE, &pWItem->mInfo ))

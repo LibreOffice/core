@@ -28,6 +28,7 @@
 #include <osl/time.h>
 #include <osl/file.hxx>
 #include <sal/macros.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #ifdef _WIN32
 #ifdef _MSC_VER
@@ -169,7 +170,7 @@ OUString UpdateCheckConfig::getDownloadsDirectory()
 
     if (SHGetKnownFolderPath(FOLDERID_Downloads, 0, nullptr, &szPath) == S_OK)
     {
-        aRet = SAL_U(szPath);
+        aRet = o3tl::toU(szPath);
         CoTaskMemFree(szPath);
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
@@ -197,7 +198,7 @@ OUString UpdateCheckConfig::getAllUsersDirectory()
 
     if (TRUE == SHGetSpecialFolderPathW(nullptr, szPath, CSIDL_COMMON_DOCUMENTS, true))
     {
-        aRet = SAL_U(szPath);
+        aRet = o3tl::toU(szPath);
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
 #else

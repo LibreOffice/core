@@ -34,6 +34,7 @@
 #include "rtl/ustring.h"
 
 #include "osl/module.h"
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <opengl/win/gdiimpl.hxx>
 #include <vcl/svapp.hxx>
@@ -351,7 +352,7 @@ bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
         RECT rcContent;
         hr = vsAPI.GetThemeBackgroundContentRect( hTheme, hDC, iPart, iState, &rc, &rcContent);
         hr = vsAPI.DrawThemeText( hTheme, hDC, iPart, iState,
-            SAL_W(aStr.getStr()), -1,
+            o3tl::toW(aStr.getStr()), -1,
             DT_CENTER | DT_VCENTER | DT_SINGLELINE,
             0, &rcContent);
     }

@@ -31,6 +31,7 @@
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <memory>
 #include <utility>
@@ -228,7 +229,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() {
             }
 
             if(issuer.get()[cchIssuer -1] == 0) cchIssuer--; //delimit the last 0x00;
-            OUString xIssuer(SAL_U(issuer.get()), cchIssuer) ;
+            OUString xIssuer(o3tl::toU(issuer.get()), cchIssuer) ;
 
             return replaceTagSWithTagST(xIssuer);
         } else {
@@ -265,7 +266,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectName()
                 throw RuntimeException() ;
             }
 
-            OUString xSubject(SAL_U(subject.get()));
+            OUString xSubject(o3tl::toU(subject.get()));
 
             return replaceTagSWithTagST(xSubject);
         } else

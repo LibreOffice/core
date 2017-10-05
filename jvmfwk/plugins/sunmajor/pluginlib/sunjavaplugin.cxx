@@ -49,6 +49,7 @@
 #include "osl/file.hxx"
 #include "rtl/instance.hxx"
 #include "osl/getglobalmutex.hxx"
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <setjmp.h>
 #include <signal.h>
 #include <stack>
@@ -485,7 +486,7 @@ static void load_msvcr(OUString const & jvm_dll, OUStringLiteral msvcr)
     }
 
     if (LoadLibraryW(
-            SAL_W(OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr())))
+            o3tl::toW(OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr())))
         return;
 
     // Then check if msvcr71.dll is in the parent folder of where
@@ -497,7 +498,7 @@ static void load_msvcr(OUString const & jvm_dll, OUStringLiteral msvcr)
         return;
 
     LoadLibraryW(
-        SAL_W(OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr()));
+        o3tl::toW(OUString(jvm_dll.copy(0, slash+1) + msvcr).getStr()));
 }
 
 // Check if the jvm DLL imports msvcr71.dll, and in that case try
@@ -518,7 +519,7 @@ static void do_msvcr_magic(OUString const &jvm_dll)
         return;
     }
 
-    FILE *f = _wfopen(SAL_W(Module.getStr()), L"rb");
+    FILE *f = _wfopen(o3tl::toW(Module.getStr()), L"rb");
 
     if (!f)
     {

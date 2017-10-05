@@ -30,6 +30,7 @@
 #endif
 
 #include <vcl/svapp.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -56,7 +57,7 @@ STDMETHODIMP CAccImage::get_description(BSTR * description)
 
     ::rtl::OUString ouStr = GetXInterface()->getAccessibleImageDescription();
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString(SAL_W(ouStr.getStr()));
+    *description = SysAllocString(o3tl::toW(ouStr.getStr()));
 
     return S_OK;
 

@@ -35,6 +35,7 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <memory>
 
 class FilterConfigItem;
@@ -169,7 +170,7 @@ static oslProcessError runProcessWithPathSearch(const OUString &rProgName,
      *
      */
     OUString url;
-    OUString path(SAL_U(_wgetenv(L"PATH")));
+    OUString path(o3tl::toU(_wgetenv(L"PATH")));
 
     oslFileError err = osl_searchFileURL(rProgName.pData, path.pData, &url.pData);
     if (err != osl_File_E_None)

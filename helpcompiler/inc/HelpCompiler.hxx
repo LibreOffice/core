@@ -42,6 +42,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/file.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <BasCodeTagger.hxx>
 #include <helpcompiler/compilehelp.hxx>
@@ -92,7 +93,7 @@ namespace fs
         {
             OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            return std::wstring(SAL_W(ustrSystemPath.getStr()));
+            return std::wstring(o3tl::toW(ustrSystemPath.getStr()));
         }
 #endif
         std::string toUTF8() const

@@ -40,6 +40,7 @@
 #include <osl/thread.h>
 #include <systools/win32/qswin32.h>
 #include <comphelper/sequenceashashmap.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <set>
 
@@ -125,7 +126,7 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
             mi.fType=MFT_STRING;
             mi.fState=MFS_ENABLED;
             mi.wID = id;
-            mi.dwTypeData = SAL_W(
+            mi.dwTypeData = o3tl::toW(
                 const_cast<sal_Unicode *>(text.getStr()));
             mi.cch = text.getLength();
         }
@@ -252,7 +253,7 @@ static void addTaskbarIcon( HWND hWnd )
         IMAGE_ICON, GetSystemMetrics( SM_CXSMICON ), GetSystemMetrics( SM_CYSMICON ),
         LR_DEFAULTCOLOR | LR_SHARED ));
 
-    wcsncpy( nid.szTip, SAL_W(strTip.getStr()), 64 );
+    wcsncpy( nid.szTip, o3tl::toW(strTip.getStr()), 64 );
 
     nid.cbSize              = sizeof(nid);
     nid.hWnd                = hWnd;
@@ -565,7 +566,7 @@ void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
 
     HFONT hfntOld = static_cast<HFONT>(SelectObject(hdc, CreateFontIndirectW( &ncm.lfMenuFont )));
 
-    GetTextExtentPoint32W(hdc, SAL_W(pMyItem->text.getStr()),
+    GetTextExtentPoint32W(hdc, o3tl::toW(pMyItem->text.getStr()),
             pMyItem->text.getLength(), &size);
 
     lpmis->itemWidth = size.cx + 4 + GetSystemMetrics( SM_CXSMICON );
@@ -619,7 +620,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
 
     if ( pMyItem->module.getLength() > 0 )
     {
-        LPCWSTR pModuleName = SAL_W( pMyItem->module.getStr() );
+        LPCWSTR pModuleName = o3tl::toW( pMyItem->module.getStr() );
         hModule = GetModuleHandleW( pModuleName );
         if ( hModule == nullptr )
         {
@@ -656,7 +657,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
 
 
     SIZE    size;
-    GetTextExtentPointW( lpdis->hDC, SAL_W(pMyItem->text.getStr()), pMyItem->text.getLength(), &size );
+    GetTextExtentPointW( lpdis->hDC, o3tl::toW(pMyItem->text.getStr()), pMyItem->text.getLength(), &size );
 
     DrawStateW( lpdis->hDC, nullptr, nullptr, reinterpret_cast<LPARAM>(pMyItem->text.getStr()), (WPARAM)0, aRect.left, aRect.top + (height - size.cy)/2, 0, 0, DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) );
 
@@ -697,7 +698,7 @@ static OUString SHGetSpecialFolder( int nFolderID )
         lpFolderA = ALLOC( WCHAR, 16000 );
 
         SHGetPathFromIDListW( pidl, lpFolderA );
-        aFolder = SAL_U( lpFolderA );
+        aFolder = o3tl::toU( lpFolderA );
 
         FREE( lpFolderA );
         SHFree_( pidl );
@@ -743,18 +744,18 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
     if( SUCCEEDED(hres) )
     {
         IPersistFile* ppf;
-        psl->SetPath( SAL_W(rAbsObject.getStr()) );
-        psl->SetWorkingDirectory( SAL_W(rAbsObjectPath.getStr()) );
-        psl->SetDescription( SAL_W(rDescription.getStr()) );
+        psl->SetPath( o3tl::toW(rAbsObject.getStr()) );
+        psl->SetWorkingDirectory( o3tl::toW(rAbsObjectPath.getStr()) );
+        psl->SetDescription( o3tl::toW(rDescription.getStr()) );
         if( rParameter.getLength() )
-            psl->SetArguments( SAL_W(rParameter.getStr()) );
+            psl->SetArguments( o3tl::toW(rParameter.getStr()) );
 
         CLSID clsid_IPersistFile = IID_IPersistFile;
         hres = psl->QueryInterface( clsid_IPersistFile, reinterpret_cast<void**>(&ppf) );
 
         if( SUCCEEDED(hres) )
         {
-            hres = ppf->Save( SAL_W(rAbsShortcut.getStr()), TRUE );
+            hres = ppf->Save( o3tl::toW(rAbsShortcut.getStr()), TRUE );
             ppf->Release();
         } else return FALSE;
         psl->Release();
@@ -786,7 +787,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     wchar_t aPath[_MAX_PATH];
     GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
 
-    OUString aOfficepath( SAL_U(aPath) );
+    OUString aOfficepath( o3tl::toU(aPath) );
     int i = aOfficepath.lastIndexOf('\\');
     if( i != -1 )
         aOfficepath = aOfficepath.copy(0, i);
@@ -794,7 +795,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     OUString quickstartExe(aOfficepath);
     quickstartExe += "\\quickstart.exe";
 
-    return FileExistsW( SAL_W(quickstartExe.getStr()) );
+    return FileExistsW( o3tl::toW(quickstartExe.getStr()) );
 }
 
 void ShutdownIcon::EnableAutostartW32( const OUString &aShortcut )
@@ -802,7 +803,7 @@ void ShutdownIcon::EnableAutostartW32( const OUString &aShortcut )
     wchar_t aPath[_MAX_PATH];
     GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
 
-    OUString aOfficepath( SAL_U(aPath) );
+    OUString aOfficepath( o3tl::toU(aPath) );
     int i = aOfficepath.lastIndexOf('\\');
     if( i != -1 )
         aOfficepath = aOfficepath.copy(0, i);

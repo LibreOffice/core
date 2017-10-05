@@ -36,6 +36,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
@@ -220,7 +221,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
             uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::getComponentContext(m_xFactory)) );
             util::URL aURL;
 
-            aURL.Complete = SAL_U(pFilePath);
+            aURL.Complete = o3tl::toU(pFilePath);
 
             if ( aTransformer->parseSmart( aURL, OUString() ) )
                 sDocUrl = aURL.Complete;
@@ -429,7 +430,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                     if ( hr == S_OK )
                     {
-                        hr = pStg->CreateStream( SAL_W(aOfficeEmbedStreamName.getStr()),
+                        hr = pStg->CreateStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
                                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                                  0,
                                                  0,
@@ -437,7 +438,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                         if ( hr == S_OK && m_pOwnStream )
                         {
-                            hr = pStg->CreateStream( SAL_W(aExtentStreamName.getStr()),
+                            hr = pStg->CreateStream( o3tl::toW(aExtentStreamName.getStr()),
                                                      STGM_CREATE | ( nStreamMode & 0x73 ),
                                                      0,
                                                      0,
@@ -483,7 +484,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     if ( FAILED( hr ) ) return E_FAIL;
 
     DWORD nStreamMode = aStat.grfMode;
-    hr = pStg->OpenStream( SAL_W(aOfficeEmbedStreamName.getStr()),
+    hr = pStg->OpenStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
                             nullptr,
                             nStreamMode & 0x73,
                             0,
@@ -492,7 +493,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
 
     if ( SUCCEEDED( hr ) )
     {
-        hr = pStg->OpenStream( SAL_W(aExtentStreamName.getStr()),
+        hr = pStg->OpenStream( o3tl::toW(aExtentStreamName.getStr()),
                                 nullptr,
                                 nStreamMode & 0x73,
                                 0,
@@ -565,8 +566,8 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     {
         m_pOwnStream = CComPtr< IStream >();
         m_pExtStream = CComPtr< IStream >();
-        hr = pStg->DestroyElement( SAL_W(aOfficeEmbedStreamName.getStr()) );
-        hr = pStg->DestroyElement( SAL_W(aExtentStreamName.getStr()) );
+        hr = pStg->DestroyElement( o3tl::toW(aOfficeEmbedStreamName.getStr()) );
+        hr = pStg->DestroyElement( o3tl::toW(aExtentStreamName.getStr()) );
 
         OSL_ENSURE( SUCCEEDED( hr ), "Can not destroy created stream!" );
         if ( FAILED( hr ) )
@@ -595,14 +596,14 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
         if ( FAILED( hr ) ) return E_FAIL;
 
         DWORD nStreamMode = aStat.grfMode;
-        hr = pStgSave->CreateStream( SAL_W(aOfficeEmbedStreamName.getStr()),
+        hr = pStgSave->CreateStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                 0,
                                  0,
                                  &pTargetStream );
         if ( FAILED( hr ) || !pTargetStream ) return E_FAIL;
 
-        hr = pStgSave->CreateStream( SAL_W(aExtentStreamName.getStr()),
+        hr = pStgSave->CreateStream( o3tl::toW(aExtentStreamName.getStr()),
                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                 0,
                                  0,
@@ -690,14 +691,14 @@ STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
     if ( FAILED( hr ) ) return E_OUTOFMEMORY;
 
     DWORD nStreamMode = aStat.grfMode;
-    hr = m_pMasterStorage->OpenStream( SAL_W(aOfficeEmbedStreamName.getStr()),
+    hr = m_pMasterStorage->OpenStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
                                         nullptr,
                                         nStreamMode & 0x73,
                                         0,
                                         &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_OUTOFMEMORY;
 
-    hr = m_pMasterStorage->OpenStream( SAL_W(aExtentStreamName.getStr()),
+    hr = m_pMasterStorage->OpenStream( o3tl::toW(aExtentStreamName.getStr()),
                                         nullptr,
                                         nStreamMode & 0x73,
                                         0,
@@ -753,20 +754,20 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatW( L"Embedded Object" );
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
                             cf,                         // ???
-                            const_cast<LPOLESTR>( SAL_W(aCurType.data())) );
+                            const_cast<LPOLESTR>( o3tl::toW(aCurType.data())) );
     if ( FAILED( hr ) ) return E_FAIL;
 
     hr = m_pMasterStorage->SetClass( m_guid );
     if ( FAILED( hr ) ) return E_FAIL;
 
-    hr = m_pMasterStorage->CreateStream( SAL_W(aOfficeEmbedStreamName.getStr()),
+    hr = m_pMasterStorage->CreateStream( o3tl::toW(aOfficeEmbedStreamName.getStr()),
                             STGM_CREATE | ( nStreamMode & 0x73 ),
                             0,
                             0,
                             &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
 
-    hr = m_pMasterStorage->CreateStream( SAL_W(aExtentStreamName.getStr()),
+    hr = m_pMasterStorage->CreateStream( o3tl::toW(aExtentStreamName.getStr()),
                             STGM_CREATE | ( nStreamMode & 0x73 ),
                             0,
                             0,
@@ -791,7 +792,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
                                                             pszFileName ) );
                 hr = S_OK;
 
-                m_aFileName = SAL_U(pszFileName);
+                m_aFileName = o3tl::toU(pszFileName);
             }
             catch( const uno::Exception& )
             {
@@ -804,7 +805,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
             cf = (CLIPFORMAT)RegisterClipboardFormatW( L"Embedded Object" );
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
                                     cf,                         // ???
-                                    const_cast<LPOLESTR>( SAL_W(aCurType.data())) );
+                                    const_cast<LPOLESTR>( o3tl::toW(aCurType.data())) );
 
             if ( SUCCEEDED( hr ) )
             {
@@ -863,7 +864,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
         else
         {
             util::URL aURL;
-            aURL.Complete = SAL_U( pszFileName );
+            aURL.Complete = o3tl::toU( pszFileName );
 
             uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::getComponentContext(m_xFactory)) );
 
@@ -891,7 +892,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 STDMETHODIMP EmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 {
     // the different file name would mean error here
-    m_aFileName = SAL_U(pszFileName);
+    m_aFileName = o3tl::toU(pszFileName);
     return S_OK;
 }
 
@@ -903,7 +904,7 @@ STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
     if ( FAILED( hr ) || !pMalloc ) return E_FAIL;
 
     *ppszFileName = static_cast<LPOLESTR>( pMalloc->Alloc( sizeof( sal_Unicode ) * ( m_aFileName.getLength() + 1 ) ) );
-    wcsncpy( *ppszFileName, SAL_W(m_aFileName.getStr()), m_aFileName.getLength() + 1 );
+    wcsncpy( *ppszFileName, o3tl::toW(m_aFileName.getStr()), m_aFileName.getLength() + 1 );
 
     return m_aFileName.getLength() ? S_OK : S_FALSE;
 }

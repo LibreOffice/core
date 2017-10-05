@@ -19,7 +19,7 @@
 
 #include "svsys.h"
 #include "rtl/ustrbuf.hxx"
-
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <vcl/window.hxx>
 
@@ -59,7 +59,7 @@ bool WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, sal_I
     if( GetMonitorInfoW( reinterpret_cast<HMONITOR>(hMonitor), &aInfo ) )
     {
         aInfo.szDevice[CCHDEVICENAME-1] = 0;
-        OUString aDeviceName( SAL_U(aInfo.szDevice) );
+        OUString aDeviceName( o3tl::toU(aInfo.szDevice) );
         std::map< OUString, unsigned int >::const_iterator it =
             m_aDeviceNameToMonitor.find( aDeviceName );
         if( it != m_aDeviceNameToMonitor.end() )
@@ -110,8 +110,8 @@ bool WinSalSystem::initMonitors()
             {
                 aDev.DeviceName[31] = 0;
                 aDev.DeviceString[127] = 0;
-                OUString aDeviceName( SAL_U(aDev.DeviceName) );
-                OUString aDeviceString( SAL_U(aDev.DeviceString) );
+                OUString aDeviceName( o3tl::toU(aDev.DeviceName) );
+                OUString aDeviceString( o3tl::toU(aDev.DeviceString) );
                 if( aDeviceStringCount.find( aDeviceString ) == aDeviceStringCount.end() )
                     aDeviceStringCount[ aDeviceString ] = 1;
                 else
@@ -169,8 +169,8 @@ int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& r
     ImplHideSplash();
     return MessageBoxW(
         nullptr,
-        SAL_W(rMessage.getStr()),
-        SAL_W(rTitle.getStr()),
+        o3tl::toW(rMessage.getStr()),
+        o3tl::toW(rTitle.getStr()),
         MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | MB_DEFBUTTON1);
 }
 

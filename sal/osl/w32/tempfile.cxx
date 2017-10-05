@@ -20,6 +20,7 @@
 #include "systools/win32/uwinapi.h"
 
 #include "osl/file.h"
+#include <o3tl/char16_t2wchar_t.hxx>
 
 #include <file-impl.hxx>
 #include "file_error.hxx"
@@ -95,7 +96,7 @@ static oslFileError osl_win32_GetTempFileName_impl_(
     oslFileError osl_error = osl_File_E_None;
 
     if (GetTempFileNameW(
-            SAL_W(rtl_uString_getStr(base_directory)),
+            o3tl::toW(rtl_uString_getStr(base_directory)),
             L"",
             0,
             temp_file_name) == 0)
@@ -157,7 +158,7 @@ static oslFileError osl_createTempFile_impl_(
     if ((osl_error == osl_File_E_None) && !b_delete_on_close)
     {
         rtl_uString* pustr = nullptr;
-        rtl_uString_newFromStr(&pustr, SAL_U(tmp_name));
+        rtl_uString_newFromStr(&pustr, o3tl::toU(tmp_name));
         osl_getFileURLFromSystemPath(pustr, ppustrTempFileURL);
         rtl_uString_release(pustr);
     }
@@ -211,7 +212,7 @@ oslFileError SAL_CALL osl_createTempFile(
 oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
 {
     ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-    LPWSTR  lpBuffer = SAL_W(aBuffer);
+    LPWSTR  lpBuffer = o3tl::toW(aBuffer);
     DWORD   nBufferLength = aBuffer.getBufSizeInSymbols() - 1;
 
     DWORD           nLength;
@@ -231,7 +232,7 @@ oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
         if ( '\\' == lpBuffer[nLength-1] )
             lpBuffer[nLength-1] = 0;
 
-        rtl_uString_newFromStr( &ustrTempPath, SAL_U(lpBuffer) );
+        rtl_uString_newFromStr( &ustrTempPath, o3tl::toU(lpBuffer) );
 
         error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
 
