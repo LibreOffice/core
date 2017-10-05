@@ -27,7 +27,7 @@ class WinSalTimer final : public SalTimer, protected VersionedEvent
     // for access to Impl* functions
     friend LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef );
     // for access to m_bPollForMessage
-    friend static void CALLBACK SalTimerProc( PVOID data, BOOLEAN );
+    friend void CALLBACK SalTimerProc( PVOID data, BOOLEAN );
 
     HANDLE       m_nTimerId;          ///< Windows timer id
     bool         m_bPollForMessage;   ///< Run yield until a message is caught (most likely the 0ms timer)
