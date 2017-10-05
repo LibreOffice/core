@@ -243,7 +243,7 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement
                 case XLS_TOKEN( n ):    aItem.readNumeric( rAttribs );                      break;
                 case XLS_TOKEN( d ):    aItem.readDate( rAttribs );                         break;
                 case XLS_TOKEN( b ):    aItem.readBool( rAttribs );                         break;
-                case XLS_TOKEN( e ):    aItem.readError( rAttribs, getUnitConverter() );    break;
+                case XLS_TOKEN( e ):    aItem.readError( rAttribs );                        break;
                 case XLS_TOKEN( x ):    aItem.readIndex( rAttribs );                        break;
                 default:    OSL_FAIL( "OoxPivotCacheRecordsFragment::onCreateContext - unexpected element" );
             }
