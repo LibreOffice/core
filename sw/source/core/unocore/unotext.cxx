@@ -1623,9 +1623,8 @@ SwXText::convertToTextFrame(
     pEndPam.reset(nullptr);
 
     // see if there are frames already anchored to this node
-    std::set<OUString> aAnchoredFrames;
-    // for shapes, we have to work with the SdrObjects, as unique name is not guaranteed in their frame format
-    std::set<const SdrObject*> aAnchoredShapes;
+    // we have to work with the SdrObjects, as unique name is not guaranteed in their frame format
+    std::set<const SdrObject*> aAnchoredObjects;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
         const SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
@@ -1634,10 +1633,7 @@ SwXText::convertToTextFrame(
                 aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetContentAnchor()->nNode.GetIndex() &&
                 aStartPam.End()->nNode.GetIndex() >= rAnchor.GetContentAnchor()->nNode.GetIndex())
         {
-            if (pFrameFormat->Which() == RES_DRAWFRMFMT)
-                aAnchoredShapes.insert(pFrameFormat->FindSdrObject());
-            else
-                aAnchoredFrames.insert(pFrameFormat->GetName());
+            aAnchoredObjects.insert(pFrameFormat->FindSdrObject());
         }
     }
 
@@ -1682,7 +1678,7 @@ SwXText::convertToTextFrame(
                     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
                     {
                         SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
-                        if (aAnchoredFrames.find(pFrameFormat->GetName()) != aAnchoredFrames.end() || aAnchoredShapes.find(pFrameFormat->FindSdrObject()) != aAnchoredShapes.end())
+                        if (aAnchoredObjects.find(pFrameFormat->FindSdrObject()) != aAnchoredObjects.end())
                         {
                             // copy the anchor to the next paragraph
                             SwFormatAnchor aAnchor(pFrameFormat->GetAnchor());
