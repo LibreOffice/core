@@ -318,6 +318,9 @@
         <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
           <value>private:factory/swriter</value>
         </prop>
+        <prop oor:name="ooSetupFactoryWindowAttributes">
+          <value>,,,;4;</value>
+        </prop>
         <prop oor:name="ooSetupFactoryCommandConfigRef">
           <value>WriterCommands</value>
         </prop>
