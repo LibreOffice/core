@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <tools/time.hxx>
+
 #include <svsys.h>
 #include <win/saldata.hxx>
 #include <win/saltimer.h>
