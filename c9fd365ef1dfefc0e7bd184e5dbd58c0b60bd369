@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b163abdb",
+        "filename": "sc/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1062,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-05T19:28:33Z",
+      "side": 1,
+      "message": "at this point, the outer iterator will become invalid\n\nin order to express this logic over a std::vector, you would probably need to use indexes for the outer loop",
+      "revId": "c9fd365ef1dfefc0e7bd184e5dbd58c0b60bd369",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
