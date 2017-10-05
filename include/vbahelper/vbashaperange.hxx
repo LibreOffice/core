@@ -56,7 +56,6 @@ class VBAHELPER_DLLPUBLIC ScVbaShapeRange : public ScVbaShapeRange_BASE
 private:
     css::uno::Reference< css::drawing::XDrawPage > m_xDrawPage;
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
-protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

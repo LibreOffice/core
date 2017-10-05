@@ -40,7 +40,6 @@ typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XMutationE
 class CMutationEvent
     : public CMutationEvent_Base
 {
-protected:
     css::uno::Reference< css::xml::dom::XNode > m_relatedNode;
     OUString m_prevValue;
     OUString m_newValue;

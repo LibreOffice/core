@@ -51,7 +51,7 @@ public:
     //=====  internal  ========================================================
     AccessibleRelationSetHelper ();
     AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper);
-protected:
+private:
     virtual ~AccessibleRelationSetHelper() override;
 public:
 
@@ -124,11 +124,9 @@ public:
     virtual css::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId() override;
 
-protected:
+private:
     /// Mutex guarding this object.
     ::osl::Mutex maMutex;
-
-private:
     /// The implementation of this helper interface.
     std::unique_ptr<AccessibleRelationSetHelperImpl>    mpHelperImpl;
 };

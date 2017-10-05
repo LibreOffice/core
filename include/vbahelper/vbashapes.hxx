@@ -58,7 +58,6 @@ private:
     css::uno::Reference< css::drawing::XDrawPage > m_xDrawPage;
     sal_Int32 m_nNewShapeCount;
     void initBaseCollection();
-protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

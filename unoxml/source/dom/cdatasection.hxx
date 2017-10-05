@@ -36,7 +36,6 @@ namespace DOM
     {
         friend class CDocument;
 
-    protected:
         CCDATASection(CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlNodePtr const pNode);
 

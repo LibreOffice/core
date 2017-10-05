@@ -34,10 +34,8 @@ namespace DOM
     class CDocumentFragment
         : public CDocumentFragment_Base
     {
-    private:
         friend class CDocument;
 
-    protected:
         CDocumentFragment(
                 CDocument const& rDocument, ::osl::Mutex const& rMutex,
                 xmlNodePtr const pNode);

@@ -62,11 +62,10 @@ namespace utl
         public:
             static void ensureObservation();
 
-        protected:
+        private:
             OObserverImpl();
             virtual ~OObserverImpl() override;
 
-        private:
             // XTerminateListener
             virtual void SAL_CALL queryTermination( const EventObject& Event ) override;
             virtual void SAL_CALL notifyTermination( const EventObject& Event ) override;
