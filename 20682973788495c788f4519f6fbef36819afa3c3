@@ -88,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_76d21902",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:51:53Z",
+      "side": 1,
+      "message": "The standard says:  \"Type wchar_t is a distinct type whose values can represent distinct codes for all members of the largest extended character set specified among the supported locales [locale].\"  So yeah, if we assume that MSVC supports std::locale instances that use Unicode, I can see how MSVC\u0027s 16-bit wchar_t can be construed as non-conforming.",
+      "parentUuid": "1a430d35_767db91b",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_b6a001a1",
         "filename": "include/o3tl/char16_t2wchar_t.hxx",
         "patchSetId": 2
@@ -117,6 +135,24 @@
       "side": 1,
       "message": "I disagree: the endianness is crucial here for binary string representation: if we used BE, we couldn\u0027t do this conversion in the first place (I don\u0027t talk about endianness when mention wchar_t or char_16t, but mention when talk about Win/LO usage)",
       "parentUuid": "1a430d35_b6a001a1",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_96cdc55f",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:51:53Z",
+      "side": 1,
+      "message": "Internal string representation in LO (in OUString) is /not/ as a sequence of bytes in UTF-16LE character encoding scheme.  It is rather a sequence of UTF-16 code units.  (And in a hypothetical big-endian Windows version we wouldn\u0027t start to swap the individual bytes in an OUString to make it still resemble UTF-16LE.)",
+      "parentUuid": "1a430d35_9678652d",
       "revId": "20682973788495c788f4519f6fbef36819afa3c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -186,6 +222,24 @@
       "side": 1,
       "message": "... and then, if one of them wasn\u0027t included into a compilation unit (used there), would that guarantee the assertion?",
       "parentUuid": "1a430d35_7696994d",
+      "revId": "20682973788495c788f4519f6fbef36819afa3c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b6dc8113",
+        "filename": "include/o3tl/char16_t2wchar_t.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-05T08:51:53Z",
+      "side": 1,
+      "message": "As discussed offline, I meant to pull the static_assert out of the function declarations anyway.",
+      "parentUuid": "1a430d35_b6772139",
       "revId": "20682973788495c788f4519f6fbef36819afa3c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
