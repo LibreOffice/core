@@ -3075,7 +3075,7 @@ if test "$_os" = "WINNT"; then
         BITNESS_OVERRIDE=64
     fi
 fi
-if test "$_os" = "iOS"; then
+if test "$_os" = "iOS" -a "$host_cpu" = "arm64"; then
     cross_compiling="yes"
 fi
 
