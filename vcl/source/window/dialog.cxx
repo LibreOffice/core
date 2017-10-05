@@ -542,6 +542,12 @@ Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
 void Dialog::set_action_area(VclButtonBox* pBox)
 {
     mpActionArea.set(pBox);
+    if (pBox)
+    {
+        const DialogStyle& rDialogStyle =
+            GetSettings().GetStyleSettings().GetDialogStyle();
+        pBox->set_border_width(rDialogStyle.action_area_border);
+    }
 }
 
 void Dialog::set_content_area(VclBox* pBox)
@@ -557,13 +563,6 @@ void Dialog::settingOptimalLayoutSize(Window *pBox)
     pBox2->set_border_width(rDialogStyle.content_area_border);
     pBox2->set_spacing(pBox2->get_spacing() +
         rDialogStyle.content_area_spacing);
-
-    VclButtonBox *pActionArea = getActionArea(this);
-    if (pActionArea)
-    {
-        pActionArea->set_border_width(rDialogStyle.action_area_border);
-        pActionArea->set_spacing(rDialogStyle.button_spacing);
-    }
 }
 
 Dialog::~Dialog()
