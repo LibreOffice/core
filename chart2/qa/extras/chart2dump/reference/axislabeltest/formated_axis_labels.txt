@@ -3,64 +3,24 @@
 4
 // xLabel->getString()
 1. quarter
-// aLabelPosition.X
-5647
-// aLabelPosition.Y
-13076
-// aLabelSize.Height
-451
-// aLabelSize.Width
-2648
-// aLabelTransformation
-2649;0;5647;0;452;13076;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 8388352
 // fLabelFontHeight
 12
 // xLabel->getString()
 2. quarter
-// aLabelPosition.X
-10536
-// aLabelPosition.Y
-13076
-// aLabelSize.Height
-451
-// aLabelSize.Width
-2648
-// aLabelTransformation
-2649;0;10536;0;452;13076;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 8388352
 // fLabelFontHeight
 12
 // xLabel->getString()
 2. quarter
-// aLabelPosition.X
-15424
-// aLabelPosition.Y
-13076
-// aLabelSize.Height
-451
-// aLabelSize.Width
-2648
-// aLabelTransformation
-2649;0;15424;0;452;13076;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 8388352
 // fLabelFontHeight
 12
 // xLabel->getString()
 2. quarter
-// aLabelPosition.X
-20313
-// aLabelPosition.Y
-13076
-// aLabelSize.Height
-451
-// aLabelSize.Width
-2648
-// aLabelTransformation
-2649;0;20313;0;452;13076;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 8388352
 // fLabelFontHeight
@@ -70,176 +30,66 @@
 11
 // xLabel->getString()
 - Ft
-// aLabelPosition.X
-2529
-// aLabelPosition.Y
-12562
-// aLabelSize.Height
-530
-// aLabelSize.Width
-1748
-// aLabelTransformation
-1749;0;2529;0;531;12562;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 2000000 Ft
-// aLabelPosition.X
-783
-// aLabelPosition.Y
-11333
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3494
-// aLabelTransformation
-3495;0;783;0;531;11333;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 4000000 Ft
-// aLabelPosition.X
-783
-// aLabelPosition.Y
-10104
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3494
-// aLabelTransformation
-3495;0;783;0;531;10104;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 6000000 Ft
-// aLabelPosition.X
-783
-// aLabelPosition.Y
-8876
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3494
-// aLabelTransformation
-3495;0;783;0;531;8876;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 8000000 Ft
-// aLabelPosition.X
-783
-// aLabelPosition.Y
-7647
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3494
-// aLabelTransformation
-3495;0;783;0;531;7647;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 10000000 Ft
-// aLabelPosition.X
-491
-// aLabelPosition.Y
-6419
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3786
-// aLabelTransformation
-3787;0;491;0;531;6419;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 12000000 Ft
-// aLabelPosition.X
-491
-// aLabelPosition.Y
-5190
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3786
-// aLabelTransformation
-3787;0;491;0;531;5190;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 14000000 Ft
-// aLabelPosition.X
-491
-// aLabelPosition.Y
-3961
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3786
-// aLabelTransformation
-3787;0;491;0;531;3961;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 16000000 Ft
-// aLabelPosition.X
-491
-// aLabelPosition.Y
-2733
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3786
-// aLabelTransformation
-3787;0;491;0;531;2733;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 18000000 Ft
-// aLabelPosition.X
-491
-// aLabelPosition.Y
-1504
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3786
-// aLabelTransformation
-3787;0;491;0;531;1504;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight
 14
 // xLabel->getString()
 20000000 Ft
-// aLabelPosition.X
-491
-// aLabelPosition.Y
-276
-// aLabelSize.Height
-530
-// aLabelSize.Width
-3786
-// aLabelTransformation
-3787;0;491;0;531;276;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 16711935
 // fLabelFontHeight

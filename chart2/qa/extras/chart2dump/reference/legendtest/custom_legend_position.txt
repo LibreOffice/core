@@ -1,23 +1,5 @@
-// aLegendPosition.X
-1973
-// aLegendPosition.Y
-555
-// aLegendSize.Width
-3316
-// aLegendSize.Height
-2781
 // nLegendEntryCount
 4
-// aLegendEntryPosition.X
-2226
-// aLegendEntryPosition.Y
-1319
-// aLegendEntrySize.Height
-211
-// aLegendEntrySize.Width
-800
-// aLegendEntryTransformation
-801;0;2226;0;212;1319;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -28,16 +10,6 @@ com.sun.star.drawing.LineShape
 com.sun.star.drawing.PolyPolygonShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 43091
-// aLegendEntryPosition.X
-3709
-// aLegendEntryPosition.Y
-1319
-// aLegendEntrySize.Height
-211
-// aLegendEntrySize.Width
-800
-// aLegendEntryTransformation
-801;0;3709;0;212;1319;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -48,16 +20,6 @@ com.sun.star.drawing.LineShape
 com.sun.star.drawing.PolyPolygonShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 8388352
-// aLegendEntryPosition.X
-2226
-// aLegendEntryPosition.Y
-2361
-// aLegendEntrySize.Height
-211
-// aLegendEntrySize.Width
-800
-// aLegendEntryTransformation
-801;0;2226;0;212;2361;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -68,16 +30,6 @@ com.sun.star.drawing.LineShape
 com.sun.star.drawing.PolyPolygonShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 16765728
-// aLegendEntryPosition.X
-3709
-// aLegendEntryPosition.Y
-2361
-// aLegendEntrySize.Height
-211
-// aLegendEntrySize.Width
-800
-// aLegendEntryTransformation
-801;0;3709;0;212;2361;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType

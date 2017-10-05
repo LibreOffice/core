@@ -1,23 +1,5 @@
-// aLegendPosition.X
-15382
-// aLegendPosition.Y
-4235
-// aLegendSize.Width
-2404
-// aLegendSize.Height
-545
 // nLegendEntryCount
 1
-// aLegendEntryPosition.X
-15498
-// aLegendEntryPosition.Y
-4402
-// aLegendEntrySize.Height
-211
-// aLegendEntrySize.Width
-800
-// aLegendEntryTransformation
-801;0;15498;0;212;4402;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
