@@ -105,7 +105,8 @@ void Scheduler::ImplDeInitScheduler()
             ++nTasks;
             pSchedulerData = pSchedulerData->mpNext;
         }
-        SAL_INFO( "vcl.schedule.deinit", "DeInit the scheduler - tasks: " << nTasks );
+        SAL_INFO( "vcl.schedule.deinit",
+                  "DeInit the scheduler - pending tasks: " << nTasks );
     }
 
     // clean up all the sfx::SfxItemDisruptor_Impl Idles
