@@ -487,17 +487,29 @@ SwNumRule::~SwNumRule()
             int n;
 
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
-                delete *ppFormats, *ppFormats = nullptr;
+            {
+                delete *ppFormats;
+                *ppFormats = nullptr;
+            }
 
             // Outline:
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
-                delete *ppFormats, *ppFormats = nullptr;
+            {
+                delete *ppFormats;
+                *ppFormats = nullptr;
+            }
 
             ppFormats = &SwNumRule::maLabelAlignmentBaseFormats[0][0];
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
-                delete *ppFormats, *ppFormats = nullptr;
+            {
+                delete *ppFormats;
+                *ppFormats = nullptr;
+            }
             for( n = 0; n < MAXLEVEL; ++n, ++ppFormats )
-                delete *ppFormats, *ppFormats = nullptr;
+            {
+                delete *ppFormats;
+                *ppFormats = nullptr;
+            }
     }
 
     maTextNodeList.clear();

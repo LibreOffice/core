@@ -13,6 +13,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/badstatics \
     compilerplugins/clang/test/blockblock \
     compilerplugins/clang/test/casttovoid \
+    compilerplugins/clang/test/commaoperator \
     compilerplugins/clang/test/constparams \
     $(if $(filter-out INTEL,$(CPU)),compilerplugins/clang/test/convertuintptr) \
     compilerplugins/clang/test/cppunitassertequals \

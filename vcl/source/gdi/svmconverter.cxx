@@ -988,7 +988,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             pDXAry.reset(new long[nDXAryLen]);
 
                             for (sal_Int32 j = 0; j < nAryLen; ++j)
-                                rIStm.ReadInt32( nTmp ), pDXAry[ j ] = nTmp;
+                            {
+                                rIStm.ReadInt32( nTmp );
+                                pDXAry[ j ] = nTmp;
+                            }
 
                             // #106172# Add last DX array elem, if missing
                             if( nAryLen != nStrLen )
