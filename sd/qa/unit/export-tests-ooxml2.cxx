@@ -119,6 +119,7 @@ public:
     void testTdf112647();
     void testTdf112086();
     void testTdf104788();
+    void testSmartartRotation2();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -159,6 +160,7 @@ public:
     CPPUNIT_TEST(testTdf112647);
     CPPUNIT_TEST(testTdf112086);
     CPPUNIT_TEST(testTdf104788);
+    CPPUNIT_TEST(testSmartartRotation2);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1036,6 +1038,17 @@ void SdOOXMLExportTest2::testTdf104788()
     OUString sAttributeName = getXPathContent(pXmlDocContent, "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par[2]/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:anim[2]/p:cBhvr/p:attrNameLst/p:attrName");
     CPPUNIT_ASSERT_EQUAL(OUString("xshear"), sAttributeName);
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testSmartartRotation2()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-rotation2.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:bodyPr", "rot", "10800000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
