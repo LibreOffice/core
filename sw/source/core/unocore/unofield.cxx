@@ -2652,7 +2652,7 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
 static SwFieldIds lcl_GetIdByName( OUString& rName, OUString& rTypeName )
 {
     if (rName.startsWithIgnoreAsciiCase(COM_TEXT_FLDMASTER_CC))
-        rName = rName.copy(30);
+        rName = rName.copy(RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER_CC));
 
     SwFieldIds nResId = SwFieldIds::Unknown;
     sal_Int32 nFound = 0;
