@@ -106,6 +106,7 @@ public:
     void testTdf112552();
     void testTdf112557();
     void testTdf112647();
+    void testSmartartRotation2();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -133,6 +134,7 @@ public:
     CPPUNIT_TEST(testTdf112552);
     CPPUNIT_TEST(testTdf112557);
     CPPUNIT_TEST(testTdf112647);
+    CPPUNIT_TEST(testSmartartRotation2);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -789,7 +791,6 @@ void SdOOXMLExportTest2::testTdf105739()
     xShell->DoClose();
 }
 
-
 void SdOOXMLExportTest2::testTdf112552()
 {
     // Background fill was not displayed, but it was because of the wrong geometry
@@ -830,6 +831,17 @@ void SdOOXMLExportTest2::testTdf112647()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(css::style::LineSpacingMode::FIX), aLineSpacing.Mode);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2117), aLineSpacing.Height);
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testSmartartRotation2()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-rotation2.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:bodyPr", "rot", "10800000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
