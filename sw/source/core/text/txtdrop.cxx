@@ -26,9 +26,9 @@
 #include <charfmt.hxx>
 #include <viewopt.hxx>
 #include <viewsh.hxx>
-#include <pordrop.hxx>
-#include <itrform2.hxx>
-#include <txtpaint.hxx>
+#include "pordrop.hxx"
+#include "itrform2.hxx"
+#include "txtpaint.hxx"
 #include <blink.hxx>
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>

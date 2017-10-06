@@ -32,16 +32,16 @@
 #include <pagefrm.hxx>
 #include <paratr.hxx>
 #include <SwPortionHandler.hxx>
-#include <porrst.hxx>
-#include <inftxt.hxx>
-#include <txtpaint.hxx>
+#include "porrst.hxx"
+#include "inftxt.hxx"
+#include "txtpaint.hxx"
 #include <swfntcch.hxx>
 #include <tgrditem.hxx>
 #include <pagedesc.hxx>
 #include <frmatr.hxx>
-#include <redlnitr.hxx>
-#include <porfly.hxx>
-#include <atrhndl.hxx>
+#include "redlnitr.hxx"
+#include "porfly.hxx"
+#include "atrhndl.hxx"
 #include "rootfrm.hxx"
 
 #include <IDocumentRedlineAccess.hxx>

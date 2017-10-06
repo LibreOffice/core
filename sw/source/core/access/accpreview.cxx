@@ -22,7 +22,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "strings.hrc"
-#include <accpreview.hxx>
+#include "accpreview.hxx"
 
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
 

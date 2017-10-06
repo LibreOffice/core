@@ -20,7 +20,11 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_PAINTFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_PAINTFRM_HXX
 
+#include <tools/color.hxx>
+
 extern Color aGlobalRetoucheColor;
+
+class OutputDevice;
 
 void SwCalcPixStatics( OutputDevice const *pOut );
 

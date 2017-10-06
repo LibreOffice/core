@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FEFLY_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FEFLY_HXX
 
+class SwFlyFrame;
+class SfxItemSet;
+
 bool sw_ChkAndSetNewAnchor( const SwFlyFrame& rFly, SfxItemSet& rSet );
 
 

@@ -20,6 +20,11 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FNTCAP_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FNTCAP_HXX
 
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+
+class SwFont;
+
 sal_Int32 sw_CalcCaseMap( const SwFont& rFnt,
                           const OUString& rOrigString,
                           sal_Int32 nOfst,

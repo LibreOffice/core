@@ -34,9 +34,9 @@
 #include <fldbas.hxx>
 #include <dcontact.hxx>
 #include <accmap.hxx>
-#include <accfrmobjslist.hxx>
-#include <accfrmobjmap.hxx>
-#include <accframe.hxx>
+#include "accfrmobjslist.hxx"
+#include "accfrmobjmap.hxx"
+#include "accframe.hxx"
 
 using namespace sw::access;
 

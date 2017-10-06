@@ -24,9 +24,9 @@
 #include "blink.hxx"
 #include "redlnitr.hxx"
 #include "porfly.hxx"
-#include <porrst.hxx>
-#include <pormulti.hxx>
-#include <pordrop.hxx>
+#include "porrst.hxx"
+#include "pormulti.hxx"
+#include "pordrop.hxx"
 #include <breakit.hxx>
 #include <unicode/uchar.h>
 #include <com/sun/star/i18n/ScriptType.hpp>

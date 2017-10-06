@@ -38,18 +38,18 @@
 #include <pam.hxx>
 #include <flyfrms.hxx>
 #include <fmtanchr.hxx>
-#include <itrform2.hxx>
-#include <widorp.hxx>
-#include <txtcache.hxx>
-#include <porrst.hxx>
+#include "itrform2.hxx"
+#include "widorp.hxx"
+#include "txtcache.hxx"
+#include "porrst.hxx"
 #include <blink.hxx>
-#include <porfld.hxx>
+#include "porfld.hxx"
 #include <sectfrm.hxx>
-#include <pormulti.hxx>
+#include "pormulti.hxx"
 #include <rootfrm.hxx>
 #include <frmfmt.hxx>
 #include <sortedobjs.hxx>
-#include <portab.hxx>
+#include "portab.hxx"
 #include <editeng/lrspitem.hxx>
 #include <editeng/tstpitem.hxx>
 

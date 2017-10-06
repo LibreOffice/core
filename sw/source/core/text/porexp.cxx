@@ -19,8 +19,8 @@
 
 #include <viewopt.hxx>
 #include <SwPortionHandler.hxx>
-#include <inftxt.hxx>
-#include <porexp.hxx>
+#include "inftxt.hxx"
+#include "porexp.hxx"
 
 sal_Int32 SwExpandPortion::GetCursorOfst( const sal_uInt16 nOfst ) const
 { return SwLinePortion::GetCursorOfst( nOfst ); }

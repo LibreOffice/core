@@ -40,7 +40,7 @@
 
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
-#include <vprint.hxx>
+#include "vprint.hxx"
 
 using namespace ::com::sun::star;
 

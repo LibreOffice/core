@@ -23,7 +23,7 @@
 #include <cntfrm.hxx>
 #include <swcrsr.hxx>
 #include <viscrs.hxx>
-#include <callnk.hxx>
+#include "callnk.hxx"
 
 SwLayoutFrame* GetCurrColumn( const SwLayoutFrame* pLayFrame )
 {

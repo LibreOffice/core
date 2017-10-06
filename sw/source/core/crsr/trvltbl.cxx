@@ -30,7 +30,7 @@
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <viscrs.hxx>
-#include <callnk.hxx>
+#include "callnk.hxx"
 #include <tabfrm.hxx>
 #include <ndtxt.hxx>
 #include <shellres.hxx>

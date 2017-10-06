@@ -64,9 +64,9 @@
 #include <sectfrm.hxx>
 #include <flyfrm.hxx>
 #include <notxtfrm.hxx>
-#include <porfld.hxx>
+#include "porfld.hxx"
 #include <SwStyleNameMapper.hxx>
-#include <itrpaint.hxx>
+#include "itrpaint.hxx"
 #include <i18nlangtag/languagetag.hxx>
 #include <IMark.hxx>
 #include <printdata.hxx>

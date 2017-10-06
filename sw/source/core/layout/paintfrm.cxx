@@ -52,7 +52,7 @@
 #include <pagedesc.hxx>
 #include <ptqueue.hxx>
 #include <noteurl.hxx>
-#include <virtoutp.hxx>
+#include "virtoutp.hxx"
 #include <lineinfo.hxx>
 #include <dbg_lay.hxx>
 #include <docsh.hxx>

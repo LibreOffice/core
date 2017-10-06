@@ -44,7 +44,7 @@
 #include "porfly.hxx"
 #include "pordrop.hxx"
 #include "crstate.hxx"
-#include <pormulti.hxx>
+#include "pormulti.hxx"
 #include <numrule.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 

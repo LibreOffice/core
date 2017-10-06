@@ -88,7 +88,7 @@
 #include <editeng/unoipset.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svx/xdef.hxx>
-#include <unomapproperties.hxx>
+#include "unomapproperties.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

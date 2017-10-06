@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accfrmobjmap.hxx>
-#include <accframe.hxx>
+#include "accfrmobjmap.hxx"
+#include "accframe.hxx"
 #include <accmap.hxx>
-#include <acccontext.hxx>
+#include "acccontext.hxx"
 
 #include <viewsh.hxx>
 #include <doc.hxx>

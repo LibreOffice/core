@@ -26,7 +26,7 @@
 #include <pagefrm.hxx>
 #include <dflyobj.hxx>
 #include <frmtool.hxx>
-#include <virtoutp.hxx>
+#include "virtoutp.hxx"
 #include <blink.hxx>
 #include <sectfrm.hxx>
 #include <notxtfrm.hxx>

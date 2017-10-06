@@ -24,6 +24,8 @@
 
 #if defined DBG_UTIL
 
+class SwDoc;
+
 void sw_DebugRedline( const SwDoc* pDoc );
 
 #endif

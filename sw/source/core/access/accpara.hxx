@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPARA_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCPARA_HXX
 
-#include <acccontext.hxx>
+#include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
@@ -29,7 +29,7 @@
 #include <txmsrt.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
-#include <accselectionhelper.hxx>
+#include "accselectionhelper.hxx"
 #include <calbck.hxx>
 #include <unordered_map>
 
