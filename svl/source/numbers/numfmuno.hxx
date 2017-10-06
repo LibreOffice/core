@@ -87,8 +87,8 @@ class SvNumberFormatsObj : public cppu::WeakImplHelper<
                                         css::lang::XServiceInfo>
 {
 private:
-    SvNumberFormatsSupplierObj&         rSupplier;
-    mutable ::comphelper::SharedMutex   m_aMutex;
+    rtl::Reference<SvNumberFormatsSupplierObj> m_xSupplier;
+    mutable ::comphelper::SharedMutex          m_aMutex;
 
 public:
                     SvNumberFormatsObj(SvNumberFormatsSupplierObj& pParent, ::comphelper::SharedMutex const & _rMutex);
@@ -135,8 +135,9 @@ class SvNumberFormatObj : public cppu::WeakImplHelper<
                                         css::lang::XServiceInfo>
 {
 private:
-    SvNumberFormatsSupplierObj&         rSupplier;
-    sal_uLong                               nKey;
+    rtl::Reference<SvNumberFormatsSupplierObj>
+                                        m_xSupplier;
+    sal_uLong                           nKey;
     mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:
@@ -181,7 +182,8 @@ class SvNumberFormatSettingsObj : public cppu::WeakImplHelper<
                                         css::lang::XServiceInfo>
 {
 private:
-    SvNumberFormatsSupplierObj&         rSupplier;
+    rtl::Reference<SvNumberFormatsSupplierObj>
+                                        m_xSupplier;
     mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:

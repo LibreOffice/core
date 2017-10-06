@@ -346,15 +346,13 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServic
 }
 
 SvNumberFormatsObj::SvNumberFormatsObj( SvNumberFormatsSupplierObj& _rParent, ::comphelper::SharedMutex const & _rMutex )
-    :rSupplier( _rParent )
+    :m_xSupplier( &_rParent )
     ,m_aMutex( _rMutex )
 {
-    rSupplier.acquire();
 }
 
 SvNumberFormatsObj::~SvNumberFormatsObj()
 {
-    rSupplier.release();
 }
 
 // XNumberFormats
@@ -363,12 +361,12 @@ uno::Reference<beans::XPropertySet> SAL_CALL SvNumberFormatsObj::getByKey( sal_I
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
     if (!pFormat)
         throw uno::RuntimeException();
 
-    return new SvNumberFormatObj( rSupplier, nKey, m_aMutex );
+    return new SvNumberFormatObj( *m_xSupplier, nKey, m_aMutex );
 }
 
 uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType,
@@ -377,7 +375,7 @@ uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if ( !pFormatter )
         throw uno::RuntimeException();
 
@@ -402,7 +400,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
@@ -421,7 +419,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const OUString& aFormat,
     ::osl::MutexGuard aGuard( m_aMutex );
 
     sal_Int32 nRet = 0;
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
@@ -450,7 +448,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const OUString& aFormat,
     ::osl::MutexGuard aGuard( m_aMutex );
 
     sal_Int32 nRet = 0;
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
@@ -476,7 +474,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const OUString& aFormat,
 void SAL_CALL SvNumberFormatsObj::removeByKey( sal_Int32 nKey )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
 
     if (pFormatter)
     {
@@ -492,7 +490,7 @@ OUString SAL_CALL SvNumberFormatsObj::generateFormat( sal_Int32 nBaseKey,
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
@@ -507,7 +505,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardIndex( const lang::Locale& nLo
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
@@ -520,7 +518,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardFormat( sal_Int16 nType, const
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
@@ -536,7 +534,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatIndex( sal_Int16 nIndex, const l
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
@@ -556,7 +554,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
@@ -583,16 +581,14 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
 }
 
 SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, const ::comphelper::SharedMutex& _rMutex )
-    :rSupplier( rParent )
+    :m_xSupplier( &rParent )
     ,nKey( nK )
     ,m_aMutex( _rMutex )
 {
-    rSupplier.acquire();
 }
 
 SvNumberFormatObj::~SvNumberFormatObj()
 {
-    rSupplier.release();
 }
 
 // XPropertySet
@@ -616,7 +612,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
     ::osl::MutexGuard aGuard( m_aMutex );
 
     uno::Any aRet;
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
     if (!pFormat)
         throw uno::RuntimeException();
@@ -730,7 +726,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : nullptr;
     if (!pFormat)
         throw uno::RuntimeException();
@@ -796,15 +792,13 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
 }
 
 SvNumberFormatSettingsObj::SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, const ::comphelper::SharedMutex& _rMutex )
-    :rSupplier( rParent )
+    :m_xSupplier( &rParent )
     ,m_aMutex( _rMutex )
 {
-    rSupplier.acquire();
 }
 
 SvNumberFormatSettingsObj::~SvNumberFormatSettingsObj()
 {
-    rSupplier.release();
 }
 
 // XPropertySet
@@ -822,7 +816,7 @@ void SAL_CALL SvNumberFormatSettingsObj::setPropertyValue( const OUString& aProp
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
@@ -860,7 +854,7 @@ uno::Any SAL_CALL SvNumberFormatSettingsObj::getPropertyValue( const OUString& a
     ::osl::MutexGuard aGuard( m_aMutex );
 
     uno::Any aRet;
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
+    SvNumberFormatter* pFormatter = m_xSupplier->GetNumberFormatter();
     if (!pFormatter)
         throw uno::RuntimeException();
 
