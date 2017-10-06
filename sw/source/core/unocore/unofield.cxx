@@ -626,7 +626,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
 
         }
     }
-    else if (!pType && m_pImpl->m_pDoc && rPropertyName == UNO_NAME_NAME)
+    else if (m_pImpl->m_pDoc && rPropertyName == UNO_NAME_NAME)
     {
         OUString sTypeName;
         rValue >>= sTypeName;
@@ -2782,7 +2782,7 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName)
     if( SwFieldIds::Unknown != nResId )
     {
         sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
-        bRet = SwFieldIds::Unknown != nResId && nullptr != GetDoc()->getIDocumentFieldsAccess().GetFieldType(nResId, sName, true);
+        bRet = nullptr != GetDoc()->getIDocumentFieldsAccess().GetFieldType(nResId, sName, true);
     }
     return bRet;
 }
