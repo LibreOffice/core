@@ -151,6 +151,21 @@ struct IndexRange {
 /** retrieve the content of CT_IndexRange */
 IndexRange GetIndexRange( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
+/**
+* nRotation is a 100th of a degree and the return value is
+* in a 60,000th of a degree
+*
+* Also rotation is in opposite directions so multiply with -1
+*/
+inline OString calcRotationValue(sal_Int32 nRotation)
+{
+    if (nRotation > 18000) // 180 degree
+    {
+        nRotation -= 36000;
+    }
+    nRotation *= -600;
+    return OString::number(nRotation);
+}
 
 const sal_Int32 EMU_PER_HMM = 360;      /// 360 EMUs per 1/100 mm.
 const sal_Int32 EMU_PER_PT = 12700;
