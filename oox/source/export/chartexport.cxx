@@ -893,26 +893,6 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
     pFS->endElement( FSNS( XML_c, XML_legend ) );
 }
 
-namespace {
-
-/**
- * nRotation is a 100th of a degree and the return value is
- * in a 60,000th of a degree
- *
- * Also rotation is in opposite directions so multiply with -1
- */
-OString calcRotationValue(sal_Int32 nRotation)
-{
-    if (nRotation > 18000) // 180 degree
-    {
-        nRotation -= 36000;
-    }
-    nRotation *= -600;
-    return OString::number(nRotation);
-}
-
-}
-
 void ChartExport::exportTitle( const Reference< XShape >& xShape )
 {
     OUString sText;
@@ -945,7 +925,7 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape )
 
     pFS->singleElement( FSNS( XML_a, XML_bodyPr ),
             XML_vert, sWritingMode,
-            XML_rot, calcRotationValue(nRotation).getStr(),
+            XML_rot, oox::drawingml::calcRotationValue(nRotation).getStr(),
             FSEND );
     // TODO: lstStyle
     pFS->singleElement( FSNS( XML_a, XML_lstStyle ),
