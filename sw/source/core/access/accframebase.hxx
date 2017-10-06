@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRAMEBASE_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRAMEBASE_HXX
 
-#include <acccontext.hxx>
+#include "acccontext.hxx"
 #include <calbck.hxx>
 #include <pam.hxx>
 

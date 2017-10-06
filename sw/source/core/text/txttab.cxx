@@ -32,7 +32,7 @@
 #include "itrform2.hxx"
 #include "txtfrm.hxx"
 #include <numrule.hxx>
-#include <porfld.hxx>
+#include "porfld.hxx"
 #include <memory>
 
 /**

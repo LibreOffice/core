@@ -27,7 +27,7 @@
 #include <hints.hxx>
 #include "accnotextframe.hxx"
 #include <fmturl.hxx>
-#include <accnotexthyperlink.hxx>
+#include "accnotexthyperlink.hxx"
 #include <svtools/imap.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>

@@ -22,7 +22,7 @@
 
 #include "acccontext.hxx"
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <accselectionhelper.hxx>
+#include "accselectionhelper.hxx"
 
 class SwCellFrame;
 class SwAccessibleTable;

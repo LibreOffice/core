@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJSLIST_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJSLIST_HXX
 
-#include <accfrmobj.hxx>
+#include "accfrmobj.hxx"
 #include <swrect.hxx>
 
 class SwAccessibleMap;

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCCONTEXT_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCCONTEXT_HXX
 
-#include <accframe.hxx>
+#include "accframe.hxx"
 #include <accmap.hxx>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>

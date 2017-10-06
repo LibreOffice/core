@@ -20,7 +20,7 @@
 #include "dcontact.hxx"
 #include "dflyobj.hxx"
 #include "pam.hxx"
-#include <portab.hxx>
+#include "portab.hxx"
 #include "flyfrm.hxx"
 #include "rootfrm.hxx"
 #include "frmfmt.hxx"

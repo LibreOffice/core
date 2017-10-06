@@ -19,7 +19,6 @@
 
 #include <crsrsh.hxx>
 #include <viscrs.hxx>
-#include <callnk.hxx>
 
 bool SwCursorShell::IsStartWord( sal_Int16 nWordType ) const
 {

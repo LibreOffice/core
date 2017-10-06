@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFOOTNOTE_HXX
 
 #include <sal/types.h>
-#include <acccontext.hxx>
+#include "acccontext.hxx"
 
 class SwAccessibleMap;
 class SwFootnoteFrame;

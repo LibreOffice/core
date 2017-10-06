@@ -46,7 +46,7 @@
 #include "expfld.hxx"
 #include "docufld.hxx"
 #include "pagedesc.hxx"
-#include <pormulti.hxx>
+#include "pormulti.hxx"
 #include "fmtmeta.hxx"
 #include "reffld.hxx"
 #include "flddat.hxx"

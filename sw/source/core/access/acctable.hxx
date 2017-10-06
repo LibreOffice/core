@@ -25,7 +25,7 @@
 #include <vector>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#include <acccontext.hxx>
+#include "acccontext.hxx"
 
 class SwTabFrame;
 class SwAccessibleTableData_Impl;

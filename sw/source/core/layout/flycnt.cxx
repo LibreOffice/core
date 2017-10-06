@@ -41,7 +41,7 @@
 #include <dcontact.hxx>
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
-#include <objectformattertxtfrm.hxx>
+#include "objectformattertxtfrm.hxx"
 #include <HandleAnchorNodeChg.hxx>
 
 using namespace ::com::sun::star;

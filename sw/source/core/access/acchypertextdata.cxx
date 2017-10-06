@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <acchyperlink.hxx>
-#include <acchypertextdata.hxx>
+#include "acchyperlink.hxx"
+#include "acchypertextdata.hxx"
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

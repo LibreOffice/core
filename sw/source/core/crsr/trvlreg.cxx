@@ -23,7 +23,7 @@
 #include <docary.hxx>
 #include <fmtcntnt.hxx>
 #include <viscrs.hxx>
-#include <callnk.hxx>
+#include "callnk.hxx"
 #include <pamtyp.hxx>
 #include <section.hxx>
 

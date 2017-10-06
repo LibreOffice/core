@@ -38,10 +38,10 @@
 #include <viscrs.hxx>
 #include <hints.hxx>
 #include <fesh.hxx>
-#include <accfrmobjslist.hxx>
+#include "accfrmobjslist.hxx"
 #include <accmap.hxx>
 #include <strings.hrc>
-#include <acctable.hxx>
+#include "acctable.hxx"
 
 #include <layfrm.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>

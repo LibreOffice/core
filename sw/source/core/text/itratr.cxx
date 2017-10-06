@@ -44,12 +44,12 @@
 #include <dcontact.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
-#include <itratr.hxx>
+#include "itratr.hxx"
 #include <htmltbl.hxx>
 #include <swtable.hxx>
-#include <redlnitr.hxx>
+#include "redlnitr.hxx"
 #include <fmtsrnd.hxx>
-#include <itrtxt.hxx>
+#include "itrtxt.hxx"
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <editeng/lrspitem.hxx>

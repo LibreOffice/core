@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <objectformatterlayfrm.hxx>
+#include "objectformatterlayfrm.hxx"
 #include <anchoredobject.hxx>
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <textmarkuphelper.hxx>
-#include <accportions.hxx>
+#include "textmarkuphelper.hxx"
+#include "accportions.hxx"
 
 #include <vector>
 #include <algorithm>

@@ -23,7 +23,7 @@
 #include <txatbase.hxx>
 #include <frmatr.hxx>
 #include <viscrs.hxx>
-#include <callnk.hxx>
+#include "callnk.hxx"
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <frmfmt.hxx>

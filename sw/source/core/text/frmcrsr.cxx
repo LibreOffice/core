@@ -31,7 +31,7 @@
 #include <editeng/tstpitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
-#include <pormulti.hxx>
+#include "pormulti.hxx"
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <sortedobjs.hxx>

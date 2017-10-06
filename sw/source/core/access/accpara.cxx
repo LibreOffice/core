@@ -41,9 +41,9 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <breakit.hxx>
-#include <accpara.hxx>
+#include "accpara.hxx"
 #include <strings.hrc>
-#include <accportions.hxx>
+#include "accportions.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -53,8 +53,8 @@
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <txtatr.hxx>
-#include <acchyperlink.hxx>
-#include <acchypertextdata.hxx>
+#include "acchyperlink.hxx"
+#include "acchypertextdata.hxx"
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <section.hxx>
@@ -81,8 +81,8 @@
 #include <unoprnms.hxx>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <viewimp.hxx>
-#include <textmarkuphelper.hxx>
-#include <parachangetrackinginfo.hxx>
+#include "textmarkuphelper.hxx"
+#include "parachangetrackinginfo.hxx"
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>

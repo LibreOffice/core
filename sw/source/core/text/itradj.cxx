@@ -28,7 +28,7 @@
 #include "porfly.hxx"
 #include "pordrop.hxx"
 #include "pormulti.hxx"
-#include <portab.hxx>
+#include "portab.hxx"
 #include <memory>
 
 #define MIN_TAB_WIDTH 60

@@ -26,8 +26,8 @@
 #include <vcl/svapp.hxx>
 #include <ndtxt.hxx>
 #include <txtinet.hxx>
-#include <accpara.hxx>
-#include <acchyperlink.hxx>
+#include "accpara.hxx"
+#include "acchyperlink.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

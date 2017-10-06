@@ -59,9 +59,9 @@
 #include <fmtline.hxx>
 #include <txtfrm.hxx>
 #include <sectfrm.hxx>
-#include <itrform2.hxx>
-#include <widorp.hxx>
-#include <txtcache.hxx>
+#include "itrform2.hxx"
+#include "widorp.hxx"
+#include "txtcache.hxx"
 #include <fntcache.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <lineinfo.hxx>

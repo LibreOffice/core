@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_DOCNODE_NDSECT_HXX
 #define INCLUDED_SW_SOURCE_CORE_DOCNODE_NDSECT_HXX
 
+#include <tools/solar.h>
+
+class SwSectionNode;
+
 void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
 
 
