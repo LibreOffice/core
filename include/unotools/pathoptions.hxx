@@ -56,6 +56,7 @@ public:
         PATH_MODULE,
         PATH_PALETTE,
         PATH_PLUGIN,
+        PATH_STORAGE,
         PATH_TEMP,
         PATH_TEMPLATE,
         PATH_USERCONFIG,
@@ -87,6 +88,7 @@ public:
     const OUString& GetModulePath() const;
     const OUString& GetPalettePath() const;
     const OUString& GetPluginPath() const;
+    const OUString& GetStoragePath() const;
     const OUString& GetTempPath() const;
     const OUString& GetTemplatePath() const;
     const OUString& GetUserConfigPath() const;
@@ -112,6 +114,7 @@ public:
     void            SetModulePath( const OUString& rPath );
     void            SetPalettePath( const OUString& rPath );
     void            SetPluginPath( const OUString& rPath );
+    void            SetStoragePath( const OUString& rPath );
     void            SetTempPath( const OUString& rPath );
     void            SetTemplatePath( const OUString& rPath );
     void            SetUserConfigPath( const OUString& rPath );
