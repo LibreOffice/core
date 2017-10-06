@@ -162,19 +162,4 @@ void SAL_CALL SvXMLImportContext::characters(const OUString &rChars)
     mrImport.Characters( rChars );
 }
 
-void SvXMLImportContext::AddFirstRef()
-{
-    acquire();
-}
-
-void SvXMLImportContext::AddNextRef()
-{
-    acquire();
-}
-
-void SvXMLImportContext::ReleaseRef()
-{
-    release();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -317,7 +317,7 @@ class StoredChapterNumberingRootContext
 private:
     SwChapterNumRules & m_rNumRules;
     size_t m_nCounter;
-    std::vector<tools::SvRef<SvxXMLListStyleContext>> m_Contexts;
+    std::vector<rtl::Reference<SvxXMLListStyleContext>> m_Contexts;
 
 public:
     StoredChapterNumberingRootContext(
