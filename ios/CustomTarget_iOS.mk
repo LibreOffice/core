@@ -116,7 +116,7 @@ $(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj $(IOSKITXC) $(IOSAPPXC)
 	        -project $(IOSKITPRJ) \
 	        -target LibreOfficeKit \
 	        -sdk $(IOS_SDK) \
-	        -arch $(CPU_NAME) \
+	        -arch `echo $(CPUNAME) |  tr '[:upper:]' '[:lower:]'`\
 	        -configuration $(if $(ENABLE_DEBUG),Debug,Release) \
 	        build \
 	        , $(WORKDIR)/ios/build.log \
