@@ -676,6 +676,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_indent, XclXmlUtils::ToPsz10(false),
         XML_outline, XclXmlUtils::ToPsz10(true),
         XML_outlineData, XclXmlUtils::ToPsz10(true),
+        XML_compact, XclXmlUtils::ToPsz10(false),
+        XML_compactData, XclXmlUtils::ToPsz10(false),
         FSEND);
 
     // NB: Excel's range does not include page field area (if any).
@@ -725,6 +727,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         {
             pPivotStrm->singleElement(XML_pivotField,
                 XML_showAll, XclXmlUtils::ToPsz10(false),
+                XML_compact, XclXmlUtils::ToPsz10(false),
                 FSEND);
             continue;
         }
@@ -736,6 +739,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         {
             pPivotStrm->singleElement(XML_pivotField,
                 XML_showAll, XclXmlUtils::ToPsz10(false),
+                XML_compact, XclXmlUtils::ToPsz10(false),
                 FSEND);
             continue;
         }
@@ -745,6 +749,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             pPivotStrm->singleElement(XML_pivotField,
                 XML_dataField, XclXmlUtils::ToPsz10(true),
                 XML_showAll, XclXmlUtils::ToPsz10(false),
+                XML_compact, XclXmlUtils::ToPsz10(false),
                 FSEND);
 
             continue;
@@ -812,6 +817,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         if (!bHasDefaultSubtotal)
             pAttList->add(XML_defaultSubtotal, XclXmlUtils::ToPsz10(false));
 
+        pAttList->add( XML_compact, XclXmlUtils::ToPsz10(false));
         sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
         pPivotStrm->startElement(XML_pivotField, xAttributeList);
 
