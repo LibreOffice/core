@@ -185,7 +185,14 @@ bool SwDoc::StartGrammarChecking( bool bSkipStart )
             {
                 bStarted = true;
                 if ( !bSkipStart )
+                {
+                    for (auto pLayout : GetAllLayouts())
+                    {   // we're starting it now, don't start grammar checker
+                        // again until the user modifies the document
+                        pLayout->SetNeedGrammarCheck(false);
+                    }
                     xGCIterator->startProofreading( xDoc, xFPIP );
+                }
             }
         }
     }
