@@ -1221,7 +1221,7 @@ private:
     std::unique_ptr<WW8RStyle> m_xStyles;     // pointer to the style reading class
     SwFormat* m_pAktColl;        // collection to be created now
                             // ( always 0 outside of a Style-Def )
-    SfxItemSet* m_pAktItemSet;// character attributes to be read in now
+    std::unique_ptr<SfxItemSet> m_xAktItemSet;// character attributes to be read in now
                             // (always 0 outside of the WW8ListManager Ctor)
     std::vector<SwWW8StyInf> m_vColl;
     const SwTextFormatColl* m_pDfltTextFormatColl;    // Default
@@ -1481,7 +1481,7 @@ private:
             SwFrameFormat const *pFlyFormat, WW8_FSPA const *pF);
 
     bool IsDropCap();
-    bool IsListOrDropcap() { return (!m_pAktItemSet  || m_bDropCap); };
+    bool IsListOrDropcap() { return (!m_xAktItemSet  || m_bDropCap); };
 
     //Apo == Absolutely Positioned Object, MSWord's old-style frames
     WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
@@ -1873,7 +1873,7 @@ public:     // really private, but can only be done public
     SwDoc& GetDoc() const           { return m_rDoc; }
     sal_uInt16 GetNAktColl()  const     { return m_nAktColl; }
     void SetNAktColl( sal_uInt16 nColl ) { m_nAktColl = nColl;    }
-    void SetAktItemSet( SfxItemSet* pItemSet ) { m_pAktItemSet = pItemSet; }
+    std::unique_ptr<SfxItemSet> SetAktItemSet(SfxItemSet* pItemSet);
     sal_uInt16 StyleUsingLFO( sal_uInt16 nLFOIndex ) const ;
     const SwFormat* GetStyleWithOrgWWName( OUString const & rName ) const ;
 

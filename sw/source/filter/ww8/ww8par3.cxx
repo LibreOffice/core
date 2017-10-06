@@ -673,7 +673,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
         rpItemSet.reset(new SfxItemSet( rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{}));
 
         // Set Reader-ItemSet-Pointer to the newly created set
-        rReader.SetAktItemSet(rpItemSet.get());
+        rReader.SetAktItemSet(rpItemSet.release());
         // Set Reader-Style to Style of this Level
         sal_uInt16 nOldColl = rReader.GetNAktColl();
         sal_uInt16 nNewColl = nLevelStyle;
@@ -697,7 +697,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
         }
 
         // Reset Reader-ItemSet-Pointer and Reader-Style
-        rReader.SetAktItemSet( nullptr );
+        rpItemSet = rReader.SetAktItemSet(nullptr);
         rReader.SetNAktColl( nOldColl );
         rReader.SetToggleAttrFlags(nOldFlags1);
         rReader.SetToggleBiDiAttrFlags(nOldFlags2);
@@ -1844,13 +1844,13 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
 
             if (bApplyListLevelIndentDirectlyAtPara)
             {
-                SfxItemSet aListIndent(m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE,
-                        RES_LR_SPACE>{});
+                std::unique_ptr<SfxItemSet> xListIndent(new SfxItemSet(m_rDoc.GetAttrPool(), svl::Items<RES_LR_SPACE,
+                                                                                                        RES_LR_SPACE>{}));
                 const SvxLRSpaceItem *pItem = static_cast<const SvxLRSpaceItem*>(
                     GetFormatAttr(RES_LR_SPACE));
                 OSL_ENSURE(pItem, "impossible");
                 if (pItem)
-                    aListIndent.Put(*pItem);
+                    xListIndent->Put(*pItem);
 
                 /*
                  Take the original paragraph sprms attached to this list level
@@ -1859,8 +1859,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
                 */
                 if (short nLen = static_cast< short >(aParaSprms.size()))
                 {
-                    SfxItemSet* pOldAktItemSet = m_pAktItemSet;
-                    SetAktItemSet(&aListIndent);
+                    std::unique_ptr<SfxItemSet> xOldAktItemSet(SetAktItemSet(xListIndent.release()));
 
                     sal_uInt8* pSprms1  = &aParaSprms[0];
                     while (0 < nLen)
@@ -1870,10 +1869,10 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nActLFO,
                         pSprms1 += nL1;
                     }
 
-                    SetAktItemSet(pOldAktItemSet);
+                    xListIndent = SetAktItemSet(xOldAktItemSet.release());
                 }
 
-                if (const SvxLRSpaceItem *pLR = aListIndent.GetItem<SvxLRSpaceItem>(RES_LR_SPACE))
+                if (const SvxLRSpaceItem *pLR = xListIndent->GetItem<SvxLRSpaceItem>(RES_LR_SPACE))
                 {
                     m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(), *pLR);
                     m_xCtrlStck->SetAttr(*m_pPaM->GetPoint(), RES_LR_SPACE);
