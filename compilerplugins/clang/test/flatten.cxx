@@ -15,16 +15,28 @@ class Class {};
 
 void top1() {
     if (foo() == 1) { // expected-note {{if condition here [loplugin:flatten]}}
+        foo();
+    } else {
+        throw std::exception(); // expected-error {{unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case [loplugin:flatten]}}
+    }
+    // no warning expected
+    if (foo() == 1) {
         Class aClass;
         (void)aClass;
     } else {
-        throw std::exception(); // expected-error {{unconditional throw in else branch, rather invert the condition, throw early, and flatten the normal case [loplugin:flatten]}}
+        throw std::exception();
     }
 }
 
 void top2() {
     if (foo() == 2) {
         throw std::exception(); // expected-error {{unconditional throw in then branch, just flatten the else [loplugin:flatten]}}
+    } else {
+        foo();
+    }
+    // no warning expected
+    if (foo() == 2) {
+        throw std::exception();
     } else {
         Class aClass;
         (void)aClass;
@@ -75,6 +87,21 @@ int main() {
     } else {
         throw std::exception();
     }
+}
+
+void top6() {
+    // no warning expected
+    if (foo() == 2) {
+        Class aClass;
+        (void)aClass;
+    } else if (foo() == 2) {
+        Class aClass;
+        (void)aClass;
+    } else {
+        throw std::exception();
+    }
+    int x = 1;
+    (void)x;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

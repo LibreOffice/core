@@ -7,12 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "plugin.hxx"
 #include <cassert>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <set>
-#include "plugin.hxx"
+#include <stack>
 
 /**
   Look for places where we can flatten the control flow in a method by returning early.
@@ -30,7 +31,9 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
+    bool TraverseIfStmt(IfStmt *);
     bool TraverseCXXCatchStmt(CXXCatchStmt * );
+    bool TraverseCompoundStmt(CompoundStmt *);
     bool VisitIfStmt(IfStmt const * );
 private:
     bool rewrite1(IfStmt const * );
@@ -40,8 +43,8 @@ private:
     std::string getSourceAsString(SourceRange range);
     std::string invertCondition(Expr const * condExpr, SourceRange conditionRange);
     bool checkOverlap(SourceRange);
-    bool lastStmtInParent(Stmt const * stmt);
 
+    std::stack<bool> mLastStmtInParentStack;
     std::vector<std::pair<char const *, char const *>> mvModifiedRanges;
 };
 
@@ -72,23 +75,30 @@ static bool containsVarDecl(Stmt const * stmt)
     return declStmt && isa<VarDecl>(*declStmt->decl_begin());
 }
 
-bool Flatten::lastStmtInParent(Stmt const * stmt)
-{
-    auto parent = parentStmt(stmt);
-    if (!parent) {
-        return true;
-    }
-    auto parentCompound = dyn_cast<CompoundStmt>(parent);
-    if (!parentCompound) {
-        return true;
-    }
-    return parentCompound->body_back() == stmt;
-}
-
 bool Flatten::TraverseCXXCatchStmt(CXXCatchStmt* )
 {
     // ignore stuff inside catch statements, where doing a "if...else..throw" is more natural
     return true;
+}
+
+bool Flatten::TraverseIfStmt(IfStmt * ifStmt)
+{
+    // ignore if we are part of an if/then/else/if chain
+    if (ifStmt->getElse() && isa<IfStmt>(ifStmt->getElse()))
+        return true;
+    return RecursiveASTVisitor<Flatten>::TraverseIfStmt(ifStmt);
+}
+
+bool Flatten::TraverseCompoundStmt(CompoundStmt * compoundStmt)
+{
+    // if the "if" statement is not the last statement in its block, and it contains
+    // var decls in its then block, we cannot de-indent the then block without
+    // extending the lifetime of some variables, which may be problematic
+    // ignore if we are part of an if/then/else/if chain
+    mLastStmtInParentStack.push(compoundStmt->size() > 0 && isa<IfStmt>(*compoundStmt->body_back()));
+    bool rv = RecursiveASTVisitor<Flatten>::TraverseCompoundStmt(compoundStmt);
+    mLastStmtInParentStack.pop();
+    return rv;
 }
 
 bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
@@ -97,15 +107,6 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
         return true;
 
     if (!ifStmt->getElse())
-        return true;
-
-    // ignore if/then/else/if chains for now
-    if (isa<IfStmt>(ifStmt->getElse()))
-        return true;
-
-    // ignore if we are part of an if/then/else/if chain
-    auto parentIfStmt = dyn_cast<IfStmt>(parentStmt(ifStmt));
-    if (parentIfStmt && parentIfStmt->getElse() == ifStmt)
         return true;
 
     if (containsPreprocessingConditionalInclusion(ifStmt->getSourceRange())) {
@@ -118,10 +119,10 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
         // if both the "if" and the "else" contain throws, no improvement
         if (containsSingleThrowExpr(ifStmt->getThen()))
             return true;
-        // if the "if" statement is not the last statement in it's block, and it contains
-        // var decls in it's then block, we cannot de-indent the then block without
+        // if the "if" statement is not the last statement in its block, and it contains
+        // var decls in its then block, we cannot de-indent the then block without
         // extending the lifetime of some variables, which may be problematic
-        if (!lastStmtInParent(ifStmt) && containsVarDecl(ifStmt->getThen()))
+        if (!mLastStmtInParentStack.top() || containsVarDecl(ifStmt->getThen()))
             return true;
 
         if (!rewrite1(ifStmt))
@@ -147,7 +148,7 @@ bool Flatten::VisitIfStmt(IfStmt const * ifStmt)
         // if the "if" statement is not the last statement in it's block, and it contains
         // var decls in it's else block, we cannot de-indent the else block without
         // extending the lifetime of some variables, which may be problematic
-        if (!lastStmtInParent(ifStmt) && containsVarDecl(ifStmt->getElse()))
+        if (!mLastStmtInParentStack.top() || containsVarDecl(ifStmt->getElse()))
             return true;
 
         if (!rewrite2(ifStmt))
