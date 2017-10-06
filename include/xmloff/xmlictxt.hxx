@@ -116,10 +116,6 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void SAL_CALL characters(const OUString & aChars) override;
-
-    void AddFirstRef();
-    void AddNextRef();
-    void ReleaseRef();
 };
 
 #endif // INCLUDED_XMLOFF_XMLICTXT_HXX

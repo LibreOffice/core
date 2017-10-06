@@ -150,7 +150,7 @@ namespace xmloff
             m_aGenericValues.push_back(_rProp);
         }
     };
-    typedef tools::SvRef<OPropertyImport> OPropertyImportRef;
+    typedef rtl::Reference<OPropertyImport> OPropertyImportRef;
 
     //= OPropertyElementsContext
     /** helper class for importing the &lt;form:properties&gt; element
