@@ -72,7 +72,7 @@ OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     , ::comphelper::OPropertyContainer(OCommonStatement_IBase::rBHelper)
     , OStatement_CBase( static_cast<cppu::OWeakObject*>(_pConnection), this )
     , m_xResultSet(nullptr)
-    , m_pConnection(_pConnection)
+    , m_xConnection(_pConnection)
     , m_aParser(_pConnection->getDriver().getComponentContext())
     , m_aSQLIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser )
     , m_pParseTree(nullptr)
@@ -85,8 +85,6 @@ OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     , m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
     , m_bEscapeProcessing(true)
 {
-    m_pConnection->acquire();
-
 #define REGISTER_PROP( id, member ) \
     registerProperty( \
         OMetaConnection::getPropMap().getNameByIndex( id ), \
@@ -126,9 +124,7 @@ void OCommonStatement::disposing()
 
     disposeResultSet();
 
-    if (m_pConnection)
-        m_pConnection->release();
-    m_pConnection = nullptr;
+    m_xConnection.clear();
 
     dispose_ChildImpl();
     OCommonStatement_IBase::disposing();
@@ -198,7 +194,7 @@ OUString OCommonStatement::impl_getColumnRefColumnName_throw( const OSQLParseNod
     }
 
     if ( !sColumnName.getLength() )
-        m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
+        m_xConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
 
     return sColumnName;
 }
@@ -230,7 +226,7 @@ void OCommonStatement::orderByAnalysis( const OSQLParseNode* _pOrderByClause, So
 
         // column name -> column field
         if ( !SQL_ISRULE( pColumnRef, column_ref ) )
-            m_pConnection->throwGenericSQLException( STR_SORT_BY_COL_ONLY, *this );
+            m_xConnection->throwGenericSQLException( STR_SORT_BY_COL_ONLY, *this );
         const OUString sColumnName( impl_getColumnRefColumnName_throw( *pColumnRef ) );
         guint nField = evoab::findEvoabField( sColumnName );
         // ascending/descending?
@@ -301,14 +297,14 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
                 )
             )
         {
-            m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
+            m_xConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
         }
 
         if  (   ( pPrec->getNodeType() != SQLNodeType::Equal )
             &&  ( pPrec->getNodeType() != SQLNodeType::NotEqual )
             )
         {
-            m_pConnection->throwGenericSQLException( STR_OPERATOR_TOO_COMPLEX, *this );
+            m_xConnection->throwGenericSQLException( STR_OPERATOR_TOO_COMPLEX, *this );
         }
 
         // recognize the special "0 = 1" condition
@@ -342,7 +338,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         const OSQLParseNode* pPart2 = parseTree->getChild(1);
 
         if( ! SQL_ISRULE( parseTree->getChild( 0 ), column_ref) )
-            m_pConnection->throwGenericSQLException(STR_QUERY_INVALID_LIKE_COLUMN,*this);
+            m_xConnection->throwGenericSQLException(STR_QUERY_INVALID_LIKE_COLUMN,*this);
 
         OUString aColumnName( impl_getColumnRefColumnName_throw( *parseTree->getChild( 0 ) ) );
 
@@ -358,7 +354,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
             SAL_INFO(
                 "connectivity.evoab2",
                 "analyseSQL : pAtom->count() = " << pAtom->count());
-            m_pConnection->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,*this);
+            m_xConnection->throwGenericSQLException(STR_QUERY_INVALID_LIKE_STRING,*this);
         }
 
         const sal_Unicode WILDCARD = '%';
@@ -383,7 +379,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         else if( bNotLike )
         {
             // We currently can't handle a 'NOT LIKE' when there are '%'
-            m_pConnection->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
+            m_xConnection->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
         }
         else if( aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) )
         {   // One occurrence of '%'  matches...
@@ -392,7 +388,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
             else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
             else
-                m_pConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD,*this);
+                m_xConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD,*this);
         }
         else if( aMatchString.getLength() >= 3 &&
                  aMatchString.startsWith(OUStringLiteral1(WILDCARD)) &&
@@ -401,7 +397,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString.copy (1, aMatchString.getLength() - 2) );
         }
         else
-            m_pConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD_MANY,*this);
+            m_xConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD_MANY,*this);
     }
 
     return pResult;
@@ -552,12 +548,12 @@ QueryData OCommonStatement::impl_getEBookQuery_throw( const OUString& _rSql )
 #endif
 
     if ( !aData.getQuery() )
-        m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
+        m_xConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
 
     // a postcondition of this method is that we properly determined the SELECT columns
     aData.xSelectColumns = m_aSQLIterator.getSelectColumns();
     if ( !aData.xSelectColumns.is() )
-        m_pConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
+        m_xConnection->throwGenericSQLException( STR_QUERY_TOO_COMPLEX, *this );
 
     return aData;
 }
@@ -566,7 +562,7 @@ QueryData OCommonStatement::impl_getEBookQuery_throw( const OUString& _rSql )
 Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const QueryData& _rQueryData )
 {
     // create result set
-    OEvoabResultSet* pResult = new OEvoabResultSet( this, m_pConnection );
+    OEvoabResultSet* pResult = new OEvoabResultSet( this, m_xConnection.get() );
     Reference< XResultSet > xRS = pResult;
     pResult->construct( _rQueryData );
 
