@@ -1374,7 +1374,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     nBytesPerRow = nRowSize;
             }
 
-            if ( bStatus )
+            if (bStatus)
             {
                 //sanity check consider ReadMap condition for last row and
                 //last plane
@@ -1441,7 +1441,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                             bStatus = false;
                     }
                 }
-                else if ( nCompression == 5 )
+                else if (nCompression == 5)
                 {
                     sal_uInt32 np = nPlanes - 1;
                     if (np >= SAL_N_ELEMENTS(aMap))
@@ -1463,6 +1463,13 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         if (nStart > nEndOfFile)
                             bStatus = false;
                     }
+                }
+                else if (nCompression == 32773)
+                {
+                }
+                else
+                {
+                    bStatus = false;
                 }
             }
 
