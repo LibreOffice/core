@@ -34,6 +34,24 @@
       "revId": "b18545688a6399dbf89b05dae585e15a75b8302a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b1dc8b13",
+        "filename": "include/sfx2/zoomitem.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-06T09:44:44Z",
+      "side": 1,
+      "message": "\u003e when removing dtors I checked if class is complete and members have DLLPUBLIC dtor.\n\nWhat do you mean with \"class is complete\"?\n\nWhat do you mean with \"members have DLLPUBLIC dtor\"?\n\n\u003e For enums I assumed this is the case.\n\nI don\u0027t understand what you want to say here.\n\n\u003e I\u0027m not sure about negative implications, guess the dtors are inlined. And as you see many pool items don\u0027t have an explicit virtual dtor. If you think that\u0027s bad I would support a uniform solution.\n\nWith the Itanium ABI (as used on Linux and macOS), things like vtables are emitted with the first non-inline virtual function, or weakly everywhere needed when there is no virtual function that\u0027s not inline.  Hence the general recommendation to make at least any virtual dtor non-inline (to ensure there is such a \"key function\").  Can\u0027t be bothered to remember the details for MSVC.\n\n\u003e so far I didn\u0027t encounter a pool item with non DLLPUBLIC member.\n\nWhat do you mean with \"non DLLPUBLIC member\"?\n\n\u003e only saw this once with an other class which gave me a linking error, so I had to define the dtor in the source.\n\nSaw what?",
+      "parentUuid": "1a430d35_f618c986",
+      "revId": "b18545688a6399dbf89b05dae585e15a75b8302a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
