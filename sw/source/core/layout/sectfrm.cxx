@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <svl/itemiter.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
@@ -1961,7 +1964,8 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
             }
             SwTwips nSpace = nGrow;
             if( !bInCalcContent && nGrow < nDist && GetUpper() )
-                nGrow += GetUpper()->Grow( LONG_MAX, true );
+                nGrow = o3tl::saturating_add(
+                    nGrow, GetUpper()->Grow( LONG_MAX, true ));
 
             if( nGrow > nDist )
                 nGrow = nDist;
