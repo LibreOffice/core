@@ -4319,6 +4319,43 @@ SwTwips SwRowFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     return nReal;
 }
 
+static bool lcl_ContainsNestedTableContainingSection(SwRowFrame* pRow)
+{
+    SwFrame* pLower = pRow->Lower();
+    if (!pLower)
+        return false;
+    if (!pLower->IsCellFrame())
+        return false;
+    SwCellFrame* pOuterCell = static_cast<SwCellFrame*>(pLower);
+
+    pLower = pOuterCell->Lower();
+    if (!pLower)
+        return false;
+    if (!pLower->IsTabFrame())
+        return false;
+    SwTabFrame* pInnerTab = static_cast<SwTabFrame*>(pLower);
+
+    pLower = pInnerTab->Lower();
+    if (!pLower)
+        return false;
+    if (!pLower->IsRowFrame())
+        return false;
+    SwRowFrame* pInnerRow = static_cast<SwRowFrame*>(pLower);
+
+    pLower = pInnerRow->Lower();
+    if (!pLower)
+        return false;
+    if (!pLower->IsCellFrame())
+        return false;
+    SwCellFrame* pInnerCell = static_cast<SwCellFrame*>(pLower);
+
+    pLower = pInnerCell->Lower();
+    if (!pLower)
+        return false;
+
+    return pLower->IsSctFrame();
+}
+
 SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 {
     SWRECTFN( this )
@@ -4407,7 +4444,8 @@ SwTwips SwRowFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                  && !pTab->IsInRecalcLowerRow() )
             {
                 SwTabFrame* pMasterTab = pTab->FindMaster();
-                pMasterTab->InvalidatePos();
+                if (!lcl_ContainsNestedTableContainingSection(this))
+                    pMasterTab->InvalidatePos();
             }
         }
         AdjustCells( (Prt().*fnRect->fnGetHeight)() - nReal, true );
