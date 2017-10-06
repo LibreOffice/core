@@ -80,27 +80,16 @@ void DocumentTimerManager::StartBackgroundJobs()
         maDocIdle.Start();
 }
 
-IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
+DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
 {
-#ifdef TIMELOG
-    static ::rtl::Logfile* pModLogFile = 0;
-    if( !pModLogFile )
-        pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
-#endif
-
     SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pTmpRoot &&
         !SfxProgress::GetActiveProgress( m_rDoc.GetDocShell() ) )
     {
         SwViewShell* pShell(m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
         for(SwViewShell& rSh : pShell->GetRingContainer())
-        {
             if( rSh.ActionPend() )
-            {
-                pIdle->Start();
-                return;
-            }
-        }
+                return IdleJob::Busy;
 
         if( pTmpRoot->IsNeedGrammarCheck() )
         {
@@ -109,59 +98,93 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
             SvtLinguConfig().GetProperty( OUString(
                         UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
 
-            if (bIsOnlineSpell && bIsAutoGrammar)
-                StartGrammarChecking( m_rDoc );
+            if( bIsOnlineSpell && bIsAutoGrammar && m_rDoc.StartGrammarChecking( true ) )
+                return IdleJob::Grammar;
         }
-        std::set<SwRootFrame*> aAllLayouts = m_rDoc.GetAllLayouts();
-        std::set<SwRootFrame*>::iterator pLayIter = aAllLayouts.begin();
-        for ( ;pLayIter != aAllLayouts.end();++pLayIter )
+
+        for ( auto pLayout : m_rDoc.GetAllLayouts() )
         {
-            if ((*pLayIter)->IsIdleFormat())
-            {
-                (*pLayIter)->GetCurrShell()->LayoutIdle();
-                // Defer the remaining work.
-                pIdle->Start();
-                return;
-            }
+            if( pLayout->IsIdleFormat() )
+                return IdleJob::Layout;
         }
 
         SwFieldUpdateFlags nFieldUpdFlag = m_rDoc.GetDocumentSettingManager().getFieldUpdateFlags(true);
         if( ( AUTOUPD_FIELD_ONLY == nFieldUpdFlag
-                    || AUTOUPD_FIELD_AND_CHARTS == nFieldUpdFlag ) &&
-                m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().IsFieldsDirty()
-                // If we switch the field name the Fields are not updated.
-                // So the "background update" should always be carried out
-                /* && !pStartSh->GetViewOptions()->IsFieldName()*/ )
+                    || AUTOUPD_FIELD_AND_CHARTS == nFieldUpdFlag )
+                && m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().IsFieldsDirty() )
         {
-            if ( m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().IsInUpdateFields() ||
-                      m_rDoc.getIDocumentFieldsAccess().IsExpFieldsLocked() )
-            {
-                pIdle->Start();
-                return;
-            }
-
-            //  Action brackets!
-            m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetInUpdateFields( true );
-
-            pTmpRoot->StartAllAction();
-
-            // no jump on update of fields #i85168#
-            const bool bOldLockView = pShell->IsViewLocked();
-            pShell->LockView( true );
-
-            m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter )->ModifyNotification( nullptr, nullptr );    // ChapterField
-            m_rDoc.getIDocumentFieldsAccess().UpdateExpFields( nullptr, false );      // Updates ExpressionFields
-            m_rDoc.getIDocumentFieldsAccess().UpdateTableFields(nullptr);                // Tables
-            m_rDoc.getIDocumentFieldsAccess().UpdateRefFields();                // References
-
-            pTmpRoot->EndAllAction();
-
-            pShell->LockView( bOldLockView );
-
-            m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetInUpdateFields( false );
-            m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty( false );
+            if( m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().IsInUpdateFields()
+                    || m_rDoc.getIDocumentFieldsAccess().IsExpFieldsLocked() )
+                return IdleJob::Busy;
+            return IdleJob::Fields;
         }
     }
+
+    return IdleJob::None;
+}
+
+IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
+{
+#ifdef TIMELOG
+    static ::rtl::Logfile* pModLogFile = 0;
+    if( !pModLogFile )
+        pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
+#endif
+
+    IdleJob eJob = GetNextIdleJob();
+
+    switch ( eJob )
+    {
+    case IdleJob::Grammar:
+        m_rDoc.StartGrammarChecking();
+        break;
+
+    case IdleJob::Layout:
+        for ( auto pLayout : m_rDoc.GetAllLayouts() )
+            if( pLayout->IsIdleFormat() )
+            {
+                pLayout->GetCurrShell()->LayoutIdle();
+                break;
+            }
+         break;
+
+    case IdleJob::Fields:
+    {
+        SwViewShell* pShell( m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
+        SwRootFrame* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
+
+        //  Action brackets!
+        m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetInUpdateFields( true );
+
+        pTmpRoot->StartAllAction();
+
+        // no jump on update of fields #i85168#
+        const bool bOldLockView = pShell->IsViewLocked();
+        pShell->LockView( true );
+
+        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter )->ModifyNotification( nullptr, nullptr );  // ChapterField
+        m_rDoc.getIDocumentFieldsAccess().UpdateExpFields( nullptr, false );  // Updates ExpressionFields
+        m_rDoc.getIDocumentFieldsAccess().UpdateTableFields(nullptr);  // Tables
+        m_rDoc.getIDocumentFieldsAccess().UpdateRefFields();  // References
+
+        pTmpRoot->EndAllAction();
+
+        pShell->LockView( bOldLockView );
+
+        m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetInUpdateFields( false );
+        m_rDoc.getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty( false );
+        break;
+    }
+
+    case IdleJob::Busy:
+        break;
+    case IdleJob::None:
+        break;
+    }
+
+    if ( IdleJob::None != eJob )
+        pIdle->Start();
+
 #ifdef TIMELOG
     if( pModLogFile && 1 != (long)pModLogFile )
         delete pModLogFile, static_cast<long&>(pModLogFile) = 1;

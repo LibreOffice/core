@@ -223,9 +223,6 @@ namespace sfx2 {
 
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
-// global function to start grammar checking in the document
-void StartGrammarChecking( SwDoc &rDoc );
-
 using SwRubyList = std::vector<std::unique_ptr<SwRubyListEntry>>;
 
 // Represents the model of a Writer document.
@@ -1629,6 +1626,12 @@ public:
                                      [] (std::weak_ptr<SwUnoCursor> const & x) { return x.expired(); }),
                       rTable.end());
     }
+
+    /**
+     * @param bSkipStart don't actually start the jobs, just check
+     * @returns true if new background checking jobs were started
+     */
+    bool StartGrammarChecking( bool bSkipStart = false );
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().
