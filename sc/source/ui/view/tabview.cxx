@@ -230,6 +230,8 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     mfPendingTabBarWidth( -1.0 ),
     mnLOKStartHeaderRow( std::numeric_limits<SCROW>::min() ),
     mnLOKEndHeaderRow( std::numeric_limits<SCROW>::min() ),
+    mnLOKStartHeaderCol( std::numeric_limits<SCCOL>::min() ),
+    mnLOKEndHeaderCol( std::numeric_limits<SCCOL>::min() ),
     bMinimized( false ),
     bInUpdateHeader( false ),
     bInActivatePart( false ),
