@@ -571,7 +571,7 @@ bool ConstParams::isPointerOrReferenceToConst(const QualType& qt) {
     return false;
 }
 
-loplugin::Plugin::Registration< ConstParams > X("constparams", true);
+loplugin::Plugin::Registration< ConstParams > X("constparams", false);
 
 }
 
