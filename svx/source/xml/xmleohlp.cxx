@@ -543,39 +543,27 @@ void SvXMLEmbeddedObjectHelper::Init(
     meCreateMode = eCreateMode;
 }
 
-SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
+rtl::Reference<SvXMLEmbeddedObjectHelper> SvXMLEmbeddedObjectHelper::Create(
         const uno::Reference < embed::XStorage >& rRootStorage,
         ::comphelper::IEmbeddedHelper& rDocPersist,
         SvXMLEmbeddedObjectHelperMode eCreateMode )
 {
-    SvXMLEmbeddedObjectHelper* pThis = new SvXMLEmbeddedObjectHelper;
+    rtl::Reference<SvXMLEmbeddedObjectHelper> pThis(new SvXMLEmbeddedObjectHelper);
 
-    pThis->acquire();
     pThis->Init( rRootStorage, rDocPersist, eCreateMode );
 
     return pThis;
 }
 
-SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
+rtl::Reference<SvXMLEmbeddedObjectHelper> SvXMLEmbeddedObjectHelper::Create(
         ::comphelper::IEmbeddedHelper& rDocPersist,
         SvXMLEmbeddedObjectHelperMode eCreateMode )
 {
-    SvXMLEmbeddedObjectHelper* pThis = new SvXMLEmbeddedObjectHelper;
+    rtl::Reference<SvXMLEmbeddedObjectHelper> pThis(new SvXMLEmbeddedObjectHelper);
 
-    pThis->acquire();
     pThis->Init( nullptr, rDocPersist, eCreateMode );
 
     return pThis;
-}
-
-void SvXMLEmbeddedObjectHelper::Destroy(
-        SvXMLEmbeddedObjectHelper* pSvXMLEmbeddedObjectHelper )
-{
-    if( pSvXMLEmbeddedObjectHelper )
-    {
-        pSvXMLEmbeddedObjectHelper->dispose();
-        pSvXMLEmbeddedObjectHelper->release();
-    }
 }
 
 // XGraphicObjectResolver: alien objects!

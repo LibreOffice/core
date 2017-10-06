@@ -56,7 +56,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
     SvXMLGraphicHelper *pGraphicHelper = nullptr;
 
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
+    rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
 
     Reference< lang::XComponent > xSourceDoc( xComponent );
     try
@@ -76,8 +76,8 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             ::comphelper::IEmbeddedHelper *pPersist = pModel->GetPersist();
             if( pPersist )
             {
-                pObjectHelper = SvXMLEmbeddedObjectHelper::Create( *pPersist, SvXMLEmbeddedObjectHelperMode::Write );
-                xObjectResolver = pObjectHelper;
+                xObjectHelper = SvXMLEmbeddedObjectHelper::Create( *pPersist, SvXMLEmbeddedObjectHelperMode::Write );
+                xObjectResolver = xObjectHelper.get();
             }
 
             pGraphicHelper = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
@@ -128,9 +128,8 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xGraphicResolver = nullptr;
 
-    if( pObjectHelper )
-        SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
-    xObjectResolver = nullptr;
+    if( xObjectHelper.is() )
+        xObjectHelper->dispose();
 
     return bDocRet;
 }
@@ -156,7 +155,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
     SvXMLGraphicHelper *pGraphicHelper = nullptr;
 
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
+    rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
 
     Reference< lang::XComponent > xTargetDocument( xComponent );
     if( !xTargetDocument.is() )
@@ -182,10 +181,10 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
         ::comphelper::IEmbeddedHelper *pPersist = pModel->GetPersist();
         if( pPersist )
         {
-            pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+            xObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                         *pPersist,
                                         SvXMLEmbeddedObjectHelperMode::Read );
-            xObjectResolver = pObjectHelper;
+            xObjectResolver = xObjectHelper.get();
         }
 
         // parse
@@ -231,8 +230,9 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xGraphicResolver = nullptr;
 
-    if( pObjectHelper )
-        SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+    if( xObjectHelper.is() )
+        xObjectHelper->dispose();
+    xObjectHelper.clear();
     xObjectResolver = nullptr;
 
     if ( xTargetModel.is() )
