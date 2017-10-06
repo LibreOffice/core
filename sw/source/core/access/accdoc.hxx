@@ -24,7 +24,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleGetAccFlowTo.hpp>
-#include <accselectionhelper.hxx>
+#include "accselectionhelper.hxx"
 
 class VclSimpleEvent;
 

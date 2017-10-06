@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 
-#include <XMLRangeHelper.hxx>
+#include "XMLRangeHelper.hxx"
 #include <unochart.hxx>
 #include <swtable.hxx>
 #include <unoprnms.hxx>

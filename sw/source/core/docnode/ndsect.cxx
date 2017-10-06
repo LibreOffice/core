@@ -55,7 +55,7 @@
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
 #include <memory>
-#include <ndsect.hxx>
+#include "ndsect.hxx"
 #include <tools/datetimeutils.hxx>
 
 // #i21457# - new implementation of local method <lcl_IsInSameTableBox(..)>.

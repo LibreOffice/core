@@ -25,7 +25,7 @@
 #include <docary.hxx>
 #include <fmtpdsc.hxx>
 #include <laycache.hxx>
-#include <layhelp.hxx>
+#include "layhelp.hxx"
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>

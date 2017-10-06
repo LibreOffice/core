@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 
 #include <list>
-#include <accfrmobj.hxx>
+#include "accfrmobj.hxx"
 
 class SwAccessibleMap;
 class SwFrame;

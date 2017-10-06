@@ -49,7 +49,7 @@
 #include <svx/srchdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
-#include <overlayrangesoutline.hxx>
+#include "overlayrangesoutline.hxx"
 
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>

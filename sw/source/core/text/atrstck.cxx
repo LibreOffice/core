@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <atrhndl.hxx>
+#include "atrhndl.hxx"
 #include <svl/itemiter.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/cmapitem.hxx>

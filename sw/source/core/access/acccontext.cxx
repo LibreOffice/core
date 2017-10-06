@@ -42,8 +42,8 @@
 #include <pam.hxx>
 #include <viewimp.hxx>
 #include <accmap.hxx>
-#include <accfrmobjslist.hxx>
-#include <acccontext.hxx>
+#include "accfrmobjslist.hxx"
+#include "acccontext.hxx"
 #include <svx/AccessibleShape.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>

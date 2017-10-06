@@ -69,7 +69,7 @@
 #include <fmtpdsc.hxx>
 #include <globals.hrc>
 #include "PostItMgr.hxx"
-#include <vprint.hxx>
+#include "vprint.hxx"
 
 using namespace ::com::sun::star;
 

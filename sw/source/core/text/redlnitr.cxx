@@ -25,7 +25,7 @@
 #include <redline.hxx>
 #include <txtatr.hxx>
 #include <docary.hxx>
-#include <itratr.hxx>
+#include "itratr.hxx"
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -37,7 +37,7 @@
 #include <vcl/settings.hxx>
 #include <txtfrm.hxx>
 #include <vcl/svapp.hxx>
-#include <redlnitr.hxx>
+#include "redlnitr.hxx"
 #include <extinput.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/window.hxx>

@@ -43,7 +43,7 @@
 #include <txtfrm.hxx>
 #include <sectfrm.hxx>
 #include <swtable.hxx>
-#include <callnk.hxx>
+#include "callnk.hxx"
 #include <viscrs.hxx>
 #include <section.hxx>
 #include <docsh.hxx>

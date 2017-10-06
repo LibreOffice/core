@@ -33,7 +33,7 @@
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
 #include <viscrs.hxx>
-#include <callnk.hxx>
+#include "callnk.hxx"
 
 bool SwCursorShell::CallCursorFN( FNCursor fnCursor )
 {

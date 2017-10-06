@@ -19,7 +19,7 @@
 
 #include <pam.hxx>
 #include <frminf.hxx>
-#include <itrtxt.hxx>
+#include "itrtxt.hxx"
 
 sal_Int32 SwTextMargin::GetTextStart() const
 {

@@ -49,7 +49,7 @@
 #include <frmfmt.hxx>
 #include <flyfrm.hxx>
 #include <viscrs.hxx>
-#include <callnk.hxx>
+#include "callnk.hxx"
 #include <doctxm.hxx>
 #include <docfld.hxx>
 #include <expfld.hxx>

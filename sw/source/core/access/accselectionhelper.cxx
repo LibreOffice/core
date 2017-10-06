@@ -18,9 +18,9 @@
  */
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <accselectionhelper.hxx>
+#include "accselectionhelper.hxx"
 
-#include <acccontext.hxx>
+#include "acccontext.hxx"
 #include <accmap.hxx>
 #include <svx/AccessibleShape.hxx>
 #include <viewsh.hxx>

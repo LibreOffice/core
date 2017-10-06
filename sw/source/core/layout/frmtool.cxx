@@ -54,7 +54,7 @@
 #include "node2lay.hxx"
 #include "ndole.hxx"
 #include "hints.hxx"
-#include <layhelp.hxx>
+#include "layhelp.hxx"
 #include <laycache.hxx>
 #include <rootfrm.hxx>
 #include <paratr.hxx>

@@ -77,7 +77,7 @@
 #include <laycache.hxx>
 #include <mvsave.hxx>
 #include <istyleaccess.hxx>
-#include <swstylemanager.hxx>
+#include "swstylemanager.hxx"
 #include <IGrammarContact.hxx>
 #include <tblafmt.hxx>
 #include <tblsel.hxx>

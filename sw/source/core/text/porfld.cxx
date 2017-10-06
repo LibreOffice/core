@@ -26,9 +26,9 @@
 #include <vcl/outdev.hxx>
 #include <viewopt.hxx>
 #include <SwPortionHandler.hxx>
-#include <porlay.hxx>
-#include <porfld.hxx>
-#include <inftxt.hxx>
+#include "porlay.hxx"
+#include "porfld.hxx"
+#include "inftxt.hxx"
 #include <blink.hxx>
 #include <frmtool.hxx>
 #include <viewsh.hxx>
@@ -37,8 +37,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include "rootfrm.hxx"
 #include <breakit.hxx>
-#include <porrst.hxx>
-#include <porftn.hxx>
+#include "porrst.hxx"
+#include "porftn.hxx"
 #include <accessibilityoptions.hxx>
 #include <editeng/lrspitem.hxx>
 #include <unicode/ubidi.h>

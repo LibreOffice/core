@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accfrmobjslist.hxx>
+#include "accfrmobjslist.hxx"
 #include <accmap.hxx>
-#include <acccontext.hxx>
+#include "acccontext.hxx"
 
 #include <pagefrm.hxx>
 #include <sortedobjs.hxx>

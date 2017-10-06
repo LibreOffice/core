@@ -36,11 +36,11 @@
 #include <viewopt.hxx>
 #include <frmtool.hxx>
 #include <txtfrm.hxx>
-#include <itrpaint.hxx>
-#include <txtpaint.hxx>
-#include <txtcache.hxx>
+#include "itrpaint.hxx"
+#include "txtpaint.hxx"
+#include "txtcache.hxx"
 #include <flyfrm.hxx>
-#include <redlnitr.hxx>
+#include "redlnitr.hxx"
 #include <swmodule.hxx>
 #include <tabfrm.hxx>
 #include <numrule.hxx>

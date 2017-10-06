@@ -22,7 +22,7 @@
 
 #include <tools/gen.hxx>
 #include <svx/svdtypes.hxx>
-#include <accfrmobj.hxx>
+#include "accfrmobj.hxx"
 #include <map>
 
 class SwAccessibleMap;

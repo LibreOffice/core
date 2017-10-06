@@ -63,7 +63,7 @@
 #include <unosection.hxx>
 #include <calbck.hxx>
 #include <algorithm>
-#include <ndsect.hxx>
+#include "ndsect.hxx"
 
 using namespace ::com::sun::star;
 

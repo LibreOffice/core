@@ -50,12 +50,12 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <paratr.hxx>
 #include <rootfrm.hxx>
-#include <inftxt.hxx>
+#include "inftxt.hxx"
 #include <blink.hxx>
 #include <noteurl.hxx>
-#include <porftn.hxx>
-#include <porrst.hxx>
-#include <itratr.hxx>
+#include "porftn.hxx"
+#include "porrst.hxx"
+#include "itratr.hxx"
 #include <accessibilityoptions.hxx>
 #include <wrong.hxx>
 #include <doc.hxx>

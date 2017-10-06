@@ -27,7 +27,7 @@
 #include <IDocumentLayoutAccess.hxx>
 
 #include <movedfwdfrmsbyobjpos.hxx>
-#include <objstmpconsiderwrapinfl.hxx>
+#include "objstmpconsiderwrapinfl.hxx"
 
 #define LOOP_DETECT 250
 

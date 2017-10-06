@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <objstmpconsiderwrapinfl.hxx>
+#include "objstmpconsiderwrapinfl.hxx"
 #include <anchoredobject.hxx>
 
 SwObjsMarkedAsTmpConsiderWrapInfluence::SwObjsMarkedAsTmpConsiderWrapInfluence()

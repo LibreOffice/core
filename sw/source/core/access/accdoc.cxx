@@ -31,7 +31,7 @@
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <accmap.hxx>
-#include <accdoc.hxx>
+#include "accdoc.hxx"
 #include "strings.hrc"
 #include <pagefrm.hxx>
 

@@ -20,6 +20,11 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_VIEW_VPRINT_HXX
 #define INCLUDED_SW_SOURCE_CORE_VIEW_VPRINT_HXX
 
+#include <sal/types.h>
+
+class SwRootFrame;
+class SwPageFrame;
+
 SwPageFrame const* sw_getPage(SwRootFrame const& rLayout, sal_Int32 const nPage);
 
 #endif

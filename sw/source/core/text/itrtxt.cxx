@@ -27,7 +27,7 @@
 #include <pagefrm.hxx>
 #include <pagedesc.hxx>
 #include <tgrditem.hxx>
-#include <porfld.hxx>
+#include "porfld.hxx"
 
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"

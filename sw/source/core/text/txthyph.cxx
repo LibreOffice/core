@@ -23,10 +23,10 @@
 #include <viewopt.hxx>
 #include <viewsh.hxx>
 #include <SwPortionHandler.hxx>
-#include <porhyph.hxx>
-#include <inftxt.hxx>
-#include <itrform2.hxx>
-#include <guess.hxx>
+#include "porhyph.hxx"
+#include "inftxt.hxx"
+#include "itrform2.hxx"
+#include "guess.hxx"
 #include <splargs.hxx>
 #include <rootfrm.hxx>
 

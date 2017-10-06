@@ -30,12 +30,12 @@
 #include <swtable.hxx>
 #include "crsrsh.hxx"
 #include "viscrs.hxx"
-#include <accfrmobj.hxx>
-#include <accfrmobjslist.hxx>
+#include "accfrmobj.hxx"
+#include "accfrmobjslist.hxx"
 #include "frmfmt.hxx"
 #include "cellatr.hxx"
 #include "accmap.hxx"
-#include <acccell.hxx>
+#include "acccell.hxx"
 
 #include <cfloat>
 #include <limits.h>

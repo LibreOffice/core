@@ -29,7 +29,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/util/XJobManager.hpp>
 #include <observablethread.hxx>
-#include <cancellablejob.hxx>
+#include "cancellablejob.hxx"
 #include <threadlistener.hxx>
 
 #include <memory>

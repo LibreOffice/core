@@ -23,7 +23,7 @@
 #include <txtinet.hxx>
 #include <frmfmt.hxx>
 
-#include <accnotexthyperlink.hxx>
+#include "accnotexthyperlink.hxx"
 
 #include <fmturl.hxx>
 
