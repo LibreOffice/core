@@ -2224,6 +2224,8 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
     if( !xXText.is() )
         return;
 
+    sal_Int32 nTextRotateAngle = 0;
+
 #define DEFLRINS 254
 #define DEFTBINS 127
     sal_Int32 nLeft, nRight, nTop, nBottom;
@@ -2263,7 +2265,6 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
         {
             for ( sal_Int32 i = 0, nElems = aProps.getLength(); i < nElems; ++i )
             {
-                sal_Int32 nTextRotateAngle = 0;
                 if ( aProps[ i ].Name == "TextPreRotateAngle" && ( aProps[ i ].Value >>= nTextRotateAngle ) )
                 {
                     if ( nTextRotateAngle == -90 )
@@ -2320,6 +2321,7 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, bHorizontalCenter ? "1" : nullptr,
                                XML_vert, sWritingMode,
+                               XML_rot, (nTextRotateAngle != 0) ? oox::drawingml::calcRotationValue( nTextRotateAngle * 100 ).getStr() : nullptr,
                                FSEND );
         if( !presetWarp.isEmpty())
         {
