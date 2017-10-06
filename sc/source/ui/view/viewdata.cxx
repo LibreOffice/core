@@ -482,6 +482,8 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
 }
 
 ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
+        nPPTX(0.0),
+        nPPTY(0.0),
         mpMarkData(new ScMarkData),
         pDocShell   ( pDocSh ),
         pDoc        ( nullptr ),
@@ -573,6 +575,8 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
 }
 
 ScViewData::ScViewData( const ScViewData& rViewData ) :
+        nPPTX(0.0),
+        nPPTY(0.0),
         maTabData( rViewData.maTabData ),
         mpMarkData(new ScMarkData(*rViewData.mpMarkData)),
         pDocShell   ( rViewData.pDocShell ),
