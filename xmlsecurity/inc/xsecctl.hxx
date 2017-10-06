@@ -339,10 +339,7 @@ public:
         const css::uno::Reference<
             css::xml::crypto::XXMLSecurityContext >& xSecurityContext );
 
-    void setSAXChainConnector(
-        const css::uno::Reference< css::lang::XInitialization >& xInitialization,
-        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
-        const css::uno::Reference< css::xml::crypto::sax::XElementStackKeeper >& xElementStackKeeper);
+    void setSAXChainConnector(const css::uno::Reference< css::lang::XInitialization >& xInitialization);
 
     void clearSAXChainConnector();
     void endMission();

@@ -466,7 +466,7 @@ cssu::Reference< cssxs::XDocumentHandler > const & XSecController::createSignatu
         m_xSecParser = new XSecParser(rXMLSignatureHelper, this);
     cssu::Reference< cssl::XInitialization > xInitialization(m_xSecParser, uno::UNO_QUERY);
 
-    setSAXChainConnector(xInitialization, nullptr, nullptr);
+    setSAXChainConnector(xInitialization);
 
     return m_xSecParser;
 }

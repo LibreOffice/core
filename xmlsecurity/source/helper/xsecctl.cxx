@@ -474,10 +474,7 @@ void XSecController::startMission(
     m_bVerifyCurrentSignature = false;
 }
 
-void XSecController::setSAXChainConnector(
-    const cssu::Reference< cssl::XInitialization >& xInitialization,
-    const cssu::Reference< cssxs::XDocumentHandler >& xDocumentHandler,
-    const cssu::Reference< cssxc::sax::XElementStackKeeper >& xElementStackKeeper)
+void XSecController::setSAXChainConnector(const cssu::Reference< cssl::XInitialization >& xInitialization)
 /****** XSecController/setSAXChainConnector ***********************************
  *
  *   NAME
@@ -485,21 +482,16 @@ void XSecController::setSAXChainConnector(
  *  collaborate with the SAXEventKeeper on the SAX chain.
  *
  *   SYNOPSIS
- *  setSAXChainConnector( xInitialization,
- *                        xDocumentHandler,
- *                        xElementStackKeeper );
+ *  setSAXChainConnector(xInitialization);
  *
  *   INPUTS
  *  xInitialization     - the previous node on the SAX chain
- *  xDocumentHandler    - the next node on the SAX chain
- *  xElementStackKeeper - the ElementStackKeeper component which reserves
- *                        missed key SAX events for the SAXEventKeeper
  ******************************************************************************/
 {
     m_bIsPreviousNodeInitializable = true;
     m_xPreviousNodeOnSAXChain = xInitialization;
-    m_xNextNodeOnSAXChain = xDocumentHandler;
-    m_xElementStackKeeper = xElementStackKeeper;
+    m_xNextNodeOnSAXChain.clear();
+    m_xElementStackKeeper.clear();
 
     initializeSAXChain( );
 }
