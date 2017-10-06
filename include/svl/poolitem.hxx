@@ -106,7 +106,7 @@ enum class SfxItemState {
      * For example, you may want to get the font color and it might either
      * be the default one or one that has been explicitly set.
     */
-    SET      = 0x0030
+    SET      = 0x0040
 };
 
 #define INVALID_POOL_ITEM reinterpret_cast<SfxPoolItem*>(-1)
