@@ -246,17 +246,16 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         SetGraphicResolver( xGraphicResolver );
     }
 
-    SvXMLEmbeddedObjectHelper *pEmbeddedResolver = nullptr;
+    rtl::Reference<SvXMLEmbeddedObjectHelper> xEmbeddedResolver;
     if( !GetEmbeddedResolver().is() )
     {
         SfxObjectShell *pPersist = pDoc->GetPersist();
         if( pPersist )
         {
-            pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
+            xEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
                                             *pPersist,
                                             SvXMLEmbeddedObjectHelperMode::Write );
-            Reference< XEmbeddedObjectResolver > xEmbeddedResolver( pEmbeddedResolver );
-            SetEmbeddedResolver( xEmbeddedResolver );
+            SetEmbeddedResolver( Reference<XEmbeddedObjectResolver>( xEmbeddedResolver.get() ) );
         }
     }
 
@@ -296,8 +295,9 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     if( pGraphicResolver )
         SvXMLGraphicHelper::Destroy( pGraphicResolver );
-    if( pEmbeddedResolver )
-        SvXMLEmbeddedObjectHelper::Destroy( pEmbeddedResolver );
+    if( xEmbeddedResolver )
+        xEmbeddedResolver->dispose();
+    xEmbeddedResolver.clear();
 
     OSL_ENSURE( !m_pTableLines, "there are table columns infos left" );
 

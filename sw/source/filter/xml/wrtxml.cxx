@@ -82,7 +82,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = nullptr;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
+    rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
 
     OSL_ENSURE( xStg.is(), "Where is my storage?" );
     pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
@@ -93,10 +93,10 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     SfxObjectShell *pPersist = pDoc->GetPersist();
     if( pPersist )
     {
-        pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+        xObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                          xStg, *pPersist,
                                          SvXMLEmbeddedObjectHelperMode::Write );
-        xObjectResolver = pObjectHelper;
+        xObjectResolver = xObjectHelper.get();
     }
 
     // create and prepare the XPropertySet that gets passed through
@@ -392,8 +392,9 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xGraphicResolver = nullptr;
 
-    if( pObjectHelper )
-        SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+    if( xObjectHelper )
+        xObjectHelper->dispose();
+    xObjectHelper.clear();
     xObjectResolver = nullptr;
 
     // restore redline mode

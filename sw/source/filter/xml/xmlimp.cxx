@@ -395,7 +395,6 @@ SwXMLImport::SwXMLImport(
     m_pTableElemTokenMap( nullptr ),
     m_pTableCellAttrTokenMap( nullptr ),
     m_pGraphicResolver( nullptr ),
-    m_pEmbeddedResolver( nullptr ),
     m_nStyleFamilyMask( SfxStyleFamily::All ),
     m_bLoadDoc( true ),
     m_bInsert( false ),
@@ -673,10 +672,10 @@ void SwXMLImport::startDocument()
         SfxObjectShell *pPersist = pDoc->GetPersist();
         if( pPersist )
         {
-            m_pEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
+            m_xEmbeddedResolver = SvXMLEmbeddedObjectHelper::Create(
                                             *pPersist,
                                             SvXMLEmbeddedObjectHelperMode::Read );
-            Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver( m_pEmbeddedResolver );
+            Reference< document::XEmbeddedObjectResolver > xEmbeddedResolver( m_xEmbeddedResolver.get() );
             SetEmbeddedResolver( xEmbeddedResolver );
         }
     }
@@ -693,8 +692,9 @@ void SwXMLImport::endDocument()
 
     if( m_pGraphicResolver )
         SvXMLGraphicHelper::Destroy( m_pGraphicResolver );
-    if( m_pEmbeddedResolver )
-        SvXMLEmbeddedObjectHelper::Destroy( m_pEmbeddedResolver );
+    if( m_xEmbeddedResolver )
+        m_xEmbeddedResolver->dispose();
+    m_xEmbeddedResolver.clear();
     // Clear the shape import to sort the shapes  (and not in the
     // destructor that might be called after the import has finished
     // for Java filters.

@@ -69,7 +69,8 @@ class SwXMLImport: public SvXMLImport
     SvXMLTokenMap           *m_pTableElemTokenMap;
     SvXMLTokenMap           *m_pTableCellAttrTokenMap;
     SvXMLGraphicHelper      *m_pGraphicResolver;
-    SvXMLEmbeddedObjectHelper   *m_pEmbeddedResolver;
+    rtl::Reference<SvXMLEmbeddedObjectHelper>
+                            m_xEmbeddedResolver;
 
     SvXMLItemMapEntriesRef  m_xTableItemMap;
     SvXMLItemMapEntriesRef  m_xTableColItemMap;

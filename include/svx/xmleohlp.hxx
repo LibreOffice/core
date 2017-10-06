@@ -99,11 +99,11 @@ public:
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
 
-    static SvXMLEmbeddedObjectHelper*   Create(
+    static rtl::Reference<SvXMLEmbeddedObjectHelper> Create(
                                     const css::uno::Reference < css::embed::XStorage >&,
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
-    static SvXMLEmbeddedObjectHelper*   Create(
+    static rtl::Reference<SvXMLEmbeddedObjectHelper>   Create(
                                     ::comphelper::IEmbeddedHelper& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode );
     static void                 Destroy( SvXMLEmbeddedObjectHelper* pSvXMLEmbeddedObjectHelper );
