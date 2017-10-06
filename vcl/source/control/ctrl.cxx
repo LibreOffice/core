@@ -427,7 +427,7 @@ void Control::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
         {
             if (pWindow->ImplIsFloatingWindow())
             {
-                dynamic_cast<FloatingWindow*>(pWindow)->LogicInvalidate(nullptr);
+                static_cast<FloatingWindow*>(pWindow)->LogicInvalidate(nullptr);
                 return;
             }
 
