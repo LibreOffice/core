@@ -2345,6 +2345,10 @@ public:
     BoundsProvider(ScDocument* pD, SCTAB nT)
         : pDoc(pD)
         , nTab(nT)
+        , nFirstIndex(-1)
+        , nSecondIndex(-1)
+        , nFirstPositionPx(-1)
+        , nSecondPositionPx(-1)
     {}
 
     void GetStartIndexAndPosition(index_type& nIndex, long& nPosition) const
