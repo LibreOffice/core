@@ -71,7 +71,7 @@ public:
                                     , nState(-1)
                                 {}
 
-    static EmbedEventListener_Impl* Create( EmbeddedObjectRef* );
+    static rtl::Reference<EmbedEventListener_Impl> Create( EmbeddedObjectRef* );
 
     virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
     virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
@@ -82,23 +82,22 @@ public:
     virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 };
 
-EmbedEventListener_Impl* EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
+rtl::Reference<EmbedEventListener_Impl> EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
 {
-    EmbedEventListener_Impl* pRet = new EmbedEventListener_Impl( p );
-    pRet->acquire();
+    rtl::Reference<EmbedEventListener_Impl> pRet(new EmbedEventListener_Impl( p ));
 
     if ( p->GetObject().is() )
     {
-        p->GetObject()->addStateChangeListener( pRet );
+        p->GetObject()->addStateChangeListener( pRet.get() );
 
         uno::Reference < util::XCloseable > xClose( p->GetObject(), uno::UNO_QUERY );
         DBG_ASSERT( xClose.is(), "Object does not support XCloseable!" );
         if ( xClose.is() )
-            xClose->addCloseListener( pRet );
+            xClose->addCloseListener( pRet.get() );
 
         uno::Reference < document::XEventBroadcaster > xBrd( p->GetObject(), uno::UNO_QUERY );
         if ( xBrd.is() )
-            xBrd->addEventListener( pRet );
+            xBrd->addEventListener( pRet.get() );
 
         pRet->nState = p->GetObject()->getCurrentState();
         if ( pRet->nState == embed::EmbedStates::RUNNING )
@@ -106,7 +105,7 @@ EmbedEventListener_Impl* EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
             uno::Reference < util::XModifiable > xMod( p->GetObject()->getComponent(), uno::UNO_QUERY );
             if ( xMod.is() )
                 // listen for changes in running state (update replacements in case of changes)
-                xMod->addModifyListener( pRet );
+                xMod->addModifyListener( pRet.get() );
         }
     }
 
@@ -221,7 +220,7 @@ struct EmbeddedObjectRef_Impl
 {
     uno::Reference <embed::XEmbeddedObject> mxObj;
 
-    EmbedEventListener_Impl*                    xListener;
+    rtl::Reference<EmbedEventListener_Impl>     mxListener;
     OUString                                    aPersistName;
     OUString                                    aMediaType;
     comphelper::EmbeddedObjectContainer*        pContainer;
@@ -235,7 +234,6 @@ struct EmbeddedObjectRef_Impl
     awt::Size                                   aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
 
     EmbeddedObjectRef_Impl() :
-        xListener(nullptr),
         pContainer(nullptr),
         pGraphic(nullptr),
         nViewAspect(embed::Aspects::MSOLE_CONTENT),
@@ -247,7 +245,6 @@ struct EmbeddedObjectRef_Impl
 
     EmbeddedObjectRef_Impl( const EmbeddedObjectRef_Impl& r ) :
         mxObj(r.mxObj),
-        xListener(nullptr),
         aPersistName(r.aPersistName),
         aMediaType(r.aMediaType),
         pContainer(r.pContainer),
@@ -280,13 +277,13 @@ EmbeddedObjectRef::EmbeddedObjectRef( const uno::Reference < embed::XEmbeddedObj
 {
     mpImpl->nViewAspect = nAspect;
     mpImpl->mxObj = xObj;
-    mpImpl->xListener = EmbedEventListener_Impl::Create( this );
+    mpImpl->mxListener = EmbedEventListener_Impl::Create( this );
 }
 
 EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj ) :
     mpImpl(new EmbeddedObjectRef_Impl(*rObj.mpImpl))
 {
-    mpImpl->xListener = EmbedEventListener_Impl::Create( this );
+    mpImpl->mxListener = EmbedEventListener_Impl::Create( this );
 }
 
 EmbeddedObjectRef::~EmbeddedObjectRef()
@@ -301,7 +298,7 @@ void EmbeddedObjectRef::Assign( const uno::Reference < embed::XEmbeddedObject >&
     Clear();
     mpImpl->nViewAspect = nAspect;
     mpImpl->mxObj = xObj;
-    mpImpl->xListener = EmbedEventListener_Impl::Create( this );
+    mpImpl->mxListener = EmbedEventListener_Impl::Create( this );
 
     //#i103460#
     if ( IsChart() )
@@ -315,17 +312,17 @@ void EmbeddedObjectRef::Assign( const uno::Reference < embed::XEmbeddedObject >&
 
 void EmbeddedObjectRef::Clear()
 {
-    if (mpImpl->mxObj.is() && mpImpl->xListener)
+    if (mpImpl->mxObj.is() && mpImpl->mxListener.is())
     {
-        mpImpl->mxObj->removeStateChangeListener(mpImpl->xListener);
+        mpImpl->mxObj->removeStateChangeListener(mpImpl->mxListener.get());
 
         uno::Reference<util::XCloseable> xClose(mpImpl->mxObj, uno::UNO_QUERY);
         if ( xClose.is() )
-            xClose->removeCloseListener( mpImpl->xListener );
+            xClose->removeCloseListener( mpImpl->mxListener.get() );
 
         uno::Reference<document::XEventBroadcaster> xBrd(mpImpl->mxObj, uno::UNO_QUERY);
         if ( xBrd.is() )
-            xBrd->removeEventListener( mpImpl->xListener );
+            xBrd->removeEventListener( mpImpl->mxListener.get() );
 
         if ( mpImpl->bIsLocked )
         {
@@ -348,11 +345,10 @@ void EmbeddedObjectRef::Clear()
         }
     }
 
-    if (mpImpl->xListener)
+    if (mpImpl->mxListener.is())
     {
-        mpImpl->xListener->pObject = nullptr;
-        mpImpl->xListener->release();
-        mpImpl->xListener = nullptr;
+        mpImpl->mxListener->pObject = nullptr;
+        mpImpl->mxListener.clear();
     }
 
     mpImpl->mxObj = nullptr;
