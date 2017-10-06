@@ -31,6 +31,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <isheadless.hxx>
 
@@ -104,6 +105,10 @@ void test::BootstrapFixture::setUp()
     test::BootstrapFixtureBase::setUp();
 
     test_init_impl(m_bAssertOnDialog, m_bNeedUCB, m_xSFactory.get());
+
+#if OSL_DEBUG_LEVEL > 0
+    Scheduler::ProcessEventsToIdle();
+#endif
 }
 
 test::BootstrapFixture::~BootstrapFixture()

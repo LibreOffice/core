@@ -96,7 +96,6 @@ void Scheduler::ImplDeInitScheduler()
 
     SchedulerGuard aSchedulerGuard;
 
-#if OSL_DEBUG_LEVEL > 0
     {
         ImplSchedulerData* pSchedulerData = rSchedCtx.mpFirstSchedulerData;
         sal_uInt32 nTasks = 0;
@@ -105,9 +104,11 @@ void Scheduler::ImplDeInitScheduler()
             ++nTasks;
             pSchedulerData = pSchedulerData->mpNext;
         }
-        SAL_INFO( "vcl.schedule.deinit", "DeInit the scheduler - tasks: " << nTasks );
+        SAL_WARN_IF( 0 != nTasks, "vcl.schedule.deinit",
+                     "DeInit the scheduler - pending tasks: " << nTasks );
     }
 
+#if OSL_DEBUG_LEVEL > 0
     // clean up all the sfx::SfxItemDisruptor_Impl Idles
     ProcessEventsToIdle();
 #endif
