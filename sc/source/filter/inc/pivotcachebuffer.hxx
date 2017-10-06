@@ -32,6 +32,10 @@ namespace com { namespace sun { namespace star {
 
 namespace oox { namespace core { class Relations; } }
 
+class ScDPSaveDimension;
+class ScDPObject;
+class DateTime;
+
 namespace oox {
 namespace xls {
 
@@ -77,6 +81,9 @@ public:
     inline const css::uno::Any& getValue() const { return maValue; }
     /** Returns the string representation of the item. */
     OUString     getName() const;
+
+    /** Returns the string representation of the item, using the actual formating. */
+    OUString     getFormattedName(const ScDPSaveDimension& rSaveDim, ScDPObject* pObj, const ::DateTime& rNullDate) const;
     /** Returns true if the item is unused. */
     inline bool         isUnused() const { return mbUnused; }
 
