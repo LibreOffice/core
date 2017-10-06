@@ -3972,7 +3972,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
     m_bWasParaEnd = false;
     m_nAktColl    =  0;
-    m_pAktItemSet =  nullptr;
+    m_xAktItemSet.reset();
     m_nCharFormat    = -1;
     m_bSpec = false;
     m_bPgSecBreak = false;
@@ -4093,22 +4093,21 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
             const SwFormatCharFormat *pSwFormatCharFormat = nullptr;
 
-            if(m_pAktItemSet)
-                pSwFormatCharFormat = &(ItemGet<SwFormatCharFormat>(*m_pAktItemSet, RES_TXTATR_CHARFMT));
+            if (m_xAktItemSet)
+                pSwFormatCharFormat = &(ItemGet<SwFormatCharFormat>(*m_xAktItemSet, RES_TXTATR_CHARFMT));
 
-            if(pSwFormatCharFormat)
+            if (pSwFormatCharFormat)
                 pFormat = pSwFormatCharFormat->GetCharFormat();
 
-            if(m_pAktItemSet && !pFormat)
+            if (m_xAktItemSet && !pFormat)
             {
                 OUString sPrefix = "WW8Dropcap" + OUString::number(m_nDropCap++);
                 pNewSwCharFormat = m_rDoc.MakeCharFormat(sPrefix, m_rDoc.GetDfltCharFormat());
-                 m_pAktItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
-                pNewSwCharFormat->SetFormatAttr( *m_pAktItemSet );
+                m_xAktItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
+                pNewSwCharFormat->SetFormatAttr(*m_xAktItemSet);
             }
 
-            delete m_pAktItemSet;
-            m_pAktItemSet = nullptr;
+            m_xAktItemSet.reset();
             m_bDropCap=false;
         }
 
@@ -4189,7 +4188,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_aTextNodesHavingFirstLineOfstSet()
     , m_aTextNodesHavingLeftIndentSet()
     , m_pAktColl(nullptr)
-    , m_pAktItemSet(nullptr)
     , m_pDfltTextFormatColl(nullptr)
     , m_pStandardFormatColl(nullptr)
     , m_pTableDesc(nullptr)
@@ -6555,6 +6553,13 @@ SwMacroInfo::~SwMacroInfo()
 SdrObjUserData* SwMacroInfo::Clone( SdrObject* /*pObj*/ ) const
 {
    return new SwMacroInfo( *this );
+}
+
+std::unique_ptr<SfxItemSet> SwWW8ImplReader::SetAktItemSet(SfxItemSet* pItemSet)
+{
+    std::unique_ptr<SfxItemSet> xRet(std::move(m_xAktItemSet));
+    m_xAktItemSet.reset(pItemSet);
+    return xRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
