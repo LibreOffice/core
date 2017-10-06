@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_31dedb3f",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5083,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-06T07:12:50Z",
+      "side": 1,
+      "message": "ah nice, good find!\n\nSo the assert was the first goal; for getting this merged, we\u0027d need a flag for a \u0027strict mode\u0027 passed down here - that needs touching ImplSdPPTImport, PPTTextObj, and PPTStyleTextPropReader.\n\nAt least for the PPT import, code should somehow cope with exceptions (that\u0027s not to say the code is exception-safe - hardly any pre-2005 code in LibreOffice is), but at least throwing instead of asserting in the case of strict mode should get you the usual \u0027General input/output error\u0027 dialog on load.",
+      "revId": "4f3aedd4b036b151452a67eb346a3566d6c4c727",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b11bab1a",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-06T07:12:50Z",
+      "side": 1,
+      "message": "Hmm - so in theory, just loading that, followed by saveAndReload(...PPT) should trigger the bug?\n\nI think the test here checks a bit too much overall; if it\u0027s worth testing, better have it separate",
+      "revId": "4f3aedd4b036b151452a67eb346a3566d6c4c727",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
