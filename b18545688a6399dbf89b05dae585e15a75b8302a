@@ -88,6 +88,24 @@
       "revId": "b18545688a6399dbf89b05dae585e15a75b8302a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_91d78fbe",
+        "filename": "include/sfx2/zoomitem.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-06T11:48:15Z",
+      "side": 1,
+      "message": "\u003e \u003e does the base class dtor (~SfxPoolItem) qualify for \u0027any virtual dtor non-inline\u0027?\n\n\u003e no\n\n(I head meant \"any\" there in the sense that if the class has a virtual dtor, then it should be non-inline.  Typically, if a class has any virtual functions at all, you\u0027d make its dtor virtual.  Also, typically all virtual functions of at least DLLPUBLIC classes would be defined non-inline, to avoid weak symbols.)",
+      "parentUuid": "1a430d35_31d25bd3",
+      "revId": "b18545688a6399dbf89b05dae585e15a75b8302a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
