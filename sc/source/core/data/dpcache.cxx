@@ -134,7 +134,7 @@ void initFromCell(
 
     if (rCell.hasError())
     {
-        rData.SetErrorString(rCache.InternString(aDocStr));
+        rData.SetErrorString(rCache.InternString(pDoc->GetString(rPos.Col(), rPos.Row(), rPos.Tab())));
     }
     else if (rCell.hasNumeric())
     {
