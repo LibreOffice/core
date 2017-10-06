@@ -34,8 +34,17 @@ namespace sw
 class DocumentTimerManager : public IDocumentTimerAccess
 {
 public:
+    enum class IdleJob
+    {
+        None, ///< document has no idle jobs to do
+        Busy, ///< document is busy and idle jobs are postponed
+        Grammar,
+        Layout,
+        Fields,
+    };
 
     DocumentTimerManager( SwDoc& i_rSwdoc );
+    virtual ~DocumentTimerManager() override;
 
     void StartIdling() override;
 
@@ -47,14 +56,15 @@ public:
 
     void StartBackgroundJobs() override;
 
-    DECL_LINK( DoIdleJobs, Timer *, void );
-
-    virtual ~DocumentTimerManager() override;
+    bool IsDocIdle() const override;
 
 private:
-
     DocumentTimerManager(DocumentTimerManager const&) = delete;
     DocumentTimerManager& operator=(DocumentTimerManager const&) = delete;
+
+    DECL_LINK( DoIdleJobs, Timer *, void );
+
+    IdleJob GetNextIdleJob() const;
 
     SwDoc& m_rDoc;
 
@@ -62,6 +72,11 @@ private:
     sal_Int32 mIdleBlockCount;
     SwDocIdle maDocIdle;
 };
+
+inline bool DocumentTimerManager::IsDocIdle() const
+{
+    return( GetNextIdleJob() != IdleJob::Busy );
+}
 
 }
 
