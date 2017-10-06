@@ -46,7 +46,7 @@ using namespace com::sun::star::sdbc;
 
 OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
-                         ,m_pDriver(_pDriver)
+                         ,m_xDriver(_pDriver)
                          ,m_aConnectionHandle(nullptr)
                          ,m_pDriverHandleCopy(_pDriverHandle)
                          ,m_nStatementCount(0)
@@ -58,7 +58,6 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          ,m_bPreventGetVersionColumns(false)
                          ,m_bReadOnly(true)
 {
-    m_pDriver->acquire();
 }
 
 OConnection::~OConnection()
@@ -78,9 +77,6 @@ OConnection::~OConnection()
 
         m_aConnectionHandle = SQL_NULL_HANDLE;
     }
-
-    m_pDriver->release();
-    m_pDriver = nullptr;
 }
 
 void SAL_CALL OConnection::release() throw()
@@ -90,8 +86,8 @@ void SAL_CALL OConnection::release() throw()
 
 oslGenericFunction OConnection::getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
 {
-    OSL_ENSURE(m_pDriver,"OConnection::getOdbcFunction: m_pDriver is null!");
-    return m_pDriver->getOdbcFunction(_nIndex);
+    OSL_ENSURE(m_xDriver.get(),"OConnection::getOdbcFunction: m_xDriver is null!");
+    return m_xDriver->getOdbcFunction(_nIndex);
 }
 
 SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTimeOut, bool bSilent)
@@ -479,10 +475,10 @@ void OConnection::disposing()
 
     OConnection_BASE::disposing();
 
-    for (std::map< SQLHANDLE,OConnection*>::iterator aConIter = m_aConnections.begin();aConIter != m_aConnections.end();++aConIter )
+    for (auto aConIter = m_aConnections.begin(); aConIter != m_aConnections.end(); ++aConIter )
         aConIter->second->dispose();
 
-    std::map< SQLHANDLE,OConnection*>().swap(m_aConnections);
+    m_aConnections.clear();
 
     if(!m_bClosed)
         N3SQLDisconnect(m_aConnectionHandle);
@@ -493,17 +489,16 @@ void OConnection::disposing()
 
 SQLHANDLE OConnection::createStatementHandle()
 {
-    OConnection* pConnectionTemp = this;
+    rtl::Reference<OConnection> xConnectionTemp = this;
     bool bNew = false;
     try
     {
         sal_Int32 nMaxStatements = getMetaData()->getMaxStatements();
         if(nMaxStatements && nMaxStatements <= m_nStatementCount)
         {
-            OConnection* pConnection = new OConnection(m_pDriverHandleCopy,m_pDriver);
-            pConnection->acquire();
-            pConnection->Construct(m_sURL,getConnectionInfo());
-            pConnectionTemp = pConnection;
+            rtl::Reference<OConnection> xConnection(new OConnection(m_pDriverHandleCopy,m_xDriver.get()));
+            xConnection->Construct(m_sURL,getConnectionInfo());
+            xConnectionTemp = xConnection;
             bNew = true;
         }
     }
@@ -512,10 +507,10 @@ SQLHANDLE OConnection::createStatementHandle()
     }
 
     SQLHANDLE aStatementHandle = SQL_NULL_HANDLE;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,pConnectionTemp->getConnection(),&aStatementHandle);
+    N3SQLAllocHandle(SQL_HANDLE_STMT,xConnectionTemp->getConnection(),&aStatementHandle);
     ++m_nStatementCount;
     if(bNew)
-        m_aConnections.emplace(aStatementHandle,pConnectionTemp);
+        m_aConnections.emplace(aStatementHandle,xConnectionTemp);
 
     return aStatementHandle;
 
@@ -526,7 +521,7 @@ void OConnection::freeStatementHandle(SQLHANDLE& _pHandle)
     if( SQL_NULL_HANDLE == _pHandle )
         return;
 
-    std::map< SQLHANDLE,OConnection*>::iterator aFind = m_aConnections.find(_pHandle);
+    auto aFind = m_aConnections.find(_pHandle);
 
     N3SQLFreeStmt(_pHandle,SQL_RESET_PARAMS);
     N3SQLFreeStmt(_pHandle,SQL_UNBIND);

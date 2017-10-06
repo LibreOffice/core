@@ -55,11 +55,12 @@ namespace connectivity
 
             // Data attributes
 
-            std::map< SQLHANDLE,OConnection*> m_aConnections; // holds all connections which are need for several statements
+            std::map< SQLHANDLE, rtl::Reference<OConnection>> m_aConnections; // holds all connections which are need for several statements
 
 
             OUString        m_sUser;        //  the user name
-            ODBCDriver*     m_pDriver;      //  Pointer to the owning
+            rtl::Reference<ODBCDriver>
+                            m_xDriver;      //  Pointer to the owning
                                             //  driver object
 
             SQLHANDLE       m_aConnectionHandle;
@@ -125,7 +126,7 @@ namespace connectivity
             bool     isIgnoreDriverPrivilegesEnabled()   const { return m_bIgnoreDriverPrivileges; }
             bool     preventGetVersionColumns()          const { return m_bPreventGetVersionColumns; }
             bool     useOldDateFormat()                  const { return m_bUseOldDateFormat; }
-            ODBCDriver*      getDriver()                     const { return m_pDriver;}
+            ODBCDriver*      getDriver()                 const { return m_xDriver.get();}
 
             SQLHANDLE       createStatementHandle();
             // close and free the handle and set it to SQL_NULLHANDLE

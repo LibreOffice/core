@@ -160,7 +160,7 @@ namespace connectivity
 
         private:
             css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
-            OEvoabConnection                     *m_pConnection;
+            rtl::Reference<OEvoabConnection>      m_xConnection;
             connectivity::OSQLParser              m_aParser;
             connectivity::OSQLParseTreeIterator   m_aSQLIterator;
             connectivity::OSQLParseNode          *m_pParseTree;
@@ -197,7 +197,7 @@ namespace connectivity
         public:
 
             // other methods
-            OEvoabConnection* getOwnConnection() const { return m_pConnection;}
+            OEvoabConnection* getOwnConnection() const { return m_xConnection.get(); }
 
             using OCommonStatement_IBase::operator css::uno::Reference< css::uno::XInterface >;
 
@@ -239,7 +239,7 @@ namespace connectivity
                 impl_executeQuery_throw( const QueryData& _rData );
 
             css::uno::Reference< css::sdbc::XConnection >
-                impl_getConnection() { return css::uno::Reference< css::sdbc::XConnection >( m_pConnection ); }
+                impl_getConnection() { return css::uno::Reference< css::sdbc::XConnection >( m_xConnection.get() ); }
 
             OUString
                 impl_getColumnRefColumnName_throw( const ::connectivity::OSQLParseNode& _rColumnRef );
