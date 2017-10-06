@@ -226,6 +226,7 @@ public:
     void testPivotTableBoolFieldFilterXLSX();
     void testPivotTableRowColPageFieldFilterXLSX();
     void testPivotTableErrorItemFilterXLSX();
+    void testPivotTableOutlineModeXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -346,6 +347,7 @@ public:
     CPPUNIT_TEST(testPivotTableBoolFieldFilterXLSX);
     CPPUNIT_TEST(testPivotTableRowColPageFieldFilterXLSX);
     CPPUNIT_TEST(testPivotTableErrorItemFilterXLSX);
+    CPPUNIT_TEST(testPivotTableOutlineModeXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5249,6 +5251,23 @@ void ScExportTest::testPivotTableErrorItemFilterXLSX()
     CPPUNIT_ASSERT(pMember->HasIsVisible() && !pMember->GetIsVisible());
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testPivotTableOutlineModeXLSX()
+{
+    ScDocShellRef xShell = loadDoc("pivottable_outline_mode.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    // Next to the outline flags, compact flags also should be set (true is the default)
+    assertXPath(pTable, "/x:pivotTableDefinition", "outline", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition", "outlineData", "1");
+    assertXPath(pTable, "/x:pivotTableDefinition", "compact", "0");
+    assertXPath(pTable, "/x:pivotTableDefinition", "compactData", "0");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "compact", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
