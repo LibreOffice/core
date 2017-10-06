@@ -48,7 +48,7 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
-#include <wrtxml.hxx>
+#include "wrtxml.hxx"
 #include <strings.hrc>
 
 #include <comphelper/documentconstants.hxx>

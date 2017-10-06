@@ -62,9 +62,9 @@
 #include <poolfmt.hxx>
 #include <IMark.hxx>
 #include <ndgrf.hxx>
-#include <htmlnum.hxx>
-#include <swcss1.hxx>
-#include <swhtml.hxx>
+#include "htmlnum.hxx"
+#include "swcss1.hxx"
+#include "swhtml.hxx"
 #include <numrule.hxx>
 
 #include <vcl/graphicfilter.hxx>

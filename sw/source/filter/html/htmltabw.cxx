@@ -41,8 +41,8 @@
 #include <poolfmt.hxx>
 #include <swtable.hxx>
 #include <htmltbl.hxx>
-#include <htmlnum.hxx>
-#include <wrthtml.hxx>
+#include "htmlnum.hxx"
+#include "wrthtml.hxx"
 #include <wrtswtbl.hxx>
 #ifdef DBG_UTIL
 #include <viewsh.hxx>

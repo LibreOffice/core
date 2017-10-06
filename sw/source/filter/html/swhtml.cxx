@@ -99,11 +99,11 @@
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <docufld.hxx>
-#include <swcss1.hxx>
+#include "swcss1.hxx"
 #include <fltini.hxx>
 #include <htmltbl.hxx>
-#include <htmlnum.hxx>
-#include <swhtml.hxx>
+#include "htmlnum.hxx"
+#include "swhtml.hxx"
 #include <linkenum.hxx>
 #include <breakit.hxx>
 #include <SwAppletImpl.hxx>
@@ -112,7 +112,7 @@
 
 #include <strings.hrc>
 #include <swerror.h>
-#include <css1atr.hxx>
+#include "css1atr.hxx"
 
 #define FONTSIZE_MASK           7
 

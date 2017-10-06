@@ -27,7 +27,7 @@
 #include <docary.hxx>
 #include <fmtcntnt.hxx>
 #include <frmfmt.hxx>
-#include <wrtasc.hxx>
+#include "wrtasc.hxx"
 
 #include <strings.hrc>
 

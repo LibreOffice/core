@@ -49,8 +49,8 @@
 #include <docstat.hxx>
 #include <swerror.h>
 #include <unotext.hxx>
-#include <xmltexte.hxx>
-#include <xmlexp.hxx>
+#include "xmltexte.hxx"
+#include "xmlexp.hxx"
 #include <sfx2/viewsh.hxx>
 #include <comphelper/processfactory.hxx>
 #include <docary.hxx>

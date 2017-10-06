@@ -24,7 +24,7 @@
 #include <pam.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
-#include <wrtasc.hxx>
+#include "wrtasc.hxx"
 #include <txatbase.hxx>
 #include <fchrfmt.hxx>
 #include <txtfld.hxx>

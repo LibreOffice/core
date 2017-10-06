@@ -31,8 +31,8 @@
 #include <fldbas.hxx>
 #include <docufld.hxx>
 #include <flddat.hxx>
-#include <htmlfld.hxx>
-#include <swhtml.hxx>
+#include "htmlfld.hxx"
+#include "swhtml.hxx"
 
 using namespace nsSwDocInfoSubType;
 using namespace ::com::sun::star;
