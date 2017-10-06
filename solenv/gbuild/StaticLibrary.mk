@@ -62,60 +62,60 @@ define gb_StaticLibrary__add_iwyu_headers
 $(foreach file,$(2),$(call gb_StaticLibrary__add_iwyu_header,$(1),$(file)))
 endef
 
-define gb_StaticLibrary_forward_to_Linktarget
-gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_StaticLibrary_get_linktarget,$$(1)),$$(2),$$(3),StaticLibrary_$$(1))
+# forward the call to the gb_LinkTarget implementation
+# (note: because the function name is in $(1), the other args are shifted by 1)
+define gb_StaticLibrary__forward_to_Linktarget
+$(call gb_LinkTarget_$(1),$(call gb_StaticLibrary_get_linktarget,$(2)),$(3),$(4),StaticLibrary_$(2))
 
 endef
 
-$(eval $(foreach method,\
-	add_cobject \
-	add_cobjects \
-	add_cxxobject \
-	add_cxxobjects \
-	add_objcxxobject \
-	add_objcxxobjects \
-	add_cxxclrobject \
-	add_cxxclrobjects \
-	add_asmobject \
-	add_asmobjects \
-	add_exception_objects \
-	add_x64_generated_exception_objects \
-	add_generated_cobjects \
-	add_x64_generated_cobjects \
-	add_generated_exception_objects \
-	add_cflags \
-	add_cxxflags \
-	add_objcflags \
-	add_objcxxflags \
-	add_cxxclrflags \
-	add_defs \
-	set_include \
-	add_ldflags \
-	set_ldflags \
-	set_x64 \
-	add_libs \
-	set_library_path_flags \
-	use_api \
-	use_sdk_api \
-	use_udk_api \
-	use_internal_api \
-	use_internal_bootstrap_api \
-	use_internal_comprehensive_api \
-	use_external \
-	use_externals \
-	use_custom_headers \
-	use_package \
-	use_packages \
-	use_unpacked \
-	use_external_project \
-	use_static_libraries \
-	add_sdi_headers \
-	set_precompiled_header \
-	set_warnings_not_errors \
-	set_external_code \
-	set_generated_cxx_suffix \
-,\
-	$(call gb_StaticLibrary_forward_to_Linktarget,$(method))\
-))
+# copy pasta for forwarding: this could be (and was) done more elegantly, but
+# these here can be found by both git grep and ctags
+gb_StaticLibrary_add_cobject = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_cobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_cxxobject = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_cxxobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_objcxxobject = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_objcxxobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_cxxclrobject = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_cxxclrobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_asmobject = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_asmobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_exception_objects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_x64_generated_exception_objects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_generated_cobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_x64_generated_cobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_generated_exception_objects = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_cflags = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_cxxflags = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_objcflags = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_objcxxflags = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_cxxclrflags = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_defs = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_set_include = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_ldflags = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_set_ldflags = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_set_x64 = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_libs = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_set_library_path_flags = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_api = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_sdk_api = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_udk_api = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_internal_api = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_internal_bootstrap_api = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_internal_comprehensive_api = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_external = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_externals = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_custom_headers = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_package = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_packages = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_unpacked = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_external_project = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_use_static_libraries = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_add_sdi_headers = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_set_precompiled_header = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_set_warnings_not_errors = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_set_external_code = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
+gb_StaticLibrary_set_generated_cxx_suffix = $(call gb_StaticLibrary__forward_to_Linktarget,$(subst gb_StaticLibrary_,,$(0)),$(1),$(2),$(3))
 
 # vim: set noet sw=4:

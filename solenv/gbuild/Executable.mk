@@ -85,67 +85,67 @@ define gb_Executable_set_targettype_gui
 $(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktarget,$(1))) : TARGETGUI := $(2)
 endef
 
-define gb_Executable_forward_to_Linktarget
-gb_Executable_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Executable_get_linktarget,$$(1)),$$(2),$$(3),Executable_$$(1))
+# forward the call to the gb_LinkTarget implementation
+# (note: because the function name is in $(1), the other args are shifted by 1)
+define gb_Executable__forward_to_Linktarget
+$(call gb_LinkTarget_$(1),$(call gb_Executable_get_linktarget,$(2)),$(3),$(4),Executable_$(2))
 
 endef
 
-$(eval $(foreach method,\
-	add_cobject \
-	add_cobjects \
-	add_cxxobject \
-	add_cxxobjects \
-	add_objcobject \
-	add_objcobjects \
-	add_objcxxobject \
-	add_objcxxobjects \
-	add_cxxclrobject \
-	add_cxxclrobjects \
-	add_grammar \
-	add_grammars \
-	add_scanner \
-	add_scanners \
-	add_exception_objects \
-	add_generated_cobjects \
-	add_generated_exception_objects \
-	add_cflags \
-	add_cxxflags \
-	add_objcflags \
-	add_objcxxflags \
-	add_cxxclrflags \
-	add_defs \
-	set_include \
-	add_ldflags \
-	set_ldflags \
-	add_libs \
-	disable_standard_system_libs \
-	use_system_darwin_frameworks \
-	use_system_win32_libs \
-	set_library_path_flags \
-	use_api \
-	use_sdk_api \
-	use_udk_api \
-	use_internal_api \
-	use_internal_bootstrap_api \
-	use_internal_comprehensive_api \
-	use_library_objects \
-	use_libraries \
-	use_static_libraries \
-	use_external \
-	use_externals \
-	use_custom_headers \
-	use_package \
-	use_packages \
-	use_unpacked \
-	add_sdi_headers \
-	set_precompiled_header \
-	add_nativeres \
-	set_warnings_not_errors \
-	set_external_code \
-	set_generated_cxx_suffix \
-,\
-	$(call gb_Executable_forward_to_Linktarget,$(method))\
-))
+# copy pasta for forwarding: this could be (and was) done more elegantly, but
+# these here can be found by both git grep and ctags
+gb_Executable_add_cobject = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_cobjects = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_cxxobject = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_cxxobjects = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_objcobject = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_objcobjects = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_objcxxobject = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_objcxxobjects = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_cxxclrobject = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_cxxclrobjects = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_grammar = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_grammars = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_scanner = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_scanners = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_exception_objects = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_generated_cobjects = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_generated_exception_objects = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_cflags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_cxxflags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_objcflags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_objcxxflags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_cxxclrflags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_defs = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_set_include = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_ldflags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_set_ldflags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_libs = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_disable_standard_system_libs = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_system_darwin_frameworks = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_system_win32_libs = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_set_library_path_flags = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_api = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_sdk_api = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_udk_api = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_internal_api = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_internal_bootstrap_api = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_internal_comprehensive_api = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_library_objects = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_libraries = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_static_libraries = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_external = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_externals = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_custom_headers = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_package = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_packages = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_use_unpacked = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_sdi_headers = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_set_precompiled_header = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_add_nativeres = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_set_warnings_not_errors = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_set_external_code = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
+gb_Executable_set_generated_cxx_suffix = $(call gb_Executable__forward_to_Linktarget,$(subst gb_Executable_,,$(0)),$(1),$(2),$(3))
 
 # Run-time use
 
