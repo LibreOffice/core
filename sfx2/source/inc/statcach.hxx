@@ -46,11 +46,11 @@ public:
                                 const css::uno::Reference< css::frame::XDispatch > & rDisp,
                                 const css::util::URL& rURL,
                                 SfxStateCache* pStateCache, const SfxSlot* pSlot );
+                            ~BindDispatch_Impl() override;
 
-    virtual void SAL_CALL           statusChanged( const css::frame::FeatureStateEvent& Event ) override;
-    virtual void SAL_CALL           disposing( const css::lang::EventObject& Source ) override;
+    virtual void SAL_CALL   statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) override;
 
-    void                    Release();
     const css::frame::FeatureStateEvent& GetStatus() const { return aStatus;}
     sal_Int16               Dispatch( const css::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron );
 };
@@ -58,7 +58,8 @@ public:
 class SfxStateCache
 {
 friend class BindDispatch_Impl;
-    BindDispatch_Impl*      pDispatch;
+    rtl::Reference<BindDispatch_Impl>
+                            mxDispatch;
     sal_uInt16              nId;           // Slot-Id
     SfxControllerItem*      pInternalController;
     css::uno::Reference < css::frame::XDispatch > xMyDispatch;

@@ -145,16 +145,13 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateE
     }
 }
 
-void BindDispatch_Impl::Release()
+BindDispatch_Impl::~BindDispatch_Impl()
 {
     if ( xDisp.is() )
     {
         xDisp->removeStatusListener( static_cast<css::frame::XStatusListener*>(this), aURL );
         xDisp.clear();
     }
-
-    pCache = nullptr;
-    release();
 }
 
 
@@ -180,7 +177,6 @@ sal_Int16 BindDispatch_Impl::Dispatch( const css::uno::Sequence < css::beans::Pr
 // This constructor for an invalid cache that is updated in the first request.
 
 SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
-    pDispatch( nullptr ),
     nId(nFuncId),
     pInternalController(nullptr),
     pController(nullptr),
@@ -201,11 +197,6 @@ SfxStateCache::~SfxStateCache()
     DBG_ASSERT( pController == nullptr && pInternalController == nullptr, "there are still Controllers registered" );
     if ( !IsInvalidItem(pLastItem) )
         delete pLastItem;
-    if ( pDispatch )
-    {
-        pDispatch->Release();
-        pDispatch = nullptr;
-    }
 }
 
 
@@ -217,11 +208,7 @@ void SfxStateCache::Invalidate( bool bWithMsg )
     {
         bSlotDirty = true;
         aSlotServ.SetSlot( nullptr );
-        if ( pDispatch )
-        {
-            pDispatch->Release();
-            pDispatch = nullptr;
-        }
+        mxDispatch.clear();
     }
 }
 
@@ -236,7 +223,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
         // get the SlotServer; we need it for internal controllers anyway, but also in most cases
         rDispat.FindServer_( nId, aSlotServ, false );
 
-        DBG_ASSERT( !pDispatch, "Old Dispatch not removed!" );
+        DBG_ASSERT( !mxDispatch.is(), "Old Dispatch not removed!" );
 
         // we don't need to check the dispatch provider if we only have an internal controller
         if ( xProv.is() )
@@ -291,13 +278,12 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 }
 
                 // so the dispatch object isn't a SfxDispatcher wrapper or it is one, but it uses another dispatcher, but not rDispat
-                pDispatch = new BindDispatch_Impl( xDisp, aURL, this, pSlot );
-                pDispatch->acquire();
+                mxDispatch = new BindDispatch_Impl( xDisp, aURL, this, pSlot );
 
                 // flags must be set before adding StatusListener because the dispatch object will set the state
                 bSlotDirty = false;
                 bCtrlDirty = true;
-                xDisp->addStatusListener( pDispatch, aURL );
+                xDisp->addStatusListener( mxDispatch.get(), aURL );
             }
             else if ( rDispat.GetFrame() )
             {
@@ -367,7 +353,7 @@ void SfxStateCache::SetVisibleState( bool bShow )
         }
 
         // Update Controller
-        if ( !pDispatch && pController )
+        if ( !mxDispatch.is() && pController )
         {
             for ( SfxControllerItem *pCtrl = pController;
                     pCtrl;
@@ -416,7 +402,7 @@ void SfxStateCache::SetState_Impl
     if ( bNotify )
     {
         // Update Controller
-        if ( !pDispatch && pController )
+        if ( !mxDispatch.is() && pController )
         {
             for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
@@ -454,7 +440,7 @@ void SfxStateCache::SetCachedState( bool bAlways )
     if ( bAlways || ( !bItemDirty && !bSlotDirty ) )
     {
         // Update Controller
-        if ( !pDispatch && pController )
+        if ( !mxDispatch.is() && pController )
         {
             for ( SfxControllerItem *pCtrl = pController;
                 pCtrl;
@@ -473,24 +459,24 @@ void SfxStateCache::SetCachedState( bool bAlways )
 
 css::uno::Reference< css::frame::XDispatch >  SfxStateCache::GetDispatch() const
 {
-    if ( pDispatch )
-        return pDispatch->xDisp;
+    if ( mxDispatch.is() )
+        return mxDispatch->xDisp;
     return css::uno::Reference< css::frame::XDispatch > ();
 }
 
 sal_Int16 SfxStateCache::Dispatch( const SfxItemSet* pSet, bool bForceSynchron )
 {
     // protect pDispatch against destruction in the call
-    css::uno::Reference < css::frame::XStatusListener > xKeepAlive( pDispatch );
+    rtl::Reference<BindDispatch_Impl> xKeepAlive( mxDispatch );
     sal_Int16 eRet = css::frame::DispatchResultState::DONTKNOW;
 
-    if ( pDispatch )
+    if ( mxDispatch.is() )
     {
         uno::Sequence < beans::PropertyValue > aArgs;
         if (pSet)
             TransformItems( nId, *pSet, aArgs );
 
-        eRet = pDispatch->Dispatch( aArgs, bForceSynchron );
+        eRet = mxDispatch->Dispatch( aArgs, bForceSynchron );
     }
 
     return eRet;

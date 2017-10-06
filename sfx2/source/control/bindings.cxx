@@ -1567,16 +1567,15 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
                 }
 
                 SfxItemState eState = SfxItemState::SET;
-                BindDispatch_Impl *pBind = new BindDispatch_Impl( xDisp, aURL, pCache, pSlot );
-                pBind->acquire();
-                xDisp->addStatusListener( pBind, aURL );
-                if ( !pBind->GetStatus().IsEnabled )
+                rtl::Reference<BindDispatch_Impl> xBind(new BindDispatch_Impl( xDisp, aURL, pCache, pSlot ));
+                xDisp->addStatusListener( xBind.get(), aURL );
+                if ( !xBind->GetStatus().IsEnabled )
                 {
                     eState = SfxItemState::DISABLED;
                 }
                 else
                 {
-                    css::uno::Any aAny = pBind->GetStatus().State;
+                    css::uno::Any aAny = xBind->GetStatus().State;
                     css::uno::Type aType = aAny.getValueType();
 
                     if ( aType == cppu::UnoType<bool>::get() )
@@ -1607,8 +1606,8 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolI
                         rpState.reset(new SfxVoidItem( nSlot ));
                 }
 
-                xDisp->removeStatusListener( pBind, aURL );
-                pBind->Release();
+                xDisp->removeStatusListener( xBind.get(), aURL );
+                xBind.clear();
                 if ( bDeleteCache )
                     DELETEZ( pCache );
                 return eState;
