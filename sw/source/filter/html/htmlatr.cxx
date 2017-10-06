@@ -69,10 +69,10 @@
 #include <swtable.hxx>
 #include "fldbas.hxx"
 #include <breakit.hxx>
-#include <htmlatr.hxx>
-#include <htmlnum.hxx>
-#include <wrthtml.hxx>
-#include <htmlfly.hxx>
+#include "htmlatr.hxx"
+#include "htmlnum.hxx"
+#include "wrthtml.hxx"
+#include "htmlfly.hxx"
 #include <numrule.hxx>
 #include <rtl/strbuf.hxx>
 

@@ -65,9 +65,9 @@
 #include <fldbas.hxx>
 #include <fmtclds.hxx>
 #include <docsh.hxx>
-#include <wrthtml.hxx>
-#include <htmlnum.hxx>
-#include <htmlfly.hxx>
+#include "wrthtml.hxx"
+#include "htmlnum.hxx"
+#include "htmlfly.hxx"
 #include <swmodule.hxx>
 #include <strings.hrc>
 #include <swerror.h>

@@ -22,8 +22,8 @@
 #include <editeng/fontitem.hxx>
 #include <unotext.hxx>
 #include <doc.hxx>
-#include <xmlexp.hxx>
-#include <xmlimp.hxx>
+#include "xmlexp.hxx"
+#include "xmlimp.hxx"
 #include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star::uno;

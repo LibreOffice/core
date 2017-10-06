@@ -60,7 +60,7 @@
 #include "htmlnum.hxx"
 #include "swhtml.hxx"
 #include <numrule.hxx>
-#include <css1atr.hxx>
+#include "css1atr.hxx"
 
 using namespace ::com::sun::star;
 
