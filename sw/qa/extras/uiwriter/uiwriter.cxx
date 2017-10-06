@@ -51,6 +51,7 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
+#include "svl/itemiter.hxx"
 
 #include <editeng/eeitem.hxx>
 #include <editeng/scripttypeitem.hxx>
@@ -275,6 +276,9 @@ public:
 #endif
     void testLinesInSectionInTable();
     void testParagraphOfTextRange();
+    void testTdf99689TableOfContents();
+    void testTdf99689TableOfFigures();
+    void testTdf99689TableOfTables();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -433,6 +437,9 @@ public:
 #endif
     CPPUNIT_TEST(testLinesInSectionInTable);
     CPPUNIT_TEST(testParagraphOfTextRange);
+    CPPUNIT_TEST(testTdf99689TableOfContents);
+    CPPUNIT_TEST(testTdf99689TableOfFigures);
+    CPPUNIT_TEST(testTdf99689TableOfTables);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3161,6 +3168,101 @@ void SwUiWriterTest::testTdf75137()
     sal_uLong thirdIndex = pShellCursor->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(firstIndex, thirdIndex);
     CPPUNIT_ASSERT(firstIndex != secondIndex);
+}
+
+namespace
+{
+    sal_Int32 lcl_getAttributeIDFromHints( const SwpHints& hints )
+    {
+        for (size_t i = 0; i < hints.Count(); ++i)
+        {
+            const SwTextAttr* hint = hints.Get(i);
+            if( hint->Which() == RES_TXTATR_AUTOFMT )
+            {
+                const SwFormatAutoFormat& rFmt = hint->GetAutoFormat();
+                SfxItemIter aIter( *rFmt.GetStyleHandle() );
+                return aIter.GetCurItem()->Which();
+            }
+        }
+        return -1;
+    }
+}
+
+void SwUiWriterTest::testTdf99689TableOfContents()
+{
+    SwDoc* pDoc = createDoc("tdf99689.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GotoNextTOXBase();
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase);
+    SwCursorShell * pShell(pDoc->GetEditShell());
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwNodeIndex aIdx ( *pTitleNode );
+    // skip the title
+    pDoc->GetNodes().GoNext( &aIdx );
+
+    // skip the first header. No attributes there.
+    // next node should contain superscript
+    SwTextNode* pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
+    CPPUNIT_ASSERT( pNext->HasHints() );
+    sal_Int32 nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
+    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+
+    // next node should contain subscript
+    pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
+    CPPUNIT_ASSERT( pNext->HasHints() );
+    nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
+    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+}
+
+void SwUiWriterTest::testTdf99689TableOfFigures()
+{
+    SwDoc* pDoc = createDoc("tdf99689_figures.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GotoNextTOXBase();
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase);
+    SwCursorShell * pShell(pDoc->GetEditShell());
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwNodeIndex aIdx ( *pTitleNode );
+
+    // skip the title
+    // next node should contain subscript
+    SwTextNode* pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
+    CPPUNIT_ASSERT( pNext->HasHints() );
+    sal_Int32 nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
+    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+
+    // next node should contain superscript
+    pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
+    CPPUNIT_ASSERT( pNext->HasHints() );
+    nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
+    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+}
+
+void SwUiWriterTest::testTdf99689TableOfTables()
+{
+    SwDoc* pDoc = createDoc("tdf99689_tables.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GotoNextTOXBase();
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase);
+    SwCursorShell * pShell(pDoc->GetEditShell());
+    SwTextNode* pTitleNode = pShell->GetCursor()->GetNode().GetTextNode();
+    SwNodeIndex aIdx ( *pTitleNode );
+
+    // skip the title
+    // next node should contain superscript
+    SwTextNode* pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
+    CPPUNIT_ASSERT( pNext->HasHints() );
+    sal_Int32 nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
+    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
+
+    // next node should contain subscript
+    pNext = static_cast<SwTextNode*> (pDoc->GetNodes().GoNext( &aIdx ));
+    CPPUNIT_ASSERT( pNext->HasHints() );
+    nAttrType = lcl_getAttributeIDFromHints( pNext->GetSwpHints() );
+    CPPUNIT_ASSERT_EQUAL(RES_CHRATR_ESCAPEMENT, static_cast<RES_CHRATR>(nAttrType) );
 }
 
 void SwUiWriterTest::testTdf83798()
