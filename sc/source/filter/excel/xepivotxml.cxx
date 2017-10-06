@@ -221,6 +221,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
         FSNS(XML_r, XML_id), XclXmlUtils::ToOString(aRelId).getStr(),
         XML_recordCount, OString::number(rEntry.mpCache->GetDataSize()).getStr(),
+        XML_createdVersion, "3", // MS Excel 2007, tdf#112936: setting version number makes MSO to handle the pivot table differently
         FSEND);
 
     if (rEntry.meType == Worksheet)
