@@ -120,7 +120,6 @@ class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper
 
 public:
     explicit SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj );
-    void Release();
 
     void SetSizeScale( const Fraction& aScaleWidth, const Fraction& aScaleHeight )
     {
@@ -183,16 +182,6 @@ tools::Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
 
 void SAL_CALL SdrLightEmbeddedClient_Impl::changingState( const css::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ )
 {
-}
-
-void SdrLightEmbeddedClient_Impl::Release()
-{
-    {
-        SolarMutexGuard aGuard;
-        mpObj = nullptr;
-    }
-
-    release();
 }
 
 void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const css::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState )
@@ -595,9 +584,9 @@ public:
     svt::EmbeddedObjectRef mxObjRef;
 
     std::unique_ptr<Graphic> mxGraphic;
-    OUString maProgName;
+    OUString        maProgName;
     OUString        aPersistName;       // name of object in persist
-    SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
+    rtl::Reference<SdrLightEmbeddedClient_Impl> mxLightClient; // must be registered as client only using AddOwnLightClient() call
 
     bool mbFrame:1; // Due to compatibility at SdrTextObj for now
     bool mbSuppressSetVisAreaSize:1; // #i118524#
@@ -612,7 +601,6 @@ public:
     rtl::Reference<SvxUnoShapeModifyListener> mxModifyListener;
 
     explicit SdrOle2ObjImpl( bool bFrame ) :
-        pLightClient (nullptr),
         mbFrame(bFrame),
         mbSuppressSetVisAreaSize(false),
         mbTypeAsked(false),
@@ -626,7 +614,6 @@ public:
 
     SdrOle2ObjImpl( bool bFrame, const svt::EmbeddedObjectRef& rObjRef ) :
         mxObjRef(rObjRef),
-        pLightClient (nullptr),
         mbFrame(bFrame),
         mbSuppressSetVisAreaSize(false),
         mbTypeAsked(false),
@@ -713,11 +700,7 @@ SdrOle2Obj::~SdrOle2Obj()
 
     DisconnectFileLink_Impl();
 
-    if ( mpImpl->pLightClient )
-    {
-        mpImpl->pLightClient->Release();
-        mpImpl->pLightClient = nullptr;
-    }
+    mpImpl->mxLightClient.clear();
 }
 
 void SdrOle2Obj::SetAspect( sal_Int64 nAspect )
@@ -962,14 +945,11 @@ void SdrOle2Obj::Connect_Impl()
 
             if ( mpImpl->mxObjRef.is() )
             {
-                if ( !mpImpl->pLightClient )
-                {
-                    mpImpl->pLightClient = new SdrLightEmbeddedClient_Impl( this );
-                    mpImpl->pLightClient->acquire();
-                }
+                if ( !mpImpl->mxLightClient.is() )
+                    mpImpl->mxLightClient = new SdrLightEmbeddedClient_Impl( this );
 
-                mpImpl->mxObjRef->addStateChangeListener( mpImpl->pLightClient );
-                mpImpl->mxObjRef->addEventListener( uno::Reference< document::XEventListener >( mpImpl->pLightClient ) );
+                mpImpl->mxObjRef->addStateChangeListener( mpImpl->mxLightClient.get() );
+                mpImpl->mxObjRef->addEventListener( uno::Reference< document::XEventListener >( mpImpl->mxLightClient.get() ) );
 
                 if ( mpImpl->mxObjRef->getCurrentState() != embed::EmbedStates::LOADED )
                     GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
@@ -1119,10 +1099,10 @@ void SdrOle2Obj::Disconnect_Impl()
             }
         }
 
-        if ( mpImpl->mxObjRef.is() && mpImpl->pLightClient )
+        if ( mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is() )
         {
-            mpImpl->mxObjRef->removeStateChangeListener ( mpImpl->pLightClient );
-            mpImpl->mxObjRef->removeEventListener( uno::Reference< document::XEventListener >( mpImpl->pLightClient ) );
+            mpImpl->mxObjRef->removeStateChangeListener ( mpImpl->mxLightClient.get() );
+            mpImpl->mxObjRef->removeEventListener( uno::Reference< document::XEventListener >( mpImpl->mxLightClient.get() ) );
             mpImpl->mxObjRef->setClientSite( nullptr );
 
             GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
@@ -1518,8 +1498,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
         // the client is required to get access to scaling
         SfxInPlaceClient* pClient = SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(pModel->GetPersist()), mpImpl->mxObjRef.GetObject() );
         bool bHasOwnClient =
-                        ( mpImpl->pLightClient
-                        && mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) );
+                        ( mpImpl->mxLightClient.is()
+                        && mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient.get() ) );
 
         if ( pClient || bHasOwnClient )
         {
@@ -1538,8 +1518,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 }
                 else
                 {
-                    aScaleWidth = mpImpl->pLightClient->GetScaleWidth();
-                    aScaleHeight = mpImpl->pLightClient->GetScaleHeight();
+                    aScaleWidth = mpImpl->mxLightClient->GetScaleWidth();
+                    aScaleHeight = mpImpl->mxLightClient->GetScaleHeight();
                 }
 
                 // The object wants to resize itself (f.e. Chart wants to recalculate the layout)
@@ -1605,7 +1585,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                     }
                     else
                     {
-                        mpImpl->pLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
+                        mpImpl->mxLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
                     }
                 }
             }
@@ -1942,20 +1922,20 @@ bool SdrOle2Obj::AddOwnLightClient()
 {
     // The Own Light Client must be registered in object only using this method!
     if ( !SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(pModel->GetPersist()), mpImpl->mxObjRef.GetObject() )
-      && !( mpImpl->pLightClient && mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) ) )
+      && !( mpImpl->mxLightClient.is() && mpImpl->mxObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->mxLightClient.get() ) ) )
     {
         Connect();
 
-        if ( mpImpl->mxObjRef.is() && mpImpl->pLightClient )
+        if ( mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is() )
         {
             Fraction aScaleWidth;
             Fraction aScaleHeight;
             Size aObjAreaSize;
             if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
             {
-                mpImpl->pLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
+                mpImpl->mxLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
                 try {
-                    mpImpl->mxObjRef->setClientSite( mpImpl->pLightClient );
+                    mpImpl->mxObjRef->setClientSite( mpImpl->mxLightClient.get() );
                     return true;
                 } catch( uno::Exception& )
                 {}
@@ -1976,9 +1956,9 @@ Graphic SdrOle2Obj::GetEmptyOLEReplacementGraphic()
 
 void SdrOle2Obj::SetWindow(const css::uno::Reference < css::awt::XWindow >& _xWindow)
 {
-    if ( mpImpl->mxObjRef.is() && mpImpl->pLightClient )
+    if ( mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is() )
     {
-        mpImpl->pLightClient->setWindow(_xWindow);
+        mpImpl->mxLightClient->setWindow(_xWindow);
     }
 }
 
