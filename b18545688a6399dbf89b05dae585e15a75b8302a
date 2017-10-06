@@ -52,6 +52,24 @@
       "revId": "b18545688a6399dbf89b05dae585e15a75b8302a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_91222f00",
+        "filename": "include/sfx2/zoomitem.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-10-06T10:47:34Z",
+      "side": 1,
+      "message": "\u003e What do you mean with \"class is complete\"?\n\nclass Impl;\nclass Item : SfxPoolItem\n{\n    Impl m_impl;\n    // no explicit dtor\n...\n}\nItem would be incomplete, \n\n\u003e What do you mean with \"members have DLLPUBLIC dtor\"?\n\nclass Impl\n{}\nclass DLLPUBLIC Item : SfxPoolItem\n{\n    Impl m_impl;\n    // no explicit dtor\n...\n}\nImpl dtor is not DLLPUBLIC, linking will fail if Item dtor is used in an other module.\nAll classes of member variables have to be DLLPUBLIC.\n\n\u003e I don\u0027t understand what you want to say here.\n\nSvxZoomItem has only enum (class) member variables. \nenum is a primitive type and is destructible everywhere even if it\u0027s only declared and not defined.\n\n\u003e With the Itanium ABI (as used on Linux and macOS), things like vtables are emitted with the first non-inline virtual function, or weakly everywhere needed when there is no virtual function that\u0027s not inline. Hence the general recommendation to make at least any virtual dtor non-inline (to ensure there is such a \"key function\").  Can\u0027t be bothered to remember the details for MSVC.\n\ndoes the base class dtor (~SfxPoolItem) qualify for \u0027any virtual dtor non-inline\u0027?\n\n\u003e Saw what?\n\nclass which is DLLPUBLIC, that has default-able dtor and a member variable which is not DLLPUBLIC.",
+      "parentUuid": "1a430d35_b1dc8b13",
+      "revId": "b18545688a6399dbf89b05dae585e15a75b8302a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
