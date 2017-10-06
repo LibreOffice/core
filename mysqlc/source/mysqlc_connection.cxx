@@ -65,10 +65,9 @@ OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver)
     :OMetaConnection_BASE(m_aMutex)
     ,OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(&_rDriver), this)
     ,m_xMetaData(nullptr)
-    ,m_rDriver(_rDriver)
+    ,m_xDriver(&_rDriver)
     ,cppDriver(_cppDriver)
 {
-    m_rDriver.acquire();
 }
 
 OConnection::~OConnection()
@@ -76,7 +75,6 @@ OConnection::~OConnection()
     if (!isClosed()) {
         close();
     }
-    m_rDriver.release();
 }
 
 void SAL_CALL OConnection::release()
@@ -536,7 +534,7 @@ rtl::OUString OConnection::transFormPreparedStatement(const rtl::OUString& _sSQL
             Reference< XConnection> xCon = this;
             aArgs[0] <<= NamedValue(rtl::OUString("ActiveConnection"), makeAny(xCon));
 
-            m_xParameterSubstitution.set(m_rDriver.getFactory()->createInstanceWithArguments("org.openoffice.comp.helper.ParameterSubstitution",aArgs),UNO_QUERY);
+            m_xParameterSubstitution.set(m_xDriver->getFactory()->createInstanceWithArguments("org.openoffice.comp.helper.ParameterSubstitution",aArgs),UNO_QUERY);
         } catch(const Exception&) {}
     }
     if ( m_xParameterSubstitution.is() ) {

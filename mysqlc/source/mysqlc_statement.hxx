@@ -34,6 +34,7 @@
 
 #include <cppconn/statement.h>
 #include <cppuhelper/compbase5.hxx>
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
@@ -70,7 +71,7 @@ namespace connectivity
             SQLWarning m_aLastWarning;
 
         protected:
-            OConnection*            m_pConnection;  // The owning Connection object
+            rtl::Reference<OConnection> m_xConnection;  // The owning Connection object
 
             sql::Statement          *cppStatement;
 
@@ -142,7 +143,7 @@ namespace connectivity
             sal_Bool SAL_CALL getMoreResults() SAL_OVERRIDE;
 
             // other methods
-            OConnection* getOwnConnection() const { return m_pConnection;}
+            OConnection* getOwnConnection() const { return m_xConnection.get();}
 
         private:
             using ::cppu::OPropertySetHelper::getFastPropertyValue;
