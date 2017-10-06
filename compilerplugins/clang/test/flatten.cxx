@@ -77,4 +77,19 @@ int main() {
     }
 }
 
+void top6() {
+    // no warning expected
+    if (foo() == 2) {
+        Class aClass;
+        (void)aClass;
+    } else if (foo() == 2) {
+        Class aClass;
+        (void)aClass;
+    } else {
+        throw std::exception();
+    }
+    int x = 1;
+    (void)x;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
