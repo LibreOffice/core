@@ -512,7 +512,7 @@ namespace xmloff
         void implSelectCurrentItem();
         void implDefaultSelectCurrentItem();
     };
-    typedef tools::SvRef<OListAndComboImport> OListAndComboImportRef;
+    typedef rtl::Reference<OListAndComboImport> OListAndComboImportRef;
 
     //= OListOptionImport
     /** helper class for importing a single &lt;form:option&gt; element.
