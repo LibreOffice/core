@@ -41,6 +41,7 @@
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/string.hxx>
+#include <rtl/ref.hxx>
 
 #include <map>
 
@@ -104,7 +105,7 @@ namespace connectivity
                                             // of all the Statement objects
                                             // for this Connection
 
-            MysqlCDriver&   m_rDriver;      // Pointer to the owning driver object
+            rtl::Reference<MysqlCDriver> m_xDriver; // Pointer to the owning driver object
             sql::Driver*    cppDriver;
 
         public:
@@ -185,7 +186,7 @@ namespace connectivity
             const ConnectionSettings& getConnectionSettings() const { return m_settings; }
             rtl::OUString transFormPreparedStatement(const rtl::OUString& _sSQL);
 
-            const MysqlCDriver&  getDriver()         const { return m_rDriver;}
+            const MysqlCDriver&  getDriver()         const { return *m_xDriver.get();}
 
         }; /* OConnection */
         // TODO: Not used.

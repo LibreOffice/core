@@ -56,10 +56,9 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_c
     :OCommonStatement_IBase(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBase::rBHelper)
     ,OStatement_CBase( static_cast<cppu::OWeakObject*>(_pConnection), this )
-    ,m_pConnection(_pConnection)
+    ,m_xConnection(_pConnection)
     ,cppStatement(_cppStatement)
 {
-    m_pConnection->acquire();
 }
 
 OCommonStatement::~OCommonStatement()
@@ -79,10 +78,7 @@ void OCommonStatement::disposing()
 
     disposeResultSet();
 
-    if (m_pConnection) {
-        m_pConnection->release();
-        m_pConnection = nullptr;
-    }
+    m_xConnection.clear();
     delete cppStatement;
 
     dispose_ChildImpl();
@@ -136,13 +132,13 @@ sal_Bool SAL_CALL OCommonStatement::execute(const rtl::OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const rtl::OUString sSqlStatement = m_pConnection->transFormPreparedStatement( sql );
+    const rtl::OUString sSqlStatement = m_xConnection->transFormPreparedStatement( sql );
 
     bool success = false;
     try {
-        success = cppStatement->execute(rtl::OUStringToOString(sSqlStatement, m_pConnection->getConnectionSettings().encoding).getStr());
+        success = cppStatement->execute(rtl::OUStringToOString(sSqlStatement, m_xConnection->getConnectionSettings().encoding).getStr());
     } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
+        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
     }
     return success;
 }
@@ -151,15 +147,15 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const rtl::OUStr
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const rtl::OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
+    const rtl::OUString sSqlStatement = m_xConnection->transFormPreparedStatement(sql);
 
     Reference< XResultSet > xResultSet;
     try {
-        std::unique_ptr< sql::ResultSet > rset(cppStatement->executeQuery(rtl::OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr()));
-        xResultSet = new OResultSet(this, rset.get(), m_pConnection->getConnectionEncoding());
+        std::unique_ptr< sql::ResultSet > rset(cppStatement->executeQuery(rtl::OUStringToOString(sSqlStatement, m_xConnection->getConnectionEncoding()).getStr()));
+        xResultSet = new OResultSet(this, rset.get(), m_xConnection->getConnectionEncoding());
         rset.release();
     } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
+        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
     }
     return xResultSet;
 }
@@ -170,7 +166,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
     checkDisposed(rBHelper.bDisposed);
 
     // just return our connection here
-    return m_pConnection;
+    return m_xConnection.get();
 }
 
 sal_Int32 SAL_CALL OCommonStatement::getUpdateCount()
@@ -206,13 +202,13 @@ sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const rtl::OUString& sql)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const rtl::OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
+    const rtl::OUString sSqlStatement = m_xConnection->transFormPreparedStatement(sql);
 
     sal_Int32 affectedRows = 0;
     try {
-        affectedRows = cppStatement->executeUpdate(rtl::OUStringToOString(sSqlStatement, m_pConnection->getConnectionEncoding()).getStr());
+        affectedRows = cppStatement->executeUpdate(rtl::OUStringToOString(sSqlStatement, m_xConnection->getConnectionEncoding()).getStr());
     } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
+        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
     }
     return affectedRows;
 }
@@ -225,10 +221,10 @@ Reference< XResultSet > SAL_CALL OCommonStatement::getResultSet()
     Reference< XResultSet > xResultSet;
     try {
         std::unique_ptr< sql::ResultSet > rset(cppStatement->getResultSet());
-        xResultSet = new OResultSet(this, rset.get(), m_pConnection->getConnectionEncoding());
+        xResultSet = new OResultSet(this, rset.get(), m_xConnection->getConnectionEncoding());
         rset.release();
     } catch (const sql::SQLException &e) {
-        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
+        mysqlc_sdbc_driver::translateAndThrow(e, *this, m_xConnection->getConnectionEncoding());
     }
     return xResultSet;
 }
