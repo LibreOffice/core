@@ -238,9 +238,6 @@ typedef std::vector<std::unique_ptr<SwPageDesc>> SwPageDescs;
 
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
 
-// global function to start grammar checking in the document
-void StartGrammarChecking( SwDoc &rDoc );
-
 // Represents the model of a Writer document.
 class SW_DLLPUBLIC SwDoc :
     public IInterface
@@ -1650,6 +1647,12 @@ public:
                      [](const std::weak_ptr<SwUnoCursor>& pWeakPtr) { return !pWeakPtr.expired(); });
         std::swap(mvUnoCursorTable, unoCursorTable);
     }
+
+    /**
+     * @param bSkipStart don't actually start the jobs, just check
+     * @returns true if new background checking jobs were started
+     */
+    bool StartGrammarChecking( bool bSkipStart = false );
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().

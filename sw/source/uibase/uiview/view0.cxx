@@ -539,7 +539,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
                 aCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bIsAutoGrammar;
 
                 if (pDoc && bIsAutoGrammar)
-                    StartGrammarChecking( *pDoc );
+                    pDoc->StartGrammarChecking();
             }
         }
         break;

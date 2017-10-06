@@ -55,6 +55,11 @@ public:
     */
     virtual void StartBackgroundJobs() = 0;
 
+    /**
+     * Is the document ready to be processed?
+     */
+    virtual bool IsDocIdle() const = 0;
+
 protected:
     virtual ~IDocumentTimerAccess() {};
 };

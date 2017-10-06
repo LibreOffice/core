@@ -154,11 +154,12 @@ const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
     return m_xGCIterator;
 }
 
-void StartGrammarChecking( SwDoc &rDoc )
+bool SwDoc::StartGrammarChecking( bool bSkipStart )
 {
     // check for a visible view
     bool bVisible = false;
-    const SwDocShell *pDocShell = rDoc.GetDocShell();
+    bool bStarted = false;
+    const SwDocShell *pDocShell = GetDocShell();
     SfxViewFrame     *pFrame = SfxViewFrame::GetFirst( pDocShell, false );
     while (pFrame && !bVisible)
     {
@@ -173,17 +174,23 @@ void StartGrammarChecking( SwDoc &rDoc )
     //!! a uno reference to them)
     if (bVisible)
     {
-        uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
+        uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( GetGCIterator() );
         if ( xGCIterator.is() )
         {
-            uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+            uno::Reference< lang::XComponent >  xDoc( GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
             uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
 
             // start automatic background checking if not active already
             if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
-                xGCIterator->startProofreading( xDoc, xFPIP );
+            {
+                bStarted = true;
+                if ( !bSkipStart )
+                    xGCIterator->startProofreading( xDoc, xFPIP );
+            }
         }
     }
+
+    return bStarted;
 }
 
 /*

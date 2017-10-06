@@ -24,6 +24,7 @@
 #include <vcl/scheduler.hxx>
 
 #include "SwDocIdle.hxx"
+#include "IDocumentTimerAccess.hxx"
 
 namespace sw
 {
@@ -31,12 +32,17 @@ namespace sw
 sal_uInt64 SwDocIdle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTimeNow */ ) const
 {
     bool bReadyForSchedule = true;
+
     SwView* pView = m_rDoc.GetDocShell() ? m_rDoc.GetDocShell()->GetView() : nullptr;
     if( pView )
     {
         SwWrtShell& rWrtShell = pView->GetWrtShell();
         bReadyForSchedule = rWrtShell.GetViewOptions()->IsIdle();
     }
+
+    if( bReadyForSchedule && !m_rDoc.getIDocumentTimerAccess().IsDocIdle() )
+        bReadyForSchedule = false;
+
     return bReadyForSchedule
         ? Scheduler::ImmediateTimeoutMs : Scheduler::InfiniteTimeoutMs;
 }
