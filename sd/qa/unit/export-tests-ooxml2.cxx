@@ -101,6 +101,7 @@ public:
     void testTdf92076();
     void testTdf59046();
     void testTdf105739();
+    void testSmartartRotation2();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -125,6 +126,7 @@ public:
     CPPUNIT_TEST(testTdf92076);
     CPPUNIT_TEST(testTdf59046);
     CPPUNIT_TEST(testTdf105739);
+    CPPUNIT_TEST(testSmartartRotation2);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -781,6 +783,17 @@ void SdOOXMLExportTest2::testTdf105739()
     xShell->DoClose();
 }
 
+
+void SdOOXMLExportTest2::testSmartartRotation2()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/smartart-rotation2.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:txBody/a:bodyPr", "rot", "10800000");
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
 
