@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/safeint.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <drawdoc.hxx>
@@ -104,7 +107,7 @@ static SwRectFnCollection aHorizontal = {
     &FirstMinusSecond,
     &FirstMinusSecond,
     &SwIncrement,
-    &SwIncrement,
+    &o3tl::saturating_add<long>,
     &SwRect::SetLeftAndWidth,
     &SwRect::SetTopAndHeight
 };
