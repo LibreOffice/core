@@ -3544,11 +3544,12 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
                 }
                 break;
             default :
-                pVar->PutDouble( 0.0 );
+                pVar->PutEmpty();
         }
     }
     else
-        pVar->PutDouble( 0.0 );
+        pVar->PutEmpty();
+
     return bOk;
 }
 
