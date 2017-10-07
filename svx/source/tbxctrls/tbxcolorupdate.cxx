@@ -30,8 +30,9 @@
 namespace svx
 {
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
-        sal_uInt16 nId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox)
-        : mnBtnId(nTbxBtnId)
+        sal_uInt16 nId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox, bool bWideButton)
+        : mbWideButton(bWideButton)
+        , mnBtnId(nTbxBtnId)
         , mnSlotId(nId)
         , mpTbx(pToolBox)
         , maCurColor(COL_TRANSPARENT)
@@ -69,7 +70,7 @@ namespace svx
     void ToolboxButtonColorUpdater::Update(const Color& rColor, bool bForceUpdate)
     {
         Image aImage(mpTbx->GetItemImage(mnBtnId));
-        Size aItemSize(mpTbx->GetItemContentSize(mnBtnId));
+        Size aItemSize(mbWideButton ? mpTbx->GetItemContentSize(mnBtnId) : aImage.GetSizePixel());
 
         const bool bSizeChanged = (maBmpSize != aItemSize);
         const bool bDisplayModeChanged = (mbWasHiContrastMode != mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode());
