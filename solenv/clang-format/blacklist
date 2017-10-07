@@ -15865,7 +15865,6 @@ sw/source/core/unocore/unoftn.cxx
 sw/source/core/unocore/unoidx.cxx
 sw/source/core/unocore/unomap.cxx
 sw/source/core/unocore/unomap1.cxx
-sw/source/core/unocore/unomapproperties.hxx
 sw/source/core/unocore/unoobj.cxx
 sw/source/core/unocore/unoobj2.cxx
 sw/source/core/unocore/unoparagraph.cxx
