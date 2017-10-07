@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_BITMAP_HXX
 #define INCLUDED_VCL_BITMAP_HXX
 
-#include <tools/color.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/checksum.hxx>
@@ -29,6 +28,8 @@
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+class Color;
 
 enum class BmpMirrorFlags
 {

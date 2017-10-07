@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
-#include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editeng.hxx>
@@ -36,6 +35,7 @@
 struct ESelection;
 struct EFieldInfo;
 struct EBulletInfo;
+class Color;
 class OutputDevice;
 class SfxItemSet;
 class SvxTextForwarder;

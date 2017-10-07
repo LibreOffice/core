@@ -35,12 +35,13 @@
 #include <svtools/grfmgr.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/msdffdef.hxx>
-#include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <vcl/mapmod.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+class Color;
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }

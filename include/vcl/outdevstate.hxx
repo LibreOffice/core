@@ -27,9 +27,10 @@
 
 #include <tools/solar.h>
 #include <tools/gen.hxx>
-#include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+class Color;
 
 // Flags for OutputDevice::Push() and OutDevState
 enum class PushFlags {

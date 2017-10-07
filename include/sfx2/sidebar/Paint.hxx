@@ -19,12 +19,13 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_PAINT_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_PAINT_HXX
 
-#include <tools/color.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/wall.hxx>
 #include <com/sun/star/awt/Gradient.hpp>
 
 #include <boost/variant.hpp>
+
+class Color;
 
 namespace sfx2 { namespace sidebar {
 

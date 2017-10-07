@@ -31,6 +31,7 @@
 #include <tools/lineend.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
+#include <tools/color.hxx>
 #include <vcl/font.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>

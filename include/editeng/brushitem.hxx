@@ -19,6 +19,7 @@
 #ifndef INCLUDED_EDITENG_BRUSHITEM_HXX
 #define INCLUDED_EDITENG_BRUSHITEM_HXX
 
+#include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/wall.hxx>
 #include <tools/link.hxx>

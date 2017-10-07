@@ -18,10 +18,11 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
 #include <opengl/texture.hxx>
 
 #include <unordered_map>
+
+class Color;
 
 enum class TextureShaderType
 {

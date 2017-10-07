@@ -22,7 +22,8 @@
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
+
+class Color;
 
 typedef std::pair<Color, OUString> NamedColor;
 

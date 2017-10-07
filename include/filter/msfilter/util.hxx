@@ -17,7 +17,8 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/datetime.hxx>
-#include <tools/color.hxx>
+
+class Color;
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Size; }
