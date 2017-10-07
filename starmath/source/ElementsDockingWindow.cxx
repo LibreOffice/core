@@ -768,9 +768,10 @@ IMPL_LINK(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElement, voi
 
     if (pViewSh)
     {
+        std::unique_ptr<SfxStringItem> pInsertCommand = o3tl::make_unique<SfxStringItem>(SID_INSERTCOMMANDTEXT, rElement.getText());
         pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
             SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
-            { new SfxStringItem(SID_INSERTCOMMANDTEXT, rElement.getText()) });
+            { pInsertCommand.get() });
     }
 }
 
