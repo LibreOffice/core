@@ -31,7 +31,7 @@ class OutputDevice;
 class MetaAction;
 class MetaCommentAction;
 class SvStream;
-class Color;
+namespace basegfx { class BColor; }
 class BitmapEx;
 namespace tools {
     class Polygon;
@@ -50,7 +50,7 @@ enum class MtfConversion
 };
 
 
-typedef Color (*ColorExchangeFnc)( const Color& rColor, const void* pColParam );
+typedef basegfx::BColor (*ColorExchangeFnc)( const basegfx::BColor& rColor, const void* pColParam );
 typedef BitmapEx (*BmpExchangeFnc)( const BitmapEx& rBmpEx, const void* pBmpParam );
 
 class VCL_DLLPUBLIC GDIMetaFile final
@@ -69,16 +69,16 @@ private:
     bool            m_bUseCanvas;
 
 
-    SAL_DLLPRIVATE static Color         ImplColAdjustFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static basegfx::BColor        ImplColAdjustFnc( const basegfx::BColor& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx      ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color         ImplColConvertFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static basegfx::BColor        ImplColConvertFnc( const basegfx::BColor& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx      ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color         ImplColMonoFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static basegfx::BColor        ImplColMonoFnc( const basegfx::BColor& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx      ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color         ImplColReplaceFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static basegfx::BColor        ImplColReplaceFnc( const basegfx::BColor& rColor, const void* pColParam );
     SAL_DLLPRIVATE static BitmapEx      ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
     SAL_DLLPRIVATE void                 ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam,
@@ -132,10 +132,10 @@ public:
                             bool bInvert = false, bool msoBrightness = false );
 
     void            Convert( MtfConversion eConversion );
-    void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
+    void            ReplaceColors( const basegfx::BColor* pSearchColors, const basegfx::BColor* rReplaceColors,
                                    sal_uLong nColorCount );
 
-    GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
+    GDIMetaFile     GetMonochromeMtf( const basegfx::BColor& rCol ) const;
 
     void            Record( OutputDevice* pOutDev );
     bool            IsRecord() const { return m_bRecord; }

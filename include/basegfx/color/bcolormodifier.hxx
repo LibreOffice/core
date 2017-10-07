@@ -204,6 +204,46 @@ namespace basegfx
 
 namespace basegfx
 {
+    /** replace color
+
+        does not use the source color at all, but always returns the
+        given color, replacing everything. Useful e.g. for unified shadow
+        creation
+    */
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_alphablend : public BColorModifier
+    {
+    private:
+        ::basegfx::BColor           maBColor;
+        ::basegfx::BColor           maBackgroundBColor;
+        float                       mfAlpha;
+
+    protected:
+    public:
+        BColorModifier_alphablend(const ::basegfx::BColor& rBColor, ::basegfx::BColor& rBackgroundBColor, float fAlpha)
+        :   BColorModifier(),
+            maBColor(rBColor),
+            maBackgroundBColor(rBackgroundBColor),
+            mfAlpha(fAlpha)
+        {
+            assert(fAlpha >= 0 && fAlpha <= 1.0);
+        }
+
+        virtual ~BColorModifier_alphablend() override;
+
+        // data access
+        const ::basegfx::BColor& getBColor() const { return maBColor; }
+
+        // compare operator
+        virtual bool operator==(const BColorModifier& rCompare) const override;
+
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+    };
+} // end of namespace basegfx
+
+
+namespace basegfx
+{
     /** interpolate color
 
         returns an interpolated color mixed by the given value (f) in the range

@@ -91,9 +91,9 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
     {
         lastSize = nMaxHeight - border;
 
-        Color       aEraseColor( 255, 255, 255, 255 );
-        BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
-        BitmapEx    aBmpExSrc( aBmpExDst );
+        basegfx::BColor aEraseColor(255, 255, 255, 255);
+        BitmapEx aBmpExDst( maImage.GetBitmapEx() );
+        BitmapEx aBmpExSrc( aBmpExDst );
 
         aEraseColor.SetTransparency( 255 );
         aBmpExDst.Erase( aEraseColor );

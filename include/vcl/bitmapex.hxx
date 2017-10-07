@@ -23,7 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/alpha.hxx>
-#include <tools/color.hxx>
+#include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -51,7 +51,7 @@ public:
                         BitmapEx( const Bitmap& rBmp );
                         BitmapEx( const Bitmap& rBmp, const Bitmap& rMask );
                         BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask );
-                        BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor );
+                        BitmapEx( const Bitmap& rBmp, const basegfx::BColor& rTransparentColor );
 
     BitmapEx&           operator=( const BitmapEx& rBitmapEx );
     bool                operator==( const BitmapEx& rBitmapEx ) const;
@@ -70,7 +70,7 @@ public:
     bool                IsTransparent() const;
     TransparentType     GetTransparentType() const { return eTransparent; }
 
-    Bitmap              GetBitmap( const Color* pTransReplaceColor = nullptr ) const;
+    Bitmap              GetBitmap( const basegfx::BColor* pTransReplaceColor = nullptr ) const;
     /// Gives direct access to the contained bitmap.
     const Bitmap&       GetBitmapRef() const;
     Bitmap              GetMask() const;
@@ -87,7 +87,7 @@ public:
     const MapMode&      GetPrefMapMode() const { return aBitmap.GetPrefMapMode(); }
     void                SetPrefMapMode( const MapMode& rPrefMapMode ) { aBitmap.SetPrefMapMode( rPrefMapMode ); }
 
-    const Color&        GetTransparentColor() const { return aTransparentColor; }
+    const basegfx::BColor&        GetTransparentColor() const { return aTransparentColor; }
 
     sal_uInt16          GetBitCount() const { return aBitmap.GetBitCount(); }
     sal_uLong           GetSizeBytes() const;
@@ -191,7 +191,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                Erase( const Color& rFillColor );
+    bool                Erase( const basegfx::BColor& rFillColor );
 
     /** Perform the Invert operation on every pixel
 
@@ -255,7 +255,7 @@ public:
      */
     bool                Rotate(
                             long nAngle10,
-                            const Color& rFillColor );
+                            const basegfx::BColor& rFillColor );
 
     /** Replace all pixel having the search color with the specified color
 
@@ -268,8 +268,8 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                Replace(
-                            const Color& rSearchColor,
-                            const Color& rReplaceColor );
+                            const basegfx::BColor& rSearchColor,
+                            const basegfx::BColor& rReplaceColor );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -290,8 +290,8 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                Replace(
-                            const Color* pSearchColors,
-                            const Color* pReplaceColors,
+                            const basegfx::BColor* pSearchColors,
+                            const basegfx::BColor* pReplaceColors,
                             sal_uLong nColorCount,
                             const sal_uLong* pTols = nullptr );
 
@@ -439,7 +439,7 @@ private:
     Bitmap              aBitmap;
     Bitmap              aMask;
     Size                aBitmapSize;
-    Color               aTransparentColor;
+    basegfx::BColor              aTransparentColor;
     TransparentType     eTransparent;
     bool                bAlpha;
 
@@ -462,8 +462,8 @@ private:
 BitmapEx VCL_DLLPUBLIC createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
-    Color aColorTopLeft,
-    Color aColorBottomRight);
+    basegfx::BColor aColorTopLeft,
+    basegfx::BColor aColorBottomRight);
 
 
 /** Create a blend frame as BitmapEx
@@ -481,10 +481,10 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
 BitmapEx VCL_DLLPUBLIC createBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
-    Color aColorTopLeft,
-    Color aColorTopRight,
-    Color aColorBottomRight,
-    Color aColorBottomLeft);
+    basegfx::BColor aColorTopLeft,
+    basegfx::BColor aColorTopRight,
+    basegfx::BColor aColorBottomRight,
+    basegfx::BColor aColorBottomLeft);
 
 #endif // INCLUDED_VCL_BITMAPEX_HXX
 
