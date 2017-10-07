@@ -31,7 +31,7 @@
 class VCL_DLLPUBLIC ListControl : public Control
 {
 private:
-    std::vector<VclPtr<Control>> maEntries;
+    std::vector<VclPtr<vcl::Window>> maEntries;
     bool mbHasScrollBar;
     VclPtr<ScrollBar> mpScrollBar;
 
@@ -43,7 +43,7 @@ public:
     virtual ~ListControl() override;
     virtual void dispose() override;
 
-    void addEntry(VclPtr<Control> xEntry, sal_uInt32 nPos = std::numeric_limits<sal_uInt16>::max());
+    void addEntry(VclPtr<vcl::Window> xEntry, sal_uInt32 nPos = std::numeric_limits<sal_uInt16>::max());
     void deleteEntry(sal_uInt32 nPos);
 
     virtual Size GetOptimalSize() const override;
