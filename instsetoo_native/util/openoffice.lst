@@ -250,7 +250,7 @@ Apache_OpenOffice_Beta_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg410betasdk
+            DATABASENAME openoffice420betasdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
@@ -304,7 +304,7 @@ Apache_OpenOffice_Dev_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg40devsdk
+            DATABASENAME openoffice420devsdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME ALv2
             IGNOREDIRECTORYLAYER 1
