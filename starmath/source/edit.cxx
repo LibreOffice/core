@@ -29,7 +29,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 
@@ -961,9 +960,10 @@ void SmEditWindow::Flush()
         SmViewShell *pViewSh = rCmdBox.GetView();
         if (pViewSh)
         {
+            mpTextToFlush.reset(new SfxStringItem(SID_TEXT, GetText()));
             pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
                     SID_TEXT, SfxCallMode::RECORD,
-                    { new SfxStringItem(SID_TEXT, GetText()) });
+                    { mpTextToFlush.get() });
         }
     }
     if (aCursorMoveIdle.IsActive())

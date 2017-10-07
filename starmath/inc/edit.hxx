@@ -25,6 +25,7 @@
 #include <svtools/transfer.hxx>
 #include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svl/stritem.hxx>
 #include <memory>
 
 class SmDocShell;
@@ -45,6 +46,7 @@ void SmGetLeftSelectionPart(const ESelection &rSelection, sal_Int32 &nPara, sal_
 class SmEditWindow : public vcl::Window, public DropTargetHelper
 {
     rtl::Reference<SmEditAccessible> mxAccessible;
+    std::unique_ptr<SfxStringItem> mpTextToFlush;
 
     SmCmdBoxWindow& rCmdBox;
     std::unique_ptr<EditView> pEditView;
