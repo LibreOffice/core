@@ -1229,7 +1229,7 @@ SwUndoParagraphSigning::SwUndoParagraphSigning(const SwPosition& rPos,
 
     const auto it2 = aStatements.find(ParagraphSignatureUsageRDFName);
     if (it2 != aStatements.end())
-        m_usage = it->second;
+        m_usage = it2->second;
 
     uno::Reference<css::text::XTextRange> xText(m_xField, uno::UNO_QUERY);
     m_display = xText->getString();
