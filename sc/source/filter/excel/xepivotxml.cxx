@@ -781,8 +781,9 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 if (sFormattedName == rMember.maName)
                 {
                     size_t nCachePos = it - iCacheFieldItems_begin;
-                    aMemberSequence.emplace_back(nCachePos, !rMember.mbVisible);
-                    aUsedCachePositions.insert(nCachePos);
+                    auto aInserted = aUsedCachePositions.insert(nCachePos);
+                    if (aInserted.second)
+                        aMemberSequence.push_back(std::make_pair(nCachePos, !rMember.mbVisible));
                     break;
                 }
             }
