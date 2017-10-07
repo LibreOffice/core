@@ -31,7 +31,6 @@
 #include "strings.hxx"
 
 #include <o3tl/make_unique.hxx>
-#include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/help.hxx>
@@ -768,9 +767,10 @@ IMPL_LINK(SmElementsDockingWindow, SelectClickHandler, SmElement&, rElement, voi
 
     if (pViewSh)
     {
+        mpInsertCommand.reset(new SfxStringItem(SID_INSERTCOMMANDTEXT, rElement.getText()));
         pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
             SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
-            { new SfxStringItem(SID_INSERTCOMMANDTEXT, rElement.getText()) });
+            { mpInsertCommand.get() });
     }
 }
 

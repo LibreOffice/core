@@ -23,6 +23,7 @@
 #include <sfx2/dockwin.hxx>
 #include <svx/dlgctrl.hxx>
 #include <vcl/scrbar.hxx>
+#include <svl/stritem.hxx>
 
 #include "format.hxx"
 #include <memory>
@@ -136,6 +137,7 @@ class SmElementsDockingWindow : public SfxDockingWindow
 
     VclPtr<SmElementsControl>  mpElementsControl;
     VclPtr<ListBox>            mpElementListBox;
+    std::unique_ptr<SfxStringItem> mpInsertCommand;
 
     virtual void Resize() override;
     SmViewShell* GetView();
