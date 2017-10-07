@@ -204,6 +204,36 @@ namespace basegfx
 
 namespace basegfx
 {
+    /** alpha blending of a color
+
+        takes a source color, and does an alpha blend against a background color
+    */
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC BColorModifier_alphablend : public BColorModifier
+    {
+    private:
+        ::basegfx::BColor           maBackgroundBColor;
+        float                       mfAlpha;
+
+    protected:
+    public:
+        BColorModifier_alphablend(::basegfx::BColor& rBackgroundBColor, float fAlpha)
+        :   BColorModifier(),
+            maBackgroundBColor(rBackgroundBColor),
+            mfAlpha(fAlpha)
+        {
+            assert(fAlpha >= 0 && fAlpha <= 1.0);
+        }
+
+        virtual ~BColorModifier_alphablend() override;
+
+        // compute modified color
+        virtual ::basegfx::BColor getModifiedColor(const ::basegfx::BColor& aSourceColor) const override;
+    };
+} // end of namespace basegfx
+
+
+namespace basegfx
+{
     /** interpolate color
 
         returns an interpolated color mixed by the given value (f) in the range

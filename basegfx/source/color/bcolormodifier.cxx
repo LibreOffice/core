@@ -84,6 +84,22 @@ namespace basegfx
 
 namespace basegfx
 {
+    BColorModifier_alphablend::~BColorModifier_alphablend()
+    {
+    }
+
+    ::basegfx::BColor BColorModifier_alphablend::getModifiedColor(const ::basegfx::BColor& aSourceColor) const
+    {
+        const double aNewRed   = (aSourceColor.getRed()   * mfAlpha) + ((1 - mfAlpha) * maBackgroundBColor.getRed());
+        const double aNewGreen = (aSourceColor.getGreen() * mfAlpha) + ((1 - mfAlpha) * maBackgroundBColor.getGreen());
+        const double aNewBlue  = (aSourceColor.getBlue()  * mfAlpha) + ((1 - mfAlpha) * maBackgroundBColor.getBlue());
+
+        return ::basegfx::BColor(aNewRed, aNewGreen, aNewBlue);
+    }
+} // end of namespace basegfx
+
+namespace basegfx
+{
     BColorModifier_replace::~BColorModifier_replace()
     {
     }
