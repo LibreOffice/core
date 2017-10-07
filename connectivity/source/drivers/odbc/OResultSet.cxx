@@ -164,6 +164,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
 
 OResultSet::~OResultSet()
 {
+    setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, NULL);
 }
 
 void OResultSet::construct()
