@@ -389,6 +389,18 @@ vcl::Window* Dialog::GetDefaultParent(WinBits nStyle)
     return pParent;
 }
 
+VclPtr<vcl::Window> Dialog::AddBorderWindow(vcl::Window* pParent, WinBits nStyle)
+{
+    VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, nStyle, BorderWindowStyle::Frame );
+    SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, nullptr );
+    pBorderWin->mpWindowImpl->mpClientWindow = this;
+    pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
+    mpWindowImpl->mpBorderWindow  = pBorderWin;
+    mpWindowImpl->mpRealParent    = pParent;
+
+    return pBorderWin;
+}
+
 void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
 {
     SystemWindowFlags nSysWinMode = Application::GetSystemWindowMode();
@@ -414,14 +426,9 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
          (nSysWinMode & SystemWindowFlags::DIALOG) )
     {
         // create window with a small border ?
-        if ( (nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER )
+        if (mbForceBorderWindow || ((nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER ))
         {
-            VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, nStyle, BorderWindowStyle::Frame );
-            SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, nullptr );
-            pBorderWin->mpWindowImpl->mpClientWindow = this;
-            pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
-            mpWindowImpl->mpBorderWindow  = pBorderWin;
-            mpWindowImpl->mpRealParent    = pParent;
+            AddBorderWindow(pParent, nStyle);
         }
         else
         {
@@ -509,12 +516,13 @@ void Dialog::doDeferredInit(WinBits nBits)
 {
     VclPtr<vcl::Window> pParent = mpDialogParent;
     mpDialogParent = nullptr;
-    ImplInit(pParent, nBits, mnInitFlag);
+    ImplInit(pParent, nBits | WB_BORDER, mnInitFlag);
     mbIsDeferredInit = false;
 }
 
 Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
     : SystemWindow(WindowType::DIALOG)
+    , mbForceBorderWindow(false)
     , mnInitFlag(InitFlag::Default)
     , maID(rID)
 {
@@ -522,8 +530,9 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
     loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag)
+Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag, bool bBorder)
     : SystemWindow(nType)
+    , mbForceBorderWindow(bBorder)
     , mnInitFlag(eFlag)
     , maID(rID)
 {
@@ -533,6 +542,7 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
 
 Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
     : SystemWindow(WindowType::DIALOG)
+    , mbForceBorderWindow(false)
     , mnInitFlag(eFlag)
 {
     ImplInitDialogData();
@@ -1356,8 +1366,8 @@ ModalDialog::ModalDialog( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
-    Dialog(pParent, rID, rUIXMLDescription, WindowType::MODALDIALOG)
+ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, bool bBorder ) :
+    Dialog(pParent, rID, rUIXMLDescription, WindowType::MODALDIALOG, InitFlag::Default, bBorder)
 {
 }
 
