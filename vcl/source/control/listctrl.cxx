@@ -142,6 +142,11 @@ void ListControl::deleteEntry(sal_uInt32 nPos)
     RecalcAll();
 }
 
+std::vector<VclPtr<vcl::Window>> ListControl::getEntries() const
+{
+    return maEntries;
+}
+
 bool ListControl::EventNotify( NotifyEvent& rNEvt )
 {
     if (rNEvt.GetType() == MouseNotifyEvent::COMMAND)
