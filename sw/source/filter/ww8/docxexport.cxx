@@ -1030,34 +1030,34 @@ void DocxExport::WriteSettings()
             }
             else if (propList[i].Name == "DocumentProtection")
             {
-                sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
 
                 uno::Sequence< beans::PropertyValue > rAttributeList;
                 propList[i].Value >>= rAttributeList;
 
-                for (sal_Int32 j = 0; j < rAttributeList.getLength(); ++j)
-                {
-                    static DocxStringTokenMap const aTokens[] =
-                    {
-                        { "edit",                XML_edit },
-                        { "enforcement",         XML_enforcement },
-                        { "formatting",          XML_formatting },
-                        { "cryptProviderType",   XML_cryptProviderType },
-                        { "cryptAlgorithmClass", XML_cryptAlgorithmClass },
-                        { "cryptAlgorithmType",  XML_cryptAlgorithmType },
-                        { "cryptAlgorithmSid",   XML_cryptAlgorithmSid },
-                        { "cryptSpinCount",      XML_cryptSpinCount },
-                        { "hash",                XML_hash },
-                        { "salt",                XML_salt },
-                        { nullptr, 0 }
-                    };
-
-                    if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttributeList[j].Name))
-                        pAttributeList->add(FSNS(XML_w, nToken), rAttributeList[j].Value.get<OUString>().toUtf8());
-                }
-
                 if (rAttributeList.getLength())
                 {
+                    sax_fastparser::FastAttributeList* pAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
+                    for (sal_Int32 j = 0; j < rAttributeList.getLength(); ++j)
+                    {
+                        static DocxStringTokenMap const aTokens[] =
+                        {
+                            { "edit",                XML_edit },
+                            { "enforcement",         XML_enforcement },
+                            { "formatting",          XML_formatting },
+                            { "cryptProviderType",   XML_cryptProviderType },
+                            { "cryptAlgorithmClass", XML_cryptAlgorithmClass },
+                            { "cryptAlgorithmType",  XML_cryptAlgorithmType },
+                            { "cryptAlgorithmSid",   XML_cryptAlgorithmSid },
+                            { "cryptSpinCount",      XML_cryptSpinCount },
+                            { "hash",                XML_hash },
+                            { "salt",                XML_salt },
+                            { nullptr, 0 }
+                        };
+
+                        if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttributeList[j].Name))
+                            pAttributeList->add(FSNS(XML_w, nToken), rAttributeList[j].Value.get<OUString>().toUtf8());
+                    }
+
                     // we have document protection from from input DOCX file
 
                     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
