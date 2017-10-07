@@ -118,7 +118,7 @@ IMPL_LINK_NOARG( ListControl, ScrollHdl, ScrollBar*, void )
     DoScroll(mpScrollBar->GetDelta());
 }
 
-void ListControl::addEntry(VclPtr<Control> xEntry, sal_uInt32 nPos)
+void ListControl::addEntry(VclPtr<Window> xEntry, sal_uInt32 nPos)
 {
     xEntry->Show();
     if (nPos < maEntries.size())
