@@ -54,6 +54,7 @@ private:
     bool            mbInClose;
     bool            mbModalMode;
     bool            mbPaintComplete;
+    bool            mbForceBorderWindow;
     InitFlag        mnInitFlag; // used for deferred init
 
     VclPtr<VclButtonBox> mpActionArea;
@@ -63,6 +64,7 @@ private:
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
+    SAL_DLLPRIVATE VclPtr<vcl::Window> AddBorderWindow(vcl::Window* pParent, WinBits nBits);
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
@@ -100,7 +102,7 @@ public:
 
 protected:
     explicit        Dialog( WindowType nType );
-    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag = InitFlag::Default );
+    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType, InitFlag eFlag = InitFlag::Default, bool bBorder = false );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) override;
     virtual void    settingOptimalLayoutSize(Window *pBox) override;
 
@@ -189,7 +191,7 @@ class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:
     explicit        ModalDialog( vcl::Window* pParent, WinBits nStyle = WB_STDMODAL );
-    explicit        ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
+    explicit        ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, bool bBorder = false );
 
 protected:
     using Window::Show;
