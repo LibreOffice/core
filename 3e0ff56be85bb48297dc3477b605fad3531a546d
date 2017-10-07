@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_758f6ecc",
+        "filename": "include/basegfx/color/bcolormodifier.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-07T15:49:24Z",
+      "side": 1,
+      "message": "this is redundant",
+      "revId": "3e0ff56be85bb48297dc3477b605fad3531a546d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_95bcda6d",
+        "filename": "include/basegfx/color/bcolormodifier.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-07T15:49:24Z",
+      "side": 1,
+      "message": "and this",
+      "revId": "3e0ff56be85bb48297dc3477b605fad3531a546d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
