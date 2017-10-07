@@ -20,11 +20,11 @@
 #ifndef INCLUDED_VCL_WALL_HXX
 #define INCLUDED_VCL_WALL_HXX
 
-#include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 
+class Color;
 class Gradient;
 class BitmapEx;
 class ImplWallpaper;

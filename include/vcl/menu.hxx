@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <vcl/vclenum.hxx>
-#include <tools/color.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
