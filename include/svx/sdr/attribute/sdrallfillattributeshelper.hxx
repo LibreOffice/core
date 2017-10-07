@@ -23,11 +23,12 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <tools/color.hxx>
 #include <svl/itemset.hxx>
 #include <memory>
 
 //////////////////////////////////////////////////////////////////////////////
+
+class Color;
 
 namespace drawinglayer
 {

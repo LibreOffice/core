@@ -39,7 +39,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svx/msdffdef.hxx>
-#include <tools/color.hxx>
 #include <tools/colordata.hxx>
 #include <vcl/errcode.hxx>
 #include <tools/gen.hxx>
@@ -47,6 +46,7 @@
 #include <tools/solar.h>
 #include <vcl/graph.hxx>
 
+class Color;
 class GDIMetaFile;
 class SotStorage;
 class SvStream;

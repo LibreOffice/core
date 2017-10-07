@@ -21,11 +21,12 @@
 #define INCLUDED_SVX_SVDHLPLN_HXX
 
 #include <sal/types.h>
-#include <tools/color.hxx>
 #include <tools/gen.hxx>
 
 #include <vcl/pointr.hxx>
 #include <svx/svxdllapi.h>
+
+#include <vector>
 #include <memory>
 
 class OutputDevice;

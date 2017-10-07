@@ -21,7 +21,6 @@
 
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/color.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 #include <memory>

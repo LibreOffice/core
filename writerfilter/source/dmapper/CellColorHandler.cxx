@@ -26,6 +26,7 @@
 #include <sal/macros.h>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
+#include <tools/color.hxx>
 
 namespace writerfilter {
 namespace dmapper {
