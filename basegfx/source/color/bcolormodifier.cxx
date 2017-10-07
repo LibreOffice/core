@@ -84,6 +84,34 @@ namespace basegfx
 
 namespace basegfx
 {
+    BColorModifier_alphablend::~BColorModifier_alphablend()
+    {
+    }
+
+    bool BColorModifier_alphablend::operator==(const BColorModifier& rCompare) const
+    {
+        const BColorModifier_alphablend* pCompare = dynamic_cast< const BColorModifier_alphablend* >(&rCompare);
+
+        if(!pCompare)
+        {
+            return false;
+        }
+
+        return getBColor() == pCompare->getBColor();
+    }
+
+    ::basegfx::BColor BColorModifier_alphablend::getModifiedColor(const ::basegfx::BColor& /*aSourceColor*/) const
+    {
+        const double aNewRed   = (maBColor.getRed()   * mfAlpha) + ((1 - mfAlpha) * maBackgroundBColor.getRed());
+        const double aNewGreen = (maBColor.getGreen() * mfAlpha) + ((1 - mfAlpha) * maBackgroundBColor.getGreen());
+        const double aNewBlue  = (maBColor.getBlue()  * mfAlpha) + ((1 - mfAlpha) * maBackgroundBColor.getBlue());
+
+        return ::basegfx::BColor(aNewRed, aNewGreen, aNewBlue);
+    }
+} // end of namespace basegfx
+
+namespace basegfx
+{
     BColorModifier_replace::~BColorModifier_replace()
     {
     }

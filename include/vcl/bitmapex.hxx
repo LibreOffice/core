@@ -417,7 +417,7 @@ public:
         @param rBColorModifierStack
         A ColrModifierStack which defines how each pixel has to be modified
     */
-    BitmapEx            ModifyBitmapEx( const basegfx::BColorModifierStack& rBColorModifierStack) const;
+    BitmapEx            ModifyBitmapEx( const ColorModifierStack& rBColorModifierStack) const;
 
     static BitmapEx     AutoScaleBitmap( BitmapEx const & aBitmap, const long aStandardSize );
 
@@ -439,7 +439,7 @@ private:
     Bitmap              aBitmap;
     Bitmap              aMask;
     Size                aBitmapSize;
-    Color               aTransparentColor;
+    Color              aTransparentColor;
     TransparentType     eTransparent;
     bool                bAlpha;
 

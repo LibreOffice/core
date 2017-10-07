@@ -68,7 +68,7 @@ namespace o3tl
     template<> struct typed_flags<BmpDitherFlags> : is_typed_flags<BmpDitherFlags, 0x07> {};
 }
 
-#define BMP_COL_TRANS               Color( 252, 3, 251 )
+#define BMP_COL_TRANS               basegfx::BColor( 252, 3, 251 )
 
 enum class BmpConversion
 {
@@ -187,7 +187,6 @@ class   BitmapReadAccess;
 class   BitmapWriteAccess;
 class   BitmapPalette;
 class   ImpBitmap;
-class   Color;
 class   GDIMetaFile;
 class   AlphaMask;
 class   OutputDevice;
@@ -330,7 +329,7 @@ public:
      */
     bool                    Expand(
                                 sal_uLong nDX, sal_uLong nDY,
-                                const Color* pInitColor = nullptr );
+                                const basegfx::BColor* pInitColor = nullptr );
 
     /** Copy a rectangular area from another bitmap
 
@@ -396,7 +395,7 @@ public:
      */
     bool                    Blend(
                                 const AlphaMask& rAlpha,
-                                const Color& rBackgroundColor );
+                                const basegfx::BColor& rBackgroundColor );
 
     /** Fill the entire bitmap with the given color
 
@@ -405,7 +404,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Erase( const Color& rFillColor );
+    bool                    Erase( const basegfx::BColor& rFillColor );
 
     /** Perform the Invert operation on every pixel
 
@@ -475,7 +474,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Rotate( long nAngle10, const Color& rFillColor );
+    bool                    Rotate( long nAngle10, const basegfx::BColor& rFillColor );
 
     /** Create on-off mask from bitmap
 
@@ -493,7 +492,7 @@ public:
 
         @return the resulting bitmask.
      */
-    Bitmap                  CreateMask( const Color& rTransColor, sal_uLong nTol = 0 ) const;
+    Bitmap                  CreateMask( const basegfx::BColor& rTransColor, sal_uLong nTol = 0 ) const;
 
     /** Create region of similar colors in a given rectangle
 
@@ -506,7 +505,7 @@ public:
 
         @return the generated region.
      */
-    vcl::Region                  CreateRegion( const Color& rColor, const tools::Rectangle& rRect ) const;
+    vcl::Region                  CreateRegion( const basegfx::BColor& rColor, const tools::Rectangle& rRect ) const;
 
     /** Replace all pixel where the given mask is on with the specified color
 
@@ -518,7 +517,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Replace( const Bitmap& rMask, const Color& rReplaceColor );
+    bool                    Replace( const Bitmap& rMask, const basegfx::BColor& rReplaceColor );
 
     /** Merge bitmap with given background color according to specified alpha mask
 
@@ -530,7 +529,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Replace( const AlphaMask& rAlpha, const Color& rMergeColor );
+    bool                    Replace( const AlphaMask& rAlpha, const basegfx::BColor& rMergeColor );
 
     /** Replace all pixel having the search color with the specified color
 
@@ -547,7 +546,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
+    bool                    Replace( const basegfx::BColor& rSearchColor, const basegfx::BColor& rReplaceColor, sal_uLong nTol = 0 );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -568,8 +567,8 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                    Replace(
-                                const Color* pSearchColors,
-                                const Color* rReplaceColors,
+                                const basegfx::BColor* pSearchColors,
+                                const basegfx::BColor* rReplaceColors,
                                 sal_uLong nColorCount,
                                 sal_uLong* pTols = nullptr );
 
@@ -670,8 +669,8 @@ public:
 
     SAL_DLLPRIVATE bool     ImplMakeMono( sal_uInt8 cThreshold );
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
-    SAL_DLLPRIVATE bool     ImplConvertUp( sal_uInt16 nBitCount, Color const * pExtColor = nullptr );
-    SAL_DLLPRIVATE bool     ImplConvertDown( sal_uInt16 nBitCount, Color const * pExtColor = nullptr );
+    SAL_DLLPRIVATE bool     ImplConvertUp( sal_uInt16 nBitCount, basegfx::BColor const * pExtColor = nullptr );
+    SAL_DLLPRIVATE bool     ImplConvertDown( sal_uInt16 nBitCount, basegfx::BColor const * pExtColor = nullptr );
     SAL_DLLPRIVATE bool     ImplConvertGhosted();
     SAL_DLLPRIVATE bool     ImplDitherMatrix();
     SAL_DLLPRIVATE bool     ImplDitherFloyd();
