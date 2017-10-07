@@ -43,9 +43,7 @@ namespace svx
     class SVX_DLLPUBLIC ToolboxButtonColorUpdater
     {
     public:
-                    ToolboxButtonColorUpdater( sal_uInt16   nSlotId,
-                                               sal_uInt16   nTbxBtnId,
-                                               ToolBox*     ptrTbx);
+                    ToolboxButtonColorUpdater( sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton = false);
                     ~ToolboxButtonColorUpdater();
 
         void        Update( const Color& rColor, bool bForceUpdate = false );
@@ -55,6 +53,7 @@ namespace svx
         ToolboxButtonColorUpdater(ToolboxButtonColorUpdater &) = delete;
         void operator =(ToolboxButtonColorUpdater) = delete;
 
+        bool            mbWideButton;
         sal_uInt16      mnBtnId;
         sal_uInt16      mnSlotId;
         VclPtr<ToolBox> mpTbx;
