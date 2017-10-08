@@ -26,7 +26,6 @@
 #include <cppuhelper/weak.hxx>
 #include <uno/mapping.hxx>
 
-
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -49,10 +48,8 @@
 #define _MAX_PATH PATH_MAX
 #endif
 
-
 #define IMPLEMENTATION_NAME "com.sun.star.DummyService.V10"
 #define SERVICE_NAME "com.sun.star.ts.TestManagerImpl"
-
 
 using namespace css::uno;
 using namespace css::registry;
@@ -60,7 +57,6 @@ using namespace css::lang;
 using namespace css::container;
 using namespace osl;
 using namespace cppu;
-
 
 Reference<XMultiServiceFactory> getProcessServiceManager()
 {
@@ -80,12 +76,7 @@ Reference< XMultiServiceFactory > createRegistryServiceManager( const OUString& 
 }
 
 
-/**********************************
-* The service, that is used to test the Service manager
-*
-*
-*
-*************************************/
+// The service that is used to test the Service manager
 static sal_uInt32 nInstanceCount = 0;
 class Test_Manager_Impl : public WeakImplHelper< XServiceInfo >
 {
@@ -98,9 +89,6 @@ public:
     sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw();
     Sequence< OUString >        SAL_CALL getSupportedServiceNames() throw();
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static() throw();
-
-private:
-//  static XIdlClassRef     getStaticIdlClass();
 };
 
 Test_Manager_Impl::~Test_Manager_Impl()
@@ -108,15 +96,11 @@ Test_Manager_Impl::~Test_Manager_Impl()
     nInstanceCount--;
 }
 
-
 // old, is no longer needed by the new Mimic
 Reference< XInterface > SAL_CALL Test_Manager_Impl_CreateInstance_Impl()
 {
     return (OWeakObject *)new Test_Manager_Impl();
 }
-
-
-// Test_Manager_Impl_CreateInstance()
 
 Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
     const Reference< XMultiServiceFactory > & /*rSMgr*/ ) throw (Exception)
@@ -126,30 +110,20 @@ Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
     return xService;
 }
 
-
-// Test_Manager_Impl::getImplementationName
-
 OUString Test_Manager_Impl::getImplementationName() throw()
 {
     return OUString(IMPLEMENTATION_NAME);
 }
 
-// Test_Manager_Impl::supportsService
 sal_Bool Test_Manager_Impl::supportsService( const OUString& ServiceName ) throw()
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-
-// Test_Manager_Impl::getSupportedServiceNames
-
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames() throw ()
 {
     return getSupportedServiceNames_Static();
 }
-
-
-// Test_Manager_Impl::getSupportedServiceNames_Static
 
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static() throw ()
 {
@@ -159,15 +133,7 @@ Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static() throw 
     return aSNS;
 }
 
-
-/****
-*
-*
-*  This routine performs the test of the process service manager ( getProcessServiceManager is called )
-*
-*
-*
-****/
+// This routine performs the test of the process service manager (getProcessServiceManager is called)
 
 extern "C" void SAL_CALL test_ServiceManager()
 {
@@ -213,9 +179,7 @@ extern "C" void SAL_CALL test_ServiceManager()
     // try to get an instance for a unknown service
     OSL_VERIFY( !xSMgr->createInstance("bla.blup.Q").is() );
 
-
     // First test : register service via the internal function of the component itself
-
     {
         Reference< XImplementationRegistration >
             xInst( xSMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
@@ -234,9 +198,7 @@ extern "C" void SAL_CALL test_ServiceManager()
         OSL_ENSURE( seqImpl.getLength() == 1, "count of implementations is wrong" );
         OSL_ENSURE( seqImpl.getConstArray()[0] == "com.sun.star.DummyService.V10", "implementation name is not equal" );
 
-
         // tests, if a service provider can be instantiated.
-
         Reference< XInterface > xIFace(xSMgr->createInstance("com.sun.star.ts.TestManagerImpl"));
         OSL_ENSURE( xIFace.is(), "loadable service not found" );
 
@@ -305,6 +267,5 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     return pRet;
 }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

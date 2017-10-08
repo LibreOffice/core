@@ -913,10 +913,6 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
             throw css::lang::DisposedException(
                 OUString(), static_cast< cppu::OWeakObject * >(this));
     }
-//    stoc_javavm::JVM aJvm;
-//    initVMConfiguration(&aJvm, m_xContext->getServiceManager(), m_xContext);
-//    return aJvm.isEnabled();
-    //ToDo
     bool bEnabled = false;
     if (jfw_getEnabled( & bEnabled) != JFW_E_NONE)
         throw css::uno::RuntimeException();
@@ -1202,9 +1198,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     // FindClass("com.sun.star.lib.sandbox.SandboxSecurityManager" only worked at the first time
                     // this code was executed. Maybe it is a security feature. However, all attempts to debug the
                     // SandboxSecurity class (maybe the VM invokes checkPackageAccess)  failed.
-//                  jclass jcSandboxSec= pJNIEnv->FindClass("com.sun.star.lib.sandbox.SandboxSecurity");
-//                  if(pJNIEnv->ExceptionOccurred()) throw RuntimeException("JNI:FindClass com.sun.star.lib.sandbox.SandboxSecurity");
-//                  jboolean bIsSand= pJNIEnv->IsInstanceOf( joSecur, jcSandboxSec);
+
                     // The SecurityManagers class Name must be com.sun.star.lib.sandbox.SandboxSecurity
                     jclass jcSec= pJNIEnv->GetObjectClass( joSecur);
                     jclass jcClass= pJNIEnv->FindClass("java/lang/Class");

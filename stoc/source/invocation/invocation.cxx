@@ -357,10 +357,6 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
         _xNameContainer.set( _xDirect, UNO_QUERY );
         _xENDirect.set( _xDirect, UNO_QUERY );
         _xDirect2.set( _xDirect, UNO_QUERY );
-
-        // only once!!!
-        //_xIntrospectionAccess = XIntrospectionAccessRef();
-        //_xPropertySet         = XPropertySetRef();
     }
     else
     {
@@ -417,23 +413,8 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
                 _xENIntrospection.set( _xIntrospectionAccess, UNO_QUERY );
             }
         }
-        /* only once !!!
-        _xDirect = XInvocationRef();
-        if( !_xIntrospectionAccess.is() )
-        {
-            // reset
-            _xElementAccess     = XElementAccessRef();
-            _xEnumerationAccess = XEnumerationAccessRef();
-            _xIndexAccess       = XIndexAccessRef();
-            _xIndexContainer    = XIndexContainerRef();
-            _xNameAccess        = XNameAccessRef();
-            _xNameContainer     = XNameContainerRef();
-            _xPropertySet       = XPropertySetRef();
-        }
-        */
     }
 }
-
 
 OUString Invocation_Impl::getExactName( const OUString& rApproximateName )
 {
@@ -446,7 +427,6 @@ OUString Invocation_Impl::getExactName( const OUString& rApproximateName )
     return aRet;
 }
 
-
 Reference<XIntrospectionAccess> Invocation_Impl::getIntrospection()
 {
     if( _xDirect.is() )
@@ -454,7 +434,6 @@ Reference<XIntrospectionAccess> Invocation_Impl::getIntrospection()
     else
         return _xIntrospectionAccess;
 }
-
 
 sal_Bool Invocation_Impl::hasMethod( const OUString& Name )
 {
@@ -464,7 +443,6 @@ sal_Bool Invocation_Impl::hasMethod( const OUString& Name )
         return _xIntrospectionAccess->hasMethod( Name, MethodConcept::ALL ^ MethodConcept::DANGEROUS );
     return false;
 }
-
 
 sal_Bool Invocation_Impl::hasProperty( const OUString& Name )
 {
@@ -479,7 +457,6 @@ sal_Bool Invocation_Impl::hasProperty( const OUString& Name )
         return _xNameAccess->hasByName( Name );
     return false;
 }
-
 
 Any Invocation_Impl::getValue( const OUString& PropertyName )
 {
@@ -512,7 +489,6 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
 
     throw UnknownPropertyException( "cannot get value " + PropertyName );
 }
-
 
 void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
 {
@@ -586,7 +562,6 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
         }
     }
 }
-
 
 Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& InParams,
                                 Sequence<sal_Int16>& OutIndices, Sequence<Any>& OutParams )
@@ -691,7 +666,6 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
     throw aExc;
 }
 
-
 // Struct to optimize sorting
 struct MemberItem
 {
@@ -714,11 +688,6 @@ void Invocation_Impl::getInfoSequenceImpl
     Sequence< InvocationInfo >* pInfoSeq
 )
 {
-    //Sequence< OUString > aStrSeq;
-    //if( !pStringSeq )
-        //pStringSeq = &aStrSeq;
-
-
     // Get all needed sequences
     Sequence<OUString> aNameAccessNames;
     Sequence<Property> aPropertySeq;
@@ -955,7 +924,6 @@ void Invocation_Impl::fillInfoForMethod
     }
 }
 
-
 // XTypeProvider
 Sequence< Type > SAL_CALL Invocation_Impl::getTypes()
 {
@@ -1036,7 +1004,6 @@ Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-
 class InvocationService
     : public WeakImplHelper< XSingleServiceFactory, XServiceInfo >
 {
@@ -1089,13 +1056,11 @@ Sequence< OUString > InvocationService::getSupportedServiceNames()
     return inv_getSupportedServiceNames();
 }
 
-
 Reference<XInterface> InvocationService::createInstance()
 {
     //TODO:throw( Exception("no default construction of invocation adapter possible!", *this) );
     return Reference<XInterface>(); // dummy
 }
-
 
 Reference<XInterface> InvocationService::createInstanceWithArguments(
     const Sequence<Any>& rArguments )

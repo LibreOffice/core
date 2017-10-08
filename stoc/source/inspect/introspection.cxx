@@ -192,7 +192,6 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
     sal_Int32 mnPropCount;
 
     // Number of Properties, which are assigned to particular concepts
-    //sal_Int32 mnDangerousPropCount;
     sal_Int32 mnPropertySetPropCount;
     sal_Int32 mnAttributePropCount;
     sal_Int32 mnMethodPropCount;
@@ -237,10 +236,8 @@ public:
 
     // Methods of XIntrospectionAccess (OLD, now only Impl)
     void setPropertyValue(const Any& obj, const OUString& aPropertyName, const Any& aValue) const;
-//    void setPropertyValue(Any& obj, const OUString& aPropertyName, const Any& aValue) const;
     Any getPropertyValue(const Any& obj, const OUString& aPropertyName) const;
     void setPropertyValueByIndex(const Any& obj, sal_Int32 nIndex, const Any& aValue) const;
-//    void setPropertyValueByIndex(Any& obj, sal_Int32 nIndex, const Any& aValue) const;
     Any getPropertyValueByIndex(const Any& obj, sal_Int32 nIndex) const;
 
     const std::vector<Property>& getProperties() const              { return maAllPropertySeq; }
@@ -250,8 +247,6 @@ public:
     const std::vector<sal_Int32>& getMethodConcepts() const         { return maMethodConceptSeq; }
 };
 
-
-// Ctor
 IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlReflection > const & xCoreReflection_ )
     : mxCoreReflection( xCoreReflection_ )
 {
@@ -278,7 +273,6 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
     mpOrgPropertyHandleArray = nullptr;
 
     mnPropCount = 0;
-    //mnDangerousPropCount = 0;
     mnPropertySetPropCount = 0;
     mnAttributePropCount = 0;
     mnMethodPropCount = 0;
@@ -369,7 +363,6 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
 }
 
 void IntrospectionAccessStatic_Impl::setPropertyValue( const Any& obj, const OUString& aPropertyName, const Any& aValue ) const
-//void IntrospectionAccessStatic_Impl::setPropertyValue( Any& obj, const OUString& aPropertyName, const Any& aValue ) const
 {
     sal_Int32 i = getPropertyIndex( aPropertyName );
     if( i == -1 )
@@ -378,7 +371,6 @@ void IntrospectionAccessStatic_Impl::setPropertyValue( const Any& obj, const OUS
 }
 
 void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal_Int32 nSequenceIndex, const Any& aValue) const
-//void IntrospectionAccessStatic_Impl::setPropertyValueByIndex( Any& obj, sal_Int32 nSequenceIndex, const Any& aValue) const
 {
     // Is the passed object something that fits?
     Reference<XInterface> xInterface;
@@ -420,12 +412,10 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
                 Type aPropType = rProp.Type;
                 OUString aTypeName( aPropType.getTypeName() );
                 Reference< XIdlClass > xPropClass = mxCoreReflection->forName( aTypeName );
-                //Reference<XIdlClass> xPropClass = rProp.Type;
                 if( xPropClass.is() && xPropClass->getTypeClass() == TypeClass_INTERFACE )
                 {
                     if( valInterface->is() )
                     {
-                        //Any queryInterface( const Type& rType );
                         aRealValue = (*valInterface)->queryInterface( aPropType );
                         if( aRealValue.hasValue() )
                             bUseCopy = true;
@@ -463,7 +453,6 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
                 }
                 else
                 {
-                    // throw UnknownPropertyException
                 }
             }
         }
@@ -476,18 +465,13 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
             if( xField2.is() )
             {
                 xField2->set( const_cast<Any&>(obj), aValue );
-                // IllegalArgumentException
-                // NullPointerException
             } else
             if( xField.is() )
             {
                 xField->set( obj, aValue );
-                // IllegalArgumentException
-                // NullPointerException
             }
             else
             {
-                // throw IllegalArgumentException();
             }
         }
         break;
@@ -505,7 +489,6 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
             }
             else
             {
-                // throw IllegalArgumentException();
             }
         }
         break;
@@ -532,7 +515,6 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
         TypeClass eObjType = obj.getValueType().getTypeClass();
         if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
         {
-            // throw IllegalArgumentException();
             return aRet;
         }
     }
@@ -559,7 +541,6 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
                 }
                 else
                 {
-                    // throw UnknownPropertyException
                     return aRet;
                 }
             }
@@ -575,7 +556,6 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
                 }
                 else
                 {
-                    // throw UnknownPropertyException
                     return aRet;
                 }
             }
@@ -588,12 +568,9 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
             if( xField.is() )
             {
                 aRet = xField->get( obj );
-                // IllegalArgumentException
-                // NullPointerException
             }
             else
             {
-                // throw IllegalArgumentException();
                 return aRet;
             }
         }
@@ -610,7 +587,6 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
             }
             else
             {
-                // throw IllegalArgumentException();
                 return aRet;
             }
         }
@@ -618,7 +594,6 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
 
         case MAP_SETONLY:
             // Get method does not exist
-            // throw WriteOnlyPropertyException();
             return aRet;
     }
     return aRet;
@@ -655,7 +630,6 @@ void IntrospectionAccessStatic_Impl::checkInterfaceArraySize( std::vector< Refer
 
 
 //*** ImplIntrospectionAccess ***
-
 
 // New Impl class as part of the introspection conversion to instance-bound
 // Introspection with property access via XPropertySet. The old class
@@ -795,7 +769,7 @@ public:
 
 ImplIntrospectionAccess::ImplIntrospectionAccess
     ( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ )
-        : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ ) //, maAdapter()
+        : maInspectedObject( obj ), mpStaticImpl( pStaticImpl_ )
 {
     // Save object as an interface if possible
     maInspectedObject >>= mxIface;
@@ -1020,9 +994,7 @@ Any SAL_CALL ImplIntrospectionAccess::queryInterface( const Type& rType )
     return aRet;
 }
 
-
 //*** Implementation of ImplIntrospectionAdapter ***
-
 
 // Methods from XPropertySet
 Reference<XPropertySetInfo> ImplIntrospectionAccess::getPropertySetInfo()
@@ -1046,7 +1018,6 @@ void ImplIntrospectionAccess::addPropertyChangeListener(const OUString& aPropert
     {
         Reference<XPropertySet> xPropSet =
             Reference<XPropertySet>::query( mxIface );
-        //Reference<XPropertySet> xPropSet( mxIface, USR_QUERY );
         if( xPropSet.is() )
             xPropSet->addPropertyChangeListener(aPropertyName, aListener);
     }
@@ -1058,7 +1029,6 @@ void ImplIntrospectionAccess::removePropertyChangeListener(const OUString& aProp
     {
         Reference<XPropertySet> xPropSet =
             Reference<XPropertySet>::query( mxIface );
-        //Reference<XPropertySet> xPropSet( mxIface, USR_QUERY );
         if( xPropSet.is() )
             xPropSet->removePropertyChangeListener(aPropertyName, aListener);
     }
@@ -1070,7 +1040,6 @@ void ImplIntrospectionAccess::addVetoableChangeListener(const OUString& aPropert
     {
         Reference<XPropertySet> xPropSet =
             Reference<XPropertySet>::query( mxIface );
-        //Reference<XPropertySet> xPropSet( mxIface, USR_QUERY );
         if( xPropSet.is() )
             xPropSet->addVetoableChangeListener(aPropertyName, aListener);
     }
@@ -1086,7 +1055,6 @@ void ImplIntrospectionAccess::removeVetoableChangeListener(const OUString& aProp
             xPropSet->removeVetoableChangeListener(aPropertyName, aListener);
     }
 }
-
 
 // Methods from XFastPropertySet
 void ImplIntrospectionAccess::setFastPropertyValue(sal_Int32, const Any&)
@@ -1219,7 +1187,6 @@ sal_Int64 ImplIntrospectionAccess::getSomething( const Sequence< sal_Int8 >& aId
     return Reference<XUnoTunnel>::query( mxIface )->getSomething( aIdentifier );
 }
 
-
 //*** Implementation of ImplIntrospectionAccess ***
 
 // Methods from XIntrospectionAccess
@@ -1294,8 +1261,6 @@ Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyCo
     sal_Int32 nCount = 0;
 
     // There are currently no DANGEROUS properties
-    // if( PropertyConcepts & DANGEROUS )
-    //    nCount += mpStaticImpl->mnDangerousPropCount;
     if( PropertyConcepts & PROPERTYSET )
         nCount += mpStaticImpl->mnPropertySetPropCount;
     if( PropertyConcepts & ATTRIBUTES )
@@ -2388,7 +2353,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     else //if( eType == TypeClass_STRUCT )
     {
         // Is it an interface or a struct?
-        //Reference<XIdlClass> xClassRef = aToInspectObj.getReflection()->getIdlClass();
         css::uno::Reference<css::reflection::XIdlClass> xClassRef(
             reflection->forName(aToInspectObj.getValueTypeName()));
         if( !xClassRef.is() )
@@ -2420,10 +2384,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
             rProp.Attributes = (eAccessMode == FieldAccessMode_READONLY ||
                                 eAccessMode == FieldAccessMode_CONST)
                                 ? READONLY : 0;
-
-            //FieldAccessMode eAccessMode = xField->getAccessMode();
-            //rProp.Attributes = (eAccessMode == FieldAccessMode::READONLY || eAccessMode == CONST)
-                //? PropertyAttribute::READONLY : 0;
 
             // Write name in hash table
             rPropNameMap[ aPropName ] = rPropCount;

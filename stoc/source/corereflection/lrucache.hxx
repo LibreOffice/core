@@ -19,9 +19,6 @@
 #ifndef INCLUDED_STOC_SOURCE_COREREFLECTION_LRUCACHE_HXX
 #define INCLUDED_STOC_SOURCE_COREREFLECTION_LRUCACHE_HXX
 
-// __CACHE_DIAGNOSE forces cache size to 4 and works only for OUString keys
-//  #define __CACHE_DIAGNOSE 1
-
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -29,8 +26,6 @@
 #include <unordered_map>
 
 /** Implementation of a least recently used (lru) cache.
-    <br>
-    @author Daniel Boelzle
 */
 template< class t_Key, class t_Val, class t_KeyHash >
 class LRU_Cache
@@ -54,31 +49,29 @@ class LRU_Cache
     inline void toFront( CacheEntry * pEntry ) const;
 
 public:
-    /** Constructor:
-        <br>
+    /** Constructor
+
         @param nCachedElements number of elements to be cached; default param set to 128
     */
     explicit inline LRU_Cache();
     /** Destructor: releases all cached elements and keys.
-        <br>
     */
     inline ~LRU_Cache();
 
     /** Retrieves a value from the cache. Returns default constructed value,
         if none was found.
-        <br>
+
         @param rKey a key
         @return value
     */
     inline t_Val getValue( const t_Key & rKey ) const;
     /** Sets a value to be cached for given key.
-        <br>
+
         @param rKey a key
         @param rValue a value
     */
     inline void setValue( const t_Key & rKey, const t_Val & rValue );
     /** Clears the cache, thus releasing all cached elements and keys.
-        <br>
     */
     inline void clear();
 };

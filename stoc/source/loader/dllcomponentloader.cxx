@@ -101,24 +101,6 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 void DllComponentLoader::initialize( const css::uno::Sequence< css::uno::Any >& )
 {
     OSL_FAIL( "dllcomponentloader::initialize should not be called !" );
-//      if( aArgs.getLength() != 1 )
-//      {
-//          throw IllegalArgumentException();
-//      }
-
-//      Reference< XMultiServiceFactory > rServiceManager;
-
-//      if( aArgs.getConstArray()[0].getValueType().getTypeClass() == TypeClass_INTERFACE )
-//      {
-//          aArgs.getConstArray()[0] >>= rServiceManager;
-//      }
-
-//      if( !rServiceManager.is() )
-//      {
-//          throw IllegalArgumentException();
-//      }
-
-//      m_xSMgr = rServiceManager;
 }
 
 
