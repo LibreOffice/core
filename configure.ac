@@ -637,6 +637,9 @@ darwin*) # Mac OS X or iOS
         enable_report_builder=no
         with_theme="tango"
         with_ppds=no
+        if test "$enable_ios_simulator" = "yes"; then
+            host=x86_64-apple-darwin
+        fi
     else
         _os=Darwin
         INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
