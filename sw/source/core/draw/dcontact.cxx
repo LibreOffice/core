@@ -353,7 +353,7 @@ sal_uInt32 SwContact::GetMinOrdNum() const
 {
     sal_uInt32 nMinOrdNum( SAL_MAX_UINT32 );
 
-    std::list< SwAnchoredObject* > aObjs;
+    std::vector< SwAnchoredObject* > aObjs;
     GetAnchoredObjs( aObjs );
 
     while ( !aObjs.empty() )
@@ -378,7 +378,7 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 {
     sal_uInt32 nMaxOrdNum( 0 );
 
-    std::list< SwAnchoredObject* > aObjs;
+    std::vector< SwAnchoredObject* > aObjs;
     GetAnchoredObjs( aObjs );
 
     while ( !aObjs.empty() )
@@ -434,7 +434,7 @@ void SwContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // determine anchored object
         SwAnchoredObject* pAnchoredObj(nullptr);
         {
-            std::list<SwAnchoredObject*> aAnchoredObjs;
+            std::vector<SwAnchoredObject*> aAnchoredObjs;
             GetAnchoredObjs(aAnchoredObjs);
             if(!aAnchoredObjs.empty())
                 pAnchoredObj = aAnchoredObjs.front();
@@ -633,7 +633,7 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 }
 
 /// get data collection of anchored objects, handled by with contact
-void SwFlyDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const
+void SwFlyDrawContact::GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const
 {
     const SwFrameFormat* pFormat = GetFormat();
     SwFlyFrame::GetAnchoredObjects( _roAnchoredObjs, *pFormat );
@@ -1963,7 +1963,7 @@ void SwDrawContact::ChangeMasterObject(SdrObject* pNewMaster)
 }
 
 /// get data collection of anchored objects, handled by with contact
-void SwDrawContact::GetAnchoredObjs(std::list<SwAnchoredObject*>& o_rAnchoredObjs) const
+void SwDrawContact::GetAnchoredObjs(std::vector<SwAnchoredObject*>& o_rAnchoredObjs) const
 {
     o_rAnchoredObjs.push_back(const_cast<SwAnchoredDrawObject*>(&maAnchoredDrawObj));
 
