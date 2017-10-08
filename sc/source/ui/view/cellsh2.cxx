@@ -783,10 +783,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         break;
         case SID_DATA_PROVIDER:
         {
-            ScopedVclPtrInstance< sc::DataProviderDlg > aDialog( GetViewData()->GetDocShell(), pTabViewShell->GetDialogParent() );
+            std::shared_ptr<ScDocument> pDoc = std::make_shared<ScDocument>();
+            pDoc->InsertTab(0, "test");
+            ScopedVclPtrInstance< ScDataProviderDlg > aDialog( pTabViewShell->GetDialogParent(), pDoc);
             if (aDialog->Execute() == RET_OK)
             {
-                aDialog->StartImport();
+                // handle the import here
             }
         }
         break;
