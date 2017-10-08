@@ -12,6 +12,40 @@
 #include <vcl/wmf.hxx>
 #include "commonfuzzer.hxx"
 
+#include <config_features.h>
+#include <osl/detail/component-mapping.h>
+
+extern "C" {
+void * emfio_component_getFactory( const char* , void* , void* );
+void * com_sun_star_i18n_LocaleDataImpl_get_implementation( void *, void * );
+void * com_sun_star_i18n_BreakIterator_Unicode_get_implementation( void *, void * );
+void * com_sun_star_i18n_BreakIterator_get_implementation( void *, void * );
+}
+
+const lib_to_factory_mapping *
+lo_get_factory_map(void)
+{
+    static lib_to_factory_mapping map[] = {
+        { "libemfiolo.a", emfio_component_getFactory },
+        { 0, 0 }
+    };
+
+    return map;
+}
+
+const lib_to_constructor_mapping *
+lo_get_constructor_map(void)
+{
+    static lib_to_constructor_mapping map[] = {
+        { "com_sun_star_i18n_LocaleDataImpl_get_implementation", com_sun_star_i18n_LocaleDataImpl_get_implementation },
+        { "com_sun_star_i18n_BreakIterator_Unicode_get_implementation", com_sun_star_i18n_BreakIterator_Unicode_get_implementation },
+        { "com_sun_star_i18n_BreakIterator_get_implementation", com_sun_star_i18n_BreakIterator_get_implementation },
+        { 0, 0 }
+    };
+
+    return map;
+}
+
 extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 {
     TypicalFuzzerInitialize(argc, argv);
