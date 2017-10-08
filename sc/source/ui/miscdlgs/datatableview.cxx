@@ -25,6 +25,8 @@
 #include "fillinfo.hxx"
 #include "table.hxx"
 
+#include <vcl/builderfactory.hxx>
+
 constexpr double nPPTX = 0.06666;
 constexpr double nPPTY = 0.06666;
 
@@ -32,11 +34,16 @@ constexpr sal_uInt16 nRowHeaderWidth = 100;
 constexpr sal_uInt16 nColHeaderHeight = 20;
 constexpr sal_uInt16 nScrollBarSize = 10;
 
-ScDataTableColView::ScDataTableColView(vcl::Window* pParent, ScDocument* pDoc, SelectionEngine* pSelectionEngine):
+ScDataTableColView::ScDataTableColView(vcl::Window* pParent, SelectionEngine* pSelectionEngine):
         ScHeaderControl(pParent, pSelectionEngine, 1024, false, nullptr),
-        mpDoc(pDoc),
+        mpDoc(nullptr),
         mnCol(0)
 {
+}
+
+void ScDataTableColView::Init(ScDocument* pDoc)
+{
+    mpDoc = pDoc;
 }
 
 void ScDataTableColView::SetPos(SCCOLROW nCol)
@@ -78,11 +85,16 @@ void ScDataTableColView::HideEntries(SCCOLROW nPos, SCCOLROW nEndPos)
 }
 
 
-ScDataTableRowView::ScDataTableRowView(vcl::Window* pParent, ScDocument* pDoc, SelectionEngine* pSelectionEngine):
+ScDataTableRowView::ScDataTableRowView(vcl::Window* pParent, SelectionEngine* pSelectionEngine):
         ScHeaderControl(pParent, pSelectionEngine, 1024, true, nullptr),
-        mpDoc(pDoc),
+        mpDoc(nullptr),
         mnRow(0)
 {
+}
+
+void ScDataTableRowView::Init(ScDocument* pDoc)
+{
+    mpDoc = pDoc;
 }
 
 void ScDataTableRowView::SetPos(SCCOLROW nRow)
@@ -123,12 +135,11 @@ void ScDataTableRowView::HideEntries(SCCOLROW nPos, SCCOLROW nEndPos)
     }
 }
 
-ScDataTableView::ScDataTableView(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc):
+ScDataTableView::ScDataTableView(vcl::Window* pParent):
     Control(pParent),
-    mpDoc(pDoc),
     mpSelectionEngine(new SelectionEngine(this)),
-    mpColView(VclPtr<ScDataTableColView>::Create(this, mpDoc.get(), mpSelectionEngine.get())),
-    mpRowView(VclPtr<ScDataTableRowView>::Create(this, mpDoc.get(), mpSelectionEngine.get())),
+    mpColView(VclPtr<ScDataTableColView>::Create(this, mpSelectionEngine.get())),
+    mpRowView(VclPtr<ScDataTableRowView>::Create(this, mpSelectionEngine.get())),
     mpVScroll(VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL | WB_DRAG))),
     mpHScroll(VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL | WB_DRAG))),
     mnFirstVisibleRow(0),
@@ -150,6 +161,15 @@ ScDataTableView::ScDataTableView(vcl::Window* pParent, std::shared_ptr<ScDocumen
     mpVScroll->Show();
     mpHScroll->Show();
 }
+
+void ScDataTableView::Init(std::shared_ptr<ScDocument> pDoc)
+{
+    mpDoc = pDoc;
+    mpColView->Init(mpDoc.get());
+    mpRowView->Init(mpDoc.get());
+}
+
+VCL_BUILDER_FACTORY(ScDataTableView)
 
 ScDataTableView::~ScDataTableView()
 {
@@ -259,6 +279,11 @@ void ScDataTableView::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     aOutput.DrawGrid(rRenderContext, true, false);
     aOutput.DrawStrings();
     Control::Paint(rRenderContext, rRectangle);
+}
+
+Size ScDataTableView::GetOptimalSize() const
+{
+    return Size(600, 200);
 }
 
 IMPL_LINK(ScDataTableView, ScrollHdl, ScrollBar*, pScrollBar, void)
