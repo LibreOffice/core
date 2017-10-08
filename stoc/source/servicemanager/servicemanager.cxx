@@ -127,9 +127,8 @@ Sequence< OUString > retrieveAsciiValueList(
     return seq;
 }
 
-/*****************************************************************************
-    Enumeration by ServiceName
-*****************************************************************************/
+// Enumeration by ServiceName
+
 struct hashRef_Impl
 {
     size_t operator()(const Reference<XInterface > & rName) const
@@ -232,10 +231,8 @@ sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
     return false;
 }
 
+//  Enumeration by implementation
 
-/*****************************************************************************
-    Enumeration by implementation
-*****************************************************************************/
 class ImplementationEnumeration_Impl : public WeakImplHelper< XEnumeration >
 {
 public:
@@ -273,9 +270,8 @@ Any ImplementationEnumeration_Impl::nextElement()
     return ret;
 }
 
-/*****************************************************************************
-    Hash tables
-*****************************************************************************/
+// Hash tables
+
 typedef std::unordered_set
 <
     OUString,
@@ -296,9 +292,6 @@ typedef std::unordered_map
     OUStringHash
 > HashMap_OWString_Interface;
 
-/*****************************************************************************
-    class OServiceManager_Listener
-*****************************************************************************/
 class OServiceManager_Listener : public WeakImplHelper< XEventListener >
 {
 private:
@@ -333,10 +326,6 @@ void OServiceManager_Listener::disposing(const EventObject & rEvt )
     }
 }
 
-
-/*****************************************************************************
-    class OServiceManager
-*****************************************************************************/
 struct OServiceManagerMutex
 {
     Mutex m_mutex;
@@ -370,8 +359,6 @@ public:
         OUString const & rServiceSpecifier,
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext ) override;
-//      virtual Sequence< OUString > SAL_CALL getAvailableServiceNames()
-//          throw (RuntimeException);
 
     // XMultiServiceFactory
     virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
@@ -395,7 +382,6 @@ public:
     virtual void SAL_CALL remove( const Any & Element ) override;
 
     // XContentEnumerationAccess
-    //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
     virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) override;
 
     // XComponent
@@ -431,7 +417,6 @@ private:
 
     Reference<XEventListener >      getFactoryListener();
 
-
     HashMultimap_OWString_Interface m_ServiceMap;
     HashSet_Ref                     m_ImplementationMap;
     HashMap_OWString_Interface      m_ImplementationNameMap;
@@ -439,13 +424,11 @@ private:
     bool                            m_bInDisposing;
 };
 
-
 inline bool OServiceManager::is_disposed() const
 {
     // ought to be guarded by m_mutex:
     return (m_bInDisposing || rBHelper.bDisposed);
 }
-
 
 inline void OServiceManager::check_undisposed() const
 {
@@ -456,7 +439,6 @@ inline void OServiceManager::check_undisposed() const
             static_cast<OWeakObject *>(const_cast<OServiceManager *>(this)) );
     }
 }
-
 
 typedef WeakComponentImplHelper<
     lang::XMultiServiceFactory, lang::XMultiComponentFactory, lang::XServiceInfo,
@@ -501,8 +483,6 @@ public:
         Sequence< Any > const & rArguments,
         Reference< XComponentContext > const & xContext ) override
         { return getRoot()->createInstanceWithArgumentsAndContext( rServiceSpecifier, rArguments, xContext ); }
-//      virtual Sequence< OUString > SAL_CALL getAvailableServiceNames()
-//          throw (RuntimeException);
 
     // XMultiServiceFactory
     virtual Sequence< OUString > SAL_CALL getAvailableServiceNames() override
@@ -531,7 +511,6 @@ public:
         { Reference< XSet >(getRoot(), UNO_QUERY_THROW)->remove( Element ); }
 
     // XContentEnumerationAccess
-    //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
     virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) override
         { return Reference< XContentEnumerationAccess >(getRoot(), UNO_QUERY_THROW)->createContentEnumeration( aServiceName ); }
 
@@ -567,7 +546,6 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
 
         MutexGuard aGuard( m_mutex );
         m_xContext = xContext;
-
     }
     else
     {
@@ -596,7 +574,7 @@ void OServiceManagerWrapper::disposing()
 {
     m_xContext.clear();
 
-// no m_root->dispose(), because every context disposes its service manager...
+    // no m_root->dispose(), because every context disposes its service manager...
     m_root.clear();
 }
 
@@ -614,9 +592,7 @@ OServiceManagerWrapper::OServiceManagerWrapper(
 }
 
 
-/**
- * Create a ServiceManager
- */
+// Create a ServiceManager
 OServiceManager::OServiceManager( Reference< XComponentContext > const & xContext )
     : t_OServiceManager_impl( m_mutex )
     , m_xContext( xContext )
@@ -846,6 +822,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
 
     return Reference< XInterface >();
 }
+
 // XMultiComponentFactory
 Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     OUString const & rServiceSpecifier,
@@ -954,7 +931,6 @@ Sequence< OUString > OServiceManager::getSupportedServiceNames()
     seqNames[1] = "com.sun.star.lang.ServiceManager";
     return seqNames;
 }
-
 
 Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
     const OUString& aServiceName, Reference< XComponentContext > const & )
@@ -1185,9 +1161,6 @@ void OServiceManager::remove( const Any & Element )
     }
 }
 
-/*****************************************************************************
-    class ORegistryServiceManager
-*****************************************************************************/
 class ORegistryServiceManager : public OServiceManager
 {
 public:
@@ -1238,9 +1211,7 @@ private:
 #endif
 };
 
-/**
- * Create a ServiceManager
- */
+// Create a ServiceManager
 ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext > const & xContext )
     : OServiceManager( xContext )
     , m_searchedRegistry(false)
@@ -1264,10 +1235,9 @@ void ORegistryServiceManager::dispose()
 }
 
 /**
- * Return the root key of the registry. The Default registry service is ordered
- * if no registry is set.
- */
-//Reference<XServiceProvider > create_DefaultRegistry_ServiceProvider();
+ Return the root key of the registry. The Default registry service is ordered
+ if no registry is set.
+*/
 
 Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
 {
@@ -1427,7 +1397,6 @@ Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames()
     seqNames[1] = "com.sun.star.lang.RegistryServiceManager";
     return seqNames;
 }
-
 
 // OServiceManager
 Sequence< Reference< XInterface > > ORegistryServiceManager::queryServiceFactories(

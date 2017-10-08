@@ -54,34 +54,37 @@ using namespace osl;
 
 namespace stoc_impreg
 {
-void SAL_CALL mergeKeys(
-Reference< registry::XRegistryKey > const & xDest,
-Reference< registry::XRegistryKey > const & xSource );
+    void SAL_CALL mergeKeys(
+        Reference< registry::XRegistryKey > const & xDest,
+        Reference< registry::XRegistryKey > const & xSource );
 }
+
 static void mergeKeys(
-Reference< registry::XSimpleRegistry > const & xDest,
-OUString const & rBaseNode,
-OUString const & rURL )
+    Reference< registry::XSimpleRegistry > const & xDest,
+    OUString const & rBaseNode,
+    OUString const & rURL )
 {
-Reference< registry::XRegistryKey > xDestRoot( xDest->getRootKey() );
-Reference< registry::XRegistryKey > xDestKey;
-if (rBaseNode.getLength())
-{
-xDestKey = xDestRoot->createKey( rBaseNode );
-xDestRoot->closeKey();
-}
-else
-{
-xDestKey = xDestRoot;
-}
-Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
-xSimReg->open( rURL, sal_True, sal_False );
-OSL_ASSERT( xSimReg->isValid() );
-Reference< registry::XRegistryKey > xSourceKey( xSimReg->getRootKey() );
-::stoc_impreg::mergeKeys( xDestKey, xSourceKey );
-xSourceKey->closeKey();
-xSimReg->close();
-xDestKey->closeKey();
+    Reference< registry::XRegistryKey > xDestRoot( xDest->getRootKey() );
+    Reference< registry::XRegistryKey > xDestKey;
+
+    if (rBaseNode.getLength())
+    {
+        xDestKey = xDestRoot->createKey( rBaseNode );
+        xDestRoot->closeKey();
+    }
+    else
+    {
+        xDestKey = xDestRoot;
+    }
+
+    Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
+    xSimReg->open( rURL, sal_True, sal_False );
+    OSL_ASSERT( xSimReg->isValid() );
+    Reference< registry::XRegistryKey > xSourceKey( xSimReg->getRootKey() );
+    ::stoc_impreg::mergeKeys( xDestKey, xSourceKey );
+    xSourceKey->closeKey();
+    xSimReg->close();
+    xDestKey->closeKey();
 }
 
 
@@ -89,33 +92,32 @@ OString userRegEnv("STAR_USER_REGISTRY=");
 
 OUString getExePath()
 {
-OUString        exe;
-OSL_VERIFY( osl_getExecutableFile( &exe.pData ) == osl_Process_E_None);
+    OUString        exe;
+    OSL_VERIFY( osl_getExecutableFile( &exe.pData ) == osl_Process_E_None);
 #if defined(_WIN32)
-exe = exe.copy(0, exe.getLength() - 16);
+    exe = exe.copy(0, exe.getLength() - 16);
 #else
-exe = exe.copy(0, exe.getLength() - 12);
+    exe = exe.copy(0, exe.getLength() - 12);
 #endif
-return exe;
+    return exe;
 }
 
 void setStarUserRegistry()
 {
-Registry *myRegistry = new Registry();
+    Registry *myRegistry = new Registry();
 
-RegistryKey rootKey, rKey, rKey2;
+    RegistryKey rootKey, rKey, rKey2;
 
-OUString userReg = getExePath();
-userReg += "user.rdb";
-if(myRegistry->open(userReg, RegAccessMode::READWRITE))
-{
-OSL_VERIFY(!myRegistry->create(userReg));
-}
+    OUString userReg = getExePath();
+    userReg += "user.rdb";
 
-OSL_VERIFY(!myRegistry->close());
-delete myRegistry;
+    if (myRegistry->open(userReg, RegAccessMode::READWRITE))
+        OSL_VERIFY(!myRegistry->create(userReg));
 
-userRegEnv += OUStringToOString(userReg, RTL_TEXTENCODING_ASCII_US);
+    OSL_VERIFY(!myRegistry->close());
+    delete myRegistry;
+
+    userRegEnv += OUStringToOString(userReg, RTL_TEXTENCODING_ASCII_US);
     putenv((char *)userRegEnv.getStr());
 }
 
@@ -439,7 +441,6 @@ void test_DefaultRegistry(
     applicatRdb += "stoctest.rdb";
 
     Reference < XMultiServiceFactory > rSMgr  = ::cppu::createRegistryServiceFactory( userRdb, applicatRdb, sal_False, OUString());
-                                                                                      //OUString("//./e:/src596/stoc/wntmsci3/bin") );
 
     Reference< XPropertySet > xPropSet( rSMgr, UNO_QUERY);
     OSL_ENSURE( xPropSet.is(), "test_DefaultRegistry error0");
@@ -670,6 +671,5 @@ SAL_IMPLEMENT_MAIN()
     xSimReg->destroy();
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

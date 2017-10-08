@@ -51,7 +51,6 @@ static void mergeKeys(
     Reference< registry::XRegistryKey > const & xDest,
     Reference< registry::XRegistryKey > const & xSource,
     t_links & links )
-    // throw( registry::InvalidRegistryException, registry::MergeConflictException, RuntimeException )
 {
     if (!xSource.is() || !xSource->isValid()) {
         throw registry::InvalidRegistryException(
@@ -144,7 +143,6 @@ static void mergeKeys(
 void mergeKeys(
     Reference< registry::XRegistryKey > const & xDest,
     Reference< registry::XRegistryKey > const & xSource )
-    // throw( registry::InvalidRegistryException, registry::MergeConflictException, RuntimeException )
 {
     if (!xDest.is() || !xDest->isValid()) {
         throw registry::InvalidRegistryException(

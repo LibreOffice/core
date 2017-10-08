@@ -493,14 +493,14 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
     // convert to...
     switch (aDestinationClass)
     {
-    // --- to VOID ------------------------------------------------------------------------------
+    // to VOID
     case TypeClass_VOID:
         return Any();
-    // --- to ANY -------------------------------------------------------------------------------
+    // to ANY
     case TypeClass_ANY:
         return rVal;
 
-    // --- to STRUCT, EXCEPTION ----------------------------------------------------------
+    // to STRUCT, EXCEPTION
     case TypeClass_STRUCT:
     case TypeClass_EXCEPTION:
     {
@@ -517,7 +517,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         aRet.setValue( rVal.getValue(), aDestTD.get() ); // evtl. .uP.cAsT.
         break;
     }
-    // --- to INTERFACE -------------------------------------------------------------------------
+    // to INTERFACE
     case TypeClass_INTERFACE:
     {
         if (! rVal.hasValue())
@@ -544,7 +544,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         }
         break;
     }
-    // --- to SEQUENCE --------------------------------------------------------------------------
+    // to SEQUENCE
     case TypeClass_SEQUENCE:
     {
         if (aSourceClass==TypeClass_SEQUENCE)
@@ -605,7 +605,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         }
         break;
     }
-    // --- to ENUM ------------------------------------------------------------------------------
+    // to ENUM
     case TypeClass_ENUM:
     {
         TypeDescription aEnumTD( aDestType );
@@ -705,15 +705,15 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     // Convert to...
     switch (aDestinationClass)
     {
-    // --- to VOID ------------------------------------------------------------------------------
+    // to VOID
     case TypeClass_VOID:
         return Any();
 
-    // --- to ANY -------------------------------------------------------------------------------
+    // to ANY
     case TypeClass_ANY:
         return rVal;
 
-    // --- to BOOL ------------------------------------------------------------------------------
+    // to BOOL
     case TypeClass_BOOLEAN:
         switch (aSourceClass)
         {
@@ -744,7 +744,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         }
         break;
 
-    // --- to CHAR, BYTE ------------------------------------------------------------------------
+    // to CHAR, BYTE
     case TypeClass_CHAR:
     {
         if (aSourceClass==TypeClass_STRING)
@@ -764,7 +764,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         aRet <<= (sal_Int8)( toHyper( rVal, -(sal_Int64)0x80, 0x7f ) );
         break;
 
-    // --- to SHORT, UNSIGNED SHORT -------------------------------------------------------------
+    // to SHORT, UNSIGNED SHORT
     case TypeClass_SHORT:
         aRet <<= (sal_Int16)( toHyper( rVal, -(sal_Int64)0x8000, 0x7fff ) );
         break;
@@ -772,7 +772,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         aRet <<= (sal_uInt16)( toHyper( rVal, 0, 0xffff ) );
         break;
 
-    // --- to LONG, UNSIGNED LONG ---------------------------------------------------------------
+    // to LONG, UNSIGNED LONG
     case TypeClass_LONG:
         aRet <<= (sal_Int32)( toHyper( rVal, -(sal_Int64)0x80000000, 0x7fffffff ) );
         break;
@@ -780,7 +780,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         aRet <<= (sal_uInt32)( toHyper( rVal, 0, 0xffffffff ) );
         break;
 
-    // --- to HYPER, UNSIGNED HYPER--------------------------------------------
+    // to HYPER, UNSIGNED HYPER
     case TypeClass_HYPER:
         aRet <<= toHyper( rVal, SAL_INT64_MIN, SAL_INT64_MAX );
         break;
@@ -788,7 +788,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         aRet <<= (sal_uInt64)( toHyper( rVal, 0 ) );
         break;
 
-    // --- to FLOAT, DOUBLE ---------------------------------------------------------------------
+    //  to FLOAT, DOUBLE
     case TypeClass_FLOAT:
         aRet <<= (float)( toDouble( rVal, -FLT_MAX, FLT_MAX ) );
         break;
@@ -796,7 +796,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         aRet <<= toDouble( rVal, -DBL_MAX, DBL_MAX );
         break;
 
-    // --- to STRING ----------------------------------------------------------------------------
+    //  to STRING
     case TypeClass_STRING:
         switch (aSourceClass)
         {
@@ -851,9 +851,6 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         case TypeClass_HYPER:
             aRet <<= OUString::number( *o3tl::forceAccess<sal_Int64>(rVal) );
             break;
-//      case TypeClass_UNSIGNED_HYPER:
-//             aRet <<= OUString::valueOf( (sal_Int64)*(sal_uInt64 const *)rVal.getValue() );
-//          break;
             // handle unsigned hyper like double
 
         default:

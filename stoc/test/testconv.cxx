@@ -292,7 +292,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
 
     sal_uInt32 nElems = 0;
 
-    // ==BYTE==
+    // BYTE
     aVal <<= OUString("0xff");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("255");
@@ -330,7 +330,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= OUString("256");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==UINT16==
+    // UINT16
     aVal <<= OUString("65535");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("0xffff");
@@ -363,7 +363,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (sal_uInt16)( -5 ); // is 0xfffb
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==INT16==
+    // INT16
     aVal <<= (sal_Int16)( -1 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
@@ -382,7 +382,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (sal_Int16)( -5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==UINT32==
+    // UINT32
     aVal <<= OUString("+4294967295");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= OUString("4294967295");
@@ -425,7 +425,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (sal_uInt32)( -5 ); // is 0xfffffffb
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==INT32==
+    // INT32
     aVal <<= (sal_Int32)( 0xffffffff ); // is -1
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
@@ -447,7 +447,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (sal_Int32)( -5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==FLOAT==
+    // FLOAT
     aVal <<= OUString("-3.4e+38");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (float)( MIN_FLOAT );
@@ -476,7 +476,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (float)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==DOUBLE==
+    // DOUBLE
     aVal <<= OUString("-1.7976931348623155e+308");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
     aVal <<= (double)( MIN_DOUBLE );
@@ -516,7 +516,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (double)( 5 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==CHAR==
+    // CHAR
     sal_Unicode c = 'A';
     aVal.setValue( &c, cppu::UnoType<cppu::UnoCharType>::get() );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
@@ -524,7 +524,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= OUString("A");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==BOOL==
+    // BOOL
     aVal <<= OUString("0");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
@@ -542,7 +542,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal.setValue( &bTmp, cppu::UnoType<bool>::get() );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==ZERO STRINGS==
+    // ZERO STRINGS
     aVal <<= OUString();
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
@@ -552,7 +552,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= OUString("-0");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==TYPECLASS ENUM==
+    // TYPECLASS ENUM
     aVal <<= OUString("eNuM");
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
@@ -566,7 +566,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal.setValue( &e, cppu::UnoType<FieldAccessMode>::get());
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==SEQ of INT==
+    // SEQ of INT
     Sequence< sal_Int32 > aINT32Seq( 3 ), aINT32Seq2( 3 );
     sal_Int32 * pINT32Seq = aINT32Seq.getArray();
     pINT32Seq[0]     = -32768;
@@ -582,7 +582,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= aINT32Seq2;
     pTestBlocks[nElems++] = ConvBlock( aVal, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    // ==SEQ of ANY==
+    // SEQ of ANY
     Sequence< Any > aAnySeq( 2 ), aAnySeq2( 2 );
     Any * pAnySeq    = aAnySeq.getArray();
     pAnySeq[0]       = makeAny( aINT32Seq );

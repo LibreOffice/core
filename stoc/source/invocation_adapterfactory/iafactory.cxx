@@ -79,7 +79,6 @@ struct hash_ptr
 typedef std::unordered_set< void *, hash_ptr > t_ptr_set;
 typedef std::unordered_map< void *, t_ptr_set, hash_ptr > t_ptr_map;
 
-
 class FactoryImpl
     : public ::cppu::WeakImplHelper< lang::XServiceInfo,
                                       script::XInvocationAdapterFactory,
@@ -206,7 +205,6 @@ inline void AdapterImpl::release()
         delete this;
 }
 
-
 static inline void constructRuntimeException(
     uno_Any * pExc, const OUString & rMsg )
 {
@@ -215,7 +213,6 @@ static inline void constructRuntimeException(
     ::uno_type_any_construct(
         pExc, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), nullptr );
 }
-
 
 static inline bool type_equals(
     typelib_TypeDescriptionReference * pType1,
@@ -226,7 +223,6 @@ static inline bool type_equals(
              0 == ::rtl_ustr_compare(
                  pType1->pTypeName->buffer, pType2->pTypeName->buffer )));
 }
-
 
 bool AdapterImpl::coerce_assign(
     void * pDest, typelib_TypeDescriptionReference * pType, uno_Any * pSource,
@@ -317,7 +313,6 @@ inline bool AdapterImpl::coerce_construct(
     ::uno_type_constructData( pDest, pType );
     return coerce_assign( pDest, pType, pSource, pExc );
 }
-
 
 static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
 {
@@ -671,7 +666,6 @@ AdapterImpl::AdapterImpl(
     m_pFactory->acquire();
 }
 
-
 FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
     : m_pInvokMethodTD( nullptr ),
       m_pSetValueTD( nullptr ),
@@ -752,7 +746,6 @@ FactoryImpl::~FactoryImpl()
     assert(m_receiver2adapters.empty() && "still adapters out there!?");
 #endif
 }
-
 
 static inline AdapterImpl * lookup_adapter(
     t_ptr_set ** pp_adapter_set,
@@ -856,6 +849,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
     }
     return xRet;
 }
+
 // XInvocationAdapterFactory impl
 
 Reference< XInterface > FactoryImpl::createAdapter(
@@ -889,7 +883,6 @@ static Reference< XInterface > SAL_CALL FactoryImpl_create(
 }
 
 }
-
 
 static const struct ::cppu::ImplementationEntry g_entries[] =
 {

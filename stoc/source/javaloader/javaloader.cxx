@@ -158,9 +158,6 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             reinterpret_cast< jvmaccess::UnoVirtualMachine * >(nPointer));
         if (!xVirtualMachine.is())
         {
-            //throw RuntimeException(
-            //   "javaloader error - JavaVirtualMachine service could not provide a VM",
-            //   css::uno::Reference<XInterface>());
             // We must not throw a RuntimeException, because this might end the applications.
             // It is ok if java components
             // are not working because the office can be installed without Java support.
@@ -303,7 +300,6 @@ Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
     return loader_getSupportedServiceNames();
 }
 
-
 // XImplementationLoader
 sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     const css::uno::Reference<XRegistryKey> & xKey, const OUString & blabla,
@@ -314,7 +310,6 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
         throw CannotRegisterImplementationException("Could not create Java implementation loader");
     return loader->writeRegistryInfo(xKey, blabla, rLibName);
 }
-
 
 css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     const OUString & rImplName, const OUString & blabla, const OUString & rLibName,
@@ -364,7 +359,6 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(cons
 }
 
 } //end namespace
-
 
 using namespace stoc_javaloader;
 
