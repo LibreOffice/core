@@ -25,6 +25,7 @@ namespace sc {
 class ScDBDataManager;
 class DataProvider;
 class ScDBDataManager;
+class DataTransformation;
 
 class SC_DLLPUBLIC ExternalDataSource
 {
@@ -67,6 +68,8 @@ private:
     std::shared_ptr<DataProvider> mpDataProvider;
     std::shared_ptr<ScDBDataManager> mpDBDataManager;
 
+    std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
+
     ScDocument* mpDoc;
 
 public:
@@ -79,6 +82,8 @@ public:
     void setUpdateFrequency(double nUpdateFrequency);
 
     void setID(const OUString& rID);
+    void setURL(const OUString& rURL);
+    void setProvider(const OUString& rProvider);
 
     const OUString& getURL() const;
     const OUString& getProvider() const;
@@ -86,8 +91,12 @@ public:
     double getUpdateFrequency() const;
     OUString getDBName() const;
     void setDBData(const ScDBData* pDBData);
+    ScDBDataManager* getDBManager();
 
     void refresh(ScDocument* pDoc, bool bDeterministic = false);
+
+    void AddDataTransformation(std::shared_ptr<sc::DataTransformation> mpDataTransformation);
+    const std::vector<std::shared_ptr<sc::DataTransformation>>& getDataTransformation() const;
 };
 
 class SC_DLLPUBLIC ExternalDataMapper
