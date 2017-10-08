@@ -31,7 +31,7 @@
 
 class ScTabView;
 
-class ScHeaderControl : public vcl::Window
+class SC_DLLPUBLIC ScHeaderControl : public vcl::Window
 {
 private:
     SelectionEngine*    pSelEngine;
