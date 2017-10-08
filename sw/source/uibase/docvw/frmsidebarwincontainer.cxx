@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <frmsidebarwincontainer.hxx>
+#include "frmsidebarwincontainer.hxx"
 
 #include <map>
 #include <fmtfld.hxx>

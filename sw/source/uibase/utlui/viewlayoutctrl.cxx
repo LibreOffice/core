@@ -24,7 +24,7 @@
 #include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <swtypes.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );

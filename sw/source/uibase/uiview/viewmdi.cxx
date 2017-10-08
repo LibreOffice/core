@@ -19,7 +19,7 @@
 
 #include <string>
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>

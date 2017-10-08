@@ -26,16 +26,16 @@
 #include <editeng/brushitem.hxx>
 #include <numrule.hxx>
 
-#include "cmdid.h"
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "viewopt.hxx"
-#include "wdocsh.hxx"
-#include "poolfmt.hxx"
-#include "textsh.hxx"
-#include "uiitems.hxx"
-#include "swabstdlg.hxx"
-#include "SwStyleNameMapper.hxx"
+#include <cmdid.h>
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <viewopt.hxx>
+#include <wdocsh.hxx>
+#include <poolfmt.hxx>
+#include <textsh.hxx>
+#include <uiitems.hxx>
+#include <swabstdlg.hxx>
+#include <SwStyleNameMapper.hxx>
 #include <globals.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <svx/nbdtmg.hxx>

@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONCUSTOMSHAPE_HXX
 
 #include <rtl/ustring.hxx>
-#include "drawbase.hxx"
+#include <drawbase.hxx>
 
 class SdrObject;
 class SfxRequest;

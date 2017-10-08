@@ -19,11 +19,11 @@
 
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include "swdll.hxx"
-#include "unofreg.hxx"
-#include "docsh.hxx"
-#include "globdoc.hxx"
-#include "wdocsh.hxx"
+#include <swdll.hxx>
+#include <unofreg.hxx>
+#include <docsh.hxx>
+#include <globdoc.hxx>
+#include <wdocsh.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

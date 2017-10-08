@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unodefaults.hxx>
+#include "unodefaults.hxx"
 #include <svx/unoprov.hxx>
 #include <drawdoc.hxx>
 #include <doc.hxx>

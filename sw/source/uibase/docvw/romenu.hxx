@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_DOCVW_ROMENU_HXX
 
 #include <editeng/brushitem.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/menu.hxx>
 #include <svl/stritem.hxx>

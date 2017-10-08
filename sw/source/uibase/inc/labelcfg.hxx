@@ -20,8 +20,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LABELCFG_HXX
 
 #include <unotools/configitem.hxx>
-#include "swdllapi.h"
-#include "labrec.hxx"
+#include <swdllapi.h>
+#include <labrec.hxx>
 
 #include <map>
 #include <vector>

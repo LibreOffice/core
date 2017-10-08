@@ -33,7 +33,7 @@
 #include <vcl/lstbox.hxx>
 
 #include <sfx2/childwin.hxx>
-#include "toxe.hxx"
+#include <toxe.hxx>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <memory>
 

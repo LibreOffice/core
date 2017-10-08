@@ -30,7 +30,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotxdoc.hxx>
 
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

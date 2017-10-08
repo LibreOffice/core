@@ -36,21 +36,21 @@
 #include <sfx2/frame.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
-#include "dbmgr.hxx"
+#include <dbmgr.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
 #include <vcl/svapp.hxx>
 
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "swtypes.hxx"
-#include "cmdid.h"
-#include "swevent.hxx"
-#include "strings.hrc"
-#include "textsh.hxx"
-#include "swabstdlg.hxx"
-#include "dbui.hrc"
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <swtypes.hxx>
+#include <cmdid.h>
+#include <swevent.hxx>
+#include <strings.hrc>
+#include <textsh.hxx>
+#include <swabstdlg.hxx>
+#include <dbui.hrc>
 
 #include <unomid.h>
 

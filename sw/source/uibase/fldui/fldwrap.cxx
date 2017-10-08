@@ -32,7 +32,7 @@
 
 #include <helpids.h>
 #include <globals.hrc>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwFieldDlgWrapper, FN_INSERT_FIELD)
 

@@ -22,16 +22,16 @@
 #include <sfx2/objface.hxx>
 #include <svl/srchitem.hxx>
 
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "helpids.h"
-#include "globals.hrc"
-#include "strings.hrc"
-#include "wolesh.hxx"
-#include "cmdid.h"
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <helpids.h>
+#include <globals.hrc>
+#include <strings.hrc>
+#include <wolesh.hxx>
+#include <cmdid.h>
 
 #define SwWebOleShell
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell)
 

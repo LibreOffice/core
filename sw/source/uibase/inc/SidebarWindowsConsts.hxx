@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SIDEBARWINDOWSCONSTS_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SIDEBARWINDOWSCONSTS_HXX
 
+#include <sal/types.h>
+
 namespace sw { namespace sidebarwindows {
 
 const sal_Int8 ANCHORLINE_WIDTH = 1;

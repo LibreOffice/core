@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_GLSHELL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GLSHELL_HXX
-#include "wdocsh.hxx"
+#include <wdocsh.hxx>
 
 class SwGlosDocShell : public SwDocShell
 {

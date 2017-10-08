@@ -29,7 +29,7 @@
 #include <vcl/edit.hxx>
 #include <svx/stddlg.hxx>
 #include <numprevw.hxx>
-#include "numrule.hxx"
+#include <numrule.hxx>
 
 class SwWrtShell;
 class SvxBrushItem;

@@ -18,8 +18,8 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_REDLNDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_REDLNDLG_HXX
-#include "swdllapi.h"
-#include "chldwrap.hxx"
+#include <swdllapi.h>
+#include <chldwrap.hxx>
 #include <redline.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>

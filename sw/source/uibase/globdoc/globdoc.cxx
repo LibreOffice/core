@@ -22,10 +22,10 @@
 
 #include <unomid.h>
 
-#include "swtypes.hxx"
-#include "shellio.hxx"
-#include "globdoc.hxx"
-#include "strings.hrc"
+#include <swtypes.hxx>
+#include <shellio.hxx>
+#include <globdoc.hxx>
+#include <strings.hrc>
 
 // Description: Register all filters
 

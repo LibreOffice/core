@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TOXMGR_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_TOXMGR_HXX
 
-#include "swdllapi.h"
-#include "tox.hxx"
+#include <swdllapi.h>
+#include <tox.hxx>
 #include <authfld.hxx>
 #include <memory>
 

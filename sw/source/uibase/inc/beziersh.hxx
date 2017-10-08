@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_BEZIERSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_BEZIERSH_HXX
 
-#include "basesh.hxx"
+#include <basesh.hxx>
 
 class SwBezierShell: public SwBaseShell
 {

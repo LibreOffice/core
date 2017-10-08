@@ -21,8 +21,8 @@
 
 #include <memory>
 #include <sfx2/tabdlg.hxx>
-#include "swdllapi.h"
-#include "swtypes.hxx"
+#include <swdllapi.h>
+#include <swtypes.hxx>
 
 class SwTabCols;
 struct TColumn;

@@ -18,7 +18,7 @@
  */
 
 #include <hintids.hxx>
-#include "uitool.hxx"
+#include <uitool.hxx>
 #include <sfx2/app.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/xfillit.hxx>
@@ -41,21 +41,21 @@
 #include <fmtornt.hxx>
 #include <frmatr.hxx>
 #include <edtwin.hxx>
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "basesh.hxx"
-#include "cmdid.h"
-#include "viewopt.hxx"
-#include "tabcol.hxx"
-#include "frmfmt.hxx"
-#include "pagedesc.hxx"
-#include "wview.hxx"
-#include "fmtcol.hxx"
-#include "section.hxx"
-#include "swruler.hxx"
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <basesh.hxx>
+#include <cmdid.h>
+#include <viewopt.hxx>
+#include <tabcol.hxx>
+#include <frmfmt.hxx>
+#include <pagedesc.hxx>
+#include <wview.hxx>
+#include <fmtcol.hxx>
+#include <section.hxx>
+#include <swruler.hxx>
 
-#include "ndtxt.hxx"
-#include "pam.hxx"
+#include <ndtxt.hxx>
+#include <pam.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 

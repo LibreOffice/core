@@ -19,15 +19,15 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FRMMGR_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRMMGR_HXX
 
-#include "swtypes.hxx"
-#include "frmatr.hxx"
+#include <swtypes.hxx>
+#include <frmatr.hxx>
 #include <editeng/svxenum.hxx>
 #include <tools/gen.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtornt.hxx>
 #include <fmtanchr.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 class   SwWrtShell;
 struct  SvxSwFrameValidation;

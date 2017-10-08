@@ -27,7 +27,7 @@
 #include <svtools/simptabl.hxx>
 #include <pam.hxx>
 
-#include "IMark.hxx"
+#include <IMark.hxx>
 
 class SwWrtShell;
 class SfxRequest;

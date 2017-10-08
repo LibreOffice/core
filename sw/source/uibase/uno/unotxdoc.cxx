@@ -108,10 +108,10 @@
 #include <modcfg.hxx>
 #include <ndtxt.hxx>
 #include <strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <swcont.hxx>
-#include <unodefaults.hxx>
-#include <SwXDocumentSettings.hxx>
+#include "unodefaults.hxx"
+#include "SwXDocumentSettings.hxx"
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
@@ -133,7 +133,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/saveopt.hxx>
-#include "swruler.hxx"
+#include <swruler.hxx>
 
 
 #include <EnhancedPDFExportHelper.hxx>

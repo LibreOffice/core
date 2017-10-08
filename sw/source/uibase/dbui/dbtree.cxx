@@ -42,7 +42,7 @@
 
 #include <helpids.h>
 #include <strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #include <unomid.h>
 

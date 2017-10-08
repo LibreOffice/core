@@ -33,7 +33,7 @@ typedef tools::SvRef<SwDocShell> SwDocShellRef;
 #include <cppuhelper/weakref.hxx>
 
 #include <vector>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 typedef std::vector< css::uno::WeakReference< css::text::XAutoTextGroup > > UnoAutoTextGroups;
 typedef std::vector< css::uno::WeakReference< css::text::XAutoTextEntry > > UnoAutoTextEntries;

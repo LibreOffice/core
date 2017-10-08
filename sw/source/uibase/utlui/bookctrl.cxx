@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <swtypes.hxx>
 #include <strings.hrc>
 
@@ -27,11 +27,11 @@
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
-#include "cmdid.h"
-#include "swmodule.hxx"
-#include "wrtsh.hxx"
-#include "IMark.hxx"
-#include "bookctrl.hxx"
+#include <cmdid.h>
+#include <swmodule.hxx>
+#include <wrtsh.hxx>
+#include <IMark.hxx>
+#include <bookctrl.hxx>
 #include <map>
 
 SFX_IMPL_STATUSBAR_CONTROL( SwBookmarkControl, SfxStringItem );

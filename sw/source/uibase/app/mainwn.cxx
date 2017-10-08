@@ -21,7 +21,7 @@
 #include <sfx2/progress.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 
 class SwDocShell;
 

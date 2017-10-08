@@ -110,7 +110,7 @@
 #include <drwtxtsh.hxx>
 #include <fchrfmt.hxx>
 #include <fmturl.hxx>
-#include <romenu.hxx>
+#include "romenu.hxx"
 #include <initui.hxx>
 #include <frmatr.hxx>
 #include <extinput.hxx>
@@ -133,7 +133,7 @@
 #include <numrule.hxx>
 #include <pagedesc.hxx>
 #include <svtools/ruler.hxx>
-#include "formatclipboard.hxx"
+#include <formatclipboard.hxx>
 #include <vcl/svapp.hxx>
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>
@@ -152,7 +152,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "../../core/inc/rootfrm.hxx"
+#include <rootfrm.hxx>
 
 #include <unotools/syslocaleoptions.hxx>
 #include <memory>

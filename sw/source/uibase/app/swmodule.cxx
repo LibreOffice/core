@@ -128,7 +128,7 @@
 #include <app.hrc>
 #include <error.hrc>
 #include <strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <svx/xmlsecctrl.hxx>
 bool     g_bNoInterrupt     = false;
 

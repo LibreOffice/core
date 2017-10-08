@@ -32,7 +32,7 @@
 #include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <drawdoc.hxx>
-#include <sdrhhcwrap.hxx>
+#include "sdrhhcwrap.hxx"
 #include <frmfmt.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>

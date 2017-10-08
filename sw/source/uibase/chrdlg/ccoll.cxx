@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cmdid.h"
-#include "swmodule.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "globals.hrc"
-#include "helpids.h"
+#include <cmdid.h>
+#include <swmodule.hxx>
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <globals.hrc>
+#include <helpids.h>
 
 #include <sfx2/styfitem.hxx>
 
-#include "uitool.hxx"
-#include "ccoll.hxx"
-#include "fmtcol.hxx"
-#include "hintids.hxx"
-#include "docsh.hxx"
-#include "docstyle.hxx"
-#include "hints.hxx"
+#include <uitool.hxx>
+#include <ccoll.hxx>
+#include <fmtcol.hxx>
+#include <hintids.hxx>
+#include <docsh.hxx>
+#include <docstyle.hxx>
+#include <hints.hxx>
 
 #include <vcl/svapp.hxx>
 

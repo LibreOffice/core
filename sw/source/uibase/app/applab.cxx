@@ -67,11 +67,11 @@
 
 #include <app.hrc>
 #include <strings.hrc>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 #include <IDocumentDeviceAccess.hxx>
 
-#include <appenv.hxx>
+#include "appenv.hxx"
 #include <memory>
 
 using namespace ::com::sun::star;

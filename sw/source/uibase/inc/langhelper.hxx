@@ -19,12 +19,17 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_LANGHELPER_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LANGHELPER_HXX
 
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+#include <i18nlangtag/lang.h>
+
 class SwWrtShell;
 class SwView;
 class EditEngine;
 class EditView;
 class OutlinerView;
 class SfxItemSet;
+class SfxRequest;
 struct ESelection;
 enum class SvtScriptType;
 

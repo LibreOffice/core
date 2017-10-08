@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WOLESH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WOLESH_HXX
 
-#include "olesh.hxx"
+#include <olesh.hxx>
 
 class SwWebOleShell: public SwOleShell
 {

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "cmdid.h"
+#include <cmdid.h>
 #include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/eitem.hxx>
@@ -16,17 +16,17 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "helpids.h"
-#include "globals.hrc"
-#include "navsh.hxx"
-#include "strings.hrc"
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <helpids.h>
+#include <globals.hrc>
+#include <navsh.hxx>
+#include <strings.hrc>
 #define SwNavigationShell
-#include "swslots.hxx"
+#include <swslots.hxx>
 #include <unomid.h>
-#include "navmgr.hxx"
+#include <navmgr.hxx>
 
 SFX_IMPL_INTERFACE(SwNavigationShell, SwBaseShell)
 

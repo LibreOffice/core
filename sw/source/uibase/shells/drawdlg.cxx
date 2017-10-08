@@ -25,12 +25,12 @@
 #include <svx/drawitem.hxx>
 
 #include <svx/xtable.hxx>
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "docsh.hxx"
-#include "cmdid.h"
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <docsh.hxx>
+#include <cmdid.h>
 
-#include "drawsh.hxx"
+#include <drawsh.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <memory>

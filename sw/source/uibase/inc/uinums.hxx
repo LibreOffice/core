@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UINUMS_HXX
 
 #include <numrule.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 #include <memory>
 #include <vector>

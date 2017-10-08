@@ -23,7 +23,7 @@
 #include <cstdlib>
 
 #include "PageMarginControl.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <editeng/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>

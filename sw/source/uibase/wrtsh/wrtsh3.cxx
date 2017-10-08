@@ -28,11 +28,11 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sfx2/htmlmode.hxx>
-#include "swmodule.hxx"
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "IMark.hxx"
-#include "doc.hxx"
+#include <swmodule.hxx>
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <IMark.hxx>
+#include <doc.hxx>
 
 #include <unomid.h>
 

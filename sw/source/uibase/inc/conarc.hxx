@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CONARC_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONARC_HXX
 
-#include "drawbase.hxx"
+#include <drawbase.hxx>
 
 // draw rectangle
 class ConstArc : public SwDrawBase

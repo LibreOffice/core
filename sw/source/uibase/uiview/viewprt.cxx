@@ -49,7 +49,7 @@
 #include <cfgitems.hxx>
 #include <dbmgr.hxx>
 #include <docstat.hxx>
-#include <viewfunc.hxx>
+#include "viewfunc.hxx"
 #include <swmodule.hxx>
 #include <wview.hxx>
 #include <doc.hxx>
@@ -60,7 +60,7 @@
 #include <strings.hrc>
 #include <app.hrc>
 #include <swwrtshitem.hxx>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <svl/slstitm.hxx>
 
 #include <unomid.h>

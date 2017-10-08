@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cmdid.h"
-#include "hintids.hxx"
+#include <cmdid.h>
+#include <hintids.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <sfx2/app.hxx>
@@ -33,21 +33,21 @@
 
 #include <numrule.hxx>
 #include <fmtornt.hxx>
-#include "wrtsh.hxx"
-#include "swmodule.hxx"
-#include "frmatr.hxx"
-#include "helpids.h"
-#include "globals.hrc"
-#include "strings.hrc"
-#include "uinums.hxx"
-#include "listsh.hxx"
-#include "poolfmt.hxx"
-#include "view.hxx"
-#include "edtwin.hxx"
+#include <wrtsh.hxx>
+#include <swmodule.hxx>
+#include <frmatr.hxx>
+#include <helpids.h>
+#include <globals.hrc>
+#include <strings.hrc>
+#include <uinums.hxx>
+#include <listsh.hxx>
+#include <poolfmt.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
 
 #define SwListShell
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 #include <IDocumentOutlineNodes.hxx>
 

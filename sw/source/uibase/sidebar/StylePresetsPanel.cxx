@@ -30,8 +30,8 @@
 
 #include <sfx2/doctempl.hxx>
 
-#include "shellio.hxx"
-#include "docsh.hxx"
+#include <shellio.hxx>
+#include <docsh.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>

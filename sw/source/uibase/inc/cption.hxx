@@ -30,7 +30,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <wrtsh.hxx>
-#include "optload.hxx"
+#include <optload.hxx>
 
 class SwFieldMgr;
 class SwView;

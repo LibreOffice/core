@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/globname.hxx>
 #include <SwCapObjType.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 class SW_DLLPUBLIC InsCaptionOpt
 {

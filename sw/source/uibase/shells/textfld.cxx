@@ -62,7 +62,7 @@
 #include <strings.hrc>
 #include <sfx2/app.hxx>
 #include <svx/dialogs.hrc>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <doc.hxx>
 #include <app.hrc>
 #include <edtwin.hxx>

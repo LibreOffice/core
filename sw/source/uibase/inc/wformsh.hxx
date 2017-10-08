@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WFORMSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WFORMSH_HXX
 
-#include "drformsh.hxx"
+#include <drformsh.hxx>
 
 class SwWebDrawFormShell : public SwDrawFormShell
 {

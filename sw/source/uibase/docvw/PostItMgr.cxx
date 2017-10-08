@@ -19,16 +19,16 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
-#include "PostItMgr.hxx"
+#include <PostItMgr.hxx>
 #include <postithelper.hxx>
 
 #include <AnnotationWin.hxx>
-#include <frmsidebarwincontainer.hxx>
+#include "frmsidebarwincontainer.hxx"
 #include <accmap.hxx>
 
 #include <SidebarWindowsConsts.hxx>
-#include <AnchorOverlayObject.hxx>
-#include <ShadowOverlayObject.hxx>
+#include "AnchorOverlayObject.hxx"
+#include "ShadowOverlayObject.hxx"
 
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
@@ -58,7 +58,7 @@
 
 #include <swmodule.hxx>
 #include <strings.hrc>
-#include "cmdid.h"
+#include <cmdid.h>
 
 #include <sfx2/request.hxx>
 #include <sfx2/event.hxx>
@@ -80,9 +80,9 @@
 #include <comphelper/string.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-#include "annotsh.hxx"
-#include "swabstdlg.hxx"
-#include "swevent.hxx"
+#include <annotsh.hxx>
+#include <swabstdlg.hxx>
+#include <swevent.hxx>
 #include <calbck.hxx>
 #include <memory>
 

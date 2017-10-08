@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 
-#include "frmmgr.hxx"
-#include "frmfmt.hxx"
-#include "colmgr.hxx"
+#include <frmmgr.hxx>
+#include <frmfmt.hxx>
+#include <colmgr.hxx>
 
 // private methods
 

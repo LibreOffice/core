@@ -19,10 +19,10 @@
 
 #include <config_features.h>
 
-#include "SwXFilterOptions.hxx"
-#include "swdll.hxx"
-#include "unofreg.hxx"
-#include "unomailmerge.hxx"
+#include <SwXFilterOptions.hxx>
+#include <swdll.hxx>
+#include <unofreg.hxx>
+#include <unomailmerge.hxx>
 #include <sal/types.h>
 #include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>

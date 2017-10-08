@@ -30,27 +30,27 @@
 #include <svl/stritem.hxx>
 #include <vcl/settings.hxx>
 
-#include "swtypes.hxx"
-#include "cmdid.h"
-#include "swmodule.hxx"
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "calc.hxx"
-#include "inputwin.hxx"
-#include "fldbas.hxx"
-#include "fldmgr.hxx"
-#include "frmfmt.hxx"
-#include "cellatr.hxx"
-#include "edtwin.hxx"
-#include "helpids.h"
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <swtypes.hxx>
+#include <cmdid.h>
+#include <swmodule.hxx>
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <calc.hxx>
+#include <inputwin.hxx>
+#include <fldbas.hxx>
+#include <fldmgr.hxx>
+#include <frmfmt.hxx>
+#include <cellatr.hxx>
+#include <edtwin.hxx>
+#include <helpids.h>
+#include <strings.hrc>
+#include <bitmaps.hlst>
 
 // Only for the UpdateRange: Delete the box in which the stacked cursor is positioned.
-#include "pam.hxx"
+#include <pam.hxx>
 
-#include "swundo.hxx"
-#include "dbui.hrc"
+#include <swundo.hxx>
+#include <dbui.hrc>
 
 #include <IDocumentContentOperations.hxx>
 

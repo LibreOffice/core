@@ -38,8 +38,8 @@
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
-#include "calbck.hxx"
-#include "TextCursorHelper.hxx"
+#include <calbck.hxx>
+#include <TextCursorHelper.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <sfx2/objsh.hxx>

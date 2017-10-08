@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cmdid.h"
-#include "hintids.hxx"
+#include <cmdid.h>
+#include <hintids.hxx>
 #include <algorithm>
 #include <svl/eitem.hxx>
 #include <tools/fract.hxx>
@@ -35,8 +35,8 @@
 #include <vcl/builderfactory.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
-#include "colex.hxx"
-#include "colmgr.hxx"
+#include <colex.hxx>
+#include <colmgr.hxx>
 #include <svx/unobrushitemhelper.hxx>
 
 // Taking the updated values from the set

@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DRWTXTSH_HXX
 
 #include <sfx2/shell.hxx>
-#include "shellid.hxx"
+#include <shellid.hxx>
 #include <unotools/caserotate.hxx>
 
 class SdrView;

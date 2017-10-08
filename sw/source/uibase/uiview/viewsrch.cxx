@@ -66,7 +66,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 
-#include "PostItMgr.hxx"
+#include <PostItMgr.hxx>
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::i18n;

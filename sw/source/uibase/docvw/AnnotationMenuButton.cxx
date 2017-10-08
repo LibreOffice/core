@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <AnnotationMenuButton.hxx>
+#include "AnnotationMenuButton.hxx"
 
 #include <app.hrc>
 #include <strings.hrc>

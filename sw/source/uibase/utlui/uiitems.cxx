@@ -20,11 +20,11 @@
 #include <editeng/itemtype.hxx>
 #include <unosett.hxx>
 
-#include "swtypes.hxx"
-#include "cmdid.h"
-#include "uiitems.hxx"
+#include <swtypes.hxx>
+#include <cmdid.h>
+#include <uiitems.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include <unomid.h>
 #include <numrule.hxx>
 

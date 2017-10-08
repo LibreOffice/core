@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 
 #include <vcl/status.hxx>
 #include <sfx2/app.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/zoomitem.hxx>
 
-#include "swtypes.hxx"
-#include "zoomctrl.hxx"
+#include <swtypes.hxx>
+#include <zoomctrl.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL( SwZoomControl, SvxZoomItem );
 

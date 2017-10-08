@@ -74,7 +74,7 @@
 #include <cfgitems.hxx>
 #include <globals.hrc>
 #include <strings.hrc>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 #include <svx/dialogs.hrc>
 
@@ -84,7 +84,7 @@
 
 #define SwFrameShell
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

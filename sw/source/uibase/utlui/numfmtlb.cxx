@@ -37,7 +37,7 @@
 #include <wrtsh.hxx>
 #include <numfmtlb.hxx>
 #include <strings.hrc>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <unomid.h>
 #include <sfx2/viewfrm.hxx>
 #include <memory>

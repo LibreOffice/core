@@ -23,7 +23,7 @@
 
 #include <vcl/fixed.hxx>
 
-#include "docstat.hxx"
+#include <docstat.hxx>
 
 // DocInfo now as page
 class SwDocStatPage: public SfxTabPage

@@ -20,8 +20,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_ANNOTSH_HXX
 
 #include <sfx2/shell.hxx>
-#include "shellid.hxx"
-#include "swmodule.hxx"
+#include <shellid.hxx>
+#include <swmodule.hxx>
 #include <unotools/caserotate.hxx>
 
 class SwView;

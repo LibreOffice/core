@@ -126,7 +126,7 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <fmthdft.hxx>
 #include <svx/ofaitem.hxx>
 #include <unomid.h>

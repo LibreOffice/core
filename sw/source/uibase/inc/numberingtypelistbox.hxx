@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <vcl/lstbox.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <editeng/svxenum.hxx>
 

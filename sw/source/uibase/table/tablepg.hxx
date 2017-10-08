@@ -23,8 +23,8 @@
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <actctrl.hxx>
-#include "prcntfld.hxx"
-#include "swtypes.hxx"
+#include <prcntfld.hxx>
+#include <swtypes.hxx>
 
 class SwWrtShell;
 class SwTableRep;

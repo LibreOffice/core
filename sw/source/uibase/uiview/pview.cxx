@@ -62,7 +62,7 @@
 #include <prtopt.hxx>
 #include <docstat.hxx>
 #include <usrpref.hxx>
-#include <viewfunc.hxx>
+#include "viewfunc.hxx"
 
 #include <helpids.h>
 #include <cmdid.h>

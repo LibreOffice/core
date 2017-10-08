@@ -55,8 +55,8 @@
 #include <helpids.h>
 #include <strings.hrc>
 #include <globals.hrc>
-#include "bitmaps.hlst"
-#include "swabstdlg.hxx"
+#include <bitmaps.hlst>
+#include <swabstdlg.hxx>
 #include <memory>
 
 using namespace ::com::sun::star::uno;

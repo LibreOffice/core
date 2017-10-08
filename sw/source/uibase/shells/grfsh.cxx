@@ -73,8 +73,8 @@
 #define SwGrfShell
 
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
-#include "swabstdlg.hxx"
+#include <swslots.hxx>
+#include <swabstdlg.hxx>
 #include <unocrsr.hxx>
 #include <memory>
 

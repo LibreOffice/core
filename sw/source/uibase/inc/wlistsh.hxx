@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WLISTSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WLISTSH_HXX
 
-#include "listsh.hxx"
+#include <listsh.hxx>
 
 class SwWebListShell: public SwListShell
 {

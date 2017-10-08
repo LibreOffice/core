@@ -103,7 +103,7 @@ using namespace ::com::sun::star;
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <unomid.h>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>

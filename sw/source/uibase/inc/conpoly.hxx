@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CONPOLY_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONPOLY_HXX
 
-#include "drawbase.hxx"
+#include <drawbase.hxx>
 
 // base class for all functions
 class ConstPolygon : public SwDrawBase

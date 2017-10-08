@@ -42,13 +42,13 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <toolkit/helper/vclunohelper.hxx>
 
 // Size check

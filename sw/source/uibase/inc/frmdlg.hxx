@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FRMDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FRMDLG_HXX
 
-#include "globals.hrc"
+#include <globals.hrc>
 #include <sfx2/tabdlg.hxx>
 class SwWrtShell;
 

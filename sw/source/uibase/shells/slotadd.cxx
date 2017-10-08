@@ -19,9 +19,9 @@
 
 #include <config_options.h>
 
-#include "hintids.hxx"
-#include "uiitems.hxx"
-#include "cmdid.h"
+#include <hintids.hxx>
+#include <uiitems.hxx>
+#include <cmdid.h>
 
 #include <svl/globalnameitem.hxx>
 #include <editeng/memberids.h>
@@ -105,11 +105,11 @@
 #include <fmtinfmt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
-#include "envimg.hxx"
-#include "frmatr.hxx"
-#include "cfgitems.hxx"
-#include "grfatr.hxx"
-#include "fmtline.hxx"
+#include <envimg.hxx>
+#include <frmatr.hxx>
+#include <cfgitems.hxx>
+#include <grfatr.hxx>
+#include <fmtline.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <editeng/blinkitem.hxx>
 #include <svl/slstitm.hxx>
@@ -133,6 +133,6 @@
 
 #define SFX_TYPEMAP
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

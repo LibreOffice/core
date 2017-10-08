@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <vcl/graph.hxx>
 #include <svl/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
@@ -47,22 +47,22 @@
 #include <navipi.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
-#include "view.hxx"
-#include "basesh.hxx"
-#include "docsh.hxx"
-#include "doc.hxx"
-#include "globals.hrc"
-#include "cmdid.h"
-#include "globdoc.hxx"
-#include "wview.hxx"
-#include "strings.hrc"
+#include <view.hxx>
+#include <basesh.hxx>
+#include <docsh.hxx>
+#include <doc.hxx>
+#include <globals.hrc>
+#include <cmdid.h>
+#include <globdoc.hxx>
+#include <wview.hxx>
+#include <strings.hrc>
 
 #define SwView
 #define Text
 #define TextDrawText
 
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
+#include <swslots.hxx>
 #include <PostItMgr.hxx>
 
 using namespace ::com::sun::star;
@@ -73,7 +73,7 @@ using namespace ::com::sun::star;
 
 #include <unomid.h>
 #include <memory>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {

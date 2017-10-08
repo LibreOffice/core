@@ -39,7 +39,7 @@
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
-#include <romenu.hxx>
+#include "romenu.hxx"
 #include <pagedesc.hxx>
 #include <modcfg.hxx>
 

@@ -19,13 +19,13 @@
 
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 
-#include <ThemePanel.hxx>
-#include <StylePresetsPanel.hxx>
-#include <PageStylesPanel.hxx>
-#include <PageFormatPanel.hxx>
-#include <PageHeaderPanel.hxx>
-#include <PageFooterPanel.hxx>
-#include <WrapPropertyPanel.hxx>
+#include "ThemePanel.hxx"
+#include "StylePresetsPanel.hxx"
+#include "PageStylesPanel.hxx"
+#include "PageFormatPanel.hxx"
+#include "PageHeaderPanel.hxx"
+#include "PageFooterPanel.hxx"
+#include "WrapPropertyPanel.hxx"
 #include <navipi.hxx>
 #include <redlndlg.hxx>
 

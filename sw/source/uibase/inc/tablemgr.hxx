@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TABLEMGR_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_TABLEMGR_HXX
 
-#include "swdllapi.h"
-#include "swtypes.hxx"
-#include "tabcol.hxx"
+#include <swdllapi.h>
+#include <swtypes.hxx>
+#include <tabcol.hxx>
 
 class SwFrameFormat;
 class SwWrtShell;

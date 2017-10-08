@@ -22,7 +22,7 @@
 #include <memory>
 #include <svtools/treelistbox.hxx>
 
-#include "swdllapi.h"
+#include <swdllapi.h>
 #include <swtypes.hxx>
 
 class SwDBTreeList_Impl;

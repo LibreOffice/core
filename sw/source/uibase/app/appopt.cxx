@@ -65,7 +65,7 @@
 #include <globals.hrc>
 #include <globals.h>
 #include <svl/slstitm.hxx>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <swwrtshitem.hxx>
 
 #include <unomid.h>

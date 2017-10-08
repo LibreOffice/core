@@ -21,12 +21,12 @@
 #include <svx/svdview.hxx>
 #include <svx/fmshell.hxx>
 
-#include "swmodule.hxx"
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "wrtsh.hxx"
-#include "drawbase.hxx"
-#include "conform.hxx"
+#include <swmodule.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <wrtsh.hxx>
+#include <drawbase.hxx>
+#include <conform.hxx>
 
 ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
     SwDrawBase(pWrtShell, pEditWin, pSwView)

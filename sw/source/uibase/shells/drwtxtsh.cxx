@@ -71,8 +71,8 @@
 #include <svx/xtable.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
-#include "swabstdlg.hxx"
-#include "IDocumentUndoRedo.hxx"
+#include <swabstdlg.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

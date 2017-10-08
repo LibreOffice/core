@@ -25,7 +25,7 @@
 #include <svx/colorbox.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
 #include <svx/SvxNumOptionsTabPageHelper.hxx>
 #include "PageStylesPanel.hxx"
 #include <sfx2/sidebar/ControlFactory.hxx>
@@ -33,7 +33,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
-#include "cmdid.h"
+#include <cmdid.h>
 
 using namespace ::com::sun::star;
 

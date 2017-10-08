@@ -22,7 +22,7 @@
 
 #include <svx/svdobj.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <swdll.hxx>
 #include <wdocsh.hxx>

@@ -25,9 +25,9 @@
 #include <sfx2/sfxsids.hrc>
 #include <unotools/useroptions.hxx>
 #include <swmodule.hxx>
-#include "labimg.hxx"
-#include "cmdid.h"
-#include "swtypes.hxx"
+#include <labimg.hxx>
+#include <cmdid.h>
+#include <swtypes.hxx>
 #include <unomid.h>
 
 using namespace utl;

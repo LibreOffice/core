@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WGRFSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WGRFSH_HXX
 
-#include "grfsh.hxx"
+#include <grfsh.hxx>
 
 class SwWebGrfShell: public SwGrfShell
 {

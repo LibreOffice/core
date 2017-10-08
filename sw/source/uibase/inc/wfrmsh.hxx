@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WFRMSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WFRMSH_HXX
 
-#include "frmsh.hxx"
+#include <frmsh.hxx>
 
 class SwWebFrameShell: public SwFrameShell
 {

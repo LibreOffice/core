@@ -24,11 +24,11 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
-#include "swtypes.hxx"
-#include "hintids.hxx"
-#include "uitool.hxx"
-#include "usrpref.hxx"
-#include "crstate.hxx"
+#include <swtypes.hxx>
+#include <hintids.hxx>
+#include <uitool.hxx>
+#include <usrpref.hxx>
+#include <crstate.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

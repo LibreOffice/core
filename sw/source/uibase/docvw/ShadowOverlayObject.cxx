@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ShadowOverlayObject.hxx>
+#include "ShadowOverlayObject.hxx"
 
 #include <view.hxx>
 #include <svx/sdrpaintwindow.hxx>
