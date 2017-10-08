@@ -2534,11 +2534,11 @@ bool SwFlyFrame::IsFormatPossible() const
            !IsLocked() && !IsColLocked();
 }
 
-void SwFlyFrame::GetAnchoredObjects( std::list<SwAnchoredObject*>& aList, const SwFormat& rFormat )
+void SwFlyFrame::GetAnchoredObjects( std::vector<SwAnchoredObject*>& aVector, const SwFormat& rFormat )
 {
     SwIterator<SwFlyFrame,SwFormat> aIter( rFormat );
     for( SwFlyFrame* pFlyFrame = aIter.First(); pFlyFrame; pFlyFrame = aIter.Next() )
-        aList.push_back( pFlyFrame );
+        aVector.push_back( pFlyFrame );
 }
 
 const SwFlyFrameFormat * SwFlyFrame::GetFormat() const

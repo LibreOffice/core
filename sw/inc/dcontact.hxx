@@ -25,6 +25,7 @@
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <list>
+#include <vector>
 #include <memory>
 
 #include "calbck.hxx"
@@ -170,7 +171,7 @@ public:
     /** get data collection of anchored objects, handled by with contact
 
     */
-    virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const = 0;
+    virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const = 0;
 
     /** get minimum order number of anchored objects handled by with contact
 
@@ -215,7 +216,7 @@ public:
 
     /** get data collection of anchored objects handled by with contact
     */
-    virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const override;
+    virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const override;
 };
 
 /** new class for re-direct methods calls at a 'virtual'
@@ -416,7 +417,7 @@ class SwDrawContact final : public SwContact
         */
 
         static void GetTextObjectsFromFormat( std::list<SdrTextObj*>&, SwDoc* );
-        virtual void GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const override;
+        virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const override;
 };
 
 #endif
