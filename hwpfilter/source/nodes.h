@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <list>
+#include <vector>
 #include <stdio.h>
 #include <stdlib.h>
 #include <osl/diagnose.h>
@@ -94,8 +94,7 @@ public:
      Node *child;
      Node *next;
 };
-
-extern std::list<Node *> nodelist;
+extern std::vector<Node *> nodelist;
 
 #endif
 

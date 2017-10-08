@@ -28,7 +28,7 @@
 #define YYMAXDEPTH 0
 #endif
 
-#include <list>
+#include <vector>
 #include <stdlib.h>
 #include <string.h>
 
@@ -40,7 +40,7 @@ extern "C" {
 #include "grammar.h"
 }
 
-std::list<Node*> nodelist;
+std::vector<Node*> nodelist;
 
 void yyerror(const char *);
 
@@ -1191,12 +1191,9 @@ void yyerror(const char * /*err*/)
 {
 //  printf("REALKING ERR[%s]\n",err);
     // if error, delete all nodes.
-    int ncount = nodelist.size();
-    for( int i = 0 ; i < ncount ; i++){
-        Node *pNode = nodelist.front();
-        nodelist.pop_front();
-        delete pNode;
-    }
+    for (const auto &node : nodelist)
+        delete node;
+    nodelist.clear();
     top = nullptr;
 }
 
