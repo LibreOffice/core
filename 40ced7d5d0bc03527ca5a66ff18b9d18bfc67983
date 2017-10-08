@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9805efc3",
+        "filename": "vcl/source/control/listctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-08T19:16:14Z",
+      "side": 1,
+      "message": "no need for a new field, there is already such a flag in VclReferenceBase that is set in disposeOnce() before dispose() is called\n\nJust call \n   if (isDisposed())\nhere",
+      "revId": "40ced7d5d0bc03527ca5a66ff18b9d18bfc67983",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
