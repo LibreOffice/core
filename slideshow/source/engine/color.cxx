@@ -277,7 +277,7 @@ namespace slideshow
         {
         }
 
-        RGBColor::RGBColor( ::cppcanvas::Color::IntSRGBA nRGBColor ) :
+        RGBColor::RGBColor( ::cppcanvas::IntSRGBA nRGBColor ) :
             maRGBTriple( ::cppcanvas::getRed( nRGBColor ) / 255.0,
                          ::cppcanvas::getGreen( nRGBColor ) / 255.0,
                          ::cppcanvas::getBlue( nRGBColor ) / 255.0 )
@@ -297,7 +297,7 @@ namespace slideshow
         }
 
 
-        ::cppcanvas::Color::IntSRGBA RGBColor::getIntegerColor() const
+        ::cppcanvas::IntSRGBA RGBColor::getIntegerColor() const
         {
             return ::cppcanvas::makeColor( colorToInt( getRed() ),
                                            colorToInt( getGreen() ),

@@ -649,7 +649,7 @@ namespace slideshow
                     static_cast< sal_uInt8 >( nColor >> 24U ) ) );
         }
 
-        sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
+        sal_Int32 RGBAColor2UnoColor( ::cppcanvas::IntSRGBA aColor )
         {
             return ::cppcanvas::makeColorARGB(
                 // convert from IntSRGBA color to API color
@@ -662,7 +662,7 @@ namespace slideshow
 
         void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,
                        const ::basegfx::B2DRectangle&      rRect,
-                       ::cppcanvas::Color::IntSRGBA        aFillColor )
+                       ::cppcanvas::IntSRGBA        aFillColor )
         {
             const ::basegfx::B2DPolygon aPoly(
                 ::basegfx::utils::createPolygonFromRect( rRect ));

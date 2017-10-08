@@ -2902,14 +2902,12 @@ namespace cppcanvas
             tools::calcLogic2PixelAffineTransform( aStateStack.getState().mapModeTransform,
                                                    *aVDev.get() );
 
-            ColorSharedPtr pColor( getCanvas()->createColor() );
-
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
                 // setup default text color to black
                 rState.textColor =
                     rState.textFillColor =
-                    rState.textLineColor = pColor->getDeviceColor( 0x000000FF );
+                    rState.textLineColor = tools::intSRGBAToDoubleSequence( 0x000000FF );
             }
 
             // apply overrides from the Parameters struct
@@ -2917,13 +2915,13 @@ namespace cppcanvas
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
                 rState.isFillColorSet = true;
-                rState.fillColor = pColor->getDeviceColor( *rParams.maFillColor );
+                rState.fillColor = tools::intSRGBAToDoubleSequence( *rParams.maFillColor );
             }
             if( rParams.maLineColor.is_initialized() )
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
                 rState.isLineColorSet = true;
-                rState.lineColor = pColor->getDeviceColor( *rParams.maLineColor );
+                rState.lineColor = tools::intSRGBAToDoubleSequence( *rParams.maLineColor );
             }
             if( rParams.maTextColor.is_initialized() )
             {
@@ -2932,7 +2930,7 @@ namespace cppcanvas
                 rState.isTextLineColorSet = true;
                 rState.textColor =
                     rState.textFillColor =
-                    rState.textLineColor = pColor->getDeviceColor( *rParams.maTextColor );
+                    rState.textLineColor = tools::intSRGBAToDoubleSequence( *rParams.maTextColor );
             }
             if( rParams.maFontName.is_initialized() ||
                 rParams.maFontWeight.is_initialized() ||

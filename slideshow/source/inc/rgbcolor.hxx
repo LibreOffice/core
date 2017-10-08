@@ -37,7 +37,7 @@ namespace slideshow
         {
         public:
             RGBColor();
-            explicit RGBColor( ::cppcanvas::Color::IntSRGBA nRGBColor );
+            explicit RGBColor( ::cppcanvas::IntSRGBA nRGBColor );
             RGBColor( double nRed, double nGreen, double nBlue );
             explicit RGBColor( const HSLColor& rColor );
 
@@ -55,7 +55,7 @@ namespace slideshow
 
             /** Create an integer sRGBA color.
              */
-            ::cppcanvas::Color::IntSRGBA getIntegerColor() const;
+            ::cppcanvas::IntSRGBA getIntegerColor() const;
 
             struct RGBTriple
             {

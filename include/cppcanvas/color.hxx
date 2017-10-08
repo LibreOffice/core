@@ -27,44 +27,34 @@
 
 namespace cppcanvas
 {
-    class Color
-    {
-    public:
-        /** Color in the sRGB color space, plus alpha channel
+    /** Color in the sRGB color space, plus alpha channel
 
-            The four bytes of the sal_uInt32 are allocated as follows
-            to the color channels and alpha: 0xRRGGBBAA.
-         */
-        typedef sal_uInt32 IntSRGBA;
+        The four bytes of the sal_uInt32 are allocated as follows
+        to the color channels and alpha: 0xRRGGBBAA.
+     */
+    typedef sal_uInt32 IntSRGBA;
 
-        virtual ~Color() {}
-
-        virtual css::uno::Sequence< double >   getDeviceColor( IntSRGBA aSRGBA ) const = 0;
-    };
-
-    typedef std::shared_ptr< ::cppcanvas::Color > ColorSharedPtr;
-
-    inline sal_uInt8 getRed( Color::IntSRGBA nCol )
+    inline sal_uInt8 getRed( IntSRGBA nCol )
     {
         return static_cast<sal_uInt8>( (nCol&0xFF000000U) >> 24U );
     }
 
-    inline sal_uInt8 getGreen( Color::IntSRGBA nCol )
+    inline sal_uInt8 getGreen( IntSRGBA nCol )
     {
         return static_cast<sal_uInt8>( (nCol&0x00FF0000U) >> 16U );
     }
 
-    inline sal_uInt8 getBlue( Color::IntSRGBA nCol )
+    inline sal_uInt8 getBlue( IntSRGBA nCol )
     {
         return static_cast<sal_uInt8>( (nCol&0x0000FF00U) >> 8U );
     }
 
-    inline sal_uInt8 getAlpha( Color::IntSRGBA nCol )
+    inline sal_uInt8 getAlpha( IntSRGBA nCol )
     {
         return static_cast<sal_uInt8>( nCol&0x000000FFU );
     }
 
-    inline Color::IntSRGBA makeColor( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nAlpha )
+    inline IntSRGBA makeColor( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nAlpha )
     {
         return (nRed << 24U)|(nGreen << 16U)|(nBlue << 8U)|nAlpha;
     }

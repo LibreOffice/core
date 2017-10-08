@@ -261,13 +261,13 @@ namespace slideshow
         RGBColor unoColor2RGBColor( sal_Int32 );
         /** Convert an IntSRGBA to plain UNO API 32 bit int
          */
-        sal_Int32 RGBAColor2UnoColor( cppcanvas::Color::IntSRGBA );
+        sal_Int32 RGBAColor2UnoColor( cppcanvas::IntSRGBA );
 
         /** Fill a plain rectangle on the given canvas with the given color
          */
         void fillRect( const std::shared_ptr< cppcanvas::Canvas >& rCanvas,
                        const basegfx::B2DRange&                      rRect,
-                       cppcanvas::Color::IntSRGBA                    aFillColor );
+                       cppcanvas::IntSRGBA                    aFillColor );
 
         /** Init canvas with default background (white)
          */
