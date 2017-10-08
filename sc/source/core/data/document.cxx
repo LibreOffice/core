@@ -1574,7 +1574,7 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         bRet = true;
     }
     SetAutoCalc( bOldAutoCalc );
-    if ( bRet )
+    if ( bRet && pChartListenerCollection )
         pChartListenerCollection->UpdateDirtyCharts();
     return bRet;
 }
