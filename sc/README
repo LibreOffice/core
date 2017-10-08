@@ -39,3 +39,5 @@ ColumnBlock:
             * for each cell: 64 bit IEEE 754 double precision value
         - 2 : string
             * for each cell: 32 bit signed string length followed by string length bytes of the string (UTF-8)
+        - 3 : formula
+            * for each cell: 32 bit signed string length followed by the formula in R1C1 notation as a string
