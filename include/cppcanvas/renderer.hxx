@@ -100,16 +100,16 @@ namespace cppcanvas
         struct Parameters
         {
             /// Optionally forces the fill color attribute for all actions
-            ::boost::optional< Color::IntSRGBA >            maFillColor;
+            ::boost::optional< IntSRGBA >                  maFillColor;
 
             /// Optionally forces the line color attribute for all actions
-            ::boost::optional< Color::IntSRGBA >        maLineColor;
+            ::boost::optional< IntSRGBA >                 maLineColor;
 
             /// Optionally forces the text color attribute for all actions
-            ::boost::optional< Color::IntSRGBA >        maTextColor;
+            ::boost::optional< IntSRGBA >                  maTextColor;
 
             /// Optionally forces the given fontname for all text actions
-            ::boost::optional< OUString >        maFontName;
+            ::boost::optional< OUString >                  maFontName;
 
             /** Optionally transforms all text output actions with the
                 given matrix (in addition to the overall canvas

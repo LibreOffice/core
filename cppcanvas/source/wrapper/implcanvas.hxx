@@ -60,8 +60,6 @@ namespace cppcanvas
             virtual void                             setClip() override;
             virtual ::basegfx::B2DPolyPolygon const* getClip() const override;
 
-            virtual ColorSharedPtr                   createColor() const override;
-
             virtual CanvasSharedPtr                  clone() const override;
 
             virtual void                             clear() const override;

@@ -27,9 +27,9 @@ namespace cppcanvas
 {
     namespace tools
     {
-        css::uno::Sequence< double > intSRGBAToDoubleSequence( Color::IntSRGBA );
+        css::uno::Sequence< double > intSRGBAToDoubleSequence( IntSRGBA );
 
-        Color::IntSRGBA doubleSequenceToIntSRGBA( const css::uno::Sequence< double >& rColor  );
+        IntSRGBA doubleSequenceToIntSRGBA( const css::uno::Sequence< double >& rColor  );
     }
 }
 

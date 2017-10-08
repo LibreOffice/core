@@ -29,7 +29,6 @@
 #include <cppcanvas/polypolygon.hxx>
 
 #include "implfont.hxx"
-#include "implcolor.hxx"
 #include "implcanvas.hxx"
 
 
@@ -82,11 +81,6 @@ namespace cppcanvas
         ::basegfx::B2DPolyPolygon const* ImplCanvas::getClip() const
         {
             return !maClipPolyPolygon ? nullptr : &(*maClipPolyPolygon);
-        }
-
-        ColorSharedPtr ImplCanvas::createColor() const
-        {
-            return ColorSharedPtr( new ImplColor( getUNOCanvas()->getDevice() ) );
         }
 
         CanvasSharedPtr ImplCanvas::clone() const
