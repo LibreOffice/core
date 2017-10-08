@@ -227,6 +227,8 @@ public:
     inline bool             operator!() const;
     bool                    operator==( const Bitmap& rBitmap ) const;
     bool                    operator!=( const Bitmap& rBitmap ) const { return !operator==(rBitmap); }
+    // only compares if we are using the same internal copy-on-write Impl class
+    bool                    ShallowEquals( const Bitmap& rBitmap ) const { return mxImpBmp == rBitmap.mxImpBmp; }
 
     inline bool             IsEmpty() const;
     void                    SetEmpty();
