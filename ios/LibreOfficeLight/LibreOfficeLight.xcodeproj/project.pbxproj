@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		39022C181EDC142F00100066 /* lokit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39022C171EDC142F00100066 /* lokit.mm */; };
 		39022C1B1EDC2A0E00100066 /* program in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1A1EDC2A0E00100066 /* program */; };
 		39022C1D1EDC2A2C00100066 /* services in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1C1EDC2A2C00100066 /* services */; };
 		39022C1F1EDC2AB000100066 /* share in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1E1EDC2AB000100066 /* share */; };
@@ -32,7 +31,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		39022C171EDC142F00100066 /* lokit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = lokit.mm; sourceTree = "<group>"; };
 		39022C191EDC14D300100066 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
 		39022C1A1EDC2A0E00100066 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../generated/resources/program; sourceTree = "<group>"; };
 		39022C1C1EDC2A2C00100066 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../generated/resources/services; sourceTree = "<group>"; };
@@ -116,7 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				39022C191EDC14D300100066 /* lokit-Bridging-Header.h */,
-				39022C171EDC142F00100066 /* lokit.mm */,
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
 				3992D85B1E5B764A00BEA987 /* SideMenu.swift */,
 				3992D8591E5B762A00BEA987 /* DocumentController.swift */,
@@ -247,7 +244,6 @@
 				3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */,
 				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
 				3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */,
-				39022C181EDC142F00100066 /* lokit.mm in Sources */,
 				397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -361,6 +357,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 x86_64";
 			};
@@ -436,6 +433,7 @@
 				);
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 x86_64";
@@ -586,6 +584,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 x86_64";
 			};
