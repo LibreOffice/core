@@ -16,51 +16,54 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/listctrl.hxx>
+#include <vcl/button.hxx>
 
-#include "address.hxx"
-#include "datamapper.hxx"
-#include "dataprovider.hxx"
+#include "datatableview.hxx"
 
-class ScDocShell;
-class SvtURLBox;
-class ScRange;
-class ComboBox;
+#include <memory>
 
-namespace sc {
+class ScDocument;
+class ScDataProviderBaseControl;
+class ScDBData;
 
-class DataProviderDlg : public ModalDialog
+class ScDataProviderDlg : public ModalDialog
 {
-    ScDocShell *mpDocShell;
+private:
 
-    VclPtr<SvtURLBox>      m_pCbUrl;
-    VclPtr<PushButton>     m_pBtnBrowse;
-    VclPtr<OKButton>       m_pBtnOk;
-    VclPtr<ListBox>        m_pCBData;
-    VclPtr<ListBox>        m_pCBProvider;
-    VclPtr<Edit>           m_pEdID;
+    std::shared_ptr<ScDocument> mpDoc;
+    VclPtr<ScDataTableView> mpTable;
+    VclPtr<ListControl> mpList;
+    VclPtr<MenuBar> mpBar;
+    VclPtr<ScDataProviderBaseControl> mpDataProviderCtrl;
 
-    DECL_LINK(UpdateClickHdl, Button*, void);
-    DECL_LINK(UpdateComboBoxHdl, ComboBox&, void);
-    DECL_LINK(BrowseHdl, Button*, void);
-    DECL_LINK(EditHdl, Edit&, void);
-    DECL_LINK(SelectHdl, ListBox&, void);
+    ScDBData* pDBData;
 
-    void UpdateEnable();
+    void InitMenu();
 
-    std::shared_ptr<ExternalDataSource> mpDataSource;
+    DECL_LINK( StartMenuHdl, Menu*, bool );
+    DECL_LINK( ColumnMenuHdl, Menu*, bool );
+    DECL_LINK( ImportHdl, Window*, void );
 
 public:
-    DataProviderDlg(ScDocShell *pDocShell, vcl::Window* pParent);
-    virtual ~DataProviderDlg() override;
+
+    ScDataProviderDlg(vcl::Window* pWindow, std::shared_ptr<ScDocument> pDoc);
+
+    virtual ~ScDataProviderDlg() override;
     virtual void dispose() override;
 
-    void Init();
+    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
 
-    void StartImport();
+    void applyAndQuit();
+    void cancelAndQuit();
+
+    void deleteColumn();
+    void splitColumn();
+    void mergeColumns();
+
+    void import();
 };
 
-}
-
-#endif // INCLUDED_SC_SOURCE_UI_INC_DATAPROVIDERDLG_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
