@@ -65,6 +65,10 @@ public:
             }
             return sKeyword;
         }
+    const NfKeywordTable & GetEnglishKeywords() const
+        {
+            return sEnglishKeyword;
+        }
     // Keywords used in output like true and false
     const OUString& GetSpecialKeyword( NfKeywordIndex eIdx ) const
         {
@@ -149,6 +153,7 @@ public:
 
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords
+    NfKeywordTable sEnglishKeyword;             // Syntax keywords in English (USA)
     Color StandardColor[NF_MAX_DEFAULT_COLORS]; // Standard color array
     Date maNullDate;                            // 30Dec1899
     OUString sNameStandardFormat;               // "Standard"

@@ -50,20 +50,75 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     bConvertMode = false;
     bConvertSystemToSystem = false;
     //! All keywords MUST be UPPERCASE!
-    sKeyword[NF_KEY_E] =     "E";        // Exponent
-    sKeyword[NF_KEY_AMPM] =  "AM/PM";    // AM/PM
-    sKeyword[NF_KEY_AP] =    "A/P";      // AM/PM short
-    sKeyword[NF_KEY_MI] =    "M";        // Minute
-    sKeyword[NF_KEY_MMI] =   "MM";       // Minute 02
-    sKeyword[NF_KEY_S] =     "S";        // Second
-    sKeyword[NF_KEY_SS] =    "SS";       // Second 02
-    sKeyword[NF_KEY_Q] =     "Q";        // Quarter short 'Q'
-    sKeyword[NF_KEY_QQ] =    "QQ";       // Quarter long
-    sKeyword[NF_KEY_NN] =    "NN";       // Day of week short
-    sKeyword[NF_KEY_NNN] =   "NNN";      // Day of week long
-    sKeyword[NF_KEY_NNNN] =  "NNNN";     // Day of week long incl. separator
-    sKeyword[NF_KEY_WW] =    "WW";       // Week of year
-    sKeyword[NF_KEY_CCC] =   "CCC";      // Currency abbreviation
+    sEnglishKeyword[NF_KEY_E] =       "E";        // Exponent
+    sEnglishKeyword[NF_KEY_AMPM] =    "AM/PM";    // AM/PM
+    sEnglishKeyword[NF_KEY_AP] =      "A/P";      // AM/PM short
+    sEnglishKeyword[NF_KEY_MI] =      "M";        // Minute
+    sEnglishKeyword[NF_KEY_MMI] =     "MM";       // Minute 02
+    sEnglishKeyword[NF_KEY_M] =       "M";        // month        (!)
+    sEnglishKeyword[NF_KEY_MM] =      "MM";       // month 02     (!)
+    sEnglishKeyword[NF_KEY_MMM] =     "MMM";      // month short name
+    sEnglishKeyword[NF_KEY_MMMM] =    "MMMM";     // month long name
+    sEnglishKeyword[NF_KEY_H] =       "H";        // hour
+    sEnglishKeyword[NF_KEY_HH] =      "HH";       // hour 02
+    sEnglishKeyword[NF_KEY_S] =       "S";        // Second
+    sEnglishKeyword[NF_KEY_SS] =      "SS";       // Second 02
+    sEnglishKeyword[NF_KEY_Q] =       "Q";        // Quarter short 'Q'
+    sEnglishKeyword[NF_KEY_QQ] =      "QQ";       // Quarter long
+    sEnglishKeyword[NF_KEY_D] =       "D";        // day of month
+    sEnglishKeyword[NF_KEY_DD] =      "DD";       // day of month 02
+    sEnglishKeyword[NF_KEY_DDD] =     "DDD";      // day of week short
+    sEnglishKeyword[NF_KEY_DDDD] =    "DDDD";     // day of week long
+    sEnglishKeyword[NF_KEY_YY] =      "YY";       // year two digits
+    sEnglishKeyword[NF_KEY_YYYY] =    "YYYY";     // year four digits
+    sEnglishKeyword[NF_KEY_NN] =      "NN";       // Day of week short
+    sEnglishKeyword[NF_KEY_NNN] =     "NNN";      // Day of week long
+    sEnglishKeyword[NF_KEY_NNNN] =    "NNNN";     // Day of week long incl. separator
+    sEnglishKeyword[NF_KEY_CCC] =     "CCC";      // Currency abbreviation
+    sEnglishKeyword[NF_KEY_GENERAL] = "GENERAL";  // General / Standard
+    sEnglishKeyword[NF_KEY_WW] =      "WW";       // Week of year
+    sEnglishKeyword[NF_KEY_MMMMM] =   "MMMMM";    // first letter of month name
+    sEnglishKeyword[NF_KEY_TRUE] =    "TRUE";     // boolean true
+    sEnglishKeyword[NF_KEY_FALSE] =   "FALSE";    // boolean false
+    sEnglishKeyword[NF_KEY_BOOLEAN] = "BOOLEAN";  // boolean
+    sEnglishKeyword[NF_KEY_COLOR] =   "COLOR";    // color
+        // colours
+    sEnglishKeyword[NF_KEY_BLACK] =   "BLACK";
+    sEnglishKeyword[NF_KEY_BLUE] =    "BLUE";
+    sEnglishKeyword[NF_KEY_GREEN] =   "GREEN";
+    sEnglishKeyword[NF_KEY_CYAN] =    "CYAN";
+    sEnglishKeyword[NF_KEY_RED] =     "RED";
+    sEnglishKeyword[NF_KEY_MAGENTA] = "MAGENTA";
+    sEnglishKeyword[NF_KEY_BROWN] =   "BROWN";
+    sEnglishKeyword[NF_KEY_GREY] =    "GREY";
+    sEnglishKeyword[NF_KEY_YELLOW] =  "YELLOW";
+    sEnglishKeyword[NF_KEY_WHITE] =   "WHITE";
+    // preset new calendar keywords
+    sEnglishKeyword[NF_KEY_AAA] =     "AAA";
+    sEnglishKeyword[NF_KEY_AAAA] =    "AAAA";
+    sEnglishKeyword[NF_KEY_EC] =      "E";
+    sEnglishKeyword[NF_KEY_EEC] =     "EE";
+    sEnglishKeyword[NF_KEY_G] =       "G";
+    sEnglishKeyword[NF_KEY_GG] =      "GG";
+    sEnglishKeyword[NF_KEY_GGG] =     "GGG";
+    sEnglishKeyword[NF_KEY_R] =       "R";
+    sEnglishKeyword[NF_KEY_RR] =      "RR";
+    sEnglishKeyword[NF_KEY_THAI_T] =  "t"; // Thai T modifier, speciality of Thai Excel, only used with Thai locale and converted to [NatNum1]
+
+    sKeyword[NF_KEY_E] =     sEnglishKeyword[NF_KEY_E];        // Exponent
+    sKeyword[NF_KEY_AMPM] =  sEnglishKeyword[NF_KEY_AMPM];     // AM/PM
+    sKeyword[NF_KEY_AP] =    sEnglishKeyword[NF_KEY_AP];       // AM/PM short
+    sKeyword[NF_KEY_MI] =    sEnglishKeyword[NF_KEY_MI];       // Minute
+    sKeyword[NF_KEY_MMI] =   sEnglishKeyword[NF_KEY_MMI];      // Minute 02
+    sKeyword[NF_KEY_S] =     sEnglishKeyword[NF_KEY_S];        // Second
+    sKeyword[NF_KEY_SS] =    sEnglishKeyword[NF_KEY_SS];       // Second 02
+    sKeyword[NF_KEY_Q] =     sEnglishKeyword[NF_KEY_Q];        // Quarter short 'Q'
+    sKeyword[NF_KEY_QQ] =    sEnglishKeyword[NF_KEY_QQ];       // Quarter long
+    sKeyword[NF_KEY_NN] =    sEnglishKeyword[NF_KEY_NN];       // Day of week short
+    sKeyword[NF_KEY_NNN] =   sEnglishKeyword[NF_KEY_NNN];      // Day of week long
+    sKeyword[NF_KEY_NNNN] =  sEnglishKeyword[NF_KEY_NNNN];     // Day of week long incl. separator
+    sKeyword[NF_KEY_WW] =    sEnglishKeyword[NF_KEY_WW];       // Week of year
+    sKeyword[NF_KEY_CCC] =   sEnglishKeyword[NF_KEY_CCC];      // Currency abbreviation
     bKeywordsNeedInit = true;            // locale dependent keywords
     bCompatCurNeedInit = true;           // locale dependent compatibility currency strings
 
@@ -108,7 +163,7 @@ void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
         if ( sKeyword[NF_KEY_TRUE].isEmpty() )
         {
             SAL_WARN( "svl.numbers", "InitSpecialKeyword: TRUE_WORD?" );
-            const_cast<ImpSvNumberformatScan*>(this)->sKeyword[NF_KEY_TRUE] = "TRUE";
+            const_cast<ImpSvNumberformatScan*>(this)->sKeyword[NF_KEY_TRUE] = sEnglishKeyword[NF_KEY_TRUE];
         }
         break;
     case NF_KEY_FALSE :
@@ -117,7 +172,7 @@ void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
         if ( sKeyword[NF_KEY_FALSE].isEmpty() )
         {
             SAL_WARN( "svl.numbers", "InitSpecialKeyword: FALSE_WORD?" );
-            const_cast<ImpSvNumberformatScan*>(this)->sKeyword[NF_KEY_FALSE] = "FALSE";
+            const_cast<ImpSvNumberformatScan*>(this)->sKeyword[NF_KEY_FALSE] = sEnglishKeyword[NF_KEY_FALSE];
         }
         break;
     default:
@@ -207,15 +262,15 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     sKeyword[NF_KEY_GENERAL] = pCharClass->uppercase( sNameStandardFormat );
 
     // preset new calendar keywords
-    sKeyword[NF_KEY_AAA] =   "AAA";
-    sKeyword[NF_KEY_AAAA] =  "AAAA";
-    sKeyword[NF_KEY_EC] =    "E";
-    sKeyword[NF_KEY_EEC] =   "EE";
-    sKeyword[NF_KEY_G] =     "G";
-    sKeyword[NF_KEY_GG] =    "GG";
-    sKeyword[NF_KEY_GGG] =   "GGG";
-    sKeyword[NF_KEY_R] =     "R";
-    sKeyword[NF_KEY_RR] =    "RR";
+    sKeyword[NF_KEY_AAA] =   sEnglishKeyword[NF_KEY_AAA];
+    sKeyword[NF_KEY_AAAA] =  sEnglishKeyword[NF_KEY_AAAA];
+    sKeyword[NF_KEY_EC] =    sEnglishKeyword[NF_KEY_EC];
+    sKeyword[NF_KEY_EEC] =   sEnglishKeyword[NF_KEY_EEC];
+    sKeyword[NF_KEY_G] =     sEnglishKeyword[NF_KEY_G];
+    sKeyword[NF_KEY_GG] =    sEnglishKeyword[NF_KEY_GG];
+    sKeyword[NF_KEY_GGG] =   sEnglishKeyword[NF_KEY_GGG];
+    sKeyword[NF_KEY_R] =     sEnglishKeyword[NF_KEY_R];
+    sKeyword[NF_KEY_RR] =    sEnglishKeyword[NF_KEY_RR];
 
     // Thai T NatNum special. Other locale's small letter 't' results in upper
     // case comparison not matching but length does in conversion mode. Ugly.
@@ -225,7 +280,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     }
     else
     {
-        sKeyword[NF_KEY_THAI_T] = "t";
+        sKeyword[NF_KEY_THAI_T] = sEnglishKeyword[NF_KEY_THAI_T];
     }
     if ( eLang.anyOf(
             LANGUAGE_GERMAN,
@@ -299,10 +354,10 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         }
         else
         {
-            sKeyword[NF_KEY_D] = "D";
-            sKeyword[NF_KEY_DD] = "DD";
-            sKeyword[NF_KEY_DDD] = "DDD";
-            sKeyword[NF_KEY_DDDD] = "DDDD";
+            sKeyword[NF_KEY_D] = sEnglishKeyword[NF_KEY_D];
+            sKeyword[NF_KEY_DD] = sEnglishKeyword[NF_KEY_DD];
+            sKeyword[NF_KEY_DDD] = sEnglishKeyword[NF_KEY_DDD];
+            sKeyword[NF_KEY_DDDD] = sEnglishKeyword[NF_KEY_DDDD];
         }
         // month
         if ( eLang == LANGUAGE_FINNISH )
@@ -315,11 +370,11 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         }
         else
         {
-            sKeyword[NF_KEY_M] = "M";
-            sKeyword[NF_KEY_MM] = "MM";
-            sKeyword[NF_KEY_MMM] = "MMM";
-            sKeyword[NF_KEY_MMMM] = "MMMM";
-            sKeyword[NF_KEY_MMMMM] = "MMMMM";
+            sKeyword[NF_KEY_M] = sEnglishKeyword[NF_KEY_M];
+            sKeyword[NF_KEY_MM] = sEnglishKeyword[NF_KEY_MM];
+            sKeyword[NF_KEY_MMM] = sEnglishKeyword[NF_KEY_MMM];
+            sKeyword[NF_KEY_MMMM] = sEnglishKeyword[NF_KEY_MMMM];
+            sKeyword[NF_KEY_MMMMM] = sEnglishKeyword[NF_KEY_MMMMM];
         }
         // year
         if ( eLang.anyOf(
@@ -374,8 +429,8 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         }
         else
         {
-            sKeyword[NF_KEY_YY] = "YY";
-            sKeyword[NF_KEY_YYYY] = "YYYY";
+            sKeyword[NF_KEY_YY] = sEnglishKeyword[NF_KEY_YY];
+            sKeyword[NF_KEY_YYYY] = sEnglishKeyword[NF_KEY_YYYY];
         }
         // hour
         if ( eLang.anyOf(
@@ -399,23 +454,23 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         }
         else
         {
-            sKeyword[NF_KEY_H] = "H";
-            sKeyword[NF_KEY_HH] = "HH";
+            sKeyword[NF_KEY_H] = sEnglishKeyword[NF_KEY_H];
+            sKeyword[NF_KEY_HH] = sEnglishKeyword[NF_KEY_HH];
         }
         // boolean
-        sKeyword[NF_KEY_BOOLEAN] = "BOOLEAN";
+        sKeyword[NF_KEY_BOOLEAN] = sEnglishKeyword[NF_KEY_BOOLEAN];
         // colours
-        sKeyword[NF_KEY_COLOR] =     "COLOR";
-        sKeyword[NF_KEY_BLACK] =     "BLACK";
-        sKeyword[NF_KEY_BLUE] =      "BLUE";
-        sKeyword[NF_KEY_GREEN] =     "GREEN";
-        sKeyword[NF_KEY_CYAN] =      "CYAN";
-        sKeyword[NF_KEY_RED] =       "RED";
-        sKeyword[NF_KEY_MAGENTA] =   "MAGENTA";
-        sKeyword[NF_KEY_BROWN] =     "BROWN";
-        sKeyword[NF_KEY_GREY] =      "GREY";
-        sKeyword[NF_KEY_YELLOW] =    "YELLOW";
-        sKeyword[NF_KEY_WHITE] =     "WHITE";
+        sKeyword[NF_KEY_COLOR] =     sEnglishKeyword[NF_KEY_COLOR];
+        sKeyword[NF_KEY_BLACK] =     sEnglishKeyword[NF_KEY_BLACK];
+        sKeyword[NF_KEY_BLUE] =      sEnglishKeyword[NF_KEY_BLUE];
+        sKeyword[NF_KEY_GREEN] =     sEnglishKeyword[NF_KEY_GREEN];
+        sKeyword[NF_KEY_CYAN] =      sEnglishKeyword[NF_KEY_CYAN];
+        sKeyword[NF_KEY_RED] =       sEnglishKeyword[NF_KEY_RED];
+        sKeyword[NF_KEY_MAGENTA] =   sEnglishKeyword[NF_KEY_MAGENTA];
+        sKeyword[NF_KEY_BROWN] =     sEnglishKeyword[NF_KEY_BROWN];
+        sKeyword[NF_KEY_GREY] =      sEnglishKeyword[NF_KEY_GREY];
+        sKeyword[NF_KEY_YELLOW] =    sEnglishKeyword[NF_KEY_YELLOW];
+        sKeyword[NF_KEY_WHITE] =     sEnglishKeyword[NF_KEY_WHITE];
     }
 
     // boolean keywords
@@ -531,8 +586,9 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
 {
     OUString sString = pFormatter->GetCharClass()->uppercase( sSymbol, nPos, sSymbol.getLength() - nPos );
     const NfKeywordTable & rKeyword = GetKeywords();
+    const NfKeywordTable & rEnglishKeyword = GetEnglishKeywords();
     // #77026# for the Xcl perverts: the GENERAL keyword is recognized anywhere
-    if ( sString.startsWith( rKeyword[NF_KEY_GENERAL] ))
+    if ( sString.startsWith( rKeyword[NF_KEY_GENERAL] ) || sString.startsWith( rEnglishKeyword[NF_KEY_GENERAL] ) )
     {
         return NF_KEY_GENERAL;
     }
@@ -568,6 +624,29 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
             if ( j && rKeyword[j].getLength() > rKeyword[i].getLength() )
             {
                 return j;
+            }
+        }
+        if ( i == 0 && eTmpLnge != LANGUAGE_ENGLISH_US )
+        {
+            // no localized keyword, try English keywords
+            i = NF_KEY_LASTKEYWORD;
+            while ( i > 0 && sString.indexOf(rEnglishKeyword[i]) != 0 )
+            {
+                i--;
+            }
+            if ( i > NF_KEY_LASTOLDKEYWORD && sString != rEnglishKeyword[i] )
+            {
+                // found something, but maybe it's something else?
+                // e.g. new NNN is found in NNNN, for NNNN we must search on
+                short j = i - 1;
+                while ( j > 0 && sString.indexOf(rEnglishKeyword[j]) != 0 )
+                {
+                    j--;
+                }
+                if ( j && rEnglishKeyword[j].getLength() > rEnglishKeyword[i].getLength() )
+                {
+                    return j;
+                }
             }
         }
     }
