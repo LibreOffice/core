@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cmdid.h"
-#include "hintids.hxx"
+#include <cmdid.h>
+#include <hintids.hxx>
 
 #include <svl/stritem.hxx>
 #include <editeng/protitem.hxx>
@@ -30,14 +30,14 @@
 #include <svx/swframevalidation.hxx>
 #include <svx/xdef.hxx>
 #include <fmtclds.hxx>
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "viewopt.hxx"
-#include "uitool.hxx"
-#include "frmmgr.hxx"
-#include "format.hxx"
-#include "mdiexp.hxx"
-#include "poolfmt.hxx"
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <viewopt.hxx>
+#include <uitool.hxx>
+#include <frmmgr.hxx>
+#include <format.hxx>
+#include <mdiexp.hxx>
+#include <poolfmt.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>

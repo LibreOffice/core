@@ -21,9 +21,9 @@
 
 #include <memory>
 
-#include <SidebarTxtControlAcc.hxx>
+#include "SidebarTxtControlAcc.hxx"
 
-#include <SidebarTxtControl.hxx>
+#include "SidebarTxtControl.hxx"
 
 #include <svl/SfxBroadcaster.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>

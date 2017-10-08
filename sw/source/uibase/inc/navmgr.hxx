@@ -12,9 +12,9 @@
 #include <vector>
 #include <memory>
 
-#include "swtypes.hxx"
-#include "calbck.hxx"
-#include "unocrsr.hxx"
+#include <swtypes.hxx>
+#include <calbck.hxx>
+#include <unocrsr.hxx>
 #include <vcl/svapp.hxx>
 
 class   SwWrtShell;

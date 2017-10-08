@@ -63,7 +63,7 @@
 #include <docsh.hxx>
 #include <wdocsh.hxx>
 #include <srcview.hxx>
-#include <viewfunc.hxx>
+#include "viewfunc.hxx"
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentState.hxx>
@@ -78,7 +78,7 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>
 #define SwSrcView
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 #include <unomid.h>
 

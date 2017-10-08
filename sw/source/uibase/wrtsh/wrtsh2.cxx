@@ -54,7 +54,7 @@
 #include <navipi.hxx>
 #include <txtinet.hxx>
 #include <cmdid.h>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <SwRewriter.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>

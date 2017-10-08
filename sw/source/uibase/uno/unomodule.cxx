@@ -20,9 +20,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
-#include "swmodule.hxx"
-#include "swdll.hxx"
-#include "unofreg.hxx"
+#include <swmodule.hxx>
+#include <swdll.hxx>
+#include <unofreg.hxx>
 #include "unomodule.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/objface.hxx>

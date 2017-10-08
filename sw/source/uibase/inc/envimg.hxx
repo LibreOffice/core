@@ -21,7 +21,7 @@
 
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 SW_DLLPUBLIC OUString MakeSender();
 

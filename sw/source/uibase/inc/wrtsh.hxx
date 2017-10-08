@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WRTSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WRTSH_HXX
 
-#include "swdllapi.h"
+#include <swdllapi.h>
 #include <fesh.hxx>
 #include <sortopt.hxx>
 #include <swurl.hxx>
 #include <IMark.hxx>
-#include "navmgr.hxx"
+#include <navmgr.hxx>
 #include <boost/optional.hpp>
 #include <o3tl/typed_flags_set.hxx>
 

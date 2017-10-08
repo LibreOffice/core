@@ -24,20 +24,20 @@
 #include <expfld.hxx>
 #include <modcfg.hxx>
 
-#include "swmodule.hxx"
-#include "view.hxx"
-#include "wview.hxx"
-#include "wrtsh.hxx"
-#include "cmdid.h"
-#include "caption.hxx"
-#include "poolfmt.hxx"
-#include "edtwin.hxx"
+#include <swmodule.hxx>
+#include <view.hxx>
+#include <wview.hxx>
+#include <wrtsh.hxx>
+#include <cmdid.h>
+#include <caption.hxx>
+#include <poolfmt.hxx>
+#include <edtwin.hxx>
 #include <SwStyleNameMapper.hxx>
 
-#include "initui.hxx"
-#include "swabstdlg.hxx"
+#include <initui.hxx>
+#include <swabstdlg.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <memory>
 

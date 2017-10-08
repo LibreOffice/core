@@ -64,9 +64,9 @@
 #include <globals.hrc>
 #include <app.hrc>
 #include <strings.hrc>
-#include "swabstdlg.hxx"
-#include "envimg.hxx"
-#include <appenv.hxx>
+#include <swabstdlg.hxx>
+#include <envimg.hxx>
+#include "appenv.hxx"
 
 #include <memory>
 

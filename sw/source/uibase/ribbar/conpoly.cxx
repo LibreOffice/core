@@ -21,11 +21,11 @@
 #include <svx/svdview.hxx>
 #include <svx/svdopath.hxx>
 
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "wrtsh.hxx"
-#include "drawbase.hxx"
-#include "conpoly.hxx"
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <wrtsh.hxx>
+#include <drawbase.hxx>
+#include <conpoly.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 ConstPolygon::ConstPolygon(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :

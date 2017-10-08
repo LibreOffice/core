@@ -24,7 +24,7 @@
 #include <vcl/fixed.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svx/stddlg.hxx>
-#include "dbtree.hxx"
+#include <dbtree.hxx>
 
 class SwFieldMgr;
 class SwView;

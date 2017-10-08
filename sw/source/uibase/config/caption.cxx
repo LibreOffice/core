@@ -18,8 +18,8 @@
  */
 
 
-#include "numrule.hxx"
-#include "caption.hxx"
+#include <numrule.hxx>
+#include <caption.hxx>
 
 InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleId) :
     bUseCaption(false),

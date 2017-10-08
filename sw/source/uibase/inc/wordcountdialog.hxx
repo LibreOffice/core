@@ -23,7 +23,7 @@
 #include <vcl/button.hxx>
 struct SwDocStat;
 #include <sfx2/childwin.hxx>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 class SwWordCountFloatDlg : public SfxModelessDialog
 {

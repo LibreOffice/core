@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CONFORM_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONFORM_HXX
 
-#include "drawbase.hxx"
+#include <drawbase.hxx>
 
 class ConstFormControl : public SwDrawBase
 {

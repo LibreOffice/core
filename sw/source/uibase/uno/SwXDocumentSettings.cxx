@@ -26,7 +26,7 @@
 #include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
-#include <SwXDocumentSettings.hxx>
+#include "SwXDocumentSettings.hxx"
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -51,10 +51,10 @@
 #include <svl/asiancfg.hxx>
 #include <comphelper/servicehelper.hxx>
 
-#include "swmodule.hxx"
-#include "cfgitems.hxx"
-#include "prtopt.hxx"
-#include "dbmgr.hxx"
+#include <swmodule.hxx>
+#include <cfgitems.hxx>
+#include <prtopt.hxx>
+#include <dbmgr.hxx>
 
 using namespace comphelper;
 using namespace ::com::sun::star;

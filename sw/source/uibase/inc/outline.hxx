@@ -34,7 +34,7 @@
 
 #include <vcl/field.hxx>
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 #include <numprevw.hxx>
 #include <numberingtypelistbox.hxx>
 #include <rtl/ustring.hxx>

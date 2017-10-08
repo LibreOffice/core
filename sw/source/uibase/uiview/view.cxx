@@ -100,7 +100,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 
-#include "formatclipboard.hxx"
+#include <formatclipboard.hxx>
 #include <PostItMgr.hxx>
 #include <annotsh.hxx>
 #include <swruler.hxx>

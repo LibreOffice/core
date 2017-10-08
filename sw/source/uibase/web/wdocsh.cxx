@@ -25,18 +25,18 @@
 #include <sfx2/objface.hxx>
 
 #include <sfx2/msg.hxx>
-#include "cmdid.h"
-#include "swtypes.hxx"
+#include <cmdid.h>
+#include <swtypes.hxx>
 
-#include "shellio.hxx"
-#include "wdocsh.hxx"
-#include "strings.hrc"
+#include <shellio.hxx>
+#include <wdocsh.hxx>
+#include <strings.hrc>
 
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of
     // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define SwWebDocShell
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 #include <unomid.h>
 

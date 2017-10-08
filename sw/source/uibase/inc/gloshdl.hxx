@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <rtl/ustring.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 class SwWrtShell;
 class SwTextBlocks;

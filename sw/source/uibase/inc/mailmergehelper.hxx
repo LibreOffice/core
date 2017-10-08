@@ -31,7 +31,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <vcl/scrbar.hxx>
 #include <rtl/ustring.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 class SwMailMergeConfigItem;
 

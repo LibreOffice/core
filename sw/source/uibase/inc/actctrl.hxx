@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_ACTCTRL_HXX
 
 #include <vcl/field.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 // numerical input
 class SW_DLLPUBLIC NumEditAction: public NumericField

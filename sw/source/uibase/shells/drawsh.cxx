@@ -50,19 +50,19 @@
 #include <svx/svdundo.hxx>
 #include <svx/xbtmpit.hxx>
 
-#include "swundo.hxx"
-#include "wrtsh.hxx"
-#include "cmdid.h"
-#include "globals.hrc"
-#include "helpids.h"
-#include "strings.hrc"
-#include "drwbassh.hxx"
-#include "drawsh.hxx"
+#include <swundo.hxx>
+#include <wrtsh.hxx>
+#include <cmdid.h>
+#include <globals.hrc>
+#include <helpids.h>
+#include <strings.hrc>
+#include <drwbassh.hxx>
+#include <drawsh.hxx>
 
 #define SwDrawShell
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
-#include "swabstdlg.hxx"
+#include <swslots.hxx>
+#include <swabstdlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

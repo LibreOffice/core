@@ -22,7 +22,7 @@
 #include <svl/lstner.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/svlbitm.hxx>
-#include "swcont.hxx"
+#include <swcont.hxx>
 
 #include <map>
 #include <memory>

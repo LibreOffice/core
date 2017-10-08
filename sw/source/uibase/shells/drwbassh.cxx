@@ -55,7 +55,7 @@
 #include <swslots.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <swundo.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

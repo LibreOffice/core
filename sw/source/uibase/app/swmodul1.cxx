@@ -59,12 +59,12 @@
 #include <cmdid.h>
 #include <app.hrc>
 #include <strings.hrc>
-#include "helpids.h"
+#include <helpids.h>
 #include <IDocumentLayoutAccess.hxx>
 
 #include <unomid.h>
 #include <tools/color.hxx>
-#include "PostItMgr.hxx"
+#include <PostItMgr.hxx>
 
 using namespace ::svx;
 using namespace ::com::sun::star;

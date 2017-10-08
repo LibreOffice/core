@@ -90,12 +90,12 @@
 #include <globals.hrc>
 #include <strings.hrc>
 #include <breakit.hxx>
-#include "annotsh.hxx"
-#include "view.hxx"
+#include <annotsh.hxx>
+#include <view.hxx>
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -112,7 +112,7 @@
 
 #include <docsh.hxx>
 #include <svl/undo.hxx>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <app.hrc>
 
 #include <comphelper/string.hxx>

@@ -34,15 +34,15 @@
 #include <sfx2/htmlmode.hxx>
 #include <tools/urlobj.hxx>
 
-#include "viewopt.hxx"
-#include "swmodule.hxx"
-#include "wrtsh.hxx"
-#include "cmdid.h"
-#include "globals.hrc"
-#include "helpids.h"
-#include "strings.hrc"
-#include "drwbassh.hxx"
-#include "drformsh.hxx"
+#include <viewopt.hxx>
+#include <swmodule.hxx>
+#include <wrtsh.hxx>
+#include <cmdid.h>
+#include <globals.hrc>
+#include <helpids.h>
+#include <strings.hrc>
+#include <drwbassh.hxx>
+#include <drformsh.hxx>
 #include <svl/urihelper.hxx>
 #include <view.hxx>
 #include <sfx2/docfile.hxx>
@@ -50,7 +50,7 @@
 
 #define SwDrawFormShell
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 #include <unomid.h>
 

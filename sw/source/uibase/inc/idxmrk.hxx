@@ -21,7 +21,7 @@
 
 #include <sfx2/childwin.hxx>
 
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 class SwWrtShell;
 

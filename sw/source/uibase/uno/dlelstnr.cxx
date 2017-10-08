@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
-#include "dlelstnr.hxx"
+#include <dlelstnr.hxx>
 #include <proofreadingiterator.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>

@@ -36,7 +36,7 @@
 
 #include <svx/ColorSets.hxx>
 
-#include "docsh.hxx"
+#include <docsh.hxx>
 
 namespace sw { namespace sidebar {
 

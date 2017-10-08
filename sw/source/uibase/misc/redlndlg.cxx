@@ -45,7 +45,7 @@
 #include <vector>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #include <unomid.h>
 

@@ -27,16 +27,16 @@
 #include <fmtfsize.hxx>
 #include <fldbas.hxx>
 #include <uiitems.hxx>
-#include "viewopt.hxx"
-#include "cmdid.h"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "swundo.hxx"
-#include "textsh.hxx"
-#include "idxmrk.hxx"
-#include "cnttab.hxx"
-#include "toxmgr.hxx"
-#include "swabstdlg.hxx"
+#include <viewopt.hxx>
+#include <cmdid.h>
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <swundo.hxx>
+#include <textsh.hxx>
+#include <idxmrk.hxx>
+#include <cnttab.hxx>
+#include <toxmgr.hxx>
+#include <swabstdlg.hxx>
 #include <globals.hrc>
 #include <memory>
 

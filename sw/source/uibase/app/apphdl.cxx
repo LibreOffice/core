@@ -110,7 +110,7 @@ using namespace ::com::sun::star;
 // see Idl-file
 #define SwModule
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 #include <strings.hrc>
 

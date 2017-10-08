@@ -37,7 +37,7 @@
 
 #include <svx/fntctrl.hxx>
 
-#include "docstyle.hxx"
+#include <docstyle.hxx>
 
 namespace sw { namespace sidebar {
 

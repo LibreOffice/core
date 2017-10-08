@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DRAWSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DRAWSH_HXX
 
-#include "drwbassh.hxx"
+#include <drwbassh.hxx>
 
 class SwDrawBaseShell;
 

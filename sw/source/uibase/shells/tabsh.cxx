@@ -62,7 +62,7 @@
 #include <uiitems.hxx>
 #include <usrpref.hxx>
 #include <tabsh.hxx>
-#include "swtablerep.hxx"
+#include <swtablerep.hxx>
 #include <tablemgr.hxx>
 #include <cellatr.hxx>
 #include <frmfmt.hxx>
@@ -82,7 +82,7 @@
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 #include <memory>
 

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "navmgr.hxx"
-#include "wrtsh.hxx"
+#include <navmgr.hxx>
+#include <wrtsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <cmdid.h>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "maildispatcher.hxx"
-#include "imaildsplistener.hxx"
+#include <maildispatcher.hxx>
+#include <imaildsplistener.hxx>
 
 #include <algorithm>
 

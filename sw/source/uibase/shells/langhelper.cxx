@@ -47,7 +47,7 @@
 #include <view.hxx>
 #include <viewopt.hxx>
 
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 #include <vcl/msgbox.hxx>
 

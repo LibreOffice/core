@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WVIEW_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WVIEW_HXX
 
-#include "swdllapi.h"
-#include "view.hxx"
+#include <swdllapi.h>
+#include <view.hxx>
 
 class SW_DLLPUBLIC SwWebView: public SwView
 {

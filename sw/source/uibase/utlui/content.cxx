@@ -84,13 +84,13 @@
 #include <docary.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "swabstdlg.hxx"
-#include "globals.hrc"
-#include "bitmaps.hlst"
+#include <swabstdlg.hxx>
+#include <globals.hrc>
+#include <bitmaps.hlst>
 #include <unomid.h>
 
-#include "navmgr.hxx"
-#include "AnnotationWin.hxx"
+#include <navmgr.hxx>
+#include <AnnotationWin.hxx>
 #include <memory>
 
 #define CTYPE_CNT   0

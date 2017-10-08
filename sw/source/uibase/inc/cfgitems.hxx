@@ -21,7 +21,7 @@
 
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 #include <printdata.hxx>
 
 #include <cmdid.h>

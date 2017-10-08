@@ -26,8 +26,8 @@
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
-#include "swdllapi.h"
-#include "shellid.hxx"
+#include <swdllapi.h>
+#include <shellid.hxx>
 
 class SwViewOption;
 class SwDocShell;

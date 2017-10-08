@@ -51,7 +51,7 @@
 #include <vcl/lstbox.hxx>
 
 #include <editeng/acorrcfg.hxx>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 #include <IDocumentFieldsAccess.hxx>
 

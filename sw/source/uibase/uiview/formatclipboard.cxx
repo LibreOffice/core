@@ -20,7 +20,7 @@
 #include <memory>
 #include <utility>
 
-#include "formatclipboard.hxx"
+#include <formatclipboard.hxx>
 
 #include <o3tl/make_unique.hxx>
 #include <svx/svxids.hrc>

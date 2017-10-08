@@ -19,7 +19,7 @@
 
 #include <AnnotationWin.hxx>
 
-#include <AnnotationMenuButton.hxx>
+#include "AnnotationMenuButton.hxx"
 #include <PostItMgr.hxx>
 
 #include <strings.hrc>
@@ -51,10 +51,10 @@
 #include <IDocumentUndoRedo.hxx>
 #include <SwUndoField.hxx>
 #include <edtwin.hxx>
-#include <ShadowOverlayObject.hxx>
-#include <AnchorOverlayObject.hxx>
-#include <OverlayRanges.hxx>
-#include <SidebarTxtControl.hxx>
+#include "ShadowOverlayObject.hxx"
+#include "AnchorOverlayObject.hxx"
+#include "OverlayRanges.hxx"
+#include "SidebarTxtControl.hxx"
 
 #include <memory>
 

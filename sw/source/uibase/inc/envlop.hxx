@@ -30,7 +30,7 @@
 
 #include <vcl/button.hxx>
 
-#include "envimg.hxx"
+#include <envimg.hxx>
 
 #define GetFieldVal(rField)         (rField).Denormalize((rField).GetValue(FUNIT_TWIP))
 #define SetFieldVal(rField, lValue) (rField).SetValue((rField).Normalize(lValue), FUNIT_TWIP)

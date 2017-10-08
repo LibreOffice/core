@@ -22,7 +22,7 @@
 #include <memory>
 #include <unotools/configitem.hxx>
 #include <fldupde.hxx>
-#include "viewopt.hxx"
+#include <viewopt.hxx>
 #include <tools/fldunit.hxx>
 
 class SwMasterUsrPref;

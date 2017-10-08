@@ -38,7 +38,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/cmapitem.hxx>
-#include "paratr.hxx"
+#include <paratr.hxx>
 
 #include <fmtinfmt.hxx>
 #include <docsh.hxx>
@@ -55,8 +55,8 @@
 #include <globals.h>
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
-#include "swabstdlg.hxx"
-#include "outline.hxx"
+#include <swabstdlg.hxx>
+#include <outline.hxx>
 #include <memory>
 
 const sal_uInt32 nFontInc = 40;      // 2pt

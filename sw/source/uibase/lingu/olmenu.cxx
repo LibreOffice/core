@@ -17,29 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SwRewriter.hxx"
-#include "cmdid.h"
-#include "strings.hrc"
-#include "doc.hxx"
-#include "docsh.hxx"
-#include "edtwin.hxx"
-#include "helpids.h"
-#include "hintids.hxx"
-#include "langhelper.hxx"
-#include "ndtxt.hxx"
-#include "bitmaps.hlst"
-#include "olmenu.hxx"
-#include "swabstdlg.hxx"
-#include "swmodule.hxx"
-#include "swtypes.hxx"
-#include "swundo.hxx"
-#include "uitool.hxx"
-#include "unomid.h"
-#include "view.hxx"
-#include "viewopt.hxx"
-#include "wrtsh.hxx"
-#include "wview.hxx"
-#include "textsh.hxx"
+#include <SwRewriter.hxx>
+#include <cmdid.h>
+#include <strings.hrc>
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <edtwin.hxx>
+#include <helpids.h>
+#include <hintids.hxx>
+#include <langhelper.hxx>
+#include <ndtxt.hxx>
+#include <bitmaps.hlst>
+#include <olmenu.hxx>
+#include <swabstdlg.hxx>
+#include <swmodule.hxx>
+#include <swtypes.hxx>
+#include <swundo.hxx>
+#include <uitool.hxx>
+#include <unomid.h>
+#include <view.hxx>
+#include <viewopt.hxx>
+#include <wrtsh.hxx>
+#include <wview.hxx>
+#include <textsh.hxx>
 
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>

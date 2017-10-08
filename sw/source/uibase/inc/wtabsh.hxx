@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WTABSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WTABSH_HXX
 
-#include "tabsh.hxx"
+#include <tabsh.hxx>
 
 class SwWebTableShell: public SwTableShell
 {

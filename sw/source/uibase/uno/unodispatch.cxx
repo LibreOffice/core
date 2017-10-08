@@ -28,8 +28,8 @@
 #include <unobaseclass.hxx>
 #include <view.hxx>
 #include <cmdid.h>
-#include "wrtsh.hxx"
-#include "dbmgr.hxx"
+#include <wrtsh.hxx>
+#include <dbmgr.hxx>
 
 using namespace ::com::sun::star;
 

@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "viscrs.hxx"
+#include <viscrs.hxx>
 #include <o3tl/any.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/printer.hxx>
@@ -70,7 +70,7 @@
 #include <unotextrange.hxx>
 #include <sfx2/docfile.hxx>
 #include <calbck.hxx>
-#include "swdtflvr.hxx"
+#include <swdtflvr.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_OLESH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_OLESH_HXX
 
-#include "frmsh.hxx"
+#include <frmsh.hxx>
 
 class SwOleShell: public SwFrameShell
 {

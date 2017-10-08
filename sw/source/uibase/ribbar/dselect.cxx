@@ -18,12 +18,12 @@
  */
 
 #include <sfx2/bindings.hxx>
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "wrtsh.hxx"
-#include "cmdid.h"
-#include "drawbase.hxx"
-#include "dselect.hxx"
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <wrtsh.hxx>
+#include <cmdid.h>
+#include <drawbase.hxx>
+#include <dselect.hxx>
 
 DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
                 SwDrawBase(pWrtShell, pEditWin, pSwView)

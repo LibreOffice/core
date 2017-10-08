@@ -94,7 +94,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <modcfg.hxx>
 #include <instable.hxx>
 #include <svx/fmshell.hxx>
@@ -125,7 +125,7 @@ static sal_uInt8 nFooterPos;
 
 #define SwBaseShell
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 namespace
 {

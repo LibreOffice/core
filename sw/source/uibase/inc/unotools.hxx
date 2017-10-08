@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 class SwOneExampleFrame;
 

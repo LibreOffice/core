@@ -30,11 +30,11 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
-#include "charatr.hxx"
-#include "charfmt.hxx"
-#include "docstyle.hxx"
-#include "fmtcol.hxx"
-#include "format.hxx"
+#include <charatr.hxx>
+#include <charfmt.hxx>
+#include <docstyle.hxx>
+#include <fmtcol.hxx>
+#include <format.hxx>
 
 namespace
 {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cmdid.h"
+#include <cmdid.h>
 #include <svx/svdview.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/eitem.hxx>
@@ -28,17 +28,17 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "helpids.h"
-#include "globals.hrc"
-#include "drawbase.hxx"
-#include "beziersh.hxx"
-#include "strings.hrc"
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <helpids.h>
+#include <globals.hrc>
+#include <drawbase.hxx>
+#include <beziersh.hxx>
+#include <strings.hrc>
 #define SwBezierShell
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 #include <unomid.h>
 

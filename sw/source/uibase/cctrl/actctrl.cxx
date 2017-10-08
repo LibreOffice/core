@@ -19,7 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/builderfactory.hxx>
-#include "actctrl.hxx"
+#include <actctrl.hxx>
 
 bool NumEditAction::EventNotify( NotifyEvent& rNEvt )
 {

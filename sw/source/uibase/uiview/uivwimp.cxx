@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <cmdid.h>
-#include "globals.hrc"
+#include <globals.hrc>
 
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>

@@ -8,10 +8,10 @@
  */
 
 #include <memory>
-#include "uiobject.hxx"
-#include "edtwin.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
+#include <uiobject.hxx>
+#include <edtwin.hxx>
+#include <view.hxx>
+#include <wrtsh.hxx>
 
 SwEditWinUIObject::SwEditWinUIObject(const VclPtr<SwEditWin>& xEditWin):
     WindowUIObject(xEditWin),

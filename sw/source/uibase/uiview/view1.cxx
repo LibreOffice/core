@@ -32,7 +32,7 @@
 #include <redlndlg.hxx>
 #include <dpage.hxx>
 #include <edtwin.hxx>
-#include "formatclipboard.hxx"
+#include <formatclipboard.hxx>
 #include <cmdid.h>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>

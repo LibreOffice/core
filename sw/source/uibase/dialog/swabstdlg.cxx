@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 #include <osl/module.hxx>
 

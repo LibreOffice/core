@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_WTEXTSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WTEXTSH_HXX
 
-#include "textsh.hxx"
+#include <textsh.hxx>
 
 class SwWebTextShell: public SwTextShell
 {

@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/tstpitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "basesh.hxx"
-#include "viewopt.hxx"
-#include "uitool.hxx"
-#include "cmdid.h"
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <basesh.hxx>
+#include <viewopt.hxx>
+#include <uitool.hxx>
+#include <cmdid.h>
 #include <sfx2/tabdlg.hxx>
 
-#include "pagedesc.hxx"
+#include <pagedesc.hxx>
 
 void SwView::ExecDlg(SfxRequest const &rReq)
 {

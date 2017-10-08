@@ -21,7 +21,7 @@
 
 #include <vcl/lstbox.hxx>
 #include <svl/zforlist.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 class SwView;
 

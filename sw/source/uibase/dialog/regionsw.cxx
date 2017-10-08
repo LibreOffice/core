@@ -52,7 +52,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <memory>
 
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)

@@ -22,12 +22,12 @@
 #include <svx/svxids.hrc>
 #include <editeng/svxenum.hxx>
 
-#include "viewopt.hxx"
-#include "swtypes.hxx"
-#include "cmdid.h"
-#include "prtopt.hxx"
-#include "cfgitems.hxx"
-#include "crstate.hxx"
+#include <viewopt.hxx>
+#include <swtypes.hxx>
+#include <cmdid.h>
+#include <prtopt.hxx>
+#include <cfgitems.hxx>
+#include <crstate.hxx>
 
 
 SwDocDisplayItem::SwDocDisplayItem() :

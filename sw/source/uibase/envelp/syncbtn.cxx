@@ -20,14 +20,14 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include "cmdid.h"
-#include "swmodule.hxx"
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "strings.hrc"
+#include <cmdid.h>
+#include <swmodule.hxx>
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <strings.hrc>
 
-#include "syncbtn.hxx"
-#include "swtypes.hxx"
+#include <syncbtn.hxx>
+#include <swtypes.hxx>
 
 SFX_IMPL_FLOATINGWINDOW( SwSyncChildWin, FN_SYNC_LABELS )
 

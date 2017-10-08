@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>

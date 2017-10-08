@@ -22,7 +22,7 @@
 #include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
 #include <swtypes.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 class MetricFormatter;
 class SfxItemSet;

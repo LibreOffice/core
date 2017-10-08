@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_DRWBASSH_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DRWBASSH_HXX
 
-#include "basesh.hxx"
+#include <basesh.hxx>
 
 class SwView;
 class SfxItemSet;

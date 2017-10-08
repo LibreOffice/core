@@ -20,7 +20,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <wrtsh.hxx>
-#include "barcfg.hxx"
+#include <barcfg.hxx>
 
 #include <unomid.h>
 

@@ -26,12 +26,12 @@
 #include <swtypes.hxx>
 #include <strings.hrc>
 
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "swmodule.hxx"
-#include "cmdid.h"
-#include "docsh.hxx"
-#include "tmplctrl.hxx"
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <swmodule.hxx>
+#include <cmdid.h>
+#include <docsh.hxx>
+#include <tmplctrl.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL( SwTemplateControl, SfxStringItem );
 

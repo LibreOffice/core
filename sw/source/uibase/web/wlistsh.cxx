@@ -23,19 +23,19 @@
 #include <svl/srchitem.hxx>
 #include <svx/imapdlg.hxx>
 
-#include "cmdid.h"
-#include "wrtsh.hxx"
-#include "swmodule.hxx"
-#include "globals.hrc"
-#include "strings.hrc"
-#include "uinums.hxx"
-#include "wlistsh.hxx"
+#include <cmdid.h>
+#include <wrtsh.hxx>
+#include <swmodule.hxx>
+#include <globals.hrc>
+#include <strings.hrc>
+#include <uinums.hxx>
+#include <wlistsh.hxx>
 
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of
     // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define SwWebListShell
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 SFX_IMPL_INTERFACE(SwWebListShell, SwListShell)
 

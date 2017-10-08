@@ -64,8 +64,8 @@
 
 #define SwMediaShell
 #include <sfx2/msg.hxx>
-#include "swslots.hxx"
-#include "swabstdlg.hxx"
+#include <swslots.hxx>
+#include <swabstdlg.hxx>
 #include <memory>
 
 SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell)

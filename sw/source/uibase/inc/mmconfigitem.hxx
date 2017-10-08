@@ -26,8 +26,8 @@
 #include <set>
 #include <vector>
 #include <swdbdata.hxx>
-#include "swdllapi.h"
-#include "sharedconnection.hxx"
+#include <swdllapi.h>
+#include <sharedconnection.hxx>
 
 namespace com{namespace sun{namespace star{
     namespace sdbc{

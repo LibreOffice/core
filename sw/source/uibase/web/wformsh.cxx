@@ -25,17 +25,17 @@
 #include <tools/globname.hxx>
 #include <sfx2/app.hxx>
 
-#include "swtypes.hxx"
-#include "cmdid.h"
-#include "wformsh.hxx"
-#include "globals.hrc"
-#include "strings.hrc"
+#include <swtypes.hxx>
+#include <cmdid.h>
+#include <wformsh.hxx>
+#include <globals.hrc>
+#include <strings.hrc>
 
 #include <sfx2/request.hxx>
     // needed for -fsanitize=function visibility of typeinfo for functions of
     // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define SwWebDrawFormShell
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwWebDrawFormShell, SwDrawFormShell)
 

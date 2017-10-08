@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CONRECT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONRECT_HXX
 
-#include "drawbase.hxx"
+#include <drawbase.hxx>
 
 // draw rectangle
 class ConstRectangle : public SwDrawBase

@@ -42,14 +42,14 @@
 #include <uitool.hxx>
 #include <frmatr.hxx>
 
-#include <tablepg.hxx>
+#include "tablepg.hxx"
 #include <tablemgr.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <cmdid.h>
-#include "swtablerep.hxx"
+#include <swtablerep.hxx>
 #include <memory>
 
 SwTableRep::SwTableRep( const SwTabCols& rTabCol )

@@ -19,11 +19,11 @@
 
 #include <svx/svdobj.hxx>
 
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "wrtsh.hxx"
-#include "drawbase.hxx"
-#include "conarc.hxx"
+#include <view.hxx>
+#include <edtwin.hxx>
+#include <wrtsh.hxx>
+#include <drawbase.hxx>
+#include <conarc.hxx>
 
 ConstArc::ConstArc(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView)
     : SwDrawBase(pWrtShell, pEditWin, pSwView), m_nButtonUpCount(0)

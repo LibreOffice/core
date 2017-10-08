@@ -20,8 +20,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_PRCNTFLD_HXX
 
 #include <vcl/field.hxx>
-#include "swdllapi.h"
-#include "uitool.hxx"
+#include <swdllapi.h>
+#include <uitool.hxx>
 
 //Wraps a MetricField with extra features
 class SW_DLLPUBLIC PercentField

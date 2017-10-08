@@ -65,7 +65,7 @@
 #include <paratr.hxx>
 #include <fmtcol.hxx>
 #include <poolfmt.hxx>
-#include "usrpref.hxx"
+#include <usrpref.hxx>
 
 #include <cmdid.h>
 #include <globals.hrc>

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FLDWRAP_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FLDWRAP_HXX
 
-#include "chldwrap.hxx"
+#include <chldwrap.hxx>
 class AbstractSwFieldDlg;
 
 class SwFieldDlgWrapper : public SwChildWinWrapper

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/itempool.hxx>
 #include <svx/svdobj.hxx>
@@ -48,20 +48,20 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoutl.hxx>
 
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "viewopt.hxx"
-#include "cmdid.h"
-#include "drawsh.hxx"
-#include "drwbassh.hxx"
-#include "beziersh.hxx"
-#include "conrect.hxx"
-#include "conpoly.hxx"
-#include "conarc.hxx"
-#include "conform.hxx"
-#include "concustomshape.hxx"
-#include "dselect.hxx"
-#include "edtwin.hxx"
+#include <view.hxx>
+#include <wrtsh.hxx>
+#include <viewopt.hxx>
+#include <cmdid.h>
+#include <drawsh.hxx>
+#include <drwbassh.hxx>
+#include <beziersh.hxx>
+#include <conrect.hxx>
+#include <conpoly.hxx>
+#include <conarc.hxx>
+#include <conform.hxx>
+#include <concustomshape.hxx>
+#include <dselect.hxx>
+#include <edtwin.hxx>
 
 #include <dcontact.hxx>
 

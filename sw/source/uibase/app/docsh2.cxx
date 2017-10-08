@@ -124,8 +124,8 @@
 #include <sfx2/fcontnr.hxx>
 #include <svx/ClassificationDialog.hxx>
 
-#include "swabstdlg.hxx"
-#include "watermarkdialog.hxx"
+#include <swabstdlg.hxx>
+#include <watermarkdialog.hxx>
 
 #include <ndtxt.hxx>
 

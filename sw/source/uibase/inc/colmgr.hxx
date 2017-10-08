@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_COLMGR_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_COLMGR_HXX
 
-#include "swdllapi.h"
+#include <swdllapi.h>
 #include <fmtclds.hxx>
 
 SW_DLLPUBLIC void FitToActualSize(SwFormatCol& rCol, sal_uInt16 nWidth);

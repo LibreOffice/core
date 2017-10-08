@@ -31,7 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <hhcwrp.hxx>
-#include <sdrhhcwrap.hxx>
+#include "sdrhhcwrap.hxx"
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <mdiexp.hxx>

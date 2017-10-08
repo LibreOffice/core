@@ -9,7 +9,7 @@
 
 #include <swtypes.hxx>
 #include <strings.hrc>
-#include "wordcountctrl.hxx"
+#include <wordcountctrl.hxx>
 #include <svl/stritem.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL(SwWordCountStatusBarControl, SfxStringItem);

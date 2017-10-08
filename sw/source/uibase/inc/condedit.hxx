@@ -21,7 +21,7 @@
 
 #include <vcl/edit.hxx>
 #include <svtools/transfer.hxx>
-#include "swdllapi.h"
+#include <swdllapi.h>
 
 class SW_DLLPUBLIC ConditionEdit : public Edit, public DropTargetHelper
 {

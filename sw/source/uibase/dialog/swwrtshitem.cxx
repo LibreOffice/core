@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swwrtshitem.hxx"
+#include <swwrtshitem.hxx>
 #include <globals.hrc>
 
 SwWrtShellItem::SwWrtShellItem( SwWrtShell* pSh )

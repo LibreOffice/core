@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <SidebarWinAcc.hxx>
+#include "SidebarWinAcc.hxx"
 #include <AnnotationWin.hxx>
 
 #include <viewsh.hxx>
