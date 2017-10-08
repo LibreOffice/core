@@ -613,12 +613,9 @@ void Formula::parse()
      if( res ){
           makeMathML( res );
      }
-     int count = nodelist.size();
-     for( i = 0 ; i < count ; i++ ){
-         const Node *tmpNode = nodelist.front();
-         nodelist.pop_front();
-         delete tmpNode;
-     }
+     for (const auto &node : nodelist)
+         delete node;
+     nodelist.clear();
 }
 
 void Formula::trim()
