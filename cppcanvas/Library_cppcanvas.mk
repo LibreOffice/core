@@ -71,7 +71,6 @@ $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/wrapper/implbitmap \
 	cppcanvas/source/wrapper/implbitmapcanvas \
 	cppcanvas/source/wrapper/implcanvas \
-	cppcanvas/source/wrapper/implcolor \
 	cppcanvas/source/wrapper/implcustomsprite \
 	cppcanvas/source/wrapper/implfont \
 	cppcanvas/source/wrapper/implpolypolygon \

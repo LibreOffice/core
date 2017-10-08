@@ -83,8 +83,6 @@ namespace cppcanvas
          */
         virtual ::basegfx::B2DPolyPolygon const* getClip() const = 0;
 
-        virtual ColorSharedPtr                   createColor() const = 0;
-
         virtual CanvasSharedPtr                  clone() const = 0;
         virtual void                             clear() const = 0;
 
