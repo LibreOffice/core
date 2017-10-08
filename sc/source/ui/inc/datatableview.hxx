@@ -35,9 +35,10 @@ class ScDataTableColView : public ScHeaderControl
 
 public:
 
-    ScDataTableColView(vcl::Window* pParent, ScDocument* pDoc, SelectionEngine* pSelectionEngine);
+    ScDataTableColView(vcl::Window* pParent, SelectionEngine* pSelectionEngine);
 
     void SetPos(SCCOLROW nRow);
+    void Init(ScDocument* pDoc);
 
     virtual SCCOLROW GetPos() const override;
     virtual sal_uInt16 GetEntrySize(SCCOLROW nPos) const override;
@@ -54,9 +55,10 @@ class ScDataTableRowView : public ScHeaderControl
 
 public:
 
-    ScDataTableRowView(vcl::Window* pParent, ScDocument* pDoc, SelectionEngine* pSelectionEngine);
+    ScDataTableRowView(vcl::Window* pParent, SelectionEngine* pSelectionEngine);
 
     void SetPos(SCCOLROW nRow);
+    void Init(ScDocument* pDoc);
 
     virtual SCCOLROW GetPos() const override;
     virtual sal_uInt16 GetEntrySize(SCCOLROW nPos) const override;
@@ -91,8 +93,14 @@ class SC_DLLPUBLIC ScDataTableView : public Control
 
     DECL_LINK( ScrollHdl, ScrollBar*, void );
 
+protected:
+
+    virtual Size GetOptimalSize() const override;
+
 public:
-    ScDataTableView(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc);
+    ScDataTableView(vcl::Window* pParent);
+
+    void Init(std::shared_ptr<ScDocument> pDoc);
 
     ~ScDataTableView() override;
 

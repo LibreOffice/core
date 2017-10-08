@@ -7,137 +7,479 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <dataproviderdlg.hxx>
+#include "dataproviderdlg.hxx"
 
-#include <sfx2/filedlghelper.hxx>
-#include <svtools/inettbc.hxx>
-#include <vcl/layout.hxx>
-#include <address.hxx>
-#include <docsh.hxx>
-#include <dbdata.hxx>
-#include "datamapper.hxx"
+#include "document.hxx"
+#include "dataprovider.hxx"
+#include "datatransformation.hxx"
 
-namespace sc {
+#include <vcl/lstbox.hxx>
 
-DataProviderDlg::DataProviderDlg(ScDocShell *pDocShell, vcl::Window* pParent)
-    : ModalDialog(pParent, "DataProviderDialog", "modules/scalc/ui/dataprovider.ui")
-    , mpDocShell(pDocShell)
+constexpr int MENU_START = 0;
+constexpr int MENU_COLUMN = 1;
+
+class ScDataProviderBaseControl : public VclContainer,
+                                    public VclBuilderContainer
 {
-    get(m_pCbUrl, "url");
-    get(m_pBtnBrowse, "browse");
-    get(m_pBtnOk, "ok");
-    get(m_pCBData, "combobox_db");
-    get(m_pCBProvider, "combobox_provider");
-    get(m_pEdID, "edit_id");
+    VclPtr<VclContainer> maGrid;
+    VclPtr<ListBox> maProviderList;
+    VclPtr<Edit> maEditURL;
+    VclPtr<Edit> maEditID;
+    VclPtr<PushButton> mpApplyBtn;
 
-    m_pCbUrl->SetSelectHdl( LINK( this, DataProviderDlg, UpdateComboBoxHdl ) );
-    m_pCbUrl->SetModifyHdl(LINK(this, DataProviderDlg, EditHdl));
-    m_pBtnBrowse->SetClickHdl( LINK( this, DataProviderDlg, BrowseHdl ) );
-    m_pCBData->SetSelectHdl(LINK(this, DataProviderDlg, SelectHdl));
-    Init();
-    m_pCBData->Resize();
-    UpdateEnable();
+    bool mbDirty;
+    OUString maOldProvider;
+    OUString maURL;
+    OUString maID;
+
+    Link<Window*, void> maImportCallback;
+
+    DECL_LINK(ProviderSelectHdl, ListBox&, void);
+    DECL_LINK(IDEditHdl, Edit&, void);
+    DECL_LINK(URLEditHdl, Edit&, void);
+    DECL_LINK(ApplyBtnHdl, Button*, void);
+
+    void updateApplyBtn(bool bValidConfig);
+
+public:
+    ScDataProviderBaseControl(vcl::Window* pParent, const Link<Window*, void>& rImportCallback);
+    ~ScDataProviderBaseControl() override;
+
+    virtual void dispose() override;
+    virtual void setAllocation(const Size &rAllocation) override;
+    virtual Size calculateRequisition() const override;
+
+    void isValid();
+
+    sc::ExternalDataSource getDataSource(ScDocument* pDoc);
+};
+
+ScDataProviderBaseControl::ScDataProviderBaseControl(vcl::Window* pParent,
+        const Link<Window*, void>& rImportCallback):
+    VclContainer(pParent, WB_CLIPCHILDREN | WB_BORDER),
+    mbDirty(false),
+    maImportCallback(rImportCallback)
+{
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), "modules/scalc/ui/dataproviderentry.ui"));
+
+    get(maGrid, "grid");
+    get(maProviderList, "provider_lst");
+    get(maEditURL, "ed_url");
+    get(maEditID, "ed_id");
+
+    auto aDataProvider = sc::DataProviderFactory::getDataProviders();
+    for (auto& rDataProvider : aDataProvider)
+    {
+        maProviderList->InsertEntry(rDataProvider);
+    }
+
+    maProviderList->SetSelectHdl(LINK(this, ScDataProviderBaseControl, ProviderSelectHdl));
+    maEditID->SetModifyHdl(LINK(this, ScDataProviderBaseControl, IDEditHdl));
+    maEditURL->SetModifyHdl(LINK(this, ScDataProviderBaseControl, URLEditHdl));
+
+    mpApplyBtn = VclPtr<PushButton>::Create(maGrid, WB_FLATBUTTON);
+    mpApplyBtn->set_grid_top_attach(1);
+    mpApplyBtn->set_grid_left_attach(5);
+    mpApplyBtn->SetQuickHelpText("Apply Changes");
+    mpApplyBtn->SetControlForeground(COL_GREEN);
+    mpApplyBtn->SetControlBackground(COL_GREEN);
+    mpApplyBtn->SetBackground(Wallpaper(COL_LIGHTGREEN));
+    mpApplyBtn->SetModeImage(Image(BitmapEx("sc/res/xml_element.png")));
+    mpApplyBtn->Show();
+    mpApplyBtn->SetClickHdl(LINK(this, ScDataProviderBaseControl, ApplyBtnHdl));
+    SetSizePixel(GetOptimalSize());
+    isValid();
 }
 
-DataProviderDlg::~DataProviderDlg()
+ScDataProviderBaseControl::~ScDataProviderBaseControl()
 {
     disposeOnce();
 }
 
-void DataProviderDlg::dispose()
+void ScDataProviderBaseControl::dispose()
 {
-    m_pCbUrl.clear();
-    m_pBtnBrowse.clear();
-    m_pBtnOk.clear();
-    m_pCBData.clear();
-    m_pCBProvider.clear();
-    m_pEdID.clear();
+    maEditID.clear();
+    maEditURL.clear();
+    maProviderList.clear();
+    mpApplyBtn.disposeAndClear();
+    maGrid.clear();
+    disposeBuilder();
+    VclContainer::dispose();
+}
+
+Size ScDataProviderBaseControl::calculateRequisition() const
+{
+    return getLayoutRequisition(*maGrid);
+}
+
+void ScDataProviderBaseControl::setAllocation(const Size &rAllocation)
+{
+    setLayoutPosSize(*maGrid, Point(0, 0), rAllocation);
+}
+
+void ScDataProviderBaseControl::isValid()
+{
+    bool bValid = !maProviderList->GetSelectedEntry().isEmpty();
+    bValid &= !maEditURL->GetText().isEmpty();
+
+    if (bValid)
+    {
+        Color aColor = GetSettings().GetStyleSettings().GetDialogColor();
+        SetBackground(aColor);
+        maGrid->SetBackground(aColor);
+        Invalidate();
+        updateApplyBtn(true);
+    }
+    else
+    {
+        SetBackground(Wallpaper(COL_RED));
+        maGrid->SetBackground(Wallpaper(COL_RED));
+        Invalidate();
+        updateApplyBtn(false);
+    }
+}
+
+sc::ExternalDataSource ScDataProviderBaseControl::getDataSource(ScDocument* pDoc)
+{
+    OUString aURL = maEditURL->GetText();
+    OUString aProvider = maProviderList->GetSelectedEntry();
+    sc::ExternalDataSource aSource(aURL, aProvider, pDoc);
+
+    OUString aID = maEditID->GetText();
+    aSource.setID(aID);
+    return aSource;
+}
+
+void ScDataProviderBaseControl::updateApplyBtn(bool bValidConfig)
+{
+    if (!bValidConfig)
+    {
+        mpApplyBtn->Disable();
+        mpApplyBtn->SetBackground(Wallpaper(COL_RED));
+        mpApplyBtn->SetQuickHelpText("");
+        return;
+    }
+
+    if (mbDirty)
+    {
+        mpApplyBtn->Enable();
+        mpApplyBtn->SetBackground(Wallpaper(COL_YELLOW));
+        mpApplyBtn->SetQuickHelpText("Apply Changes");
+    }
+    else
+    {
+        mpApplyBtn->Disable();
+        mpApplyBtn->SetBackground(Wallpaper(COL_GREEN));
+        mpApplyBtn->SetQuickHelpText("Current Config Applied");
+    }
+}
+
+IMPL_LINK_NOARG(ScDataProviderBaseControl, ProviderSelectHdl, ListBox&, void)
+{
+    isValid();
+    mbDirty |= maOldProvider != maProviderList->GetSelectedEntry();
+    maOldProvider = maProviderList->GetSelectedEntry();
+}
+
+IMPL_LINK_NOARG(ScDataProviderBaseControl, IDEditHdl, Edit&, void)
+{
+    isValid();
+    mbDirty |= maEditID->GetText() != maID;
+    maID = maEditID->GetText();
+}
+
+IMPL_LINK_NOARG(ScDataProviderBaseControl, URLEditHdl, Edit&, void)
+{
+    isValid();
+    mbDirty |= maEditURL->GetText() != maURL;
+    maURL = maEditURL->GetText();
+}
+
+IMPL_LINK_NOARG(ScDataProviderBaseControl, ApplyBtnHdl, Button*, void)
+{
+    mbDirty = false;
+    updateApplyBtn(true);
+    maImportCallback.Call(this);
+}
+
+
+namespace {
+
+struct MenuData
+{
+    int nMenuID;
+    const char* aMenuName;
+    std::function<void(ScDataProviderDlg*)> maCallback;
+};
+
+MenuData aStartData[] = {
+    { 0, "Apply & Quit", &ScDataProviderDlg::applyAndQuit },
+    { 1, "Cancel & Quit", &ScDataProviderDlg::cancelAndQuit }
+};
+
+MenuData aColumnData[] = {
+    { 0, "Delete Column", &ScDataProviderDlg::deleteColumn },
+    { 1, "Split Column", &ScDataProviderDlg::splitColumn },
+    { 2, "Merge Columns", &ScDataProviderDlg::mergeColumns },
+};
+
+class ScDataTransformationBaseControl : public VclContainer,
+                                    public VclBuilderContainer
+{
+    VclPtr<VclContainer> maGrid;
+
+public:
+    ScDataTransformationBaseControl(vcl::Window* pParent, const OUString& rUIFile);
+    ~ScDataTransformationBaseControl() override;
+
+    virtual void dispose() override;
+    virtual void setAllocation(const Size &rAllocation) override;
+    virtual Size calculateRequisition() const override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() = 0;
+};
+
+ScDataTransformationBaseControl::ScDataTransformationBaseControl(vcl::Window* pParent, const OUString& rUIFile):
+    VclContainer(pParent, WB_BORDER | WB_CLIPCHILDREN)
+{
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIFile));
+
+    get(maGrid, "grid");
+    SetSizePixel(GetOptimalSize());
+}
+
+ScDataTransformationBaseControl::~ScDataTransformationBaseControl()
+{
+    disposeOnce();
+}
+
+void ScDataTransformationBaseControl::dispose()
+{
+    maGrid.clear();
+
+    VclContainer::dispose();
+}
+
+Size ScDataTransformationBaseControl::calculateRequisition() const
+{
+    return getLayoutRequisition(*maGrid);
+}
+
+void ScDataTransformationBaseControl::setAllocation(const Size &rAllocation)
+{
+    setLayoutPosSize(*maGrid, Point(0, 0), rAllocation);
+}
+
+class ScSplitColumnTransformationControl : public ScDataTransformationBaseControl
+{
+private:
+    VclPtr<Edit> maSeparator;
+    VclPtr<NumericField> maNumColumns;
+
+public:
+    ScSplitColumnTransformationControl(vcl::Window* pParent);
+    ~ScSplitColumnTransformationControl() override;
+
+    virtual void dispose() override;
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+};
+
+ScSplitColumnTransformationControl::ScSplitColumnTransformationControl(vcl::Window* pParent):
+    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/splitcolumnentry.ui")
+{
+    get(maSeparator, "ed_separator");
+    get(maNumColumns, "num_cols");
+}
+
+ScSplitColumnTransformationControl::~ScSplitColumnTransformationControl()
+{
+    disposeOnce();
+}
+
+void ScSplitColumnTransformationControl::dispose()
+{
+    maSeparator.clear();
+    maNumColumns.clear();
+
+    ScDataTransformationBaseControl::dispose();
+}
+
+std::shared_ptr<sc::DataTransformation> ScSplitColumnTransformationControl::getTransformation()
+{
+    return std::make_shared<sc::SplitColumnTransformation>(0, ',');
+}
+
+class ScMergeColumnTransformationControl : public ScDataTransformationBaseControl
+{
+private:
+
+public:
+    ScMergeColumnTransformationControl(vcl::Window* pParent);
+
+    virtual std::shared_ptr<sc::DataTransformation> getTransformation() override;
+};
+
+ScMergeColumnTransformationControl::ScMergeColumnTransformationControl(vcl::Window* pParent):
+    ScDataTransformationBaseControl(pParent, "modules/scalc/ui/mergecolumnentry.ui")
+{
+}
+
+std::shared_ptr<sc::DataTransformation> ScMergeColumnTransformationControl::getTransformation()
+{
+    return std::make_shared<sc::MergeColumnTransformation>(0, 1, ",");
+}
+
+}
+
+ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDocument> pDoc):
+    ModalDialog(pParent, "dataproviderdlg", "modules/scalc/ui/dataproviderdlg2.ui", true),
+    mpDoc(pDoc),
+    mpBar(VclPtr<MenuBar>::Create())
+{
+    get(mpTable, "data_table");
+    get(mpList, "operation_ctrl");
+    mpTable->Init(mpDoc);
+
+    mpDataProviderCtrl = VclPtr<ScDataProviderBaseControl>::Create(mpList, LINK(this, ScDataProviderDlg, ImportHdl));
+    mpList->addEntry(mpDataProviderCtrl);
+
+    pDBData = new ScDBData("data", 0, 0, 0, MAXCOL, MAXROW);
+    bool bSuccess = mpDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    SAL_WARN_IF(!bSuccess, "sc", "temporary warning");
+
+    InitMenu();
+}
+
+ScDataProviderDlg::~ScDataProviderDlg()
+{
+    disposeOnce();
+}
+
+void ScDataProviderDlg::dispose()
+{
+    mpDataProviderCtrl.clear();
+    mpTable.clear();
+    mpList.clear();
+    mpBar.disposeAndClear();
+
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(DataProviderDlg, BrowseHdl, Button*, void)
+void ScDataProviderDlg::InitMenu()
 {
-    sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, this);
-    if ( aFileDialog.Execute() != ERRCODE_NONE )
-        return;
-
-    m_pCbUrl->SetText( aFileDialog.GetPath() );
-    UpdateEnable();
-}
-
-IMPL_LINK_NOARG(DataProviderDlg, UpdateClickHdl, Button*, void)
-{
-    UpdateEnable();
-}
-
-IMPL_LINK_NOARG(DataProviderDlg, UpdateComboBoxHdl, ComboBox&, void)
-{
-    UpdateEnable();
-}
-
-IMPL_LINK_NOARG(DataProviderDlg, EditHdl, Edit&, void)
-{
-    UpdateEnable();
-}
-
-IMPL_LINK_NOARG(DataProviderDlg, SelectHdl, ListBox&, void)
-{
-    UpdateEnable();
-}
-
-void DataProviderDlg::UpdateEnable()
-{
-    bool bEmptyEntry = m_pCbUrl->GetURL().isEmpty() ||
-            m_pCBData->GetSelectedEntry().isEmpty() ||
-            m_pCBProvider->GetSelectedEntry().isEmpty();
-    m_pBtnOk->Enable(!bEmptyEntry);
-    setOptimalLayoutSize();
-}
-
-void DataProviderDlg::Init()
-{
-    ScDocument& rDoc = mpDocShell->GetDocument();
-    ScDBCollection::NamedDBs& rNamedDBs = rDoc.GetDBCollection()->getNamedDBs();
-    for (auto& itr : rNamedDBs)
+    mpBar->InsertItem(MENU_START, "Start");
+    VclPtrInstance<PopupMenu> pPopup;
+    for (auto& itrStartData : aStartData)
     {
-        OUString aName = itr->GetName();
-        m_pCBData->InsertEntry(aName);
+        pPopup->InsertItem(itrStartData.nMenuID, OUString::createFromAscii(itrStartData.aMenuName));
     }
 
-    std::vector<OUString> aDataProviders = sc::DataProviderFactory::getDataProviders();
-    for (auto& itr : aDataProviders)
+    mpBar->SetPopupMenu(MENU_START, pPopup);
+    pPopup->SetSelectHdl(LINK(this, ScDataProviderDlg, StartMenuHdl));
+
+    mpBar->InsertItem(MENU_COLUMN, "Column");
+    VclPtrInstance<PopupMenu> pColumnMenu;
+    for (auto& itrColumnData : aColumnData)
+ {
+        pColumnMenu->InsertItem(itrColumnData.nMenuID, OUString::createFromAscii(itrColumnData.aMenuName));
+    }
+    pColumnMenu->SetSelectHdl(LINK(this, ScDataProviderDlg, ColumnMenuHdl));
+
+    mpBar->SetPopupMenu(MENU_COLUMN, pColumnMenu);
+
+    SetMenuBar(mpBar.get());
+}
+
+void ScDataProviderDlg::MouseButtonUp(const MouseEvent& rMEvt)
+{
+    VclPtr<FixedText> mpText = VclPtr<FixedText>::Create(mpList);
+    mpText->SetText("Some Text " + OUString::number(rMEvt.GetPosPixel().X()) + "x" + OUString::number(rMEvt.GetPosPixel().getY()));
+    mpText->SetSizePixel(Size(400, 20));
+    mpList->addEntry(mpText);
+}
+
+IMPL_LINK(ScDataProviderDlg, StartMenuHdl, Menu*, pMenu, bool)
+{
+    for (auto& i: aStartData)
     {
-        m_pCBProvider->InsertEntry(itr);
+        if (i.nMenuID == pMenu->GetCurItemId())
+        {
+            i.maCallback(this);
+            return true;
+        }
+    }
+    return true;
+}
+
+IMPL_LINK(ScDataProviderDlg, ColumnMenuHdl, Menu*, pMenu, bool)
+{
+    for (auto& i: aColumnData)
+    {
+        if (i.nMenuID == pMenu->GetCurItemId())
+        {
+            i.maCallback(this);
+            return true;
+        }
+    }
+    return true;
+}
+
+IMPL_LINK(ScDataProviderDlg, ImportHdl, Window*, pCtrl, void)
+{
+    if (pCtrl == mpDataProviderCtrl.get())
+    {
+        import();
     }
 }
 
-void DataProviderDlg::StartImport()
+void ScDataProviderDlg::applyAndQuit()
 {
-    OUString aURL = m_pCbUrl->GetText();
-    if (aURL.isEmpty())
-        return;
-
-    OUString maDBDataName = m_pCBData->GetSelectedEntry();
-    if (maDBDataName.isEmpty())
-        return;
-
-    OUString aProvider = m_pCBProvider->GetSelectedEntry();
-    if (aProvider.isEmpty())
-        return;
-
-    ScDocument& rDoc = mpDocShell->GetDocument();
-    ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(maDBDataName));
-    if (!pDBData)
-        return;
-
-    OUString aID = m_pEdID->GetText();
-
-    ExternalDataSource aDataSource(aURL, aProvider, &mpDocShell->GetDocument());
-    aDataSource.setID(aID);
-    aDataSource.setDBData(pDBData);
-    mpDocShell->GetDocument().GetExternalDataMapper().insertDataSource(aDataSource);
+    EndDialog(RET_OK);
 }
 
+void ScDataProviderDlg::cancelAndQuit()
+{
+    EndDialog(RET_CANCEL);
+}
+
+void ScDataProviderDlg::deleteColumn()
+{
+    VclPtr<FixedText> mpText = VclPtr<FixedText>::Create(mpList);
+    mpText->SetText("Delete Column");
+    mpText->SetSizePixel(Size(400, 20));
+    mpList->addEntry(mpText);
+}
+
+void ScDataProviderDlg::splitColumn()
+{
+    VclPtr<ScSplitColumnTransformationControl> pSplitColumnEntry = VclPtr<ScSplitColumnTransformationControl>::Create(mpList);
+    mpList->addEntry(pSplitColumnEntry);
+}
+
+void ScDataProviderDlg::mergeColumns()
+{
+    VclPtr<ScMergeColumnTransformationControl> pMergeColumnEntry = VclPtr<ScMergeColumnTransformationControl>::Create(mpList);
+    mpList->addEntry(pMergeColumnEntry);
+}
+
+void ScDataProviderDlg::import()
+{
+    sc::ExternalDataSource aSource = mpDataProviderCtrl->getDataSource(mpDoc.get());
+    std::vector<VclPtr<vcl::Window>> aListEntries = mpList->getEntries();
+    for (size_t i = 1; i < aListEntries.size(); ++i)
+    {
+        ScDataTransformationBaseControl* pTransformationCtrl = dynamic_cast<ScDataTransformationBaseControl*>(aListEntries[i].get());
+        if (!pTransformationCtrl)
+        {
+            SAL_WARN("sc", "all children except the provider should inherit from the base control");
+            continue;
+        }
+        aSource.AddDataTransformation(pTransformationCtrl->getTransformation());
+    }
+    aSource.setDBData(pDBData);
+    aSource.refresh(mpDoc.get(), true);
+    mpTable->Invalidate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -111,6 +111,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/dataform \
 	sc/uiconfig/scalc/ui/datastreams \
 	sc/uiconfig/scalc/ui/dataprovider \
+	sc/uiconfig/scalc/ui/dataproviderdlg \
+	sc/uiconfig/scalc/ui/dataproviderentry \
 	sc/uiconfig/scalc/ui/definedatabaserangedialog \
 	sc/uiconfig/scalc/ui/definename \
 	sc/uiconfig/scalc/ui/deletecells \
@@ -211,6 +213,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sortkey \
 	sc/uiconfig/scalc/ui/sortoptionspage \
 	sc/uiconfig/scalc/ui/sortwarning \
+	sc/uiconfig/scalc/ui/splitcolumnentry \
 	sc/uiconfig/scalc/ui/subtotaldialog \
 	sc/uiconfig/scalc/ui/subtotaloptionspage \
 	sc/uiconfig/scalc/ui/subtotalgrppage \
