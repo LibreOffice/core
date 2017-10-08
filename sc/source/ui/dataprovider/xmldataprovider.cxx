@@ -39,12 +39,9 @@ void XMLFetchThread::execute()
     mpIdle->Start();
 }
 
-XMLDataProvider::XMLDataProvider(ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pDBManager,
-        const OUString& rID):
-    maURL(rURL),
-    maID(rID),
+XMLDataProvider::XMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource):
+    DataProvider(rDataSource),
     mpDocument(pDoc),
-    mpDBDataManager(pDBManager),
     maIdle("XMLDataProvider CopyHandler")
 {
     maIdle.SetInvokeHandler(LINK(this, XMLDataProvider, ImportFinishedHdl));
@@ -65,7 +62,7 @@ void XMLDataProvider::Import()
 
 const OUString& XMLDataProvider::GetURL() const
 {
-    return maURL;
+    return mrDataSource.getURL();
 }
 
 std::map<OUString, OUString> XMLDataProvider::getDataSourcesForURL(const OUString& /*rURL*/)
@@ -77,7 +74,7 @@ std::map<OUString, OUString> XMLDataProvider::getDataSourcesForURL(const OUStrin
 
 IMPL_LINK_NOARG(XMLDataProvider, ImportFinishedHdl, Timer*, void)
 {
-    mpDBDataManager->WriteToDoc(*mpDoc);
+    mrDataSource.getDBManager()->WriteToDoc(*mpDoc);
     mxXMLFetchThread.clear();
     mpDoc.reset();
 }

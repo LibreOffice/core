@@ -60,11 +60,11 @@ class CSVFetchThread : public salhelper::Thread
 
     std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
 
-    Idle* mpIdle;
+    std::function<void()> maImportFinishedHdl;
 
 
 public:
-    CSVFetchThread(ScDocument& rDoc, const OUString&, Idle* pIdle,
+    CSVFetchThread(ScDocument& rDoc, const OUString&, std::function<void()> aImportFinishedHdl,
             const std::vector<std::shared_ptr<sc::DataTransformation>>& mrDataTransformations);
     virtual ~CSVFetchThread() override;
 
@@ -87,9 +87,10 @@ protected:
      * If true make the threaded import deterministic for the tests.
      */
     bool mbDeterministic;
+    sc::ExternalDataSource& mrDataSource;
 
 public:
-    DataProvider();
+    DataProvider(sc::ExternalDataSource& rDataSource);
 
     virtual ~DataProvider();
 
@@ -106,23 +107,20 @@ public:
 
 class CSVDataProvider : public DataProvider
 {
-    OUString maURL;
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
     ScDocument* mpDocument;
-    ScDBDataManager* mpDBDataManager;
     std::unique_ptr<ScDocument> mpDoc;
-    Idle maIdle;
 
     void Refresh();
 
 public:
-    CSVDataProvider (ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pDBManager);
+    CSVDataProvider (ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
     virtual ~CSVDataProvider() override;
 
     virtual void Import() override;
 
-    const OUString& GetURL() const override { return maURL; }
-    DECL_LINK( ImportFinishedHdl, Timer*, void );
+    const OUString& GetURL() const override;
+    void ImportFinished();
 };
 
 /**
@@ -140,16 +138,11 @@ class ScDBDataManager
     OUString maDBName;
     ScDocument* mpDoc;
 
-    std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
-
 public:
     ScDBDataManager(const OUString& rDBName, bool bAllowResize, ScDocument* pDoc);
     ~ScDBDataManager();
 
     void SetDatabase(const OUString& rDBName);
-
-    void AddDataTransformation(std::shared_ptr<sc::DataTransformation> mpDataTransformation);
-    const std::vector<std::shared_ptr<sc::DataTransformation>>& getDataTransformation() const;
 
     ScDBData* getDBData();
 
@@ -164,7 +157,7 @@ private:
 
 public:
 
-    static std::shared_ptr<DataProvider> getDataProvider(ScDocument* pDoc, const OUString& rProvider, const OUString& rURL, const OUString& rID, ScDBDataManager* pManager);
+    static std::shared_ptr<DataProvider> getDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
 
     static std::vector<OUString> getDataProviders();
 };

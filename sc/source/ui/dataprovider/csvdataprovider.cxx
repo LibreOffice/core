@@ -65,14 +65,14 @@ public:
 
 namespace sc {
 
-CSVFetchThread::CSVFetchThread(ScDocument& rDoc, const OUString& mrURL, Idle* pIdle,
+CSVFetchThread::CSVFetchThread(ScDocument& rDoc, const OUString& mrURL, std::function<void()> aImportFinishedHdl,
         const std::vector<std::shared_ptr<sc::DataTransformation>>& rDataTransformations):
         Thread("CSV Fetch Thread"),
         mrDocument(rDoc),
         maURL (mrURL),
         mbTerminate(false),
         maDataTransformations(rDataTransformations),
-        mpIdle(pIdle)
+        maImportFinishedHdl(aImportFinishedHdl)
 {
     maConfig.delimiters.push_back(',');
     maConfig.text_qualifier = '"';
@@ -116,16 +116,13 @@ void CSVFetchThread::execute()
     }
 
     SolarMutexGuard aGuard;
-    mpIdle->Start();
+    maImportFinishedHdl();
 }
 
-CSVDataProvider::CSVDataProvider(ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pBDDataManager):
-    maURL(rURL),
-    mpDocument(pDoc),
-    mpDBDataManager(pBDDataManager),
-    maIdle("CSVDataProvider CopyHandler")
+CSVDataProvider::CSVDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource):
+    DataProvider(rDataSource),
+    mpDocument(pDoc)
 {
-    maIdle.SetInvokeHandler(LINK(this, CSVDataProvider, ImportFinishedHdl));
 }
 
 CSVDataProvider::~CSVDataProvider()
@@ -145,7 +142,7 @@ void CSVDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, (SCTAB)0);
-    mxCSVFetchThread = new CSVFetchThread(*mpDoc, maURL, &maIdle, mpDBDataManager->getDataTransformation());
+    mxCSVFetchThread = new CSVFetchThread(*mpDoc, mrDataSource.getURL(), std::bind(&CSVDataProvider::ImportFinished, this), mrDataSource.getDataTransformation());
     mxCSVFetchThread->launch();
 
     if (mbDeterministic)
@@ -155,10 +152,9 @@ void CSVDataProvider::Import()
     }
 }
 
-IMPL_LINK_NOARG(CSVDataProvider, ImportFinishedHdl, Timer*, void)
+void CSVDataProvider::ImportFinished()
 {
-    mpDBDataManager->WriteToDoc(*mpDoc);
-    mxCSVFetchThread.clear();
+    mrDataSource.getDBManager()->WriteToDoc(*mpDoc);
     mpDoc.reset();
     Refresh();
 }
@@ -166,7 +162,13 @@ IMPL_LINK_NOARG(CSVDataProvider, ImportFinishedHdl, Timer*, void)
 void CSVDataProvider::Refresh()
 {
     ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDocument->GetDocumentShell());
-    pDocShell->SetDocumentModified();
+    if (pDocShell)
+        pDocShell->SetDocumentModified();
+}
+
+const OUString& CSVDataProvider::GetURL() const
+{
+    return mrDataSource.getURL();
 }
 
 }

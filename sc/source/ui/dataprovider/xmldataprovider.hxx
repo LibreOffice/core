@@ -18,10 +18,7 @@ class XMLFetchThread;
 
 class XMLDataProvider : public DataProvider
 {
-    OUString maURL;
-    OUString maID;
     ScDocument* mpDocument;
-    ScDBDataManager* mpDBDataManager;
     rtl::Reference<XMLFetchThread> mxXMLFetchThread;
 
     std::unique_ptr<ScDocument> mpDoc;
@@ -29,7 +26,7 @@ class XMLDataProvider : public DataProvider
 
 public:
 
-    XMLDataProvider(ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pDBManager, const OUString& rID);
+    XMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
     virtual ~XMLDataProvider();
 
     virtual void Import() override;
