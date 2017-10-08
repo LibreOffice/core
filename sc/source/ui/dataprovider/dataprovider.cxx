@@ -74,6 +74,17 @@ void ExternalDataSource::setID(const OUString& rID)
     maID = rID;
 }
 
+void ExternalDataSource::setURL(const OUString& rURL)
+{
+    maURL = rURL;
+}
+
+void ExternalDataSource::setProvider(const OUString& rProvider)
+{
+    maProvider = rProvider;
+    mpDataProvider.reset();
+}
+
 const OUString& ExternalDataSource::getURL() const
 {
     return maURL;
@@ -117,6 +128,11 @@ double ExternalDataSource::getUpdateFrequency() const
     return mnUpdateFrequency;
 }
 
+ScDBDataManager* ExternalDataSource::getDBManager()
+{
+    return mpDBDataManager.get();
+}
+
 void ExternalDataSource::refresh(ScDocument* pDoc, bool bDeterministic)
 {
     // no DB data available
@@ -125,7 +141,7 @@ void ExternalDataSource::refresh(ScDocument* pDoc, bool bDeterministic)
 
     // if no data provider exists, try to create one
     if (!mpDataProvider)
-        mpDataProvider = DataProviderFactory::getDataProvider(pDoc, maProvider, maURL, maID, mpDBDataManager.get());
+        mpDataProvider = DataProviderFactory::getDataProvider(pDoc, *this);
 
     // if we still have not been able to create one, we can not refresh the data
     if (!mpDataProvider)
@@ -135,6 +151,16 @@ void ExternalDataSource::refresh(ScDocument* pDoc, bool bDeterministic)
         mpDataProvider->setDeterministic();
 
     mpDataProvider->Import();
+}
+
+void ExternalDataSource::AddDataTransformation(std::shared_ptr<sc::DataTransformation> mpDataTransformation)
+{
+    maDataTransformations.push_back(mpDataTransformation);
+}
+
+const std::vector<std::shared_ptr<sc::DataTransformation>>& ExternalDataSource::getDataTransformation() const
+{
+    return maDataTransformations;
 }
 
 ExternalDataMapper::ExternalDataMapper(ScDocument* /*pDoc*/)
@@ -161,8 +187,9 @@ std::vector<sc::ExternalDataSource>& ExternalDataMapper::getDataSources()
     return maDataSources;
 }
 
-DataProvider::DataProvider():
-    mbDeterministic(false)
+DataProvider::DataProvider(sc::ExternalDataSource& rDataSource):
+    mbDeterministic(false),
+    mrDataSource(rDataSource)
 {
 }
 
@@ -198,14 +225,15 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
     SCCOL nColSize = std::min<SCCOL>(aDestRange.aEnd.Col() - aDestRange.aStart.Col(), nEndCol);
     aDestRange.aEnd.SetCol(aDestRange.aStart.Col() + nColSize);
 
-    SCROW nRowSize = std::min<SCCOL>(aDestRange.aEnd.Row() - aDestRange.aStart.Row(), nEndRow);
+    SCROW nRowSize = std::min<SCROW>(aDestRange.aEnd.Row() - aDestRange.aStart.Row(), nEndRow);
     aDestRange.aEnd.SetRow(aDestRange.aStart.Row() + nRowSize);
 
     ScMarkData aMark;
     aMark.SelectTable(0, true);
     mpDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &rDoc);
     ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());
-    pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
+    if (pDocShell)
+        pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
 }
 
 ScDBDataManager::ScDBDataManager(const OUString& rDBName,  bool /*bAllowResize*/, ScDocument* pDoc):
@@ -224,16 +252,6 @@ void ScDBDataManager::SetDatabase(const OUString& rDBName)
     maDBName = rDBName;
 }
 
-void ScDBDataManager::AddDataTransformation(std::shared_ptr<sc::DataTransformation> mpDataTransformation)
-{
-    maDataTransformations.push_back(std::move(mpDataTransformation));
-}
-
-const std::vector<std::shared_ptr<sc::DataTransformation>>& ScDBDataManager::getDataTransformation() const
-{
-    return maDataTransformations;
-}
-
 ScDBData* ScDBDataManager::getDBData()
 {
     ScDBData* pDBData = mpDoc->GetDBCollection()->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(maDBName));
@@ -245,16 +263,17 @@ bool DataProviderFactory::isInternalDataProvider(const OUString& rProvider)
     return rProvider.startsWith("org.libreoffice.calc");
 }
 
-std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* pDoc, const OUString& rProvider,
-        const OUString& rURL, const OUString& rID, ScDBDataManager* pManager)
+std::shared_ptr<DataProvider> DataProviderFactory::getDataProvider(ScDocument* pDoc,
+        sc::ExternalDataSource& rDataSource)
 {
-    bool bInternal = DataProviderFactory::isInternalDataProvider(rProvider);
+    const OUString& rDataProvider = rDataSource.getProvider();
+    bool bInternal = DataProviderFactory::isInternalDataProvider(rDataProvider);
     if (bInternal)
     {
-        if (rProvider == "org.libreoffice.calc.csv")
-            return std::shared_ptr<DataProvider>(new CSVDataProvider(pDoc, rURL, pManager));
-        else if (rProvider == "org.libreoffice.calc.html")
-            return std::shared_ptr<DataProvider>(new HTMLDataProvider(pDoc, rURL, pManager, rID));
+        if (rDataProvider == "org.libreoffice.calc.csv")
+            return std::shared_ptr<DataProvider>(new CSVDataProvider(pDoc, rDataSource));
+        else if (rDataProvider == "org.libreoffice.calc.html")
+            return std::shared_ptr<DataProvider>(new HTMLDataProvider(pDoc, rDataSource));
     }
     else
     {

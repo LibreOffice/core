@@ -27,8 +27,7 @@ class HTMLFetchThread : public salhelper::Thread
     OUString maURL;
     OUString maID;
     const std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
-
-    Idle* mpIdle;
+    std::function<void()> maImportFinishedHdl;
 
     void handleTable(xmlNodePtr pTable);
     void handleRow(xmlNodePtr pRow, SCROW nRow);
@@ -36,20 +35,20 @@ class HTMLFetchThread : public salhelper::Thread
     void handleCell(xmlNodePtr pCell, SCROW nRow, SCCOL nCol);
 
 public:
-    HTMLFetchThread(ScDocument& rDoc, const OUString&, const OUString& rID, Idle* pIdle,
+    HTMLFetchThread(ScDocument& rDoc, const OUString&, const OUString& rID, std::function<void()> aImportFinishedHdl,
             const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations);
 
     virtual void execute() override;
 };
 
-HTMLFetchThread::HTMLFetchThread(ScDocument& rDoc, const OUString& rURL, const OUString& rID, Idle* pIdle,
+HTMLFetchThread::HTMLFetchThread(ScDocument& rDoc, const OUString& rURL, const OUString& rID, std::function<void()> aImportFinishedHdl,
         const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations):
     salhelper::Thread("HTML Fetch Thread"),
     mrDocument(rDoc),
     maURL(rURL),
     maID(rID),
     maDataTransformations(rTransformations),
-    mpIdle(pIdle)
+    maImportFinishedHdl(aImportFinishedHdl)
 {
 }
 
@@ -207,18 +206,13 @@ void HTMLFetchThread::execute()
     }
 
     SolarMutexGuard aGuard;
-    mpIdle->Start();
+    maImportFinishedHdl();
 }
 
-HTMLDataProvider::HTMLDataProvider(ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pDBManager,
-        const OUString& rID):
-    maID(rID),
-    maURL(rURL),
-    mpDocument(pDoc),
-    mpDBDataManager(pDBManager),
-    maIdle("HTMLDataProvider CopyHandler")
+HTMLDataProvider::HTMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource):
+    DataProvider(rDataSource),
+    mpDocument(pDoc)
 {
-    maIdle.SetInvokeHandler(LINK(this, HTMLDataProvider, ImportFinishedHdl));
 }
 
 HTMLDataProvider::~HTMLDataProvider()
@@ -238,8 +232,8 @@ void HTMLDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, (SCTAB)0);
-    mxHTMLFetchThread = new HTMLFetchThread(*mpDoc, maURL, maID, &maIdle,
-            mpDBDataManager->getDataTransformation());
+    mxHTMLFetchThread = new HTMLFetchThread(*mpDoc, mrDataSource.getURL(), mrDataSource.getID(),
+            std::bind(&HTMLDataProvider::ImportFinished, this), mrDataSource.getDataTransformation());
     mxHTMLFetchThread->launch();
 
     if (mbDeterministic)
@@ -254,7 +248,7 @@ std::map<OUString, OUString> HTMLDataProvider::getDataSourcesForURL(const OUStri
     std::map<OUString, OUString> aMap;
 
     OStringBuffer aBuffer(64000);
-    std::unique_ptr<SvStream> pStream = DataProvider::FetchStreamFromURL(maURL, aBuffer);
+    std::unique_ptr<SvStream> pStream = DataProvider::FetchStreamFromURL(mrDataSource.getURL(), aBuffer);
 
     if (aBuffer.isEmpty())
         return std::map<OUString, OUString>();
@@ -280,16 +274,16 @@ std::map<OUString, OUString> HTMLDataProvider::getDataSourcesForURL(const OUStri
     return aMap;
 }
 
-IMPL_LINK_NOARG(HTMLDataProvider, ImportFinishedHdl, Timer*, void)
+void HTMLDataProvider::ImportFinished()
 {
-    mpDBDataManager->WriteToDoc(*mpDoc);
+    mrDataSource.getDBManager()->WriteToDoc(*mpDoc);
     mxHTMLFetchThread.clear();
     mpDoc.reset();
 }
 
 const OUString& HTMLDataProvider::GetURL() const
 {
-    return maURL;
+    return mrDataSource.getURL();
 }
 
 }

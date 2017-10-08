@@ -21,18 +21,14 @@ class HTMLDataProvider : public DataProvider
 {
 private:
 
-    OUString maID;
-    OUString maURL;
     ScDocument* mpDocument;
-    ScDBDataManager* mpDBDataManager;
     rtl::Reference<HTMLFetchThread> mxHTMLFetchThread;
 
     std::unique_ptr<ScDocument> mpDoc;
-    Idle maIdle;
 
 public:
 
-    HTMLDataProvider(ScDocument* pDoc, const OUString& rURL, ScDBDataManager* pDBManager, const OUString& rID);
+    HTMLDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
     virtual ~HTMLDataProvider() override;
 
     virtual void Import() override;
@@ -41,7 +37,7 @@ public:
 
     virtual std::map<OUString, OUString> getDataSourcesForURL(const OUString& rURL) override;
 
-    DECL_LINK( ImportFinishedHdl, Timer*, void );
+    void ImportFinished();
 };
 
 }
