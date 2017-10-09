@@ -29,7 +29,7 @@
 #include <svl/lstner.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svdmark.hxx>
-#include "bastypes.hxx"
+#include <bastypes.hxx>
 
 class SfxBindings;
 class SdrView;

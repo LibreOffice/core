@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "iderdll.hxx"
+#include <iderdll.hxx>
 #include "iderdll2.hxx"
 #include "macrodlg.hxx"
 #include "moduldlg.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "baside2.hxx"
 
 #include <com/sun/star/document/XScriptInvocationContext.hpp>

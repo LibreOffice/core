@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_LOCALIZATIONMGR_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_LOCALIZATIONMGR_HXX
 
-#include "scriptdocument.hxx"
+#include <scriptdocument.hxx>
 
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 

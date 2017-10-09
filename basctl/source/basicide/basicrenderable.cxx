@@ -18,8 +18,8 @@
  */
 
 #include "basicrenderable.hxx"
-#include "bastypes.hxx"
-#include "strings.hrc"
+#include <bastypes.hxx>
+#include <strings.hrc>
 
 #include <toolkit/awt/vclxdevice.hxx>
 #include <tools/multisel.hxx>

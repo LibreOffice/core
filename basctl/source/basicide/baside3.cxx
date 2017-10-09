@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "strings.hrc"
-#include "helpids.h"
+#include <strings.hrc>
+#include <helpids.h>
 
-#include "accessibledialogwindow.hxx"
-#include "baside3.hxx"
-#include "basidesh.hxx"
-#include "bastype2.hxx"
-#include "dlged.hxx"
-#include "dlgeddef.hxx"
-#include "dlgedmod.hxx"
-#include "dlgedview.hxx"
-#include "iderdll.hxx"
-#include "localizationmgr.hxx"
-#include "managelang.hxx"
+#include <accessibledialogwindow.hxx>
+#include <baside3.hxx>
+#include <basidesh.hxx>
+#include <bastype2.hxx>
+#include <dlged.hxx>
+#include <dlgeddef.hxx>
+#include <dlgedmod.hxx>
+#include <dlgedview.hxx>
+#include <iderdll.hxx>
+#include <localizationmgr.hxx>
+#include <managelang.hxx>
 
 #include <basic/basmgr.hxx>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>

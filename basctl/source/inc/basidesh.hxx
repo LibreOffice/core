@@ -19,9 +19,9 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_BASIDESH_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_BASIDESH_HXX
 
-#include "doceventnotifier.hxx"
-#include "sbxitem.hxx"
-#include "objdlg.hxx"
+#include <doceventnotifier.hxx>
+#include <sbxitem.hxx>
+#include <objdlg.hxx>
 
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <sfx2/viewsh.hxx>

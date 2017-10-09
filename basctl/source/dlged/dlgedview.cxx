@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlgedview.hxx"
-#include "dlged.hxx"
+#include <dlgedview.hxx>
+#include <dlged.hxx>
 #include <dlgedpage.hxx>
 
 #include <svx/svxids.hrc>
@@ -26,7 +26,7 @@
 
 #include <basidesh.hxx>
 #include <iderdll.hxx>
-#include "dlgedobj.hxx"
+#include <dlgedobj.hxx>
 
 namespace basctl
 {

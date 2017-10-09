@@ -21,13 +21,13 @@
 
 #include <cassert>
 
-#include "helpids.h"
+#include <helpids.h>
 #include <strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #include "baside2.hxx"
 #include "brkdlg.hxx"
-#include "iderdll.hxx"
+#include <iderdll.hxx>
 
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>

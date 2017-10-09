@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basidectrlr.hxx"
+#include <basidectrlr.hxx>
 
-#include "basidesh.hxx"
+#include <basidesh.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

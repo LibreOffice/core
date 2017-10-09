@@ -19,12 +19,12 @@
 
 #include <sal/config.h>
 
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <strings.hrc>
+#include <bitmaps.hlst>
 
 #include "moduldlg.hxx"
-#include "localizationmgr.hxx"
-#include "basidesh.hxx"
+#include <localizationmgr.hxx>
+#include <basidesh.hxx>
 
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>

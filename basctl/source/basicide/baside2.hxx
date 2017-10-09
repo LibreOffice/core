@@ -21,9 +21,9 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASIDE2_HXX
 
 #include <memory>
-#include "layout.hxx"
+#include <layout.hxx>
 #include "bastype3.hxx"
-#include "basidesh.hxx"
+#include <basidesh.hxx>
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
 

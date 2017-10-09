@@ -19,7 +19,7 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_BASOBJ_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_BASOBJ_HXX
 
-#include "scriptdocument.hxx"
+#include <scriptdocument.hxx>
 
 #include <svl/lstner.hxx>
 

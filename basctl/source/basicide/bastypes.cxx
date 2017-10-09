@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "strings.hrc"
-#include "helpids.h"
+#include <strings.hrc>
+#include <helpids.h>
 
 #include "baside2.hxx"
-#include "baside3.hxx"
-#include "iderdll.hxx"
+#include <baside3.hxx>
+#include <iderdll.hxx>
 #include "iderdll2.hxx"
 
 #include <basic/basmgr.hxx>

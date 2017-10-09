@@ -21,16 +21,16 @@
 
 #include <cassert>
 
-#include "dlged.hxx"
-#include "dlgeddef.hxx"
-#include "dlgedlist.hxx"
-#include "dlgedobj.hxx"
-#include "dlgedpage.hxx"
-#include "dlgedview.hxx"
-#include "iderid.hxx"
-#include "localizationmgr.hxx"
-#include "strings.hxx"
-#include "strings.hrc"
+#include <dlged.hxx>
+#include <dlgeddef.hxx>
+#include <dlgedlist.hxx>
+#include <dlgedobj.hxx>
+#include <dlgedpage.hxx>
+#include <dlgedview.hxx>
+#include <iderid.hxx>
+#include <localizationmgr.hxx>
+#include <strings.hxx>
+#include <strings.hrc>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>

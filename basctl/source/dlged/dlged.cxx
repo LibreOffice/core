@@ -18,19 +18,19 @@
  */
 
 
-#include "basidesh.hxx"
-#include "dlged.hxx"
-#include "dlgedclip.hxx"
-#include "dlgeddef.hxx"
-#include "dlgedfac.hxx"
-#include "dlgedfunc.hxx"
-#include "dlgedmod.hxx"
-#include "dlgedobj.hxx"
-#include "dlgedpage.hxx"
-#include "dlgedview.hxx"
-#include "iderdll.hxx"
-#include "localizationmgr.hxx"
-#include "baside3.hxx"
+#include <basidesh.hxx>
+#include <dlged.hxx>
+#include <dlgedclip.hxx>
+#include <dlgeddef.hxx>
+#include <dlgedfac.hxx>
+#include <dlgedfunc.hxx>
+#include <dlgedmod.hxx>
+#include <dlgedobj.hxx>
+#include <dlgedpage.hxx>
+#include <dlgedview.hxx>
+#include <iderdll.hxx>
+#include <localizationmgr.hxx>
+#include <baside3.hxx>
 
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>

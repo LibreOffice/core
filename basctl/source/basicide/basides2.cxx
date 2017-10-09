@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "docsignature.hxx"
+#include <docsignature.hxx>
 
 #include "basicrenderable.hxx"
 
 #include <com/sun/star/frame/XTitle.hpp>
 
 #include <strings.hrc>
-#include <baside2.hxx>
-#include <basdoc.hxx>
+#include "baside2.hxx"
+#include "basdoc.hxx"
 #include <vcl/xtextedt.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/signaturestate.hxx>

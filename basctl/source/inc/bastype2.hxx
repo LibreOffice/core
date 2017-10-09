@@ -24,12 +24,12 @@
 
 #include <memory>
 
-#include "doceventnotifier.hxx"
+#include <doceventnotifier.hxx>
 
 #include <svtools/treelistbox.hxx>
 #include <basic/sbstar.hxx>
 #include <sbxitem.hxx>
-#include "basobj.hxx"
+#include <basobj.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SbModule;

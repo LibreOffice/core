@@ -23,14 +23,14 @@
 #include <unotools/moduleoptions.hxx>
 
 #include <iderdll.hxx>
-#include <iderdll2.hxx>
-#include <basdoc.hxx>
+#include "iderdll2.hxx"
+#include "basdoc.hxx"
 #include <strings.hrc>
 
-#include <baside2.hxx>
+#include "baside2.hxx"
 #include <baside3.hxx>
 #include <localizationmgr.hxx>
-#include "dlged.hxx"
+#include <dlged.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
