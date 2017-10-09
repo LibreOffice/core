@@ -22,7 +22,7 @@
 
 #include "wincommon.hxx"
 #include <cppuhelper/implbase.hxx>
-#include "com/sun/star/media/XFrameGrabber.hpp"
+#include <com/sun/star/media/XFrameGrabber.hpp>
 
 struct IMediaDet;
 

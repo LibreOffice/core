@@ -26,10 +26,10 @@
 #include <svtools/miscopt.hxx>
 #include <tools/time.hxx>
 #include <vcl/lstbox.hxx>
-#include "bitmaps.hlst"
-#include "strings.hrc"
-#include "helpids.h"
-#include "mediamisc.hxx"
+#include <bitmaps.hlst>
+#include <strings.hrc>
+#include <helpids.h>
+#include <mediamisc.hxx>
 
 using ::rtl::OUString;
 

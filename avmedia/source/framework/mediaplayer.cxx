@@ -20,9 +20,9 @@
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <avmedia/mediaitem.hxx>
-#include "mediamisc.hxx"
-#include "strings.hrc"
-#include "helpids.h"
+#include <mediamisc.hxx>
+#include <strings.hrc>
+#include <helpids.h>
 
 #include <svl/stritem.hxx>
 #include <sfx2/app.hxx>

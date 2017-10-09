@@ -24,7 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
-#include "com/sun/star/media/XPlayerWindow.hpp"
+#include <com/sun/star/media/XPlayerWindow.hpp>
 
 
 @interface MyMediaView : NSView
