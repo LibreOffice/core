@@ -627,6 +627,8 @@ cmd/sc_findbar.png cmd/sc_recsearch.png
 # File Menu
 cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
+cmd/lc_exporttopdf.png cmd/lc_exportdirecttoepub.png
+cmd/sc_exporttopdf.png cmd/sc_exportdirecttoepub.png
 
 # Square
 cmd/lc_basicshapes.quadrat.png cmd/lc_square.png
@@ -888,10 +890,6 @@ cmd/sc_lastslide.png cmd/sc_lastrecord.png
 cmd/sc_previousslide.png cmd/sc_prevrecord.png
 cmd/sc_nextslide.png cmd/sc_nextrecord.png
 cmd/sc_slidesetup.png cmd/sc_pagesetup.png
-
-# Classification
-cmd/lc_classificationdialog.png cmd/lc_formproperties.png
-cmd/sc_classificationdialog.png cmd/sc_formproperties.png
 
 # dbaccess
 # ==============================================
@@ -1363,10 +1361,6 @@ sw/res/styfamnu.png cmd/sc_defaultbullet.png
 # split cells duplicates
 sw/res/zetlhor2.png svx/res/zetlhor2.png
 sw/res/zetlver2.png svx/res/zetlver2.png
-
-# writer epub export
-cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
-cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
 
 # vcl
 # ==============================================

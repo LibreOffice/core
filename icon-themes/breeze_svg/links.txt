@@ -627,6 +627,8 @@ cmd/sc_findbar.png cmd/sc_recsearch.png
 # File Menu
 cmd/lc_exporttopdf.png cmd/lc_exportdirecttopdf.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
+cmd/lc_exporttopdf.png cmd/lc_exportdirecttoepub.png
+cmd/sc_exporttopdf.png cmd/sc_exportdirecttoepub.png
 
 # Square
 cmd/lc_basicshapes.quadrat.png cmd/lc_square.png
@@ -1376,7 +1378,3 @@ cmd/sc_rowoperations.png cmd/sc_entirerow.png
 
 cmd/sc_cellprotection.png cmd/sc_protect.png
 cmd/lc_cellprotection.png cmd/lc_protect.png
-
-# writer epub export
-cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
-cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
