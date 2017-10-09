@@ -24,7 +24,7 @@
 #include "macavfcommon.hxx"
 #include <cppuhelper/implbase.hxx>
 
-#include "com/sun/star/media/XPlayer.hpp"
+#include <com/sun/star/media/XPlayer.hpp>
 
 namespace avmedia { namespace macavf {
 

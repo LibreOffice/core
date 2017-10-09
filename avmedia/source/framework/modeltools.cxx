@@ -9,7 +9,7 @@
 
 #include <avmedia/modeltools.hxx>
 #include <avmedia/mediaitem.hxx>
-#include "mediamisc.hxx"
+#include <mediamisc.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -31,7 +31,7 @@
 #include <config_features.h>
 
 #if HAVE_FEATURE_COLLADA
-#include <collada_headers.hxx>
+#include "collada_headers.hxx"
 #include <GLTFAsset.h>
 #endif
 

@@ -23,7 +23,7 @@
 #include <svtools/transfer.hxx>
 #include <vcl/syschild.hxx>
 
-#include "mediacontrol.hxx"
+#include <mediacontrol.hxx>
 
 namespace com { namespace sun { namespace star { namespace media {
     class XPlayer;

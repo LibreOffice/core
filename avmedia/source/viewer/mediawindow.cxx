@@ -19,9 +19,9 @@
 
 #include <avmedia/mediawindow.hxx>
 #include "mediawindow_impl.hxx"
-#include "mediamisc.hxx"
-#include "bitmaps.hlst"
-#include "strings.hrc"
+#include <mediamisc.hxx>
+#include <bitmaps.hlst>
+#include <strings.hrc>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 #include <unotools/pathoptions.hxx>
@@ -29,9 +29,9 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/media/XManager.hpp>
-#include "com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp"
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp"
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <memory>
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME 3.0

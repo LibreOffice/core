@@ -22,10 +22,10 @@
 #include <iostream>
 #include "mediawindow_impl.hxx"
 #include "mediaevent_impl.hxx"
-#include "mediamisc.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "helpids.h"
+#include <mediamisc.hxx>
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <helpids.h>
 
 #include <algorithm>
 #include <cmath>

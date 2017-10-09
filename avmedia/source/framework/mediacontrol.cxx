@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "mediacontrol.hxx"
-#include "strings.hrc"
-#include "mediamisc.hxx"
+#include <mediacontrol.hxx>
+#include <strings.hrc>
+#include <mediamisc.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <avmedia/mediaplayer.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <tools/time.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>
