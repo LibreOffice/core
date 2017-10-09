@@ -1560,7 +1560,7 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
     pOverflowToolBar->SetOutStyle( pToolBar->GetOutStyle() );
     m_aOverflowManager.set( new ToolBarManager( m_xContext, m_xFrame, OUString(), pOverflowToolBar ) );
     m_aOverflowManager->FillOverflowToolbar( pToolBar );
-    pOverflowToolBar->SetMenuType( ToolBoxMenuType::NONE );
+    pOverflowToolBar->WillUsePopupMode( true );
 
     ::Size aActSize( pOverflowToolBar->GetSizePixel() );
     ::Size aSize( pOverflowToolBar->CalcWindowSizePixel() );
