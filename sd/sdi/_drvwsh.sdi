@@ -2776,5 +2776,9 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
     ]
+    SID_CLASSIFICATION_DIALOG
+    [
+        ExecMethod = FuTemporary ;
+    ]
 
 }

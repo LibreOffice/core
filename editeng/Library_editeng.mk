@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/editeng/textconv \
     editeng/source/items/borderline \
     editeng/source/items/bulitem \
+    editeng/source/items/CustomPropertyField \
     editeng/source/items/charhiddenitem \
     editeng/source/items/flditem \
     editeng/source/items/frmitems \

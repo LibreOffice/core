@@ -31,6 +31,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -38,6 +39,10 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/section.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/CustomPropertyField.hxx>
+
 #include <o3tl/make_unique.hxx>
 
 #include <sfx2/bindings.hxx>
@@ -52,6 +57,7 @@
 
 #include <svx/SpellDialogChildWindow.hxx>
 #include <svx/compressgraphicdialog.hxx>
+#include <svx/ClassificationDialog.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/bmpmask.hxx>
 #include <svx/colrctrl.hxx>
@@ -181,6 +187,312 @@ using namespace ::com::sun::star::uno;
 #define MIN_ACTIONS_FOR_DIALOG  5000    ///< if there are more meta objects, we show a dialog during the break up
 
 namespace sd {
+
+namespace {
+
+void lcl_removeAllProperties(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
+    uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+
+    for (const beans::Property& rProperty : aProperties)
+    {
+        rxPropertyContainer->removeProperty(rProperty.Name);
+    }
+}
+
+bool lcl_containsProperty(const uno::Sequence<beans::Property> & rProperties, const OUString& rName)
+{
+    return std::find_if(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
+    {
+        return rProperty.Name == rName;
+    }) != rProperties.end();
+}
+
+OUString lcl_getProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, const OUString& rName)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
+    return xPropertySet->getPropertyValue(rName).get<OUString>();
+}
+
+bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, OUString const & rsKey, OUString const & rsValue)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
+
+    try
+    {
+        if (lcl_containsProperty(xPropertySet->getPropertySetInfo()->getProperties(), rsKey))
+            xPropertySet->setPropertyValue(rsKey, uno::makeAny(rsValue));
+        else
+            rxPropertyContainer->addProperty(rsKey, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rsValue));
+    }
+    catch (const uno::Exception& /*rException*/)
+    {
+        return false;
+    }
+    return true;
+}
+
+const SvxFieldItem* findField(editeng::Section const & rSection)
+{
+    for (SfxPoolItem const * pPool: rSection.maAttributes)
+    {
+        if (pPool->Which() == EE_FEATURE_FIELD)
+            return static_cast<const SvxFieldItem*>(pPool);
+    }
+    return nullptr;
+}
+
+bool hasCustomPropertyField(std::vector<editeng::Section> const & aSections, OUString const & rKey)
+{
+    for (editeng::Section const & rSection : aSections)
+    {
+        const SvxFieldItem* pFieldItem = findField(rSection);
+        if (pFieldItem)
+        {
+            const editeng::CustomPropertyField* pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField());
+            if (pCustomPropertyField && pCustomPropertyField->GetKey() == rKey)
+                return true;
+        }
+    }
+    return false;
+}
+
+} // end anonymous namespace
+
+class ClassificationCollector
+{
+private:
+    sd::DrawViewShell& m_rDrawViewShell;
+    std::vector<svx::ClassificationResult> m_aResults;
+    SdrRectObj* m_pRectObject;
+public:
+    ClassificationCollector(sd::DrawViewShell & rDrawViewShell)
+        : m_rDrawViewShell(rDrawViewShell)
+        , m_pRectObject(nullptr)
+    {}
+
+    std::vector<svx::ClassificationResult> getResults()
+    {
+        return m_aResults;
+    }
+
+    SdrRectObj* getObject()
+    {
+        return m_pRectObject;
+    }
+
+    bool collect()
+    {
+        OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+        OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
+
+        uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
+
+        // Properties
+        uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
+
+        // Set to MASTER mode
+        EditMode eOldMode = m_rDrawViewShell.GetEditMode();
+        if (eOldMode != EditMode::MasterPage)
+            m_rDrawViewShell.ChangeEditMode(EditMode::MasterPage, false);
+
+        const sal_uInt16 nCount = m_rDrawViewShell.GetDoc()->GetMasterSdPageCount(PageKind::Standard);
+
+        sal_Int32 nParagraph = 1;
+        bool bFound = false;
+
+        for (sal_uInt16 nPageIndex = 0; nPageIndex < nCount; ++nPageIndex)
+        {
+            SdPage* pMasterPage = m_rDrawViewShell.GetDoc()->GetMasterSdPage(nPageIndex, PageKind::Standard);
+            for (size_t nObject = 0; nObject < pMasterPage->GetObjCount(); ++nObject)
+            {
+                SdrObject* pObject = pMasterPage->GetObj(nObject);
+                SdrRectObj* pRectObject = dynamic_cast<SdrRectObj*>(pObject);
+                if (pRectObject && pRectObject->GetTextKind() == OBJ_TEXT)
+                {
+                    OutlinerParaObject* pOutlinerParagraphObject = pRectObject->GetOutlinerParaObject();
+                    if (pOutlinerParagraphObject)
+                    {
+                        const EditTextObject& rEditText = pOutlinerParagraphObject->GetTextObject();
+                        std::vector<editeng::Section> aSections;
+                        rEditText.GetAllSections(aSections);
+
+                        if (hasCustomPropertyField(aSections, sKey))
+                        {
+                            bFound = true;
+                            m_pRectObject = pRectObject;
+                            for (editeng::Section const & rSection : aSections)
+                            {
+                                const SvxFieldItem* pFieldItem = findField(rSection);
+                                if (pFieldItem)
+                                {
+                                    const auto* pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pFieldItem->GetField());
+                                    OUString aKey = pCustomPropertyField->GetKey();
+                                    if (aKey.startsWith(sPolicy + "Marking:Text:"))
+                                    {
+                                        OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                                        m_aResults.push_back({ svx::ClassificationType::TEXT, aValue, nParagraph });
+                                    }
+                                    else if (aKey.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
+                                    {
+                                        OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                                        m_aResults.push_back({ svx::ClassificationType::CATEGORY, aValue, nParagraph });
+                                    }
+                                    else if (aKey.startsWith(sPolicy + "Extension:Marking"))
+                                    {
+                                        OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                                        m_aResults.push_back({ svx::ClassificationType::MARKING, aValue, nParagraph });
+                                    }
+                                    else if (aKey.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
+                                    {
+                                        OUString aValue = lcl_getProperty(xPropertyContainer, aKey);
+                                        m_aResults.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, nParagraph });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Revert edit mode
+        m_rDrawViewShell.ChangeEditMode(eOldMode, false);
+
+        return bFound;
+    }
+};
+
+class ClassificationInserter
+{
+    sd::DrawViewShell& m_rDrawViewShell;
+public:
+    ClassificationInserter(sd::DrawViewShell & rDrawViewShell)
+        : m_rDrawViewShell(rDrawViewShell)
+    {}
+
+    bool insert(std::vector<svx::ClassificationResult> const & rResults, SdrRectObj* pRectObj)
+    {
+        // Set to MASTER mode
+        EditMode eOldMode = m_rDrawViewShell.GetEditMode();
+        if (eOldMode != EditMode::MasterPage)
+            m_rDrawViewShell.ChangeEditMode(EditMode::MasterPage, false);
+
+        uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
+
+        // Clear properties
+        uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
+
+        lcl_removeAllProperties(xPropertyContainer);
+
+        SfxClassificationHelper aHelper(xDocumentProperties);
+
+        // Apply properties from the BA policy
+        for (svx::ClassificationResult const & rResult : rResults)
+        {
+            if (rResult.meType == svx::ClassificationType::CATEGORY)
+                aHelper.SetBACName(rResult.msString, aHelper.getPolicyType());
+        }
+
+        OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
+        sal_Int32 nTextNumber = 1;
+
+        Outliner* pOutliner;
+        OutlinerMode eOutlinerMode = OutlinerMode::DontKnow;
+        if (pRectObj == nullptr)
+        {
+            pOutliner = m_rDrawViewShell.GetDoc()->GetInternalOutliner();
+            eOutlinerMode = pOutliner->GetMode();
+            pOutliner->Init(OutlinerMode::TextObject);
+            pOutliner->SetStyleSheet(0, nullptr);
+        }
+        else
+        {
+            SdrView* pView = m_rDrawViewShell.GetView();
+            pView->SdrBeginTextEdit(pRectObj);
+            pOutliner = pView->GetTextEditOutliner();
+        }
+
+        for (svx::ClassificationResult const & rResult : rResults)
+        {
+            ESelection aPosition(EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT, EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT);
+
+            switch(rResult.meType)
+            {
+                case svx::ClassificationType::TEXT:
+                {
+                    OUString sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber);
+                    nTextNumber++;
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                }
+                break;
+
+                case svx::ClassificationType::CATEGORY:
+                {
+                    OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                }
+                break;
+
+                case svx::ClassificationType::MARKING:
+                {
+                    OUString sKey = sPolicy + "Extension:Marking";
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                }
+                break;
+
+                case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
+                {
+                    OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
+                    addOrInsertDocumentProperty(xPropertyContainer, sKey, rResult.msString);
+                    pOutliner->QuickInsertField(SvxFieldItem(editeng::CustomPropertyField(sKey), EE_FEATURE_FIELD), aPosition);
+                }
+                break;
+
+                default:
+                break;
+            }
+        }
+
+        if (pRectObj == nullptr)
+        {
+            pRectObj = new SdrRectObj(OBJ_TEXT);
+            pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
+
+            pOutliner->UpdateFields();
+            pOutliner->SetUpdateMode(true);
+            Size aSize(pOutliner->CalcTextSize());
+            pOutliner->SetUpdateMode(false);
+
+            // Calculate position
+            Point aPosition;
+            ::tools::Rectangle aRect(aPosition, m_rDrawViewShell.GetActiveWindow()->GetOutputSizePixel());
+            aPosition = Point(aRect.Center().X(), aRect.GetHeight());
+            aPosition = m_rDrawViewShell.GetActiveWindow()->PixelToLogic(aPosition);
+            aPosition.X() -= aSize.Width() / 2;
+            aPosition.Y() -= aSize.Height() * 4;
+
+            pRectObj->SetLogicRect(::tools::Rectangle(aPosition, aSize));
+            pRectObj->SetOutlinerParaObject(pOutliner->CreateParaObject());
+
+            m_rDrawViewShell.GetDrawView()->InsertObjectAtView(pRectObj, *m_rDrawViewShell.GetDrawView()->GetSdrPageView());
+            pOutliner->Init(eOutlinerMode);
+        }
+        else
+        {
+            SdrView* pView = m_rDrawViewShell.GetView();
+            pView->SdrEndTextEdit();
+        }
+
+        // Revert edit mode
+        m_rDrawViewShell.ChangeEditMode(eOldMode, false);
+
+        return true;
+    }
+};
 
 /**
  * SfxRequests for temporary actions
@@ -1168,6 +1480,26 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
                 SAL_WARN("sd.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
+
+            Cancel();
+            rReq.Ignore();
+        }
+        break;
+
+        case SID_CLASSIFICATION_DIALOG:
+        {
+            ScopedVclPtr<svx::ClassificationDialog> pDialog(VclPtr<svx::ClassificationDialog>::Create(nullptr));
+            ClassificationCollector aCollector(*this);
+            aCollector.collect();
+
+            pDialog->setupValues(aCollector.getResults());
+
+            if (RET_OK == pDialog->Execute())
+            {
+                ClassificationInserter aInserter(*this);
+                aInserter.insert(pDialog->getResult(), aCollector.getObject());
+            }
+            pDialog.disposeAndClear();
 
             Cancel();
             rReq.Ignore();

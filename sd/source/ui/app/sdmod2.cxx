@@ -19,6 +19,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/CustomPropertyField.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/styfitem.hxx>
@@ -175,6 +176,8 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     const SvxAuthorField* pAuthorField = nullptr;
     const SvxURLField* pURLField = nullptr;
 
+    const editeng::CustomPropertyField* pCustomPropertyField = nullptr;
+
     if( (pDateField = dynamic_cast< const SvxDateField* >(pField)) != nullptr )
     {
         LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
@@ -250,7 +253,6 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
         pInfo->SetRepresentation( aRepresentation );
     }
-
     else if( dynamic_cast< const SvxPageTitleField*  >(pField) )
     {
         OUString aRepresentation(" ");
@@ -344,6 +346,10 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
     else if ( dynamic_cast< const SdrMeasureField* >(pField))
     {
         pInfo->ClearFieldColor();
+    }
+    else if ((pCustomPropertyField = dynamic_cast<const editeng::CustomPropertyField*>(pField)) != nullptr)
+    {
+        pInfo->SetRepresentation(pCustomPropertyField->GetFormatted(SfxObjectShell::Current()->getDocProperties()));
     }
     else
     {
