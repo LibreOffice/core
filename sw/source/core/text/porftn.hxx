@@ -68,7 +68,7 @@ public:
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
     void SetNumber( const OUString& rStr ) { aErgo = rStr; }
-    const OUString& GetQuoText() const { return aExpand; }
+    const OUString& GetQuoText() const { return m_aExpand; }
     const OUString &GetContText() const { return aErgo; }
 
     // Field cloner for SplitGlue

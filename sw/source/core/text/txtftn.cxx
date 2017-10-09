@@ -1334,7 +1334,7 @@ SwFootnotePortion::SwFootnotePortion( const OUString &rExpand,
 
 bool SwFootnotePortion::GetExpText( const SwTextSizeInfo &, OUString &rText ) const
 {
-    rText = aExpand;
+    rText = m_aExpand;
     return true;
 }
 
@@ -1403,7 +1403,7 @@ bool SwQuoVadisPortion::Format( SwTextFormatInfo &rInf )
     if( bFull )
     {
         // Second try; we make the String shorter
-        aExpand = "...";
+        m_aExpand = "...";
         bFull = SwFieldPortion::Format( rInf );
         SetLen( 0 );
         if( bFull  )
@@ -1422,7 +1422,7 @@ bool SwQuoVadisPortion::Format( SwTextFormatInfo &rInf )
 
 bool SwQuoVadisPortion::GetExpText( const SwTextSizeInfo &, OUString &rText ) const
 {
-    rText = aExpand;
+    rText = m_aExpand;
     // if this QuoVadisPortion has a follow, the follow is responsible for
     // the ergo text.
     if ( ! HasFollow() )
@@ -1432,7 +1432,7 @@ bool SwQuoVadisPortion::GetExpText( const SwTextSizeInfo &, OUString &rText ) co
 
 void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Special( GetLen(), aExpand + aErgo, GetWhichPor() );
+    rPH.Special( GetLen(), m_aExpand + aErgo, GetWhichPor() );
 }
 
 void SwQuoVadisPortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -1443,7 +1443,7 @@ void SwQuoVadisPortion::Paint( const SwTextPaintInfo &rInf ) const
     {
         rInf.DrawViewOpt( *this, POR_QUOVADIS );
         SwTextSlot aDiffText( &rInf, this, true, false );
-        SwFontSave aSave( rInf, pFnt );
+        SwFontSave aSave( rInf, m_pFont );
         rInf.DrawText( *this, rInf.GetLen(), true );
     }
 }
@@ -1457,10 +1457,10 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
     : SwFieldPortion( rExp )
 {
     SetLen(0);
-    aExpand += rStr;
+    m_aExpand += rStr;
 
     // One blank distance to the text
-    aExpand += " ";
+    m_aExpand += " ";
     SetWhichPor( POR_ERGOSUM );
 }
 

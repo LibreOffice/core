@@ -31,23 +31,23 @@ class SwFieldPortion : public SwExpandPortion
 {
     friend class SwTextFormatter;
 protected:
-    OUString  aExpand;          // The expanded field
-    SwFont  *pFnt;              // For multi-line fields
-    sal_Int32 nNextOffset;      // Offset of the follow in the original string
-    sal_Int32 nNextScriptChg;
-    sal_uInt16  nViewWidth;     // Screen width for empty fields
-    bool bFollow : 1;           // 2nd or later part of a field
-    bool bLeft : 1;             // Used by SwNumberPortion
-    bool bHide : 1;             // Used by SwNumberPortion
-    bool bCenter : 1;           // Used by SwNumberPortion
-    bool bHasFollow : 1;        // Continues on the next line
-    bool bAnimated : 1;         // Used by SwGrfNumPortion
-    bool bNoPaint : 1;          // Used by SwGrfNumPortion
-    bool bReplace : 1;          // Used by SwGrfNumPortion
-    const bool bPlaceHolder : 1;
+    OUString  m_aExpand;          // The expanded field
+    SwFont  *m_pFont;              // For multi-line fields
+    sal_Int32 m_nNextOffset;      // Offset of the follow in the original string
+    sal_Int32 m_nNextScriptChg;
+    sal_uInt16  m_nViewWidth;     // Screen width for empty fields
+    bool m_bFollow : 1;           // 2nd or later part of a field
+    bool m_bLeft : 1;             // Used by SwNumberPortion
+    bool m_bHide : 1;             // Used by SwNumberPortion
+    bool m_bCenter : 1;           // Used by SwNumberPortion
+    bool m_bHasFollow : 1;        // Continues on the next line
+    bool m_bAnimated : 1;         // Used by SwGrfNumPortion
+    bool m_bNoPaint : 1;          // Used by SwGrfNumPortion
+    bool m_bReplace : 1;          // Used by SwGrfNumPortion
+    const bool m_bPlaceHolder : 1;
     bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
 
-    void SetFont( SwFont *pNew ) { pFnt = pNew; }
+    void SetFont( SwFont *pNew ) { m_pFont = pNew; }
     bool IsNoLength() const  { return m_bNoLength; }
     void SetNoLength()       { m_bNoLength = true; }
 
@@ -59,11 +59,11 @@ public:
     sal_uInt16 m_nAttrFieldType;
     void TakeNextOffset( const SwFieldPortion* pField );
     void CheckScript( const SwTextSizeInfo &rInf );
-    bool HasFont() const { return nullptr != pFnt; }
+    bool HasFont() const { return nullptr != m_pFont; }
     // #i89179# - made public
-    const SwFont *GetFont() const { return pFnt; }
+    const SwFont *GetFont() const { return m_pFont; }
 
-    const OUString& GetExp() const { return aExpand; }
+    const OUString& GetExp() const { return m_aExpand; }
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
@@ -73,23 +73,23 @@ public:
 
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const override;
 
-    bool IsFollow() const { return bFollow; }
-    void SetFollow( bool bNew ) { bFollow = bNew; }
+    bool IsFollow() const { return m_bFollow; }
+    void SetFollow( bool bNew ) { m_bFollow = bNew; }
 
-    bool IsLeft() const { return bLeft; }
-    void SetLeft( bool bNew ) { bLeft = bNew; }
+    bool IsLeft() const { return m_bLeft; }
+    void SetLeft( bool bNew ) { m_bLeft = bNew; }
 
-    bool IsHide() const { return bHide; }
-    void SetHide( bool bNew ) { bHide = bNew; }
+    bool IsHide() const { return m_bHide; }
+    void SetHide( bool bNew ) { m_bHide = bNew; }
 
-    bool IsCenter() const { return bCenter; }
-    void SetCenter( bool bNew ) { bCenter = bNew; }
+    bool IsCenter() const { return m_bCenter; }
+    void SetCenter( bool bNew ) { m_bCenter = bNew; }
 
-    bool HasFollow() const { return bHasFollow; }
-    void SetHasFollow( bool bNew ) { bHasFollow = bNew; }
+    bool HasFollow() const { return m_bHasFollow; }
+    void SetHasFollow( bool bNew ) { m_bHasFollow = bNew; }
 
-    sal_Int32 GetNextOffset() const { return nNextOffset; }
-    void SetNextOffset( sal_Int32 nNew ) { nNextOffset = nNew; }
+    sal_Int32 GetNextOffset() const { return m_nNextOffset; }
+    void SetNextOffset( sal_Int32 nNew ) { m_nNextOffset = nNew; }
 
     // Field cloner for SplitGlue
     virtual SwFieldPortion *Clone( const OUString &rExpand ) const;
@@ -183,8 +183,8 @@ public:
 
     void StopAnimation( OutputDevice* pOut );
 
-    bool IsAnimated() const { return bAnimated; }
-    void SetAnimated( bool bNew ) { bAnimated = bNew; }
+    bool IsAnimated() const { return m_bAnimated; }
+    void SetAnimated( bool bNew ) { m_bAnimated = bNew; }
     void SetRelPos( SwTwips nNew ) { nYPos = nNew; }
     void SetId( long nNew ) const
         { const_cast<SwGrfNumPortion*>(this)->nId = nNew; }
