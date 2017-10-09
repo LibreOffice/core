@@ -170,6 +170,7 @@ SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
 
 const uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot() const
 {
+#if HAVE_FEATURE_AVMEDIA
     if( !m_xImpl->m_xCachedSnapshot.is() )
     {
         OUString aRealURL = m_xImpl->m_MediaProperties.getTempURL();
@@ -177,6 +178,7 @@ const uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot() const
             aRealURL = m_xImpl->m_MediaProperties.getURL();
         m_xImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, m_xImpl->m_MediaProperties.getReferer(), m_xImpl->m_MediaProperties.getMimeType());
     }
+#endif
     return m_xImpl->m_xCachedSnapshot;
 }
 
@@ -229,15 +231,26 @@ void SdrMediaObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrin
 void SdrMediaObj::setURL( const OUString& rURL, const OUString& rReferer, const OUString& rMimeType )
 {
     ::avmedia::MediaItem aURLItem;
+#if HAVE_FEATURE_AVMEDIA
     if( !rMimeType.isEmpty() )
         m_xImpl->m_MediaProperties.setMimeType(rMimeType);
     aURLItem.setURL( rURL, "", rReferer );
+#else
+    (void) rMimeType;
+    (void) rURL;
+    (void) rReferer;
+#endif
     setMediaProperties( aURLItem );
 }
 
 const OUString& SdrMediaObj::getURL() const
 {
+#if HAVE_FEATURE_AVMEDIA
     return m_xImpl->m_MediaProperties.getURL();
+#else
+static OUString ret;
+    return ret;
+#endif
 }
 
 void SdrMediaObj::setMediaProperties( const ::avmedia::MediaItem& rState )
@@ -374,6 +387,7 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
 }
 
 /// copy a stream from XStorage to temp file
+#if HAVE_FEATURE_AVMEDIA
 static bool lcl_HandlePackageURL(
         OUString const & rURL,
         SdrModel const *const pModel,
@@ -406,10 +420,12 @@ static bool lcl_HandlePackageURL(
     }
     return lcl_CopyToTempFile(xInStream, o_rTempFileURL);
 }
+#endif
 
 void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProperties )
 {
     bool bBroadcastChanged = false;
+#if HAVE_FEATURE_AVMEDIA
     const AVMediaSetMask nMaskSet = rNewProperties.getMaskSet();
 
     // use only a subset of MediaItem properties for own properties
@@ -477,6 +493,9 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
 
     if( AVMediaSetMask::ZOOM & nMaskSet )
         m_xImpl->m_MediaProperties.setZoom( rNewProperties.getZoom() );
+#else
+    (void) rNewProperties;
+#endif
 
     if( bBroadcastChanged )
     {

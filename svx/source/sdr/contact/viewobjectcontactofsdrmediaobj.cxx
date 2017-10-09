@@ -78,8 +78,12 @@ Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 {
     Size aRet;
 
+#if HAVE_FEATURE_AVMEDIA
     if( mpMediaWindow )
         aRet = mpMediaWindow->getPreferredSize();
+#else
+   aRet = Size(0,0);
+#endif
 
     return aRet;
 }
@@ -87,6 +91,7 @@ Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 
 void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
+#if HAVE_FEATURE_AVMEDIA
     if( mpMediaWindow )
     {
         mpMediaWindow->updateMediaItem( rItem );
@@ -109,11 +114,15 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
             mpMediaWindow->show();
         }
     }
+#else
+    (void) rItem;
+#endif
 }
 
 
 void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
+#if HAVE_FEATURE_AVMEDIA
     if( mpMediaWindow )
     {
         ::avmedia::MediaItem aUpdatedItem;
@@ -124,6 +133,9 @@ void ViewObjectContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaIte
         updateMediaItem( aUpdatedItem );
         static_cast< ViewContactOfSdrMediaObj& >( GetViewContact() ).mediaPropertiesChanged( aUpdatedItem );
     }
+#else
+    (void) rItem;
+#endif
 }
 
 
