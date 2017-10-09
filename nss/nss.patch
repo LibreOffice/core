@@ -104,16 +104,19 @@ diff -ur misc/nss-3.25/nss/cmd/shlibsign/Makefile misc/build/nss-3.25/nss/cmd/sh
 diff -ur misc/nss-3.25/nss/coreconf/Darwin.mk misc/build/nss-3.25/nss/coreconf/Darwin.mk
 --- misc/nss-3.25/nss/coreconf/Darwin.mk	2016-06-20 10:11:28.000000000 -0700
 +++ misc/build/nss-3.25/nss/coreconf/Darwin.mk	2016-07-14 23:47:54.560325000 -0700
-@@ -6,10 +6,12 @@
+@@ -4,12 +4,14 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
  include $(CORE_DEPTH)/coreconf/UNIX.mk
- include $(CORE_DEPTH)/coreconf/Werror.mk
+-include $(CORE_DEPTH)/coreconf/Werror.mk
++#include $(CORE_DEPTH)/coreconf/Werror.mk
  
 -DEFAULT_COMPILER = gcc
 +DEFAULT_COMPILER = cc
 +
 +# CC is taken from environment automatically.
 +#CC		= cc
-+CCC		= $(CXX)
++CCC		= $(CXX) -stdlib=libc++
  
 -CC		= gcc
 -CCC		= g++
@@ -260,3 +263,27 @@ diff -ur misc/nss-3.25/nss/lib/zlib/inflate.c misc/build/nss-3.25/nss/lib/zlib/i
          (state->mode == COPY ? state->length :
              (state->mode == MATCH ? state->was - state->length : 0));
  }
+diff -ur misc/nss-3.25/nss/external_tests/common/gtest.mk misc/build/nss-3.25/nss/external_tests/common/gtest.mk
+--- misc/nss-3.25/nss/external_tests/common/gtest.mk		2017-10-09 14:16:48.000000000 -0400
++++ misc/build/nss-3.25/nss/external_tests/common/gtest.mk	2017-10-09 14:17:55.000000000 -0400
+@@ -16,6 +16,9 @@
+ # platform.
+ ifeq (-Werror,$(filter -Werror -Wsign-compare,$(WARNING_CFLAGS)))
+ WARNING_CFLAGS += -Wsign-compare
++ifeq (Darwin,$(OS_ARCH))
++    WARNING_CFLAGS += -Wno-error=deprecated -Wno-error=c++11-extensions
++endif
+ endif
+ WARNING_CFLAGS := $(filter-out -w44018,$(WARNING_CFLAGS))
+ 
+@@ -32,5 +35,9 @@
+     # Needed because we include files from a subdirectory
+     MAKE_OBJDIR = $(INSTALL) -D $(dir $@)
+ else
+-    CXXFLAGS += -std=c++0x
++    ifeq (Darwin,$(OS_ARCH))
++        CXXFLAGS += -stdlib=libc++
++    else
++        CXXFLAGS += -std=c++0x
++    endif
+ endif

@@ -116,8 +116,8 @@ ifneq ($(MACOSX_DEPLOYMENT_TARGET),)
 endif
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
-gb_CFLAGS_WERROR := -Werror
-gb_CXXFLAGS_WERROR := -Werror
+gb_CFLAGS_WERROR := -Werror -Wno-error=deprecated
+gb_CXXFLAGS_WERROR := -Werror -Wno-error=deprecated
 endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
