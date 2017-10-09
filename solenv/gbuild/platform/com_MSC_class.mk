@@ -109,7 +109,7 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 gb_LinkTarget_CXXCLRFLAGS := $(gb_CXXCLRFLAGS)
 
 gb_LinkTarget_INCLUDE :=\
-	$(subst -I. , ,$(SOLARINC)) \
+	$(SOLARINC) \
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
 	-I$(BUILDDIR)/config_$(gb_Side) \
 
@@ -530,7 +530,7 @@ gb_AUTOCONF_WRAPPERS = \
     LD="$(shell cygpath -w $(COMPATH)/bin/link.exe) -nologo"
 
 gb_ExternalProject_INCLUDE := \
-	$(subst -I,,$(subst $(WHITESPACE),;,$(subst -I. , ,$(SOLARINC))))
+	$(subst -I,,$(subst $(WHITESPACE),;,$(SOLARINC)))
 
 # InstallScript class
 
