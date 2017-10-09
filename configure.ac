@@ -1723,21 +1723,6 @@ AC_ARG_WITH(rhino-jar,
         [Specify path to jarfile manually.]),
     RHINO_JAR=$withval)
 
-AC_ARG_WITH(commons-codec-jar,
-    AS_HELP_STRING([--with-commons-codec-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    COMMONS_CODEC_JAR=$withval)
-
-AC_ARG_WITH(commons-lang-jar,
-    AS_HELP_STRING([--with-commons-lang-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    COMMONS_LANG_JAR=$withval)
-
-AC_ARG_WITH(commons-httpclient-jar,
-    AS_HELP_STRING([--with-commons-httpclient-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    COMMONS_HTTPCLIENT_JAR=$withval)
-
 AC_ARG_WITH(commons-logging-jar,
     AS_HELP_STRING([--with-commons-logging-jar=JARFILE],
         [Specify path to jarfile manually.]),
@@ -10468,7 +10453,7 @@ if test "$ENABLE_REPORTBUILDER" = "TRUE"; then
     else
         AC_MSG_RESULT([internal])
         SYSTEM_APACHE_COMMONS=
-        BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS TOMCAT"
+        BUILD_TYPE="$BUILD_TYPE APACHE_COMMONS"
     fi
 fi
 AC_SUBST(SYSTEM_APACHE_COMMONS)
