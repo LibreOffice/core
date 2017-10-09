@@ -202,6 +202,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartBibliography(false),
         m_bStartGenericField(false),
         m_bTextInserted(false),
+        m_sCurrentPermId(0),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
         m_sCurrentParaStyleId(),
@@ -4791,6 +4792,7 @@ void DomainMapper_Impl::SetBookmarkName( const OUString& rBookmarkName )
         m_sCurrentBkmkName = rBookmarkName;
 }
 
+// This method was used as-is for DomainMapper_Impl::startOrEndPermissionRange() implementation.
 void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
 {
     /*
@@ -4864,6 +4866,121 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
         }
     }
     catch( const uno::Exception& )
+    {
+        //TODO: What happens to bookmarks where start and end are at different XText objects?
+    }
+}
+
+void DomainMapper_Impl::setPermissionRangeEd(const OUString& user)
+{
+    PermMap_t::iterator aPremIter = m_aPermMap.find(m_sCurrentPermId);
+    if (aPremIter != m_aPermMap.end())
+        aPremIter->second.m_Ed = user;
+    else
+        m_sCurrentPermEd = user;
+}
+
+void DomainMapper_Impl::setPermissionRangeEdGrp(const OUString& group)
+{
+    PermMap_t::iterator aPremIter = m_aPermMap.find(m_sCurrentPermId);
+    if (aPremIter != m_aPermMap.end())
+        aPremIter->second.m_EdGrp = group;
+    else
+        m_sCurrentPermEdGrp = group;
+}
+
+// This method is based on implementation from DomainMapper_Impl::StartOrEndBookmark()
+void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
+{
+    /*
+    * Add the dummy paragraph to handle section properties
+    * if the first element in the section is a table. If the dummy para is not added yet, then add it;
+    * So permission is not attached to the wrong paragraph.
+    */
+    if (getTableManager().isInCell() && m_nTableDepth == 0 && GetIsFirstParagraphInSection()
+        && !GetIsDummyParaAddedForTableInSection() && !GetIsTextFrameInserted())
+    {
+        AddDummyParaForTableInSection();
+    }
+
+    if (m_aTextAppendStack.empty())
+        return;
+
+    const bool bIsAfterDummyPara = GetIsDummyParaAddedForTableInSection() && GetIsFirstParagraphInSection();
+
+    uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    PermMap_t::iterator aPermIter = m_aPermMap.find(permissinId);
+
+    //is the bookmark name already registered?
+    try
+    {
+        if (aPermIter == m_aPermMap.end())
+        {
+            //otherwise insert a text range as marker
+            bool bIsStart = true;
+            uno::Reference< text::XTextRange > xCurrent;
+            if (xTextAppend.is())
+            {
+                uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
+
+                if (!bIsAfterDummyPara)
+                    bIsStart = !xCursor->goLeft(1, false);
+                xCurrent = xCursor->getStart();
+            }
+
+            // register the start of the new permission
+            m_sCurrentPermId = permissinId;
+            m_aPermMap.emplace(permissinId, PermInsertPosition(bIsStart, permissinId, m_sCurrentPermEd, m_sCurrentPermEdGrp, xCurrent));
+
+            // clean up
+            m_sCurrentPermEd.clear();
+            m_sCurrentPermEdGrp.clear();
+        }
+        else
+        {
+            if (m_xTextFactory.is())
+            {
+                uno::Reference< text::XTextCursor > xCursor;
+                uno::Reference< text::XText > xText = aPermIter->second.m_xTextRange->getText();
+                if (aPermIter->second.m_bIsStartOfText && !bIsAfterDummyPara)
+                {
+                    xCursor = xText->createTextCursorByRange(xText->getStart());
+                }
+                else
+                {
+                    xCursor = xText->createTextCursorByRange(aPermIter->second.m_xTextRange);
+                    xCursor->goRight(1, false);
+                }
+
+                xCursor->gotoRange(xTextAppend->getEnd(), true);
+                // A Paragraph was recently finished, and a new Paragraph has not been started as yet
+                // then  move the bookmark-End to the earlier paragraph
+                if (IsOutsideAParagraph())
+                {
+                    xCursor->goLeft(1, false);
+                }
+
+                // create a new bookmark using specific bookmark name pattern for permissions
+                uno::Reference< text::XTextContent > xPerm(m_xTextFactory->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY_THROW);
+                uno::Reference< container::XNamed > xPermNamed(xPerm, uno::UNO_QUERY_THROW);
+                xPermNamed->setName(aPermIter->second.createBookmarkName());
+
+                // add new bookmark
+                const bool bAbsorb = !xCursor->isCollapsed();
+                uno::Reference< text::XTextRange > xCurrent = uno::Reference< text::XTextRange >(xCursor, uno::UNO_QUERY_THROW);
+                xTextAppend->insertTextContent(xCurrent, xPerm, bAbsorb);
+            }
+
+            // remove proccessed permission
+            m_aPermMap.erase(aPermIter);
+
+            // clean up
+            m_sCurrentPermId = 0;
+            m_sCurrentPermEd.clear();
+            m_sCurrentPermEdGrp.clear();
+        }
+    }
+    catch (const uno::Exception&)
     {
         //TODO: What happens to bookmarks where start and end are at different XText objects?
     }

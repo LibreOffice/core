@@ -695,7 +695,10 @@ protected:
 
 private:
 
-    void DoWriteBookmarks( );
+    void DoWriteBookmarkTagStart(const OUString & bookmarkName);
+    void DoWriteBookmarkTagEnd(const OUString & bookmarkName);
+    void DoWriteBookmarksStart();
+    void DoWriteBookmarksEnd();
     void DoWriteAnnotationMarks( );
     void WritePostponedGraphic();
     void WritePostponedMath(const SwOLENode* pObject);
