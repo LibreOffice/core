@@ -29,8 +29,6 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/configurationlistener.hxx>
 
-#include <officecfg/Office/Common.hxx>
-
 using namespace com::sun::star;
 
 namespace sfx2
@@ -104,16 +102,9 @@ public:
 namespace
 {
 
-SfxClassificationPolicyType getPolicyType()
-{
-    sal_Int32 nPolicyTypeNumber = officecfg::Office::Common::Classification::Policy::get();
-    auto eType = static_cast<SfxClassificationPolicyType>(nPolicyTypeNumber);
-    return eType;
-}
-
 OUString getCategoryType()
 {
-    return SfxClassificationHelper::policyTypeToString(getPolicyType());
+    return SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
 }
 
 } // end anonymous namespace
@@ -211,7 +202,7 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
     }
 
     // Restore state based on the doc. model.
-    const OUString& rCategoryName = aHelper.GetBACName(getPolicyType());
+    const OUString& rCategoryName = aHelper.GetBACName(SfxClassificationHelper::getPolicyType());
     if (!rCategoryName.isEmpty())
     {
         m_pClassification->getCategory()->SelectEntry(rCategoryName);
@@ -232,7 +223,7 @@ ClassificationControl::ClassificationControl(vcl::Window* pParent)
     m_pCategory = VclPtr<ListBox>::Create(this, WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN|WB_SIMPLEMODE);
 
     OUString aText;
-    switch (getPolicyType())
+    switch (SfxClassificationHelper::getPolicyType())
     {
     case SfxClassificationPolicyType::IntellectualProperty:
         aText = SfxResId(STR_CLASSIFIED_INTELLECTUAL_PROPERTY);

@@ -465,14 +465,6 @@ static void lcl_removeAllProperties(uno::Reference<beans::XPropertyContainer> co
     }
 }
 
-// from classification helper
-SfxClassificationPolicyType getPolicyType()
-{
-    sal_Int32 nPolicyTypeNumber = officecfg::Office::Common::Classification::Policy::get();
-    auto eType = static_cast<SfxClassificationPolicyType>(nPolicyTypeNumber);
-    return eType;
-}
-
 bool addOrInsertDocumentProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, OUString const & rsKey, OUString const & rsValue)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
@@ -528,11 +520,11 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
     {
         if (rResult.meType == svx::ClassificationType::CATEGORY)
         {
-            aHelper.SetBACName(rResult.msString, getPolicyType());
+            aHelper.SetBACName(rResult.msString, SfxClassificationHelper::getPolicyType());
         }
     }
 
-    OUString sPolicy = SfxClassificationHelper::policyTypeToString(getPolicyType());
+    OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
 
     std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
     for (const OUString& rPageStyleName : aUsedPageStyles)
@@ -637,7 +629,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
 
-    OUString sPolicy = SfxClassificationHelper::policyTypeToString(getPolicyType());
+    OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
     sal_Int32 nParagraph = 1;
 
     while (xParagraphs->hasMoreElements())
