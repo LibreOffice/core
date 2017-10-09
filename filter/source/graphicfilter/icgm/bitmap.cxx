@@ -33,12 +33,31 @@ CGMBitmap::~CGMBitmap()
 {
 }
 
+namespace
+{
+    bool isLegalBitsPerPixel(sal_uInt32 nBitsPerPixel)
+    {
+        switch (nBitsPerPixel)
+        {
+            case 1:
+            case 2:
+            case 4:
+            case 8:
+            case 24:
+                return true;
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
+}
 
 void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 {
     rDesc.mbStatus = true;
 
-    if ( ImplGetDimensions( rDesc ) && rDesc.mpBuf )
+    if (ImplGetDimensions(rDesc) && rDesc.mpBuf && isLegalBitsPerPixel(rDesc.mnDstBitsPerPixel))
     {
         rDesc.mpBitmap = new Bitmap( Size( rDesc.mnX, rDesc.mnY ), (sal_uInt16)rDesc.mnDstBitsPerPixel );
         if ( ( rDesc.mpAcc = rDesc.mpBitmap->AcquireWriteAccess() ) != nullptr )
