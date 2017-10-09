@@ -17,7 +17,7 @@
 #include <osl/process.h>
 #include <rtl/math.hxx>
 
-#include "scanner.hxx"
+#include <scanner.hxx>
 
 namespace
 {

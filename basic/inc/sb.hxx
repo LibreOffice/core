@@ -26,7 +26,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 
-#include "sbprop.hxx"
+#include <sbprop.hxx>
 
 // create object from user-type  (+StringID+StringID)
 SbxObject* createUserTypeImpl( const OUString& rClassName );

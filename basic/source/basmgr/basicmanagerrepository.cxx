@@ -19,10 +19,10 @@
 
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
-#include "scriptcont.hxx"
-#include "dlgcont.hxx"
+#include <scriptcont.hxx>
+#include <dlgcont.hxx>
 #include <basic/sbuno.hxx>
-#include "sbintern.hxx"
+#include <sbintern.hxx>
 
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>

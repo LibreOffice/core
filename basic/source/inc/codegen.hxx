@@ -22,8 +22,8 @@
 
 class SbiParser;
 class SbModule;
-#include "opcodes.hxx"
-#include "buffer.hxx"
+#include <opcodes.hxx>
+#include <buffer.hxx>
 #include <basic/codecompletecache.hxx>
 
 class SbiCodeGen {

@@ -18,9 +18,9 @@
  */
 
 
-#include "codegen.hxx"
-#include "expr.hxx"
-#include "parser.hxx"
+#include <codegen.hxx>
+#include <expr.hxx>
+#include <parser.hxx>
 
 // Transform table for token operators and opcodes
 

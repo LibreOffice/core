@@ -22,7 +22,7 @@
 
 #include <basic/sbx.hxx>
 
-#include "sb.hxx"
+#include <sb.hxx>
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

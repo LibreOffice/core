@@ -39,7 +39,7 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/sequence.hxx>
 
-#include "namecont.hxx"
+#include <namecont.hxx>
 #include <basic/basicmanagerrepository.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>

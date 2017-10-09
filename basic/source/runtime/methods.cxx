@@ -42,10 +42,10 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 
-#include "runtime.hxx"
-#include "sbunoobj.hxx"
+#include <runtime.hxx>
+#include <sbunoobj.hxx>
 #include <osl/file.hxx>
-#include "errobject.hxx"
+#include <errobject.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -69,12 +69,12 @@ using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
-#include "date.hxx"
-#include "stdobj.hxx"
-#include "sbstdobj.hxx"
-#include "rtlproto.hxx"
-#include "image.hxx"
-#include "iosys.hxx"
+#include <date.hxx>
+#include <stdobj.hxx>
+#include <sbstdobj.hxx>
+#include <rtlproto.hxx>
+#include <image.hxx>
+#include <iosys.hxx>
 #include "ddectrl.hxx"
 #include <sbintern.hxx>
 #include <basic/vbahelper.hxx>
@@ -85,8 +85,8 @@ using namespace com::sun::star::uno;
 #include <stdlib.h>
 #include <errno.h>
 
-#include "sbobjmod.hxx"
-#include "sbxmod.hxx"
+#include <sbobjmod.hxx>
+#include <sbxmod.hxx>
 
 #ifdef _WIN32
 #include <prewin.h>

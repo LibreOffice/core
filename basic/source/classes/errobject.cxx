@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "errobject.hxx"
+#include <errobject.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XDefaultProperty.hpp>
-#include "sbintern.hxx"
-#include "runtime.hxx"
+#include <sbintern.hxx>
+#include <runtime.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo;

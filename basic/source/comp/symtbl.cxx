@@ -19,7 +19,7 @@
 
 
 #include <memory>
-#include "parser.hxx"
+#include <parser.hxx>
 
 #include <osl/diagnose.h>
 

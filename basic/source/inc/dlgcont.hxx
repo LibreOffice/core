@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_DLGCONT_HXX
 #define INCLUDED_BASIC_SOURCE_INC_DLGCONT_HXX
 
-#include "namecont.hxx"
+#include <namecont.hxx>
 
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/resource/XStringResourcePersistence.hpp>

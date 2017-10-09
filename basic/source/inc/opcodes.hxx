@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_OPCODES_HXX
 #define INCLUDED_BASIC_SOURCE_INC_OPCODES_HXX
 
-#include "sbintern.hxx"
+#include <sbintern.hxx>
 
 // An opcode can have a length of 1, 3 or 5 bytes,
 // depending on its numeric value (see below).

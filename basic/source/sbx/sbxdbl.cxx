@@ -22,7 +22,7 @@
 #include <vcl/errcode.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
-#include "runtime.hxx"
+#include <runtime.hxx>
 
 double ImpGetDouble( const SbxValues* p )
 {

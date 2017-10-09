@@ -25,7 +25,7 @@
 
 #include <basic/sbx.hxx>
 #include <basic/sbxfac.hxx>
-#include "sbxbase.hxx"
+#include <sbxbase.hxx>
 
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>

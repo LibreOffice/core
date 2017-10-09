@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basiccharclass.hxx"
-#include "scanner.hxx"
-#include "sbintern.hxx"
+#include <basiccharclass.hxx>
+#include <scanner.hxx>
+#include <sbintern.hxx>
 
 #include <i18nlangtag/lang.h>
 #include <comphelper/processfactory.hxx>

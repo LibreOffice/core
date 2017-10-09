@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "buffer.hxx"
-#include "parser.hxx"
+#include <buffer.hxx>
+#include <parser.hxx>
 
 const static sal_uInt32 UP_LIMIT=0xFFFFFF00;
 

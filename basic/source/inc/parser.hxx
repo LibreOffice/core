@@ -20,9 +20,9 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_PARSER_HXX
 #define INCLUDED_BASIC_SOURCE_INC_PARSER_HXX
 
-#include "expr.hxx"
-#include "codegen.hxx"
-#include "symtbl.hxx"
+#include <expr.hxx>
+#include <codegen.hxx>
+#include <symtbl.hxx>
 
 
 #include <vector>

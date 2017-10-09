@@ -17,29 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sb.hxx"
+#include <sb.hxx>
 #include <tools/stream.hxx>
 #include <vcl/errinf.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <basic/sbx.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
-#include "image.hxx"
-#include "sbunoobj.hxx"
-#include "sbjsmeth.hxx"
-#include "sbjsmod.hxx"
-#include "sbintern.hxx"
-#include "runtime.hxx"
+#include <image.hxx>
+#include <sbunoobj.hxx>
+#include <sbjsmeth.hxx>
+#include <sbjsmod.hxx>
+#include <sbintern.hxx>
+#include <runtime.hxx>
 #include <basic/sbuno.hxx>
-#include "sbobjmod.hxx"
-#include "stdobj.hxx"
-#include "filefmt.hxx"
-#include "basic.hrc"
+#include <sbobjmod.hxx>
+#include <stdobj.hxx>
+#include <filefmt.hxx>
+#include <basic.hrc>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
-#include "errobject.hxx"
+#include <errobject.hxx>
 #include <memory>
 #include <unordered_map>
 

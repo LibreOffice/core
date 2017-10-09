@@ -22,9 +22,9 @@
 #include <algorithm>
 
 #include <rtl/math.hxx>
-#include "codegen.hxx"
-#include "parser.hxx"
-#include "expr.hxx"
+#include <codegen.hxx>
+#include <parser.hxx>
+#include <expr.hxx>
 
 
 SbiExprNode::SbiExprNode( SbiExprNode* l, SbiToken t, SbiExprNode* r ) :
