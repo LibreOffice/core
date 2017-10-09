@@ -273,13 +273,12 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF),
         OStringBuffer("SfxOleStringHelper::ImplLoadString8 - invalid string of len ").
         append(nSize).getStr() );
-    if( (0 < nSize) && (nSize <= 0xFFFF) )
+    if (nSize > 0 && nSize <= 0xFFFF)
     {
         // load character buffer
-        ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nSize + 1 ), 0 );
-        rStrm.ReadBytes(aBuffer.data(), static_cast<std::size_t>(nSize));
-        // create string from encoded character array
-        aValue = OUString(aBuffer.data(), strlen(aBuffer.data()), GetTextEncoding());
+        OString sValue(read_uInt8s_ToOString(rStrm, nSize - 1));
+        rStrm.SeekRel(1);  // skip null-byte at end
+        aValue = OStringToOUString(sValue, GetTextEncoding());
     }
     return aValue;
 }
@@ -292,23 +291,14 @@ OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm )
     rStrm.ReadInt32( nSize );
     DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF), "SfxOleStringHelper::ImplLoadString16 - invalid string" );
     // size field includes trailing NUL character
-    if( (0 < nSize) && (nSize <= 0xFFFF) )
+    if (nSize > 0 && nSize <= 0xFFFF)
     {
         // load character buffer
-        ::std::vector< sal_Unicode > aBuffer;
-        aBuffer.reserve( static_cast< size_t >( nSize + 1 ) );
-        sal_uInt16 cChar;
-        for( sal_Int32 nIdx = 0; nIdx < nSize; ++nIdx )
-        {
-            rStrm.ReadUInt16( cChar );
-            aBuffer.push_back( static_cast< sal_Unicode >( cChar ) );
-        }
+        aValue = read_uInt16s_ToOUString(rStrm, nSize - 1);
+        rStrm.SeekRel(2);  // skip null-byte at end
         // stream is always padded to 32-bit boundary, skip 2 bytes on odd character count
         if( (nSize & 1) == 1 )
-            rStrm.SeekRel( 2 );
-        // create string from character array
-        aBuffer.push_back( 0 );
-        aValue = OUString(aBuffer.data());
+            rStrm.SeekRel(2);
     }
     return aValue;
 }
