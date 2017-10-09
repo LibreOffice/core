@@ -24,8 +24,8 @@
 
 #include <math.h>
 
-#include "bezierclip.hxx"
-#include "gauss.hxx"
+#include <bezierclip.hxx>
+#include <gauss.hxx>
 
 // what to test
 #define WITH_ASSERTIONS
