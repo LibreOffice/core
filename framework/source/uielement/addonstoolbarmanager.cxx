@@ -266,6 +266,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 AddonsParams* pRuntimeItemData = new AddonsParams;
                 pRuntimeItemData->aImageId  = aImageId;
                 pRuntimeItemData->aTarget   = aTarget;
+                pRuntimeItemData->aControlType = aControlType;
                 pRuntimeItemData->nWidth    = nWidth;
                 m_pToolBar->SetItemData( nId, pRuntimeItemData );
                 m_pToolBar->SetItemCommand( nId, aURL );

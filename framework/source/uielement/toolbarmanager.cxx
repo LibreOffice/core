@@ -1193,6 +1193,11 @@ void ToolBarManager::FillOverflowToolbar( ToolBox const * pParent )
             m_pToolBar->SetItemCommand( nId, aCommandURL );
             m_pToolBar->SetQuickHelpText( nId, pParent->GetQuickHelpText( nId ) );
 
+            // Handle possible add-on controls.
+            AddonsParams* pAddonParams = static_cast< AddonsParams* >( pParent->GetItemData( nId ) );
+            if ( pAddonParams )
+                m_pToolBar->SetItemData( nId, new AddonsParams( *pAddonParams ) );
+
             // Fill command map. It stores all our commands and from what
             // image manager we got our image. So we can decide if we have to use an
             // image from a notification message.
