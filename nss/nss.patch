@@ -116,7 +116,7 @@ diff -ur misc/nss-3.25/nss/coreconf/Darwin.mk misc/build/nss-3.25/nss/coreconf/D
 +
 +# CC is taken from environment automatically.
 +#CC		= cc
-+CCC		= $(CXX) -stdlib=libc++
++CCC		= $(CXX) -stdlib=libc++ -std=c++11
  
 -CC		= gcc
 -CCC		= g++
@@ -282,7 +282,7 @@ diff -ur misc/nss-3.25/nss/external_tests/common/gtest.mk misc/build/nss-3.25/ns
  else
 -    CXXFLAGS += -std=c++0x
 +    ifeq (Darwin,$(OS_ARCH))
-+        CXXFLAGS += -stdlib=libc++
++        CXXFLAGS += -stdlib=libc++ -std=c++11
 +    else
 +        CXXFLAGS += -std=c++0x
 +    endif
