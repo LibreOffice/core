@@ -941,6 +941,8 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
     $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
 ))
 
+# for fontconfig using platforms, continue to provide Standard Symbols L etc now Type 1 font support is gone
+# via fonts_urw
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 	extras_fonts \
 	$(if $(USING_X11)$(ENABLE_HEADLESS)$(filter ANDROID,$(OS)), \
@@ -959,6 +961,8 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_sourcecode \
 		fonts_sourcesans \
 	) \
+	$(if $(USING_X11)$(ENABLE_HEADLESS)$(filter ANDROID,$(OS)), \
+		fonts_urw) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_images,\
