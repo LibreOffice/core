@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_use_libraries,giffuzzer,\
 $(eval $(call gb_Executable_use_static_libraries,giffuzzer,\
     findsofficepath \
     ulingu \
-    fuzzer_core \
     fuzzerstubs \
 ))
 
