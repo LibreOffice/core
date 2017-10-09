@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <tools/urlobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
@@ -84,10 +86,12 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
 
     xPropSet->setPropertyValue("ButtonType", uno::Any(form::FormButtonType_URL) );
 
+#if HAVE_FEATURE_AVMEDIA
         if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
     {
         xPropSet->setPropertyValue("DispatchURLInternal", uno::Any(true) );
     }
+#endif
 
     Point aPos;
     if (pInsPos)

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sfx2/opengrf.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
@@ -207,8 +209,12 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     {
         uno::Reference<frame::XModel> const xModel(
                 rData.GetDocument()->GetDocumentShell()->GetModel());
+#if HAVE_FEATURE_AVMEDIA
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
         if (!bRet) { return; }
+#else
+        return;
+#endif
     }
 
     SdrMediaObj* pObj = new SdrMediaObj( tools::Rectangle( aInsertPos, aSize ) );
@@ -312,13 +318,18 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
     }
 
     bool bLink(true);
-    if (bAPI || ::avmedia::MediaWindow::executeMediaURLDialog(pWin, aURL, &bLink))
+    if (bAPI
+#if HAVE_FEATURE_AVMEDIA
+        || ::avmedia::MediaWindow::executeMediaURLDialog(pWin, aURL, &bLink)
+#endif
+       )
     {
         Size aPrefSize;
 
         if( pWin )
             pWin->EnterWait();
 
+#if HAVE_FEATURE_AVMEDIA
         if( !::avmedia::MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true, &aPrefSize ) )
         {
             if( pWin )
@@ -328,6 +339,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
                 ::avmedia::MediaWindow::executeFormatErrorBox( pWindow );
         }
         else
+#endif
         {
             lcl_InsertMedia( aURL, bAPI, pViewSh, pWindow, pView, aPrefSize,
                     bLink );

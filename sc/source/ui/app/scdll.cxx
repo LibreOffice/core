@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <editeng/eeitem.hxx>
 
 #include <svx/fmobjfac.hxx>
@@ -187,7 +189,9 @@ void ScDLL::Init()
     CharmapPopup::RegisterControl(SID_CHARMAP_CONTROL, pMod );
 
     // Media Controller
+#if HAVE_FEATURE_AVMEDIA
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
+#endif
 
     // Common SFX Controller
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);

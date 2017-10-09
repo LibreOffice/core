@@ -587,6 +587,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     OUString aStrURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
     // is it a media URL?
+#if HAVE_FEATURE_AVMEDIA
     if( ::avmedia::MediaWindow::isMediaURL( aStrURL, ""/*TODO?*/ ) )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
@@ -594,6 +595,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
                                 SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
                                 { &aMediaURLItem }) );
     }
+#endif
 
     if (!bLink)     // for bLink only graphics or URL
     {
