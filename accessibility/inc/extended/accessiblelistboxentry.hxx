@@ -37,7 +37,7 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <svtools/treelistentry.hxx>
 #include <tools/gen.hxx>
-#include "extended/listboxaccessible.hxx"
+#include <extended/listboxaccessible.hxx>
 
 // forward ---------------------------------------------------------------
 

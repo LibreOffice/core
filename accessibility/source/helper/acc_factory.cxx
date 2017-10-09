@@ -59,7 +59,7 @@
 #include <svtools/accessibletable.hxx>
 #include <vcl/popupmenuwindow.hxx>
 
-#include "floatingwindowaccessible.hxx"
+#include <floatingwindowaccessible.hxx>
 
 using namespace ::accessibility;
 using namespace ::com::sun::star::uno;

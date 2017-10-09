@@ -20,7 +20,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLETABLISTBOX_HXX
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLETABLISTBOX_HXX
 
-#include "AccessibleBrowseBox.hxx"
+#include <extended/AccessibleBrowseBox.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <svtools/accessibletableprovider.hxx>

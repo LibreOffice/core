@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "extended/AccessibleBrowseBoxHeaderBar.hxx"
+#include <extended/AccessibleBrowseBoxHeaderBar.hxx>
 #include <svtools/accessibletableprovider.hxx>
 #include <comphelper/servicehelper.hxx>
 

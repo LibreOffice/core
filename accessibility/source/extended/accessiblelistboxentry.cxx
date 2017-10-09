@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "extended/accessiblelistboxentry.hxx"
+#include <extended/accessiblelistboxentry.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <svtools/svlbitm.hxx>

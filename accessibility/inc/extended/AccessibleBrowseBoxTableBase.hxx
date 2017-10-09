@@ -21,7 +21,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOXTABLEBASE_HXX
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOXTABLEBASE_HXX
 
-#include "extended/AccessibleBrowseBoxBase.hxx"
+#include <extended/AccessibleBrowseBoxBase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 

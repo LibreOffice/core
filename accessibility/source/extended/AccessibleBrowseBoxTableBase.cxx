@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "extended/AccessibleBrowseBoxTableBase.hxx"
+#include <extended/AccessibleBrowseBoxTableBase.hxx>
 #include <svtools/accessibletableprovider.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>

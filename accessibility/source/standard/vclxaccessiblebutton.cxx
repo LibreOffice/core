@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-#include "strings.hxx"
+#include <strings.hxx>
 
 #include <vcl/button.hxx>
 
