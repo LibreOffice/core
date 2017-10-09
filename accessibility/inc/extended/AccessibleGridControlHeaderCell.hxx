@@ -19,7 +19,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLHEADERCELL_HXX
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLHEADERCELL_HXX
 
-#include "extended/AccessibleGridControlTableCell.hxx"
+#include <extended/AccessibleGridControlTableCell.hxx>
 
 namespace accessibility
 {

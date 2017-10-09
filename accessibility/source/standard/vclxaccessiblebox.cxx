@@ -33,7 +33,7 @@
 #include <vcl/lstbox.hxx>
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
-#include "strings.hxx"
+#include <strings.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

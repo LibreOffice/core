@@ -35,7 +35,7 @@
 #include <comphelper/sequence.hxx>
 #include <vcl/window.hxx>
 #include <vcl/button.hxx>
-#include "strings.hxx"
+#include <strings.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

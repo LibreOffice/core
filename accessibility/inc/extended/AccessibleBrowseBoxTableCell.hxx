@@ -19,7 +19,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOXTABLECELL_HXX
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEBROWSEBOXTABLECELL_HXX
 
-#include "extended/accessiblebrowseboxcell.hxx"
+#include <extended/accessiblebrowseboxcell.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 

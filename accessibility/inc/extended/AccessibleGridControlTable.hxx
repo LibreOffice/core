@@ -21,7 +21,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLTABLE_HXX
 #define INCLUDED_ACCESSIBILITY_INC_EXTENDED_ACCESSIBLEGRIDCONTROLTABLE_HXX
 
-#include "extended/AccessibleGridControlTableBase.hxx"
+#include <extended/AccessibleGridControlTableBase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <extended/AccessibleGridControlTableCell.hxx>

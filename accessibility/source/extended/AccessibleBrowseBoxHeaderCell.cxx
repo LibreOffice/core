@@ -18,9 +18,9 @@
  */
 
 
-#include "extended/AccessibleBrowseBoxHeaderCell.hxx"
+#include <extended/AccessibleBrowseBoxHeaderCell.hxx>
 #include <svtools/accessibletableprovider.hxx>
-#include "extended/AccessibleBrowseBox.hxx"
+#include <extended/AccessibleBrowseBox.hxx>
 
 namespace accessibility
 {

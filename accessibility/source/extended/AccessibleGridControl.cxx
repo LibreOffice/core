@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "extended/AccessibleGridControl.hxx"
-#include "extended/AccessibleGridControlTable.hxx"
-#include "extended/AccessibleGridControlHeader.hxx"
+#include <extended/AccessibleGridControl.hxx>
+#include <extended/AccessibleGridControlTable.hxx>
+#include <extended/AccessibleGridControlHeader.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>

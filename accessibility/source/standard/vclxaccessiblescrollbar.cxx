@@ -31,7 +31,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/scrbar.hxx>
-#include "strings.hxx"
+#include <strings.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

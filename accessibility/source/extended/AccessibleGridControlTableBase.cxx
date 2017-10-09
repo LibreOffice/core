@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "extended/AccessibleGridControlTableBase.hxx"
+#include <extended/AccessibleGridControlTableBase.hxx>
 #include <svtools/accessibletable.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>

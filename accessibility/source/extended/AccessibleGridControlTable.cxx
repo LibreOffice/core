@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "extended/AccessibleGridControlTable.hxx"
-#include "extended/AccessibleGridControlTableCell.hxx"
+#include <extended/AccessibleGridControlTable.hxx>
+#include <extended/AccessibleGridControlTableCell.hxx>
 #include <svtools/accessibletable.hxx>
 
 
