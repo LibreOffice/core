@@ -19,9 +19,9 @@
 
 #include <vcl/scrbar.hxx>
 #include <svx/svdview.hxx>
-#include "dlgedfunc.hxx"
-#include "dlged.hxx"
-#include "dlgedview.hxx"
+#include <dlgedfunc.hxx>
+#include <dlged.hxx>
+#include <dlgedview.hxx>
 #include <vcl/seleng.hxx>
 
 namespace basctl

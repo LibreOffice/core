@@ -20,11 +20,11 @@
 #include <strings.hrc>
 #include <basidesh.hxx>
 
-#include <basicbox.hxx>
+#include "basicbox.hxx"
 #include <iderdll.hxx>
 
-#include "localizationmgr.hxx"
-#include "managelang.hxx"
+#include <localizationmgr.hxx>
+#include <managelang.hxx>
 
 #include <sfx2/dispatch.hxx>
 #include <svtools/langtab.hxx>

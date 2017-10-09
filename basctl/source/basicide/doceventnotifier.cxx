@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "doceventnotifier.hxx"
-#include "scriptdocument.hxx"
+#include <doceventnotifier.hxx>
+#include <scriptdocument.hxx>
 
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 

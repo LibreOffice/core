@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "strings.hrc"
+#include <strings.hrc>
 
-#include "objdlg.hxx"
-#include "helpids.h"
+#include <objdlg.hxx>
+#include <helpids.h>
 
 #include <svl/itemset.hxx>
 #include <vcl/taskpanelist.hxx>

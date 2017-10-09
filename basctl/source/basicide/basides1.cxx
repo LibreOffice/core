@@ -18,16 +18,16 @@
  */
 
 #include <memory>
-#include "strings.hrc"
-#include "helpids.h"
+#include <strings.hrc>
+#include <helpids.h>
 
 #include "baside2.hxx"
-#include "baside3.hxx"
-#include "docsignature.hxx"
-#include "iderdll.hxx"
+#include <baside3.hxx>
+#include <docsignature.hxx>
+#include <iderdll.hxx>
 #include "iderdll2.hxx"
-#include "localizationmgr.hxx"
-#include "managelang.hxx"
+#include <localizationmgr.hxx>
+#include <managelang.hxx>
 
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_BASIDE3_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_BASIDE3_HXX
 
-#include "layout.hxx"
-#include "bastypes.hxx"
-#include "propbrw.hxx"
+#include <layout.hxx>
+#include <bastypes.hxx>
+#include <propbrw.hxx>
 
 #include <svl/undo.hxx>
 #include <vcl/dialog.hxx>

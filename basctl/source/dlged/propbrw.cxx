@@ -18,14 +18,14 @@
  */
 
 
-#include "propbrw.hxx"
-#include "basidesh.hxx"
-#include "dlgedobj.hxx"
-#include "iderid.hxx"
-#include "baside3.hxx"
-#include "strings.hrc"
+#include <propbrw.hxx>
+#include <basidesh.hxx>
+#include <dlgedobj.hxx>
+#include <iderid.hxx>
+#include <baside3.hxx>
+#include <strings.hrc>
 
-#include "strings.hxx"
+#include <strings.hxx>
 #include <svx/svxids.hrc>
 
 #include <com/sun/star/awt/PosSize.hpp>

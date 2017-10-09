@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "localizationmgr.hxx"
+#include <localizationmgr.hxx>
 
-#include "basidesh.hxx"
-#include "baside3.hxx"
-#include "iderdll.hxx"
-#include "dlged.hxx"
-#include "managelang.hxx"
+#include <basidesh.hxx>
+#include <baside3.hxx>
+#include <iderdll.hxx>
+#include <dlged.hxx>
+#include <managelang.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/resource/MissingResourceException.hpp>

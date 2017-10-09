@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basidesh.hxx"
-#include "basobj.hxx"
-#include "iderdll.hxx"
-#include "iderid.hxx"
-#include "localizationmgr.hxx"
-#include "managelang.hxx"
+#include <basidesh.hxx>
+#include <basobj.hxx>
+#include <iderdll.hxx>
+#include <iderid.hxx>
+#include <localizationmgr.hxx>
+#include <managelang.hxx>
 
-#include "helpids.h"
-#include "strings.hrc"
+#include <helpids.h>
+#include <strings.hrc>
 
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/WordType.hpp>

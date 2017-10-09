@@ -23,7 +23,7 @@
 #include <bastype2.hxx>
 #include <sfx2/basedlgs.hxx>
 
-#include "com/sun/star/frame/XFrame.hpp"
+#include <com/sun/star/frame/XFrame.hpp>
 
 #include <vcl/button.hxx>
 

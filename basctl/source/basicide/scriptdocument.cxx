@@ -18,12 +18,12 @@
  */
 
 #include <memory>
-#include "scriptdocument.hxx"
-#include "basobj.hxx"
-#include "strings.hrc"
-#include "iderid.hxx"
-#include "dlgeddef.hxx"
-#include "doceventnotifier.hxx"
+#include <scriptdocument.hxx>
+#include <basobj.hxx>
+#include <strings.hrc>
+#include <iderid.hxx>
+#include <dlgeddef.hxx>
+#include <doceventnotifier.hxx>
 #include "documentenumeration.hxx"
 
 #include <com/sun/star/uri/UriReferenceFactory.hpp>

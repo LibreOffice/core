@@ -20,8 +20,8 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_OBJDLG_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_OBJDLG_HXX
 
-#include "bastype2.hxx"
-#include "bastypes.hxx"
+#include <bastype2.hxx>
+#include <bastypes.hxx>
 
 #include <vcl/fixed.hxx>
 

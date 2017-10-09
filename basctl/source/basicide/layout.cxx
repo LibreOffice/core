@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "layout.hxx"
+#include <layout.hxx>
 
-#include "bastypes.hxx"
+#include <bastypes.hxx>
 #include <vcl/settings.hxx>
 
 namespace basctl

@@ -21,7 +21,7 @@
 
 #include "breakpoint.hxx"
 #include "brkdlg.hxx"
-#include "basidesh.hxx"
+#include <basidesh.hxx>
 
 #include <sfx2/dispatch.hxx>
 

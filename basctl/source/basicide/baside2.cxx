@@ -18,14 +18,14 @@
  */
 
 #include "baside2.hxx"
-#include "baside3.hxx"
+#include <baside3.hxx>
 #include "brkdlg.hxx"
-#include "iderdll.hxx"
+#include <iderdll.hxx>
 #include "moduldlg.hxx"
-#include "docsignature.hxx"
-#include "officecfg/Office/BasicIDE.hxx"
+#include <docsignature.hxx>
+#include <officecfg/Office/BasicIDE.hxx>
 
-#include "helpids.h"
+#include <helpids.h>
 #include <strings.hrc>
 
 #include <basic/basmgr.hxx>
