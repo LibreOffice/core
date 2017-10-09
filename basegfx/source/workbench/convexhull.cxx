@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <vector>
 
-#include "bezierclip.hxx"
+#include <bezierclip.hxx>
 
 /* Implements the theta function from Sedgewick: Algorithms in XXX, chapter 24 */
 template <class PointType> double theta( const PointType& p1, const PointType& p2 )
