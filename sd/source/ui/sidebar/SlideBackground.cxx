@@ -422,11 +422,14 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
     if ( !xPanels.is() )
         return;
 
-    Reference<ui::XPanel> xPanel ( xPanels->getByName("SlideBackgroundPanel"), uno::UNO_QUERY);
-    if ( !xPanel.is() )
-        return;
+    if (xPanels->hasByName("SlideBackgroundPanel"))
+    {
+        Reference<ui::XPanel> xPanel ( xPanels->getByName("SlideBackgroundPanel"), uno::UNO_QUERY);
+        if ( !xPanel.is() )
+            return;
 
-    xPanel->setTitle( rTitle );
+        xPanel->setTitle( rTitle );
+    }
 }
 
 void SlideBackground::addListener()
