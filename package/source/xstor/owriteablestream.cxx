@@ -478,10 +478,10 @@ void OWriteStream_Impl::DisposeWrappers()
     }
     m_pParent = nullptr;
 
-    if ( !m_aInputStreamsList.empty() )
+    if ( !m_aInputStreamsVector.empty() )
     {
-        for ( InputStreamsList_Impl::iterator pStreamIter = m_aInputStreamsList.begin();
-              pStreamIter != m_aInputStreamsList.end(); ++pStreamIter )
+        for ( InputStreamsVector_Impl::iterator pStreamIter = m_aInputStreamsVector.begin();
+              pStreamIter != m_aInputStreamsVector.end(); ++pStreamIter )
         {
             if ( *pStreamIter )
             {
@@ -490,7 +490,7 @@ void OWriteStream_Impl::DisposeWrappers()
             }
         }
 
-        m_aInputStreamsList.clear();
+        m_aInputStreamsVector.clear();
     }
 }
 
@@ -1255,7 +1255,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
                         uno::UNO_QUERY );
         SAL_WARN_IF( !xCompStream.is(), "package.xstor", "OInputCompStream MUST provide XStream interfaces!" );
 
-        m_aInputStreamsList.push_back( pStream );
+        m_aInputStreamsVector.push_back( pStream );
         return xCompStream;
     }
     else if ( ( nStreamMode & embed::ElementModes::READWRITE ) == embed::ElementModes::SEEKABLEREAD )
@@ -1279,12 +1279,12 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
                         uno::UNO_QUERY );
         SAL_WARN_IF( !xSeekStream.is(), "package.xstor", "OInputSeekStream MUST provide XStream interfaces!" );
 
-        m_aInputStreamsList.push_back( pStream );
+        m_aInputStreamsVector.push_back( pStream );
         return xSeekStream;
     }
     else if ( ( nStreamMode & embed::ElementModes::WRITE ) == embed::ElementModes::WRITE )
     {
-        if ( !m_aInputStreamsList.empty() )
+        if ( !m_aInputStreamsVector.empty() )
             throw io::IOException(); // TODO:
 
         uno::Reference< io::XStream > xStream;
@@ -1384,7 +1384,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetRawInStream()
 void OWriteStream_Impl::InputStreamDisposed( OInputCompStream* pStream )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
-    m_aInputStreamsList.remove( pStream );
+    m_aInputStreamsVector.erase(std::find(m_aInputStreamsVector.begin(), m_aInputStreamsVector.end(), pStream ));
 }
 
 void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, uno::Reference< io::XStream >& xTargetStream )

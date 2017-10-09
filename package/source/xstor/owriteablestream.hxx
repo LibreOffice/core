@@ -45,7 +45,7 @@
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-#include <list>
+#include <vector>
 #include <memory>
 
 #include "ocompinstream.hxx"
@@ -60,7 +60,7 @@ namespace package {
 
 struct WSInternalData_Impl;
 
-typedef ::std::list< OInputCompStream* > InputStreamsList_Impl;
+typedef ::std::vector< OInputCompStream* > InputStreamsVector_Impl;
 
 struct OStorage_Impl;
 class OWriteStream;
@@ -79,7 +79,7 @@ struct OWriteStream_Impl
     css::uno::Reference< css::io::XStream > m_xCacheStream;
     css::uno::Reference< css::io::XSeekable > m_xCacheSeek;
 
-    InputStreamsList_Impl m_aInputStreamsList;
+    InputStreamsVector_Impl m_aInputStreamsVector;
 
     bool                        m_bHasDataToFlush;    // only modified elements will be sent to the original content
     bool                        m_bFlushed;      // sending the streams is coordinated by the root storage of the package
