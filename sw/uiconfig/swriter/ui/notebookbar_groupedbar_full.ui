@@ -1230,10 +1230,17 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ExportToPDFD">
+      <object class="GtkMenuItem" id="ExportDirectToPDFD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ExportToPDF</property>
+        <property name="action_name">.uno:ExportDirectToPDF</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="ExportDirectToEPUBD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ExportDirectToEPUB</property>
       </object>
     </child>
     <child>
