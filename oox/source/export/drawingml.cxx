@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <config_folders.h>
 #include "rtl/bootstrap.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -968,7 +970,11 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
     bool bEmbed = rURL.startsWith("vnd.sun.star.Package:");
 
     // mime type
+#if HAVE_FEATURE_AVMEDIA
     OUString aMimeType(pMediaObj->getMediaProperties().getMimeType());
+#else
+    OUString aMimeType("none");
+#endif
     if (aMimeType == "application/vnd.sun.star.media")
     {
         // try to set something better
