@@ -33,7 +33,9 @@ endif
 # instdir/share/fonts/truetype/fc_local.conf when it shall
 # contain content from at least one of external/more_fonts/fc_local.snippet
 # (conditional on MORE_FONTS in BUILD_TYPE) and
-# extras/source/truetype/symbol/fc_local.snippet (unconditional):
+# $(WORKDIR)/UnpackedTarball/font_urw/fontconfig/urw-fallback.conf
+# which is used on platforms where Standard Symbols L was typically
+# available when we supported Type 1 fonts
 ifneq ($(USING_X11)$(ENABLE_HEADLESS)$(filter ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,postprocess, \
     CustomTarget_fontconfig \

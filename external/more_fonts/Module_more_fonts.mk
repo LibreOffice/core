@@ -22,6 +22,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_sourcecode \
 	ExternalPackage_sourcesans \
 	ExternalPackage_EmojiOne_Color \
+	ExternalPackage_urw \
 	UnpackedTarball_caladea \
 	UnpackedTarball_carlito \
 	UnpackedTarball_dejavu \
@@ -34,6 +35,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_sourcecode \
 	UnpackedTarball_sourcesans \
 	UnpackedTarball_EmojiOne_Color \
+	UnpackedTarball_urw \
 ))
 
 # vim: set noet sw=4 ts=4:
