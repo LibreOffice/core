@@ -1224,6 +1224,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103090, "tdf103090.odt")
     CPPUNIT_ASSERT_EQUAL(expectedFieldName, fieldName);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf90789_2, "tdf90789-2.docx")
+{
+    // Section break before frame and shape was ignored
+    CPPUNIT_ASSERT_EQUAL( 3, getPages() );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
