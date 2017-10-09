@@ -524,6 +524,14 @@ bool TIFFReader::ReadMap()
                 if ( nStrip >= aStripOffsets.size())
                     return false;
                 pTIFF->Seek( aStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
+                try
+                {
+                    aMap[np].resize(nBytesPerRow);
+                }
+                catch (const std::bad_alloc &)
+                {
+                    return false;
+                }
                 pTIFF->ReadBytes(aMap[np].data(), nBytesPerRow);
                 if (!pTIFF->good())
                     return false;
@@ -591,6 +599,14 @@ bool TIFFReader::ReadMap()
                 }
                 if (np >= SAL_N_ELEMENTS(aMap))
                     return false;
+                try
+                {
+                    aMap[np].resize(nBytesPerRow);
+                }
+                catch (const std::bad_alloc &)
+                {
+                    return false;
+                }
                 DecompressStatus aResult = aCCIDecom.DecompressScanline(aMap[np].data(), nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes);
                 if (!aResult.m_bSuccess)
                     return false;
@@ -636,6 +652,14 @@ bool TIFFReader::ReadMap()
                 }
                 if (np >= SAL_N_ELEMENTS(aMap))
                     return false;
+                try
+                {
+                    aMap[np].resize(nBytesPerRow);
+                }
+                catch (const std::bad_alloc &)
+                {
+                    return false;
+                }
                 if ( ( aLZWDecom.Decompress(aMap[np].data(), nBytesPerRow) != nBytesPerRow ) || pTIFF->GetError() )
                     return false;
             }
@@ -663,6 +687,14 @@ bool TIFFReader::ReadMap()
                 sal_uInt32 nRowBytesLeft = nBytesPerRow;
                 if (np >= SAL_N_ELEMENTS(aMap))
                     return false;
+                try
+                {
+                    aMap[np].resize(nBytesPerRow);
+                }
+                catch (const std::bad_alloc &)
+                {
+                    return false;
+                }
                 sal_uInt8* pdst = aMap[np].data();
                 do
                 {
@@ -1481,20 +1513,6 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 xAcc = Bitmap::ScopedWriteAccess(aBitmap);
                 if (xAcc && xAcc->Width() == nImageWidth && xAcc->Height() == nImageLength)
                 {
-                    for (auto& j : aMap)
-                    {
-                        try
-                        {
-                            j.resize(nBytesPerRow);
-                        }
-                        catch (const std::bad_alloc &)
-                        {
-                            j.clear();
-                            bStatus = false;
-                            break;
-                        }
-                    }
-
                     if (bStatus && HasAlphaChannel())
                     {
                         pAlphaMask.reset( new AlphaMask( aTargetSize ) );
