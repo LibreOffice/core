@@ -23,7 +23,7 @@
 #include <algorithm>
 
 SalUserEventList::SalUserEventList()
-    : m_bAllUserEventProcessedSignaled( false )
+    : m_bAllUserEventProcessedSignaled( true )
 {
 }
 
@@ -78,16 +78,26 @@ bool SalUserEventList::DispatchUserEvents( bool bHandleAllCurrentEvents )
             }
 
             if ( isFrameAlive( aEvent.m_pFrame ) )
-                ProcessEvent( aEvent );
+            {
+                try
+                {
+                    ProcessEvent( aEvent );
+                }
+                catch (...)
+                {
+                    SAL_WARN( "vcl", "Uncaught exception during ProcessEvent!" );
+                    std::abort();
+                }
+            }
         }
         while( true );
+    }
 
-        osl::MutexGuard aGuard( m_aUserEventsMutex );
-        if ( !m_bAllUserEventProcessedSignaled && !HasUserEvents() )
-        {
-            m_bAllUserEventProcessedSignaled = true;
-            TriggerAllUserEventsProcessed();
-        }
+    osl::MutexGuard aGuard( m_aUserEventsMutex );
+    if ( !m_bAllUserEventProcessedSignaled && !HasUserEvents() )
+    {
+        m_bAllUserEventProcessedSignaled = true;
+        TriggerAllUserEventsProcessed();
     }
 
     return bWasEvent;
@@ -115,7 +125,7 @@ bool SalUserEventList::RemoveEvent( SalFrame* pFrame, void* pData, SalEvent nEve
         }
     }
 
-    if ( bResult && !m_bAllUserEventProcessedSignaled && !HasUserEvents() )
+    if ( !m_bAllUserEventProcessedSignaled && !HasUserEvents() )
     {
         m_bAllUserEventProcessedSignaled = true;
         TriggerAllUserEventsProcessed();
