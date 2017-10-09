@@ -22,7 +22,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <basic/sbx.hxx>
-#include "runtime.hxx"
+#include <runtime.hxx>
 
 #include <boost/optional.hpp>
 

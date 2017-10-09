@@ -19,7 +19,7 @@
 
 #ifndef INCLUDED_BASIC_SOURCE_INC_ERROBJECT_HXX
 #define INCLUDED_BASIC_SOURCE_INC_ERROBJECT_HXX
-#include "sbunoobj.hxx"
+#include <sbunoobj.hxx>
 #include <ooo/vba/XErrObject.hpp>
 
 

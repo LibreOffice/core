@@ -23,7 +23,7 @@
 #include <basic/basicdllapi.h>
 #include <basic/sbxfac.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include "sb.hxx"
+#include <sb.hxx>
 
 namespace utl
 {

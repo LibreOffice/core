@@ -78,7 +78,7 @@
 #include <basic/sbuno.hxx>
 #include <basic/sberrors.hxx>
 #include <sbunoobj.hxx>
-#include "sbjsmod.hxx"
+#include <sbjsmod.hxx>
 #include <basic/basmgr.hxx>
 #include <sbintern.hxx>
 #include <runtime.hxx>

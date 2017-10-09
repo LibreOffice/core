@@ -18,12 +18,12 @@
  */
 
 
-#include "runtime.hxx"
-#include "stdobj.hxx"
-#include "sbstdobj.hxx"
+#include <runtime.hxx>
+#include <stdobj.hxx>
+#include <sbstdobj.hxx>
 #include <sal/macros.h>
-#include "rtlproto.hxx"
-#include "sbintern.hxx"
+#include <rtlproto.hxx>
+#include <sbintern.hxx>
 // The nArgs-field of a table entry is encrypted as follows:
 // At the moment it is assumed that properties don't need any
 // parameters!

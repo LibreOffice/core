@@ -39,9 +39,9 @@
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
-#include "global.hxx"
+#include <global.hxx>
 #include <sbunoobj.hxx>
-#include "sbintern.hxx"
+#include <sbintern.hxx>
 
 #include <memory>
 #include <vector>

@@ -15,7 +15,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "global.hxx"
+#include <global.hxx>
 
 namespace
 {

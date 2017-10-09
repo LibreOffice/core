@@ -18,7 +18,7 @@
  */
 
 #include <basic/sbx.hxx>
-#include "parser.hxx"
+#include <parser.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <svtools/miscopt.hxx>
 #include <rtl/character.hxx>

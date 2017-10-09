@@ -22,8 +22,8 @@
 
 #include <memory>
 
-#include "opcodes.hxx"
-#include "token.hxx"
+#include <opcodes.hxx>
+#include <token.hxx>
 #include <vector>
 
 class SbiExprNode;

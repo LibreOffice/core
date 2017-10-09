@@ -21,9 +21,9 @@
 #include <tools/tenccvt.hxx>
 #include <osl/thread.h>
 #include <basic/sbx.hxx>
-#include "sb.hxx"
+#include <sb.hxx>
 #include <string.h>
-#include "image.hxx"
+#include <image.hxx>
 #include <codegen.hxx>
 #include <memory>
 

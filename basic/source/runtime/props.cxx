@@ -18,10 +18,10 @@
  */
 
 
-#include "runtime.hxx"
-#include "stdobj.hxx"
-#include "rtlproto.hxx"
-#include "errobject.hxx"
+#include <runtime.hxx>
+#include <stdobj.hxx>
+#include <rtlproto.hxx>
+#include <errobject.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
 

@@ -26,7 +26,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
-#include "math.h"
+#include <math.h>
 #include <comphelper/processfactory.hxx>
 #include <memory>
 

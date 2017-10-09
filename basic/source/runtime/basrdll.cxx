@@ -27,7 +27,7 @@
 #include <basic/sbstar.hxx>
 #include <basic/basrdll.hxx>
 #include <unotools/resmgr.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <sbxbase.hxx>
 
 struct BasicDLL::Impl

@@ -19,9 +19,9 @@
 
 
 #include <basic/sbx.hxx>
-#include "parser.hxx"
-#include "image.hxx"
-#include "sbobjmod.hxx"
+#include <parser.hxx>
+#include <image.hxx>
+#include <sbobjmod.hxx>
 #include <svtools/miscopt.hxx>
 #include <rtl/character.hxx>
 #include <memory>

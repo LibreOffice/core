@@ -24,9 +24,9 @@
 #include <tools/stream.hxx>
 
 #include <basic/sbx.hxx>
-#include "sbunoobj.hxx"
+#include <sbunoobj.hxx>
 #include "sbxconv.hxx"
-#include "runtime.hxx"
+#include <runtime.hxx>
 
 
 ///////////////////////////// constructors

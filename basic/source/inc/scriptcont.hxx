@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_SCRIPTCONT_HXX
 #define INCLUDED_BASIC_SOURCE_INC_SCRIPTCONT_HXX
 
-#include "namecont.hxx"
+#include <namecont.hxx>
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <comphelper/uno3.hxx>

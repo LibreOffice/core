@@ -35,13 +35,13 @@
 #include <string.h>
 
 #include "sbxres.hxx"
-#include "sbxbase.hxx"
+#include <sbxbase.hxx>
 #include <basic/sbxfac.hxx>
 #include <basic/sbxform.hxx>
 
-#include "date.hxx"
-#include "runtime.hxx"
-#include "strings.hrc"
+#include <date.hxx>
+#include <runtime.hxx>
+#include <strings.hrc>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>

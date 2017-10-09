@@ -31,7 +31,7 @@
 #include <com/sun/star/resource/StringResourceWithStorage.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
-#include "dlgcont.hxx"
+#include <dlgcont.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 

@@ -53,18 +53,18 @@
 
 #include <basic/sbuno.hxx>
 
-#include "codegen.hxx"
+#include <codegen.hxx>
 #include "comenumwrapper.hxx"
 #include "ddectrl.hxx"
 #include "dllmgr.hxx"
-#include "errobject.hxx"
-#include "image.hxx"
-#include "iosys.hxx"
-#include "opcodes.hxx"
-#include "runtime.hxx"
-#include "sb.hxx"
-#include "sbintern.hxx"
-#include "sbunoobj.hxx"
+#include <errobject.hxx>
+#include <image.hxx>
+#include <iosys.hxx>
+#include <opcodes.hxx>
+#include <runtime.hxx>
+#include <sb.hxx>
+#include <sbintern.hxx>
+#include <sbunoobj.hxx>
 #include <basic/codecompletecache.hxx>
 #include <memory>
 

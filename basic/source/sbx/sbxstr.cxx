@@ -23,7 +23,7 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 #include "sbxres.hxx"
-#include "runtime.hxx"
+#include <runtime.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <memory>
 

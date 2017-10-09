@@ -23,9 +23,9 @@
 #include <vcl/edit.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/svapp.hxx>
-#include "runtime.hxx"
-#include "stdobj.hxx"
-#include "rtlproto.hxx"
+#include <runtime.hxx>
+#include <stdobj.hxx>
+#include <rtlproto.hxx>
 #include <memory>
 
 class SvRTLInputBox : public ModalDialog

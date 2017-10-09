@@ -23,20 +23,20 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
-#include "sb.hxx"
+#include <sb.hxx>
 #include <sbjsmeth.hxx>
-#include "sbjsmod.hxx"
-#include "sbintern.hxx"
-#include "image.hxx"
-#include "opcodes.hxx"
-#include "runtime.hxx"
-#include "token.hxx"
-#include "sbunoobj.hxx"
+#include <sbjsmod.hxx>
+#include <sbintern.hxx>
+#include <image.hxx>
+#include <opcodes.hxx>
+#include <runtime.hxx>
+#include <token.hxx>
+#include <sbunoobj.hxx>
 
 #include <sal/log.hxx>
 
 #include <basic/basrdll.hxx>
-#include "sbobjmod.hxx"
+#include <sbobjmod.hxx>
 #include <basic/vbahelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <unotools/eventcfg.hxx>
@@ -68,8 +68,8 @@
 #include <ooo/vba/VbQueryClose.hpp>
 #include <list>
 #include <memory>
-#include "sbxmod.hxx"
-#include "parser.hxx"
+#include <sbxmod.hxx>
+#include <parser.hxx>
 
 #include <limits>
 

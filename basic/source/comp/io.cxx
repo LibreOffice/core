@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "parser.hxx"
-#include "iosys.hxx"
+#include <parser.hxx>
+#include <iosys.hxx>
 #include <memory>
 
 // test if there's an I/O channel

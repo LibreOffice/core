@@ -19,9 +19,9 @@
 
 
 #include <basic/sbx.hxx>
-#include "image.hxx"
-#include "codegen.hxx"
-#include "parser.hxx"
+#include <image.hxx>
+#include <codegen.hxx>
+#include <parser.hxx>
 #include <cstddef>
 #include <limits>
 #include <algorithm>

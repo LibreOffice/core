@@ -18,7 +18,7 @@
  */
 
 
-#include "propacc.hxx"
+#include <propacc.hxx>
 
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>

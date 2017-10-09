@@ -24,10 +24,10 @@
 #include <svl/SfxBroadcaster.hxx>
 
 #include <basic/sbx.hxx>
-#include "runtime.hxx"
+#include <runtime.hxx>
 #include "sbxres.hxx"
 #include "sbxconv.hxx"
-#include "sbunoobj.hxx"
+#include <sbunoobj.hxx>
 #include <math.h>
 #include <rtl/character.hxx>
 

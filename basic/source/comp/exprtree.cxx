@@ -19,9 +19,9 @@
 
 
 #include <memory>
-#include "parser.hxx"
+#include <parser.hxx>
 #include <basic/sbx.hxx>
-#include "expr.hxx"
+#include <expr.hxx>
 #include <o3tl/make_unique.hxx>
 
 SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,

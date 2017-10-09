@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_TOKEN_HXX
 #define INCLUDED_BASIC_SOURCE_INC_TOKEN_HXX
 
-#include "scanner.hxx"
+#include <scanner.hxx>
 #include <basic/sbdef.hxx>
 
 // The tokenizer is stand-alone, i. e. he can be used from everywhere.

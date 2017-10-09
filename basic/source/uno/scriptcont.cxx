@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scriptcont.hxx"
+#include <scriptcont.hxx>
 #include <filefmt.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>

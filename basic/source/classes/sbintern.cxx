@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sbintern.hxx"
-#include "sbunoobj.hxx"
-#include "token.hxx"
-#include "symtbl.hxx"
-#include "parser.hxx"
-#include "codegen.hxx"
+#include <sbintern.hxx>
+#include <sbunoobj.hxx>
+#include <token.hxx>
+#include <symtbl.hxx>
+#include <parser.hxx>
+#include <codegen.hxx>
 #include <basic/basmgr.hxx>
 
 SbiGlobals* SbiGlobals::pGlobals = nullptr;

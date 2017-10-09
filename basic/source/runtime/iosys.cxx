@@ -26,7 +26,7 @@
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 
-#include "runtime.hxx"
+#include <runtime.hxx>
 
 #include <rtl/byteseq.hxx>
 #include <rtl/textenc.h>
@@ -55,8 +55,8 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
 using namespace com::sun::star::bridge;
 
-#include "iosys.hxx"
-#include "sbintern.hxx"
+#include <iosys.hxx>
+#include <sbintern.hxx>
 
 
 class SbiInputDialog : public ModalDialog {
