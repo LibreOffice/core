@@ -1125,6 +1125,26 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             break;
         }
+        case NS_ooxml::LN_CT_PermStart_ed:
+        {
+            m_pImpl->setPermissionRangeEd(sStringValue);
+            break;
+        }
+        case NS_ooxml::LN_CT_PermStart_edGrp:
+        {
+            m_pImpl->setPermissionRangeEdGrp(sStringValue);
+            break;
+        }
+        case NS_ooxml::LN_CT_PermStart_id:
+        {
+            m_pImpl->startOrEndPermissionRange(nIntValue);
+            break;
+        }
+        case NS_ooxml::LN_CT_PermEnd_id:
+        {
+            m_pImpl->startOrEndPermissionRange(nIntValue);
+            break;
+        }
         default:
             SAL_WARN("writerfilter", "DomainMapper::lcl_attribute: unhandled token: " << nName);
         }
@@ -2816,11 +2836,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pProperties->resolve(*this);
     }
     break;
-    case NS_ooxml::LN_EG_RunLevelElts_permStart: // 93164
-    case NS_ooxml::LN_EG_RunLevelElts_permEnd: // 93165
-    {
-        break;
-    }
     default:
         {
 #ifdef DEBUG_WRITERFILTER
