@@ -133,11 +133,11 @@ public:
 struct CloneControlModel
 {
 private:
-    ControlModelContainerBase::UnoControlModelHolderList&   m_rTargetList;
+    ControlModelContainerBase::UnoControlModelHolderVector&   m_rTargetVector;
 
 public:
-    explicit CloneControlModel( ControlModelContainerBase::UnoControlModelHolderList& _rTargetList )
-        :m_rTargetList( _rTargetList )
+    explicit CloneControlModel( ControlModelContainerBase::UnoControlModelHolderVector& _rTargetVector )
+        :m_rTargetVector( _rTargetVector )
     {
     }
 
@@ -147,7 +147,7 @@ public:
         Reference< XCloneable > xCloneSource( _rSource.first, UNO_QUERY );
         Reference< XControlModel > xClone( xCloneSource->createClone(), UNO_QUERY );
         // add to target list
-        m_rTargetList.emplace_back( xClone, _rSource.second );
+        m_rTargetVector.emplace_back( xClone, _rSource.second );
     }
 };
 
@@ -312,7 +312,7 @@ UnoControlModel* ControlModelContainerBase::Clone() const
     return pClone;
 }
 
-ControlModelContainerBase::UnoControlModelHolderList::iterator ControlModelContainerBase::ImplFindElement( const OUString& rName )
+ControlModelContainerBase::UnoControlModelHolderVector::iterator ControlModelContainerBase::ImplFindElement( const OUString& rName )
 {
     return ::std::find_if( maModels.begin(), maModels.end(), FindControlModel( rName ) );
 }
@@ -480,7 +480,7 @@ void ControlModelContainerBase::replaceByName( const OUString& aName, const Any&
     if ( !xNewModel.is() )
         lcl_throwIllegalArgumentException();
 
-    UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
+    UnoControlModelHolderVector::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
         lcl_throwNoSuchElementException();
     // Dialog behaviour is to have all containee names unique (MSO Userform is the same)
@@ -519,7 +519,7 @@ void ControlModelContainerBase::replaceByName( const OUString& aName, const Any&
 
 Any ControlModelContainerBase::getByName( const OUString& aName )
 {
-    UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
+    UnoControlModelHolderVector::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
         lcl_throwNoSuchElementException();
 
@@ -579,7 +579,7 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
     if ( aName.isEmpty() || !xM.is() )
         lcl_throwIllegalArgumentException();
 
-    UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
+    UnoControlModelHolderVector::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() != aElementPos )
         lcl_throwElementExistException();
 
@@ -612,7 +612,7 @@ void ControlModelContainerBase::removeByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
+    UnoControlModelHolderVector::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
         lcl_throwNoSuchElementException();
 
@@ -676,7 +676,7 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
     for ( auto const & control : _rControls )
     {
         // look up the control in our own structure. This is to prevent invalid arguments
-        UnoControlModelHolderList::const_iterator aPos =
+        UnoControlModelHolderVector::const_iterator aPos =
             ::std::find_if(
                 maModels.begin(), maModels.end(),
                 CompareControlModel( control )
@@ -709,7 +709,7 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
     ::std::vector< Reference< XControlModel > > aUnindexedModels;
         // will be the container of all models which do not have a tab index property
 
-    UnoControlModelHolderList::const_iterator aLoop = maModels.begin();
+    UnoControlModelHolderVector::const_iterator aLoop = maModels.begin();
     for ( ; aLoop != maModels.end(); ++aLoop )
     {
         Reference< XControlModel > xModel( aLoop->first );
@@ -1029,7 +1029,7 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
 
     // the accessor for the changed element
     OUString sAccessor;
-    UnoControlModelHolderList::const_iterator aPos =
+    UnoControlModelHolderVector::const_iterator aPos =
         ::std::find_if(
             maModels.begin(), maModels.end(),
             CompareControlModel( Reference< XControlModel >( _rEvent.Source, UNO_QUERY ) )

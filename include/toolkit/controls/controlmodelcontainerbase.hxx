@@ -41,7 +41,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <tools/gen.hxx>
-#include <list>
+#include <vector>
 
 //  class ControlModelContainerBase
 
@@ -66,7 +66,7 @@ public:
     typedef ::std::pair< css::uno::Reference< css::awt::XControlModel >, OUString >
                                                         UnoControlModelHolder;
 private:
-    typedef ::std::list< UnoControlModelHolder >        UnoControlModelHolderList;
+    typedef ::std::vector< UnoControlModelHolder >        UnoControlModelHolderVector;
 
 public:
     // for grouping control models (XTabControllerModel::getGroupXXX)
@@ -81,7 +81,7 @@ public:
 protected:
     ContainerListenerMultiplexer        maContainerListeners;
     ::comphelper::OInterfaceContainerHelper2   maChangeListeners;
-    UnoControlModelHolderList           maModels;
+    UnoControlModelHolderVector           maModels;
 
     AllGroups                           maGroups;
     bool                            mbGroupsUpToDate;
@@ -96,7 +96,7 @@ protected:
     css::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper() override;
 
-    UnoControlModelHolderList::iterator         ImplFindElement( const OUString& rName );
+    UnoControlModelHolderVector::iterator         ImplFindElement( const OUString& rName );
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::container::ElementExistException
