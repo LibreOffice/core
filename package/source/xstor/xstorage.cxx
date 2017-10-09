@@ -1516,7 +1516,7 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
         return;
 
     if ( (pElement->m_xStorage && ( pElement->m_xStorage->m_pAntiImpl || !pElement->m_xStorage->m_aReadOnlyWrapVector.empty() ))
-      || (pElement->m_xStream && ( pElement->m_xStream->m_pAntiImpl || !pElement->m_xStream->m_aInputStreamsList.empty() )) )
+      || (pElement->m_xStream && ( pElement->m_xStream->m_pAntiImpl || !pElement->m_xStream->m_aInputStreamsVector.empty() )) )
         throw io::IOException( THROW_WHERE ); // TODO: Access denied
 
     if ( pElement->m_bIsInserted )
@@ -3630,7 +3630,7 @@ void SAL_CALL OStorage::revert()
         if ( ((*pElementIter)->m_xStorage
                 && ( (*pElementIter)->m_xStorage->m_pAntiImpl || !(*pElementIter)->m_xStorage->m_aReadOnlyWrapVector.empty() ))
           || ((*pElementIter)->m_xStream
-                  && ( (*pElementIter)->m_xStream->m_pAntiImpl || !(*pElementIter)->m_xStream->m_aInputStreamsList.empty()) ) )
+                  && ( (*pElementIter)->m_xStream->m_pAntiImpl || !(*pElementIter)->m_xStream->m_aInputStreamsVector.empty()) ) )
             throw io::IOException( THROW_WHERE ); // TODO: access denied
     }
 
