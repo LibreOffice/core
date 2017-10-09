@@ -24,6 +24,17 @@
             <value>false</value>
           </prop>
         </node>
+        <node oor:name="TabbedCompact" oor:op="replace">
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Tabbed Compact</value>
+          </prop>
+          <prop oor:name="File">
+            <value>notebookbar_compact.ui</value>
+          </prop>
+          <prop oor:name="HasMenubar">
+            <value>false</value>
+          </prop>
+        </node>
         <node oor:name="GroupedbarCompact" oor:op="replace">
           <prop oor:name="Label">
             <value xml:lang="en-US">Groupedbar Compact</value>
