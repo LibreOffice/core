@@ -105,6 +105,12 @@ $(eval $(call gb_Library_add_libs,vcl,\
 
 endif
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+))
+endif
+
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
