@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "View.hxx"
 #include <osl/file.hxx>
 #include <sfx2/bindings.hxx>
@@ -285,8 +287,12 @@ void View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
     {
         uno::Reference<frame::XModel> const xModel(
                 GetDoc().GetObjectShell()->GetModel());
+#if HAVE_FEATURE_AVMEDIA
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
         if (!bRet) { return; }
+#else
+        return;
+#endif
     }
 
     InsertMediaObj( realURL, "application/vnd.sun.star.media", rAction, rPos, rSize );
@@ -300,8 +306,10 @@ void View::Insert3DModelURL(
     OUString sRealURL;
     uno::Reference<frame::XModel> const xModel(
                 GetDoc().GetObjectShell()->GetModel());
+#if HAVE_FEATURE_AVMEDIA
     bool const bRet = ::avmedia::Embed3DModel(xModel, rModelURL, sRealURL);
     if (!bRet)
+#endif
         return;
 
     SdrMediaObj* pRetObject = InsertMediaObj( sRealURL, "model/vnd.gltf+json", rAction, rPos, rSize );
@@ -417,7 +425,10 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
+#if HAVE_FEATURE_AVMEDIA
         if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/ ) )
+#else
+#endif
         {
             if( !rGraphicFilter.ImportGraphic( aGraphic, aURL ) )
             {
@@ -476,6 +487,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 
         if( !bOK )
         {
+#if HAVE_FEATURE_AVMEDIA
             Size aPrefSize;
 
             if( ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/ ) &&
@@ -495,7 +507,9 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 
                 InsertMediaURL( aCurrentDropFile, mnAction, maDropPos, aPrefSize, true ) ;
             }
-            else if( mnAction & DND_ACTION_LINK )
+            else
+#endif
+                if( mnAction & DND_ACTION_LINK )
                 static_cast< DrawViewShell* >( mpViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, OUString(), &maDropPos );
             else
             {

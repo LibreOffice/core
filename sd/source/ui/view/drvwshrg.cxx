@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "DrawViewShell.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/templdlg.hxx>
@@ -75,7 +77,9 @@ void DrawViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SvxHlinkDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(::sd::SpellDialogChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
+#if HAVE_FEATURE_AVMEDIA
     GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
+#endif
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 
@@ -98,7 +102,9 @@ void GraphicViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SvxHlinkDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(::sd::SpellDialogChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SID_SEARCH_DLG);
+#if HAVE_FEATURE_AVMEDIA
     GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
+#endif
     GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 

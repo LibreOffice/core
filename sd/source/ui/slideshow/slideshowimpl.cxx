@@ -1444,6 +1444,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
     break;
     case ClickAction_SOUND:
     {
+#if HAVE_FEATURE_AVMEDIA
         try
         {
             mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark, ""/*TODO?*/), uno::UNO_QUERY_THROW );
@@ -1453,6 +1454,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
         {
             OSL_FAIL("sd::SlideshowImpl::click(), exception caught!" );
         }
+#endif
     }
     break;
 

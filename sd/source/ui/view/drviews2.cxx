@@ -2856,6 +2856,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+#if HAVE_FEATURE_AVMEDIA
         case SID_AVMEDIA_PLAYER:
         {
             GetViewFrame()->ToggleChildWindow( ::avmedia::MediaPlayer::GetChildWindowId() );
@@ -2864,6 +2865,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Ignore ();
         }
         break;
+#endif
 
         case SID_PRESENTATION_MINIMIZER:
         {

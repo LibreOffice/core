@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "fuinsert.hxx"
 
 #include <comphelper/storagehelper.hxx>
@@ -708,13 +710,18 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
     }
 
     bool bLink(true);
-    if (bAPI || ::avmedia::MediaWindow::executeMediaURLDialog(mpWindow, aURL, & bLink))
+    if (bAPI
+#if HAVE_FEATURE_AVMEDIA
+        || ::avmedia::MediaWindow::executeMediaURLDialog(mpWindow, aURL, & bLink)
+#endif
+       )
     {
         Size aPrefSize;
 
         if( mpWindow )
             mpWindow->EnterWait();
 
+#if HAVE_FEATURE_AVMEDIA
         if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, &aPrefSize ) )
         {
             if( mpWindow )
@@ -751,6 +758,12 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
             if( mpWindow )
                 mpWindow->LeaveWait();
         }
+#else
+        if( mpWindow )
+            mpWindow->LeaveWait();
+        (void) aPrefSize;
+        (void) bLink;
+#endif
     }
 }
 

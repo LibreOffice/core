@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "fusel.hxx"
 #include <basic/sbstar.hxx>
 #include <svx/svddrgmt.hxx>
@@ -1338,6 +1340,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_SOUND:
                 {
+#if HAVE_FEATURE_AVMEDIA
                         try
                         {
                             mxPlayer.set( avmedia::MediaWindow::createPlayer( pInfo->GetBookmark(), ""/*TODO?*/), uno::UNO_QUERY_THROW );
@@ -1346,6 +1349,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         catch( uno::Exception& )
                         {
                         }
+#endif
                     bAnimated = true;
                 }
                 break;

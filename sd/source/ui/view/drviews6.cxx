@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "DrawViewShell.hxx"
 #include <vcl/metaact.hxx>
 #include <sfx2/request.hxx>
@@ -242,11 +244,13 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
         sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_3D_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
+#if HAVE_FEATURE_AVMEDIA
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
     {
         sal_uInt16 nId = ::avmedia::MediaPlayer::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
     }
+#endif
 }
 
 /**

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
 #include <editeng/eeitem.hxx>
@@ -173,7 +175,9 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxIMapDlgChildWindow::RegisterChildWindow(false, pMod);
     SvxHlinkDlgWrapper::RegisterChildWindow(false, pMod);
     ::sd::SpellDialogChildWindow::RegisterChildWindow(false, pMod);
+#if HAVE_FEATURE_AVMEDIA
     ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
+#endif
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(false, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(false, pMod);
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
@@ -221,7 +225,9 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     svx::TextCharacterSpacingPopup::RegisterControl(SID_ATTR_CHAR_KERNING, pMod);
     svx::TextUnderlinePopup::RegisterControl(SID_ATTR_CHAR_UNDERLINE, pMod);
 
+#if HAVE_FEATURE_AVMEDIA
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
+#endif
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
     SdTemplateControl::RegisterControl( SID_STATUS_LAYOUT, pMod );
     SvxTableToolBoxControl::RegisterControl(SID_INSERT_TABLE, pMod );

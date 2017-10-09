@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1497,10 +1499,12 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
                     xPropSet->setPropertyValue("TargetFrame" , Any( rTarget ) );
 
                 xPropSet->setPropertyValue( "ButtonType" , Any( form::FormButtonType_URL ) );
+#if HAVE_FEATURE_AVMEDIA
                 if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
                 {
                     xPropSet->setPropertyValue( "DispatchURLInternal" , Any( true ) );
                 }
+#endif
             }
             else
             {
@@ -1532,8 +1536,10 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
             xPropSet->setPropertyValue( "TargetFrame" , Any( rTarget ) );
 
         xPropSet->setPropertyValue( "ButtonType" , Any(  form::FormButtonType_URL ) );
+#if HAVE_FEATURE_AVMEDIA
         if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
             xPropSet->setPropertyValue( "DispatchURLInternal" , Any( true ) );
+#endif
 
         Point aPos;
 
