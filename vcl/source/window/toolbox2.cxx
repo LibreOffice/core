@@ -1718,7 +1718,7 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
 
 void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
 {
-    if( IsMenuEnabled() )
+    if ( IsMenuEnabled() && !ImplIsInPopupMode() )
     {
         UpdateCustomMenu();
         // handle custom menu asynchronously
