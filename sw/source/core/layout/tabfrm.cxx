@@ -662,7 +662,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
 
     // Lock this tab frame and its follow
     bool bUnlockMaster = false;
-    bool bUnlockFollow = false;
+    SwFlowFrame * bUnlockFollow = nullptr;
     SwTabFrame* pMaster = rTab.IsFollow() ? rTab.FindMaster() : nullptr;
     if ( pMaster && !pMaster->IsJoinLocked() )
     {
@@ -671,8 +671,8 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     }
     if ( !rTab.GetFollow()->IsJoinLocked() )
     {
-        bUnlockFollow = true;
-        ::TableSplitRecalcLock( rTab.GetFollow() );
+        bUnlockFollow = rTab.GetFollow();
+        ::TableSplitRecalcLock( bUnlockFollow );
     }
 
     bool bInSplit = rLastLine.IsInSplit();
@@ -689,7 +689,7 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
 
     // Unlock this tab frame and its follow
     if ( bUnlockFollow )
-        ::TableSplitRecalcUnlock( rTab.GetFollow() );
+        ::TableSplitRecalcUnlock( bUnlockFollow );
     if ( bUnlockMaster )
         ::TableSplitRecalcUnlock( pMaster );
 
