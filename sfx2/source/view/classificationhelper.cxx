@@ -37,6 +37,8 @@
 #include <svl/fstathelper.hxx>
 #include <config_folders.h>
 
+#include <officecfg/Office/Common.hxx>
+
 using namespace com::sun::star;
 
 namespace
@@ -845,6 +847,14 @@ const OUString& SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY()
 {
     static OUString sProp("urn:bails:IntellectualProperty:");
     return sProp;
+}
+
+SfxClassificationPolicyType SfxClassificationHelper::getPolicyType()
+{
+    sal_Int32 nPolicyTypeNumber = officecfg::Office::Common::Classification::Policy::get();
+    auto eType = static_cast<SfxClassificationPolicyType>(nPolicyTypeNumber);
+    return eType;
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

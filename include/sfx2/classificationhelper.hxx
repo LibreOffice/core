@@ -96,6 +96,8 @@ public:
     static const OUString& PROP_DOCWATERMARK();
     /// Get the property prefix for the IntellectualProperty policy type.
     static const OUString& PROP_PREFIX_INTELLECTUALPROPERTY();
+
+    static SfxClassificationPolicyType getPolicyType();
 };
 
 #endif
