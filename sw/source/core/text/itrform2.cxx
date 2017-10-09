@@ -737,7 +737,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
     {
         // Numbering + InterNetFields can keep an own font, then their size is
         // independent from hard attribute values
-        SwFont* pFieldFnt = static_cast<SwFieldPortion*>(pPor)->pFnt;
+        SwFont* pFieldFnt = static_cast<SwFieldPortion*>(pPor)->m_pFont;
         SwFontSave aSave( rInf, pFieldFnt );
         pPor->Height( rInf.GetTextHeight() );
         pPor->SetAscent( rInf.GetAscent() );
