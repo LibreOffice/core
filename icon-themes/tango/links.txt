@@ -609,7 +609,3 @@ cmd/lc_cellprotection.png cmd/lc_protect.png
 cmd/lc_bulletliststyle.png cmd/lc_defaultbullet.png
 cmd/sc_bulletliststyle.png cmd/sc_defaultbullet.png
 cmd/lc_numberliststyle.png cmd/lc_defaultnumbering.png
-
-# writer epub export
-cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
-cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
