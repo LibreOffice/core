@@ -28,6 +28,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <svl/converter.hxx>
 #include "writer/WConnection.hxx"
 #include "component/CColumns.hxx"
@@ -87,7 +88,17 @@ static void lcl_SetValue(connectivity::ORowSetValue& rValue, const uno::Referenc
         ++nDocRow;
 
     uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
-    const uno::Reference<table::XCell> xCell = xCellRange->getCellByPosition(nDocColumn, nDocRow);
+    uno::Reference<table::XCell> xCell;
+    try
+    {
+        xCell = xCellRange->getCellByPosition(nDocColumn, nDocRow);
+    }
+    catch (const lang::IndexOutOfBoundsException& /*rException*/)
+    {
+        SAL_WARN("connectivity.writer", "getCellByPosition(" << nDocColumn << ", " << nDocRow << ") failed");
+        rValue = OUString();
+    }
+
     if (xCell.is())
     {
         const uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
