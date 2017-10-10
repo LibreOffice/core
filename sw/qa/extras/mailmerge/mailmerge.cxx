@@ -440,6 +440,22 @@ DECLARE_FILE_MAILMERGE_TEST(testWriterDataSource, "writer-mail-merge.odt", "10-t
     }
 }
 
+DECLARE_FILE_MAILMERGE_TEST(testWriterMergedDataSource, "writer-merged-mail-merge.odt", "10-testing-addresses-writer-merged.odt", "testing-addresses-writer-merged")
+{
+    // This failed with com.sun.star.lang.IndexOutOfBoundsException, leading to
+    // a crash, as the last row had merged cells in
+    // 10-testing-addresses-writer-merged.odt.
+    executeMailMerge();
+    for (int doc = 0; doc < 10; ++doc)
+    {
+        loadMailMergeDocument(doc);
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        CPPUNIT_ASSERT_EQUAL(OUString("Fixed text."), getRun(getParagraph(1), 1)->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString("lastname" + OUString::number(doc + 1)), getRun(getParagraph(2), 1)->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString("Another fixed text."), getRun(getParagraph(3), 1)->getString());
+    }
+}
+
 DECLARE_FILE_MAILMERGE_TEST(test2Pages, "simple-mail-merge-2pages.odt", "10-testing-addresses.ods", "testing-addresses")
 {
     executeMailMerge();
