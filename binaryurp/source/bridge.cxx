@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
@@ -26,37 +26,37 @@
 #include <memory>
 #include <vector>
 
-#include "com/sun/star/bridge/InvalidProtocolChangeException.hpp"
-#include "com/sun/star/bridge/XBridge.hpp"
-#include "com/sun/star/bridge/XInstanceProvider.hpp"
-#include "com/sun/star/bridge/XProtocolProperties.hpp"
-#include "com/sun/star/connection/XConnection.hpp"
-#include "com/sun/star/io/IOException.hpp"
-#include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/lang/EventObject.hpp"
-#include "com/sun/star/lang/XEventListener.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/weak.hxx"
-#include "osl/mutex.hxx"
-#include "osl/thread.hxx"
-#include "rtl/byteseq.hxx"
-#include "rtl/random.h"
-#include "rtl/ref.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "sal/types.h"
-#include "typelib/typeclass.h"
-#include "typelib/typedescription.h"
-#include "typelib/typedescription.hxx"
-#include "uno/dispatcher.hxx"
-#include "uno/environment.hxx"
-#include "uno/lbnames.h"
+#include <com/sun/star/bridge/InvalidProtocolChangeException.hpp>
+#include <com/sun/star/bridge/XBridge.hpp>
+#include <com/sun/star/bridge/XInstanceProvider.hpp>
+#include <com/sun/star/bridge/XProtocolProperties.hpp>
+#include <com/sun/star/connection/XConnection.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/weak.hxx>
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
+#include <rtl/byteseq.hxx>
+#include <rtl/random.h>
+#include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
+#include <typelib/typeclass.h>
+#include <typelib/typedescription.h>
+#include <typelib/typedescription.hxx>
+#include <uno/dispatcher.hxx>
+#include <uno/environment.hxx>
+#include <uno/lbnames.h>
 
 #include "binaryany.hxx"
 #include "bridge.hxx"

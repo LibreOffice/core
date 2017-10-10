@@ -20,14 +20,14 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_CACHE_HXX
 #define INCLUDED_BINARYURP_SOURCE_CACHE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <cstddef>
 #include <map>
 #include <list>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 namespace binaryurp {
 

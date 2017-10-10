@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <utility>
 
-#include "typelib/typeclass.h"
-#include "typelib/typedescription.hxx"
-#include "uno/any2.h"
+#include <typelib/typeclass.h>
+#include <typelib/typedescription.hxx>
+#include <uno/any2.h>
 
 #include "binaryany.hxx"
 

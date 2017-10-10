@@ -20,12 +20,12 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_OUTGOINGREQUESTS_HXX
 #define INCLUDED_BINARYURP_SOURCE_OUTGOINGREQUESTS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 #include <vector>
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 
 namespace binaryurp { struct OutgoingRequest; }
 namespace rtl { class ByteSequence; }
