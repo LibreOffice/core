@@ -548,7 +548,6 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 
             // see if this font is already cached
             // update attributes
-            std::list<std::unique_ptr<PrintFont>> aFonts;
             OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
             splitPath( aOrgPath, aDir, aBase );
 
@@ -562,7 +561,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
             // not described by fontconfig (e.g. alias names, PSName)
             if (eFormatRes != FcResultMatch)
                 format = nullptr;
-            analyzeFontFile( nDirID, aBase, aFonts, reinterpret_cast<char*>(format) );
+            std::vector<std::unique_ptr<PrintFont>> aFonts = analyzeFontFile( nDirID, aBase, reinterpret_cast<char*>(format) );
             if(aFonts.empty())
             {
 #if OSL_DEBUG_LEVEL > 1

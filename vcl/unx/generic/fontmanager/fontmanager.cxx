@@ -194,8 +194,8 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
     std::vector<fontID> aFontIds = findFontFileIDs( nDirID, aName );
     if( aFontIds.empty() )
     {
-        std::list<std::unique_ptr<PrintFont>> aNewFonts;
-        if (analyzeFontFile(nDirID, aName, aNewFonts))
+        std::vector<std::unique_ptr<PrintFont>> aNewFonts = analyzeFontFile(nDirID, aName);
+        if (!aNewFonts.empty())
         {
             for (auto it = aNewFonts.begin(); it != aNewFonts.end(); ++it)
             {
@@ -214,9 +214,9 @@ enum fontFormat
     UNKNOWN, TRUETYPE, CFF
 };
 
-bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, std::list<std::unique_ptr<PrintFontManager::PrintFont>>& rNewFonts, const char *pFormat ) const
+std::vector<std::unique_ptr<PrintFontManager::PrintFont>> PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, const char *pFormat ) const
 {
-    rNewFonts.clear();
+    std::vector<std::unique_ptr<PrintFontManager::PrintFont>> aNewFonts;
 
     OString aDir( getDirectory( nDirID ) );
 
@@ -226,7 +226,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, st
 
     // #i1872# reject unreadable files
     if( access( aFullPath.getStr(), R_OK ) )
-        return false;
+        return aNewFonts;
 
     fontFormat eFormat = UNKNOWN;
     if (pFormat)
@@ -290,7 +290,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, st
                 xFont->m_aFontFile          = rFontFile;
                 xFont->m_nCollectionEntry   = i;
                 if (analyzeSfntFile(xFont.get()))
-                    rNewFonts.push_back(std::move(xFont));
+                    aNewFonts.push_back(std::move(xFont));
             }
         }
         else
@@ -302,10 +302,10 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, st
 
             // need to read the font anyway to get aliases inside the font file
             if (analyzeSfntFile(xFont.get()))
-                rNewFonts.push_back(std::move(xFont));
+                aNewFonts.push_back(std::move(xFont));
         }
     }
-    return ! rNewFonts.empty();
+    return aNewFonts;
 }
 
 fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, int nFaceIndex ) const
