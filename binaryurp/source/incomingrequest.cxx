@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <list>
 #include <vector>
 
-#include "com/sun/star/bridge/XInstanceProvider.hpp"
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "cppuhelper/exc_hlp.hxx"
-#include "o3tl/runtimetooustring.hxx"
-#include "rtl/byteseq.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "sal/types.h"
-#include "typelib/typedescription.hxx"
-#include "uno/dispatcher.hxx"
+#include <com/sun/star/bridge/XInstanceProvider.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <cppuhelper/exc_hlp.hxx>
+#include <o3tl/runtimetooustring.hxx>
+#include <rtl/byteseq.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
+#include <typelib/typedescription.hxx>
+#include <uno/dispatcher.hxx>
 
 #include "binaryany.hxx"
 #include "bridge.hxx"
