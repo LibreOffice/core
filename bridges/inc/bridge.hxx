@@ -25,10 +25,10 @@
 #include <atomic>
 #include <cstddef>
 
-#include "sal/types.h"
-#include "typelib/typedescription.h"
-#include "uno/environment.h"
-#include "uno/mapping.h"
+#include <sal/types.h>
+#include <typelib/typedescription.h>
+#include <uno/environment.h>
+#include <uno/mapping.h>
 
 namespace bridges { namespace cpp_uno { namespace shared {
 

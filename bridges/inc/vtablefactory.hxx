@@ -20,11 +20,11 @@
 #ifndef INCLUDED_BRIDGES_INC_VTABLEFACTORY_HXX
 #define INCLUDED_BRIDGES_INC_VTABLEFACTORY_HXX
 
-#include "osl/mutex.hxx"
-#include "rtl/alloc.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "typelib/typedescription.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/alloc.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <typelib/typedescription.hxx>
 
 #include <unordered_map>
 
