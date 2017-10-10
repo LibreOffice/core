@@ -13,7 +13,7 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 	Library_avmedia \
 ))
 
-ifeq ($(USE_AVMEDIA_DUMMY),FALSE)
+ifneq ($(USE_AVMEDIA_DUMMY),TRUE)
 $(eval $(call gb_Module_add_l10n_targets,avmedia,\
     AllLangMoTarget_avmedia \
 ))

@@ -7,7 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifeq ($(USE_AVMEDIA_DUMMY),FALSE)
 $(eval $(call gb_Library_Library,avmediaogl))
 
 $(eval $(call gb_Library_set_componentfile,avmediaogl,avmedia/source/opengl/avmediaogl))
@@ -42,6 +41,5 @@ $(eval $(call gb_Library_add_exception_objects,avmediaogl,\
     avmedia/source/opengl/ogluno \
     avmedia/source/opengl/oglwindow \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
