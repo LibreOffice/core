@@ -88,8 +88,6 @@
 #include "undo/undoobjects.hxx"
 #include <memory>
 
-#include <config_features.h>
-
 using namespace com::sun::star;
 
 namespace sd {
