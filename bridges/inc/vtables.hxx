@@ -20,8 +20,8 @@
 #ifndef INCLUDED_BRIDGES_INC_VTABLES_HXX
 #define INCLUDED_BRIDGES_INC_VTABLES_HXX
 
-#include "sal/types.h"
-#include "typelib/typedescription.h"
+#include <sal/types.h>
+#include <typelib/typedescription.h>
 
 namespace bridges { namespace cpp_uno { namespace shared {
 
