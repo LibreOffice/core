@@ -2286,6 +2286,7 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
         }
     }
     GetExport( ).m_bInWriteTOX = false;
+    GetExport( ).m_bHideTabLeaderAndPageNumbers = false;
     if (bCareEnd)
         OnTOXEnding();
 }
