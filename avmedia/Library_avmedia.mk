@@ -15,6 +15,8 @@ $(eval $(call gb_Library_set_include,avmedia,\
 	-I$(SRCDIR)/avmedia/source/inc \
 ))
 
+$(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
+
 $(eval $(call gb_Library_use_sdk_api,avmedia,))
 
 ifeq ($(USE_AVMEDIA_DUMMY),TRUE)
@@ -22,7 +24,6 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/avmediadummy \
 ))
 
-$(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
 
 else
 
