@@ -15,6 +15,8 @@ $(eval $(call gb_UnpackedTarball_set_pre_action,liblangtag,\
 	$(GNUTAR) -x -j -f $(gb_UnpackedTarget_TARFILE_LOCATION)/$(LANGTAGREG_TARBALL) \
 ))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,liblangtag))
+
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,liblangtag,\
@@ -27,7 +29,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,liblangtag, \
 	$(if $(SYSTEM_LIBXML),,external/liblangtag/langtag-libtool-rpath.patch.0) \
     external/liblangtag/clang-cl.patch.0 \
     external/liblangtag/langtag-valencia.patch.0 \
-    external/liblangtag/langtag-iOS.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

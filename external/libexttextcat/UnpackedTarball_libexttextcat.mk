@@ -9,12 +9,8 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,libexttextcat))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,libexttextcat,0))
-
-$(eval $(call gb_UnpackedTarball_add_patches,libexttextcat,\
-        external/libexttextcat/exttextcat-iOS.patch.1 \
-))
-
 $(eval $(call gb_UnpackedTarball_set_tarball,libexttextcat,$(LIBEXTTEXTCAT_TARBALL)))
+
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,libexttextcat))
 
 # vim: set noet sw=4 ts=4:
