@@ -75,6 +75,7 @@ namespace objectpositioning
                                        const SwFrame&  rPageAlignLayFrame,
                                        const SwTwips nProposedRelPosY,
                                        const bool bFollowTextFlow,
+                                       const bool bBrowse,
                                        const bool bCheckBottom ) const;
         SwTwips ImplAdjustHoriRelPos( const SwFrame&  _rPageAlignLayFrame,
                                        const SwTwips _nProposedRelPosX ) const;
@@ -187,6 +188,7 @@ namespace objectpositioning
                                           const SwFrame& rPageAlignLayFrame,
                                           const SwTwips nProposedRelPosY,
                                           const bool bFollowTextFlow,
+                                          const bool bBrowse,
                                           const bool bCheckBottom = true ) const
         {
             return !mbDoNotCaptureAnchoredObj
@@ -194,6 +196,7 @@ namespace objectpositioning
                                             rPageAlignLayFrame,
                                             nProposedRelPosY,
                                             bFollowTextFlow,
+                                            bBrowse,
                                             bCheckBottom )
                    : nProposedRelPosY;
         }

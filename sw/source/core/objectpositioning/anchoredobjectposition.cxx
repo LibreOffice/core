@@ -39,6 +39,7 @@
 #include <textboxhelper.hxx>
 #include <fmtsrnd.hxx>
 
+
 using namespace ::com::sun::star;
 using namespace objectpositioning;
 
@@ -404,6 +405,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const SwFrame& rPageAlignLayFrame,
                                                          const SwTwips nProposedRelPosY,
                                                          const bool bFollowTextFlow,
+                                                         const bool bBrowse,
                                                          const bool bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = nProposedRelPosY;
@@ -455,6 +457,13 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
         }
         else
         {
+            // just a try: if opening (not browsing) a file AND the position is
+            // off-page, then return the proposed position and to not adjust it.
+            if ( !bBrowse && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Right() )
+            {
+                return nProposedRelPosY;
+            }
+
             if ( bCheckBottom &&
                  nTopOfAnch + nAdjustedRelPosY + aObjSize.Width() >
                     aPgAlignArea.Right() )
@@ -471,6 +480,13 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
     }
     else
     {
+        // just a try: if opening (not browsing) a file AND the position is
+        // off-page, then return the proposed position and to not adjust it.
+        if ( !bBrowse && nTopOfAnch + nAdjustedRelPosY > aPgAlignArea.Bottom() )
+        {
+            return nProposedRelPosY;
+        }
+
         // #i31805# - consider value of <bCheckBottom>
         if ( bCheckBottom &&
              nTopOfAnch + nAdjustedRelPosY + aObjSize.Height() >
@@ -509,6 +525,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                 nAdjustedRelPosY = nProposedRelPosY;
         }
     }
+
     return nAdjustedRelPosY;
 }
 
