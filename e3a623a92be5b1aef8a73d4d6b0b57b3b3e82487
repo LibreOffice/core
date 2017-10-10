@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3b85d5ac",
+        "filename": "basctl/source/dlged/dlgedobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-10T20:05:51Z",
+      "side": 1,
+      "message": "I don\u0027t think this makes the code any clearer or better, but that\u0027s just my opinion\n\nsee here for a nice discussion on the erase-remove idiom:\nhttps://en.wikipedia.org/wiki/Erase%E2%80%93remove_idiom\n\nessentially, it is mostly useful when removing more than one element",
+      "revId": "e3a623a92be5b1aef8a73d4d6b0b57b3b3e82487",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
