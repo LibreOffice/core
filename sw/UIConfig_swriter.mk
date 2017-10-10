@@ -185,7 +185,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/optfonttabpage \
 	sw/uiconfig/swriter/ui/optformataidspage \
 	sw/uiconfig/swriter/ui/optgeneralpage \
-    sw/uiconfig/swriter/ui/optredlinepage \
+	sw/uiconfig/swriter/ui/optredlinepage \
 	sw/uiconfig/swriter/ui/opttablepage \
 	sw/uiconfig/swriter/ui/opttestpage \
 	sw/uiconfig/swriter/ui/outlinenumbering \
@@ -212,6 +212,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/mmsalutationpage \
 	sw/uiconfig/swriter/ui/navigatorpanel \
 	sw/uiconfig/swriter/ui/notebookbar \
+	sw/uiconfig/swriter/ui/notebookbar_compact \
 	sw/uiconfig/swriter/ui/notebookbar_groups \
 	sw/uiconfig/swriter/ui/notebookbar_single \
 	sw/uiconfig/swriter/ui/notebookbar_groupedbar_full \
