@@ -303,6 +303,15 @@ DECLARE_RTFIMPORT_TEST(testFdo52066, "fdo52066.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(19)), xShape->getSize().Height);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf112211_2, "tdf112211-2.rtf")
+{
+    uno::Reference<beans::XPropertyState> xPropertyState(getParagraph(2), uno::UNO_QUERY);
+    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("ParaLeftMargin");
+    // This was beans::PropertyState_DIRECT_VALUE -> direct formatting
+    // prevented inheritance from numbering definition.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo49892, "fdo49892.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);

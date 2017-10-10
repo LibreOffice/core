@@ -161,12 +161,6 @@ static bool isSPRMDeduplicateBlacklist(Id nId)
     case NS_ooxml::LN_CT_TabStop_val:
     case NS_ooxml::LN_CT_TabStop_leader:
     case NS_ooxml::LN_CT_TabStop_pos:
-    // Erasing these just because they equal to the style one is
-    // problematic, as then the used value won't be from the style, but
-    // possibly from the numbering.
-    case NS_ooxml::LN_CT_Ind_right:
-    case NS_ooxml::LN_CT_Ind_firstLine:
-    case NS_ooxml::LN_CT_Ind_hanging:
     // \htmautsp arrives after the style table, so only the non-style value is
     // correct, keep these.
     case NS_ooxml::LN_CT_Spacing_beforeAutospacing:
