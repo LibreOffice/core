@@ -1083,6 +1083,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103090, "tdf103090.odt")
     CPPUNIT_ASSERT_EQUAL(expectedFieldName, fieldName);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107111, "tdf107111.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // Ensure that hyperlink and its properties are in place.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr", 1);
+
+    // Ensure that hyperlink properties do not contain <w:webHidden/>.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr/w:webHidden", 0);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
 {
     uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY_THROW);
