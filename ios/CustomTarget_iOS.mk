@@ -46,6 +46,7 @@ $(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	    -e "s'@CFLAGS@'$(gb_GLOBALDEFS)'g" \
 	    -e "s'@CPLUSPLUSFLAGS@'$(gb_GLOBALDEFS)'g" \
 	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
+	    -e "s'@LDLIBS@'`$(SRCDIR)/bin/lo-all-static-libs`'g" \
 	    $(SRCDIR)/ios/loApp.xcconfig.in > $(WORKDIR)/ios/loApp.xcconfig
 
 ifeq ("$(wildcard $(IOSRES))","")

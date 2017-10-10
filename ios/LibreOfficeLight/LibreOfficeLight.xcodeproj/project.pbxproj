@@ -13,6 +13,8 @@
 		39022C211EDC2D0800100066 /* icudt59l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 39022C201EDC2D0800100066 /* icudt59l.dat */; };
 		39022C241EDC303200100066 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39022C221EDC303200100066 /* InfoPlist.strings */; };
 		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
+		393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975771F8BECB0002DC80B /* libiconv.tbd */; };
+		3939757A1F8BECC1002DC80B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975791F8BECC1002DC80B /* libz.tbd */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
@@ -21,6 +23,7 @@
 		3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8591E5B762A00BEA987 /* DocumentController.swift */; };
 		3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85B1E5B764A00BEA987 /* SideMenu.swift */; };
 		399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399648461E5B87DC00E73E83 /* ViewProperties.swift */; };
+		39A356E01F8D077500C780F2 /* LibreOfficeKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39A356DF1F8D077500C780F2 /* LibreOfficeKit.mm */; };
 		39B08B9D1E5F0BB600682A59 /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E51E5F0BB400682A59 /* fundamentalrc */; };
 		39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E61E5F0BB400682A59 /* offapi.rdb */; };
 		39B08B9F1E5F0BB600682A59 /* oovbaapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E71E5F0BB400682A59 /* oovbaapi.rdb */; };
@@ -38,6 +41,8 @@
 		39022C201EDC2D0800100066 /* icudt59l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt59l.dat; path = ../generated/resources/icudt59l.dat; sourceTree = "<group>"; };
 		39022C231EDC303200100066 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
+		393975771F8BECB0002DC80B /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		393975791F8BECC1002DC80B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibreOfficeLight.entitlements; sourceTree = "<group>"; };
 		397868D71E59A3EA007F9248 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -48,6 +53,7 @@
 		3992D8591E5B762A00BEA987 /* DocumentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DocumentController.swift; path = LibreOfficeLight/DocumentController.swift; sourceTree = SOURCE_ROOT; };
 		3992D85B1E5B764A00BEA987 /* SideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideMenu.swift; path = LibreOfficeLight/SideMenu.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
+		39A356DF1F8D077500C780F2 /* LibreOfficeKit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LibreOfficeKit.mm; sourceTree = "<group>"; };
 		39ACF4181F8A317600DA7334 /* loApp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loApp.xcconfig; path = ../../../../../../../Users/jani/lo_ios/workdir/ios/loApp.xcconfig; sourceTree = "<group>"; };
 		39B084E51E5F0BB400682A59 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../generated/resources/fundamentalrc; sourceTree = SOURCE_ROOT; };
 		39B084E61E5F0BB400682A59 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../generated/resources/offapi.rdb; sourceTree = SOURCE_ROOT; };
@@ -64,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3939757A1F8BECC1002DC80B /* libz.tbd in Frameworks */,
+				393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +95,8 @@
 		3972753A1E77D9F7006ACDCC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				393975791F8BECC1002DC80B /* libz.tbd */,
+				393975771F8BECB0002DC80B /* libiconv.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -113,6 +123,7 @@
 		397E08FC1E597BD8001374E0 /* LibreOfficeLight */ = {
 			isa = PBXGroup;
 			children = (
+				39A356DF1F8D077500C780F2 /* LibreOfficeKit.mm */,
 				39022C191EDC14D300100066 /* lokit-Bridging-Header.h */,
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
 				3992D85B1E5B764A00BEA987 /* SideMenu.swift */,
@@ -245,6 +256,7 @@
 				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
 				3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */,
 				397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */,
+				39A356E01F8D077500C780F2 /* LibreOfficeKit.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,12 +360,10 @@
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(LINK_LDFLAGS)",
-					"-lstdc++",
-				);
+				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -426,12 +436,10 @@
 					"$(LO_SRCDIR)/ios/generated",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(LINK_LDFLAGS)",
-					"-lstdc++",
-				);
+				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -577,12 +585,10 @@
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(LINK_LDFLAGS)",
-					"-lstdc++",
-				);
+				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
