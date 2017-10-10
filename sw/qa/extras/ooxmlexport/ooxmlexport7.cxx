@@ -1230,6 +1230,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90789_2, "tdf90789-2.docx")
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107111, "tdf107111.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // Ensure that hyperlink and its properties are in place.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr", 1);
+
+    // Ensure that hyperlink properties do not contain <w:webHidden/>.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:hyperlink/w:r/w:rPr/w:webHidden", 0);
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
