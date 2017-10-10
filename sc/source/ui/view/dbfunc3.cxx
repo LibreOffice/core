@@ -84,7 +84,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::sheet::XDimensionsSupplier;
-using ::std::list;
 using ::std::vector;
 
 //          outliner
@@ -1649,7 +1648,7 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
     {
         typedef ScDPSaveDimension::MemberList MemList;
         const MemList& rDimMembers = pSaveDim->GetMembers();
-        list<OUString> aMembers;
+        vector<OUString> aMembers;
         std::unordered_set<OUString, OUStringHash> aMemberSet;
         size_t nMemberCount = 0;
         for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
@@ -1663,7 +1662,7 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
 
         // Sort the member list in ascending order.
         ScOUStringCollate aCollate( ScGlobal::GetCollator() );
-        aMembers.sort(aCollate);
+        std::stable_sort(aMembers.begin(), aMembers.end(), aCollate);
 
         // Collect and rank those custom sort strings that also exist in the member name list.
 
@@ -1699,12 +1698,10 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
 
         vector<OUString> aRankedNames(nMemberCount);
         sal_uInt16 nCurStrId = 0;
-        for (list<OUString>::const_iterator itr = aMembers.begin(), itrEnd = aMembers.end();
-              itr != itrEnd; ++itr)
+        for (auto const& aMemberName : aMembers)
         {
-            OUString aName = *itr;
             sal_uInt16 nRank = 0;
-            UserSortMap::const_iterator itrSub = aSubStrs.find(aName);
+            UserSortMap::const_iterator itrSub = aSubStrs.find(aMemberName);
             if (itrSub == aSubStrs.end())
                 nRank = nSubCount + nCurStrId++;
             else
@@ -1713,15 +1710,13 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
             if (!bAscending)
                 nRank = static_cast< sal_uInt16 >( nMemberCount - nRank - 1 );
 
-            aRankedNames[nRank] = aName;
+            aRankedNames[nRank] = aMemberName;
         }
 
         // Re-order ScDPSaveMember instances with the new ranks.
-
-        for (vector<OUString>::const_iterator itr = aRankedNames.begin(), itrEnd = aRankedNames.end();
-              itr != itrEnd; ++itr)
+        for (auto const& aRankedName : aRankedNames)
         {
-            const ScDPSaveMember* pOldMem = pSaveDim->GetExistingMemberByName(*itr);
+            const ScDPSaveMember* pOldMem = pSaveDim->GetExistingMemberByName(aRankedName);
             if (!pOldMem)
                 // All members are supposed to be present.
                 continue;
