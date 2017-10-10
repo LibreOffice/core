@@ -240,10 +240,12 @@ OUString FTPURL::ident(bool withslash,bool internal) const
     // password. ( These are set together with the command. )
 
     OUStringBuffer bff;
-    bff.append("ftp://");
+    //bff.append("ftp://");
+    bff = "ftp://";
 
     if( m_aUsername != "anonymous" ) {
-        bff.append(m_aUsername);
+        //bff.append(m_aUsername);
+        bff = m_aUsername;
 
         OUString aPassword,aAccount;
         m_pFCP->forHost(m_aHost,
@@ -254,31 +256,41 @@ OUString FTPURL::ident(bool withslash,bool internal) const
 
         if((m_bShowPassword || internal) &&
            !aPassword.isEmpty() )
-            bff.append(':')
-                .append(aPassword);
+            //bff.append(':')
+             //   .append(aPassword);
+            bff = ":" + aPassword;
 
-        bff.append('@');
+        //bff.append('@');
+        bff = "@";
     }
-    bff.append(m_aHost);
+   // bff.append(m_aHost);
+    bff = m_aHost;
 
     if( m_aPort != "21" )
-        bff.append(':')
+        /*bff.append(':')
             .append(m_aPort)
-            .append('/');
+            .append('/');*/
+        bff = ":" + m_aPort + "/";
     else
-        bff.append('/');
+       // bff.append('/');
+        bff = "/";
 
     for(size_t i = 0; i < m_aPathSegmentVec.size(); ++i)
         if(i == 0)
-            bff.append(m_aPathSegmentVec[i]);
+            //bff.append(m_aPathSegmentVec[i]);
+            bff = m_aPathSegmentVec[i];
         else
-            bff.append('/').append(m_aPathSegmentVec[i]);
+            //bff.append('/').append(m_aPathSegmentVec[i]);
+            bff = "/" + m_aPathSegmentVec[i];
     if(withslash)
         if(!bff.isEmpty() && bff[bff.getLength()-1] != '/')
-            bff.append('/');
+            //bff.append('/');
+            bff = "/";
 
-    bff.append(m_aType);
-    return bff.makeStringAndClear();
+    //bff.append(m_aType);
+    bff = m_aType;
+    return bff.toString();
+    //return bff.makeStringAndClear();
 }
 
 
@@ -286,10 +298,12 @@ OUString FTPURL::parent(bool internal) const
 {
     OUStringBuffer bff;
 
-    bff.append("ftp://");
+    //bff.append("ftp://");
+    bff = "ftp://";
 
     if( m_aUsername != "anonymous" ) {
-        bff.append(m_aUsername);
+        //bff.append(m_aUsername);
+        bff = m_aUsername;
 
         OUString aPassword,aAccount;
         m_pFCP->forHost(m_aHost,
@@ -299,20 +313,25 @@ OUString FTPURL::parent(bool internal) const
                         aAccount);
 
         if((internal || m_bShowPassword) && !aPassword.isEmpty())
-            bff.append(':')
-                .append(aPassword);
+            /*bff.append(':')
+                .append(aPassword);*/
+            bff = ":" + aPassword;
 
-        bff.append('@');
+        //bff.append('@');
+        bff = "@";
     }
 
-    bff.append(m_aHost);
+    //bff.append(m_aHost);
+    bff = m_aHost;
 
     if( m_aPort != "21" )
-        bff.append(':')
+        /*bff.append(':')
             .append(m_aPort)
-            .append('/');
+            .append('/');*/
+        bff = ":" + m_aPort + "/";
     else
-        bff.append('/');
+        //bff.append('/');
+        bff = "/";
 
     OUString last;
 
@@ -320,17 +339,23 @@ OUString FTPURL::parent(bool internal) const
         if(1+i == m_aPathSegmentVec.size())
             last = m_aPathSegmentVec[i];
         else if(i == 0)
-            bff.append(m_aPathSegmentVec[i]);
+            //bff.append(m_aPathSegmentVec[i]);
+            bff = m_aPathSegmentVec[i];
         else
-            bff.append('/').append(m_aPathSegmentVec[i]);
+            //bff.append('/').append(m_aPathSegmentVec[i]);
+            bff = "/" + m_aPathSegmentVec[i];
 
     if(last.isEmpty())
-        bff.append("..");
+        //bff.append("..");
+        bff = "..";
     else if ( last == ".." )
-        bff.append(last).append("/..");
+        //bff.append(last).append("/..");
+        bff = last + "/..";
 
-    bff.append(m_aType);
-    return bff.makeStringAndClear();
+    //bff.append(m_aType);
+    bff = m_aType;
+    //return bff.makeStringAndClear();
+    return bff.toString();
 }
 
 
