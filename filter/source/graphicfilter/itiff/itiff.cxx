@@ -107,6 +107,8 @@ private:
     void    ReadHeader();
     void    ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen );
 
+    sal_uInt8* getMapData(sal_uInt32 np);
+
     bool    ReadMap();
         // reads/decompresses the bitmap data and fills aMap
 
@@ -503,6 +505,11 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         bStatus = false;
 }
 
+sal_uInt8* TIFFReader::getMapData(sal_uInt32 np)
+{
+    aMap[np].resize(nBytesPerRow);
+    return aMap[np].data();
+}
 
 bool TIFFReader::ReadMap()
 {
@@ -524,15 +531,7 @@ bool TIFFReader::ReadMap()
                 if ( nStrip >= aStripOffsets.size())
                     return false;
                 pTIFF->Seek( aStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
-                try
-                {
-                    aMap[np].resize(nBytesPerRow);
-                }
-                catch (const std::bad_alloc &)
-                {
-                    return false;
-                }
-                pTIFF->ReadBytes(aMap[np].data(), nBytesPerRow);
+                pTIFF->ReadBytes(getMapData(np), nBytesPerRow);
                 if (!pTIFF->good())
                     return false;
             }
@@ -599,15 +598,7 @@ bool TIFFReader::ReadMap()
                 }
                 if (np >= SAL_N_ELEMENTS(aMap))
                     return false;
-                try
-                {
-                    aMap[np].resize(nBytesPerRow);
-                }
-                catch (const std::bad_alloc &)
-                {
-                    return false;
-                }
-                DecompressStatus aResult = aCCIDecom.DecompressScanline(aMap[np].data(), nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes);
+                DecompressStatus aResult = aCCIDecom.DecompressScanline(getMapData(np), nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes);
                 if (!aResult.m_bSuccess)
                     return false;
                 bDifferentToPrev |= !aResult.m_bBufferUnchanged;
@@ -652,15 +643,7 @@ bool TIFFReader::ReadMap()
                 }
                 if (np >= SAL_N_ELEMENTS(aMap))
                     return false;
-                try
-                {
-                    aMap[np].resize(nBytesPerRow);
-                }
-                catch (const std::bad_alloc &)
-                {
-                    return false;
-                }
-                if ( ( aLZWDecom.Decompress(aMap[np].data(), nBytesPerRow) != nBytesPerRow ) || pTIFF->GetError() )
+                if ( ( aLZWDecom.Decompress(getMapData(np), nBytesPerRow) != nBytesPerRow ) || pTIFF->GetError() )
                     return false;
             }
             if ( !ConvertScanline( ny ) )
@@ -687,15 +670,7 @@ bool TIFFReader::ReadMap()
                 sal_uInt32 nRowBytesLeft = nBytesPerRow;
                 if (np >= SAL_N_ELEMENTS(aMap))
                     return false;
-                try
-                {
-                    aMap[np].resize(nBytesPerRow);
-                }
-                catch (const std::bad_alloc &)
-                {
-                    return false;
-                }
-                sal_uInt8* pdst = aMap[np].data();
+                sal_uInt8* pdst = getMapData(np);
                 do
                 {
                     sal_uInt8 nRecHeader(0);
@@ -810,7 +785,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         if ( nBitsPerSample == 8 && nSamplesPerPixel >= 3 &&
              nPlanes == 1 && nPhotometricInterpretation == 2 )
         {
-            sal_uInt8*  pt = aMap[0].data();
+            sal_uInt8* pt = getMapData(0);
 
             // are the values being saved as difference?
             if ( 2 == nPredictor )
@@ -854,15 +829,15 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                 {
                     if ( nPlanes < 3 )
                     {
-                        nRed = GetBits( aMap[0].data(), ( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
-                        nGreen = GetBits( aMap[1].data(), ( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
-                        nBlue = GetBits( aMap[2].data(), ( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
+                        nRed = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
+                        nGreen = GetBits( getMapData(1), ( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
+                        nBlue = GetBits( getMapData(2), ( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
                     }
                     else
                     {
-                        nRed = GetBits( aMap[0].data(), nx * nBitsPerSample, nBitsPerSample );
-                        nGreen = GetBits( aMap[1].data(), nx * nBitsPerSample, nBitsPerSample );
-                        nBlue = GetBits( aMap[2].data(), nx * nBitsPerSample, nBitsPerSample );
+                        nRed = GetBits( getMapData(0), nx * nBitsPerSample, nBitsPerSample );
+                        nGreen = GetBits( getMapData(1), nx * nBitsPerSample, nBitsPerSample );
+                        nBlue = GetBits( getMapData(2), nx * nBitsPerSample, nBitsPerSample );
                     }
                     xAcc->SetPixel( nY, nx, Color( (sal_uInt8)( nRed - nMinMax ), (sal_uInt8)( nGreen - nMinMax ), (sal_uInt8)(nBlue - nMinMax) ) );
                 }
@@ -877,15 +852,15 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                 {
                     if ( nPlanes < 3 )
                     {
-                        nRed = GetBits( aMap[0].data(), ( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
-                        nGreen = GetBits( aMap[0].data(), ( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
-                        nBlue = GetBits( aMap[0].data(), ( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
+                        nRed = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
+                        nGreen = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
+                        nBlue = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
                     }
                     else
                     {
-                        nRed = GetBits( aMap[0].data(), nx * nBitsPerSample, nBitsPerSample );
-                        nGreen = GetBits( aMap[1].data(), nx * nBitsPerSample, nBitsPerSample );
-                        nBlue = GetBits( aMap[2].data(), nx * nBitsPerSample, nBitsPerSample );
+                        nRed = GetBits( getMapData(0), nx * nBitsPerSample, nBitsPerSample );
+                        nGreen = GetBits( getMapData(1), nx * nBitsPerSample, nBitsPerSample );
+                        nBlue = GetBits( getMapData(2), nx * nBitsPerSample, nBitsPerSample );
                     }
                     nRed = 255 - (sal_uInt8)( nRed - nMinMax );
                     nGreen = 255 - (sal_uInt8)( nGreen - nMinMax );
@@ -909,9 +884,9 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         for( ns = 0; ns < 4; ns++ )
                         {
                             if( nPlanes < 3 )
-                                nSampLast[ ns ] = nSampLast[ ns ] + (sal_uInt8) GetBits( aMap[0].data(), ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample );
+                                nSampLast[ ns ] = nSampLast[ ns ] + (sal_uInt8) GetBits( getMapData(0), ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample );
                             else
-                                nSampLast[ ns ] = nSampLast[ ns ] + (sal_uInt8) GetBits( aMap[ns].data(), nx * nBitsPerSample, nBitsPerSample );
+                                nSampLast[ ns ] = nSampLast[ ns ] + (sal_uInt8) GetBits( getMapData(ns), nx * nBitsPerSample, nBitsPerSample );
                             nSamp[ ns ] = nSampLast[ ns ];
                         }
                     }
@@ -920,9 +895,9 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         for( ns = 0; ns < 4; ns++ )
                         {
                             if( nPlanes < 3 )
-                                nSamp[ ns ] = (sal_uInt8) GetBits( aMap[0].data(), ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample );
+                                nSamp[ ns ] = (sal_uInt8) GetBits( getMapData(0), ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample );
                             else
-                                nSamp[ ns ]= (sal_uInt8) GetBits( aMap[ns].data(), nx * nBitsPerSample, nBitsPerSample );
+                                nSamp[ ns ]= (sal_uInt8) GetBits( getMapData(ns), nx * nBitsPerSample, nBitsPerSample );
                         }
                     }
                     const long nBlack = nSamp[ 3 ];
@@ -942,7 +917,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         if ( nMaxSampleValue > nMinSampleValue )
         {
             sal_uInt32 nMinMax = ( ( 1 << nDstBitsPerPixel ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
-            sal_uInt8* pt = aMap[0].data();
+            sal_uInt8* pt = getMapData(0);
             sal_uInt8* ptend = pt + nBytesPerRow;
             sal_uInt8 nShift;
 
@@ -1100,7 +1075,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         if ( nMaxSampleValue > nMinSampleValue )
         {
             sal_uInt32 nMinMax = ( ( 1 << 8 /*nDstBitsPerPixel*/ ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
-            sal_uInt8*  pt = aMap[0].data();
+            sal_uInt8*  pt = getMapData(0);
             for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += 2 )
             {
                 SetPixelIndex(xAcc.get(), nY, nx, static_cast<sal_uInt8>( ((sal_uInt32)*pt - nMinSampleValue) * nMinMax));
@@ -1581,8 +1556,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
 itiGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     TIFFReader aTIFFReader;
-
-    return aTIFFReader.ReadTIFF( rStream, rGraphic );
+    try
+    {
+        return aTIFFReader.ReadTIFF(rStream, rGraphic);
+    }
+    catch (const std::bad_alloc &)
+    {
+        return false;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
