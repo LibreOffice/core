@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+ifeq ($(USE_AVMEDIA_DUMMY),FALSE)
 $(eval $(call gb_Library_Library,avmediavlc))
 
 $(eval $(call gb_Library_set_componentfile,avmediavlc,avmedia/source/vlc/avmediavlc))
@@ -51,5 +52,6 @@ $(eval $(call gb_Library_add_exception_objects,avmediavlc,\
     avmedia/source/vlc/wrapper/EventHandler \
     avmedia/source/vlc/wrapper/Common \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+ifeq ($(USE_AVMEDIA_DUMMY),FALSE)
 $(eval $(call gb_Library_Library,avmediaQuickTime))
 
 $(eval $(call gb_Library_set_componentfile,avmediaQuickTime,avmedia/source/quicktime/avmediaQuickTime))
@@ -41,5 +42,6 @@ $(eval $(call gb_Library_add_objcxxobjects,avmediaQuickTime,\
 	avmedia/source/quicktime/quicktimeuno \
 	avmedia/source/quicktime/window \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+ifeq ($(USE_AVMEDIA_DUMMY),FALSE)
 $(eval $(call gb_Library_Library,avmediaMacAVF))
 
 $(eval $(call gb_Library_set_componentfile,avmediaMacAVF,avmedia/source/macavf/avmediaMacAVF))
@@ -42,5 +43,6 @@ $(eval $(call gb_Library_add_objcxxobjects,avmediaMacAVF,\
 	avmedia/source/macavf/player \
 	avmedia/source/macavf/window \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:

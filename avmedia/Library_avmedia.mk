@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Library_Library,avmedia))
 
-$(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
-
 $(eval $(call gb_Library_set_include,avmedia,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/avmedia/inc \
@@ -25,6 +23,7 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 ))
 
 else
+$(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
 
 
 $(eval $(call gb_Library_add_defs,avmedia,\

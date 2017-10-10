@@ -7,6 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+ifeq ($(USE_AVMEDIA_DUMMY),FALSE)
 $(eval $(call gb_Library_Library,avmediagst))
 
 $(eval $(call gb_Library_set_componentfile,avmediagst,avmedia/source/gstreamer/avmediagstreamer))
@@ -53,5 +54,6 @@ $(eval $(call gb_Library_add_exception_objects,avmediagst,\
 	avmedia/source/gstreamer/gstwindow \
 	avmedia/source/gstreamer/gstframegrabber \
 ))
+endif
 
 # vim: set noet sw=4 ts=4:
