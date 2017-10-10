@@ -20,6 +20,8 @@
 #include "salprn.hxx"
 #include "headless/svpgdi.hxx"
 #include "headless/svpinst.hxx"
+#include "unx/fontmanager.hxx"
+#include "unx/gendata.hxx"
 
 SalPrinter* SvpSalInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {
@@ -127,6 +129,23 @@ void SalGenericInstance::jobEndedPrinterUpdate()
 bool AquaSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 {
     return false;
+}
+
+using namespace psp;
+
+GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance *const pInstance)
+    : m_eType(t), m_pDisplay(nullptr), m_pPrintFontManager(nullptr)
+{
+    m_pInstance = pInstance; SetSalData(this);
+}
+
+GenericUnixSalData::~GenericUnixSalData()
+{
+}
+
+
+PrintFontManager::~PrintFontManager()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
