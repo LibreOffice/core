@@ -669,8 +669,11 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                     {
                                         while ( bIsValid && ( nBitsLeft != 7 ) )
                                         {
-                                            rStream.ReadChar( nByte );
-                                            switch ( nByte )
+                                            rStream.ReadChar(nByte);
+                                            bIsValid = rStream.good();
+                                            if (!bIsValid)
+                                                break;
+                                            switch (nByte)
                                             {
                                                 case 0x0a :
                                                     if ( --nScanLines < 0 )
