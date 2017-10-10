@@ -22,8 +22,9 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/avmediadummy \
 ))
 
-else
 $(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia))
+
+else
 
 
 $(eval $(call gb_Library_add_defs,avmedia,\
