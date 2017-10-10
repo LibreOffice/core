@@ -64,8 +64,6 @@
 #include <sfx2/ipclient.hxx>
 #include <svx/svdoashp.hxx>
 
-#include <config_features.h>
-
 using namespace com::sun::star;
 
 namespace sd {
