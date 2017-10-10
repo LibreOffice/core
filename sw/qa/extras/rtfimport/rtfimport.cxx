@@ -764,6 +764,15 @@ DECLARE_RTFIMPORT_TEST(testFdo36089, "fdo36089.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(-50), getProperty<sal_Int16>(getRun(getParagraph(1), 2), "CharEscapement"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf112211_2, "tdf112211-2.rtf")
+{
+    uno::Reference<beans::XPropertyState> xPropertyState(getParagraph(2), uno::UNO_QUERY);
+    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("ParaLeftMargin");
+    // This was beans::PropertyState_DIRECT_VALUE -> direct formatting
+    // prevented inheritance from numbering definition.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, ePropertyState);
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo49892, "fdo49892.rtf")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
