@@ -20,9 +20,9 @@
 #ifndef INCLUDED_BINARYURP_SOURCE_BINARYANY_HXX
 #define INCLUDED_BINARYURP_SOURCE_BINARYANY_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "uno/any2.h"
+#include <uno/any2.h>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class TypeDescription;

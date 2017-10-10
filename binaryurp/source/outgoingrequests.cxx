@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "rtl/byteseq.hxx"
-#include "osl/mutex.hxx"
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <rtl/byteseq.hxx>
+#include <osl/mutex.hxx>
 
 #include "lessoperators.hxx"
 #include "outgoingrequest.hxx"
