@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,icu))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,icu,$(ICU_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_update_autoconf_configs,icu,source))
+
 # Data zip contains data/... and needs to end up in icu/source/data/...
 # Only data/misc/icudata.rc is needed for a Cygwin/MSVC build.
 $(eval $(call gb_UnpackedTarball_set_pre_action,icu,\
@@ -34,7 +36,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/icu4c-59-werror-undef.patch.1 \
 	external/icu/icu4c-59-werror-shadow.patch.1 \
-	external/icu/icu4c-iOS.patch.1 \
 	external/icu/icu4c-59-icu13329-xlocale.patch.1 \
 ))
 
