@@ -39,6 +39,7 @@
 #include <textboxhelper.hxx>
 #include <fmtsrnd.hxx>
 
+
 using namespace ::com::sun::star;
 using namespace objectpositioning;
 
@@ -404,6 +405,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                                                          const SwFrame& rPageAlignLayFrame,
                                                          const SwTwips nProposedRelPosY,
                                                          const bool bFollowTextFlow,
+                                                         const bool bBrowse,
                                                          const bool bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = nProposedRelPosY;
@@ -455,7 +457,8 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
         }
         else
         {
-            if ( bCheckBottom &&
+            // just a try: only adjust the position of objects if in browse mode
+            if ( bBrowse && bCheckBottom &&
                  nTopOfAnch + nAdjustedRelPosY + aObjSize.Width() >
                     aPgAlignArea.Right() )
             {
@@ -472,7 +475,8 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
     else
     {
         // #i31805# - consider value of <bCheckBottom>
-        if ( bCheckBottom &&
+         // just a try: only adjust the position of objects if in browse mode
+        if ( bBrowse && bCheckBottom &&
              nTopOfAnch + nAdjustedRelPosY + aObjSize.Height() >
                 aPgAlignArea.Top() + aPgAlignArea.Height() )
         {
@@ -509,6 +513,7 @@ SwTwips SwAnchoredObjectPosition::ImplAdjustVertRelPos( const SwTwips nTopOfAnch
                 nAdjustedRelPosY = nProposedRelPosY;
         }
     }
+
     return nAdjustedRelPosY;
 }
 

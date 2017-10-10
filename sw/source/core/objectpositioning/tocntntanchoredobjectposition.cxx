@@ -617,7 +617,8 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                                          rVertEnvironLayFrame,
                                                          nTmpRelPosY,
                                                          DoesObjFollowsTextFlow(),
-                                                         bCheckBottom );
+                                                         bCheckBottom,
+                                                         bBrowse );
                         if ( aRectFnSet.IsVert() )
                             aRelPos.X() = nTmpRelPosY;
                         else
@@ -702,6 +703,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                             nRelPosY = AdjustVertRelPos( nTopOfAnch, aRectFnSet.IsVert(), aRectFnSet.IsVertL2R(),
                                                           rVertEnvironLayFrame,
                                                           nRelPosY,
+                                                          bBrowse,
                                                           DoesObjFollowsTextFlow() );
                             if( aRectFnSet.IsVert() )
                                 aRelPos.X() = nRelPosY;
