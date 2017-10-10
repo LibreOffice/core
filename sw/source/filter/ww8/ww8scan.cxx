@@ -2153,7 +2153,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
     bool failure = false;
     nIMax = ncpN;
 
-    if ((nIMax < 1) || (nIMax > (WW8_CP_MAX - 4)/6) || ((nPN + ncpN) > USHRT_MAX) || nPN < 0)
+    if ((nIMax < 1) || (nIMax > (WW8_CP_MAX - 4) / (4 + nStru)) || ((nPN + ncpN) > USHRT_MAX) || nPN < 0)
         failure = true;
 
     if (!failure)
