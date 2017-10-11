@@ -452,6 +452,8 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 
 			[allCookies addObject: [NSNumber numberWithInt:(int)cookie]];
 		}
+                CFRelease(elements);
+                elements=nil;
 	} else {
 		return NO;
 	}
