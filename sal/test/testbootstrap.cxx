@@ -33,8 +33,9 @@ int main( int argc, char *argv[] )
     sal_Int32 nCount = rtl_getAppCommandArgCount();
 
 #if OSL_DEBUG_LEVEL > 0
-    OUStringBuffer debugBuff;
-    debugBuff.append("rtl-commandargs (").append(nCount).append(")real args: ").append(argc);
+    /*OUStringBuffer debugBuff;
+    debugBuff.append("rtl-commandargs (").append(nCount).append(")real args: ").append(argc);*/
+    OString debugBuff= "rtl-commandargs (" + nCount + ")real args: " + argc;
     for( sal_Int32 i = 0 ; i < nCount ; i ++ )
     {
         OUString data;
