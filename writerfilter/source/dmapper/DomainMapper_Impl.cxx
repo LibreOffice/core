@@ -4971,7 +4971,7 @@ void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
                 xTextAppend->insertTextContent(xCurrent, xPerm, bAbsorb);
             }
 
-            // remove proccessed permission
+            // remove processed permission
             m_aPermMap.erase(aPermIter);
 
             // clean up
