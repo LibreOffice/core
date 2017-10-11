@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5e1e0f64",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-10-11T05:24:04Z",
+      "side": 1,
+      "message": "Instead of “Bug 112689” please write “tdf#112689”. This is because our bugs can be reported in more than one place. See https://wiki.documentfoundation.org/Development/FAQ#What_are_those_.23iXXXX.23.2Ffdo.23XXXX.2Fetc._comments.3F",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "fbdf8e8585f0fb029ae2e7f600084e0e85feffb7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
