@@ -19,11 +19,11 @@ bool isAsciiCharacterLiteral(Expr const * expr) {
     return false;
 }
 
-class Visitor final:
-    public RecursiveASTVisitor<Visitor>, public loplugin::Plugin
+class SalUnicodeLiteral final:
+    public RecursiveASTVisitor<SalUnicodeLiteral>, public loplugin::Plugin
 {
 public:
-    explicit Visitor(InstantiationData const & data): Plugin(data) {}
+    explicit SalUnicodeLiteral(InstantiationData const & data): Plugin(data) {}
 
     bool VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
         check(expr);
@@ -89,7 +89,8 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("salunicodeliteral");
+static loplugin::Plugin::Registration<SalUnicodeLiteral> reg(
+    "salunicodeliteral");
 
 }
 

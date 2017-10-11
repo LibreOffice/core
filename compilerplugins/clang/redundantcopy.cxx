@@ -13,11 +13,11 @@
 
 namespace {
 
-class Visitor final:
-    public RecursiveASTVisitor<Visitor>, public loplugin::Plugin
+class RedundantCopy final:
+    public RecursiveASTVisitor<RedundantCopy>, public loplugin::Plugin
 {
 public:
-    explicit Visitor(InstantiationData const & data): Plugin(data) {}
+    explicit RedundantCopy(InstantiationData const & data): Plugin(data) {}
 
     bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr) {
         if (ignoreLocation(expr)) {
@@ -51,7 +51,7 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("redundantcopy");
+static loplugin::Plugin::Registration<RedundantCopy> reg("redundantcopy");
 
 }
 

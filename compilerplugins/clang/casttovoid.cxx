@@ -43,11 +43,11 @@ Expr const * lookThroughInitListExpr(Expr const * expr) {
     return expr;
 }
 
-class Visitor final:
-    public RecursiveASTVisitor<Visitor>, public loplugin::Plugin
+class CastToVoid final:
+    public RecursiveASTVisitor<CastToVoid>, public loplugin::Plugin
 {
 public:
-    explicit Visitor(InstantiationData const & data): Plugin(data) {}
+    explicit CastToVoid(InstantiationData const & data): Plugin(data) {}
 
     bool TraverseCStyleCastExpr(CStyleCastExpr * expr) {
         auto const dre = checkCast(expr);
@@ -325,13 +325,13 @@ private:
         DeclRefExpr const * firstConsumption = nullptr;
     };
 
-    struct CastToVoid {
+    struct Cast {
         ExplicitCastExpr const * cast;
         DeclRefExpr const * sub;
     };
 
     std::map<VarDecl const *, Usage> vars_;
-    std::stack<CastToVoid> castToVoid_;
+    std::stack<Cast> castToVoid_;
     std::stack<QualType> returnTypes_;
 
     void run() override {
@@ -490,7 +490,7 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("casttovoid");
+static loplugin::Plugin::Registration<CastToVoid> reg("casttovoid");
 
 }
 

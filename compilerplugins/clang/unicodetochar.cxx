@@ -17,11 +17,11 @@
 
 namespace {
 
-class Visitor final:
-    public RecursiveASTVisitor<Visitor>, public loplugin::Plugin
+class UnicodeToChar final:
+    public RecursiveASTVisitor<UnicodeToChar>, public loplugin::Plugin
 {
 public:
-    explicit Visitor(InstantiationData const & data): Plugin(data) {}
+    explicit UnicodeToChar(InstantiationData const & data): Plugin(data) {}
 
     bool TraverseCStyleCastExpr(CStyleCastExpr * expr) {
         subExprs_.push(expr->getSubExpr());
@@ -81,7 +81,7 @@ private:
     std::stack<Expr const *> subExprs_;
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("unicodetochar");
+static loplugin::Plugin::Registration<UnicodeToChar> reg("unicodetochar");
 
 }
 

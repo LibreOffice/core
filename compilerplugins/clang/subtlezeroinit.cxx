@@ -17,11 +17,11 @@
 
 namespace {
 
-class Visitor final:
-    public RecursiveASTVisitor<Visitor>, public loplugin::Plugin
+class SubtleZeroInit final:
+    public RecursiveASTVisitor<SubtleZeroInit>, public loplugin::Plugin
 {
 public:
-    explicit Visitor(InstantiationData const & data): Plugin(data) {}
+    explicit SubtleZeroInit(InstantiationData const & data): Plugin(data) {}
 
     bool VisitCXXNewExpr(CXXNewExpr const * expr) {
         if (ignoreLocation(expr)) {
@@ -52,7 +52,7 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("subtlezeroinit");
+static loplugin::Plugin::Registration<SubtleZeroInit> reg("subtlezeroinit");
 
 }
 
