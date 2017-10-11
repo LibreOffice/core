@@ -13,11 +13,12 @@
 
 namespace {
 
-class Visitor:
-    public RecursiveASTVisitor<Visitor>, public loplugin::RewritePlugin
+class RedundantInline:
+    public RecursiveASTVisitor<RedundantInline>, public loplugin::RewritePlugin
 {
 public:
-    explicit Visitor(InstantiationData const & data): RewritePlugin(data) {}
+    explicit RedundantInline(InstantiationData const & data):
+        RewritePlugin(data) {}
 
     void run() override {
         if (compiler.getLangOpts().CPlusPlus) {
@@ -120,7 +121,7 @@ private:
     }
 };
 
-loplugin::Plugin::Registration<Visitor> reg("redundantinline", true);
+loplugin::Plugin::Registration<RedundantInline> reg("redundantinline", true);
 
 }
 

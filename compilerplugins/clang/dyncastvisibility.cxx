@@ -75,11 +75,11 @@ StringRef vis(Visibility v) {
     }
 }
 
-class Visitor final:
-    public RecursiveASTVisitor<Visitor>, public loplugin::Plugin
+class DynCastVisibility final:
+    public RecursiveASTVisitor<DynCastVisibility>, public loplugin::Plugin
 {
 public:
-    explicit Visitor(InstantiationData const & data): Plugin(data) {}
+    explicit DynCastVisibility(InstantiationData const & data): Plugin(data) {}
 
     bool shouldVisitTemplateInstantiations() const { return true; }
 
@@ -156,7 +156,8 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("dyncastvisibility");
+static loplugin::Plugin::Registration<DynCastVisibility> reg(
+    "dyncastvisibility");
 
 }
 

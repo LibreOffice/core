@@ -11,11 +11,11 @@
 
 namespace {
 
-class Visitor final:
-    public RecursiveASTVisitor<Visitor>, public loplugin::Plugin
+class DllPrivate final:
+    public RecursiveASTVisitor<DllPrivate>, public loplugin::Plugin
 {
 public:
-    explicit Visitor(InstantiationData const & data): Plugin(data) {}
+    explicit DllPrivate(InstantiationData const & data): Plugin(data) {}
 
     bool VisitNamedDecl(NamedDecl const * decl) {
         if (!decl->getLocation().isInvalid()&&ignoreLocation(decl)) {
@@ -72,7 +72,7 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("dllprivate");
+static loplugin::Plugin::Registration<DllPrivate> reg("dllprivate");
 
 }
 
