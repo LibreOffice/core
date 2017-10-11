@@ -82,18 +82,16 @@ SwVbaRow::Select( )
 
 void SwVbaRow::SelectRow( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow )
 {
-    OUStringBuffer aRangeName;
-    aRangeName.append('A').append(sal_Int32( nStartRow + 1 ) );
+    OUString aRangeName = "A" + OUString::number(nStartRow + 1);
     SwVbaTableHelper aTableHelper( xTextTable );
     sal_Int32 nColCount = aTableHelper.getTabColumnsCount( nEndRow );
     // FIXME: the column count > 26
     //sal_Char cCol = 'A' + nColCount - 1;
     OUString sCol = SwVbaTableHelper::getColumnStr( nColCount - 1);
-    aRangeName.append(':').append( sCol ).append( sal_Int32( nEndRow + 1 ) );
+    aRangeName += ":" +sCol + OUString::number(nEndRow + 1);
 
     uno::Reference< table::XCellRange > xCellRange( xTextTable, uno::UNO_QUERY_THROW );
-    OUString sSelRange = aRangeName.makeStringAndClear();
-    uno::Reference< table::XCellRange > xSelRange = xCellRange->getCellRangeByName( sSelRange );
+    uno::Reference< table::XCellRange > xSelRange = xCellRange->getCellRangeByName( aRangeName );
 
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     xSelection->select( uno::makeAny( xSelRange ) );
