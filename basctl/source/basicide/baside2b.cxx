@@ -1451,14 +1451,14 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
+        if (!mpUIBuilder)
+            mpUIBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/BasicIDE/ui/breakpointmenus.ui", ""));
+
         Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
         Point aEventPos( PixelToLogic( aPos ) );
         BreakPoint* pBrk = rCEvt.IsMouseEvent() ? FindBreakPoint( aEventPos ) : nullptr;
         if ( pBrk )
         {
-            if (!mpUIBuilder)
-                mpUIBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/BasicIDE/ui/breakpointmenus.ui", ""));
-
             // test if break point is enabled...
             VclPtr<PopupMenu> xBrkPropMenu = mpUIBuilder->get_menu("breakmenu");
             xBrkPropMenu->CheckItem(xBrkPropMenu->GetItemId("active"), pBrk->bEnabled);
