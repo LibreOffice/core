@@ -72,7 +72,7 @@ bool SunVersion::init(const char *szVersion)
     int nPart = 0;
     // position within part beginning with 0
     int nPartPos = 0;
-    char buf[128];
+    char buf[128] = {0};
 
     //char must me a number 0 - 999 and no leading
     while (true)
