@@ -31,7 +31,7 @@
 #define DEPRECATED_ATTRIBUTE
 
 #include <Carbon/Carbon.h>
-#include <QuickTime/QuickTime.h>
+// #include <QuickTime/QuickTime.h>
 #include <postmac.h>
 
 #include "PictToBmpFlt.hxx"

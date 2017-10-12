@@ -106,13 +106,15 @@ $(eval $(call gb_Library_add_libs,vcl,\
 endif
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_set_ldflags,vcl,\
+$(eval $(call gb_Library_add_ldflags,vcl,\
     $$(LDFLAGS) \
 ))
 endif
 
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
+    $$(CXXFLAGS) \
+    $$(OBJCXXFLAGS) \
     $(gb_OBJCXXFLAGS) \
 ))
 ifeq ($(ENABLE_CAIRO),TRUE)
@@ -503,13 +505,14 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     AppleRemote \
 ))
 $(eval $(call gb_Library_add_libs,vcl,\
+    $$(LDFLAGS) \
     -framework Cocoa \
     -framework Carbon \
     -framework CoreFoundation \
 ))
 # ??? what about this
 ifneq ($(MACOSX_DEPLOYMENT_TARGET),10.7)
-$(eval $(call gb_Library_set_ldflags,vcl, $$(LDFLAGS) -framework QuickTime ))
+$(eval $(call gb_Library_add_ldflags,vcl, $$(LDFLAGS) -framework QuickTime ))
 endif
 endif
 
