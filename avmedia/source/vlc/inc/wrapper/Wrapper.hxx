@@ -7,16 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_WRAPPER_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_WRAPPER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_WRAPPER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_WRAPPER_HXX
 
-#include "Common.hxx"
-#include "EventHandler.hxx"
-#include "EventManager.hxx"
-#include "Instance.hxx"
-#include "Media.hxx"
-#include "Player.hxx"
+#include "wrapper/Common.hxx"
+#include "wrapper/EventHandler.hxx"
+#include "wrapper/EventManager.hxx"
+#include "wrapper/Instance.hxx"
+#include "wrapper/Media.hxx"
+#include "wrapper/Player.hxx"
 
-#endif // INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_WRAPPER_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

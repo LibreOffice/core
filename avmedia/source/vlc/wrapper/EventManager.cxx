@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "EventManager.hxx"
+#include "wrapper/EventManager.hxx"
 #include "SymbolLoader.hxx"
-#include "EventHandler.hxx"
+#include "wrapper/EventHandler.hxx"
 #include "Types.hxx"
 
 namespace

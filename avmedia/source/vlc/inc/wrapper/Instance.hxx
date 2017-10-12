@@ -7,12 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_MEDIA_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_MEDIA_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_INSTANCE_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_INSTANCE_HXX
 
-struct libvlc_media_t;
-
-namespace rtl { class OUString; }
+struct libvlc_instance_t;
 
 namespace avmedia
 {
@@ -20,26 +18,22 @@ namespace vlc
 {
 namespace wrapper
 {
-    class Instance;
-    class Media
+    class Instance
     {
     public:
         static bool LoadSymbols();
-        Media( const rtl::OUString& url, Instance& instance );
-        Media( const Media& other );
-        Media& operator=( const Media& other );
+        Instance( int argc, const char * const argv[] );
+        Instance( const Instance& other );
+        Instance& operator=( const Instance& other );
+        virtual ~Instance();
 
-        int getDuration() const;
-
-        virtual ~Media();
-
-        operator libvlc_media_t*()
+        operator libvlc_instance_t*()
         {
-            return mMedia;
+            return mInstance;
         }
 
     private:
-        libvlc_media_t *mMedia;
+        libvlc_instance_t *mInstance;
     };
 }
 }
