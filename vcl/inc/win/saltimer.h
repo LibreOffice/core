@@ -26,15 +26,18 @@ class WinSalTimer final : public SalTimer, protected VersionedEvent
 {
     // for access to Impl* functions
     friend LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef );
-    // for access to m_bPollForMessage
+    // for access to GetNextVersionedEvent
     friend void CALLBACK SalTimerProc( PVOID data, BOOLEAN );
+    // for access to ImplHandleElapsedTimer
+    friend bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents );
 
     HANDLE       m_nTimerId;          ///< Windows timer id
-    bool         m_bPollForMessage;   ///< Run yield until a message is caught (most likely the 0ms timer)
+    bool         m_bDirectTimeout;    ///< timeout can be processed directly
 
     void ImplStart( sal_uIntPtr nMS );
     void ImplStop();
-    void ImplEmitTimerCallback();
+    void ImplHandleTimerEvent( WPARAM aWPARAM );
+    void ImplHandleElapsedTimer();
 
 public:
     WinSalTimer();
@@ -43,25 +46,18 @@ public:
     virtual void Start(sal_uIntPtr nMS) override;
     virtual void Stop() override;
 
-    inline bool IsValidWPARAM( WPARAM wParam ) const;
-
-    inline bool PollForMessage() const;
+    inline bool IsDirectTimeout() const;
     inline bool HasTimerElapsed() const;
 };
 
-inline bool WinSalTimer::IsValidWPARAM( WPARAM aWPARAM ) const
+inline bool WinSalTimer::IsDirectTimeout() const
 {
-    return IsValidEventVersion( static_cast<sal_Int32>( aWPARAM ) );
-}
-
-inline bool WinSalTimer::PollForMessage() const
-{
-    return m_bPollForMessage;
+    return m_bDirectTimeout;
 }
 
 inline bool WinSalTimer::HasTimerElapsed() const
 {
-    return m_bPollForMessage || ExistsValidEvent();
+    return m_bDirectTimeout || ExistsValidEvent();
 }
 
 #endif
