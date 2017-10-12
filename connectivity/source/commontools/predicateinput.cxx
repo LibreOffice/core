@@ -64,7 +64,7 @@ namespace dbtools
 
         sal_Unicode nReturn( _nFallback );
         if ( !_rSeparator.isEmpty() )
-            nReturn = static_cast< sal_Char >( _rSeparator[0] );
+            nReturn = _rSeparator[0];
         return nReturn;
     }
 
