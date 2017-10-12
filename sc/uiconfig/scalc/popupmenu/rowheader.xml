@@ -12,6 +12,13 @@
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuitem menu:id=".uno:PasteSpecial"/>
+  <menu:menu menu:id=".uno:PasteOnly">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:PasteOnlyText"/>
+      <menu:menuitem menu:id=".uno:PasteOnlyValue"/>
+      <menu:menuitem menu:id=".uno:PasteOnlyFormula"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertRowsBefore"/>
   <menu:menuitem menu:id=".uno:InsertRowsAfter"/>
