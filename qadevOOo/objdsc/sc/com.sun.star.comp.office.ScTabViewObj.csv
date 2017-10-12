@@ -61,8 +61,6 @@
 "ScTabViewObj";"com::sun::star::view::XFormLayerAccess#optional";"isFormDesignMode()"
 "ScTabViewObj";"com::sun::star::view::XFormLayerAccess#optional";"setFormDesignMode()"
 "ScTabViewObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
-"ScTabViewObj";"com::sun::star::sheet::XSpreadsheetView";"getActiveSheet()"
-"ScTabViewObj";"com::sun::star::sheet::XSpreadsheetView";"setActiveSheet()"
 "ScTabViewObj";"com::sun::star::frame::XController";"attachFrame()"
 "ScTabViewObj";"com::sun::star::frame::XController";"attachModel()"
 "ScTabViewObj";"com::sun::star::frame::XController";"suspend()"

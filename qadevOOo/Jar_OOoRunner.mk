@@ -613,7 +613,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XSheetAnnotationAnchor \
     qadevOOo/tests/java/ifc/sheet/_XSheetAuditing \
     qadevOOo/tests/java/ifc/sheet/_XSheetCellCursor \
-    qadevOOo/tests/java/ifc/sheet/_XSpreadsheetView \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesAsian \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesComplex \
