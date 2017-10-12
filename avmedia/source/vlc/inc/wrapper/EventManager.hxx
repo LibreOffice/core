@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTMANAGER_HXX
-#define INCLUDED_AVMEDIA_SOURCE_VLC_WRAPPER_EVENTMANAGER_HXX
+#ifndef INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_EVENTMANAGER_HXX
+#define INCLUDED_AVMEDIA_SOURCE_VLC_INC_WRAPPER_EVENTMANAGER_HXX
 
 #include <functional>
-#include "Player.hxx"
+#include "wrapper/Player.hxx"
 
 struct libvlc_event_manager_t;
 struct libvlc_event_t;
