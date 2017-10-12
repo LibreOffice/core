@@ -298,7 +298,7 @@ bool XSecController::chainOn( bool bRetrievingLastEvent )
             /*
              * connects the next document handler on the SAX chain
              */
-            m_xSAXEventKeeper->setNextHandler( m_xNextNodeOnSAXChain );
+            m_xSAXEventKeeper->setNextHandler(uno::Reference<xml::sax::XDocumentHandler>());
 
             m_bIsSAXEventKeeperConnected = true;
 
@@ -330,13 +330,13 @@ void XSecController::chainOff()
                         (m_xPreviousNodeOnSAXChain, cssu::UNO_QUERY);
 
                     cssu::Sequence<cssu::Any> aArgs( 1 );
-                    aArgs[0] <<= m_xNextNodeOnSAXChain;
+                    aArgs[0] <<= uno::Reference<xml::sax::XDocumentHandler>();
                     xInitialization->initialize(aArgs);
                 }
                 else
                 {
                     cssu::Reference< cssxs::XParser > xParser(m_xPreviousNodeOnSAXChain, cssu::UNO_QUERY);
-                    xParser->setDocumentHandler( m_xNextNodeOnSAXChain );
+                    xParser->setDocumentHandler(uno::Reference<xml::sax::XDocumentHandler>());
                 }
             }
 
@@ -490,7 +490,6 @@ void XSecController::setSAXChainConnector(const cssu::Reference< cssl::XInitiali
 {
     m_bIsPreviousNodeInitializable = true;
     m_xPreviousNodeOnSAXChain = xInitialization;
-    m_xNextNodeOnSAXChain.clear();
     m_xElementStackKeeper.clear();
 
     initializeSAXChain( );
@@ -518,7 +517,6 @@ void XSecController::clearSAXChainConnector()
     chainOff();
 
     m_xPreviousNodeOnSAXChain = nullptr;
-    m_xNextNodeOnSAXChain = nullptr;
     m_xElementStackKeeper = nullptr;
 }
 

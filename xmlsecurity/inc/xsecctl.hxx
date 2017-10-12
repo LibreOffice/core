@@ -164,12 +164,6 @@ private:
     bool m_bIsPreviousNodeInitializable;
 
     /*
-     * the next node on the SAX chain.
-     * it can always provide an XDocumentHandler interface.
-     */
-    css::uno::Reference< css::xml::sax::XDocumentHandler > m_xNextNodeOnSAXChain;
-
-    /*
      * the ElementStackKeeper is used to reserve the key SAX events.
      * when the SAXEventKeeper is chained on the SAX chain, it need
      * first get all missed key SAX events in order to make sure the
