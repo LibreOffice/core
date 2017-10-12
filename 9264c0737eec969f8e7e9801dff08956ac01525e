@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5e828f95",
+        "filename": "sal/test/testbootstrap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-12T19:11:45Z",
+      "side": 1,
+      "message": "If a portion of the code is not needed any more; it is better to remove it instead of turning into a comment.",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 95
+      },
+      "revId": "9264c0737eec969f8e7e9801dff08956ac01525e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7e7d8bb0",
+        "filename": "sal/test/testbootstrap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-12T19:11:45Z",
+      "side": 1,
+      "message": "Although OString doesn\u0027t have a method called \"append\", it is called on line 44. Besides, it might be better to leave this *Buffer alone since it is called repetitively in the loop.",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 21
+      },
+      "revId": "9264c0737eec969f8e7e9801dff08956ac01525e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
