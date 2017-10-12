@@ -11,9 +11,10 @@
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xprintareas.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
+#include <test/sheet/xspreadsheet.hxx>
+#include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
-#include <test/sheet/xsubtotalcalculatable.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -24,12 +25,15 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 12
+#define NUMBER_OF_TESTS 14
 
-class ScTableSheetObj : public CalcUnoApiTest,
-                          public apitest::XSearchable, public apitest::XReplaceable,
-                          public apitest::XPrintAreas, public apitest::XCellSeries,
-                          public apitest::XUniqueCellFormatRangesSupplier, public apitest::XSubTotalCalculatable
+class ScTableSheetObj : public CalcUnoApiTest, public apitest::XSearchable,
+                                               public apitest::XReplaceable,
+                                               public apitest::XPrintAreas,
+                                               public apitest::XCellSeries,
+                                               public apitest::XUniqueCellFormatRangesSupplier,
+                                               public apitest::XSpreadsheet,
+                                               public apitest::XSubTotalCalculatable
 {
 public:
     ScTableSheetObj();
@@ -61,6 +65,10 @@ public:
 
     // XUniqueCellFormatRangesSupplier
     CPPUNIT_TEST(testGetUniqueCellFormatRanges);
+
+    // XSpreadsheet
+    CPPUNIT_TEST(testCreateCursor);
+    CPPUNIT_TEST(testCreateCursorByRange);
 
     // XSubTotalCalculatable
     CPPUNIT_TEST(testCreateSubTotalDescriptor);
