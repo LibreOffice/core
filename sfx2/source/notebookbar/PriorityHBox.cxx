@@ -55,8 +55,31 @@ public:
         disposeOnce();
     }
 
+    void Initialize()
+    {
+        m_bInitialized = true;
+
+        GetChildrenWithPriorities();
+        SetSizeFromParent();
+    }
+
+    void SetSizeFromParent()
+    {
+        vcl::Window* pParent = GetParent();
+        if (pParent)
+        {
+            Size aParentSize = pParent->GetSizePixel();
+            SetSizePixel(Size(aParentSize.getWidth(), aParentSize.getHeight()));
+        }
+    }
+
     virtual Size calculateRequisition() const override
     {
+        if (!m_bInitialized)
+        {
+            return VclHBox::calculateRequisition();
+        }
+
         sal_uInt16 nVisibleChildren = 0;
 
         Size aSize;
@@ -90,6 +113,13 @@ public:
 
     virtual void Resize() override
     {
+        SetSizeFromParent();
+
+        if (!m_bInitialized)
+        {
+            return VclHBox::Resize();
+        }
+
         long nWidth = GetSizePixel().Width();
         long nCurrentWidth = VclHBox::calculateRequisition().getWidth();
 
@@ -132,18 +162,7 @@ public:
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
     {
         if (!m_bInitialized && SfxViewFrame::Current())
-        {
-            m_bInitialized = true;
-
-            GetChildrenWithPriorities();
-
-            SystemWindow* pSystemWindow = SfxViewFrame::Current()->GetFrame().GetSystemWindow();
-            if (pSystemWindow)
-            {
-                long nWidth = pSystemWindow->GetSizePixel().Width();
-                SetSizePixel(Size(nWidth, GetSizePixel().Height()));
-            }
-        }
+            Initialize();
 
         VclHBox::Paint(rRenderContext, rRect);
     }
@@ -159,6 +178,9 @@ public:
             if (pPrioritable && pPrioritable->GetPriority() != VCL_PRIORITY_DEFAULT)
                 m_aSortedChilds.push_back(pPrioritable);
         }
+
+        if (!m_aSortedChilds.size())
+            m_bInitialized = false;
 
         std::sort(m_aSortedChilds.begin(), m_aSortedChilds.end(), lcl_comparePriority);
     }
