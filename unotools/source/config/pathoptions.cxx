@@ -111,6 +111,7 @@ class SvtPathOptions_Impl
         const OUString& GetLinguisticPath() { return GetPath( SvtPathOptions::PATH_LINGUISTIC ); }
         const OUString& GetModulePath() { return GetPath( SvtPathOptions::PATH_MODULE ); }
         const OUString& GetPalettePath() { return GetPath( SvtPathOptions::PATH_PALETTE ); }
+        const OUString& GetIconsetPath() { return GetPath( SvtPathOptions::PATH_ICONSET); }
         const OUString& GetPluginPath() { return GetPath( SvtPathOptions::PATH_PLUGIN ); }
         const OUString& GetStoragePath() { return GetPath( SvtPathOptions::PATH_STORAGE ); }
         const OUString& GetTempPath() { return GetPath( SvtPathOptions::PATH_TEMP ); }
@@ -182,6 +183,7 @@ static const PropertyStruct aPropNames[] =
     { "Gallery",        SvtPathOptions::PATH_GALLERY        },
     { "Graphic",        SvtPathOptions::PATH_GRAPHIC        },
     { "Help",           SvtPathOptions::PATH_HELP           },
+    { "Iconset",        SvtPathOptions::PATH_ICONSET        },
     { "Linguistic",     SvtPathOptions::PATH_LINGUISTIC     },
     { "Module",         SvtPathOptions::PATH_MODULE         },
     { "Palette",        SvtPathOptions::PATH_PALETTE        },
@@ -234,7 +236,8 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
             osl::FileBase::getSystemPathFromFileURL( aPathValue, aResult );
             aPathValue = aResult;
         }
-        else if (ePath == SvtPathOptions::PATH_PALETTE)
+        else if (ePath == SvtPathOptions::PATH_PALETTE ||
+                 ePath == SvtPathOptions::PATH_ICONSET)
         {
             auto ctx = comphelper::getProcessComponentContext();
             OUStringBuffer buf;
@@ -545,6 +548,11 @@ const OUString& SvtPathOptions::GetPalettePath() const
     return pImpl->GetPalettePath();
 }
 
+const OUString& SvtPathOptions::GetIconsetPath() const
+{
+    return pImpl->GetIconsetPath();
+}
+
 const OUString& SvtPathOptions::GetPluginPath() const
 {
     return pImpl->GetPluginPath();
@@ -767,6 +775,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                 case PATH_LINGUISTIC:   aPath = GetLinguisticPath();    break;
                 case PATH_MODULE:       aPath = GetModulePath();        break;
                 case PATH_PALETTE:      aPath = GetPalettePath();       break;
+                case PATH_ICONSET:      aPath = GetIconsetPath();       break;
                 case PATH_PLUGIN:       aPath = GetPluginPath();        break;
                 case PATH_STORAGE:      aPath = GetStoragePath();       break;
                 case PATH_TEMP:         aPath = GetTempPath();          break;

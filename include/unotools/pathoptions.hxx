@@ -52,6 +52,7 @@ public:
         PATH_GALLERY,
         PATH_GRAPHIC,
         PATH_HELP,
+        PATH_ICONSET,
         PATH_LINGUISTIC,
         PATH_MODULE,
         PATH_PALETTE,
@@ -86,6 +87,7 @@ public:
     const OUString& GetHelpPath() const;
     const OUString& GetLinguisticPath() const;
     const OUString& GetModulePath() const;
+    const OUString& GetIconsetPath() const;
     const OUString& GetPalettePath() const;
     const OUString& GetPluginPath() const;
     const OUString& GetStoragePath() const;

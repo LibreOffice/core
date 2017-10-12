@@ -14,6 +14,7 @@
 #include <tools/solar.h>
 
 #include <rtl/ustring.hxx>
+#include <vcl/IconThemeInfo.hxx>
 
 #include <memory>
 #include <vector>
@@ -27,7 +28,6 @@ class DirectoryItem;
 }
 
 namespace vcl {
-class IconThemeInfo;
 
 /** This class scans a folder for icon themes and provides the results.
  */
@@ -67,13 +67,11 @@ private:
     /** Scan a directory for icon themes.
      *
      * @return
-     * This method will return true on success.
      * There are several cases when this method will fail:
      * - The directory does not exist
      * - There are no files which which match the pattern images_xxx.zip
      */
-    bool
-    ScanDirectoryForIconThemes(const OUString &path);
+    void ScanDirectoryForIconThemes(const OUString &path);
 
     /** Adds the provided icon theme by path.
      */
