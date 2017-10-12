@@ -180,10 +180,12 @@ based on the function used to generate them. Even if WM_TIMER messages should
 have the lowest priority, a manually posted WM_TIMER is processed with the
 priority of a PostMessage message.
 
-Therefore the current solution always starts a (threaded) timer, even for the
-instant Idles, and syncs to this timer message in the main dispatch loop, to
-process the messages in the correct sequence. Using SwitchToThread(), this
-kind of polling seem to work reasonably well.
+So we're giving up on processing all our Scheduler events as a message in the
+system message loop. Instead we just indicate a 0ms timer message by setting
+the m_bDirectTimeout in the timer object. This timer is always processed, if
+the system message wasn't already our timer. As a result we can also skip the
+polling. All this is one more reason to drop the single message processing
+in favour of always processing all pending (system) events.
 
 An additional workaround is implemented for the delayed queuing of posted
 messages, where PeekMessage in WinSalTimer::Stop() won't be able remove the
