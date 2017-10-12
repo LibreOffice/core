@@ -33,85 +33,80 @@ extern "C" {
 
    The described concept provides a platform independent way to access
    minimum bootstrap settings for every application by explicitly or
-   implicitly passing the values to the application.<p>
+   implicitly passing the values to the application.
 
-   MULTI-LEVEL STRATEGY FOR RETRIEVAL OF BOOTSTRAP VALUES :<p>
+   <strong>MULTI-LEVEL STRATEGY FOR RETRIEVAL OF BOOTSTRAP VALUES:</strong>
 
    The 1st level is tried first. On failure,
    the next level is tried. Every query starts at the first level again, so
-   that one setting may be taken from the 3rd and one from the 1st level.<p>
+   that one setting may be taken from the 3rd and one from the 1st level.
 
    1st level: explicitly set variables via rtl_bootstrap_set()
 
-   2nd level: command line arguments. A "-env:SETTINGNAME=value" is given on
-   command line. This allows to give an application a certain setting, even
+   2nd level: command line arguments. A `-env:SETTINGNAME=value` is given on
+   command line. This allows giving an application a certain setting, even
    if an ini-file exists (especially useful for e.g. daemons that want to
-   start an executable with dynamical changing settings).<p>
+   start an executable with dynamical changing settings).
 
    3rd level: environment variables. The application tries to get the
-   setting from the environment.<p>
+   setting from the environment.
 
    4th level: executable ini-file. Every application looks for an ini-file.
-   The filename defaults to /absolute/path/to/executable[rc|.ini]
+   The filename defaults to `/absolute/path/to/executable[rc|.ini]`
    without .bin or .exe suffix. The ini-filename can be
    set by the special command line parameter
-   '-env:INIFILENAME=/absolute/path/to/inifile' at runtime or it may
-   be set at compile time by an API-call.<p>
+   `-env:INIFILENAME=/absolute/path/to/inifile` at runtime or it may
+   be set at compile time by an API-call.
 
    5th level: URE_BOOTSTRAP ini-file. If the bootstrap variable URE_BOOTSTRAP
-   expands to the URL of an ini-file, that ini-file is searched.<p>
+   expands to the URL of an ini-file, that ini-file is searched.
 
    6th level: default. An application can have some default settings decided
    at compile time, which allow the application to run even with no
-   deployment settings. <p>
+   deployment settings.
 
-   If neither of the above levels leads to an successful retrieval of the value
-   (no default possible), the application may  fail to start.<p>
+   If neither of the above levels leads to a successful retrieval of the value
+   (no default possible), the application may fail to start.
 
-   NAMING CONVENTIONS <p>
+   <strong>NAMING CONVENTIONS</strong>
 
-   Naming conventions for names of bootstrap values :
+   Naming conventions for names of bootstrap values:
    Names may only include characters, that are allowed characters for
    environment variables. This excludes '.', ' ', ';', ':' and any non-ascii
-   character. Names are case insensitive.<p>
+   character. Names are case insensitive.
 
-   An ini-file is only allowed to have one section, which must be named '[Bootstrap]'.
+   An ini-file is only allowed to have one section, which must be named
+   `[Bootstrap]` with the square brackets.
    The section may be omitted.
    The section name does not appear in the name of the corresponding
    environment variable or commandline arg.
-   Values maybe arbitrary unicode strings, they must be encoded in UTF8.<p>
+   Values may be arbitrary unicode strings, they must be encoded in UTF8.
 
-   Example:<p>
+   <em>Example:</em>
 
    in an ini-file:
    <code>
    [Sectionname]
    Name=value
-   </code><p>
+   </code>
 
    as commandline arg:
-   <code>-env:Name=value</code><p>
+   <code>-env:Name=value</code>
 
-   as environment
-   <code>
-   setenv Name value
-   set Name=value
-   </code><p>
+   as environment:
+   - <code>setenv Name value</code>
+   - <code>set Name=value</code>
 
-   SPECIAL VARIABLES:
+   <strong>SPECIAL VARIABLES:</strong>
 
-   <ul>
-   <li> INIFILENAME<br>
+   - INIFILENAME<br>
      This variable allows to set the inifilename. This makes only sense, if the filename
      is different than the executable file name. It must be given on command line. If it is
      given the executable ini-file is ignored.
-   </li>
-   </ul>
 */
 
 /** may be called by an application to set an ini-filename.
 
-    <p>
     Must be called before rtl_bootstrap_get(). May not be called twice.
     If it is never called, the filename is based on the name of the executable,
     with the suffix ".ini" on Windows or "rc" on Unix.
@@ -121,21 +116,21 @@ extern "C" {
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pFileUri );
 
 /**
-   @param ppValue
-        out parameter. Contains always a valid rtl_uString pointer.
    @param pName
-            The name of the bootstrap setting to be     retrieved.
+           The name of the bootstrap setting to be retrieved.
+   @param[out] ppValue
+           Contains always a valid rtl_uString pointer.
    @param pDefault
-        maybe NULL. If once the default is
+           maybe <code>NULL</code>. If once the default is
            returned, successive calls always return this
            default value, even when called with different
            defaults.
 
-   @return <code>sal_True</code>, when a value could be retrieved successfully,
-           <code>sal_False</code>, when none of the 4 methods gave a value. ppValue
-           then contains ane empty string.
-           When a pDefault value is given, the function returns always
-           <code>sal_True</code>.
+   @retval sal_True when a value could be retrieved successfully.
+           When a <code>pDefault</code> value is given,
+           the function always returns <code>sal_True</code>.
+   @retval sal_False when none of the 4 methods gave a value.
+           <code>ppValue</code> then contains an empty string.
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_bootstrap_get(
         rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault );
@@ -155,25 +150,24 @@ typedef void * rtlBootstrapHandle;
 
 /**
    Opens a bootstrap argument container.
-   @param pIniName [in]   The name of the ini-file to use, if <code>NULL</code> defaults
+   @param[in] pIniName    The name of the ini-file to use, if <code>NULL</code> defaults
                           to the executables name
-   @return                Handle for a bootstrap argument
-                          container
+   @return                Handle for a bootstrap argument container
 */
 SAL_DLLPUBLIC rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName);
 
 /**
    Closes a bootstrap argument container.
-   @param handle [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
+   @param[in] handle      The handle got by rtl_bootstrap_args_open()
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
     SAL_THROW_EXTERN_C();
 
 /**
-   @param handle   [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
-   @param pName    [in]     The name of the variable to be retrieved
-   @param ppValue  [out]    The result of the retrieval. *ppValue may be null in case of failure.
-   @param pDefault [in]     The default value for the retrieval, may be <code>NULL</code>
+   @param[in]  handle       The handle got by rtl_bootstrap_args_open()
+   @param[in]  pName        The name of the variable to be retrieved
+   @param[out] ppValue      The result of the retrieval. *ppValue may be null in case of failure.
+   @param[in]  pDefault     The default value for the retrieval, may be <code>NULL</code>
 
    @return                  The status of the retrieval, <code>sal_True</code> on success.
 */
@@ -183,23 +177,23 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
 
 /** Returns the name of the inifile associated with this handle.
 
-   @param handle   [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
-   @param ppIniName [out] contains after the call the name of the ini-filename.
+   @param[in]  handle       The handle got by rtl_bootstrap_args_open()
+   @param[out] ppIniName    contains after the call the name of the ini-filename.
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_get_iniName_from_handle(
         rtlBootstrapHandle handle, rtl_uString ** ppIniName);
 
 /** Expands a macro using bootstrap variables.
 
-    @param handle   [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
-    @param macro    [inout]  The macro to be expanded
+    @param[in]     handle   The handle got by rtl_bootstrap_args_open()
+    @param[in,out] macro    The macro to be expanded
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
     rtlBootstrapHandle handle, rtl_uString ** macro );
 
 /** Expands a macro using default bootstrap variables.
 
-    @param macro    [inout]  The macro to be expanded
+    @param[in,out] macro    The macro to be expanded
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_expandMacros(
     rtl_uString ** macro);
@@ -209,9 +203,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_expandMacros(
     @param value
     an arbitrary, non-NULL value
 
-    @param encoded
-    non-NULL out parameter, receiving the given value with all occurrences of
-    special characters ("$" and "\") escaped
+    @param[out] encoded
+    the given value with all occurrences of special characters ("$" and "\") escaped
 
     @since UDK 3.2.9
 */
