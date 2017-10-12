@@ -472,11 +472,11 @@ static void ImplSalDispatchMessage( MSG* pMsg )
         ImplSalPostDispatchMsg( pMsg, lResult );
 }
 
-static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
+bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
 {
     static sal_uInt32 nLastTicks = 0;
     MSG aMsg;
-    bool bWasMsg = false, bOneEvent = false;
+    bool bWasMsg = false, bOneEvent = false, bWasTimeoutMsg = false;
     ImplSVData *const pSVData = ImplGetSVData();
     WinSalTimer* pTimer = static_cast<WinSalTimer*>( pSVData->maSchedCtx.mpSalTimer );
 
@@ -491,6 +491,8 @@ static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
         if ( bOneEvent )
         {
             bWasMsg = true;
+            if ( !bWasTimeoutMsg )
+                bWasTimeoutMsg = (SAL_MSG_TIMER_CALLBACK == aMsg.message);
             TranslateMessage( &aMsg );
             ImplSalDispatchMessage( &aMsg );
             if ( bHandleAllCurrentEvents
@@ -499,23 +501,26 @@ static bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
                 bHadNewerEvent = true;
             bOneEvent = !bHadNewerEvent;
         }
-        // busy loop to catch a message, eventually the 0ms timer.
-        // we don't need to loop, if we wait anyway.
-        if ( !bWait && !bWasMsg && pTimer && pTimer->PollForMessage() )
-        {
-            SwitchToThread();
-            continue;
-        }
+
         if ( !(bHandleAllCurrentEvents && bOneEvent) )
             break;
     }
     while( true );
 
+    // 0ms timeouts are handled out-of-bounds to prevent busy-locking the
+    // event loop with timeout massages.
+    // We ensure we never handle more then one timeout per call.
+    // This way we'll always process a normal system message.
+    if ( !bWasTimeoutMsg && pTimer && pTimer->IsDirectTimeout() )
+    {
+        pTimer->ImplHandleElapsedTimer();
+        bWasMsg = true;
+    }
+
     if ( bHandleAllCurrentEvents )
         nLastTicks = nCurTicks;
 
-    // Also check that we don't wait when application already has quit
-    if ( bWait && !bWasMsg && !pSVData->maAppData.mbAppQuit )
+    if ( bWait && !bWasMsg )
     {
         if ( GetMessageW( &aMsg, nullptr, 0, 0 ) )
         {
@@ -540,8 +545,6 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     SolarMutexReleaser aReleaser;
     if ( !IsMainThread() )
     {
-        // If you change the SendMessageW function, you might need to update
-        // the PeekMessage( ... PM_QS_POSTMESSAGE) calls!
         bDidWork = SendMessageW( mhComWnd, SAL_MSG_THREADYIELD,
                                  (WPARAM) false, (LPARAM) bHandleAllCurrentEvents );
         if ( !bDidWork && bWait )
@@ -659,17 +662,7 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
         {
             WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
             assert( pTimer != nullptr );
-            MSG aMsg;
-            bool bValidMSG = pTimer->IsValidWPARAM( wParam );
-            // PM_QS_POSTMESSAGE is needed, so we don't process the SendMessage from DoYield!
-            while ( PeekMessageW(&aMsg, pInst->mhComWnd, SAL_MSG_TIMER_CALLBACK,
-                                 SAL_MSG_TIMER_CALLBACK, PM_REMOVE | PM_NOYIELD | PM_QS_POSTMESSAGE) )
-            {
-                assert( !bValidMSG && "Unexpected non-last valid message" );
-                bValidMSG = pTimer->IsValidWPARAM( aMsg.wParam );
-            }
-            if ( bValidMSG )
-                pTimer->ImplEmitTimerCallback();
+            pTimer->ImplHandleTimerEvent( wParam );
             break;
         }
     }
