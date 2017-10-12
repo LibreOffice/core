@@ -82,8 +82,8 @@
  *      listed; default is 0 which means that none are logged. It's also
  *      possible to remove functions using '!'.
  *      An example INI file:
- *           #Functions: all, except PRTARE
- *           [record] 0xFFFFFFFE !0x200
+ *           #Functions: all(0x0007ffff), except PrintArea (0x200)
+ *           [record] 524287 !512
  *           [frmid]
  *           #the following FrameIds:
  *           1 2 12 13 14 15
@@ -282,7 +282,8 @@ SwImplProtocol::~SwImplProtocol()
         pStream->Close();
         delete pStream;
     }
-    pFrameIds->clear();
+    if (pFrameIds)
+        pFrameIds->clear();
     delete pFrameIds;
     aVars.clear();
 }
@@ -339,7 +340,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
     {
         OString aTok = rLine.getToken( 0, ' ', nIndex );
         bool bNo = false;
-        if( '!' == aTok[0] )
+        if( !aTok.isEmpty() && '!' == aTok[0] )
         {
             bNo = true;                 // remove this function/type
             aTok = aTok.copy(1);
@@ -407,7 +408,7 @@ void SwImplProtocol::FileInit()
                 aLine.clear();
             }
             else
-                aLine = OString(c);
+                aLine += OString(c);
         }
         if( !aLine.isEmpty() )
             CheckLine( aLine );     // evaluate last line
