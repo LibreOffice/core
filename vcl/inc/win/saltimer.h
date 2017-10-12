@@ -46,6 +46,7 @@ public:
     inline bool IsValidWPARAM( WPARAM wParam ) const;
 
     inline bool PollForMessage() const;
+    inline bool HasTimerElapsed() const;
 };
 
 inline bool WinSalTimer::IsValidWPARAM( WPARAM aWPARAM ) const
@@ -56,6 +57,11 @@ inline bool WinSalTimer::IsValidWPARAM( WPARAM aWPARAM ) const
 inline bool WinSalTimer::PollForMessage() const
 {
     return m_bPollForMessage;
+}
+
+inline bool WinSalTimer::HasTimerElapsed() const
+{
+    return m_bPollForMessage || ExistsValidEvent();
 }
 
 #endif

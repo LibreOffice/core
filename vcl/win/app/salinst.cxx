@@ -696,9 +696,118 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
     return nRet;
 }
 
+struct MsgRange
+{
+    UINT nStart;
+    UINT nEnd;
+};
+
+static std::vector<MsgRange> GetOtherRanges( VclInputFlags nType )
+{
+    assert( nType != VCL_INPUT_ANY );
+
+    const unsigned MAX_EXCL = 20;
+    // this array must be kept sorted!
+    const UINT nExclMessageIds[ MAX_EXCL ] =
+    {
+        0,
+
+        WM_MOVE, // 3
+        WM_SIZE, // 5
+        WM_PAINT, // 15
+        WM_KEYDOWN, // 256
+        WM_TIMER, // 275
+
+        WM_MOUSEFIRST, // 512
+        513,
+        514,
+        515,
+        516,
+        517,
+        518,
+        519,
+        520,
+        WM_MOUSELAST, // 521
+
+        SAL_MSG_POSTMOVE, // WM_USER+136
+        SAL_MSG_POSTCALLSIZE, // WM_USER+137
+
+        SAL_MSG_TIMER_CALLBACK, // WM_USER+162
+
+        UINT_MAX
+    };
+
+    bool aExclMessageList[ MAX_EXCL ] = { false, };
+    std::vector<MsgRange> aResult;
+
+    // set the excluded values
+    if ( !(nType & VclInputFlags::MOUSE) )
+    {
+        for ( unsigned i = 0; nExclMessageIds[ 6 + i ] <= WM_MOUSELAST; ++i )
+            aExclMessageList[ 6 + i ] = true;
+    }
+
+    if ( !(nType & VclInputFlags::KEYBOARD) )
+        aExclMessageList[ 4 ] = true;
+
+    if ( !(nType & VclInputFlags::PAINT) )
+    {
+        aExclMessageList[ 1 ] = true;
+        aExclMessageList[ 2 ] = true;
+        aExclMessageList[ 3 ] = true;
+        aExclMessageList[ 16 ] = true;
+        aExclMessageList[ 17 ] = true;
+    }
+
+    if ( !(nType & VclInputFlags::TIMER) )
+    {
+        aExclMessageList[ 5 ]  = true;
+        aExclMessageList[ 18 ]  = true;
+    }
+
+    // build the message ranges
+    MsgRange aRange = { 0, 0 };
+    bool doEnd = true;
+    for ( unsigned i = 1; i < MAX_EXCL; ++i )
+    {
+        if ( aExclMessageList[ i ] )
+        {
+            if ( !doEnd )
+            {
+                if ( nExclMessageIds[ i ] == aRange.nStart )
+                    ++aRange.nStart;
+                else
+                    doEnd = true;
+            }
+            if ( doEnd )
+            {
+                aRange.nEnd = nExclMessageIds[ i ] - 1;
+                aResult.push_back( aRange );
+                doEnd = false;
+                aRange.nStart = aRange.nEnd + 2;
+            }
+        }
+    }
+
+    if ( aRange.nStart != UINT_MAX )
+    {
+        aRange.nEnd = UINT_MAX;
+        aResult.push_back( aRange );
+    }
+
+    return aResult;
+}
+
 bool WinSalInstance::AnyInput( VclInputFlags nType )
 {
     MSG aMsg;
+
+    if ( nType & VclInputFlags::TIMER )
+    {
+        const WinSalTimer* pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+        if ( pTimer && pTimer->HasTimerElapsed() )
+            return true;
+    }
 
     if ( (nType & VCL_INPUT_ANY) == VCL_INPUT_ANY )
     {
@@ -709,27 +818,49 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
     }
     else
     {
+        const bool bCheck_KEYBOARD = (bool) (nType & VclInputFlags::KEYBOARD);
+        const bool bCheck_OTHER    = (bool) (nType & VclInputFlags::OTHER);
+
+        // If there is a modifier key event, it counts as OTHER
+        // Previously we were simply ignoring these events...
+        if ( bCheck_KEYBOARD || bCheck_OTHER )
+        {
+            // Test for key input
+            if ( PeekMessageW( &aMsg, nullptr, WM_KEYDOWN, WM_KEYDOWN,
+                                  PM_NOREMOVE | PM_NOYIELD ) )
+            {
+                const bool bIsModifier = ( (aMsg.wParam == VK_SHIFT) ||
+                    (aMsg.wParam == VK_CONTROL) || (aMsg.wParam == VK_MENU) );
+                if ( bCheck_KEYBOARD && !bIsModifier )
+                    return true;
+                if ( bCheck_OTHER && bIsModifier )
+                    return true;
+            }
+        }
+
+        // Other checks for all messages not excluded.
+        // The less we exclude, the less ranges have to be checked!
+        if ( bCheck_OTHER )
+        {
+            // TIMER and KEYBOARD are already handled, so always exclude them!
+            VclInputFlags nOtherType = nType &
+                ~VclInputFlags(VclInputFlags::KEYBOARD | VclInputFlags::TIMER);
+            std::vector<MsgRange> aMsgRangeList( GetOtherRanges( nOtherType ) );
+            for ( MsgRange aRange : aMsgRangeList )
+                if ( PeekMessageW( &aMsg, nullptr, aRange.nStart,
+                                   aRange.nEnd, PM_NOREMOVE | PM_NOYIELD ) )
+                    return true;
+
+            // MOUSE and PAINT already handled, so skip futher checks
+            return false;
+        }
+
         if ( nType & VclInputFlags::MOUSE )
         {
             // Test for mouse input
             if ( PeekMessageW( &aMsg, nullptr, WM_MOUSEFIRST, WM_MOUSELAST,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
-        }
-
-        if ( nType & VclInputFlags::KEYBOARD )
-        {
-            // Test for key input
-            if ( PeekMessageW( &aMsg, nullptr, WM_KEYDOWN, WM_KEYDOWN,
-                                  PM_NOREMOVE | PM_NOYIELD ) )
-            {
-                if ( (aMsg.wParam == VK_SHIFT)   ||
-                     (aMsg.wParam == VK_CONTROL) ||
-                     (aMsg.wParam == VK_MENU) )
-                    return false;
-                else
-                    return true;
-            }
         }
 
         if ( nType & VclInputFlags::PAINT )
@@ -753,22 +884,6 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
 
             if ( PeekMessageW( &aMsg, nullptr, SAL_MSG_POSTMOVE, SAL_MSG_POSTMOVE,
                                   PM_NOREMOVE | PM_NOYIELD ) )
-                return true;
-        }
-
-        if ( nType & VclInputFlags::TIMER )
-        {
-            // Test for timer input
-            if ( PeekMessageW( &aMsg, nullptr, WM_TIMER, WM_TIMER,
-                                  PM_NOREMOVE | PM_NOYIELD ) )
-                return true;
-
-        }
-
-        if ( nType & VclInputFlags::OTHER )
-        {
-            // Test for any input
-            if ( PeekMessageW( &aMsg, nullptr, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
         }
     }
