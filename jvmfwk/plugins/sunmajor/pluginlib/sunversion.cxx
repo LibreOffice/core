@@ -72,7 +72,7 @@ bool SunVersion::init(const char *szVersion)
     int nPart = 0;
     // position within part beginning with 0
     int nPartPos = 0;
-    char buf[128];
+    char buf[128] = {0};
 
     //char must me a number 0 - 999 and no leading
     while (true)
@@ -104,7 +104,6 @@ bool SunVersion::init(const char *szVersion)
                 return false;
 
             strncpy(buf, pLast, len);
-            buf[len] = 0;
             pCur ++;
             pLast = pCur;
 
@@ -149,7 +148,6 @@ bool SunVersion::init(const char *szVersion)
                         return false;
                     //we've got the update: 01, 02 etc
                     strncpy(buf, pLast, len);
-                    buf[len] = 0;
                     m_arVersionParts[nPart] = atoi(buf);
                     if (pCur == pEnd)
                     {
@@ -199,7 +197,6 @@ bool SunVersion::init(const char *szVersion)
           if (len >= 127)
               return false;
           strncpy(buf, (pLast+1), len); //eliminate 'p'
-          buf[len] = 0;
           m_nUpdateSpecial = atoi(buf)+100; //hack for FBSD #i56953#
           return true;
       }
