@@ -310,31 +310,28 @@ javaPluginError jfw_plugin_getAllJavaInfos(
         addAllJREInfos(checkJavaHomeAndPath, infos);
     vector<rtl::Reference<VendorBase> > vecVerifiedInfos;
 
-    typedef vector<rtl::Reference<VendorBase> >::iterator it;
-    for (it i= vecInfos.begin(); i != vecInfos.end(); ++i)
+    for (auto const& vecInfo : vecInfos)
     {
-        const rtl::Reference<VendorBase>& cur = *i;
 
-        if (sVendor != cur->getVendor())
+        if (sVendor != vecInfo->getVendor())
             continue;
 
         javaPluginError err = checkJavaVersionRequirements(
-            cur, sMinVersion, sMaxVersion, arExcludeList);
+            vecInfo, sMinVersion, sMaxVersion, arExcludeList);
 
         if (err == javaPluginError::FailedVersion || err == javaPluginError::WrongArch)
             continue;
         else if (err == javaPluginError::WrongVersionFormat)
             return err;
 
-        vecVerifiedInfos.push_back(*i);
+        vecVerifiedInfos.push_back(vecInfo);
     }
     //Now vecVerifiedInfos contains all those JREs which meet the version requirements
     //Transfer them into the array that is passed out.
     parJavaInfo->clear();
-    typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
-    for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ++ii)
+    for (auto const& vecVerifiedInfo : vecVerifiedInfos)
     {
-        parJavaInfo->push_back(createJavaInfo(*ii));
+        parJavaInfo->push_back(createJavaInfo(vecVerifiedInfo));
     }
 
     return javaPluginError::NONE;
@@ -388,11 +385,10 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
     assert(infoJavaHome.size() == 1);
 
     //Check if the detected JRE matches the version requirements
-    typedef std::vector<pair<OUString, jfw::VersionInfo>>::const_iterator ci_pl;
-    for (ci_pl vendorInfo = vecVendorInfos.begin(); vendorInfo != vecVendorInfos.end(); ++vendorInfo)
+    for (auto const& vendorInfo : vecVendorInfos)
     {
-        const OUString& vendor = vendorInfo->first;
-        jfw::VersionInfo versionInfo = vendorInfo->second;
+        const OUString& vendor = vendorInfo.first;
+        jfw::VersionInfo versionInfo = vendorInfo.second;
 
         if (vendor == infoJavaHome[0]->getVendor())
         {
@@ -425,28 +421,24 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
     vector<std::unique_ptr<JavaInfo>> vecVerifiedInfos;
 
     // copy infos of JREs that meet version requirements to vecVerifiedInfos
-    typedef vector<rtl::Reference<VendorBase> >::iterator it;
-    for (it i= vecInfosFromPath.begin(); i != vecInfosFromPath.end(); ++i)
+    for (auto const& infosFromPath : vecInfosFromPath)
     {
-        const rtl::Reference<VendorBase>& currentInfo = *i;
-
-        typedef std::vector<pair<OUString, jfw::VersionInfo>>::const_iterator ci_pl;
-        for (ci_pl vendorInfo = vecVendorInfos.begin(); vendorInfo != vecVendorInfos.end(); ++vendorInfo)
+        for (auto const& vendorInfo : vecVendorInfos)
         {
-            const OUString& vendor = vendorInfo->first;
-            jfw::VersionInfo const & versionInfo = vendorInfo->second;
+            const OUString& vendor = vendorInfo.first;
+            jfw::VersionInfo const & versionInfo = vendorInfo.second;
 
-            if (vendor == currentInfo->getVendor())
+            if (vendor == infosFromPath->getVendor())
             {
                 javaPluginError errorcode = checkJavaVersionRequirements(
-                    currentInfo,
+                    infosFromPath,
                     versionInfo.sMinVersion,
                     versionInfo.sMaxVersion,
                     versionInfo.vecExcludeVersions);
 
                 if (errorcode == javaPluginError::NONE)
                 {
-                    vecVerifiedInfos.push_back(createJavaInfo(currentInfo));
+                    vecVerifiedInfos.push_back(createJavaInfo(infosFromPath));
                 }
             }
         }

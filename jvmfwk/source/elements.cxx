@@ -496,11 +496,10 @@ void NodeJava::write() const
             xmlAddChild(vmParameters, nodeCrLf);
         }
 
-        typedef std::vector<OUString>::const_iterator cit;
-        for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); ++i)
+        for (auto const & vmParameter : *m_vmParameters)
         {
             xmlNewTextChild(vmParameters, nullptr, reinterpret_cast<xmlChar const *>("param"),
-                            CXmlCharPtr(*i));
+                            CXmlCharPtr(vmParameter));
             //add a new line
             xmlNode * nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
             xmlAddChild(vmParameters, nodeCrLf);
@@ -537,11 +536,10 @@ void NodeJava::write() const
             xmlAddChild(jreLocationsNode, nodeCrLf);
         }
 
-        typedef std::vector<OUString>::const_iterator cit;
-        for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); ++i)
+        for (auto const & JRELocation : *m_JRELocations)
         {
             xmlNewTextChild(jreLocationsNode, nullptr, reinterpret_cast<xmlChar const *>("location"),
-                            CXmlCharPtr(*i));
+                            CXmlCharPtr(JRELocation));
             //add a new line
             xmlNode * nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
             xmlAddChild(jreLocationsNode, nodeCrLf);
@@ -989,10 +987,9 @@ void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
 ::std::vector< OString> MergedSettings::getVmParametersUtf8() const
 {
     ::std::vector< OString> ret;
-    typedef ::std::vector< OUString>::const_iterator cit;
-    for (cit i = m_vmParams.begin(); i != m_vmParams.end(); ++i)
+    for (auto const & vmParam : m_vmParams)
     {
-        ret.push_back( OUStringToOString(*i, RTL_TEXTENCODING_UTF8));
+        ret.push_back( OUStringToOString(vmParam, RTL_TEXTENCODING_UTF8));
     }
     return ret;
 }
