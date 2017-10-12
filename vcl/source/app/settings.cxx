@@ -520,7 +520,6 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 }
 
 ImplStyleData::ImplStyleData() :
-    mIconThemeScanner(vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath())),
     mIconThemeSelector(new vcl::IconThemeSelector()),
     maPersonaHeaderFooter(),
     maPersonaHeaderBitmap(),
@@ -658,7 +657,8 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     meContextMenuShortcuts      = rData.meContextMenuShortcuts;
     mbPrimaryButtonWarpsSlider  = rData.mbPrimaryButtonWarpsSlider;
     mnToolbarIconSize           = rData.mnToolbarIconSize;
-    mIconThemeScanner.reset(new vcl::IconThemeScanner(*rData.mIconThemeScanner));
+    if (rData.mIconThemeScanner)
+        mIconThemeScanner.reset(new vcl::IconThemeScanner(*rData.mIconThemeScanner));
     mIconThemeSelector.reset(new vcl::IconThemeSelector(*rData.mIconThemeSelector));
     mnEdgeBlending              = rData.mnEdgeBlending;
     maEdgeBlendingTopLeftColor  = rData.maEdgeBlendingTopLeftColor;
@@ -2971,6 +2971,9 @@ StyleSettings::GetOptions() const
 std::vector<vcl::IconThemeInfo>
 StyleSettings::GetInstalledIconThemes() const
 {
+    if (!mxData->mIconThemeScanner) {
+        const_cast<StyleSettings*>(this)->mxData->mIconThemeScanner = vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath());
+    }
     return mxData->mIconThemeScanner->GetFoundIconThemes();
 }
 
@@ -2978,6 +2981,9 @@ StyleSettings::GetInstalledIconThemes() const
 StyleSettings::GetAutomaticallyChosenIconTheme() const
 {
     OUString desktopEnvironment = Application::GetDesktopEnvironment();
+    if (!mxData->mIconThemeScanner) {
+        const_cast<StyleSettings*>(this)->mxData->mIconThemeScanner = vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath());
+    }
     OUString themeName = mxData->mIconThemeSelector->SelectIconThemeForDesktopEnvironment(
             mxData->mIconThemeScanner->GetFoundIconThemes(),
             desktopEnvironment
@@ -3014,6 +3020,9 @@ StyleSettings::DetermineIconTheme() const
         }
     }
 
+    if (!mxData->mIconThemeScanner) {
+        const_cast<StyleSettings*>(this)->mxData->mIconThemeScanner = vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath());
+    }
     OUString r = mxData->mIconThemeSelector->SelectIconTheme(
                         mxData->mIconThemeScanner->GetFoundIconThemes(),
                         sTheme);
