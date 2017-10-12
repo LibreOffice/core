@@ -48,13 +48,13 @@ ANDROID)
     oslibs="$oslibs $WORKDIR/UnpackedTarball/openssl/*.a"
 
     # coinmp not used for iOS
-    oslibs = "$oslibs $WORKDIR/UnpackedTarball/coinmp/Cbc/src/.libs/*.a"
-    oslibs = "$oslibs $WORKDIR/UnpackedTarball/coinmp/Cgl/src/.libs/*.a"
-    oslibs = "$oslibs $WORKDIR/UnpackedTarball/coinmp/Clp/src/.libs/*.a"
-    oslibs = "$oslibs $WORKDIR/UnpackedTarball/coinmp/Clp/src/OsiClp/.libs/*.a"
-    oslibs = "$oslibs $WORKDIR/UnpackedTarball/coinmp/CoinMP/src/.libs/*.a"
-    oslibs = "$oslibs $WORKDIR/UnpackedTarball/coinmp/CoinUtils/src/.libs/*.a"
-    oslibs = "$oslibs $WORKDIR/UnpackedTarball/coinmp/Osi/src/Osi/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Cbc/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Cgl/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Clp/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Clp/src/OsiClp/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/CoinMP/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/CoinUtils/src/.libs/*.a"
+    oslibs="$oslibs $WORKDIR/UnpackedTarball/coinmp/Osi/src/Osi/.libs/*.a"
     ;;
 IOS)
     oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
