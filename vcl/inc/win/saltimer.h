@@ -31,13 +31,20 @@ class WinSalTimer final : public SalTimer, protected VersionedEvent
     // for access to ImplHandleElapsedTimer
     friend bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents );
 
+    /**
+     * Identifier for our SetTimer based timer
+     */
+    static constexpr UINT_PTR m_aWmTimerId = 0xdeadbeef;
+
     HANDLE       m_nTimerId;          ///< Windows timer id
     bool         m_bDirectTimeout;    ///< timeout can be processed directly
+    bool         m_bForceRealTimer;   ///< enforce using a real timer for 0ms
 
     void ImplStart( sal_uIntPtr nMS );
     void ImplStop();
     void ImplHandleTimerEvent( WPARAM aWPARAM );
     void ImplHandleElapsedTimer();
+    void ImplHandle_WM_TIMER( WPARAM aWPARAM );
 
 public:
     WinSalTimer();
@@ -48,6 +55,14 @@ public:
 
     inline bool IsDirectTimeout() const;
     inline bool HasTimerElapsed() const;
+
+    /**
+     * Enforces the usage of a real timer instead of the message queue
+     *
+     * Needed for Window resize processing, as this starts a modal event loop.
+     */
+    void SetForceRealTimer( bool bVal );
+    inline bool GetForceRealTimer() const;
 };
 
 inline bool WinSalTimer::IsDirectTimeout() const
@@ -58,6 +73,11 @@ inline bool WinSalTimer::IsDirectTimeout() const
 inline bool WinSalTimer::HasTimerElapsed() const
 {
     return m_bDirectTimeout || ExistsValidEvent();
+}
+
+inline bool WinSalTimer::GetForceRealTimer() const
+{
+    return m_bForceRealTimer;
 }
 
 #endif

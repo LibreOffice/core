@@ -633,6 +633,10 @@ bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
         }
     }
 
+    // we're back in the main loop after resize or move
+    if ( pTimer )
+        pTimer->SetForceRealTimer( false );
+
     return bWasMsg;
 }
 
@@ -755,6 +759,13 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
             WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
             assert( pTimer != nullptr );
             pTimer->ImplHandleTimerEvent( wParam );
+            break;
+        }
+        case WM_TIMER:
+        {
+            WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+            assert( pTimer != nullptr );
+            pTimer->ImplHandle_WM_TIMER( wParam );
             break;
         }
     }
