@@ -34,7 +34,7 @@ namespace cppu
 
 /**
  * Sets enum from int32 value.  This function does NOT check for valid enum values!
- *<BR>
+ *
  * @param nEnum         int32 enum value
  * @param rType         enum type
  * @return enum or empty any.
@@ -48,10 +48,11 @@ inline css::uno::Any SAL_CALL int2enum(
 
 /**
  * Sets int32 from enum or int in any.
- *<BR>
- * @param rnEnum        [out] int32 enum value
+ *
+ * @param[out] rnEnum   int32 enum value
  * @param rAny          enum or int
- * @param sal_True if enum or int value was set else sal_False.
+ * @retval true if enum or int value was set
+ * @retval false otherwise
  */
 inline bool enum2int( sal_Int32 & rnEnum, const css::uno::Any & rAny )
 {
@@ -66,10 +67,10 @@ inline bool enum2int( sal_Int32 & rnEnum, const css::uno::Any & rAny )
 
 /**
  * Sets int32 from enum or int in any with additional typecheck
- * <BR>
- * @param rAny          enum or int
- * @param eRet          the enum value as int. If there is not enum of the given type or
+ *
+ * @param[out] eRet     the enum value as int. If there is no enum of the given type
  *                      a css::lang::IllegalArgumentException is thrown
+ * @param rAny          enum or int
  * @throws css::lang::IllegalArgumentException
  */
 template< typename E >
@@ -88,7 +89,7 @@ inline void any2enum( E & eRet, const css::uno::Any & rAny )
 }
 
 /**
- * extracts a boolean either as a bool or an integer from
+ * Extracts a boolean either as a bool or an integer from
  * an any. If there is no bool or integer inside the any
  * a css::lang::IllegalArgumentException is thrown
  *

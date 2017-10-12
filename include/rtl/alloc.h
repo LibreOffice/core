@@ -35,8 +35,8 @@ extern "C" {
     A call to this function will return NULL upon the requested
     memory size being either zero or larger than currently allocatable.
 
-    @param  Bytes [in] memory size.
-    @return pointer to allocated memory.
+    @param[in] Bytes memory size.
+    @return pointer to the allocated memory.
  */
 SAL_DLLPUBLIC void * SAL_CALL rtl_allocateMemory (
     sal_Size Bytes
@@ -53,9 +53,9 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_allocateMemory (
     @see rtl_allocateMemory()
     @see rtl_freeMemory()
 
-    @param  Ptr   [in] pointer to previously allocated memory.
-    @param  Bytes [in] new memory size.
-    @return pointer to reallocated memory. May differ from Ptr.
+    @param[in] Ptr   pointer to the previously allocated memory.
+    @param[in] Bytes new memory size.
+    @return pointer to the reallocated memory. May differ from Ptr.
  */
 SAL_DLLPUBLIC void * SAL_CALL rtl_reallocateMemory (
     void *   Ptr,
@@ -64,7 +64,7 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_reallocateMemory (
 
 
 /** Free memory.
-    @param  Ptr   [in] pointer to previously allocated memory.
+    @param[in] Ptr pointer to the previously allocated memory.
     @return none. Memory is released. Ptr is invalid.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_freeMemory (
@@ -76,8 +76,8 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeMemory (
     A call to this function will return NULL upon the requested
     memory size being either zero or larger than currently allocatable.
 
-    @param  Bytes [in] memory size.
-    @return pointer to allocated and zero'ed memory.
+    @param[in] Bytes memory size.
+    @return pointer to the allocated and zero'ed memory.
  */
 SAL_DLLPUBLIC void * SAL_CALL rtl_allocateZeroMemory (
     sal_Size Bytes
@@ -87,8 +87,8 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_allocateZeroMemory (
 
     Fills a block of memory with zeros in a way that is guaranteed to be secure
 
-    @param  Ptr   [in] pointer to previously allocated memory.
-    @param  Bytes [in] memory size.
+    @param[in] Ptr   pointer to the previously allocated memory.
+    @param[in] Bytes memory size.
 
     @since LibreOffice 5.0
  */
@@ -99,10 +99,10 @@ SAL_DLLPUBLIC void SAL_CALL rtl_secureZeroMemory (
 
 
 /** Zero and free memory.
-    @param  Ptr   [in] pointer to previously allocated memory.
-    @param  Bytes [in] memory size.
-    @return none. Memory is zero'ed with rtl_secureZeroMemory and released. Ptr
-                  is invalid.
+    @param[in] Ptr   pointer to the previously allocated memory.
+    @param[in] Bytes memory size.
+    @return none. Memory is zero'ed with rtl_secureZeroMemory() and released.
+                  Ptr is invalid.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_freeZeroMemory (
     void *   Ptr,
@@ -115,12 +115,12 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeZeroMemory (
     memory size being either zero or larger than currently allocatable.
 
     Memory obtained through this function must be freed with
-    rtl_freeAlignedMemory.
+    rtl_freeAlignedMemory().
 
-    @param Alignment [in] alignment in bytes, must be a power of two multiple of
+    @param[in] Alignment alignment in bytes, must be a power of two multiple of
         sizeof(void*).
-    @param  Bytes [in] memory size.
-    @return pointer to allocated memory.
+    @param[in] Bytes     memory size.
+    @return pointer to the allocated memory.
 
     @since LibreOffice 4.3
  */
@@ -130,9 +130,9 @@ SAL_DLLPUBLIC void* SAL_CALL rtl_allocateAlignedMemory (
 ) SAL_THROW_EXTERN_C();
 
 
-/** Free memory allocated with rtl_allocateAlignedMemory.
+/** Free memory allocated with rtl_allocateAlignedMemory().
 
-    @param  Ptr   [in] pointer to previously allocated memory.
+    @param[in] Ptr pointer to the previously allocated memory.
     @return none. Memory is released. Ptr is invalid.
 
     @since LibreOffice 4.3
@@ -149,15 +149,14 @@ typedef struct SAL_DLLPUBLIC_RTTI rtl_arena_st rtl_arena_type;
 #define RTL_ARENA_NAME_LENGTH 31
 
 
-/** rtl_arena_create()
- *
- *  @param  pName             [in] descriptive name; for debugging purposes.
- *  @param  quantum           [in] resource allocation unit / granularity; rounded up to next power of 2.
- *  @param  quantum_cache_max [in] max resources to cache; rounded up to next multiple of quantum; usually 0.
- *  @param  source_arena      [in] passed as argument to source_alloc, source_free; usually NULL.
- *  @param  source_alloc      [in] function to allocate resources; usually rtl_arena_alloc.
- *  @param  source_free       [in] function to free resources; usually rtl_arena_free.
- *  @param  nFlags            [in] flags; usually 0.
+/**
+ *  @param[in] pName             descriptive name; for debugging purposes.
+ *  @param[in] quantum           resource allocation unit / granularity; rounded up to next power of 2.
+ *  @param[in] quantum_cache_max max resources to cache; rounded up to next multiple of quantum; usually 0.
+ *  @param[in] source_arena      passed as argument to source_alloc, source_free; usually NULL.
+ *  @param[in] source_alloc      function to allocate resources; usually rtl_arena_alloc.
+ *  @param[in] source_free       function to free resources; usually rtl_arena_free.
+ *  @param[in] nFlags            flags; usually 0.
  *
  *  @return pointer to rtl_arena_type, or NULL upon failure.
  *
@@ -174,9 +173,8 @@ SAL_DLLPUBLIC rtl_arena_type * SAL_CALL rtl_arena_create (
 ) SAL_THROW_EXTERN_C();
 
 
-/** rtl_arena_destroy()
- *
- *  @param  pArena [in] the arena to destroy.
+/**
+ *  @param[in] pArena the arena to destroy.
  *  @return None
  *
  *  @see rtl_arena_create()
@@ -186,10 +184,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_arena_destroy (
 ) SAL_THROW_EXTERN_C();
 
 
-/** rtl_arena_alloc()
- *
- *  @param  pArena [in]    arena from which resource is allocated.
- *  @param  pBytes [inout] size of resource to allocate.
+/**
+ *  @param[in]     pArena arena from which resource is allocated.
+ *  @param[in,out] pBytes size of resource to allocate.
  *
  *  @return allocated resource, or NULL upon failure.
  *
@@ -201,11 +198,10 @@ SAL_DLLPUBLIC void * SAL_CALL rtl_arena_alloc (
 ) SAL_THROW_EXTERN_C();
 
 
-/** rtl_arena_free()
- *
- *  @param  pArena [in] arena from which resource was allocated.
- *  @param  pAddr  [in] resource to free.
- *  @param  nBytes [in] size of resource.
+/**
+ *  @param[in] pArena arena from which resource was allocated.
+ *  @param[in] pAddr  resource to free.
+ *  @param[in] nBytes size of resource.
  *
  *  @return None.
  *
@@ -226,17 +222,16 @@ typedef struct rtl_cache_st rtl_cache_type;
 
 #define RTL_CACHE_FLAG_BULKDESTROY 1
 
-/** rtl_cache_create()
- *
- *  @param  pName       [in] descriptive name; for debugging purposes.
- *  @param  nObjSize    [in] object size.
- *  @param  nObjAlign   [in] object alignment; usually 0 for suitable default.
- *  @param  constructor [in] object constructor callback function; returning 1 for success or 0 for failure.
- *  @param  destructor  [in] object destructor callback function.
- *  @param  reclaim     [in] reclaim callback function.
- *  @param  pUserArg    [in] opaque argument passed to callback functions.
- *  @param  pSource     [in] opaque argument passed to callback functions.
- *  @param  nFlags      [in] flags.
+/**
+ *  @param[in] pName       descriptive name; for debugging purposes.
+ *  @param[in] nObjSize    object size.
+ *  @param[in] nObjAlign   object alignment; usually 0 for suitable default.
+ *  @param[in] constructor object constructor callback function; returning 1 for success or 0 for failure.
+ *  @param[in] destructor  object destructor callback function.
+ *  @param[in] reclaim     reclaim callback function.
+ *  @param[in] pUserArg    opaque argument passed to callback functions.
+ *  @param[in] pSource     opaque argument passed to callback functions.
+ *  @param[in] nFlags      flags.
  *
  *  @return pointer to rtl_cache_type, or NULL upon failure.
  *
@@ -255,9 +250,8 @@ SAL_DLLPUBLIC rtl_cache_type * SAL_CALL rtl_cache_create (
 ) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cache_destroy()
- *
- *  @param  pCache [in] the cache to destroy.
+/**
+ *  @param[in] pCache the cache to destroy.
  *
  *  @return None.
  *
@@ -268,21 +262,19 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cache_destroy (
 ) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cache_alloc()
+/**
+ *  @param[in] pCache cache from which object is allocated.
  *
- *  @param  pCache [in] cache from which object is allocated.
- *
- *  @return pointer to allocated object, or NULL upon failure.
+ *  @return pointer to the allocated object, or NULL upon failure.
  */
 SAL_DLLPUBLIC void * SAL_CALL rtl_cache_alloc (
     rtl_cache_type * pCache
 ) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cache_free()
- *
- *  @param  pCache [in] cache from which object was allocated.
- *  @param  pObj   [in] object to free.
+/**
+ *  @param[in] pCache cache from which object was allocated.
+ *  @param[in] pObj   object to free.
  *
  *  @return None.
  *
