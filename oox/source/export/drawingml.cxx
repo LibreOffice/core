@@ -3573,9 +3573,12 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
         return OUStringToOString( aCachedItem->second, RTL_TEXTENCODING_UTF8 );
 
     OUString sFileName = "media/hdphoto" + OUString::number( mnWdpImageCounter++ ) + ".wdp";
-    uno::Reference< io::XOutputStream > xOutStream =
-            mpFB->openFragmentStream( "word/" + sFileName,
-                                      "image/vnd.ms-photo" );
+    Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
+                                                                      .appendAscii( GetComponentDir() )
+                                                                      .append( "/" )
+                                                                      .append( sFileName )
+                                                                      .makeStringAndClear(),
+                                                                      "image/vnd.ms-photo" );
     OUString sId;
     xOutStream->writeBytes( rPictureData );
     xOutStream->closeOutput();
