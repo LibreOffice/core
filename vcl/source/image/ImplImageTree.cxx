@@ -44,8 +44,8 @@
 #include <vcl/pngread.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-
 #include <vcl/BitmapTools.hxx>
+#include <vcl/IconThemeScanner.hxx>
 #include <vcl/pngwrite.hxx>
 
 #include "BitmapProcessor.hxx"
@@ -91,13 +91,6 @@ OUString convertLcTo32Path(OUString const & rPath)
 OUString createPath(OUString const & name, sal_Int32 pos, OUString const & locale)
 {
     return name.copy(0, pos + 1) + locale + name.copy(pos);
-}
-
-OUString getIconThemeFolderUrl()
-{
-    OUString sUrl("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/");
-    rtl::Bootstrap::expandMacros(sUrl);
-    return sUrl;
 }
 
 OUString getIconCacheUrl(OUString const & sStyle, OUString const & sVariant, OUString const & sName)
@@ -401,19 +394,37 @@ void ImplImageTree::createStyle()
 
     if (maCurrentStyle != "default")
     {
-        INetURLObject aUrl(getIconThemeFolderUrl());
-        OSL_ASSERT(!aUrl.HasError());
+        OUString paths = vcl::IconThemeScanner::GetStandardIconThemePath();
+        std::deque<OUString> aPaths;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            aPaths.push_front(paths.getToken(0, ';', nIndex));
+        }
+        while (nIndex >= 0);
 
-        bool ok = aUrl.Append("images_" + maCurrentStyle, INetURLObject::EncodeMechanism::All);
-        OSL_ASSERT(ok);
-        sThemeUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE) + ".zip";
+        for (const auto& path : aPaths)
+        {
+            INetURLObject aUrl(path);
+            OSL_ASSERT(!aUrl.HasError());
 
+            bool ok = aUrl.Append("images_" + maCurrentStyle, INetURLObject::EncodeMechanism::All);
+            OSL_ASSERT(ok);
+            sThemeUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE) + ".zip";
+            if (urlExists(sThemeUrl))
+                break;
+            sThemeUrl.clear();
+        }
+
+        if (sThemeUrl.isEmpty())
+            return;
     }
     else
+    {
         sThemeUrl += "images";
-
-    if (!urlExists(sThemeUrl))
-        return;
+        if (!urlExists(sThemeUrl))
+            return;
+    }
 
     maIconSets[maCurrentStyle] = IconSet(sThemeUrl);
 

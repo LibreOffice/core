@@ -118,6 +118,11 @@
         <value>$(userurl)/wordbook</value>
       </prop>
     </node>
+    <node oor:name="Iconset" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/@LIBO_SHARE_FOLDER@/config" oor:op="fuse"/>
+      </node>
+    </node>
     <node oor:name="Module" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
         <node oor:name="$(progpath)" oor:op="fuse"/>
