@@ -8,23 +8,29 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/sheet/xspreadsheetview.hxx>
 #include <test/sheet/xviewfreezable.hxx>
 #include <test/sheet/xviewsplitable.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XViewSplitable.hpp>
+
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
 using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 2
+#define NUMBER_OF_TESTS 3
 
-class ScTabViewObj : public CalcUnoApiTest, public apitest::XViewFreezable, public apitest::XViewSplitable
+class ScTabViewObj : public CalcUnoApiTest, public apitest::XSpreadsheetView,
+                                            public apitest::XViewFreezable,
+                                            public apitest::XViewSplitable
 {
 public:
     ScTabViewObj();
@@ -34,6 +40,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTabViewObj);
+
+    // XSpreadsheetView
+    CPPUNIT_TEST(testGetSetActiveSheet);
 
     // XViewFreezable
     CPPUNIT_TEST(testFreeze);
@@ -66,6 +75,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::init()
     CPPUNIT_ASSERT_MESSAGE("no calc document", xSheetDoc.is());
 
     uno::Reference< frame::XModel > xModel(xSheetDoc, uno::UNO_QUERY_THROW);
+
     return xModel->getCurrentController();
 }
 
