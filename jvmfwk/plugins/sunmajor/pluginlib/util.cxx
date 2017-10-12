@@ -584,22 +584,18 @@ void addJavaInfoFromWinReg(
     if(getSDKInfoFromRegistry(vecJavaHome))
     {
         // create impl objects
-        typedef std::vector<OUString>::iterator ItHome;
-        for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
-            ++it_home)
+        for (auto const& javaHome : vecJavaHome)
         {
-            getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
+            getAndAddJREInfoByPath(javaHome, allInfos, addedInfos);
         }
     }
 
     vecJavaHome.clear();
     if(getJREInfoFromRegistry(vecJavaHome))
     {
-        typedef std::vector<OUString>::iterator ItHome;
-        for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
-            ++it_home)
+        for (auto const& javaHome : vecJavaHome)
         {
-            getAndAddJREInfoByPath(*it_home, allInfos, addedInfos);
+            getAndAddJREInfoByPath(javaHome, allInfos, addedInfos);
         }
    }
 }
@@ -765,13 +761,12 @@ void addJREInfoFromBinPath(
         if (path.endsWith("/"))
             sBinPath = path.copy(0, path.getLength() - 1);
 
-        typedef vector<OUString>::const_iterator c_it;
-        for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
+        for (auto const& looppath : vecPaths)
         {
             //the map contains e.g. jre/bin/java.exe
             //get the directory where the executable is contained
             OUString sHome;
-            sal_Int32 index = i->lastIndexOf('/');
+            sal_Int32 index = looppath.lastIndexOf('/');
             if (index == -1)
             {
                 //map contained only : "java.exe, then the argument
@@ -781,7 +776,7 @@ void addJREInfoFromBinPath(
             else
             {
                 // jre/bin/jre -> jre/bin
-                OUString sMapPath = i->copy(0, index);
+                OUString sMapPath = looppath.copy(0, index);
                 index = sBinPath.lastIndexOf(sMapPath);
                 if (index != -1
                     && (index + sMapPath.getLength() == sBinPath.getLength())
@@ -926,8 +921,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         vecPaths = getVectorFromCharArray(arExePaths, size);
 
         bool bBreak = false;
-        typedef vector<OUString>::const_iterator c_it;
-        for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
+        for (auto const& looppath : vecPaths)
         {
             //if the path is a link, then resolve it
             //check if the executable exists at all
@@ -936,9 +930,9 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             //sizeof counts the terminating 0
             OUString sFullPath;
             if (path.getLength() == sizeof("file:///") - 1)
-                sFullPath = sResolvedDir + (*i);
+                sFullPath = sResolvedDir + looppath;
             else
-                sFullPath = sResolvedDir + "/" + (*i);
+                sFullPath = sResolvedDir + "/" + looppath;
 
             sFilePath = resolveFilePath(sFullPath);
 
@@ -1026,14 +1020,13 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     }
 
     //find java.vendor property
-    typedef vector<pair<OUString, OUString> >::const_iterator c_ip;
     OUString sVendorName;
 
-    for (c_ip i = props.begin(); i != props.end(); ++i)
+    for (auto const& prop : props)
     {
-        if (i->first == "java.vendor")
+        if (prop.first == "java.vendor")
         {
-            sVendorName = i->second;
+            sVendorName = prop.second;
             break;
         }
     }
