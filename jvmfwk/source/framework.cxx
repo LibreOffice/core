@@ -263,10 +263,9 @@ javaFrameworkError jfw_startVM(
 
         //add the options set by options dialog
         int index = 2;
-        typedef std::vector<OString>::const_iterator cit;
-        for (cit i = vmParams.begin(); i != vmParams.end(); ++i)
+        for (auto const & vmParam : vmParams)
         {
-            arOpt[index].optionString = const_cast<sal_Char*>(i->getStr());
+            arOpt[index].optionString = const_cast<sal_Char*>(vmParam.getStr());
             arOpt[index].extraInfo = nullptr;
             index ++;
         }
@@ -342,10 +341,8 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
 
         // save vendors and respective version requirements pair-wise in a vector
         std::vector<std::pair<OUString, jfw::VersionInfo>> versionInfos;
-        typedef std::vector<OUString>::const_iterator ciVendor;
-        for (ciVendor i = vecVendors.begin(); i != vecVendors.end(); ++i)
+        for (auto const & vendor : vecVendors)
         {
-            const OUString & vendor = *i;
             jfw::VersionInfo versionInfo =
                 aVendorSettings.getVersionInformation(vendor);
 
@@ -407,10 +404,8 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
         {
             //Use every vendor to get Java installations. At the first usable
             //Java the loop will break
-            typedef std::vector<OUString>::const_iterator ci_pl;
-            for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
+            for (auto const & vendor : vecVendors)
             {
-                const OUString & vendor = *i;
                 jfw::VersionInfo versionInfo =
                     aVendorSettings.getVersionInformation(vendor);
 
@@ -465,19 +460,16 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
                 const std::vector<OUString> & vecJRELocations =
                     settings.getJRELocations();
                 //use every plug-in to determine the JavaInfo objects
-                for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
+                for (auto const & vendor : vecVendors)
                 {
-                    const OUString & vendor = *i;
                     jfw::VersionInfo versionInfo =
                         aVendorSettings.getVersionInformation(vendor);
 
-                    typedef std::vector<OUString>::const_iterator citLoc;
-                    for (citLoc it = vecJRELocations.begin();
-                        it != vecJRELocations.end(); ++it)
+                    for (auto const & JRELocation : vecJRELocations)
                     {
                         std::unique_ptr<JavaInfo> aInfo;
                         javaPluginError err = jfw_plugin_getJavaInfoByPath(
-                            *it,
+                            JRELocation,
                             vendor,
                             versionInfo.sMinVersion,
                             versionInfo.sMaxVersion,
@@ -629,10 +621,8 @@ javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr
 
         //Use every plug-in library to determine if the path represents a
         //JRE. If a plugin recognized it then the loop will break
-        typedef std::vector<OUString>::const_iterator ci_pl;
-        for (ci_pl i = vecVendors.begin(); i != vecVendors.end(); ++i)
+        for (auto const & vendor : vecVendors)
         {
-            const OUString & vendor = *i;
             jfw::VersionInfo versionInfo =
                 aVendorSettings.getVersionInformation(vendor);
 
