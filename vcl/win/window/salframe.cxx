@@ -3977,6 +3977,10 @@ static void ImplHandleSizeMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
             ImplSaveFrameState( pFrame );
             // Call Hdl
             ImplCallSizeHdl( hWnd );
+
+            WinSalTimer* pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+            if ( pTimer )
+                pTimer->SetForceRealTimer( true );
         }
     }
 }
@@ -4780,6 +4784,13 @@ static bool ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
         {
             return true;
         }
+    }
+
+    if ( nCommand == SC_MOVE )
+    {
+        WinSalTimer* pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+        if ( pTimer )
+            pTimer->SetForceRealTimer( true );
     }
 
     if ( nCommand == SC_KEYMENU )
