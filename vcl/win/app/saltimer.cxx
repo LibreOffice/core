@@ -41,12 +41,15 @@ void WinSalTimer::ImplStop()
     const WinSalInstance *pInst = pSalData->mpInstance;
     assert( !pInst || pSalData->mnAppThreadId == GetCurrentThreadId() );
 
+    if ( m_bForceRealTimer && m_bDirectTimeout )
+        KillTimer( GetSalData()->mpInstance->mhComWnd, m_aWmTimerId );
+    m_bDirectTimeout = false;
+
     const HANDLE hTimer = m_nTimerId;
     if ( nullptr == hTimer )
         return;
 
     m_nTimerId = nullptr;
-    m_bDirectTimeout = false;
     DeleteTimerQueueTimer( nullptr, hTimer, INVALID_HANDLE_VALUE );
     // Keep InvalidateEvent after DeleteTimerQueueTimer, because the event id
     // is set in SalTimerProc, which DeleteTimerQueueTimer will finish or cancel.
@@ -73,13 +76,21 @@ void WinSalTimer::ImplStart( sal_uLong nMS )
     if ( !m_bDirectTimeout )
         CreateTimerQueueTimer(&m_nTimerId, nullptr, SalTimerProc, this,
                               nMS, 0, WT_EXECUTEINTIMERTHREAD | WT_EXECUTEONLYONCE);
-    // We don't need any wakeup message, as this code can just run in the
+    else if ( m_bForceRealTimer )
+    {
+        // so we don't block the nested message queue in move and resize
+        // with posted 0ms SAL_MSG_TIMER_CALLBACK messages
+        SetTimer( GetSalData()->mpInstance->mhComWnd, m_aWmTimerId,
+                  USER_TIMER_MINIMUM, nullptr );
+    }
+    // we don't need any wakeup message, as this code can just run in the
     // main thread!
 }
 
 WinSalTimer::WinSalTimer()
     : m_nTimerId( nullptr )
     , m_bDirectTimeout( false )
+    , m_bForceRealTimer( false )
 {
 }
 
@@ -154,6 +165,25 @@ void WinSalTimer::ImplHandleTimerEvent( const WPARAM aWPARAM )
         return;
 
     ImplHandleElapsedTimer();
+}
+
+void WinSalTimer::SetForceRealTimer( const bool bVal )
+{
+    if ( m_bForceRealTimer == bVal )
+        return;
+
+    m_bForceRealTimer = bVal;
+
+    // we need a real timer, as m_bDirectTimeout won't be processed
+    if ( bVal && m_bDirectTimeout )
+        Start( 0 );
+}
+
+void WinSalTimer::ImplHandle_WM_TIMER( const WPARAM aWPARAM )
+{
+    assert( m_aWmTimerId == aWPARAM );
+    if ( m_aWmTimerId == aWPARAM && m_bDirectTimeout && m_bForceRealTimer )
+        ImplHandleElapsedTimer();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
