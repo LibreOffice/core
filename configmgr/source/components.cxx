@@ -23,7 +23,7 @@
 #include <cassert>
 #include <chrono>
 #include <cstddef>
-#include <list>
+#include <vector>
 #include <set>
 
 #include <com/sun/star/beans/Optional.hpp>
@@ -79,17 +79,17 @@ namespace configmgr {
 
 namespace {
 
-struct UnresolvedListItem {
+struct UnresolvedVectorItem {
     OUString name;
     rtl::Reference< ParseManager > manager;
 
-    UnresolvedListItem(
+    UnresolvedVectorItem(
         OUString const & theName,
         rtl::Reference< ParseManager > const & theManager):
         name(theName), manager(theManager) {}
 };
 
-typedef std::list< UnresolvedListItem > UnresolvedList;
+typedef std::vector< UnresolvedVectorItem > UnresolvedVector;
 
 void parseXcsFile(
     OUString const & url, int layer, Data & data, Partial const * partial,
@@ -750,7 +750,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
         throw css::uno::RuntimeException(
             "cannot open directory " + url);
     }
-    UnresolvedList unres;
+    UnresolvedVector unres;
     std::set< OUString > existingDeps;
     std::set< OUString > processedDeps;
     for (;;) {
@@ -794,7 +794,7 @@ void Components::parseXcdFiles(int layer, OUString const & url) {
     }
     while (!unres.empty()) {
         bool isResolved = false;
-        for (UnresolvedList::iterator i(unres.begin()); i != unres.end();) {
+        for (UnresolvedVector::iterator i(unres.begin()); i != unres.end();) {
             if (i->manager->parse(&existingDeps)) {
                 processedDeps.insert(i->name);
                 i = unres.erase(i);
