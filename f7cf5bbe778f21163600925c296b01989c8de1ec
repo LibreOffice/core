@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_3e50635e",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-12T15:02:13Z",
+      "side": 1,
+      "message": "you could just let nExclMessageIds size itself, and then define\n\n   const unsigned MAX_EXCL \u003d SAL_N_ELEMENTS(nExclMessageIds)",
+      "revId": "f7cf5bbe778f21163600925c296b01989c8de1ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5e4fefbc",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-12T15:02:13Z",
+      "side": 1,
+      "message": "what also works is\n\n  const bool bCheck_KEYBOARD(nType \u0026 VclInputFlags::KEYBOARD)",
+      "revId": "f7cf5bbe778f21163600925c296b01989c8de1ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
