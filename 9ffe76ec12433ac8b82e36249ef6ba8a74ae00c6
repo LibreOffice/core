@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_bee0d3cd",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-10-12T07:38:51Z",
+      "side": 1,
+      "message": "So is this in reality the tab height? Then please rename the variables accordingly. You can do that in a separate patch of course.",
+      "revId": "9ffe76ec12433ac8b82e36249ef6ba8a74ae00c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
