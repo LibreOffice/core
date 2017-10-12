@@ -217,6 +217,15 @@ static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
 static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
 static const sal_uInt32 T_otto = 0x4f54544f;        /* 'OTTO' */
 
+sal_uInt32 FreetypeFontInfo::GetType() const
+{
+    const unsigned char* pBuffer = mpFontFile->GetBuffer();
+    const int nFileSize = mpFontFile->GetFileSize();
+    if (!pBuffer || nFileSize<1024)
+        return 0;
+    return GetUInt(pBuffer);
+}
+
 const unsigned char* FreetypeFontInfo::GetTable( const char* pTag, sal_uLong* pLength ) const
 {
     const unsigned char* pBuffer = mpFontFile->GetBuffer();
@@ -502,6 +511,10 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
 
     FT_Activate_Size( maSizeFT );
 
+    sal_uLong nHead = 0;
+    const uint8_t* pHeadBuf = mpFontInfo->GetTable("head", &nHead);
+    const std::vector<uint8_t> rHead(pHeadBuf, pHeadBuf + nHead);
+
     sal_uLong nHhea = 0;
     const uint8_t* pHheaBuf = mpFontInfo->GetTable("hhea", &nHhea);
     const std::vector<uint8_t> rHhea(pHheaBuf, pHheaBuf + nHhea);
@@ -510,7 +523,21 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
     const uint8_t* pOS2Buf = mpFontInfo->GetTable("OS/2", &nOS2);
     const std::vector<uint8_t> rOS2(pOS2Buf, pOS2Buf + nOS2);
 
-    rxTo->ImplCalcLineSpacing(rHhea, rOS2, maFaceFT->units_per_EM);
+    rxTo->ImplCalcLineSpacing(rHead, rHhea, rOS2, maFaceFT->units_per_EM, mpFontInfo->GetType() != T_otto);
+
+#if 1
+    const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
+    fprintf(stderr, "font %s\n", OUStringToOString(rxTo->GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr());
+    fprintf(stderr, "new ascent descent internal/external leading is %ld %ld %ld %ld %d %d\n", rxTo->GetAscent(), rxTo->GetDescent(), rxTo->GetInternalLeading(), rxTo->GetExternalLeading(), GetFontSelData().mnHeight, int(maFaceFT->units_per_EM * fScale + 0.5));
+    const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
+    long nAscent = ( (rMetrics.ascender + 32) >> 6 );
+    long nDescent = ( (-rMetrics.descender + 32) >> 6 );
+    long nExtLeading = ( ((rMetrics.height + 32) >> 6) - (nAscent + nDescent) );
+    long nIntLeading = ( nAscent + nDescent - (maFaceFT->units_per_EM * fScale + 0.5) );
+    if (nAscent != rxTo->GetAscent() || nDescent != rxTo->GetDescent() /*|| nIntLeading != rxTo->GetInternalLeading()*/)
+        fprintf(stderr, "FUCKED\n");
+    fprintf(stderr, "old ascent descent internal/external leading is %ld %ld %ld %ld %d %d\n", nAscent, nDescent, nIntLeading, nExtLeading, GetFontSelData().mnHeight, int(maFaceFT->units_per_EM * fScale + 0.5));
+#endif
 
     rxTo->SetSlant( 0 );
     rxTo->SetWidth( mnWidth );

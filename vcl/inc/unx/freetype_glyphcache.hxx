@@ -59,6 +59,7 @@ public:
                           ~FreetypeFontInfo();
 
     const unsigned char*  GetTable( const char*, sal_uLong* pLength=nullptr ) const;
+    sal_uInt32            GetType() const;
 
     FT_FaceRec_*          GetFaceFT();
     void                  ReleaseFaceFT();

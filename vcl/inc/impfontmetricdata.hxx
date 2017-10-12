@@ -90,11 +90,12 @@ public:
 
     void            ImplInitTextLineSize( const OutputDevice* pDev );
     void            ImplInitAboveTextLineSize();
-    void            ImplCalcLineSpacing(const std::vector<uint8_t>& rHhea,
+    void            ImplCalcLineSpacing(const std::vector<uint8_t>& rHead,
+                                        const std::vector<uint8_t>& rHhea,
                                         const std::vector<uint8_t>& rOS_2,
-                                        int nUPEM);
+                                        int nUPEM, bool bClassicTTF);
 
-private:
+public:
     // font instance attributes from the font request
     long            mnHeight;                   // Font size
     long            mnWidth;                    // Reference Width

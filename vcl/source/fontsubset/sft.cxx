@@ -1653,6 +1653,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     t->nglyphs = GetUInt16(table, 4);
 
     table = getTable(t, O_head);
+    fprintf(stderr, "bar flag is %x\n", GetUInt16(table, 16));
     t->unitsPerEm = GetUInt16(table, 18);
     indexfmt = GetInt16(table, 50);
 
@@ -2385,10 +2386,14 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, const sal_uInt1
 }
 
 // TODO, clean up table parsing and re-use it elsewhere in this file.
-void GetTTFontMetrics(const std::vector<uint8_t>& hhea,
+void GetTTFontMetrics(
+                      const std::vector<uint8_t>& head,
+                      const std::vector<uint8_t>& hhea,
                       const std::vector<uint8_t>& os2,
                       TTGlobalFontInfo *info)
 {
+    info->flags = GetInt16(head.data(), 16);
+
     /* There are 3 different versions of OS/2 table: original (68 bytes long),
      * Microsoft old (78 bytes long) and Microsoft new (86 bytes long,)
      * Apple's documentation recommends looking at the table length.
@@ -2459,6 +2464,8 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     }
 
     table = getTable(ttf, O_head);      /* 'head' tables is always there */
+    info->flags = GetInt16(table, 16);
+    fprintf(stderr, "foo flag is %x\n", info->flags);
     info->xMin = XUnits(UPEm, GetInt16(table, 36));
     info->yMin = XUnits(UPEm, GetInt16(table, 38));
     info->xMax = XUnits(UPEm, GetInt16(table, 40));

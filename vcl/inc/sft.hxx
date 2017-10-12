@@ -162,6 +162,7 @@ namespace vcl
         char *subfamily;          /**< subfamily name                                          */
         sal_Unicode *usubfamily;  /**< subfamily name UCS2 */
         char *psname;             /**< PostScript name                                         */
+        sal_uInt16 flags;         /**< flags bits from 'HEAD' table */
         sal_uInt16 macStyle;      /**< macstyle bits from 'HEAD' table */
         int   weight;             /**< value of WeightClass or 0 if can't be determined        */
         int   width;              /**< value of WidthClass or 0 if can't be determined         */
@@ -447,7 +448,9 @@ namespace vcl
  * @ingroup sft
  *
  */
- void GetTTFontMetrics(const std::vector<uint8_t>& hhea,
+ void GetTTFontMetrics(
+                       const std::vector<uint8_t>& head,
+                       const std::vector<uint8_t>& hhea,
                        const std::vector<uint8_t>& os2,
                        TTGlobalFontInfo *info);
 
@@ -479,6 +482,21 @@ namespace vcl
         sal_uInt32  *goffsets;
         sal_uInt32  nglyphs;
         sal_uInt32  unitsPerEm;
+        /*
+            bit 0 - y value of 0 specifies baseline
+            bit 1 - x position of left most black bit is LSB
+            bit 2 - scaled point size and actual point size will differ (i.e. 24 point glyph differs from 12 point glyph scaled by factor of 2)
+            bit 3 - use integer scaling instead of fractional
+            bit 4 - (used by the Microsoft implementation of the TrueType scaler)
+            bit 5 - This bit should be set in fonts that are intended to e laid out vertically, and in which the glyphs have been drawn such that an x-coordinate of 0 corresponds to the desired vertical baseline.
+            bit 6 - This bit must be set to zero.
+            bit 7 - This bit should be set if the font requires layout for correct linguistic rendering (e.g. Arabic fonts).
+            bit 8 - This bit should be set for an AAT font which has one or more metamorphosis effects designated as happening by default.
+            bit 9 - This bit should be set if the font contains any strong right-to-left glyphs.
+            bit 10 - This bit should be set if the font contains Indic-style rearrangement effects.
+            bits 11-13 - Defined by Adobe.
+            bit 14 - This bit should be set if the glyphs in the font are simply generic symbols for code point ranges, such as for a last resort font.`
+        */
         sal_uInt32  numberOfHMetrics;
         sal_uInt32  numOfLongVerMetrics;                   /* if this number is not 0, font has vertical metrics information */
         const sal_uInt8* cmap;

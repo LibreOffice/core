@@ -406,8 +406,10 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
  *   - Use Win metrics if available.
  *   - Unless USE_TYPO_METRICS flag is set, in which case use Typo metrics.
 */
-void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaData,
-        const std::vector<uint8_t>& rOS2Data, int nUPEM)
+void ImplFontMetricData::ImplCalcLineSpacing(
+        const std::vector<uint8_t>& rHeadData,
+        const std::vector<uint8_t>& rHheaData,
+        const std::vector<uint8_t>& rOS2Data, int nUPEM, bool bClassicTTF)
 {
     mnAscent = mnDescent = mnExtLeading = mnIntLeading = 0;
 
@@ -416,7 +418,7 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
 
     vcl::TTGlobalFontInfo rInfo;
     memset(&rInfo, 0, sizeof(vcl::TTGlobalFontInfo));
-    GetTTFontMetrics(rHheaData, rOS2Data, &rInfo);
+    GetTTFontMetrics(rHeadData, rHheaData, rOS2Data, &rInfo);
 
     // Try hhea table first.
     // tdf#107605: Some fonts have weird values here, so check that ascender is
@@ -449,12 +451,23 @@ void ImplFontMetricData::ImplCalcLineSpacing(const std::vector<uint8_t>& rHheaDa
         }
     }
 
-    mnAscent = round(fAscent);
-    mnDescent = round(fDescent);
+    if (bClassicTTF && rInfo.flags & 8)
+    {
+        fprintf(stderr, "round\n");
+        mnAscent = round(fAscent);
+        mnDescent = round(fDescent);
+    }
+    else
+    {
+        fprintf(stderr, "ceil\n");
+        mnAscent = ceil(fAscent);
+        mnDescent = ceil(fDescent);
+    }
     mnExtLeading = round(fExtLeading);
 
     if (mnAscent || mnDescent)
         mnIntLeading = mnAscent + mnDescent - mnHeight;
+//        mnIntLeading = mnAscent + mnDescent - (mnHeight + 0.5);
 
     SAL_INFO("vcl.gdi.fontmetric",
                   "fsSelection: "   << rInfo.fsSelection
