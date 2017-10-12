@@ -68,7 +68,6 @@ using ::std::find_if;
 using ::std::for_each;
 using ::std::distance;
 using ::std::pair;
-using ::std::list;
 using namespace formula;
 
 #define SRCDOC_LIFE_SPAN     30000      // 5 minutes (in 100th of a sec)

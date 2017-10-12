@@ -74,7 +74,6 @@ using namespace ::formula;
 using ::com::sun::star::uno::Sequence;
 using ::std::unique_ptr;
 using ::std::vector;
-using ::std::list;
 using ::std::distance;
 using ::std::shared_ptr;
 
@@ -118,10 +117,10 @@ private:
     OUStringBuffer & m_rBuffer;
 };
 
-OUString lcl_createTableNumberList( const ::std::list< SCTAB > & rTableList )
+OUString lcl_createTableNumberList( const ::std::vector< SCTAB > & rTableVector )
 {
     OUStringBuffer aBuffer;
-    ::std::for_each( rTableList.begin(), rTableList.end(), lcl_appendTableNumber( aBuffer ));
+    ::std::for_each( rTableVector.begin(), rTableVector.end(), lcl_appendTableNumber( aBuffer ));
     // remove last trailing ' '
     if( !aBuffer.isEmpty() )
         aBuffer.setLength( aBuffer.getLength() - 1 );
@@ -1512,7 +1511,7 @@ ScChart2DataProvider::createDataSource(
         return xResult;
 
     ScChart2DataSource* pDS = nullptr;
-    ::std::list< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqs;
+    ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqs;
 
     // Fill Categories
     if( bCategories )
@@ -1559,15 +1558,12 @@ ScChart2DataProvider::createDataSource(
     }
 
     pDS = new ScChart2DataSource(m_pDocument);
-    ::std::list< uno::Reference< chart2::data::XLabeledDataSequence > >::iterator aItr( aSeqs.begin() );
-    ::std::list< uno::Reference< chart2::data::XLabeledDataSequence > >::iterator aEndItr( aSeqs.end() );
 
     //reorder labeled sequences according to aSequenceMapping
     ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqVector;
-    while(aItr != aEndItr)
+    for (auto const & aSeq : aSeqs)
     {
-        aSeqVector.push_back(*aItr);
-        ++aItr;
+        aSeqVector.push_back(aSeq);
     }
 
     ::std::map< sal_Int32, uno::Reference< chart2::data::XLabeledDataSequence > > aSequenceMap;
@@ -1608,12 +1604,12 @@ class InsertTabNumber
 {
 public:
     InsertTabNumber() :
-        mpTabNumList(new list<SCTAB>)
+        mpTabNumVector(new vector<SCTAB>)
     {
     }
 
     InsertTabNumber(const InsertTabNumber& r) :
-        mpTabNumList(r.mpTabNumList)
+        mpTabNumVector(r.mpTabNumVector)
     {
     }
 
@@ -1623,15 +1619,15 @@ public:
             return;
 
         const ScSingleRefData& r = *pToken->GetSingleRef();
-        mpTabNumList->push_back(r.Tab());
+        mpTabNumVector->push_back(r.Tab());
     }
 
-    void getList(list<SCTAB>& rList)
+    void getVector(vector<SCTAB>& rVector)
     {
-        mpTabNumList->swap(rList);
+        mpTabNumVector->swap(rVector);
     }
 private:
-    shared_ptr< list<SCTAB> > mpTabNumList;
+    shared_ptr< vector<SCTAB> > mpTabNumVector;
 };
 
 class RangeAnalyzer
@@ -1907,12 +1903,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
     // TableNumberList
     {
-        list<SCTAB> aTableNumList;
+        vector<SCTAB> aTableNumVector;
         InsertTabNumber func;
         func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
-        func.getList(aTableNumList);
+        func.getVector(aTableNumVector);
         aResult.emplace_back( "TableNumberList", -1,
-                                  uno::makeAny( lcl_createTableNumberList( aTableNumList ) ),
+                                  uno::makeAny( lcl_createTableNumberList( aTableNumVector ) ),
                                   beans::PropertyState_DIRECT_VALUE );
     }
 
