@@ -424,7 +424,6 @@ static void QueueCallbackFunction(void* target,  IOReturn result, void* refcon, 
 
 	if (success == kIOReturnSuccess) {
 
-		[elements autorelease];
 		/*
 		cookies = calloc(NUMBER_OF_APPLE_REMOTE_ACTIONS, sizeof(IOHIDElementCookie));
 		memset(cookies, 0, sizeof(IOHIDElementCookie) * NUMBER_OF_APPLE_REMOTE_ACTIONS);
