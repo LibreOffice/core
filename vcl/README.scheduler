@@ -187,6 +187,15 @@ the system message wasn't already our timer. As a result we can also skip the
 polling. All this is one more reason to drop the single message processing
 in favour of always processing all pending (system) events.
 
+There is an other special case, we have to handle: window updates during move
+and resize of windows. These system actions run in their own nested message
+loop. So we have to completely switch to timers, even for 0ms. But these
+posted events prevent any event processing, while we're busy. The only viable
+solution seems to be to switch to WM_TIMER based timers, as these generate
+messages with the lowest system priority (but they don't allow 0ms timeouts).
+So processing slows down during resize and move, but we gain working painting,
+even when busy.
+
 An additional workaround is implemented for the delayed queuing of posted
 messages, where PeekMessage in WinSalTimer::Stop() won't be able remove the
 just posted timer callback message. See "General: invalidation of elapsed
