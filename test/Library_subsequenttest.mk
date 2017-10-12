@@ -66,6 +66,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xspreadsheetdocument \
 	test/source/sheet/xspreadsheets \
 	test/source/sheet/xspreadsheets2 \
+	test/source/sheet/xspreadsheetview \
 	test/source/sheet/xsheetannotation \
 	test/source/sheet/xsheetannotations \
 	test/source/sheet/xsheetannotationshapesupplier \
