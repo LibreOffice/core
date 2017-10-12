@@ -79,7 +79,7 @@ namespace dbtools
             {
                 aLocaleData = m_xLocaleData->getLocaleItem( _rLocale );
                 _rDecSep = lcl_getSeparatorChar( aLocaleData.decimalSeparator, _rDecSep );
-                _rThdSep = lcl_getSeparatorChar( aLocaleData.decimalSeparator, _rThdSep );
+                _rThdSep = lcl_getSeparatorChar( aLocaleData.thousandSeparator, _rThdSep );
                 return true;
             }
         }
