@@ -47,11 +47,17 @@ public:
     virtual void Stop() override;
 
     inline bool IsDirectTimeout() const;
+    inline bool HasTimerElapsed() const;
 };
 
 inline bool WinSalTimer::IsDirectTimeout() const
 {
     return m_bDirectTimeout;
+}
+
+inline bool WinSalTimer::HasTimerElapsed() const
+{
+    return m_bDirectTimeout || ExistsValidEvent();
 }
 
 #endif
