@@ -16,8 +16,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 
-#include "IDialogRenderable.hxx"
-
 #include <map>
 
 namespace vcl
