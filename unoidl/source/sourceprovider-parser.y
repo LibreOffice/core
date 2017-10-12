@@ -14,7 +14,7 @@
 
 %{
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
@@ -26,7 +26,7 @@
 #include <utility>
 #include <vector>
 
-#include <sourceprovider-parser-requires.hxx>
+#include "sourceprovider-parser-requires.hxx"
 
 %}
 
@@ -52,9 +52,9 @@
 
 %{
 
-#include "osl/file.h"
-#include "osl/thread.h"
-#include "sal/log.hxx"
+#include <osl/file.h>
+#include <osl/thread.h>
+#include <sal/log.hxx>
 
 #include "sourceprovider-scanner.hxx"
 
