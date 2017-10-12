@@ -100,6 +100,7 @@ public:
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
     void testTdf111884();
+    void testTdf112633();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -128,6 +129,7 @@ public:
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
     CPPUNIT_TEST(testTdf111884);
+    CPPUNIT_TEST(testTdf112633);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -799,6 +801,34 @@ void SdOOXMLExportTest1::testTdf111884()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_GRUP), pShape->GetObjIdentifier());
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testTdf112633()
+{
+    // Load document and export it to a temporary file
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf112633.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    xmlDocPtr pRelsDoc = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
+
+    // Check image with artistic effect exists in the slide
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/"
+            "a14:imgLayer/a14:imgEffect/a14:artisticPencilGrayscale",
+            "pencilSize", "80");
+
+    // Check there is a relation with the .wdp file that contains the backed up image
+    OUString sEmbedId1 = getXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:pic/p:blipFill/a:blip/a:extLst/"
+            "a:ext/a14:imgProps/a14:imgLayer", "embed");
+    OUString sXmlPath = "/rels:Relationships/rels:Relationship[@Id='" + sEmbedId1 + "']";
+    assertXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target", "../media/hdphoto1.wdp");
+
+    // Check the .wdp file exists
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(
+            comphelper::getComponentContext(m_xSFactory), tempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("ppt/media/hdphoto1.wdp")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
