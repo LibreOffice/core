@@ -33,6 +33,12 @@ $(eval $(call gb_Library_set_include,avmediaMacAVF,\
 	-I$(SRCDIR)/avmedia/source/inc \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_cxxflags,avmediaMacAVF,\
+    -x objective-c++ \
+))
+endif
+
 $(eval $(call gb_Library_add_api,avmediaMacAVF,\
 	offapi \
 	udkapi \

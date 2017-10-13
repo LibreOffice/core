@@ -32,6 +32,12 @@ $(eval $(call gb_SrsTarget_set_include,avmedia/res,\
 	-I$(SRCDIR)/avmedia/inc \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_cxxflags,avmedia,\
+    -x objective-c++ \
+))
+endif
+
 # add src files here (complete path relative to repository root)
 $(eval $(call gb_SrsTarget_add_files,avmedia/res,\
 	avmedia/source/framework/mediacontrol.src \

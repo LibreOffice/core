@@ -42,6 +42,12 @@ $(eval $(call gb_Library_add_api,avmedia,\
 	udkapi \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_cxxflags,avmedia,\
+    -x objective-c++ \
+))
+endif
+
 $(eval $(call gb_Library_add_linked_libs,avmedia,\
 	comphelper \
 	cppuhelper \

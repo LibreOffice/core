@@ -39,6 +39,12 @@ $(eval $(call gb_Library_add_cflags,avmediagst,\
 	$(filter-out -I%,$(GTK_CFLAGS)) \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_cxxflags,avmediagst,\
+    -x objective-c++ \
+))
+endif
+
 $(eval $(call gb_Library_add_api,avmediagst,\
 	offapi \
 	udkapi \
