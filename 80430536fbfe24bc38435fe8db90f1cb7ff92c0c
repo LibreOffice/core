@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_29210fb5",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-10-13T20:41:13Z",
+      "side": 1,
+      "message": "It will be great to not use hardcoded values, but instead declare new enum type:\n\ntypedef enum\n{\n  ImageDataTypeUnknown \u003d 0x00000000,\n  ImageDataTypeBitmap \u003d 0x00000001,\n  ImageDataTypeMetafile \u003d 0x00000002\n} ImageDataType;\n\nand used it here and in Metafile",
+      "revId": "80430536fbfe24bc38435fe8db90f1cb7ff92c0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_49301b02",
+        "filename": "drawinglayer/source/tools/emfphelperdata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-10-13T20:41:13Z",
+      "side": 1,
+      "message": "nitpick: please add space after \"flags,\". As a result it should looks like \"flags, brushId\"",
+      "revId": "80430536fbfe24bc38435fe8db90f1cb7ff92c0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
