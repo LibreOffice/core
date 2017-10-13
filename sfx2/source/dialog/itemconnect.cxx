@@ -247,35 +247,35 @@ public:
 
 private:
     typedef std::shared_ptr< ItemConnectionBase > ItemConnectionRef;
-    typedef std::list< ItemConnectionRef >          ItemConnectionList;
-    typedef ItemConnectionList::iterator            ItemConnectionListIt;
+    typedef std::vector< ItemConnectionRef > ItemConnectionVector;
+    typedef ItemConnectionVector::iterator ItemConnectionVectorIt;
 
-    ItemConnectionList          maList;
+    ItemConnectionVector maVector;
 };
 
 void ItemConnectionArrayImpl::Append( ItemConnectionBase* pConnection )
 {
     if( pConnection )
-        maList.push_back( ItemConnectionRef( pConnection ) );
+        maVector.push_back( ItemConnectionRef( pConnection ) );
 }
 
 void ItemConnectionArrayImpl::ApplyFlags( const SfxItemSet* pItemSet )
 {
-    for( ItemConnectionListIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
-        (*aIt)->DoApplyFlags( pItemSet );
+    for (auto const& itemConnection : maVector)
+        itemConnection->DoApplyFlags( pItemSet );
 }
 
 void ItemConnectionArrayImpl::Reset( const SfxItemSet* pItemSet )
 {
-    for( ItemConnectionListIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
-        (*aIt)->DoReset( pItemSet );
+    for (auto const& itemConnection : maVector)
+        itemConnection->DoReset( pItemSet );
 }
 
 bool ItemConnectionArrayImpl::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
 {
     bool bChanged = false;
-    for( ItemConnectionListIt aIt = maList.begin(), aEnd = maList.end(); aIt != aEnd; ++aIt )
-        bChanged |= (*aIt)->DoFillItemSet( rDestSet, rOldSet );
+    for (auto const& itemConnection : maVector)
+        bChanged |= itemConnection->DoFillItemSet( rDestSet, rOldSet );
     return bChanged;
 }
 
