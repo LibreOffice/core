@@ -414,8 +414,18 @@ void SvXMLImport::cleanup() throw ()
         mxModel->removeEventListener(mxEventListener);
     // clear context stacks first in case of parse error because the context
     // class dtors are full of application logic
-    while (!maFastContexts.empty()) { maFastContexts.pop(); }
-    while (!maContexts.empty()) { maContexts.pop(); }
+    while (!maFastContexts.empty())
+    {
+        if (SvXMLStylesContext* pStylesContext = dynamic_cast<SvXMLStylesContext*>(maFastContexts.top().get()))
+            pStylesContext->Clear();
+        maFastContexts.pop();
+    }
+    while (!maContexts.empty())
+    {
+        if (SvXMLStylesContext* pStylesContext = dynamic_cast<SvXMLStylesContext*>(maContexts.top().get()))
+            pStylesContext->Clear();
+        maContexts.pop();
+    }
     DisposingModel();
 }
 
