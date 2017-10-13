@@ -94,12 +94,13 @@ void getOwnUpdateInfos(
         Sequence<OUString> urls(i->second.extension->getUpdateInformationURLs());
         if (urls.getLength())
         {
-            const OUString id =  dp_misc::getIdentifier(i->second.extension);
+            const OUString search_id = dp_misc::getIdentifier(i->second.extension);
+            SAL_INFO( "extensions.update", "Searching update for " << search_id );
             uno::Any anyError;
             //It is unclear from the idl if there can be a null reference returned.
             //However all valid information should be the same
             Sequence<Reference< xml::dom::XElement > >
-                infos(getUpdateInformation(updateInformation, urls, id, anyError));
+                infos(getUpdateInformation(updateInformation, urls, search_id, anyError));
             if (anyError.hasValue())
                 out_errors.emplace_back(i->second.extension, anyError);
 
@@ -110,15 +111,15 @@ void getOwnUpdateInfos(
                     Reference< xml::dom::XNode >(infos[j], UNO_QUERY_THROW));
                 if (!infoset.hasDescription())
                     continue;
-                boost::optional< OUString > id2(infoset.getIdentifier());
-                if (!id2)
+                boost::optional< OUString > result_id(infoset.getIdentifier());
+                if (!result_id)
                     continue;
-                OSL_ASSERT(*id2 == id);
-                if (*id2 == id)
-                {
-                    i->second.version = infoset.getVersion();
-                    i->second.info.set(infos[j], UNO_QUERY_THROW);
-                }
+                SAL_INFO( "extensions.update", "  found version "
+                          << infoset.getVersion() << " for " << *result_id );
+                if (*result_id != search_id)
+                    continue;
+                i->second.version = infoset.getVersion();
+                i->second.info.set(infos[j], UNO_QUERY_THROW);
                 break;
             }
         }
