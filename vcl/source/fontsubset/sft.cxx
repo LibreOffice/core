@@ -2413,7 +2413,7 @@ void GetTTFontMterics(const std::vector<uint8_t>& hhea,
      * FIXME: horribly outdated comment and horrible code that uses hard-coded
      * offsets to read the table.
      */
-    if (os2.size() > 76 + 2)
+    if (os2.size() >= 76 + 2)
     {
         info->fsSelection   = GetUInt16(os2.data(), 62);
         info->typoAscender  = GetInt16(os2.data(),  68);
@@ -2423,7 +2423,7 @@ void GetTTFontMterics(const std::vector<uint8_t>& hhea,
         info->winDescent    = GetUInt16(os2.data(), 76);
     }
 
-    if (hhea.size() > 8 + 2) {
+    if (hhea.size() >= 8 + 2) {
         info->ascender      = GetInt16(hhea.data(), 4);
         info->descender     = GetInt16(hhea.data(), 6);
         info->linegap       = GetInt16(hhea.data(), 8);
