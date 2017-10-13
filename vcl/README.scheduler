@@ -170,6 +170,10 @@ There is also a workaround for a problem for pushing tasks to an empty queue,
 as [NSApp postEvent: ... atStart: NO] doesn't append the event, if the
 message queue is empty.
 
+An additional problem is the filtering of events on Window close. This drops
+posted timer events, when a Window is closed resulting in a busy DoYield loop,
+so we have to re-post the event, after closing a window.
+
 == Windows implementation details ==
 
 Posted or sent event messages often trigger processing of WndProc in

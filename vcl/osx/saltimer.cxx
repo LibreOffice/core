@@ -196,4 +196,12 @@ AquaSalTimer::~AquaSalTimer()
     Stop();
 }
 
+void AquaSalTimer::handleWindowShouldClose()
+{
+    // for whatever reason events get filtered on close, presumely by
+    // timestamp so post a new timeout event, if there was one queued...
+    if ( ExistsValidEvent() && !m_pRunningTimer )
+        queueDispatchTimerEvent( NO );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

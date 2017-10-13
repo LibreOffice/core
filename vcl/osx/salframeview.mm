@@ -369,6 +369,9 @@ static AquaSalFrame* getMouseContainerFrame()
         {
             mpFrame->CallCallback( SalEvent::Close, nullptr );
             bRet = NO; // application will close the window or not, AppKit shouldn't
+            AquaSalTimer *pTimer = static_cast<AquaSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+            assert( pTimer );
+            pTimer->handleWindowShouldClose();
         }
     }
 
