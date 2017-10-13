@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e95b87f4",
+        "filename": "sw/source/ui/vba/vbacolumn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-13T07:36:26Z",
+      "side": 1,
+      "message": "Wrong\n(see comments from",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 16
+      },
+      "revId": "55146930ba84b1c3d407518b331d1c385c88b54e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
