@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_SOURCE_ACCESSIBILITY_ACCESSIBLETEXTEVENTQUEUE_HXX
 
 #include <memory>
-#include <list>
+#include <vector>
 #include <algorithm>
 
 class SfxHint;
@@ -41,7 +41,7 @@ namespace accessibility
     class AccessibleTextEventQueue
     {
     public:
-        typedef ::std::list< SfxHint* > EventQueue;
+        typedef ::std::vector< SfxHint* > EventQueue;
 
         AccessibleTextEventQueue();
         ~AccessibleTextEventQueue();
