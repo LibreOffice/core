@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4991fb98",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-10-13T05:25:34Z",
+      "side": 1,
+      "message": "I didn\u0027t find any other examples of this odd-ball type of structure which is an 8+16 value. I assume I need to pad it out to fill the 32-bit field.\n\nhttps://msdn.microsoft.com/en-us/library/dd906771(v\u003doffice.12).aspx",
+      "range": {
+        "startLine": 2428,
+        "startChar": 8,
+        "endLine": 2428,
+        "endChar": 52
+      },
+      "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
