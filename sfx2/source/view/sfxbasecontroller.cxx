@@ -1135,7 +1135,7 @@ uno::Sequence< sal_Int16 > SAL_CALL SfxBaseController::getSupportedCommandGroups
 
 uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
 {
-    std::list< frame::DispatchInformation > aCmdList;
+    std::vector< frame::DispatchInformation > aCmdVector;
 
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
@@ -1162,7 +1162,7 @@ uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfi
                             frame::DispatchInformation aCmdInfo;
                             aCmdInfo.Command = ".uno:" + OUString::createFromAscii( pSfxSlot->GetUnoName() );
                             aCmdInfo.GroupId = nCommandGroup;
-                            aCmdList.push_back( aCmdInfo );
+                            aCmdVector.push_back( aCmdInfo );
                         }
                         pSfxSlot = pSlotPool->NextSlot();
                     }
@@ -1171,7 +1171,7 @@ uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfi
         }
     }
 
-    return comphelper::containerToSequence( aCmdList );
+    return comphelper::containerToSequence( aCmdVector );
 }
 
 bool SfxBaseController::HandleEvent_Impl( NotifyEvent const & rEvent )
