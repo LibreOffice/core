@@ -4,6 +4,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import re
+
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 
@@ -41,14 +43,14 @@ frogg catt dogg
 dogg catt
 frog, dogg, catt"""
 
-    TDF46852_CORRECTED = """\
-dog
-dog
-tact dog
-frog frog
-frog tact dog
-dog tact
-frog, dog, tact"""
+    TDF46852_REGEX = """\
+([a-z]+)
+\\1
+([a-z]+) \\1
+([a-z]+) \\3
+\\3 \\2 \\1
+\\1 \\2
+\\3, \\1, \\2"""
 
     def test_tdf46852(self):
         supported_locale = self.is_supported_locale("en", "US")
@@ -92,5 +94,5 @@ frog, dog, tact"""
                 )
             )
 
-        self.assertEqual(document.Text.getString(), self.TDF46852_CORRECTED)
+        self.assertTrue(re.match(self.TDF46852_REGEX, document.Text.getString()))
         
