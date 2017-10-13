@@ -1752,10 +1752,9 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     }
 
     // Write the bookmark start if any
-    OUString aBkmName( m_sFieldBkm );
-    if ( !aBkmName.isEmpty() )
+    if ( !m_sFieldBkm.isEmpty() )
     {
-        DoWriteBookmarkTagEnd(aBkmName);
+        DoWriteBookmarkTagStart(m_sFieldBkm);
     }
 
     if (rInfos.pField ) // For hyperlinks and TOX
@@ -1779,9 +1778,9 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     }
 
     // Write the bookmark end if any
-    if ( !aBkmName.isEmpty() )
+    if ( !m_sFieldBkm.isEmpty() )
     {
-        DoWriteBookmarkTagEnd(aBkmName);
+        DoWriteBookmarkTagEnd(m_sFieldBkm);
 
         m_nNextBookmarkId++;
     }
