@@ -199,7 +199,7 @@ Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups
 
 Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
 {
-    std::list< frame::DispatchInformation > aCmdList;
+    std::vector< frame::DispatchInformation > aCmdVector;
 
     SolarMutexGuard aGuard;
     SfxSlotPool& rAppSlotPool = SfxGetpApp()->GetAppSlotPool_Impl();
@@ -223,7 +223,7 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
                         frame::DispatchInformation aCmdInfo;
                         aCmdInfo.Command = ".uno:" + OUString::createFromAscii(pSfxSlot->GetUnoName());
                         aCmdInfo.GroupId = nCommandGroup;
-                        aCmdList.push_back( aCmdInfo );
+                        aCmdVector.push_back( aCmdInfo );
                     }
                     pSfxSlot = rAppSlotPool.NextSlot();
                 }
@@ -231,7 +231,7 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
         }
     }
 
-    return comphelper::containerToSequence( aCmdList );
+    return comphelper::containerToSequence( aCmdVector );
 }
 
 }
