@@ -412,11 +412,11 @@ template< typename T >
 // Document XML ID Registry (_Impl)
 
 /// element list
-typedef ::std::list< Metadatable* > XmlIdList_t;
+typedef ::std::vector< Metadatable* > XmlIdVector_t;
 
 /// Idref -> (content.xml element list, styles.xml element list)
 typedef std::unordered_map< OUString,
-    ::std::pair< XmlIdList_t, XmlIdList_t >, OUStringHash > XmlIdMap_t;
+    ::std::pair< XmlIdVector_t, XmlIdVector_t >, OUStringHash > XmlIdMap_t;
 
 /// pointer hash template
 template<typename T> struct PtrHash
@@ -446,17 +446,17 @@ struct XmlIdRegistryDocument::XmlIdRegistry_Impl
     Metadatable* LookupElement(const OUString & i_rStreamName,
         const OUString & i_rIdref) const;
 
-    const XmlIdList_t * LookupElementList(
+    const XmlIdVector_t * LookupElementVector(
         const OUString & i_rStreamName,
         const OUString & i_rIdref) const;
 
-          XmlIdList_t * LookupElementList(
+          XmlIdVector_t * LookupElementVector(
         const OUString & i_rStreamName,
         const OUString & i_rIdref)
     {
-        return const_cast<XmlIdList_t*>(
+        return const_cast<XmlIdVector_t*>(
             const_cast<const XmlIdRegistry_Impl*>(this)
-                ->LookupElementList(i_rStreamName, i_rIdref));
+                ->LookupElementVector(i_rStreamName, i_rIdref));
     }
 
     XmlIdMap_t m_XmlIdMap;
@@ -470,9 +470,9 @@ rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
 {
     if (i_rIter != i_rXmlIdMap.end())
     {
-        XmlIdList_t & rList( isContentFile(i_rStream)
+        XmlIdVector_t & rVector( isContentFile(i_rStream)
             ? i_rIter->second.first : i_rIter->second.second );
-        rList.remove(&const_cast<Metadatable&>(i_rObject));
+        rVector.erase(std::find(rVector.begin(), rVector.end(), &const_cast<Metadatable&>(i_rObject)));
         if (i_rIter->second.first.empty() && i_rIter->second.second.empty())
         {
             i_rXmlIdMap.erase(i_rIter);
@@ -481,8 +481,8 @@ rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
 }
 
 
-const XmlIdList_t *
-XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElementList(
+const XmlIdVector_t *
+XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElementVector(
     const OUString & i_rStreamName,
     const OUString & i_rIdref) const
 {
@@ -511,10 +511,10 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElement(
         throw lang::IllegalArgumentException("illegal XmlId", nullptr, 0);
     }
 
-    const XmlIdList_t * pList( LookupElementList(i_rStreamName, i_rIdref) );
+    const XmlIdVector_t * pList( LookupElementVector(i_rStreamName, i_rIdref) );
     if (pList)
     {
-        const XmlIdList_t::const_iterator iter(
+        const XmlIdVector_t::const_iterator iter(
             ::std::find_if(pList->begin(), pList->end(),
                 [](Metadatable* item)->bool {
                     return !(item->IsInUndo() || item->IsInClipboard());
@@ -559,7 +559,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
     OSL_ENSURE(isContentFile(i_rStreamName) || isStylesFile(i_rStreamName),
         "invalid stream");
 
-    XmlIdList_t * pList( LookupElementList(i_rStreamName, i_rIdref) );
+    XmlIdVector_t * pList( LookupElementVector(i_rStreamName, i_rIdref) );
     if (pList)
     {
         if (pList->empty())
@@ -577,7 +577,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
                     return !(item->IsInUndo() || item->IsInClipboard());
                     } ) )
             {
-                pList->push_front( &i_rObject );
+                pList->insert(pList->begin(), &i_rObject );
                 return true;
             }
             else
@@ -589,8 +589,8 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
     else
     {
         m_XmlIdMap.insert(::std::make_pair(i_rIdref, bContent
-            ? ::std::make_pair( XmlIdList_t( 1, &i_rObject ), XmlIdList_t() )
-            : ::std::make_pair( XmlIdList_t(), XmlIdList_t( 1, &i_rObject ) )));
+            ? ::std::make_pair( XmlIdVector_t( 1, &i_rObject ), XmlIdVector_t() )
+            : ::std::make_pair( XmlIdVector_t(), XmlIdVector_t( 1, &i_rObject ) )));
         return true;
     }
 }
@@ -735,8 +735,8 @@ XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
     OSL_ENSURE(m_pImpl->m_XmlIdMap.find(id) == m_pImpl->m_XmlIdMap.end(),
         "created id is in use");
     m_pImpl->m_XmlIdMap.insert(::std::make_pair(id, isInContent
-        ? ::std::make_pair( XmlIdList_t( 1, &i_rObject ), XmlIdList_t() )
-        : ::std::make_pair( XmlIdList_t(), XmlIdList_t( 1, &i_rObject ) )));
+        ? ::std::make_pair( XmlIdVector_t( 1, &i_rObject ), XmlIdVector_t() )
+        : ::std::make_pair( XmlIdVector_t(), XmlIdVector_t( 1, &i_rObject ) )));
     m_pImpl->m_XmlIdReverseMap[&i_rObject] = ::std::make_pair(stream, id);
 }
 
@@ -792,10 +792,10 @@ void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
         OSL_FAIL("no xml id?");
         return;
     }
-    XmlIdList_t * pList ( m_pImpl->LookupElementList(path, idref) );
+    XmlIdVector_t * pList ( m_pImpl->LookupElementVector(path, idref) );
     OSL_ENSURE( ::std::find( pList->begin(), pList->end(), &i_rCopy )
         == pList->end(), "copy already registered???");
-    XmlIdList_t::iterator srcpos(
+    XmlIdVector_t::iterator srcpos(
         ::std::find( pList->begin(), pList->end(), &i_rSource ) );
     OSL_ENSURE(srcpos != pList->end(), "source not in list???");
     if (srcpos == pList->end())
