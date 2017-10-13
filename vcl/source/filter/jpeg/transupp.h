@@ -133,7 +133,7 @@ typedef struct {
                           normally modifies the source coefficients in place.
                           Setting this to TRUE will instead use a slower,
                           double-buffered algorithm, which leaves the source
-                          coefficients in tact (necessary if other transformed
+                          coefficients intact (necessary if other transformed
                           images must be generated from the same set of
                           coefficients. */
 
