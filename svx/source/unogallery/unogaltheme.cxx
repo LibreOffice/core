@@ -333,12 +333,12 @@ void GalleryTheme::implReleaseItems( GalleryObject const * pObj )
 {
     const SolarMutexGuard aGuard;
 
-    for( GalleryItemList::iterator aIter = maItemList.begin(); aIter != maItemList.end();  )
+    for( GalleryItemVector::iterator aIter = maItemVector.begin(); aIter != maItemVector.end();  )
     {
         if( !pObj || ( (*aIter)->implGetObject() == pObj ) )
         {
             (*aIter)->implSetInvalid();
-            aIter = maItemList.erase( aIter );
+            aIter = maItemVector.erase( aIter );
         }
         else
             ++aIter;
@@ -350,8 +350,7 @@ void GalleryTheme::implRegisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
     const SolarMutexGuard aGuard;
 
-//  DBG_ASSERT( maItemList.find( &rItem ) == maItemList.end(), "Item already registered" );
-    maItemList.push_back( &rItem );
+    maItemVector.push_back( &rItem );
 }
 
 
@@ -359,8 +358,7 @@ void GalleryTheme::implDeregisterGalleryItem( ::unogallery::GalleryItem& rItem )
 {
     const SolarMutexGuard aGuard;
 
-//  DBG_ASSERT( maItemList.find( &rItem ) != maItemList.end(), "Item is not registered" );
-    maItemList.remove( &rItem );
+    maItemVector.erase(std::remove(maItemVector.begin(), maItemVector.end(), &rItem), maItemVector.end());
 }
 
 }
