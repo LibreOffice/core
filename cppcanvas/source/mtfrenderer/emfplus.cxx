@@ -1236,7 +1236,16 @@ namespace cppcanvas
                                 }
 
                                 if (bValid) {
-                                    BitmapEx aBmp( image.graphic.GetBitmapEx () );
+                                    BitmapEx aBmp;
+                                    if (image.type == 1) // Bitmap
+                                    {
+                                        aBmp = image.graphic.GetBitmapEx();
+                                    }
+                                    else if (image.type == 2) // Metafile
+                                    {
+                                        GraphicConversionParameters aParameters(Size(aDstSize.getX(), aDstSize.getY()));
+                                        aBmp = image.graphic.GetBitmapEx(aParameters);
+                                    }
                                     aBmp.Crop( aSource );
 
                                     Size aSize( aBmp.GetSizePixel() );
