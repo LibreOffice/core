@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c9124b62",
+        "filename": "emfio/source/reader/emfreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-10-13T21:04:48Z",
+      "side": 1,
+      "message": "Generally in EMF+ there special record: EmfPlusGetDC, which is very important for Dual mode.\nIt specifies that specifies that subsequent EMF records encountered in the metafile must be processed.\n\nMaybe to handle this we could change following line to:\n\n            else if ( mbEMFPlusDualMode \u0026\u0026 !bHaveDC \u0026\u0026 nRecType !\u003d EMR_HEADER \u0026\u0026 nRecType !\u003d EMR_EOF )\n\nWith this solution, we will process EMF, if GetDC was found.\n\nAs I understand the GetDC should be taken to accound also for DualMode.",
+      "revId": "2f6bd9cb033a325ad678dbffd9861d1e844817c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
