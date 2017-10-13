@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_69ba370c",
+        "filename": "sfx2/source/dialog/versdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-13T07:21:23Z",
+      "side": 1,
+      "message": "missing \"+\"",
+      "range": {
+        "startLine": 239,
+        "startChar": 56,
+        "endLine": 239,
+        "endChar": 57
+      },
+      "revId": "040cc7c2ba9e4a34b2389e653d27533acb9bc03d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_29c02f7c",
+        "filename": "sfx2/source/dialog/versdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-13T07:21:23Z",
+      "side": 1,
+      "message": "Second declaration of sHeader.\nFirst one above must be removed",
+      "range": {
+        "startLine": 558,
+        "startChar": 13,
+        "endLine": 558,
+        "endChar": 20
+      },
+      "revId": "040cc7c2ba9e4a34b2389e653d27533acb9bc03d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_49bf3bfb",
+        "filename": "sfx2/source/dialog/versdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-13T07:21:23Z",
+      "side": 1,
+      "message": "missing \"+\"",
+      "range": {
+        "startLine": 558,
+        "startChar": 56,
+        "endLine": 558,
+        "endChar": 57
+      },
+      "revId": "040cc7c2ba9e4a34b2389e653d27533acb9bc03d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
