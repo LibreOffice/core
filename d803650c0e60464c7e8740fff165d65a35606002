@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_09dc53e3",
+        "filename": "xmlsecurity/source/helper/ooxmlsecparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-13T16:15:49Z",
+      "side": 1,
+      "message": "Missing initialization of:\n    bool m_bInValidSignatureImage;\n    bool m_bInInvalidSignatureImage;",
+      "range": {
+        "startLine": 23,
+        "startChar": 5,
+        "endLine": 23,
+        "endChar": 23
+      },
+      "revId": "d803650c0e60464c7e8740fff165d65a35606002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_29d74fc0",
+        "filename": "xmlsecurity/source/helper/xsecverify.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-13T16:15:49Z",
+      "side": 1,
+      "message": "Do not know how big is the actual data ... consider usage of the:\n\nv.reserve(rValidSigImg.getLength());",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 5
+      },
+      "revId": "d803650c0e60464c7e8740fff165d65a35606002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_49e65bb5",
+        "filename": "xmlsecurity/source/helper/xsecverify.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-13T16:15:49Z",
+      "side": 1,
+      "message": "Do not know how big is the actual data ... consider usage of the:\n\nv.reserve(rInvalidSigImg.getLength());",
+      "range": {
+        "startLine": 379,
+        "startChar": 1,
+        "endLine": 382,
+        "endChar": 5
+      },
+      "revId": "d803650c0e60464c7e8740fff165d65a35606002",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
