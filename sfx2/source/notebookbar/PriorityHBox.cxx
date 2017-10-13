@@ -113,7 +113,8 @@ public:
 
     virtual void Resize() override
     {
-        SetSizeFromParent();
+        if (!m_bInitialized && SfxViewFrame::Current())
+            Initialize();
 
         if (!m_bInitialized)
         {
