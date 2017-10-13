@@ -32,6 +32,7 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -1107,25 +1108,35 @@ namespace emfplushelper
 
                             if (bValid)
                             {
-                                BitmapEx aBmp(image.graphic.GetBitmapEx());
-                                aBmp.Crop(aSource);
-                                Size aSize(aBmp.GetSizePixel());
-                                SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
-                                if (aSize.Width() > 0 && aSize.Height() > 0)
-                                {
-                                    // create correct transform matrix
-                                    basegfx::B2DHomMatrix aTransformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                        aDstSize.getX(),
-                                        aDstSize.getY(),
-                                        aDstPoint.getX(),
-                                        aDstPoint.getY());
+                                // create correct transform matrix
+                                basegfx::B2DHomMatrix aTransformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                    aDstSize.getX(),
+                                    aDstSize.getY(),
+                                    aDstPoint.getX(),
+                                    aDstPoint.getY());
 
-                                    mrTargetHolders.Current().append(
-                                        new drawinglayer::primitive2d::BitmapPrimitive2D(aBmp,aTransformMatrix));
-                                }
-                                else
+                                if (image.type == 1) // Bitmap
                                 {
-                                    SAL_INFO("cppcanvas.emf", "EMF+ warning: empty bitmap");
+                                    BitmapEx aBmp(image.graphic.GetBitmapEx());
+                                    aBmp.Crop(aSource);
+                                    Size aSize(aBmp.GetSizePixel());
+                                    SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
+                                    if (aSize.Width() > 0 && aSize.Height() > 0)
+                                    {
+                                        mrTargetHolders.Current().append(
+                                            new drawinglayer::primitive2d::BitmapPrimitive2D(aBmp,aTransformMatrix));
+                                    }
+                                    else
+                                    {
+                                        SAL_INFO("cppcanvas.emf", "EMF+ warning: empty bitmap");
+                                    }
+                                }
+                                else if (image.type == 2) // Metafile
+                                {
+                                    GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
+                                    aGDI.Clip(aSource);
+                                    mrTargetHolders.Current().append(
+                                            new drawinglayer::primitive2d::MetafilePrimitive2D(aTransformMatrix,aGDI));
                                 }
                             }
                             else
@@ -1158,11 +1169,11 @@ namespace emfplushelper
                             // parse the string
                             OUString text = read_uInt16s_ToOUString(rMS, stringLength);
                             SAL_INFO("cppcanvas.emf", "EMF+ DrawString string: " << text);
-                            // get the stringFormat from the Object table
+                            // get the stringFormat from the Object table ( this is OPTIONAL and may be nullptr )
                             EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
                             // get the font from the flags
                             EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
-                            if (!stringFormat || !font)
+                            if (!font)
                             {
                                 break;
                             }
@@ -1175,35 +1186,33 @@ namespace emfplushelper
 
                             const OUString emptyString;
                             drawinglayer::attribute::FontAttribute fontAttribute(
-                                font->family,                                    // font family
-                                emptyString,                                     // (no) font style
-                                font->Bold() ? 8u : 1u,                          // weight: 8 = bold
-                                font->family == "SYMBOL",                        // symbol
-                                stringFormat->DirectionVertical(),               // vertical
-                                font->Italic(),                                  // italic
-                                false,                                           // monospaced
-                                false,                                           // outline = false, no such thing in MS-EMFPLUS
-                                stringFormat->DirectionRightToLeft(),            // right-to-left
-                                false);                                          // BiDiStrong
+                                font->family,                                          // font family
+                                emptyString,                                           // (no) font style
+                                font->Bold() ? 8u : 1u,                                // weight: 8 = bold
+                                font->family == "SYMBOL",                              // symbol
+                                stringFormat && stringFormat->DirectionVertical(),     // vertical
+                                font->Italic(),                                        // italic
+                                false,                                                 // monospaced
+                                false,                                                 // outline = false, no such thing in MS-EMFPLUS
+                                stringFormat && stringFormat->DirectionRightToLeft(),  // right-to-left
+                                false);                                                // BiDiStrong
 
-                            LanguageTag aLanguageTag(static_cast< LanguageType >(stringFormat->language));
-                            css::lang::Locale locale = aLanguageTag.getLocale();
+                            css::lang::Locale locale;
+                            if (stringFormat)
+                            {
+                                LanguageTag aLanguageTag(static_cast< LanguageType >(stringFormat->language));
+                                locale = aLanguageTag.getLocale();
+                            }
+                            else
+                            {
+                                // use system default
+                                locale =  Application::GetSettings().GetLanguageTag().getLocale();
+                            }
 
                             basegfx::B2DHomMatrix transformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(MapSize(font->emSize,font->emSize),Map(lx,ly+font->emSize));
 
-                            basegfx::BColor color;
-                            if (flags & 0x8000) // we use a color
-                            {
-                                color = Color(0xff - (brushId >> 24), (brushId >> 16) & 0xff, (brushId >> 8) & 0xff, brushId & 0xff).getBColor();
-                            }
-                            else // we use a pen
-                            {
-                                const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[brushId & 0xff].get());
-                                if (pen)
-                                {
-                                    color = pen->GetColor().getBColor();
-                                }
-                            }
+                            basegfx::BColor color = EMFPGetBrushColorOrARGBColor(flags,brushId);
+
                             mrPropertyHolders.Current().setTextColor(color);
                             mrPropertyHolders.Current().setTextColorActive(true);
 
