@@ -172,7 +172,6 @@ UUIInteractionHelper::handleRequest(
         HandleData aHD(rRequest);
         Link<void*,void> aLink(&aHD,handlerequest);
         Application::PostUserEvent(aLink,this);
-        SolarMutexReleaser aReleaser;
         aHD.wait();
         return aHD.bHandled;
     }
@@ -224,7 +223,6 @@ UUIInteractionHelper::getStringFromRequest(
         HandleData aHD(rRequest);
         Link<void*,void> aLink(&aHD,getstringfromrequest);
         Application::PostUserEvent(aLink,this);
-        SolarMutexReleaser aReleaser;
         aHD.wait();
         return aHD.m_aResult;
     }
