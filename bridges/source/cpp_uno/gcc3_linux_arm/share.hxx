@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ARM_SHARE_HXX
 #define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ARM_SHARE_HXX
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <typeinfo>
 #include <exception>
@@ -34,8 +34,8 @@
 #define _GLIBCXX_CDTOR_CALLABI
 #endif
 
-#include "config_cxxabi.h"
-#include "uno/mapping.h"
+#include <config_cxxabi.h>
+#include <uno/mapping.h>
 
 namespace CPPU_CURRENT_NAMESPACE
 {

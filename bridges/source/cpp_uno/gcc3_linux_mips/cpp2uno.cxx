@@ -21,11 +21,11 @@
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>
 #include <osl/endian.h>
-#include "bridge.hxx"
-#include "cppinterfaceproxy.hxx"
-#include "types.hxx"
-#include "vtablefactory.hxx"
-#include "share.hxx"
+#include <bridge.hxx>
+#include <cppinterfaceproxy.hxx>
+#include <types.hxx>
+#include <vtablefactory.hxx>
+#include <share.hxx>
 
 #include <stdio.h>
 #include <string.h>

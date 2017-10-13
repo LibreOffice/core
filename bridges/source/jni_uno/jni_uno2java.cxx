@@ -26,9 +26,9 @@
 
 #include <sal/alloca.h>
 
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
 #include "jni_bridge.h"
 #include "jniunoenvironmentdata.hxx"

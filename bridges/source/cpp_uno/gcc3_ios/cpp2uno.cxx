@@ -22,12 +22,12 @@
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
 
-#include "bridge.hxx"
-#include "cppinterfaceproxy.hxx"
-#include "types.hxx"
-#include "vtablefactory.hxx"
+#include <bridge.hxx>
+#include <cppinterfaceproxy.hxx>
+#include <types.hxx>
+#include <vtablefactory.hxx>
 
-#include "share.hxx"
+#include <share.hxx>
 
 #ifdef __arm64
 extern "C" {

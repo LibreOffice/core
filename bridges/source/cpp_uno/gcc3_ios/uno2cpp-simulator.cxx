@@ -23,21 +23,21 @@
 #include <exception>
 #include <typeinfo>
 
-#include "rtl/alloc.h"
+#include <rtl/alloc.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <o3tl/runtimetooustring.hxx>
 #include <uno/data.h>
 
 #include <bridge.hxx>
 #include <types.hxx>
-#include "unointerfaceproxy.hxx"
-#include "vtables.hxx"
+#include <unointerfaceproxy.hxx>
+#include <vtables.hxx>
 
-#include "abi.hxx"
-#include "callvirtualmethod.hxx"
-#include "share.hxx"
+#include <abi.hxx>
+#include <callvirtualmethod.hxx>
+#include <share.hxx>
 
 using namespace ::com::sun::star::uno;
 

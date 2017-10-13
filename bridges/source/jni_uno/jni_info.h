@@ -26,15 +26,15 @@
 
 #include "jni_base.h"
 
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/strbuf.hxx"
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 
-#include "uno/environment.h"
-#include "typelib/typedescription.hxx"
+#include <uno/environment.h>
+#include <typelib/typedescription.hxx>
 
-#include "com/sun/star/uno/Type.hxx"
+#include <com/sun/star/uno/Type.hxx>
 
 namespace jvmaccess { class UnoVirtualMachine; }
 

@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstring>
 
-#include "cppu/macros.hxx"
-#include "sal/types.h"
-#include "typelib/typeclass.h"
-#include "typelib/typedescription.h"
+#include <cppu/macros.hxx>
+#include <sal/types.h>
+#include <typelib/typeclass.h>
+#include <typelib/typedescription.h>
 
-#include "abi.hxx"
-#include "callvirtualmethod.hxx"
+#include <abi.hxx>
+#include <callvirtualmethod.hxx>
 
 // The call instruction within the asm block of callVirtualMethod may throw
 // exceptions.  At least GCC 4.7.0 with -O0 would create (unnecessary)

@@ -60,7 +60,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		-c $(3) \
 		-o $(1) \
 		$(if $(COMPILER_TEST),,$(call gb_cxx_dep_generation_options,$(1),$(4))) \
-		-I$(dir $(3)) \
 		$(INCLUDE) \
 		$(PCHFLAGS) \
 		$(if $(COMPILER_TEST),,$(call gb_cxx_dep_copy,$(4))) \

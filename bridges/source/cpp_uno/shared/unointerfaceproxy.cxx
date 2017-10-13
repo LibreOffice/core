@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unointerfaceproxy.hxx"
+#include <unointerfaceproxy.hxx>
 
-#include "bridge.hxx"
+#include <bridge.hxx>
 
-#include "com/sun/star/uno/XInterface.hpp"
-#include "typelib/typedescription.h"
-#include "uno/dispatcher.h"
+#include <com/sun/star/uno/XInterface.hpp>
+#include <typelib/typedescription.h>
+#include <uno/dispatcher.h>
 
 namespace bridges { namespace cpp_uno { namespace shared {
 

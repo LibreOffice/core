@@ -21,11 +21,11 @@
 #include <sal/log.hxx>
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>
-#include "bridge.hxx"
-#include "cppinterfaceproxy.hxx"
-#include "types.hxx"
-#include "vtablefactory.hxx"
-#include "share.hxx"
+#include <bridge.hxx>
+#include <cppinterfaceproxy.hxx>
+#include <types.hxx>
+#include <vtablefactory.hxx>
+#include <share.hxx>
 
 #define GET_FP(n, p) \
             __asm__( "ldx %0, %%l0\n\t" \

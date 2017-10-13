@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cppinterfaceproxy.hxx"
+#include <cppinterfaceproxy.hxx>
 
 #include "guardedarray.hxx"
 
-#include "bridge.hxx"
-#include "vtablefactory.hxx"
+#include <bridge.hxx>
+#include <vtablefactory.hxx>
 
-#include "com/sun/star/uno/XInterface.hpp"
-#include "osl/getglobalmutex.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/instance.hxx"
-#include "typelib/typedescription.h"
+#include <com/sun/star/uno/XInterface.hpp>
+#include <osl/getglobalmutex.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
+#include <typelib/typedescription.h>
 
 #include <cstddef>
 #include <new>

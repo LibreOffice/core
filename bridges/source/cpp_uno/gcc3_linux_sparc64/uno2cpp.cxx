@@ -21,12 +21,12 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <uno/data.h>
 
-#include "bridge.hxx"
-#include "types.hxx"
-#include "unointerfaceproxy.hxx"
-#include "vtables.hxx"
+#include <bridge.hxx>
+#include <types.hxx>
+#include <unointerfaceproxy.hxx>
+#include <vtables.hxx>
 
-#include "share.hxx"
+#include <share.hxx>
 
 #define SET_FP(n, p) \
             __asm__( "ldx %0, %%l0\n\t" \

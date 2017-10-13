@@ -19,17 +19,17 @@
 #ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_IOS_SHARE_HXX
 #define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_IOS_SHARE_HXX
 
-#include "uno/mapping.h"
+#include <uno/mapping.h>
 
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
 
 // from opensource.apple.com: libcppabi-24.4/include/rtti.h
-#include "rtti.h"
+#include <rtti.h>
 
 // from opensource.apple.com: libcppabi-24.4/include/unwind-cxx.h
-#include "unwind-cxx.h"
+#include <unwind-cxx.h>
 
 // Import the __cxxabiv1 a.k.a. "abi" namespace
 using namespace abi;

@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
-#include <jni_info.h>
+#include "jni_info.h"
 
 namespace jni_uno {
 

@@ -24,16 +24,16 @@
 #include <typeinfo.h>
 #include <signal.h>
 
-#include "rtl/alloc.h"
-#include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/alloc.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/mutex.hxx>
 
-#include "com/sun/star/uno/Any.hxx"
+#include <com/sun/star/uno/Any.hxx>
 #include <unordered_map>
-#include "msci.hxx"
-#include "except.hxx"
+#include <msci.hxx>
+#include <except.hxx>
 
 
 #pragma pack(push, 8)

@@ -19,12 +19,12 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include "bridge.hxx"
-#include "types.hxx"
-#include "unointerfaceproxy.hxx"
-#include "vtables.hxx"
+#include <bridge.hxx>
+#include <types.hxx>
+#include <unointerfaceproxy.hxx>
+#include <vtables.hxx>
 
-#include "share.hxx"
+#include <share.hxx>
 
 using namespace ::com::sun::star::uno;
 

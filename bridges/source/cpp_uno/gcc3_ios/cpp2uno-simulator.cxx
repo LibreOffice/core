@@ -25,18 +25,18 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
 
-#include "bridge.hxx"
-#include "cppinterfaceproxy.hxx"
-#include "types.hxx"
-#include "vtablefactory.hxx"
+#include <bridge.hxx>
+#include <cppinterfaceproxy.hxx>
+#include <types.hxx>
+#include <vtablefactory.hxx>
 
-#include "abi.hxx"
-#include "call.hxx"
-#include "share.hxx"
+#include <abi.hxx>
+#include <call.hxx>
+#include <share.hxx>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

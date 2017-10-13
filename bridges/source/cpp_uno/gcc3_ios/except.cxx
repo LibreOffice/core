@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <new>
@@ -28,16 +28,16 @@
 #include <cxxabi.h>
 #include <dlfcn.h>
 
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/genfunc.hxx"
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/genfunc.hxx>
 #include <sal/log.hxx>
-#include "osl/mutex.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "typelib/typedescription.h"
-#include "uno/any2.h"
+#include <osl/mutex.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <typelib/typedescription.h>
+#include <uno/any2.h>
 #include <unordered_map>
-#include "share.hxx"
+#include <share.hxx>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

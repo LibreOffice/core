@@ -29,7 +29,7 @@
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 #include <unordered_map>
-#include "share.hxx"
+#include <share.hxx>
 
 
 using namespace ::std;

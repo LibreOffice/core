@@ -50,9 +50,9 @@
    OTHER DEALINGS IN THE SOFTWARE.
    ----------------------------------------------------------------------- */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "abi.hxx"
+#include <abi.hxx>
 
 #include <sal/log.hxx>
 

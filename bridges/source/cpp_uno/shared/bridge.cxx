@@ -18,18 +18,18 @@
  */
 
 
-#include "bridge.hxx"
+#include <bridge.hxx>
 
-#include "cppinterfaceproxy.hxx"
-#include "unointerfaceproxy.hxx"
+#include <cppinterfaceproxy.hxx>
+#include <unointerfaceproxy.hxx>
 
-#include "com/sun/star/uno/XInterface.hpp"
-#include "rtl/ustring.h"
-#include "sal/types.h"
-#include "typelib/typedescription.h"
-#include "uno/dispatcher.h"
-#include "uno/environment.h"
-#include "uno/mapping.h"
+#include <com/sun/star/uno/XInterface.hpp>
+#include <rtl/ustring.h>
+#include <sal/types.h>
+#include <typelib/typedescription.h>
+#include <uno/dispatcher.h>
+#include <uno/environment.h>
+#include <uno/mapping.h>
 
 namespace bridges { namespace cpp_uno { namespace shared {
 
