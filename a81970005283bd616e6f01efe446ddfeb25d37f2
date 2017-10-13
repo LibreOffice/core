@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_29474f1e",
+        "filename": "sw/source/ui/vba/vbarow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-13T07:34:23Z",
+      "side": 1,
+      "message": "No need to keep commented code",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 79
+      },
+      "revId": "a81970005283bd616e6f01efe446ddfeb25d37f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_895e83e7",
+        "filename": "sw/source/ui/vba/vbarow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-13T07:34:23Z",
+      "side": 1,
+      "message": "wrong since we lose the beginning of aRange defined line 85",
+      "range": {
+        "startLine": 92,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 17
+      },
+      "revId": "a81970005283bd616e6f01efe446ddfeb25d37f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a9617faa",
+        "filename": "sw/source/ui/vba/vbarow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-13T07:34:23Z",
+      "side": 1,
+      "message": "Why not removing sSelRange and directly use aRangeName?",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 36
+      },
+      "revId": "a81970005283bd616e6f01efe446ddfeb25d37f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
