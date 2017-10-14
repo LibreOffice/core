@@ -281,10 +281,9 @@ void ScTable::InsertCol(
 {
     if (nStartRow==0 && nEndRow==MAXROW)
     {
-        if (pColWidth && pColFlags)
+        if (mpColWidth && pColFlags)
         {
-            memmove( &pColWidth[nStartCol+nSize], &pColWidth[nStartCol],
-                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColWidth[0]) );
+            mpColWidth->InsertPreservingSize(nStartCol, nSize, STD_COL_WIDTH);
             memmove( &pColFlags[nStartCol+nSize], &pColFlags[nStartCol],
                     (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColFlags[0]) );
         }
@@ -357,11 +356,10 @@ void ScTable::DeleteCol(
 {
     if (nStartRow==0 && nEndRow==MAXROW)
     {
-        if (pColWidth && pColFlags)
+        if (mpColWidth && pColFlags)
         {
             assert( nStartCol + nSize <= MAXCOL+1 );    // moving 0 if ==MAXCOL+1 is correct
-            memmove( &pColWidth[nStartCol], &pColWidth[nStartCol+nSize],
-                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColWidth[0]) );
+            mpColWidth->RemovePreservingSize(nStartCol, nSize, STD_COL_WIDTH);
             memmove( &pColFlags[nStartCol], &pColFlags[nStartCol+nSize],
                     (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColFlags[0]) );
         }
@@ -508,9 +506,8 @@ void ScTable::CopyToClip(
     //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
     //  also for all preceding columns/rows, to have valid positions for drawing objects
 
-    if (pColWidth && pTable->pColWidth)
-        for (i=0; i<=nCol2; i++)
-            pTable->pColWidth[i] = pColWidth[i];
+    if (mpColWidth && pTable->mpColWidth)
+        pTable->mpColWidth->CopyFrom(*mpColWidth, 0, nCol2);
 
     pTable->CopyColHidden(*this, 0, nCol2);
     pTable->CopyColFiltered(*this, 0, nCol2);
@@ -667,9 +664,8 @@ void ScTable::CopyFromClip(
 
         if ((rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
         {
-            if (nRow1==0 && nRow2==MAXROW && pColWidth && pTable->pColWidth)
-                for (SCCOL i=nCol1; i<=nCol2; i++)
-                    pColWidth[i] = pTable->pColWidth[i-nDx];
+            if (nRow1==0 && nRow2==MAXROW && mpColWidth && pTable->mpColWidth)
+                mpColWidth->CopyFrom(*pTable->mpColWidth, nCol1, nCol2, nCol1 - nDx);
 
             if (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pTable->mpRowHeights &&
                                              pRowFlags && pTable->pRowFlags)
@@ -1124,19 +1120,21 @@ void ScTable::CopyToTable(
 
     bool bFlagChange = false;
 
-    bool bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
+    bool bWidth  = (nRow1==0 && nRow2==MAXROW && mpColWidth && pDestTab->mpColWidth);
     bool bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
 
     if (bWidth || bHeight)
     {
         if (bWidth)
         {
+            auto destTabColWidthIt = pDestTab->mpColWidth->begin() + nCol1;
+            auto thisTabColWidthIt = mpColWidth->begin() + nCol1;
+            pDestTab->mpColWidth->CopyFrom(*mpColWidth, nCol1, nCol2);
             for (SCCOL i = nCol1; i <= nCol2; ++i)
             {
                 bool bThisHidden = ColHidden(i);
                 bool bHiddenChange = (pDestTab->ColHidden(i) != bThisHidden);
-                bool bChange = bHiddenChange || (pDestTab->pColWidth[i] != pColWidth[i]);
-                pDestTab->pColWidth[i] = pColWidth[i];
+                bool bChange = bHiddenChange || (*destTabColWidthIt != *thisTabColWidthIt);
                 pDestTab->pColFlags[i] = pColFlags[i];
                 pDestTab->SetColHidden(i, i, bThisHidden);
                 //TODO: collect changes?
@@ -1145,6 +1143,9 @@ void ScTable::CopyToTable(
 
                 if (bChange)
                     bFlagChange = true;
+
+                ++destTabColWidthIt;
+                ++thisTabColWidthIt;
             }
             pDestTab->SetColManualBreaks( maColManualBreaks);
         }
@@ -1233,7 +1234,7 @@ void ScTable::UndoToTable(
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
-        bool bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
+        bool bWidth  = (nRow1==0 && nRow2==MAXROW && mpColWidth && pDestTab->mpColWidth);
         bool bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
 
         for ( SCCOL i = 0; i < aCol.size(); i++)
@@ -1251,8 +1252,7 @@ void ScTable::UndoToTable(
         {
             if (bWidth)
             {
-                for (SCCOL i=nCol1; i<=nCol2; i++)
-                    pDestTab->pColWidth[i] = pColWidth[i];
+                pDestTab->mpColWidth->CopyFrom(*mpColWidth, nCol1, nCol2);
                 pDestTab->SetColManualBreaks( maColManualBreaks);
             }
             if (bHeight)
@@ -2091,7 +2091,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
 
 void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 )
 {
-    if ( !pColWidth || !mpRowHeights || !pColFlags || !pRowFlags )
+    if ( !mpColWidth || !mpRowHeights || !pColFlags || !pRowFlags )
     {
         OSL_FAIL( "Row/column info missing" );
         return;
@@ -2762,16 +2762,16 @@ void ScTable::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& r
 
 void ScTable::SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth )
 {
-    if (ValidCol(nCol) && pColWidth)
+    if (ValidCol(nCol) && mpColWidth)
     {
         if (!nNewWidth)
         {
             nNewWidth = STD_COL_WIDTH;
         }
 
-        if ( nNewWidth != pColWidth[nCol] )
+        if ( nNewWidth != mpColWidth->GetValue(nCol) )
         {
-            pColWidth[nCol] = nNewWidth;
+            mpColWidth->SetValue(nCol, nNewWidth);
             InvalidatePageBreaks();
         }
     }
@@ -2783,14 +2783,14 @@ void ScTable::SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth )
 
 void ScTable::SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth )
 {
-    if (!ValidCol(nCol) || !pColWidth)
+    if (!ValidCol(nCol) || !mpColWidth)
         return;
 
     if (!nNewWidth)
         nNewWidth = STD_COL_WIDTH;
 
-    if (nNewWidth != pColWidth[nCol])
-        pColWidth[nCol] = nNewWidth;
+    if (nNewWidth != mpColWidth->GetValue(nCol))
+        mpColWidth->SetValue(nCol, nNewWidth);
 }
 
 void ScTable::SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight )
@@ -2944,12 +2944,12 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
 {
     OSL_ENSURE(ValidCol(nCol),"wrong column number");
 
-    if (ValidCol(nCol) && pColFlags && pColWidth)
+    if (ValidCol(nCol) && pColFlags && mpColWidth)
     {
         if (bHiddenAsZero && ColHidden(nCol))
             return 0;
         else
-            return pColWidth[nCol];
+            return mpColWidth->GetValue(nCol);
     }
     else
         return (sal_uInt16) STD_COL_WIDTH;
@@ -2963,7 +2963,8 @@ sal_uLong ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const
     sal_uLong nW = 0;
     bool bHidden = false;
     SCCOL nLastHiddenCol = -1;
-    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+    auto colWidthIt = mpColWidth->begin() + nStartCol;
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol, ++colWidthIt)
     {
         if (nCol > nLastHiddenCol)
             bHidden = ColHidden(nCol, nullptr, &nLastHiddenCol);
@@ -2971,7 +2972,7 @@ sal_uLong ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const
         if (bHidden)
             continue;
 
-        nW += pColWidth[nCol];
+        nW += *colWidthIt;
     }
     return nW;
 }
@@ -2980,8 +2981,8 @@ sal_uInt16 ScTable::GetOriginalWidth( SCCOL nCol ) const        // always the se
 {
     OSL_ENSURE(ValidCol(nCol),"wrong column number");
 
-    if (ValidCol(nCol) && pColWidth)
-        return pColWidth[nCol];
+    if (ValidCol(nCol) && mpColWidth)
+        return mpColWidth->GetValue(nCol);
     else
         return (sal_uInt16) STD_COL_WIDTH;
 }
@@ -3007,16 +3008,21 @@ sal_uInt16 ScTable::GetCommonWidth( SCCOL nEndCol ) const
         if ( nRangeStart <= nEndCol )
         {
             sal_uInt16 nThisCount = 0;
-            sal_uInt16 nThisWidth = pColWidth[nRangeStart];
+            auto colWidthIt = mpColWidth->begin() + nRangeStart;
+            sal_uInt16 nThisWidth = *colWidthIt;
             SCCOL nRangeEnd = nRangeStart;
-            while ( nRangeEnd <= nEndCol && pColWidth[nRangeEnd] == nThisWidth )
+            while ( nRangeEnd <= nEndCol && *colWidthIt == nThisWidth )
             {
                 ++nThisCount;
                 ++nRangeEnd;
+                ++colWidthIt;
 
                 //  skip hidden columns
                 while ( nRangeEnd <= nEndCol && ColHidden(nRangeEnd) )
+                {
                     ++nRangeEnd;
+                    ++colWidthIt;
+                }
             }
 
             if ( nThisCount > nMaxCount )
@@ -3401,8 +3407,9 @@ SCCOL ScTable::GetLastChangedCol() const
         return 0;
 
     SCCOL nLastFound = 0;
-    for ( SCCOL nCol = 1; nCol < aCol.size(); nCol++ )
-        if ((pColFlags[nCol] & CRFlags::All) || (pColWidth[nCol] != STD_COL_WIDTH))
+    auto colWidthIt = mpColWidth->begin() + 1;
+    for ( SCCOL nCol = 1; nCol < aCol.size(); nCol++, ++colWidthIt )
+        if ((pColFlags[nCol] & CRFlags::All) || (*colWidthIt != STD_COL_WIDTH))
             nLastFound = nCol;
 
     return nLastFound;
@@ -3815,12 +3822,13 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
 sal_uLong ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
 {
     sal_uLong n = 0;
-    if ( pColWidth )
+    if ( mpColWidth )
     {
         SCCOL i;
-        for( i = 0; i < nCol; i++ )
+        auto colWidthIt = mpColWidth->begin();
+        for( i = 0; i < nCol; i++, ++colWidthIt )
             if (!( bHiddenAsZero && ColHidden(i) ))
-                n += pColWidth[i];
+                n += *colWidthIt;
     }
     else
     {

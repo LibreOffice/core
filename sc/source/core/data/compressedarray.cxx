@@ -238,18 +238,18 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
 }
 
 template< typename A, typename D >
-void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A nStart,
-        A nEnd )
+void ScCompressedArray<A,D>::CopyFrom( const ScCompressedArray<A,D>& rArray, A nDestStart,
+        A nDestEnd, A nSrcStart )
 {
     size_t nIndex = 0;
     A nRegionEnd;
-    for (A j=nStart; j<=nEnd; ++j)
+    for (A j=nDestStart; j<=nDestEnd; ++j)
     {
-        const D& rValue = (j==nStart ?
-                rArray.GetValue( j, nIndex, nRegionEnd) :
+        const D& rValue = (j==nDestStart ?
+                rArray.GetValue( j - nDestStart + nSrcStart, nIndex, nRegionEnd) :
                 rArray.GetNextValue( nIndex, nRegionEnd));
-        if (nRegionEnd > nEnd)
-            nRegionEnd = nEnd;
+        if (nRegionEnd > nDestEnd)
+            nRegionEnd = nDestEnd;
         this->SetValue( j, nRegionEnd, rValue);
         j = nRegionEnd;
     }
@@ -275,6 +275,19 @@ const D& ScCompressedArray<A,D>::Insert( A nStart, size_t nAccessCount )
         }
     } while (++nIndex < nCount);
     return rValue;
+}
+
+template< typename A, typename D >
+void ScCompressedArray<A,D>::InsertPreservingSize( A nStart, size_t nAccessCount, const D& rFillValue )
+{
+    const A nPrevLastPos = GetLastPos();
+
+    Insert(nStart, nAccessCount);
+    for (A i = nStart; i < A(nStart + nAccessCount); ++i)
+        SetValue(i, rFillValue);
+
+    const A nNewLastPos = GetLastPos();
+    Remove(nPrevLastPos, nNewLastPos - nPrevLastPos);
 }
 
 template< typename A, typename D >
@@ -311,6 +324,35 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
         pData[nIndex].nEnd -= nAccessCount;
     } while (++nIndex < nCount);
     pData[nCount-1].nEnd = nMaxAccess;
+}
+
+template< typename A, typename D >
+void ScCompressedArray<A,D>::RemovePreservingSize( A nStart, size_t nAccessCount, const D& rFillValue )
+{
+    const A nPrevLastPos = GetLastPos();
+
+    Remove(nStart, nAccessCount);
+
+    const A nNewLastPos = GetLastPos();
+    InsertPreservingSize(nNewLastPos, nNewLastPos - nPrevLastPos, rFillValue);
+}
+
+template< typename A, typename D >
+void ScCompressedArray<A,D>::Iterator::operator++()
+{
+    ++mnRegion;
+    if (mnRegion > mrArray.pData[mnIndex].nEnd)
+        ++mnIndex;
+}
+
+template< typename A, typename D >
+typename ScCompressedArray<A,D>::Iterator ScCompressedArray<A,D>::Iterator::operator+(size_t nAccessCount) const
+{
+    A nRegion = mnRegion + nAccessCount;
+    auto nIndex = mnIndex;
+    while (nRegion > mrArray.pData[nIndex].nEnd)
+        ++nIndex;
+    return Iterator(mrArray, nIndex, nRegion);
 }
 
 // === ScBitMaskCompressedArray ==============================================
@@ -417,5 +459,6 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( const D& rBitMask ) const
 
 template class ScCompressedArray< SCROW, CRFlags>;             // flags, base class
 template class ScBitMaskCompressedArray< SCROW, CRFlags>;      // flags
+template class ScCompressedArray< SCCOL, sal_uInt16>;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -166,7 +166,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     for (SCCOL nX=nStartCol; nX<=nEndCol; nX++)
     {
         bool bStartOfPage = false;
-        long nThisX = ColHidden(nX) ? 0 : pColWidth[nX];
+        long nThisX = ColHidden(nX) ? 0 : mpColWidth->GetValue(nX);
         bool bManualBreak = HasColManualBreak(nX);
         if ( (nSizeX+nThisX > nPageSizeX) || (bManualBreak && !bSkipColBreaks) )
         {
@@ -183,7 +183,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         {
             // subtract size of repeat columns from page size
             for (SCCOL i=nRepeatStartX; i<=nRepeatEndX; i++)
-                nPageSizeX -= ColHidden(i) ? 0 : pColWidth[i];
+                nPageSizeX -= ColHidden(i) ? 0 : mpColWidth->GetValue(i);
             while (nX<=nRepeatEndX)
                 RemoveColBreak(++nX, true, false);
             bColFound = true;

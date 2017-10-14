@@ -177,7 +177,7 @@ private:
 
     std::unique_ptr<ScTableProtection> pTabProtection;
 
-    std::unique_ptr<sal_uInt16[]>            pColWidth;
+    std::unique_ptr<ScCompressedArray<SCCOL, sal_uInt16>> mpColWidth;
     std::unique_ptr<ScFlatUInt16RowSegments> mpRowHeights;
 
     std::unique_ptr<CRFlags[]>               pColFlags;

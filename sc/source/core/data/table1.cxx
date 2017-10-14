@@ -246,7 +246,6 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     nRepeatStartY( SCROW_REPEAT_NONE ),
     nRepeatEndY( SCROW_REPEAT_NONE ),
     pTabProtection( nullptr ),
-    pColWidth( nullptr ),
     mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(nullptr) ),
     pColFlags( nullptr ),
     pRowFlags( nullptr ),
@@ -291,12 +290,11 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
 
     if (bColInfo)
     {
-        pColWidth.reset( new sal_uInt16[ MAXCOL+1 ] );
+        mpColWidth.reset( new ScCompressedArray<SCCOL, sal_uInt16>( MAXCOL+1, STD_COL_WIDTH ) );
         pColFlags.reset( new CRFlags[ MAXCOL+1 ] );
 
         for (SCCOL i=0; i<=MAXCOL; i++)
         {
-            pColWidth[i] = STD_COL_WIDTH;
             pColFlags[i] = CRFlags::NONE;
         }
     }
