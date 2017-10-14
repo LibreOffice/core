@@ -2758,7 +2758,13 @@ bool ScMatrix::IsSizeAllocatable( SCSIZE nC, SCSIZE nR )
         SAL_WARN( "sc.core", "ScMatrix one-dimensional zero: " << nC << " columns * " << nR << " rows");
         return false;
     }
-    if (nC && nR && (nC > (ScMatrix::GetElementsMax() / nR)))
+    if (!nC || !nR)
+        return true;
+
+    static size_t nElementsMax = std::getenv("SC_MAX_MATRIX_ELEMENTS") ? std::atoi(std::getenv("SC_MAX_MATRIX_ELEMENTS"))
+                                                                       : ScMatrix::GetElementsMax();
+
+    if (nC > (nElementsMax / nR))
     {
         SAL_WARN( "sc.core", "ScMatrix overflow: " << nC << " columns * " << nR << " rows");
         return false;
