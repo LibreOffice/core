@@ -648,12 +648,13 @@ OOXMLMeasurementOrPercentValue::OOXMLMeasurementOrPercentValue(const char * pVal
     {
         mnValue = static_cast<int>(val * 50);
     }
+    else if (nLen > 2 &&
+        pValue[nLen - 2] == 'p' && pValue[nLen - 1] == 't')
+    {
+        mnValue = OOXMLTwipsMeasureValue(pValue).getInt();
+    }
     else
     {
-        // TODO: also allow units. For that, we need to know
-        // how to represent the number to converter or store
-        // the value in the type as number + unit and have
-        // getter with unit specification
         mnValue = static_cast<int>(val);
     }
 }
