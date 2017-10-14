@@ -146,7 +146,7 @@
           <value xml:lang="en-US">Increase Paragraph Spacing</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
+          <value>3</value>
         </prop>
       </node>
       <node oor:name=".uno:ParaspaceDecrease" oor:op="replace">
@@ -160,7 +160,7 @@
           <value xml:lang="en-US">Decrease Paragraph Spacing</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
+          <value>3</value>
         </prop>
       </node>
       <node oor:name=".uno:ArrowShapes" oor:op="replace">
