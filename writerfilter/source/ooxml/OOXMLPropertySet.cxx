@@ -643,7 +643,7 @@ OOXMLMeasurementOrPercentValue::OOXMLMeasurementOrPercentValue(const char * pVal
     double val = rtl_str_toDouble(pValue); // will ignore the trailing unit
 
     int nLen = strlen(pValue);
-    if (nLen > 2 &&
+    if (nLen > 1 &&
         pValue[nLen - 1] == '%')
     {
         mnValue = static_cast<int>(val * 50);

@@ -1427,19 +1427,6 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108849, "tdf108849.docx")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Misplaced body-level sectPr's create extra sections!", 2, getPages());
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf109306, "tdf109306.docx")
-{
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    // Both types of relative width specification (pct): simple integers (in fiftieths of percent)
-    // and floats with "%" unit specification must be treated correctly
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(90), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
-
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTables->getByIndex(1), "IsWidthRelative"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(80), getProperty<sal_Int16>(xTables->getByIndex(1), "RelativeWidth"));
-}
-
 DECLARE_OOXMLIMPORT_TEST(testTdf109524, "tdf109524.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);

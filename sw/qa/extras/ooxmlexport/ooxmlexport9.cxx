@@ -172,6 +172,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79272_strictDxa, "tdf79272_strictDxa.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4318), getProperty<sal_Int32>(xTables->getByIndex(0), "Width"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf109306, "tdf109306.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    // Both types of relative width specification (pct): simple integers (in fiftieths of percent)
+    // and floats with "%" unit specification must be treated correctly
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTables->getByIndex(0), "IsWidthRelative"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(9), getProperty<sal_Int16>(xTables->getByIndex(0), "RelativeWidth"));
+
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTables->getByIndex(1), "IsWidthRelative"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(80), getProperty<sal_Int16>(xTables->getByIndex(1), "RelativeWidth"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testKern, "kern.docx")
 {
     CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(1), 1), "CharAutoKerning"));
