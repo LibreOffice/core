@@ -59,4 +59,9 @@ $(eval $(call gb_Module_add_targets,fpicker,\
 ))
 endif
 
+ifeq ($(GUIBASE),aqua)
+$(eval $(call gb_Module_add_targets,fpicker,\
+	Library_fps_aqua \
+))
+endif
 # vim: set noet sw=4 ts=4:

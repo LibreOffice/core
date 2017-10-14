@@ -58,5 +58,8 @@ $(eval $(call gb_Library_add_exception_objects,fps_aqua,\
 	fpicker/source/aqua/AquaFilePickerDelegate \
 ))
 
+$(eval $(call gb_Library_add_cxxflags,fps_aqua,\
+    -x objective-c++ \
+))
 
 # vim: set noet sw=4 ts=4:
