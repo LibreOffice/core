@@ -120,7 +120,8 @@ static void lcl_setLanguage( const SdDrawDocument *pDoc, const OUString &rLangua
         for( size_t nObj = 0; nObj < nObjCount; ++nObj )
         {
             SdrObject *pObj = pPage->GetObj( nObj );
-            lcl_setLanguageForObj( pObj, nLang, bLanguageNone );
+            if (pObj->GetObjIdentifier() != OBJ_PAGE)
+                lcl_setLanguageForObj( pObj, nLang, bLanguageNone );
         }
     }
 }
@@ -296,6 +297,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                         const OUString aDocumentLangPrefix("Default_");
                         const OUString aStrNone("LANGUAGE_NONE");
                         const OUString aStrResetLangs("RESET_LANGUAGES");
+                        SdDrawDocument* pDoc = mpViewShell->GetDoc();
                         sal_Int32 nPos = -1;
                         if (-1 != (nPos = aNewLangTxt.indexOf( aDocumentLangPrefix )))
                         {
@@ -306,11 +308,18 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                             break;
                         }
                         if (aNewLangTxt == aStrNone)
-                            lcl_setLanguage( mpViewShell->GetDoc(), OUString() );
+                            lcl_setLanguage( pDoc, OUString(), true );
                         else if (aNewLangTxt == aStrResetLangs)
-                            lcl_setLanguage( mpViewShell->GetDoc(), OUString(), true );
+                            lcl_setLanguage( pDoc, OUString() );
                         else
-                            lcl_setLanguage( mpViewShell->GetDoc(), aNewLangTxt );
+                            lcl_setLanguage( pDoc, aNewLangTxt );
+
+                        mpViewShell->GetFrame()->GetBindings().Invalidate( SID_LANGUAGE_STATUS );
+
+                        if ( pDoc->GetOnlineSpell() )
+                        {
+                            pDoc->StartOnlineSpelling();
+                        }
                     }
                 }
             }
