@@ -650,11 +650,7 @@ OOXMLMeasurementOrPercentValue::OOXMLMeasurementOrPercentValue(const char * pVal
     }
     else
     {
-        // TODO: also allow units. For that, we need to know
-        // how to represent the number to converter or store
-        // the value in the type as number + unit and have
-        // getter with unit specification
-        mnValue = static_cast<int>(val);
+        mnValue = OOXMLTwipsMeasureValue(pValue).getInt();
     }
 }
 
