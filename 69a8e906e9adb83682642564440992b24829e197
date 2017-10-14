@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_e45baef4",
+        "filename": "ucb/source/ucp/ftp/ftpurl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-14T10:47:22Z",
+      "side": 1,
+      "message": "you can directly put \"OUString bff \u003d \"ftp://\";\ninstead of having 2 instructions.",
+      "range": {
+        "startLine": 243,
+        "startChar": 4,
+        "endLine": 243,
+        "endChar": 19
+      },
+      "revId": "69a8e906e9adb83682642564440992b24829e197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_246e9696",
+        "filename": "ucb/source/ucp/ftp/ftpurl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-14T10:47:22Z",
+      "side": 1,
+      "message": "you don\u0027t append here, you assign.",
+      "range": {
+        "startLine": 246,
+        "startChar": 11,
+        "endLine": 246,
+        "endChar": 14
+      },
+      "revId": "69a8e906e9adb83682642564440992b24829e197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_446d6297",
+        "filename": "ucb/source/ucp/ftp/ftpurl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-14T10:47:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 257,
+        "startChar": 16,
+        "endLine": 257,
+        "endChar": 17
+      },
+      "revId": "69a8e906e9adb83682642564440992b24829e197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_64689e88",
+        "filename": "ucb/source/ucp/ftp/ftpurl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-14T10:47:22Z",
+      "side": 1,
+      "message": "idem",
+      "range": {
+        "startLine": 258,
+        "startChar": 12,
+        "endLine": 258,
+        "endChar": 14
+      },
+      "revId": "69a8e906e9adb83682642564440992b24829e197",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
