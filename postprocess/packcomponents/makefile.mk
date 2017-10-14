@@ -314,7 +314,7 @@ my_components += \
 my_components += \
     component/avmedia/source/macavf/avmediaMacAVF \
     component/avmedia/source/quicktime/avmediaQuickTime \
-    components/fpicker/source/aqua/fps_aqua \
+    component/fpicker/source/aqua/fps_aqua \
     macab1 \
     macbe1 \
     MacOSXSpell
