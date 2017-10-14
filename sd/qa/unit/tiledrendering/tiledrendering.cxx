@@ -31,6 +31,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/slstitm.hxx>
 #include <comphelper/lok.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
@@ -96,6 +97,7 @@ public:
     void testCommentCallbacks();
     void testMultiViewInsertDeletePage();
     void testDisableUndoRepair();
+    void testLanguageStatus();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -133,6 +135,7 @@ public:
     CPPUNIT_TEST(testCommentCallbacks);
     CPPUNIT_TEST(testMultiViewInsertDeletePage);
     CPPUNIT_TEST(testDisableUndoRepair);
+    CPPUNIT_TEST(testLanguageStatus);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1814,6 +1817,24 @@ void SdTiledRenderingTest::testDisableUndoRepair()
         CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item* >(pItem2.get()));
         CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(pItem1.get()));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), dynamic_cast< const SfxUInt32Item * >(pItem1.get())->GetValue());
+    }
+}
+
+void SdTiledRenderingTest::testLanguageStatus()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    createDoc("dummy.odp");
+    SfxViewShell* pView1 = SfxViewShell::Current();
+    SfxLokHelper::createView();
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    {
+        std::unique_ptr<SfxPoolItem> pItem1;
+        std::unique_ptr<SfxPoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem2);
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringListItem* >(pItem1.get()));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringListItem* >(pItem2.get()));
     }
 }
 
