@@ -236,10 +236,8 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
     OUString sHeader1(get<FixedText>("datetime")->GetText());
     OUString sHeader2(get<FixedText>("savedby")->GetText());
     OUString sHeader3(get<FixedText>("comments")->GetText());
-    OUStringBuffer sHeader;
-    sHeader.append(sHeader1).append("\t").append(sHeader2)
-        .append("\t ").append(sHeader3);
-    m_pVersionBox->InsertHeaderEntry(sHeader.makeStringAndClear());
+    OUString sHeader = sHeader1 + "\t" + sHeader2 + "\t" + sHeader3;
+    m_pVersionBox->InsertHeaderEntry(sHeader);
 
     HeaderBar &rBar = m_pVersionBox->GetTheHeaderBar();
     HeaderBarItemBits nBits = rBar.GetItemBits(1) | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED;
@@ -264,7 +262,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
 OUString ConvertWhiteSpaces_Impl( const OUString& rText )
 {
     // converted linebreaks and tabs to blanks; it's necessary for the display
-    OUStringBuffer sConverted;
+    OUStringBuffer sConverted;//not converting to OUString
     const sal_Unicode* pChars = rText.getStr();
     while ( *pChars )
     {
@@ -556,10 +554,8 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )
     OUString sHeader1(get<FixedText>("datetime")->GetText());
     OUString sHeader2(get<FixedText>("savedby")->GetText());
     OUString sHeader3(get<FixedText>("comments")->GetText());
-    OUStringBuffer sHeader;
-    sHeader.append(sHeader1).append("\t").append(sHeader2)
-        .append("\t ").append(sHeader3);
-    m_pVersionBox->InsertHeaderEntry(sHeader.makeStringAndClear());
+    OUString sHeader = sHeader1 + "\t" + sHeader2 + "\t" + sHeader3;
+    m_pVersionBox->InsertHeaderEntry(sHeader);
 
     HeaderBar &rBar = m_pVersionBox->GetTheHeaderBar();
     HeaderBarItemBits nBits = rBar.GetItemBits(1) | HeaderBarItemBits::FIXEDPOS | HeaderBarItemBits::FIXED;

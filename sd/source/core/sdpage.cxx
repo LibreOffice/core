@@ -128,8 +128,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
     // The name of the layout of the page is used by SVDRAW to determine the
     // presentation template of the outline objects. Therefore, it already
     // contains the designator for the outline (STR_LAYOUT_OUTLINE).
-    OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME));
-    aBuf.append(SD_LT_SEPARATOR).append(STR_LAYOUT_OUTLINE);
+    OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME) + SD_LT_SEPARATOR + STR_LAYOUT_OUTLINE);
     maLayoutName = aBuf.makeStringAndClear();
 
     Size aPageSize(GetSize());
