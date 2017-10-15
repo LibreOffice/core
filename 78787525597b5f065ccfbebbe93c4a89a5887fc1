@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a430d35_4407221c",
+        "filename": "sd/source/core/sdpage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T21:23:08Z",
+      "side": 1,
+      "message": "Why create a *Buffer, just to makeStringAndClear() it?\n\nThis could be simply written as:\n\nmaLayoutName \u003d SdResId(STR_LAYOUT_DEFAULT_NAME)\n             + SD_LT_SEPARATOR\n             + STR_LAYOUT_OUTLINE;",
+      "range": {
+        "startLine": 131,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 45
+      },
+      "revId": "78787525597b5f065ccfbebbe93c4a89a5887fc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_4459e259",
         "filename": "sd/source/core/sdpage.cxx",
         "patchSetId": 2
@@ -13,6 +36,30 @@
       "writtenOn": "2017-10-15T20:06:58Z",
       "side": 1,
       "message": "why did you change this one?",
+      "range": {
+        "startLine": 556,
+        "startChar": 16,
+        "endLine": 556,
+        "endChar": 84
+      },
+      "revId": "78787525597b5f065ccfbebbe93c4a89a5887fc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8fff6300",
+        "filename": "sd/source/core/sdpage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T21:23:08Z",
+      "side": 1,
+      "message": "Better keep this as it was to avoid unnecessary noise.",
+      "parentUuid": "1a430d35_4459e259",
       "range": {
         "startLine": 556,
         "startChar": 16,
