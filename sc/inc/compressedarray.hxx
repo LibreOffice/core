@@ -69,9 +69,6 @@ public:
     /** Construct with nMaxAccess=MAXROW, for example. */
                                 ScCompressedArray( A nMaxAccess,
                                         const D& rValue );
-    /** Construct from a plain array of D */
-                                ScCompressedArray( A nMaxAccess,
-                                        const D* pDataArray, size_t nDataCount );
     virtual                     ~ScCompressedArray();
     void                        Resize( size_t nNewSize );
     void                        Reset( const D& rValue );
@@ -174,11 +171,6 @@ public:
                                 ScBitMaskCompressedArray( A nMaxAccessP,
                                         const D& rValue )
                                     : ScCompressedArray<A,D>( nMaxAccessP, rValue )
-                                    {}
-                                ScBitMaskCompressedArray( A nMaxAccessP,
-                                        const D* pDataArray, size_t nDataCount )
-                                    : ScCompressedArray<A,D>( nMaxAccessP,
-                                            pDataArray, nDataCount)
                                     {}
     void                        AndValue( A nPos, const D& rValueToAnd );
     void                        OrValue( A nPos, const D& rValueToOr );

@@ -37,31 +37,6 @@ ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D& rValue )
 }
 
 template< typename A, typename D >
-ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D* pDataArray,
-        size_t nDataCount )
-    : nCount(0)
-    , nLimit( nDataCount)
-    , pData( new DataEntry[nDataCount])
-    , nMaxAccess( nMaxAccessP)
-{
-    D aValue = pDataArray[0];
-    for (size_t j=0; j<nDataCount; ++j)
-    {
-        if (!(aValue == pDataArray[j]))
-        {
-            pData[nCount].aValue = aValue;
-            pData[nCount].nEnd = j-1;
-            ++nCount;
-            aValue = pDataArray[j];
-        }
-    }
-    pData[nCount].aValue = aValue;
-    pData[nCount].nEnd = nMaxAccess;
-    ++nCount;
-    Resize( nCount);
-}
-
-template< typename A, typename D >
 ScCompressedArray<A,D>::~ScCompressedArray()
 {
     delete[] pData;
