@@ -89,6 +89,13 @@ namespace emfplushelper
         return "";
     }
 
+    typedef enum
+    {
+      ImageDataTypeUnknown = 0x00000000,
+      ImageDataTypeBitmap = 0x00000001,
+      ImageDataTypeMetafile = 0x00000002
+    } ImageDataType;
+
     EMFPObject::~EMFPObject()
     {
     }
@@ -1061,26 +1068,25 @@ namespace emfplushelper
                         SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << "attributes index: " << attrIndex << "source unit: " << sourceUnit);
                         SAL_INFO("cppcanvas.emf", "EMF+\tTODO: use image attributes");
 
-                        if (sourceUnit == 2 && maEMFPObjects[flags & 0xff].get())
+                        // For DrawImage and DrawImagePoints, source unit of measurement type must be 1 pixel
+                        if (sourceUnit == UnitTypePixel && aObjects [flags & 0xff])
                         {
-                            // we handle only GraphicsUnit.Pixel now
                             EMFPImage& image = *static_cast<EMFPImage *>(maEMFPObjects[flags & 0xff].get());
                             float sx, sy, sw, sh;
-                            sal_Int32 aCount;
                             ReadRectangle(rMS, sx, sy, sw, sh);
                             ::tools::Rectangle aSource(Point(sx, sy), Size(sw, sh));
                             SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << " source rectangle: " << sx << "," << sy << " " << sw << "x" << sh);
                             ::basegfx::B2DPoint aDstPoint;
                             ::basegfx::B2DSize aDstSize;
-                            bool bValid = false;
 
                             if (type == EmfPlusRecordTypeDrawImagePoints)
                             {
+                                sal_Int32 aCount;
                                 rMS.ReadInt32(aCount);
 
-                                if (aCount == 3)
+                                // Number of points used by DrawImagePoints. Exactly 3 points must be specified.
+                                if( aCount == 3 )
                                 {
-                                    // TODO: now that we now that this value is count we should support it better
                                     float x1, y1, x2, y2, x3, y3;
 
                                     ReadPoint(rMS, x1, y1, flags);
@@ -1092,8 +1098,11 @@ namespace emfplushelper
 
                                     aDstPoint = Map(x1, y1);
                                     aDstSize = MapSize(x2 - x1, y3 - y1);
-
-                                    bValid = true;
+                                }
+                                else
+                                {
+                                    SAL_WARN("cppcanvas.emf", "EMF+ DrawImagePoints Wrong EMF+ file. Expected 3 points, received: "<< aCount);
+                                    break;
                                 }
                             }
                             else if (type == EmfPlusRecordTypeDrawImage)
@@ -1103,50 +1112,42 @@ namespace emfplushelper
                                 SAL_INFO("cppcanvas.emf", "EMF+ destination rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
                                 aDstPoint = Map(dx, dy);
                                 aDstSize = MapSize(dw, dh);
-                                bValid = true;
                             }
 
-                            if (bValid)
-                            {
-                                // create correct transform matrix
-                                basegfx::B2DHomMatrix aTransformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                    aDstSize.getX(),
-                                    aDstSize.getY(),
-                                    aDstPoint.getX(),
-                                    aDstPoint.getY());
+                            // create correct transform matrix
+                            basegfx::B2DHomMatrix aTransformMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                                aDstSize.getX(),
+                                aDstSize.getY(),
+                                aDstPoint.getX(),
+                                aDstPoint.getY());
 
-                                if (image.type == 1) // Bitmap
+                            if (image.type == ImageDataTypeBitmap)
+                            {
+                                BitmapEx aBmp(image.graphic.GetBitmapEx());
+                                aBmp.Crop(aSource);
+                                Size aSize(aBmp.GetSizePixel());
+                                SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
+                                if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
-                                    BitmapEx aBmp(image.graphic.GetBitmapEx());
-                                    aBmp.Crop(aSource);
-                                    Size aSize(aBmp.GetSizePixel());
-                                    SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
-                                    if (aSize.Width() > 0 && aSize.Height() > 0)
-                                    {
-                                        mrTargetHolders.Current().append(
-                                            new drawinglayer::primitive2d::BitmapPrimitive2D(aBmp,aTransformMatrix));
-                                    }
-                                    else
-                                    {
-                                        SAL_INFO("cppcanvas.emf", "EMF+ warning: empty bitmap");
-                                    }
-                                }
-                                else if (image.type == 2) // Metafile
-                                {
-                                    GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
-                                    aGDI.Clip(aSource);
                                     mrTargetHolders.Current().append(
-                                            new drawinglayer::primitive2d::MetafilePrimitive2D(aTransformMatrix,aGDI));
+                                        new drawinglayer::primitive2d::BitmapPrimitive2D(aBmp, aTransformMatrix));
+                                }
+                                else
+                                {
+                                    SAL_INFO("cppcanvas.emf", "EMF+ warning: empty bitmap");
                                 }
                             }
-                            else
+                            else if (image.type == ImageDataTypeMetafile)
                             {
-                                SAL_WARN("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme)");
+                                GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
+                                aGDI.Clip(aSource);
+                                mrTargetHolders.Current().append(
+                                        new drawinglayer::primitive2d::MetafilePrimitive2D(aTransformMatrix, aGDI));
                             }
                         }
                         else
                         {
-                            SAL_WARN("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme) - possibly unsupported source units for crop rectangle");
+                            SAL_WARN("cppcanvas.emf", "EMF+ DrawImage(Points) Wrong EMF+ file. Only Unit Type Pixel is support by EMF+ standard in DrawImage(Points)");
                         }
                         break;
                     }
