@@ -2280,6 +2280,8 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     {
         SfxListener::Notify(rBC, rHint);
     }
+    if (SfxHintId::DocChanged == rHint.GetId())
+        m_bViewHasChanged = true;
 }
 
 
