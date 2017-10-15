@@ -247,7 +247,6 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     nRepeatEndY( SCROW_REPEAT_NONE ),
     pTabProtection( nullptr ),
     mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(nullptr) ),
-    pColFlags( nullptr ),
     pRowFlags( nullptr ),
     mpHiddenCols(new ScFlatBoolColSegments),
     mpHiddenRows(new ScFlatBoolRowSegments),
@@ -291,12 +290,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     if (bColInfo)
     {
         mpColWidth.reset( new ScCompressedArray<SCCOL, sal_uInt16>( MAXCOL+1, STD_COL_WIDTH ) );
-        pColFlags.reset( new CRFlags[ MAXCOL+1 ] );
-
-        for (SCCOL i=0; i<=MAXCOL; i++)
-        {
-            pColFlags[i] = CRFlags::NONE;
-        }
+        mpColFlags.reset( new ScBitMaskCompressedArray<SCCOL, CRFlags>( MAXCOL+1, CRFlags::NONE ) );
     }
 
     if (bRowInfo)
@@ -1800,7 +1794,7 @@ void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 void ScTable::ExtendPrintArea( OutputDevice* pDev,
                     SCCOL /* nStartCol */, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow )
 {
-    if ( !pColFlags || !pRowFlags )
+    if ( !mpColFlags || !pRowFlags )
     {
         OSL_FAIL("ExtendPrintArea: No ColInfo or RowInfo");
         return;
