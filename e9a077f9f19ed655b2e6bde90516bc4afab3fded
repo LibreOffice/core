@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_24acd634",
+        "filename": "svx/source/accessibility/AccessibleTextEventQueue.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-15T18:51:42Z",
+      "side": 1,
+      "message": "this should probably be a \n   std::deque\u003c std::unique_ptr\u003cSfxHint\u003e\u003e\nbased on how we are using it",
+      "revId": "e9a077f9f19ed655b2e6bde90516bc4afab3fded",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
