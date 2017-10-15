@@ -180,7 +180,7 @@ private:
     std::unique_ptr<ScCompressedArray<SCCOL, sal_uInt16>> mpColWidth;
     std::unique_ptr<ScFlatUInt16RowSegments> mpRowHeights;
 
-    std::unique_ptr<CRFlags[]>               pColFlags;
+    std::unique_ptr<ScBitMaskCompressedArray<SCCOL, CRFlags>> mpColFlags;
     ScBitMaskCompressedArray< SCROW, CRFlags>*     pRowFlags;
     std::unique_ptr<ScFlatBoolColSegments>  mpHiddenCols;
     std::unique_ptr<ScFlatBoolRowSegments>  mpHiddenRows;

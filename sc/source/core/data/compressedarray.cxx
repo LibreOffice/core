@@ -369,7 +369,7 @@ void ScBitMaskCompressedArray<A,D>::AndValue( A nStart, A nEnd,
     {
         if ((this->pData[nIndex].aValue & rValueToAnd) != this->pData[nIndex].aValue)
         {
-            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
+            A nS = ::std::max<A>( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
             A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
             this->SetValue( nS, nE, this->pData[nIndex].aValue & rValueToAnd);
             if (nE >= nEnd)
@@ -395,7 +395,7 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
     {
         if ((this->pData[nIndex].aValue | rValueToOr) != this->pData[nIndex].aValue)
         {
-            A nS = ::std::max( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
+            A nS = ::std::max<A>( (nIndex>0 ? this->pData[nIndex-1].nEnd+1 : 0), nStart);
             A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
             this->SetValue( nS, nE, this->pData[nIndex].aValue | rValueToOr);
             if (nE >= nEnd)
@@ -460,5 +460,7 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( const D& rBitMask ) const
 template class ScCompressedArray< SCROW, CRFlags>;             // flags, base class
 template class ScBitMaskCompressedArray< SCROW, CRFlags>;      // flags
 template class ScCompressedArray< SCCOL, sal_uInt16>;
+template class ScCompressedArray< SCCOL, CRFlags>;
+template class ScBitMaskCompressedArray< SCCOL, CRFlags>;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

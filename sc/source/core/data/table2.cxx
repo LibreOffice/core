@@ -281,11 +281,10 @@ void ScTable::InsertCol(
 {
     if (nStartRow==0 && nEndRow==MAXROW)
     {
-        if (mpColWidth && pColFlags)
+        if (mpColWidth && mpColFlags)
         {
             mpColWidth->InsertPreservingSize(nStartCol, nSize, STD_COL_WIDTH);
-            memmove( &pColFlags[nStartCol+nSize], &pColFlags[nStartCol],
-                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColFlags[0]) );
+            mpColFlags->InsertPreservingSize(nStartCol, nSize, CRFlags::NONE);
         }
         if (pOutlineTable)
             pOutlineTable->InsertCol( nStartCol, nSize );
@@ -356,12 +355,11 @@ void ScTable::DeleteCol(
 {
     if (nStartRow==0 && nEndRow==MAXROW)
     {
-        if (mpColWidth && pColFlags)
+        if (mpColWidth && mpColFlags)
         {
             assert( nStartCol + nSize <= MAXCOL+1 );    // moving 0 if ==MAXCOL+1 is correct
             mpColWidth->RemovePreservingSize(nStartCol, nSize, STD_COL_WIDTH);
-            memmove( &pColFlags[nStartCol], &pColFlags[nStartCol+nSize],
-                    (MAXCOL - nStartCol + 1 - nSize) * sizeof(pColFlags[0]) );
+            mpColFlags->RemovePreservingSize(nStartCol, nSize, CRFlags::NONE);
         }
         if (pOutlineTable)
             if (pOutlineTable->DeleteCol( nStartCol, nSize ))
@@ -1130,12 +1128,12 @@ void ScTable::CopyToTable(
             auto destTabColWidthIt = pDestTab->mpColWidth->begin() + nCol1;
             auto thisTabColWidthIt = mpColWidth->begin() + nCol1;
             pDestTab->mpColWidth->CopyFrom(*mpColWidth, nCol1, nCol2);
+            pDestTab->mpColFlags->CopyFrom(*mpColFlags, nCol1, nCol2);
             for (SCCOL i = nCol1; i <= nCol2; ++i)
             {
                 bool bThisHidden = ColHidden(i);
                 bool bHiddenChange = (pDestTab->ColHidden(i) != bThisHidden);
                 bool bChange = bHiddenChange || (*destTabColWidthIt != *thisTabColWidthIt);
-                pDestTab->pColFlags[i] = pColFlags[i];
                 pDestTab->SetColHidden(i, i, bThisHidden);
                 //TODO: collect changes?
                 if (bHiddenChange && pCharts)
@@ -2091,7 +2089,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
 
 void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 )
 {
-    if ( !mpColWidth || !mpRowHeights || !pColFlags || !pRowFlags )
+    if ( !mpColWidth || !mpRowHeights || !mpColFlags || !pRowFlags )
     {
         OSL_FAIL( "Row/column info missing" );
         return;
@@ -2944,7 +2942,7 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
 {
     OSL_ENSURE(ValidCol(nCol),"wrong column number");
 
-    if (ValidCol(nCol) && pColFlags && mpColWidth)
+    if (ValidCol(nCol) && mpColFlags && mpColWidth)
     {
         if (bHiddenAsZero && ColHidden(nCol))
             return 0;
@@ -3357,8 +3355,8 @@ void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, CRFlags nNewFlags )
 
 CRFlags ScTable::GetColFlags( SCCOL nCol ) const
 {
-    if (ValidCol(nCol) && pColFlags)
-        return pColFlags[nCol];
+    if (ValidCol(nCol) && mpColFlags)
+        return mpColFlags->GetValue(nCol);
     else
         return CRFlags::NONE;
 }
@@ -3403,13 +3401,13 @@ SCROW ScTable::GetLastFlaggedRow() const
 
 SCCOL ScTable::GetLastChangedCol() const
 {
-    if ( !pColFlags )
+    if ( !mpColFlags )
         return 0;
 
     SCCOL nLastFound = 0;
     auto colWidthIt = mpColWidth->begin() + 1;
     for ( SCCOL nCol = 1; nCol < aCol.size(); nCol++, ++colWidthIt )
-        if ((pColFlags[nCol] & CRFlags::All) || (*colWidthIt != STD_COL_WIDTH))
+        if ((mpColFlags->GetValue(nCol) & CRFlags::All) || (*colWidthIt != STD_COL_WIDTH))
             nLastFound = nCol;
 
     return nLastFound;
@@ -3434,7 +3432,7 @@ SCROW ScTable::GetLastChangedRow() const
 
 bool ScTable::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, bool bShow )
 {
-    if (pOutlineTable && pColFlags)
+    if (pOutlineTable && mpColFlags)
     {
         return pOutlineTable->GetColArray().ManualAction( nStartCol, nEndCol, bShow, *this, true );
     }
