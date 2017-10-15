@@ -1163,7 +1163,7 @@ SvxConfigPage::SvxConfigPage(vcl::Window *pParent, const SfxItemSet& rSet)
     get(m_pSaveInListBox, "savein");
     get(m_pInsertBtn, "insert");
     get(m_pModifyBtn, "modify");
-    get(m_pResetBtn, "resetbtn");
+    get(m_pResetBtn, "defaultsbtn");
     get(m_pDescriptionFieldLb, "descriptionlabel");
     get(m_pDescriptionField, "desc");
     m_pDescriptionField->set_height_request(m_pDescriptionField->GetTextHeight()*2.9);
