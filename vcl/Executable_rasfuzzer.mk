@@ -33,7 +33,6 @@ $(eval $(call gb_Executable_use_libraries,rasfuzzer,\
 $(eval $(call gb_Executable_use_static_libraries,rasfuzzer,\
     findsofficepath \
     ulingu \
-    fuzzer_core \
     fuzzerstubs \
 ))
 
