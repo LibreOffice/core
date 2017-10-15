@@ -150,7 +150,7 @@ cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 cmd/lc_datafilterautofilter.png cmd/lc_autofilter.png
 cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
 
-# calc function dialog
+# calc fx function symbol
 cmd/lc_functiondialog.png cmd/lc_insertformula.png
 cmd/sc_functiondialog.png cmd/sc_insertformula.png
 formula/res/fx.png cmd/sc_dbviewfunctions.png
@@ -158,16 +158,6 @@ formula/res/fx.png cmd/sc_dbviewfunctions.png
 # text background colour Impress/Draw
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
-
-# insert rows and columns
-#cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
-#cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
-#cmd/lc_insertcolumnsbefore.png cmd/lc_insertcolumns.png
-#cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
-#cmd/lc_insertrowsafter.png cmd/lc_insertrows.png
-#cmd/sc_insertrowsafter.png cmd/sc_insertrows.png
-#cmd/lc_insertcolumnsafter.png cmd/lc_insertcolumns.png
-#cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
 
 # simple save button
 cmd/lc_savesimple.png cmd/lc_save.png
@@ -211,3 +201,12 @@ cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/lc_rowoperations.png cmd/lc_entirerow.png
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
+
+cmd/lc_objectforwardone.png cmd/lc_forward.png
+cmd/sc_objectforwardone.png cmd/sc_forward.png
+cmd/lc_objectbackone.png cmd/lc_backward.png
+cmd/sc_objectbackone.png cmd/sc_backward.png
+
+# writer epub export
+cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
+cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png

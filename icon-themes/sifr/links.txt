@@ -150,7 +150,7 @@ cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
 cmd/lc_datafilterautofilter.png cmd/lc_autofilter.png
 cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
 
-# calc function dialog
+# calc fx function symbol
 cmd/lc_functiondialog.png cmd/lc_insertformula.png
 cmd/sc_functiondialog.png cmd/sc_insertformula.png
 formula/res/fx.png cmd/sc_dbviewfunctions.png
