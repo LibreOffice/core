@@ -52,8 +52,6 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>
 
-#include <svx/svdoutl.hxx>
-
 #include <sfx2/fcontnr.hxx>
 
 #include "app.hrc"
