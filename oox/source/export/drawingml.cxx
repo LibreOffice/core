@@ -1300,6 +1300,15 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         aPos.X -= aParentPos.X;
         aPos.Y -= aParentPos.Y;
     }
+    else if (m_xParent.is())
+    {
+        SdrObject* pShape = GetSdrObjectFromXShape(rXShape);
+        if (pShape)
+        {
+            aPos.X = pShape->GetRelativePos().getX();
+            aPos.Y = pShape->GetRelativePos().getY();
+        }
+    }
 
     if ( aSize.Width < 0 )
         aSize.Width = 1000;
