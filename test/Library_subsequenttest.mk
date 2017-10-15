@@ -71,6 +71,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/sheet/xsheetannotations \
 	test/source/sheet/xsheetannotationshapesupplier \
 	test/source/sheet/xsheetoutline \
+	test/source/sheet/xsheetpagebreak \
 	test/source/sheet/xstyleloader \
 	test/source/sheet/xsubtotalfield \
 	test/source/sheet/xuniquecellformatrangessupplier\
