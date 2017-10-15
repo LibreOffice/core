@@ -263,6 +263,3 @@
 "ScTableSheetObj";"com::sun::star::util::XImportable";"doImport()"
 "ScTableSheetObj";"com::sun::star::util::XSortable";"createSortDescriptor()"
 "ScTableSheetObj";"com::sun::star::util::XSortable";"sort()"
-"ScTableSheetObj";"com::sun::star::sheet::XSheetPageBreak";"getColumnPageBreaks()"
-"ScTableSheetObj";"com::sun::star::sheet::XSheetPageBreak";"getRowPageBreaks()"
-"ScTableSheetObj";"com::sun::star::sheet::XSheetPageBreak";"removeAllManualPageBreaks()"
