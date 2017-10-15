@@ -25,8 +25,6 @@
 
 #include "scdllapi.h"
 
-const size_t nScCompressedArrayDelta = 4;
-
 /** Compressed array of row (or column) entries, e.g. heights, flags, ...
 
     The array stores ranges of values such that equal consecutive values occupy only
@@ -70,8 +68,7 @@ public:
 
     /** Construct with nMaxAccess=MAXROW, for example. */
                                 ScCompressedArray( A nMaxAccess,
-                                        const D& rValue,
-                                        size_t nDelta = nScCompressedArrayDelta );
+                                        const D& rValue );
     /** Construct from a plain array of D */
                                 ScCompressedArray( A nMaxAccess,
                                         const D* pDataArray, size_t nDataCount );
@@ -119,7 +116,6 @@ public:
 protected:
     size_t                      nCount;
     size_t                      nLimit;
-    size_t                      nDelta;
     DataEntry*                  pData;
     A                           nMaxAccess;
 };
@@ -176,9 +172,8 @@ template< typename A, typename D > class ScBitMaskCompressedArray : public ScCom
 {
 public:
                                 ScBitMaskCompressedArray( A nMaxAccessP,
-                                        const D& rValue,
-                                        size_t nDeltaP = nScCompressedArrayDelta )
-                                    : ScCompressedArray<A,D>( nMaxAccessP, rValue, nDeltaP)
+                                        const D& rValue )
+                                    : ScCompressedArray<A,D>( nMaxAccessP, rValue )
                                     {}
                                 ScBitMaskCompressedArray( A nMaxAccessP,
                                         const D* pDataArray, size_t nDataCount )
