@@ -1294,11 +1294,18 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
+    SdrObject* pShape = GetSdrObjectFromXShape(rXShape);
+
     if (GetDocumentType() == DOCUMENT_DOCX && m_xParent.is())
     {
         awt::Point aParentPos = m_xParent->getPosition();
         aPos.X -= aParentPos.X;
         aPos.Y -= aParentPos.Y;
+    }
+    else if (pShape->GetUpGroup() && m_xParent.is())
+    {
+        aPos.X = pShape->GetRelativePos().getX();
+        aPos.Y = pShape->GetRelativePos().getY();
     }
 
     if ( aSize.Width < 0 )
