@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_2450565e",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 4253,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T15:42:54Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be \u0027reviewb\u0027 instead of \u0027insertb\u0027?",
+      "range": {
+        "startLine": 4253,
+        "startChar": 95,
+        "endLine": 4253,
+        "endChar": 102
+      },
+      "revId": "322fe120749af947b165066769925c7aa5ff77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_644a5eae",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 4964,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T15:42:54Z",
+      "side": 1,
+      "message": "\u0027reviewR\u0027 instead of \u0027insertb\u0027?",
+      "range": {
+        "startLine": 4964,
+        "startChar": 95,
+        "endLine": 4964,
+        "endChar": 102
+      },
+      "revId": "322fe120749af947b165066769925c7aa5ff77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_84c74a11",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 5425,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T15:42:54Z",
+      "side": 1,
+      "message": "\u0027viewb\u0027 instead of \u0027insertb\u0027?",
+      "range": {
+        "startLine": 5425,
+        "startChar": 95,
+        "endLine": 5425,
+        "endChar": 102
+      },
+      "revId": "322fe120749af947b165066769925c7aa5ff77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a4ca8618",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 6107,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T15:42:54Z",
+      "side": 1,
+      "message": "\u0027tableT\u0027",
+      "range": {
+        "startLine": 6107,
+        "startChar": 95,
+        "endLine": 6107,
+        "endChar": 102
+      },
+      "revId": "322fe120749af947b165066769925c7aa5ff77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c4d152cf",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 6637,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T15:42:54Z",
+      "side": 1,
+      "message": "\u0027graphicB\u0027?",
+      "range": {
+        "startLine": 6637,
+        "startChar": 95,
+        "endLine": 6637,
+        "endChar": 102
+      },
+      "revId": "322fe120749af947b165066769925c7aa5ff77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e4d48ebe",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 7183,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T15:42:54Z",
+      "side": 1,
+      "message": "\u0027drab\u0027?",
+      "range": {
+        "startLine": 7183,
+        "startChar": 95,
+        "endLine": 7183,
+        "endChar": 102
+      },
+      "revId": "322fe120749af947b165066769925c7aa5ff77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_04dc3ae3",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 7537,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T15:42:54Z",
+      "side": 1,
+      "message": "\u0027frame:MenuWrap\u0027?",
+      "range": {
+        "startLine": 7537,
+        "startChar": 95,
+        "endLine": 7537,
+        "endChar": 100
+      },
+      "revId": "322fe120749af947b165066769925c7aa5ff77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_24d776c0",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 7564,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T15:42:54Z",
+      "side": 1,
+      "message": "\u0027frame:MenuAlign\u0027?",
+      "range": {
+        "startLine": 7564,
+        "startChar": 95,
+        "endLine": 7564,
+        "endChar": 101
+      },
+      "revId": "322fe120749af947b165066769925c7aa5ff77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_44e642b5",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_compact.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 7633,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-15T15:42:54Z",
+      "side": 1,
+      "message": "\u0027frame:MenuDraw\u0027?",
+      "range": {
+        "startLine": 7633,
+        "startChar": 95,
+        "endLine": 7633,
+        "endChar": 102
+      },
+      "revId": "322fe120749af947b165066769925c7aa5ff77c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
