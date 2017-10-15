@@ -1181,10 +1181,10 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << "attributes index: " << attrIndex << "source unit: " << sourceUnit);
                             SAL_INFO("cppcanvas.emf", "EMF+\tTODO: use image attributes");
 
-                            if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
+                            // For DrawImage and DrawImagePoints, source unit of measurement type must be 1 pixel
+                            if (sourceUnit == UnitTypePixel && aObjects [flags & 0xff]) {
                                 EMFPImage& image = *static_cast<EMFPImage *>( aObjects [flags & 0xff].get());
                                 float sx, sy, sw, sh;
-                                sal_Int32 aCount;
 
                                 ReadRectangle (rMF, sx, sy, sw, sh);
                                 ::tools::Rectangle aSource(Point(sx, sy), Size(sw, sh));
@@ -1193,12 +1193,13 @@ namespace cppcanvas
 
                                 ::basegfx::B2DPoint aDstPoint;
                                 ::basegfx::B2DSize aDstSize;
-                                bool bValid = false;
 
                                 if (type == EmfPlusRecordTypeDrawImagePoints) {
+                                    sal_Int32 aCount;
                                     rMF.ReadInt32( aCount );
 
-                                    if( aCount == 3) { // TODO: now that we now that this value is count we should support it better
+                                    // Number of points used by DrawImagePoints. Exactly 3 points must be specified.
+                                    if( aCount == 3 ) {
                                         float x1, y1, x2, y2, x3, y3;
 
                                         ReadPoint (rMF, x1, y1, flags);
@@ -1210,8 +1211,9 @@ namespace cppcanvas
 
                                         aDstPoint = Map (x1, y1);
                                         aDstSize = MapSize(x2 - x1, y3 - y1);
-
-                                        bValid = true;
+                                    } else {
+                                        SAL_WARN("cppcanvas.emf", "EMF+ DrawImagePoints Wrong EMF+ file. Expected 3 points, received: "<< aCount);
+                                        break;
                                     }
                                 } else if (type == EmfPlusRecordTypeDrawImage) {
                                     float dx, dy, dw, dh;
@@ -1222,39 +1224,33 @@ namespace cppcanvas
 
                                     aDstPoint = Map (dx, dy);
                                     aDstSize = MapSize(dw, dh);
-
-                                    bValid = true;
                                 }
 
-                                if (bValid) {
-                                    BitmapEx aBmp( image.graphic.GetBitmapEx () );
-                                    aBmp.Crop( aSource );
+                                BitmapEx aBmp( image.graphic.GetBitmapEx () );
+                                aBmp.Crop( aSource );
 
-                                    Size aSize( aBmp.GetSizePixel() );
-                                    SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
-                                    if( aSize.Width() > 0 && aSize.Height() > 0 ) {
-                                        std::shared_ptr<Action> pBmpAction (
-                                            internal::BitmapActionFactory::createBitmapAction (
-                                                aBmp,
-                                                rState.mapModeTransform * aDstPoint,
-                                                rState.mapModeTransform * aDstSize,
-                                                rCanvas,
-                                                rState));
+                                Size aSize( aBmp.GetSizePixel() );
+                                SAL_INFO("cppcanvas.emf", "EMF+ bitmap size: " << aSize.Width() << "x" << aSize.Height());
+                                if( aSize.Width() > 0 && aSize.Height() > 0 ) {
+                                    std::shared_ptr<Action> pBmpAction (
+                                        internal::BitmapActionFactory::createBitmapAction (
+                                            aBmp,
+                                            rState.mapModeTransform * aDstPoint,
+                                            rState.mapModeTransform * aDstSize,
+                                            rCanvas,
+                                            rState));
 
-                                        if( pBmpAction ) {
-                                            maActions.emplace_back( pBmpAction,
-                                                                            rFactoryParms.mrCurrActionIndex );
+                                    if( pBmpAction ) {
+                                        maActions.emplace_back( pBmpAction,
+                                                                        rFactoryParms.mrCurrActionIndex );
 
-                                            rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
-                                        }
-                                    } else {
-                                        SAL_INFO("cppcanvas.emf", "EMF+ warning: empty bitmap");
+                                        rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
                                     }
                                 } else {
-                                    SAL_WARN("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme)");
+                                    SAL_WARN("cppcanvas.emf", "EMF+ warning: empty bitmap");
                                 }
                             } else {
-                                SAL_WARN("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme) - possibly unsupported source units for crop rectangle");
+                                SAL_WARN("cppcanvas.emf", "EMF+ DrawImage(Points) Wrong EMF+ file. Only Unit Type Pixel is support by EMF+ standard in DrawImage(Points)");
                             }
                             break;
                         }
