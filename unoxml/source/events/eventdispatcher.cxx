@@ -107,6 +107,18 @@ namespace DOM { namespace events {
             xmlNodePtr const pNode, Reference<XNode> const& xNode,
             Reference< XEvent > const& i_xEvent) const
     {
+        TypeListenerMap captureListeners;
+        TypeListenerMap targetListeners;
+        {
+            ::osl::MutexGuard g(rMutex);
+
+            captureListeners = m_CaptureListeners;
+            targetListeners = m_TargetListeners;
+        }
+
+        if (captureListeners.empty() && targetListeners.empty())
+            return true;
+
         CEvent *pEvent = nullptr; // pointer to internal event representation
 
         OUString const aType = i_xEvent->getType();
@@ -180,8 +192,6 @@ namespace DOM { namespace events {
         typedef std::vector< ::std::pair<Reference<XEventTarget>, xmlNodePtr> >
             NodeVector_t;
         NodeVector_t captureVector;
-        TypeListenerMap captureListeners;
-        TypeListenerMap targetListeners;
         {
             ::osl::MutexGuard g(rMutex);
 
@@ -193,8 +203,6 @@ namespace DOM { namespace events {
                 captureVector.emplace_back(xRef, cur);
                 cur = cur->parent;
             }
-            captureListeners = m_CaptureListeners;
-            targetListeners = m_TargetListeners;
         }
 
         // the capture vector now holds the node path from target to root
