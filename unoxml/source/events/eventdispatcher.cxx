@@ -107,6 +107,9 @@ namespace DOM { namespace events {
             xmlNodePtr const pNode, Reference<XNode> const& xNode,
             Reference< XEvent > const& i_xEvent) const
     {
+        if (m_CaptureListeners.empty() && m_TargetListeners.empty())
+            return true;
+
         CEvent *pEvent = nullptr; // pointer to internal event representation
 
         OUString const aType = i_xEvent->getType();
