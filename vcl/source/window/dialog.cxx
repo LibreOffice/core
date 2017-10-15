@@ -492,6 +492,7 @@ void Dialog::ImplInitSettings()
 
 Dialog::Dialog( WindowType nType )
     : SystemWindow( nType )
+    , mbForceBorderWindow(false)
     , mnInitFlag(InitFlag::Default)
 {
     ImplInitDialogData();
