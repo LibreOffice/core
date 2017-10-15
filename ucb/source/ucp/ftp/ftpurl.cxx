@@ -239,11 +239,10 @@ OUString FTPURL::ident(bool withslash,bool internal) const
     // and more important, as one without username and
     // password. ( These are set together with the command. )
 
-    OUStringBuffer bff;
-    bff.append("ftp://");
+    OUString bff = "ftp://";
 
     if( m_aUsername != "anonymous" ) {
-        bff.append(m_aUsername);
+        bff += m_aUsername;
 
         OUString aPassword,aAccount;
         m_pFCP->forHost(m_aHost,
@@ -254,42 +253,37 @@ OUString FTPURL::ident(bool withslash,bool internal) const
 
         if((m_bShowPassword || internal) &&
            !aPassword.isEmpty() )
-            bff.append(':')
-                .append(aPassword);
+            bff += ":" + aPassword;
 
-        bff.append('@');
+        bff += "@";
     }
-    bff.append(m_aHost);
+    bff += (m_aHost);
 
     if( m_aPort != "21" )
-        bff.append(':')
-            .append(m_aPort)
-            .append('/');
+        bff += ":" + m_aPort + "/";
     else
-        bff.append('/');
+        bff += "/";
 
     for(size_t i = 0; i < m_aPathSegmentVec.size(); ++i)
         if(i == 0)
-            bff.append(m_aPathSegmentVec[i]);
+            bff += m_aPathSegmentVec[i];
         else
-            bff.append('/').append(m_aPathSegmentVec[i]);
+            bff += "/" + m_aPathSegmentVec[i];
     if(withslash)
         if(!bff.isEmpty() && bff[bff.getLength()-1] != '/')
-            bff.append('/');
+            bff += "/";
 
-    bff.append(m_aType);
-    return bff.makeStringAndClear();
+    bff += (m_aType);
+    return bff;
 }
 
 
 OUString FTPURL::parent(bool internal) const
 {
-    OUStringBuffer bff;
-
-    bff.append("ftp://");
+    OUString bff ="ftp://";
 
     if( m_aUsername != "anonymous" ) {
-        bff.append(m_aUsername);
+        bff += (m_aUsername);
 
         OUString aPassword,aAccount;
         m_pFCP->forHost(m_aHost,
@@ -299,20 +293,17 @@ OUString FTPURL::parent(bool internal) const
                         aAccount);
 
         if((internal || m_bShowPassword) && !aPassword.isEmpty())
-            bff.append(':')
-                .append(aPassword);
+            bff += ":" + aPassword;
 
-        bff.append('@');
+        bff += "@";
     }
 
-    bff.append(m_aHost);
+    bff += m_aHost;
 
     if( m_aPort != "21" )
-        bff.append(':')
-            .append(m_aPort)
-            .append('/');
+        bff += ":" + m_aPort + "/";
     else
-        bff.append('/');
+        bff += "/";
 
     OUString last;
 
@@ -320,17 +311,17 @@ OUString FTPURL::parent(bool internal) const
         if(1+i == m_aPathSegmentVec.size())
             last = m_aPathSegmentVec[i];
         else if(i == 0)
-            bff.append(m_aPathSegmentVec[i]);
+            bff+= m_aPathSegmentVec[i];
         else
-            bff.append('/').append(m_aPathSegmentVec[i]);
+            bff += "/" + m_aPathSegmentVec[i];
 
     if(last.isEmpty())
-        bff.append("..");
+        bff += "..";
     else if ( last == ".." )
-        bff.append(last).append("/..");
+        bff += (last) + "/..";
 
-    bff.append(m_aType);
-    return bff.makeStringAndClear();
+    bff += m_aType;
+    return bff;
 }
 
 

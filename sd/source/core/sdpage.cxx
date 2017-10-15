@@ -128,10 +128,8 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
     // The name of the layout of the page is used by SVDRAW to determine the
     // presentation template of the outline objects. Therefore, it already
     // contains the designator for the outline (STR_LAYOUT_OUTLINE).
-    OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME));
-    aBuf.append(SD_LT_SEPARATOR).append(STR_LAYOUT_OUTLINE);
+    OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME) + SD_LT_SEPARATOR STR_LAYOUT_OUTLINE);
     maLayoutName = aBuf.makeStringAndClear();
-
     Size aPageSize(GetSize());
 
     if (aPageSize.Width() > aPageSize.Height())
@@ -555,7 +553,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
         {
             for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
             {
-                OUString aName( maLayoutName + " " + OUString::number( nLevel ) );
+                OUString aName = (maLayoutName) + " " + OUString::number( nLevel ) ;
                 SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
                 DBG_ASSERT(pSheet, "StyleSheet for outline object not found");
                 if (pSheet)
