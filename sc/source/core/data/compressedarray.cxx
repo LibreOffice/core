@@ -23,12 +23,12 @@
 
 #include <algorithm>
 
+static const size_t nScCompressedArrayDelta = 4;
+
 template< typename A, typename D >
-ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D& rValue,
-        size_t nDeltaP )
+ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D& rValue )
     : nCount(1)
     , nLimit(1)
-    , nDelta( nDeltaP > 0 ? nDeltaP : 1)
     , pData( new DataEntry[1])
     , nMaxAccess( nMaxAccessP)
 {
@@ -41,7 +41,6 @@ ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D* pDataArray,
         size_t nDataCount )
     : nCount(0)
     , nLimit( nDataCount)
-    , nDelta( nScCompressedArrayDelta)
     , pData( new DataEntry[nDataCount])
     , nMaxAccess( nMaxAccessP)
 {
@@ -127,7 +126,7 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
             size_t nNeeded = nCount + 2;
             if (nLimit < nNeeded)
             {
-                nLimit += nDelta;
+                nLimit += nScCompressedArrayDelta;
                 if (nLimit < nNeeded)
                     nLimit = nNeeded;
                 DataEntry* pNewData = new DataEntry[nLimit];
