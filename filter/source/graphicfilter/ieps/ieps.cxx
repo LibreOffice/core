@@ -36,6 +36,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/safeint.hxx>
 #include <memory>
 
 class FilterConfigItem;
@@ -96,7 +97,9 @@ static long ImplGetNumber(sal_uInt8* &rBuf, sal_uInt32& nSecurityCount)
                     nSecurityCount = 1;         // error parsing the bounding box values
                 else if ( bValid )
                 {
-                    nRetValue *= 10;
+                    const bool bFail = o3tl::checked_multiply(nRetValue, 10L, nRetValue);
+                    if (bFail)
+                        return 0;
                     nRetValue += *rBuf - '0';
                 }
                 break;
