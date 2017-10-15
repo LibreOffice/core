@@ -10,9 +10,10 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xprintareas.hxx>
-#include <test/sheet/xuniquecellformatrangessupplier.hxx>
+#include <test/sheet/xsheetpagebreak.hxx>
 #include <test/sheet/xspreadsheet.hxx>
 #include <test/sheet/xsubtotalcalculatable.hxx>
+#include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
 
@@ -25,15 +26,16 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 14
+#define NUMBER_OF_TESTS 17
 
-class ScTableSheetObj : public CalcUnoApiTest, public apitest::XSearchable,
-                                               public apitest::XReplaceable,
+class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
                                                public apitest::XPrintAreas,
-                                               public apitest::XCellSeries,
-                                               public apitest::XUniqueCellFormatRangesSupplier,
+                                               public apitest::XReplaceable,
+                                               public apitest::XSearchable,
+                                               public apitest::XSheetPageBreak,
                                                public apitest::XSpreadsheet,
-                                               public apitest::XSubTotalCalculatable
+                                               public apitest::XSubTotalCalculatable,
+                                               public apitest::XUniqueCellFormatRangesSupplier
 {
 public:
     ScTableSheetObj();
@@ -63,6 +65,11 @@ public:
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
 
+    // XSheetPageBreak
+    CPPUNIT_TEST(testGetColumnPageBreaks);
+    CPPUNIT_TEST(testGetRowPageBreaks);
+    CPPUNIT_TEST(testRemoveAllManualPageBreaks);
+
     // XUniqueCellFormatRangesSupplier
     CPPUNIT_TEST(testGetUniqueCellFormatRanges);
 
@@ -86,9 +93,9 @@ uno::Reference< lang::XComponent > ScTableSheetObj::mxComponent;
 
 ScTableSheetObj::ScTableSheetObj():
     CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-    apitest::XSearchable("test", 4),
+    apitest::XCellSeries(1, 0),
     apitest::XReplaceable("searchReplaceString", "replaceReplaceString"),
-    apitest::XCellSeries(1, 0)
+    apitest::XSearchable("test", 4)
 {
 }
 
