@@ -36,7 +36,7 @@
 #include <attributesmap.hxx>
 #include <document.hxx>
 
-#include "../events/mutationevent.hxx"
+#include "mutationevent.hxx"
 
 using namespace css::uno;
 using namespace css::xml::dom;

@@ -34,11 +34,11 @@
 #include <entity.hxx>
 #include <notation.hxx>
 
-#include "../events/event.hxx"
-#include "../events/mutationevent.hxx"
-#include "../events/uievent.hxx"
-#include "../events/mouseevent.hxx"
-#include "../events/eventdispatcher.hxx"
+#include "event.hxx"
+#include "mutationevent.hxx"
+#include "uievent.hxx"
+#include "mouseevent.hxx"
+#include "eventdispatcher.hxx"
 
 #include <string.h>
 

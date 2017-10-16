@@ -17,56 +17,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_EVENTS_MUTATIONEVENT_HXX
-#define INCLUDED_UNOXML_SOURCE_EVENTS_MUTATIONEVENT_HXX
+#ifndef INCLUDED_UNOXML_INC_EVENT_HXX
+#define INCLUDED_UNOXML_INC_EVENT_HXX
 
 #include <sal/types.h>
 
 #include <com/sun/star/uno/Reference.h>
-
-#include <com/sun/star/xml/dom/events/PhaseType.hpp>
-#include <com/sun/star/xml/dom/events/AttrChangeType.hpp>
-#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
+#include <com/sun/star/xml/dom/events/XEvent.hpp>
+#include <com/sun/star/xml/dom/events/XEventTarget.hpp>
+#include <com/sun/star/util/Time.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
-#include "event.hxx"
+#include "node.hxx"
 
-namespace DOM { namespace events {
-
-typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XMutationEvent >
-    CMutationEvent_Base;
-
-class CMutationEvent
-    : public CMutationEvent_Base
+namespace DOM {namespace events
 {
-    css::uno::Reference< css::xml::dom::XNode > m_relatedNode;
-    OUString m_prevValue;
-    OUString m_newValue;
-    OUString m_attrName;
-    css::xml::dom::events::AttrChangeType m_attrChangeType;
+class CEvent : public cppu::WeakImplHelper< css::xml::dom::events::XEvent >
+{
+friend class CEventDispatcher;
+
+protected:
+    ::osl::Mutex m_Mutex;
+    bool m_canceled;
+    OUString m_eventType;
+    css::uno::Reference< css::xml::dom::events::XEventTarget > m_target;
+    css::uno::Reference< css::xml::dom::events::XEventTarget > m_currentTarget;
+    css::xml::dom::events::PhaseType m_phase;
+    bool m_bubbles;
+    bool m_cancelable;
+    css::util::Time m_time;
 
 public:
-    explicit CMutationEvent();
 
-    virtual ~CMutationEvent() override;
+    explicit CEvent();
 
-    virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getRelatedNode() override;
-    virtual OUString SAL_CALL getPrevValue() override;
-    virtual OUString SAL_CALL getNewValue() override;
-    virtual OUString SAL_CALL getAttrName() override;
-    virtual css::xml::dom::events::AttrChangeType SAL_CALL getAttrChange() override;
-    virtual void SAL_CALL initMutationEvent(
-                           const OUString& typeArg,
-                           sal_Bool canBubbleArg,
-                           sal_Bool cancelableArg,
-                           const css::uno::Reference< css::xml::dom::XNode >& relatedNodeArg,
-                           const OUString& prevValueArg,
-                           const OUString& newValueArg,
-                           const OUString& attrNameArg,
-                           css::xml::dom::events::AttrChangeType attrChangeArg) override;
-
-    // delegate to CEvent, since we are inheriting from CEvent and XEvent
+    virtual ~CEvent() override;
     virtual OUString SAL_CALL getType() override;
     virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() override;
     virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() override;

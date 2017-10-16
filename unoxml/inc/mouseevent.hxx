@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_EVENTS_MOUSEEVENT_HXX
-#define INCLUDED_UNOXML_SOURCE_EVENTS_MOUSEEVENT_HXX
+#ifndef INCLUDED_UNOXML_INC_MOUSEEVENT_HXX
+#define INCLUDED_UNOXML_INC_MOUSEEVENT_HXX
 
 #include <com/sun/star/xml/dom/events/PhaseType.hpp>
 #include <com/sun/star/xml/dom/events/XMouseEvent.hpp>

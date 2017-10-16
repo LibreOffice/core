@@ -27,7 +27,7 @@
 
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 
-#include "../events/mutationevent.hxx"
+#include "mutationevent.hxx"
 
 using namespace css::uno;
 using namespace css::xml::dom;
