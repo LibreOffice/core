@@ -180,8 +180,8 @@ bool ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam );
 bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
 
 WinSalObject* ImplFindSalObject( HWND hWndChild );
-bool ImplSalPreDispatchMsg( MSG* pMsg );
-void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
+bool ImplSalPreDispatchMsg( const MSG* pMsg );
+void ImplSalPostDispatchMsg( const MSG* pMsg );
 
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Font& rFont );
 
