@@ -1335,11 +1335,11 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     aDelegatorArguments.realloc(nArgsLen+1);
     aDelegatorArguments[nArgsLen++] <<= xInfoSet;
 
-     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-    uno::Reference< document::XGraphicObjectResolver >      xGrfResolver;
-    SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(_xStorageToSaveTo,SvXMLGraphicHelperMode::Write);
-    xGrfResolver = pGraphicHelper;
-    pGraphicHelper->release();
+    uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+    uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
+    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper = SvXMLGraphicHelper::Create(_xStorageToSaveTo,SvXMLGraphicHelperMode::Write);
+    xGrfResolver = xGraphicHelper.get();
+    xGraphicHelper.clear();
     xObjectResolver = SvXMLEmbeddedObjectHelper::Create( _xStorageToSaveTo,*this, SvXMLEmbeddedObjectHelperMode::Write ).get();
 
     aDelegatorArguments.realloc(nArgsLen+2);
@@ -2126,16 +2126,14 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
         return static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( m_pImpl->m_xStorage,*this, SvXMLEmbeddedObjectHelperMode::Write ).get());
     else if ( aServiceSpecifier == "com.sun.star.document.ImportGraphicObjectResolver" )
     {
-        SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,SvXMLGraphicHelperMode::Write);
-        uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(pGraphicHelper));
-        pGraphicHelper->release();
+        rtl::Reference<SvXMLGraphicHelper> xGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,SvXMLGraphicHelperMode::Write);
+        uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(xGraphicHelper.get()));
         return xRet;
     }
     else if ( aServiceSpecifier == "com.sun.star.document.ExportGraphicObjectResolver" )
     {
-        SvXMLGraphicHelper* pGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,SvXMLGraphicHelperMode::Write);
-        uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(pGraphicHelper));
-        pGraphicHelper->release();
+        rtl::Reference<SvXMLGraphicHelper> xGraphicHelper = SvXMLGraphicHelper::Create(m_pImpl->m_xStorage,SvXMLGraphicHelperMode::Write);
+        uno::Reference< uno::XInterface> xRet(static_cast< ::cppu::OWeakObject* >(xGraphicHelper.get()));
         return xRet;
     }
     else if ( aServiceSpecifier == "com.sun.star.chart2.data.DataProvider" )

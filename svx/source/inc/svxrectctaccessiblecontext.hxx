@@ -46,6 +46,7 @@
 #include <svx/rectenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/gen.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace awt {
     struct Point;
@@ -256,7 +257,7 @@ private:
     VclPtr<SvxRectCtl>                  mpRepr;
 
     /// array for all possible children
-    SvxRectCtlChildAccessibleContext**  mpChildren;
+    std::vector<rtl::Reference<SvxRectCtlChildAccessibleContext>>  mvChildren;
 
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32 mnClientId;

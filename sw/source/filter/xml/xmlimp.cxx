@@ -394,7 +394,6 @@ SwXMLImport::SwXMLImport(
     m_pDocElemTokenMap( nullptr ),
     m_pTableElemTokenMap( nullptr ),
     m_pTableCellAttrTokenMap( nullptr ),
-    m_pGraphicResolver( nullptr ),
     m_nStyleFamilyMask( SfxStyleFamily::All ),
     m_bLoadDoc( true ),
     m_bInsert( false ),
@@ -662,9 +661,8 @@ void SwXMLImport::startDocument()
 
     if( !GetGraphicResolver().is() )
     {
-        m_pGraphicResolver = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
-        Reference< document::XGraphicObjectResolver > xGraphicResolver( m_pGraphicResolver );
-        SetGraphicResolver( xGraphicResolver );
+        m_xGraphicResolver = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Read );
+        SetGraphicResolver( m_xGraphicResolver.get() );
     }
 
     if( !GetEmbeddedResolver().is() )
@@ -690,8 +688,9 @@ void SwXMLImport::endDocument()
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    if( m_pGraphicResolver )
-        SvXMLGraphicHelper::Destroy( m_pGraphicResolver );
+    if( m_xGraphicResolver )
+        m_xGraphicResolver->dispose();
+    m_xGraphicResolver.clear();
     if( m_xEmbeddedResolver )
         m_xEmbeddedResolver->dispose();
     m_xEmbeddedResolver.clear();

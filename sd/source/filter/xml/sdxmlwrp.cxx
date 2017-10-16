@@ -507,7 +507,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     }
 
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
-    SvXMLGraphicHelper *pGraphicHelper = nullptr;
+    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
 
@@ -556,10 +556,10 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     if( ERRCODE_NONE == nRet )
     {
-        pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
+        xGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
                                                      SvXMLGraphicHelperMode::Read,
                                                      false );
-        xGraphicResolver = pGraphicHelper;
+        xGraphicResolver = xGraphicHelper.get();
         xObjectHelper = SvXMLEmbeddedObjectHelper::Create(
                                     xStorage, *pDoc->GetPersist(),
                                     SvXMLEmbeddedObjectHelperMode::Read );
@@ -649,8 +649,9 @@ bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
-    if( pGraphicHelper )
-        SvXMLGraphicHelper::Destroy( pGraphicHelper );
+    if( xGraphicHelper )
+        xGraphicHelper->dispose();
+    xGraphicHelper.clear();
     xGraphicResolver = nullptr;
     if( xObjectHelper.is() )
         xObjectHelper->dispose();
@@ -785,7 +786,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 bool SdXMLFilter::Export()
 {
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
-    SvXMLGraphicHelper*         pGraphicHelper = nullptr;
+    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
     bool                    bDocRet = false;
 
     if( !mxModel.is() )
@@ -878,8 +879,8 @@ bool SdXMLFilter::Export()
                 xObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *mrDocShell.GetDoc()->GetPersist(), SvXMLEmbeddedObjectHelperMode::Write );
                 xObjectResolver = xObjectHelper.get();
 
-                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Write, false );
-                xGrfResolver = pGraphicHelper;
+                xGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Write, false );
+                xGrfResolver = xGraphicHelper.get();
             }
 
             CreateStatusIndicator();
@@ -997,8 +998,9 @@ bool SdXMLFilter::Export()
     if ( !bLocked )
         mxModel->unlockControllers();
 
-    if( pGraphicHelper )
-        SvXMLGraphicHelper::Destroy( pGraphicHelper );
+    if( xGraphicHelper )
+        xGraphicHelper->dispose();
+    xGraphicHelper.clear();
 
     if( xObjectHelper )
         xObjectHelper->dispose();

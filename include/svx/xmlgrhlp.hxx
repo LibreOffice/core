@@ -92,12 +92,10 @@ protected:
 public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
 
-    static SvXMLGraphicHelper*  Create( const css::uno::Reference < css::embed::XStorage >& rXMLStorage,
+    static rtl::Reference<SvXMLGraphicHelper> Create( const css::uno::Reference < css::embed::XStorage >& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
                                         bool bDirect = true );
-    static SvXMLGraphicHelper*  Create( SvXMLGraphicHelperMode eCreateMode );
-
-    static void                 Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper );
+    static rtl::Reference<SvXMLGraphicHelper> Create( SvXMLGraphicHelperMode eCreateMode );
 
 public:
 

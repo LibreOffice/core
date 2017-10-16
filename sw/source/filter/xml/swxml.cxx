@@ -474,7 +474,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
             comphelper::getProcessComponentContext();
 
     uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
-    SvXMLGraphicHelper *pGraphicHelper = nullptr;
+    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
 
@@ -488,10 +488,10 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     if( !xStorage.is() )
         return ERR_SWG_READ_ERROR;
 
-    pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
+    xGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
                                                  SvXMLGraphicHelperMode::Read,
                                                  false );
-    xGraphicResolver = pGraphicHelper;
+    xGraphicResolver = xGraphicHelper.get();
     SfxObjectShell *pPersist = rDoc.GetPersist();
     if( pPersist )
     {
@@ -888,8 +888,9 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
 
     lcl_EnsureValidPam( rPaM ); // move Pam into valid content
 
-    if( pGraphicHelper )
-        SvXMLGraphicHelper::Destroy( pGraphicHelper );
+    if( xGraphicHelper )
+        xGraphicHelper->dispose();
+    xGraphicHelper.clear();
     xGraphicResolver = nullptr;
     if( xObjectHelper )
         xObjectHelper->dispose();

@@ -106,7 +106,6 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     SvxRectCtlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
     mpRepr( &rRepr ),
-    mpChildren( nullptr ),
     mnClientId( 0 ),
     mnSelectedChild( NOCHILDSELECTED )
 {
@@ -116,11 +115,7 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
         msDescription = SvxResId( RID_SVXSTR_RECTCTL_ACC_CORN_DESCR );
     }
 
-    mpChildren = new SvxRectCtlChildAccessibleContext*[ MAX_NUM_OF_CHILDREN ];
-
-    SvxRectCtlChildAccessibleContext**  p = mpChildren;
-    for( int i = MAX_NUM_OF_CHILDREN ; i ; --i, ++p )
-        *p = nullptr;
+    mvChildren.resize(MAX_NUM_OF_CHILDREN);
 }
 
 
@@ -211,7 +206,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 {
     checkChildIndex( nIndex );
 
-    Reference< XAccessible >    xChild = mpChildren[ nIndex ];
+    Reference< XAccessible > xChild(mvChildren[ nIndex ].get());
     if( !xChild.is() )
     {
         ::SolarMutexGuard aSolarGuard;
@@ -220,7 +215,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 
         ThrowExceptionIfNotAlive();
 
-        xChild = mpChildren[ nIndex ];
+        xChild = mvChildren[ nIndex ].get();
 
         if( !xChild.is() )
         {
@@ -232,8 +227,8 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
 
             SvxRectCtlChildAccessibleContext*   pChild = new SvxRectCtlChildAccessibleContext(
                                                     this, *mpRepr, aName, aDescr, aFocusRect, nIndex );
-            xChild = mpChildren[ nIndex ] = pChild;
-            pChild->acquire();
+            mvChildren[ nIndex ] = pChild;
+            xChild = pChild;
 
             // set actual state
             if( mnSelectedChild == nIndex )
@@ -522,11 +517,8 @@ void SvxRectCtlAccessibleContext::FireChildFocus( RectPoint eButton )
         mnSelectedChild = nNew;
         if( nNew != NOCHILDSELECTED )
         {
-            SvxRectCtlChildAccessibleContext* pChild = mpChildren[ nNew ];
-            if( pChild )
-            {
-                pChild->FireFocusEvent();
-            }
+            if( mvChildren[ nNew ].is() )
+                mvChildren[ nNew ]->FireFocusEvent();
         }
         else
         {
@@ -553,7 +545,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
             SvxRectCtlChildAccessibleContext*   pChild;
             if( mnSelectedChild != NOCHILDSELECTED )
             {   // deselect old selected child if one is selected
-                pChild = mpChildren[ mnSelectedChild ];
+                pChild = mvChildren[ mnSelectedChild ].get();
                 if( pChild )
                     pChild->setStateChecked( false );
             }
@@ -563,9 +555,8 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew )
 
             if( nNew != NOCHILDSELECTED )
             {
-                pChild = mpChildren[ nNew ];
-                if( pChild )
-                    pChild->setStateChecked( true );
+                if( mvChildren[ nNew ].is() )
+                    mvChildren[ nNew ]->setStateChecked( true );
             }
         }
         else
@@ -587,20 +578,11 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
             ::osl::MutexGuard   aGuard( m_aMutex );
             mpRepr = nullptr;      // object dies with representation
 
-            SvxRectCtlChildAccessibleContext**  p = mpChildren;
-            for( int i = MAX_NUM_OF_CHILDREN ; i ; --i, ++p )
-            {
-                SvxRectCtlChildAccessibleContext*   pChild = *p;
-                if( pChild )
-                {
-                    pChild->dispose();
-                    pChild->release();
-                    *p = nullptr;
-                }
-            }
+            for (auto & rxChild : mvChildren)
+                if( rxChild.is() )
+                    rxChild->dispose();
 
-            delete[] mpChildren;
-            mpChildren = nullptr;
+            mvChildren.clear();
         }
 
         {

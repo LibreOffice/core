@@ -867,12 +867,12 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
 
         uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
-        SvXMLGraphicHelper* pGraphicHelper = nullptr;
+        rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
 
         if( xStorage.is() )
         {
-            pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Write, false );
-            xGrfContainer = pGraphicHelper;
+            xGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Write, false );
+            xGrfContainer = xGraphicHelper.get();
         }
 
         if( pObjSh )
@@ -928,8 +928,9 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             SAL_INFO( "sc.filter", "content export end" );
         }
 
-        if( pGraphicHelper )
-            SvXMLGraphicHelper::Destroy( pGraphicHelper );
+        if( xGraphicHelper )
+            xGraphicHelper->dispose();
+        xGraphicHelper.clear();
 
         if( xObjectHelper )
             xObjectHelper->dispose();

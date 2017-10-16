@@ -313,7 +313,7 @@ SvxXMLXTableImport::~SvxXMLXTableImport() throw ()
 }
 
 static void openStorageStream( xml::sax::InputSource *pParserInput,
-                               SvXMLGraphicHelper   **ppGraphicHelper,
+                               rtl::Reference<SvXMLGraphicHelper>& rxGraphicHelper,
                                const uno::Reference < embed::XStorage >& xStorage )
 {
     uno::Reference < io::XStream > xIStm;
@@ -324,7 +324,7 @@ static void openStorageStream( xml::sax::InputSource *pParserInput,
         return;
     }
     pParserInput->aInputStream = xIStm->getInputStream();
-    *ppGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Read );
+    rxGraphicHelper = SvXMLGraphicHelper::Create( xStorage, SvXMLGraphicHelperMode::Read );
 }
 
 bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
@@ -333,7 +333,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                                bool *bOptLoadedFromStorage ) throw()
 {
     bool bRet = true;
-    SvXMLGraphicHelper* pGraphicHelper = nullptr;
+    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
 
     INetURLObject aURLObj( rPath );
     bool bUseStorage = aURLObj.GetProtocol() == INetProtocol::NotValid; // a relative path
@@ -355,7 +355,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
             if( aMedium.IsStorage() )
             {
                 uno::Reference < embed::XStorage > xMediumStorage( aMedium.GetStorage( false ), uno::UNO_QUERY_THROW );
-                openStorageStream( &aParserInput, &pGraphicHelper, xMediumStorage );
+                openStorageStream( &aParserInput, xGraphicHelper, xMediumStorage );
             }
             else
                 aParserInput.aInputStream = aMedium.GetInputStream();
@@ -372,7 +372,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
             {
             }
             if( xSubStorage.is() )
-                openStorageStream( &aParserInput, &pGraphicHelper, xSubStorage );
+                openStorageStream( &aParserInput, xGraphicHelper, xSubStorage );
             else
             {
                 css::uno::Reference< css::io::XStream > xStream;
@@ -387,8 +387,8 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
         }
 
         uno::Reference< XGraphicObjectResolver > xGrfResolver;
-        if (pGraphicHelper)
-            xGrfResolver = pGraphicHelper;
+        if (xGraphicHelper.is())
+            xGrfResolver = xGraphicHelper.get();
 
         try
         {
@@ -403,8 +403,8 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
         xParser->setDocumentHandler( xHandler );
         xParser->parseStream( aParserInput );
 
-        if( pGraphicHelper )
-            SvXMLGraphicHelper::Destroy( pGraphicHelper );
+        if( xGraphicHelper )
+            xGraphicHelper->dispose();
     }
     catch (...)
     {
