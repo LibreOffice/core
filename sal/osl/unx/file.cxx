@@ -1477,7 +1477,8 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
             if ((nOffset < 0) && (nPos < -1*nOffset))
                 return osl_File_E_INVAL;
 
-            if (limit_off_t < (sal_Int64) nPos + nOffset)
+            assert(nPos >= 0);
+            if (nOffset > MAX_OFF_T - nPos)
                 return osl_File_E_OVERFLOW;
             break;
 
@@ -1486,7 +1487,8 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
             if ((nOffset < 0) && (nPos < -1*nOffset))
                 return osl_File_E_INVAL;
 
-            if (limit_off_t < (sal_Int64) nPos + nOffset)
+            assert(nPos >= 0);
+            if (nOffset > MAX_OFF_T - nPos)
                 return osl_File_E_OVERFLOW;
             break;
 
