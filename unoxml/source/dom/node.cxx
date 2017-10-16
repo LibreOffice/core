@@ -39,8 +39,8 @@
 #include <attr.hxx>
 #include <childlist.hxx>
 
-#include "../events/eventdispatcher.hxx"
-#include "../events/mutationevent.hxx"
+#include "eventdispatcher.hxx"
+#include "mutationevent.hxx"
 
 using namespace css;
 using namespace css::uno;

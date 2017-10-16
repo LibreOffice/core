@@ -17,42 +17,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_EVENTS_EVENT_HXX
-#define INCLUDED_UNOXML_SOURCE_EVENTS_EVENT_HXX
+#ifndef INCLUDED_UNOXML_INC_UIEVENT_HXX
+#define INCLUDED_UNOXML_INC_UIEVENT_HXX
 
 #include <sal/types.h>
 
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/xml/dom/events/XEvent.hpp>
-#include <com/sun/star/xml/dom/events/XEventTarget.hpp>
-#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/xml/dom/events/PhaseType.hpp>
+#include <com/sun/star/xml/dom/events/XUIEvent.hpp>
+#include <com/sun/star/xml/dom/views/XAbstractView.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
-#include "node.hxx"
+#include "event.hxx"
 
-namespace DOM {namespace events
-{
-class CEvent : public cppu::WeakImplHelper< css::xml::dom::events::XEvent >
-{
-friend class CEventDispatcher;
+namespace DOM { namespace events {
 
+typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XUIEvent > CUIEvent_Base;
+
+class CUIEvent
+    : public CUIEvent_Base
+{
 protected:
-    ::osl::Mutex m_Mutex;
-    bool m_canceled;
-    OUString m_eventType;
-    css::uno::Reference< css::xml::dom::events::XEventTarget > m_target;
-    css::uno::Reference< css::xml::dom::events::XEventTarget > m_currentTarget;
-    css::xml::dom::events::PhaseType m_phase;
-    bool m_bubbles;
-    bool m_cancelable;
-    css::util::Time m_time;
+    sal_Int32 m_detail;
+    css::uno::Reference< css::xml::dom::views::XAbstractView > m_view;
 
 public:
+    explicit CUIEvent();
 
-    explicit CEvent();
+    virtual css::uno::Reference< css::xml::dom::views::XAbstractView > SAL_CALL getView() override;
+    virtual sal_Int32 SAL_CALL getDetail() override;
+    virtual void SAL_CALL initUIEvent(const OUString& typeArg,
+                     sal_Bool canBubbleArg,
+                     sal_Bool cancelableArg,
+                     const css::uno::Reference< css::xml::dom::views::XAbstractView >& viewArg,
+                     sal_Int32 detailArg) override;
 
-    virtual ~CEvent() override;
+    // delegate to CEvent, since we are inheriting from CEvent and XEvent
     virtual OUString SAL_CALL getType() override;
     virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() override;
     virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() override;

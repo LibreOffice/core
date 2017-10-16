@@ -17,14 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_UNOXML_SOURCE_EVENTS_UIEVENT_HXX
-#define INCLUDED_UNOXML_SOURCE_EVENTS_UIEVENT_HXX
+#ifndef INCLUDED_UNOXML_INC_MUTATIONEVENT_HXX
+#define INCLUDED_UNOXML_INC_MUTATIONEVENT_HXX
 
 #include <sal/types.h>
 
+#include <com/sun/star/uno/Reference.h>
+
 #include <com/sun/star/xml/dom/events/PhaseType.hpp>
-#include <com/sun/star/xml/dom/events/XUIEvent.hpp>
-#include <com/sun/star/xml/dom/views/XAbstractView.hpp>
+#include <com/sun/star/xml/dom/events/AttrChangeType.hpp>
+#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -32,25 +34,37 @@
 
 namespace DOM { namespace events {
 
-typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XUIEvent > CUIEvent_Base;
+typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XMutationEvent >
+    CMutationEvent_Base;
 
-class CUIEvent
-    : public CUIEvent_Base
+class CMutationEvent
+    : public CMutationEvent_Base
 {
-protected:
-    sal_Int32 m_detail;
-    css::uno::Reference< css::xml::dom::views::XAbstractView > m_view;
+    css::uno::Reference< css::xml::dom::XNode > m_relatedNode;
+    OUString m_prevValue;
+    OUString m_newValue;
+    OUString m_attrName;
+    css::xml::dom::events::AttrChangeType m_attrChangeType;
 
 public:
-    explicit CUIEvent();
+    explicit CMutationEvent();
 
-    virtual css::uno::Reference< css::xml::dom::views::XAbstractView > SAL_CALL getView() override;
-    virtual sal_Int32 SAL_CALL getDetail() override;
-    virtual void SAL_CALL initUIEvent(const OUString& typeArg,
-                     sal_Bool canBubbleArg,
-                     sal_Bool cancelableArg,
-                     const css::uno::Reference< css::xml::dom::views::XAbstractView >& viewArg,
-                     sal_Int32 detailArg) override;
+    virtual ~CMutationEvent() override;
+
+    virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getRelatedNode() override;
+    virtual OUString SAL_CALL getPrevValue() override;
+    virtual OUString SAL_CALL getNewValue() override;
+    virtual OUString SAL_CALL getAttrName() override;
+    virtual css::xml::dom::events::AttrChangeType SAL_CALL getAttrChange() override;
+    virtual void SAL_CALL initMutationEvent(
+                           const OUString& typeArg,
+                           sal_Bool canBubbleArg,
+                           sal_Bool cancelableArg,
+                           const css::uno::Reference< css::xml::dom::XNode >& relatedNodeArg,
+                           const OUString& prevValueArg,
+                           const OUString& newValueArg,
+                           const OUString& attrNameArg,
+                           css::xml::dom::events::AttrChangeType attrChangeArg) override;
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
     virtual OUString SAL_CALL getType() override;
