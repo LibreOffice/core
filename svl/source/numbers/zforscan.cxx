@@ -2348,21 +2348,18 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         bDecSep = true;
                         nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                         OUString& rStr = sStrArray[i];
+                        nPos = nPos + sStrArray[i].getLength();
+                        nCounter++;
                         i++;
-                        if (i < nAnzStrings)
+                        while (i < nAnzStrings &&
+                               sStrArray[i][0] == '0')
                         {
+                            rStr += sStrArray[i];
                             nPos = nPos + sStrArray[i].getLength();
+                            nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                            nAnzResStrings--;
                             nCounter++;
-                            while (i < nAnzStrings &&
-                                   sStrArray[i][0] == '0')
-                            {
-                                rStr += sStrArray[i];
-                                nPos = nPos + sStrArray[i].getLength();
-                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                nAnzResStrings--;
-                                nCounter++;
-                                i++;
-                            }
+                            i++;
                         }
                     }
                     else
@@ -2501,21 +2498,18 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             bDecSep = true;
                             nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                             OUString& rStr = sStrArray[i];
+                            nPos = nPos + sStrArray[i].getLength();
                             i++;
-                            if (i < nAnzStrings)
+                            nCounter++;
+                            while (i < nAnzStrings &&
+                                   sStrArray[i][0] == '0')
                             {
+                                rStr += sStrArray[i];
                                 nPos = nPos + sStrArray[i].getLength();
+                                nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                                nAnzResStrings--;
                                 nCounter++;
-                                while (i < nAnzStrings &&
-                                       sStrArray[i][0] == '0')
-                                {
-                                    rStr += sStrArray[i];
-                                    nPos = nPos + sStrArray[i].getLength();
-                                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                    nAnzResStrings--;
-                                    nCounter++;
-                                    i++;
-                                }
+                                i++;
                             }
                         }
                         else
