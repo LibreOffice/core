@@ -29,7 +29,7 @@ $(call gb_CustomTarget_get_target,ios/ios): $(IOSGEN)/$(IOSKIT)
 
 
 #- Generate xcconfig files  ---------------------------------------------------
-$(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk 
+$(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 	@mkdir -p $(IOSGEN) $(WORKDIR)/ios;
 	sed -e "s'@BUILDDIR@'$(BUILDDIR)'g" \
@@ -48,7 +48,6 @@ $(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	    -e "s'@CFLAGS@'$(gb_GLOBALDEFS)'g" \
 	    -e "s'@CPLUSPLUSFLAGS@'$(gb_GLOBALDEFS)'g" \
 	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
-	    -e "s'@LDLIBS@'`$(SRCDIR)/bin/lo-all-static-libs`'g" \
 	    $(SRCDIR)/ios/loApp.xcconfig.in > $(WORKDIR)/ios/loApp.xcconfig
 
 ifeq ("$(wildcard $(IOSRES))","")

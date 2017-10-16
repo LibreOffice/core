@@ -13,16 +13,15 @@ LO_WORKDIR = @WORKDIR@
 OTHER_CFLAGS = @CFLAGS@
 OTHER_CPLUSPLUSFLAGS = @CPLUSPLUSFLAGS@
 SYMROOT = @SYMROOT@
-LINK_LDFLAGS= @LDLIBS@ 
 
 //:configuration = Debug
-//LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_ARM64_debug.a
+LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_ARM64_debug.a
 
 //:configuration = Release
-//LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_ARM64.a
+LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_ARM64.a
 
 //:configuration = Simulator
-//LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_X86_64_debug.a
+LINK_LDFLAGS= $(LO_SRCDIR)/ios/generated/libLibreOfficeKit_X86_64_debug.a
 
 //:completeSettings = some
 
