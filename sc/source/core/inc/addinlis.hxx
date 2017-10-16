@@ -26,6 +26,7 @@
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 #include <list>
 
 class ScDocument;
@@ -40,7 +41,7 @@ private:
     css::uno::Any aResult;
     std::unique_ptr<ScAddInDocs> pDocs; // documents where this is used
 
-    static ::std::list<ScAddInListener*> aAllListeners;
+    static ::std::list<rtl::Reference<ScAddInListener>> aAllListeners;
 
     // always allocated via CreateListener
     ScAddInListener( css::uno::Reference<css::sheet::XVolatileResult> const & xVR,
