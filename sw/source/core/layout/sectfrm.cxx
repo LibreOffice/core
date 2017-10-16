@@ -1594,7 +1594,11 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
                 pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
                 continue;
             }
-            if( WrongPageDesc( pNxtPg ) )
+            // Page desc is never wrong in case of sections-in-tables: in that
+            // case pLayLeaf points to our section's cell's follow, which is
+            // fine to be on the same page. New page creation is handled when
+            // creating / moving the cell frame.
+            if( WrongPageDesc( pNxtPg ) && !bLayLeafTableAllowed )
             {
                 if( bWrongPage )
                     break; // there's a column between me and my right page
