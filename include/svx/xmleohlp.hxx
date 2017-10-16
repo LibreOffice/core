@@ -22,12 +22,13 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
-#include <map>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svx/svxdllapi.h>
+#include <map>
+#include <memory>
 
 enum class SvXMLEmbeddedObjectHelperMode
 {
@@ -43,9 +44,6 @@ class OutputStorageWrapper_Impl;
 class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper :
     public cppu::WeakComponentImplHelper< css::document::XEmbeddedObjectResolver, css::container::XNameAccess >
 {
-    typedef ::std::map< OUString, OutputStorageWrapper_Impl* > SvXMLEmbeddedObjectHelper_Impl;
-private:
-
     ::osl::Mutex                maMutex;
 
     const OUString       maReplacementGraphicsContainerStorageName;
@@ -59,7 +57,8 @@ private:
     css::uno::Reference < css::embed::XStorage > mxTempStorage;  // package
                                                 // objects
     SvXMLEmbeddedObjectHelperMode       meCreateMode;
-    SvXMLEmbeddedObjectHelper_Impl      *mpStreamMap;
+    std::unique_ptr<std::map< OUString, rtl::Reference<OutputStorageWrapper_Impl> >>
+                                                 mpStreamMap;
 
     SVX_DLLPRIVATE bool                 ImplGetStorageNames(
                                        const OUString& rURLStr,
