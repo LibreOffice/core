@@ -4345,7 +4345,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
-    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
+    if (!bThreadingProhibited && !ScCalcConfig::isOpenCLEnabled() && pCode->GetVectorState() != FormulaVectorDisabledNotInSubSet && officecfg::Office::Calc::Formula::Calculation::UseThreadedCalculationForFormulaGroups::get())
     {
         // iterate over code in the formula ...
         // ensure all input is pre-calculated -
