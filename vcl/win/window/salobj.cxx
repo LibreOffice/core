@@ -145,7 +145,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
     return CallNextHookEx( pSalData->mhSalObjMsgHook, nCode, wParam, lParam );
 }
 
-bool ImplSalPreDispatchMsg( MSG* pMsg )
+bool ImplSalPreDispatchMsg( const MSG* pMsg )
 {
     // Used for Unicode and none Unicode
     SalData*        pSalData = GetSalData();
@@ -231,10 +231,10 @@ bool ImplSalPreDispatchMsg( MSG* pMsg )
     return FALSE;
 }
 
-void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
+void ImplSalPostDispatchMsg( const MSG* pMsg )
 {
     // Used for Unicode and none Unicode
-    SalData*        pSalData = GetSalData();
+    SalData *pSalData = GetSalData();
 
     if ( (pMsg->message == WM_KEYDOWN) || (pMsg->message == WM_KEYUP) )
     {

@@ -25,7 +25,7 @@
 class WinSalTimer final : public SalTimer, protected VersionedEvent
 {
     // for access to Impl* functions
-    friend LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef );
+    friend LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, bool& rDef );
     // for access to GetNextVersionedEvent
     friend void CALLBACK SalTimerProc( PVOID data, BOOLEAN );
     // for access to ImplHandleElapsedTimer

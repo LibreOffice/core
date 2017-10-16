@@ -66,7 +66,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
                                location: NSZeroPoint
                                modifierFlags: 0
-                               timestamp: 0
+                               timestamp: [[NSProcessInfo processInfo] systemUptime]
                                windowNumber: 0
                                context: nil
                                subtype: AquaSalInstance::AppExecuteSVMain
