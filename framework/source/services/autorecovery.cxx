@@ -2606,6 +2606,7 @@ void AutoRecovery::implts_updateDocumentUsedForSavingState(const css::uno::Refer
 
 void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::frame::XModel >& xDocument)
 {
+    SolarMutexGuard aSolarGuard;
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
     AutoRecovery::TDocumentInfo aInfo;
