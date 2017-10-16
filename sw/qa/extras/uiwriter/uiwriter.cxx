@@ -270,6 +270,7 @@ public:
     void testTableInSectionInTable();
     void testSectionInTableInTable();
     void testSectionInTableInTable2();
+    void testSectionInTableInTable3();
     void testTdf112160();
     void testLinesMoveBackwardsInSectionInTable();
     void testTdf112741();
@@ -432,6 +433,7 @@ public:
     CPPUNIT_TEST(testTableInSectionInTable);
     CPPUNIT_TEST(testSectionInTableInTable);
     CPPUNIT_TEST(testSectionInTableInTable2);
+    CPPUNIT_TEST(testSectionInTableInTable3);
     CPPUNIT_TEST(testTdf112160);
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
     CPPUNIT_TEST(testTdf112741);
@@ -5355,6 +5357,38 @@ void SwUiWriterTest::testSectionInTableInTable2()
     // Make sure that the first's follow and the second's precede is correct.
     CPPUNIT_ASSERT_EQUAL(nSection2, nSection1Follow);
     CPPUNIT_ASSERT_EQUAL(nSection1, nSection2Precede);
+}
+
+void SwUiWriterTest::testSectionInTableInTable3()
+{
+    createDoc("tdf113153.fodt");
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xTable(xTables->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Table16"), xTable->getName());
+
+    uno::Reference<text::XTextTable> xRowSupplier(xTable, uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xRows = xRowSupplier->getRows();
+    uno::Reference<beans::XPropertySet> xRow(xRows->getByIndex(1), uno::UNO_QUERY);
+    xRow->setPropertyValue("IsSplitAllowed", uno::makeAny(true));
+    // This never returned.
+    calcLayout();
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    sal_uInt32 nTable1 = getXPath(pXmlDoc, "//page[1]//body/tab", "id").toUInt32();
+    sal_uInt32 nTable1Follow = getXPath(pXmlDoc, "//page[1]//body/tab", "follow").toUInt32();
+    sal_uInt32 nTable2 = getXPath(pXmlDoc, "//page[2]//body/tab", "id").toUInt32();
+    sal_uInt32 nTable2Precede = getXPath(pXmlDoc, "//page[2]//body/tab", "precede").toUInt32();
+    sal_uInt32 nTable2Follow = getXPath(pXmlDoc, "//page[2]//body/tab", "follow").toUInt32();
+    sal_uInt32 nTable3 = getXPath(pXmlDoc, "//page[3]//body/tab", "id").toUInt32();
+    sal_uInt32 nTable3Precede = getXPath(pXmlDoc, "//page[3]//body/tab", "precede").toUInt32();
+
+    // Make sure the outer table frames are linked together properly.
+    CPPUNIT_ASSERT_EQUAL(nTable2, nTable1Follow);
+    CPPUNIT_ASSERT_EQUAL(nTable1, nTable2Precede);
+    CPPUNIT_ASSERT_EQUAL(nTable3, nTable2Follow);
+    CPPUNIT_ASSERT_EQUAL(nTable2, nTable3Precede);
 }
 
 void SwUiWriterTest::testTdf112160()
