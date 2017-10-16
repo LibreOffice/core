@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_2f22ef01",
+        "filename": "writerfilter/source/ooxml/OOXMLPropertySet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-10-16T17:46:35Z",
+      "side": 1,
+      "message": "In model.xml, ST_MeasurementOrPercent is only used by ST_TblWidth, and ST_TblWidth is only used by these items which all default to dxa (as does CT_TblWidth itself):\n-CT_tcMar\n-CT_tblCellMar\n-tblCellSpacing\n-tblInd\n-tblW\n-tcW\n-wAfter\n-wBefore\n\n\u003cxsd:simpleType name\u003d\"ST_MeasurementOrPercent\"\u003e\n\u003cxsd:union memberTypes\u003d\"ST_DecimalNumberOrPercent s:ST_UniversalMeasure\"/\u003e. So, really we should support all of the universalMeasurements and not just pt.",
+      "parentUuid": "1a430d35_cf26cb67",
+      "range": {
+        "startLine": 651,
+        "startChar": 9,
+        "endLine": 652,
+        "endChar": 59
+      },
+      "revId": "71a4d5117d9adeb7f4aff06427a3ac66f7e0d415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_ef29c738",
         "filename": "writerfilter/source/ooxml/OOXMLPropertySet.cxx",
         "patchSetId": 1
