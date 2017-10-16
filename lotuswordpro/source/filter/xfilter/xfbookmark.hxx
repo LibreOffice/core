@@ -60,6 +60,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBOOKMARK_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBOOKMARK_HXX
 
+#include <sal/config.h>
+
+#include "ixfattrlist.hxx"
+#include "ixfstream.hxx"
 #include "xfcontent.hxx"
 
 /**
