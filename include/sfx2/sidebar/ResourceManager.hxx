@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_RESOURCEMANAGER_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_RESOURCEMANAGER_HXX
 
-#include "DeckDescriptor.hxx"
-#include "PanelDescriptor.hxx"
+#include "sfx2/sidebar/DeckDescriptor.hxx"
+#include "sfx2/sidebar/PanelDescriptor.hxx"
 #include <sfx2/sidebar/Context.hxx>
 #include <unotools/confignode.hxx>
 #include <com/sun/star/frame/XController.hpp>

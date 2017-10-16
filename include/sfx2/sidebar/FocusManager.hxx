@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_FOCUSMANAGER_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_FOCUSMANAGER_HXX
 
-#include "Panel.hxx"
+#include "sfx2/sidebar/Panel.hxx"
 #include <tools/link.hxx>
 #include <vcl/keycod.hxx>
 
