@@ -363,6 +363,7 @@ class SwWW8FltControlStack : public SwFltControlStack
 {
 private:
     SwWW8ImplReader& rReader;
+    std::unique_ptr<SfxItemSet> m_xScratchSet;
     sal_uInt16 nToggleAttrFlags;
     sal_uInt16 nToggleBiDiAttrFlags;
     SwWW8FltControlStack(const SwWW8FltControlStack&) = delete;
