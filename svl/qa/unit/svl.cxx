@@ -1307,6 +1307,11 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "-1.00E-03";
         checkPreviewString(aFormatter, sCode, -0.000999999, eLang, sExpected);
     }
+    {   // tdf#112933 one decimal seconds fraction
+        sCode =     "MM:SS.0";
+        sExpected = "23:53.6";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
