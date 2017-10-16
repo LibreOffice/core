@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITATTR_HXX
-#define INCLUDED_EDITENG_SOURCE_EDITENG_EDITATTR_HXX
+#ifndef INCLUDED_EDITENG_INC_EDITATTR_HXX
+#define INCLUDED_EDITENG_INC_EDITATTR_HXX
 
 #include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
@@ -429,6 +429,6 @@ public:
 };
 
 
-#endif // INCLUDED_EDITENG_SOURCE_EDITENG_EDITATTR_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

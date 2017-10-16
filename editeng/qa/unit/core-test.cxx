@@ -12,14 +12,15 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include "eerdll2.hxx"
+#include "editdoc.hxx"
+
 #include "sfx2/app.hxx"
 #include "svl/itempool.hxx"
 #include "editeng/eerdll.hxx"
-#include "editeng/eerdll2.hxx"
 #include "editeng/editeng.hxx"
 #include "editeng/eeitem.hxx"
 #include "editeng/editids.hrc"
-#include "editeng/editdoc.hxx"
 #include "editeng/svxacorr.hxx"
 #include "editeng/unofield.hxx"
 #include "editeng/wghtitem.hxx"

@@ -49,7 +49,7 @@ $(eval $(call gb_CppunitTest_use_externals,editeng_core,\
 ))
 
 $(eval $(call gb_CppunitTest_set_include,editeng_core,\
-    -I$(SRCDIR)/editeng/source \
+    -I$(SRCDIR)/editeng/inc \
     $$(INCLUDE) \
 ))
 
