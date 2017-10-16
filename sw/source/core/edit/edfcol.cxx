@@ -442,8 +442,16 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl(sal_uInt16 nFormatColl) const
 
 OUString lcl_getProperty(uno::Reference<beans::XPropertyContainer> const & rxPropertyContainer, const OUString& rName)
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-    return xPropertySet->getPropertyValue(rName).get<OUString>();
+    try
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
+        return xPropertySet->getPropertyValue(rName).get<OUString>();
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
+
+    return OUString();
 }
 
 static bool lcl_containsProperty(const uno::Sequence<beans::Property> & rProperties, const OUString& rName)
@@ -532,9 +540,8 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         }
     }
 
-    OUString sPolicy = SfxClassificationHelper::policyTypeToString(getPolicyType());
-
-    std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
+    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(getPolicyType());
+    const std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
     for (const OUString& rPageStyleName : aUsedPageStyles)
     {
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
@@ -662,26 +669,30 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
             xPropertySet->getPropertyValue(UNO_NAME_NAME) >>= aName;
             if (aName.startsWith(sPolicy + "Marking:Text:"))
             {
-                OUString aValue = lcl_getProperty(xPropertyContainer, aName);
-                aResult.push_back({ svx::ClassificationType::TEXT, aValue, nParagraph });
+                const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
+                if (!aValue.isEmpty())
+                    aResult.push_back({ svx::ClassificationType::TEXT, aValue, nParagraph });
             }
             else if (aName.startsWith(sPolicy + "BusinessAuthorizationCategory:Name"))
             {
-                OUString aValue = lcl_getProperty(xPropertyContainer, aName);
-                aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, nParagraph });
+                const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
+                if (!aValue.isEmpty())
+                    aResult.push_back({ svx::ClassificationType::CATEGORY, aValue, nParagraph });
             }
             else if (aName.startsWith(sPolicy + "Extension:Marking"))
             {
-                OUString aValue = lcl_getProperty(xPropertyContainer, aName);
-                aResult.push_back({ svx::ClassificationType::MARKING, aValue, nParagraph });
+                const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
+                if (!aValue.isEmpty())
+                    aResult.push_back({ svx::ClassificationType::MARKING, aValue, nParagraph });
             }
             else if (aName.startsWith(sPolicy + "Extension:IntellectualPropertyPart"))
             {
-                OUString aValue = lcl_getProperty(xPropertyContainer, aName);
-                aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, nParagraph });
+                const OUString aValue = lcl_getProperty(xPropertyContainer, aName);
+                if (!aValue.isEmpty())
+                    aResult.push_back({ svx::ClassificationType::INTELLECTUAL_PROPERTY_PART, aValue, nParagraph });
             }
         }
-        nParagraph++;
+        ++nParagraph;
     }
 
     return aResult;
@@ -695,7 +706,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
 
     SfxClassificationHelper aHelper(pDocShell->getDocProperties());
 
-    bool bHadWatermark = !aHelper.GetDocumentWatermark().isEmpty();
+    const bool bHadWatermark = !aHelper.GetDocumentWatermark().isEmpty();
 
     // This updates the infobar as well.
     aHelper.SetBACName(rName, eType);
