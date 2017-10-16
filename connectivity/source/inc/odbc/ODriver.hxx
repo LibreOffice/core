@@ -28,7 +28,7 @@
 #include "odbc/odbcbasedllapi.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <osl/module.h>
-#include "OTools.hxx"
+#include "odbc/OTools.hxx"
 
 namespace connectivity
 {

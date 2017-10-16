@@ -27,7 +27,7 @@
 #include <connectivity/CommonTools.hxx>
 #include "TConnection.hxx"
 #include "OTypeInfo.hxx"
-#include "OTools.hxx"
+#include "odbc/OTools.hxx"
 #include <cppuhelper/weakref.hxx>
 #include "AutoRetrievingBase.hxx"
 #include <osl/module.h>
