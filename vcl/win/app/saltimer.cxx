@@ -158,13 +158,14 @@ void WinSalTimer::ImplHandleElapsedTimer()
     ImplSalYieldMutexRelease();
 }
 
-void WinSalTimer::ImplHandleTimerEvent( const WPARAM aWPARAM )
+bool WinSalTimer::ImplHandleTimerEvent( const WPARAM aWPARAM )
 {
     assert( aWPARAM <= SAL_MAX_INT32 );
     if ( !IsValidEventVersion( static_cast<sal_Int32>( aWPARAM ) ) )
-        return;
+        return false;
 
     ImplHandleElapsedTimer();
+    return true;
 }
 
 void WinSalTimer::SetForceRealTimer( const bool bVal )
@@ -179,11 +180,14 @@ void WinSalTimer::SetForceRealTimer( const bool bVal )
         Start( 0 );
 }
 
-void WinSalTimer::ImplHandle_WM_TIMER( const WPARAM aWPARAM )
+bool WinSalTimer::ImplHandle_WM_TIMER( const WPARAM aWPARAM )
 {
     assert( m_aWmTimerId == aWPARAM );
-    if ( m_aWmTimerId == aWPARAM && m_bDirectTimeout && m_bForceRealTimer )
-        ImplHandleElapsedTimer();
+    if ( !(m_aWmTimerId == aWPARAM && m_bDirectTimeout && m_bForceRealTimer) )
+        return false;
+
+    ImplHandleElapsedTimer();
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

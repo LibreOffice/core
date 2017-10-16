@@ -459,17 +459,15 @@ void WinSalInstance::AcquireYieldMutex( sal_uInt32 nCount )
     mpSalYieldMutex->acquire( nCount );
 }
 
-static void ImplSalDispatchMessage( MSG* pMsg )
+static LRESULT ImplSalDispatchMessage( MSG* pMsg )
 {
     SalData* pSalData = GetSalData();
-    if ( pSalData->mpFirstObject )
-    {
-        if ( ImplSalPreDispatchMsg( pMsg ) )
-            return;
-    }
+    if ( pSalData->mpFirstObject && ImplSalPreDispatchMsg( pMsg ) )
+        return 0;
     LRESULT lResult = DispatchMessageW( pMsg );
     if ( pSalData->mpFirstObject )
         ImplSalPostDispatchMsg( pMsg, lResult );
+    return lResult;
 }
 
 bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
@@ -491,10 +489,13 @@ bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
         if ( bOneEvent )
         {
             bWasMsg = true;
-            if ( !bWasTimeoutMsg )
-                bWasTimeoutMsg = (SAL_MSG_TIMER_CALLBACK == aMsg.message);
             TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
+            LRESULT nRet = ImplSalDispatchMessage( &aMsg );
+
+            if ( !bWasTimeoutMsg )
+                bWasTimeoutMsg = (SAL_MSG_TIMER_CALLBACK == aMsg.message)
+                    && static_cast<bool>( nRet );
+
             if ( bHandleAllCurrentEvents
                     && !bHadNewerEvent && aMsg.time > nCurTicks
                     && (nLastTicks <= nCurTicks || aMsg.time < nLastTicks) )
@@ -666,14 +667,16 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
         {
             WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
             assert( pTimer != nullptr );
-            pTimer->ImplHandleTimerEvent( wParam );
+            nRet = static_cast<LRESULT>( pTimer->ImplHandleTimerEvent( wParam ) );
+            rDef = FALSE;
             break;
         }
         case WM_TIMER:
         {
             WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
             assert( pTimer != nullptr );
-            pTimer->ImplHandle_WM_TIMER( wParam );
+            nRet = static_cast<LRESULT>( pTimer->ImplHandle_WM_TIMER( wParam ) );
+            rDef = FALSE;
             break;
         }
     }
