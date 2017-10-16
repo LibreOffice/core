@@ -89,10 +89,10 @@ public:
     bool operator()(const ::sd::slidesorter::cache::PageCacheManager::BestFittingPageCaches::value_type& rElement1,
         const ::sd::slidesorter::cache::PageCacheManager::BestFittingPageCaches::value_type& rElement2)
     {
-        if (rElement1.first == maPreferredSize)
-            return true;
-        else if (rElement2.first == maPreferredSize)
+        if (rElement2.first == maPreferredSize)
             return false;
+        else if (rElement1.first == maPreferredSize)
+            return true;
         else
             return (rElement1.first.Width()*rElement1.first.Height()
                 > rElement2.first.Width()*rElement2.first.Height());
