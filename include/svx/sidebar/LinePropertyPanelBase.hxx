@@ -29,7 +29,7 @@
 #include <memory>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
-#include "LineWidthPopup.hxx"
+#include "svx/sidebar/LineWidthPopup.hxx"
 #include <svx/svxdllapi.h>
 
 

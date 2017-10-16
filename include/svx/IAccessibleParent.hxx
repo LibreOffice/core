@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <sal/types.h>
-#include "AccessibleControlShape.hxx"
+#include "svx/AccessibleControlShape.hxx"
 namespace accessibility {
 
 class AccessibleShape;

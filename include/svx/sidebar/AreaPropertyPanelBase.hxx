@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANELBASE_HXX
 
 #include <memory>
-#include "AreaTransparencyGradientPopup.hxx"
+#include "svx/sidebar/AreaTransparencyGradientPopup.hxx"
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
