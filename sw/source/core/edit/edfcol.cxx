@@ -112,9 +112,10 @@ std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
     return aReturn;
 }
 
-/// Search for a field named rFieldName of type rServiceName in xText.
-bool lcl_hasField(const uno::Reference<text::XText>& xText, const OUString& rServiceName, const OUString& rFieldName)
+/// Search for a field named rFieldName of type rServiceName in xText and return it.
+uno::Reference<text::XTextField> lcl_findClassificationField(const uno::Reference<text::XText>& xText, const OUString& rServiceName, const OUString& rFieldName)
 {
+    uno::Reference<text::XTextField> xField;
     uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
     while (xParagraphs->hasMoreElements())
@@ -137,14 +138,21 @@ bool lcl_hasField(const uno::Reference<text::XText>& xText, const OUString& rSer
             OUString aName;
             uno::Reference<beans::XPropertySet> xPropertySet(xTextField, uno::UNO_QUERY);
             xPropertySet->getPropertyValue(UNO_NAME_NAME) >>= aName;
-            if (aName != rFieldName)
-                continue;
-
-            return true;
+            if (aName == rFieldName)
+            {
+                xField = uno::Reference<text::XTextField>(xTextField, uno::UNO_QUERY);
+                break;
+            }
         }
     }
 
-    return false;
+    return xField;
+}
+
+/// Search for a field named rFieldName of type rServiceName in xText and return true iff found.
+bool lcl_hasField(const uno::Reference<text::XText>& xText, const OUString& rServiceName, const OUString& rFieldName)
+{
+    return lcl_findClassificationField(xText, rServiceName, rFieldName).is();
 }
 
 /// Search for a frame with WATERMARK_NAME in name of type rServiceName in xText. Returns found name in rShapeName.
@@ -525,6 +533,78 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
 
     uno::Reference<document::XDocumentProperties> xDocumentProperties = SfxObjectShell::Current()->getDocProperties();
 
+    // First, we need to remove the old ones.
+    //TODO: we should get this as a param, since we pass it to the dialog.
+    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(getPolicyType());
+    const std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
+    for (const OUString& rPageStyleName : aUsedPageStyles)
+    {
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
+
+        // HEADER
+        bool bHeaderIsOn = false;
+        xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
+        uno::Reference<text::XText> xHeaderText;
+        if (bHeaderIsOn)
+            xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
+
+        // FOOTER
+        bool bFooterIsOn = false;
+        xPageStyle->getPropertyValue(UNO_NAME_FOOTER_IS_ON) >>= bFooterIsOn;
+        uno::Reference<text::XText> xFooterText;
+        if (bFooterIsOn)
+            xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
+
+        sal_Int32 nTextNumber = 1;
+        OUString sKey;
+        for (svx::ClassificationResult const & rResult : CollectAdvancedClassification())
+        {
+            sKey = "";
+            switch(rResult.meType)
+            {
+                case svx::ClassificationType::TEXT:
+                {
+                    sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber++);
+                }
+                break;
+
+                case svx::ClassificationType::CATEGORY:
+                {
+                    sKey = sPolicy + "BusinessAuthorizationCategory:Name";
+                }
+                break;
+
+                case svx::ClassificationType::MARKING:
+                {
+                    sKey = sPolicy + "Extension:Marking";
+                }
+                break;
+
+                case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
+                {
+                    sKey = sPolicy + "Extension:IntellectualPropertyPart";
+                }
+                break;
+
+                default:
+                break;
+            }
+
+            if (!sKey.isEmpty())
+            {
+                uno::Reference<css::text::XTextField> xField = lcl_findClassificationField(xHeaderText, DocInfoServiceName, sKey);
+                if (xField.is())
+                {
+                    if (xHeaderText.is())
+                        xHeaderText->removeTextContent(xField);
+
+                    if (xFooterText.is())
+                        xFooterText->removeTextContent(xField);
+                }
+            }
+        }
+    }
+
     // Clear properties
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
     lcl_removeAllProperties(xPropertyContainer);
@@ -540,8 +620,6 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
         }
     }
 
-    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(getPolicyType());
-    const std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
     for (const OUString& rPageStyleName : aUsedPageStyles)
     {
         uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
