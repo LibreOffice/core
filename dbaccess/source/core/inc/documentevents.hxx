@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTEVENTS_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTEVENTS_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_DOCUMENTEVENTS_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_DOCUMENTEVENTS_HXX
 
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -73,6 +73,6 @@ namespace dbaccess
 
 } // namespace dbaccess
 
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DOCUMENTEVENTS_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

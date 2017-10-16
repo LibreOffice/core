@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASECONTEXT_HXX
-#define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASECONTEXT_HXX
+#ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_DATABASECONTEXT_HXX
+#define INCLUDED_DBACCESS_SOURCE_CORE_INC_DATABASECONTEXT_HXX
 
 #include <sal/config.h>
 
@@ -186,6 +186,6 @@ private:
 
 }   // namespace dbaccess
 
-#endif // INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_DATABASECONTEXT_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
