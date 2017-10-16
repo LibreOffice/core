@@ -36,8 +36,8 @@
 #include <rtl/ref.hxx>
 
 #include "xsecfwdllapi.h"
-#include "securityengine.hxx"
-#include "xmlsignaturetemplateimpl.hxx"
+#include "framework/securityengine.hxx"
+#include "framework/xmlsignaturetemplateimpl.hxx"
 
 #include <vector>
 

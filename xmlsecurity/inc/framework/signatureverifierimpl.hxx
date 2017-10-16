@@ -30,7 +30,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include "xsecfwdllapi.h"
-#include "signatureengine.hxx"
+#include "framework/signatureengine.hxx"
 
 typedef cppu::ImplInheritanceHelper
 <
