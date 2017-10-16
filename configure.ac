@@ -5197,6 +5197,8 @@ find_winsdk_version()
             winsdklibsubdir=$regvalue
             if test "$regvalue" = "10.0.14393"; then
                 winsdklibsubdir="10.0.14393.0"
+            elif test "$regvalue" = "10.0.16299"; then
+                winsdklibsubdir="10.0.16299.0"
             elif test "$regvalue" = "10.0.15063"; then
                 winsdklibsubdir="10.0.15063.0"
                 dnl Hack needed at least by tml:
