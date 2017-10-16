@@ -198,7 +198,7 @@ AquaSalTimer::~AquaSalTimer()
 
 void AquaSalTimer::handleWindowShouldClose()
 {
-    // for whatever reason events get filtered on close, presumely by
+    // for whatever reason events get filtered on close, presumably by
     // timestamp so post a new timeout event, if there was one queued...
     if ( ExistsValidEvent() && !m_pRunningTimer )
         queueDispatchTimerEvent( NO );
