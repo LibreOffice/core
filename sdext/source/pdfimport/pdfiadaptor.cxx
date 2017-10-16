@@ -24,7 +24,7 @@
 #include "odfemitter.hxx"
 #include "inc/wrapper.hxx"
 #include "inc/contentsink.hxx"
-#include "tree/pdfiprocessor.hxx"
+#include "pdfiprocessor.hxx"
 
 #include <osl/file.h>
 #include <osl/thread.h>
