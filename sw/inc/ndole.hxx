@@ -22,6 +22,7 @@
 #include <ndnotxt.hxx>
 #include <svtools/embedhlp.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <rtl/ref.hxx>
 
 class SwGrfFormatColl;
 class SwDoc;
@@ -35,7 +36,7 @@ class SW_DLLPUBLIC SwOLEObj
     friend class SwOLENode;
 
     const SwOLENode* m_pOLENode;
-    SwOLEListener_Impl* m_pListener;
+    rtl::Reference<SwOLEListener_Impl> m_xListener;
 
     /** Either ref or name are known. If only name is known, ref is obtained
        on demand by GetOleRef() from Sfx. */
