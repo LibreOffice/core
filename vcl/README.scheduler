@@ -89,6 +89,35 @@ can be added to the scheduler reasonably.
 
 = Implementation details =
 
+== General: event priority for DoYield ==
+
+There are three types of events, with different priority:
+
+1. LO user events
+2. System events
+3. LO Scheduler event
+
+They should be processed according to the following code:
+
+bool DoYield( bool bWait, bool bAllCurrent )
+{
+    bool bWasEvent = ProcessUserEvents( bAllCurrent );
+    if ( !bAllCurrent && bWasEvent )
+        return true;
+    bWasEvent = ProcessSystemEvents( bAllCurrent, &bWasSchedulerEvent ) || bWasEvent;
+    if ( !bWasSchedulerEvent && IsSchedulerEvent() )
+    {
+        ProcessSchedulerEvent()
+        bWasEvent = true;
+    }
+    if ( !bWasEvent && bWait )
+    {
+        WaitForSystemEvents();
+        bWasEvent = true;
+    }
+    return bWasEvent;
+}
+
 == General: main thread deferral ==
 
 Currently for Mac and Windows, we run main thread deferrals by disabling the
