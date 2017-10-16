@@ -44,11 +44,11 @@
 #include <astobserves.hxx>
 #include <astneeds.hxx>
 
-#include "aststructinstance.hxx"
+#include <aststructinstance.hxx>
 
 #include "attributeexceptions.hxx"
 
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
