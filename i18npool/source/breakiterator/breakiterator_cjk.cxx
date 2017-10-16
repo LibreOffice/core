@@ -116,7 +116,8 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
     }
 
     // Prevent cutting Korean words in the middle.
-    if ( nOldStartPos == nStartPos && isHangul( Text[nStartPos] ) )
+    if (nOldStartPos == nStartPos && nStartPos < Text.getLength()
+        && isHangul(Text[nStartPos]))
     {
         while ( nStartPos >= 0 && isHangul( Text[nStartPos] ) )
             --nStartPos;
