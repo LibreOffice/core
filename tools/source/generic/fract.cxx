@@ -112,8 +112,6 @@ Fraction::Fraction( double dVal ) : mpImpl(new Impl)
     try
     {
         mpImpl->value = rational_FromDouble( dVal );
-        if ( HasOverflowValue() )
-            throw boost::bad_rational();
         mpImpl->valid = true;
     }
     catch (const boost::bad_rational&)
@@ -125,15 +123,6 @@ Fraction::Fraction( double dVal ) : mpImpl(new Impl)
 
 Fraction::~Fraction()
 {
-}
-
-bool Fraction::HasOverflowValue()
-{
-    //coverity[result_independent_of_operands]
-    return mpImpl->value.numerator() < std::numeric_limits<sal_Int32>::min() ||
-        mpImpl->value.numerator() > std::numeric_limits<sal_Int32>::max() ||
-        mpImpl->value.denominator() < std::numeric_limits<sal_Int32>::min() ||
-        mpImpl->value.denominator() > std::numeric_limits<sal_Int32>::max();
 }
 
 Fraction::operator double() const
@@ -164,12 +153,6 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
 
     mpImpl->value += rVal.mpImpl->value;
 
-    if ( HasOverflowValue() )
-    {
-        mpImpl->valid = false;
-        SAL_WARN( "tools.fraction", "'operator +=' detected overflow" );
-    }
-
     return *this;
 }
 
@@ -185,12 +168,6 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
     }
 
     mpImpl->value -= rVal.mpImpl->value;
-
-    if ( HasOverflowValue() )
-    {
-        mpImpl->valid = false;
-        SAL_WARN( "tools.fraction", "'operator -=' detected overflow" );
-    }
 
     return *this;
 }
@@ -231,7 +208,7 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
 
     bool bFail = checked_multiply_by(mpImpl->value, rVal.mpImpl->value);
 
-    if (bFail || HasOverflowValue())
+    if (bFail)
     {
         mpImpl->valid = false;
     }
@@ -251,12 +228,6 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
     }
 
     mpImpl->value /= rVal.mpImpl->value;
-
-    if ( HasOverflowValue() )
-    {
-        mpImpl->valid = false;
-        SAL_WARN( "tools.fraction", "'operator /=' detected overflow" );
-    }
 
     return *this;
 }

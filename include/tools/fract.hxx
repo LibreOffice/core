@@ -32,8 +32,6 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Fraction final
 
     std::unique_ptr<Impl> mpImpl;
 
-    bool            HasOverflowValue();
-
 public:
                     Fraction();
                     Fraction( const Fraction & rFrac );
