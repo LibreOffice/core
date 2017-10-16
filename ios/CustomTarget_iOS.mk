@@ -27,20 +27,13 @@ $(eval $(call gb_CustomTarget_CustomTarget,ios/ios))
 
 $(call gb_CustomTarget_get_target,ios/ios): $(IOSGEN)/$(IOSKIT)
 
-#- Setup directories  ---------------------------------------------------------
-IOSPREPARE:
-ifeq ("$(wildcard $(IOSGEN))","")
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 
-	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
-	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
-	         $(IOSGEN) $(WORKDIR)/ios;
-endif
 
 
 #- Generate xcconfig files  ---------------------------------------------------
-$(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk IOSPREPARE
+$(IOSKITXC): $(SRCDIR)/ios/loKit.xcconfig.in $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
+	@mkdir -p $(WORKDIR)/ios
 	sed -e "s'@BUILDDIR@'$(BUILDDIR)'g" \
 	    -e "s'@INSTDIR@'$(INSTDIR)'g" \
 	    -e "s'@SRCDIR@'$(SRC_ROOT)'g" \
@@ -50,6 +43,10 @@ $(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
 	    -e "s'@PRELINK@'`$(SRCDIR)/bin/lo-all-static-libs`'g" \
 	    $(SRCDIR)/ios/loKit.xcconfig.in > $(WORKDIR)/ios/loKit.xcconfig
+
+$(IOSAPPXC): $(SRCDIR)/ios/loKit.xcconfig.in $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
+	@mkdir -p $(WORKDIR)/ios
 	sed -e "s'@BUILDDIR@'$(BUILDDIR)'g" \
 	    -e "s'@INSTDIR@'$(INSTDIR)'g" \
 	    -e "s'@SRCDIR@'$(SRC_ROOT)'g" \
@@ -59,8 +56,11 @@ $(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 	    -e "s'@SYMROOT@'$(WORKDIR)/ios/build'g" \
 	    $(SRCDIR)/ios/loApp.xcconfig.in > $(WORKDIR)/ios/loApp.xcconfig
 
-ifeq ("$(wildcard $(IOSRES))","")
+$(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
+	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
+	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
+	         $(IOSGEN) $(WORKDIR)/ios;
 
 	# generate file with call declarations
 	$(SRCDIR)/solenv/bin/native-code.py \
@@ -111,11 +111,10 @@ ifeq ("$(wildcard $(IOSRES))","")
 	echo 'AllLanguages=en-US'   >> $(IOSRES)/program/versionrc
 	echo 'BuildVersion='        >> $(IOSRES)/program/versionrc
 	echo "buildid=$(BUILDID)"   >> $(IOSRES)/program/versionrc
-endif
 
 
 #- build  ---------------------------------------------------------------------
-$(IOSGEN)/$(IOSKIT): $(IOSKITXC) $(IOSAPPXC) IOSPREPARE
+$(IOSGEN)/$(IOSKIT): $(IOSKITXC) $(IOSAPPXC) $(IOSGEN)/native-code.h STAT_LIB_DEPEND
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
 	CC=; \
 	$(call gb_Helper_print_on_error, \
@@ -130,6 +129,8 @@ $(IOSGEN)/$(IOSKIT): $(IOSKITXC) $(IOSAPPXC) IOSPREPARE
 	        , $(WORKDIR)/ios/build.log \
 	)
 	cp $(WORKDIR)/ios/build/*/libLibreOfficeKit.a $(IOSGEN)/$(IOSKIT)
+
+STAT_LIB_DEPEND:
 
 
 
