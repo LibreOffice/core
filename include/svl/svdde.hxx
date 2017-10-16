@@ -43,7 +43,7 @@ class DdeTopic;
 class DdeService;
 struct DdeDataImp;
 struct DdeImp;
-class DdeItemImp;
+struct DdeItemImpData;
 struct Conversation;
 
 typedef ::std::vector< DdeService* > DdeServices;
@@ -207,7 +207,7 @@ class SVL_DLLPUBLIC DdeItem
     friend class    DdeTopic;
     DdeString*      pName;
     DdeTopic*       pMyTopic;
-    DdeItemImp*     pImpData;
+    std::vector<DdeItemImpData>* pImpData;
 
 protected:
     sal_uInt8            nType;

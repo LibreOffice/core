@@ -41,24 +41,6 @@ struct DdeItemImpData
     explicit DdeItemImpData( HCONV nH ) : nHCnv( nH ), nCnt( 1 ) {}
 };
 
-class DdeItemImp {
-public:
-    DdeItemImp() : mvData() {}
-
-    size_t size() const { return mvData.size(); }
-
-    std::vector<DdeItemImpData>::iterator begin() { return mvData.begin(); }
-
-    void erase(std::vector<DdeItemImpData>::iterator it) { mvData.erase(it); }
-
-    void push_back(const DdeItemImpData& rData) { mvData.push_back(rData); }
-
-    DdeItemImpData& operator[](size_t i) { return mvData[i]; }
-
-private:
-    std::vector<DdeItemImpData> mvData;
-};
-
 HDDEDATA CALLBACK DdeInternal::SvrCallback(
             UINT nCode, UINT nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, ULONG_PTR, ULONG_PTR )
@@ -755,7 +737,7 @@ void DdeInternal::IncMonitor(DdeItem *const pItem, HCONV nHCnv)
 {
     if (!pItem->pImpData)
     {
-        pItem->pImpData = new DdeItemImp;
+        pItem->pImpData = new std::vector<DdeItemImpData>;
         if (DDEGETPUTITEM == pItem->nType)
         {
             static_cast<DdeGetPutItem*>(pItem)->AdviseLoop( true );
