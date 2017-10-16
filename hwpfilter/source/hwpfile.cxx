@@ -63,25 +63,20 @@ HWPFile::~HWPFile()
     delete oledata;
     delete hiodev;
 
-    std::list < ColumnInfo* >::iterator it_column = columnlist.begin();
-    for (; it_column != columnlist.end(); ++it_column)
-        delete *it_column;
+    for (auto const& column : columnlist)
+        delete column;
 
-    std::list < HWPPara* >::iterator it = plist.begin();
-    for (; it != plist.end(); ++it)
-        delete *it;
+    for (auto const& paragraph : plist)
+        delete paragraph;
 
-    std::vector< Table* >::iterator tbl = tables.begin();
-    for (; tbl != tables.end(); ++tbl)
-        delete *tbl;
+    for (auto const& table : tables)
+        delete table;
 
-    std::list<EmPicture*>::iterator emb = emblist.begin();
-    for (; emb != emblist.end(); ++emb)
-        delete *emb;
+    for (auto const& emb : emblist)
+        delete emb;
 
-    std::list<HyperText*>::iterator hyp = hyperlist.begin();
-    for (; hyp != hyperlist.end(); ++hyp)
-        delete *hyp;
+    for (auto const& hyper : hyperlist)
+        delete hyper;
 }
 
 int HWPFile::ReadHwpFile(HStream * stream)
@@ -237,7 +232,7 @@ void HWPFile::ParaListRead()
     ReadParaList(plist);
 }
 
-bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
+bool HWPFile::ReadParaList(std::vector < HWPPara* > &aplist, unsigned char flag)
 {
     std::unique_ptr<HWPPara> spNode( new HWPPara );
     unsigned char tmp_etcflag;
@@ -401,43 +396,32 @@ void HWPFile::TagsRead()
 
 ColumnDef *HWPFile::GetColumnDef(int num)
 {
-    std::list<ColumnInfo*>::iterator it = columnlist.begin();
-
-    for(int i = 0; it != columnlist.end() ; ++it, i++){
-        if( i == num )
-            break;
-    }
-
-    if( it != columnlist.end() )
-        return (*it)->coldef;
+    if (static_cast<size_t>(num) < columnlist.size())
+        return columnlist[num]->coldef;
     else
         return nullptr;
 }
+
 /* Index of @return starts from 1 */
 int HWPFile::GetPageMasterNum(int page)
 {
-    std::list<ColumnInfo*>::iterator it = columnlist.begin();
-    int i;
-
-    for( i = 1 ; it != columnlist.end() ; ++it, i++){
-        ColumnInfo *now = *it;
-        if( page < now->start_page )
-            return i-1;
+    int i = 0;
+    for (auto const& column : columnlist)
+    {
+        if( page < column->start_page )
+            return i;
+        ++i;
     }
-    return i-1;
+    return i;
 }
 
 HyperText *HWPFile::GetHyperText()
 {
-    std::list<HyperText*>::iterator it = hyperlist.begin();
-
-    for( int i = 0; it != hyperlist.end(); ++it, i++ ){
-        if( i == currenthyper )
-          break;
-    }
-
-    currenthyper++;
-    return it != hyperlist.end() ? *it : nullptr;
+    ++currenthyper;
+    if (static_cast<size_t>(currenthyper) <= hyperlist.size())
+        return hyperlist[currenthyper-1];
+    else
+        return nullptr;
 }
 
 EmPicture *HWPFile::GetEmPicture(Picture * pic)
@@ -448,10 +432,9 @@ EmPicture *HWPFile::GetEmPicture(Picture * pic)
     name[1] = 'W';
     name[2] = 'P';
 
-    std::list < EmPicture* >::iterator it = emblist.begin();
-    for (; it != emblist.end(); ++it)
-        if (strcmp(name, (*it)->name) == 0)
-            return *it;
+    for (auto const& emb : emblist)
+        if (strcmp(name, emb->name) == 0)
+            return emb;
     return nullptr;
 }
 
@@ -461,10 +444,9 @@ EmPicture *HWPFile::GetEmPictureByName(char * name)
     name[1] = 'W';
     name[2] = 'P';
 
-    std::list < EmPicture* >::iterator it = emblist.begin();
-    for (; it != emblist.end(); ++it)
-        if (strcmp(name, (*it)->name) == 0)
-            return *it;
+    for (auto const& emb : emblist)
+        if (strcmp(name, emb->name) == 0)
+            return emb;
     return nullptr;
 }
 

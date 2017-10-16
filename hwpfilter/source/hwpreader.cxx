@@ -1921,9 +1921,8 @@ void HwpReader::makeTableStyle(Table *tbl)
     }
 
 // cell
-    for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
+    for (auto const& tcell : tbl->cells)
     {
-        TCell *tcell = *it;
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
         padd("style:name", sXML_CDATA, ascii( buf ));
         padd("style:family", sXML_CDATA,"table-cell");
@@ -3475,9 +3474,8 @@ void HwpReader::makeTable(TxtBox * hbox)
 
 // cell
     int j = -1, k = -1;
-    for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
+    for (auto const& tcell : tbl->cells)
     {
-        TCell *tcell = *it;
         if( tcell->nRowIndex > j )
         {
             if( j > k )

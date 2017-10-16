@@ -349,19 +349,15 @@ TxtBox::~TxtBox()
 {
     for (auto& entry : plists)
     {
-        std::list < HWPPara* >::iterator it = entry.begin();
-        for (; it != entry.end(); ++it)
+        for (auto const& para : entry)
         {
-            HWPPara* pPara = *it;
-            delete pPara;
+            delete para;
         }
     }
 
-    std::list < HWPPara* >::iterator it = caption.begin();
-    for (; it != caption.end(); ++it)
+    for (auto const& para : caption)
     {
-        HWPPara* pPara = *it;
-        delete pPara;
+        delete para;
     }
 }
 
@@ -387,11 +383,9 @@ Picture::~Picture()
     if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
         delete static_cast<HWPDrawingObject *>(picinfo.picdraw.hdo);
 
-    std::list < HWPPara* >::iterator it = caption.begin();
-    for (; it != caption.end(); ++it)
+    for (auto const& para : caption)
     {
-        HWPPara* pPara = *it;
-        delete pPara;
+        delete para;
     }
 }
 
@@ -400,11 +394,9 @@ Picture::~Picture()
 // hidden(15)
 Hidden::~Hidden()
 {
-    std::list < HWPPara* >::iterator it = plist.begin();
-    for (; it != plist.end(); ++it)
+    for (auto const& para : plist)
     {
-        HWPPara* pPara = *it;
-        delete pPara;
+        delete para;
     }
 }
 
@@ -412,11 +404,9 @@ Hidden::~Hidden()
 // header/footer(16)
 HeaderFooter::~HeaderFooter()
 {
-    std::list < HWPPara* >::iterator it = plist.begin();
-    for (; it != plist.end(); ++it)
+    for (auto const& para : plist)
     {
-        HWPPara* pPara = *it;
-        delete pPara;
+        delete para;
     }
 }
 
@@ -424,11 +414,9 @@ HeaderFooter::~HeaderFooter()
 // footnote(17)
 Footnote::~Footnote()
 {
-    std::list < HWPPara* >::iterator it = plist.begin();
-    for (; it != plist.end(); ++it)
+    for (auto const& para : plist)
     {
-        HWPPara* pPara = *it;
-        delete pPara;
+        delete para;
     }
 }
 
