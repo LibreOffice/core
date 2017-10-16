@@ -1341,6 +1341,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
     static const std::set<OpCode> aThreadedCalcBlackList({
         ocIndirect,
         ocMacro,
+        ocOffset,
         ocTableOp
     });
 
