@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_efeaa7ab",
+        "filename": "unoxml/source/events/eventdispatcher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-10-16T15:55:00Z",
+      "side": 1,
+      "message": "better to lock the rMutex while checking these, maybe a concurrent addListener might crash or something",
+      "revId": "6c86c4c13dbab1ae089a205f87ec872f1bb797cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
