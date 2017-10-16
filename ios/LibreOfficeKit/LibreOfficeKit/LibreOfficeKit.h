@@ -6,3 +6,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
+// Bridge functions between LibreOfficeKit library and swift application.
+// Only functions mentioned here can be used from the application
+// The swift compiler uses this header to generate a needed interface
+// The functions (LibreOfficeKit.mm) calls functions directly in LibreOffice
+
+int BridgeLOkit_Init(const char *path);
+int BridgeLOkit_open(const char *path);
+int BridgeLOkit_ClientCommand(const char *input);

@@ -7,27 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		39B5D21A1F78130F008FB162 /* LibreOfficeKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39B5D2191F78130F008FB162 /* LibreOfficeKit.mm */; };
-		39B5D21B1F78130F008FB162 /* LibreOfficeKit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 39B5D2181F78130F008FB162 /* LibreOfficeKit.h */; };
+		39503A731F94CBA000F19C78 /* LibreOfficeKit.c in Sources */ = {isa = PBXBuildFile; fileRef = 39503A721F94CBA000F19C78 /* LibreOfficeKit.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		39B5D2131F78130F008FB162 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
+			dstPath = "$(SRCDIR)/ios/generated";
+			dstSubfolderSpec = 0;
 			files = (
-				39B5D21B1F78130F008FB162 /* LibreOfficeKit.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		39503A6E1F94C3B700F19C78 /* LibreOfficeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibreOfficeKit.h; sourceTree = "<group>"; };
+		39503A721F94CBA000F19C78 /* LibreOfficeKit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = LibreOfficeKit.c; sourceTree = "<group>"; };
 		39B5D2151F78130F008FB162 /* libLibreOfficeKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLibreOfficeKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		39B5D2181F78130F008FB162 /* LibreOfficeKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibreOfficeKit.h; sourceTree = "<group>"; };
-		39B5D2191F78130F008FB162 /* LibreOfficeKit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LibreOfficeKit.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,8 +66,8 @@
 		39B5D2171F78130F008FB162 /* LibreOfficeKit */ = {
 			isa = PBXGroup;
 			children = (
-				39B5D2181F78130F008FB162 /* LibreOfficeKit.h */,
-				39B5D2191F78130F008FB162 /* LibreOfficeKit.mm */,
+				39503A721F94CBA000F19C78 /* LibreOfficeKit.c */,
+				39503A6E1F94C3B700F19C78 /* LibreOfficeKit.h */,
 			);
 			path = LibreOfficeKit;
 			sourceTree = "<group>";
@@ -131,7 +129,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39B5D21A1F78130F008FB162 /* LibreOfficeKit.mm in Sources */,
+				39503A731F94CBA000F19C78 /* LibreOfficeKit.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +274,7 @@
 		39B5D21F1F78130F008FB162 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
 				PRELINK_FLAGS = "-ios_version_min 10.3";
 				PRELINK_LIBS = "";
@@ -287,6 +286,7 @@
 		39B5D2201F78130F008FB162 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
 				PRELINK_FLAGS = "-ios_version_min 10.3";
 				PRELINK_LIBS = "";

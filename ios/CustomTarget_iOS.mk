@@ -10,6 +10,8 @@ IOSGEN := $(SRCDIR)/ios/generated
 IOSRES := $(IOSGEN)/resources
 IOSKITXC := $(WORKDIR)/ios/loKit.xcconfig
 IOSAPPXC := $(WORKDIR)/ios/loApp.xcconfig
+IOSKITSRC := $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit
+IOSAPPSRC := $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight
 IOSKITPRJ := $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj
 IOSAPPPRJ := $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj
 IOSAPP := $(INSTDIR)/LibreOfficeLight.app
@@ -58,7 +60,7 @@ ifeq ("$(wildcard $(IOSRES))","")
 	# generate file with call declarations
 	$(SRCDIR)/solenv/bin/native-code.py \
 	    -g core -g writer -g calc -g draw -g edit \
-	    > $(IOSGEN)/native-code.mm
+	    > $(IOSGEN)/native-code.h
 
 	# generate resource files used to start/run LibreOffice
 	cp $(WORKDIR)/UnpackedTarball/icu/source/data/in/icudt59l.dat $(IOSRES)/icudt59l.dat
@@ -108,7 +110,7 @@ endif
 
 
 #- build  ---------------------------------------------------------------------
-$(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj $(IOSKITXC) $(IOSAPPXC)
+$(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj $(IOSKITXC) $(IOSAPPXC) $(IOSKITSRC)/LibreOfficeKit.h $(IOSKITSRC)/LibreOfficeKit.c
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
 	CC=; \
 	$(call gb_Helper_print_on_error, \
@@ -145,7 +147,7 @@ $(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/ios):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
-	rm $(IOSGEN)/$(IOSKIT)
+	rm -f $(IOSGEN)/$(IOSKIT)
 	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/project.xcworkspace
 	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/xcuserdata
 	rm -rf $(SRCDIR)/ios/LibreOfficeLight/LibreOfficeLight.xcodeproj/project.xcworkspace

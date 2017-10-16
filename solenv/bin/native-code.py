@@ -446,7 +446,6 @@ print ("""/*
 #include <config_features.h>
 #include <osl/detail/component-mapping.h>
 
-extern "C" {
 """)
 
 for entry in sorted(full_factory_map.keys()):
@@ -520,6 +519,6 @@ print ("""
     return map;
 }
 
-}""")
+""")
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
