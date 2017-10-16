@@ -778,7 +778,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
 
-    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(getPolicyType());
+    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
 
     // Prevent recursive validation since this is triggered on node updates, which we do below.
     const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
@@ -863,7 +863,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
 
     uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
 
-    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(getPolicyType());
+    const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
     const sal_Int32 nParagraph = 1;
 
     while (xTextPortions->hasMoreElements())
