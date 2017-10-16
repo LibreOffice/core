@@ -62,7 +62,7 @@
 #include "editeng/AccessibleEditableTextPara.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdpntv.hxx>
-#include "../table/cell.hxx"
+#include "cell.hxx"
 #include "../table/accessiblecell.hxx"
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>

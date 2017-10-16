@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SOURCE_TABLE_TABLEMODEL_HXX
-#define INCLUDED_SVX_SOURCE_TABLE_TABLEMODEL_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_TABLEMODEL_HXX
+#define INCLUDED_SVX_SOURCE_INC_TABLEMODEL_HXX
 
 #include <sal/types.h>
 #include <com/sun/star/util/XBroadcaster.hpp>

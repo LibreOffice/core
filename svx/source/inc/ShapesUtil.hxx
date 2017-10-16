@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVX_SOURCE_SIDEBAR_SHAPES_SHAPESUTIL_HXX
-#define INCLUDED_SVX_SOURCE_SIDEBAR_SHAPES_SHAPESUTIL_HXX
+#ifndef INCLUDED_SVX_SOURCE_INC_SHAPESUTIL_HXX
+#define INCLUDED_SVX_SOURCE_INC_SHAPESUTIL_HXX
 #include <map>
 #include <rtl/ustring.hxx>
 

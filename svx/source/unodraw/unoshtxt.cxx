@@ -47,7 +47,7 @@
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svx/svdotable.hxx>
-#include "../table/cell.hxx"
+#include "cell.hxx"
 #include <svx/sdrpaintwindow.hxx>
 
 

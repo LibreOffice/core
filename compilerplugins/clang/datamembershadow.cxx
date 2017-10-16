@@ -85,9 +85,7 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
     if (loplugin::isSamePathname(aFileName, SRCDIR "/store/source/stortree.hxx")
         || loplugin::isSamePathname(aFileName, SRCDIR "/store/source/stordata.hxx"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/table/cell.hxx")
-        || loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/unodraw/../table/cell.hxx")
-        || loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/accessibility/../table/cell.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/inc/cell.hxx"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/sw/source/uibase/inc/dbtree.hxx"))
         return true;

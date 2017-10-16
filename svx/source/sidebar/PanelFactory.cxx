@@ -25,7 +25,7 @@
 #include "graphic/GraphicPropertyPanel.hxx"
 #include "line/LinePropertyPanel.hxx"
 #include "possize/PosSizePropertyPanel.hxx"
-#include "shapes/DefaultShapesPanel.hxx"
+#include "DefaultShapesPanel.hxx"
 #include "media/MediaPlaybackPanel.hxx"
 #include "GalleryControl.hxx"
 #include "EmptyPanel.hxx"
