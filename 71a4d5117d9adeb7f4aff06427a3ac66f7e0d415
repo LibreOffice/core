@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_cf26cb67",
+        "filename": "writerfilter/source/ooxml/OOXMLPropertySet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-10-16T12:40:12Z",
+      "side": 1,
+      "message": "Do we only care of \"pt\"? I\u0027d suppose that *if* we know the base unit system, then we should use simple \"else\" for all resulting cases.\n\nBut do we actually know that this class is always used in places where our code expects the twips? I am unsure of that, actually. I\u0027d be more happy if we somehow check our code to make sure that we *always* get all measurements in some common base unit, and then do something like here.... that\u0027s why I didn\u0027t do that in my previous commit.",
+      "range": {
+        "startLine": 651,
+        "startChar": 9,
+        "endLine": 652,
+        "endChar": 59
+      },
+      "revId": "71a4d5117d9adeb7f4aff06427a3ac66f7e0d415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_ef29c738",
+        "filename": "writerfilter/source/ooxml/OOXMLPropertySet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-10-16T12:40:12Z",
+      "side": 1,
+      "message": "This is done in OOXMLTwipsMeasureValue (actually in OOXMLUniversalMeasureValue), so possibly could be gone from here (provided we know answer to the above question wrt base units)",
+      "range": {
+        "startLine": 656,
+        "startChar": 4,
+        "endLine": 659,
+        "endChar": 5
+      },
+      "revId": "71a4d5117d9adeb7f4aff06427a3ac66f7e0d415",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
