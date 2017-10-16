@@ -408,6 +408,7 @@ opts = OptionParser()
 opts.add_option("-j", "--java-guard", action="store_true", help="include external java functions", dest="java", default=False)
 opts.add_option("-g", "--group", action="append", help="group of implementations to make available in application", dest="groups")
 opts.add_option("-r", "--limit-rdb", action="append", help="instead of outputting native-code.cxx, limit the services.rdb only to the services defined by the groups", dest="services")
+opts.add_option("-C", "--pure-c", action="store_true", help="do not print extern \"C\"", dest="pure_c", default=False)
 
 (options, args) = opts.parse_args()
 
@@ -447,6 +448,8 @@ print ("""/*
 #include <osl/detail/component-mapping.h>
 
 """)
+if not options.pure_c:
+    print ("""extern "C" {""")
 
 for entry in sorted(full_factory_map.keys()):
     factory_function = full_factory_map[entry]['function']
@@ -520,5 +523,7 @@ print ("""
 }
 
 """)
+if not options.pure_c:
+    print("""}""")
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

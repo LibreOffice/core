@@ -27,11 +27,20 @@ $(eval $(call gb_CustomTarget_CustomTarget,ios/ios))
 
 $(call gb_CustomTarget_get_target,ios/ios): $(IOSGEN)/$(IOSKIT)
 
+#- Setup directories  ---------------------------------------------------------
+IOSPREPARE:
+ifeq ("$(wildcard $(IOSGEN))","")
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
+
+	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
+	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program \
+	         $(IOSGEN) $(WORKDIR)/ios;
+endif
+
 
 #- Generate xcconfig files  ---------------------------------------------------
-$(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk
+$(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_iOS.mk IOSPREPARE
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
-	@mkdir -p $(IOSGEN) $(WORKDIR)/ios;
 	sed -e "s'@BUILDDIR@'$(BUILDDIR)'g" \
 	    -e "s'@INSTDIR@'$(INSTDIR)'g" \
 	    -e "s'@SRCDIR@'$(SRC_ROOT)'g" \
@@ -53,12 +62,9 @@ $(IOSKITXC) $(IOSAPPXC): $(BUILDDIR)/config_host.mk $(SRCDIR)/ios/CustomTarget_i
 ifeq ("$(wildcard $(IOSRES))","")
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ENV,2)
 
-	mkdir -p $(IOSGEN) $(IOSRES) $(IOSRES)/services \
-	         $(IOSRES)/share/config $(IOSRES)/share/filter $(IOSRES)/program
-
 	# generate file with call declarations
 	$(SRCDIR)/solenv/bin/native-code.py \
-	    -g core -g writer -g calc -g draw -g edit \
+	    -C -g core -g writer -g calc -g draw -g edit \
 	    > $(IOSGEN)/native-code.h
 
 	# generate resource files used to start/run LibreOffice
@@ -109,7 +115,7 @@ endif
 
 
 #- build  ---------------------------------------------------------------------
-$(IOSGEN)/$(IOSKIT): $(IOSKITPRJ)/project.pbxproj $(IOSKITXC) $(IOSAPPXC) $(IOSKITSRC)/LibreOfficeKit.h $(IOSKITSRC)/LibreOfficeKit.c
+$(IOSGEN)/$(IOSKIT): $(IOSKITXC) $(IOSAPPXC) IOSPREPARE
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),APP,2)
 	CC=; \
 	$(call gb_Helper_print_on_error, \
