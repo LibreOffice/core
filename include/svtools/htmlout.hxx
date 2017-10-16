@@ -26,7 +26,7 @@
 #include <rtl/string.hxx>
 #include <svl/macitem.hxx>
 
-#include "HtmlWriter.hxx"
+#include "svtools/HtmlWriter.hxx"
 
 class Color;
 class ImageMap;
