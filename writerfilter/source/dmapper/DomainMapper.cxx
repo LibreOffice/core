@@ -697,10 +697,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
              */
             //TODO: unsupported?
         break;
-        case NS_ooxml::LN_CT_TblCellMar_right: // 92375;
-        case NS_ooxml::LN_CT_TblBorders_top: // 92377;
-        case NS_ooxml::LN_CT_TblBorders_left: // 92378;
-        case NS_ooxml::LN_CT_TblBorders_bottom: // 92379;
+        case NS_ooxml::LN_CT_TblBorders_right:
+        case NS_ooxml::LN_CT_TblBorders_top:
+        case NS_ooxml::LN_CT_TblBorders_left:
+        case NS_ooxml::LN_CT_TblBorders_bottom:
         //todo: handle cell mar
         break;
         case NS_ooxml::LN_blip: // contains the binary graphic
