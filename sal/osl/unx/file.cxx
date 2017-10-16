@@ -1146,6 +1146,12 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
 
 const off_t MAX_OFF_T = std::numeric_limits< off_t >::max();
 
+namespace {
+
+template<typename T> bool exceedsOffT(T n) { return n > MAX_OFF_T; }
+
+}
+
 oslFileError SAL_CALL osl_mapFile(
     oslFileHandle Handle,
     void**        ppAddr,
@@ -1166,8 +1172,7 @@ oslFileError SAL_CALL osl_mapFile(
 
     size_t const nLength = sal::static_int_cast< size_t >(uLength);
 
-    sal_uInt64 const limit_off_t = MAX_OFF_T;
-    if (uOffset > limit_off_t)
+    if (exceedsOffT(uOffset))
         return osl_File_E_OVERFLOW;
 
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
@@ -1371,8 +1376,7 @@ oslFileError SAL_CALL osl_readFileAt(
     if ((pImpl->m_state & FileHandle_Impl::STATE_SEEKABLE) == 0)
         return osl_File_E_SPIPE;
 
-    sal_uInt64 const limit_off_t = MAX_OFF_T;
-    if (uOffset > limit_off_t)
+    if (exceedsOffT(uOffset))
         return osl_File_E_OVERFLOW;
 
     off_t const nOffset = sal::static_int_cast< off_t >(uOffset);
@@ -1407,8 +1411,7 @@ oslFileError SAL_CALL osl_writeFileAt(
     if ((pImpl->m_state & FileHandle_Impl::STATE_WRITEABLE) == 0)
         return osl_File_E_BADF;
 
-    sal_uInt64 const limit_off_t = MAX_OFF_T;
-    if (limit_off_t < uOffset)
+    if (exceedsOffT(uOffset))
         return osl_File_E_OVERFLOW;
 
     off_t const nOffset = sal::static_int_cast< off_t >(uOffset);
@@ -1458,8 +1461,7 @@ oslFileError SAL_CALL osl_setFilePos(oslFileHandle Handle, sal_uInt32 uHow, sal_
     if ((!pImpl) || ((pImpl->m_kind == FileHandle_Impl::KIND_FD) && (pImpl->m_fd == -1)))
         return osl_File_E_INVAL;
 
-    sal_Int64 const limit_off_t = MAX_OFF_T;
-    if (uOffset > limit_off_t)
+    if (exceedsOffT(uOffset))
         return osl_File_E_OVERFLOW;
 
     off_t nPos = 0, nOffset = sal::static_int_cast< off_t >(uOffset);
@@ -1522,8 +1524,7 @@ oslFileError SAL_CALL osl_setFileSize(oslFileHandle Handle, sal_uInt64 uSize)
     if ((pImpl->m_state & FileHandle_Impl::STATE_WRITEABLE) == 0)
         return osl_File_E_BADF;
 
-    sal_uInt64 const limit_off_t = MAX_OFF_T;
-    if (uSize > limit_off_t)
+    if (exceedsOffT(uSize))
         return osl_File_E_OVERFLOW;
 
     oslFileError result = pImpl->syncFile();
