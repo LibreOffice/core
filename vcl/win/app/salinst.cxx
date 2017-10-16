@@ -459,14 +459,14 @@ void WinSalInstance::AcquireYieldMutex( sal_uInt32 nCount )
     mpSalYieldMutex->acquire( nCount );
 }
 
-static LRESULT ImplSalDispatchMessage( MSG* pMsg )
+static LRESULT ImplSalDispatchMessage( const MSG* pMsg )
 {
     SalData* pSalData = GetSalData();
     if ( pSalData->mpFirstObject && ImplSalPreDispatchMsg( pMsg ) )
         return 0;
     LRESULT lResult = DispatchMessageW( pMsg );
     if ( pSalData->mpFirstObject )
-        ImplSalPostDispatchMsg( pMsg, lResult );
+        ImplSalPostDispatchMsg( pMsg );
     return lResult;
 }
 
@@ -569,124 +569,108 @@ bool WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     return bDidWork;
 }
 
-LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
+#define CASE_NOYIELDLOCK( salmsg, function ) \
+    case salmsg: \
+        assert( !pInst->mbNoYieldLock ); \
+        pInst->mbNoYieldLock = true; \
+        function; \
+        pInst->mbNoYieldLock = false; \
+        break;
+
+#define CASE_NOYIELDLOCK_RESULT( salmsg, function ) \
+    case salmsg: \
+        assert( !pInst->mbNoYieldLock ); \
+        pInst->mbNoYieldLock = true; \
+        nRet = reinterpret_cast<LRESULT>( function ); \
+        pInst->mbNoYieldLock = false; \
+        break;
+
+LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, bool& rDef )
 {
     LRESULT nRet = 0;
     WinSalInstance *pInst = GetSalData()->mpInstance;
+    WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
 
     switch ( nMsg )
     {
         case SAL_MSG_THREADYIELD:
             assert( !(bool)wParam );
-            nRet = static_cast<LRESULT>(ImplSalYield( false, (bool)lParam ));
-            rDef = FALSE;
+            nRet = static_cast<LRESULT>(ImplSalYield(
+                false, static_cast<bool>( lParam ) ));
             break;
+
         case SAL_MSG_STARTTIMER:
         {
             sal_uInt64 nTime = tools::Time::GetSystemTicks();
-            if ( nTime < (sal_uInt64) lParam )
-                nTime = (sal_uInt64) lParam - nTime;
+            if ( nTime < static_cast<sal_uInt64>( lParam ) )
+                nTime = static_cast<sal_uInt64>( lParam ) - nTime;
             else
                 nTime = 0;
-            static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer)->ImplStart( nTime );
-            rDef = FALSE;
+            assert( pTimer != nullptr );
+            pTimer->ImplStart( nTime );
             break;
         }
+
         case SAL_MSG_STOPTIMER:
-            static_cast<WinSalTimer*>(ImplGetSVData()->maSchedCtx.mpSalTimer)->ImplStop();
+            assert( pTimer != nullptr );
+            pTimer->ImplStop();
             break;
-        case SAL_MSG_CREATEFRAME:
-            assert( !pInst->mbNoYieldLock );
-            pInst->mbNoYieldLock = true;
-            nRet = reinterpret_cast<LRESULT>(ImplSalCreateFrame( GetSalData()->mpInstance, reinterpret_cast<HWND>(lParam), (SalFrameStyleFlags)wParam ));
-            pInst->mbNoYieldLock = false;
-            rDef = FALSE;
-            break;
-        case SAL_MSG_RECREATEHWND:
-            assert( !pInst->mbNoYieldLock );
-            pInst->mbNoYieldLock = true;
-            nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND( reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), false ));
-            pInst->mbNoYieldLock = false;
-            rDef = FALSE;
-            break;
-        case SAL_MSG_RECREATECHILDHWND:
-            assert( !pInst->mbNoYieldLock );
-            pInst->mbNoYieldLock = true;
-            nRet = reinterpret_cast<LRESULT>(ImplSalReCreateHWND( reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), true ));
-            pInst->mbNoYieldLock = false;
-            rDef = FALSE;
-            break;
-        case SAL_MSG_DESTROYFRAME:
-            assert( !pInst->mbNoYieldLock );
-            pInst->mbNoYieldLock = true;
-            delete reinterpret_cast<SalFrame*>(lParam);
-            pInst->mbNoYieldLock = false;
-            rDef = FALSE;
-            break;
+
+        CASE_NOYIELDLOCK_RESULT( SAL_MSG_CREATEFRAME, ImplSalCreateFrame( GetSalData()->mpInstance,
+            reinterpret_cast<HWND>(lParam), static_cast<SalFrameStyleFlags>(wParam)) )
+        CASE_NOYIELDLOCK_RESULT( SAL_MSG_RECREATEHWND, ImplSalReCreateHWND(
+            reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), false) )
+        CASE_NOYIELDLOCK_RESULT( SAL_MSG_RECREATECHILDHWND, ImplSalReCreateHWND(
+            reinterpret_cast<HWND>(wParam), reinterpret_cast<HWND>(lParam), true) )
+        CASE_NOYIELDLOCK( SAL_MSG_DESTROYFRAME, delete reinterpret_cast<SalFrame*>(lParam) )
+
         case SAL_MSG_DESTROYHWND:
-            //We only destroy the native window here. We do NOT destroy the SalFrame contained
-            //in the structure (GetWindowPtr()).
+            // We only destroy the native window here. We do NOT destroy the SalFrame contained
+            // in the structure (GetWindowPtr()).
             if (DestroyWindow(reinterpret_cast<HWND>(lParam)) == 0)
             {
                 OSL_FAIL("DestroyWindow failed!");
-                //Failure: We remove the SalFrame from the window structure. So we avoid that
+                // Failure: We remove the SalFrame from the window structure. So we avoid that
                 // the window structure may contain an invalid pointer, once the SalFrame is deleted.
-               SetWindowPtr(reinterpret_cast<HWND>(lParam), nullptr);
+                SetWindowPtr(reinterpret_cast<HWND>(lParam), nullptr);
             }
-            rDef = FALSE;
             break;
-        case SAL_MSG_CREATEOBJECT:
-            assert( !pInst->mbNoYieldLock );
-            pInst->mbNoYieldLock = true;
-            nRet = reinterpret_cast<LRESULT>(ImplSalCreateObject( GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam) ));
-            pInst->mbNoYieldLock = false;
-            rDef = FALSE;
-            break;
-        case SAL_MSG_DESTROYOBJECT:
-            assert( !pInst->mbNoYieldLock );
-            pInst->mbNoYieldLock = true;
-            delete reinterpret_cast<SalObject*>(lParam);
-            pInst->mbNoYieldLock = false;
-            rDef = FALSE;
-            break;
-        case SAL_MSG_GETDC:
-            assert( !pInst->mbNoYieldLock );
-            pInst->mbNoYieldLock = true;
-            nRet = reinterpret_cast<LRESULT>(GetDCEx( reinterpret_cast<HWND>(wParam), nullptr, DCX_CACHE ));
-            pInst->mbNoYieldLock = false;
-            rDef = FALSE;
-            break;
-        case SAL_MSG_RELEASEDC:
-            assert( !pInst->mbNoYieldLock );
-            pInst->mbNoYieldLock = true;
-            ReleaseDC( reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam) );
-            pInst->mbNoYieldLock = false;
-            rDef = FALSE;
-            break;
+
+        CASE_NOYIELDLOCK_RESULT( SAL_MSG_CREATEOBJECT, ImplSalCreateObject(
+            GetSalData()->mpInstance, reinterpret_cast<WinSalFrame*>(lParam)) )
+        CASE_NOYIELDLOCK( SAL_MSG_DESTROYOBJECT, delete reinterpret_cast<SalObject*>(lParam) )
+        CASE_NOYIELDLOCK_RESULT( SAL_MSG_GETDC, GetDCEx(
+            reinterpret_cast<HWND>(wParam), nullptr, DCX_CACHE) )
+        CASE_NOYIELDLOCK( SAL_MSG_RELEASEDC, ReleaseDC(
+            reinterpret_cast<HWND>(wParam), reinterpret_cast<HDC>(lParam)) )
+
         case SAL_MSG_TIMER_CALLBACK:
-        {
-            WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
             assert( pTimer != nullptr );
             nRet = static_cast<LRESULT>( pTimer->ImplHandleTimerEvent( wParam ) );
-            rDef = FALSE;
             break;
-        }
+
         case WM_TIMER:
-        {
-            WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
             assert( pTimer != nullptr );
             nRet = static_cast<LRESULT>( pTimer->ImplHandle_WM_TIMER( wParam ) );
-            rDef = FALSE;
             break;
-        }
+
+        case SAL_MSG_DUMMY:
+            break;
+
+        default:
+            rDef = true;
+            break;
     }
 
     return nRet;
 }
 
+#undef CASE_NOYIELDLOCK
+#undef CASE_NOYIELDLOCK_RESULT
+
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
-    int bDef = TRUE;
+    bool bDef = false;
     LRESULT nRet = 0;
     __try
     {

@@ -63,6 +63,8 @@ public:
 
 class AquaSalInstance : public SalInstance, public SalUserEventList
 {
+    friend class AquaSalFrame;
+
     bool RunInMainYield( bool bHandleAllCurrentEvents );
 
     virtual void TriggerUserEventProcessing() override;
@@ -80,7 +82,6 @@ public:
 
     static std::list<const ApplicationEvent*> aAppEventList;
 
-public:
     AquaSalInstance();
     virtual ~AquaSalInstance() override;
 
@@ -134,9 +135,6 @@ public:
     // check whether a particular string is passed on the command line
     // this is needed to avoid duplicate open events through a) command line and b) NSApp's openFile
     static bool isOnCommandLine( const OUString& );
-
-public:
-    friend class AquaSalFrame;
 
     void delayedSettingsChanged( bool bInvalidate );
 
