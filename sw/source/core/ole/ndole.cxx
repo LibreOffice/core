@@ -90,7 +90,7 @@ class SwOLEListener_Impl : public ::cppu::WeakImplHelper< embed::XStateChangeLis
     SwOLEObj* mpObj;
 public:
     explicit SwOLEListener_Impl( SwOLEObj* pObj );
-    void Release();
+    void dispose();
     virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
     virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
     virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) override;
@@ -128,12 +128,11 @@ void SAL_CALL SwOLEListener_Impl::stateChanged( const lang::EventObject&, ::sal_
     }
 }
 
-void SwOLEListener_Impl::Release()
+void SwOLEListener_Impl::dispose()
 {
     if (mpObj && g_pOLELRU_Cache)
         g_pOLELRU_Cache->RemoveObj( *mpObj );
-    mpObj=nullptr;
-    release();
+    mpObj = nullptr;
 }
 
 void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& )
@@ -733,7 +732,6 @@ private:
 
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     m_pOLENode( nullptr ),
-    m_pListener( nullptr ),
     m_xOLERef( xObj ),
     m_aPrimitive2DSequence(),
     m_aRange(),
@@ -742,15 +740,13 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     m_xOLERef.Lock();
     if ( xObj.is() )
     {
-        m_pListener = new SwOLEListener_Impl( this );
-        m_pListener->acquire();
-        xObj->addStateChangeListener( m_pListener );
+        m_xListener = new SwOLEListener_Impl( this );
+        xObj->addStateChangeListener( m_xListener.get() );
     }
 }
 
 SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     m_pOLENode( nullptr ),
-    m_pListener( nullptr ),
     m_aName( rString ),
     m_aPrimitive2DSequence(),
     m_aRange(),
@@ -770,11 +766,12 @@ SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
         m_pDeflateData = nullptr;
     }
 
-    if( m_pListener )
+    if( m_xListener )
     {
         if ( m_xOLERef.is() )
-            m_xOLERef->removeStateChangeListener( m_pListener );
-        m_pListener->Release();
+            m_xOLERef->removeStateChangeListener( m_xListener.get() );
+        m_xListener->dispose();
+        m_xListener.clear();
     }
 
     if( m_pOLENode && !m_pOLENode->GetDoc()->IsInDtor() )
@@ -910,9 +907,8 @@ const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         {
             m_xOLERef.Assign( xObj, m_xOLERef.GetViewAspect() );
             m_xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), m_aName );
-            m_pListener = new SwOLEListener_Impl( this );
-            m_pListener->acquire();
-            xObj->addStateChangeListener( m_pListener );
+            m_xListener = new SwOLEListener_Impl( this );
+            xObj->addStateChangeListener( m_xListener.get() );
         }
 
         const_cast<SwOLENode*>(m_pOLENode)->CheckFileLink_Impl(); // for this notification nonconst access is required
