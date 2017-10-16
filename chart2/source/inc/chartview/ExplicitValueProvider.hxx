@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_EXPLICITVALUEPROVIDER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_EXPLICITVALUEPROVIDER_HXX
 
-#include "ExplicitScaleValues.hxx"
+#include "chartview/ExplicitScaleValues.hxx"
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
@@ -28,7 +28,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include "chartviewdllapi.hxx"
+#include "chartview/chartviewdllapi.hxx"
 #include "ChartModel.hxx"
 
 #include <memory>

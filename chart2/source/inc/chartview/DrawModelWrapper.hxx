@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "chartviewdllapi.hxx"
+#include "chartview/chartviewdllapi.hxx"
 
 namespace chart
 {

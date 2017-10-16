@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_EXPLICITSCALEVALUES_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTVIEW_EXPLICITSCALEVALUES_HXX
 
-#include "chartviewdllapi.hxx"
+#include "chartview/chartviewdllapi.hxx"
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>

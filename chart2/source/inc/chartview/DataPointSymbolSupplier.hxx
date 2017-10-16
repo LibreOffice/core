@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include "chartviewdllapi.hxx"
+#include "chartview/chartviewdllapi.hxx"
 
 namespace chart
 {
