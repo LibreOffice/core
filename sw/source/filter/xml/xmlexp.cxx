@@ -238,12 +238,11 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // we don't need it here.
     // else: keep default pClass that we received
 
-    SvXMLGraphicHelper *pGraphicResolver = nullptr;
+    rtl::Reference<SvXMLGraphicHelper> xGraphicResolver;
     if( !GetGraphicResolver().is() )
     {
-        pGraphicResolver = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
-        Reference< XGraphicObjectResolver > xGraphicResolver( pGraphicResolver );
-        SetGraphicResolver( xGraphicResolver );
+        xGraphicResolver = SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode::Write );
+        SetGraphicResolver( xGraphicResolver.get() );
     }
 
     rtl::Reference<SvXMLEmbeddedObjectHelper> xEmbeddedResolver;
@@ -293,8 +292,9 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
       pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
     }
 
-    if( pGraphicResolver )
-        SvXMLGraphicHelper::Destroy( pGraphicResolver );
+    if( xGraphicResolver )
+        xGraphicResolver->dispose();
+    xGraphicResolver.clear();
     if( xEmbeddedResolver )
         xEmbeddedResolver->dispose();
     xEmbeddedResolver.clear();

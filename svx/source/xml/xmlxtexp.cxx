@@ -177,14 +177,14 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
 }
 
 static void createStorageStream( uno::Reference < io::XOutputStream > *xOut,
-                                 SvXMLGraphicHelper                  **ppGraphicHelper,
+                                 rtl::Reference<SvXMLGraphicHelper>&   rxGraphicHelper,
                                  const uno::Reference < embed::XStorage >& xSubStorage )
 {
     uno::Reference < io::XStream > xStream;
     xStream = xSubStorage->openStreamElement(
                         "Content.xml",
                         embed::ElementModes::WRITE );
-    *ppGraphicHelper = SvXMLGraphicHelper::Create( xSubStorage, SvXMLGraphicHelperMode::Write );
+    rxGraphicHelper = SvXMLGraphicHelper::Create( xSubStorage, SvXMLGraphicHelperMode::Write );
     initializeStreamMetadata( xStream );
     *xOut = xStream->getOutputStream();
 }
@@ -197,7 +197,7 @@ bool SvxXMLXTableExportComponent::save(
 {
     bool bRet = false;
     std::unique_ptr<SfxMedium> pMedium;
-    SvXMLGraphicHelper* pGraphicHelper = nullptr;
+    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
     sal_Int32 eCreate = embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE;
 
     INetURLObject aURLObj( rURL );
@@ -271,22 +271,23 @@ bool SvxXMLXTableExportComponent::save(
         }
 
         if( !xOut.is() && xSubStorage.is() )
-            createStorageStream( &xOut, &pGraphicHelper, xSubStorage );
+            createStorageStream( &xOut, xGraphicHelper, xSubStorage );
         if( !xOut.is() )
             return false;
 
         uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
         xMetaSrc->setOutputStream( xOut );
-        if( pGraphicHelper )
-            xGrfResolver = pGraphicHelper;
+        if( xGraphicHelper.is() )
+            xGrfResolver = xGraphicHelper.get();
 
         // Finally do the export
         const OUString aName;
         rtl::Reference< SvxXMLXTableExportComponent > xExporter( new SvxXMLXTableExportComponent( xContext, aName, xHandler, xTable, xGrfResolver ) );
         bRet = xExporter->exportTable();
 
-        if( pGraphicHelper )
-            SvXMLGraphicHelper::Destroy( pGraphicHelper );
+        if( xGraphicHelper )
+            xGraphicHelper->dispose();
+        xGraphicHelper.clear();
 
         if( xSubStorage.is() )
         {

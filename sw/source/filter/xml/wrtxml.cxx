@@ -80,15 +80,15 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     // Get data sink ...
     tools::SvRef<SotStorageStream> xDocStream;
     uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
-    SvXMLGraphicHelper *pGraphicHelper = nullptr;
+    rtl::Reference<SvXMLGraphicHelper> xGraphicHelper ;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     rtl::Reference<SvXMLEmbeddedObjectHelper> xObjectHelper;
 
     OSL_ENSURE( xStg.is(), "Where is my storage?" );
-    pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
+    xGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                                                  SvXMLGraphicHelperMode::Write,
                                                  false );
-    xGraphicResolver = pGraphicHelper;
+    xGraphicResolver = xGraphicHelper.get();
 
     SfxObjectShell *pPersist = pDoc->GetPersist();
     if( pPersist )
@@ -388,8 +388,9 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
         }
     }
 
-    if( pGraphicHelper )
-        SvXMLGraphicHelper::Destroy( pGraphicHelper );
+    if( xGraphicHelper )
+        xGraphicHelper->dispose();
+    xGraphicHelper.clear();
     xGraphicResolver = nullptr;
 
     if( xObjectHelper )

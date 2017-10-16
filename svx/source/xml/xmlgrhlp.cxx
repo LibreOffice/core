@@ -773,35 +773,24 @@ void SvXMLGraphicHelper::Init( const uno::Reference < embed::XStorage >& rXMLSto
     mbDirect = meCreateMode != SvXMLGraphicHelperMode::Read || bDirect;
 }
 
-SvXMLGraphicHelper* SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
+rtl::Reference<SvXMLGraphicHelper> SvXMLGraphicHelper::Create( const uno::Reference < embed::XStorage >& rXMLStorage,
                                                 SvXMLGraphicHelperMode eCreateMode,
                                                 bool bDirect )
 {
-    SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
+    rtl::Reference<SvXMLGraphicHelper> pThis = new SvXMLGraphicHelper;
 
-    pThis->acquire();
     pThis->Init( rXMLStorage, eCreateMode, bDirect );
 
     return pThis;
 }
 
-SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMode )
+rtl::Reference<SvXMLGraphicHelper> SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMode )
 {
-    SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
+    rtl::Reference<SvXMLGraphicHelper> pThis = new SvXMLGraphicHelper;
 
-    pThis->acquire();
     pThis->Init( nullptr, eCreateMode, false );
 
     return pThis;
-}
-
-void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
-{
-    if( pSvXMLGraphicHelper )
-    {
-        pSvXMLGraphicHelper->dispose();
-        pSvXMLGraphicHelper->release();
-    }
 }
 
 // XGraphicObjectResolver
@@ -994,12 +983,9 @@ void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
     if( aArguments.getLength() > 0 )
         aArguments[0] >>= xStorage;
 
-    SvXMLGraphicHelper * pHelper( SvXMLGraphicHelper::Create( xStorage, m_eGraphicHelperMode ));
-    m_xGraphicObjectResolver.set( pHelper );
-    m_xBinaryStreamResolver.set( pHelper );
-    // SvXMLGraphicHelper::Create calls acquire.  Since we have two references
-    // now it is safe (and necessary) to undo this acquire
-    pHelper->release();
+    rtl::Reference<SvXMLGraphicHelper> pHelper( SvXMLGraphicHelper::Create( xStorage, m_eGraphicHelperMode ));
+    m_xGraphicObjectResolver.set( pHelper.get() );
+    m_xBinaryStreamResolver.set( pHelper.get() );
 }
 
 // ____ XGraphicObjectResolver ____
