@@ -38,6 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
         // start LibreOfficeKit
         BridgeLOkit_Init(Bundle.main.bundlePath)
+        BridgeLOkit_open("jan");
+        BridgeLOkit_ClientCommand("jan");
 
         // Override point for customization after application launch.
         return true

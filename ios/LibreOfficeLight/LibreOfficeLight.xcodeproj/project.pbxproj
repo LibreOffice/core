@@ -15,6 +15,7 @@
 		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
 		393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975771F8BECB0002DC80B /* libiconv.tbd */; };
 		3939757A1F8BECC1002DC80B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 393975791F8BECC1002DC80B /* libz.tbd */; };
+		39503A751F94D44900F19C78 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 39503A741F94D44900F19C78 /* libc++.tbd */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
 		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
@@ -23,7 +24,6 @@
 		3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8591E5B762A00BEA987 /* DocumentController.swift */; };
 		3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85B1E5B764A00BEA987 /* SideMenu.swift */; };
 		399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399648461E5B87DC00E73E83 /* ViewProperties.swift */; };
-		39A356E01F8D077500C780F2 /* LibreOfficeKit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39A356DF1F8D077500C780F2 /* LibreOfficeKit.mm */; };
 		39B08B9D1E5F0BB600682A59 /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E51E5F0BB400682A59 /* fundamentalrc */; };
 		39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E61E5F0BB400682A59 /* offapi.rdb */; };
 		39B08B9F1E5F0BB600682A59 /* oovbaapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B084E71E5F0BB400682A59 /* oovbaapi.rdb */; };
@@ -34,7 +34,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		39022C191EDC14D300100066 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
 		39022C1A1EDC2A0E00100066 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../generated/resources/program; sourceTree = "<group>"; };
 		39022C1C1EDC2A2C00100066 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../generated/resources/services; sourceTree = "<group>"; };
 		39022C1E1EDC2AB000100066 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../generated/resources/share; sourceTree = "<group>"; };
@@ -43,6 +42,8 @@
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
 		393975771F8BECB0002DC80B /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		393975791F8BECC1002DC80B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
+		39503A741F94D44900F19C78 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibreOfficeLight.entitlements; sourceTree = "<group>"; };
 		397868D71E59A3EA007F9248 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -53,7 +54,6 @@
 		3992D8591E5B762A00BEA987 /* DocumentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DocumentController.swift; path = LibreOfficeLight/DocumentController.swift; sourceTree = SOURCE_ROOT; };
 		3992D85B1E5B764A00BEA987 /* SideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideMenu.swift; path = LibreOfficeLight/SideMenu.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
-		39A356DF1F8D077500C780F2 /* LibreOfficeKit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LibreOfficeKit.mm; sourceTree = "<group>"; };
 		39ACF4181F8A317600DA7334 /* loApp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loApp.xcconfig; path = ../../../../../../../Users/jani/lo_ios/workdir/ios/loApp.xcconfig; sourceTree = "<group>"; };
 		39B084E51E5F0BB400682A59 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../generated/resources/fundamentalrc; sourceTree = SOURCE_ROOT; };
 		39B084E61E5F0BB400682A59 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../generated/resources/offapi.rdb; sourceTree = SOURCE_ROOT; };
@@ -70,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39503A751F94D44900F19C78 /* libc++.tbd in Frameworks */,
 				3939757A1F8BECC1002DC80B /* libz.tbd in Frameworks */,
 				393975781F8BECB0002DC80B /* libiconv.tbd in Frameworks */,
 			);
@@ -95,6 +96,7 @@
 		3972753A1E77D9F7006ACDCC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				39503A741F94D44900F19C78 /* libc++.tbd */,
 				393975791F8BECC1002DC80B /* libz.tbd */,
 				393975771F8BECB0002DC80B /* libiconv.tbd */,
 			);
@@ -123,8 +125,7 @@
 		397E08FC1E597BD8001374E0 /* LibreOfficeLight */ = {
 			isa = PBXGroup;
 			children = (
-				39A356DF1F8D077500C780F2 /* LibreOfficeKit.mm */,
-				39022C191EDC14D300100066 /* lokit-Bridging-Header.h */,
+				39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */,
 				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
 				3992D85B1E5B764A00BEA987 /* SideMenu.swift */,
 				3992D8591E5B762A00BEA987 /* DocumentController.swift */,
@@ -256,7 +257,6 @@
 				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
 				3992D85A1E5B762A00BEA987 /* DocumentController.swift in Sources */,
 				397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */,
-				39A356E01F8D077500C780F2 /* LibreOfficeKit.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +366,7 @@
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "lokit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -441,6 +442,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "lokit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
@@ -591,6 +593,7 @@
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "lokit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
