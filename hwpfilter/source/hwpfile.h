@@ -160,7 +160,7 @@ class DLLEXPORT HWPFile
 /**
  * Reads main paragraph list
  */
-        bool ReadParaList(std::list<HWPPara*> &aplist, unsigned char flag = 0);
+        bool ReadParaList(std::vector<HWPPara*> &aplist, unsigned char flag = 0);
 /**
  * Sets if the stream is compressed
  */
@@ -282,14 +282,14 @@ class DLLEXPORT HWPFile
         HWPInfo   _hwpInfo;
         HWPFont   _hwpFont;
         HWPStyle  _hwpStyle;
-        std::list<ColumnInfo*> columnlist;
-          // paragraph linked list
-        std::list<HWPPara*> plist;
-          // floating box linked list
-        std::list<FBox*> blist;
-          // embedded picture list(tag datas)
-        std::list<EmPicture*> emblist;
-        std::list<HyperText*> hyperlist;
+        std::vector<ColumnInfo*> columnlist;
+        // paragraph list
+        std::vector<HWPPara*> plist;
+        // floating box list
+        std::vector<FBox*> blist;
+        // embedded picture list(tag datas)
+        std::vector<EmPicture*> emblist;
+        std::vector<HyperText*> hyperlist;
         int currenthyper;
         std::vector<std::shared_ptr<ParaShape>> pslist;
         std::vector<std::shared_ptr<CharShape>> cslist;
