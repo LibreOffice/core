@@ -1137,7 +1137,6 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
         if( !nTol )
         {
             const BitmapColor   aTest( pReadAcc->GetBestMatchingColor( rTransColor ) );
-            long nX, nY;
 
             if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ||
                 pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitLsnPal )
@@ -1150,12 +1149,11 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                     aWhite.GetIndex() == 1 )
                 {
                     // optimized for 1Bit-MSB destination palette
-                    for( nY = 0; nY < nHeight; nY++ )
+                    for (long nY = 0; nY < nHeight; ++nY)
                     {
                         Scanline pSrc = pReadAcc->GetScanline( nY );
                         Scanline pDst = pWriteAcc->GetScanline( nY );
-                        long nShift = 0;
-                        for( nX = 0, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
+                        for (long nX = 0, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4)
                         {
                             if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
                                 pDst[ nX >> 3 ] |= 1 << ( 7 - ( nX & 7 ) );
@@ -1166,11 +1164,10 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                 }
                 else
                 {
-                    for( nY = 0; nY < nHeight; nY++ )
+                    for (long nY = 0; nY < nHeight; ++nY)
                     {
                         Scanline pSrc = pReadAcc->GetScanline( nY );
-                        long nShift = 0;
-                        for( nX = 0, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4 )
+                        for (long nX = 0, nShift = nShiftInit; nX < nWidth; nX++, nShift ^= 4)
                         {
                             if( cTest == ( ( pSrc[ nX >> 1 ] >> nShift ) & 0x0f ) )
                                 pWriteAcc->SetPixel( nY, nX, aWhite );
@@ -1189,11 +1186,11 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                     aWhite.GetIndex() == 1 )
                 {
                     // optimized for 1Bit-MSB destination palette
-                    for( nY = 0; nY < nHeight; nY++ )
+                    for (long nY = 0; nY < nHeight; ++nY)
                     {
                         Scanline pSrc = pReadAcc->GetScanline( nY );
                         Scanline pDst = pWriteAcc->GetScanline( nY );
-                        for( nX = 0; nX < nWidth; nX++ )
+                        for (long nX = 0; nX < nWidth; ++nX)
                         {
                             if( cTest == pSrc[ nX ] )
                                 pDst[ nX >> 3 ] |= 1 << ( 7 - ( nX & 7 ) );
@@ -1204,10 +1201,10 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                 }
                 else
                 {
-                    for( nY = 0; nY < nHeight; nY++ )
+                    for (long nY = 0; nY < nHeight; ++nY)
                     {
                         Scanline pSrc = pReadAcc->GetScanline( nY );
-                        for( nX = 0; nX < nWidth; nX++ )
+                        for (long nX = 0; nX < nWidth; ++nX)
                         {
                             if( cTest == pSrc[ nX ] )
                                 pWriteAcc->SetPixel( nY, nX, aWhite );
@@ -1217,12 +1214,25 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                     }
                 }
             }
+            else if (pWriteAcc->GetScanlineFormat() == pReadAcc->GetScanlineFormat() && aWhite.GetIndex() == 1 &&
+                     (pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitLsbPal || pReadAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal))
+            {
+                for (long nY = 0; nY < nHeight; ++nY)
+                {
+                    Scanline pSrc = pReadAcc->GetScanline(nY);
+                    Scanline pDst = pWriteAcc->GetScanline(nY);
+                    assert(pWriteAcc->GetScanlineSize() == pReadAcc->GetScanlineSize());
+                    const long nScanlineSize = pWriteAcc->GetScanlineSize();
+                    for (long nX = 0; nX < nScanlineSize; ++nX)
+                        pDst[nX] = ~pSrc[nX];
+                }
+            }
             else
             {
                 // not optimized
-                for( nY = 0; nY < nHeight; nY++ )
+                for (long nY = 0; nY < nHeight; ++nY)
                 {
-                    for( nX = 0; nX < nWidth; nX++ )
+                    for (long nX = 0; nX < nWidth; ++nX)
                     {
                         if( aTest == pReadAcc->GetPixel( nY, nX ) )
                             pWriteAcc->SetPixel( nY, nX, aWhite );
