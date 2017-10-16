@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_8f74c39c",
+        "filename": "icon-themes/sifr/cmd/32/editheaderandfooter.png",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-10-16T02:50:47Z",
+      "side": 1,
+      "message": "This icon doesn’t have a transparent background like the others",
+      "revId": "1ccd65baec5506c381c26c5c3da81a26f8ac166c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_af77bf9d",
+        "filename": "icon-themes/sifr/cmd/lc_editheaderandfooter.png",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-10-16T02:50:47Z",
+      "side": 1,
+      "message": "Same",
+      "revId": "1ccd65baec5506c381c26c5c3da81a26f8ac166c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_cf6ecbc8",
+        "filename": "icon-themes/sifr/cmd/sc_editheaderandfooter.png",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2017-10-16T02:50:47Z",
+      "side": 1,
+      "message": "Same. is it intentional?",
+      "revId": "1ccd65baec5506c381c26c5c3da81a26f8ac166c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
