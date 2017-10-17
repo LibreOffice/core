@@ -686,6 +686,7 @@ void FloatingWindow::StartPopupMode( const tools::Rectangle& rRect, FloatWinPopu
 
     // compute window position according to flags and arrangement
     sal_uInt16 nArrangeIndex;
+    DoInitialLayout();
     mpImplData->maPos = ImplCalcPos( this, rRect, nFlags, nArrangeIndex );
     SetPosPixel( mpImplData->maPos );
 
