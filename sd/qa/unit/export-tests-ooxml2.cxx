@@ -107,6 +107,7 @@ public:
     void testTdf112557();
     void testTdf112647();
     void testSmartartRotation2();
+    void testAccentColor();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -135,6 +136,7 @@ public:
     CPPUNIT_TEST(testTdf112557);
     CPPUNIT_TEST(testTdf112647);
     CPPUNIT_TEST(testSmartartRotation2);
+    CPPUNIT_TEST(testAccentColor);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -842,6 +844,23 @@ void SdOOXMLExportTest2::testSmartartRotation2()
 
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[3]/p:txBody/a:bodyPr", "rot", "10800000");
+}
+
+void SdOOXMLExportTest2::testAccentColor()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/accent-color.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocPtr pXmlDocContent1 = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDocContent1, "/p:sld/p:cSld/p:spTree/p:sp/p:style/a:fillRef/a:schemeClr", "val", "accent6");
+    xmlDocPtr pXmlDocContent2 = parseExport(tempFile, "ppt/slides/slide2.xml");
+    assertXPath(pXmlDocContent2, "/p:sld/p:cSld/p:spTree/p:sp/p:style/a:fillRef/a:schemeClr", "val", "accent6");
+    xmlDocPtr pXmlDocTheme1 = parseExport(tempFile, "ppt/theme/theme1.xml");
+    assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val", "70ad47");
+    xmlDocPtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
+    assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val", "deb340");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
