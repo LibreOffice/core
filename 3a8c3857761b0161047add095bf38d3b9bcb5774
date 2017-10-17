@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_0a96014c",
+        "filename": "sc/uiconfig/scalc/ui/scgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-17T12:05:55Z",
+      "side": 1,
+      "message": "That sentence doesn\u0027t make sense to me.. ;-)\n\nAlso, it doesn\u0027t indicate any difference between checking and unchecking the option.",
+      "revId": "3a8c3857761b0161047add095bf38d3b9bcb5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
