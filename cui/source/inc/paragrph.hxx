@@ -141,6 +141,8 @@ class SvxParaAlignTabPage : public SfxTabPage
 
     VclPtr<CheckBox>                m_pSnapToGridCB;
 
+    OUString                        m_sDefault;
+
     //preview
     VclPtr<SvxParaPrevWindow>       m_pExampleWin;
     //vertical alignment
@@ -155,6 +157,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     DECL_LINK(TextDirectionHdl_Impl, ListBox&, void);
 
     void                    UpdateExample_Impl();
+    void                    UpdateLastLineLBFirstEntry( const SvxFrameDirection& eDir );
 
                             SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
 

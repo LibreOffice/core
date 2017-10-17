@@ -974,10 +974,8 @@ void    SvxStdParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)
 }
 
 #define LASTLINEPOS_DEFAULT     0
-#define LASTLINEPOS_LEFT        1
-
-#define LASTLINECOUNT_OLD       3
-#define LASTLINECOUNT_NEW       4
+#define LASTLINEPOS_CENTER      1
+#define LASTLINEPOS_BLOCK       2
 
 SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
 
@@ -1002,29 +1000,15 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet
     get(m_pPropertiesFL,"framePROPERTIES");
     get(m_pTextDirectionLB,"comboLB_TEXTDIRECTION");
 
+    m_sDefault = m_pLastLineLB->GetEntry(LASTLINEPOS_DEFAULT);
+
     SvtLanguageOptions aLangOptions;
-    sal_uInt16 nLastLinePos = LASTLINEPOS_DEFAULT;
 
     if ( aLangOptions.IsAsianTypographyEnabled() )
     {
         m_pLeft->SetText(m_pLeftBottom->GetText());
         m_pRight->SetText(m_pRightTop->GetText());
-
-        OUString sLeft(m_pLeft->GetText());
-        sLeft = MnemonicGenerator::EraseAllMnemonicChars( sLeft );
-
-        if ( m_pLastLineLB->GetEntryCount() == LASTLINECOUNT_OLD )
-        {
-            m_pLastLineLB->RemoveEntry( 0 );
-            m_pLastLineLB->InsertEntry( sLeft, 0 );
-        }
-        else
-            nLastLinePos = LASTLINEPOS_LEFT;
     }
-
-    // remove "Default" or "Left" entry, depends on CJKOptions
-    if ( m_pLastLineLB->GetEntryCount() == LASTLINECOUNT_NEW )
-        m_pLastLineLB->RemoveEntry( nLastLinePos );
 
     Link<Button*,void> aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
     m_pLeft->SetClickHdl( aLink );
@@ -1122,10 +1106,16 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
         sal_Int32 nLBPos = m_pLastLineLB->GetSelectedEntryPos();
         SvxAdjust eLastBlock = SvxAdjust::Left;
 
-        if ( 1 == nLBPos )
-            eLastBlock = SvxAdjust::Center;
-        else if ( 2 == nLBPos )
-            eLastBlock = SvxAdjust::Block;
+        switch ( nLBPos )
+        {
+            case LASTLINEPOS_DEFAULT :
+                m_pTextDirectionLB->GetSelectEntryValue() == SvxFrameDirection::Horizontal_RL_TB ?
+                    eLastBlock = SvxAdjust::Right : eLastBlock = SvxAdjust::Left;
+                break;
+            case LASTLINEPOS_CENTER : eLastBlock = SvxAdjust::Center; break;
+            case LASTLINEPOS_BLOCK : eLastBlock = SvxAdjust::Block; break;
+            default: ; //prevent warning
+        }
 
         bool bNothingWasChecked =
             !m_pLeft->GetSavedValue() && !m_pRight->GetSavedValue() &&
@@ -1173,7 +1163,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
     SfxItemState eItemState = rSet->GetItemState( _nWhich );
 
-    sal_Int32 nLBSelect = 0;
+    sal_Int32 nLBSelect = LASTLINEPOS_DEFAULT;
     if ( eItemState >= SfxItemState::DEFAULT )
     {
         const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>(rSet->Get( _nWhich ));
@@ -1195,14 +1185,15 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 
         switch(rAdj.GetLastBlock())
         {
-            case SvxAdjust::Left:  nLBSelect = 0; break;
+            case SvxAdjust::Left:
+            case SvxAdjust::Right:  nLBSelect = LASTLINEPOS_DEFAULT; break;
 
-            case SvxAdjust::Center: nLBSelect = 1;  break;
+            case SvxAdjust::Center: nLBSelect = LASTLINEPOS_CENTER;  break;
 
-            case SvxAdjust::Block: nLBSelect = 2;  break;
+            case SvxAdjust::Block: nLBSelect = LASTLINEPOS_BLOCK;  break;
             default: ; //prevent warning
         }
-        m_pExpandCB->Enable(bEnable && nLBSelect == 2);
+        m_pExpandCB->Enable(bEnable && nLBSelect == LASTLINEPOS_BLOCK);
         m_pExpandCB->Check(SvxAdjust::Block == rAdj.GetOneWord());
     }
     else
@@ -1212,7 +1203,6 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
         m_pCenter->Check( false );
         m_pJustify->Check( false );
     }
-    m_pLastLineLB->SelectEntryPos(nLBSelect);
 
     sal_uInt16 nHtmlMode = GetHtmlMode_Impl(*rSet);
     if(nHtmlMode & HTMLMODE_ON)
@@ -1249,7 +1239,9 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     if( SfxItemState::DEFAULT <= rSet->GetItemState( _nWhich ) )
     {
         const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet->Get( _nWhich ) );
-        m_pTextDirectionLB->SelectEntryValue( rFrameDirItem.GetValue() );
+        const SvxFrameDirection eDir = rFrameDirItem.GetValue();
+        UpdateLastLineLBFirstEntry( eDir );
+        m_pTextDirectionLB->SelectEntryValue( eDir );
         m_pTextDirectionLB->SaveValue();
     }
 
@@ -1262,8 +1254,31 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     m_pLastLineLB->SaveValue();
     m_pExpandCB->SaveValue();
 
+    m_pLastLineLB->SelectEntryPos(nLBSelect);
     UpdateExample_Impl();
 }
+
+void SvxParaAlignTabPage::UpdateLastLineLBFirstEntry(const SvxFrameDirection& eDir)
+{
+    m_pLastLineLB->RemoveEntry( 0 );
+    switch ( eDir )
+    {
+        case SvxFrameDirection::Horizontal_LR_TB :
+            m_pLastLineLB->InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( m_pLeft->GetText() ), 0 );
+            break;
+        case SvxFrameDirection::Horizontal_RL_TB :
+            m_pLastLineLB->InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( m_pRight->GetText() ), 0 );
+            break;
+        case SvxFrameDirection::Environment :
+            m_pLastLineLB->InsertEntry( m_sDefault , 0 );
+            break;
+        default:
+        {
+            SAL_WARN( "cui.tabpages", "SvxParaAlignTabPage::UpdateLastLineLBFirstEntry: other directions not supported" );
+        }
+    }
+}
+
 void SvxParaAlignTabPage::ChangesApplied()
 {
     m_pTextDirectionLB->SaveValue();
@@ -1282,7 +1297,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
     bool bJustify = m_pJustify->IsChecked();
     m_pLastLineFT->Enable(bJustify);
     m_pLastLineLB->Enable(bJustify);
-    bool bLastLineIsBlock = m_pLastLineLB->GetSelectedEntryPos() == 2;
+    bool bLastLineIsBlock = m_pLastLineLB->GetSelectedEntryPos() == LASTLINEPOS_BLOCK;
     m_pExpandCB->Enable(bJustify && bLastLineIsBlock);
     UpdateExample_Impl();
 }
@@ -1290,7 +1305,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
 IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl, ListBox&, void)
 {
     //fdo#41350 only enable 'Expand last word' if last line is also justified
-    bool bLastLineIsBlock = m_pLastLineLB->GetSelectedEntryPos() == 2;
+    bool bLastLineIsBlock = m_pLastLineLB->GetSelectedEntryPos() == LASTLINEPOS_BLOCK;
     m_pExpandCB->Enable(bLastLineIsBlock);
     UpdateExample_Impl();
 }
@@ -1309,6 +1324,9 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox&, void)
             SAL_WARN( "cui.tabpages", "SvxParaAlignTabPage::TextDirectionHdl_Impl(): other directions not supported" );
         }
     }
+    UpdateLastLineLBFirstEntry( eDir );
+    m_pLastLineLB->SelectEntryPos( LASTLINEPOS_DEFAULT );
+    AlignHdl_Impl( nullptr );
 }
 
 void SvxParaAlignTabPage::UpdateExample_Impl()
@@ -1324,10 +1342,16 @@ void SvxParaAlignTabPage::UpdateExample_Impl()
         m_pExampleWin->SetAdjust( SvxAdjust::Block );
         SvxAdjust eLastBlock = SvxAdjust::Left;
         sal_Int32 nLBPos = m_pLastLineLB->GetSelectedEntryPos();
-        if(nLBPos == 1)
-            eLastBlock = SvxAdjust::Center;
-        else if(nLBPos == 2)
-            eLastBlock = SvxAdjust::Block;
+        switch ( nLBPos )
+        {
+            case LASTLINEPOS_DEFAULT :
+                m_pTextDirectionLB->GetSelectEntryValue() == SvxFrameDirection::Horizontal_RL_TB ?
+                    eLastBlock = SvxAdjust::Right : eLastBlock = SvxAdjust::Left;
+                break;
+            case LASTLINEPOS_CENTER : eLastBlock = SvxAdjust::Center; break;
+            case LASTLINEPOS_BLOCK : eLastBlock = SvxAdjust::Block; break;
+            default: ; //prevent warning
+        }
         m_pExampleWin->SetLastLine( eLastBlock );
     }
 
