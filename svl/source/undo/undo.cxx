@@ -31,7 +31,6 @@
 
 #include <memory>
 #include <vector>
-#include <list>
 #include <limits.h>
 #include <algorithm>
 
@@ -367,8 +366,8 @@ namespace svl { namespace undo { namespace impl
     private:
         SfxUndoManager_Data&                m_rManagerData;
         ::osl::ResettableMutexGuard         m_aGuard;
-        ::std::list< SfxUndoAction* >       m_aUndoActionsCleanup;
-        ::std::list< NotifyUndoListener >   m_notifiers;
+        ::std::vector< SfxUndoAction* >     m_aUndoActionsCleanup;
+        ::std::vector< NotifyUndoListener > m_notifiers;
     };
 
     UndoManagerGuard::~UndoManagerGuard()
@@ -380,21 +379,15 @@ namespace svl { namespace undo { namespace impl
         m_aGuard.clear();
 
         // delete all actions
-        while ( !m_aUndoActionsCleanup.empty() )
-        {
-            SfxUndoAction* pAction = m_aUndoActionsCleanup.front();
-            m_aUndoActionsCleanup.pop_front();
-            delete pAction;
-        }
+        for (auto const& undoAction : m_aUndoActionsCleanup)
+            delete undoAction;
+        m_aUndoActionsCleanup.clear();
 
         // handle scheduled notification
-        for (   ::std::list< NotifyUndoListener >::const_iterator notifier = m_notifiers.begin();
-                notifier != m_notifiers.end();
-                ++notifier
-             )
+        for (auto const& notifier : m_notifiers)
         {
-            if ( notifier->is() )
-                ::std::for_each( aListenersCopy.begin(), aListenersCopy.end(), *notifier );
+            if ( notifier.is() )
+                ::std::for_each( aListenersCopy.begin(), aListenersCopy.end(), notifier );
         }
     }
 } } }
