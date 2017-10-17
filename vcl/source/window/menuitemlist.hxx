@@ -24,6 +24,7 @@
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
+#include <memory>
 #include <vector>
 
 class SalMenuItem;
@@ -94,7 +95,7 @@ struct MenuItemData
 class MenuItemList
 {
 private:
-    typedef ::std::vector< MenuItemData* > MenuItemDataList_impl;
+    typedef ::std::vector< std::unique_ptr<MenuItemData> > MenuItemDataList_impl;
     MenuItemDataList_impl maItemList;
 
 public:
@@ -122,7 +123,7 @@ public:
                     }
     MenuItemData*   GetDataFromPos( size_t nPos ) const
                     {
-                        return ( nPos < maItemList.size() ) ? maItemList[ nPos ] : nullptr;
+                        return ( nPos < maItemList.size() ) ? maItemList[ nPos ].get() : nullptr;
                     }
 
     MenuItemData*   SearchItem(

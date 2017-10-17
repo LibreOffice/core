@@ -66,11 +66,12 @@ private:
     bool            mbHMirr;
     bool            mbVMirr;
 
+public:
+                    ~ImplAnimView();
 private:
                     ImplAnimView( Animation* pParent, OutputDevice* pOut,
                                   const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = nullptr );
-                    ~ImplAnimView();
 
     bool            matches( OutputDevice* pOut, long nExtraData ) const;
     void            drawToPos( sal_uLong nPos );
