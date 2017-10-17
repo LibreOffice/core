@@ -285,14 +285,14 @@ bool ExTextOutRenderer::operator ()(CommonSalLayout const &rLayout,
     return true;
 }
 
-SalLayout* WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
+std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (!mpWinFontEntry[nFallbackLevel])
         return nullptr;
 
     assert(mpWinFontData[nFallbackLevel]);
 
-    return new CommonSalLayout(getHDC(), *mpWinFontEntry[nFallbackLevel], *mpWinFontData[nFallbackLevel]);
+    return std::unique_ptr<SalLayout>(new CommonSalLayout(getHDC(), *mpWinFontEntry[nFallbackLevel], *mpWinFontData[nFallbackLevel]));
 }
 
 LogicalFontInstance * WinSalGraphics::GetWinFontEntry(int const nFallbackLevel)
