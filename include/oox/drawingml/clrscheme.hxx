@@ -28,8 +28,41 @@
 
 #include <oox/dllapi.h>
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 namespace oox { namespace drawingml {
+
+enum PredefinedClrSchemeId {
+    //dk1,
+    //lt1,
+    dk2 = 0,
+    lt2,
+    accent1,
+    accent2,
+    accent3,
+    accent4,
+    accent5,
+    accent6,
+    hlink,
+    folHlink,
+    Count
+};
+
+static std::map<PredefinedClrSchemeId, rtl::OUString> PredefinedClrNames =
+{
+    //{ dk1,  "dk1" },
+    //{ lt1, "lt1" },
+    { dk2, "dk2" },
+    { lt2, "lt2" },
+    { accent1, "accent1" },
+    { accent2, "accent2" },
+    { accent3, "accent3" },
+    { accent4, "accent4" },
+    { accent5, "accent5" },
+    { accent6, "accent6" },
+    { hlink, "hlink" },
+    { folHlink, "folHlink" }
+};
 
 class ClrMap
 {
