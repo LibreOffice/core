@@ -72,6 +72,7 @@ public:
     void testImage();
     void testTable();
     void testLink();
+    void testLinkCharFormat();
 
     CPPUNIT_TEST_SUITE(EPUBExportTest);
     CPPUNIT_TEST(testOutlineLevel);
@@ -93,6 +94,7 @@ public:
     CPPUNIT_TEST(testImage);
     CPPUNIT_TEST(testTable);
     CPPUNIT_TEST(testLink);
+    CPPUNIT_TEST(testLinkCharFormat);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -463,6 +465,16 @@ void EPUBExportTest::testLink()
 
     mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
     assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a", "https://libreoffice.org/");
+    assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "https://libreoffice.org/");
+}
+
+void EPUBExportTest::testLinkCharFormat()
+{
+    createDoc("link-charformat.fodt", {});
+
+    mpXmlDoc = parseExport("OEBPS/sections/section0001.xhtml");
+    // <span> was lost, link text having a char format was missing.
+    assertXPathContent(mpXmlDoc, "//xhtml:p/xhtml:a/xhtml:span", "https://libreoffice.org/");
     assertXPath(mpXmlDoc, "//xhtml:p/xhtml:a", "href", "https://libreoffice.org/");
 }
 
