@@ -2930,20 +2930,20 @@ void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, const Sequence< Proper
 {
     if( aProperties.getLength() > 0 )
     {
-        OUString sSchemeClr;
+        sal_uInt32 nColor = 0;
         sal_uInt32 nIdx = 0;
         Sequence< PropertyValue > aTransformations;
         for( sal_Int32 i=0; i < aProperties.getLength(); ++i)
         {
-            if( aProperties[i].Name == "SchemeClr" )
-                aProperties[i].Value >>= sSchemeClr;
+            if( aProperties[i].Name == "Color" )
+                aProperties[i].Value >>= nColor;
             else if( aProperties[i].Name == "Idx" )
                 aProperties[i].Value >>= nIdx;
             else if( aProperties[i].Name == "Transformations" )
                 aProperties[i].Value >>= aTransformations;
         }
         mpFS->startElementNS( XML_a, nTokenId, XML_idx, I32S( nIdx ), FSEND );
-        WriteColor( sSchemeClr, aTransformations );
+        WriteColor( nColor );
         mpFS->endElementNS( XML_a, nTokenId );
     }
     else
