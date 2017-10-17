@@ -679,18 +679,18 @@ void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const sal_u
 {
     OSL_ENSURE( ValidCol(nCol), "-DifAttrCache::SetNumFormat(): Col too big!" );
 
-    if( !mvCols[ nCol ] )
-        mvCols[ nCol ].reset( new DifColumn );
+    if( !maColMap.count(nCol) )
+        maColMap[ nCol ].reset( new DifColumn );
 
-    mvCols[ nCol ]->SetNumFormat( nRow, nNumFormat );
+    maColMap[ nCol ]->SetNumFormat( nRow, nNumFormat );
 }
 
 void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
 {
     for( SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, MAXCOL) )
     {
-        if( mvCols[ nCol ] )
-            mvCols[ nCol ]->Apply( rDoc, nCol, nTab );
+        if( maColMap.count(nCol) )
+            maColMap[ nCol ]->Apply( rDoc, nCol, nTab );
     }
 }
 
