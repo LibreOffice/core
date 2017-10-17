@@ -32,7 +32,7 @@
     (void) pNSTimer;
     AquaSalTimer *pTimer = static_cast<AquaSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
     if (pTimer)
-        pTimer->handleTimerElapsed();
+        pTimer->handleTimerElapsed( false );
 }
 
 @end

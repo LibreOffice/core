@@ -84,7 +84,7 @@ public:
         virtual void Remove( int fd ) override;
         virtual void StartTimer( sal_uLong nMS ) override;
         virtual void StopTimer() override;
-        virtual bool CheckTimeout( bool bExecuteTimers = true ) override;
+        virtual bool HandleTimeout( HandleTimeoutMode eMode ) override;
         virtual void Wakeup() override;
         void TriggerUserEventProcessing();
 

@@ -72,8 +72,6 @@ public:
 
     SalXLib*        GetLib() const { return pXLib_; }
 
-    static void             Timeout();
-
     // X errors
     virtual void            ErrorTrapPush() override;
     virtual bool            ErrorTrapPop( bool bIgnoreError = true ) override;

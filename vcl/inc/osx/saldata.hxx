@@ -62,7 +62,6 @@ class SystemFontList;
 class SalData
 {
 public:
-    SALTIMERPROC                                  mpTimerProc;      // timer callback proc
     AquaSalInstance                              *mpInstance;
     std::list<AquaSalFrame*>                      maPresentationFrames;  // list of frames in presentation mode
     SalObject                                    *mpFirstObject;    // pointer of first object window

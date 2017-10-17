@@ -164,7 +164,7 @@ void SvpSalInstance::Wakeup()
 #endif
 }
 
-bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
+bool SvpSalInstance::HandleTimeout( const HandleTimeoutMode eMode )
 {
     bool bRet = false;
     if( m_aTimeout.tv_sec ) // timer is started
@@ -174,7 +174,7 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
         if( aTimeOfDay >= m_aTimeout )
         {
             bRet = true;
-            if( bExecuteTimers )
+            if( eMode != HandleTimeoutMode::CheckOnly )
             {
                 // timed out, update timeout
                 m_aTimeout = aTimeOfDay;
@@ -183,9 +183,8 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
                 osl::Guard< comphelper::SolarMutex > aGuard( mpSalYieldMutex.get() );
 
                 // notify
-                ImplSVData* pSVData = ImplGetSVData();
-                if( pSVData->maSchedCtx.mpSalTimer )
-                    pSVData->maSchedCtx.mpSalTimer->CallCallback();
+                bRet = SalTimer::CallCallback(
+                    eMode == HandleTimeoutMode::ProcessAllCurrentTasks );
             }
         }
     }
@@ -269,7 +268,9 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
     if ( !bHandleAllCurrentEvents &&bEvent )
         return true;
 
-    bEvent = CheckTimeout() || bEvent;
+    bEvent = HandleTimeout( bHandleAllCurrentEvents
+         ? HandleTimeoutMode::ProcessAllCurrentTasks
+         : HandleTimeoutMode::ProcessSingleTask ) || bEvent;
 
     if (bWait && ! bEvent )
     {
@@ -330,7 +331,7 @@ void SvpSalInstance::DoReleaseYield( int nTimeoutMS )
 bool SvpSalInstance::AnyInput( VclInputFlags nType )
 {
     if( nType & VclInputFlags::TIMER )
-        return CheckTimeout( false );
+        return HandleTimeout( HandleTimeoutMode::CheckOnly );
     return false;
 }
 

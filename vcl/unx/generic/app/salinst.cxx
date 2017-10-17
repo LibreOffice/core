@@ -145,7 +145,8 @@ bool X11SalInstance::AnyInput(VclInputFlags nType)
     Display *pDisplay  = vcl_sal::getSalDisplay(pData)->GetDisplay();
     bool bRet = false;
 
-    if( (nType & VclInputFlags::TIMER) && (mpXLib && mpXLib->CheckTimeout(false)) )
+    if( (nType & VclInputFlags::TIMER)
+            && mpXLib && mpXLib->HandleTimeout( HandleTimeoutMode::CheckOnly ) )
         bRet = true;
 
     if( !bRet && XPending(pDisplay) )

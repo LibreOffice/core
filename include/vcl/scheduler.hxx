@@ -43,16 +43,22 @@ class VCL_DLLPUBLIC Scheduler final
     static void Lock( sal_uInt32 nLockCount = 1 );
     static sal_uInt32 Unlock( bool bUnlockAll = false );
 
+    static bool ProcessSingleTask( sal_uInt64 nTime,
+                                   ImplSchedulerData ** const pLastDataPtr );
+
 public:
     static constexpr sal_uInt64 ImmediateTimeoutMs = 0;
     static constexpr sal_uInt64 InfiniteTimeoutMs  = SAL_MAX_UINT64;
 
     static void       ImplDeInitScheduler();
 
-    /// Process one pending Timer with highhest priority
-    static void       CallbackTaskScheduling();
-    /// Process one pending task ahead of time with highest priority.
-    static bool       ProcessTaskScheduling();
+    /**
+     * Process one or all current pending tasks, ranked by priority
+     *
+     * @param bHandleAllCurrentEvents process one or all pending tasks
+     * @return true, if any task was processed
+     */
+    static bool       ProcessTaskScheduling( bool bHandleAllCurrentEvents );
     /**
      * Process all events until none is pending
      *

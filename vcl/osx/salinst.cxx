@@ -603,11 +603,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         while( true );
 
         AquaSalTimer *pTimer = static_cast<AquaSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
-        if ( !mbTimerProcessed && pTimer && pTimer->IsDirectTimeout() )
-        {
-            pTimer->handleTimerElapsed();
-            bHadEvent = true;
-        }
+        if ( (!mbTimerProcessed || bHandleAllCurrentEvents) && pTimer && pTimer->IsDirectTimeout() )
+            bHadEvent = pTimer->handleTimerElapsed( bHandleAllCurrentEvents ) || bHadEvent;
 
         // if we had no event yet, wait for one if requested
         if( bWait && ! bHadEvent )

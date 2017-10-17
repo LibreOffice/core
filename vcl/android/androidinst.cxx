@@ -69,7 +69,7 @@ AndroidSalInstance::~AndroidSalInstance()
 bool AndroidSalInstance::AnyInput( VclInputFlags nType )
 {
     if( nType & VclInputFlags::TIMER )
-        return CheckTimeout( false );
+        return HandleTimeout( HandleTimeoutMode::CheckOnly );
 
     // Unfortunately there is no way to check for a specific type of
     // input being queued. That information is too hidden, sigh.

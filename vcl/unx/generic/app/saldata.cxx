@@ -560,13 +560,6 @@ void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
     m_aXErrorHandlerStack.back().m_bWas = true;
 }
 
-void X11SalData::Timeout()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->maSchedCtx.mpSalTimer )
-        pSVData->maSchedCtx.mpSalTimer->CallCallback();
-}
-
 struct YieldEntry
 {
     int         fd;         // file descriptor for reading
@@ -622,7 +615,7 @@ void SalXLib::Remove( int nFD )
     }
 }
 
-bool SalXLib::CheckTimeout( bool bExecuteTimers )
+bool SalXLib::HandleTimeout( HandleTimeoutMode eMode )
 {
     bool bRet = false;
     if( m_aTimeout.tv_sec ) // timer is started
@@ -632,7 +625,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
         if( aTimeOfDay >= m_aTimeout )
         {
             bRet = true;
-            if( bExecuteTimers )
+            if( eMode != HandleTimeoutMode::CheckOnly )
             {
                 // timed out, update timeout
                 m_aTimeout = aTimeOfDay;
@@ -644,7 +637,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
                 */
                 m_aTimeout += m_nTimeoutMS;
                 // notify
-                X11SalData::Timeout();
+                bRet = SalTimer::CallCallback( eMode == HandleTimeoutMode::ProcessAllCurrentTasks );
             }
         }
     }
@@ -655,10 +648,7 @@ bool
 SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     // check for timeouts here if you want to make screenshots
-    static char* p_prioritize_timer = getenv ("SAL_HIGHPRIORITY_REPAINT");
     bool bHandledEvent = false;
-    if (p_prioritize_timer != nullptr)
-        bHandledEvent = CheckTimeout();
 
     const int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
 
@@ -724,8 +714,9 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 
     // usually handle timeouts here (as in 5.2)
-    if (p_prioritize_timer == nullptr)
-        bHandledEvent = CheckTimeout() || bHandledEvent;
+    bHandledEvent = HandleTimeout( bHandleAllCurrentEvents
+                  ? HandleTimeoutMode::ProcessAllCurrentTasks
+                  : HandleTimeoutMode::ProcessSingleTask ) || bHandledEvent;
 
     // handle wakeup events.
     if ((nFound > 0) && FD_ISSET(m_pTimeoutFDS[0], &ReadFDS))
