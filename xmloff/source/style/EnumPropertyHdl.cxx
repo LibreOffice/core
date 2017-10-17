@@ -56,7 +56,7 @@ bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, c
             rValue <<= (sal_Int8) nValue;
             break;
         default:
-            OSL_FAIL( "Wrong type for enum property handler!" );
+            assert(!"Wrong type for enum property handler!");
             return false;
         }
         return true;
