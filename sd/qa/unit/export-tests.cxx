@@ -79,6 +79,7 @@ public:
     void testN821567();
     void testMediaEmbedding();
     void testFdo84043();
+    void testTdf97630();
     void testSwappedOutImageExport();
     void testOOoXMLAnimations();
     void testTdf80020();
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testN821567);
     CPPUNIT_TEST(testMediaEmbedding);
     CPPUNIT_TEST(testFdo84043);
+    CPPUNIT_TEST(testTdf97630);
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testOOoXMLAnimations);
     CPPUNIT_TEST(testTdf80020);
@@ -126,6 +128,7 @@ public:
             { "table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" },
             { "text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" },
             { "xlink", "http://www.w3c.org/1999/xlink" },
+            { "loext", "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" },
         };
         for (size_t i = 0; i < SAL_N_ELEMENTS(namespaces); ++i)
         {
@@ -243,6 +246,104 @@ void SdExportTest::testFdo84043()
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     SdrObject const* pShape = pPage->GetObj(1);
     CPPUNIT_ASSERT_MESSAGE("no shape", pShape != nullptr);
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf97630()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/fit-to-size.fodp"), FODP);
+
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDP(xDPS->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+
+        drawing::TextFitToSizeType tmp;
+        // text shapes
+        uno::Reference<beans::XPropertySet> xShape0(xDP->getByIndex(0), uno::UNO_QUERY);
+        xShape0->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, tmp);
+        uno::Reference<beans::XPropertySet> xShape1(xDP->getByIndex(1), uno::UNO_QUERY);
+        xShape1->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
+        uno::Reference<beans::XPropertySet> xShape2(xDP->getByIndex(2), uno::UNO_QUERY);
+        xShape2->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
+        uno::Reference<beans::XPropertySet> xShape3(xDP->getByIndex(3), uno::UNO_QUERY);
+        xShape3->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_AUTOFIT, tmp);
+
+        // fontworks
+        uno::Reference<beans::XPropertySet> xShape4(xDP->getByIndex(4), uno::UNO_QUERY);
+        xShape4->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, tmp);
+        uno::Reference<beans::XPropertySet> xShape5(xDP->getByIndex(5), uno::UNO_QUERY);
+        xShape5->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
+
+    }
+
+    utl::TempFile aTempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), ODP, &aTempFile);
+
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDPS(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDP(xDPS->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+
+        drawing::TextFitToSizeType tmp;
+        // text shapes
+        uno::Reference<beans::XPropertySet> xShape0(xDP->getByIndex(0), uno::UNO_QUERY);
+        xShape0->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, tmp);
+        uno::Reference<beans::XPropertySet> xShape1(xDP->getByIndex(1), uno::UNO_QUERY);
+        xShape1->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
+        uno::Reference<beans::XPropertySet> xShape2(xDP->getByIndex(2), uno::UNO_QUERY);
+        xShape2->getPropertyValue("TextFitToSize") >>= tmp;
+#if 1
+// TODO see TODO in sdpropls.cxx
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
+#else
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
+#endif
+        uno::Reference<beans::XPropertySet> xShape3(xDP->getByIndex(3), uno::UNO_QUERY);
+        xShape3->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_AUTOFIT, tmp);
+
+        // fontworks
+        uno::Reference<beans::XPropertySet> xShape4(xDP->getByIndex(4), uno::UNO_QUERY);
+        xShape4->getPropertyValue("TextFitToSize") >>= tmp;
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, tmp);
+        uno::Reference<beans::XPropertySet> xShape5(xDP->getByIndex(5), uno::UNO_QUERY);
+        xShape5->getPropertyValue("TextFitToSize") >>= tmp;
+#if 1
+// TODO see TODO in sdpropls.cxx
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_ALLLINES, tmp);
+#else
+        CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_PROPORTIONAL, tmp);
+#endif
+    }
+
+    xmlDocPtr pXmlDoc = parseExport(aTempFile, "content.xml");
+    // text shapes
+    assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='false' and @style:shrink-to-fit='false']", 1);
+#if 1
+// TODO see TODO in sdpropls.cxx
+    assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='true' and @style:shrink-to-fit='false']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='all' and @style:shrink-to-fit='false']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='shrink-to-fit' and @style:shrink-to-fit='true']", 1);
+#else
+    assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='true' and @style:shrink-to-fit='false']", 2);
+    assertXPath(pXmlDoc, "//style:style[@style:family='presentation']/style:graphic-properties[@draw:fit-to-size='false' and @style:shrink-to-fit='true']", 1);
+#endif
+    // fontworks
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fit-to-size='false' and @style:shrink-to-fit='false']", 1);
+#if 1
+// TODO see TODO in sdpropls.cxx
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fit-to-size='all' and @style:shrink-to-fit='false']", 1);
+#else
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fit-to-size='true' and @style:shrink-to-fit='false']", 1);
+#endif
 
     xDocShRef->DoClose();
 }
