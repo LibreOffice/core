@@ -136,9 +136,6 @@ namespace compmodule
             "OModule::getComponentFactory : inconsistent state !");
 
 
-        Reference< XInterface > xReturn;
-
-
         sal_Int32 nLen = s_pImplementationNames->size();
 
         for (sal_Int32 i=0; i<nLen; ++i)
@@ -147,14 +144,10 @@ namespace compmodule
             {
                 const FactoryInstantiation FactoryInstantiationFunction = (*s_pFactoryFunctionPointers)[i];
 
-                xReturn = FactoryInstantiationFunction( _rxServiceManager, _rImplementationName,
+                Reference< XInterface > xReturn = FactoryInstantiationFunction( _rxServiceManager, _rImplementationName,
                     (*s_pCreationFunctionPointers)[i],
                     (*s_pSupportedServices)[i], nullptr);
-                if (xReturn.is())
-                {
-                    xReturn->acquire();
-                    return xReturn.get();
-                }
+                return xReturn;
             }
         }
 
