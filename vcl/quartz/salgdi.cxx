@@ -512,10 +512,10 @@ void AquaSalGraphics::SetFont(const FontSelectPattern* pReqFont, int nFallbackLe
             );
 }
 
-SalLayout* AquaSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
+std::unique_ptr<SalLayout> AquaSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (mpTextStyle[nFallbackLevel])
-        return new CommonSalLayout(*mpTextStyle[nFallbackLevel]);
+        return std::unique_ptr<SalLayout>(new CommonSalLayout(*mpTextStyle[nFallbackLevel]));
 
     return nullptr;
 }
