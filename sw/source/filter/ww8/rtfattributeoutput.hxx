@@ -66,7 +66,7 @@ public:
     void StartRun(const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false) override;
 
     /// End of the text run.
-    void EndRun() override;
+    void EndRun(const SwTextNode* pNode, sal_Int32 nPos) override;
 
     /// Called before we start outputting the attributes.
     void StartRunProperties() override;
@@ -92,7 +92,7 @@ public:
     void StartRuby(const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby) override;
 
     /// Output ruby end.
-    void EndRuby() override;
+    void EndRuby(const SwTextNode& rNode, sal_Int32 nPos) override;
 
     /// Output URL start.
     bool StartURL(const OUString& rUrl, const OUString& rTarget) override;
