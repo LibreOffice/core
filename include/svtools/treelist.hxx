@@ -131,7 +131,7 @@ class SVT_DLLPUBLIC SvTreeList final
     SvTreeList(const SvTreeList&) = delete;
     SvTreeList& operator= (const SvTreeList&) = delete;
 
-    SvTreeListEntry*        pRootItem;
+    std::unique_ptr<SvTreeListEntry>  pRootItem;
 
 public:
 
@@ -166,7 +166,7 @@ public:
 
     sal_uLong           Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pPar,sal_uLong nPos = TREELIST_APPEND);
     sal_uLong           Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND )
-    { return Insert(pEntry, pRootItem, nRootPos ); }
+    { return Insert(pEntry, pRootItem.get(), nRootPos ); }
 
     void                InsertTree( SvTreeListEntry* pTree, SvTreeListEntry* pTargetParent, sal_uLong nListPos );
 
