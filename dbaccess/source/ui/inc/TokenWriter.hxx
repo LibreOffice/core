@@ -76,7 +76,6 @@ namespace dbaui
         sal_Int32           m_nCommandType;
         bool                m_bNeedToReInitialize;
 
-        ODatabaseExport*    m_pReader;
         rtl_TextEncoding    m_eDestEnc;
         bool                m_bInInitialize;
         bool                m_bCheckOnly;

@@ -125,7 +125,6 @@ namespace dbaccess
 
         DatabaseDocumentLoader::DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext )
         {
-            acquire();
             try
             {
                 m_xDesktop.set( Desktop::create(rxContext) );
@@ -175,7 +174,7 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
     ,m_aContext( _rxContext )
     ,m_aContainerListeners(m_aMutex)
 {
-    m_pDatabaseDocumentLoader = new DatabaseDocumentLoader( _rxContext );
+    m_xDatabaseDocumentLoader = new DatabaseDocumentLoader( _rxContext );
 
 #if HAVE_FEATURE_SCRIPTING
     ::basic::BasicManagerRepository::registerCreationListener( *this );
@@ -197,9 +196,7 @@ ODatabaseContext::~ODatabaseContext()
     ::basic::BasicManagerRepository::revokeCreationListener( *this );
 #endif
 
-    if ( m_pDatabaseDocumentLoader )
-        m_pDatabaseDocumentLoader->release();
-
+    m_xDatabaseDocumentLoader.clear();
     m_xDBRegistrationAggregate->setDelegator( nullptr );
     m_xDBRegistrationAggregate.clear();
     m_xDatabaseRegistrations.clear();
@@ -389,12 +386,12 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
 
 void ODatabaseContext::appendAtTerminateListener(const ODatabaseModelImpl& _rDataSourceModel)
 {
-    m_pDatabaseDocumentLoader->append(_rDataSourceModel);
+    m_xDatabaseDocumentLoader->append(_rDataSourceModel);
 }
 
 void ODatabaseContext::removeFromTerminateListener(const ODatabaseModelImpl& _rDataSourceModel)
 {
-    m_pDatabaseDocumentLoader->remove(_rDataSourceModel);
+    m_xDatabaseDocumentLoader->remove(_rDataSourceModel);
 }
 
 void ODatabaseContext::setTransientProperties(const OUString& _sURL, ODatabaseModelImpl& _rDataSourceModel )
