@@ -88,6 +88,12 @@ protected:
     }
 };
 
+DECLARE_WW8EXPORT_TEST(testTdf38778, "tdf38778_properties_in_run_for_field.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(10.0f, getProperty<float>(getRun(getParagraph(1), 1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+}
+
 DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
 {
     /*

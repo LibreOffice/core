@@ -1116,7 +1116,7 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bS
     m_pSerializer->mark(Tag_StartRun_3); // let's call it "postponed text"
 }
 
-void DocxAttributeOutput::EndRun()
+void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos)
 {
     int nFieldsInPrevHyperlink = m_nFieldsInHyperlink;
     // Reset m_nFieldsInHyperlink if a new hyperlink is about to start
@@ -1131,7 +1131,7 @@ void DocxAttributeOutput::EndRun()
         // Add the fields starts for all but hyperlinks and TOCs
         if ( pIt->bOpen && pIt->pField )
         {
-            StartField_Impl( *pIt );
+            StartField_Impl( pNode, nPos, *pIt );
 
             // Remove the field from the stack if only the start has to be written
             // Unknown fields should be removed too
@@ -1179,7 +1179,7 @@ void DocxAttributeOutput::EndRun()
             {
                 // If fields begin before hyperlink then
                 // it should end before hyperlink close
-                EndField_Impl( m_Fields.back( ) );
+                EndField_Impl( pNode, nPos, m_Fields.back( ) );
                 m_Fields.pop_back();
             }
             m_pSerializer->endElementNS( XML_w, XML_hyperlink );
@@ -1196,7 +1196,7 @@ void DocxAttributeOutput::EndRun()
         // Add the fields starts for hyperlinks, TOCs and index marks
         if ( pIt->bOpen && !pIt->pField )
         {
-            StartField_Impl( *pIt, true );
+            StartField_Impl( pNode, nPos, *pIt, true );
 
             if (m_startedHyperlink)
                 ++m_nFieldsInHyperlink;
@@ -1343,7 +1343,7 @@ void DocxAttributeOutput::EndRun()
             {
                 // If fields begin after hyperlink start then
                 // it should end before hyperlink close
-                EndField_Impl( m_Fields.back( ) );
+                EndField_Impl( pNode, nPos, m_Fields.back( ) );
                 m_Fields.pop_back();
             }
             m_nFieldsInHyperlink = 0;
@@ -1359,7 +1359,7 @@ void DocxAttributeOutput::EndRun()
     {
         while ( m_Fields.begin() != m_Fields.end() )
         {
-            EndField_Impl( m_Fields.front( ) );
+            EndField_Impl( pNode, nPos, m_Fields.front( ) );
             m_Fields.erase( m_Fields.begin( ) );
         }
         m_nFieldsInHyperlink = 0;
@@ -1615,7 +1615,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
 }
 
-void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
+void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun )
 {
     if ( rInfos.pField && rInfos.eType == ww::eUNKNOWN )
     {
@@ -1648,9 +1648,9 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
 
                 if ( bWriteRun )
                     m_pSerializer->endElementNS( XML_w, XML_r );
-                if ( !rInfos.pField )
-                    CmdField_Impl( rInfos );
 
+                if ( !rInfos.pField )
+                    CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
         }
         else
         {
@@ -1680,7 +1680,7 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
             // The hyperlinks fields can't be expanded: the value is
             // normally in the text run
             if ( !rInfos.pField )
-                CmdField_Impl( rInfos );
+                CmdField_Impl( pNode, nPos, rInfos, bWriteRun );
         }
     }
 }
@@ -1700,48 +1700,146 @@ void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
 
 }
 
-void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
+void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun )
 {
-    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-    sal_Int32 nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
-
-    for ( sal_Int32 i = 0; i < nNbToken; i++ )
+    // Write the Field instruction
     {
-        OUString sToken = rInfos.sCmd.getToken( i, '\t' );
-        if ( rInfos.eType ==  ww::eCREATEDATE
-          || rInfos.eType ==  ww::eSAVEDATE
-          || rInfos.eType ==  ww::ePRINTDATE
-          || rInfos.eType ==  ww::eDATE
-          || rInfos.eType ==  ww::eTIME )
+        if ( bWriteRun )
         {
-           sToken = sToken.replaceAll("NNNN", "dddd");
-           sToken = sToken.replaceAll("NN", "ddd");
+            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+            DoWriteFieldRunProperties( pNode, nPos );
         }
 
-        // Write the Field command
-        DoWriteCmd( sToken );
+        sal_Int32 nNbToken = comphelper::string::getTokenCount(rInfos.sCmd, '\t');
 
-        // Replace tabs by </instrText><tab/><instrText>
-        if ( i < ( nNbToken - 1 ) )
-            RunText( "\t" );
+        for ( sal_Int32 i = 0; i < nNbToken; i++ )
+        {
+            OUString sToken = rInfos.sCmd.getToken( i, '\t' );
+            if ( rInfos.eType ==  ww::eCREATEDATE
+              || rInfos.eType ==  ww::eSAVEDATE
+              || rInfos.eType ==  ww::ePRINTDATE
+              || rInfos.eType ==  ww::eDATE
+              || rInfos.eType ==  ww::eTIME )
+            {
+               sToken = sToken.replaceAll("NNNN", "dddd");
+               sToken = sToken.replaceAll("NN", "ddd");
+            }
+
+            // Write the Field command
+            DoWriteCmd( sToken );
+
+            // Replace tabs by </instrText><tab/><instrText>
+            if ( i < ( nNbToken - 1 ) )
+                RunText( "\t" );
+        }
+
+        if ( bWriteRun )
+        {
+            m_pSerializer->endElementNS( XML_w, XML_r );
+        }
     }
 
-    m_pSerializer->endElementNS( XML_w, XML_r );
-
     // Write the Field separator
-    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-    m_pSerializer->singleElementNS( XML_w, XML_fldChar,
-          FSNS( XML_w, XML_fldCharType ), "separate",
-          FSEND );
-    m_pSerializer->endElementNS( XML_w, XML_r );
+    {
+        if ( bWriteRun )
+        {
+            m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+            DoWriteFieldRunProperties( pNode, nPos );
+        }
+
+        m_pSerializer->singleElementNS( XML_w, XML_fldChar,
+              FSNS( XML_w, XML_fldCharType ), "separate",
+              FSEND );
+
+        if ( bWriteRun )
+        {
+            m_pSerializer->endElementNS( XML_w, XML_r );
+        }
+    }
 }
 
-void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
+/// Writes properties for run that is used to separate field implementation.
+/// There are several runs are used:
+///     <w:r>
+///         <w:rPr>
+///             <!-- properties written with StartRunProperties() / EndRunProperties().
+///         </w:rPr>
+///         <w:fldChar w:fldCharType="begin" />
+///     </w:r>
+///         <w:r>
+///         <w:rPr>
+///             <!-- properties written with DoWriteFieldRunProperties()
+///         </w:rPr>
+///         <w:instrText>TIME \@"HH:mm:ss"</w:instrText>
+///     </w:r>
+///     <w:r>
+///         <w:rPr>
+///             <!-- properties written with DoWriteFieldRunProperties()
+///         </w:rPr>
+///         <w:fldChar w:fldCharType="separate" />
+///     </w:r>
+///     <w:r>
+///         <w:rPr>
+///             <!-- properties written with DoWriteFieldRunProperties()
+///         </w:rPr>
+///         <w:t>14:01:13</w:t>
+///         </w:r>
+///     <w:r>
+///         <w:rPr>
+///             <!-- properties written with DoWriteFieldRunProperties()
+///         </w:rPr>
+///         <w:fldChar w:fldCharType="end" />
+///     </w:r>
+/// See, tdf#38778
+void DocxAttributeOutput::DoWriteFieldRunProperties( const SwTextNode * pNode, sal_Int32 nPos )
+{
+    if (! pNode)
+    {
+        // nothing to do
+        return;
+    }
+
+    m_bPreventDoubleFieldsHandling = true;
+
+    {
+        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+
+        // 1. output webHidden flag
+        if(GetExport().m_bHideTabLeaderAndPageNumbers && m_pHyperlinkAttrList.is() )
+        {
+            m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
+        }
+
+        // 2. output color
+        if ( m_pColorAttrList.is() )
+        {
+            XFastAttributeListRef xAttrList( m_pColorAttrList.get() );
+            m_pColorAttrList.clear();
+
+            m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
+        }
+
+        // 3. output all other character properties
+        SwWW8AttrIter aAttrIt( m_rExport, *pNode );
+        aAttrIt.OutAttr( nPos, false );
+
+        m_pSerializer->endElementNS( XML_w, XML_rPr );
+
+        // During SwWW8AttrIter::OutAttr() call the new value of the text color could be set into [m_pColorAttrList].
+        // But we do not need to keep it any more and should clean up,
+        // While the next run could define a new color that is different to current one.
+        m_pColorAttrList.clear();
+    }
+
+    m_bPreventDoubleFieldsHandling = false;
+}
+
+void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos )
 {
     // The command has to be written before for the hyperlinks
     if ( rInfos.pField )
     {
-        CmdField_Impl( rInfos );
+        CmdField_Impl( pNode, nPos, rInfos, true );
     }
 
     // Write the bookmark start if any
@@ -1754,6 +1852,8 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     {
         // Write the Field latest value
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        DoWriteFieldRunProperties( pNode, nPos );
+
         OUString sExpand;
         if(rInfos.eType == ww::eCITATION)
         {
@@ -1782,6 +1882,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     if ( rInfos.bClose  )
     {
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        DoWriteFieldRunProperties( pNode, nPos );
         m_pSerializer->singleElementNS( XML_w, XML_fldChar,
               FSNS( XML_w, XML_fldCharType ), "end",
               FSEND );
@@ -1813,7 +1914,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
             m_sFieldBkm = OUString( );
 
             // Write the end of the field
-            EndField_Impl( rInfos );
+            EndField_Impl( pNode, nPos, rInfos );
         }
     }
 }
@@ -2326,8 +2427,8 @@ void DocxAttributeOutput::RawText(const OUString& /*rText*/, rtl_TextEncoding /*
 
 void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby )
 {
-    OSL_TRACE("TODO DocxAttributeOutput::StartRuby( const SwTextNode& rNode, const SwFormatRuby& rRuby )" );
-    EndRun(); // end run before starting ruby to avoid nested runs, and overlap
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::StartRuby( const SwTextNode& rNode, const SwFormatRuby& rRuby )" );
+    EndRun( &rNode, nPos ); // end run before starting ruby to avoid nested runs, and overlap
     assert(!m_closeHyperlinkInThisRun); // check that no hyperlink overlaps ruby
     assert(!m_closeHyperlinkInPreviousRun);
     m_pSerializer->startElementNS( XML_w, XML_ruby, FSEND );
@@ -2381,17 +2482,17 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
 
     EndRunProperties( nullptr );
     RunText( rRuby.GetText( ) );
-    EndRun( );
+    EndRun( &rNode, nPos );
     m_pSerializer->endElementNS( XML_w, XML_rt );
 
     m_pSerializer->startElementNS( XML_w, XML_rubyBase, FSEND );
     StartRun( nullptr );
 }
 
-void DocxAttributeOutput::EndRuby()
+void DocxAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::EndRuby()" );
-    EndRun( );
+    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::EndRuby()" );
+    EndRun( &rNode, nPos );
     m_pSerializer->endElementNS( XML_w, XML_rubyBase );
     m_pSerializer->endElementNS( XML_w, XML_ruby );
     StartRun(nullptr); // open Run again so OutputTextNode loop can close it
@@ -6405,11 +6506,24 @@ void DocxAttributeOutput::CharFont( const SvxFontItem& rFont)
 {
     GetExport().GetId( rFont ); // ensure font info is written to fontTable.xml
     const OUString& sFontName(rFont.GetFamilyName());
-    OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
+    const OString sFontNameUtf8 = OUStringToOString(sFontName, RTL_TEXTENCODING_UTF8);
     if (!sFontNameUtf8.isEmpty())
+    {
+        if (m_pFontsAttrList &&
+            (   m_pFontsAttrList->hasAttribute(FSNS( XML_w, XML_ascii )) ||
+                m_pFontsAttrList->hasAttribute(FSNS( XML_w, XML_hAnsi ))    )
+            )
+        {
+            // tdf#38778: do to fields output into DOC the font could be added before and after field declaration
+            // that all sub runs of the field will have correct font inside.
+            // For DOCX we should do not add the same font information twice in the same node
+            return;
+        }
+
         AddToAttrList( m_pFontsAttrList, 2,
             FSNS( XML_w, XML_ascii ), sFontNameUtf8.getStr(),
             FSNS( XML_w, XML_hAnsi ), sFontNameUtf8.getStr() );
+    }
 }
 
 void DocxAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
@@ -6858,6 +6972,9 @@ void DocxAttributeOutput::WriteExpand( const SwField* pField )
 
 void DocxAttributeOutput::WriteField_Impl( const SwField* pField, ww::eField eType, const OUString& rFieldCmd, sal_uInt8 nMode )
 {
+    if (m_bPreventDoubleFieldsHandling)
+        return;
+
     struct FieldInfos infos;
     if (pField)
         infos.pField.reset(pField->CopyField());
@@ -8397,6 +8514,9 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
 
 void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
 {
+    if (m_bPreventDoubleFieldsHandling)
+        return;
+
     const std::map< OUString, css::uno::Any >& rMap = rItem.GetGrabBag();
 
     // get original values of theme-derived properties to check if they have changed during the edition
@@ -8598,6 +8718,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_bRunTextIsOn( false ),
       m_bWritingHeaderFooter( false ),
       m_bAnchorLinkedToNode(false),
+      m_bPreventDoubleFieldsHandling( false ),
       m_sFieldBkm( ),
       m_nNextBookmarkId( 0 ),
       m_nNextAnnotationMarkId( 0 ),
