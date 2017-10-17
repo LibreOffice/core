@@ -584,7 +584,7 @@ public:
     void WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_uInt8 nTTyp );
 
     /// Export the pool items to attributes (through an attribute output class).
-    void ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript );
+    void ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript, const SvxFontItem *pFont );
 
     /// Return the numeric id of the numbering rule
     sal_uInt16 GetId( const SwNumRule& rNumRule );
@@ -1488,7 +1488,7 @@ public:
     void OutAttr( sal_Int32 nSwPos, bool bRuby = false );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const override;
-    int OutAttrWithRange(sal_Int32 nPos);
+    int OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos);
     const SwRedlineData* GetParagraphLevelRedline( );
     const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );
     FlyProcessingState OutFlys(sal_Int32 nSwPos);
