@@ -1001,6 +1001,22 @@ DECLARE_RTFEXPORT_TEST(testTdf94377, "tdf94377.rtf")
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getRun(getParagraphOfText(2, xText, "asdf12"), 1), "CharHeight"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf104079, "tdf104079.rtf")
+{
+    bool bFound = false;
+    int nIndex = 0;
+    while (!bFound)
+    {
+        uno::Reference<text::XTextRange> xParagraph = getParagraph(++nIndex);
+        if (!xParagraph->getString().startsWith("toc3"))
+            continue;
+
+        bFound = true;
+        // This was 0, 3rd paragraph of ToC lost its bottom paragraph margin.
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(212), getProperty<sal_Int32>(xParagraph, "ParaBottomMargin"));
+    }
+}
+
 DECLARE_RTFEXPORT_TEST(testPageBackground, "page-background.rtf")
 {
     // The problem was that \background was ignored.
