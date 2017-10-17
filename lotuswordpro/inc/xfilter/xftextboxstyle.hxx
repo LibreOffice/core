@@ -58,7 +58,7 @@
 
 #include "xfilter/xfglobal.hxx"
 #include "xfilter/xfstyle.hxx"
-#include "xfmargins.hxx"
+#include "xfilter/xfmargins.hxx"
 #include "xfilter/xfcolor.hxx"
 #include "xfilter/xfpadding.hxx"
 

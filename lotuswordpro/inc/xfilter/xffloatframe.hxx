@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFLOATFRAME_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFLOATFRAME_HXX
 
-#include "xfframe.hxx"
+#include "xfilter/xfframe.hxx"
 #include <vector>
 
 /**

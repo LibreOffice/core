@@ -64,7 +64,7 @@
 
 #include <rtl/ref.hxx>
 
-#include "xfglobal.hxx"
+#include "xfilter/xfglobal.hxx"
 #include "xfilter/xffont.hxx"
 #include <vector>
 
