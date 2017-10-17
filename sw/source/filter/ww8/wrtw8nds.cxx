@@ -485,7 +485,10 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
         m_rExport.m_pOutFormatNode = &rNd;
         m_rExport.m_aCurrentCharPropStarts.push( nSwPos );
 
-        m_rExport.ExportPoolItemsToCHP( aExportItems, GetScript() );
+        // tdf#38778 Fix output of the font in DOC run for fields
+        const SvxFontItem * pFontToOutput = ( rParentFont != *pFont )? pFont : nullptr;
+
+        m_rExport.ExportPoolItemsToCHP( aExportItems, GetScript(), pFontToOutput );
 
         // HasTextItem only allowed in the above range
         m_rExport.m_aCurrentCharPropStarts.pop();
@@ -667,10 +670,16 @@ bool SwWW8AttrIter::IsTextAttr( sal_Int32 nSwPos )
         for (size_t i = 0; i < pTextAttrs->Count(); ++i)
         {
             const SwTextAttr* pHt = pTextAttrs->Get(i);
-            if ( ( pHt->HasDummyChar() || pHt->HasContent() )
-                 && (pHt->GetStart() == nSwPos) )
+            if (nSwPos == pHt->GetStart())
             {
-                return true;
+                if (pHt->HasDummyChar() || pHt->HasContent() )
+                {
+                    return true;
+                }
+            }
+            else if (nSwPos < pHt->GetStart())
+            {
+                break; // sorted by start
             }
         }
     }
@@ -880,7 +889,7 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
             WRITEFIELD_START | WRITEFIELD_CMD_START );
 }
 
-void WW8AttributeOutput::EndRuby()
+void WW8AttributeOutput::EndRuby(const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/)
 {
     m_rWW8Export.WriteChar( ')' );
     m_rWW8Export.OutputField( nullptr, ww::eEQ, OUString(), WRITEFIELD_END | WRITEFIELD_CLOSE );
@@ -1228,7 +1237,7 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
         FieldVanish( sText, eType );
 }
 
-int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
+int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
 {
     int nRet = 0;
     if ( const SwpHints* pTextAttrs = rNd.GetpSwpHints() )
@@ -1262,7 +1271,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                     pEnd = pHt->End();
                     if (nPos == *pEnd && nPos != pHt->GetStart())
                     {
-                        m_rExport.AttrOutput().EndRuby();
+                        m_rExport.AttrOutput().EndRuby(rNode, nPos);
                         --nRet;
                     }
                     break;
@@ -1316,7 +1325,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                     pEnd = pHt->End();
                     if (nPos == *pEnd && nPos == pHt->GetStart())
                     {   // special case: empty must be handled here
-                        m_rExport.AttrOutput().EndRuby();
+                        m_rExport.AttrOutput().EndRuby( rNd, nPos );
                         --nRet;
                     }
                     break;
@@ -2192,7 +2201,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             AppendSmartTags(rNode);
 
         bool bTextAtr = aAttrIter.IsTextAttr( nAktPos );
-        nOpenAttrWithRange += aAttrIter.OutAttrWithRange(nAktPos);
+        nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nAktPos );
 
         sal_Int32 nLen = nNextAttr - nAktPos;
         if ( !bTextAtr && nLen )
@@ -2380,7 +2389,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             bool bAttrWithRange = (nOpenAttrWithRange > 0);
             if ( nAktPos != nEnd )
             {
-                nOpenAttrWithRange += aAttrIter.OutAttrWithRange(nEnd);
+                nOpenAttrWithRange += aAttrIter.OutAttrWithRange( rNode, nEnd );
                 OSL_ENSURE(nOpenAttrWithRange == 0,
                     "odd to see this happening, expected 0");
             }
@@ -2429,7 +2438,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
 
         if( bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame )
         {
-            AttrOutput().EndRun();
+            AttrOutput().EndRun(&rNode, nAktPos);
             //write the postponed text run
             AttrOutput().StartRun( pRedlineData, bSingleEmptyRun );
             AttrOutput().SetAnchorIsLinkedToNode( false );
@@ -2441,16 +2450,16 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                 AttrOutput().EndRunProperties( pRedlineData );
             }
             AttrOutput().RunText( aSavedSnippet, eChrSet );
-            AttrOutput().EndRun();
+            AttrOutput().EndRun(&rNode, nAktPos);
         }
         else if( bPostponeWritingText && !aSavedSnippet.isEmpty() )
         {
             //write the postponed text run
             AttrOutput().RunText( aSavedSnippet, eChrSet );
-            AttrOutput().EndRun();
+            AttrOutput().EndRun(&rNode, nAktPos);
         }
         else
-            AttrOutput().EndRun();
+            AttrOutput().EndRun(&rNode, nAktPos);
 
         nAktPos = nNextAttr;
         UpdatePosition( &aAttrIter, nAktPos, nEnd );
