@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <o3tl/any.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/drawingml/clrscheme.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/relationship.hxx>
@@ -2341,46 +2342,14 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     return *this;
 }
 
-#define MINIMAL_THEME "  <a:themeElements>\
-    <a:clrScheme name=\"Office\">\
-      <a:dk1>\
+#define SYS_COLOR_SCHEMES "      <a:dk1>\
         <a:sysClr val=\"windowText\" lastClr=\"000000\"/>\
       </a:dk1>\
       <a:lt1>\
         <a:sysClr val=\"window\" lastClr=\"FFFFFF\"/>\
-      </a:lt1>\
-      <a:dk2>\
-        <a:srgbClr val=\"1F497D\"/>\
-      </a:dk2>\
-      <a:lt2>\
-        <a:srgbClr val=\"EEECE1\"/>\
-      </a:lt2>\
-      <a:accent1>\
-        <a:srgbClr val=\"4F81BD\"/>\
-      </a:accent1>\
-      <a:accent2>\
-        <a:srgbClr val=\"C0504D\"/>\
-      </a:accent2>\
-      <a:accent3>\
-        <a:srgbClr val=\"9BBB59\"/>\
-      </a:accent3>\
-      <a:accent4>\
-        <a:srgbClr val=\"8064A2\"/>\
-      </a:accent4>\
-      <a:accent5>\
-        <a:srgbClr val=\"4BACC6\"/>\
-      </a:accent5>\
-      <a:accent6>\
-        <a:srgbClr val=\"F79646\"/>\
-      </a:accent6>\
-      <a:hlink>\
-        <a:srgbClr val=\"0000FF\"/>\
-      </a:hlink>\
-      <a:folHlink>\
-        <a:srgbClr val=\"800080\"/>\
-      </a:folHlink>\
-    </a:clrScheme>\
-    <a:fontScheme name=\"Office\">\
+      </a:lt1>"
+
+#define MINIMAL_THEME "    <a:fontScheme name=\"Office\">\
       <a:majorFont>\
         <a:latin typeface=\"Arial\"/>\
         <a:ea typeface=\"DejaVu Sans\"/>\
@@ -2557,16 +2526,138 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
           </a:path>\
         </a:gradFill>\
       </a:bgFillStyleLst>\
-    </a:fmtScheme>\
-  </a:themeElements>"
+    </a:fmtScheme>"
+
+void PowerPointExport::WriteDefaultColorSchemes(FSHelperPtr pFS)
+{
+    for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
+    {
+        OUString sName = PredefinedClrNames[static_cast<PredefinedClrSchemeId>(nId)];
+        sal_Int32 nColor = 0;
+
+        switch (nId)
+        {
+        case PredefinedClrSchemeId::dk2:
+            nColor = 0x1F497D;
+            break;
+        case PredefinedClrSchemeId::lt2:
+            nColor = 0xEEECE1;
+            break;
+        case PredefinedClrSchemeId::accent1:
+            nColor = 0x4F81BD;
+            break;
+        case PredefinedClrSchemeId::accent2:
+            nColor = 0xC0504D;
+            break;
+        case PredefinedClrSchemeId::accent3:
+            nColor = 0x9BBB59;
+            break;
+        case PredefinedClrSchemeId::accent4:
+            nColor = 0x8064A2;
+            break;
+        case PredefinedClrSchemeId::accent5:
+            nColor = 0x4BACC6;
+            break;
+        case PredefinedClrSchemeId::accent6:
+            nColor = 0xF79646;
+            break;
+        case PredefinedClrSchemeId::hlink:
+            nColor = 0x0000FF;
+            break;
+        case PredefinedClrSchemeId::folHlink:
+            nColor = 0x800080;
+            break;
+        }
+
+        OUString sOpenColorScheme = OUStringBuffer()
+            .append("<a:")
+            .append(sName)
+            .append(">")
+            .makeStringAndClear();
+        pFS->write(sOpenColorScheme);
+
+        pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor), FSEND);
+
+        OUString sCloseColorScheme = OUStringBuffer()
+            .append("</a:")
+            .append(sName)
+            .append(">")
+            .makeStringAndClear();
+        pFS->write(sCloseColorScheme);
+    }
+}
+
+bool PowerPointExport::WriteColorSchemes(FSHelperPtr pFS, const OUString& rThemePath)
+{
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(getModel(), uno::UNO_QUERY);
+        if (xDocProps.is())
+        {
+            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+
+            const OUString aGrabBagPropName = "InteropGrabBag";
+            if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
+            {
+                comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
+                uno::Sequence<beans::PropertyValue> aCurrentTheme;
+
+                aGrabBag.getValue(rThemePath) >>= aCurrentTheme;
+
+                // Order is important
+                for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
+                {
+                    OUString sName = PredefinedClrNames[static_cast<PredefinedClrSchemeId>(nId)];
+                    sal_Int32 nColor = 0;
+
+                    for (auto aIt = aCurrentTheme.begin(); aIt != aCurrentTheme.end(); aIt++)
+                    {
+                        if (aIt->Name == sName)
+                        {
+                            aIt->Value >>= nColor;
+                            break;
+                        }
+                    }
+
+                    OUString sOpenColorScheme = OUStringBuffer()
+                        .append("<a:")
+                        .append(sName)
+                        .append(">")
+                        .makeStringAndClear();
+                    pFS->write(sOpenColorScheme);
+
+                    pFS->singleElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(nColor), FSEND);
+
+                    OUString sCloseColorScheme = OUStringBuffer()
+                        .append("</a:")
+                        .append(sName)
+                        .append(">")
+                        .makeStringAndClear();
+                    pFS->write(sCloseColorScheme);
+                }
+
+                // TODO: write complete color schemes & only if successful, protection against partial export
+                return true;
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("writerfilter", "Failed to save documents grab bag");
+    }
+
+    return false;
+}
 
 void PowerPointExport::WriteTheme(sal_Int32 nThemeNum)
 {
-    FSHelperPtr pFS = openFragmentStreamWithSerializer(OUStringBuffer()
-                      .append("ppt/theme/theme")
-                      .append(nThemeNum + 1)
-                      .append(".xml")
-                      .makeStringAndClear(),
+    OUString sThemePath = OUStringBuffer()
+        .append("ppt/theme/theme")
+        .append(nThemeNum + 1)
+        .append(".xml")
+        .makeStringAndClear();
+
+    FSHelperPtr pFS = openFragmentStreamWithSerializer(sThemePath,
                       "application/vnd.openxmlformats-officedocument.theme+xml");
 
     pFS->startElementNS(XML_a, XML_theme,
@@ -2574,7 +2665,23 @@ void PowerPointExport::WriteTheme(sal_Int32 nThemeNum)
                         XML_name, "Office Theme",
                         FSEND);
 
+    pFS->startElementNS(XML_a, XML_themeElements, FSEND);
+    pFS->startElementNS(XML_a, XML_clrScheme, XML_name, "Office", FSEND);
+
+    pFS->write(SYS_COLOR_SCHEMES);
+
+    if (!WriteColorSchemes(pFS, sThemePath))
+    {
+        // color schemes are required - use default values
+        WriteDefaultColorSchemes(pFS);
+    }
+
+    pFS->endElementNS(XML_a, XML_clrScheme);
+
+    // export remaining part
     pFS->write(MINIMAL_THEME);
+
+    pFS->endElementNS(XML_a, XML_themeElements);
     pFS->endElementNS(XML_a, XML_theme);
 }
 
