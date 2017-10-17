@@ -1311,6 +1311,25 @@ void Test::testUserDefinedNumberFormats()
         sCode =     "MM:SS.0";
         sExpected = "23:53.6";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        // Two decimals.
+        sCode =     "MM:SS.00";
+        sExpected = "23:53.61";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        // Three decimals.
+        sCode =     "MM:SS.000";
+        sExpected = "23:53.605";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+
+        // Same with date+time.
+        sCode =     "YYYY-MM-DD MM:SS.0";
+        sExpected = "1900-01-02 23:53.6";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "YYYY-MM-DD MM:SS.00";
+        sExpected = "1900-01-02 23:53.61";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "YYYY-MM-DD MM:SS.000";
+        sExpected = "1900-01-02 23:53.605";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
 }
 
