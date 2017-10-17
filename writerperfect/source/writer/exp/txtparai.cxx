@@ -214,16 +214,29 @@ void XMLTabContext::startElement(const OUString &/*rName*/, const css::uno::Refe
 class XMLHyperlinkContext : public XMLImportContext
 {
 public:
-    XMLHyperlinkContext(XMLImport &rImport);
+    XMLHyperlinkContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList);
+    rtl::Reference<XMLImportContext> CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
 
     void SAL_CALL startElement(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs) override;
     void SAL_CALL endElement(const OUString &rName) override;
     void SAL_CALL characters(const OUString &rChars) override;
+
+private:
+    librevenge::RVNGPropertyList m_aPropertyList;
 };
 
-XMLHyperlinkContext::XMLHyperlinkContext(XMLImport &rImport)
+XMLHyperlinkContext::XMLHyperlinkContext(XMLImport &rImport, const librevenge::RVNGPropertyList &rPropertyList)
     : XMLImportContext(rImport)
 {
+    // Inherit properties from parent.
+    librevenge::RVNGPropertyList::Iter itProp(rPropertyList);
+    for (itProp.rewind(); itProp.next();)
+        m_aPropertyList.insert(itProp.key(), itProp()->clone());
+}
+
+rtl::Reference<XMLImportContext> XMLHyperlinkContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
+{
+    return CreateParagraphOrSpanChildContext(mrImport, rName, m_aPropertyList);
 }
 
 void XMLHyperlinkContext::startElement(const OUString &/*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList> &xAttribs)
@@ -262,7 +275,7 @@ XMLParaContext::XMLParaContext(XMLImport &rImport)
 rtl::Reference<XMLImportContext> XMLParaContext::CreateChildContext(const OUString &rName, const css::uno::Reference<css::xml::sax::XAttributeList> &/*xAttribs*/)
 {
     if (rName == "text:a")
-        return new XMLHyperlinkContext(mrImport);
+        return new XMLHyperlinkContext(mrImport, m_aTextPropertyList);
     return CreateParagraphOrSpanChildContext(mrImport, rName, m_aTextPropertyList);
 }
 
