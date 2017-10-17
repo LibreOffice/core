@@ -31,6 +31,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
+#include <memory>
 #include <vector>
 
 
@@ -75,7 +76,7 @@ struct Style
 };
 class StyleBag
 {
-    ::std::vector< Style * > _styles;
+    ::std::vector< std::unique_ptr<Style> > _styles;
 
 public:
     ~StyleBag() ;
