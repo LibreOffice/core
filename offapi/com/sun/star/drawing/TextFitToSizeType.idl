@@ -28,25 +28,25 @@
  */
 published enum TextFitToSizeType
 {
-    /** the text size is only defined by the font properties
+    /** The text size is only defined by the font properties.
     */
     NONE,
 
-
-    /** if the shape is scaled, the text character size is scaled proportional
+    /** The font is scaled up or down proportionally to fit the
+        size of the shape.  This may scale anisotropically.
+        No AutoGrow and no Auto line-breaks in this case.
     */
     PROPORTIONAL,
 
-
-    /** like <code>PROPORTIONAL</code>, but the width of each text row is
-        also scaled proportional.
+    /** Like <code>PROPORTIONAL</code>, but each line of text
+        is separately scaled proportionally to fit the width.
+        No AutoGrow and no Auto line-breaks in this case.
     */
     ALLLINES,
 
-
-    /** if the shape is scaled, the font is scaled isotropically to
-        fit the available space. Auto line-breaks will keep working
-   */
+    /** The font is scaled down (never up!) isotropically to fit the
+        available space.  Auto line-breaks will keep working.
+    */
     AUTOFIT
 
 };
