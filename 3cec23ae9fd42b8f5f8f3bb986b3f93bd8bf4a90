@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_8a4af181",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2017-10-17T20:24:31Z",
+      "side": 1,
+      "message": "I was not able to create rtl::Static const array. I used a global const array.",
+      "parentUuid": "1a430d35_3e7303e9",
+      "revId": "3cec23ae9fd42b8f5f8f3bb986b3f93bd8bf4a90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_be4d339b",
         "filename": "svl/source/numbers/zforscan.cxx",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2017-10-12T19:14:11Z",
       "side": 1,
       "message": "This should be done for only the very specific subset of languages that in SetDependentKeywords() actually get different keyword codes assigned. All other languages can not result in a valid keyword here, and would just be unnecessarily tried.",
+      "range": {
+        "startLine": 629,
+        "startChar": 35,
+        "endLine": 629,
+        "endChar": 54
+      },
+      "revId": "3cec23ae9fd42b8f5f8f3bb986b3f93bd8bf4a90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_aa4ded9a",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2017-10-17T20:24:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_be4d339b",
       "range": {
         "startLine": 629,
         "startChar": 35,
