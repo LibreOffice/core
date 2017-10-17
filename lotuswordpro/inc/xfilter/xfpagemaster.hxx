@@ -64,7 +64,7 @@
 #include "xfilter/xfglobal.hxx"
 #include "xfilter/xfstyle.hxx"
 #include "xfilter/xfcolor.hxx"
-#include "xfmargins.hxx"
+#include "xfilter/xfmargins.hxx"
 
 class XFBorders;
 class XFShadow;

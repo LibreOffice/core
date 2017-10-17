@@ -60,8 +60,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTERSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFFOOTERSTYLE_HXX
 
-#include "xfheaderstyle.hxx"
-#include "xfmargins.hxx"
+#include "xfilter/xfheaderstyle.hxx"
+#include "xfilter/xfmargins.hxx"
 
 class XFFooterStyle : public XFHeaderStyle
 {

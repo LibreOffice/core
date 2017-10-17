@@ -62,7 +62,7 @@
 
 #include "xfilter/xfglobal.hxx"
 #include "xfilter/xfstyle.hxx"
-#include "xfbgimage.hxx"
+#include "xfilter/xfbgimage.hxx"
 #include "xfilter/xfcolor.hxx"
 #include <memory>
 

@@ -61,8 +61,8 @@
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFHEADERSTYLE_HXX
 
 #include "xfilter/xfstyle.hxx"
-#include "xfmargins.hxx"
-#include "xfborders.hxx"
+#include "xfilter/xfmargins.hxx"
+#include "xfilter/xfborders.hxx"
 #include "xfilter/xfpadding.hxx"
 #include "xfilter/xfshadow.hxx"
 

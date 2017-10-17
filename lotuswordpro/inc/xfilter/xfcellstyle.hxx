@@ -66,7 +66,7 @@
 
 #include "xfilter/xfstyle.hxx"
 #include "xfilter/xfcolor.hxx"
-#include "xfmargins.hxx"
+#include "xfilter/xfmargins.hxx"
 #include "xfilter/xfpadding.hxx"
 #include "xfilter/xfshadow.hxx"
 

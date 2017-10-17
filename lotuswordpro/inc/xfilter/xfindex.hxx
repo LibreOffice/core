@@ -64,7 +64,7 @@
 
 #include "xfilter/xfcontent.hxx"
 #include "xfilter/xfcontentcontainer.hxx"
-#include "xftabstop.hxx"
+#include "xfilter/xftabstop.hxx"
 
 class XFIndex;
 class XFIndexTemplate;

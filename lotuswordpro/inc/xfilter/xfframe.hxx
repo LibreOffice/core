@@ -63,7 +63,7 @@
 
 #include "xfilter/xfglobal.hxx"
 #include "xfilter/xfcontent.hxx"
-#include "xfrect.hxx"
+#include "xfilter/xfrect.hxx"
 #include "xfilter/xfcontentcontainer.hxx"
 
 #define     XFFRAME_FLAG_HEIGHT         0x00000001
