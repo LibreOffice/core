@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
 
-#include <list>
+#include <vector>
 
 #include <com/sun/star/style/TabStop.hpp>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -44,7 +44,7 @@ protected:
     TextParagraphProperties& mrTextParagraphProperties;
     TextSpacing     maLineSpacing;
     BulletList&     mrBulletList;
-    std::list< css::style::TabStop >  maTabList;
+    std::vector< css::style::TabStop >  maTabList;
     std::shared_ptr< BlipFillProperties > mxBlipProps;
 };
 

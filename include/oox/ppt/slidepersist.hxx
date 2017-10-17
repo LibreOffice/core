@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_PPT_SLIDEPERSIST_HXX
 #define INCLUDED_OOX_PPT_SLIDEPERSIST_HXX
 
-#include <list>
+#include <vector>
 #include <map>
 #include <memory>
 
@@ -109,7 +109,7 @@ public:
 
     const oox::drawingml::ShapePtr& getShapes() { return maShapesPtr; }
     void hideShapesAsMasterShapes();
-    ::std::list< std::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
+    ::std::vector< std::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
     oox::ppt::HeaderFooter& getHeaderFooter(){ return maHeaderFooter; };
 
     oox::vml::Drawing* getDrawing() { return mpDrawingPtr.get(); }
@@ -138,7 +138,7 @@ private:
     oox::drawingml::ShapePtr                                                maShapesPtr;
     oox::drawingml::Color                                                   maBackgroundColor;
     oox::drawingml::FillPropertiesPtr                                       mpBackgroundPropertiesPtr;
-    ::std::list< std::shared_ptr< TimeNode > >                              maTimeNodeList;
+    ::std::vector< std::shared_ptr< TimeNode > >                            maTimeNodeList;
 
     oox::ppt::HeaderFooter                                                  maHeaderFooter;
     sal_Int32                                                               mnLayoutValueToken;
