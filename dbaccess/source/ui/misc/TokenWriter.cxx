@@ -84,7 +84,6 @@ ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _
     ,m_xContext(_rM)
     ,m_nCommandType(CommandType::TABLE)
     ,m_bNeedToReInitialize(false)
-    ,m_pReader(nullptr)
     ,m_bInInitialize(false)
     ,m_bCheckOnly(false)
 {
@@ -105,7 +104,6 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     ,m_xContext(_rM)
     ,m_nCommandType(css::sdb::CommandType::TABLE)
     ,m_bNeedToReInitialize(false)
-    ,m_pReader(nullptr)
     ,m_bInInitialize(false)
     ,m_bCheckOnly(false)
 {
@@ -123,11 +121,7 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
 ODatabaseImportExport::~ODatabaseImportExport()
 {
     acquire();
-
     dispose();
-
-    if(m_pReader)
-        m_pReader->release();
 }
 
 void ODatabaseImportExport::dispose()
@@ -575,13 +569,10 @@ bool ORTFImportExport::Read()
     SvParserState eState = SvParserState::Error;
     if ( m_pStream )
     {
-        m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext);
-        static_cast<ORTFReader*>(m_pReader)->AddFirstRef();
+        tools::SvRef<ORTFReader> xReader(new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext));
         if ( isCheckEnabled() )
-            m_pReader->enableCheckOnly();
-        eState = static_cast<ORTFReader*>(m_pReader)->CallParser();
-        m_pReader->release();
-        m_pReader = nullptr;
+            xReader->enableCheckOnly();
+        eState = xReader->CallParser();
     }
 
     return eState != SvParserState::Error;
@@ -645,14 +636,11 @@ bool OHTMLImportExport::Read()
     SvParserState eState = SvParserState::Error;
     if ( m_pStream )
     {
-        m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext);
-        static_cast<OHTMLReader*>(m_pReader)->AddFirstRef();
+        tools::SvRef<OHTMLReader> xReader(new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext));
         if ( isCheckEnabled() )
-            m_pReader->enableCheckOnly();
-        m_pReader->SetTableName(m_sDefaultTableName);
-        eState = static_cast<OHTMLReader*>(m_pReader)->CallParser();
-        m_pReader->release();
-        m_pReader = nullptr;
+            xReader->enableCheckOnly();
+        xReader->SetTableName(m_sDefaultTableName);
+        eState = xReader->CallParser();
     }
 
     return eState != SvParserState::Error;

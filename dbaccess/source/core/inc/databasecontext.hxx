@@ -107,7 +107,7 @@ protected:
         // properties.
 
     ::comphelper::OInterfaceContainerHelper2       m_aContainerListeners;
-    DatabaseDocumentLoader*                 m_pDatabaseDocumentLoader;
+    rtl::Reference<DatabaseDocumentLoader>         m_xDatabaseDocumentLoader;
 
 public:
     explicit ODatabaseContext( const css::uno::Reference< css::uno::XComponentContext >& );
