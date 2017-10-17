@@ -1045,32 +1045,77 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         OUString aFieldValue = cChar ? OUString(cChar) : static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
                         if ( bCalcCharPositions || !pPortion->HasValidSize() )
                         {
-                            pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), aFieldValue, 0, aFieldValue.getLength() );
+                            // get size, but also DXArray to allow length information in line breaking below
+                            const sal_Int32 nLength(aFieldValue.getLength());
+                            std::unique_ptr<long[]> pTmpDXArray(new long[nLength]);
+                            pPortion->GetSize() = aTmpFont.QuickGetTextSize(GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), pTmpDXArray.get());
+
                             // So no scrolling for oversized fields
                             if ( pPortion->GetSize().Width() > nXWidth )
                             {
-                                sal_Int32 nWidthOrg         = pPortion->GetSize().Width();
-                                sal_Int32 nChars            = aFieldValue.getLength();
-                                sal_Int32 nApproxWC         = nXWidth / ( nWidthOrg / nChars );
-                                ExtraPortionInfo *pExtraInfo= pPortion->GetExtraInfos();
-                                if( !nApproxWC ) nApproxWC++;
-                                if( pExtraInfo == nullptr )
+                                // create ExtraPortionInfo on-demand, flush lineBreaksList
+                                ExtraPortionInfo *pExtraInfo = pPortion->GetExtraInfos();
+
+                                if(nullptr == pExtraInfo)
                                 {
                                     pExtraInfo = new ExtraPortionInfo();
                                     pExtraInfo->nOrgWidth = nXWidth;
-                                    pPortion->SetExtraInfos( pExtraInfo );
+                                    pPortion->SetExtraInfos(pExtraInfo);
                                 }
                                 else
                                 {
                                     pExtraInfo->lineBreaksList.clear();
                                 }
 
-                                pPortion->GetSize().Width() = nXWidth;
+                                // iterate over CellBreaks using XBreakIterator to be on the
+                                // safe side with international texts/charSets
+                                Reference < i18n::XBreakIterator > xBreakIterator(ImplGetBreakIterator());
+                                const sal_Int32 nTextLength(aFieldValue.getLength());
+                                const lang::Locale aLocale(GetLocale(EditPaM(pNode, nPortionStart)));
+                                sal_Int32 nDone(0);
+                                sal_Int32 nNextCellBreak(
+                                    xBreakIterator->nextCharacters(
+                                            aFieldValue,
+                                            0,
+                                            aLocale,
+                                            css::i18n::CharacterIteratorMode::SKIPCELL,
+                                            0,
+                                            nDone));
+                                sal_Int32 nLastCellBreak(0);
+                                sal_Int32 nLineStartX(0);
 
-                                while( nChars > 0 )
+                                // always add 1st line break (safe, we already know we are larger than nXWidth)
+                                pExtraInfo->lineBreaksList.push_back(0);
+
+                                for(sal_Int32 a(0); a < nTextLength; a++)
                                 {
-                                    pExtraInfo->lineBreaksList.push_back( aFieldValue.getLength() - nChars );
-                                    nChars -= nApproxWC;
+                                    if(a == nNextCellBreak)
+                                    {
+                                        // check width
+                                        if(pTmpDXArray[a] - nLineStartX > nXWidth)
+                                        {
+                                            // new CellBreak does not fit in current line, need to
+                                            // create a break at LastCellBreak - but do not add 1st
+                                            // line break twice for very tall frames
+                                            if(0 != a)
+                                            {
+                                                pExtraInfo->lineBreaksList.push_back(a);
+                                            }
+
+                                            // moveLineStart forward in X
+                                            nLineStartX = pTmpDXArray[nLastCellBreak];
+                                        }
+
+                                        // update CellBreak iteration values
+                                        nLastCellBreak = a;
+                                        nNextCellBreak = xBreakIterator->nextCharacters(
+                                            aFieldValue,
+                                            a,
+                                            aLocale,
+                                            css::i18n::CharacterIteratorMode::SKIPCELL,
+                                            1,
+                                            nDone);
+                                    }
                                 }
                             }
                         }
@@ -3262,26 +3307,32 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                         bParsingFields = true;
                                         itSubLines = pExtraInfo->lineBreaksList.begin();
                                     }
+
                                     if( bParsingFields )
                                     {
                                         if( itSubLines != pExtraInfo->lineBreaksList.begin() )
                                         {
+                                            // only use GetMaxAscent(), pLine->GetHeight() will not
+                                            // proceed as needed (see PortionKind::TEXT above and nAdvanceY)
+                                            // what will lead to a compressed look with multiple lines
+                                            const sal_uInt16 nMaxAscent(pLine->GetMaxAscent());
+
                                             if ( !IsVertical() )
                                             {
-                                                aStartPos.Y() += pLine->GetMaxAscent();
-                                                aTmpPos.Y() += pLine->GetHeight();
+                                                aStartPos.Y() += nMaxAscent;
+                                                aTmpPos.Y() += nMaxAscent;
                                             }
                                             else
                                             {
                                                 if (IsTopToBottom())
                                                 {
-                                                    aTmpPos.X() -= pLine->GetMaxAscent();
-                                                    aStartPos.X() -= pLine->GetHeight();
+                                                    aTmpPos.X() -= nMaxAscent;
+                                                    aStartPos.X() -= nMaxAscent;
                                                 }
                                                 else
                                                 {
-                                                    aTmpPos.X() += pLine->GetMaxAscent();
-                                                    aStartPos.X() += pLine->GetHeight();
+                                                    aTmpPos.X() += nMaxAscent;
+                                                    aStartPos.X() += nMaxAscent;
                                                 }
                                             }
                                         }
