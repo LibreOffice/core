@@ -60,10 +60,10 @@
 
 #include <sal/config.h>
 
-#include <xfparastyle.hxx>
-#include "xfstylemanager.hxx"
-#include <xftextstyle.hxx>
-#include "ixfstyle.hxx"
+#include <xfilter/xfparastyle.hxx>
+#include "xfilter/xfstylemanager.hxx"
+#include <xfilter/xftextstyle.hxx>
+#include "xfilter/ixfstyle.hxx"
 
 XFStyleManager::XFStyleManager() : s_aStdArrowStyles( "arrow" ), s_aTextStyles( "T" ),
     s_aParaStyles( "P" ),s_aListStyles( "L" ),s_aSectionStyles( "Sect" ),

@@ -57,7 +57,7 @@
  * @file
  * Background image.
  ************************************************************************/
-#include "xfbgimage.hxx"
+#include "xfilter/xfbgimage.hxx"
 #include "xfbase64.hxx"
 
 XFBGImage::XFBGImage()

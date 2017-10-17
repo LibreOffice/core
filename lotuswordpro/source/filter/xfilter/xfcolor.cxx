@@ -59,7 +59,7 @@
  ************************************************************************/
 #include <string.h>
 #include <stdio.h>
-#include "xfcolor.hxx"
+#include "xfilter/xfcolor.hxx"
 
 OUString XFColor::ToString() const
 {

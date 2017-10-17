@@ -57,9 +57,9 @@
  * @file
  * Image style object.
  ************************************************************************/
-#include "xfimagestyle.hxx"
-#include "xfborders.hxx"
-#include "xfshadow.hxx"
+#include "xfilter/xfimagestyle.hxx"
+#include "xfilter/xfborders.hxx"
+#include "xfilter/xfshadow.hxx"
 
 XFImageStyle::XFImageStyle()
     : m_nBrightness(0)

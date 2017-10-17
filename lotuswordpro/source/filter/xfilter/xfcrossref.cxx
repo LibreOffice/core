@@ -60,9 +60,9 @@
 
 #include <sal/config.h>
 
-#include "ixfattrlist.hxx"
-#include "ixfstream.hxx"
-#include "xfcrossref.hxx"
+#include "xfilter/ixfattrlist.hxx"
+#include "xfilter/ixfstream.hxx"
+#include "xfilter/xfcrossref.hxx"
 
 XFCrossRefStart::XFCrossRefStart()
     : m_nType(CROSSREF_INVALID)

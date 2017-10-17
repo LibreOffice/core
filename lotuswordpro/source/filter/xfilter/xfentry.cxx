@@ -60,9 +60,9 @@
 
 #include <sal/config.h>
 
-#include "ixfattrlist.hxx"
-#include "ixfstream.hxx"
-#include "xfentry.hxx"
+#include "xfilter/ixfattrlist.hxx"
+#include "xfilter/ixfstream.hxx"
+#include "xfilter/xfentry.hxx"
 
 XFEntry::XFEntry()
     : m_eType(enumXFEntryTOC)
