@@ -3044,6 +3044,13 @@ static void impl_cellMargins( FSHelperPtr const & pSerializer, const SvxBoxItem&
     {
         sal_Int32 nDist = sal_Int32( rBox.GetDistance( *pBrd ) );
 
+        if (pDefaultMargins)
+        {
+            // Skip output if cell margin == table default margin
+            if (sal_Int32( pDefaultMargins->GetDistance( *pBrd ) ) == nDist)
+                continue;
+        }
+
         if ( aBorders[i] == SvxBoxItemLine::LEFT ) {
             // Office's cell margin is measured from the right of the border.
             // While LO's cell spacing is measured from the center of the border.
@@ -3051,13 +3058,6 @@ static void impl_cellMargins( FSHelperPtr const & pSerializer, const SvxBoxItem&
             const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
             if (pLn)
                 nDist -= pLn->GetWidth() * 0.5;
-        }
-
-        if (pDefaultMargins)
-        {
-            // Skip output if cell margin == table default margin
-            if (sal_Int32( pDefaultMargins->GetDistance( *pBrd ) ) == nDist)
-                continue;
         }
 
         if (!tagWritten) {

@@ -2127,6 +2127,9 @@ DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
         aLeftBorder >>= aLeftBorderLine;
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Incorrect left spacing computed from docx cell margin",
             cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1 );
+        // The 'a' in the fourth table should not be partly hidden by the border
+        if ( i == 3 )
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Incorrect cell padding", 0.5 * aLeftBorderLine.LineWidth, aLeftMargin, 1 );
     }
 }
 
