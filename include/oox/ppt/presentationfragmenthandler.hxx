@@ -53,6 +53,7 @@ protected:
 private:
 
     void importSlide(sal_uInt32 nSlide, bool bFirstSlide, bool bImportNotes);
+    void saveThemeToGrabBag(oox::drawingml::ThemePtr pThemePtr, const OUString& sTheme);
 
     std::vector< OUString > maSlideMasterVector;
     std::vector< OUString > maSlidesVector;

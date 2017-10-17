@@ -26,6 +26,8 @@
 #include <oox/export/shapes.hxx>
 #include "epptbase.hxx"
 
+using ::sax_fastparser::FSHelperPtr;
+
 namespace com { namespace sun { namespace star {
     namespace animations {
         class XAnimate;
@@ -90,6 +92,8 @@ protected:
     virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     virtual void ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum ) override;
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
+    bool WriteColorSchemes(FSHelperPtr pFS, const OUString& rThemePath);
+    void WriteDefaultColorSchemes(FSHelperPtr pFS);
     void WriteTheme( sal_Int32 nThemeNum );
 
     virtual bool ImplCreateDocument() override;
