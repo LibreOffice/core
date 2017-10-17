@@ -101,7 +101,7 @@ bool SvpSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPo
     return m_aTextRenderImpl.GetGlyphOutline(rGlyph, rPolyPoly);
 }
 
-SalLayout* SvpSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+std::unique_ptr<SalLayout> SvpSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     return m_aTextRenderImpl.GetTextLayout(rArgs, nFallbackLevel);
 }

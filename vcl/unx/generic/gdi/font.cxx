@@ -117,7 +117,7 @@ bool X11SalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     return mxTextRenderImpl->GetGlyphOutline(rGlyph, rPolyPoly);
 }
 
-SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+std::unique_ptr<SalLayout> X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     return mxTextRenderImpl->GetTextLayout(rArgs, nFallbackLevel);
 }

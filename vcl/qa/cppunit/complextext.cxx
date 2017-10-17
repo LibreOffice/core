@@ -15,6 +15,8 @@ std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/wrkwin.hxx>
+// workaround MSVC2015 issue with std::unique_ptr
+#include <sallayout.hxx>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
