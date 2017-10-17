@@ -777,10 +777,10 @@ bool GenPspGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     return pSF->GetGlyphOutline(rGlyph, rB2DPolyPoly);
 }
 
-SalLayout* GenPspGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
+std::unique_ptr<SalLayout> GenPspGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (m_pFreetypeFont[nFallbackLevel])
-        return new PspCommonSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
+        return std::unique_ptr<SalLayout>(new PspCommonSalLayout(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]));
 
     return nullptr;
 }

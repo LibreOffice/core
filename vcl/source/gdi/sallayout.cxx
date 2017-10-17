@@ -1024,15 +1024,15 @@ void GenericSalLayout::Simplify( bool bIsBase )
     m_GlyphItems.erase(m_GlyphItems.begin() + j, m_GlyphItems.end());
 }
 
-MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout )
+MultiSalLayout::MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout )
 :   SalLayout()
 ,   mnLevel( 1 )
 ,   mbIncomplete( false )
 {
     //maFallbackRuns[0].Clear();
     mpFallbackFonts[ 0 ] = nullptr;
-    mpLayouts[ 0 ]  = &rBaseLayout;
-    mnUnitsPerPixel = rBaseLayout.GetUnitsPerPixel();
+    mpLayouts[ 0 ]  = pBaseLayout.release();
+    mnUnitsPerPixel = mpLayouts[ 0 ]->GetUnitsPerPixel();
 }
 
 void MultiSalLayout::SetIncomplete(bool bIncomplete)
@@ -1047,14 +1047,14 @@ MultiSalLayout::~MultiSalLayout()
         delete mpLayouts[ i ];
 }
 
-void MultiSalLayout::AddFallback( SalLayout& rFallback,
+void MultiSalLayout::AddFallback( std::unique_ptr<SalLayout> pFallback,
     ImplLayoutRuns const & rFallbackRuns, const PhysicalFontFace* pFallbackFont )
 {
     if( mnLevel >= MAX_FALLBACK )
         return;
 
     mpFallbackFonts[ mnLevel ]  = pFallbackFont;
-    mpLayouts[ mnLevel ]        = &rFallback;
+    mpLayouts[ mnLevel ]        = pFallback.release();
     maFallbackRuns[ mnLevel-1 ] = rFallbackRuns;
     ++mnLevel;
 }

@@ -1315,7 +1315,8 @@ public:
     SAL_DLLPRIVATE void         ReMirror( vcl::Region &rRegion ) const;
     SAL_DLLPRIVATE bool         ImplIsRecordLayout() const;
     virtual bool                HasMirroredGraphics() const;
-    SAL_DLLPRIVATE SalLayout*   ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
+    SAL_DLLPRIVATE std::unique_ptr<SalLayout>
+                                ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), long nLogicWidth=0,
                                             const long* pLogicDXArray=nullptr, SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::TextLayoutCache const* = nullptr) const;
@@ -1323,9 +1324,11 @@ public:
                                                          DeviceCoordinate nPixelWidth, const DeviceCoordinate* pPixelDXArray,
                                                          SalLayoutFlags flags = SalLayoutFlags::NONE,
                                                          vcl::TextLayoutCache const* = nullptr) const;
-    SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
+    SAL_DLLPRIVATE std::unique_ptr<SalLayout>
+                                ImplGlyphFallbackLayout( std::unique_ptr<SalLayout>, ImplLayoutArgs& ) const;
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
-    SAL_DLLPRIVATE SalLayout*   getFallbackFont(
+    SAL_DLLPRIVATE std::unique_ptr<SalLayout>
+                                getFallbackFont(
                                     FontSelectPattern &rFontSelData, int nFallbackLevel,
                                     ImplLayoutArgs& rLayoutArgs) const;
 

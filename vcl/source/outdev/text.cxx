@@ -864,13 +864,11 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     // without cache
     if(!pLayoutCache)
     {
-        SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt);
+        std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt);
         if(pSalLayout)
         {
             ImplDrawText( *pSalLayout );
-            delete pSalLayout;
         }
-
     }
     else
     {
@@ -953,11 +951,10 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     if( mbOutputClipped )
         return;
 
-    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags);
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry, flags);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
-        delete pSalLayout;
     }
 
     if( mpAlphaVDev )
@@ -977,13 +974,15 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
         nLen = rStr.getLength() - nIndex;
     }
 
+    std::unique_ptr<SalLayout> xSalLayout;
     const SalLayout*  pSalLayout = pSalLayoutCache;
 
     if(!pSalLayoutCache)
     {
         // do layout
-        pSalLayout = ImplLayout(rStr, nIndex, nLen,
+        xSalLayout = ImplLayout(rStr, nIndex, nLen,
                 Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
+        pSalLayout = xSalLayout.get();
         if( !pSalLayout )
         {
             // The caller expects this to init the elements of pDXAry.
@@ -1008,9 +1007,6 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     }
     DeviceCoordinate nWidth = pSalLayout->FillDXArray( pDXPixelArray.get() );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-
-    if(!pSalLayoutCache)
-        delete pSalLayout;
 
     // convert virtual char widths to virtual absolute positions
     if( pDXPixelArray )
@@ -1056,9 +1052,6 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     long nWidth = pSalLayout->FillDXArray( pDXAry );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
 
-    if(!pSalLayoutCache)
-        delete pSalLayout;
-
     // convert virtual char widths to virtual absolute positions
     if( pDXAry )
         for( int i = 1; i < nLen; ++i )
@@ -1094,14 +1087,13 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
         nLen = rStr.getLength() - nIndex;
 
     // layout complex text
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0) );
     if( !pSalLayout )
         return false;
 
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
     pSalLayout->GetCaretPositions( 2*nLen, pCaretXArray );
     long nWidth = pSalLayout->GetTextWidth();
-    delete pSalLayout;
 
     // fixup unknown caret positions
     int i;
@@ -1157,11 +1149,10 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, nWidth);
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, nWidth);
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
-        delete pSalLayout;
     }
 
     if( mpAlphaVDev )
@@ -1258,7 +1249,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     return aLayoutArgs;
 }
 
-SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
+std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, long nLogicalWidth,
                                     const long* pDXArray, SalLayoutFlags flags,
@@ -1334,13 +1325,12 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
             nPixelWidth, pDXPixelArray, flags, pLayoutCache);
 
     // get matching layout object for base font
-    SalLayout* pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
+    std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
 
     // layout text
     if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs ) )
     {
-        delete pSalLayout;
-        pSalLayout = nullptr;
+        pSalLayout.reset();
     }
 
     if( !pSalLayout )
@@ -1349,7 +1339,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
     if (aLayoutArgs.NeedFallback() && mpFontInstance->maFontSelData.mnHeight >= 3)
-        pSalLayout = ImplGlyphFallbackLayout(pSalLayout, aLayoutArgs);
+        pSalLayout = ImplGlyphFallbackLayout(std::move(pSalLayout), aLayoutArgs);
 
     // position, justify, etc. the layout
     pSalLayout->AdjustLayout( aLayoutArgs );
@@ -1379,12 +1369,11 @@ std::shared_ptr<vcl::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
     ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs(copyBecausePrepareModifiesIt,
             0, rString.getLength(), 0, nullptr);
 
-    SalLayout *const pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
+    std::unique_ptr<SalLayout> pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
     if (!pSalLayout)
         return nullptr;
     std::shared_ptr<vcl::TextLayoutCache> const ret(
             pSalLayout->CreateTextLayoutCache(copyBecausePrepareModifiesIt));
-    delete pSalLayout;
     return ret;
 }
 
@@ -1404,7 +1393,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                                        long nCharExtra,
          vcl::TextLayoutCache const*const pLayoutCache) const
 {
-    SalLayout *const pSalLayout = ImplLayout( rStr, nIndex, nLen,
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
             Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
@@ -1424,8 +1413,6 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
             nExtraPixelWidth = LogicWidthToDeviceCoordinate( nCharExtra );
         }
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
-
-        delete pSalLayout;
     }
 
     return nRetVal;
@@ -1439,7 +1426,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
 {
     rHyphenPos = -1;
 
-    SalLayout *const pSalLayout = ImplLayout( rStr, nIndex, nLen,
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
             Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
@@ -1465,12 +1452,11 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
 
         // calculate hyphenated break position
         OUString aHyphenStr(nHyphenChar);
-        SalLayout* pHyphenLayout = ImplLayout( aHyphenStr, 0, 1 );
+        std::unique_ptr<SalLayout> pHyphenLayout = ImplLayout( aHyphenStr, 0, 1 );
         if( pHyphenLayout )
         {
             // calculate subpixel width of hyphenation character
             long nHyphenPixelWidth = pHyphenLayout->GetTextWidth() * nSubPixelFactor;
-            delete pHyphenLayout;
 
             // calculate hyphenated break position
             nTextPixelWidth -= nHyphenPixelWidth;
@@ -1482,8 +1468,6 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
             if( rHyphenPos > nRetVal )
                 rHyphenPos = nRetVal;
         }
-
-        delete pSalLayout;
     }
 
     return nRetVal;
@@ -2328,7 +2312,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
 
     if ( !IsDeviceOutputNecessary() ) return aSysLayoutData;
 
-    SalLayout* pLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry);
+    std::unique_ptr<SalLayout> pLayout = ImplLayout(rStr, nIndex, nLen, rStartPt, 0, pDXAry);
 
     if ( !pLayout ) return aSysLayoutData;
 
@@ -2350,8 +2334,6 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     // Get font data
     aSysLayoutData.orientation = pLayout->GetOrientation();
 
-    delete pLayout;
-
     return aSysLayoutData;
 }
 
@@ -2363,7 +2345,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
     bool bRet = false;
     rRect.SetEmpty();
 
-    SalLayout* pSalLayout = nullptr;
+    std::unique_ptr<SalLayout> pSalLayout;
     const Point aPoint;
     // calculate offset when nBase!=nIndex
     long nXOffset = 0;
@@ -2376,7 +2358,6 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
         {
             nXOffset = pSalLayout->GetTextWidth();
             nXOffset /= pSalLayout->GetUnitsPerPixel();
-            delete pSalLayout;
             // TODO: fix offset calculation for Bidi case
             if( nBase < nIndex)
                 nXOffset = -nXOffset;
@@ -2413,8 +2394,6 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
             if( mbMap )
                 rRect += Point( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
         }
-
-        delete pSalLayout;
     }
 
     return bRet;
@@ -2450,7 +2429,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
         const_cast<OutputDevice&>(*this).mbNewFont = true;
     }
 
-    SalLayout* pSalLayout = nullptr;
+    std::unique_ptr<SalLayout> pSalLayout;
 
     // calculate offset when nBase!=nIndex
     long nXOffset = 0;
@@ -2462,7 +2441,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
-            delete pSalLayout;
+            pSalLayout.reset();
             // TODO: fix offset calculation for Bidi case
             if( nBase > nIndex)
                 nXOffset = -nXOffset;
@@ -2500,7 +2479,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
             }
         }
 
-        delete pSalLayout;
+        pSalLayout.reset();
     }
 
     if( bOldMap )

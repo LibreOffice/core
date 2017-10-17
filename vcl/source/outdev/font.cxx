@@ -1295,7 +1295,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     mpMetaFile = pOldMetaFile;
 }
 
-SalLayout* OutputDevice::getFallbackFont(
+std::unique_ptr<SalLayout> OutputDevice::getFallbackFont(
     FontSelectPattern &rFontSelData, int nFallbackLevel,
     ImplLayoutArgs& rLayoutArgs) const
 {
@@ -1307,7 +1307,7 @@ SalLayout* OutputDevice::getFallbackFont(
     mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
 
     rLayoutArgs.ResetPos();
-    SalLayout* pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
+    std::unique_ptr<SalLayout> pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
 
     if (!pFallback)
         return nullptr;
@@ -1315,7 +1315,6 @@ SalLayout* OutputDevice::getFallbackFont(
     if (!pFallback->LayoutText(rLayoutArgs))
     {
         // there is no need for a font that couldn't resolve anything
-        delete pFallback;
         return nullptr;
     }
 
@@ -1324,7 +1323,7 @@ SalLayout* OutputDevice::getFallbackFont(
     return pFallback;
 }
 
-SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLayoutArgs& rLayoutArgs ) const
+std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_ptr<SalLayout> pSalLayout, ImplLayoutArgs& rLayoutArgs ) const
 {
     // This function relies on a valid mpFontInstance, if it doesn't exist bail out
     // - we'd have crashed later on anyway. At least here we can catch the error in debug
@@ -1337,7 +1336,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     }
 
     // prepare multi level glyph fallback
-    MultiSalLayout* pMultiSalLayout = nullptr;
+    std::unique_ptr<MultiSalLayout> pMultiSalLayout;
     ImplLayoutRuns aLayoutRuns = rLayoutArgs.maRuns;
     rLayoutArgs.PrepareFallback();
     rLayoutArgs.mnFlags |= SalLayoutFlags::ForFallback;
@@ -1382,13 +1381,13 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         }
 
         // create and add glyph fallback layout to multilayout
-        SalLayout* pFallback = getFallbackFont(aFontSelData,
+        std::unique_ptr<SalLayout> pFallback = getFallbackFont(aFontSelData,
             nFallbackLevel, rLayoutArgs);
         if (pFallback)
         {
             if( !pMultiSalLayout )
-                pMultiSalLayout = new MultiSalLayout( *pSalLayout );
-            pMultiSalLayout->AddFallback( *pFallback,
+                pMultiSalLayout.reset( new MultiSalLayout( std::move(pSalLayout) ) );
+            pMultiSalLayout->AddFallback( std::move(pFallback),
                 rLayoutArgs.maRuns, aFontSelData.mpFontData );
             if (nFallbackLevel == MAX_FALLBACK-1)
                 pMultiSalLayout->SetIncomplete(true);
@@ -1402,7 +1401,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     }
 
     if( pMultiSalLayout && pMultiSalLayout->LayoutText( rLayoutArgs ) )
-        pSalLayout = pMultiSalLayout;
+        pSalLayout = std::move(pMultiSalLayout);
 
     // restore orig font settings
     pSalLayout->InitFont();
@@ -1426,7 +1425,7 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
                                             sal_Int32* pKashidaPosDropped ) const
 {
    // do layout
-    SalLayout* pSalLayout = ImplLayout( rTxt, nIdx, nLen );
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rTxt, nIdx, nLen );
     if( !pSalLayout )
         return 0;
     sal_Int32 nDropped = 0;
@@ -1438,7 +1437,6 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
             ++nDropped;
         }
     }
-    delete pSalLayout;
     return nDropped;
 }
 
