@@ -131,7 +131,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextVerticalAdjust",             XML_NAMESPACE_DRAW, XML_TEXTAREA_VERTICAL_ALIGN,    XML_SD_TYPE_VERTICAL_ALIGN, 0 ),
     GMAP( "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT,       XML_TYPE_BOOL, 0 ),
     GMAP( "TextAutoGrowWidth",              XML_NAMESPACE_DRAW, XML_AUTO_GROW_WIDTH,        XML_TYPE_BOOL, 0 ),
-    GMAP( "TextFitToSize",                  XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE,            XML_SD_TYPE_FITTOSIZE, 0 ),
+    GMAP( "TextFitToSize",                  XML_NAMESPACE_DRAW, XML_FIT_TO_SIZE,            XML_SD_TYPE_FITTOSIZE|MID_FLAG_MERGE_PROPERTY, 0),
+    GMAPV( "TextFitToSize",                 XML_NAMESPACE_STYLE, XML_SHRINK_TO_FIT,         XML_SD_TYPE_FITTOSIZE_AUTOFIT|MID_FLAG_MERGE_PROPERTY, 0, SvtSaveOptions::ODFVER_012 ),
     GMAP( "TextContourFrame",               XML_NAMESPACE_DRAW, XML_FIT_TO_CONTOUR,         XML_TYPE_BOOL, 0 ),
     GMAP( "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   XML_MAX_HEIGHT,             XML_TYPE_MEASURE, 0 ),
     GMAP( "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   XML_MAX_WIDTH,              XML_TYPE_MEASURE, 0 ),
@@ -615,12 +616,13 @@ static SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
+// note: PROPORTIONAL and ALLLINES are the same thing now!
 static SvXMLEnumMapEntry const pXML_FitToSize_Enum_Odf12[] =
 {
     { XML_FALSE,        drawing::TextFitToSizeType_NONE },
     { XML_TRUE,         drawing::TextFitToSizeType_PROPORTIONAL },
     { XML_TRUE,         drawing::TextFitToSizeType_ALLLINES },
-    { XML_TRUE,         drawing::TextFitToSizeType_AUTOFIT },
+    { XML_FALSE,        drawing::TextFitToSizeType_AUTOFIT },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -631,6 +633,15 @@ static SvXMLEnumMapEntry const pXML_FitToSize_Enum[] =
     { XML_ALL,          drawing::TextFitToSizeType_ALLLINES },
     { XML_SHRINK_TO_FIT,drawing::TextFitToSizeType_AUTOFIT },
     { XML_TOKEN_INVALID, 0 }
+};
+
+static SvXMLEnumMapEntry const pXML_ShrinkToFit_Enum[] =
+{
+    { XML_FALSE,        drawing::TextFitToSizeType_NONE },
+    { XML_FALSE,        drawing::TextFitToSizeType_PROPORTIONAL },
+    { XML_FALSE,        drawing::TextFitToSizeType_ALLLINES },
+    { XML_TRUE,         drawing::TextFitToSizeType_AUTOFIT },
+    { XML_TOKEN_INVALID, (drawing::TextFitToSizeType)0 }
 };
 
 static SvXMLEnumMapEntry const pXML_MeasureUnit_Enum[] =
@@ -853,6 +864,40 @@ bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
     return bRet;
 }
 
+class XMLFitToSizeEnumPropertyHdl : public XMLEnumPropertyHdl
+{
+public:
+    XMLFitToSizeEnumPropertyHdl(
+            const SvXMLEnumMapEntry *const pMap)
+        : XMLEnumPropertyHdl(pMap, cppu::UnoType<css::drawing::TextFitToSizeType>::get())
+    {
+    }
+
+    virtual bool importXML(const OUString& rStrImpValue, uno::Any& rValue,
+                           const SvXMLUnitConverter& rUC) const override
+    {
+        // we don't know here what the actual attribute name is -
+        // but we can combine the 2 attributes by just taking the
+        // "largest" result value; this can never result in ALLLINES
+        // so the implementation has to interpret PROPORTIONAL as ALLLINES;
+        // both "true" is invalid anyway.
+        Any any;
+        auto const bRet = XMLEnumPropertyHdl::importXML(rStrImpValue, any, rUC);
+        if (!bRet)
+        {
+            return false;
+        }
+        assert(any.hasValue());
+        if (!rValue.hasValue() ||
+            rValue.get<drawing::TextFitToSizeType>() < any.get<drawing::TextFitToSizeType>())
+        {
+            rValue = any;
+        }
+        return true;
+    }
+};
+
+
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLImport& rImport )
 : mxModel( xModel ), mpExport(nullptr), mpImport( &rImport )
 {
@@ -1047,17 +1092,25 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             case XML_SD_TYPE_FITTOSIZE:
                 {
-                    if (mpExport && (mpExport->getDefaultVersion()
-                                        <= SvtSaveOptions::ODFVER_012))
+                    if (mpExport
+#if 1
+// TODO: remove in a couple releases, when users have the import of style:shrink-to-fit
+                            && (mpExport->getDefaultVersion()
+                                        <= SvtSaveOptions::ODFVER_012)
+#endif
+                        )
                     {
-                        pHdl = new XMLEnumPropertyHdl(pXML_FitToSize_Enum_Odf12,
-                            cppu::UnoType<css::drawing::TextFitToSizeType>::get());
+                        pHdl = new XMLFitToSizeEnumPropertyHdl(pXML_FitToSize_Enum_Odf12);
                     }
                     else
-                    {
-                        pHdl = new XMLEnumPropertyHdl(pXML_FitToSize_Enum,
-                            cppu::UnoType<css::drawing::TextFitToSizeType>::get());
+                    {   // import all values written by old LO
+                        pHdl = new XMLFitToSizeEnumPropertyHdl(pXML_FitToSize_Enum);
                     }
+                }
+                break;
+            case XML_SD_TYPE_FITTOSIZE_AUTOFIT:
+                {
+                    pHdl = new XMLFitToSizeEnumPropertyHdl(pXML_ShrinkToFit_Enum);
                 }
                 break;
             case XML_SD_TYPE_MEASURE_UNIT:
