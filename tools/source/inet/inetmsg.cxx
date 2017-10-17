@@ -218,12 +218,6 @@ INetMIMEMessage::INetMIMEMessage()
 
 INetMIMEMessage::~INetMIMEMessage()
 {
-    for (auto i: m_aHeaderList) {
-        delete i;
-    }
-    for (auto i: aChildren) {
-        delete i;
-    }
 }
 
 void INetMIMEMessage::SetMIMEVersion (const OUString& rVersion)
@@ -293,12 +287,13 @@ void INetMIMEMessage::EnableAttachMultipartFormDataChild()
     SetContentTransferEncoding("7bit");
 }
 
-void INetMIMEMessage::AttachChild(INetMIMEMessage& rChildMsg)
+void INetMIMEMessage::AttachChild(std::unique_ptr<INetMIMEMessage> pChildMsg)
 {
+    assert(IsContainer());
     if (IsContainer())
     {
-        rChildMsg.pParent = this;
-        aChildren.push_back( &rChildMsg );
+        pChildMsg->pParent = this;
+        aChildren.push_back( std::move(pChildMsg) );
     }
 }
 

@@ -28,6 +28,7 @@
 
 #include <vector>
 #include <map>
+#include <memory>
 
 class DateTime;
 
@@ -72,14 +73,15 @@ enum class InetMessageMime
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetMIMEMessage
 {
-    ::std::vector< INetMessageHeader* >
+    ::std::vector< std::unique_ptr<INetMessageHeader> >
                     m_aHeaderList;
 
     SvLockBytesRef  m_xDocLB;
 
     ::std::map<InetMessageMime, sal_uIntPtr>  m_nMIMEIndex;
     INetMIMEMessage*                          pParent;
-    ::std::vector< INetMIMEMessage* >         aChildren;
+    ::std::vector< std::unique_ptr<INetMIMEMessage> >
+                                              aChildren;
     OString                 m_aBoundary;
 
     OUString GetHeaderValue_Impl (
@@ -99,12 +101,11 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetMIMEMessage
         if (m_aHeaderList.size() <= rnIndex)
         {
             rnIndex = m_aHeaderList.size();
-            m_aHeaderList.push_back( p );
+            m_aHeaderList.emplace_back( p );
         }
         else
         {
-            delete m_aHeaderList[ rnIndex ];
-            m_aHeaderList[ rnIndex ] = p;
+            m_aHeaderList[ rnIndex ].reset(p);
         }
     }
 
@@ -170,12 +171,12 @@ public:
 
     INetMIMEMessage* GetChild (sal_uIntPtr nIndex) const
     {
-        return ( nIndex < aChildren.size() ) ? aChildren[ nIndex ] : nullptr;
+        return ( nIndex < aChildren.size() ) ? aChildren[ nIndex ].get() : nullptr;
     }
     INetMIMEMessage* GetParent() const { return pParent; }
 
     void EnableAttachMultipartFormDataChild();
-    void AttachChild( INetMIMEMessage& rChildMsg );
+    void AttachChild( std::unique_ptr<INetMIMEMessage> pChildMsg );
 
     const OString& GetMultipartBoundary() const { return m_aBoundary; }
 };
