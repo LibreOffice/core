@@ -457,10 +457,10 @@ bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,
     return pSF->GetGlyphOutline(rGlyph, rPolyPoly);
 }
 
-SalLayout* CairoTextRender::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
+std::unique_ptr<SalLayout> CairoTextRender::GetTextLayout(ImplLayoutArgs& /*rArgs*/, int nFallbackLevel)
 {
     if (mpFreetypeFont[nFallbackLevel])
-        return new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]);
+        return std::unique_ptr<SalLayout>(new CommonSalLayout(*mpFreetypeFont[nFallbackLevel]));
 
     return nullptr;
 }
