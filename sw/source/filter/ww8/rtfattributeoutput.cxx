@@ -395,7 +395,7 @@ void RtfAttributeOutput::StartRun(const SwRedlineData* pRedlineData, bool bSingl
     OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");
 }
 
-void RtfAttributeOutput::EndRun()
+void RtfAttributeOutput::EndRun(const SwTextNode* /*pNode*/, sal_Int32 /*nPos*/)
 {
     m_aRun->append(SAL_NEWLINE_STRING);
     m_aRun.appendAndClear(m_aRunText);
@@ -436,7 +436,7 @@ void RtfAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding eCharSe
     m_aRunText->append(msfilter::rtfutil::OutString(rText, eCharSet));
 }
 
-void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, const SwFormatRuby& rRuby)
+void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby)
 {
     OUString aStr(FieldString(ww::eEQ));
     aStr += "\\* jc";
@@ -528,7 +528,7 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     nHeight = (rHeightItem.GetHeight() + 10)/20-1;
     aStr += OUString::number(nHeight);
     aStr += "(";
-    EndRun();
+    EndRun(&rNode, nPos);
     m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::Start | FieldFlags::CmdStart);
     aStr  = rRuby.GetText();
     aStr += ")";
@@ -536,10 +536,10 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     m_rExport.OutputField(nullptr, ww::eEQ, aStr, FieldFlags::NONE);
 }
 
-void RtfAttributeOutput::EndRuby()
+void RtfAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
 {
     m_rExport.OutputField(nullptr, ww::eEQ, ")", FieldFlags::End | FieldFlags::Close);
-    EndRun();
+    EndRun(&rNode, nPos);
 }
 
 bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
