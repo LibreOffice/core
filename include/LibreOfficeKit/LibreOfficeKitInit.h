@@ -10,7 +10,7 @@
 #ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
 #define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITINIT_H
 
-#include "LibreOfficeKit.h"
+#include <LibreOfficeKit/LibreOfficeKit.h>
 
 #ifdef __cplusplus
 extern "C"

@@ -12,8 +12,8 @@
 
 #include <cstddef>
 
-#include "LibreOfficeKit.h"
-#include "LibreOfficeKitInit.h"
+#include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitInit.h>
 
 /*
  * The reasons this C++ code is not as pretty as it could be are:
