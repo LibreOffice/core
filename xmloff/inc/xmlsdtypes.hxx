@@ -67,6 +67,7 @@
 #define XML_SD_TYPE_CONTROL_BORDER_COLOR            (XML_SD_TYPES_START + 33 )
 #define XML_SD_TYPE_IMAGE_SCALE_MODE                (XML_SD_TYPES_START + 34 )
 #define XML_SD_TYPE_LINECAP                         (XML_SD_TYPES_START + 35 )
+#define XML_SD_TYPE_FITTOSIZE_AUTOFIT               (XML_SD_TYPES_START + 36 )
 
 //////////////////////////////////////////////////////////////////////////////
 // 3D property types

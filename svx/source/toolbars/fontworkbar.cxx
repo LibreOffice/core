@@ -73,10 +73,16 @@ void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
                 case SDRTEXTHORZADJUST_RIGHT  : nAlignment = 2; break;
                 case SDRTEXTHORZADJUST_BLOCK  :
                 {
-                    if ( rTextFitToSizeTypeItem.GetValue() == SdrFitToSizeType::NONE )
+                    auto const fit(rTextFitToSizeTypeItem.GetValue());
+                    if (fit == SdrFitToSizeType::NONE)
+                    {
                         nAlignment = 3;
-                    else if ( rTextFitToSizeTypeItem.GetValue() == SdrFitToSizeType::AllLines )
+                    }
+                    else if (fit == SdrFitToSizeType::AllLines ||
+                             fit == SdrFitToSizeType::Proportional)
+                    {
                         nAlignment = 4;
+                    }
                 }
             }
             if ( ( nOldAlignment != -1 ) && ( nOldAlignment != nAlignment ) )
