@@ -56,7 +56,7 @@ public:
     /// End of the text run.
     ///
     /// No-op for binary filters.
-    virtual void EndRun() override {}
+    virtual void EndRun(const SwTextNode* , sal_Int32 ) override {}
 
     /// Before we start outputting the attributes.
     virtual void StartRunProperties() override;
@@ -74,7 +74,7 @@ public:
     virtual void StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby ) override;
 
     /// Output ruby end.
-    virtual void EndRuby() override;
+    virtual void EndRuby(const SwTextNode& rNode, sal_Int32 nPos) override;
 
     /// Output URL start.
     virtual bool StartURL( const OUString &rUrl, const OUString &rTarget ) override;

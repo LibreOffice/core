@@ -166,7 +166,7 @@ public:
     virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false ) override;
 
     /// End of the text run.
-    virtual void EndRun() override;
+    virtual void EndRun(const SwTextNode* pNode, sal_Int32 nPos) override;
 
     /// Called before we start outputting the attributes.
     virtual void StartRunProperties() override;
@@ -190,7 +190,7 @@ public:
     virtual void StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby ) override;
 
     /// Output ruby end.
-    virtual void EndRuby() override;
+    virtual void EndRuby(const SwTextNode& rNode, sal_Int32 nPos) override;
 
     /// Output URL start.
     virtual bool StartURL( const OUString& rUrl, const OUString& rTarget ) override;
@@ -725,10 +725,11 @@ private:
     /// Closes a currently open SDT block.
     void EndSdtBlock();
 
-    void StartField_Impl( FieldInfos const & rInfos, bool bWriteRun = false );
+    void StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
     void CmdField_Impl( FieldInfos const & rInfos );
-    void EndField_Impl( FieldInfos& rInfos );
+    void EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos );
+    void DoWriteFieldRunProperties( const SwTextNode* pNode, sal_Int32 nPos );
 
     static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
     static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
@@ -776,6 +777,7 @@ private:
     bool m_bAnchorLinkedToNode;
 
     /// Field data to remember in the text run
+    bool m_bPreventDoubleFieldsHandling;
     std::vector< FieldInfos > m_Fields;
     OUString m_sFieldBkm;
     sal_Int32 m_nNextBookmarkId;

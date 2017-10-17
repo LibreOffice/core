@@ -1512,7 +1512,9 @@ void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTy
             nAktPos = nNextAttr;
             eChrSet = eNextChrSet;
             aAttrIter.NextPos();
-            AttrOutput().EndRun();
+
+            AttrOutput().EndRun( nullptr, 0 );
+
         } while( nAktPos < nEnd );
 //        aAttrIter.OutParaAttr(false);
         AttrOutput().EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t());
