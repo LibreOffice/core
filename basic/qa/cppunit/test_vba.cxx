@@ -180,7 +180,11 @@ void VBATest::testMiscOLEStuff()
 // Not much point even trying to run except on Windows.
 // (Without Excel doesn't really do anything anyway,
 // see "so skip test" below.)
-#if defined(_WIN32)
+
+// Since some time, on a properly updated Windows 10, this works
+// only with a 64-bit LibreOffice
+
+#if defined(_WIN64)
     // test if we have the necessary runtime environment
     // to run the OLE tests.
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
@@ -220,10 +224,6 @@ void VBATest::testMiscOLEStuff()
     const char* macroSource[] = {
         "ole_ObjAssignNoDflt.vb",
         "ole_ObjAssignToNothing.vb",
-#if !defined(_WIN64)
-        // This test uses Microsoft.Jet.OLEDB.4.0 Provider, that is unavailable on Win64
-        "ole_dfltObjDflMethod.vb",
-#endif
     };
 
     OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
