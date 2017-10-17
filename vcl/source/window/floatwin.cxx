@@ -596,11 +596,6 @@ void FloatingWindow::LogicInvalidate(const tools::Rectangle* /*pRectangle*/)
 
 void FloatingWindow::StateChanged( StateChangedType nType )
 {
-    if (nType == StateChangedType::InitShow)
-    {
-        DoInitialLayout();
-    }
-
     SystemWindow::StateChanged( nType );
     Dialog* pParentDlg = GetParentDialog();
     if (pParentDlg && nType == StateChangedType::InitShow && IsVisible())
