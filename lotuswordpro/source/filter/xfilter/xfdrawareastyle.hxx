@@ -61,8 +61,8 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWAREASTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDRAWAREASTYLE_HXX
 
-#include "xfstyle.hxx"
-#include "xfcolor.hxx"
+#include "xfilter/xfstyle.hxx"
+#include "xfilter/xfcolor.hxx"
 
 class XFDrawAreaStyle : public XFStyle
 {

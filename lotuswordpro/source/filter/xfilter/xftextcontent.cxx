@@ -54,8 +54,8 @@
  *
  ************************************************************************/
 
-#include "xftextcontent.hxx"
-#include "ixfstream.hxx"
+#include "xfilter/xftextcontent.hxx"
+#include "xfilter/ixfstream.hxx"
 
 XFTextContent::XFTextContent(const OUString& text):m_strText(text)
 {

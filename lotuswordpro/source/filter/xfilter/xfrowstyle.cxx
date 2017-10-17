@@ -57,8 +57,8 @@
  * @file
  * Table row style, ie. table row height.
  ************************************************************************/
-#include "xfrowstyle.hxx"
-#include "xfbgimage.hxx"
+#include "xfilter/xfrowstyle.hxx"
+#include "xfilter/xfbgimage.hxx"
 
 XFRowStyle::XFRowStyle():m_fHeight(0)
 {

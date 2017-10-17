@@ -57,7 +57,7 @@
  * @file
  * Number style for table cell.
  ************************************************************************/
-#include "xfnumberstyle.hxx"
+#include "xfilter/xfnumberstyle.hxx"
 
 XFNumberStyle::XFNumberStyle()
     : m_eType(enumXFNumberNumber)

@@ -57,11 +57,11 @@
  * @file
  * Frame style include position,size,rotation and so on.
  ************************************************************************/
-#include "xfframestyle.hxx"
-#include "xfcolumns.hxx"
-#include "xfborders.hxx"
-#include "xfshadow.hxx"
-#include "xfbgimage.hxx"
+#include "xfilter/xfframestyle.hxx"
+#include "xfilter/xfcolumns.hxx"
+#include "xfilter/xfborders.hxx"
+#include "xfilter/xfshadow.hxx"
+#include "xfilter/xfbgimage.hxx"
 
 XFFrameStyle::XFFrameStyle()
     : m_eWrap(enumXFWrapNone)

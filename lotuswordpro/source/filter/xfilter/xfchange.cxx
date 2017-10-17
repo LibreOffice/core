@@ -58,7 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include "xfchange.hxx"
+#include "xfilter/xfchange.hxx"
 
 void XFChangeList::ToXml(IXFStream *pStrm)
 {

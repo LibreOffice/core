@@ -57,12 +57,12 @@
  * @file
  * Style for all draw object.
  ************************************************************************/
-#include "xfdrawstyle.hxx"
-#include "xfdrawlinestyle.hxx"
+#include "xfilter/xfdrawstyle.hxx"
+#include "xfilter/xfdrawlinestyle.hxx"
 #include "xfdrawareastyle.hxx"
-#include "xfstylemanager.hxx"
+#include "xfilter/xfstylemanager.hxx"
 #include "xffontworkstyle.hxx"
-#include "../lwpglobalmgr.hxx"
+#include "lwpglobalmgr.hxx"
 XFDrawStyle::XFDrawStyle()
     : m_pFontWorkStyle(nullptr)
     , m_eWrap(enumXFWrapNone)

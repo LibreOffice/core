@@ -57,8 +57,8 @@
  * @file
  * Container for content.It will destroy all children when destroy.
  ************************************************************************/
-#include "xfcontentcontainer.hxx"
-#include "xftextcontent.hxx"
+#include "xfilter/xfcontentcontainer.hxx"
+#include "xfilter/xftextcontent.hxx"
 
 XFContentContainer::XFContentContainer()
 {

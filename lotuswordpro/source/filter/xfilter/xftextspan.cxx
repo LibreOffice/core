@@ -57,10 +57,10 @@
  * @file
  * An span of text with style.
  ************************************************************************/
-#include "xftextspan.hxx"
-#include "ixfstream.hxx"
-#include "ixfattrlist.hxx"
-#include "xftextcontent.hxx"
+#include "xfilter/xftextspan.hxx"
+#include "xfilter/ixfstream.hxx"
+#include "xfilter/ixfattrlist.hxx"
+#include "xfilter/xftextcontent.hxx"
 
 XFTextSpan::XFTextSpan()
 {

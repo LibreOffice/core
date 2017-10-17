@@ -60,7 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBASE64_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBASE64_HXX
 
-#include "xfglobal.hxx"
+#include "xfilter/xfglobal.hxx"
 
 /**
  * @brief
