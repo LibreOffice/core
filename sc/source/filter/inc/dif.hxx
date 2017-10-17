@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_DIF_HXX
 
 #include <array>
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -164,7 +165,7 @@ public:
 
 private:
 
-    std::array<std::unique_ptr<DifColumn>,MAXCOL + 1> mvCols;
+    std::map<SCCOL, std::unique_ptr<DifColumn>> maColMap;
 };
 
 #endif
