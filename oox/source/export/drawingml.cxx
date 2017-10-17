@@ -2943,7 +2943,7 @@ void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, const Sequence< Proper
                 aProperties[i].Value >>= aTransformations;
         }
         mpFS->startElementNS( XML_a, nTokenId, XML_idx, I32S( nIdx ), FSEND );
-        WriteColor( sSchemeClr, aTransformations );
+        WriteColor(sSchemeClr, aTransformations);
         mpFS->endElementNS( XML_a, nTokenId );
     }
     else
