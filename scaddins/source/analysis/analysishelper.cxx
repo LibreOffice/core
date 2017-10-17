@@ -2031,8 +2031,6 @@ void Complex::Csch()
 
 ComplexList::~ComplexList()
 {
-    for(Complex* p : maVector)
-        delete p;
 }
 
 
@@ -2054,9 +2052,9 @@ void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, C
             const OUString&   rStr = rList[ n2 ];
 
             if( !rStr.isEmpty() )
-                Append( new Complex( rStr ) );
+                Append( Complex( rStr ) );
             else if( bEmpty0 )
-                Append( new Complex( 0.0 ) );
+                Append( Complex( 0.0 ) );
             else if( bErrOnEmpty )
                 throw lang::IllegalArgumentException();
         }
@@ -2081,15 +2079,15 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
                 auto       pStr = o3tl::forceAccess<OUString>(r);
 
                 if( !pStr->isEmpty() )
-                    Append( new Complex( *pStr ) );
+                    Append( Complex( *pStr ) );
                 else if( bEmpty0 )
-                    Append( new Complex( 0.0 ) );
+                    Append( Complex( 0.0 ) );
                 else if( bErrOnEmpty )
                     throw lang::IllegalArgumentException();
                 }
                 break;
             case uno::TypeClass_DOUBLE:
-                Append( new Complex( *o3tl::forceAccess<double>(r), 0.0 ) );
+                Append( Complex( *o3tl::forceAccess<double>(r), 0.0 ) );
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
