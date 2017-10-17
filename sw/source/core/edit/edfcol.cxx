@@ -888,45 +888,45 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     // need to insert in reverse order.
     std::reverse(aResults.begin(), aResults.end());
     sal_Int32 nTextNumber = 1;
-    for (svx::ClassificationResult const & rResult : aResults)
+    for (size_t nIndex = 0; nIndex < aResults.size(); ++nIndex)
     {
+        const svx::ClassificationResult& rResult = aResults[nIndex];
+        const bool isLast = nIndex == 0;
+        const bool isFirst = nIndex == aResults.size() - 1;
+        OUString sKey;
         switch(rResult.meType)
         {
             case svx::ClassificationType::TEXT:
             {
-                const OUString sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber++);
-                uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
-                lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString);
+                sKey = sPolicy + "Marking:Text:" + OUString::number(nTextNumber++);
             }
             break;
 
             case svx::ClassificationType::CATEGORY:
             {
-                const OUString sKey = sPolicy + "BusinessAuthorizationCategory:Name";
-                uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
-                lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString);
+                sKey = sPolicy + "BusinessAuthorizationCategory:Name";
             }
             break;
 
             case svx::ClassificationType::MARKING:
             {
-                const OUString sKey = sPolicy + "Extension:Marking";
-                uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
-                lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString);
+                sKey = sPolicy + "Extension:Marking";
             }
             break;
 
             case svx::ClassificationType::INTELLECTUAL_PROPERTY_PART:
             {
-                const OUString sKey = sPolicy + "Extension:IntellectualPropertyPart";
-                uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
-                lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, rResult.msString);
+                sKey = sPolicy + "Extension:IntellectualPropertyPart";
             }
             break;
 
             default:
             break;
         }
+
+        uno::Reference<text::XTextField> xTextField = lcl_InsertParagraphClassification(xModel, xParent);
+        const OUString text = (isFirst ? ("(" + rResult.msString) : isLast ? (rResult.msString + ")") : rResult.msString);
+        lcl_UpdateParagraphClassificationField(GetDoc(), xModel, xTextField, sKey, text);
     }
 }
 
