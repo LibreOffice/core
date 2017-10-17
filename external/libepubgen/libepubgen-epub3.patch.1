@@ -2419,3 +2419,71 @@ index 5e53ee2..e25fa26 100644
 -- 
 2.12.3
 
+From 383f315b067e9fc1aa840913c581e7451949c2db Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 17 Oct 2017 12:21:26 +0200
+Subject: [PATCH] EPUBHTMLGenerator: better handling of empty paragraphs
+
+The ODF/librevenge concept is that empty paragraphs still take their
+vertical space, i.e. inserting lots of them is a (poor) equivalent of a
+page break.
+
+HTML collapses empty paragraphs by default, so empty paragraphs need
+some content to preserve this effect. Do the same trick what LibreOffice
+Writer does: if the text has no content, add a <br/> element inside the
+paragraph.
+---
+ src/lib/EPUBHTMLGenerator.cpp      |  8 ++++++++
+ src/test/EPUBTextGeneratorTest.cpp | 15 +++++++++++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index f3b30a6..d822571 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -362,6 +362,7 @@ struct EPUBHTMLGeneratorImpl
+     , m_stylesheetPath(stylesheetPath)
+     , m_actualPage(0)
+     , m_ignore(false)
++    , m_hasText(false)
+     , m_frameAnchorTypes()
+     , m_stylesMethod(stylesMethod)
+     , m_actualSink()
+@@ -449,6 +450,8 @@ struct EPUBHTMLGeneratorImpl
+ 
+   int m_actualPage;
+   bool m_ignore;
++  /// Does the currently opened paragraph have some text?
++  bool m_hasText;
+ 
+   std::stack<std::string> m_frameAnchorTypes;
+ 
+@@ -595,6 +598,7 @@ void EPUBHTMLGenerator::openParagraph(const RVNGPropertyList &propList)
+     break;
+   }
+   m_impl->output(false).openElement("p", attrs);
++  m_impl->m_hasText = false;
+ }
+ 
+ void EPUBHTMLGenerator::closeParagraph()
+@@ -602,6 +606,9 @@ void EPUBHTMLGenerator::closeParagraph()
+   if (m_impl->m_ignore)
+     return;
+ 
++  if (!m_impl->m_hasText)
++    insertLineBreak();
++
+   m_impl->output().closeElement("p");
+ }
+ 
+@@ -694,6 +701,7 @@ void EPUBHTMLGenerator::insertText(const RVNGString &text)
+   if (m_impl->m_ignore)
+     return;
+   m_impl->output().insertCharacters(text);
++  m_impl->m_hasText = true;
+ }
+ 
+ void EPUBHTMLGenerator::insertSpace()
+-- 
+2.12.3
+
