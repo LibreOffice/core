@@ -585,14 +585,13 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             if( !aString.isEmpty() )
             {
                 // #105987# ImplLayout takes everything in logical coordinates
-                SalLayout* pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
+                std::unique_ptr<SalLayout> pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
                                                          rTextAct.GetLen(), rTextAct.GetPoint(),
                                                          0, rTextAct.GetDXArray() );
                 if( pSalLayout )
                 {
                     tools::Rectangle aBoundRect( const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect( *pSalLayout ) );
                     aActionBounds = rOut.PixelToLogic( aBoundRect );
-                    delete pSalLayout;
                 }
             }
         }
@@ -615,14 +614,13 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             if( !aString.isEmpty() )
             {
                 // #105987# ImplLayout takes everything in logical coordinates
-                SalLayout* pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
+                std::unique_ptr<SalLayout> pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
                                                          rTextAct.GetLen(), rTextAct.GetPoint(),
                                                          rTextAct.GetWidth() );
                 if( pSalLayout )
                 {
                     tools::Rectangle aBoundRect( const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect( *pSalLayout ) );
                     aActionBounds = rOut.PixelToLogic( aBoundRect );
-                    delete pSalLayout;
                 }
             }
         }

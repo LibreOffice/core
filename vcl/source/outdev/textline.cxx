@@ -600,11 +600,10 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 
     // calculate approximation of strikeout atom size
     long nStrikeoutWidth = 0;
-    SalLayout* pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
+    std::unique_ptr<SalLayout> pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
     if( pLayout )
     {
         nStrikeoutWidth = pLayout->GetTextWidth() / (nTestStrLen * pLayout->GetUnitsPerPixel());
-        delete pLayout;
     }
     if( nStrikeoutWidth <= 0 ) // sanity check
         return;
@@ -664,7 +663,6 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 
     pLayout->DrawText( *mpGraphics );
 
-    delete pLayout;
     Pop();
 
     SetTextColor( aOldColor );
