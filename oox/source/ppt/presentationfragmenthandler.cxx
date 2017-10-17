@@ -64,6 +64,22 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
+static std::map<PredefinedClrSchemeId, sal_Int32> PredefinedClrTokens =
+{
+    //{ dk1, XML_dk1 },
+    //{ lt1, XML_lt1 },
+    { dk2, XML_dk2 },
+    { lt2, XML_lt2 },
+    { accent1, XML_accent1 },
+    { accent2, XML_accent2 },
+    { accent3, XML_accent3 },
+    { accent4, XML_accent4 },
+    { accent5, XML_accent5 },
+    { accent6, XML_accent6 },
+    { hlink, XML_hlink },
+    { folHlink, XML_folHlink }
+};
+
 PresentationFragmentHandler::PresentationFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath ) throw()
 : FragmentHandler2( rFilter, rFragmentPath )
 , mpTextListStyle( new TextListStyle )
@@ -140,6 +156,65 @@ void ResolveTextFields( XmlFilterBase const & rFilter )
                 }
             }
         }
+    }
+}
+
+void PresentationFragmentHandler::saveThemeToGrabBag(oox::drawingml::ThemePtr pThemePtr, const OUString& sTheme)
+{
+    if (!pThemePtr)
+        return;
+
+    try
+    {
+        uno::Reference<beans::XPropertySet> xDocProps(getFilter().getModel(), uno::UNO_QUERY);
+        if (xDocProps.is())
+        {
+            uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+
+            const OUString aGrabBagPropName = "InteropGrabBag";
+            if (xPropsInfo.is() && xPropsInfo->hasPropertyByName(aGrabBagPropName))
+            {
+                // get existing grab bag
+                comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
+
+                uno::Sequence<beans::PropertyValue> aTheme(1);
+                comphelper::SequenceAsHashMap aThemesHashMap;
+
+                // create current theme
+                uno::Sequence<beans::PropertyValue> aCurrentTheme(PredefinedClrSchemeId::Count);
+
+                ClrScheme rClrScheme = pThemePtr->getClrScheme();
+                for (int nId = PredefinedClrSchemeId::dk2; nId != PredefinedClrSchemeId::Count; nId++)
+                {
+                    sal_uInt32 nToken = PredefinedClrTokens[static_cast<PredefinedClrSchemeId>(nId)];
+                    const OUString& sName = PredefinedClrNames[static_cast<PredefinedClrSchemeId>(nId)];
+                    sal_Int32 nColor = 0;
+
+                    rClrScheme.getColor(nToken, nColor);
+                    const uno::Any& rColor = uno::makeAny(nColor);
+
+                    aCurrentTheme[nId].Name = sName;
+                    aCurrentTheme[nId].Value = rColor;
+                }
+
+                // add new theme to the sequence
+                aTheme[0].Name = sTheme;
+                const uno::Any& rCurrentTheme = makeAny(aCurrentTheme);
+                aTheme[0].Value = rCurrentTheme;
+
+                aThemesHashMap << aTheme;
+
+                // put the new items
+                aGrabBag.update(aThemesHashMap);
+
+                // put it back to the document
+                xDocProps->setPropertyValue(aGrabBagPropName, uno::Any(aGrabBag.getAsConstPropertyValueList()));
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveThemeToGrabBag, Failed to save grab bag");
     }
 }
 
@@ -232,6 +307,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                                         UNO_QUERY_THROW));
                                 rThemes[ aThemeFragmentPath ] = pThemePtr;
                                 pThemePtr->setFragment(xDoc);
+                                saveThemeToGrabBag(pThemePtr, aThemeFragmentPath);
                             }
                             else
                             {
