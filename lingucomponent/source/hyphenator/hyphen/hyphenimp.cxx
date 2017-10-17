@@ -834,15 +834,18 @@ Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
-            XMultiServiceFactory * pServiceManager  )
+extern "C"
+{
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL hyphen_component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
     if ( Hyphenator::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(
-                pServiceManager,
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 Hyphenator::getImplementationName_Static(),
                 Hyphenator_CreateInstance,
                 Hyphenator::getSupportedServiceNames_Static());
@@ -853,4 +856,5 @@ void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
     return pRet;
 }
 
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

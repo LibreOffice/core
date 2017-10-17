@@ -523,15 +523,18 @@ Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-void * SAL_CALL MacSpellChecker_getFactory( const sal_Char * pImplName,
-            XMultiServiceFactory * pServiceManager, void *  )
+extern "C"
+{
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL MacOSXSpell_component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = nullptr;
     if ( MacSpellChecker::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(
-                pServiceManager,
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 MacSpellChecker::getImplementationName_Static(),
                 MacSpellChecker_CreateInstance,
                 MacSpellChecker::getSupportedServiceNames_Static());
@@ -542,6 +545,7 @@ void * SAL_CALL MacSpellChecker_getFactory( const sal_Char * pImplName,
     return pRet;
 }
 
+}
 
 
 

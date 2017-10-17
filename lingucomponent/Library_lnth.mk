@@ -43,7 +43,6 @@ $(eval $(call gb_Library_use_externals,lnth,\
 $(eval $(call gb_Library_add_exception_objects,lnth,\
 	lingucomponent/source/thesaurus/libnth/nthesdta \
 	lingucomponent/source/thesaurus/libnth/nthesimp \
-	lingucomponent/source/thesaurus/libnth/ntreg \
 ))
 
 # vim: set noet sw=4 ts=4:

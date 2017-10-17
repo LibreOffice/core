@@ -634,8 +634,10 @@ Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
-            XMultiServiceFactory * pServiceManager  )
+extern "C"
+{
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL lnth_component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
     if ( Thesaurus::getImplementationName_Static().equalsAscii( pImplName ) )
@@ -643,7 +645,7 @@ void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
 
         Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(
-                pServiceManager,
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 Thesaurus::getImplementationName_Static(),
                 Thesaurus_CreateInstance,
                 Thesaurus::getSupportedServiceNames_Static());
@@ -652,6 +654,7 @@ void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
         pRet = xFactory.get();
     }
     return pRet;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

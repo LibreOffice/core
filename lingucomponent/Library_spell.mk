@@ -41,7 +41,6 @@ $(eval $(call gb_Library_use_externals,spell,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,spell,\
-	lingucomponent/source/spellcheck/spell/sreg \
 	lingucomponent/source/spellcheck/spell/sspellimp \
 ))
 
