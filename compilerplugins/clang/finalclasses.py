@@ -31,7 +31,13 @@ with open("loplugin.finalclasses.log") as txt:
 
 tmpset = set()
 for clazz in sorted(definitionSet - inheritFromSet):
-    tmpset.add((clazz, definitionToFileDict[clazz]))
+    file = definitionToFileDict[clazz]
+    # ignore classes defined inside compilation units, the compiler knows they are final already
+    if (".cxx" in file): continue
+    # ignore test and external code
+    if ("/qa/" in file): continue
+    if (file.startswith("workdir/")): continue
+    tmpset.add((clazz, file))
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
