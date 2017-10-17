@@ -1262,7 +1262,7 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     }
 
     // lookup existing style
-    for (Style* pStyle : _styles)
+    for (auto const & pStyle : _styles)
     {
         short demanded_defaults = ~rStyle._set & rStyle._all;
         // test, if defaults are not set
@@ -1324,18 +1324,14 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     }
 
     // no appr style found, append new
-    Style * pStyle = new Style( rStyle );
+    std::unique_ptr<Style> pStyle(new Style( rStyle ));
     pStyle->_id = OUString::number( _styles.size() );
-    _styles.push_back( pStyle );
-    return pStyle->_id;
+    _styles.push_back( std::move(pStyle) );
+    return _styles.back()->_id;
 }
 
 StyleBag::~StyleBag()
 {
-    for (Style* _style : _styles)
-    {
-        delete _style;
-    }
 }
 
 void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
@@ -1346,7 +1342,7 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
         xOut->ignorableWhitespace( OUString() );
         xOut->startElement( aStylesName, Reference< xml::sax::XAttributeList >() );
         // export styles
-        for (Style* _style : _styles)
+        for (auto const & _style : _styles)
         {
             Reference< xml::sax::XAttributeList > xAttr( _style->createElement() );
             static_cast< ElementDescriptor * >( xAttr.get() )->dump( xOut.get() );
