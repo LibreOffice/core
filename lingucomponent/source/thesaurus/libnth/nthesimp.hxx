@@ -130,9 +130,6 @@ inline OUString Thesaurus::getImplementationName_Static() throw()
     return OUString( "org.openoffice.lingu.new.Thesaurus" );
 }
 
-void * SAL_CALL Thesaurus_getFactory(
-    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

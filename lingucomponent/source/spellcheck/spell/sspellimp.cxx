@@ -667,15 +667,18 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
-            XMultiServiceFactory * pServiceManager  )
+extern "C"
+{
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL spell_component_getFactory(
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
     if ( SpellChecker::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(
-                pServiceManager,
+                static_cast< XMultiServiceFactory * >( pServiceManager ),
                 SpellChecker::getImplementationName_Static(),
                 SpellChecker_CreateInstance,
                 SpellChecker::getSupportedServiceNames_Static());
@@ -684,6 +687,8 @@ void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
         pRet = xFactory.get();
     }
     return pRet;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
