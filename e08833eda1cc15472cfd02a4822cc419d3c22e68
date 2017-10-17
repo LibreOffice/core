@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_ca6eb9c8",
+        "filename": "hwpfilter/source/hwpfile.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-17T06:57:33Z",
+      "side": 1,
+      "message": "the name hyper is typedef\u0027ed to __int64 on windows",
+      "revId": "e08833eda1cc15472cfd02a4822cc419d3c22e68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
