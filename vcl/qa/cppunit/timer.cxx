@@ -402,8 +402,10 @@ public:
     {
         Start();
         if (mpOther)
+        {
             mpOther->Start();
-        Application::Yield();
+            Application::Yield();
+        }
         if (mpTriggered)
             *mpTriggered = true;
     }

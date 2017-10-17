@@ -693,9 +693,7 @@ extern "C" {
 
         sal_gtk_timeout_defer( pTSource );
 
-        ImplSVData* pSVData = ImplGetSVData();
-        if( pSVData->maSchedCtx.mpSalTimer )
-            pSVData->maSchedCtx.mpSalTimer->CallCallback();
+        SalTimer::CallCallback( false );
 
         return G_SOURCE_REMOVE;
     }

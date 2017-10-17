@@ -47,7 +47,7 @@ class AquaSalTimer final : public SalTimer, protected VersionedEvent
     bool        m_bDirectTimeout;    ///< timeout can be processed directly
 
     void queueDispatchTimerEvent( bool bAtStart );
-    void callTimerCallback();
+    bool callTimerCallback( bool bHandleAllCurrentEvents );
 
 public:
     AquaSalTimer();
@@ -58,7 +58,7 @@ public:
 
     void handleStartTimerEvent( NSEvent* pEvent );
     bool handleDispatchTimerEvent( NSEvent* pEvent );
-    void handleTimerElapsed();
+    bool handleTimerElapsed( bool bHandleAllCurrentEvents );
     void handleWindowShouldClose();
 
     bool IsTimerElapsed() const;

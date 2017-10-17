@@ -42,6 +42,8 @@
 
 #include "KDESalDisplay.hxx"
 
+#include <saltimer.hxx>
+
 #if KDE4_HAVE_GLIB
 #include "KDE4FilePicker.hxx"
 #include "tst_exclude_socket_notifiers.moc"
@@ -356,11 +358,11 @@ void KDEXLib::StopTimer()
     timeoutTimer.stop();
 }
 
-bool KDEXLib::CheckTimeout( bool bExecuteTimers )
+bool KDEXLib::HandleTimeout( HandleTimeoutMode eMode )
 {
     if( !m_isGlibEventLoopType )
-        return SalXLib::CheckTimeout( bExecuteTimers );
-    assert( !bExecuteTimers );
+        return SalXLib::HandleTimeout( eMode );
+    assert( eMode == HandleTimeoutMode::CheckOnly );
     return m_bTimedOut;
 }
 
@@ -376,7 +378,7 @@ void KDEXLib::customEvent(QEvent* e)
     if( e->type() == m_timerEventId )
     {
         m_bTimedOut = false;
-        X11SalData::Timeout();
+        SalTimer::CallCallback( false );
     }
 }
 

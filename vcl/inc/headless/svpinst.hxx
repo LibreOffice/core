@@ -85,7 +85,7 @@ public:
     inline void             registerFrame( SalFrame* pFrame );
     inline void             deregisterFrame( SalFrame* pFrame );
 
-    bool                    CheckTimeout( bool bExecuteTimers = true );
+    bool                    HandleTimeout( HandleTimeoutMode eMode );
 
     // Frame
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;

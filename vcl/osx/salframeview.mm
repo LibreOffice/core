@@ -538,7 +538,7 @@ private:
         if ( bWasLiveResize != bIsLiveResize )
         {
             GetSalData()->mpInstance->mbIsLiveResize = bIsLiveResize;
-            Scheduler::ProcessTaskScheduling();
+            Scheduler::ProcessTaskScheduling( false );
         }
     }
 

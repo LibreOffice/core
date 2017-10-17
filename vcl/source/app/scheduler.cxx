@@ -236,7 +236,7 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce, sal_uInt64 nTime)
         rSchedCtx.mnTimerStart = 0;
         rSchedCtx.mnTimerPeriod = InfiniteTimeoutMs;
         rSchedCtx.mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
-        rSchedCtx.mpSalTimer->SetCallback(Scheduler::CallbackTaskScheduling);
+        rSchedCtx.mpSalTimer->SetCallback( Scheduler::ProcessTaskScheduling );
     }
 
     assert(SAL_MAX_UINT64 - nMS >= nTime);
@@ -254,12 +254,6 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce, sal_uInt64 nTime)
         rSchedCtx.mnTimerPeriod = nMS;
         rSchedCtx.mpSalTimer->Start( nMS );
     }
-}
-
-void Scheduler::CallbackTaskScheduling()
-{
-    // this function is for the saltimer callback
-    Scheduler::ProcessTaskScheduling();
 }
 
 static bool g_bDeterministicMode = false;
@@ -325,7 +319,8 @@ static inline ImplSchedulerData* DropSchedulerData(
     return pSchedulerDataNext;
 }
 
-bool Scheduler::ProcessTaskScheduling()
+bool Scheduler::ProcessSingleTask( const sal_uInt64 nTime,
+                                   ImplSchedulerData ** const pLastDataPtr )
 {
     ImplSVData *pSVData = ImplGetSVData();
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
@@ -336,25 +331,26 @@ bool Scheduler::ProcessTaskScheduling()
     if ( !rSchedCtx.mbActive || InfiniteTimeoutMs == rSchedCtx.mnTimerPeriod )
         return false;
 
-    sal_uInt64 nTime = tools::Time::GetSystemTicks();
     if ( nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod )
     {
-        SAL_WARN( "vcl.schedule", "we're too early - restart the timer!" );
+        SAL_WARN_IF( !pLastDataPtr,
+                     "vcl.schedule", "we're too early - restart the timer!" );
         UpdateSystemTimer( rSchedCtx,
                            rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - nTime,
                            true, nTime );
         return false;
     }
 
-    ImplSchedulerData* pSchedulerData = nullptr;
+    ImplSchedulerData* pSchedulerData = rSchedCtx.mpFirstSchedulerData;
     ImplSchedulerData* pPrevSchedulerData = nullptr;
     ImplSchedulerData *pMostUrgent = nullptr;
     ImplSchedulerData *pPrevMostUrgent = nullptr;
     sal_uInt64         nMinPeriod = InfiniteTimeoutMs;
     sal_uInt64         nMostUrgentPeriod = InfiniteTimeoutMs;
     sal_uInt64         nReadyPeriod = InfiniteTimeoutMs;
+    bool               bAfterLastData = false;
+    bool               bInvokeMostUrgent = ( !pLastDataPtr || *pLastDataPtr );
 
-    pSchedulerData = rSchedCtx.mpFirstSchedulerData;
     while ( pSchedulerData )
     {
         const Timer *timer = dynamic_cast<Timer*>( pSchedulerData->mpTask );
@@ -386,6 +382,8 @@ bool Scheduler::ProcessTaskScheduling()
                     pSchedulerData->mpTask->mpSchedulerData = nullptr;
                 delete pSchedulerData;
             }
+            if ( pLastDataPtr && *pLastDataPtr == pSchedulerData )
+                bAfterLastData = true;
             pSchedulerData = pSchedulerDataNext;
             continue;
         }
@@ -404,11 +402,15 @@ bool Scheduler::ProcessTaskScheduling()
             pPrevMostUrgent = pPrevSchedulerData;
             pMostUrgent = pSchedulerData;
             nMostUrgentPeriod = nReadyPeriod;
+            if ( bAfterLastData || pMostUrgent->mnUpdateTime > nTime )
+                bInvokeMostUrgent = false;
         }
         else if ( nMinPeriod > nReadyPeriod )
             nMinPeriod = nReadyPeriod;
 
 next_entry:
+        if ( pLastDataPtr && *pLastDataPtr == pSchedulerData )
+            bAfterLastData = true;
         pPrevSchedulerData = pSchedulerData;
         pSchedulerData = pSchedulerData->mpNext;
     }
@@ -417,8 +419,19 @@ next_entry:
         SAL_INFO("vcl.schedule", "Calculated minimum timeout as " << nMinPeriod );
     UpdateSystemTimer( rSchedCtx, nMinPeriod, true, nTime );
 
-    if ( pMostUrgent )
+    if ( pMostUrgent && !bInvokeMostUrgent )
     {
+        nReadyPeriod = pMostUrgent->mpTask->UpdateMinPeriod( nMinPeriod, nTime );
+        if ( nMinPeriod > nReadyPeriod )
+            nMinPeriod = nReadyPeriod;
+        UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );
+        pMostUrgent = nullptr;
+    }
+    else if ( pMostUrgent )
+    {
+        if ( pLastDataPtr && *pLastDataPtr == pMostUrgent )
+            *pLastDataPtr = nullptr;
+
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
                   << pMostUrgent << "  invoke-in  " << *pMostUrgent->mpTask );
 
@@ -460,6 +473,8 @@ next_entry:
             AppendSchedulerData( rSchedCtx, pSchedulerData );
             UpdateSystemTimer( rSchedCtx, ImmediateTimeoutMs, true,
                                tools::Time::GetSystemTicks() );
+            if ( pLastDataPtr && *pLastDataPtr && rSchedCtx.mpLastSchedulerData != *pLastDataPtr )
+                *pLastDataPtr = rSchedCtx.mpLastSchedulerData;
         }
         else
         {
@@ -482,6 +497,26 @@ next_entry:
     }
 
     return !!pMostUrgent;
+}
+
+bool Scheduler::ProcessTaskScheduling( bool bHandleAllCurrentEvents )
+{
+    sal_uInt64 nTime = tools::Time::GetSystemTicks();
+    bool bWasEvent = false, bAnyEvent = false;
+    ImplSchedulerData *pLastData = ImplGetSVData()->maSchedCtx.mpLastSchedulerData;
+    ImplSchedulerData ** const pLastDataPtr = bHandleAllCurrentEvents ? &pLastData : nullptr;
+    SAL_INFO_IF( bHandleAllCurrentEvents, "vcl.schedule", tools::Time::GetSystemTicks()
+        << " process all current events - start" );
+    do
+    {
+        bWasEvent = ProcessSingleTask( nTime, pLastDataPtr );
+        if ( !bAnyEvent && bWasEvent )
+            bAnyEvent = bWasEvent;
+    }
+    while ( bWasEvent && bHandleAllCurrentEvents );
+    SAL_INFO_IF( bHandleAllCurrentEvents, "vcl.schedule", tools::Time::GetSystemTicks()
+        << " process all current events - done" );
+    return bAnyEvent;
 }
 
 void Task::StartTimer( sal_uInt64 nMS )

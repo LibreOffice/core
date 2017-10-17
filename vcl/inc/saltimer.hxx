@@ -22,8 +22,9 @@
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
-#include <salwtype.hxx>
-#include <iostream>
+#include <svdata.hxx>
+
+typedef bool (*SALTIMERPROC)( bool bHandleAllCurrentEvents );
 
 /*
  * note: there will be only a single instance of SalTimer
@@ -40,19 +41,32 @@ public:
     virtual ~SalTimer() COVERITY_NOEXCEPT_FALSE;
 
     // AutoRepeat and Restart
-    virtual void            Start( sal_uLong nMS ) = 0;
-    virtual void            Stop() = 0;
+    virtual void Start( sal_uLong nMS ) = 0;
+    virtual void Stop() = 0;
 
     // Callbacks (indepen in \sv\source\app\timer.cxx)
-    void            SetCallback( SALTIMERPROC pProc )
+    void SetCallback( SALTIMERPROC pProc )
     {
         m_pProc = pProc;
     }
 
-    void            CallCallback()
+    bool Timeout( bool bHandleAllCurrentEvents )
     {
+        bool bRet = false;
         if( m_pProc )
-            m_pProc();
+            bRet = m_pProc( bHandleAllCurrentEvents );
+        return bRet;
+    }
+
+    static bool CallCallback( bool bHandleAllCurrentEvents )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        bool bRet = false;
+        assert( pSVData );
+        SalTimer *pTimer = pSVData->maSchedCtx.mpSalTimer;
+        if( pTimer )
+            bRet = pTimer->Timeout( bHandleAllCurrentEvents );
+        return bRet;
     }
 };
 

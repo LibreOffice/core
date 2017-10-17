@@ -512,11 +512,8 @@ bool ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
     // event loop with timeout messages.
     // We ensure we never handle more then one timeout per call.
     // This way we'll always process a normal system message.
-    if ( !bWasTimeoutMsg && pTimer && pTimer->IsDirectTimeout() )
-    {
-        pTimer->ImplHandleElapsedTimer();
-        bWasMsg = true;
-    }
+    if ( (!bWasTimeoutMsg || bHandleAllCurrentEvents) && pTimer && pTimer->IsDirectTimeout() )
+        bWasMsg = pTimer->ImplHandleElapsedTimer( bHandleAllCurrentEvents ) || bWasMsg;
 
     if ( bHandleAllCurrentEvents )
         nLastTicks = nCurTicks;

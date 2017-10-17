@@ -215,7 +215,8 @@ struct SalQueryCharPositionEvent
 
 typedef bool (*SALFRAMEPROC)( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
 
-enum class SalObjEvent {
+enum class SalObjEvent
+{
     GetFocus           = 1,
     LoseFocus          = 2,
     ToTop              = 3
@@ -258,7 +259,12 @@ struct SalLongPressEvent
     long mnY;
 };
 
-typedef void (*SALTIMERPROC)();
+enum class HandleTimeoutMode
+{
+    CheckOnly,
+    ProcessSingleTask,
+    ProcessAllCurrentTasks
+};
 
 #endif // INCLUDED_VCL_INC_SALWTYPE_HXX
 
