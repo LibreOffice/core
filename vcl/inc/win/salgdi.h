@@ -380,7 +380,8 @@ public:
     virtual bool            GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) override;
     virtual bool            GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) override;
 
-    virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
+    virtual std::unique_ptr<SalLayout>
+                            GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) override;
     virtual void            DrawTextLayout( const CommonSalLayout& ) override;
 
     virtual bool            supportsOperation( OutDevSupportType ) const override;
