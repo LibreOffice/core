@@ -1124,28 +1124,17 @@ void GtkSalFrame::InitCommon()
     m_nHeightRequest = 0;
 
     // fake an initial geometry, gets updated via configure event or SetPosSize
-    if( m_bDefaultPos || m_bDefaultSize )
+    if (m_bDefaultPos || m_bDefaultSize)
     {
         Size aDefSize = calcDefaultSize();
         maGeometry.nX                   = -1;
         maGeometry.nY                   = -1;
         maGeometry.nWidth               = aDefSize.Width();
         maGeometry.nHeight              = aDefSize.Height();
-        if( m_pParent )
-        {
-            // approximation
-            maGeometry.nTopDecoration       = m_pParent->maGeometry.nTopDecoration;
-            maGeometry.nBottomDecoration    = m_pParent->maGeometry.nBottomDecoration;
-            maGeometry.nLeftDecoration      = m_pParent->maGeometry.nLeftDecoration;
-            maGeometry.nRightDecoration     = m_pParent->maGeometry.nRightDecoration;
-        }
-        else
-        {
-            maGeometry.nTopDecoration       = 0;
-            maGeometry.nBottomDecoration    = 0;
-            maGeometry.nLeftDecoration      = 0;
-            maGeometry.nRightDecoration     = 0;
-        }
+        maGeometry.nTopDecoration       = 0;
+        maGeometry.nBottomDecoration    = 0;
+        maGeometry.nLeftDecoration      = 0;
+        maGeometry.nRightDecoration     = 0;
     }
     updateScreenNumber();
 
