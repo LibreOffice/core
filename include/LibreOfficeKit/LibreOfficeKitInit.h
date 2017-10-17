@@ -42,7 +42,7 @@ extern "C"
     #endif
     #define SEPARATOR         '/'
 
-#if !defined(TARGET_OS_IPHONE)
+#if !defined(IOS)
         static void *lok_loadlib(const char *pFN)
     {
         return dlopen(pFN, RTLD_LAZY
@@ -68,7 +68,7 @@ extern "C"
     {
         (void)pPath;
     }
-#endif // TARGET_OS_IPHONE
+#endif // IOS
 
     static void *lok_dlsym(void *Hnd, const char *pName)
     {
@@ -169,7 +169,7 @@ static void *lok_dlopen( const char *install_path, char ** _imp_lib )
     char *imp_lib;
     void *dlhandle;
 
-#if !defined(TARGET_OS_IPHONE)
+#if !defined(IOS)
     size_t partial_length, imp_lib_size;
     struct stat dir_st;
 
