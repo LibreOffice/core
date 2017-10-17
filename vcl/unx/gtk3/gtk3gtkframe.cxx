@@ -1621,6 +1621,9 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
             nY += m_pParent->maGeometry.nY;
         }
 
+        maGeometry.nX = nX;
+        maGeometry.nY = nY;
+
         m_bDefaultPos = false;
 
         moveWindow(nX, nY);
