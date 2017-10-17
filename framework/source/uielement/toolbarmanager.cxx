@@ -287,22 +287,12 @@ void ToolBarManager::RefreshImages()
 {
     SolarMutexGuard g;
 
-    vcl::ImageType eImageType = vcl::ImageType::Size16;
-
     if (m_eSymbolSize == SFX_SYMBOLS_SIZE_LARGE)
-    {
         m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Large);
-        eImageType = vcl::ImageType::Size26;
-    }
     else if (m_eSymbolSize == SFX_SYMBOLS_SIZE_32)
-    {
-        eImageType = vcl::ImageType::Size32;
         m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Size32);
-    }
     else
-    {
         m_pToolBar->SetToolboxButtonSize(ToolBoxButtonSize::Small);
-    }
 
     for ( auto const& it : m_aControllerMap )
     {
@@ -316,6 +306,7 @@ void ToolBarManager::RefreshImages()
         else
         {
             OUString aCommandURL = m_pToolBar->GetItemCommand( it.first );
+            vcl::ImageType eImageType = m_pToolBar->GetImageSize();
             Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, m_xFrame, eImageType);
             // Try also to query for add-on images before giving up and use an
             // empty image.
