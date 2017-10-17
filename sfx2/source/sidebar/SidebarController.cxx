@@ -616,6 +616,7 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId, const Conte
         if (pPanel != nullptr)
         {
             aNewPanels[nWriteIndex] = pPanel;
+            pPanel->SetExpanded( rPanelContexDescriptor.mbIsInitiallyVisible );
             ++nWriteIndex;
         }
         else
