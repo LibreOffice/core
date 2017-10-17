@@ -2383,3 +2383,39 @@ index 07aa50d..26675af 100644
 -- 
 2.12.3
 
+From 4f46bc715a5fc8a0e13bb1596f6f5dbb55ca0632 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Tue, 17 Oct 2017 10:22:35 +0200
+Subject: [PATCH] EPUBSpanStyleManager: ignore underline type/style 'none'
+
+This is similar to commit 7be89d1881e175182039ca93a1546d79933cab85
+(EPUBSpanStyleManager: ignore line though type/style 'none',
+2017-09-11).
+---
+ src/lib/EPUBSpanStyleManager.cpp   |  9 ++++++++-
+ src/test/EPUBTextGeneratorTest.cpp | 22 ++++++++++++++++++++++
+ 2 files changed, 30 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/EPUBSpanStyleManager.cpp b/src/lib/EPUBSpanStyleManager.cpp
+index 5e53ee2..e25fa26 100644
+--- a/src/lib/EPUBSpanStyleManager.cpp
++++ b/src/lib/EPUBSpanStyleManager.cpp
+@@ -161,7 +161,14 @@ void EPUBSpanStyleManager::extractDecorations(RVNGPropertyList const &pList, EPU
+ 
+   if (pList["style:text-overline-style"] || pList["style:text-overline-type"])
+     s << " overline";
+-  if (pList["style:text-underline-style"] || pList["style:text-underline-type"])
++  const librevenge::RVNGProperty *textUnderlineStyle = pList["style:text-underline-style"];
++  bool underline = textUnderlineStyle && textUnderlineStyle->getStr() != "none";
++  if (!underline)
++  {
++    const librevenge::RVNGProperty *textUnderlineType = pList["style:text-underline-type"];
++    underline = textUnderlineType && textUnderlineType->getStr() != "none";
++  }
++  if (underline)
+     s << " underline";
+   if (s.str().length())
+     cssProps["text-decoration"] = s.str();
+-- 
+2.12.3
+
