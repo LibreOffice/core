@@ -172,7 +172,7 @@ public:
     virtual void StartRun( const SwRedlineData* pRedlineData, bool bSingleEmptyRun = false ) = 0;
 
     /// End of the text run.
-    virtual void EndRun() = 0;
+    virtual void EndRun( const SwTextNode* pNode, sal_Int32 nPos ) = 0;
 
     /// Called before we start outputting the attributes.
     virtual void StartRunProperties() = 0;
@@ -199,7 +199,7 @@ public:
     virtual void StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby ) = 0;
 
     /// Output ruby end.
-    virtual void EndRuby() = 0;
+    virtual void EndRuby( const SwTextNode& rNode, sal_Int32 nPos ) = 0;
 
     /// Output URL start.
     virtual bool StartURL( const OUString& rUrl, const OUString& rTarget ) = 0;

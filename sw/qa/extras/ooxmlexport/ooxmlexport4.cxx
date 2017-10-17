@@ -675,6 +675,73 @@ DECLARE_OOXMLEXPORT_TEST(test_OpeningBrace, "2120112713_OpenBrace.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[1]/m:dPr[1]/m:begChr[1]","val","");
 }
 
+// Checks that all runs of the field have text properties.
+// Old behaviour: only first run has text properties of the field
+//
+// There are several runs are used in fields:
+//     <w:r>
+//         <w:rPr>
+//             <!-- properties written with DocxAttributeOutput::StartRunProperties() / DocxAttributeOutput::EndRunProperties().
+//         </w:rPr>
+//         <w:fldChar w:fldCharType="begin" />
+//     </w:r>
+//         <w:r>
+//         <w:rPr>
+//             <!-- properties written with DocxAttributeOutput::DoWriteFieldRunProperties()
+//         </w:rPr>
+//         <w:instrText>TIME \@"HH:mm:ss"</w:instrText>
+//     </w:r>
+//     <w:r>
+//         <w:rPr>
+//             <!-- properties written with DocxAttributeOutput::DoWriteFieldRunProperties()
+//         </w:rPr>
+//         <w:fldChar w:fldCharType="separate" />
+//     </w:r>
+//     <w:r>
+//         <w:rPr>
+//             <!-- properties written with DocxAttributeOutput::DoWriteFieldRunProperties()
+//         </w:rPr>
+//         <w:t>14:01:13</w:t>
+//         </w:r>
+//     <w:r>
+//         <w:rPr>
+//             <!-- properties written with DocxAttributeOutput::DoWriteFieldRunProperties()
+//         </w:rPr>
+//         <w:fldChar w:fldCharType="end" />
+//     </w:r>
+// See, tdf#38778
+DECLARE_OOXMLEXPORT_TEST(testTdf38778, "tdf38778_properties_in_run_for_field.doc")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    const OUString psz("20");
+    const OUString pszCs("20");
+
+    // w:fldCharType="begin"
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:sz",   "val", psz);
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w:szCs", "val", pszCs);
+
+    // PAGE
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[4]/w:rPr/w:sz",   "val", psz);
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[4]/w:rPr/w:szCs", "val", pszCs);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[4]/w:instrText",  " PAGE ");
+
+    // w:fldCharType="separate"
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[5]/w:rPr/w:sz",   "val", psz);
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[5]/w:rPr/w:szCs", "val", pszCs);
+
+    // field result: 1
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[6]/w:rPr/w:sz",   "val", psz);
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[6]/w:rPr/w:szCs", "val", pszCs);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[6]/w:t",          "1"); // field result
+
+    // w:fldCharType="end"
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[7]/w:rPr/w:sz",   "val", psz);
+    assertXPath(pXmlDoc,        "/w:document/w:body/w:p[1]/w:r[7]/w:rPr/w:szCs", "val", pszCs);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO76312, "FDO76312.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
