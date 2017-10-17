@@ -1398,8 +1398,13 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 break;
 
             case FN_EDIT_CURRENT_REGION:
-                if( !rSh.GetCurrSection() )
+                //tdf#112808 if cursor is in an index, don't show the edit section.
+                if( !rSh.GetCurrSection() ||
+                    rSh.GetCurrSection()->GetType() == TOX_HEADER_SECTION ||
+                    rSh.GetCurrSection()->GetType() == TOX_CONTENT_SECTION )
+                {
                     rSet.DisableItem(nWhich);
+                }
                 break;
 
             case FN_INSERT_REGION:
