@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVL_SOURCE_INC_PASSWORDCONTAINER_HXX
 #define INCLUDED_SVL_SOURCE_INC_PASSWORDCONTAINER_HXX
 
-#include <list>
 #include <vector>
 #include <map>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
@@ -166,8 +165,8 @@ public:
 };
 
 
-typedef ::std::pair< const OUString, ::std::list< NamePassRecord > > PairUrlRecord;
-typedef ::std::map< OUString, ::std::list< NamePassRecord > > PassMap;
+typedef ::std::pair< const OUString, ::std::vector< NamePassRecord > > PairUrlRecord;
+typedef ::std::map< OUString, ::std::vector< NamePassRecord > > PassMap;
 
 
 class PasswordContainer;
@@ -221,7 +220,7 @@ private:
 
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::task::UserRecord > CopyToUserRecordSequence(
-                                        const ::std::list< NamePassRecord >& original,
+                                        const ::std::vector< NamePassRecord >& original,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     css::task::UserRecord CopyToUserRecord(
@@ -231,7 +230,7 @@ private:
 
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::task::UserRecord > FindUsr(
-                                        const ::std::list< NamePassRecord >& userlist,
+                                        const ::std::vector< NamePassRecord >& userlist,
                                         const OUString& name,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 /// @throws css::uno::RuntimeException
@@ -259,7 +258,7 @@ css::task::UrlRecord find(
     OUString const & GetMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     /// @throws css::uno::RuntimeException
-    void UpdateVector( const OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord const & rec, bool writeFile );
+    void UpdateVector( const OUString& url, ::std::vector< NamePassRecord >& toUpdate, NamePassRecord const & rec, bool writeFile );
 
     /// @throws css::uno::RuntimeException
     void PrivateAdd( const OUString& aUrl,
