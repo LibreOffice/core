@@ -108,6 +108,7 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
                 createGrabBag("top");
             break;
             case NS_ooxml::LN_CT_TblCellMar_start:
+            case NS_ooxml::LN_CT_TcMar_start:
                 if( rtl )
                 {
                     m_nRightMargin = m_nValue;
@@ -133,6 +134,7 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
                 createGrabBag("bottom");
             break;
             case NS_ooxml::LN_CT_TblCellMar_end:
+            case NS_ooxml::LN_CT_TcMar_end:
                 if( rtl )
                 {
                     m_nLeftMargin = m_nValue;
