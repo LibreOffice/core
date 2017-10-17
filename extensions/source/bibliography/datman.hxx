@@ -86,7 +86,7 @@ private:
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xParser;
         css::uno::Reference< css::form::runtime::XFormController >    m_xFormCtrl;
         css::uno::Reference< css::frame::XDispatch >                  m_xFormDispatch;
-        BibInterceptorHelper*         m_pInterceptorHelper;
+        rtl::Reference<BibInterceptorHelper>                          m_xInterceptorHelper;
 
         OUString                     aActiveDataTable;
         OUString                     aDataSourceURL;
