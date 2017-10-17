@@ -118,9 +118,6 @@ inline OUString SpellChecker::getImplementationName_Static() throw()
     return OUString( "org.openoffice.lingu.MySpellSpellChecker" );
 }
 
-void * SAL_CALL SpellChecker_getFactory(
-    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

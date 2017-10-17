@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_externals,MacOSXSpell,\
 ))
 
 $(eval $(call gb_Library_add_objcxxobjects,MacOSXSpell,\
-	lingucomponent/source/spellcheck/macosxspell/macreg \
 	lingucomponent/source/spellcheck/macosxspell/macspellimp \
 ))
 

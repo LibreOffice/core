@@ -129,9 +129,6 @@ inline OUString Hyphenator::getImplementationName_Static() throw()
     return OUString( "org.openoffice.lingu.LibHnjHyphenator" );
 }
 
-void * SAL_CALL Hyphenator_getFactory(
-    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
