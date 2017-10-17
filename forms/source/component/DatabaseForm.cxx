@@ -938,10 +938,8 @@ void ODatabaseForm::Encode( OUString& rString )
 void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rName,
     const OUString& rData )
 {
-
     // Create part as MessageChild
-    INetMIMEMessage* pChild = new INetMIMEMessage();
-
+    std::unique_ptr<INetMIMEMessage> pChild(new INetMIMEMessage);
 
     // Header
     //TODO: Encode rName into a properly formatted Content-Disposition header
@@ -965,7 +963,7 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rN
     pStream->Flush();
     pStream->Seek( 0 );
     pChild->SetDocumentLB( new SvLockBytes(pStream, true) );
-    rParent.AttachChild( *pChild );
+    rParent.AttachChild( std::move(pChild) );
 }
 
 
@@ -1005,7 +1003,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
 
 
     // Create part as MessageChild
-    INetMIMEMessage* pChild = new INetMIMEMessage;
+    std::unique_ptr<INetMIMEMessage> pChild(new INetMIMEMessage);
 
 
     // Header
@@ -1025,7 +1023,7 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
 
     // Body
     pChild->SetDocumentLB( new SvLockBytes(pStream, true) );
-    rParent.AttachChild( *pChild );
+    rParent.AttachChild( std::move(pChild) );
 
     return true;
 }
