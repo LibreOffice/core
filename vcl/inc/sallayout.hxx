@@ -221,8 +221,8 @@ public:
     virtual bool    IsKashidaPosValid(int nCharPos) const override;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
-    explicit        MultiSalLayout( SalLayout& rBaseLayout );
-    void            AddFallback( SalLayout& rFallbackLayout,
+    explicit        MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout );
+    void            AddFallback( std::unique_ptr<SalLayout> pFallbackLayout,
                                  ImplLayoutRuns const &, const PhysicalFontFace* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& ) override;
     virtual void    AdjustLayout( ImplLayoutArgs& ) override;
@@ -230,7 +230,7 @@ public:
 
     void SetIncomplete(bool bIncomplete);
 
-protected:
+public:
     virtual         ~MultiSalLayout() override;
 
 private:
