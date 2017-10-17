@@ -607,7 +607,6 @@ OUString const gViewSize("theViewSize");
 
 BibDataManager::BibDataManager()
     :BibDataManager_Base( GetMutex() )
-    ,m_pInterceptorHelper( nullptr )
     ,m_aLoadListeners(m_aMutex)
     ,pBibView( nullptr )
     ,pToolbar(nullptr)
@@ -633,11 +632,10 @@ BibDataManager::~BibDataManager()
             xConnection->dispose();
         m_xForm = nullptr;
     }
-    if( m_pInterceptorHelper )
+    if( m_xInterceptorHelper.is() )
     {
-        m_pInterceptorHelper->ReleaseInterceptor();
-        m_pInterceptorHelper->release();
-        m_pInterceptorHelper = nullptr;
+        m_xInterceptorHelper->ReleaseInterceptor();
+        m_xInterceptorHelper.clear();
     }
 }
 
@@ -1590,12 +1588,10 @@ uno::Reference< form::runtime::XFormController > const & BibDataManager::GetForm
 
 void BibDataManager::RegisterInterceptor( ::bib::BibBeamer* pBibBeamer)
 {
-    DBG_ASSERT( !m_pInterceptorHelper, "BibDataManager::RegisterInterceptor: called twice!" );
+    DBG_ASSERT( !m_xInterceptorHelper.is(), "BibDataManager::RegisterInterceptor: called twice!" );
 
     if( pBibBeamer )
-        m_pInterceptorHelper = new BibInterceptorHelper( pBibBeamer, m_xFormDispatch);
-    if( m_pInterceptorHelper )
-        m_pInterceptorHelper->acquire();
+        m_xInterceptorHelper = new BibInterceptorHelper( pBibBeamer, m_xFormDispatch);
 }
 
 
