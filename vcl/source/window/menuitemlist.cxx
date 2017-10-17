@@ -41,8 +41,6 @@ MenuItemData::~MenuItemData()
 
 MenuItemList::~MenuItemList()
 {
-    for(MenuItemData* i : maItemList)
-        delete i;
 }
 
 MenuItemData* MenuItemList::Insert(
@@ -78,9 +76,9 @@ MenuItemData* MenuItemList::Insert(
     pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
 
     if( nPos < maItemList.size() ) {
-        maItemList.insert( maItemList.begin() + nPos, pData );
+        maItemList.insert( maItemList.begin() + nPos, std::unique_ptr<MenuItemData>(pData) );
     } else {
-        maItemList.push_back( pData );
+        maItemList.emplace_back( pData );
     }
     return pData;
 }
@@ -111,9 +109,9 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
 
     if( nPos < maItemList.size() ) {
-        maItemList.insert( maItemList.begin() + nPos, pData );
+        maItemList.insert( maItemList.begin() + nPos, std::unique_ptr<MenuItemData>(pData) );
     } else {
-        maItemList.push_back( pData );
+        maItemList.emplace_back( pData );
     }
 }
 
@@ -121,16 +119,13 @@ void MenuItemList::Remove( size_t nPos )
 {
     if( nPos < maItemList.size() )
     {
-        delete maItemList[ nPos ];
         maItemList.erase( maItemList.begin() + nPos );
     }
 }
 
 void MenuItemList::Clear()
 {
-    for (MenuItemData* i : maItemList)
-        delete i;
-    maItemList.resize(0);
+    maItemList.clear();
 }
 
 MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
@@ -140,7 +135,7 @@ MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
         if ( maItemList[ i ]->nId == nSVId )
         {
             rPos = i;
-            return maItemList[ i ];
+            return maItemList[ i ].get();
         }
     }
     return nullptr;
@@ -164,7 +159,7 @@ MenuItemData* MenuItemList::SearchItem(
     {
         for ( rPos = 0; rPos < nListCount; rPos++)
         {
-            MenuItemData* pData = maItemList[ rPos ];
+            MenuItemData* pData = maItemList[ rPos ].get();
             if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
             {
                 if( nDuplicates > 1 && rPos == nCurrentPos )
@@ -186,7 +181,7 @@ MenuItemData* MenuItemList::SearchItem(
 
         for ( rPos = 0; rPos < nListCount; rPos++)
         {
-            MenuItemData* pData = maItemList[ rPos ];
+            MenuItemData* pData = maItemList[ rPos ].get();
             if ( pData->bEnabled )
             {
                 sal_Int32 n = pData->aText.indexOf('~');
@@ -226,7 +221,7 @@ size_t MenuItemList::GetItemCount( sal_Unicode cSelectChar ) const
     size_t nItems = 0;
     for ( size_t nPos = maItemList.size(); nPos; )
     {
-        MenuItemData* pData = maItemList[ --nPos ];
+        MenuItemData* pData = maItemList[ --nPos ].get();
         if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
             nItems++;
     }
@@ -246,7 +241,7 @@ size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
     size_t nItems = 0;
     for ( size_t nPos = maItemList.size(); nPos; )
     {
-        MenuItemData* pData = maItemList[ --nPos ];
+        MenuItemData* pData = maItemList[ --nPos ].get();
         if ( pData->bEnabled )
         {
             sal_Int32 n = pData->aText.indexOf('~');
