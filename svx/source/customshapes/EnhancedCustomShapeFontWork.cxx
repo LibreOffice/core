@@ -433,7 +433,10 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
     while ( aTextAreaIter != aTextAreaIEnd )
     {
         GetTextAreaOutline( rFWData, pCustomShape, *aTextAreaIter, bSameLetterHeights );
-        if (eFTS == drawing::TextFitToSizeType_ALLLINES)
+        if (eFTS == drawing::TextFitToSizeType_ALLLINES ||
+            // tdf#97630 interpret PROPORTIONAL same as ALLLINES so we don't
+            // need another ODF attribute!
+            eFTS == drawing::TextFitToSizeType_PROPORTIONAL)
         {
             std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
             std::vector< FWParagraphData >::const_iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );

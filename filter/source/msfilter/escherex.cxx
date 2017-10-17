@@ -3450,7 +3450,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     {
                                         drawing::TextFitToSizeType const eFTS(
                                             static_cast<const SdrTextFitToSizeTypeItem&>(pCustoShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
-                                        if (eFTS == drawing::TextFitToSizeType_ALLLINES)
+                                        if (eFTS == drawing::TextFitToSizeType_ALLLINES ||
+                                            eFTS == drawing::TextFitToSizeType_PROPORTIONAL)
                                         {
                                             gTextAlign = mso_alignTextStretch;
                                         }
