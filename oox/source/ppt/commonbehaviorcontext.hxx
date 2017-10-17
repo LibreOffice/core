@@ -53,7 +53,7 @@ namespace oox { namespace ppt {
     private:
         bool              mbInAttrList;
         bool              mbIsInAttrName;
-        std::list< Attribute > maAttributes;
+        std::vector< Attribute > maAttributes;
         OUString   msCurrentAttribute;
     };
 

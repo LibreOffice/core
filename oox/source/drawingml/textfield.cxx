@@ -48,13 +48,13 @@ TextField::TextField()
 
 namespace {
 
-/** intsanciate the textfields. Because of semantics difference between
+/** instanciate the textfields. Because of semantics difference between
  * OpenXML and OpenOffice, some OpenXML field might cause two fields to be created.
  * @param aFields the created fields. The list is empty if no field has been created.
  * @param xModel the model
  * @param sType the OpenXML field type.
  */
-void lclCreateTextFields( std::list< Reference< XTextField > > & aFields,
+void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
                                                             const Reference< XModel > & xModel, const OUString & sType )
 {
     Reference< XInterface > xIface;
@@ -204,17 +204,16 @@ sal_Int32 TextField::insertAt(
             nCharHeight = aTextCharacterProps.moHeight.get();
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
-        std::list< Reference< XTextField > > fields;
+        std::vector< Reference< XTextField > > fields;
         lclCreateTextFields( fields, rFilterBase.getModel(), msType );
         if( !fields.empty() )
         {
             bool bFirst = true;
-            for( std::list< Reference< XTextField > >::iterator iter = fields.begin();
-                     iter != fields.end(); ++iter )
+            for (auto const& field : fields)
             {
-                if( iter->is() )
+                if( field.is() )
                 {
-                    Reference< XTextContent > xContent( *iter, UNO_QUERY);
+                    Reference< XTextContent > xContent( field, UNO_QUERY);
                     if( bFirst)
                     {
                         bFirst = false;

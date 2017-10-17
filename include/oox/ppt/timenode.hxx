@@ -21,7 +21,7 @@
 #ifndef INCLUDED_OOX_PPT_TIMENODE_HXX
 #define INCLUDED_OOX_PPT_TIMENODE_HXX
 
-#include <list>
+#include <vector>
 #include <map>
 #include <memory>
 
@@ -44,7 +44,7 @@ namespace oox { namespace ppt {
     class TimeNode;
 
     typedef std::shared_ptr< TimeNode > TimeNodePtr;
-    typedef std::list< TimeNodePtr > TimeNodePtrList;
+    typedef std::vector< TimeNodePtr > TimeNodePtrList;
 
     class TimeNode final
     {

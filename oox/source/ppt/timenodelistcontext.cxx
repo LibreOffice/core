@@ -541,33 +541,32 @@ namespace oox { namespace ppt {
 
         virtual ~AnimContext() throw () override
             {
-                ::std::list< TimeAnimationValue >::iterator iter, end;
                 int nKeyTimes = maTavList.size();
                 if( nKeyTimes > 0)
                 {
-                    int i;
+                    int i=0;
                     Sequence< double > aKeyTimes( nKeyTimes );
                     Sequence< Any > aValues( nKeyTimes );
 
                     NodePropertyMap & aProps( mpNode->getNodeProperties() );
-                    end = maTavList.end();
-                    for(iter = maTavList.begin(), i=0; iter != end; ++iter,++i)
+                    for (auto const& tav : maTavList)
                     {
                         // TODO what to do if it is Timing_INFINITE ?
-                        Any aTime = GetTimeAnimateValueTime( iter->msTime );
+                        Any aTime = GetTimeAnimateValueTime( tav.msTime );
                         aTime >>= aKeyTimes[i];
-                        aValues[i] = iter->maValue;
+                        aValues[i] = tav.maValue;
 
                         OUString aTest;
-                        iter->maValue >>= aTest;
+                        tav.maValue >>= aTest;
                         if( !aTest.isEmpty() )
                         {
-                            aValues[i] = iter->maValue;
+                            aValues[i] = tav.maValue;
                         }
                         else
                         {
-                            aProps[ NP_FORMULA ] <<= iter->msFormula;
+                            aProps[ NP_FORMULA ] <<= tav.msFormula;
                         }
+                        ++i;
                     }
                     aProps[ NP_VALUES ] <<= aValues;
                     aProps[ NP_KEYTIMES ] <<= aKeyTimes;

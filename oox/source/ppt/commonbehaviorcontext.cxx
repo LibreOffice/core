@@ -60,14 +60,13 @@ namespace oox { namespace ppt {
             if( !maAttributes.empty() )
             {
                 OUStringBuffer sAttributes;
-                std::list< Attribute >::const_iterator iter;
-                for(iter = maAttributes.begin(); iter != maAttributes.end(); ++iter)
+                for (auto const& attribute : maAttributes)
                 {
                     if( !sAttributes.isEmpty() )
                     {
                         sAttributes.append( ";" );
                     }
-                    sAttributes.append( iter->name );
+                    sAttributes.append( attribute.name );
                 }
                 OUString sTmp( sAttributes.makeStringAndClear() );
                 mpNode->getNodeProperties()[ NP_ATTRIBUTENAME ] <<= sTmp;

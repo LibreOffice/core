@@ -138,7 +138,7 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
     else
         rPropertyMap.setProperty( PROP_ParaLineSpacing, css::style::LineSpacing( css::style::LineSpacingMode::PROP, 100 ));
 
-    ::std::list< TabStop >::size_type nTabCount = maTabList.size();
+    ::std::vector< TabStop >::size_type nTabCount = maTabList.size();
     if( nTabCount != 0 )
     {
         Sequence< TabStop > aSeq( nTabCount );
