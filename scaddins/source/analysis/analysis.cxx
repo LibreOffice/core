@@ -943,9 +943,9 @@ OUString SAL_CALL AnalysisAddIn::getImproduct( const uno::Reference< beans::XPro
     if( z_list.empty() )
         return Complex( 0 ).GetString();
 
-    Complex         z( *(z_list.Get(0)) );
+    Complex         z = z_list.Get(0);
     for( sal_uInt32 i = 1; i < z_list.Count(); ++i )
-        z.Mult( *(z_list.Get(i)) );
+        z.Mult( z_list.Get(i) );
 
     return z.GetString();
 }
@@ -984,9 +984,9 @@ OUString SAL_CALL AnalysisAddIn::getImsum( const uno::Reference< beans::XPropert
     if( z_list.empty() )
         return Complex( 0 ).GetString();
 
-    Complex         z( *(z_list.Get(0)) );
+    Complex         z( z_list.Get(0) );
     for( sal_uInt32 i = 1; i < z_list.Count(); ++i )
-        z.Add( *(z_list.Get(i)) );
+        z.Add( z_list.Get(i) );
 
     return z.GetString();
 }
