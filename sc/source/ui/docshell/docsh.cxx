@@ -1063,7 +1063,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     // Set optimal col width after import?
     bool bSetColWidths = false;
     bool bSetSimpleTextColWidths = false;
-    ScColWidthParam aColWidthParam[MAXCOLCOUNT];
+    std::map<SCCOL, ScColWidthParam> aColWidthParam;
     ScRange aColWidthRange;
     // Set optimal row height after import?
     bool bSetRowHeights = false;

@@ -37,6 +37,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <map>
 
 class ScRefreshTimerProtector;
 class ScEditEngineDefaulter;
@@ -132,7 +133,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
     SAL_DLLPRIVATE static bool   SaveCurrentChart( SfxMedium& rMedium );
 
     SAL_DLLPRIVATE ErrCode       DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
-                                             ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc );
+                                             std::map<SCCOL, ScColWidthParam>& aColWidthParam, ScFlatBoolRowSegments& rRowHeightsRecalc );
     SAL_DLLPRIVATE ErrCode       DBaseExport(
                                     const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo );
 

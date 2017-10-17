@@ -288,7 +288,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
 #endif // HAVE_FEATURE_DBCONNECTIVITY
 
 ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
-                               ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc )
+                               std::map<SCCOL, ScColWidthParam>& aColWidthParam, ScFlatBoolRowSegments& rRowHeightsRecalc )
 {
 #if !HAVE_FEATURE_DBCONNECTIVITY
     (void) rFullFileName;
