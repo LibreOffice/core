@@ -23,7 +23,7 @@
 
 using namespace svx;
 
-SFX_IMPL_TOOLBOX_CONTROL(TextUnderlinePopup, SvxTextLineItem);
+SFX_IMPL_TOOLBOX_CONTROL(TextUnderlinePopup, SvxUnderlineItem);
 
 TextUnderlinePopup::TextUnderlinePopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
     : SfxToolBoxControl(nSlotId, nId, rTbx)
