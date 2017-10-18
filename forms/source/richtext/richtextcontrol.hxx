@@ -86,10 +86,8 @@ namespace frm
 
     public:
         /** factory method
-            @return
-                a new ORichTextPeer instance, which has been acquired once!
         */
-        static ORichTextPeer* Create(
+        static rtl::Reference<ORichTextPeer> Create(
             const css::uno::Reference< css::awt::XControlModel >&         _rxModel,
             vcl::Window* _pParentWindow,
             WinBits _nStyle

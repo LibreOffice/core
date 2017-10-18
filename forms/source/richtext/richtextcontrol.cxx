@@ -180,15 +180,12 @@ namespace frm
 
             // create the peer
             Reference< XControlModel > xModel( getModel() );
-            ORichTextPeer* pPeer = ORichTextPeer::Create( xModel, pParentWin, getWinBits( xModel ) );
+            rtl::Reference<ORichTextPeer> pPeer = ORichTextPeer::Create( xModel, pParentWin, getWinBits( xModel ) );
             DBG_ASSERT( pPeer, "ORichTextControl::createPeer: invalid peer returned!" );
             if ( pPeer )
             {
-                // by definition, the returned component is acquired once
-                pPeer->release();
-
                 // announce the peer to the base class
-                setPeer( pPeer );
+                setPeer( pPeer.get() );
 
                 // initialize ourself (and thus the peer) with the model properties
                 updateFromModel();
@@ -254,7 +251,7 @@ namespace frm
     }
 
     // ORichTextPeer
-    ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, vcl::Window* _pParentWindow, WinBits _nStyle )
+    rtl::Reference<ORichTextPeer> ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, vcl::Window* _pParentWindow, WinBits _nStyle )
     {
         DBG_TESTSOLARMUTEX();
 
@@ -265,14 +262,13 @@ namespace frm
             return nullptr;
 
         // the peer itself
-        ORichTextPeer* pPeer = new ORichTextPeer;
-        pPeer->acquire();   // by definition, the returned object is acquired once
+        rtl::Reference<ORichTextPeer> pPeer(new ORichTextPeer);
 
         // the VCL control for the peer
-        VclPtrInstance<RichTextControl> pRichTextControl( pEngine, _pParentWindow, _nStyle, nullptr, pPeer );
+        VclPtrInstance<RichTextControl> pRichTextControl( pEngine, _pParentWindow, _nStyle, nullptr, pPeer.get() );
 
         // some knittings
-        pRichTextControl->SetComponentInterface( pPeer );
+        pRichTextControl->SetComponentInterface( pPeer.get() );
 
         // outta here
         return pPeer;

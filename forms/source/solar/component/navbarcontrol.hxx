@@ -78,10 +78,8 @@ namespace frm
     {
     public:
         /** factory method
-            @return
-                a new ONavigationBarPeer instance, which has been acquired once!
         */
-        static ONavigationBarPeer* Create(
+        static rtl::Reference<ONavigationBarPeer> Create(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
             vcl::Window* _pParentWindow,
             const css::uno::Reference< css::awt::XControlModel >& _rxModel
