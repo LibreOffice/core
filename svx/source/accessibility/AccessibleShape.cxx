@@ -405,67 +405,66 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     AccessibleShape::getAccessibleStateSet()
 {
     ::osl::MutexGuard aGuard (maMutex);
-    Reference<XAccessibleStateSet> xStateSet;
 
-    bool bDisposed = IsDisposed();
-
-    if (bDisposed)
+    if (IsDisposed())
     {
         // Return a minimal state set that only contains the DEFUNC state.
-        xStateSet = AccessibleContextBase::getAccessibleStateSet ();
+        return AccessibleContextBase::getAccessibleStateSet ();
     }
-    else
-    {
-        ::utl::AccessibleStateSetHelper* pStateSet =
-              static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
 
-        if (pStateSet != nullptr)
+    ::utl::AccessibleStateSetHelper* pStateSet =
+          static_cast<::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+
+    if (!pStateSet)
+        return Reference<XAccessibleStateSet>();
+
+    // Merge current FOCUSED state from edit engine.
+    if (mpText)
+    {
+        if (mpText->HaveFocus())
+            pStateSet->AddState (AccessibleStateType::FOCUSED);
+        else
+            pStateSet->RemoveState (AccessibleStateType::FOCUSED);
+    }
+    //Just when the document is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
+    css::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
+    if( xTempAcc.is() )
+    {
+        css::uno::Reference<XAccessibleContext>
+                                xTempAccContext = xTempAcc->getAccessibleContext();
+        if( xTempAccContext.is() )
         {
-            // Merge current FOCUSED state from edit engine.
-            if (mpText != nullptr)
+            css::uno::Reference<XAccessibleStateSet> rState =
+                xTempAccContext->getAccessibleStateSet();
+            if (rState.is())
             {
-                if (mpText->HaveFocus())
-                    pStateSet->AddState (AccessibleStateType::FOCUSED);
-                else
-                    pStateSet->RemoveState (AccessibleStateType::FOCUSED);
-            }
-            //Just when the document is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
-            css::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
-            if( xTempAcc.is() )
-            {
-                css::uno::Reference<XAccessibleContext>
-                                        xTempAccContext = xTempAcc->getAccessibleContext();
-                if( xTempAccContext.is() )
+                css::uno::Sequence<short> aStates = rState->getStates();
+                int count = aStates.getLength();
+                for( int iIndex = 0;iIndex < count;iIndex++ )
                 {
-                    css::uno::Reference<XAccessibleStateSet> rState =
-                        xTempAccContext->getAccessibleStateSet();
-                    if( rState.is() )           {
-                        css::uno::Sequence<short> aStates = rState->getStates();
-                        int count = aStates.getLength();
-                        for( int iIndex = 0;iIndex < count;iIndex++ )
-                        {
-                            if( aStates[iIndex] == AccessibleStateType::EDITABLE )
-                            {
-                                pStateSet->AddState (AccessibleStateType::EDITABLE);
-                                pStateSet->AddState (AccessibleStateType::RESIZABLE);
-                                pStateSet->AddState (AccessibleStateType::MOVEABLE);
-                                break;
-                            }
-                        }
+                    if( aStates[iIndex] == AccessibleStateType::EDITABLE )
+                    {
+                        pStateSet->AddState (AccessibleStateType::EDITABLE);
+                        pStateSet->AddState (AccessibleStateType::RESIZABLE);
+                        pStateSet->AddState (AccessibleStateType::MOVEABLE);
+                        break;
                     }
                 }
             }
-            // Create a copy of the state set that may be modified by the
-            // caller without affecting the current state set.
-            xStateSet.set( new ::utl::AccessibleStateSetHelper (*pStateSet));
         }
     }
-    if (!bDisposed && xStateSet.is() && mpParent && mpParent->IsDocumentSelAll())
+
+    // Create a copy of the state set that may be modified by the
+    // caller without affecting the current state set.
+    Reference<XAccessibleStateSet> xStateSet(new ::utl::AccessibleStateSetHelper(*pStateSet));
+
+    if (mpParent && mpParent->IsDocumentSelAll())
     {
-        ::utl::AccessibleStateSetHelper* pStateSet =
-            static_cast< ::utl::AccessibleStateSetHelper*>(xStateSet.get());
-        pStateSet->AddState (AccessibleStateType::SELECTED);
+        ::utl::AccessibleStateSetHelper* pCopyStateSet =
+            static_cast<::utl::AccessibleStateSetHelper*>(xStateSet.get());
+        pCopyStateSet->AddState (AccessibleStateType::SELECTED);
     }
+
     return xStateSet;
 }
 
