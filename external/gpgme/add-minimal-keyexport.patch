@@ -1,0 +1,68 @@
+--- lang/cpp/src/context.h.bak	2017-10-18 12:28:00.898945587 +0200
++++ lang/cpp/src/context.h	2017-10-18 12:28:35.794832395 +0200
+@@ -178,10 +178,10 @@
+     // Key Export
+     //
+ 
+-    GpgME::Error exportPublicKeys(const char *pattern, Data &keyData);
+-    GpgME::Error exportPublicKeys(const char *pattern[], Data &keyData);
+-    GpgME::Error startPublicKeyExport(const char *pattern, Data &keyData);
+-    GpgME::Error startPublicKeyExport(const char *pattern[], Data &keyData);
++    GpgME::Error exportPublicKeys(const char *pattern, Data &keyData, bool minimal=false);
++    GpgME::Error exportPublicKeys(const char *pattern[], Data &keyData, bool minimal=false);
++    GpgME::Error startPublicKeyExport(const char *pattern, Data &keyData, bool minimal=false);
++    GpgME::Error startPublicKeyExport(const char *pattern[], Data &keyData, bool minimal=false);
+ 
+     //
+     // Key Import
+--- lang/cpp/src/context.cpp.bak	2017-10-18 12:27:50.830978224 +0200
++++ lang/cpp/src/context.cpp	2017-10-18 12:30:13.278515603 +0200
+@@ -557,14 +557,14 @@
+     }
+ }
+ 
+-Error Context::exportPublicKeys(const char *pattern, Data &keyData)
++Error Context::exportPublicKeys(const char *pattern, Data &keyData, bool minimal)
+ {
+     d->lastop = Private::Export;
+     Data::Private *const dp = keyData.impl();
+-    return Error(d->lasterr = gpgme_op_export(d->ctx, pattern, 0, dp ? dp->data : 0));
++    return Error(d->lasterr = gpgme_op_export(d->ctx, pattern, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : 0));
+ }
+ 
+-Error Context::exportPublicKeys(const char *patterns[], Data &keyData)
++Error Context::exportPublicKeys(const char *patterns[], Data &keyData, bool minimal)
+ {
+     d->lastop = Private::Export;
+ #ifndef HAVE_GPGME_EXT_KEYLIST_MODE_EXTERNAL_NONBROKEN
+@@ -574,17 +574,17 @@
+     }
+ #endif
+     Data::Private *const dp = keyData.impl();
+-    return Error(d->lasterr = gpgme_op_export_ext(d->ctx, patterns, 0, dp ? dp->data : 0));
++    return Error(d->lasterr = gpgme_op_export_ext(d->ctx, patterns, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : 0));
+ }
+ 
+-Error Context::startPublicKeyExport(const char *pattern, Data &keyData)
++Error Context::startPublicKeyExport(const char *pattern, Data &keyData, bool minimal)
+ {
+     d->lastop = Private::Export;
+     Data::Private *const dp = keyData.impl();
+-    return Error(d->lasterr = gpgme_op_export_start(d->ctx, pattern, 0, dp ? dp->data : 0));
++    return Error(d->lasterr = gpgme_op_export_start(d->ctx, pattern, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : 0));
+ }
+ 
+-Error Context::startPublicKeyExport(const char *patterns[], Data &keyData)
++Error Context::startPublicKeyExport(const char *patterns[], Data &keyData, bool minimal)
+ {
+     d->lastop = Private::Export;
+ #ifndef HAVE_GPGME_EXT_KEYLIST_MODE_EXTERNAL_NONBROKEN
+@@ -594,7 +594,7 @@
+     }
+ #endif
+     Data::Private *const dp = keyData.impl();
+-    return Error(d->lasterr = gpgme_op_export_ext_start(d->ctx, patterns, 0, dp ? dp->data : 0));
++    return Error(d->lasterr = gpgme_op_export_ext_start(d->ctx, patterns, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : 0));
+ }
+ 
+ ImportResult Context::importKeys(const Data &data)
