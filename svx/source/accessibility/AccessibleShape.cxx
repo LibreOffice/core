@@ -460,7 +460,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
             xStateSet.set( new ::utl::AccessibleStateSetHelper (*pStateSet));
         }
     }
-    if (!bDisposed && mpParent && mpParent->IsDocumentSelAll())
+    if (!bDisposed && xStateSet.is() && mpParent && mpParent->IsDocumentSelAll())
     {
         ::utl::AccessibleStateSetHelper* pStateSet =
             static_cast< ::utl::AccessibleStateSetHelper*>(xStateSet.get());
