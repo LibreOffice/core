@@ -20,9 +20,11 @@
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 
+#include <officecfg/Office/UI/Sidebar.hxx>
 #include <unotools/confignode.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -98,6 +100,7 @@ ResourceManager::ResourceManager()
 {
     ReadDeckList();
     ReadPanelList();
+    ReadLastActive();
 }
 
 ResourceManager::~ResourceManager()
@@ -241,6 +244,14 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
     }
 
     return rPanelIds;
+}
+
+const OUString& ResourceManager::GetLastActiveDeck( const Context& rContext )
+{
+    if( maLastActiveDecks.find( rContext.msApplication ) == maLastActiveDecks.end())
+        return maLastActiveDecks["any"];
+    else
+        return maLastActiveDecks[rContext.msApplication];
 }
 
 void ResourceManager::ReadDeckList()
@@ -394,6 +405,22 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
         aPanelRootNode.commit();
 }
 
+void ResourceManager::SaveLastActiveDeck(const Context& rContext, const OUString& rActiveDeck)
+{
+    //if( maLastActiveDecks.find( rContext.msApplication ) != maLastActiveDecks.end())
+    maLastActiveDecks[rContext.msApplication] = rActiveDeck;
+
+    std::set<OUString> aLastActiveDecks;
+    for ( auto rEntry : maLastActiveDecks )
+        aLastActiveDecks.insert( rEntry.first + "," +  rEntry.second);
+
+    std::shared_ptr<comphelper::ConfigurationChanges> cfgWriter( comphelper::ConfigurationChanges::create() );
+
+    officecfg::Office::UI::Sidebar::Content::LastActiveDeck::set(comphelper::containerToSequence(aLastActiveDecks), cfgWriter);
+    cfgWriter->commit();
+
+}
+
 void ResourceManager::ReadPanelList()
 {
     const utl::OConfigurationTreeRoot aPanelRootNode(
@@ -432,6 +459,30 @@ void ResourceManager::ReadPanelList()
         rPanelDescriptor.msNodeName = aPanelNodeNames[nReadIndex];
 
         ReadContextList(aPanelNode, rPanelDescriptor.maContextList, sDefaultMenuCommand);
+    }
+}
+
+
+void ResourceManager::ReadLastActive()
+{
+    boost::optional< Sequence <OUString> > aLastActive (officecfg::Office::UI::Sidebar::Content::LastActiveDeck::get());
+
+    if (aLastActive)
+    {
+        const css::uno::Sequence<OUString>& rLastActiveDecks = aLastActive.get();
+        for (auto i = rLastActiveDecks.begin(); i != rLastActiveDecks.end(); ++i)
+        {
+            sal_Int32 nCharIdx = i->lastIndexOf(',');
+            if ( nCharIdx < 0 )
+            {
+                SAL_WARN("sfx.sidebar", "Expecting 2 values separated by comma");
+                continue;
+            }
+
+            const OUString sApplicationName = i->copy( 0, nCharIdx ).trim();
+            const OUString sLastUsed = i->copy( nCharIdx + 1 ).trim();
+            maLastActiveDecks.insert( std::make_pair(sApplicationName, sLastUsed ) );
+        }
     }
 }
 
