@@ -281,17 +281,6 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
     maHideTimer.SetDebugName( "vcl::HelpTextWindow maHideTimer" );
 }
 
-void HelpTextWindow::StateChanged(StateChangedType nType)
-{
-    FloatingWindow::StateChanged(nType);
-    if (nType == StateChangedType::InitShow)
-    {
-        ApplySettings(*this);
-        SetHelpText(maHelpText);
-        Invalidate();
-    }
-}
-
 void HelpTextWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -334,6 +323,7 @@ void HelpTextWindow::dispose()
 void HelpTextWindow::SetHelpText( const OUString& rHelpText )
 {
     maHelpText = rHelpText;
+    ApplySettings(*this);
     if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN)
     {
         Size aSize;
