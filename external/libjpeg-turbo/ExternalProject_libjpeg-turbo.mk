@@ -22,6 +22,10 @@ $(call gb_ExternalProject_get_state_target,libjpeg-turbo,build) : $(call gb_Exte
 		$(MAKE) \
 	)
 
+libjpeg-turbo_CFLAGS:=" \
+    $(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS)) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(CFLAGS) $(gb_VISIBILITY_FLAGS) \
+	$(gb_LinkTarget_EXCEPTIONFLAGS)"
+
 $(call gb_ExternalProject_get_state_target,libjpeg-turbo,configure) :
 	$(call gb_ExternalProject_run,configure,\
 		MAKE=$(MAKE) ./configure \
@@ -33,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,libjpeg-turbo,configure) :
 			--without-java \
 			--without-turbojpeg \
 			$(if $(NASM),,--without-simd) \
-			CFLAGS='$(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS)) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(CFLAGS) $(gb_VISIBILITY_FLAGS)' \
+			CFLAGS=$(libjpeg-turbo_CFLAGS) \
 	)
 
 # vim: set noet sw=4 ts=4:
