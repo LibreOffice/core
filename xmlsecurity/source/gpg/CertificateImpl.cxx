@@ -13,6 +13,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <com/sun/star/security/KeyUsage.hpp>
+#include <officecfg/Office/Common.hxx>
 
 #include <gpgme.h>
 #include <context.h>
@@ -212,7 +213,10 @@ void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)
     // extract key data, store into m_aBits
     GpgME::Data data_out;
     ctx->setArmor(false); // caller will base64-encode anyway
-    GpgME::Error err = ctx->exportPublicKeys(key.primaryFingerprint(), data_out);
+    GpgME::Error err = ctx->exportPublicKeys(
+        key.primaryFingerprint(),
+        data_out,
+        officecfg::Office::Common::Security::OpenPGP::MinimalKeyExport::get());
 
     if (err)
         throw RuntimeException("The GpgME library failed to retrieve the public key");
