@@ -1645,19 +1645,19 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
     SvxTabStopItem aAttr(0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP);
 
-    const SwTextFormatColl* pSty = nullptr;
+    const SwFormat * pSty = nullptr;
     sal_uInt16 nTabBase;
     if (m_pAktColl && m_nAktColl < m_vColl.size()) // StyleDef
     {
         nTabBase = m_vColl[m_nAktColl].m_nBase;
         if (nTabBase < m_vColl.size())  // Based On
-            pSty = static_cast<const SwTextFormatColl*>(m_vColl[nTabBase].m_pFormat);
+            pSty = m_vColl[nTabBase].m_pFormat;
     }
     else
     { // Text
         nTabBase = m_nAktColl;
         if (m_nAktColl < m_vColl.size())
-            pSty = static_cast<const SwTextFormatColl*>(m_vColl[m_nAktColl].m_pFormat);
+            pSty = m_vColl[m_nAktColl].m_pFormat;
         //TODO: figure out else here
     }
 
@@ -1687,7 +1687,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
                 // current one (prevent loop)
                 aLoopWatch.insert(reinterpret_cast<size_t>(pSty));
                 if (nTabBase < m_vColl.size())
-                    pSty = static_cast<const SwTextFormatColl*>(m_vColl[nTabBase].m_pFormat);
+                    pSty = m_vColl[nTabBase].m_pFormat;
                 //TODO figure out the else branch
 
                 if (aLoopWatch.find(reinterpret_cast<size_t>(pSty)) !=
