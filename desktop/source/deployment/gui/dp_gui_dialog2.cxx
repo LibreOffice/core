@@ -451,6 +451,7 @@ void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller )
 ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag)
     : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/extensionmanager.ui", eFlag)
     , DialogHelper(pManager->getContext(), static_cast<Dialog*>(this))
+    , m_xRestartParent(pParent ? pParent : Application::GetDefDialogParent())
     , m_sAddPackages(DpResId(RID_STR_ADD_PACKAGES))
     , m_bHasProgress(false)
     , m_bProgressChanged(false)
@@ -546,6 +547,7 @@ void ExtMgrDialog::dispose()
     m_pProgressText.clear();
     m_pProgressBar.clear();
     m_pCancelBtn.clear();
+    m_xRestartParent.clear();
     ModelessDialog::dispose();
 }
 
@@ -1022,11 +1024,11 @@ bool ExtMgrDialog::EventNotify( NotifyEvent& rNEvt )
         return true;
 }
 
-IMPL_STATIC_LINK_NOARG(ExtMgrDialog, Restart, void*, void)
+IMPL_STATIC_LINK(ExtMgrDialog, Restart, void*, pParent, void)
 {
     SolarMutexGuard aGuard;
     ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                    nullptr, svtools::RESTART_REASON_EXTENSION_INSTALL);
+                                    static_cast<vcl::Window*>(pParent), svtools::RESTART_REASON_EXTENSION_INSTALL);
 }
 
 bool ExtMgrDialog::Close()
@@ -1040,7 +1042,7 @@ bool ExtMgrDialog::Close()
         if (!m_bClosed && m_pManager->isModified())
         {
             m_pManager->clearModified();
-            Application::PostUserEvent(LINK(nullptr, ExtMgrDialog, Restart));
+            Application::PostUserEvent(LINK(nullptr, ExtMgrDialog, Restart), m_xRestartParent);
         }
         m_bClosed = true;
     }

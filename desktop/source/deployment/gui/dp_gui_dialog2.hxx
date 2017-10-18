@@ -99,6 +99,7 @@ public:
 class ExtMgrDialog : public ModelessDialog,
                      public DialogHelper
 {
+    VclPtr<vcl::Window> m_xRestartParent;
     VclPtr<ExtBoxWithBtns_Impl> m_pExtensionBox;
     VclPtr<PushButton>          m_pOptionsBtn;
     VclPtr<PushButton>          m_pAddBtn;
