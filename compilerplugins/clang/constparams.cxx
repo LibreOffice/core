@@ -8,7 +8,6 @@
  */
 
 #include <algorithm>
-#include <set>
 #include <string>
 #include <unordered_set>
 #include <unordered_map>
@@ -60,8 +59,8 @@ public:
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
-        for (const ParmVarDecl *pParmVarDecl : interestingSet) {
-            if (cannotBeConstSet.find(pParmVarDecl) == cannotBeConstSet.end()) {
+        for (const ParmVarDecl *pParmVarDecl : interestingParamSet) {
+            if (paramCannotBeConstSet.find(pParmVarDecl) == paramCannotBeConstSet.end()) {
                 auto functionDecl = parmToFunction[pParmVarDecl];
                 auto canonicalDecl = functionDecl->getCanonicalDecl();
                 if (ignoredFunctions_.find(canonicalDecl)
@@ -174,10 +173,10 @@ private:
     bool checkIfCanBeConst(const Stmt*, const ParmVarDecl*);
     bool isPointerOrReferenceToConst(const QualType& qt);
 
-    std::unordered_set<const ParmVarDecl*> interestingSet;
+    std::unordered_set<const ParmVarDecl*> interestingParamSet;
     std::unordered_map<const ParmVarDecl*, const FunctionDecl*> parmToFunction;
-    std::unordered_set<const ParmVarDecl*> cannotBeConstSet;
-    std::set<FunctionDecl const *> ignoredFunctions_;
+    std::unordered_set<const ParmVarDecl*> paramCannotBeConstSet;
+    std::unordered_set<FunctionDecl const *> ignoredFunctions_;
     Expr const * callee_ = nullptr;
 };
 
@@ -257,7 +256,7 @@ bool ConstParams::VisitFunctionDecl(const FunctionDecl * functionDecl)
         // ignore things with template params
         if (pParmVarDecl->getType()->isInstantiationDependentType())
             continue;
-        interestingSet.insert(pParmVarDecl);
+        interestingParamSet.insert(pParmVarDecl);
         parmToFunction[pParmVarDecl] = functionDecl;
     }
 
@@ -278,10 +277,10 @@ bool ConstParams::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
         return true;
     }
     // no need to check again if we have already eliminated this one
-    if (cannotBeConstSet.find(parmVarDecl) != cannotBeConstSet.end())
+    if (paramCannotBeConstSet.find(parmVarDecl) != paramCannotBeConstSet.end())
         return true;
     if (!checkIfCanBeConst(declRefExpr, parmVarDecl))
-        cannotBeConstSet.insert(parmVarDecl);
+        paramCannotBeConstSet.insert(parmVarDecl);
 
     return true;
 }
