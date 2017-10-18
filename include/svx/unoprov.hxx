@@ -26,6 +26,7 @@
 #include <svx/svxdllapi.h>
 #include <editeng/unoipset.hxx>
 #include <rtl/ref.hxx>
+#include <memory>
 
 
 class SvxItemPropertySet;
@@ -84,7 +85,7 @@ public:
 class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry const * aMapArr[SVXMAP_END];
-    SvxItemPropertySet* aSetArr[SVXMAP_END];
+    std::unique_ptr<SvxItemPropertySet> aSetArr[SVXMAP_END];
 public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();

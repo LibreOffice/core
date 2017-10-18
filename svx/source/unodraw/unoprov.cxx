@@ -902,8 +902,6 @@ SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 
 SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
 {
-    for(SvxItemPropertySet* p : aSetArr)
-        delete p;
 }
 
 
@@ -949,8 +947,8 @@ const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPro
 const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool)
 {
     if( !aSetArr[nPropertyId] )
-        aSetArr[nPropertyId] = new SvxItemPropertySet( GetMap( nPropertyId ), rPool );
-    return aSetArr[nPropertyId];
+        aSetArr[nPropertyId].reset(new SvxItemPropertySet( GetMap( nPropertyId ), rPool ));
+    return aSetArr[nPropertyId].get();
 }
 
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
