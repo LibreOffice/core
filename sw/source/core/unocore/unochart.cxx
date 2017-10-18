@@ -1860,7 +1860,7 @@ SwChartDataSequence::SwChartDataSequence(
 {
     m_bDisposed = false;
 
-    acquire();
+    rtl::Reference<SwChartDataSequence> aSelfHold(this);
     try
     {
         const SwTable* pTable = SwTable::FindTable( &rTableFormat );
@@ -1876,13 +1876,11 @@ SwChartDataSequence::SwChartDataSequence(
     }
     catch (uno::RuntimeException &)
     {
-        // TODO: shouldn't there be a call to release() here?
         throw;
     }
     catch (uno::Exception &)
     {
     }
-    release();
 
 #if OSL_DEBUG_LEVEL > 0
     // check if it can properly convert into a SwUnoTableCursor
@@ -1906,7 +1904,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
 {
     m_bDisposed = false;
 
-    acquire();
+    rtl::Reference<SwChartDataSequence> aSelfHold(this);
     try
     {
         const SwTable* pTable = SwTable::FindTable( GetFrameFormat() );
@@ -1922,13 +1920,11 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     }
     catch (uno::RuntimeException &)
     {
-        // TODO: shouldn't there be a call to release() here?
         throw;
     }
     catch (uno::Exception &)
     {
     }
-    release();
 
 #if OSL_DEBUG_LEVEL > 0
     // check if it can properly convert into a SwUnoTableCursor
