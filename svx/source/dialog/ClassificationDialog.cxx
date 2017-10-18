@@ -178,7 +178,7 @@ std::vector<ClassificationResult> ClassificationDialog::getResult()
 
 IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
 {
-    sal_Int32 nSelected = rBox.GetSelectedEntryPos();
+    const sal_Int32 nSelected = rBox.GetSelectedEntryPos();
     if (nSelected >= 0)
     {
         std::unique_ptr<EditTextObject> pEditText(m_pEditWindow->pEdEngine->CreateTextObject());
@@ -198,7 +198,7 @@ IMPL_LINK(ClassificationDialog, SelectClassificationHdl, ListBox&, rBox, void)
             }
         }
 
-        OUString aString = maHelper.GetBACNames()[nSelected];
+        const OUString aString = maHelper.GetAbbreviatedBACNames()[nSelected];
         insertField(ClassificationType::CATEGORY, aString);
 
         m_pInternationalClassificationListBox->SelectEntryPos(nSelected);
@@ -228,7 +228,7 @@ IMPL_LINK(ClassificationDialog, SelectMarkingHdl, ListBox&, rBox, void)
             }
         }
 
-        OUString aString = maHelper.GetMarkings()[nSelected];
+        const OUString aString = maHelper.GetMarkings()[nSelected];
         insertField(ClassificationType::MARKING, aString);
     }
 }

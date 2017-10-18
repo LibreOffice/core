@@ -68,6 +68,7 @@
       </xs:sequence>
       <xs:attribute name="Identifier" type="xs:anyURI" use="required"/>
       <xs:attribute name="Name" type="xs:string" use="optional"/>
+      <xs:attribute name="loextAbbreviatedName" type="xs:string" use="optional"/>
     </xs:complexType>
   </xs:element>
   <!-- Impact Level -->
