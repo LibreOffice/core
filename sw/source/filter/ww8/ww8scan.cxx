@@ -1811,6 +1811,9 @@ static bool WW8GetFieldPara(WW8PLCFspecial& rPLCF, WW8FieldDesc& rF)
     if( !rPLCF.Get( rF.nLCode, pData ) )
         goto Err;
 
+    if (rF.nLCode < rF.nSCode)
+        goto Err;
+
     rF.nSRes = rF.nLCode;                           // Default
     rF.nSCode++;                                    // without markers
     rF.nLCode -= rF.nSCode;                         // Pos -> length
