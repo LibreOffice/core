@@ -201,7 +201,7 @@ void AboutDialog::SetLogo()
     bool bOldAntiAliasSetting = aDrawOpt.IsAntiAliasing();
     aDrawOpt.SetAntiAliasing(true);
 
-    // load svg logo, specify desired width, scale height isotrophically
+    // load svg logo, specify desired width, scale height isotropically
     if (SfxApplication::loadBrandSvg("flat_logo", aLogoBitmap, nWidth) &&
         !aLogoBitmap.IsEmpty())
     {
