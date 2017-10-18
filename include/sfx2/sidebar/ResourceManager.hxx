@@ -51,6 +51,7 @@ public:
     void InitDeckContext(const Context& rContex);
     void SaveDecksSettings(const Context& rContext);
     void SaveDeckSettings(const DeckDescriptor* pDeckDesc);
+    void SaveLastActiveDeck(const Context& rContext, const OUString& rActiveDeck);
 
     void disposeDecks();
 
@@ -84,6 +85,8 @@ public:
                                             const OUString& rsDeckId,
                                             const css::uno::Reference<css::frame::XController>& rxController);
 
+    const OUString& GetLastActiveDeck( const Context& rContext );
+
     /** Remember the expansions state per panel and context.
     */
     void StorePanelExpansionState(const OUString& rsPanelId,
@@ -99,11 +102,13 @@ private:
     typedef std::vector<std::shared_ptr<PanelDescriptor>> PanelContainer;
     PanelContainer maPanels;
     mutable std::set<rtl::OUString> maProcessedApplications;
+    std::map<OUString, OUString> maLastActiveDecks;
 
     SvtMiscOptions maMiscOptions;
 
     void ReadDeckList();
     void ReadPanelList();
+    void ReadLastActive();
     static void ReadContextList(const utl::OConfigurationNode& rNode,
                          ContextList& rContextList,
                          const OUString& rsDefaultMenuCommand);
