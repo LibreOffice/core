@@ -36,7 +36,9 @@ namespace
 
         // Declares the method as a test to call
         CPPUNIT_TEST(testMiscVBAFunctions);
+#ifdef _WIN32
         CPPUNIT_TEST(testMiscOLEStuff);
+#endif
 
         // End of test suite definition
         CPPUNIT_TEST_SUITE_END();
@@ -175,16 +177,11 @@ void VBATest::testMiscVBAFunctions()
     }
 }
 
-void VBATest::testMiscOLEStuff()
-{
 // Not much point even trying to run except on Windows.
 // (Without Excel doesn't really do anything anyway,
-// see "so skip test" below.)
-
-// Since some time, on a properly updated Windows 10, this works
-// only with a 64-bit LibreOffice
-
-#if defined(_WIN64)
+#ifdef _WIN32
+void VBATest::testMiscOLEStuff()
+{
     // test if we have the necessary runtime environment
     // to run the OLE tests.
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
@@ -203,27 +200,45 @@ void VBATest::testMiscOLEStuff()
         bOk = xADODB.is();
     }
     if ( !bOk )
-        return; // can't do anything, skip test
+        return; // can't do anything without OLE, so skip test
 
+    // search for the ODBC Excel drivers
     const int nBufSize = 1024 * 4;
     wchar_t sBuf[nBufSize];
-    SQLGetInstalledDriversW( sBuf, nBufSize, nullptr );
+    if( !SQLGetInstalledDriversW( sBuf, nBufSize, nullptr ) )
+        return;
+
+    const wchar_t *aExcelDriverNameList[]
+    {
+        L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)",
+        L"Microsoft Excel Driver (*.xls)"
+    };
+    const unsigned MAX_DRV = SAL_N_ELEMENTS( aExcelDriverNameList );
+    bool bFoundDrivers[ MAX_DRV ] = { false, };
 
     const wchar_t *pODBCDriverName = sBuf;
-    bool bFound = false;
-    for (; wcslen( pODBCDriverName ) != 0; pODBCDriverName += wcslen( pODBCDriverName ) + 1 ) {
-        if( wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls)" ) == 0 ||
-            wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)" ) == 0 ) {
-            bFound = true;
+    for (; wcslen( pODBCDriverName ) != 0; pODBCDriverName += wcslen( pODBCDriverName ) + 1 )
+    {
+        for ( unsigned i = 0; i < MAX_DRV; ++i )
+            if ( !bFoundDrivers[ i ] && wcscmp( pODBCDriverName, aExcelDriverNameList[ i ] ) == 0 )
+                bFoundDrivers[ i ] = true;
+    }
+
+    pODBCDriverName = nullptr;
+    for ( unsigned i = 0; i < MAX_DRV; ++i )
+        if ( bFoundDrivers[ i ] )
+        {
+            pODBCDriverName = aExcelDriverNameList[ i ];
             break;
         }
-    }
-    if ( !bFound )
-        return; // can't find ODBC driver needed test, so skip test
+
+    if ( !pODBCDriverName )
+        return; // can't find any ODBC driver needed for the test, so skip it
 
     const char* macroSource[] = {
         "ole_ObjAssignNoDflt.vb",
         "ole_ObjAssignToNothing.vb",
+        "ole_dfltObjDflMethod.vb",
     };
 
     OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
@@ -251,11 +266,8 @@ void VBATest::testMiscOLEStuff()
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.get() != nullptr );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"), pReturn->GetOUString() );
     }
-#else
-    // Avoid "this method is empty and should be removed" warning
-    (void) 42;
-#endif
 }
+#endif
 
   // Put the test suite in the registry
   CPPUNIT_TEST_SUITE_REGISTRATION(VBATest);
