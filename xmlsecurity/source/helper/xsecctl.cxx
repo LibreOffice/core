@@ -198,7 +198,7 @@ void XSecController::createXSecComponent( )
     }
 }
 
-bool XSecController::chainOn( bool bRetrievingLastEvent )
+bool XSecController::chainOn( bool /*bRetrievingLastEvent*/ )
 /****** XSecController/chainOn ************************************************
  *
  *   NAME
@@ -281,21 +281,6 @@ bool XSecController::chainOn( bool bRetrievingLastEvent )
             }
 
             /*
-             * get missed key SAX events
-             */
-            if (m_xElementStackKeeper.is())
-            {
-                m_xElementStackKeeper->retrieve(xSEKHandler, bRetrievingLastEvent);
-
-                /*
-                 * now the ElementStackKeeper can stop its work, because the
-                 * SAXEventKeeper is on the SAX chain, no SAX events will be
-                 * missed.
-                 */
-                m_xElementStackKeeper->stop();
-            }
-
-            /*
              * connects the next document handler on the SAX chain
              */
             m_xSAXEventKeeper->setNextHandler(uno::Reference<xml::sax::XDocumentHandler>());
@@ -338,15 +323,6 @@ void XSecController::chainOff()
                     cssu::Reference< cssxs::XParser > xParser(m_xPreviousNodeOnSAXChain, cssu::UNO_QUERY);
                     xParser->setDocumentHandler(uno::Reference<xml::sax::XDocumentHandler>());
                 }
-            }
-
-            if (m_xElementStackKeeper.is())
-            {
-                /*
-                 * start the ElementStackKeeper to reserve any possible
-                 * missed key SAX events
-                 */
-                m_xElementStackKeeper->start();
             }
 
             m_bIsSAXEventKeeperConnected = false;
@@ -397,14 +373,6 @@ void XSecController::initializeSAXChain()
     m_bIsSAXEventKeeperConnected = false;
     m_bIsCollectingElement = false;
     m_bIsBlocking = false;
-
-    if (m_xElementStackKeeper.is())
-    {
-        /*
-         * starts the ElementStackKeeper
-         */
-        m_xElementStackKeeper->start();
-    }
 
     chainOff();
 }
@@ -490,7 +458,6 @@ void XSecController::setSAXChainConnector(const cssu::Reference< cssl::XInitiali
 {
     m_bIsPreviousNodeInitializable = true;
     m_xPreviousNodeOnSAXChain = xInitialization;
-    m_xElementStackKeeper.clear();
 
     initializeSAXChain( );
 }
@@ -502,22 +469,9 @@ void XSecController::clearSAXChainConnector()
  *  clearSAXChainConnector -- resets the collaborating components.
  ******************************************************************************/
 {
-    /*
-     * before resetting, if the ElementStackKeeper has kept something, then
-     * those kept key SAX events must be transferred to the SAXEventKeeper
-     * first. This is to promise the next node to the SAXEventKeeper on the
-     * SAX chain always receives a complete document.
-     */
-    if (m_xElementStackKeeper.is() && m_xSAXEventKeeper.is())
-    {
-        cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), cssu::UNO_QUERY);
-        m_xElementStackKeeper->retrieve(xSEKHandler, true);
-    }
-
     chainOff();
 
     m_xPreviousNodeOnSAXChain = nullptr;
-    m_xElementStackKeeper = nullptr;
 }
 
 void XSecController::endMission()

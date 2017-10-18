@@ -29,7 +29,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
-#include <com/sun/star/xml/crypto/sax/XElementStackKeeper.hpp>
 #include <com/sun/star/xml/crypto/sax/XSecuritySAXEventKeeper.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedListener.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeperStatusChangeListener.hpp>
@@ -162,44 +161,6 @@ private:
      * correct interface type.
      */
     bool m_bIsPreviousNodeInitializable;
-
-    /*
-     * the ElementStackKeeper is used to reserve the key SAX events.
-     * when the SAXEventKeeper is chained on the SAX chain, it need
-     * first get all missed key SAX events in order to make sure the
-     * DOM tree it buffering has the same structure with the original
-     * document.
-     *
-     * For a given section of a SAX event stream, the key SAX events
-     * are the minimal SAX event subset of that section, which,
-     * combining with SAX events outside of this section, has the same
-     * structure with the original document.
-     *
-     * For example, sees the following dom fragment:
-     *     <A>
-     *      <B/>
-     *      <C>
-     *       <D>
-     *        <E/>
-     *       </D>
-     *      </C>
-     *     </A>
-     *
-     * If we consider the SAX event section from startElement(<A>) to
-     * startElement(<D>), then the key SAX events are:
-     *
-     *    startElement(<A>), startElement(<C>), startElement(<D>)
-     *
-     * The startElement(<B>) and endElement(<B>) is ignored, because
-     * they are unimportant for the tree structure in this section.
-     *
-     * If we consider the SAX event section from startElement(<D>) to
-     * endElement(<A>), the key SAX events are:
-     *
-     *    startElement(<D>), endElement(<D>), endElement(<C>),
-     *    endElement(<A>).
-     */
-    css::uno::Reference< css::xml::crypto::sax::XElementStackKeeper > m_xElementStackKeeper;
 
     /*
      * a flag representing whether the SAXEventKeeper is now on the
