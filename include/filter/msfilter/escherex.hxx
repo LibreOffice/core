@@ -606,6 +606,7 @@ public:
 
     EscherGraphicProvider( EscherGraphicProviderFlags nFlags  = EscherGraphicProviderFlags::NONE );
     virtual ~EscherGraphicProvider();
+
     EscherGraphicProvider& operator=( EscherGraphicProvider const & ) = delete; // MSVC2015 workaround
     EscherGraphicProvider( EscherGraphicProvider const & ) = delete; // MSVC2015 workaround
 };
@@ -614,8 +615,8 @@ struct EscherShapeListEntry;
 
 class MSFILTER_DLLPUBLIC EscherSolverContainer
 {
-    ::std::vector< EscherShapeListEntry* >     maShapeList;
-    ::std::vector< EscherConnectorListEntry* > maConnectorList;
+    ::std::vector< std::unique_ptr<EscherShapeListEntry> >     maShapeList;
+    ::std::vector< std::unique_ptr<EscherConnectorListEntry> > maConnectorList;
 
 public:
 
@@ -638,8 +639,11 @@ public:
 
     void            WriteSolver( SvStream& );
 
-                    EscherSolverContainer(){};
+                    EscherSolverContainer();
                     ~EscherSolverContainer();
+
+    EscherSolverContainer& operator=( EscherSolverContainer const & ) = delete; // MSVC2015 workaround
+    EscherSolverContainer( EscherSolverContainer const & ) = delete; // MSVC2015 workaround
 };
 
 
@@ -856,7 +860,7 @@ class MSFILTER_DLLPUBLIC EscherPersistTable
 {
 
 public:
-    ::std::vector< EscherPersistEntry* > maPersistTable;
+    ::std::vector< std::unique_ptr<EscherPersistEntry> > maPersistTable;
 
     bool        PtIsID( sal_uInt32 nID );
     void        PtInsert( sal_uInt32 nID, sal_uInt32 nOfs );
@@ -867,6 +871,9 @@ public:
 
                 EscherPersistTable();
     virtual     ~EscherPersistTable();
+
+    EscherPersistTable& operator=( EscherPersistTable const & ) = delete; // MSVC2015 workaround
+    EscherPersistTable( EscherPersistTable const & ) = delete; // MSVC2015 workaround
 };
 
 
