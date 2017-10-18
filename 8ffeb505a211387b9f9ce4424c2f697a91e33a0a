@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1e1002a8",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-18T11:57:25Z",
+      "side": 1,
+      "message": "getLeastSignificantBit() would be a better name. Or rather findFirstSetBit() as that is what the function does and wraps.",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 23
+      },
+      "revId": "8ffeb505a211387b9f9ce4424c2f697a91e33a0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_fe0c1696",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-18T11:57:25Z",
+      "side": 1,
+      "message": "__buitlin_ffs() is GCC only and should only be used then, probably best to test in configure, similar to\n\n git grep HAVE_GCC_BUILTIN_ATOMIC\n\nOtherwise, there\u0027s also the POSIX function ffs() that should be available if _XOPEN_SOURCE \u003e\u003d 700",
+      "range": {
+        "startLine": 180,
+        "startChar": 11,
+        "endLine": 180,
+        "endChar": 24
+      },
+      "revId": "8ffeb505a211387b9f9ce4424c2f697a91e33a0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3e277e13",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-18T11:57:25Z",
+      "side": 1,
+      "message": "getBitsInFracPart() would be a better name.",
+      "revId": "8ffeb505a211387b9f9ce4424c2f697a91e33a0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_be79aefe",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-18T11:57:25Z",
+      "side": 1,
+      "message": "Why was the 11 bits chosen (here and below)? A comment to enlighten the reader would be welcome ;-)\nWhat would happen with other values?",
+      "revId": "8ffeb505a211387b9f9ce4424c2f697a91e33a0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_3e6e9e2f",
+        "filename": "sc/qa/unit/data/functions/mathematical/fods/mod.fods",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-18T11:57:25Z",
+      "side": 1,
+      "message": "Please, to edit test files use the en-US locale to diminish the diff. For example, now all numbers\u0027 text representation changed from \"1.2\" to \"1,2\" (i.e. different decial separator) and also number formats and styles changes are too many. Best use\n\n LC_ALL\u003den_US.UTF-8 soffice\n\nor at least under Tools -\u003e Options -\u003e Languages -\u003e Language Settings, set Locale to English-US before opening the file.",
+      "revId": "8ffeb505a211387b9f9ce4424c2f697a91e33a0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
