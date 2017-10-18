@@ -7159,9 +7159,6 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop const & rDop )
     for( sal_uInt8 nI = 0x1; nI <= 0x20; nI <<= 1 )
         if( nI & rDop.grpfIhdt )                // bit set?
             nIdxOffset++;
-
-    nTextOfs = rFib.m_ccpText + rFib.m_ccpFootnote;  // size of the main text
-                                            // and from the footnotes
 }
 
 bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart,

@@ -1844,7 +1844,6 @@ class WW8PLCF_HdFt
 {
 private:
     WW8PLCF aPLCF;
-    long nTextOfs;
     short nIdxOffset;
 
 public:
