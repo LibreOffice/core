@@ -140,6 +140,7 @@ rtl::Reference<SidebarController> SidebarController::create(
     if (instance->mxReadOnlyModeDispatch.is())
         instance->mxReadOnlyModeDispatch->addStatusListener(instance.get(), aURL);
 
+
     instance->SwitchToDeck(gsDefaultDeckId);
 
     return instance;
@@ -437,12 +438,20 @@ void SidebarController::UpdateConfigurations()
         if (maCurrentContext.msApplication != "none")
             mpResourceManager->SaveDecksSettings(maCurrentContext);
 
+        // get last active deck for this application first update
+        if (!maRequestedContext.msApplication.isEmpty() &&
+             (maCurrentContext.msApplication != maRequestedContext.msApplication))
+        {
+           OUString sLastActive = mpResourceManager->GetLastActiveDeck( maCurrentContext );
+
         maCurrentContext = maRequestedContext;
 
         mpResourceManager->InitDeckContext(GetCurrentContext());
 
         // Find the set of decks that could be displayed for the new context.
         ResourceManager::DeckContextDescriptorContainer aDecks;
+
+        }
 
         css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
 
