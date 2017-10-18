@@ -347,18 +347,6 @@ TxtBox::TxtBox()
 
 TxtBox::~TxtBox()
 {
-    for (auto& entry : plists)
-    {
-        for (auto const& para : entry)
-        {
-            delete para;
-        }
-    }
-
-    for (auto const& para : caption)
-    {
-        delete para;
-    }
 }
 
 // picture(11)
@@ -382,11 +370,6 @@ Picture::~Picture()
 {
     if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
         delete static_cast<HWPDrawingObject *>(picinfo.picdraw.hdo);
-
-    for (auto const& para : caption)
-    {
-        delete para;
-    }
 }
 
 
@@ -394,30 +377,18 @@ Picture::~Picture()
 // hidden(15)
 Hidden::~Hidden()
 {
-    for (auto const& para : plist)
-    {
-        delete para;
-    }
 }
 
 
 // header/footer(16)
 HeaderFooter::~HeaderFooter()
 {
-    for (auto const& para : plist)
-    {
-        delete para;
-    }
 }
 
 
 // footnote(17)
 Footnote::~Footnote()
 {
-    for (auto const& para : plist)
-    {
-        delete para;
-    }
 }
 
 
