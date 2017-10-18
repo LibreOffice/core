@@ -30,13 +30,17 @@ namespace
         public:
         VBATest() : BootstrapFixture(true, false) {}
         void testMiscVBAFunctions();
+#ifdef _WIN32
         void testMiscOLEStuff();
+#endif
         // Adds code needed to register the test suite
         CPPUNIT_TEST_SUITE(VBATest);
 
         // Declares the method as a test to call
         CPPUNIT_TEST(testMiscVBAFunctions);
+#ifdef _WIN32
         CPPUNIT_TEST(testMiscOLEStuff);
+#endif
 
         // End of test suite definition
         CPPUNIT_TEST_SUITE_END();
@@ -175,16 +179,67 @@ void VBATest::testMiscVBAFunctions()
     }
 }
 
-void VBATest::testMiscOLEStuff()
-{
 // Not much point even trying to run except on Windows.
 // (Without Excel doesn't really do anything anyway,
-// see "so skip test" below.)
+#ifdef _WIN32
+static bool IsIncompatibleExcelJetDriver( const wchar_t *pODBCDriverName )
+{
+    ULONG nError;
+    HKEY hKey;
 
-// Since some time, on a properly updated Windows 10, this works
-// only with a 64-bit LibreOffice
+    if ( wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls)" ) )
+        return false;
 
-#if defined(_WIN64)
+    // All lookup failures will result in a aborted test!
+
+    // Find registered Jet Excel DLL in registry
+    std::wstring strValueName( L"SOFTWARE\\Microsoft\\Jet\\4.0\\Engines\\Excel" );
+    nError = RegOpenKeyExW( HKEY_LOCAL_MACHINE, strValueName.c_str(),
+                            0, KEY_QUERY_VALUE, &hKey );
+    if( ERROR_SUCCESS != nError )
+        return true;
+
+    wchar_t dll_name[ 1024 ];
+    DWORD dll_name_size = sizeof( dll_name );
+    nError = RegQueryValueEx( hKey, "Win32", NULL, NULL,
+                              reinterpret_cast<LPBYTE>( dll_name ) , &dll_name_size );
+    RegCloseKey( hKey );
+    if( ERROR_SUCCESS != nError )
+        return true;
+    dll_name[ dll_name_size ] = '\0';
+
+    TCHAR dll_name_expanded[ 1024 ];
+    if ( !ExpandEnvironmentStrings( reinterpret_cast<LPCTSTR>( dll_name ),
+             dll_name_expanded, sizeof( dll_name_expanded ) - 2 ) )
+        return true;
+
+    // Get DLL version
+    DWORD   verHandle     = 0;
+    UINT    size          = 0;
+    LPBYTE  lpBuffer      = NULL;
+    LPCTSTR szVersionFile = reinterpret_cast<LPCTSTR>( dll_name_expanded );
+
+    DWORD verSize = GetFileVersionInfoSize( szVersionFile, &verHandle );
+    if ( 0 == verSize )
+        return true;
+
+    LPSTR verData = static_cast<LPSTR>( alloca( verSize ) );
+    if( !GetFileVersionInfo( szVersionFile, verHandle, verSize, verData) )
+        return true;
+    if( !VerQueryValue( verData, "\\", (VOID FAR* FAR*) &lpBuffer, &size) || !size )
+        return true;
+
+    VS_FIXEDFILEINFO *verInfo = (VS_FIXEDFILEINFO *) lpBuffer;
+    if( 0xfeef04bd != verInfo->dwSignature )
+        return true;
+
+    // Incompatible version: 4.0.9801.1
+    return verInfo->dwFileVersionMS == 262144
+        && verInfo->dwFileVersionLS == 642318337;
+}
+
+void VBATest::testMiscOLEStuff()
+{
     // test if we have the necessary runtime environment
     // to run the OLE tests.
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
@@ -203,27 +258,48 @@ void VBATest::testMiscOLEStuff()
         bOk = xADODB.is();
     }
     if ( !bOk )
-        return; // can't do anything, skip test
+        return; // can't do anything without OLE, so skip test
 
+    // search for the ODBC Excel drivers
     const int nBufSize = 1024 * 4;
     wchar_t sBuf[nBufSize];
-    SQLGetInstalledDriversW( sBuf, nBufSize, nullptr );
+    if( !SQLGetInstalledDriversW( sBuf, nBufSize, nullptr ) )
+        return;
+
+    const wchar_t *aExcelDriverNameList[]
+    {
+        L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)",
+        L"Microsoft Excel Driver (*.xls)"
+    };
+    const unsigned MAX_DRV = SAL_N_ELEMENTS( aExcelDriverNameList );
+    bool bFoundDrivers[ MAX_DRV ] = { false, };
 
     const wchar_t *pODBCDriverName = sBuf;
-    bool bFound = false;
-    for (; wcslen( pODBCDriverName ) != 0; pODBCDriverName += wcslen( pODBCDriverName ) + 1 ) {
-        if( wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls)" ) == 0 ||
-            wcscmp( pODBCDriverName, L"Microsoft Excel Driver (*.xls, *.xlsx, *.xlsm, *.xlsb)" ) == 0 ) {
-            bFound = true;
+    for (; wcslen( pODBCDriverName ) != 0; pODBCDriverName += wcslen( pODBCDriverName ) + 1 )
+    {
+        for ( unsigned i = 0; i < MAX_DRV; ++i )
+            if ( !bFoundDrivers[ i ] && wcscmp( pODBCDriverName, aExcelDriverNameList[ i ] ) == 0 )
+                bFoundDrivers[ i ] = true;
+    }
+
+    pODBCDriverName = nullptr;
+    for ( unsigned i = 0; i < MAX_DRV; ++i )
+        if ( bFoundDrivers[ i ] )
+        {
+            pODBCDriverName = aExcelDriverNameList[ i ];
             break;
         }
-    }
-    if ( !bFound )
-        return; // can't find ODBC driver needed test, so skip test
+
+    if ( !pODBCDriverName )
+        return; // can't find any ODBC driver needed for the test, so skip it
+
+    if ( IsIncompatibleExcelJetDriver( pODBCDriverName ) )
+        return; // found incompatible Excel driver, so skip the tests
 
     const char* macroSource[] = {
         "ole_ObjAssignNoDflt.vb",
         "ole_ObjAssignToNothing.vb",
+        "ole_dfltObjDflMethod.vb",
     };
 
     OUString sMacroPathURL = m_directories.getURLFromSrc("/basic/qa/vba_tests/");
@@ -251,11 +327,8 @@ void VBATest::testMiscOLEStuff()
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.get() != nullptr );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"), pReturn->GetOUString() );
     }
-#else
-    // Avoid "this method is empty and should be removed" warning
-    (void) 42;
-#endif
 }
+#endif
 
   // Put the test suite in the registry
   CPPUNIT_TEST_SUITE_REGISTRATION(VBATest);

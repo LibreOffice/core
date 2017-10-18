@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_system_win32_libs,basic_macros, \
 	$(if $(filter 140 150,$(VCVER)),legacy_stdio_definitions) \
 	odbc32 \
 	odbccp32 \
+	version \
 ))
 endif
 
