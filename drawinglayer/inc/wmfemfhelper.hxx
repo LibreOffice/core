@@ -25,6 +25,7 @@
 #include <vcl/font.hxx>
 #include <vcl/outdevstate.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <memory>
 
 // predefines
 namespace drawinglayer { namespace geometry { class ViewInformation2D; }}
@@ -42,13 +43,13 @@ namespace wmfemfhelper
     class TargetHolder
     {
     private:
-        std::vector< drawinglayer::primitive2d::BasePrimitive2D* > aTargets;
+        std::vector< std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D> > aTargets;
 
     public:
         TargetHolder();
         ~TargetHolder();
         sal_uInt32 size() const;
-        void append(drawinglayer::primitive2d::BasePrimitive2D* pCandidate);
+        void append(std::unique_ptr<drawinglayer::primitive2d::BasePrimitive2D> pCandidate);
         drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequence(const PropertyHolder& rPropertyHolder);
     };
 }
