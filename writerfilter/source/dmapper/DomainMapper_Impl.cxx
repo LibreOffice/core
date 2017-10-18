@@ -1186,7 +1186,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                     {
                         // Workaround to make sure char props of the field are not lost.
                         // Not relevant for editeng-based comments.
-                        // Nor revelent for fields inside a TOC field.
+                        // Not relevant for fields inside a TOC field.
                         OUString const sMarker("X");
                         xCursor = xTextAppend->getText()->createTextCursor();
                         if (xCursor.is())
