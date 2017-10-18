@@ -2557,3 +2557,51 @@ index 26675af..5d4e8f2 100644
 -- 
 2.12.3
 
+From c5bb9ad8922c9f537f0d613d42c33487717455c3 Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 18 Oct 2017 10:52:01 +0200
+Subject: [PATCH] EPUBHTMLGenerator: better handling of tabs
+
+Mapping ODF/librevenge tab to \t in HTML is not a great idea, as it's
+ignorable whitespace. Go with NBSPs and a breakable space instead, that
+is much closer visually (15 is just an arbitrary number, it's what MS
+Word uses in its HTML export, LO Writer HTML export doesn't handle
+this).
+
+Adapt the empty paragraph case to also use NBSP for consistency.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 10 +++++++---
+ src/test/EPUBTextGeneratorTest.cpp | 18 +++++++++++++++++-
+ 2 files changed, 24 insertions(+), 4 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index 11bf7de..25294c6 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -617,7 +617,7 @@ void EPUBHTMLGenerator::closeParagraph()
+     return;
+ 
+   if (!m_impl->m_hasText)
+-    insertLineBreak();
++    insertSpace();
+ 
+   m_impl->output().closeElement("p");
+ }
+@@ -687,8 +687,12 @@ void EPUBHTMLGenerator::insertTab()
+   if (m_impl->m_ignore)
+     return;
+ 
+-  // Does not have a lot of effect since tabs in html are ignorable white-space
+-  m_impl->output().insertCharacters("\t");
++  // \t would not have a lot of effect since tabs in html are ignorable
++  // white-space. Write NBSPs and a breakable space instead.
++  for (int i = 0; i < 15; ++i)
++    m_impl->output().insertCharacters("\xc2\xa0");
++  m_impl->output().insertCharacters(" ");
++  m_impl->m_hasText = true;
+ }
+ 
+ void EPUBHTMLGenerator::insertLineBreak()
+-- 
+2.12.3
+
