@@ -9,7 +9,7 @@
     </baf:AdministrativeData>
     <baf:Included>
         <!-- Translators: the Name attribute in this string can be localized -->
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:non-business" Name="Non-Business">
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:non-business" Name="Non-Business" loextAbbreviatedName="NB">
             <baf:LabelingRules/>
             <baf:ImpactLevel>
                 <baf:Scale>UK-Cabinet</baf:Scale>
@@ -17,7 +17,7 @@
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
         <!-- Translators: the Name attribute in this string can be localized -->
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:general-business" Name="General Business">
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:general-business" Name="General Business" loextAbbreviatedName="GB">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Header</baf:Identifier>
@@ -31,7 +31,7 @@
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
         <!-- Translators: the Name attribute in this string can be localized -->
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:confidential" Name="Confidential">
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:confidential" Name="Confidential" loextAbbreviatedName="Conf">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Header</baf:Identifier>
@@ -55,7 +55,7 @@
             </baf:ImpactLevel>
         </baf:BusinessAuthorizationCategory>
         <!-- Translators: the Name attribute in this string can be localized -->
-        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:internal-only" Name="Internal Only">
+        <baf:BusinessAuthorizationCategory Identifier="urn:example:tscp:1:internal-only" Name="Internal Only" loextAbbreviatedName="IO">
             <baf:LabelingRules>
                 <baf:VisualMarkingPart>
                     <baf:Identifier>Document: Header</baf:Identifier>

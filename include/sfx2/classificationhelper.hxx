@@ -63,6 +63,10 @@ public:
     const OUString& GetBACName(SfxClassificationPolicyType eType);
     /// Return all possible valid category names, based on the policy.
     std::vector<OUString> GetBACNames();
+    /// Get the currently selected category abbreviation for eType. Returns full name if no abbreviation defined.
+    const OUString& GetAbbreviatedBACName(SfxClassificationPolicyType eType);
+    /// Return all possible valid abbreviated category names, based on the policy.
+    std::vector<OUString> GetAbbreviatedBACNames();
     /// Setting this sets all the other properties, based on the policy.
     void SetBACName(const OUString& rName, SfxClassificationPolicyType eType);
     /// If GetImpactScale() and GetImpactLevel*() will return something meaningful.
