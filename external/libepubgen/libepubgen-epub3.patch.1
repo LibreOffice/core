@@ -2487,3 +2487,73 @@ index f3b30a6..d822571 100644
 -- 
 2.12.3
 
+From 8166fc972e3d4b930ad0baab164f99b3c717252e Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Wed, 18 Oct 2017 10:04:32 +0200
+Subject: [PATCH] EPUBTextGenerator: handle headings inside sections
+
+On one hand, we don't want to split inside a section as there might be
+elements we need to close/open at split boundary, OTOH this is currently
+not a problem as we don't produce any output for sections.
+
+So remove the level management for sections (this way allowing headings
+to split inside sections), let's get back to this when there is a
+concept how e.g. multiple columns would be represented in EPUB.
+
+Use case is when sections are used to just group paragraph together and
+mark all of them read-only: in this case it's unexpected that headings
+are handled differently to not-in-section ones.
+---
+ src/lib/EPUBHTMLGenerator.cpp      | 14 ++++++++++++--
+ src/lib/EPUBTextGenerator.cpp      |  3 ---
+ src/test/EPUBTextGeneratorTest.cpp | 38 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 50 insertions(+), 5 deletions(-)
+
+diff --git a/src/lib/EPUBHTMLGenerator.cpp b/src/lib/EPUBHTMLGenerator.cpp
+index d822571..11bf7de 100644
+--- a/src/lib/EPUBHTMLGenerator.cpp
++++ b/src/lib/EPUBHTMLGenerator.cpp
+@@ -574,8 +574,18 @@ void EPUBHTMLGenerator::closeFooter()
+ }
+ 
+ void EPUBHTMLGenerator::defineSectionStyle(const RVNGPropertyList &) {}
+-void EPUBHTMLGenerator::openSection(const RVNGPropertyList & /* propList */) {}
+-void EPUBHTMLGenerator::closeSection() {}
++
++void EPUBHTMLGenerator::openSection(const RVNGPropertyList & /* propList */)
++{
++  // Once output is produced here, EPUBTextGenerator::openSection() will need
++  // to call EPUBSplitGuard::openLevel().
++}
++
++void EPUBHTMLGenerator::closeSection()
++{
++  // Once output is produced here, EPUBTextGenerator::closeSection() will need
++  // to call EPUBSplitGuard::closeLevel().
++}
+ 
+ void EPUBHTMLGenerator::defineParagraphStyle(const RVNGPropertyList &propList)
+ {
+diff --git a/src/lib/EPUBTextGenerator.cpp b/src/lib/EPUBTextGenerator.cpp
+index 26675af..5d4e8f2 100644
+--- a/src/lib/EPUBTextGenerator.cpp
++++ b/src/lib/EPUBTextGenerator.cpp
+@@ -335,15 +335,12 @@ void EPUBTextGenerator::openSection(const librevenge::RVNGPropertyList &propList
+ {
+   if (m_impl->getSplitGuard().splitOnSize())
+     m_impl->startNewHtmlFile();
+-  m_impl->getSplitGuard().openLevel();
+ 
+   m_impl->getHtml()->openSection(propList);
+ }
+ 
+ void EPUBTextGenerator::closeSection()
+ {
+-  m_impl->getSplitGuard().closeLevel();
+-
+   m_impl->getHtml()->closeSection();
+ }
+ 
+-- 
+2.12.3
+
