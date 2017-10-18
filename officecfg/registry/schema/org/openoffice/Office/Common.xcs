@@ -2460,6 +2460,19 @@
         </info>
         <value>true</value>
       </prop>
+      <group oor:name="OpenPGP">
+        <info>
+          <desc>Contains security settings regarding the GnuPG/OpenPGP backend.</desc>
+        </info>
+        <prop oor:name="MinimalKeyExport" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Determines if the PGPKeyPacket element on signed
+            documents will contain the full public key (default), or
+            the potentially much smaller minimal one, without any signatures.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
       <group oor:name="Scripting">
         <info>
           <desc>Contains security settings regarding Basic scripts.</desc>
