@@ -36,7 +36,7 @@ published interface XObjectInputStream: com::sun::star::io::XDataInputStream
 {
 
     /** reads an object from the stream. In general, it
-        reads the service name, instantiaties the object and
+        reads the service name, instantiates the object and
         calls read on the XPersistObject interface with itself
         as argument.
      */
