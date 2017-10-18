@@ -41,6 +41,7 @@
 #include <swtable.hxx>
 #include <node.hxx>
 #include <tblsel.hxx>
+#include <o3tl/make_unique.hxx>
 #include <sfx2/request.hxx>
 #include <memory>
 
@@ -317,9 +318,9 @@ void SwSortDlg::Apply()
         else if( nullptr != (pUserData = m_pTypDLB1->GetSelectedEntryData()) )
             sEntry = *static_cast<OUString*>(pUserData);
 
-        SwSortKey *pKey = new SwSortKey( nCol1, sEntry,
-                                    bAsc1 ? SRT_ASCENDING : SRT_DESCENDING );
-        aOptions.aKeys.push_back( pKey );
+        aOptions.aKeys.push_back(
+            o3tl::make_unique<SwSortKey>( nCol1, sEntry,
+                                    bAsc1 ? SRT_ASCENDING : SRT_DESCENDING ));
     }
 
     if( bCheck2 )
@@ -330,9 +331,9 @@ void SwSortDlg::Apply()
         else if( nullptr != (pUserData = m_pTypDLB2->GetSelectedEntryData()) )
             sEntry = *static_cast<OUString*>(pUserData);
 
-        SwSortKey *pKey = new SwSortKey( nCol2, sEntry,
-                                    bAsc2 ? SRT_ASCENDING : SRT_DESCENDING );
-        aOptions.aKeys.push_back( pKey );
+        aOptions.aKeys.push_back(
+            o3tl::make_unique<SwSortKey>( nCol2, sEntry,
+                                    bAsc2 ? SRT_ASCENDING : SRT_DESCENDING ));
     }
 
     if( bCheck3 )
@@ -343,9 +344,9 @@ void SwSortDlg::Apply()
         else if( nullptr != (pUserData = m_pTypDLB3->GetSelectedEntryData()) )
             sEntry = *static_cast<OUString*>(pUserData);
 
-        SwSortKey *pKey = new SwSortKey( nCol3, sEntry,
-                                    bAsc3 ? SRT_ASCENDING : SRT_DESCENDING );
-        aOptions.aKeys.push_back( pKey );
+        aOptions.aKeys.push_back(
+            o3tl::make_unique<SwSortKey>( nCol3, sEntry,
+                                    bAsc3 ? SRT_ASCENDING : SRT_DESCENDING ));
     }
 
     aOptions.eDirection =  bCol ? SRT_COLUMNS : SRT_ROWS;

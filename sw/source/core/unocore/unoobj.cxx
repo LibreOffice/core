@@ -2588,21 +2588,21 @@ bool SwUnoCursorHelper::ConvertSortProperties(
     rSortOpt.cDeli = ' ';
     rSortOpt.eDirection = SRT_COLUMNS;  //!! UI text may be contrary though !!
 
-    SwSortKey* pKey1 = new SwSortKey;
+    std::unique_ptr<SwSortKey> pKey1(new SwSortKey);
     pKey1->nColumnId = USHRT_MAX;
     pKey1->bIsNumeric = true;
     pKey1->eSortOrder = SRT_ASCENDING;
 
-    SwSortKey* pKey2 = new SwSortKey;
+    std::unique_ptr<SwSortKey> pKey2(new SwSortKey);
     pKey2->nColumnId = USHRT_MAX;
     pKey2->bIsNumeric = true;
     pKey2->eSortOrder = SRT_ASCENDING;
 
-    SwSortKey* pKey3 = new SwSortKey;
+    std::unique_ptr<SwSortKey> pKey3(new SwSortKey);
     pKey3->nColumnId = USHRT_MAX;
     pKey3->bIsNumeric = true;
     pKey3->eSortOrder = SRT_ASCENDING;
-    SwSortKey* aKeys[3] = {pKey1, pKey2, pKey3};
+    SwSortKey* aKeys[3] = {pKey1.get(), pKey2.get(), pKey3.get()};
 
     bool bOldSortdescriptor(false);
     bool bNewSortdescriptor(false);
@@ -2815,15 +2815,15 @@ bool SwUnoCursorHelper::ConvertSortProperties(
 
     if (pKey1->nColumnId != USHRT_MAX)
     {
-        rSortOpt.aKeys.push_back(pKey1);
+        rSortOpt.aKeys.push_back(std::move(pKey1));
     }
     if (pKey2->nColumnId != USHRT_MAX)
     {
-        rSortOpt.aKeys.push_back(pKey2);
+        rSortOpt.aKeys.push_back(std::move(pKey2));
     }
     if (pKey3->nColumnId != USHRT_MAX)
     {
-        rSortOpt.aKeys.push_back(pKey3);
+        rSortOpt.aKeys.push_back(std::move(pKey3));
     }
 
     return bRet && !rSortOpt.aKeys.empty();

@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include "swdllapi.h"
+#include <memory>
 #include <vector>
 
 enum SwSortOrder        { SRT_ASCENDING, SRT_DESCENDING };
@@ -44,7 +45,9 @@ struct SW_DLLPUBLIC SwSortOptions
     ~SwSortOptions();
     SwSortOptions(const SwSortOptions& rOpt);
 
-    std::vector<SwSortKey*> aKeys;
+    SwSortOptions& operator=( SwSortOptions const & ) = delete; // MSVC2015 workaround
+
+    std::vector<std::unique_ptr<SwSortKey>> aKeys;
     SwSortDirection         eDirection;
     sal_Unicode             cDeli;
     LanguageType            nLanguage;
