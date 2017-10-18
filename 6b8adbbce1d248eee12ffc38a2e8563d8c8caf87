@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_de8bda1c",
+        "filename": "sw/source/uibase/shells/basesh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-10-18T08:58:59Z",
+      "side": 1,
+      "message": "There are more section types, maybe all but CONTENT_SECTION should be disabled?\n\nhttps://opengrok.libreoffice.org/xref/core/sw/inc/section.hxx#46-51",
+      "revId": "6b8adbbce1d248eee12ffc38a2e8563d8c8caf87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
