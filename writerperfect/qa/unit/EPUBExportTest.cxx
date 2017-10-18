@@ -400,7 +400,7 @@ void EPUBExportTest::testEscape()
     // Make sure escaping happens only once.
     assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[2]", "a&b");
     // This was also lost.
-    assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[3]", "\t");
+    assertXPathContent(mpXmlDoc, "//xhtml:p[1]/xhtml:span[3]", OUString::fromUtf8("\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0\xc2\xa0 "));
 }
 
 void EPUBExportTest::testParaCharProps()
