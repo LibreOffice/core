@@ -156,12 +156,12 @@ XFListStyle::XFListStyle()
 
     for( int i=0; i<10; i++ )
     {
-        m_pListLevels[i] = new XFListlevelNumber();
+        m_pListLevels[i].reset(new XFListlevelNumber());
         m_pListLevels[i]->SetListlevelType(enumXFListLevelNumber);
         m_pListLevels[i]->SetMinLabelWidth(0.499);
         m_pListLevels[i]->SetIndent(0.501*(i+1));
         m_pListLevels[i]->SetLevel(i+1);
-        static_cast<XFListlevelNumber*>(m_pListLevels[i])->SetNumFmt(nf);
+        static_cast<XFListlevelNumber*>(m_pListLevels[i].get())->SetNumFmt(nf);
     }
 }
 
@@ -172,16 +172,16 @@ XFListStyle::XFListStyle(const XFListStyle& other):XFStyle(other)
         const enumXFListLevel type = other.m_pListLevels[i]->m_eListType;
         if( type == enumXFListLevelNumber )
         {
-            XFListlevelNumber *pNum = static_cast<XFListlevelNumber*>(other.m_pListLevels[i]);
-            m_pListLevels[i] = new XFListlevelNumber(*pNum);
+            XFListlevelNumber *pNum = static_cast<XFListlevelNumber*>(other.m_pListLevels[i].get());
+            m_pListLevels[i].reset(new XFListlevelNumber(*pNum));
         }
         else if( type == enumXFListLevelBullet )
         {
-            XFListLevelBullet *pBullet = static_cast<XFListLevelBullet*>(other.m_pListLevels[i]);
-            m_pListLevels[i] = new XFListLevelBullet(*pBullet);
+            XFListLevelBullet *pBullet = static_cast<XFListLevelBullet*>(other.m_pListLevels[i].get());
+            m_pListLevels[i].reset(new XFListLevelBullet(*pBullet));
         }
         else
-            m_pListLevels[i] = nullptr;
+            m_pListLevels[i].reset();
     }
 }
 
@@ -192,45 +192,39 @@ XFListStyle& XFListStyle::operator=(const XFListStyle& other)
         const enumXFListLevel type = other.m_pListLevels[i]->m_eListType;
         if( type == enumXFListLevelNumber )
         {
-            XFListlevelNumber *pNum = static_cast<XFListlevelNumber*>(m_pListLevels[i]);
-            m_pListLevels[i] = new XFListlevelNumber(*pNum);
+            XFListlevelNumber *pNum = static_cast<XFListlevelNumber*>(m_pListLevels[i].get());
+            m_pListLevels[i].reset(new XFListlevelNumber(*pNum));
         }
         else if( type == enumXFListLevelBullet )
         {
-            XFListLevelBullet *pBullet = static_cast<XFListLevelBullet*>(m_pListLevels[i]);
-            m_pListLevels[i] = new XFListLevelBullet(*pBullet);
+            XFListLevelBullet *pBullet = static_cast<XFListLevelBullet*>(m_pListLevels[i].get());
+            m_pListLevels[i].reset(new XFListLevelBullet(*pBullet));
         }
         else
-            m_pListLevels[i] = nullptr;
+            m_pListLevels[i].reset();
     }
     return *this;
 }
 
 XFListStyle::~XFListStyle()
 {
-    for(XFListLevel* p : m_pListLevels)
-    {
-        delete p;
-    }
 }
 
 void    XFListStyle::SetDisplayLevel(sal_Int32 level, sal_Int16 nDisplayLevel)
 {
     assert(level>=1&&level<=10);
 
-    XFListLevel *pLevel = m_pListLevels[level-1];
+    XFListLevel *pLevel = m_pListLevels[level-1].get();
     if( !pLevel )
     {
-        pLevel = new XFListlevelNumber();
+        m_pListLevels[level-1].reset(new XFListlevelNumber());
+        pLevel = m_pListLevels[level-1].get();
         pLevel->SetListlevelType(enumXFListLevelNumber);
         pLevel->SetLevel(level+1);
         pLevel->SetMinLabelWidth(0.499);
         pLevel->SetIndent(0.501*(level+1));
-        pLevel->SetDisplayLevel(nDisplayLevel);
-        m_pListLevels[level-1] = pLevel;
     }
-    else
-        pLevel->SetDisplayLevel(nDisplayLevel);
+    pLevel->SetDisplayLevel(nDisplayLevel);
 }
 
 void    XFListStyle::SetListPosition(sal_Int32 level,
@@ -242,25 +236,18 @@ void    XFListStyle::SetListPosition(sal_Int32 level,
 {
     assert(level>=1&&level<=10);
 
-    XFListLevel *pLevel = m_pListLevels[level-1];
+    XFListLevel *pLevel = m_pListLevels[level-1].get();
     if( !pLevel )
     {
-        pLevel = new XFListLevelBullet();
+        m_pListLevels[level-1].reset( new XFListLevelBullet() );
+        pLevel = m_pListLevels[level-1].get();
         pLevel->SetListlevelType(enumXFListLevelNumber);
         pLevel->SetLevel(level+1);
-        pLevel->SetIndent(indent);
-        pLevel->SetMinLabelWidth(minLabelWidth);
-        pLevel->SetMinLabelDistance(minLabelDistance);
-        pLevel->SetAlignType(align);
-        m_pListLevels[level-1] = pLevel;
     }
-    else
-    {
-        pLevel->SetIndent(indent);
-        pLevel->SetMinLabelWidth(minLabelWidth);
-        pLevel->SetMinLabelDistance(minLabelDistance);
-        pLevel->SetAlignType(align);
-    }
+    pLevel->SetIndent(indent);
+    pLevel->SetMinLabelWidth(minLabelWidth);
+    pLevel->SetMinLabelDistance(minLabelDistance);
+    pLevel->SetAlignType(align);
 }
 
 void    XFListStyle::SetListBullet(sal_Int32 level,
@@ -272,10 +259,7 @@ void    XFListStyle::SetListBullet(sal_Int32 level,
 {
     assert(level>=1&&level<=10);
 
-    if( m_pListLevels[level-1] )
-        delete m_pListLevels[level-1];
-
-    XFListLevelBullet *pLevel = new XFListLevelBullet();
+    std::unique_ptr<XFListLevelBullet> pLevel(new XFListLevelBullet());
     pLevel->SetPrefix(prefix);
     pLevel->SetSuffix(suffix);
     pLevel->SetBulletChar(bullet);
@@ -285,17 +269,14 @@ void    XFListStyle::SetListBullet(sal_Int32 level,
     pLevel->SetMinLabelWidth(0.499);
     pLevel->SetIndent(0.501*level);
     pLevel->SetLevel(level);
-    m_pListLevels[level-1] = pLevel;
+    m_pListLevels[level-1] = std::move(pLevel);
 }
 
 void    XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt const & fmt, sal_Int16 start )
 {
     assert(level>=1&&level<=10);
 
-    if( m_pListLevels[level-1] )
-        delete m_pListLevels[level-1];
-
-    XFListlevelNumber *pLevel = new XFListlevelNumber();
+    std::unique_ptr<XFListlevelNumber> pLevel(new XFListlevelNumber());
     pLevel->SetNumFmt(fmt);
     pLevel->SetStartValue(start);
 
@@ -303,7 +284,7 @@ void    XFListStyle::SetListNumber(sal_Int32 level, XFNumFmt const & fmt, sal_In
     pLevel->SetMinLabelWidth(0.499);
     pLevel->SetIndent(0.501*level);
     pLevel->SetLevel(level);
-    m_pListLevels[level-1] = pLevel;
+    m_pListLevels[level-1] = std::move(pLevel);
 }
 
 void XFListStyle::ToXml(IXFStream *pStrm)
@@ -316,7 +297,7 @@ void XFListStyle::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute("style:parent-style-name",GetParentStyleName());
     pStrm->StartElement( "text:list-style" );
 
-    for(XFListLevel* pLevel : m_pListLevels)
+    for(auto const & pLevel : m_pListLevels)
     {
         if( pLevel )
             pLevel->ToXml(pStrm);
