@@ -131,13 +131,11 @@ namespace frm
             }
 
             // create the peer
-            ONavigationBarPeer* pPeer = ONavigationBarPeer::Create( m_xContext, pParentWin, getModel() );
+            rtl::Reference<ONavigationBarPeer> pPeer = ONavigationBarPeer::Create( m_xContext, pParentWin, getModel() );
             assert(pPeer && "ONavigationBarControl::createPeer: invalid peer returned!");
-            // by definition, the returned component is acquired once
-            pPeer->release();
 
             // announce the peer to the base class
-            setPeer( pPeer );
+            setPeer( pPeer.get() );
 
             // initialize ourself (and thus the peer) with the model properties
             updateFromModel();
@@ -198,14 +196,13 @@ namespace frm
     // ONavigationBarPeer
 
 
-    ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XComponentContext >& _rxORB,
+    rtl::Reference<ONavigationBarPeer> ONavigationBarPeer::Create( const Reference< XComponentContext >& _rxORB,
         vcl::Window* _pParentWindow, const Reference< XControlModel >& _rxModel )
     {
         DBG_TESTSOLARMUTEX();
 
         // the peer itself
-        ONavigationBarPeer* pPeer = new ONavigationBarPeer( _rxORB );
-        pPeer->acquire();   // by definition, the returned object is acquired once
+        rtl::Reference<ONavigationBarPeer> pPeer(new ONavigationBarPeer( _rxORB ));
 
         // the VCL control for the peer
         Reference< XModel > xContextDocument( getXModel( _rxModel ) );
@@ -220,8 +217,8 @@ namespace frm
         );
 
         // some knittings
-        pNavBar->setDispatcher( pPeer );
-        pNavBar->SetComponentInterface( pPeer );
+        pNavBar->setDispatcher( pPeer.get() );
+        pNavBar->SetComponentInterface( pPeer.get() );
 
         // we want a faster repeating rate for the slots in this
         // toolbox
