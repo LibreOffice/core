@@ -412,6 +412,7 @@ void OpenGLContext::reset()
             delete pFramebuffer;
             pFramebuffer = pPrevFramebuffer;
         }
+        mnFramebufferCount = 0;
         mpFirstFramebuffer = nullptr;
         mpLastFramebuffer = nullptr;
     }
