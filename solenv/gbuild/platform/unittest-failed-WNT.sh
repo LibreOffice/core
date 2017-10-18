@@ -23,6 +23,10 @@ make $1Test_$2 CPPUNITTRACE=TRUE # which is a shortcut for the following line
 make $1Test_$2 CPPUNITTRACE="'$DEVENV' /debugexe" # for interactive debugging in Visual Studio
 make $1Test_$2 CPPUNITTRACE="drmemory -free_max_frames 20" # for memory checking (install Dr.Memory first, and put it to your PATH)
 
+You can limit the execution to just one particular test by:
+
+make $1Test_$2 CPPUNIT_TEST_NAME="testXYZ" ...above mentioned params...
+
 EOF
 
 exit 1
