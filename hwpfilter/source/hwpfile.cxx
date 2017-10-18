@@ -267,6 +267,41 @@ bool HWPFile::ReadParaList(std::vector < HWPPara* > &aplist, unsigned char flag)
     return true;
 }
 
+bool HWPFile::ReadParaList(std::vector< std::unique_ptr<HWPPara> > &aplist, unsigned char flag)
+{
+    std::unique_ptr<HWPPara> spNode( new HWPPara );
+    unsigned char tmp_etcflag;
+    unsigned char prev_etcflag = 0;
+    while (spNode->Read(*this, flag))
+    {
+         if( !(spNode->etcflag & 0x04) ){
+          tmp_etcflag = spNode->etcflag;
+          spNode->etcflag = prev_etcflag;
+          prev_etcflag = tmp_etcflag;
+         }
+        if (spNode->nch && spNode->reuse_shape)
+        {
+            if (!aplist.empty()){
+                     spNode->pshape = aplist.back()->pshape;
+                }
+                else{
+                     spNode->nch = 0;
+                     spNode->reuse_shape = 0;
+                }
+        }
+        spNode->pshape->pagebreak = spNode->etcflag;
+        if (spNode->nch)
+            AddParaShape(spNode->pshape);
+
+        if (!aplist.empty())
+            aplist.back()->SetNext(spNode.get());
+        aplist.push_back(std::move(spNode));
+        spNode.reset( new HWPPara );
+    }
+
+    return true;
+}
+
 void HWPFile::TagsRead()
 {
     while (true)

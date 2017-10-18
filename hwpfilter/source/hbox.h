@@ -363,12 +363,12 @@ struct TxtBox: public FBox
 /**
  * Paragraph list
  */
-    std::vector<std::vector<HWPPara*>> plists;
+    std::vector<std::vector<std::unique_ptr<HWPPara>>> plists;
 
 /**
  * Caption
  */
-    std::vector<HWPPara*> caption;
+    std::vector<std::unique_ptr<HWPPara>> caption;
 
     TxtBox();
     virtual ~TxtBox() override;
@@ -625,7 +625,7 @@ struct Picture: public FBox
     PicDef    picinfo;
     char      reserved3[9];
 
-    std::vector<HWPPara*> caption;
+    std::vector<std::unique_ptr<HWPPara>> caption;
 /**
  * It's for the Drawing object
  */
@@ -668,7 +668,7 @@ struct Hidden: public HBox
     hchar     dummy;
 
     unsigned char info[8];                        // h, next, dummy
-    std::vector<HWPPara*> plist;
+    std::vector<std::unique_ptr<HWPPara>> plist;
 
     Hidden();
     virtual ~Hidden() override;
@@ -697,7 +697,7 @@ struct HeaderFooter: public HBox
 /**
  * Paragraph list of header or footer
  */
-    std::vector<HWPPara*> plist;
+    std::vector<std::unique_ptr<HWPPara>> plist;
 
     HeaderFooter();
     virtual ~HeaderFooter() override;
@@ -730,7 +730,7 @@ struct Footnote: public HBox
 /**
  * Paragraph list of Footnote objects
  */
-    std::vector<HWPPara*> plist;
+    std::vector<std::unique_ptr<HWPPara>> plist;
 
     Footnote();
     virtual ~Footnote() override;

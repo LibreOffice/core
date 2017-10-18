@@ -1125,7 +1125,7 @@ void HwpReader::makeMasterStyles()
                 d->bInHeader = true;
                 d->pPn = pPage->pagenumber;
             }
-            parsePara(pPage->header->plist.front());
+            parsePara(pPage->header->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             rendEl("style:header");
@@ -1140,7 +1140,7 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 3;
             }
-            parsePara(pPage->header_even->plist.front());
+            parsePara(pPage->header_even->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
@@ -1175,7 +1175,7 @@ void HwpReader::makeMasterStyles()
                 d->nPnPos = 1;
                 d->pPn = pPage->pagenumber;
             }
-            parsePara(pPage->header_odd->plist.front());
+            parsePara(pPage->header_odd->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
@@ -1226,7 +1226,7 @@ void HwpReader::makeMasterStyles()
                 d->bInHeader = true;
                 d->pPn = pPage->pagenumber;
             }
-            parsePara(pPage->footer->plist.front());
+            parsePara(pPage->footer->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             rendEl("style:footer");
@@ -1241,7 +1241,7 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 3;
             }
-            parsePara(pPage->footer_even->plist.front());
+            parsePara(pPage->footer_even->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
@@ -1276,7 +1276,7 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 1;
             }
-            parsePara(pPage->footer_odd->plist.front());
+            parsePara(pPage->footer_odd->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
@@ -3504,7 +3504,7 @@ void HwpReader::makeTable(TxtBox * hbox)
             padd("table:protected", sXML_CDATA,"true");
         rstartEl("table:table-cell", mxList.get());
         mxList->clear();
-        parsePara(hbox->plists[tcell->pCell->key].front());
+        parsePara(hbox->plists[tcell->pCell->key].front().get());
         rendEl("table:table-cell");
     }
     rendEl("table:table-row");
@@ -3560,7 +3560,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         mxList->clear();
         if( hbox->cap_pos % 2 )                   /* The caption is on the top */
         {
-            parsePara(hbox->caption.front());
+            parsePara(hbox->caption.front().get());
         }
         padd( "text:style-name", sXML_CDATA, "Standard");
         rstartEl("text:p", mxList.get());
@@ -3628,7 +3628,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
 /* If captions are present and it is on the top */
         if( hbox->style.cap_len > 0 && (hbox->cap_pos % 2) && hbox->type == TBL_TYPE )
         {
-            parsePara(hbox->caption.front());
+            parsePara(hbox->caption.front().get());
         }
         if( hbox->type == TBL_TYPE)               // Is Table
         {
@@ -3636,12 +3636,12 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         }
         else                                      // Is TextBox
         {
-            parsePara(hbox->plists[0].front());
+            parsePara(hbox->plists[0].front().get());
         }
 /* If captions are present and it is on the bottom */
         if( hbox->style.cap_len > 0 && !(hbox->cap_pos % 2) && hbox->type == TBL_TYPE)
         {
-            parsePara(hbox->caption.front());
+            parsePara(hbox->caption.front().get());
         }
         rendEl("draw:text-box");
 // Caption exist and it is text-box
@@ -3650,7 +3650,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             rendEl( "text:p");
             if( !(hbox->cap_pos % 2))
             {
-                parsePara(hbox->caption.front());
+                parsePara(hbox->caption.front().get());
             }
             rendEl( "draw:text-box");
         }
@@ -3678,7 +3678,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
      hchar dest[3];
     size_t l = 0;
 
-    pPar = hbox->plists[0].front();
+    pPar = hbox->plists[0].front().get();
     while( pPar )
     {
         for( n = 0; n < pPar->nch && pPar->hhstr[n]->hh;
@@ -3814,7 +3814,7 @@ void HwpReader::makePicture(Picture * hbox)
                 mxList->clear();
                 if( hbox->cap_pos % 2 )           /* Caption is on the top */
                 {
-                    parsePara(hbox->caption.front());
+                    parsePara(hbox->caption.front().get());
                 }
                 padd( "text:style-name", sXML_CDATA, "Standard");
                 rstartEl("text:p", mxList.get());
@@ -3959,7 +3959,7 @@ void HwpReader::makePicture(Picture * hbox)
                 rendEl( "text:p");
                 if( !(hbox->cap_pos % 2))         /* Caption is at the bottom, */
                 {
-                    parsePara(hbox->caption.front());
+                    parsePara(hbox->caption.front().get());
                 }
                 rendEl( "draw:text-box");
             }
@@ -4601,7 +4601,7 @@ void HwpReader::makeHidden(Hidden * hbox)
     padd("text:string-value", sXML_CDATA, "");
     rstartEl("text:hidden-text", mxList.get());
     mxList->clear();
-    HWPPara *para = hbox->plist.front();
+    HWPPara *para = hbox->plist.front().get();
 
     while (para)
     {
@@ -4639,7 +4639,7 @@ void HwpReader::makeFootnote(Footnote * hbox)
         rchars(ascii(Int2Str(hbox->number, "%d", buf)));
         rendEl("text:endnote-citation");
         rstartEl("text:endnote-body", mxList.get());
-        parsePara(hbox->plist.front());
+        parsePara(hbox->plist.front().get());
         rendEl("text:endnote-body");
         rendEl("text:endnote");
     }
@@ -4656,7 +4656,7 @@ void HwpReader::makeFootnote(Footnote * hbox)
         rchars(ascii(Int2Str(hbox->number, "%d", buf)));
         rendEl("text:footnote-citation");
         rstartEl("text:footnote-body", mxList.get());
-        parsePara(hbox->plist.front());
+        parsePara(hbox->plist.front().get());
         rendEl("text:footnote-body");
         rendEl("text:footnote");
     }
