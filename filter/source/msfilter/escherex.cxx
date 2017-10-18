@@ -19,6 +19,7 @@
 
 #include "eschesdo.hxx"
 #include <o3tl/any.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/xflftrit.hxx>
@@ -3816,14 +3817,11 @@ EscherPersistTable::EscherPersistTable()
 
 EscherPersistTable::~EscherPersistTable()
 {
-    for(EscherPersistEntry* i : maPersistTable) {
-        delete i;
-    }
 }
 
 bool EscherPersistTable::PtIsID( sal_uInt32 nID )
 {
-    for(EscherPersistEntry* pPtr : maPersistTable) {
+    for(auto const & pPtr : maPersistTable) {
         if ( pPtr->mnID == nID ) {
             return true;
         }
@@ -3833,16 +3831,14 @@ bool EscherPersistTable::PtIsID( sal_uInt32 nID )
 
 void EscherPersistTable::PtInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    maPersistTable.push_back( new EscherPersistEntry( nID, nOfs ) );
+    maPersistTable.push_back( o3tl::make_unique<EscherPersistEntry>( nID, nOfs ) );
 }
 
 void EscherPersistTable::PtDelete( sal_uInt32 nID )
 {
-    ::std::vector< EscherPersistEntry* >::iterator it = maPersistTable.begin();
-    for( ; it != maPersistTable.end() ; ++it )
+    for(auto it = maPersistTable.begin(); it != maPersistTable.end() ; ++it)
     {
         if ( (*it)->mnID == nID ) {
-            delete *it;
             maPersistTable.erase( it );
             break;
         }
@@ -3851,7 +3847,7 @@ void EscherPersistTable::PtDelete( sal_uInt32 nID )
 
 sal_uInt32 EscherPersistTable::PtGetOffsetByID( sal_uInt32 nID )
 {
-    for(EscherPersistEntry* pPtr : maPersistTable) {
+    for(auto const & pPtr : maPersistTable) {
         if ( pPtr->mnID == nID ) {
             return pPtr->mnOffset;
         }
@@ -3861,7 +3857,7 @@ sal_uInt32 EscherPersistTable::PtGetOffsetByID( sal_uInt32 nID )
 
 void EscherPersistTable::PtReplace( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    for(EscherPersistEntry* pPtr : maPersistTable) {
+    for(auto const & pPtr : maPersistTable) {
         if ( pPtr->mnID == nID ) {
             pPtr->mnOffset = nOfs;
             return;
@@ -3871,7 +3867,7 @@ void EscherPersistTable::PtReplace( sal_uInt32 nID, sal_uInt32 nOfs )
 
 void EscherPersistTable::PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 {
-    for(EscherPersistEntry* pPtr : maPersistTable) {
+    for(auto const & pPtr : maPersistTable) {
         if ( pPtr->mnID == nID ) {
             pPtr->mnOffset = nOfs;
             return;
@@ -4673,19 +4669,17 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
     return nRule;
 }
 
+EscherSolverContainer::EscherSolverContainer()
+{
+}
+
 EscherSolverContainer::~EscherSolverContainer()
 {
-    for(EscherShapeListEntry* i : maShapeList) {
-        delete i;
-    }
-    for(EscherConnectorListEntry* i : maConnectorList) {
-        delete i;
-    }
 }
 
 void EscherSolverContainer::AddShape( const css::uno::Reference< css::drawing::XShape > & rXShape, sal_uInt32 nId )
 {
-    maShapeList.push_back( new EscherShapeListEntry( rXShape, nId ) );
+    maShapeList.push_back( o3tl::make_unique<EscherShapeListEntry>( rXShape, nId ) );
 }
 
 void EscherSolverContainer::AddConnector(
@@ -4696,12 +4690,12 @@ void EscherSolverContainer::AddConnector(
     css::uno::Reference< css::drawing::XShape > const & rConB
 )
 {
-    maConnectorList.push_back( new EscherConnectorListEntry( rConnector, rPA, rConA, rPB, rConB ) );
+    maConnectorList.push_back( o3tl::make_unique<EscherConnectorListEntry>( rConnector, rPA, rConA, rPB, rConB ) );
 }
 
 sal_uInt32 EscherSolverContainer::GetShapeId( const css::uno::Reference< css::drawing::XShape > & rXShape ) const
 {
-    for (EscherShapeListEntry* pPtr : maShapeList)
+    for (auto const & pPtr : maShapeList)
     {
         if ( rXShape == pPtr->aXShape )
             return pPtr->n_EscherId;
@@ -4723,7 +4717,7 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 
         EscherConnectorRule aConnectorRule;
         aConnectorRule.nRuleId = 2;
-        for (EscherConnectorListEntry* pPtr : maConnectorList)
+        for (auto const & pPtr : maConnectorList)
         {
             aConnectorRule.ncptiA  = aConnectorRule.ncptiB = 0xffffffff;
             aConnectorRule.nShapeC = GetShapeId( pPtr->mXConnector );
@@ -4966,7 +4960,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes )
     sal_uInt32  nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
 
     // adjust persist table
-    for(EscherPersistEntry* pPtr : maPersistTable) {
+    for(auto const & pPtr : maPersistTable) {
         sal_uInt32 nOfs = pPtr->mnOffset;
         if ( nOfs >= nCurPos ) {
             pPtr->mnOffset += nBytes;
