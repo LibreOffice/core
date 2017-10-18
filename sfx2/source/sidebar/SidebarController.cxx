@@ -140,7 +140,7 @@ rtl::Reference<SidebarController> SidebarController::create(
     if (instance->mxReadOnlyModeDispatch.is())
         instance->mxReadOnlyModeDispatch->addStatusListener(instance.get(), aURL);
 
-    instance->SwitchToDeck(gsDefaultDeckId);
+    //first UpdateConfigurations call will SwitchToDeck
 
     return instance;
 }
@@ -210,7 +210,10 @@ void SAL_CALL SidebarController::disposing()
     // so need to test if GetCurrentContext is still valid regarding msApplication
 
     if (GetCurrentContext().msApplication != "none")
+    {
         mpResourceManager->SaveDecksSettings(GetCurrentContext());
+        mpResourceManager->SaveLastActiveDeck(GetCurrentContext(), msCurrentDeckId);
+    }
 
     // clear decks
     ResourceManager::DeckContextDescriptorContainer aDecks;
@@ -436,6 +439,15 @@ void SidebarController::UpdateConfigurations()
 
         if (maCurrentContext.msApplication != "none")
             mpResourceManager->SaveDecksSettings(maCurrentContext);
+
+        // get last active deck for this application on first update
+        if (!maRequestedContext.msApplication.isEmpty() &&
+             (maCurrentContext.msApplication != maRequestedContext.msApplication))
+        {
+           OUString sLastActiveDeck = mpResourceManager->GetLastActiveDeck( maRequestedContext );
+           if (!sLastActiveDeck.isEmpty())
+               msCurrentDeckId = sLastActiveDeck;
+        }
 
         maCurrentContext = maRequestedContext;
 
