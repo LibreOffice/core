@@ -454,6 +454,8 @@ void SvxStyleBox_Impl::Select()
                 pViewFrm->ShowChildWindow( SID_SIDEBAR );
                 ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
                                                     pViewFrm->GetFrame().GetFrameInterface());
+                //tdf#113214 change text back to previous entry
+                SetText(GetSavedValue());
                 bDoIt = false;
             }
         }
