@@ -48,6 +48,7 @@
 #include <svtools/extensionlistbox.hxx>
 #include <svtools/restartdialog.hxx>
 
+#include <sfx2/filedlghelper.hxx>
 #include <sfx2/sfxdlg.hxx>
 
 #include <comphelper/anytostring.hxx>
@@ -676,10 +677,8 @@ bool ExtMgrDialog::acceptLicense( const uno::Reference< deployment::XPackage > &
 
 uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 {
-    const uno::Reference< uno::XComponentContext > xContext( m_pManager->getContext() );
-    const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker =
-        ui::dialogs::FilePicker::createWithMode(xContext, ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE);
-    xFilePicker->setTitle( m_sAddPackages );
+    sfx2::FileDialogHelper aDlgHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, this);
+    const uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aDlgHelper.GetFilePicker();
 
     if ( !m_sLastFolderURL.isEmpty() )
         xFilePicker->setDisplayDirectory( m_sLastFolderURL );
