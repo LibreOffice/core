@@ -408,7 +408,9 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ::osl::MutexGuard aGuard (maMutex);
     Reference<XAccessibleStateSet> xStateSet;
 
-    if (IsDisposed())
+    bool bDisposed = IsDisposed();
+
+    if (bDisposed)
     {
         // Return a minimal state set that only contains the DEFUNC state.
         xStateSet = AccessibleContextBase::getAccessibleStateSet ();
@@ -459,7 +461,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
             xStateSet.set( new ::utl::AccessibleStateSetHelper (*pStateSet));
         }
     }
-    if (mpParent && mpParent->IsDocumentSelAll())
+    if (!bDisposed && mpParent && mpParent->IsDocumentSelAll())
     {
         ::utl::AccessibleStateSetHelper* pStateSet =
             static_cast< ::utl::AccessibleStateSetHelper*>(xStateSet.get());
