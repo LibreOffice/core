@@ -134,9 +134,6 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     SetHelpId( HID_SC_WIN_PREVIEW );
 
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
-
-    for (SCCOL i=0; i<=MAXCOL; i++)
-        nRight[i] = 0;                  // initialized with actual positions when markers are drawn
 }
 
 ScPreview::~ScPreview()
@@ -434,6 +431,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             tools::Rectangle aRectCellPosition;
             tools::Rectangle aRectPosition;
             pLocationData->GetMainCellRange( aPageArea, aPixRect );
+            mvRight.resize(aPageArea.aEnd.Col()+1);
             if( !bLayoutRTL )
             {
                 pLocationData->GetCellPosition( aPageArea.aStart, aRectPosition );
@@ -441,7 +439,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                 for( SCCOL i = aPageArea.aStart.Col(); i <= aPageArea.aEnd.Col(); i++ )
                 {
                     pLocationData->GetCellPosition( ScAddress( i,aPageArea.aStart.Row(),aPageArea.aStart.Tab()),aRectCellPosition );
-                    nRight[i] = aRectCellPosition.Right();
+                    mvRight[i] = aRectCellPosition.Right();
                 }
             }
             else
@@ -450,11 +448,11 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                 nLeftPosition = aRectPosition.Right()+1;
 
                 pLocationData->GetCellPosition( aPageArea.aStart,aRectCellPosition );
-                nRight[ aPageArea.aEnd.Col() ] = aRectCellPosition.Left();
+                mvRight[ aPageArea.aEnd.Col() ] = aRectCellPosition.Left();
                 for( SCCOL i = aPageArea.aEnd.Col(); i > aPageArea.aStart.Col(); i-- )
                 {
                     pLocationData->GetCellPosition( ScAddress( i,aPageArea.aEnd.Row(),aPageArea.aEnd.Tab()),aRectCellPosition );
-                    nRight[ i-1 ] = nRight[ i ] + aRectCellPosition.Right() - aRectCellPosition.Left() + 1;
+                    mvRight[ i-1 ] = mvRight[ i ] + aRectCellPosition.Right() - aRectCellPosition.Left() + 1;
                 }
             }
         }
@@ -565,8 +563,8 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                 Point aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
                 SetLineColor( COL_BLACK );
                 SetFillColor( COL_BLACK );
-                DrawRect( tools::Rectangle( Point( nRight[i] - 2, aColumnTop.Y() ),Point( nRight[i] + 2 , 4 + aColumnTop.Y()) ));
-                DrawLine( Point( nRight[i], aColumnTop.Y() ), Point( nRight[i],  10 + aColumnTop.Y()) );
+                DrawRect( tools::Rectangle( Point( mvRight[i] - 2, aColumnTop.Y() ),Point( mvRight[i] + 2 , 4 + aColumnTop.Y()) ));
+                DrawLine( Point( mvRight[i], aColumnTop.Y() ), Point( mvRight[i],  10 + aColumnTop.Y()) );
             }
             SetMapMode( aMMMode );
         }
@@ -1027,7 +1025,7 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
         SCCOL i = 0;
         for( i = aPageArea.aStart.Col(); i<= aPageArea.aEnd.Col(); i++ )
         {
-            if( aNowPt.X() < nRight[i] + 2 && aNowPt.X() > nRight[i] - 2 )
+            if( aNowPt.X() < mvRight[i] + 2 && aNowPt.X() > mvRight[i] - 2 )
             {
                 nColNumberButttonDown = i;
                 break;
@@ -1040,7 +1038,7 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
         if( nColNumberButttonDown == aPageArea.aStart.Col() )
             DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,PointerStyle::HSplit );
         else
-            DrawInvert( PixelToLogic( Point( nRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
+            DrawInvert( PixelToLogic( Point( mvRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
 
         DrawInvert( aButtonDownChangePoint.X(), PointerStyle::HSplit );
         bColRulerMove = true;
@@ -1258,7 +1256,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 if( nColNumberButttonDown == aPageArea.aStart.Col() )
                     DrawInvert( PixelToLogic( Point( nLeftPosition, 0 ),aMMMode ).X() ,PointerStyle::HSplit );
                 else
-                    DrawInvert( PixelToLogic( Point( nRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
+                    DrawInvert( PixelToLogic( Point( mvRight[ nColNumberButttonDown-1 ], 0 ),aMMMode ).X() ,PointerStyle::HSplit );
                 DrawInvert( aButtonUpPt.X(), PointerStyle::HSplit );
             }
             if( bMoveRulerAction )
@@ -1268,13 +1266,13 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                 if( !bLayoutRTL )
                 {
-                    nNewColWidth = (long) ( PixelToLogic( Point( rMEvt.GetPosPixel().X() - nRight[ nColNumberButttonDown ], 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth = (long) ( PixelToLogic( Point( rMEvt.GetPosPixel().X() - mvRight[ nColNumberButttonDown ], 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
                     nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButttonDown, nTab );
                 }
                 else
                 {
 
-                    nNewColWidth = (long) ( PixelToLogic( Point( nRight[ nColNumberButttonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
+                    nNewColWidth = (long) ( PixelToLogic( Point( mvRight[ nColNumberButttonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
                     nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButttonDown, nTab );
                 }
 
@@ -1358,7 +1356,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     {
         Point   aColumnTop = LogicToPixel( Point( 0, -aOffset.Y() ) ,aMMMode );
         Point   aColumnBottom = LogicToPixel( Point( 0, (long)( nHeight * HMM_PER_TWIPS - aOffset.Y()) ), aMMMode );
-        if( aPixPt.X() < ( nRight[i] + 2 ) && ( aPixPt.X() > ( nRight[i] - 2 ) ) && ( aPixPt.X() < aRightTop.X() ) && ( aPixPt.X() > aLeftTop.X() )
+        if( aPixPt.X() < ( mvRight[i] + 2 ) && ( aPixPt.X() > ( mvRight[i] - 2 ) ) && ( aPixPt.X() < aRightTop.X() ) && ( aPixPt.X() > aLeftTop.X() )
             && ( aPixPt.Y() > aColumnTop.Y() ) && ( aPixPt.Y() < aColumnBottom.Y() ) && !bLeftRulerMove && !bRightRulerMove
             && !bTopRulerMove && !bBottomRulerMove && !bHeaderRulerMove && !bFooterRulerMove )
         {
