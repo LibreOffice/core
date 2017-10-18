@@ -29,8 +29,6 @@ static LibreOfficeKit* kit;
 static LibreOfficeKitDocument* document;
 
 
-
-
 // Bridge functions to LibreOfficeKit
 int BridgeLOkit_Init(const char *path)
 {
@@ -39,8 +37,11 @@ int BridgeLOkit_Init(const char *path)
     strcpy(bufUserPath + strlen(path), "/user");
 
     // Initialize LibreOfficeKit
-    if (!kit)
-      kit = lok_init_2(path, bufUserPath);
+    if (!kit) {
+        kit = lok_init_2(path, bufUserPath);
+        if (!kit)
+            return 1;
+    }
     return 0;
 }
 

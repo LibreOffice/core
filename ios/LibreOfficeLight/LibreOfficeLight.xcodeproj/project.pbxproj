@@ -441,7 +441,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "lokit-Bridging-Header.h";
@@ -480,7 +480,7 @@
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -488,6 +488,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = 2;
 				VALID_ARCHS = "arm64 x86_64";
 			};
@@ -509,13 +510,14 @@
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "LibreOfficeLight/lokit-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = 2;
 				VALID_ARCHS = "arm64 x86_64";
 			};
@@ -631,7 +633,7 @@
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -639,6 +641,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
 				TARGETED_DEVICE_FAMILY = 2;
 				VALID_ARCHS = "arm64 x86_64";
 			};
