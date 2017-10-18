@@ -111,7 +111,7 @@ namespace
   static const FlavorMap flavorMap[] =
     {
       { NSStringPboardType, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
-      { NSRTFPboardType, "text/richtext", "Rich Text Format", false },
+      { NSRTFPboardType, "text/rtf", "Rich Text Format", false },
       { NSTIFFPboardType, "image/png", "Portable Network Graphics", false },
       { NSHTMLPboardType, "text/html", "Plain Html", false },
       { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", false },
