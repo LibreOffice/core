@@ -568,29 +568,25 @@ sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements()
 
 ScCellTextCursor::ScCellTextCursor(const ScCellTextCursor& rOther) :
     SvxUnoTextCursor( rOther ),
-    rTextObj( rOther.rTextObj )
+    mxTextObj( rOther.mxTextObj )
 {
-    rTextObj.acquire();
 }
 
 ScCellTextCursor::ScCellTextCursor(ScCellObj& rText) :
     SvxUnoTextCursor( rText.GetUnoText() ),
-    rTextObj( rText )
+    mxTextObj( &rText )
 {
-    rTextObj.acquire();
 }
 
 ScCellTextCursor::~ScCellTextCursor() throw()
 {
-    rTextObj.release();
 }
 
 // SvxUnoTextCursor methods reimplemented here to return the right objects:
 
 uno::Reference<text::XText> SAL_CALL ScCellTextCursor::getText()
 {
-    SolarMutexGuard aGuard;
-    return &rTextObj;
+    return mxTextObj.get();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart()

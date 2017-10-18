@@ -336,7 +336,7 @@ protected:
 
     ScDocShell* GetDocShell() const;
 protected:
-    ScDataPilotDescriptorBase& mrParent;
+    rtl::Reference<ScDataPilotDescriptorBase> mxParent;
     ScFieldIdentifier   maFieldId;
 
 private:
@@ -615,7 +615,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    ScDataPilotFieldGroupsObj& mrParent;
+    rtl::Reference<ScDataPilotFieldGroupsObj> mxParent;
     OUString     maGroupName;
 };
 
@@ -642,7 +642,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    ScDataPilotFieldGroupObj& mrParent;
+    rtl::Reference<ScDataPilotFieldGroupObj> mxParent;
     OUString     maName;
 };
 

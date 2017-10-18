@@ -217,14 +217,14 @@ public:
 
 class ScCellTextCursor : public SvxUnoTextCursor
 {
-    ScCellObj&              rTextObj;
+    rtl::Reference<ScCellObj> mxTextObj;
 
 public:
                             ScCellTextCursor(const ScCellTextCursor& rOther);
                             ScCellTextCursor(ScCellObj& rText);
-        virtual                                 ~ScCellTextCursor() throw() override;
+        virtual             ~ScCellTextCursor() throw() override;
 
-    ScCellObj&              GetCellObj() const  { return rTextObj; }
+    ScCellObj&              GetCellObj() const  { return *mxTextObj; }
 
                             // SvxUnoTextCursor methods reimplemented here:
     virtual css::uno::Reference< css::text::XText > SAL_CALL
@@ -248,7 +248,7 @@ private:
 
 public:
                             ScHeaderFooterTextCursor(rtl::Reference<ScHeaderFooterTextObj> const & rText);
-        virtual                                 ~ScHeaderFooterTextCursor() throw() override;
+        virtual             ~ScHeaderFooterTextCursor() throw() override;
 
                             // SvxUnoTextCursor methods reimplemented here:
     virtual css::uno::Reference< css::text::XText > SAL_CALL
@@ -314,7 +314,7 @@ class ScEditEngineTextObj : public ScSimpleEditSourceHelper, public SvxUnoText
 {
 public:
                         ScEditEngineTextObj();
-        virtual                         ~ScEditEngineTextObj() throw() override;
+        virtual         ~ScEditEngineTextObj() throw() override;
 
     void                SetText( const EditTextObject& rTextObject );
     EditTextObject*     CreateTextObject();
@@ -359,8 +359,8 @@ public:
 class ScCellTextObj : public ScCellTextData, public SvxUnoText
 {
 public:
-                ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP);
-        virtual         ~ScCellTextObj() throw() override;
+                 ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP);
+        virtual  ~ScCellTextObj() throw() override;
 };
 
 #endif

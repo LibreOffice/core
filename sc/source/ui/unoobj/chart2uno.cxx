@@ -3273,7 +3273,7 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
     if (m_aTokens.empty())
         return;
 
-    acquire();      // in case the listeners have the last ref - released below
+    rtl::Reference<ScChart2DataSequence> aSelfHold(this);      // in case the listeners have the last ref
 
     sal_uInt16 nCount = m_aValueListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
@@ -3301,8 +3301,6 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
             break;
         }
     }
-
-    release();      // might delete this object
 }
 
 // DataSequence XPropertySet -------------------------------------------------
