@@ -19,6 +19,7 @@
 
 #include <i18nlangtag/lang.h>
 #include <sortopt.hxx>
+#include <o3tl/make_unique.hxx>
 
 SwSortKey::SwSortKey() :
     eSortOrder( SRT_ASCENDING ),
@@ -59,17 +60,14 @@ SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     bTable( rOpt.bTable ),
     bIgnoreCase( rOpt.bIgnoreCase )
 {
-    for(SwSortKey* pKey : rOpt.aKeys)
+    for(auto const & pKey : rOpt.aKeys)
     {
-        SwSortKey* pNew = new SwSortKey(*pKey);
-        aKeys.push_back( pNew );
+        aKeys.push_back( o3tl::make_unique<SwSortKey>(*pKey) );
     }
 }
 
 SwSortOptions::~SwSortOptions()
 {
-    for( SwSortKey *pKey : aKeys )
-        delete pKey;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
