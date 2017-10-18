@@ -463,7 +463,7 @@ void PrinterInfoManager::initialize()
                 if( find_it != m_aPrinters.end() )
                 {
                     aPrinter.m_aAlternateFiles = find_it->second.m_aAlternateFiles;
-                    aPrinter.m_aAlternateFiles.push_front( find_it->second.m_aFile );
+                    aPrinter.m_aAlternateFiles.emplace_back( find_it->second.m_aFile );
                 }
                 m_aPrinters[ aPrinterName ] = aPrinter;
             }
@@ -628,9 +628,10 @@ bool PrinterInfoManager::writePrinterConfig()
                     rofiles[ it->second.m_aFile ] = 1;
                     // update alternate file list
                     // the remove operation ensures uniqueness of each alternate
-                    it->second.m_aAlternateFiles.remove( it->second.m_aFile );
-                    it->second.m_aAlternateFiles.remove( files.begin()->first );
-                    it->second.m_aAlternateFiles.push_front( it->second.m_aFile );
+                    it->second.m_aAlternateFiles.erase( std::remove_if(it->second.m_aAlternateFiles.begin(), it->second.m_aAlternateFiles.end(),
+                                                         [&](const OUString& file) { return ((file == it->second.m_aFile) || (file == files.begin()->first)); }),
+                                                          it->second.m_aAlternateFiles.end() );
+                    it->second.m_aAlternateFiles.emplace_back( it->second.m_aFile );
                     // update file
                     it->second.m_aFile = files.begin()->first;
                 }
@@ -770,11 +771,13 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
                 bSuccess = false;
             else
             {
-                for( std::list< OUString >::const_iterator file_it = it->second.m_aAlternateFiles.begin();
-                file_it != it->second.m_aAlternateFiles.end() && bSuccess; ++file_it )
+                for (auto const& file : it->second.m_aAlternateFiles)
                 {
-                    if( ! checkWriteability( *file_it ) )
+                    if( ! checkWriteability(file) )
+                    {
                         bSuccess = false;
+                        break;
+                    }
                 }
             }
             if( bSuccess && ! bCheckOnly )
@@ -783,10 +786,9 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
                 Config aConfig( it->second.m_aFile );
                 aConfig.DeleteGroup( it->second.m_aGroup );
                 aConfig.Flush();
-                for( std::list< OUString >::const_iterator file_it = it->second.m_aAlternateFiles.begin();
-                file_it != it->second.m_aAlternateFiles.end() && bSuccess; ++file_it )
+                for (auto const& file : it->second.m_aAlternateFiles)
                 {
-                    Config aAltConfig( *file_it );
+                    Config aAltConfig( file );
                     aAltConfig.DeleteGroup( it->second.m_aGroup );
                     aAltConfig.Flush();
                 }
