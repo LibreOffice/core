@@ -1278,7 +1278,7 @@ void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<ut
 {
     SolarMutexGuard aGuard;
 
-    acquire();      // in case the listeners have the last ref - released below
+    rtl::Reference<ScDataPilotTableObj> aSelfHold(this); // in case the listeners have the last ref
 
     sal_uInt16 nCount = aModifyListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
@@ -1296,8 +1296,6 @@ void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<ut
             break;
         }
     }
-
-    release();      // might delete this object
 }
 
 void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -1400,31 +1398,28 @@ void SAL_CALL ScDataPilotDescriptor::setTag( const OUString& aNewTag )
 }
 
 ScDataPilotChildObjBase::ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent ) :
-    mrParent( rParent )
+    mxParent( &rParent )
 {
-    mrParent.acquire();
 }
 
 ScDataPilotChildObjBase::ScDataPilotChildObjBase( ScDataPilotDescriptorBase& rParent, const ScFieldIdentifier& rFieldId ) :
-    mrParent( rParent ),
+    mxParent( &rParent ),
     maFieldId( rFieldId )
 {
-    mrParent.acquire();
 }
 
 ScDataPilotChildObjBase::~ScDataPilotChildObjBase()
 {
-    mrParent.release();
 }
 
 ScDPObject* ScDataPilotChildObjBase::GetDPObject() const
 {
-    return mrParent.GetDPObject();
+    return mxParent->GetDPObject();
 }
 
 void ScDataPilotChildObjBase::SetDPObject( ScDPObject* pDPObject )
 {
-    mrParent.SetDPObject( pDPObject );
+    mxParent->SetDPObject( pDPObject );
 }
 
 ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObject ) const
@@ -1484,7 +1479,7 @@ Reference< XMembersAccess > ScDataPilotChildObjBase::GetMembers() const
 
 ScDocShell* ScDataPilotChildObjBase::GetDocShell() const
 {
-    return mrParent.GetDocShell();
+    return mxParent->GetDocShell();
 }
 
 ScDataPilotFieldsObj::ScDataPilotFieldsObj( ScDataPilotDescriptorBase& rParent ) :
@@ -1649,7 +1644,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl( sal_Int32 nInd
     {
         ScFieldIdentifier aFieldId;
         if (lcl_GetFieldDataByIndex( pObj->GetSource(), maOrient, nIndex, aFieldId ))
-            return new ScDataPilotFieldObj( mrParent, aFieldId, maOrient );
+            return new ScDataPilotFieldObj( *mxParent, aFieldId, maOrient );
     }
     return nullptr;
 }
@@ -1660,7 +1655,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByName_Impl(const OUString& 
     {
         ScFieldIdentifier aFieldId;
         if (lcl_GetFieldDataByName( pDPObj, aName, aFieldId ))
-            return new ScDataPilotFieldObj( mrParent, aFieldId, maOrient );
+            return new ScDataPilotFieldObj( *mxParent, aFieldId, maOrient );
     }
     return nullptr;
 }
@@ -2026,7 +2021,7 @@ Reference<XIndexAccess> SAL_CALL ScDataPilotFieldObj::getItems()
 {
     SolarMutexGuard aGuard;
     if (!mxItems.is())
-        mxItems.set( new ScDataPilotItemsObj( mrParent, maFieldId ) );
+        mxItems.set( new ScDataPilotItemsObj( *mxParent, maFieldId ) );
     return mxItems;
 }
 
@@ -2365,7 +2360,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
                 // find source field
                 try
                 {
-                    Reference< XNameAccess > xFields( mrParent.getDataPilotFields(), UNO_QUERY_THROW );
+                    Reference< XNameAccess > xFields( mxParent->getDataPilotFields(), UNO_QUERY_THROW );
                     aInfo.SourceField.set( xFields->getByName( pGroupDim->GetSourceDimName() ), UNO_QUERY );
                 }
                 catch( Exception& )
@@ -2663,7 +2658,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     // if new grouping field has been created (on first group), return it
     if( !sNewDim.isEmpty() )
     {
-        Reference< XNameAccess > xFields(mrParent.getDataPilotFields(), UNO_QUERY);
+        Reference< XNameAccess > xFields(mxParent->getDataPilotFields(), UNO_QUERY);
         if (xFields.is())
         {
             try
@@ -2788,7 +2783,7 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
     if( !aGroupDimName.isEmpty() )
         try
         {
-           Reference< XNameAccess > xFields( mrParent.getDataPilotFields(), UNO_QUERY_THROW );
+           Reference< XNameAccess > xFields( mxParent->getDataPilotFields(), UNO_QUERY_THROW );
            xRet.set( xFields->getByName( aGroupDimName ), UNO_QUERY );
         }
         catch( Exception& )
@@ -3026,15 +3021,13 @@ OUString lclExtractMember( const Any& rElement )
 } // namespace
 
 ScDataPilotFieldGroupObj::ScDataPilotFieldGroupObj( ScDataPilotFieldGroupsObj& rParent, const OUString& rGroupName ) :
-    mrParent( rParent ),
+    mxParent( &rParent ),
     maGroupName( rGroupName )
 {
-    mrParent.acquire();
 }
 
 ScDataPilotFieldGroupObj::~ScDataPilotFieldGroupObj()
 {
-    mrParent.release();
 }
 
 // XNameAccess
@@ -3042,7 +3035,7 @@ ScDataPilotFieldGroupObj::~ScDataPilotFieldGroupObj()
 Any SAL_CALL ScDataPilotFieldGroupObj::getByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     if( aIt == rMembers.end() )
         throw NoSuchElementException("Name \"" + rName + "\" not found", static_cast<cppu::OWeakObject*>(this));
@@ -3052,13 +3045,13 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByName( const OUString& rName )
 Sequence< OUString > SAL_CALL ScDataPilotFieldGroupObj::getElementNames()
 {
     SolarMutexGuard aGuard;
-    return ::comphelper::containerToSequence( mrParent.getFieldGroup( maGroupName ).maMembers );
+    return ::comphelper::containerToSequence( mxParent->getFieldGroup( maGroupName ).maMembers );
 }
 
 sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
     return ::std::find( rMembers.begin(), rMembers.end(), rName ) != rMembers.end();
 }
 
@@ -3075,7 +3068,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, co
     if( rName == aNewName )
         return;
 
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aOldIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     ScFieldGroupMembers::iterator aNewIt = ::std::find( rMembers.begin(), rMembers.end(), aNewName );
     if( aOldIt == rMembers.end() )
@@ -3095,7 +3088,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, con
     if( rName.isEmpty() )
         throw IllegalArgumentException("Name is empty", static_cast<cppu::OWeakObject*>(this), 0);
 
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     if( aIt != rMembers.end() )
         throw IllegalArgumentException("Name \"" + rName + "\" already exists", static_cast<cppu::OWeakObject*>(this), 0);
@@ -3108,7 +3101,7 @@ void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
 
     if( rName.isEmpty() )
         throw IllegalArgumentException("Name is empty", static_cast<cppu::OWeakObject*>(this), 0);
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     if( aIt == rMembers.end() )
         throw NoSuchElementException("Name \"" + rName + "\" not found", static_cast<cppu::OWeakObject*>(this));
@@ -3120,13 +3113,13 @@ void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
 sal_Int32 SAL_CALL ScDataPilotFieldGroupObj::getCount()
 {
     SolarMutexGuard aGuard;
-    return static_cast< sal_Int32 >( mrParent.getFieldGroup( maGroupName ).maMembers.size() );
+    return static_cast< sal_Int32 >( mxParent->getFieldGroup( maGroupName ).maMembers.size() );
 }
 
 Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
-    ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
+    ScFieldGroupMembers& rMembers = mxParent->getFieldGroup( maGroupName ).maMembers;
     if ((nIndex < 0) || (nIndex >= static_cast< sal_Int32 >( rMembers.size() )))
         throw IndexOutOfBoundsException();
     return Any( Reference< XNamed >( new ScDataPilotFieldGroupItemObj( *this, rMembers[ nIndex ] ) ) );
@@ -3151,7 +3144,7 @@ uno::Type SAL_CALL ScDataPilotFieldGroupObj::getElementType()
 sal_Bool SAL_CALL ScDataPilotFieldGroupObj::hasElements()
 {
     SolarMutexGuard aGuard;
-    return !mrParent.getFieldGroup( maGroupName ).maMembers.empty();
+    return !mxParent->getFieldGroup( maGroupName ).maMembers.empty();
 }
 
 // XNamed
@@ -3165,21 +3158,19 @@ OUString SAL_CALL ScDataPilotFieldGroupObj::getName()
 void SAL_CALL ScDataPilotFieldGroupObj::setName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
-    mrParent.renameFieldGroup( maGroupName, rName );
+    mxParent->renameFieldGroup( maGroupName, rName );
     // if call to renameFieldGroup() did not throw, remember the new name
     maGroupName = rName;
 }
 
 ScDataPilotFieldGroupItemObj::ScDataPilotFieldGroupItemObj( ScDataPilotFieldGroupObj& rParent, const OUString& rName ) :
-    mrParent( rParent ),
+    mxParent( &rParent ),
     maName( rName )
 {
-    mrParent.acquire();
 }
 
 ScDataPilotFieldGroupItemObj::~ScDataPilotFieldGroupItemObj()
 {
-    mrParent.release();
 }
 
 // XNamed
@@ -3193,7 +3184,7 @@ OUString SAL_CALL ScDataPilotFieldGroupItemObj::getName()
 void SAL_CALL ScDataPilotFieldGroupItemObj::setName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
-    mrParent.replaceByName( maName, Any( rName ) );
+    mxParent->replaceByName( maName, Any( rName ) );
     // if call to replaceByName() did not throw, remember the new name
     maName = rName;
 }
@@ -3212,7 +3203,7 @@ ScDataPilotItemsObj::~ScDataPilotItemsObj()
 ScDataPilotItemObj* ScDataPilotItemsObj::GetObjectByIndex_Impl( sal_Int32 nIndex ) const
 {
     return ((0 <= nIndex) && (nIndex < GetMemberCount())) ?
-        new ScDataPilotItemObj( mrParent, maFieldId, nIndex ) : nullptr;
+        new ScDataPilotItemObj( *mxParent, maFieldId, nIndex ) : nullptr;
 }
 
 // XNameAccess
