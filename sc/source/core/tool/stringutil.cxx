@@ -348,7 +348,7 @@ bool ScStringUtil::parseSimpleNumber(
 sal_Int32 ScStringUtil::GetQuotedTokenCount(const OUString &rIn, const OUString& rQuotedPairs, sal_Unicode cTok )
 {
     assert( !(rQuotedPairs.getLength()%2) );
-    assert( rQuotedPairs.indexOf(cTok) );
+    assert( rQuotedPairs.indexOf(cTok) == -1 );
 
     // empty string: TokenCount is 0 per definition
     if ( rIn.isEmpty() )
