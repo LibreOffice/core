@@ -1466,9 +1466,9 @@ void SdrTextObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextSizeDirty();
 }
 
-SdrFitToSizeType SdrTextObj::GetFitToSize() const
+drawing::TextFitToSizeType SdrTextObj::GetFitToSize() const
 {
-    SdrFitToSizeType eType = SdrFitToSizeType::NONE;
+    drawing::TextFitToSizeType eType = drawing::TextFitToSizeType_NONE;
 
     if(!IsAutoGrowWidth())
         eType = static_cast<const SdrTextFitToSizeTypeItem&>(GetObjectItem(SDRATTR_TEXT_FITTOSIZE)).GetValue();
@@ -1898,13 +1898,14 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
 // Access to TextAnimationAllowed flag
 bool SdrTextObj::IsAutoFit() const
 {
-    return GetFitToSize()==SdrFitToSizeType::Autofit;
+    return GetFitToSize() == drawing::TextFitToSizeType_AUTOFIT;
 }
 
 bool SdrTextObj::IsFitToSize() const
 {
-    const SdrFitToSizeType eFit=GetFitToSize();
-    return (eFit==SdrFitToSizeType::Proportional || eFit==SdrFitToSizeType::AllLines);
+    const drawing::TextFitToSizeType eFit = GetFitToSize();
+    return (eFit == drawing::TextFitToSizeType_PROPORTIONAL
+         || eFit == drawing::TextFitToSizeType_ALLLINES);
 }
 
 void SdrTextObj::SetTextAnimationAllowed(bool bNew)

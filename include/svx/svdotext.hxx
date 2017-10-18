@@ -400,7 +400,7 @@ public:
     long GetMinTextFrameWidth() const;
     long GetMaxTextFrameWidth() const;
 
-    SdrFitToSizeType GetFitToSize() const;
+    css::drawing::TextFitToSizeType GetFitToSize() const;
     const tools::Rectangle &GetGeoRect() const;
 
     // check if it's a TextFontwork

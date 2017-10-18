@@ -1205,7 +1205,7 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
                     SfxItemSet aItemSet = pCaption->GetMergedItemSet();
                     meTVA       = pCaption->GetTextVerticalAdjust();
                     meTHA       = pCaption->GetTextHorizontalAdjust();
-                    mbAutoScale = pCaption->GetFitToSize() != SdrFitToSizeType::NONE;
+                    mbAutoScale = pCaption->GetFitToSize() != drawing::TextFitToSizeType_NONE;
                     mbLocked    = pCaption->IsMoveProtect() || pCaption->IsResizeProtect();
 
                     // AutoFill style would change if Postit.cxx object creation values are changed

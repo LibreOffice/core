@@ -19,33 +19,25 @@
 #ifndef INCLUDED_SVX_SDTFSITM_HXX
 #define INCLUDED_SVX_SDTFSITM_HXX
 
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
+
 #include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-enum class SdrFitToSizeType
-{
-    NONE,         // - no fit-to-size
-    Proportional, // - resize all glyphs proportionally
-                  //   (might scale anisotrophically)
-    AllLines,     // - like SdrFitToSizeType::Proportional, but
-                  //   scales each line separately
-    Autofit       // - mimics PPT's automatic adaption of
-                  //   font size to text rect - comparable
-                  //   to SdrFitToSizeType::Proportional, but
-                  //   scales isotrophically
-};
 
-// No AutoGrow and no automatic line breaks for
-// SdrFitToSizeType::Proportional and SdrFitToSizeType::AllLines.
 // No automatic line breaks for AutoGrowingWidth as well (only if
 // TextMaxFrameWidth is reached).
 
 
-class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem: public SfxEnumItem<SdrFitToSizeType> {
+class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem
+    : public SfxEnumItem<css::drawing::TextFitToSizeType>
+{
 public:
     static SfxPoolItem* CreateDefault();
-    SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SdrFitToSizeType::NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE, eFit) {}
+    SdrTextFitToSizeTypeItem(
+            css::drawing::TextFitToSizeType const eFit = css::drawing::TextFitToSizeType_NONE)
+        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE, eFit) {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16       GetValueCount() const override;
 

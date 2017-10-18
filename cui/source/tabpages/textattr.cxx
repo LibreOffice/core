@@ -38,6 +38,8 @@
 #include <svx/ofaitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 
+using namespace ::com::sun::star;
+
 const sal_uInt16 SvxTextAttrPage::pRanges[] =
 {
       SDRATTR_MISC_FIRST
@@ -309,9 +311,9 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     // adjust to border
     if ( rAttrs->GetItemState( SDRATTR_TEXT_FITTOSIZE ) != SfxItemState::DONTCARE )
     {
-        SdrFitToSizeType eFTS =
+        drawing::TextFitToSizeType const eFTS =
                     static_cast<const SdrTextFitToSizeTypeItem&>( rAttrs->Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
-        if( eFTS == SdrFitToSizeType::Autofit || eFTS == SdrFitToSizeType::NONE )
+        if (eFTS == drawing::TextFitToSizeType_AUTOFIT || eFTS == drawing::TextFitToSizeType_NONE)
             m_pTsbFitToSize->SetState( TRISTATE_FALSE );
         else
             m_pTsbFitToSize->SetState( TRISTATE_TRUE );
@@ -407,14 +409,14 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     eState = m_pTsbFitToSize->GetState();
     if( m_pTsbFitToSize->IsValueChangedFromSaved() )
     {
-        SdrFitToSizeType eFTS;
+        drawing::TextFitToSizeType eFTS;
         switch( eState )
         {
             default: ; //prevent warning
                 OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
                 SAL_FALLTHROUGH;
-            case TRISTATE_FALSE: eFTS = SdrFitToSizeType::Autofit; break;
-            case TRISTATE_TRUE: eFTS = SdrFitToSizeType::Proportional; break;
+            case TRISTATE_FALSE: eFTS = drawing::TextFitToSizeType_AUTOFIT; break;
+            case TRISTATE_TRUE: eFTS = drawing::TextFitToSizeType_PROPORTIONAL; break;
         }
         rAttrs->Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }

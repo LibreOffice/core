@@ -73,9 +73,9 @@ void SetAlignmentState( SdrView const * pSdrView, SfxItemSet& rSet )
                 case SDRTEXTHORZADJUST_RIGHT  : nAlignment = 2; break;
                 case SDRTEXTHORZADJUST_BLOCK  :
                 {
-                    if ( rTextFitToSizeTypeItem.GetValue() == SdrFitToSizeType::NONE )
+                    if (rTextFitToSizeTypeItem.GetValue() == drawing::TextFitToSizeType_NONE)
                         nAlignment = 3;
-                    else if ( rTextFitToSizeTypeItem.GetValue() == SdrFitToSizeType::AllLines )
+                    else if (rTextFitToSizeTypeItem.GetValue() == drawing::TextFitToSizeType_ALLLINES)
                         nAlignment = 4;
                 }
             }
@@ -271,11 +271,11 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
                 sal_Int32 nValue = rReq.GetArgs()->GetItem<SfxInt32Item>(SID_FONTWORK_ALIGNMENT)->GetValue();
                 if ( ( nValue >= 0 ) && ( nValue < 5 ) )
                 {
-                    SdrFitToSizeType eFTS = SdrFitToSizeType::NONE;
+                    drawing::TextFitToSizeType eFTS = drawing::TextFitToSizeType_NONE;
                     SdrTextHorzAdjust eHorzAdjust;
                     switch ( nValue )
                     {
-                        case 4 : eFTS = SdrFitToSizeType::AllLines; SAL_FALLTHROUGH;
+                        case 4 : eFTS = drawing::TextFitToSizeType_ALLLINES; SAL_FALLTHROUGH;
                         case 3 : eHorzAdjust = SDRTEXTHORZADJUST_BLOCK; break;
                         default: eHorzAdjust = SDRTEXTHORZADJUST_LEFT; break;
                         case 1 : eHorzAdjust = SDRTEXTHORZADJUST_CENTER; break;

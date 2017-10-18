@@ -3447,8 +3447,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                     break;
                                 case drawing::TextHorizontalAdjust_BLOCK:
                                     {
-                                        SdrFitToSizeType  eFTS( static_cast<const SdrTextFitToSizeTypeItem&>(pCustoShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
-                                        if ( eFTS == SdrFitToSizeType::AllLines)
+                                        drawing::TextFitToSizeType const eFTS(
+                                            static_cast<const SdrTextFitToSizeTypeItem&>(pCustoShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
+                                        if (eFTS == drawing::TextFitToSizeType_ALLLINES)
                                         {
                                             gTextAlign = mso_alignTextStretch;
                                         }

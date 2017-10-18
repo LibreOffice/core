@@ -960,11 +960,11 @@ bool SdrTextFitToSizeTypeItem::GetPresentation(SfxItemPresentation ePres,
 
 bool SdrTextFitToSizeTypeItem::HasBoolValue() const { return true; }
 
-bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue()!=SdrFitToSizeType::NONE; }
+bool SdrTextFitToSizeTypeItem::GetBoolValue() const { return GetValue() != drawing::TextFitToSizeType_NONE; }
 
 void SdrTextFitToSizeTypeItem::SetBoolValue(bool bVal)
 {
-    SetValue(bVal ? SdrFitToSizeType::Proportional : SdrFitToSizeType::NONE);
+    SetValue((bVal) ? drawing::TextFitToSizeType_PROPORTIONAL : drawing::TextFitToSizeType_NONE);
 }
 
 bool SdrTextFitToSizeTypeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
@@ -987,7 +987,7 @@ bool SdrTextFitToSizeTypeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
         eFS = (drawing::TextFitToSizeType) nEnum;
     }
 
-    SetValue( (SdrFitToSizeType)eFS );
+    SetValue(eFS);
 
     return true;
 }
