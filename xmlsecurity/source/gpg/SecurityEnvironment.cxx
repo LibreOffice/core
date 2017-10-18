@@ -76,7 +76,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getCertificatesIm
         GpgME::Key k = m_ctx->nextKey(err);
         if (err)
             break;
-        if (!k.isInvalid()) {
+        if (!k.isRevoked() && !k.isExpired() && !k.isDisabled() && !k.isInvalid()) {
             // We can't create CertificateImpl here as CertificateImpl::setCertificate uses GpgME API
             // which interrupts our key listing here. So first get the keys from GpgME, then create the CertificateImpls
             keyList.push_back(k);
