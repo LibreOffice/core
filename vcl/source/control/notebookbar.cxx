@@ -173,7 +173,7 @@ void NotebookBar::UpdateBackground()
     if (!aPersona.IsEmpty())
         SetBackground(Wallpaper(aPersona));
     else
-        SetBackground(rStyleSettings.GetMenuBarColor());
+        SetBackground(rStyleSettings.GetDialogColor());
 
     Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }
