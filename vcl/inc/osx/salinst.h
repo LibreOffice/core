@@ -77,6 +77,7 @@ public:
     osl::Condition                          maWaitingYieldCond;
     bool                                    mbIsLiveResize;
     bool                                    mbNoYieldLock;
+    bool                                    mbTimerProcessed;
 
     static std::list<const ApplicationEvent*> aAppEventList;
 

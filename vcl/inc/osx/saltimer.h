@@ -44,6 +44,7 @@ public:
 class AquaSalTimer final : public SalTimer, protected VersionedEvent
 {
     NSTimer    *m_pRunningTimer;
+    bool        m_bDirectTimeout;    ///< timeout can be processed directly
 
     void queueDispatchTimerEvent( bool bAtStart );
     void callTimerCallback();
@@ -56,12 +57,18 @@ public:
     void Stop() override;
 
     void handleStartTimerEvent( NSEvent* pEvent );
-    void handleDispatchTimerEvent( NSEvent* pEvent );
+    bool handleDispatchTimerEvent( NSEvent* pEvent );
     void handleTimerElapsed();
     void handleWindowShouldClose();
 
     bool IsTimerElapsed() const;
+    inline bool IsDirectTimeout() const;
 };
+
+inline bool AquaSalTimer::IsDirectTimeout() const
+{
+    return m_bDirectTimeout;
+}
 
 #endif // INCLUDED_VCL_INC_OSX_SALTIMER_H
 

@@ -379,6 +379,7 @@ AquaSalInstance::AquaSalInstance()
     : mnActivePrintJobs( 0 )
     , mbIsLiveResize( false )
     , mbNoYieldLock( false )
+    , mbTimerProcessed( false )
 {
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
@@ -452,9 +453,12 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         break;
     }
     case DispatchTimerEvent:
-        if ( pTimer )
-            pTimer->handleDispatchTimerEvent( pEvent );
+    {
+        AquaSalInstance *pInst = GetSalData()->mpInstance;
+        if ( pTimer && pInst )
+            pInst->mbTimerProcessed = pTimer->handleDispatchTimerEvent( pEvent );
         break;
+    }
 #if !HAVE_FEATURE_MACOSX_SANDBOX
     case AppleRemoteControlEvent: // Defined in <apple_remote/RemoteMainController.h>
     {
@@ -570,6 +574,8 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         // handle available events
         NSEvent* pEvent = nil;
         NSTimeInterval now = [[NSProcessInfo processInfo] systemUptime];
+        mbTimerProcessed = false;
+
         do
         {
             SolarMutexReleaser aReleaser;
@@ -595,6 +601,13 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
                 break;
         }
         while( true );
+
+        AquaSalTimer *pTimer = static_cast<AquaSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
+        if ( !mbTimerProcessed && pTimer && pTimer->IsDirectTimeout() )
+        {
+            pTimer->handleTimerElapsed();
+            bHadEvent = true;
+        }
 
         // if we had no event yet, wait for one if requested
         if( bWait && ! bHadEvent )
