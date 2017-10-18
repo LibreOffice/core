@@ -3654,6 +3654,14 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
         return;
     }
 
+    if (p->nCp2OrIdx < 0 || p->nCp2OrIdx > p->nSprmsLen)
+    {
+        SAL_WARN("sw.ww8", "Document has invalid Cp or Idx, ignoring it");
+        p->nEndPos = p->nStartPos = WW8_CP_MAX;
+        p->nSprmsLen = 0;
+        return;
+    }
+
     p->nSprmsLen -= p->nCp2OrIdx;
 }
 
