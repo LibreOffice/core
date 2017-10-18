@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_21f763f6",
+        "filename": "desktop/source/deployment/gui/dp_gui_dialog2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-18T18:59:09Z",
+      "side": 1,
+      "message": "not setting the filepicker title anymore?",
+      "revId": "cb67c47e7607767bc2a69b2c9d1611be6dbd811d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
