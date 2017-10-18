@@ -36,6 +36,7 @@
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -421,7 +422,7 @@ namespace emfplushelper
 
                 }
                 mrTargetHolders.Current().append(
-                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                    o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
                         polygon,
                         lineAttribute,
                         aStrokeAttribute));
@@ -437,7 +438,7 @@ namespace emfplushelper
                 }
                 drawinglayer::attribute::StrokeAttribute strokeAttribute(aPattern);
                 mrTargetHolders.Current().append(
-                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                    o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
                         polygon,
                         lineAttribute,
                         strokeAttribute));
@@ -446,7 +447,7 @@ namespace emfplushelper
             else // no further line decoration, so use simple primitive
             {
                 mrTargetHolders.Current().append(
-                    new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
+                    o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D>(
                         polygon,
                         lineAttribute));
             }
@@ -466,7 +467,7 @@ namespace emfplushelper
         if (isColor) // use Color
         {
             mrTargetHolders.Current().append(
-                new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
                     polygon,
                     ::Color(0xff - (brushIndexOrColor >> 24), (brushIndexOrColor >> 16) & 0xff, (brushIndexOrColor >> 8) & 0xff, brushIndexOrColor & 0xff).getBColor()));
 
@@ -525,7 +526,7 @@ namespace emfplushelper
                 // temporal solution: create a solid colored polygon
                 // TODO create a 'real' hatching primitive
                 mrTargetHolders.Current().append(
-                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                    o3tl::make_unique<drawinglayer::primitive2d::PolyPolygonColorPrimitive2D>(
                         polygon,
                         fillColor.getBColor()));
             }
@@ -634,7 +635,7 @@ namespace emfplushelper
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
-                        new drawinglayer::primitive2d::SvgLinearGradientPrimitive2D(
+                        o3tl::make_unique<drawinglayer::primitive2d::SvgLinearGradientPrimitive2D>(
                             aTextureTransformation,
                             polygon,
                             aVector,
@@ -650,7 +651,7 @@ namespace emfplushelper
 
                     // create the same one used for SVG
                     mrTargetHolders.Current().append(
-                        new drawinglayer::primitive2d::SvgRadialGradientPrimitive2D(
+                        o3tl::make_unique<drawinglayer::primitive2d::SvgRadialGradientPrimitive2D>(
                             aTextureTransformation,
                             polygon,
                             aVector,
@@ -1130,7 +1131,7 @@ namespace emfplushelper
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
                                 {
                                     mrTargetHolders.Current().append(
-                                        new drawinglayer::primitive2d::BitmapPrimitive2D(aBmp, aTransformMatrix));
+                                        o3tl::make_unique<drawinglayer::primitive2d::BitmapPrimitive2D>(aBmp, aTransformMatrix));
                                 }
                                 else
                                 {
@@ -1142,7 +1143,7 @@ namespace emfplushelper
                                 GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
                                 aGDI.Clip(aSource);
                                 mrTargetHolders.Current().append(
-                                        new drawinglayer::primitive2d::MetafilePrimitive2D(aTransformMatrix, aGDI));
+                                        o3tl::make_unique<drawinglayer::primitive2d::MetafilePrimitive2D>(aTransformMatrix, aGDI));
                             }
                         }
                         else
@@ -1219,7 +1220,7 @@ namespace emfplushelper
 
                             std::vector<double> emptyVector;
                             mrTargetHolders.Current().append(
-                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                o3tl::make_unique<drawinglayer::primitive2d::TextSimplePortionPrimitive2D>(
                                     transformMatrix,
                                     text,
                                     0,             // text always starts at 0
@@ -1619,7 +1620,7 @@ namespace emfplushelper
 
                                 //generate TextSimplePortionPrimitive2D
                                 mrTargetHolders.Current().append(
-                                    new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                    o3tl::make_unique<drawinglayer::primitive2d::TextSimplePortionPrimitive2D>(
                                     transformMatrix,
                                     text,
                                     pos,            // take character at current pos
