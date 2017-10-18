@@ -239,21 +239,11 @@ namespace psp
     class PPDCache
     {
     public:
-        std::list< PPDParser* > aAllParsers;
-        std::unordered_map< OUString, OUString, OUStringHash >* pAllPPDFiles;
+        std::list< std::unique_ptr<PPDParser> > aAllParsers;
+        std::unique_ptr<std::unordered_map< OUString, OUString, OUStringHash >> pAllPPDFiles;
         PPDCache()
             : pAllPPDFiles(nullptr)
         {}
-        ~PPDCache()
-        {
-            while( aAllParsers.begin() != aAllParsers.end() )
-            {
-                delete aAllParsers.front();
-                aAllParsers.pop_front();
-            }
-            delete pAllPPDFiles;
-            pAllPPDFiles = nullptr;
-        }
     };
 }
 
@@ -450,7 +440,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     if( rPPDCache.pAllPPDFiles )
         return;
 
-    rPPDCache.pAllPPDFiles = new std::unordered_map< OUString, OUString, OUStringHash >;
+    rPPDCache.pAllPPDFiles.reset(new std::unordered_map< OUString, OUString, OUStringHash >);
 
     // check installation directories
     std::vector< OUString > aPathList;
@@ -509,7 +499,7 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
             if( it == rPPDCache.pAllPPDFiles->end() && bRetry )
             {
                 // a new file ? rehash
-                delete rPPDCache.pAllPPDFiles; rPPDCache.pAllPPDFiles = nullptr;
+                rPPDCache.pAllPPDFiles.reset();
                 bRetry = false;
                 // note this is optimized for office start where
                 // no new files occur and initPPDFiles is called only once
@@ -561,9 +551,9 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
 
 
     PPDCache &rPPDCache = thePPDCache::get();
-    for( ::std::list< PPDParser* >::const_iterator it = rPPDCache.aAllParsers.begin(); it != rPPDCache.aAllParsers.end(); ++it )
-        if( (*it)->m_aFile == aFile )
-            return *it;
+    for( auto const & i : rPPDCache.aAllParsers )
+        if( i->m_aFile == aFile )
+            return i.get();
 
     PPDParser* pNewParser = nullptr;
     if( !aFile.startsWith( "CUPS:" ) && !aFile.startsWith( "CPD:" ) )
@@ -587,9 +577,14 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
     {
         // this may actually be the SGENPRT parser,
         // so ensure uniqueness here
-        rPPDCache.aAllParsers.remove( pNewParser );
+        rPPDCache.aAllParsers.erase(
+                std::remove_if(
+                    rPPDCache.aAllParsers.begin(),
+                    rPPDCache.aAllParsers.end(),
+                    [pNewParser] (std::unique_ptr<PPDParser> const & x) { return x.get() == pNewParser; } ),
+                rPPDCache.aAllParsers.end());
         // insert new parser to list
-        rPPDCache.aAllParsers.push_front( pNewParser );
+        rPPDCache.aAllParsers.push_front( std::unique_ptr<PPDParser>(pNewParser) );
     }
     return pNewParser;
 }

@@ -177,7 +177,6 @@ private:
 
     PPDParser( const OUString& rFile );
     PPDParser( const OUString& rFile, std::vector<PPDKey*> keys );
-    ~PPDParser();
 
     void parseOrderDependency(const OString& rLine);
     void parseOpenUI(const OString& rLine, const OString& rPPDGroup);
@@ -190,6 +189,7 @@ private:
     static void initPPDFiles(PPDCache &rPPDCache);
     static OUString getPPDFile( const OUString& rFile );
 public:
+    ~PPDParser();
     static const PPDParser* getParser( const OUString& rFile );
 
     const PPDKey*   getKey( int n ) const;
