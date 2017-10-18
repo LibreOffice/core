@@ -441,10 +441,6 @@ void XSecController::collectToVerify( const OUString& referenceId )
         if ( bJustChainingOn )
         {
             cssu::Reference< cssxs::XDocumentHandler > xSEKHandler(static_cast<cppu::OWeakObject*>(m_xSAXEventKeeper.get()), cssu::UNO_QUERY);
-            if (m_xElementStackKeeper.is())
-            {
-                m_xElementStackKeeper->retrieve(xSEKHandler, true);
-            }
             m_xSAXEventKeeper->setNextHandler(xHandler);
         }
     }
