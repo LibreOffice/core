@@ -64,6 +64,7 @@
 #include "xfilter/xfstyle.hxx"
 #include "xfilter/xfnumfmt.hxx"
 #include "unicode/utypes.h"
+#include <memory>
 #include <vector>
 
 class IXFStream;
@@ -214,7 +215,7 @@ public:
     virtual void    ToXml(IXFStream *pStrm) override;
 
 private:
-    XFListLevel     *m_pListLevels[10];
+    std::unique_ptr<XFListLevel> m_pListLevels[10];
 };
 
 inline void XFListLevel::SetListlevelType(enumXFListLevel type)
