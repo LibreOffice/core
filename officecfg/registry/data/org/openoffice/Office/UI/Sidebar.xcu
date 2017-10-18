@@ -1550,8 +1550,8 @@
       </node>
     </node>
     <prop oor:name="LastActiveDeck">
-      <value oor:separator=";">
-         any, PropertyDeck;
+      <value>
+         <it>any, PropertyDeck</it>
       </value>
     </prop>
   </node>
