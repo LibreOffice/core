@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <setjmp.h>
 #include <jpeglib.h>
 #include <jerror.h>
 
@@ -37,12 +38,28 @@ extern "C" {
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#ifdef _MSC_VER
+#pragma warning(push, 1) /* disable to __declspec(align()) aligned warning */
+#pragma warning (disable: 4324)
+#endif
+
+struct ErrorManagerStruct
+{
+    jpeg_error_mgr pub;
+    jmp_buf setjmp_buffer;
+};
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 extern "C" void errorExit (j_common_ptr cinfo)
 {
     char buffer[JMSG_LENGTH_MAX];
     (*cinfo->err->format_message) (cinfo, buffer);
     SAL_WARN("vcl.filter", "fatal failure reading JPEG: " << buffer);
-    throw css::uno::RuntimeException(OUString(buffer, strlen(buffer), RTL_TEXTENCODING_ASCII_US));
+    ErrorManagerStruct * error = reinterpret_cast<ErrorManagerStruct *>(cinfo->err);
+    longjmp(error->setjmp_buffer, 1);
 }
 
 extern "C" void outputMessage (j_common_ptr cinfo)
@@ -55,226 +72,239 @@ extern "C" void outputMessage (j_common_ptr cinfo)
 class JpegDecompressOwner
 {
 public:
-    JpegDecompressOwner(jpeg_decompress_struct &cinfo) : m_cinfo(cinfo)
+    void set(jpeg_decompress_struct *cinfo)
     {
+        m_cinfo = cinfo;
     }
     ~JpegDecompressOwner()
     {
-        jpeg_destroy_decompress(&m_cinfo);
+        if (m_cinfo != nullptr)
+        {
+            jpeg_destroy_decompress(m_cinfo);
+        }
     }
 private:
-    jpeg_decompress_struct &m_cinfo;
+    jpeg_decompress_struct *m_cinfo = nullptr;
 };
 
 class JpegCompressOwner
 {
 public:
-    JpegCompressOwner(jpeg_compress_struct &cinfo) : m_cinfo(cinfo)
+    void set(jpeg_compress_struct *cinfo)
     {
+        m_cinfo = cinfo;
     }
     ~JpegCompressOwner()
     {
-        jpeg_destroy_compress(&m_cinfo);
+        if (m_cinfo != nullptr)
+        {
+            jpeg_destroy_compress(m_cinfo);
+        }
     }
 private:
-    jpeg_compress_struct &m_cinfo;
+    jpeg_compress_struct *m_cinfo = nullptr;
 };
 
 void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
                Size const & previewSize, GraphicFilterImportFlags nImportFlags,
                Bitmap::ScopedWriteAccess* ppAccess )
 {
-    try
+    jpeg_decompress_struct cinfo;
+    ErrorManagerStruct jerr;
+
+    JpegDecompressOwner aOwner;
+    std::unique_ptr<Bitmap::ScopedWriteAccess> pScopedAccess;
+    std::vector<sal_uInt8> pScanLineBuffer;
+    std::vector<sal_uInt8> pCYMKBuffer;
+
+    if ( setjmp( jerr.setjmp_buffer ) )
     {
-        jpeg_decompress_struct cinfo;
-        jpeg_error_mgr jerr;
+        return;
+    }
 
-        cinfo.err = jpeg_std_error( &jerr );
-        jerr.error_exit = errorExit;
-        jerr.output_message = outputMessage;
+    cinfo.err = jpeg_std_error( &jerr.pub );
+    jerr.pub.error_exit = errorExit;
+    jerr.pub.output_message = outputMessage;
 
-        jpeg_create_decompress( &cinfo );
-        JpegDecompressOwner aOwner(cinfo);
-        jpeg_svstream_src( &cinfo, pInputStream );
-        SourceManagerStruct *source = reinterpret_cast<SourceManagerStruct*>(cinfo.src);
-        jpeg_read_header( &cinfo, TRUE );
+    jpeg_create_decompress( &cinfo );
+    aOwner.set(&cinfo);
+    jpeg_svstream_src( &cinfo, pInputStream );
+    SourceManagerStruct *source = reinterpret_cast<SourceManagerStruct*>(cinfo.src);
+    jpeg_read_header( &cinfo, TRUE );
 
-        cinfo.scale_num = 1;
-        cinfo.scale_denom = 1;
-        cinfo.output_gamma = 1.0;
-        cinfo.raw_data_out = FALSE;
-        cinfo.quantize_colors = FALSE;
+    cinfo.scale_num = 1;
+    cinfo.scale_denom = 1;
+    cinfo.output_gamma = 1.0;
+    cinfo.raw_data_out = FALSE;
+    cinfo.quantize_colors = FALSE;
 
-        /* change scale for preview import */
-        long nPreviewWidth = previewSize.Width();
-        long nPreviewHeight = previewSize.Height();
-        if( nPreviewWidth || nPreviewHeight )
+    /* change scale for preview import */
+    long nPreviewWidth = previewSize.Width();
+    long nPreviewHeight = previewSize.Height();
+    if( nPreviewWidth || nPreviewHeight )
+    {
+        if( nPreviewWidth == 0 )
         {
-            if( nPreviewWidth == 0 )
+            nPreviewWidth = ( cinfo.image_width * nPreviewHeight ) / cinfo.image_height;
+            if( nPreviewWidth <= 0 )
             {
-                nPreviewWidth = ( cinfo.image_width * nPreviewHeight ) / cinfo.image_height;
-                if( nPreviewWidth <= 0 )
-                {
-                    nPreviewWidth = 1;
-                }
+                nPreviewWidth = 1;
             }
-            else if( nPreviewHeight == 0 )
+        }
+        else if( nPreviewHeight == 0 )
+        {
+            nPreviewHeight = ( cinfo.image_height * nPreviewWidth ) / cinfo.image_width;
+            if( nPreviewHeight <= 0 )
             {
-                nPreviewHeight = ( cinfo.image_height * nPreviewWidth ) / cinfo.image_width;
-                if( nPreviewHeight <= 0 )
-                {
-                    nPreviewHeight = 1;
-                }
-            }
-
-            for( cinfo.scale_denom = 1; cinfo.scale_denom < 8; cinfo.scale_denom *= 2 )
-            {
-                if( cinfo.image_width < nPreviewWidth * cinfo.scale_denom )
-                    break;
-                if( cinfo.image_height < nPreviewHeight * cinfo.scale_denom )
-                    break;
-            }
-
-            if( cinfo.scale_denom > 1 )
-            {
-                cinfo.dct_method            = JDCT_FASTEST;
-                cinfo.do_fancy_upsampling   = FALSE;
-                cinfo.do_block_smoothing    = FALSE;
+                nPreviewHeight = 1;
             }
         }
 
-        jpeg_calc_output_dimensions(&cinfo);
-
-        long nWidth = cinfo.output_width;
-        long nHeight = cinfo.output_height;
-
-        bool bGray = (cinfo.output_components == 1);
-
-        JPEGCreateBitmapParam aCreateBitmapParam;
-
-        aCreateBitmapParam.nWidth = nWidth;
-        aCreateBitmapParam.nHeight = nHeight;
-
-        aCreateBitmapParam.density_unit = cinfo.density_unit;
-        aCreateBitmapParam.X_density = cinfo.X_density;
-        aCreateBitmapParam.Y_density = cinfo.Y_density;
-        aCreateBitmapParam.bGray = bGray;
-
-        const auto bOnlyCreateBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::OnlyCreateBitmap);
-        const auto bUseExistingBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap);
-        bool bBitmapCreated = bUseExistingBitmap;
-        if (!bBitmapCreated)
-            bBitmapCreated = pJPEGReader->CreateBitmap(aCreateBitmapParam);
-
-        if (bBitmapCreated && !bOnlyCreateBitmap)
+        for( cinfo.scale_denom = 1; cinfo.scale_denom < 8; cinfo.scale_denom *= 2 )
         {
-            std::unique_ptr<Bitmap::ScopedWriteAccess> pScopedAccess;
+            if( cinfo.image_width < nPreviewWidth * cinfo.scale_denom )
+                break;
+            if( cinfo.image_height < nPreviewHeight * cinfo.scale_denom )
+                break;
+        }
 
-            if (nImportFlags & GraphicFilterImportFlags::UseExistingBitmap)
-                // ppAccess must be set if this flag is used.
-                assert(ppAccess);
-            else
-                pScopedAccess.reset(new Bitmap::ScopedWriteAccess(pJPEGReader->GetBitmap()));
+        if( cinfo.scale_denom > 1 )
+        {
+            cinfo.dct_method            = JDCT_FASTEST;
+            cinfo.do_fancy_upsampling   = FALSE;
+            cinfo.do_block_smoothing    = FALSE;
+        }
+    }
 
-            Bitmap::ScopedWriteAccess& pAccess = bUseExistingBitmap ? *ppAccess : *pScopedAccess.get();
+    jpeg_calc_output_dimensions(&cinfo);
 
-            if (pAccess)
+    long nWidth = cinfo.output_width;
+    long nHeight = cinfo.output_height;
+
+    bool bGray = (cinfo.output_components == 1);
+
+    JPEGCreateBitmapParam aCreateBitmapParam;
+
+    aCreateBitmapParam.nWidth = nWidth;
+    aCreateBitmapParam.nHeight = nHeight;
+
+    aCreateBitmapParam.density_unit = cinfo.density_unit;
+    aCreateBitmapParam.X_density = cinfo.X_density;
+    aCreateBitmapParam.Y_density = cinfo.Y_density;
+    aCreateBitmapParam.bGray = bGray;
+
+    const auto bOnlyCreateBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::OnlyCreateBitmap);
+    const auto bUseExistingBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap);
+    bool bBitmapCreated = bUseExistingBitmap;
+    if (!bBitmapCreated)
+        bBitmapCreated = pJPEGReader->CreateBitmap(aCreateBitmapParam);
+
+    if (bBitmapCreated && !bOnlyCreateBitmap)
+    {
+        if (nImportFlags & GraphicFilterImportFlags::UseExistingBitmap)
+            // ppAccess must be set if this flag is used.
+            assert(ppAccess);
+        else
+            pScopedAccess.reset(new Bitmap::ScopedWriteAccess(pJPEGReader->GetBitmap()));
+
+        Bitmap::ScopedWriteAccess& pAccess = bUseExistingBitmap ? *ppAccess : *pScopedAccess.get();
+
+        if (pAccess)
+        {
+            int nPixelSize = 3;
+            J_COLOR_SPACE best_out_color_space = JCS_RGB;
+            ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
+            ScanlineFormat eFinalFormat = pAccess->GetScanlineFormat();
+
+            if (bGray)
             {
-                int nPixelSize = 3;
-                J_COLOR_SPACE best_out_color_space = JCS_RGB;
-                ScanlineFormat eScanlineFormat = ScanlineFormat::N24BitTcRgb;
-                ScanlineFormat eFinalFormat = pAccess->GetScanlineFormat();
+                best_out_color_space = JCS_GRAYSCALE;
+                eScanlineFormat = ScanlineFormat::N8BitPal;
+                nPixelSize = 1;
+            }
+            else if (eFinalFormat == ScanlineFormat::N32BitTcBgra)
+            {
+                best_out_color_space = JCS_EXT_BGRA;
+                eScanlineFormat = eFinalFormat;
+                nPixelSize = 4;
+            }
+            else if (eFinalFormat == ScanlineFormat::N32BitTcRgba)
+            {
+                best_out_color_space = JCS_EXT_RGBA;
+                eScanlineFormat = eFinalFormat;
+                nPixelSize = 4;
+            }
+            else if (eFinalFormat == ScanlineFormat::N32BitTcArgb)
+            {
+                best_out_color_space = JCS_EXT_ARGB;
+                eScanlineFormat = eFinalFormat;
+                nPixelSize = 4;
+            }
 
-                if (bGray)
-                {
-                    best_out_color_space = JCS_GRAYSCALE;
-                    eScanlineFormat = ScanlineFormat::N8BitPal;
-                    nPixelSize = 1;
-                }
-                else if (eFinalFormat == ScanlineFormat::N32BitTcBgra)
-                {
-                    best_out_color_space = JCS_EXT_BGRA;
-                    eScanlineFormat = eFinalFormat;
-                    nPixelSize = 4;
-                }
-                else if (eFinalFormat == ScanlineFormat::N32BitTcRgba)
-                {
-                    best_out_color_space = JCS_EXT_RGBA;
-                    eScanlineFormat = eFinalFormat;
-                    nPixelSize = 4;
-                }
-                else if (eFinalFormat == ScanlineFormat::N32BitTcArgb)
-                {
-                    best_out_color_space = JCS_EXT_ARGB;
-                    eScanlineFormat = eFinalFormat;
-                    nPixelSize = 4;
-                }
+            if (cinfo.jpeg_color_space == JCS_YCCK)
+                cinfo.out_color_space = JCS_CMYK;
 
-                if (cinfo.jpeg_color_space == JCS_YCCK)
-                    cinfo.out_color_space = JCS_CMYK;
+            if (cinfo.out_color_space != JCS_CMYK)
+                cinfo.out_color_space = best_out_color_space;
 
-                if (cinfo.out_color_space != JCS_CMYK)
-                    cinfo.out_color_space = best_out_color_space;
+            jpeg_start_decompress(&cinfo);
 
-                jpeg_start_decompress(&cinfo);
+            JSAMPLE* aRangeLimit = cinfo.sample_range_limit;
 
-                JSAMPLE* aRangeLimit = cinfo.sample_range_limit;
+            pScanLineBuffer.resize(nWidth * nPixelSize);
 
-                std::vector<sal_uInt8> pScanLineBuffer(nWidth * nPixelSize);
-                std::vector<sal_uInt8> pCYMKBuffer;
+            if (cinfo.out_color_space == JCS_CMYK)
+            {
+                pCYMKBuffer.resize(nWidth * 4);
+            }
+
+            for (*pLines = 0; *pLines < nHeight && !source->no_data_available; (*pLines)++)
+            {
+                size_t yIndex = *pLines;
+
+                sal_uInt8* p = (cinfo.out_color_space == JCS_CMYK) ? pCYMKBuffer.data() : pScanLineBuffer.data();
+                jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
 
                 if (cinfo.out_color_space == JCS_CMYK)
                 {
-                    pCYMKBuffer.resize(nWidth * 4);
-                }
+                    // convert CMYK to RGB
+                    for (long cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
+                    {
+                        int color_C = 255 - pCYMKBuffer[cmyk + 0];
+                        int color_M = 255 - pCYMKBuffer[cmyk + 1];
+                        int color_Y = 255 - pCYMKBuffer[cmyk + 2];
+                        int color_K = 255 - pCYMKBuffer[cmyk + 3];
 
-                for (*pLines = 0; *pLines < nHeight && !source->no_data_available; (*pLines)++)
+                        sal_uInt8 cRed = aRangeLimit[255L - (color_C + color_K)];
+                        sal_uInt8 cGreen = aRangeLimit[255L - (color_M + color_K)];
+                        sal_uInt8 cBlue = aRangeLimit[255L - (color_Y + color_K)];
+
+                        pAccess->SetPixel(yIndex, x, BitmapColor(cRed, cGreen, cBlue));
+                    }
+                }
+                else
                 {
-                    size_t yIndex = *pLines;
-
-                    sal_uInt8* p = (cinfo.out_color_space == JCS_CMYK) ? pCYMKBuffer.data() : pScanLineBuffer.data();
-                    jpeg_read_scanlines(&cinfo, reinterpret_cast<JSAMPARRAY>(&p), 1);
-
-                    if (cinfo.out_color_space == JCS_CMYK)
-                    {
-                        // convert CMYK to RGB
-                        for (long cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
-                        {
-                            int color_C = 255 - pCYMKBuffer[cmyk + 0];
-                            int color_M = 255 - pCYMKBuffer[cmyk + 1];
-                            int color_Y = 255 - pCYMKBuffer[cmyk + 2];
-                            int color_K = 255 - pCYMKBuffer[cmyk + 3];
-
-                            sal_uInt8 cRed = aRangeLimit[255L - (color_C + color_K)];
-                            sal_uInt8 cGreen = aRangeLimit[255L - (color_M + color_K)];
-                            sal_uInt8 cBlue = aRangeLimit[255L - (color_Y + color_K)];
-
-                            pAccess->SetPixel(yIndex, x, BitmapColor(cRed, cGreen, cBlue));
-                        }
-                    }
-                    else
-                    {
-                        pAccess->CopyScanline(yIndex, pScanLineBuffer.data(), eScanlineFormat, pScanLineBuffer.size());
-                    }
-
-                    /* PENDING ??? */
-                    if (cinfo.err->msg_code == 113)
-                        break;
+                    pAccess->CopyScanline(yIndex, pScanLineBuffer.data(), eScanlineFormat, pScanLineBuffer.size());
                 }
-            }
-        }
 
-        if (bBitmapCreated && !bOnlyCreateBitmap)
-        {
-            jpeg_finish_decompress( &cinfo );
+                /* PENDING ??? */
+                if (cinfo.err->msg_code == 113)
+                    break;
+            }
+
+            pScanLineBuffer.clear();
+            pCYMKBuffer.clear();
         }
-        else
-        {
-            jpeg_abort_decompress( &cinfo );
-        }
+        pScopedAccess.reset();
     }
-    catch (const css::uno::RuntimeException&)
+
+    if (bBitmapCreated && !bOnlyCreateBitmap)
     {
+        jpeg_finish_decompress( &cinfo );
+    }
+    else
+    {
+        jpeg_abort_decompress( &cinfo );
     }
 }
 
@@ -283,165 +313,170 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
                 long nQualityPercent, long aChromaSubsampling,
                 css::uno::Reference<css::task::XStatusIndicator> const & status )
 {
-    try
-    {
-        jpeg_compress_struct        cinfo;
-        jpeg_error_mgr              jerr;
-        void*                       pScanline;
-        long                        nY;
+    jpeg_compress_struct        cinfo;
+    ErrorManagerStruct          jerr;
+    void*                       pScanline;
+    long                        nY;
 
-        cinfo.err = jpeg_std_error( &jerr );
-        jerr.error_exit = errorExit;
-        jerr.output_message = outputMessage;
+    JpegCompressOwner aOwner;
 
-        jpeg_create_compress( &cinfo );
-        JpegCompressOwner aOwner(cinfo);
-        jpeg_svstream_dest( &cinfo, pOutputStream );
-
-        cinfo.image_width = (JDIMENSION) nWidth;
-        cinfo.image_height = (JDIMENSION) nHeight;
-        if ( bGreys )
-        {
-            cinfo.input_components = 1;
-            cinfo.in_color_space = JCS_GRAYSCALE;
-        }
-        else
-        {
-            cinfo.input_components = 3;
-            cinfo.in_color_space = JCS_RGB;
-        }
-
-        jpeg_set_defaults( &cinfo );
-        jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );
-
-        cinfo.density_unit = 1;
-        cinfo.X_density = rPPI.getX();
-        cinfo.Y_density = rPPI.getY();
-
-        if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
-            jpeg_simple_progression( &cinfo );
-
-        if (aChromaSubsampling == 1) // YUV 4:4:4
-        {
-            cinfo.comp_info[0].h_samp_factor = 1;
-            cinfo.comp_info[0].v_samp_factor = 1;
-        }
-        else if (aChromaSubsampling == 2) // YUV 4:2:2
-        {
-            cinfo.comp_info[0].h_samp_factor = 2;
-            cinfo.comp_info[0].v_samp_factor = 1;
-        }
-        else if (aChromaSubsampling == 3) // YUV 4:2:0
-        {
-            cinfo.comp_info[0].h_samp_factor = 2;
-            cinfo.comp_info[0].v_samp_factor = 2;
-        }
-
-        jpeg_start_compress( &cinfo, TRUE );
-
-        for( nY = 0; nY < nHeight; nY++ )
-        {
-            pScanline = pJPEGWriter->GetScanline( nY );
-
-            if( pScanline )
-            {
-                jpeg_write_scanlines( &cinfo, reinterpret_cast<JSAMPARRAY>(&pScanline), 1 );
-            }
-
-            if( status.is() )
-            {
-                status->setValue( nY * 100L / nHeight );
-            }
-        }
-
-        jpeg_finish_compress(&cinfo);
-    }
-    catch (const css::uno::RuntimeException&)
+    if ( setjmp( jerr.setjmp_buffer ) )
     {
         return false;
     }
+
+    cinfo.err = jpeg_std_error( &jerr.pub );
+    jerr.pub.error_exit = errorExit;
+    jerr.pub.output_message = outputMessage;
+
+    jpeg_create_compress( &cinfo );
+    aOwner.set(&cinfo);
+    jpeg_svstream_dest( &cinfo, pOutputStream );
+
+    cinfo.image_width = (JDIMENSION) nWidth;
+    cinfo.image_height = (JDIMENSION) nHeight;
+    if ( bGreys )
+    {
+        cinfo.input_components = 1;
+        cinfo.in_color_space = JCS_GRAYSCALE;
+    }
+    else
+    {
+        cinfo.input_components = 3;
+        cinfo.in_color_space = JCS_RGB;
+    }
+
+    jpeg_set_defaults( &cinfo );
+    jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );
+
+    cinfo.density_unit = 1;
+    cinfo.X_density = rPPI.getX();
+    cinfo.Y_density = rPPI.getY();
+
+    if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
+        jpeg_simple_progression( &cinfo );
+
+    if (aChromaSubsampling == 1) // YUV 4:4:4
+    {
+        cinfo.comp_info[0].h_samp_factor = 1;
+        cinfo.comp_info[0].v_samp_factor = 1;
+    }
+    else if (aChromaSubsampling == 2) // YUV 4:2:2
+    {
+        cinfo.comp_info[0].h_samp_factor = 2;
+        cinfo.comp_info[0].v_samp_factor = 1;
+    }
+    else if (aChromaSubsampling == 3) // YUV 4:2:0
+    {
+        cinfo.comp_info[0].h_samp_factor = 2;
+        cinfo.comp_info[0].v_samp_factor = 2;
+    }
+
+    jpeg_start_compress( &cinfo, TRUE );
+
+    for( nY = 0; nY < nHeight; nY++ )
+    {
+        pScanline = pJPEGWriter->GetScanline( nY );
+
+        if( pScanline )
+        {
+            jpeg_write_scanlines( &cinfo, reinterpret_cast<JSAMPARRAY>(&pScanline), 1 );
+        }
+
+        if( status.is() )
+        {
+            status->setValue( nY * 100L / nHeight );
+        }
+    }
+
+    jpeg_finish_compress(&cinfo);
+
     return true;
 }
 
 void Transform(void* pInputStream, void* pOutputStream, long nAngle)
 {
-    try
+    jpeg_transform_info aTransformOption;
+    JCOPY_OPTION        aCopyOption = JCOPYOPT_ALL;
+
+    jpeg_decompress_struct   aSourceInfo;
+    jpeg_compress_struct     aDestinationInfo;
+    ErrorManagerStruct       aSourceError;
+    ErrorManagerStruct       aDestinationError;
+
+    jvirt_barray_ptr* aSourceCoefArrays      = nullptr;
+    jvirt_barray_ptr* aDestinationCoefArrays = nullptr;
+
+    aTransformOption.force_grayscale = FALSE;
+    aTransformOption.trim            = FALSE;
+    aTransformOption.perfect         = FALSE;
+    aTransformOption.crop            = FALSE;
+
+    // Angle to transform option
+    // 90 Clockwise = 270 Counterclockwise
+    switch (nAngle)
     {
-        jpeg_transform_info aTransformOption;
-        JCOPY_OPTION        aCopyOption = JCOPYOPT_ALL;
-
-        jpeg_decompress_struct   aSourceInfo;
-        jpeg_compress_struct     aDestinationInfo;
-        jpeg_error_mgr           aSourceError;
-        jpeg_error_mgr           aDestinationError;
-
-        jvirt_barray_ptr* aSourceCoefArrays      = nullptr;
-        jvirt_barray_ptr* aDestinationCoefArrays = nullptr;
-
-        aTransformOption.force_grayscale = FALSE;
-        aTransformOption.trim            = FALSE;
-        aTransformOption.perfect         = FALSE;
-        aTransformOption.crop            = FALSE;
-
-        // Angle to transform option
-        // 90 Clockwise = 270 Counterclockwise
-        switch (nAngle)
-        {
-            case 2700:
-                aTransformOption.transform  = JXFORM_ROT_90;
-                break;
-            case 1800:
-                aTransformOption.transform  = JXFORM_ROT_180;
-                break;
-            case 900:
-                aTransformOption.transform  = JXFORM_ROT_270;
-                break;
-            default:
-                aTransformOption.transform  = JXFORM_NONE;
-        }
-
-        // Decompression
-        aSourceInfo.err                 = jpeg_std_error(&aSourceError);
-        aSourceInfo.err->error_exit     = errorExit;
-        aSourceInfo.err->output_message = outputMessage;
-
-        // Compression
-        aDestinationInfo.err                 = jpeg_std_error(&aDestinationError);
-        aDestinationInfo.err->error_exit     = errorExit;
-        aDestinationInfo.err->output_message = outputMessage;
-
-        aDestinationInfo.optimize_coding = TRUE;
-
-        jpeg_create_decompress(&aSourceInfo);
-        JpegDecompressOwner aDecompressOwner(aSourceInfo);
-        jpeg_create_compress(&aDestinationInfo);
-        JpegCompressOwner aCompressOwner(aDestinationInfo);
-
-        jpeg_svstream_src (&aSourceInfo, pInputStream);
-
-        jcopy_markers_setup(&aSourceInfo, aCopyOption);
-        jpeg_read_header(&aSourceInfo, TRUE);
-        jtransform_request_workspace(&aSourceInfo, &aTransformOption);
-
-        aSourceCoefArrays = jpeg_read_coefficients(&aSourceInfo);
-        jpeg_copy_critical_parameters(&aSourceInfo, &aDestinationInfo);
-
-        aDestinationCoefArrays = jtransform_adjust_parameters(&aSourceInfo, &aDestinationInfo, aSourceCoefArrays, &aTransformOption);
-        jpeg_svstream_dest (&aDestinationInfo, pOutputStream);
-
-        // Compute optimal Huffman coding tables instead of precomputed tables
-        aDestinationInfo.optimize_coding = TRUE;
-        jpeg_write_coefficients(&aDestinationInfo, aDestinationCoefArrays);
-        jcopy_markers_execute(&aSourceInfo, &aDestinationInfo, aCopyOption);
-        jtransform_execute_transformation(&aSourceInfo, &aDestinationInfo, aSourceCoefArrays, &aTransformOption);
-
-        jpeg_finish_compress(&aDestinationInfo);
-
-        jpeg_finish_decompress(&aSourceInfo);
+        case 2700:
+            aTransformOption.transform  = JXFORM_ROT_90;
+            break;
+        case 1800:
+            aTransformOption.transform  = JXFORM_ROT_180;
+            break;
+        case 900:
+            aTransformOption.transform  = JXFORM_ROT_270;
+            break;
+        default:
+            aTransformOption.transform  = JXFORM_NONE;
     }
-    catch (const css::uno::RuntimeException&)
+
+    // Decompression
+    aSourceInfo.err                 = jpeg_std_error(&aSourceError.pub);
+    aSourceInfo.err->error_exit     = errorExit;
+    aSourceInfo.err->output_message = outputMessage;
+
+    // Compression
+    aDestinationInfo.err                 = jpeg_std_error(&aDestinationError.pub);
+    aDestinationInfo.err->error_exit     = errorExit;
+    aDestinationInfo.err->output_message = outputMessage;
+
+    aDestinationInfo.optimize_coding = TRUE;
+
+    JpegDecompressOwner aDecompressOwner;
+    JpegCompressOwner aCompressOwner;
+
+    if (setjmp(aSourceError.setjmp_buffer) || setjmp(aDestinationError.setjmp_buffer))
     {
+        jpeg_destroy_decompress(&aSourceInfo);
+        jpeg_destroy_compress(&aDestinationInfo);
+        return;
     }
+
+    jpeg_create_decompress(&aSourceInfo);
+    aDecompressOwner.set(&aSourceInfo);
+    jpeg_create_compress(&aDestinationInfo);
+    aCompressOwner.set(&aDestinationInfo);
+
+    jpeg_svstream_src (&aSourceInfo, pInputStream);
+
+    jcopy_markers_setup(&aSourceInfo, aCopyOption);
+    jpeg_read_header(&aSourceInfo, TRUE);
+    jtransform_request_workspace(&aSourceInfo, &aTransformOption);
+
+    aSourceCoefArrays = jpeg_read_coefficients(&aSourceInfo);
+    jpeg_copy_critical_parameters(&aSourceInfo, &aDestinationInfo);
+
+    aDestinationCoefArrays = jtransform_adjust_parameters(&aSourceInfo, &aDestinationInfo, aSourceCoefArrays, &aTransformOption);
+    jpeg_svstream_dest (&aDestinationInfo, pOutputStream);
+
+    // Compute optimal Huffman coding tables instead of precomputed tables
+    aDestinationInfo.optimize_coding = TRUE;
+    jpeg_write_coefficients(&aDestinationInfo, aDestinationCoefArrays);
+    jcopy_markers_execute(&aSourceInfo, &aDestinationInfo, aCopyOption);
+    jtransform_execute_transformation(&aSourceInfo, &aDestinationInfo, aSourceCoefArrays, &aTransformOption);
+
+    jpeg_finish_compress(&aDestinationInfo);
+
+    jpeg_finish_decompress(&aSourceInfo);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
