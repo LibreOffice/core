@@ -82,7 +82,7 @@ private:
     bool            mbHasEmptyRangeTable:1; /// we have at least one sheet with empty print range (print range set to '- none -').
 
     ScRange         aPageArea;
-    long            nRight[ MAXCOL+1 ];
+    std::vector<long> mvRight;
     long            nLeftPosition;
     long            mnScale;
     SCCOL           nColNumberButttonDown;
