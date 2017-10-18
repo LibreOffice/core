@@ -20,7 +20,6 @@
 #include <memory>
 #include <svtools/treelistentry.hxx>
 #include <svtools/treelist.hxx>
-#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -58,18 +57,6 @@ SvTreeListEntry::SvTreeListEntry()
     , nEntryFlags(SvTLEntryFlags::NONE)
     , maBackColor(Application::GetSettings().GetStyleSettings().GetWindowColor())
 {
-}
-
-SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r)
-    : pParent(nullptr)
-    , nAbsPos(r.nAbsPos)
-    , nListPos(r.nListPos & 0x7FFFFFFF)
-    , pUserData(r.pUserData)
-    , nEntryFlags(r.nEntryFlags)
-    , maBackColor(Application::GetSettings().GetStyleSettings().GetWindowColor())
-{
-    for (auto const& it : r.m_Children)
-        m_Children.push_back(o3tl::make_unique<SvTreeListEntry>(*it));
 }
 
 SvTreeListEntry::~SvTreeListEntry()

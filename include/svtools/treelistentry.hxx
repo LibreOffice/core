@@ -70,13 +70,13 @@ private:
     void SetListPositions();
     void InvalidateChildrensListPositions();
 
+    SvTreeListEntry(const SvTreeListEntry& r) = delete;
     void operator=(SvTreeListEntry const&) = delete;
 
 public:
     static const size_t ITEM_NOT_FOUND = SAL_MAX_SIZE;
 
     SvTreeListEntry();
-    SvTreeListEntry(const SvTreeListEntry& r);
     virtual ~SvTreeListEntry();
 
     bool HasChildren() const;
