@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_9eb5d232",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-10-18T05:56:00Z",
+      "side": 1,
+      "message": "These three unit tests (includingTablePosition14/15) failed when I added _start/_end support, which is how I found this second bug.\n\n_start/_end support is NOT needed to fix this bug. In the XRay tool, LeftBorderDistance\u003d\u003d0, but in the unit test LeftBorderDistance\u003d\u003d106. I failed to figure out how that is even possible.  Adding _start/_end support(needed for the other bug anyway) makes the unit test run properly, so both fixes are combined into this one commit.",
+      "range": {
+        "startLine": 2130,
+        "startChar": 11,
+        "endLine": 2130,
+        "endChar": 80
+      },
+      "revId": "8c4941243fa1d79a769e6cf73197513e0d10bd1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_7ebae624",
+        "filename": "writerfilter/source/dmapper/CellMarginHandler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-10-18T05:56:00Z",
+      "side": 1,
+      "message": "This part fixes tdf#78508 and n#793262.\n\nAlso, without this, the unit test always is valid, even when the document is broken. No idea how they are related...",
+      "range": {
+        "startLine": 111,
+        "startChar": 38,
+        "endLine": 111,
+        "endChar": 44
+      },
+      "revId": "8c4941243fa1d79a769e6cf73197513e0d10bd1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
