@@ -129,10 +129,12 @@ void MediaControlBase::InitializeWidgets()
 
     mpVolumeSlider->SetRange( Range( AVMEDIA_DB_RANGE, 0 ) );
     mpVolumeSlider->SetUpdateMode( true );
+    mpVolumeSlider->SetQuickHelpText( AvmResId( AVMEDIA_STR_VOLUME ));
     mpVolumeSlider->SetHelpId( HID_AVMEDIA_VOLUMESLIDER );
 
     mpTimeSlider->SetRange( Range( 0, AVMEDIA_TIME_RANGE ) );
     mpTimeSlider->SetUpdateMode( true );
+    mpTimeSlider->SetQuickHelpText( AvmResId( AVMEDIA_STR_POSITION ));
     mpTimeSlider->SetStyle(WB_HORZ | WB_DRAG | WB_3DLOOK);
     mpTimeSlider->SetScrollTypeSet(true);
 }
