@@ -1309,6 +1309,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox&, void)
             SAL_WARN( "cui.tabpages", "SvxParaAlignTabPage::TextDirectionHdl_Impl(): other directions not supported" );
         }
     }
+    UpdateExample_Impl();
 }
 
 void SvxParaAlignTabPage::UpdateExample_Impl()
@@ -1324,7 +1325,9 @@ void SvxParaAlignTabPage::UpdateExample_Impl()
         m_pExampleWin->SetAdjust( SvxAdjust::Block );
         SvxAdjust eLastBlock = SvxAdjust::Left;
         sal_Int32 nLBPos = m_pLastLineLB->GetSelectedEntryPos();
-        if(nLBPos == 1)
+        if(nLBPos == 0 && m_pTextDirectionLB->GetSelectEntryValue() == SvxFrameDirection::Horizontal_RL_TB)
+            eLastBlock = SvxAdjust::Right;
+        else if(nLBPos == 1)
             eLastBlock = SvxAdjust::Center;
         else if(nLBPos == 2)
             eLastBlock = SvxAdjust::Block;
