@@ -169,7 +169,7 @@ OString PrintFontManager::getDirectory( int nAtom ) const
 int PrintFontManager::getDirectoryAtom( const OString& rDirectory )
 {
     int nAtom = 0;
-    std::unordered_map< OString, int, OStringHash >::const_iterator it
+    std::unordered_map< OString, int >::const_iterator it
           ( m_aDirToAtom.find( rDirectory ) );
     if( it != m_aDirToAtom.end() )
         nAtom = it->second;
@@ -312,7 +312,7 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile, i
 {
     fontID nID = 0;
 
-    std::unordered_map< OString, ::std::set< fontID >, OStringHash >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
+    std::unordered_map< OString, ::std::set< fontID > >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
     if( set_it == m_aFontFileToFontID.end() )
         return nID;
 
@@ -334,7 +334,7 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
 {
     std::vector<fontID> aIds;
 
-    std::unordered_map< OString, ::std::set< fontID >, OStringHash >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
+    std::unordered_map< OString, ::std::set< fontID > >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
     if( set_it == m_aFontFileToFontID.end() )
         return aIds;
 
@@ -754,7 +754,7 @@ void PrintFontManager::initialize()
     }
 
     // protect against duplicate paths
-    std::unordered_map< OString, int, OStringHash > visited_dirs;
+    std::unordered_map< OString, int > visited_dirs;
 
     // Don't search directories that fontconfig already did
     countFontconfigFonts( visited_dirs );

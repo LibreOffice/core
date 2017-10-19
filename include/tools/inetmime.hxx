@@ -71,7 +71,7 @@ struct INetContentTypeParameter
     there will only be one item for the complete parameter, with the attribute
     name lacking any section suffix.
  */
-typedef std::unordered_map<OString, INetContentTypeParameter, OStringHash>
+typedef std::unordered_map<OString, INetContentTypeParameter>
     INetContentTypeParameterList;
 
 

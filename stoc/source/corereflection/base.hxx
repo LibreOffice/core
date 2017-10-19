@@ -74,10 +74,8 @@ inline bool td_equals( typelib_TypeDescription * pTD, typelib_TypeDescriptionRef
              rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
 }
 
-typedef std::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlField >,
-    OUStringHash > OUString2Field;
-typedef std::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlMethod >,
-    OUStringHash > OUString2Method;
+typedef std::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlField > > OUString2Field;
+typedef std::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlMethod > > OUString2Method;
 
 
 class IdlReflectionServiceImpl

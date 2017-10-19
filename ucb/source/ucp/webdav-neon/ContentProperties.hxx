@@ -67,13 +67,7 @@ public:
 
 };
 
-typedef std::unordered_map
-<
-    OUString,
-    PropertyValue,
-    OUStringHash
->
-PropertyValueMap;
+typedef std::unordered_map< OUString, PropertyValue> PropertyValueMap;
 
 class ContentProperties
 {

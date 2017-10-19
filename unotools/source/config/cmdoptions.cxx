@@ -78,7 +78,7 @@ class SvtCmdOptions
         }
 
     private:
-        typedef std::unordered_map<OUString, sal_Int32, OUStringHash>
+        typedef std::unordered_map<OUString, sal_Int32>
             CommandHashMap;
 
         CommandHashMap m_aCommandHashMap;

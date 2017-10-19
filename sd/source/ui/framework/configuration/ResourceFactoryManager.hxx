@@ -89,8 +89,7 @@ private:
     ::osl::Mutex maMutex;
     typedef std::unordered_map<
         OUString,
-        css::uno::Reference<css::drawing::framework::XResourceFactory>,
-        OUStringHash> FactoryMap;
+        css::uno::Reference<css::drawing::framework::XResourceFactory> > FactoryMap;
     FactoryMap maFactoryMap;
 
     typedef ::std::vector<

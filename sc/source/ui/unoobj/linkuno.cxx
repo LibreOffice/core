@@ -389,7 +389,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     if (!pDocShell)
         return nullptr;
 
-    typedef std::unordered_set<OUString, OUStringHash> StrSetType;
+    typedef std::unordered_set<OUString> StrSetType;
     StrSetType aNames;
     ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
@@ -443,7 +443,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScSheetLinksObj::createEnumerat
 // XIndexAccess
 sal_Int32 SAL_CALL ScSheetLinksObj::getCount()
 {
-    typedef std::unordered_set<OUString, OUStringHash> StrSetType;
+    typedef std::unordered_set<OUString> StrSetType;
 
     SolarMutexGuard aGuard;
     if (!pDocShell)
@@ -521,7 +521,7 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
 
 uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames()
 {
-    typedef std::unordered_set<OUString, OUStringHash> StrSetType;
+    typedef std::unordered_set<OUString> StrSetType;
 
     SolarMutexGuard aGuard;
     //  Name is the same as file name

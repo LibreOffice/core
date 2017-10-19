@@ -81,7 +81,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
     private:
         osl::Mutex m_mutex;
 
-        std::unordered_map<OUString, sal_Int32, OUStringHash> m_aRequestContainer;
+        std::unordered_map<OUString, sal_Int32> m_aRequestContainer;
 
         sal_Int16                   m_nRequestCount;
 };

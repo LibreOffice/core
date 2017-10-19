@@ -28,7 +28,7 @@
 
 namespace vcl
 {
-    typedef std::unordered_map< OUString, OUString, OUStringHash > OUStrMap;
+    typedef std::unordered_map< OUString, OUString > OUStrMap;
     class SmallOUStrMap : public OUStrMap { public: SmallOUStrMap() : OUStrMap(1) {} };
 
 
@@ -37,7 +37,7 @@ namespace vcl
     class VCL_DLLPUBLIC SettingsConfigItem : public ::utl::ConfigItem
     {
     private:
-        std::unordered_map< OUString, SmallOUStrMap, OUStringHash > m_aSettings;
+        std::unordered_map< OUString, SmallOUStrMap > m_aSettings;
 
         virtual void Notify( const css::uno::Sequence< OUString >& rPropertyNames ) override;
 

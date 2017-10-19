@@ -658,7 +658,7 @@ public:
     }
 };
 
-typedef std::unordered_map< OUString, uno::Reference< XDocumentProperty >, OUStringHash > DocPropsByName;
+typedef std::unordered_map< OUString, uno::Reference< XDocumentProperty > > DocPropsByName;
 
 class BuiltInPropertiesImpl : public PropertiesImpl_BASE
 {

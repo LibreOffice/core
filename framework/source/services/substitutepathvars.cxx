@@ -180,7 +180,7 @@ protected:
     OUString const & impl_getSubstituteVariableValue( const OUString& variable );
 
 private:
-    typedef std::unordered_map<OUString, PreDefVariable, OUStringHash>
+    typedef std::unordered_map<OUString, PreDefVariable>
         VarNameToIndexMap;
 
     VarNameToIndexMap            m_aPreDefVarMap;         // Mapping from pre-def variable names to enum for array access

@@ -45,9 +45,7 @@ namespace filter{
     @attention  This class is not threadsafe implemented. Because it's not necessary.
                 But you have to make sure that it's not used as such :-)
  */
-class QueryTokenizer : public std::unordered_map< OUString                    ,
-                                                  OUString                    ,
-                                                  OUStringHash >
+class QueryTokenizer : public std::unordered_map< OUString, OUString >
 {
 
     // member

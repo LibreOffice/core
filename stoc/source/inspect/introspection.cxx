@@ -143,8 +143,7 @@ bool isDerivedFrom( const Reference<XIdlClass>& xToTestClass, const Reference<XI
 typedef std::unordered_map
 <
     OUString,
-    sal_Int32,
-    OUStringHash
+    sal_Int32
 >
 IntrospectionNameMap;
 
@@ -154,8 +153,7 @@ IntrospectionNameMap;
 typedef std::unordered_map
 <
     OUString,
-    OUString,
-    OUStringHash
+    OUString
 >
 LowerToExactNameMap;
 

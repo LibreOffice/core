@@ -631,8 +631,7 @@ namespace svgio
 
         bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName, bool bCaseIndependent)
         {
-            typedef std::unordered_map< OUString, Color,
-                      OUStringHash > ColorTokenMapper;
+            typedef std::unordered_map< OUString, Color > ColorTokenMapper;
             typedef std::pair< OUString, Color > ColorTokenValueType;
             ColorTokenMapper aColorTokenMapperList;
 

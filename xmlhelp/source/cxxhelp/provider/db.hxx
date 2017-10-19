@@ -46,8 +46,8 @@ namespace helpdatafileproxy {
             { return m_pBuffer.get(); }
     };
 
-    typedef std::unordered_map< OString,std::pair<int,int>,OStringHash >   StringToValPosMap;
-    typedef std::unordered_map< OString,OString,OStringHash >     StringToDataMap;
+    typedef std::unordered_map< OString,std::pair<int,int> >   StringToValPosMap;
+    typedef std::unordered_map< OString,OString >     StringToDataMap;
 
     class Hdf
     {

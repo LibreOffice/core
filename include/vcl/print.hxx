@@ -566,7 +566,7 @@ public:
 class VCL_DLLPUBLIC PrinterOptionsHelper
 {
 protected:
-    std::unordered_map< OUString, css::uno::Any, OUStringHash >
+    std::unordered_map< OUString, css::uno::Any >
                          m_aPropertyMap;
     std::vector< css::beans::PropertyValue >
                          m_aUIProperties;

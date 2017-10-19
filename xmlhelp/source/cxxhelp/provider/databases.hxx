@@ -257,37 +257,34 @@ namespace chelp {
 
         std::vector< OUString >    m_avModules;
 
-        typedef std::unordered_map< OUString,helpdatafileproxy::Hdf*,OUStringHash >   DatabasesTable;
+        typedef std::unordered_map< OUString,helpdatafileproxy::Hdf* >   DatabasesTable;
         DatabasesTable m_aDatabases;         // Language and module dependent databases
 
-        typedef std::unordered_map< OUString,OUString,OUStringHash > LangSetTable;
+        typedef std::unordered_map< OUString,OUString > LangSetTable;
         LangSetTable m_aLangSet;   // Mapping to of lang-country to lang
 
-        typedef std::unordered_map< OUString,StaticModuleInformation*,OUStringHash > ModInfoTable;
+        typedef std::unordered_map< OUString,StaticModuleInformation* > ModInfoTable;
         ModInfoTable m_aModInfo;   // Module information
 
-        typedef std::unordered_map< OUString,KeywordInfo*,OUStringHash > KeywordInfoTable;
+        typedef std::unordered_map< OUString,KeywordInfo* > KeywordInfoTable;
         KeywordInfoTable m_aKeywordInfo;   // Module information
 
         typedef
         std::unordered_map<
              OUString,
-             css::uno::Reference< css::container::XHierarchicalNameAccess >,
-             OUStringHash >         ZipFileTable;
+             css::uno::Reference< css::container::XHierarchicalNameAccess > > ZipFileTable;
         ZipFileTable m_aZipFileTable;   // No closing of an once opened jarfile
 
         typedef
         std::unordered_map<
              OUString,
-             css::uno::Reference< css::i18n::XCollator >,
-             OUStringHash >      CollatorTable;
+             css::uno::Reference< css::i18n::XCollator > > CollatorTable;
         CollatorTable    m_aCollatorTable;
 
 
         typedef
         std::unordered_set<
-            OString,
-            OStringHash >      EmptyActiveTextSet;
+            OString >       EmptyActiveTextSet;
         EmptyActiveTextSet  m_aEmptyActiveTextSet;
 
         // methods
@@ -310,8 +307,7 @@ namespace chelp {
     typedef std::unordered_map
     <
         OUString,
-        bool,
-        OUStringHash
+        bool
     >
     ExtensionHelpExistenceMap;
 

@@ -44,11 +44,9 @@ namespace comphelper
 }
 
 typedef std::unordered_map < OUString,
-                        ::comphelper::PropertyInfo const *,
-                        OUStringHash > PropertyInfoHash;
+                        ::comphelper::PropertyInfo const * > PropertyInfoHash;
 typedef std::unordered_map < OUString,
-                        ::comphelper::PropertyData*,
-                        OUStringHash > PropertyDataHash;
+                        ::comphelper::PropertyData* > PropertyDataHash;
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

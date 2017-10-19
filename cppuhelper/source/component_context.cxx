@@ -55,7 +55,6 @@ using namespace ::com::sun::star;
 
 using rtl::OUString;
 using rtl::OUStringBuffer;
-using rtl::OUStringHash;
 
 namespace cppu
 {
@@ -138,7 +137,7 @@ protected:
             , lateInit( lateInit_ )
             {}
     };
-    typedef std::unordered_map< OUString, ContextEntry * , OUStringHash > t_map;
+    typedef std::unordered_map< OUString, ContextEntry *  > t_map;
     t_map m_map;
 
     Reference< lang::XMultiComponentFactory > m_xSMgr;

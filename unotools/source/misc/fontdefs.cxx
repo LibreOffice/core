@@ -419,7 +419,7 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
     // translate normalized localized name to its normalized English ASCII name
     if( bNeedTranslation )
     {
-        typedef std::unordered_map<OUString, const char*, OUStringHash> FontNameDictionary;
+        typedef std::unordered_map<OUString, const char*> FontNameDictionary;
         static FontNameDictionary aDictionary( SAL_N_ELEMENTS(aImplLocalizedNamesList) );
         // the font name dictionary needs to be initialized once
         if( aDictionary.empty() )

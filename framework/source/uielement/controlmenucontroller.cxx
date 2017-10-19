@@ -147,8 +147,7 @@ private:
     virtual void impl_setPopupMenu() override;
 
     class UrlToDispatchMap : public std::unordered_map< OUString,
-                                                        uno::Reference< frame::XDispatch >,
-                                                        OUStringHash >
+                                                        uno::Reference< frame::XDispatch > >
     {
         public:
             void free()

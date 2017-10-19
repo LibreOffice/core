@@ -170,7 +170,7 @@ public:
     }
 };
 
-typedef std::unordered_map< OUString, OUString, OUStringHash > StringHashMap;
+typedef std::unordered_map< OUString, OUString > StringHashMap;
 
 class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper< container::XNameContainer >
 {

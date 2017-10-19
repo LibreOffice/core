@@ -56,9 +56,8 @@ struct ConfigProviderMapEntry
 
 typedef std::unordered_map
 <
-    OUString,  // servcie specifier
-    ConfigProviderMapEntry,
-    OUStringHash
+    OUString,  // service specifier
+    ConfigProviderMapEntry
 >
 ConfigProviderMap;
 

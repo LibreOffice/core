@@ -138,10 +138,10 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     fontID                                      m_nNextFontID;
     std::unordered_map< fontID, PrintFont* >    m_aFonts;
     // for speeding up findFontFileID
-    std::unordered_map< OString, std::set< fontID >, OStringHash >
+    std::unordered_map< OString, std::set< fontID > >
                                                 m_aFontFileToFontID;
 
-    std::unordered_map< OString, int, OStringHash >
+    std::unordered_map< OString, int >
     m_aDirToAtom;
     std::unordered_map< int, OString >          m_aAtomToDir;
     int                                         m_nNextDirAtom;
@@ -178,7 +178,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     called from <code>initialize()</code>
     */
     static void initFontconfig();
-    void countFontconfigFonts( std::unordered_map<OString, int, OStringHash>& o_rVisitedPaths );
+    void countFontconfigFonts( std::unordered_map<OString, int>& o_rVisitedPaths );
     /* deinitialize fontconfig
      */
     static void deinitFontconfig();

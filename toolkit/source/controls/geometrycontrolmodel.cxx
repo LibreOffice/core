@@ -439,7 +439,7 @@
     //= OCommonGeometryControlModel
 
 
-    typedef std::unordered_map< OUString, sal_Int32, OUStringHash > HashMapString2Int;
+    typedef std::unordered_map< OUString, sal_Int32 > HashMapString2Int;
     typedef std::vector< css::uno::Sequence< css::beans::Property > >   PropSeqArray;
     typedef std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
 

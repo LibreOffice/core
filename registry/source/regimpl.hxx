@@ -135,7 +135,7 @@ private:
                         const OUString& sName,
                         sal_Int16 nSpace) const;
 
-    typedef std::unordered_map< OUString, ORegKey*, OUStringHash > KeyMap;
+    typedef std::unordered_map< OUString, ORegKey* > KeyMap;
 
     sal_uInt32          m_refCount;
     osl::Mutex          m_mutex;

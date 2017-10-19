@@ -376,11 +376,11 @@ XmlIdRegistry::GetXmlIdForElement(const Metadatable& i_rObject) const
 /// generate unique xml:id
 template< typename T >
 /*static*/ OUString create_id(const
-    std::unordered_map< OUString, T, OUStringHash > & i_rXmlIdMap)
+    std::unordered_map< OUString, T > & i_rXmlIdMap)
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
     static const char prefix[] = "id";  // prefix for generated xml:id
-    typename std::unordered_map< OUString, T, OUStringHash >
+    typename std::unordered_map< OUString, T >
         ::const_iterator iter;
     OUString id;
 
@@ -416,7 +416,7 @@ typedef ::std::vector< Metadatable* > XmlIdVector_t;
 
 /// Idref -> (content.xml element list, styles.xml element list)
 typedef std::unordered_map< OUString,
-    ::std::pair< XmlIdVector_t, XmlIdVector_t >, OUStringHash > XmlIdMap_t;
+    ::std::pair< XmlIdVector_t, XmlIdVector_t > > XmlIdMap_t;
 
 /// pointer hash template
 template<typename T> struct PtrHash
@@ -895,7 +895,7 @@ typedef std::unordered_map< const Metadatable*,
 
 /// Idref -> (content.xml element, styles.xml element)
 typedef std::unordered_map< OUString,
-    ::std::pair< Metadatable*, Metadatable* >, OUStringHash >
+    ::std::pair< Metadatable*, Metadatable* > >
     ClipboardXmlIdMap_t;
 
 struct XmlIdRegistryClipboard::XmlIdRegistry_Impl

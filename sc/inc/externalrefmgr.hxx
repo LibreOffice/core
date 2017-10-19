@@ -189,7 +189,7 @@ public:
     };
 
     typedef std::shared_ptr<Table> TableTypeRef;
-    typedef std::unordered_map< OUString, size_t, OUStringHash>
+    typedef std::unordered_map< OUString, size_t>
         TableNameIndexMap;
 
     ScExternalRefCache();
@@ -319,9 +319,9 @@ private:
         }
     };
 
-    typedef std::unordered_map<OUString, TokenArrayRef, OUStringHash> RangeNameMap;
+    typedef std::unordered_map<OUString, TokenArrayRef> RangeNameMap;
     typedef std::unordered_map<ScRange, TokenArrayRef, RangeHash> RangeArrayMap;
-    typedef std::unordered_map<OUString, OUString, OUStringHash> NamePairMap;
+    typedef std::unordered_map<OUString, OUString> NamePairMap;
 
     /** Represents data cached for a single external document. */
     struct DocItem

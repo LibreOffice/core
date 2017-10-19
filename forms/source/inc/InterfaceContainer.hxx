@@ -74,7 +74,7 @@ namespace frm
     };
 
 typedef std::vector<css::uno::Reference<css::uno::XInterface>> OInterfaceArray;
-typedef std::unordered_multimap< OUString, css::uno::Reference<css::uno::XInterface>, OUStringHash > OInterfaceMap;
+typedef std::unordered_multimap< OUString, css::uno::Reference<css::uno::XInterface> > OInterfaceMap;
 
 
 // OInterfaceContainer

@@ -796,7 +796,7 @@ comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaultsPrope
     return aSvxAdditionalDefaultsPropertyMap_Impl;
 }
 
-typedef std::unordered_map< OUString, sal_uInt32, OUStringHash > UHashMapImpl;
+typedef std::unordered_map< OUString, sal_uInt32 > UHashMapImpl;
 
 namespace {
 

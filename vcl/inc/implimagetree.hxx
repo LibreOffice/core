@@ -83,8 +83,8 @@ private:
     ImplImageTree(const ImplImageTree&) = delete;
     ImplImageTree& operator=(const ImplImageTree&) = delete;
 
-    typedef std::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
-    typedef std::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;
+    typedef std::unordered_map<OUString, std::pair<bool, BitmapEx>> IconCache;
+    typedef std::unordered_map<OUString, OUString> IconLinkHash;
 
     struct IconSet
     {
@@ -102,7 +102,7 @@ private:
     };
 
     /// Map between the theme name(s) and the content.
-    typedef std::unordered_map<OUString, IconSet, OUStringHash> StyleIconSet;
+    typedef std::unordered_map<OUString, IconSet> StyleIconSet;
 
     /// Remember all the (used) icon styles and individual icons in them.
     StyleIconSet maIconSets;

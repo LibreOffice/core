@@ -70,7 +70,7 @@ using namespace com::sun::star::lang;
 
 #define STRPOS_NOTFOUND       -1
 
-typedef std::unordered_map<OUString, sal_Int32, OUStringHash> NameToHandleMap;
+typedef std::unordered_map<OUString, sal_Int32> NameToHandleMap;
 
 typedef std::set<OUString> VarNameSet;
 

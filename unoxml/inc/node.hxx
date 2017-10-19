@@ -70,9 +70,7 @@ namespace DOM
         };
 
         typedef std::vector< std::vector<Namespace> > NamespaceVectorType;
-        typedef std::unordered_map< OUString,
-                               sal_Int32,
-                               OUStringHash > NamespaceMapType;
+        typedef std::unordered_map< OUString, sal_Int32 > NamespaceMapType;
 
         /// outer vector: xml context; inner vector: current NS
         NamespaceVectorType                 maNamespaces;

@@ -57,7 +57,7 @@ class DocumentListsManager : public IDocumentListsAccess
 
         SwDoc& m_rDoc;
 
-        typedef std::unordered_map<OUString, SwList*, OUStringHash> tHashMapForLists;
+        typedef std::unordered_map<OUString, SwList*> tHashMapForLists;
         // container to hold the lists of the text document
         tHashMapForLists maLists;
         // relation between list style and its default list

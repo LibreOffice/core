@@ -308,7 +308,7 @@ class SW_DLLPUBLIC SwDoc
     mutable SwNumRuleTable    *mpNumRuleTable;     //< List of all named NumRules.
 
     // Hash map to find numrules by name
-    mutable std::unordered_map<OUString, SwNumRule *, OUStringHash> maNumRuleMap;
+    mutable std::unordered_map<OUString, SwNumRule *> maNumRuleMap;
 
     SwPagePreviewPrtData *mpPgPViewPrtData;        //< Indenting / spacing for printing of page view.
     SwPaM           *mpExtInputRing;

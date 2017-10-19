@@ -44,10 +44,10 @@ namespace pdfi
             : m_aName( i_rName ), m_aValue( i_rValue ) {}
         };
         std::vector< AttrEntry >                                    m_aAttributes;
-        std::unordered_map< OUString, size_t, OUStringHash >   m_aIndexMap;
+        std::unordered_map< OUString, size_t >   m_aIndexMap;
 
     public:
-        explicit SaxAttrList( const std::unordered_map< OUString, OUString, OUStringHash >& );
+        explicit SaxAttrList( const std::unordered_map< OUString, OUString >& );
         SaxAttrList( const SaxAttrList& );
         virtual ~SaxAttrList() override;
 

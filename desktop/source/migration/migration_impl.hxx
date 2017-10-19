@@ -120,8 +120,7 @@ struct MigrationItem
     }
 };
 
-typedef std::unordered_map< OUString, std::vector< MigrationItem >,
-                            OUStringHash > MigrationHashMap;
+typedef std::unordered_map< OUString, std::vector< MigrationItem > > MigrationHashMap;
 
 /**
     information for the UI elements to be migrated for one module

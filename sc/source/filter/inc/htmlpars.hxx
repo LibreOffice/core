@@ -46,7 +46,7 @@ class ScHTMLTable;
  */
 class ScHTMLStyles
 {
-    typedef std::unordered_map<OUString, OUString, OUStringHash> PropsType;
+    typedef std::unordered_map<OUString, OUString> PropsType;
     typedef ::std::map<OUString, std::unique_ptr<PropsType>> NamePropsType;
     typedef ::std::map<OUString, std::unique_ptr<NamePropsType>> ElemsType;
 

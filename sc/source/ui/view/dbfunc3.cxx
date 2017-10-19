@@ -1649,7 +1649,7 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
         typedef ScDPSaveDimension::MemberList MemList;
         const MemList& rDimMembers = pSaveDim->GetMembers();
         vector<OUString> aMembers;
-        std::unordered_set<OUString, OUStringHash> aMemberSet;
+        std::unordered_set<OUString> aMemberSet;
         size_t nMemberCount = 0;
         for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
               itr != itrEnd; ++itr)
@@ -1666,7 +1666,7 @@ void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending
 
         // Collect and rank those custom sort strings that also exist in the member name list.
 
-        typedef std::unordered_map<OUString, sal_uInt16, OUStringHash> UserSortMap;
+        typedef std::unordered_map<OUString, sal_uInt16> UserSortMap;
         UserSortMap aSubStrs;
         sal_uInt16 nSubCount = 0;
         if (pUserListId)
@@ -1763,7 +1763,7 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
         bool bValid = ( aDestData.Dimension >= 0 );        // dropping onto a field
 
         // look through the source range
-        std::unordered_set< OUString, OUStringHash > aMembersSet;   // for lookup
+        std::unordered_set< OUString > aMembersSet;   // for lookup
         std::vector< OUString > aMembersVector;  // members in original order, for inserting
         aMembersVector.reserve( std::max( static_cast<SCSIZE>( rSource.aEnd.Col() - rSource.aStart.Col() + 1 ),
                                           static_cast<SCSIZE>( rSource.aEnd.Row() - rSource.aStart.Row() + 1 ) ) );

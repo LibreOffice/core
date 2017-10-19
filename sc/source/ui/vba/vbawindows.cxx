@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 typedef  std::unordered_map< OUString,
-sal_Int32, OUStringHash > NameIndexHash;
+sal_Int32 > NameIndexHash;
 
 static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any& aApplication )
 {
