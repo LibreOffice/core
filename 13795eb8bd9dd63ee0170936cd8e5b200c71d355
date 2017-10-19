@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_61f40b87",
+        "filename": "vcl/inc/printerinfomanager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-19T07:08:09Z",
+      "side": 1,
+      "message": "judging by the usage, this should be std::unordered_set",
+      "revId": "13795eb8bd9dd63ee0170936cd8e5b200c71d355",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
