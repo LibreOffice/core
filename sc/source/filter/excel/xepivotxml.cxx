@@ -20,6 +20,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
@@ -613,7 +614,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     // Dimension order here is significant as they specify the order of
     // appearance in each axis.
     const ScDPSaveData::DimsType& rDims = rSaveData.GetDimensions();
-
+    bool bTabularMode = false;
     for (const auto & i : rDims)
     {
         const ScDPSaveDimension& rDim = *i;
@@ -655,6 +656,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             default:
                 ;
         }
+        if(rDim.GetLayoutInfo())
+            bTabularMode |= (rDim.GetLayoutInfo()->LayoutMode == sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT);
     }
 
     sax_fastparser::FSHelperPtr& pPivotStrm = rStrm.GetCurrentStream();
@@ -672,8 +675,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         XML_useAutoFormatting, ToPsz10(false),
         XML_itemPrintTitles, ToPsz10(true),
         XML_indent, ToPsz10(false),
-        XML_outline, ToPsz10(true),
-        XML_outlineData, ToPsz10(true),
+        XML_outline, ToPsz10(!bTabularMode),
+        XML_outlineData, ToPsz10(!bTabularMode),
         XML_compact, ToPsz10(false),
         XML_compactData, ToPsz10(false),
         FSEND);
@@ -730,25 +733,51 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             continue;
         }
 
+        bool bDimInTabularMode = false;
+        if(pDim->GetLayoutInfo())
+            bDimInTabularMode |= (pDim->GetLayoutInfo()->LayoutMode == sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT);
+
         sheet::DataPilotFieldOrientation eOrient = pDim->GetOrientation();
 
         if (eOrient == sheet::DataPilotFieldOrientation_HIDDEN)
         {
-            pPivotStrm->singleElement(XML_pivotField,
-                XML_showAll, ToPsz10(false),
-                XML_compact, ToPsz10(false),
-                FSEND);
+            if(bDimInTabularMode)
+            {
+                pPivotStrm->singleElement(XML_pivotField,
+                    XML_showAll, ToPsz10(false),
+                    XML_compact, ToPsz10(false),
+                    XML_outline, ToPsz10(false),
+                    FSEND);
+            }
+            else
+            {
+                pPivotStrm->singleElement(XML_pivotField,
+                    XML_showAll, ToPsz10(false),
+                    XML_compact, ToPsz10(false),
+                    FSEND);
+            }
             continue;
         }
 
         if (eOrient == sheet::DataPilotFieldOrientation_DATA)
         {
-            pPivotStrm->singleElement(XML_pivotField,
-                XML_dataField, ToPsz10(true),
-                XML_showAll, ToPsz10(false),
-                XML_compact, ToPsz10(false),
-                FSEND);
-
+            if(bDimInTabularMode)
+            {
+                pPivotStrm->singleElement(XML_pivotField,
+                    XML_dataField, ToPsz10(true),
+                    XML_showAll, ToPsz10(false),
+                    XML_compact, ToPsz10(false),
+                    XML_outline, ToPsz10(false),
+                    FSEND);
+            }
+            else
+            {
+                pPivotStrm->singleElement(XML_pivotField,
+                    XML_dataField, ToPsz10(true),
+                    XML_showAll, ToPsz10(false),
+                    XML_compact, ToPsz10(false),
+                    FSEND);
+            }
             continue;
         }
 
@@ -817,6 +846,8 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             pAttList->add(XML_defaultSubtotal, ToPsz10(false));
 
         pAttList->add( XML_compact, ToPsz10(false));
+        if(bDimInTabularMode)
+            pAttList->add( XML_outline, ToPsz10(false));
         sax_fastparser::XFastAttributeListRef xAttributeList(pAttList);
         pPivotStrm->startElement(XML_pivotField, xAttributeList);
 

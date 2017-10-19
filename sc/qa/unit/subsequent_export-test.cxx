@@ -228,6 +228,7 @@ public:
     void testPivotTableErrorItemFilterXLSX();
     void testPivotTableOutlineModeXLSX();
     void testPivotTableDuplicatedMemberFilterXLSX();
+    void testPivotTableTabularModeXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -350,6 +351,7 @@ public:
     CPPUNIT_TEST(testPivotTableErrorItemFilterXLSX);
     CPPUNIT_TEST(testPivotTableOutlineModeXLSX);
     CPPUNIT_TEST(testPivotTableDuplicatedMemberFilterXLSX);
+    CPPUNIT_TEST(testPivotTableTabularModeXLSX);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5284,6 +5286,24 @@ void ScExportTest::testPivotTableDuplicatedMemberFilterXLSX()
     // Check whether page field has the right number of items
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[5]", "axis", "axisPage");
     assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[5]/x:items", "count", "21");
+}
+
+void ScExportTest::testPivotTableTabularModeXLSX()
+{
+    ScDocShellRef xShell = loadDoc("pivottable_tabular_mode.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocPtr pTable = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/pivotTables/pivotTable1.xml");
+    CPPUNIT_ASSERT(pTable);
+
+    // In tabular mode both outline and compact flag should be false
+    assertXPath(pTable, "/x:pivotTableDefinition", "outline", "0");
+    assertXPath(pTable, "/x:pivotTableDefinition", "outlineData", "0");
+    assertXPath(pTable, "/x:pivotTableDefinition", "compact", "0");
+    assertXPath(pTable, "/x:pivotTableDefinition", "compactData", "0");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "compact", "0");
+    assertXPath(pTable, "/x:pivotTableDefinition/x:pivotFields/x:pivotField[1]", "outline", "0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
