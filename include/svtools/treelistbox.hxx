@@ -772,8 +772,6 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 };
 
-#define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"
-
 class SvInplaceEdit2
 {
     Link<SvInplaceEdit2&,void> aCallBackHdl;
