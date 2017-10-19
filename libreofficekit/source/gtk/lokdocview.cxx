@@ -2827,9 +2827,9 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * default value is 1.0.
      */
     properties[PROP_ZOOM] =
-        g_param_spec_float("zoom-level",
-                           "Zoom Level",
-                           "The current zoom level of the content",
+        g_param_spec_float("zoom-factor",
+                           "Zoom Factor",
+                           "The current zoom factor of the content",
                            0, 5.0, 1.0,
                            static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                     G_PARAM_STATIC_STRINGS));
