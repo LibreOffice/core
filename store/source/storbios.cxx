@@ -688,7 +688,7 @@ void OStorePageBIOS::cleanup_Impl()
  * Low Level: Precond: initialized, exclusive access.
  */
 storeError OStorePageBIOS::read (
-    sal_uInt32 nAddr, void *pData, sal_uInt32 nSize)
+    sal_uInt32 nAddr, void *pData, sal_uInt32 nSize) const
 {
     // Check precond.
     if (!m_xLockBytes.is())
@@ -703,7 +703,7 @@ storeError OStorePageBIOS::read (
  * Low Level: Precond: initialized, writeable, exclusive access.
  */
 storeError OStorePageBIOS::write (
-    sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize)
+    sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize) const
 {
     // Check precond.
     if (!m_xLockBytes.is())
@@ -874,7 +874,7 @@ storeError OStorePageBIOS::loadObjectAt (OStorePageObject & rPage, sal_uInt32 nA
  * loadObjectAt_Impl.
  * Internal: Precond: initialized, readable, exclusive access.
  */
-storeError OStorePageBIOS::loadObjectAt_Impl (OStorePageObject & rPage, sal_uInt32 nAddr)
+storeError OStorePageBIOS::loadObjectAt_Impl (OStorePageObject & rPage, sal_uInt32 nAddr) const
 {
     storeError eErrCode = m_xCache->lookupPageAt (rPage.get(), nAddr);
     if (eErrCode != store_E_NotExists)
@@ -920,7 +920,7 @@ storeError OStorePageBIOS::saveObjectAt (OStorePageObject & rPage, sal_uInt32 nA
  * saveObjectAt_Impl.
  * Internal: Precond: initialized, writeable, exclusive access.
  */
-storeError OStorePageBIOS::saveObjectAt_Impl (OStorePageObject & rPage, sal_uInt32 nAddr)
+storeError OStorePageBIOS::saveObjectAt_Impl (OStorePageObject & rPage, sal_uInt32 nAddr) const
 {
     // Guard page (incl. set location).
     storeError eErrCode = rPage.guard (nAddr);

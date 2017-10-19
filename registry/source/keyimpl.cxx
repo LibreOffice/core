@@ -970,7 +970,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
 
 
 RegError ORegKey::getResolvedKeyName(const OUString& keyName,
-                                     OUString& resolvedName)
+                                     OUString& resolvedName) const
 {
     if (keyName.isEmpty())
         return RegError::INVALID_KEYNAME;
@@ -1004,7 +1004,7 @@ sal_uInt32 ORegKey::countSubKeys()
     return count;
 }
 
-OStoreDirectory ORegKey::getStoreDir()
+OStoreDirectory ORegKey::getStoreDir() const
 {
     OStoreDirectory rStoreDir;
     OUString        fullPath;

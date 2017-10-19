@@ -211,7 +211,7 @@ storeError OStoreIndirectionPageObject::verify (sal_uInt32 nAddr) const
 storeError OStoreIndirectionPageObject::read (
     sal_uInt16             nSingle,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS)
+    OStorePageBIOS        &rBIOS) const
 {
     PageHolderObject< page > xImpl (m_xPage);
     page const & rPage = (*xImpl);
@@ -237,7 +237,7 @@ storeError OStoreIndirectionPageObject::read (
     sal_uInt16             nDouble,
     sal_uInt16             nSingle,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS)
+    OStorePageBIOS        &rBIOS) const
 {
     PageHolderObject< page > xImpl (m_xPage);
     page const & rPage = (*xImpl);
@@ -270,7 +270,7 @@ storeError OStoreIndirectionPageObject::read (
     sal_uInt16             nDouble,
     sal_uInt16             nSingle,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS)
+    OStorePageBIOS        &rBIOS) const
 {
     PageHolderObject< page > xImpl (m_xPage);
     page const & rPage = (*xImpl);
@@ -723,7 +723,7 @@ OStoreDirectoryPageObject::scope (
 storeError OStoreDirectoryPageObject::read (
     sal_uInt32             nPage,
     OStoreDataPageObject  &rData,
-    OStorePageBIOS        &rBIOS)
+    OStorePageBIOS        &rBIOS) const
 {
     // Determine scope and link indices.
     page::DataBlock::LinkDescriptor aLink;

@@ -43,12 +43,12 @@ public:
     FileStream();
     ~FileStream();
 
-    bool isValid();
+    bool isValid() const;
 
     void createTempFile(const ::rtl::OString& sPath);
     void close();
 
-    const ::rtl::OString& getName() { return m_name; }
+    const ::rtl::OString& getName() const { return m_name; }
 
     bool write(void const * buffer, sal_uInt64 size);
 

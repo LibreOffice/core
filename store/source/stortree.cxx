@@ -301,7 +301,7 @@ storeError OStoreBTreeNodeObject::remove (
  * testInvariant.
  * Precond: root node page loaded.
  */
-void OStoreBTreeRootObject::testInvariant (char const * message)
+void OStoreBTreeRootObject::testInvariant (char const * message) const
 {
     OSL_PRECOND(m_xPage.get() != nullptr, "OStoreBTreeRootObject::testInvariant(): Null pointer");
     SAL_WARN_IF( (m_xPage->location() - m_xPage->size()) != 0, "store", message);
@@ -380,7 +380,7 @@ storeError OStoreBTreeRootObject::find_lookup (
     OStoreBTreeNodeObject & rNode,  // [out]
     sal_uInt16 &            rIndex, // [out]
     OStorePageKey const &   rKey,
-    OStorePageBIOS &        rBIOS)
+    OStorePageBIOS &        rBIOS) const
 {
     // Init node w/ root page.
     testInvariant("OStoreBTreeRootObject::find_lookup(): enter");

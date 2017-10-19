@@ -194,7 +194,7 @@ public:
     void setMethodParameterData(
         sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
         RTParamMode flags, rtl::OUString const & name,
-        rtl::OUString const & typeName)
+        rtl::OUString const & typeName) const
     {
         if (!typereg_writer_setMethodParameterData(
                 m_handle, methodIndex, parameterIndex, flags, name.pData,
