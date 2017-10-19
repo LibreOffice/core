@@ -179,9 +179,12 @@ inline void doubleToString(typename T::String ** pResult,
                            bool bEraseTrailingDecZeros)
 {
     static double const nRoundVal[] = {
-        5.0e+0, 0.5e+0, 0.5e-1, 0.5e-2, 0.5e-3, 0.5e-4, 0.5e-5, 0.5e-6,
-        0.5e-7, 0.5e-8, 0.5e-9, 0.5e-10,0.5e-11,0.5e-12,0.5e-13,0.5e-14
+        5.0e+0,  0.5e+0,  0.5e-1,  0.5e-2,  0.5e-3,  0.5e-4,  0.5e-5,  0.5e-6,
+        0.5e-7,  0.5e-8,  0.5e-9,  0.5e-10, 0.5e-11, 0.5e-12, 0.5e-13, 0.5e-14,
+        0.5e-15
     };
+    constexpr int const nRoundElems = SAL_N_ELEMENTS(nRoundVal);
+    // int to not have to cast below in comparison
 
     // sign adjustment, instead of testing for fValue<0.0 this will also fetch
     // -0.0
@@ -389,7 +392,7 @@ inline void doubleToString(typename T::String ** pResult,
     // Round the number
     if(nDigits >= 0)
     {
-        if ((fValue += nRoundVal[nDigits > 15 ? 15 : nDigits] ) >= 10)
+        if ((fValue += nRoundVal[nDigits >= nRoundElems ? nRoundElems-1 : nDigits]) >= 10)
         {
             fValue = 1.0;
             nExp++;
@@ -480,7 +483,7 @@ inline void doubleToString(typename T::String ** pResult,
     {
         for (int i = 0; ; i++)
         {
-            if (i < 15)
+            if (i < 16)
             {
                 int nDigit;
                 if (nDigits-1 == 0 && i > 0 && i < 14)
