@@ -32,8 +32,9 @@ published enum TextFitToSizeType
     */
     NONE,
 
-    /** The font is scaled up or down proportionally to fit the
-        size of the shape.  This may scale anisotropically.
+    /** The rendered glyph bitmaps are scaled up or down
+        proportionally to fit the size of the shape.
+        This may scale anisotropically.
         No AutoGrow and no Auto line-breaks in this case.
     */
     PROPORTIONAL,
@@ -41,11 +42,18 @@ published enum TextFitToSizeType
     /** Like <code>PROPORTIONAL</code>, but each line of text
         is separately scaled proportionally to fit the width.
         No AutoGrow and no Auto line-breaks in this case.
+
+        @note This is actually only implemented on fontwork
+              custom shapes, and the only supported option
+              (other than NONE) on fontwork shapes.
+              Why this is in this enum and not a value of
+              com.sun.star.drawing.TextHorizontalAdjust
+              is anybody's guess.
     */
     ALLLINES,
 
-    /** The font is scaled down (never up!) isotropically to fit the
-        available space.  Auto line-breaks will keep working.
+    /** The font size is scaled down (never up!) isotropically to
+        fit the available space.  Auto line-breaks will keep working.
     */
     AUTOFIT
 
