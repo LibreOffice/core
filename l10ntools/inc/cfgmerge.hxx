@@ -28,7 +28,7 @@
 #include <vector>
 #include "po.hxx"
 
-typedef std::unordered_map<OString, OString, OStringHash> OStringHashMap;
+typedef std::unordered_map<OString, OString> OStringHashMap;
 
 
 // class CfgStackData

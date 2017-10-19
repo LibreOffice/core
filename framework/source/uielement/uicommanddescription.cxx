@@ -126,8 +126,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 
     private:
         typedef std::unordered_map< OUString,
-                                    CmdToInfoMap,
-                                    OUStringHash > CommandToInfoCache;
+                                    CmdToInfoMap > CommandToInfoCache;
 
         void initializeConfigAccess();
 

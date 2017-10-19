@@ -42,9 +42,9 @@ class CUPSManager : public PrinterInfoManager
     int                                                    m_nDests;
     void*                                                  m_pDests;
     bool                                                   m_bNewDests;
-    std::unordered_map< OUString, int, OUStringHash >      m_aCUPSDestMap;
+    std::unordered_map< OUString, int >      m_aCUPSDestMap;
 
-    std::unordered_map< OUString, PPDContext, OUStringHash > m_aDefaultContexts;
+    std::unordered_map< OUString, PPDContext > m_aDefaultContexts;
 
     OString                                                m_aUser;
     /** this is a security risk, but the CUPS API demands

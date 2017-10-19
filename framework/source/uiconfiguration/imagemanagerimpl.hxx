@@ -147,8 +147,7 @@ namespace framework
             void clear();
 
             typedef std::unordered_map< OUString,
-                                        sal_Bool,
-                                        OUStringHash > ImageNameMap;
+                                        sal_Bool > ImageNameMap;
 
             enum NotifyOp
             {

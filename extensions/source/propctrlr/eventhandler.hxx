@@ -65,7 +65,7 @@ namespace pcr
             const OString& _sUniqueBrowseId );
     };
 
-    typedef std::unordered_map< OUString, EventDescription, OUStringHash >   EventMap;
+    typedef std::unordered_map< OUString, EventDescription >   EventMap;
 
 
     //= EventHandler

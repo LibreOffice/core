@@ -83,7 +83,7 @@ static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
 //#### RTTI simulation #############################################################################
 
 
-typedef std::unordered_map< OUString, void *, OUStringHash > t_string2PtrMap;
+typedef std::unordered_map< OUString, void * > t_string2PtrMap;
 
 class RTTInfos
 {

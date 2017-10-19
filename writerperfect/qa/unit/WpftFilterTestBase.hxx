@@ -41,7 +41,7 @@ namespace writerperfect
 namespace test
 {
 
-typedef std::unordered_map<rtl::OUString, bool, rtl::OUStringHash> WpftOptionalMap_t;
+typedef std::unordered_map<rtl::OUString, bool> WpftOptionalMap_t;
 
 class WPFTQAHELPER_DLLPUBLIC WpftFilterTestBase
     : public ::test::FiltersTest

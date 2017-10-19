@@ -36,7 +36,7 @@ class ScriptEventContainer : public ::cppu::WeakImplHelper<
                                         css::container::XNameContainer,
                                         css::container::XContainer >
 {
-    std::unordered_map< OUString, css::uno::Any, OUStringHash>
+    std::unordered_map< OUString, css::uno::Any>
                    mHashMap;
     css::uno::Type mType;
 

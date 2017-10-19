@@ -219,7 +219,7 @@ protected:
     /// for future purposes when dealing with a set of cached NameTranslationLists
     OUString m_HashedURL;
 private:
-    std::unordered_map<OUString, OUString, OUStringHash> m_Translation;
+    std::unordered_map<OUString, OUString> m_Translation;
     const OUString              maTransFileName;
 
 public:

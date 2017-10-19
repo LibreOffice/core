@@ -1138,8 +1138,7 @@ struct ClassModuleRunInitItem
 // Derive from unordered_map type instead of typedef
 // to allow forward declaration in sbmod.hxx
 class ModuleInitDependencyMap : public
-    std::unordered_map< OUString, ClassModuleRunInitItem,
-                          OUStringHash >
+    std::unordered_map< OUString, ClassModuleRunInitItem >
 {};
 
 void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem )

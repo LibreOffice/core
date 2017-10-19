@@ -65,7 +65,7 @@ namespace frm
         css::uno::Reference< css::sdbc::XConnection >                 m_xConnection;
         css::uno::Reference< css::awt::XWindow >                      m_xMessageParent;
 
-        typedef std::unordered_map< OUString, OUString, OUStringHash > MapString2String;
+        typedef std::unordered_map< OUString, OUString > MapString2String;
         MapString2String                m_aDisplayItemToValueItem;
 
         OUString                        m_aText;

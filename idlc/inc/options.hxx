@@ -22,9 +22,7 @@
 
 #include <idlctypes.hxx>
 
-typedef std::unordered_map< OString,
-                         OString,
-                         OStringHash > OptionMap;
+typedef std::unordered_map< OString, OString > OptionMap;
 
 class IllegalArgument
 {

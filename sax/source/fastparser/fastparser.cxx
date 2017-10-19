@@ -68,8 +68,7 @@ class FastLocatorImpl;
 struct NamespaceDefine;
 struct Entity;
 
-typedef std::unordered_map< OUString, sal_Int32,
-        OUStringHash > NamespaceMap;
+typedef std::unordered_map< OUString, sal_Int32 > NamespaceMap;
 
 struct EventList
 {

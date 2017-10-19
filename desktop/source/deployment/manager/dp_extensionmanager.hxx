@@ -38,8 +38,7 @@ namespace dp_manager {
 
 typedef std::unordered_map<
     OUString,
-    std::vector<css::uno::Reference<css::deployment::XPackage> >,
-    OUStringHash > id2extensions;
+    std::vector<css::uno::Reference<css::deployment::XPackage> > > id2extensions;
 
 class ExtensionManager : private ::dp_misc::MutexHolder,
         public ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager >

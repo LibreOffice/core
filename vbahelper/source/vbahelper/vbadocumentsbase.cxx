@@ -50,7 +50,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 typedef  std::unordered_map< OUString,
-                             sal_Int32, OUStringHash > NameIndexHash;
+                             sal_Int32 > NameIndexHash;
 
 typedef std::vector < uno::Reference< frame::XModel > > Documents;
 

@@ -89,9 +89,7 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax:
     private:
         OUString getErrorLineString();
 
-        class ImageHashMap : public std::unordered_map< OUString     ,
-                                                        Image_XML_Entry        ,
-                                                        OUStringHash >
+        class ImageHashMap : public std::unordered_map< OUString, Image_XML_Entry >
         {
         };
 

@@ -86,7 +86,7 @@ public:
     }
 
 private:
-    typedef std::unordered_map<OUString, vector<ScFormulaCell*>, OUStringHash> ModuleCellMap;
+    typedef std::unordered_map<OUString, vector<ScFormulaCell*>> ModuleCellMap;
     ModuleCellMap maCells;
 };
 

@@ -374,7 +374,7 @@ ImplPrnQueueList::~ImplPrnQueueList()
 
 void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 {
-    std::unordered_map< OUString, sal_Int32, OUStringHash >::iterator it =
+    std::unordered_map< OUString, sal_Int32 >::iterator it =
         m_aNameToIndex.find( pData->maPrinterName );
     if( it == m_aNameToIndex.end() )
     {
@@ -397,7 +397,7 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 ImplPrnQueueData* ImplPrnQueueList::Get( const OUString& rPrinter )
 {
     ImplPrnQueueData* pData = nullptr;
-    std::unordered_map<OUString,sal_Int32,OUStringHash>::iterator it =
+    std::unordered_map<OUString,sal_Int32>::iterator it =
         m_aNameToIndex.find( rPrinter );
     if( it != m_aNameToIndex.end() )
         pData = &m_aQueueInfos[it->second];

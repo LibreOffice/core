@@ -34,18 +34,8 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
-struct equalOUString
-{
-  bool operator()(const OUString& r1, const OUString&  r2) const
-  {
-    return r1 == r2;
-  }
-};
-
 typedef std::unordered_map< OUString,
-                            SfxItemPropertySimpleEntry,
-                            OUStringHash,
-                            equalOUString > SfxItemPropertyHashMap_t;
+                            SfxItemPropertySimpleEntry > SfxItemPropertyHashMap_t;
 
 class SfxItemPropertyMap_Impl : public SfxItemPropertyHashMap_t
 {

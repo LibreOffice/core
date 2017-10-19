@@ -45,7 +45,7 @@ namespace comphelper
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 
-    typedef std::unordered_map< OUString, Any, OUStringHash >    NamedValueRepository;
+    typedef std::unordered_map< OUString, Any >    NamedValueRepository;
 
     struct NamedValueCollection_Impl
     {

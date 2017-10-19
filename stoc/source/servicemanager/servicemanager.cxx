@@ -278,22 +278,19 @@ Any ImplementationEnumeration_Impl::nextElement()
 *****************************************************************************/
 typedef std::unordered_set
 <
-    OUString,
-    OUStringHash
+    OUString
 > HashSet_OWString;
 
 typedef std::unordered_multimap
 <
     OUString,
-    Reference<XInterface >,
-    OUStringHash
+    Reference<XInterface >
 > HashMultimap_OWString_Interface;
 
 typedef std::unordered_map
 <
     OUString,
-    Reference<XInterface >,
-    OUStringHash
+    Reference<XInterface >
 > HashMap_OWString_Interface;
 
 /*****************************************************************************

@@ -38,8 +38,7 @@
 #define OBJTYPE_SCRIPTCONTAINER 3L
 #define OBJTYPE_SFROOT          4L
 
-typedef std::unordered_map < OUString, OUString,
-                             OUStringHash > Selection_hash;
+typedef std::unordered_map < OUString, OUString > Selection_hash;
 
 class SFEntry;
 

@@ -317,7 +317,7 @@ namespace frm
 
 class PropertyInfoService
 {
-    typedef std::unordered_map<OUString, sal_Int32, OUStringHash> PropertyMap;
+    typedef std::unordered_map<OUString, sal_Int32> PropertyMap;
     static PropertyMap      s_AllKnownProperties;
 
 public:

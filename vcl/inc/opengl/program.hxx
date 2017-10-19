@@ -43,7 +43,7 @@ class VCL_PLUGIN_PUBLIC OpenGLProgram
 {
 private:
     GLuint          mnId;
-    std::unordered_map< OString, GLuint, OStringHash >
+    std::unordered_map< OString, GLuint >
                     maUniformLocations;
     sal_uInt32      mnEnabledAttribs;
     GLuint          mnPositionAttrib;

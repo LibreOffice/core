@@ -178,7 +178,7 @@ private:
      *
      * @internal
      * Must be an unordered map. A regular map is too slow for some files. */
-    typedef std::unordered_multimap<rtl::OUString, unsigned, rtl::OUStringHash> MapType;
+    typedef std::unordered_multimap<rtl::OUString, unsigned> MapType;
 
     /** A map which stores the positions of style sheets by their name */
     MapType mPositionsByName;

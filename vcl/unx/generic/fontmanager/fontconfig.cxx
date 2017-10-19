@@ -86,8 +86,8 @@ public:
     FcResult LocalizedElementFromPattern(FcPattern const * pPattern, FcChar8 **family,
                                          const char *elementtype, const char *elementlangtype);
 //to-do, make private and add some cleaner accessor methods
-    std::unordered_map< OString, OString, OStringHash > m_aFontNameToLocalized;
-    std::unordered_map< OString, OString, OStringHash > m_aLocalizedToCanonical;
+    std::unordered_map< OString, OString > m_aFontNameToLocalized;
+    std::unordered_map< OString, OString > m_aLocalizedToCanonical;
 private:
     void cacheLocalizedFontNames(const FcChar8 *origfontname, const FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements);
 
@@ -474,7 +474,7 @@ static void lcl_FcFontSetRemove(FcFontSet* pFSet, int i)
     memmove(pFSet->fonts + i, pFSet->fonts + i + 1, nTail*sizeof(FcPattern*));
 }
 
-void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OStringHash>& o_rVisitedPaths )
+void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o_rVisitedPaths )
 {
 #if OSL_DEBUG_LEVEL > 1
     int nFonts = 0;
@@ -1057,7 +1057,7 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                 if( eFamilyRes == FcResultMatch )
                 {
                     OString sFamily(reinterpret_cast<char*>(family));
-                    std::unordered_map< OString, OString, OStringHash >::const_iterator aI =
+                    std::unordered_map< OString, OString >::const_iterator aI =
                         rWrapper.m_aFontNameToLocalized.find(sFamily);
                     if (aI != rWrapper.m_aFontNameToLocalized.end())
                         sFamily = aI->second;
@@ -1177,7 +1177,7 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(const FastPrintFontInfo&
 
     OString sFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
 
-    std::unordered_map< OString, OString, OStringHash >::const_iterator aI = rWrapper.m_aLocalizedToCanonical.find(sFamily);
+    std::unordered_map< OString, OString >::const_iterator aI = rWrapper.m_aLocalizedToCanonical.find(sFamily);
     if (aI != rWrapper.m_aLocalizedToCanonical.end())
         sFamily = aI->second;
     if( !sFamily.isEmpty() )

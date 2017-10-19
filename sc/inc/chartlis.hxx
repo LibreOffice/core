@@ -128,7 +128,7 @@ class SC_DLLPUBLIC ScChartListenerCollection
 {
 public:
     typedef std::map<OUString, std::unique_ptr<ScChartListener>> ListenersType;
-    typedef std::unordered_set<OUString, OUStringHash> StringSetType;
+    typedef std::unordered_set<OUString> StringSetType;
 private:
     ListenersType m_Listeners;
     enum UpdateStatus

@@ -44,7 +44,7 @@ struct ProviderDetails
     css::uno::Reference< css::lang::XSingleComponentFactory > factory;
     css::uno::Reference< css::script::provider::XScriptProvider > provider;
 };
-typedef std::unordered_map < OUString, ProviderDetails , OUStringHash > ProviderDetails_hash;
+typedef std::unordered_map < OUString, ProviderDetails  > ProviderDetails_hash;
 
 
 class ProviderCache

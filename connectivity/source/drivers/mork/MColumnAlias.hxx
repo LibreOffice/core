@@ -49,7 +49,7 @@ namespace connectivity
                 {
                 }
             };
-            typedef std::unordered_map< OUString, AliasEntry, OUStringHash > AliasMap;
+            typedef std::unordered_map< OUString, AliasEntry > AliasMap;
 
         private:
             AliasMap    m_aAliasMap;

@@ -148,7 +148,7 @@ class ToolBarManager : public ToolbarManager_Base
     protected:
         typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::frame::XStatusListener > >  ToolBarControllerMap;
         typedef ::std::vector< css::uno::Reference< css::frame::XSubToolbarController > >             SubToolBarControllerVector;
-        typedef std::unordered_map<OUString, SubToolBarControllerVector, OUStringHash>                                                SubToolBarToSubToolBarControllerMap;
+        typedef std::unordered_map<OUString, SubToolBarControllerVector>                                                SubToolBarToSubToolBarControllerMap;
 
         bool m_bDisposed : 1,
              m_bAddedToTaskPaneList : 1,

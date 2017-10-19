@@ -57,7 +57,7 @@ SettingsConfigItem::~SettingsConfigItem()
 
 void SettingsConfigItem::ImplCommit()
 {
-    std::unordered_map< OUString, SmallOUStrMap, OUStringHash >::const_iterator group;
+    std::unordered_map< OUString, SmallOUStrMap >::const_iterator group;
 
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
     {
@@ -122,7 +122,7 @@ void SettingsConfigItem::getValues()
 
 OUString SettingsConfigItem::getValue( const OUString& rGroup, const OUString& rKey ) const
 {
-    std::unordered_map< OUString, SmallOUStrMap, OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
+    std::unordered_map< OUString, SmallOUStrMap >::const_iterator group = m_aSettings.find( rGroup );
     if( group == m_aSettings.end() || group->second.find( rKey ) == group->second.end() )
     {
         return OUString();

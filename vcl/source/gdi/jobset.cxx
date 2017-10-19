@@ -355,8 +355,8 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.WriteBytes( &aOldJobData, nOldJobDataSize );
             rOStream.WriteBytes( rJobData.GetDriverData(), rJobData.GetDriverDataLen() );
 
-            std::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
-            const std::unordered_map< OUString, OUString, OUStringHash >& rValueMap(
+            std::unordered_map< OUString, OUString >::const_iterator it;
+            const std::unordered_map< OUString, OUString >& rValueMap(
                 rJobData.GetValueMap());
 
             for( it = rValueMap.begin(); it != rValueMap.end(); ++it )

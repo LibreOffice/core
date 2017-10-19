@@ -568,7 +568,7 @@ void IndexTabPage_Impl::dispose()
 
 namespace sfx2 {
 
-    typedef std::unordered_map< OUString, int, OUStringHash > KeywordInfo;
+    typedef std::unordered_map< OUString, int > KeywordInfo;
 }
 
 void IndexTabPage_Impl::InitializeIndex()

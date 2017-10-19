@@ -74,12 +74,10 @@ private:
 
 public:
         typedef std::unordered_map< OUString,
-                                    OUString,
-                                    OUStringHash > ModuleToCommandFileMap;
+                                    OUString > ModuleToCommandFileMap;
 
         typedef std::unordered_map< OUString,
-                                    css::uno::Reference< css::container::XNameAccess >,
-                                    OUStringHash > UICommandsHashMap;
+                                    css::uno::Reference< css::container::XNameAccess > > UICommandsHashMap;
 
     protected:
         UICommandDescription( const css::uno::Reference< css::uno::XComponentContext>& rxContext, bool  );

@@ -43,8 +43,7 @@ public:
 private:
     typedef std::unordered_map<
         OUString,
-        css::uno::Reference< css::sheet::XFormulaParser >,
-        OUStringHash > ParserMap;
+        css::uno::Reference< css::sheet::XFormulaParser > > ParserMap;
 
     const ScDocument&   mrDoc;
     ParserMap           maParsers;

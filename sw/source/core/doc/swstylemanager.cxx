@@ -27,8 +27,7 @@
 #include <unordered_map>
 
 typedef std::unordered_map< OUString,
-                            std::shared_ptr<SfxItemSet>,
-                            OUStringHash > SwStyleNameCache;
+                            std::shared_ptr<SfxItemSet> > SwStyleNameCache;
 
 class SwStyleCache
 {

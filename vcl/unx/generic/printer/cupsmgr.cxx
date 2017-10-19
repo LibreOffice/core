@@ -333,7 +333,7 @@ void CUPSManager::initialize()
         // behaviour
         aPrinter.m_aInfo.m_pParser = nullptr;
         aPrinter.m_aInfo.m_aContext.setParser( nullptr );
-        std::unordered_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
+        std::unordered_map< OUString, PPDContext >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
         if( c_it != m_aDefaultContexts.end() )
         {
             aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
@@ -350,7 +350,7 @@ void CUPSManager::initialize()
     // remove everything that is not a CUPS printer and not
     // a special purpose printer (PDF, Fax)
     std::list< OUString > aRemovePrinters;
-    for( std::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
+    for( std::unordered_map< OUString, Printer >::iterator it = m_aPrinters.begin();
          it != m_aPrinters.end(); ++it )
     {
         if( m_aCUPSDestMap.find( it->first ) != m_aCUPSDestMap.end() )
@@ -425,7 +425,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     {
         if (m_nDests && m_pDests)
         {
-            std::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+            std::unordered_map< OUString, int >::iterator dest_it =
             m_aCUPSDestMap.find( aPrinter );
             if( dest_it != m_aCUPSDestMap.end() )
             {
@@ -504,13 +504,13 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
 
 void CUPSManager::setupJobContextData( JobData& rData )
 {
-    std::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+    std::unordered_map< OUString, int >::iterator dest_it =
         m_aCUPSDestMap.find( rData.m_aPrinterName );
 
     if( dest_it == m_aCUPSDestMap.end() )
         return PrinterInfoManager::setupJobContextData( rData );
 
-    std::unordered_map< OUString, Printer, OUStringHash >::iterator p_it =
+    std::unordered_map< OUString, Printer >::iterator p_it =
         m_aPrinters.find( rData.m_aPrinterName );
     if( p_it == m_aPrinters.end() ) // huh ?
     {
@@ -625,7 +625,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
 
     osl::MutexGuard aGuard( m_aCUPSMutex );
 
-    std::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+    std::unordered_map< OUString, int >::iterator dest_it =
         m_aCUPSDestMap.find( rPrintername );
     if( dest_it == m_aCUPSDestMap.end() )
     {
@@ -753,7 +753,7 @@ bool CUPSManager::removePrinter( const OUString& rName, bool bCheck )
 bool CUPSManager::setDefaultPrinter( const OUString& rName )
 {
     bool bSuccess = false;
-    std::unordered_map< OUString, int, OUStringHash >::iterator nit =
+    std::unordered_map< OUString, int >::iterator nit =
         m_aCUPSDestMap.find( rName );
     if( nit != m_aCUPSDestMap.end() && m_aCUPSMutex.tryToAcquire() )
     {
@@ -777,10 +777,10 @@ bool CUPSManager::writePrinterConfig()
     bool bDestModified = false;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
-    for( std::unordered_map< OUString, Printer, OUStringHash >::iterator prt =
+    for( std::unordered_map< OUString, Printer >::iterator prt =
              m_aPrinters.begin(); prt != m_aPrinters.end(); ++prt )
     {
-        std::unordered_map< OUString, int, OUStringHash >::iterator nit =
+        std::unordered_map< OUString, int >::iterator nit =
             m_aCUPSDestMap.find( prt->first );
         if( nit == m_aCUPSDestMap.end() )
             continue;

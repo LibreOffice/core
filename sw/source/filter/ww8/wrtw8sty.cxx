@@ -318,7 +318,7 @@ void MSWordStyles::BuildStylesTable()
 
 void MSWordStyles::BuildStyleIds()
 {
-    std::unordered_set<OString, OStringHash> aUsed;
+    std::unordered_set<OString> aUsed;
 
     m_aStyleIds.emplace_back("Normal");
     aUsed.insert("normal");

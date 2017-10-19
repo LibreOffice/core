@@ -486,7 +486,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
         StringCellCache(const ScAddress& rPos, size_t nIndex);
     };
 
-    typedef std::unordered_map<OUString, size_t, OUStringHash> StringHashType;
+    typedef std::unordered_map<OUString, size_t> StringHashType;
     typedef std::vector<StringCellCache> StringCellCaches;
 
     ScDocumentImport maDoc;

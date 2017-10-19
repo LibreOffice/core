@@ -35,18 +35,8 @@
 
 struct OHierarchyElement_Impl;
 
-struct eqFunc
-{
-    bool operator()( const OUString &r1,
-                         const OUString &r2) const
-    {
-        return r1 == r2;
-    }
-};
 typedef std::unordered_map< OUString,
-                         ::rtl::Reference< OHierarchyElement_Impl >,
-                         OUStringHash,
-                         eqFunc > OHierarchyElementList_Impl;
+                         ::rtl::Reference< OHierarchyElement_Impl > > OHierarchyElementList_Impl;
 
 typedef ::std::vector< OUString > OStringList_Impl;
 typedef ::std::list< css::uno::WeakReference< css::embed::XExtendedStorageStream > >

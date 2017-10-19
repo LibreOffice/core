@@ -581,7 +581,7 @@ sal_Int32 GetSubtotalAttrToken(ScGeneralFunction eFunc)
 
 void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDPObject& rDPObj, sal_Int32 nCacheId )
 {
-    typedef std::unordered_map<OUString, long, OUStringHash> NameToIdMapType;
+    typedef std::unordered_map<OUString, long> NameToIdMapType;
 
     const XclExpXmlPivotCaches::Entry* pCacheEntry = mrCaches.GetCache(nCacheId);
     if (!pCacheEntry)

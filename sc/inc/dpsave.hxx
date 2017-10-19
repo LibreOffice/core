@@ -111,8 +111,8 @@ private:
     css::sheet::DataPilotFieldLayoutInfo* pLayoutInfo; // (level)
 
 public:
-    typedef std::unordered_set<OUString, OUStringHash> MemberSetType;
-    typedef std::unordered_map <OUString, ScDPSaveMember*, OUStringHash> MemberHash;
+    typedef std::unordered_set<OUString> MemberSetType;
+    typedef std::unordered_map <OUString, ScDPSaveMember*> MemberHash;
     typedef std::list <ScDPSaveMember*> MemberList;
 
 private:
@@ -220,7 +220,7 @@ public:
 
     void WriteToSource( const css::uno::Reference<css::uno::XInterface>& xDim );
 
-    void UpdateMemberVisibility(const std::unordered_map< OUString, bool, OUStringHash>& rData);
+    void UpdateMemberVisibility(const std::unordered_map< OUString, bool>& rData);
 
     bool HasInvisibleMember() const;
 
@@ -233,9 +233,9 @@ public:
 
 class ScDPSaveData
 {
-    typedef std::unordered_map<OUString, size_t, OUStringHash> DupNameCountType;
+    typedef std::unordered_map<OUString, size_t> DupNameCountType;
 public:
-    typedef std::unordered_map<OUString, size_t, OUStringHash> DimOrderType;
+    typedef std::unordered_map<OUString, size_t> DimOrderType;
     typedef std::vector<std::unique_ptr<ScDPSaveDimension>> DimsType;
 
 private:

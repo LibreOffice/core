@@ -81,8 +81,7 @@ class SVT_DLLPUBLIC FrameStatusListener : public css::frame::XStatusListener,
         };
 
         typedef std::unordered_map< OUString,
-                                    css::uno::Reference< css::frame::XDispatch >,
-                                    OUStringHash > URLToDispatchMap;
+                                    css::uno::Reference< css::frame::XDispatch > > URLToDispatchMap;
 
         bool                                                      m_bDisposed : 1;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;
