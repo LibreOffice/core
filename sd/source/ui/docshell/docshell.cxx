@@ -51,6 +51,7 @@
 #include <comphelper/lok.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/visitem.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <sfx2/fcontnr.hxx>
 
@@ -350,14 +351,10 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 void DrawDocShell::InPlaceActivate( bool bActive )
 {
     SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
-    std::vector<FrameView*> &rViews = mpDoc->GetFrameViewList();
+    std::vector<std::unique_ptr<FrameView>> &rViews = mpDoc->GetFrameViewList();
 
     if( !bActive )
     {
-        std::vector<FrameView*>::iterator pIter;
-        for ( pIter = rViews.begin(); pIter != rViews.end(); ++pIter )
-            delete *pIter;
-
         rViews.clear();
 
         while (pSfxViewFrame)
@@ -369,7 +366,7 @@ void DrawDocShell::InPlaceActivate( bool bActive )
             if ( pViewSh && pViewSh->GetFrameView() )
             {
                 pViewSh->WriteFrameViewData();
-                rViews.push_back( new FrameView( mpDoc, pViewSh->GetFrameView() ) );
+                rViews.push_back( o3tl::make_unique<FrameView>( mpDoc, pViewSh->GetFrameView() ) );
             }
 
             pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
@@ -388,7 +385,7 @@ void DrawDocShell::InPlaceActivate( bool bActive )
 
             if ( pViewSh )
             {
-                pViewSh->ReadFrameViewData( rViews[ i ] );
+                pViewSh->ReadFrameViewData( rViews[ i ].get() );
             }
 
             pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);

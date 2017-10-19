@@ -139,13 +139,17 @@ public:
     SAL_DLLPRIVATE bool getDocReadOnly() const { return bReadOnly; }
 private:
     OUString            msDocAccTitle;
-    SdOutliner*     mpOutliner;          ///< local outliner for outline mode
-    SdOutliner*     mpInternalOutliner;  ///< internal outliner for creation of text objects
+    std::unique_ptr<SdOutliner>
+                        mpOutliner;          ///< local outliner for outline mode
+    std::unique_ptr<SdOutliner>
+                        mpInternalOutliner;  ///< internal outliner for creation of text objects
     Timer*              mpWorkStartupTimer;
     Idle*               mpOnlineSpellingIdle;
     sd::ShapeList*      mpOnlineSpellingList;
-    SvxSearchItem*      mpOnlineSearchItem;
-    std::vector<sd::FrameView*> maFrameViewList;
+    std::unique_ptr<SvxSearchItem>
+                        mpOnlineSearchItem;
+    std::vector<std::unique_ptr<sd::FrameView>>
+                        maFrameViewList;
     SdCustomShowList*   mpCustomShowList;
     ::sd::DrawDocShell* mpDocSh;
     SdTransferable *    mpCreatingTransferable;
@@ -171,7 +175,8 @@ private:
     ::sd::DrawDocShellRef   mxAllocedDocShRef;   // => AllocModel()
     bool                mbAllocDocSh;       // => AllocModel()
     DocumentType        meDocType;
-    CharClass*          mpCharClass;
+    std::unique_ptr<CharClass>
+                        mpCharClass;
 
     ::std::unique_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
     ::std::unique_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
@@ -415,7 +420,7 @@ public:
 
     SAL_DLLPRIVATE sal_uLong           GetLinkCount();
 
-    SAL_DLLPRIVATE std::vector<sd::FrameView*>& GetFrameViewList() { return maFrameViewList; }
+    SAL_DLLPRIVATE std::vector<std::unique_ptr<sd::FrameView>>& GetFrameViewList() { return maFrameViewList; }
     SdCustomShowList* GetCustomShowList(bool bCreate = false);
 
     SAL_DLLPRIVATE void                NbcSetChanged(bool bFlag);
@@ -434,7 +439,7 @@ public:
     SAL_DLLPRIVATE bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
     SAL_DLLPRIVATE ::sd::FrameView* GetFrameView(sal_uLong nPos) {
-        return nPos < maFrameViewList.size() ? maFrameViewList[nPos] : nullptr; }
+        return nPos < maFrameViewList.size() ? maFrameViewList[nPos].get() : nullptr; }
 
     /** deprecated*/
     SAL_DLLPRIVATE static SdAnimationInfo* GetAnimationInfo(SdrObject* pObject);
@@ -444,7 +449,7 @@ public:
     SAL_DLLPRIVATE static SdIMapInfo*  GetIMapInfo( SdrObject const * pObject );
     SAL_DLLPRIVATE static IMapObject*  GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint );
 
-    SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass; }
+    SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass.get(); }
 
     SAL_DLLPRIVATE void                RestoreLayerNames();
 

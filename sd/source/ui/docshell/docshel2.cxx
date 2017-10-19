@@ -63,10 +63,10 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 
     SdPage* pSelectedPage = nullptr;
 
-    const std::vector<sd::FrameView*> &rViews = mpDoc->GetFrameViewList();
+    const std::vector<std::unique_ptr<sd::FrameView>> &rViews = mpDoc->GetFrameViewList();
     if( !rViews.empty() )
     {
-        sd::FrameView* pFrameView = rViews[0];
+        sd::FrameView* pFrameView = rViews[0].get();
         if( pFrameView->GetPageKind() == PageKind::Standard )
         {
             sal_uInt16 nSelectedPage = pFrameView->GetSelectedPage();
