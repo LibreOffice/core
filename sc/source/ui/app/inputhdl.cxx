@@ -2011,7 +2011,8 @@ void ScInputHandler::RemoveRangeFinder()
     DeleteRangeFinder(); // Deletes the list and the labels on the table
 }
 
-bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated )
+bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
+        ScEditEngineDefaulter* pTopEngine )
 {
     bool bNewTable = false;
 
@@ -2130,6 +2131,13 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                     // #i31843# "repeat" with "line breaks" is treated as default alignment
                     eAttrAdjust = SvxCellHorJustify::Standard;
                 }
+            }
+
+            if (pTopEngine)
+            {
+                // Necessary to sync SvxAutoCorrect behavior. This has to be
+                // done before InitRangeFinder() below.
+                MergeLanguageAttributes( *pTopEngine);
             }
 
             //  UpdateSpellSettings enables online spelling if needed
@@ -2263,7 +2271,7 @@ bool ScInputHandler::DataChanging( sal_Unicode cTyped, bool bFromCommand )
     bInOwnChange = true; // disable ModifyHdl (reset in DataChanged)
 
     if ( eMode == SC_INPUT_NONE )
-        return StartTable( cTyped, bFromCommand, false );
+        return StartTable( cTyped, bFromCommand, false, nullptr );
     else
         return false;
 }
@@ -2479,7 +2487,7 @@ void ScInputHandler::InvalidateAttribs()
 
 // --------------- public methods --------------------------------------------
 
-void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText )
+void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, ScEditEngineDefaulter* pTopEngine )
 {
     if ( eMode == eNewMode )
         return;
@@ -2510,7 +2518,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText )
     {
         if (eOldMode == SC_INPUT_NONE) // not if switching between modes
         {
-            if (StartTable(0, false, eMode == SC_INPUT_TABLE))
+            if (StartTable(0, false, eMode == SC_INPUT_TABLE, pTopEngine))
             {
                 if (pActiveViewSh)
                     pActiveViewSh->GetViewData().GetDocShell()->PostEditView( mpEditEngine.get(), aCursorPos );

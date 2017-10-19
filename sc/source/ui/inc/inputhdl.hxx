@@ -131,9 +131,13 @@ private:
      *               for text or number.
      * @param bInputActivated true if the cell input mode is activated (via
      *                        F2), false otherwise.
+     * @param pTopEngine top window input line EditEngine. If not nullptr then
+     *                   some default attributes are merged to it from the
+     *                   table EditEngine.
      * @return true if the new edit mode has been started.
      */
-    bool            StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated );
+    bool            StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
+                                ScEditEngineDefaulter* pTopEngine );
     void            RemoveSelection();
     void            UpdateFormulaMode();
     static void     InvalidateAttribs();
@@ -171,7 +175,8 @@ public:
                     ScInputHandler();
                     ~ScInputHandler();
 
-    void SetMode( ScInputMode eNewMode, const OUString* pInitText = nullptr );
+    void            SetMode( ScInputMode eNewMode, const OUString* pInitText = nullptr,
+                             ScEditEngineDefaulter* pTopEngine = nullptr );
     bool            IsInputMode() const { return (eMode != SC_INPUT_NONE); }
     bool            IsEditMode() const  { return (eMode != SC_INPUT_NONE &&
                                                   eMode != SC_INPUT_TYPE); }
