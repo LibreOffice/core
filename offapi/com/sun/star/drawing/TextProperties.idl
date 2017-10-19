@@ -120,8 +120,8 @@ published service TextProperties
     [property] boolean TextContourFrame;
 
 
-    /** With this set to `TRUE`, the text inside of the Shape
-        is stretched to fit into the Shape.
+    /** With this set to a value other than `NONE`, the text inside of
+        the Shape is stretched or scaled to fit into the Shape.
      */
     [property] com::sun::star::drawing::TextFitToSizeType TextFitToSize;
 
