@@ -397,7 +397,7 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDE5XLib::createFilePicker(
         SalYieldMutexReleaser aReleaser;
         return Q_EMIT createFilePickerSignal( xMSF );
     }
-    return uno::Reference< ui::dialogs::XFilePicker2 >( new KDE4FilePicker( xMSF ) );
+    //return uno::Reference< ui::dialogs::XFilePicker2 >( new KDE4FilePicker( xMSF ) );
 #else
     (void)xMSF;
     return NULL;
