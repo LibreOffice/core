@@ -108,8 +108,6 @@
 "ScCellCursorObj";"com::sun::star::style::ParagraphProperties";"ParaUserDefinedAttributes#optional"
 "ScCellCursorObj";"com::sun::star::style::ParagraphProperties";"NumberingIsNumber#optional"
 "ScCellCursorObj";"com::sun::star::style::ParagraphProperties";"ParaIsConnectBorder#optional"
-"ScCellCursorObj";"com::sun::star::sheet::XSheetOperation";"computeFunction()"
-"ScCellCursorObj";"com::sun::star::sheet::XSheetOperation";"clearContents()"
 "ScCellCursorObj";"com::sun::star::style::CharacterPropertiesComplex";"CharHeightComplex"
 "ScCellCursorObj";"com::sun::star::style::CharacterPropertiesComplex";"CharWeightComplex"
 "ScCellCursorObj";"com::sun::star::style::CharacterPropertiesComplex";"CharFontNameComplex"
