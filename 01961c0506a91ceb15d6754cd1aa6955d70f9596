@@ -22,6 +22,24 @@
       "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_21168355",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-10-19T10:23:41Z",
+      "side": 1,
+      "message": "If this works, this is indeed confusing. The size of an sprm operand is specified by the sprm itself. sprmTTableWidth is 0xF614, the last 3 bits (spra) is 4, which means the operand is 2 bytes. But indeed with the above MSDN link the documented structure size is 3 bytes. Did you try checking what Word writes in this case (checking its output with doc-dumper?).\n\nIf it also writes 4 bytes (3 bytes + padding), then I guess best if we do the same, but please add a comment here about this oddity.",
+      "parentUuid": "1a430d35_4991fb98",
+      "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
