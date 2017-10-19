@@ -11014,10 +11014,21 @@ int main(int argc, char **argv) {
        if (KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 0) return 0;
        else return 1;
 }
-       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
+]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE5 version too old])],[])
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
 
+    # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled.
+    # Sets also KF5_GLIB_CFLAGS/KF5_GLIB_LIBS if successful.
+    PKG_CHECK_MODULES(KF5_GLIB,[glib-2.0 >= 2.4],
+        [
+            KF5_HAVE_GLIB=TRUE
+            AC_DEFINE(KF5_HAVE_GLIB,1)
+            KF5_GLIB_CFLAGS=$(printf '%s' "$KF5_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+            FilterLibs "${KF5_GLIB_LIBS}"
+            KF5_GLIB_LIBS="${filteredlibs}"
+        ],
+        AC_MSG_WARN([[No Glib found, KDE5 support will not use native file pickers!]]))
 fi
 AC_SUBST(KF5_CFLAGS)
 AC_SUBST(KF5_LIBS)
