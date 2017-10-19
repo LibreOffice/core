@@ -2782,10 +2782,9 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                                  pItem1 = iter1.NextItem(),
                                  pItem2 = iter2.NextItem())
                             {
-                                if (pItem1 != pItem2 ||
-                                    pItem1->Which() != pItem2->Which() ||
-                                    *pItem1 != *pItem2)
+                                if (pItem1 != pItem2) // all are poolable
                                 {
+                                    assert(IsInvalidItem(pItem1) || IsInvalidItem(pItem2) || pItem1->Which() != pItem2->Which() || *pItem1 != *pItem2);
                                     eMerge = DIFFER;
                                     break;
                                 }
