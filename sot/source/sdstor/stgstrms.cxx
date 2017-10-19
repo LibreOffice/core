@@ -71,10 +71,12 @@ rtl::Reference< StgPage > StgFAT::GetPhysPage( sal_Int32 nByteOff )
 
 sal_Int32 StgFAT::GetNextPage( sal_Int32 nPg )
 {
-    if( nPg >= 0 )
+    if (nPg >= 0)
     {
-      rtl::Reference< StgPage > pPg = GetPhysPage( nPg << 2 );
-      nPg = pPg.is() ? StgCache::GetFromPage( pPg, m_nOffset >> 2 ) : STG_EOF;
+        if (nPg > (SAL_MAX_INT32 >> 2))
+            return STG_EOF;
+        rtl::Reference< StgPage > pPg = GetPhysPage( nPg << 2 );
+        nPg = pPg.is() ? StgCache::GetFromPage( pPg, m_nOffset >> 2 ) : STG_EOF;
     }
     return nPg;
 }
