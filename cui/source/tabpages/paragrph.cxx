@@ -1309,6 +1309,7 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox&, void)
             SAL_WARN( "cui.tabpages", "SvxParaAlignTabPage::TextDirectionHdl_Impl(): other directions not supported" );
         }
     }
+    AlignHdl_Impl( nullptr );
 }
 
 void SvxParaAlignTabPage::UpdateExample_Impl()
