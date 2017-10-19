@@ -23,45 +23,58 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QEventLoop>
+#include <QtCore/QSocketNotifier>
+#include <unistd.h>
 
-const QEvent::Type eventType = QEvent::User;
-
-class TestExcludePostedEvents
+class TestExcludeSocketNotifiers
     : public QObject
 {
     Q_OBJECT
     public:
-        TestExcludePostedEvents();
-        virtual bool event( QEvent* e ) override;
-        bool processed;
+        TestExcludeSocketNotifiers( const int* pipes );
+        virtual ~TestExcludeSocketNotifiers() override;
+        bool received;
+    public slots:
+        void slotReceived();
+    private:
+        const int* pipes;
 };
 
-TestExcludePostedEvents::TestExcludePostedEvents()
-    : processed( false )
+TestExcludeSocketNotifiers::TestExcludeSocketNotifiers( const int* thePipes )
+    : received( false )
+    , pipes( thePipes )
 {
 }
 
-bool TestExcludePostedEvents::event( QEvent* e )
+TestExcludeSocketNotifiers::~TestExcludeSocketNotifiers()
 {
-    if( e->type() == eventType )
-        processed = true;
-    return QObject::event( e );
+    close( pipes[ 0 ] );
+    close( pipes[ 1 ] );
+}
+
+void TestExcludeSocketNotifiers::slotReceived()
+{
+    received = true;
 }
 
 #define QVERIFY(a) \
     if (!a) return 1;
 
-static int tst_excludePostedEvents()
+static int tst_processEventsExcludeSocket()
 {
-    TestExcludePostedEvents test;
-    QCoreApplication::postEvent( &test, new QEvent( eventType ));
+    int pipes[ 2 ];
+    if( pipe( pipes ) < 0 )
+        return 1;
+    TestExcludeSocketNotifiers test( pipes );
+    QSocketNotifier notifier( pipes[ 0 ], QSocketNotifier::Read );
+    QObject::connect( &notifier, SIGNAL( activated( int )), &test, SLOT( slotReceived()));
+    char dummy = 'a';
+    if( 1 != write( pipes[ 1 ], &dummy, 1 ) )
+        return 1;
     QEventLoop loop;
-    loop.processEvents(QEventLoop::ExcludeUserInputEvents
-        | QEventLoop::ExcludeSocketNotifiers
-//        | QEventLoop::WaitForMoreEvents
-        | QEventLoop::X11ExcludeTimers);
-    QVERIFY( !test.processed );
+    loop.processEvents( QEventLoop::ExcludeSocketNotifiers );
+    QVERIFY( !test.received );
     loop.processEvents();
-    QVERIFY( test.processed );
+    QVERIFY( test.received );
     return 0;
 }
