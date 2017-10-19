@@ -2081,7 +2081,13 @@ WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
     WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN): pPLCF_PosArray(nullptr), nIdx(0),
     nStru(nStruct)
 {
-    nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
+    if (nPLCF < 0)
+    {
+        SAL_WARN("sw.ww8", "broken WW8PLCF, ignoring");
+        nIMax = SAL_MAX_INT32;
+    }
+    else
+        nIMax = (nPLCF - 4) / (4 + nStruct);
 
     if( nIMax >= ncpN )
         ReadPLCF(rSt, nFilePos, nPLCF);
