@@ -50,6 +50,10 @@
 
 #include <algorithm>
 
+#include <com/sun/star/uno/Reference.hxx>
+
+using namespace com::sun::star;
+
 //  maximum values for UI
 #define SCNAV_MAXCOL        (MAXCOLCOUNT)
 // macro is sufficient since only used in ctor
@@ -665,6 +669,9 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     aLbEntries->ObjectFresh( ScContentId::DRAWING );
                     aLbEntries->ObjectFresh( ScContentId::GRAPHIC );
                     break;
+                case SfxHintId::ScSelectionChanged:
+                    UpdateSelection();
+                    break;
                 default:
                     break;
             }
@@ -783,6 +790,32 @@ void ScNavigatorDlg::SetCurrentDoc( const OUString& rDocName )        // activat
     rBindings.GetDispatcher()->ExecuteList( SID_CURRENTDOC,
                               SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                               { &aDocItem });
+}
+
+void ScNavigatorDlg::UpdateSelection()
+{
+    ScTabViewShell* pViewSh = GetTabViewShell();
+    if( !pViewSh )
+        return;
+
+    uno::Reference< drawing::XShapes > xShapes = pViewSh->getSelectedXShapes();
+    if( xShapes )
+    {
+        uno::Reference< container::XIndexAccess > xIndexAccess(
+                xShapes, uno::UNO_QUERY_THROW );
+        if( xIndexAccess->getCount() > 1 )
+            return;
+        uno::Reference< drawing::XShape > xShape;
+        if( xIndexAccess->getByIndex(0) >>= xShape )
+        {
+            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+            OUString sName;
+            if( ( xProps->getPropertyValue("Name") >>= sName ) && !sName.isEmpty() )
+            {
+                aLbEntries->SelectEntryByName( ScContentId::DRAWING, sName );
+            }
+        }
+    }
 }
 
 ScTabViewShell* ScNavigatorDlg::GetTabViewShell()
