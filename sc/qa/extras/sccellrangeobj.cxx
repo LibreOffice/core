@@ -12,8 +12,9 @@
 #include <test/sheet/xcellrangedata.hxx>
 #include <test/sheet/xcellrangesquery.hxx>
 #include <test/sheet/xcellseries.hxx>
-#include <test/sheet/xuniquecellformatrangessupplier.hxx>
+#include <test/sheet/xsheetoperation.hxx>
 #include <test/sheet/xsubtotalcalculatable.hxx>
+#include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
 
@@ -29,12 +30,17 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 20
+#define NUMBER_OF_TESTS 22
 
-class ScCellRangeObj : public CalcUnoApiTest, public apitest::XCellRangesQuery, public apitest::CellProperties,
-                        public apitest::XSearchable, public apitest::XReplaceable, public apitest::XCellRangeData,
-                        public apitest::XCellSeries, public apitest::XUniqueCellFormatRangesSupplier,
-                        public apitest::XSubTotalCalculatable
+class ScCellRangeObj : public CalcUnoApiTest, public apitest::CellProperties,
+                                              public apitest::XCellRangeData,
+                                              public apitest::XCellRangesQuery,
+                                              public apitest::XCellSeries,
+                                              public apitest::XReplaceable,
+                                              public apitest::XSearchable,
+                                              public apitest::XSheetOperation,
+                                              public apitest::XSubTotalCalculatable,
+                                              public apitest::XUniqueCellFormatRangesSupplier
 {
 public:
     ScCellRangeObj();
@@ -83,6 +89,10 @@ public:
     // XUniqueCellFormatRangesSupplier
     CPPUNIT_TEST(testGetUniqueCellFormatRanges);
 
+    // XSheetOperation
+    CPPUNIT_TEST(testComputeFunction);
+    CPPUNIT_TEST(testClearContents);
+
     // XSubTotalCalculatable
     CPPUNIT_TEST(testCreateSubTotalDescriptor);
     CPPUNIT_TEST(testApplyRemoveSubTotals);
@@ -99,9 +109,9 @@ uno::Reference< lang::XComponent > ScCellRangeObj::mxComponent;
 
 ScCellRangeObj::ScCellRangeObj():
         CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-        apitest::XSearchable("15", 1),
+        apitest::XCellSeries(2, 1),
         apitest::XReplaceable("15", "35"),
-        apitest::XCellSeries(2, 1)
+        apitest::XSearchable("15", 1)
 {
 }
 
