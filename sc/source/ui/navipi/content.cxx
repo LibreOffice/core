@@ -1626,6 +1626,43 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName like shown in
     }
 }
 
+bool ScContentTree::SelectEntryByName(const ScContentId nRoot, const OUString& rName)
+{
+    SvTreeListEntry* pParent = pRootNodes[ nRoot ];
+
+    if( !pParent->HasChildren() )
+        return false;
+
+    SvTreeListEntry* pEntry = FirstChild( pParent );
+    while( pEntry )
+    {
+        if( GetEntryText( pEntry ) == rName )
+        {
+            bool bRet = SvTreeListBox::Select( pEntry );
+
+            // Scroll to the selected item
+            if( SvTreeListBox::GetVScroll()->IsVisible() )
+            {
+                long nBeforeCount = 0;
+                SvTreeList* pList = GetModel();
+                SvTreeListEntry* pRoot = pList->First();
+                while( pRoot != pParent )
+                {
+                    ++nBeforeCount;
+                    pRoot = pList->Next( pRoot );
+                }
+                SvTreeListBox::ScrollToAbsPos( pEntry->GetChildListPos()
+                            + nBeforeCount );
+            }
+
+            return bRet;
+        }
+        pEntry = Next( pEntry );
+    }
+
+    return false;
+}
+
 void ScContentTree::ApplyNavigatorSettings()
 {
     const ScNavigatorSettings* pSettings = ScNavigatorDlg::GetNavigatorSettings();

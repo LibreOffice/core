@@ -1720,6 +1720,9 @@ void ScTabViewObj::SelectionChanged()
             /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
         }
     }
+
+    SfxApplication::Get()->Broadcast( SfxHint( SfxHintId::ScSelectionChanged ) );
+
     if ( !mbLeftMousePressed ) // selection still in progress
     {
         try

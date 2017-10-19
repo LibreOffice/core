@@ -224,6 +224,7 @@ private:
     void    SetCurrentTableStr( const OUString& rName );
     void    SetCurrentObject( const OUString& rName );
     void    SetCurrentDoc( const OUString& rDocName );
+    void    UpdateSelection();
 
     static ScTabViewShell*  GetTabViewShell();
     static ScNavigatorSettings* GetNavigatorSettings();
