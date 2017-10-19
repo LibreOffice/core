@@ -5399,26 +5399,28 @@ bool WW8Fib::GetBaseCp(ManTypes nType, WW8_CP * cp) const
     assert(cp != nullptr);
     WW8_CP nOffset = 0;
 
-    switch( nType )
+    switch (nType)
     {
-        default:
         case MAN_TXBX_HDFT:
+            if (m_ccpTxbx < 0) {
+                return false;
+            }
             nOffset = m_ccpTxbx;
             SAL_FALLTHROUGH;
         case MAN_TXBX:
-            if (m_ccpEdn > std::numeric_limits<WW8_CP>::max() - nOffset) {
+            if (m_ccpEdn < 0 || m_ccpEdn > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += m_ccpEdn;
             SAL_FALLTHROUGH;
         case MAN_EDN:
-            if (m_ccpAtn > std::numeric_limits<WW8_CP>::max() - nOffset) {
+            if (m_ccpAtn < 0 || m_ccpAtn > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += m_ccpAtn;
             SAL_FALLTHROUGH;
         case MAN_AND:
-            if (m_ccpMcr > std::numeric_limits<WW8_CP>::max() - nOffset) {
+            if (m_ccpMcr < 0 || m_ccpMcr > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += m_ccpMcr;
@@ -5431,19 +5433,19 @@ bool WW8Fib::GetBaseCp(ManTypes nType, WW8_CP * cp) const
 
         case MAN_MACRO:
         */
-            if (m_ccpHdr > std::numeric_limits<WW8_CP>::max() - nOffset) {
+            if (m_ccpHdr < 0 || m_ccpHdr > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += m_ccpHdr;
             SAL_FALLTHROUGH;
         case MAN_HDFT:
-            if (m_ccpFootnote > std::numeric_limits<WW8_CP>::max() - nOffset) {
+            if (m_ccpFootnote < 0 || m_ccpFootnote > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += m_ccpFootnote;
             SAL_FALLTHROUGH;
         case MAN_FTN:
-            if (m_ccpText > std::numeric_limits<WW8_CP>::max() - nOffset) {
+            if (m_ccpText < 0 || m_ccpText > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += m_ccpText;
