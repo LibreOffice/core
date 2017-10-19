@@ -1695,6 +1695,13 @@ DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
     //assertXPath(pXmlDoc, "/svg/path", 4);
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf77961, "tdf77961.odt")
+{
+    uno::Reference<container::XNameAccess> xStyles(getStyles("PageStyles"));
+    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( false , getProperty<bool>(xStyle, "GridDisplay"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

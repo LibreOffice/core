@@ -157,6 +157,9 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         if( xMultiStates.is() )
             xMultiStates->setAllPropertiesToDefault();
 
+        if ( xPropSetInfo->hasPropertyByName( "GridDisplay" ) )
+            xPropSet->setPropertyValue( "GridDisplay", Any(false) );
+
         bInsertHeader = bInsertFooter = true;
         bInsertHeaderLeft = bInsertFooterLeft = true;
         bInsertHeaderFirst = bInsertFooterFirst = true;
