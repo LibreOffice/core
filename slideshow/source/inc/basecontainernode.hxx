@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASECONTAINERNODE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASECONTAINERNODE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_BASECONTAINERNODE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_BASECONTAINERNODE_HXX
 
 #include "basenode.hxx"
 
@@ -96,6 +96,6 @@ typedef ::std::shared_ptr< BaseContainerNode > BaseContainerNodeSharedPtr;
 } // namespace interface
 } // namespace presentation
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASECONTAINERNODE_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASENODE_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASENODE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_INC_BASENODE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_INC_BASENODE_HXX
 
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.hxx>
@@ -205,6 +205,6 @@ typedef ::std::shared_ptr< BaseNode > BaseNodeSharedPtr;
 } // namespace internal
 } // namespace slideshow
 
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_BASENODE_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
