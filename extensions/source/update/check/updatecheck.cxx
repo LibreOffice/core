@@ -19,7 +19,7 @@
 
 #include <config_folders.h>
 
-#include "updatecheck.hxx"
+#include "update/check/updatecheck.hxx"
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -52,7 +52,7 @@
 #endif
 
 #include <onlinecheck.hxx>
-#include "updateprotocol.hxx"
+#include "update/check/updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
 
 namespace beans = com::sun::star::beans ;

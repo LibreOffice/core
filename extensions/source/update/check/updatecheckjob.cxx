@@ -19,10 +19,10 @@
 
 #include <sal/config.h>
 
-#include "updatecheck.hxx"
+#include "update/check/updatecheck.hxx"
 #include "updatecheckconfig.hxx"
-#include "updatehdl.hxx"
-#include "updateprotocol.hxx"
+#include "update/check/updatehdl.hxx"
+#include "update/check/updateprotocol.hxx"
 
 #include <memory>
 #include <cppuhelper/implbase.hxx>

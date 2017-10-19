@@ -22,7 +22,7 @@
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XPathException.hpp>
 
-#include "updateprotocol.hxx"
+#include "update/check/updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
 
 #include <com/sun/star/deployment/UpdateInformationEntry.hpp>

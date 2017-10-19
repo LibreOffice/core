@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
+#ifndef INCLUDED_EXTENSIONS_INC_UPDATE_CHECK_UPDATEHDL_HXX
+#define INCLUDED_EXTENSIONS_INC_UPDATE_CHECK_UPDATEHDL_HXX
 
 #include <osl/mutex.hxx>
 #include "com/sun/star/uno/Any.h"
@@ -34,7 +34,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include "actionlistener.hxx"
+#include "update/check/actionlistener.hxx"
 
 enum DialogControls
 {
@@ -202,6 +202,6 @@ public:
     virtual void SAL_CALL notifyTermination( const css::lang::EventObject& e ) override;
 };
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

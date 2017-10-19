@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECK_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECK_HXX
+#ifndef INCLUDED_EXTENSIONS_INC_UPDATE_CHECK_UPDATECHECK_HXX
+#define INCLUDED_EXTENSIONS_INC_UPDATE_CHECK_UPDATECHECK_HXX
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -29,11 +29,11 @@
 #include <osl/thread.hxx>
 #include <rtl/instance.hxx>
 
-#include "updateinfo.hxx"
-#include "updatecheckconfiglistener.hxx"
-#include "actionlistener.hxx"
-#include "updatehdl.hxx"
-#include "download.hxx"
+#include "update/check/updateinfo.hxx"
+#include "update/check/updatecheckconfiglistener.hxx"
+#include "update/check/actionlistener.hxx"
+#include "update/check/updatehdl.hxx"
+#include "update/check/download.hxx"
 
 
 class UpdateCheck;
@@ -175,6 +175,6 @@ UpdateCheckInitData::operator() () const
     return rtl::Reference< UpdateCheck > (new UpdateCheck());
 }
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECK_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

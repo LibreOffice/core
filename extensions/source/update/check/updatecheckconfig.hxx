@@ -28,8 +28,8 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <rtl/ref.hxx>
 
-#include "updatecheckconfiglistener.hxx"
-#include "updateinfo.hxx"
+#include "update/check/updatecheckconfiglistener.hxx"
+#include "update/check/updateinfo.hxx"
 
 /* This helper class provides by name access to a sequence of named values */
 class NamedValueByNameAccess

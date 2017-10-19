@@ -18,7 +18,7 @@
  */
 
 
-#include "updatehdl.hxx"
+#include "update/check/updatehdl.hxx"
 #include "helpids.h"
 
 #include "osl/diagnose.h"

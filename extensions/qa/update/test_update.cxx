@@ -19,8 +19,8 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "../../source/update/check/updatecheck.hxx"
-#include "../../source/update/check/updateprotocol.hxx"
+#include "update/check/updatecheck.hxx"
+#include "update/check/updateprotocol.hxx"
 
 using namespace com::sun::star;
 using namespace com::sun::star::xml;

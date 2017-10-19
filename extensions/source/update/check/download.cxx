@@ -36,7 +36,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include "download.hxx"
+#include "update/check/download.hxx"
 
 namespace beans = com::sun::star::beans ;
 namespace container = com::sun::star::container ;

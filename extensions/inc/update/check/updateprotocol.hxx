@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
-#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
+#ifndef INCLUDED_EXTENSIONS_INC_UPDATE_CHECK_UPDATEPROTOCOL_HXX
+#define INCLUDED_EXTENSIONS_INC_UPDATE_CHECK_UPDATEPROTOCOL_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
 
 #include <vector>
-#include "updateinfo.hxx"
+#include "update/check/updateinfo.hxx"
 
 // Returns 'true' if successfully connected to the update server
 bool checkForUpdates(
@@ -63,6 +63,6 @@ bool storeExtensionUpdateInfos(
     const css::uno::Sequence< css::uno::Sequence< OUString > > &rUpdateInfos
 );
 
-#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
