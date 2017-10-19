@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[6.0.0.0.alpha0+],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[6.0.0.0.alpha1+],[],[],[http://documentfoundation.org/])
 
 AC_PREREQ([2.59])
 
@@ -2641,7 +2641,7 @@ if test $_os = Darwin -o $_os = iOS; then
     if test $_os = iOS; then
         if test "$enable_ios_simulator" = "yes"; then
             useos=iphonesimulator
-        else 
+        else
             useos=iphoneos
         fi
         MACOSX_SDK_PATH=`xcrun --sdk ${useos} --show-sdk-path 2> /dev/null`
