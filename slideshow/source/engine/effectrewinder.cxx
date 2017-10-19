@@ -22,7 +22,7 @@
 #include "eventqueue.hxx"
 #include "usereventqueue.hxx"
 #include "mouseeventhandler.hxx"
-#include "animationnodes/basecontainernode.hxx"
+#include "basecontainernode.hxx"
 #include "delayevent.hxx"
 
 #include <com/sun/star/awt/MouseEvent.hpp>
