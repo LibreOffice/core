@@ -34,9 +34,8 @@ bridge_exception_objects := abi callvirtualfunction uno2cpp
 
 $(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno, \
     bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/cpp2uno, \
-    $(subst -fstack-protector-strong,-fstack-protector, \
-        $(gb_LinkTarget_EXCEPTIONFLAGS) \
-        $(call gb_LinkTarget__get_cxxflags,$(gb_CPPU_ENV)_uno)) \
+    $(gb_LinkTarget_EXCEPTIONFLAGS) \
+    $(call gb_LinkTarget__get_cxxflags,$(gb_CPPU_ENV)_uno) -fstack-protector \
 ))
 endif
 
