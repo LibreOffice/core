@@ -93,6 +93,7 @@ public:
     /// PROP_BACNAME() is stored separately for easier lookup.
     OUString m_aName;
     OUString m_aAbbreviatedName;
+    size_t m_nSensitivity; //< 0 is the highest (most-sensitive).
     std::map<OUString, OUString> m_aLabels;
 };
 
@@ -183,6 +184,7 @@ void SAL_CALL SfxClassificationParser::startElement(const OUString& rName, const
             rCategory.m_aName = aName;
             // Set the abbreviated name, if any, otherwise fallback on the full name.
             rCategory.m_aAbbreviatedName = !aAbbreviatedName.isEmpty() ? aAbbreviatedName : aName;
+            rCategory.m_nSensitivity = m_aCategories.size() - 1; // 0-based class sensitivity; first is highest.
             rCategory.m_aLabels["PolicyAuthority:Name"] = m_aPolicyAuthorityName;
             rCategory.m_aLabels["Policy:Name"] = m_aPolicyName;
             rCategory.m_aLabels["BusinessAuthorization:Identifier"] = m_aProgramID;
@@ -444,7 +446,8 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
         SfxClassificationPolicyType eType = rPair.first;
         SfxClassificationCategory& rCategory = rPair.second;
         std::map<OUString, OUString> aLabels = rCategory.m_aLabels;
-        aLabels[policyTypeToString(eType) + PROP_BACNAME()] = rCategory.m_aName;
+        const OUString abbreviation = (rCategory.m_aName != rCategory.m_aAbbreviatedName ? " (" + rCategory.m_aAbbreviatedName + ")" : OUString());
+        aLabels[policyTypeToString(eType) + PROP_BACNAME()] = rCategory.m_aName + abbreviation;
         for (const auto& rLabel : aLabels)
         {
             try
@@ -561,6 +564,7 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
                 // It's a prefix we did not recognize, ignore.
                 continue;
 
+            //TODO: Support abbreviated names(?)
             if (rProperty.Name == (aPrefix + PROP_BACNAME()))
                 m_pImpl->m_aCategory[eType].m_aName = aValue;
             else
@@ -792,6 +796,8 @@ void SfxClassificationHelper::SetBACName(const OUString& rName, SfxClassificatio
     }
 
     m_pImpl->m_aCategory[eType].m_aName = it->m_aName;
+    m_pImpl->m_aCategory[eType].m_aAbbreviatedName = it->m_aAbbreviatedName;
+    m_pImpl->m_aCategory[eType].m_nSensitivity = it->m_nSensitivity;
     m_pImpl->m_aCategory[eType].m_aLabels.clear();
     const OUString& rPrefix = policyTypeToString(eType);
     for (const auto& rLabel : it->m_aLabels)
