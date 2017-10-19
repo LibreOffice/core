@@ -39,7 +39,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <editeng/unolingu.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/settings.hxx>
@@ -1495,8 +1495,18 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc(WW8_CP nCpPos, bool* pIsUnicode,
         return nRet;
     }
 
+    if (*pIsUnicode)
+    {
+        const bool bFail = o3tl::checked_multiply<WW8_CP>(nCpPos, 2, nCpPos);
+        if (bFail)
+        {
+            SAL_WARN("sw.ww8", "broken offset, ignoring");
+            return WW8_CP_MAX;
+        }
+    }
+
     // No complex file
-    return m_pWw8Fib->m_fcMin + nCpPos * (*pIsUnicode ? 2 : 1);
+    return m_pWw8Fib->m_fcMin + nCpPos;
 }
 
 //      class WW8ScannerBase
