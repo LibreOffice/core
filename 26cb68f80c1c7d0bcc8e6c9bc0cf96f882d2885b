@@ -22,6 +22,30 @@
       "revId": "26cb68f80c1c7d0bcc8e6c9bc0cf96f882d2885b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f4f35708",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-10-19T13:06:01Z",
+      "side": 1,
+      "message": "_WIN32 is always defined both for Win32 *and* Win64 (https://msdn.microsoft.com/en-us/library/b0084kay). I seem to come across a discussion in our (mailing list|IRC) - I don\u0027t remember specifically - that LO-specific win-detection should be removed in favor of that native define (like commits f060adefba5f67ec20d755cf1d95d49b62686ee5, 937344a0e4dcdd3f805532b6cd43e06cbd362b32, ce43d0ae9279edbf1ad108fe0d8325327a038d49 etc) but I may be wrong.\n\nAs the code is identical for 64- and 32-bit, I suppose that I did it correctly (no special processing for _WIN64 before _WIN32 required).",
+      "parentUuid": "1a430d35_1480e345",
+      "range": {
+        "startLine": 181,
+        "startChar": 14,
+        "endLine": 181,
+        "endChar": 20
+      },
+      "revId": "26cb68f80c1c7d0bcc8e6c9bc0cf96f882d2885b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
