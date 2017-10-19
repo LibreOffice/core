@@ -735,7 +735,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
 
         bool bDimInTabularMode = false;
         if(pDim->GetLayoutInfo())
-            bDimInTabularMode |= (pDim->GetLayoutInfo()->LayoutMode == sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT);
+            bDimInTabularMode = (pDim->GetLayoutInfo()->LayoutMode == sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT);
 
         sheet::DataPilotFieldOrientation eOrient = pDim->GetOrientation();
 
