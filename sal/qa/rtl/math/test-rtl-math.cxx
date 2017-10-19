@@ -236,6 +236,12 @@ public:
         fVal = 12345.6789;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, -3, '.', true);
         CPPUNIT_ASSERT_EQUAL( OUString("1.2E+004"), aRes);
+
+        // Up to 16 digits in automatic format.
+        // Don't round 127193845081118.5 to 127193845081119
+        fVal = 127193845081118.5;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("127193845081118.5"), aRes);
     }
 
     void test_approx() {
