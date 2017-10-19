@@ -250,7 +250,7 @@ void PdfExportTest::testTdf105461()
     CPPUNIT_ASSERT(mpPdfPage);
 
     // Make sure there is a filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObject(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
     int nYellowPathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
@@ -306,7 +306,7 @@ void PdfExportTest::testTdf107868()
     CPPUNIT_ASSERT(mpPdfPage);
 
     // Make sure there is no filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObject(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
     int nWhitePathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
@@ -703,7 +703,7 @@ void PdfExportTest::testTdf108963()
     CPPUNIT_ASSERT(mpPdfPage);
 
     // Make sure there is a filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObject(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
     int nYellowPathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
@@ -716,14 +716,45 @@ void PdfExportTest::testTdf108963()
         if (RGB_COLORDATA(nRed, nGreen, nBlue) == COL_YELLOW)
         {
             ++nYellowPathCount;
-            float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-            FPDFPageObj_GetBounds(pPdfPageObject, &fLeft, &fBottom, &fRight, &fTop);
-            int nWidth = fRight - fLeft;
-            int nHeight = fTop - fBottom;
-            // This was 37 and 20, i.e. the bounding rectangle was much smaller
-            // as the highlight polygon wasn't rotated.
-            CPPUNIT_ASSERT_EQUAL(42, nWidth);
-            CPPUNIT_ASSERT_EQUAL(39, nHeight);
+            // The path described a yellow rectangle, but it was not rotated.
+            int nSegments = FPDFPath_CountSegments(pPdfPageObject);
+            CPPUNIT_ASSERT_EQUAL(5, nSegments);
+            FPDF_PATHSEGMENT pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 0);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_MOVETO, FPDFPathSegment_GetType(pSegment));
+            float fX = 0;
+            float fY = 0;
+            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(245.4), fX);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(244.2), fY);
+            CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+
+            pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 1);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
+            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(275.1), fX);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(267.6), fY);
+            CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+
+            pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 2);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
+            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(287.5), fX);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(251.8), fY);
+            CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+
+            pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 3);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
+            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(257.8), fX);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(228.4), fY);
+            CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+
+            pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 4);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
+            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(245.4), fX);
+            CPPUNIT_ASSERT_EQUAL(static_cast<float>(244.2), fY);
+            CPPUNIT_ASSERT(FPDFPathSegment_GetClose(pSegment));
         }
     }
 
