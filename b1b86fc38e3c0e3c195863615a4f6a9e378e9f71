@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_d49e5bb7",
+        "filename": "svx/source/accessibility/AccessibleShape.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-10-19T12:28:04Z",
+      "side": 1,
+      "message": "i wonder why the mpParent isn\u0027t reset to 0 if it\u0027s deleted when it\u0027s disposed?",
+      "revId": "b1b86fc38e3c0e3c195863615a4f6a9e378e9f71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
