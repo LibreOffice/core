@@ -22,6 +22,30 @@
       "revId": "c810255b04d15062158b7dd1b36e50291f31f0bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b48f0f22",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-19T15:39:15Z",
+      "side": 1,
+      "message": "No. I tried with different values and making it depend on nRoundElems when changing the actual number of elements (i.e. adding one) output fails for other cases adding inaccuracy.",
+      "parentUuid": "1a430d35_f4b437f3",
+      "range": {
+        "startLine": 486,
+        "startChar": 20,
+        "endLine": 486,
+        "endChar": 22
+      },
+      "revId": "c810255b04d15062158b7dd1b36e50291f31f0bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
