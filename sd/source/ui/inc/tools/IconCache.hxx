@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_TOOLS_ICONCACHE_HXX
 
 #include <memory>
-#include "SdGlobalResourceContainer.hxx"
+#include "tools/SdGlobalResourceContainer.hxx"
 #include <vcl/image.hxx>
 
 namespace sd {
