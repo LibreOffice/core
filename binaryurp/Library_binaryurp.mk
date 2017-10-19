@@ -11,6 +11,11 @@ $(eval $(call gb_Library_Library,binaryurp))
 
 $(eval $(call gb_Library_set_componentfile,binaryurp,binaryurp/source/binaryurp))
 
+$(eval $(call gb_Library_set_include,binaryurp, \
+    $$(INCLUDE) \
+    -I$(SRCDIR)/binaryurp/inc \
+))
+
 $(eval $(call gb_Library_use_udk_api,binaryurp))
 
 $(eval $(call gb_Library_use_external,binaryurp,boost_headers))

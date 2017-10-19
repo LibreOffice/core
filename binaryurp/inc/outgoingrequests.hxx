@@ -17,32 +17,41 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BINARYURP_SOURCE_WRITERSTATE_HXX
-#define INCLUDED_BINARYURP_SOURCE_WRITERSTATE_HXX
+#ifndef INCLUDED_BINARYURP_INC_OUTGOINGREQUESTS_HXX
+#define INCLUDED_BINARYURP_INC_OUTGOINGREQUESTS_HXX
 
 #include <sal/config.h>
 
-#include <rtl/byteseq.hxx>
-#include <rtl/ustring.hxx>
-#include <typelib/typedescription.hxx>
+#include <map>
+#include <vector>
 
-#include "cache.hxx"
+#include <osl/mutex.hxx>
+
+namespace binaryurp { struct OutgoingRequest; }
+namespace rtl { class ByteSequence; }
 
 namespace binaryurp {
 
-struct WriterState {
-private:
-    WriterState(const WriterState&) = delete;
-    WriterState& operator=(const WriterState&) = delete;
+class OutgoingRequests {
 public:
-    WriterState():
-        typeCache(cache::size), oidCache(cache::size), tidCache(cache::size) {}
+    OutgoingRequests();
 
-    Cache< com::sun::star::uno::TypeDescription > typeCache;
+    ~OutgoingRequests();
 
-    Cache< OUString > oidCache;
+    void push(rtl::ByteSequence const & tid, OutgoingRequest const & request);
 
-    Cache< rtl::ByteSequence > tidCache;
+    OutgoingRequest top(rtl::ByteSequence const & tid);
+
+    void pop(rtl::ByteSequence const & tid) throw ();
+
+private:
+    OutgoingRequests(const OutgoingRequests&) = delete;
+    OutgoingRequests& operator=(const OutgoingRequests&) = delete;
+
+    typedef std::map< rtl::ByteSequence, std::vector< OutgoingRequest > > Map;
+
+    osl::Mutex mutex_;
+    Map map_;
 };
 
 }

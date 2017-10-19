@@ -17,41 +17,32 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BINARYURP_SOURCE_OUTGOINGREQUESTS_HXX
-#define INCLUDED_BINARYURP_SOURCE_OUTGOINGREQUESTS_HXX
+#ifndef INCLUDED_BINARYURP_INC_WRITERSTATE_HXX
+#define INCLUDED_BINARYURP_INC_WRITERSTATE_HXX
 
 #include <sal/config.h>
 
-#include <map>
-#include <vector>
+#include <rtl/byteseq.hxx>
+#include <rtl/ustring.hxx>
+#include <typelib/typedescription.hxx>
 
-#include <osl/mutex.hxx>
-
-namespace binaryurp { struct OutgoingRequest; }
-namespace rtl { class ByteSequence; }
+#include "cache.hxx"
 
 namespace binaryurp {
 
-class OutgoingRequests {
-public:
-    OutgoingRequests();
-
-    ~OutgoingRequests();
-
-    void push(rtl::ByteSequence const & tid, OutgoingRequest const & request);
-
-    OutgoingRequest top(rtl::ByteSequence const & tid);
-
-    void pop(rtl::ByteSequence const & tid) throw ();
-
+struct WriterState {
 private:
-    OutgoingRequests(const OutgoingRequests&) = delete;
-    OutgoingRequests& operator=(const OutgoingRequests&) = delete;
+    WriterState(const WriterState&) = delete;
+    WriterState& operator=(const WriterState&) = delete;
+public:
+    WriterState():
+        typeCache(cache::size), oidCache(cache::size), tidCache(cache::size) {}
 
-    typedef std::map< rtl::ByteSequence, std::vector< OutgoingRequest > > Map;
+    Cache< com::sun::star::uno::TypeDescription > typeCache;
 
-    osl::Mutex mutex_;
-    Map map_;
+    Cache< OUString > oidCache;
+
+    Cache< rtl::ByteSequence > tidCache;
 };
 
 }

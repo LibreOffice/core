@@ -9,6 +9,11 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,binaryurp_test-unmarshal))
 
+$(eval $(call gb_CppunitTest_set_include,binaryurp_test-unmarshal, \
+    $$(INCLUDE) \
+    -I$(SRCDIR)/binaryurp/inc \
+))
+
 $(eval $(call gb_CppunitTest_use_external,binaryurp_test-unmarshal,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,binaryurp_test-unmarshal,\
