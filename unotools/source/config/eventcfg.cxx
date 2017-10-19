@@ -76,7 +76,7 @@ static o3tl::enumarray<GlobalEventId, const char*> pEventAsciiNames =
 "OnStorageChanged"
 };
 
-typedef std::unordered_map< OUString, OUString, OUStringHash > EventBindingHash;
+typedef std::unordered_map< OUString, OUString > EventBindingHash;
 typedef std::vector< css::uno::WeakReference< css::frame::XFrame > > FrameVector;
 typedef o3tl::enumarray< GlobalEventId, OUString > SupportedEventsVector;
 

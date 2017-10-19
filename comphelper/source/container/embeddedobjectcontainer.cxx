@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
-typedef std::unordered_map<OUString, uno::Reference <embed::XEmbeddedObject>, OUStringHash>
+typedef std::unordered_map<OUString, uno::Reference <embed::XEmbeddedObject>>
 EmbeddedObjectContainerNameMap;
 
 struct EmbedImpl

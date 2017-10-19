@@ -532,7 +532,7 @@ StyleTreeArr_Impl& MakeTree_Impl(StyleTreeArr_Impl& rArr)
         ::comphelper::getProcessComponentContext(),
         Application::GetSettings().GetLanguageTag().getLocale());
 
-    std::unordered_map<OUString, StyleTree_Impl*, OUStringHash> styleFinder;
+    std::unordered_map<OUString, StyleTree_Impl*> styleFinder;
     styleFinder.reserve(rArr.size());
     for (const auto& pEntry : rArr)
     {

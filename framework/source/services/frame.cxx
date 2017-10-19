@@ -419,7 +419,7 @@ private:
 
     WindowCommandDispatch*                                                  m_pWindowCommandDispatch;
 
-    typedef std::unordered_map<OUString, css::beans::Property, OUStringHash> TPropInfoHash;
+    typedef std::unordered_map<OUString, css::beans::Property> TPropInfoHash;
     TPropInfoHash m_lProps;
 
     ListenerHash m_lSimpleChangeListener;

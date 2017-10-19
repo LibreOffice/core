@@ -41,7 +41,7 @@ private:
         size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
     typedef std::unordered_map <PropertyPair, sal_Int32, PropertyPairHash> PropertyPairHashMap;
-    typedef std::unordered_map<OUString, sal_Int32, OUStringHash> PropertyHashMap;
+    typedef std::unordered_map<OUString, sal_Int32> PropertyHashMap;
 
     PropertyHashMap     aPropHashMap;
     PropertyPairHashMap aPropPairHashMap;

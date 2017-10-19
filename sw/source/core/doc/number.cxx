@@ -152,7 +152,7 @@ void SwNumRule::RemoveTextNode( SwTextNode& rTextNode )
     }
 }
 
-void SwNumRule::SetNumRuleMap(std::unordered_map<OUString, SwNumRule *, OUStringHash> *
+void SwNumRule::SetNumRuleMap(std::unordered_map<OUString, SwNumRule *> *
                               pNumRuleMap)
 {
     mpNumRuleMap = pNumRuleMap;

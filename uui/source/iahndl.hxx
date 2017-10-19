@@ -69,7 +69,7 @@ struct InteractionHandlerData
 
 typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
 
-typedef std::unordered_map< OUString, OUString, OUStringHash >    StringHashMap;
+typedef std::unordered_map< OUString, OUString >    StringHashMap;
 
 class UUIInteractionHelper
 {

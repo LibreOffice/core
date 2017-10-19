@@ -135,13 +135,13 @@ public:
 };
 
 /// Mapping numeric Language code <-> XML Element
-typedef std::unordered_map<OString, XMLElement*, OStringHash> LangHashMap;
+typedef std::unordered_map<OString, XMLElement*> LangHashMap;
 
 /// Mapping XML Element string identifier <-> Language Map
-typedef std::unordered_map<OString, LangHashMap*, OStringHash> XMLHashMap;
+typedef std::unordered_map<OString, LangHashMap*> XMLHashMap;
 
 /// Mapping XML tag names <-> have localizable strings
-typedef std::unordered_map<OString, sal_Bool, OStringHash> TagMap;
+typedef std::unordered_map<OString, sal_Bool> TagMap;
 
 /** Holds information of a XML file, is root node of tree
  */

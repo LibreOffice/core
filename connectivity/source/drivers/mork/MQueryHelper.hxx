@@ -146,7 +146,7 @@ namespace connectivity
         class MQueryHelperResultEntry
         {
         private:
-            typedef std::unordered_map< OString, OUString, OStringHash >  FieldMap;
+            typedef std::unordered_map< OString, OUString >  FieldMap;
 
             FieldMap                m_Fields;
 

@@ -100,7 +100,7 @@ static const DispatchInfo SupportedCommandsArray[] =
     { nullptr                         ,   0                               , false }
 };
 
-typedef std::unordered_map< OUString, CacheDispatchInfo, OUStringHash > CmdToInfoCache;
+typedef std::unordered_map< OUString, CacheDispatchInfo > CmdToInfoCache;
 
 const CmdToInfoCache& GetCommandToInfoCache()
 {

@@ -38,7 +38,7 @@ public:
     void BroadcastModuleUpdate(const OUString& aModuleName);
 
 private:
-    typedef std::unordered_map< OUString, bool, OUStringHash > NameBoolMap;
+    typedef std::unordered_map< OUString, bool > NameBoolMap;
     NameBoolMap mhFuncToVolatile;
     css::uno::Reference< css::container::XContainerListener > mxContainerListener;
 

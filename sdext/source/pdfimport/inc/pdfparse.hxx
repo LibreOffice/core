@@ -181,7 +181,7 @@ struct PDFArray : public PDFContainer
 
 struct PDFDict : public PDFContainer
 {
-    typedef std::unordered_map<OString,PDFEntry*,OStringHash> Map;
+    typedef std::unordered_map<OString,PDFEntry*> Map;
     Map m_aMap;
 
     PDFDict() {}

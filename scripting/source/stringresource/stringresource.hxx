@@ -53,16 +53,14 @@ namespace stringresource
 typedef std::unordered_map
 <
     OUString,
-    OUString,
-    OUStringHash
+    OUString
 >
 IdToStringMap;
 
 typedef std::unordered_map
 <
     OUString,
-    sal_Int32,
-    OUStringHash
+    sal_Int32
 >
 IdToIndexMap;
 

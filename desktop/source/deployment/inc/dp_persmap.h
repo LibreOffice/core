@@ -28,7 +28,7 @@ namespace dp_misc
 {
 
 typedef std::unordered_map<
-    OString, OString, OStringHash > t_string2string_map;
+    OString, OString > t_string2string_map;
 
 // Class to read obsolete registered extensions
 // should be removed for LibreOffice 4.0

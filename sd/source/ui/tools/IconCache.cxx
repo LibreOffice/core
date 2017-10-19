@@ -40,7 +40,7 @@ private:
     */
     static IconCache* s_pIconCache;
 
-    typedef std::unordered_map<OUString, Image, OUStringHash> ImageContainer;
+    typedef std::unordered_map<OUString, Image> ImageContainer;
     ImageContainer maContainer;
 
     Image GetIcon(const OUString& rResourceId);

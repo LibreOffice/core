@@ -14,7 +14,7 @@
 
 #include <unordered_set>
 
-typedef std::unordered_set<OUString, OUStringHash> ScDPUniqueStringSet;
+typedef std::unordered_set<OUString> ScDPUniqueStringSet;
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,7 +62,7 @@ public:
 
 class ScXMLDataPilotTableContext : public ScXMLImportContext
 {
-    typedef std::unordered_map<OUString, OUString, OUStringHash> SelectedPagesType;
+    typedef std::unordered_map<OUString, OUString> SelectedPagesType;
 
     struct GrandTotalItem
     {

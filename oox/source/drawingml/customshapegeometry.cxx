@@ -86,7 +86,7 @@ static const FormularCommandNameTable pFormularCommandNameTable[] =
     { "val",    FC_VAL }
 
 };
-typedef std::unordered_map< OUString, FormularCommand, OUStringHash > FormulaCommandHMap;
+typedef std::unordered_map< OUString, FormularCommand > FormulaCommandHMap;
 
 static const FormulaCommandHMap* pCommandHashMap;
 

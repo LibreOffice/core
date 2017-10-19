@@ -674,7 +674,7 @@ private:
         size_t operator()(const ScDPItemData& r) const;
     };
     typedef std::unordered_set<ScDPItemData, MemberHash> VisibleMemberType;
-    typedef std::unordered_map<OUString, VisibleMemberType, OUStringHash> DimMemberType;
+    typedef std::unordered_map<OUString, VisibleMemberType> DimMemberType;
     DimMemberType maDimensions;
 
     ScDPSource* mpSource;

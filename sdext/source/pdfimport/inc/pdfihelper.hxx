@@ -43,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace task
 
 namespace pdfi
 {
-    typedef std::unordered_map< OUString, OUString, OUStringHash > PropertyMap;
+    typedef std::unordered_map< OUString, OUString > PropertyMap;
     typedef sal_Int32 ImageId;
 
     /// What to do with a polygon. values can be ORed together

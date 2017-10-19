@@ -166,7 +166,7 @@ struct FieldConversion
     FieldId             eFieldId;
 };
 
-typedef std::unordered_map<OUString, FieldConversion, OUStringHash> FieldConversionMap_t;
+typedef std::unordered_map<OUString, FieldConversion> FieldConversionMap_t;
 
 uno::Any FloatingTableInfo::getPropertyValue(const OUString &propertyName)
 {

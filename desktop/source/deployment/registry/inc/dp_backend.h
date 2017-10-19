@@ -208,8 +208,7 @@ class PackageRegistryBackend
     //of bindPackage calls which are costly. Therefore we keep hard references in
     //the map now.
     typedef std::unordered_map<
-        OUString, css::uno::Reference<css::deployment::XPackage>,
-        OUStringHash > t_string2ref;
+        OUString, css::uno::Reference<css::deployment::XPackage> > t_string2ref;
     t_string2ref m_bound;
 
 protected:

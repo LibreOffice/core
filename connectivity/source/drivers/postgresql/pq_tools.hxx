@@ -125,11 +125,7 @@ css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str );
 css::uno::Sequence< OUString > convertMappedIntArray2StringArray(
     const Int2StringMap &map, const css::uno::Sequence< sal_Int32> &source );
 
-typedef std::unordered_map
-<
-    OString,
-    OString,
-    OStringHash > String2StringMap;
+typedef std::unordered_map< OString, OString > String2StringMap;
 
 OUString querySingleValue(
     const css::uno::Reference< css::sdbc::XConnection > &connection,

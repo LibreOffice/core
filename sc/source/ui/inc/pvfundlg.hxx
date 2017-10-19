@@ -56,7 +56,7 @@ private:
 
 class ScDPFunctionDlg : public ModalDialog
 {
-    typedef std::unordered_map< OUString, OUString, OUStringHash > NameMapType;
+    typedef std::unordered_map< OUString, OUString > NameMapType;
 public:
     explicit            ScDPFunctionDlg( vcl::Window* pParent, const ScDPLabelDataVector& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
@@ -182,7 +182,7 @@ private:
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
 
-    typedef std::unordered_map<OUString, ScDPName, OUStringHash> NameMapType;
+    typedef std::unordered_map<OUString, ScDPName> NameMapType;
     NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
@@ -209,7 +209,7 @@ private:
     VclPtr<ListBox>            mpLbDims;
     VclPtr<OKButton>           mpBtnOk;
 
-    typedef std::unordered_map<OUString, long, OUStringHash> DimNameIndexMap;
+    typedef std::unordered_map<OUString, long> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;
     ScDPObject&         mrDPObj;
 };

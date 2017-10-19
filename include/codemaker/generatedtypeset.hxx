@@ -61,7 +61,7 @@ private:
     GeneratedTypeSet(GeneratedTypeSet &) = delete;
     void operator =(const GeneratedTypeSet&) = delete;
 
-    std::unordered_set< OString, OStringHash > m_set;
+    std::unordered_set< OString > m_set;
 };
 
 }

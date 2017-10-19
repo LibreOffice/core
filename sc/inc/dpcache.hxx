@@ -43,7 +43,7 @@ struct ScDPNumGroupInfo;
 class SC_DLLPUBLIC ScDPCache
 {
 public:
-    typedef std::unordered_set<OUString, OUStringHash> StringSetType;
+    typedef std::unordered_set<OUString> StringSetType;
     typedef mdds::flat_segment_tree<SCROW, bool> EmptyRowsType;
     typedef std::vector<ScDPItemData> ScDPItemDataVec;
     typedef std::set<ScDPObject*> ScDPObjectSet;

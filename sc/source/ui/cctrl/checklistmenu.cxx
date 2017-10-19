@@ -1637,7 +1637,7 @@ void ScCheckListBox::Init()
     SetNodeDefaultImages();
 }
 
-void ScCheckListBox::GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordered_set<OUString, OUStringHash>& vOut,
+void ScCheckListBox::GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordered_set<OUString>& vOut,
         OUString& rLabel )
 {
     if (GetCheckButtonState(pEntry) == SvButtonState::Checked)
@@ -1669,9 +1669,9 @@ void ScCheckListBox::GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordere
     }
 }
 
-std::unordered_set<OUString, OUStringHash> ScCheckListBox::GetAllChecked()
+std::unordered_set<OUString> ScCheckListBox::GetAllChecked()
 {
-    std::unordered_set<OUString, OUStringHash> vResults(0);
+    std::unordered_set<OUString> vResults(0);
     sal_uInt32 nRootPos = 0;
     SvTreeListEntry* pEntry = GetEntry(nRootPos);
     while (pEntry)
@@ -1955,7 +1955,7 @@ bool ScCheckListMenuWindow::isAllSelected() const
 void ScCheckListMenuWindow::getResult(ResultType& rResult)
 {
     ResultType aResult;
-    std::unordered_set<OUString, OUStringHash> vCheckeds = maChecks->GetAllChecked();
+    std::unordered_set<OUString> vCheckeds = maChecks->GetAllChecked();
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
     {

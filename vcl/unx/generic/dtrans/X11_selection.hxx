@@ -151,7 +151,7 @@ namespace x11 {
         >,
         public SelectionAdaptor
     {
-        static std::unordered_map< OUString, SelectionManager*, OUStringHash >& getInstances();
+        static std::unordered_map< OUString, SelectionManager* >& getInstances();
 
         // for INCR type selection transfer
         // INCR protocol is used if the data cannot
@@ -345,7 +345,7 @@ namespace x11 {
         // caching for atoms
         std::unordered_map< Atom, OUString >
                                     m_aAtomToString;
-        std::unordered_map< OUString, Atom, OUStringHash >
+        std::unordered_map< OUString, Atom >
                                     m_aStringToAtom;
 
         // the registered selections

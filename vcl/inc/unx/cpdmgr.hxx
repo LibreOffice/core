@@ -71,8 +71,8 @@ class CPDManager : public PrinterInfoManager
     std::vector<std::pair<std::string, gchar*>> m_tBackends;
     std::unordered_map< std::string, GDBusProxy * > m_pBackends;
     std::unordered_map< FILE*, OString, FPtrHash > m_aSpoolFiles;
-    std::unordered_map< OUString, CPDPrinter *, OUStringHash > m_aCPDDestMap;
-    std::unordered_map< OUString, PPDContext, OUStringHash > m_aDefaultContexts;
+    std::unordered_map< OUString, CPDPrinter * > m_aCPDDestMap;
+    std::unordered_map< OUString, PPDContext > m_aDefaultContexts;
 #endif
     CPDManager();
     // Function called when CPDManager is destroyed

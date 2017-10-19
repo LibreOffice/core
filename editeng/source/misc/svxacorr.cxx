@@ -2634,7 +2634,7 @@ struct CompareSvxAutocorrWordList
 namespace {
 
 typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> AutocorrWordSetType;
-typedef std::unordered_map<OUString, SvxAutocorrWord*, OUStringHash> AutocorrWordHashType;
+typedef std::unordered_map<OUString, SvxAutocorrWord*> AutocorrWordHashType;
 
 }
 

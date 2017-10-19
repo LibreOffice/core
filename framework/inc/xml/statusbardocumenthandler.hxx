@@ -88,8 +88,7 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
         OUString getErrorLineString();
 
         class StatusBarHashMap : public std::unordered_map<OUString,
-                                                           StatusBar_XML_Entry,
-                                                           OUStringHash >
+                                                           StatusBar_XML_Entry >
         {
         };
 

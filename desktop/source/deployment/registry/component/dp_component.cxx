@@ -265,8 +265,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     bool m_unorc_modified;
     bool bSwitchedRdbFiles;
 
-    typedef std::unordered_map< OUString, Reference<XInterface>,
-                                OUStringHash > t_string2object;
+    typedef std::unordered_map< OUString, Reference<XInterface> > t_string2object;
     t_string2object m_backendObjects;
 
     // PackageRegistryBackend

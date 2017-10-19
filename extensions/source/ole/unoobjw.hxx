@@ -78,15 +78,13 @@ struct MemberInfo
 typedef std::unordered_map
 <
     OUString,
-    DISPID,
-    OUStringHash
+    DISPID
 > NameToIdMap;
 
 typedef std::unordered_map
 <
     OUString,
-    bool,
-    OUStringHash
+    bool
 > BadNameMap;
 
 typedef std::unordered_map

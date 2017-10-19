@@ -102,7 +102,7 @@ bool WinSalSystem::initMonitors()
         DISPLAY_DEVICEW aDev;
         aDev.cb = sizeof( aDev );
         DWORD nDevice = 0;
-        std::unordered_map< OUString, int, OUStringHash > aDeviceStringCount;
+        std::unordered_map< OUString, int > aDeviceStringCount;
         while( EnumDisplayDevicesW( nullptr, nDevice++, &aDev, 0 ) )
         {
             if( (aDev.StateFlags & DISPLAY_DEVICE_ACTIVE)
@@ -125,7 +125,7 @@ bool WinSalSystem::initMonitors()
         EnumDisplayMonitors( aDesktopRC, nullptr, ImplEnumMonitorProc, reinterpret_cast<LPARAM>(this) );
 
         // append monitor numbers to name strings
-        std::unordered_map< OUString, int, OUStringHash > aDevCount( aDeviceStringCount );
+        std::unordered_map< OUString, int > aDevCount( aDeviceStringCount );
         unsigned int nMonitorCount = m_aMonitors.size();
         for( unsigned int i = 0; i < nMonitorCount; i++ )
         {

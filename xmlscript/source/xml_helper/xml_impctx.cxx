@@ -57,7 +57,7 @@ OUString getImplementationName_DocumentHandlerImpl()
     return OUString( "com.sun.star.comp.xml.input.SaxDocumentHandler" );
 }
 
-typedef std::unordered_map< OUString, sal_Int32, OUStringHash > t_OUString2LongMap;
+typedef std::unordered_map< OUString, sal_Int32 > t_OUString2LongMap;
 
 struct PrefixEntry
 {
@@ -68,7 +68,7 @@ struct PrefixEntry
 };
 
 typedef std::unordered_map<
-    OUString, std::unique_ptr<PrefixEntry>, OUStringHash > t_OUString2PrefixMap;
+    OUString, std::unique_ptr<PrefixEntry> > t_OUString2PrefixMap;
 
 struct ElementEntry
 {

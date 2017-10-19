@@ -147,7 +147,7 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
     class SwPoolFormatList
     {
         std::vector<OUString> maImpl;
-        typedef std::unordered_map<OUString, sal_uInt32, OUStringHash> UniqueHash;
+        typedef std::unordered_map<OUString, sal_uInt32> UniqueHash;
         UniqueHash maUnique;
         void rehash();
     public:

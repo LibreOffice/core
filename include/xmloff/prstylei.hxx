@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-typedef std::unordered_set<OUString, OUStringHash> OldFillStyleDefinitionSet;
+typedef std::unordered_set<OUString> OldFillStyleDefinitionSet;
 
 class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 {

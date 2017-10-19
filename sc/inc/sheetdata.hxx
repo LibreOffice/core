@@ -104,7 +104,7 @@ struct ScLoadedNamespaceEntry
 
 class ScSheetSaveData
 {
-    std::unordered_set<OUString, OUStringHash>  maInitialPrefixes;
+    std::unordered_set<OUString>  maInitialPrefixes;
     std::vector<ScLoadedNamespaceEntry>              maLoadedNamespaces;
 
     std::vector<ScCellStyleEntry> maCellStyles;

@@ -245,7 +245,7 @@ namespace fileaccess
             css::uno::Reference< css::beans::XPropertyAccess >        xA;
         };
 
-        typedef std::unordered_map< OUString,UnqPathData,OUStringHash > ContentMap;
+        typedef std::unordered_map< OUString,UnqPathData > ContentMap;
 
         TaskManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                FileProvider* pProvider, bool bWithConfig );

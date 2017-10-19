@@ -69,7 +69,7 @@ typedef ::cppu::WeakImplHelper<
 
 class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
 {
-    typedef std::unordered_map < OUString, sal_Int32, OUStringHash > NameContainerNameMap;
+    typedef std::unordered_map < OUString, sal_Int32 > NameContainerNameMap;
 
     NameContainerNameMap mHashMap;
     std::vector< OUString > mNames;

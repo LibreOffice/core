@@ -612,8 +612,7 @@ namespace {
 
 struct bootstrap_map {
     typedef std::unordered_map<
-        rtl::OUString, Bootstrap_Impl *,
-        rtl::OUStringHash > t;
+        rtl::OUString, Bootstrap_Impl * > t;
 
     bootstrap_map(const bootstrap_map&) = delete;
     bootstrap_map& operator=(const bootstrap_map&) = delete;

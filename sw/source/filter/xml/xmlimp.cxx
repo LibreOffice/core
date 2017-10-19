@@ -1065,9 +1065,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    std::unordered_set< OUString, OUStringHash > aExcludeAlways;
+    std::unordered_set< OUString > aExcludeAlways;
     aExcludeAlways.insert("LinkUpdateMode");
-    std::unordered_set< OUString, OUStringHash > aExcludeWhenNotLoadingUserSettings;
+    std::unordered_set< OUString > aExcludeWhenNotLoadingUserSettings;
     aExcludeWhenNotLoadingUserSettings.insert("ForbiddenCharacters");
     aExcludeWhenNotLoadingUserSettings.insert("IsKernAsianPunctuation");
     aExcludeWhenNotLoadingUserSettings.insert("CharacterCompressionType");
