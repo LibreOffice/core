@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f4b437f3",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-10-19T14:32:57Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this also be nRoundElems-1?",
+      "range": {
+        "startLine": 486,
+        "startChar": 20,
+        "endLine": 486,
+        "endChar": 22
+      },
+      "revId": "c810255b04d15062158b7dd1b36e50291f31f0bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
