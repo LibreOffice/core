@@ -2860,6 +2860,9 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
+    if (AllSettings::GetLayoutRTL())
+        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
+
     pThis->CallCallback( (pEvent->type == GDK_ENTER_NOTIFY) ? SalEvent::MouseMove : SalEvent::MouseLeave, &aEvent );
 
     return true;
