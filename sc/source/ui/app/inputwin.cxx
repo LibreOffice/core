@@ -1108,13 +1108,7 @@ void ScTextWnd::StartEditEngine()
 
     ScInputHandler* pHdl = mpViewShell->GetInputHandler();
     if (pHdl)
-    {
-        bool bStarting = !pHdl->IsEditMode();
-        pHdl->SetMode(SC_INPUT_TOP);
-        if (bStarting)
-            // necessary to sync SvxAutoCorrect behavior
-            pHdl->MergeLanguageAttributes( *mpEditEngine);
-    }
+        pHdl->SetMode(SC_INPUT_TOP, nullptr, mpEditEngine.get());
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
