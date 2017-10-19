@@ -2062,9 +2062,13 @@ bool WW8PLCFspecial::GetData(long nInIdx, WW8_CP& rPos, void*& rpValue) const
 WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
     WW8_CP nStartPos) : pPLCF_PosArray(nullptr), nIdx(0), nStru(nStruct)
 {
-    OSL_ENSURE( nPLCF, "WW8PLCF: nPLCF is zero!" );
-
-    nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
+    if (nPLCF < 0)
+    {
+        SAL_WARN("sw.ww8", "broken WW8PLCF, ignoring");
+        nPLCF = 0;
+    }
+    else
+        nIMax = (nPLCF - 4) / (4 + nStruct);
 
     ReadPLCF(rSt, nFilePos, nPLCF);
 
