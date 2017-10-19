@@ -43,6 +43,7 @@ private:
     void createPlugins( std::set< std::string > rewriters );
     DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
     CompilerInstance& compiler;
+    StringRef const mainFileName;
     Rewriter rewriter;
     std::set< SourceLocation > removals;
     std::string scope;

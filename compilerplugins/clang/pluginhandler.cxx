@@ -55,6 +55,7 @@ static bool unitTestMode = false;
 
 PluginHandler::PluginHandler( CompilerInstance& compiler, const std::vector< std::string >& args )
     : compiler( compiler )
+    , mainFileName(compiler.getASTContext().getSourceManager().getFileEntryForID(compiler.getASTContext().getSourceManager().getMainFileID())->getName())
     , rewriter( compiler.getSourceManager(), compiler.getLangOpts())
     , scope( "mainfile" )
     , warningsAsErrors( false )
@@ -120,6 +121,10 @@ void PluginHandler::createPlugins( std::set< std::string > rewriters )
     for( int i = 0; i < pluginCount; ++i )
     {
         const char* name = plugins[i].optionName;
+        // When in unit-test mode, ignore plugins whose names don't match the filename of the test,
+        // so that we only generate warnings for the plugin that we want to test.
+        if (unitTestMode && mainFileName.find(plugins[ i ].optionName) == StringRef::npos)
+            continue;
         if( rewriters.erase( name ) != 0 )
             plugins[ i ].object = plugins[ i ].create( Plugin::InstantiationData { name, *this, compiler, &rewriter } );
         else if( plugins[ i ].byDefault )
@@ -179,7 +184,6 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
 {
     if( context.getDiagnostics().hasErrorOccurred())
         return;
-    StringRef const mainFileName = context.getSourceManager().getFileEntryForID(context.getSourceManager().getMainFileID())->getName();
     if (mainFileName.endswith(".ii"))
     {
         report(DiagnosticsEngine::Fatal,
@@ -191,10 +195,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
     {
         if( plugins[ i ].object != NULL )
         {
-            // When in unit-test mode, ignore plugins whose names don't match the filename of the test,
-            // so that we only generate warnings for the plugin that we want to test.
-            if (!unitTestMode || mainFileName.find(plugins[ i ].optionName) != StringRef::npos)
-                plugins[ i ].object->run();
+            plugins[ i ].object->run();
         }
     }
 #if defined _WIN32
