@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_140d4337",
+        "filename": "sd/qa/uitest/tdf98980/tdf98980.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-19T11:04:18Z",
+      "side": 1,
+      "message": "Some code pointers:\n* getDialog ends up here - sfx2/source/sidebar/Panel.cxx in Panel::GetElementWindow()\n* so if that is null, needs initialisation\n*",
+      "revId": "e09fac4d1d432b3d93674276ac464ac7db899f2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
