@@ -117,8 +117,6 @@ protected:
     }
 };
 
-#if !defined(_WIN32)
-
 DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")
 {
     text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");
@@ -1368,8 +1366,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")
     xTextCursor->gotoRange(xTextRange->getStart(),false);
     xTextCursor->gotoRange(xTextRange->getEnd(),true);
     OUString aTocString(xTextCursor->getString());
-    aTocString = aTocString.copy(256);
-    CPPUNIT_ASSERT(aTocString.startsWithIgnoreAsciiCase( "Heading 15.1:\t15" ) );
+
+    // heading 15 on the 15th page
+    aTocString = aTocString.copy(aTocString.indexOf("Heading 15.1:\t") + strlen("Heading 15.1:\t"));
+    CPPUNIT_ASSERT(aTocString.startsWithIgnoreAsciiCase( "15" ) );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo73389,"fdo73389.docx")
@@ -1890,8 +1890,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87924, "tdf87924.docx")
     // This was -270, the text rotation angle was set when it should not be rotated.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
 }
-
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testIndents, "indents.docx")
 {
