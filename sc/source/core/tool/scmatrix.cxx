@@ -336,17 +336,30 @@ private:
     void CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const;
 };
 
+static bool bElementsMaxFetched;
+static size_t nElementsMax;
+
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR) :
-    maMat(nR, nC), maMatFlag(nR, nC), pErrorInterpreter(nullptr) {}
+    maMat(nR, nC), maMatFlag(nR, nC), pErrorInterpreter(nullptr)
+{
+    nElementsMax -= GetElementCount();
+}
 
 ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal) :
-    maMat(nR, nC, fInitVal), maMatFlag(nR, nC), pErrorInterpreter(nullptr) {}
+    maMat(nR, nC, fInitVal), maMatFlag(nR, nC), pErrorInterpreter(nullptr)
+{
+    nElementsMax -= GetElementCount();
+}
 
 ScMatrixImpl::ScMatrixImpl( size_t nC, size_t nR, const std::vector<double>& rInitVals ) :
-    maMat(nR, nC, rInitVals.begin(), rInitVals.end()), maMatFlag(nR, nC), pErrorInterpreter(nullptr) {}
+    maMat(nR, nC, rInitVals.begin(), rInitVals.end()), maMatFlag(nR, nC), pErrorInterpreter(nullptr)
+{
+    nElementsMax -= GetElementCount();
+}
 
 ScMatrixImpl::~ScMatrixImpl() COVERITY_NOEXCEPT_FALSE
 {
+    nElementsMax += GetElementCount();
     Clear();
 }
 
@@ -358,6 +371,7 @@ void ScMatrixImpl::Clear()
 
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {
+    nElementsMax += GetElementCount();
     if (ScMatrix::IsSizeAllocatable( nC, nR))
     {
         maMat.resize(nR, nC);
@@ -369,10 +383,12 @@ void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
         maMat.resize(1, 1, CreateDoubleError( FormulaError::MatrixSize));
         maMatFlag.resize(1, 1);
     }
+    nElementsMax -= GetElementCount();
 }
 
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR, double fVal)
 {
+    nElementsMax += GetElementCount();
     if (ScMatrix::IsSizeAllocatable( nC, nR))
     {
         maMat.resize(nR, nC, fVal);
@@ -384,6 +400,7 @@ void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR, double fVal)
         maMat.resize(1, 1, CreateDoubleError( FormulaError::StackOverflow));
         maMatFlag.resize(1, 1);
     }
+    nElementsMax -= GetElementCount();
 }
 
 void ScMatrixImpl::SetErrorInterpreter( ScInterpreter* p)
@@ -2761,8 +2778,12 @@ bool ScMatrix::IsSizeAllocatable( SCSIZE nC, SCSIZE nR )
     if (!nC || !nR)
         return true;
 
-    static size_t nElementsMax = std::getenv("SC_MAX_MATRIX_ELEMENTS") ? std::atoi(std::getenv("SC_MAX_MATRIX_ELEMENTS"))
+    if (!bElementsMaxFetched)
+    {
+        nElementsMax = std::getenv("SC_MAX_MATRIX_ELEMENTS") ? std::atoi(std::getenv("SC_MAX_MATRIX_ELEMENTS"))
                                                                        : ScMatrix::GetElementsMax();
+        bElementsMaxFetched = true;
+    }
 
     if (nC > (nElementsMax / nR))
     {
