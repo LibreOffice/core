@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_b4a1cfab",
+        "filename": "sfx2/source/sidebar/ResourceManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-10-19T14:49:40Z",
+      "side": 1,
+      "message": "In gdb, if I \u0027p aLastActive\u0027 now, it shows me 1 entry (or in general N entries, if something else than default has been saved already)",
+      "revId": "feb70bdb02e5aab0df8a7e8b205b0982e7338a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d4a49bba",
+        "filename": "sfx2/source/sidebar/ResourceManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-10-19T14:49:40Z",
+      "side": 1,
+      "message": "Yet this loop goes into 2 (or N+1) iterations",
+      "revId": "feb70bdb02e5aab0df8a7e8b205b0982e7338a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_f4ab5787",
+        "filename": "sfx2/source/sidebar/ResourceManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-10-19T14:49:40Z",
+      "side": 1,
+      "message": "and in 1st iteration, this variable shows garbage content\n\nSo what am I doing wrong here?",
+      "revId": "feb70bdb02e5aab0df8a7e8b205b0982e7338a85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
