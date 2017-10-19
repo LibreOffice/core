@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_1480e345",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-10-19T12:52:04Z",
+      "side": 1,
+      "message": "What about _WIN64? If both know _BitScanForward() and no distinction is needed then this should be\n\n #elif defined WNT\n\n(which is our common general Windows define) to not give a misleading impression, otherwise a separate\n\n #elif defined _WIN64\n\ncase *before* the _WIN32 one.",
+      "range": {
+        "startLine": 181,
+        "startChar": 14,
+        "endLine": 181,
+        "endChar": 20
+      },
+      "revId": "26cb68f80c1c7d0bcc8e6c9bc0cf96f882d2885b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
