@@ -776,7 +776,7 @@ void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rFie
     {
         if( !bIns )             // if list is present and deleted
             return;             // don't do a thing
-        pFieldSortLst = new SetGetExpFields;
+        pFieldSortLst.reset(new SetGetExpFields);
     }
 
     if( bIns )      // insert anew:
@@ -805,8 +805,7 @@ void SwDocUpdateField::MakeFieldList( SwDoc& rDoc, bool bAll, int eGetMode )
 void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
 {
     // new version: walk all fields of the attribute pool
-    delete pFieldSortLst;
-    pFieldSortLst = new SetGetExpFields;
+    pFieldSortLst.reset(new SetGetExpFields);
 
     // consider and unhide sections
     //     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
@@ -1104,8 +1103,8 @@ void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
         if( !pFnd )
         {
             SwCalcFieldType* pNew = new SwCalcFieldType( sFieldName, &rType );
-            pNew->pNext.reset( aFieldTypeTable[ n ] );
-            aFieldTypeTable[ n ] = pNew;
+            pNew->pNext.reset( aFieldTypeTable[ n ].release() );
+            aFieldTypeTable[ n ].reset(pNew);
         }
     }
 }
@@ -1134,14 +1133,13 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
         SwHash* pFnd = Find( sFieldName, GetFieldTypeTable(), TBLSZ, &n );
         if( pFnd )
         {
-            if( aFieldTypeTable[ n ] == pFnd )
+            if( aFieldTypeTable[ n ].get() == pFnd )
             {
-                aFieldTypeTable[ n ] = static_cast<SwCalcFieldType*>(pFnd->pNext.release());
-                delete pFnd;
+                aFieldTypeTable[ n ].reset(static_cast<SwCalcFieldType*>(pFnd->pNext.release()));
             }
             else
             {
-                SwHash* pPrev = aFieldTypeTable[ n ];
+                SwHash* pPrev = aFieldTypeTable[ n ].get();
                 while( pPrev->pNext.get() != pFnd )
                     pPrev = pPrev->pNext.get();
                 pPrev->pNext = std::move(pFnd->pNext);
@@ -1152,23 +1150,16 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
 }
 
 SwDocUpdateField::SwDocUpdateField(SwDoc* pDoc)
-    : pFieldSortLst(nullptr)
-    , nNodes(0)
+    : nNodes(0)
     , nFieldLstGetMode(0)
     , pDocument(pDoc)
     , bInUpdateFields(false)
     , bFieldsDirty(false)
-
 {
-    memset( aFieldTypeTable, 0, sizeof( aFieldTypeTable ) );
 }
 
 SwDocUpdateField::~SwDocUpdateField()
 {
-    delete pFieldSortLst;
-
-    for(SwCalcFieldType* p : aFieldTypeTable)
-        delete p;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

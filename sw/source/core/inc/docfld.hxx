@@ -24,6 +24,7 @@
 #include <doc.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <memory>
 
 class SwTextField;
 class SwIndex;
@@ -131,8 +132,8 @@ const int GETFLD_EXPAND     = 2;
 
 class SwDocUpdateField
 {
-    SetGetExpFields* pFieldSortLst;    // current field list for calculation
-    SwCalcFieldType*  aFieldTypeTable[ TBLSZ ];
+    std::unique_ptr<SetGetExpFields> pFieldSortLst;    // current field list for calculation
+    std::unique_ptr<SwCalcFieldType> aFieldTypeTable[ TBLSZ ];
 
     sal_uLong nNodes;               // if the node count is different
     sal_uInt8 nFieldLstGetMode;
@@ -149,7 +150,7 @@ public:
     SwDocUpdateField(SwDoc* pDocument);
     ~SwDocUpdateField();
 
-    const SetGetExpFields* GetSortLst() const { return pFieldSortLst; }
+    const SetGetExpFields* GetSortLst() const { return pFieldSortLst.get(); }
 
     void MakeFieldList( SwDoc& rDoc, bool bAll, int eGetMode );
 
