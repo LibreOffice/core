@@ -619,7 +619,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
     if( !xRet.is() )
     {
-        const std::vector<sd::FrameView*> &rList = mpDoc->GetFrameViewList();
+        const std::vector<std::unique_ptr<sd::FrameView>> &rList = mpDoc->GetFrameViewList();
 
         if( !rList.empty() )
         {
@@ -631,7 +631,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
             {
                 for( sal_uInt32 i = 0, n = rList.size(); i < n; i++ )
                 {
-                    ::sd::FrameView* pFrameView = rList[ i ];
+                    ::sd::FrameView* pFrameView = rList[ i ].get();
 
                     uno::Sequence< beans::PropertyValue > aSeq;
                     pFrameView->WriteUserDataSequence( aSeq );
@@ -656,24 +656,18 @@ void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container:
     {
         const sal_Int32 nCount = xData->getCount();
 
-        std::vector<sd::FrameView*>::iterator pIter;
-        std::vector<sd::FrameView*> &rViews = mpDoc->GetFrameViewList();
-
-        for ( pIter = rViews.begin(); pIter != rViews.end(); ++pIter )
-            delete *pIter;
+        std::vector<std::unique_ptr<sd::FrameView>> &rViews = mpDoc->GetFrameViewList();
 
         rViews.clear();
 
-        ::sd::FrameView* pFrameView;
         uno::Sequence< beans::PropertyValue > aSeq;
         for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
         {
             if( xData->getByIndex( nIndex ) >>= aSeq )
             {
-                pFrameView = new ::sd::FrameView( mpDoc );
-
+                std::unique_ptr<::sd::FrameView> pFrameView(new ::sd::FrameView( mpDoc ));
                 pFrameView->ReadUserDataSequence( aSeq );
-                rViews.push_back( pFrameView );
+                rViews.push_back( std::move(pFrameView) );
             }
         }
     }

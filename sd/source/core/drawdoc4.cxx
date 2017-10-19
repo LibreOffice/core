@@ -862,8 +862,7 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl, Timer *, void)
         // Stop search
         StopOnlineSpelling();
 
-        delete mpOnlineSearchItem;
-        mpOnlineSearchItem = nullptr;
+        mpOnlineSearchItem.reset();
     }
 }
 
@@ -959,8 +958,7 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus&, rEditStat, void)
 // removed link and replaced with Imp method
 void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner const * pOutl)
 {
-    delete mpOnlineSearchItem;
-    mpOnlineSearchItem = nullptr;
+    mpOnlineSearchItem.reset();
 
     SpellCallbackCommand nCommand = pInfo->nCommand;
 
@@ -976,7 +974,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
             pObj->BroadcastObjectChange();
         }
 
-        mpOnlineSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
+        mpOnlineSearchItem.reset(new SvxSearchItem( SID_SEARCH_ITEM ) );
         mpOnlineSearchItem->SetSearchString(pInfo->aWord);
         StartOnlineSpelling();
     }

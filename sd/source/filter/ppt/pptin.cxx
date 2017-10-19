@@ -1228,9 +1228,9 @@ bool ImplSdPPTImport::Import()
             ::sd::FrameView* pFrameView = mpDoc->GetFrameView( 0 );
             if ( !pFrameView )
             {
-                std::vector<sd::FrameView*> &rViews = mpDoc->GetFrameViewList();
+                std::vector<std::unique_ptr<sd::FrameView>> &rViews = mpDoc->GetFrameViewList();
                 pFrameView = new ::sd::FrameView( mpDoc );
-                rViews.push_back( pFrameView );
+                rViews.push_back( std::unique_ptr<sd::FrameView>(pFrameView) );
             }
             if ( pFrameView )
             {

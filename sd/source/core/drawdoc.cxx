@@ -233,7 +233,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     LanguageType eRealLanguage = MsLangId::getRealLanguage( meLanguage );
     LanguageTag aLanguageTag( eRealLanguage);
-    mpCharClass = new CharClass( aLanguageTag );
+    mpCharClass.reset(new CharClass( aLanguageTag ));
 
     // If the current application language is a language that uses right-to-left text...
     LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -373,8 +373,7 @@ SdDrawDocument::~SdDrawDocument()
     }
 
     StopOnlineSpelling();
-    delete mpOnlineSearchItem;
-    mpOnlineSearchItem = nullptr;
+    mpOnlineSearchItem.reset();
 
     CloseBookmarkDoc();
     SetAllocDocSh(false);
@@ -393,9 +392,7 @@ SdDrawDocument::~SdDrawDocument()
         pLinkManager = nullptr;
     }
 
-    std::vector<sd::FrameView*>::iterator pIter;
-    for ( pIter = maFrameViewList.begin(); pIter != maFrameViewList.end(); ++pIter )
-        delete *pIter;
+    maFrameViewList.clear();
 
     if (mpCustomShowList)
     {
@@ -410,14 +407,9 @@ SdDrawDocument::~SdDrawDocument()
         mpCustomShowList = nullptr;
     }
 
-    delete mpOutliner;
-    mpOutliner = nullptr;
-
-    delete mpInternalOutliner;
-    mpInternalOutliner = nullptr;
-
-    delete mpCharClass;
-    mpCharClass = nullptr;
+    mpOutliner.reset();
+    mpInternalOutliner.reset();
+    mpCharClass.reset();
 }
 
 SdrModel* SdDrawDocument::AllocModel() const
@@ -806,7 +798,7 @@ SdOutliner* SdDrawDocument::GetOutliner(bool bCreateOutliner)
 {
     if (!mpOutliner && bCreateOutliner)
     {
-        mpOutliner = new SdOutliner( this, OutlinerMode::TextObject );
+        mpOutliner.reset(new SdOutliner( this, OutlinerMode::TextObject ));
 
         if (mpDocSh)
             mpOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
@@ -815,7 +807,7 @@ SdOutliner* SdDrawDocument::GetOutliner(bool bCreateOutliner)
         mpOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
 
-    return mpOutliner;
+    return mpOutliner.get();
 }
 
 // Internal outliner that is used to create text objects. We don't insert any
@@ -824,7 +816,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
 {
     if ( !mpInternalOutliner && bCreateOutliner )
     {
-        mpInternalOutliner = new SdOutliner( this, OutlinerMode::TextObject );
+        mpInternalOutliner.reset( new SdOutliner( this, OutlinerMode::TextObject ) );
 
         // This outliner is only used to create special text objects. As no
         // information about portions is saved in this outliner, the update mode
@@ -848,7 +840,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
     // b) no wasted memory
     DBG_ASSERT( !mpInternalOutliner || ( ( mpInternalOutliner->GetParagraphCount() == 1 ) && ( mpInternalOutliner->GetText( mpInternalOutliner->GetParagraph( 0 ) ).isEmpty() ) ), "InternalOutliner: not empty!" );
 
-    return mpInternalOutliner;
+    return mpInternalOutliner.get();
 }
 
 // OnlineSpelling on/off
