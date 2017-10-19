@@ -74,9 +74,9 @@
 #include "customshowlist.hxx"
 #include "sddll.hxx"
 
-#include "../../ui/inc/DrawDocShell.hxx"
-#include "../../ui/inc/FrameView.hxx"
-#include "../../ui/inc/optsitem.hxx"
+#include "DrawDocShell.hxx"
+#include "FrameView.hxx"
+#include "optsitem.hxx"
 
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/progress.hxx>
