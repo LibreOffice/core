@@ -239,7 +239,7 @@ ScDPOutputGeometry::getFieldButtonType(const ScAddress& rPos) const
 
         nCurRow += static_cast<SCROW>(nColumnFields);
     }
-    else
+    else if (mbHeaderLayout)
         ++nCurRow;
 
     if (nRowFields)
