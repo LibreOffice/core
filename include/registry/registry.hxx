@@ -179,7 +179,7 @@ public:
     friend class RegistryKeyNames;
 
     /// returns the used registry Api.
-    const Registry_Api* getApi() { return m_pApi; }
+    const Registry_Api* getApi() const { return m_pApi; }
 protected:
 
     /// stores the used and initialized registry Api.

@@ -32,7 +32,7 @@ public:
 
     OString  prepareHelp() override;
 
-    OString  prepareVersion();
+    OString  prepareVersion() const;
 
 protected:
 };

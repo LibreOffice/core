@@ -242,7 +242,7 @@ OString JavaOptions::prepareHelp()
     return help;
 }
 
-OString JavaOptions::prepareVersion()
+OString JavaOptions::prepareVersion() const
 {
     OString version(m_program);
     version += " Version 2.0\n\n";

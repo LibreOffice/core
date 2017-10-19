@@ -187,7 +187,7 @@ struct CPInfo
 
     CPInfo(CPInfoTag tag, struct CPInfo* prev);
 
-    sal_uInt32 getBlopSize();
+    sal_uInt32 getBlopSize() const;
 
     sal_uInt32 toBlop(sal_uInt8* buffer);
 };
@@ -204,7 +204,7 @@ CPInfo::CPInfo(CPInfoTag tag, struct CPInfo* prev)
     }
 }
 
-sal_uInt32 CPInfo::getBlopSize()
+sal_uInt32 CPInfo::getBlopSize() const
 {
     sal_uInt32 size = sizeof(sal_uInt32) /* size */ + sizeof(sal_uInt16) /* tag */;
 
@@ -518,7 +518,7 @@ public:
                  sal_uInt16        excCount,
                  const OString&    doku);
 
-    void setExcName(sal_uInt16 excIndex, const OString& name);
+    void setExcName(sal_uInt16 excIndex, const OString& name) const;
 
 protected:
 
@@ -550,7 +550,7 @@ void MethodEntry::setData(const OString&    name,
     reallocExcs(excCount);
 }
 
-void MethodEntry::setExcName(sal_uInt16 excIndex, const OString& name)
+void MethodEntry::setExcName(sal_uInt16 excIndex, const OString& name) const
 {
     if (excIndex < m_excCount)
     {
@@ -649,7 +649,7 @@ public:
 
     ~TypeWriter();
 
-    void setSuperType(sal_uInt16 index, OString const & name);
+    void setSuperType(sal_uInt16 index, OString const & name) const;
 
     void createBlop(); // throws std::bad_alloc
 };
@@ -708,7 +708,7 @@ TypeWriter::~TypeWriter()
         delete[] m_references;
 }
 
-void TypeWriter::setSuperType(sal_uInt16 index, OString const & name)
+void TypeWriter::setSuperType(sal_uInt16 index, OString const & name) const
 {
     m_superTypeNames[index] = name;
 }

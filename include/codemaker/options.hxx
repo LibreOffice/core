@@ -55,7 +55,7 @@ public:
     /// @throws IllegalArgument
     const OString&      getOption(const ::rtl::OString& option) const;
 
-    const StringVector& getInputFiles() { return m_inputFiles;}
+    const StringVector& getInputFiles() const { return m_inputFiles;}
 
     const StringVector& getExtraInputFiles() const
         { return m_extra_input_files; }
