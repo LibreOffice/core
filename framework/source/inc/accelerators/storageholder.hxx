@@ -56,9 +56,8 @@ class StorageHolder final
         };
 
         /** @short  TODO */
-        typedef std::unordered_map< OUString                    ,
-                                    TStorageInfo                       ,
-                                    OUStringHash > TPath2StorageInfo;
+        typedef std::unordered_map< OUString,
+                                    TStorageInfo > TPath2StorageInfo;
 
     // member
     private:

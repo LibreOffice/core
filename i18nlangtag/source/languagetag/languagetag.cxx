@@ -46,7 +46,7 @@ struct theEmptyLocale : public rtl::Static< lang::Locale, theEmptyLocale > {};
 struct theEmptyBcp47 : public rtl::Static< OUString, theEmptyBcp47 > {};
 }
 
-typedef std::unordered_set< OUString, OUStringHash > KnownTagSet;
+typedef std::unordered_set< OUString > KnownTagSet;
 namespace {
 struct theKnowns : public rtl::Static< KnownTagSet, theKnowns > {};
 struct theMutex : public rtl::Static< osl::Mutex, theMutex > {};

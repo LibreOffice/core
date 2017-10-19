@@ -217,7 +217,7 @@ struct BulletListItemInfo
 class SVGTextWriter final
 {
   public:
-    typedef std::unordered_map< OUString, BulletListItemInfo, OUStringHash >         BulletListItemInfoMap;
+    typedef std::unordered_map< OUString, BulletListItemInfo >         BulletListItemInfoMap;
 
   private:
     SVGExport&                                  mrExport;

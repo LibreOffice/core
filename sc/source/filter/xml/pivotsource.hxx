@@ -25,7 +25,7 @@ namespace sc {
  */
 struct PivotTableSources
 {
-    typedef std::unordered_map<OUString, OUString, OUStringHash> SelectedPagesType;
+    typedef std::unordered_map<OUString, OUString> SelectedPagesType;
     typedef std::unordered_map<ScDPObject*, SelectedPagesType> SelectedPagesMapType;
 
     struct SelectedPages

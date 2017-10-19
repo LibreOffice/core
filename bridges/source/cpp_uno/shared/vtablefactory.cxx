@@ -155,7 +155,7 @@ private:
     sal_Int32 calculate(
         typelib_InterfaceTypeDescription * type, sal_Int32 offset);
 
-    std::unordered_map< OUString, sal_Int32, OUStringHash > m_map;
+    std::unordered_map< OUString, sal_Int32 > m_map;
 };
 
 sal_Int32 VtableFactory::BaseOffset::calculate(

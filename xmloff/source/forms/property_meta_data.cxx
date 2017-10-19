@@ -68,7 +68,7 @@ namespace xmloff { namespace metadata
         // one big instance, since in this case, every instance can quickly decide whether it is responsible
         // for some attribute or property, and otherwise delegate to the next instance.
 
-        typedef std::unordered_map< OUString, const PropertyDescription*, OUStringHash > DescriptionsByName;
+        typedef std::unordered_map< OUString, const PropertyDescription* > DescriptionsByName;
 
         const DescriptionsByName& lcl_getPropertyDescriptions()
         {
@@ -105,7 +105,7 @@ namespace xmloff { namespace metadata
             return s_indexedPropertyGroups;
         }
 
-        typedef std::unordered_map< OUString, XMLTokenEnum, OUStringHash > ReverseTokenLookup;
+        typedef std::unordered_map< OUString, XMLTokenEnum > ReverseTokenLookup;
 
         const ReverseTokenLookup& getReverseTokenLookup()
         {

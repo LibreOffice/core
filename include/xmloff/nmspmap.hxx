@@ -61,7 +61,7 @@ struct QNamePairHash
 };
 
 typedef std::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
-typedef std::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry >, OUStringHash > NameSpaceHash;
+typedef std::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry > > NameSpaceHash;
 typedef std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry > > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap

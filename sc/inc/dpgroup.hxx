@@ -119,7 +119,7 @@ public:
 
 class ScDPGroupTableData : public ScDPTableData
 {
-    typedef std::unordered_set< OUString, OUStringHash > StringHashSet;
+    typedef std::unordered_set< OUString > StringHashSet;
 
     std::shared_ptr<ScDPTableData> pSourceData;
     long                    nSourceCount;

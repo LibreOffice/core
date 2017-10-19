@@ -46,7 +46,6 @@
 
 
 using ::rtl::OUString;
-using ::rtl::OUStringHash;
 
 namespace
 {
@@ -102,14 +101,14 @@ struct FctPtrHash
 
 // mapping from environment name to environment
 typedef std::unordered_map<
-    OUString, uno_Environment *, OUStringHash > OUString2EnvironmentMap;
+    OUString, uno_Environment * > OUString2EnvironmentMap;
 
 // mapping from ptr to object entry
 typedef std::unordered_map<
     void *, ObjectEntry *, FctPtrHash > Ptr2ObjectMap;
 // mapping from oid to object entry
 typedef std::unordered_map<
-    OUString, ObjectEntry *, OUStringHash > OId2ObjectMap;
+    OUString, ObjectEntry * > OId2ObjectMap;
 
 struct EnvironmentsData
 {

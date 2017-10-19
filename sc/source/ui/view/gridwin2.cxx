@@ -542,7 +542,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
 void ScGridWindow::UpdateDPFromFieldPopupMenu()
 {
-    typedef std::unordered_map<OUString, OUString, OUStringHash> MemNameMapType;
+    typedef std::unordered_map<OUString, OUString> MemNameMapType;
 
     if (!mpDPFieldPopup)
         return;
@@ -571,7 +571,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     ScCheckListMenuWindow::ResultType aRawResult;
     mpDPFieldPopup->getResult(aRawResult);
 
-    std::unordered_map<OUString, bool, OUStringHash> aResult;
+    std::unordered_map<OUString, bool> aResult;
     ScCheckListMenuWindow::ResultType::const_iterator itr = aRawResult.begin(), itrEnd = aRawResult.end();
     for (; itr != itrEnd; ++itr)
     {

@@ -86,7 +86,7 @@ public:
 private:
     virtual void SAL_CALL disposing() final override;
 
-    typedef std::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager2 >, OUStringHash > ModuleToModuleCfgMgr;
+    typedef std::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager2 > > ModuleToModuleCfgMgr;
 
 //TODO_AS            void impl_initStorages();
 

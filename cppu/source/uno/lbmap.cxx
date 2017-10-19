@@ -50,7 +50,6 @@ using namespace osl;
 using namespace com::sun::star::uno;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::rtl::OUStringHash;
 
 namespace cppu
 {
@@ -137,7 +136,7 @@ struct FctPtrHash
 };
 
 typedef std::unordered_map<
-    OUString, MappingEntry *, OUStringHash > t_OUString2Entry;
+    OUString, MappingEntry * > t_OUString2Entry;
 typedef std::unordered_map<
     uno_Mapping *, MappingEntry *, FctPtrHash > t_Mapping2Entry;
 

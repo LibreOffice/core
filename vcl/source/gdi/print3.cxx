@@ -135,9 +135,9 @@ public:
         ControlDependency() : mnDependsOnEntry( -1 ) {}
     };
 
-    typedef std::unordered_map< OUString, size_t, OUStringHash > PropertyToIndexMap;
-    typedef std::unordered_map< OUString, ControlDependency, OUStringHash > ControlDependencyMap;
-    typedef std::unordered_map< OUString, css::uno::Sequence< sal_Bool >, OUStringHash > ChoiceDisableMap;
+    typedef std::unordered_map< OUString, size_t > PropertyToIndexMap;
+    typedef std::unordered_map< OUString, ControlDependency > ControlDependencyMap;
+    typedef std::unordered_map< OUString, css::uno::Sequence< sal_Bool > > ChoiceDisableMap;
 
     VclPtr< Printer >                                           mxPrinter;
     css::uno::Sequence< css::beans::PropertyValue >             maUIOptions;
@@ -1373,7 +1373,7 @@ bool PrinterController::getPrinterModified() const
 
 css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rMergeList ) const
 {
-    std::unordered_set< OUString, OUStringHash > aMergeSet;
+    std::unordered_set< OUString > aMergeSet;
     size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 3;
     for( int i = 0; i < i_rMergeList.getLength(); i++ )
         aMergeSet.insert( i_rMergeList[i].Name );
@@ -1422,14 +1422,14 @@ const css::uno::Sequence< css::beans::PropertyValue >& PrinterController::getUIO
 
 css::beans::PropertyValue* PrinterController::getValue( const OUString& i_rProperty )
 {
-    std::unordered_map< OUString, size_t, OUStringHash >::const_iterator it =
+    std::unordered_map< OUString, size_t >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : nullptr;
 }
 
 const css::beans::PropertyValue* PrinterController::getValue( const OUString& i_rProperty ) const
 {
-    std::unordered_map< OUString, size_t, OUStringHash >::const_iterator it =
+    std::unordered_map< OUString, size_t >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     return it != mpImplData->maPropertyToIndex.end() ? &mpImplData->maUIProperties[it->second] : nullptr;
 }
@@ -1445,7 +1445,7 @@ void PrinterController::setValue( const OUString& i_rPropertyName, const css::un
 
 void PrinterController::setValue( const css::beans::PropertyValue& i_rPropertyValue )
 {
-    std::unordered_map< OUString, size_t, OUStringHash >::const_iterator it =
+    std::unordered_map< OUString, size_t >::const_iterator it =
         mpImplData->maPropertyToIndex.find( i_rPropertyValue.Name );
     if( it != mpImplData->maPropertyToIndex.end() )
         mpImplData->maUIProperties[ it->second ] = i_rPropertyValue;
@@ -1525,7 +1525,7 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
 bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
 {
     bool bEnabled = false;
-    std::unordered_map< OUString, size_t, OUStringHash >::const_iterator prop_it =
+    std::unordered_map< OUString, size_t >::const_iterator prop_it =
         mpImplData->maPropertyToIndex.find( i_rProperty );
     if( prop_it != mpImplData->maPropertyToIndex.end() )
     {
@@ -1755,7 +1755,7 @@ sal_Int32 PrinterController::getIntProperty( const OUString& i_rProperty, sal_In
 css::uno::Any PrinterOptionsHelper::getValue( const OUString& i_rPropertyName ) const
 {
     css::uno::Any aRet;
-    std::unordered_map< OUString, css::uno::Any, OUStringHash >::const_iterator it =
+    std::unordered_map< OUString, css::uno::Any >::const_iterator it =
         m_aPropertyMap.find( i_rPropertyName );
     if( it != m_aPropertyMap.end() )
         aRet = it->second;
@@ -1792,7 +1792,7 @@ bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::bea
     for( sal_Int32 i = 0; i < nElements; i++ )
     {
         bool bElementChanged = false;
-        std::unordered_map< OUString, css::uno::Any, OUStringHash >::iterator it =
+        std::unordered_map< OUString, css::uno::Any >::iterator it =
             m_aPropertyMap.find( pVals[ i ].Name );
         if( it != m_aPropertyMap.end() )
         {

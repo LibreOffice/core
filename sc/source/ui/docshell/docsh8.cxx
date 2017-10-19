@@ -471,7 +471,7 @@ void lcl_GetColumnTypes(
     SCCOL nLastCol = rDataRange.aEnd.Col();
     SCROW nLastRow = rDataRange.aEnd.Row();
 
-    typedef std::unordered_set<OUString, OUStringHash> StrSetType;
+    typedef std::unordered_set<OUString> StrSetType;
     StrSetType aFieldNames;
 
     long nField = 0;

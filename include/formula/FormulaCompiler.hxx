@@ -66,8 +66,8 @@ struct FormulaArrayStack
 };
 
 
-typedef std::unordered_map< OUString, OpCode, OUStringHash > OpCodeHashMap;
-typedef std::unordered_map< OUString, OUString, OUStringHash > ExternalHashMap;
+typedef std::unordered_map< OUString, OpCode > OpCodeHashMap;
+typedef std::unordered_map< OUString, OUString > ExternalHashMap;
 
 class FORMULA_DLLPUBLIC FormulaCompiler
 {

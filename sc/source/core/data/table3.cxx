@@ -2985,7 +2985,7 @@ void lcl_PrepareQuery( const ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPar
 SCSIZE ScTable::Query(const ScQueryParam& rParamOrg, bool bKeepSub)
 {
     ScQueryParam    aParam( rParamOrg );
-    typedef std::unordered_set<OUString, OUStringHash> StrSetType;
+    typedef std::unordered_set<OUString> StrSetType;
     StrSetType aStrSet;
 
     bool    bStarted = false;

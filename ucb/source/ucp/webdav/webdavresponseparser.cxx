@@ -96,7 +96,7 @@ namespace
 
     WebDAVName StrToWebDAVName(const OUString& rStr)
     {
-        typedef std::unordered_map< OUString, WebDAVName, OUStringHash > WebDAVNameMapper;
+        typedef std::unordered_map< OUString, WebDAVName > WebDAVNameMapper;
         typedef std::pair< OUString, WebDAVName > WebDAVNameValueType;
         static WebDAVNameMapper aWebDAVNameMapperList;
 

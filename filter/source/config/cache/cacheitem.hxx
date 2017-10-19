@@ -146,9 +146,8 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 /** @short  represent an item list of a FilterCache
             instance.
  */
-typedef std::unordered_map< OUString                    ,
-                            CacheItem                          ,
-                            OUStringHash > CacheItemList;
+typedef std::unordered_map< OUString,
+                            CacheItem > CacheItemList;
 
 
 /** @short  supports registration of multiple key to
@@ -163,9 +162,8 @@ typedef std::unordered_map< OUString                    ,
             there we need key-value pairs too, which can't be provided
             by a pure vector!
  */
-typedef std::unordered_map< OUString                    ,
-                            OUStringList                       ,
-                            OUStringHash > CacheItemRegistration;
+typedef std::unordered_map< OUString,
+                            OUStringList > CacheItemRegistration;
 
 
 /** @short  is used to collect all matching types of an URL

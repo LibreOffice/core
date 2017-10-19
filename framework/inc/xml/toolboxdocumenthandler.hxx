@@ -87,8 +87,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
         OUString getErrorLineString();
 
         class ToolBoxHashMap : public std::unordered_map<OUString,
-                                                         ToolBox_XML_Entry,
-                                                         OUStringHash >
+                                                         ToolBox_XML_Entry>
         {
         };
 

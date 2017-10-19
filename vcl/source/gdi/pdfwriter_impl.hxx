@@ -468,8 +468,8 @@ public:
         {}
     };
 
-    typedef std::unordered_map< OString, SvMemoryStream*, OStringHash > PDFAppearanceStreams;
-    typedef std::unordered_map< OString, PDFAppearanceStreams, OStringHash > PDFAppearanceMap;
+    typedef std::unordered_map< OString, SvMemoryStream* > PDFAppearanceStreams;
+    typedef std::unordered_map< OString, PDFAppearanceStreams > PDFAppearanceMap;
 
     struct PDFWidget : public PDFAnnotation
     {
@@ -680,7 +680,7 @@ private:
      */
     bool                                m_bEmitStructure;
     /* role map of struct tree root */
-    std::unordered_map< OString, OString, OStringHash >
+    std::unordered_map< OString, OString >
                                         m_aRoleMap;
 
     /* contains all widgets used in the PDF
@@ -689,7 +689,7 @@ private:
     /* maps radio group id to index of radio group control in m_aWidgets */
     std::map< sal_Int32, sal_Int32 >    m_aRadioGroupWidgets;
     /* unordered_map for field names, used to ensure unique field names */
-    std::unordered_map< OString, sal_Int32, OStringHash > m_aFieldNameMap;
+    std::unordered_map< OString, sal_Int32 > m_aFieldNameMap;
 
     /* contains Bitmaps for gradient functions until they are written
      *  to the file stream */

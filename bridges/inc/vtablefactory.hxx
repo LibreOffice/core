@@ -207,7 +207,7 @@ private:
     static void flushCode(
         unsigned char const * begin, unsigned char const * end);
 
-    typedef std::unordered_map< OUString, Vtables, OUStringHash > Map;
+    typedef std::unordered_map< OUString, Vtables > Map;
 
     osl::Mutex m_mutex;
     Map m_map;

@@ -342,10 +342,10 @@ void PivotTableDataProvider::collectPivotTableData()
     uno::Reference<sheet::XDimensionsSupplier> xDimensionsSupplier(pDPObject->GetSource());
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess(xDimensionsSupplier->getDimensions());
 
-    std::unordered_map<OUString, sal_Int32, OUStringHash> aDataFieldNumberFormatMap;
+    std::unordered_map<OUString, sal_Int32> aDataFieldNumberFormatMap;
     std::vector<OUString> aDataFieldNamesVectors;
 
-    std::unordered_map<OUString, OUString, OUStringHash> aDataFieldCaptionNames;
+    std::unordered_map<OUString, OUString> aDataFieldCaptionNames;
 
     sheet::DataPilotFieldOrientation eDataFieldOrientation = sheet::DataPilotFieldOrientation_HIDDEN;
 

@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno;
 
 #define PROPERTYCOUNT                   1
 
-typedef std::unordered_map<OUString, sal_Int32, OUStringHash>
+typedef std::unordered_map<OUString, sal_Int32>
     ExtensionHashMap;
 
 class SvtExtendedSecurityOptions_Impl : public ConfigItem

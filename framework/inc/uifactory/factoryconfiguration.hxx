@@ -72,8 +72,7 @@ private:
         ControllerInfo(){}
     };
     class MenuControllerMap : public std::unordered_map< OUString,
-                                                         ControllerInfo,
-                                                         OUStringHash >
+                                                         ControllerInfo >
     {
     };
 

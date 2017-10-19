@@ -547,7 +547,7 @@ public:
 };
 
 // hash map from name to index in the member array, for fast name access
-typedef std::unordered_map< OUString, sal_Int32, OUStringHash > ScDPMembersHashMap;
+typedef std::unordered_map< OUString, sal_Int32 > ScDPMembersHashMap;
 
 class ScDPMembers : public cppu::WeakImplHelper<
                             css::sheet::XMembersAccess,

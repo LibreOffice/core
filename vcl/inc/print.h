@@ -42,7 +42,7 @@ struct ImplPrnQueueData
 class VCL_PLUGIN_PUBLIC ImplPrnQueueList
 {
 public:
-    std::unordered_map< OUString, sal_Int32, OUStringHash > m_aNameToIndex;
+    std::unordered_map< OUString, sal_Int32 > m_aNameToIndex;
     std::vector< ImplPrnQueueData >     m_aQueueInfos;
     std::vector< OUString >             m_aPrinterList;
 

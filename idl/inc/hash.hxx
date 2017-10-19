@@ -46,7 +46,7 @@ public:
 class SvStringHashTable
 {
     std::unordered_map<sal_uInt32, std::unique_ptr<SvStringHashEntry>> maInt2EntryMap;
-    std::unordered_map<OString, sal_uInt32, OStringHash> maString2IntMap;
+    std::unordered_map<OString, sal_uInt32> maString2IntMap;
     sal_uInt32 mnNextId = 0;
 
 public:

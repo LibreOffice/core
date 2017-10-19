@@ -148,7 +148,7 @@ sal_Int32 ParseMathMLAttributeLengthValue(const OUString &rStr, MathMLAttributeL
 
 bool GetMathMLMathvariantValue(const OUString &rStr, MathMLMathvariantValue *pV)
 {
-    static const std::unordered_map<OUString, MathMLMathvariantValue, OUStringHash> aMap{
+    static const std::unordered_map<OUString, MathMLMathvariantValue> aMap{
         {"normal", MathMLMathvariantValue::Normal},
         {"bold", MathMLMathvariantValue::Bold},
         {"italic", MathMLMathvariantValue::Italic},

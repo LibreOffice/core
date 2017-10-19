@@ -46,7 +46,7 @@ namespace framework
             virtual css::uno::Type SAL_CALL getElementType(  ) override;
 
         private:
-            typedef std::unordered_map<OUString, css::uno::Reference< css::graphic::XGraphic >, OUStringHash> NameGraphicHashMap;
+            typedef std::unordered_map<OUString, css::uno::Reference< css::graphic::XGraphic >> NameGraphicHashMap;
             NameGraphicHashMap              m_aNameToElementMap;
             css::uno::Sequence< OUString >  m_aSeq;
     };

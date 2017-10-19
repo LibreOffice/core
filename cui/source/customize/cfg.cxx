@@ -766,7 +766,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
 {
     if ( !m_pRootEntry )
     {
-        typedef std::unordered_map< OUString, bool, OUStringHash > MenuInfo;
+        typedef std::unordered_map< OUString, bool > MenuInfo;
         MenuInfo aMenuInfo;
 
         m_pRootEntry.reset( new SvxConfigEntry( "ContextMenus", OUString(), true ) );
@@ -2368,8 +2368,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 
 SvxEntries* ToolbarSaveInData::GetEntries()
 {
-    typedef std::unordered_map<OUString, bool,
-                               OUStringHash > ToolbarInfo;
+    typedef std::unordered_map<OUString, bool > ToolbarInfo;
 
     ToolbarInfo aToolbarInfo;
 
@@ -2978,8 +2977,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     pTbSymbol->set_height_request(aTbSize.Height());
     pTbSymbol->SetStyle(pTbSymbol->GetStyle() | WB_SCROLL | WB_LINESPACING);
 
-    typedef std::unordered_map< OUString, bool,
-                                OUStringHash > ImageInfo;
+    typedef std::unordered_map< OUString, bool > ImageInfo;
 
     pTbSymbol->SetPageScroll( true );
 

@@ -272,8 +272,7 @@ namespace
 class FrameworkHelper::ViewURLMap
     : public std::unordered_map<
           OUString,
-          ViewShell::ShellType,
-          OUStringHash>
+          ViewShell::ShellType>
 {
 public:
     ViewURLMap() {}

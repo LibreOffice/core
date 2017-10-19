@@ -56,7 +56,7 @@ namespace dbaccess
         }
     };
 
-    typedef std::unordered_map< OUString, SubComponentDescriptor, OUStringHash > MapStringToCompDesc;
+    typedef std::unordered_map< OUString, SubComponentDescriptor > MapStringToCompDesc;
     typedef std::map< SubComponentType, MapStringToCompDesc > MapCompTypeToCompDescs;
 
 } // namespace dbaccess

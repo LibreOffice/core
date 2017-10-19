@@ -27,11 +27,9 @@ namespace framework
 {
 
 typedef std::unordered_map< OUString,
-                            OUString,
-                            OUStringHash > CommandToImageNameMap;
+                            OUString > CommandToImageNameMap;
 typedef std::unordered_map< OUString,
-                            bool,
-                            OUStringHash > CommandMap;
+                            bool > CommandMap;
 
 }
 

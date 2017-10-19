@@ -27,7 +27,7 @@
 
 namespace sw {
     namespace mark {
-    typedef std::unordered_map<OUString, sal_Int32, OUStringHash> MarkBasenameMapUniqueOffset_t;
+    typedef std::unordered_map<OUString, sal_Int32> MarkBasenameMapUniqueOffset_t;
 
     class MarkManager
         : virtual public IDocumentMarkAccess
@@ -116,7 +116,7 @@ namespace sw {
             // additional container for fieldmarks
             container_t m_vFieldmarks;
 
-            std::unordered_set<OUString, OUStringHash> m_aMarkNamesSet;
+            std::unordered_set<OUString> m_aMarkNamesSet;
             mutable MarkBasenameMapUniqueOffset_t m_aMarkBasenameMapUniqueOffset;
 
             // container for annotation marks

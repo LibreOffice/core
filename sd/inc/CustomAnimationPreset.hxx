@@ -33,8 +33,8 @@
 
 namespace sd {
 
-typedef std::unordered_map< OUString, CustomAnimationEffectPtr, OUStringHash > EffectsSubTypeMap;
-typedef std::unordered_map< OUString, OUString, OUStringHash > UStringMap;
+typedef std::unordered_map< OUString, CustomAnimationEffectPtr > EffectsSubTypeMap;
+typedef std::unordered_map< OUString, OUString > UStringMap;
 typedef std::vector< OUString > UStringList;
 
 class CustomAnimationPreset
@@ -70,7 +70,7 @@ private:
 };
 
 typedef std::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
-typedef std::unordered_map<OUString, CustomAnimationPresetPtr, OUStringHash> EffectDescriptorMap;
+typedef std::unordered_map<OUString, CustomAnimationPresetPtr> EffectDescriptorMap;
 typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
 struct PresetCategory

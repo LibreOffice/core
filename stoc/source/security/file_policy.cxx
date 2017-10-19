@@ -63,7 +63,7 @@ class FilePolicy
     AccessControl m_ac;
 
     Sequence< Any > m_defaultPermissions;
-    typedef std::unordered_map< OUString, Sequence< Any >, OUStringHash > t_permissions;
+    typedef std::unordered_map< OUString, Sequence< Any > > t_permissions;
     t_permissions m_userPermissions;
     bool m_init;
 

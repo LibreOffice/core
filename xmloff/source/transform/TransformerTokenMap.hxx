@@ -25,8 +25,7 @@
 #include <unordered_map>
 
 class XMLTransformerTokenMap :
-    public std::unordered_map< OUString, ::xmloff::token::XMLTokenEnum,
-                                   OUStringHash >
+    public std::unordered_map< OUString, ::xmloff::token::XMLTokenEnum >
 {
 public:
     explicit XMLTransformerTokenMap( ::xmloff::token::XMLTokenEnum *pInit );

@@ -47,10 +47,10 @@
 
 class MergeEntrys;
 
-typedef std::unordered_map<OString, OString, OStringHash>
+typedef std::unordered_map<OString, OString>
     OStringHashMap;
 
-typedef std::unordered_map<OString, bool, OStringHash>
+typedef std::unordered_map<OString, bool>
     OStringBoolHashMap;
 
 #define SOURCE_LANGUAGE "en-US"
@@ -151,7 +151,7 @@ class MergeData;
 class MergeDataHashMap
 {
     private:
-        typedef std::unordered_map<OString, MergeData*, OStringHash> HashMap_t;
+        typedef std::unordered_map<OString, MergeData*> HashMap_t;
 
     public:
         MergeDataHashMap()

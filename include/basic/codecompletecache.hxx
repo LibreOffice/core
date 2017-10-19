@@ -28,9 +28,9 @@
 #include <unordered_map>
 #include <vector>
 
-typedef std::unordered_map< OUString, OUString, OUStringHash > CodeCompleteVarTypes;
+typedef std::unordered_map< OUString, OUString > CodeCompleteVarTypes;
 /* variable name, type */
-typedef std::unordered_map< OUString, CodeCompleteVarTypes, OUStringHash > CodeCompleteVarScopes;
+typedef std::unordered_map< OUString, CodeCompleteVarTypes > CodeCompleteVarScopes;
 /* procedure, CodeCompleteVarTypes */
 
 class BASIC_DLLPUBLIC CodeCompleteOptions

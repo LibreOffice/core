@@ -35,7 +35,7 @@ struct CommandInfo
     sal_Int16                   nImageInfo;
 };
 
-typedef std::unordered_map<OUString, CommandInfo, OUStringHash> CommandToInfoMap;
+typedef std::unordered_map<OUString, CommandInfo> CommandToInfoMap;
 
 } // namespace framework
 
