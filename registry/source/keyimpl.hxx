@@ -91,7 +91,7 @@ public:
                                     sal_uInt32* pLen) const;
 
     RegError    getResolvedKeyName(const OUString& keyName,
-                                   OUString& resolvedName);
+                                   OUString& resolvedName) const;
 
     bool isDeleted() const
         { return m_bDeleted; }
@@ -116,7 +116,7 @@ public:
     const store::OStoreFile& getStoreFile() const
                     { return m_pRegistry->getStoreFile(); }
 
-    store::OStoreDirectory getStoreDir();
+    store::OStoreDirectory getStoreDir() const;
 
     const OUString& getName() const
                     { return m_name; }

@@ -192,7 +192,7 @@ public:
     explicit StringCache(sal_uInt16 size); // throws std::bad_alloc
     ~StringCache();
 
-    const sal_Unicode*  getString(sal_uInt16 index);
+    const sal_Unicode*  getString(sal_uInt16 index) const;
     sal_uInt16 createString(const sal_uInt8* buffer); // throws std::bad_alloc
 };
 
@@ -222,7 +222,7 @@ StringCache::~StringCache()
     }
 }
 
-const sal_Unicode* StringCache::getString(sal_uInt16 index)
+const sal_Unicode* StringCache::getString(sal_uInt16 index) const
 {
     if ((index > 0) && (index <= m_stringsCopied))
         return m_stringTable[index - 1];
@@ -269,20 +269,20 @@ public:
 
     sal_uInt32 parseIndex(); // throws std::bad_alloc
 
-    CPInfoTag       readTag(sal_uInt16 index);
+    CPInfoTag           readTag(sal_uInt16 index) const;
 
-    const sal_Char*     readUTF8NameConstant(sal_uInt16 index);
-    bool            readBOOLConstant(sal_uInt16 index);
-    sal_Int8            readBYTEConstant(sal_uInt16 index);
-    sal_Int16           readINT16Constant(sal_uInt16 index);
-    sal_uInt16          readUINT16Constant(sal_uInt16 index);
-    sal_Int32           readINT32Constant(sal_uInt16 index);
-    sal_uInt32          readUINT32Constant(sal_uInt16 index);
-    sal_Int64           readINT64Constant(sal_uInt16 index);
-    sal_uInt64          readUINT64Constant(sal_uInt16 index);
-    float               readFloatConstant(sal_uInt16 index);
-    double              readDoubleConstant(sal_uInt16 index);
-    const sal_Unicode*  readStringConstant(sal_uInt16 index);
+    const sal_Char*     readUTF8NameConstant(sal_uInt16 index) const;
+    bool                readBOOLConstant(sal_uInt16 index) const;
+    sal_Int8            readBYTEConstant(sal_uInt16 index) const;
+    sal_Int16           readINT16Constant(sal_uInt16 index) const;
+    sal_uInt16          readUINT16Constant(sal_uInt16 index) const;
+    sal_Int32           readINT32Constant(sal_uInt16 index) const;
+    sal_uInt32          readUINT32Constant(sal_uInt16 index) const;
+    sal_Int64           readINT64Constant(sal_uInt16 index) const;
+    sal_uInt64          readUINT64Constant(sal_uInt16 index) const;
+    float               readFloatConstant(sal_uInt16 index) const;
+    double              readDoubleConstant(sal_uInt16 index) const;
+    const sal_Unicode*  readStringConstant(sal_uInt16 index) const;
         // throws std::bad_alloc
 };
 
@@ -323,7 +323,7 @@ sal_uInt32 ConstantPool::parseIndex()
     return offset;
 }
 
-CPInfoTag ConstantPool::readTag(sal_uInt16 index)
+CPInfoTag ConstantPool::readTag(sal_uInt16 index) const
 {
     CPInfoTag tag = CP_TAG_INVALID;
 
@@ -335,7 +335,7 @@ CPInfoTag ConstantPool::readTag(sal_uInt16 index)
     return tag;
 }
 
-const sal_Char* ConstantPool::readUTF8NameConstant(sal_uInt16 index)
+const sal_Char* ConstantPool::readUTF8NameConstant(sal_uInt16 index) const
 {
     const sal_Char* aName = NULL_STRING;
 
@@ -355,7 +355,7 @@ const sal_Char* ConstantPool::readUTF8NameConstant(sal_uInt16 index)
     return aName;
 }
 
-bool ConstantPool::readBOOLConstant(sal_uInt16 index)
+bool ConstantPool::readBOOLConstant(sal_uInt16 index) const
 {
     bool aBool = false;
 
@@ -370,7 +370,7 @@ bool ConstantPool::readBOOLConstant(sal_uInt16 index)
     return aBool;
 }
 
-sal_Int8 ConstantPool::readBYTEConstant(sal_uInt16 index)
+sal_Int8 ConstantPool::readBYTEConstant(sal_uInt16 index) const
 {
     sal_Int8 aByte = 0;
 
@@ -386,7 +386,7 @@ sal_Int8 ConstantPool::readBYTEConstant(sal_uInt16 index)
     return aByte;
 }
 
-sal_Int16 ConstantPool::readINT16Constant(sal_uInt16 index)
+sal_Int16 ConstantPool::readINT16Constant(sal_uInt16 index) const
 {
     sal_Int16 aINT16 = 0;
 
@@ -401,7 +401,7 @@ sal_Int16 ConstantPool::readINT16Constant(sal_uInt16 index)
     return aINT16;
 }
 
-sal_uInt16 ConstantPool::readUINT16Constant(sal_uInt16 index)
+sal_uInt16 ConstantPool::readUINT16Constant(sal_uInt16 index) const
 {
     sal_uInt16 asal_uInt16 = 0;
 
@@ -416,7 +416,7 @@ sal_uInt16 ConstantPool::readUINT16Constant(sal_uInt16 index)
     return asal_uInt16;
 }
 
-sal_Int32 ConstantPool::readINT32Constant(sal_uInt16 index)
+sal_Int32 ConstantPool::readINT32Constant(sal_uInt16 index) const
 {
     sal_Int32 aINT32 = 0;
 
@@ -431,7 +431,7 @@ sal_Int32 ConstantPool::readINT32Constant(sal_uInt16 index)
     return aINT32;
 }
 
-sal_uInt32 ConstantPool::readUINT32Constant(sal_uInt16 index)
+sal_uInt32 ConstantPool::readUINT32Constant(sal_uInt16 index) const
 {
     sal_uInt32 aUINT32 = 0;
 
@@ -446,7 +446,7 @@ sal_uInt32 ConstantPool::readUINT32Constant(sal_uInt16 index)
     return aUINT32;
 }
 
-sal_Int64 ConstantPool::readINT64Constant(sal_uInt16 index)
+sal_Int64 ConstantPool::readINT64Constant(sal_uInt16 index) const
 {
     sal_Int64 aINT64 = 0;
 
@@ -461,7 +461,7 @@ sal_Int64 ConstantPool::readINT64Constant(sal_uInt16 index)
     return aINT64;
 }
 
-sal_uInt64 ConstantPool::readUINT64Constant(sal_uInt16 index)
+sal_uInt64 ConstantPool::readUINT64Constant(sal_uInt16 index) const
 {
     sal_uInt64 aUINT64 = 0;
 
@@ -476,7 +476,7 @@ sal_uInt64 ConstantPool::readUINT64Constant(sal_uInt16 index)
     return aUINT64;
 }
 
-float ConstantPool::readFloatConstant(sal_uInt16 index)
+float ConstantPool::readFloatConstant(sal_uInt16 index) const
 {
     union
     {
@@ -499,7 +499,7 @@ float ConstantPool::readFloatConstant(sal_uInt16 index)
     return  x.v;
 }
 
-double ConstantPool::readDoubleConstant(sal_uInt16 index)
+double ConstantPool::readDoubleConstant(sal_uInt16 index) const
 {
     union
     {
@@ -533,7 +533,7 @@ double ConstantPool::readDoubleConstant(sal_uInt16 index)
     return x.v;
 }
 
-const sal_Unicode* ConstantPool::readStringConstant(sal_uInt16 index)
+const sal_Unicode* ConstantPool::readStringConstant(sal_uInt16 index) const
 {
     const sal_Unicode* aString = NULL_WSTRING;
 
@@ -593,19 +593,19 @@ public:
         }
     }
 
-    sal_uInt32 parseIndex() { return ((m_numOfEntries ? sizeof(sal_uInt16) : 0) + (m_numOfEntries * m_FIELD_ENTRY_SIZE));}
+    sal_uInt32 parseIndex() const { return ((m_numOfEntries ? sizeof(sal_uInt16) : 0) + (m_numOfEntries * m_FIELD_ENTRY_SIZE));}
 
-    const sal_Char* getFieldName(sal_uInt16 index);
-    const sal_Char* getFieldType(sal_uInt16 index);
-    RTFieldAccess getFieldAccess(sal_uInt16 index);
-    RTValueType     getFieldConstValue(sal_uInt16 index, RTConstValueUnion* value);
+    const sal_Char* getFieldName(sal_uInt16 index) const;
+    const sal_Char* getFieldType(sal_uInt16 index) const;
+    RTFieldAccess getFieldAccess(sal_uInt16 index) const;
+    RTValueType     getFieldConstValue(sal_uInt16 index, RTConstValueUnion* value) const;
         // throws std::bad_alloc
-    const sal_Char* getFieldDoku(sal_uInt16 index);
-    const sal_Char* getFieldFileName(sal_uInt16 index);
+    const sal_Char* getFieldDoku(sal_uInt16 index) const;
+    const sal_Char* getFieldFileName(sal_uInt16 index) const;
 };
 
 
-const sal_Char* FieldList::getFieldName(sal_uInt16 index)
+const sal_Char* FieldList::getFieldName(sal_uInt16 index) const
 {
     const sal_Char* aName = nullptr;
 
@@ -621,7 +621,7 @@ const sal_Char* FieldList::getFieldName(sal_uInt16 index)
     return aName;
 }
 
-const sal_Char* FieldList::getFieldType(sal_uInt16 index)
+const sal_Char* FieldList::getFieldType(sal_uInt16 index) const
 {
     const sal_Char* aName = nullptr;
 
@@ -637,7 +637,7 @@ const sal_Char* FieldList::getFieldType(sal_uInt16 index)
     return aName;
 }
 
-RTFieldAccess FieldList::getFieldAccess(sal_uInt16 index)
+RTFieldAccess FieldList::getFieldAccess(sal_uInt16 index) const
 {
     RTFieldAccess aAccess = RTFieldAccess::INVALID;
 
@@ -653,7 +653,7 @@ RTFieldAccess FieldList::getFieldAccess(sal_uInt16 index)
     return aAccess;
 }
 
-RTValueType FieldList::getFieldConstValue(sal_uInt16 index, RTConstValueUnion* value)
+RTValueType FieldList::getFieldConstValue(sal_uInt16 index, RTConstValueUnion* value) const
 {
     RTValueType ret = RT_TYPE_NONE;
     try {
@@ -716,7 +716,7 @@ RTValueType FieldList::getFieldConstValue(sal_uInt16 index, RTConstValueUnion* v
     return ret;
 }
 
-const sal_Char* FieldList::getFieldDoku(sal_uInt16 index)
+const sal_Char* FieldList::getFieldDoku(sal_uInt16 index) const
 {
     const sal_Char* aDoku = nullptr;
 
@@ -732,7 +732,7 @@ const sal_Char* FieldList::getFieldDoku(sal_uInt16 index)
     return aDoku;
 }
 
-const sal_Char* FieldList::getFieldFileName(sal_uInt16 index)
+const sal_Char* FieldList::getFieldFileName(sal_uInt16 index) const
 {
     const sal_Char* aFileName = nullptr;
 
@@ -779,14 +779,14 @@ public:
         }
     }
 
-    const sal_Char* getReferenceName(sal_uInt16 index);
-    RTReferenceType getReferenceType(sal_uInt16 index);
-    const sal_Char* getReferenceDoku(sal_uInt16 index);
-    RTFieldAccess   getReferenceAccess(sal_uInt16 index);
+    const sal_Char* getReferenceName(sal_uInt16 index) const;
+    RTReferenceType getReferenceType(sal_uInt16 index) const;
+    const sal_Char* getReferenceDoku(sal_uInt16 index) const;
+    RTFieldAccess   getReferenceAccess(sal_uInt16 index) const;
 };
 
 
-const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index)
+const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index) const
 {
     const sal_Char* aName = nullptr;
 
@@ -802,7 +802,7 @@ const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index)
     return aName;
 }
 
-RTReferenceType ReferenceList::getReferenceType(sal_uInt16 index)
+RTReferenceType ReferenceList::getReferenceType(sal_uInt16 index) const
 {
     RTReferenceType refType = RTReferenceType::INVALID;
 
@@ -818,7 +818,7 @@ RTReferenceType ReferenceList::getReferenceType(sal_uInt16 index)
     return refType;
 }
 
-const sal_Char* ReferenceList::getReferenceDoku(sal_uInt16 index)
+const sal_Char* ReferenceList::getReferenceDoku(sal_uInt16 index) const
 {
     const sal_Char* aDoku = nullptr;
 
@@ -834,7 +834,7 @@ const sal_Char* ReferenceList::getReferenceDoku(sal_uInt16 index)
     return aDoku;
 }
 
-RTFieldAccess ReferenceList::getReferenceAccess(sal_uInt16 index)
+RTFieldAccess ReferenceList::getReferenceAccess(sal_uInt16 index) const
 {
     RTFieldAccess aAccess = RTFieldAccess::INVALID;
 
@@ -885,22 +885,22 @@ public:
 
     sal_uInt32 parseIndex(); // throws std::bad_alloc
 
-    const sal_Char* getMethodName(sal_uInt16 index);
-    sal_uInt16      getMethodParamCount(sal_uInt16 index);
-    const sal_Char* getMethodParamType(sal_uInt16 index, sal_uInt16 paramIndex);
-    const sal_Char* getMethodParamName(sal_uInt16 index, sal_uInt16 paramIndex);
-    RTParamMode     getMethodParamMode(sal_uInt16 index, sal_uInt16 paramIndex);
-    sal_uInt16      getMethodExcCount(sal_uInt16 index);
-    const sal_Char* getMethodExcType(sal_uInt16 index, sal_uInt16 excIndex);
-    const sal_Char* getMethodReturnType(sal_uInt16 index);
-    RTMethodMode    getMethodMode(sal_uInt16 index);
-    const sal_Char* getMethodDoku(sal_uInt16 index);
+    const sal_Char* getMethodName(sal_uInt16 index) const;
+    sal_uInt16      getMethodParamCount(sal_uInt16 index) const;
+    const sal_Char* getMethodParamType(sal_uInt16 index, sal_uInt16 paramIndex) const;
+    const sal_Char* getMethodParamName(sal_uInt16 index, sal_uInt16 paramIndex) const;
+    RTParamMode     getMethodParamMode(sal_uInt16 index, sal_uInt16 paramIndex) const;
+    sal_uInt16      getMethodExcCount(sal_uInt16 index) const;
+    const sal_Char* getMethodExcType(sal_uInt16 index, sal_uInt16 excIndex) const;
+    const sal_Char* getMethodReturnType(sal_uInt16 index) const;
+    RTMethodMode    getMethodMode(sal_uInt16 index) const;
+    const sal_Char* getMethodDoku(sal_uInt16 index) const;
 
 private:
-    sal_uInt16 calcMethodParamIndex( const sal_uInt16 index );
+    sal_uInt16 calcMethodParamIndex( const sal_uInt16 index ) const;
 };
 
-sal_uInt16 MethodList::calcMethodParamIndex( const sal_uInt16 index )
+sal_uInt16 MethodList::calcMethodParamIndex( const sal_uInt16 index ) const
 {
     return (METHOD_OFFSET_PARAM_COUNT + sizeof(sal_uInt16) + (index * m_PARAM_ENTRY_SIZE));
 }
@@ -927,7 +927,7 @@ sal_uInt32 MethodList::parseIndex()
     return offset;
 }
 
-const sal_Char* MethodList::getMethodName(sal_uInt16 index)
+const sal_Char* MethodList::getMethodName(sal_uInt16 index) const
 {
     const sal_Char* aName = nullptr;
 
@@ -943,7 +943,7 @@ const sal_Char* MethodList::getMethodName(sal_uInt16 index)
     return aName;
 }
 
-sal_uInt16 MethodList::getMethodParamCount(sal_uInt16 index)
+sal_uInt16 MethodList::getMethodParamCount(sal_uInt16 index) const
 {
     sal_uInt16 aCount = 0;
 
@@ -959,7 +959,7 @@ sal_uInt16 MethodList::getMethodParamCount(sal_uInt16 index)
     return aCount;
 }
 
-const sal_Char* MethodList::getMethodParamType(sal_uInt16 index, sal_uInt16 paramIndex)
+const sal_Char* MethodList::getMethodParamType(sal_uInt16 index, sal_uInt16 paramIndex) const
 {
     const sal_Char* aName = nullptr;
     try {
@@ -979,7 +979,7 @@ const sal_Char* MethodList::getMethodParamType(sal_uInt16 index, sal_uInt16 para
     return aName;
 }
 
-const sal_Char* MethodList::getMethodParamName(sal_uInt16 index, sal_uInt16 paramIndex)
+const sal_Char* MethodList::getMethodParamName(sal_uInt16 index, sal_uInt16 paramIndex) const
 {
     const sal_Char* aName = nullptr;
     try {
@@ -999,7 +999,7 @@ const sal_Char* MethodList::getMethodParamName(sal_uInt16 index, sal_uInt16 para
     return aName;
 }
 
-RTParamMode MethodList::getMethodParamMode(sal_uInt16 index, sal_uInt16 paramIndex)
+RTParamMode MethodList::getMethodParamMode(sal_uInt16 index, sal_uInt16 paramIndex) const
 {
     RTParamMode aMode = RT_PARAM_INVALID;
     try {
@@ -1022,7 +1022,7 @@ RTParamMode MethodList::getMethodParamMode(sal_uInt16 index, sal_uInt16 paramInd
 extern "C" void __coverity_tainted_data_sanitize__(void *);
 #endif
 
-sal_uInt16 MethodList::getMethodExcCount(sal_uInt16 index)
+sal_uInt16 MethodList::getMethodExcCount(sal_uInt16 index) const
 {
     sal_uInt16 aCount = 0;
 
@@ -1041,7 +1041,7 @@ sal_uInt16 MethodList::getMethodExcCount(sal_uInt16 index)
     return aCount;
 }
 
-const sal_Char* MethodList::getMethodExcType(sal_uInt16 index, sal_uInt16 excIndex)
+const sal_Char* MethodList::getMethodExcType(sal_uInt16 index, sal_uInt16 excIndex) const
 {
     const sal_Char* aName = nullptr;
 
@@ -1065,7 +1065,7 @@ const sal_Char* MethodList::getMethodExcType(sal_uInt16 index, sal_uInt16 excInd
     return aName;
 }
 
-const sal_Char* MethodList::getMethodReturnType(sal_uInt16 index)
+const sal_Char* MethodList::getMethodReturnType(sal_uInt16 index) const
 {
     const sal_Char* aName = nullptr;
 
@@ -1081,7 +1081,7 @@ const sal_Char* MethodList::getMethodReturnType(sal_uInt16 index)
     return aName;
 }
 
-RTMethodMode MethodList::getMethodMode(sal_uInt16 index)
+RTMethodMode MethodList::getMethodMode(sal_uInt16 index) const
 {
     RTMethodMode aMode = RTMethodMode::INVALID;
 
@@ -1097,7 +1097,7 @@ RTMethodMode MethodList::getMethodMode(sal_uInt16 index)
     return aMode;
 }
 
-const sal_Char* MethodList::getMethodDoku(sal_uInt16 index)
+const sal_Char* MethodList::getMethodDoku(sal_uInt16 index) const
 {
     const sal_Char* aDoku = nullptr;
 

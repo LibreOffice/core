@@ -167,7 +167,7 @@ public:
         CppuOptions const & options);
 
     void dumpDependedTypes(
-        codemaker::GeneratedTypeSet & generated, CppuOptions const & options);
+        codemaker::GeneratedTypeSet & generated, CppuOptions const & options) const;
 
     virtual void dumpHdlFile(
         FileStream & out, codemaker::cppumaker::Includes & includes) {
@@ -176,7 +176,7 @@ public:
 
     virtual void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) = 0;
 
-    OUString dumpHeaderDefine(FileStream& o, OUString const & extension);
+    OUString dumpHeaderDefine(FileStream& o, OUString const & extension) const;
 
     void dumpGetCppuType(FileStream & out);
 
@@ -198,7 +198,7 @@ public:
     OUString getTypeClass(OUString const & name, bool cStyle = false);
 
     void dumpCppuGetType(
-        FileStream & out, OUString const & name, OUString const * ownName = nullptr);
+        FileStream & out, OUString const & name, OUString const * ownName = nullptr) const;
 
     sal_uInt32 getInheritedMemberCount();
 
@@ -454,7 +454,7 @@ bool CppuType::dumpFile(
 }
 
 void CppuType::dumpDependedTypes(
-    codemaker::GeneratedTypeSet & generated, CppuOptions const & options)
+    codemaker::GeneratedTypeSet & generated, CppuOptions const & options) const
 {
     if (!options.isValid("-nD")) {
         codemaker::cppumaker::Dependencies::Map const & map
@@ -466,7 +466,7 @@ void CppuType::dumpDependedTypes(
 }
 
 OUString CppuType::dumpHeaderDefine(
-    FileStream & out, OUString const & extension)
+    FileStream & out, OUString const & extension) const
 {
     OUString def(
         "INCLUDED_" + name_.replace('.', '_').toAsciiUpperCase() + "_"
@@ -849,7 +849,7 @@ void CppuType::dumpType(
 }
 
 void CppuType::dumpCppuGetType(
-    FileStream & out, OUString const & name, OUString const * ownName)
+    FileStream & out, OUString const & name, OUString const * ownName) const
 {
     //TODO: What are these calls good for?
     OUString nucleus;
@@ -1110,16 +1110,16 @@ public:
     virtual void dumpDeclaration(FileStream& o) override;
     void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
-    void        dumpAttributes(FileStream& o);
-    void        dumpMethods(FileStream& o);
+    void        dumpAttributes(FileStream& o) const;
+    void        dumpMethods(FileStream& o) const;
     void        dumpNormalGetCppuType(FileStream& o) override;
     void        dumpComprehensiveGetCppuType(FileStream& o) override;
     void        dumpCppuAttributeRefs(FileStream& o, sal_uInt32& index);
     void        dumpCppuMethodRefs(FileStream& o, sal_uInt32& index);
     void        dumpCppuAttributes(FileStream& o, sal_uInt32& index);
     void        dumpCppuMethods(FileStream& o, sal_uInt32& index);
-    void dumpAttributesCppuDecl(FileStream & out, std::set< OUString > * seen);
-    void dumpMethodsCppuDecl(FileStream & out, std::set< OUString > * seen);
+    void dumpAttributesCppuDecl(FileStream & out, std::set< OUString > * seen) const;
+    void dumpMethodsCppuDecl(FileStream & out, std::set< OUString > * seen) const;
 
 private:
     virtual void addComprehensiveGetCppuTypeIncludes(
@@ -1131,11 +1131,11 @@ private:
 
     void dumpExceptionTypeName(
         FileStream & out, OUString const & prefix, sal_uInt32 index,
-        OUString const & name);
+        OUString const & name) const;
 
     sal_Int32 dumpExceptionTypeNames(
         FileStream & out, OUString const & prefix,
-        std::vector< OUString > const & exceptions, bool runtimeException);
+        std::vector< OUString > const & exceptions, bool runtimeException) const;
 
     rtl::Reference< unoidl::InterfaceTypeEntity > entity_;
     bool m_isDeprecated;
@@ -1196,7 +1196,7 @@ void InterfaceType::dumpHppFile(
     out << "}\n\n#endif // "<< headerDefine << "\n";
 }
 
-void InterfaceType::dumpAttributes(FileStream & out)
+void InterfaceType::dumpAttributes(FileStream & out) const
 {
     if (!entity_->getDirectAttributes().empty()) {
         out << "\n" << indent() << "// Attributes\n";
@@ -1219,7 +1219,7 @@ void InterfaceType::dumpAttributes(FileStream & out)
     }
 }
 
-void InterfaceType::dumpMethods(FileStream & out)
+void InterfaceType::dumpMethods(FileStream & out) const
 {
     if (!entity_->getDirectMethods().empty()) {
         out << "\n" << indent() << "// Methods\n";
@@ -1551,7 +1551,7 @@ void InterfaceType::dumpCppuMethods(FileStream & out, sal_uInt32 & index)
 }
 
 void InterfaceType::dumpAttributesCppuDecl(
-    FileStream & out, std::set< OUString > * seen)
+    FileStream & out, std::set< OUString > * seen) const
 {
     assert(seen != nullptr);
     for (const unoidl::InterfaceTypeEntity::Attribute& attr : entity_->getDirectAttributes()) {
@@ -1572,7 +1572,7 @@ void InterfaceType::dumpAttributesCppuDecl(
 }
 
 void InterfaceType::dumpMethodsCppuDecl(
-    FileStream & out, std::set< OUString > * seen)
+    FileStream & out, std::set< OUString > * seen) const
 {
     assert(seen != nullptr);
     for (const unoidl::InterfaceTypeEntity::Method& method : entity_->getDirectMethods()) {
@@ -1586,7 +1586,7 @@ void InterfaceType::dumpMethodsCppuDecl(
 
 void InterfaceType::dumpExceptionTypeName(
     FileStream & out, OUString const & prefix, sal_uInt32 index,
-    OUString const & name)
+    OUString const & name) const
 {
     out << indent() << "::rtl::OUString the_" << prefix << "ExceptionName"
         << index << "( \"" << name << "\" );\n";
@@ -1594,7 +1594,7 @@ void InterfaceType::dumpExceptionTypeName(
 
 sal_Int32 InterfaceType::dumpExceptionTypeNames(
     FileStream & out, OUString const & prefix,
-    std::vector< OUString > const & exceptions, bool runtimeException)
+    std::vector< OUString > const & exceptions, bool runtimeException) const
 {
     sal_Int32 count = 0;
     for (const OUString& ex : exceptions) {

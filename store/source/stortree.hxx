@@ -256,7 +256,7 @@ public:
         OStoreBTreeNodeObject & rNode,  // [out]
         sal_uInt16 &            rIndex, // [out]
         OStorePageKey const &   rKey,
-        OStorePageBIOS &        rBIOS);
+        OStorePageBIOS &        rBIOS) const;
 
     /** find_insert (possibly with split()).
      *  Precond: root node page loaded.
@@ -271,7 +271,7 @@ private:
     /** testInvariant.
      *  Precond: root node page loaded.
      */
-    void testInvariant (char const * message);
+    void testInvariant (char const * message) const;
 
     /** change (Root).
      *

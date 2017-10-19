@@ -80,7 +80,7 @@ struct OStoreDataPageData : public store::PageData
 
     /** guard (external representation).
     */
-    void guard() { (void) this; /* loplugin:staticmethods */ }
+    void guard() const { (void) this; /* loplugin:staticmethods */ }
 
     /** verify (external representation).
     */
@@ -216,20 +216,20 @@ public:
     storeError read (
         sal_uInt16             nSingle,
         OStoreDataPageObject  &rData,
-        OStorePageBIOS        &rBIOS);
+        OStorePageBIOS        &rBIOS) const;
 
     storeError read (
         sal_uInt16             nDouble,
         sal_uInt16             nSingle,
         OStoreDataPageObject  &rData,
-        OStorePageBIOS        &rBIOS);
+        OStorePageBIOS        &rBIOS) const;
 
     storeError read (
         sal_uInt16             nTriple,
         sal_uInt16             nDouble,
         sal_uInt16             nSingle,
         OStoreDataPageObject  &rData,
-        OStorePageBIOS        &rBIOS);
+        OStorePageBIOS        &rBIOS) const;
 
     /** write (indirect data page).
     */
@@ -707,7 +707,7 @@ public:
     storeError read (
         sal_uInt32             nPage,
         OStoreDataPageObject  &rData,
-        OStorePageBIOS        &rBIOS);
+        OStorePageBIOS        &rBIOS) const;
 
     /** write (external data page).
     */

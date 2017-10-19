@@ -179,7 +179,7 @@ public:
     friend class RegistryKeyNames;
 
     /// returns the used registry Api.
-    const Registry_Api* getApi() { return m_pApi; }
+    const Registry_Api* getApi() const { return m_pApi; }
 protected:
 
     /// stores the used and initialized registry Api.
@@ -206,7 +206,7 @@ public:
     inline RegistryKey getElement(sal_uInt32 index);
 
     /// returns the length of the array.
-    inline sal_uInt32 getLength();
+    inline sal_uInt32 getLength() const;
 
     friend class RegistryKey;
 protected:
@@ -244,7 +244,7 @@ public:
     inline rtl::OUString getElement(sal_uInt32 index);
 
     /// returns the length of the array.
-    inline sal_uInt32 getLength();
+    inline sal_uInt32 getLength() const;
 
     friend class RegistryKey;
 protected:
@@ -591,7 +591,7 @@ inline RegistryKey RegistryKeyArray::getElement(sal_uInt32 index)
         return RegistryKey();
 }
 
-inline sal_uInt32 RegistryKeyArray::getLength()
+inline sal_uInt32 RegistryKeyArray::getLength() const
 {
     return m_length;
 }
@@ -626,7 +626,7 @@ inline rtl::OUString RegistryKeyNames::getElement(sal_uInt32 index)
         return rtl::OUString();
 }
 
-inline sal_uInt32 RegistryKeyNames::getLength()
+inline sal_uInt32 RegistryKeyNames::getLength() const
 {
     return m_length;
 }

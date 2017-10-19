@@ -65,12 +65,12 @@ public:
     /** read.
      */
     storeError read (
-        sal_uInt32 nAddr, void *pData, sal_uInt32 nSize);
+        sal_uInt32 nAddr, void *pData, sal_uInt32 nSize) const;
 
     /** write.
      */
     storeError write (
-        sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize);
+        sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize) const;
 
     /** isWriteable.
      */
@@ -163,9 +163,9 @@ private:
     /** Page Maintenance.
      */
     storeError loadObjectAt_Impl (
-        OStorePageObject & rPage, sal_uInt32 nAddr);
+        OStorePageObject & rPage, sal_uInt32 nAddr) const;
     storeError saveObjectAt_Impl (
-        OStorePageObject & rPage, sal_uInt32 nAddr);
+        OStorePageObject & rPage, sal_uInt32 nAddr) const;
 
     OStorePageBIOS (const OStorePageBIOS&) = delete;
     OStorePageBIOS& operator= (const OStorePageBIOS&) = delete;

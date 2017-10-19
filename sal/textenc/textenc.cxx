@@ -395,7 +395,7 @@ public:
         }
     }
 
-    ImplTextEncodingData const * get(rtl_TextEncoding encoding) {
+    ImplTextEncodingData const * get(rtl_TextEncoding encoding) const {
         return (*function_)(encoding);
     }
 

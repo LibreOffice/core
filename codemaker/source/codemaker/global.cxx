@@ -273,7 +273,7 @@ FileStream::~FileStream()
         osl_closeFile(m_file);
 }
 
-bool FileStream::isValid()
+bool FileStream::isValid() const
 {
     if ( m_file )
         return true;

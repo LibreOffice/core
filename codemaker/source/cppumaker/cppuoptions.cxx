@@ -320,7 +320,7 @@ OString CppuOptions::prepareHelp()
     return help;
 }
 
-OString CppuOptions::prepareVersion()
+OString CppuOptions::prepareVersion() const
 {
     OString version = m_program + " Version 2.0\n\n";
     return version;
