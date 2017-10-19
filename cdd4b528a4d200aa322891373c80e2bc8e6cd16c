@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_5447cb1c",
+        "filename": "sw/source/core/unocore/unochart.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-10-19T13:29:35Z",
+      "side": 1,
+      "message": "assume that the code below throws: we would destroy the Reference, then its destructor would notice that the release() returns 0 and delete \"this\", then (since the ctor throws) the \"this\" is deleted again!\n\notoh with the manual \"release()\" call no double-free takes place.",
+      "revId": "cdd4b528a4d200aa322891373c80e2bc8e6cd16c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
