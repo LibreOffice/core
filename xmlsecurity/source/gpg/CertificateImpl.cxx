@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_gpgme.h>
+
 #include "CertificateImpl.hxx"
 
 #include <comphelper/servicehelper.hxx>
@@ -215,8 +217,11 @@ void CertificateImpl::setCertificate(GpgME::Context* ctx, const GpgME::Key& key)
     ctx->setArmor(false); // caller will base64-encode anyway
     GpgME::Error err = ctx->exportPublicKeys(
         key.primaryFingerprint(),
-        data_out,
-        officecfg::Office::Common::Security::OpenPGP::MinimalKeyExport::get());
+        data_out
+#if GPGME_CAN_EXPORT_MINIMAL_KEY
+        , officecfg::Office::Common::Security::OpenPGP::MinimalKeyExport::get()
+#endif
+    );
 
     if (err)
         throw RuntimeException("The GpgME library failed to retrieve the public key");
