@@ -154,13 +154,13 @@ void CPDManager::printerRemoved (GDBusConnection *,
     uniqueName << id << ", " << backend_name;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     OUString aUniqueName = OStringToOUString( uniqueName.str().c_str(), aEncoding );
-    std::unordered_map<OUString, CPDPrinter *, OUStringHash>::iterator it = pManager->m_aCPDDestMap.find( aUniqueName );
+    std::unordered_map<OUString, CPDPrinter *>::iterator it = pManager->m_aCPDDestMap.find( aUniqueName );
     if (it == pManager->m_aCPDDestMap.end()) {
         SAL_WARN("vcl.unx.print", "CPD trying to remove non-existent printer from list");
         return;
     }
     pManager->m_aCPDDestMap.erase(it);
-    std::unordered_map<OUString, Printer, OUStringHash>::iterator printersIt = pManager->m_aPrinters.find( aUniqueName );
+    std::unordered_map<OUString, Printer>::iterator printersIt = pManager->m_aPrinters.find( aUniqueName );
     if (printersIt == pManager->m_aPrinters.end()) {
         SAL_WARN("vcl.unx.print", "CPD trying to remove non-existent printer from m_aPrinters");
         return;
@@ -190,7 +190,7 @@ std::vector<std::pair<std::string, gchar*>> CPDManager::getTempBackends() {
 
 void CPDManager::addNewPrinter(const OUString& aPrinterName, const OUString& aUniqueName, CPDPrinter *pDest) {
     std::pair<OUString, CPDPrinter *> newPrinter (aUniqueName, pDest);
-    std::unordered_map<OUString, CPDPrinter *, OUStringHash>::iterator it = m_aCPDDestMap.find( aUniqueName );
+    std::unordered_map<OUString, CPDPrinter *>::iterator it = m_aCPDDestMap.find( aUniqueName );
     if (it == m_aCPDDestMap.end()) {
         m_aCPDDestMap.insert(newPrinter);
     } else {
@@ -223,7 +223,7 @@ void CPDManager::addNewPrinter(const OUString& aPrinterName, const OUString& aUn
     // behaviour
     aPrinter.m_aInfo.m_pParser = nullptr;
     aPrinter.m_aInfo.m_aContext.setParser( nullptr );
-    std::unordered_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aUniqueName );
+    std::unordered_map< OUString, PPDContext >::const_iterator c_it = m_aDefaultContexts.find( aUniqueName );
     if( c_it != m_aDefaultContexts.end() )
     {
         aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
@@ -301,7 +301,7 @@ CPDManager::~CPDManager()
     {
         g_object_unref(it->second);
     }
-    std::unordered_map<OUString, CPDPrinter *, OUStringHash>::iterator dest_it =
+    std::unordered_map<OUString, CPDPrinter *>::iterator dest_it =
         m_aCPDDestMap.begin();
     for(; dest_it != m_aCPDDestMap.end(); ++dest_it)
     {
@@ -322,7 +322,7 @@ const PPDParser* CPDManager::createCPDParser( const OUString& rPrinter )
     else
         aPrinter = rPrinter;
 
-    std::unordered_map< OUString, CPDPrinter *, OUStringHash >::iterator dest_it =
+    std::unordered_map< OUString, CPDPrinter * >::iterator dest_it =
         m_aCPDDestMap.find( aPrinter );
 
     if( dest_it != m_aCPDDestMap.end() )
@@ -517,7 +517,7 @@ void CPDManager::initialize()
 
     // remove everything that is not a CUPS printer and not
     // a special purpose printer (PDF, Fax)
-    std::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
+    std::unordered_map< OUString, Printer >::iterator it = m_aPrinters.begin();
     while (it != m_aPrinters.end())
     {
         if( m_aCPDDestMap.find( it->first ) != m_aCPDDestMap.end() )
@@ -539,13 +539,13 @@ void CPDManager::initialize()
 void CPDManager::setupJobContextData( JobData& rData )
 {
 #if ENABLE_DBUS && ENABLE_GIO
-    std::unordered_map<OUString, CPDPrinter *, OUStringHash>::iterator dest_it =
+    std::unordered_map<OUString, CPDPrinter *>::iterator dest_it =
         m_aCPDDestMap.find( rData.m_aPrinterName );
 
     if( dest_it == m_aCPDDestMap.end() )
         return PrinterInfoManager::setupJobContextData( rData );
 
-    std::unordered_map< OUString, Printer, OUStringHash >::iterator p_it =
+    std::unordered_map< OUString, Printer >::iterator p_it =
         m_aPrinters.find( rData.m_aPrinterName );
     if( p_it == m_aPrinters.end() ) // huh ?
     {
@@ -681,7 +681,7 @@ bool CPDManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
     bool success = false;
 #if ENABLE_DBUS && ENABLE_GIO
     SAL_INFO( "vcl.unx.print", "endSpool: " << rPrintername << "," << rJobTitle << " copy count = " << rDocumentJobData.m_nCopies );
-    std::unordered_map< OUString, CPDPrinter *, OUStringHash >::iterator dest_it =
+    std::unordered_map< OUString, CPDPrinter * >::iterator dest_it =
         m_aCPDDestMap.find( rPrintername );
     if( dest_it == m_aCPDDestMap.end() )
     {
@@ -777,7 +777,7 @@ bool CPDManager::setDefaultPrinter( const OUString& rName )
 {
     bool bSuccess = false;
 #if ENABLE_DBUS && ENABLE_GIO
-    std::unordered_map< OUString, CPDPrinter *, OUStringHash >::iterator nit =
+    std::unordered_map< OUString, CPDPrinter * >::iterator nit =
         m_aCPDDestMap.find( rName );
     if( nit != m_aCPDDestMap.end())
     {

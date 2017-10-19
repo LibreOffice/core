@@ -46,8 +46,7 @@ namespace ucbhelper_impl
 typedef std::unordered_map
 <
     OUString,
-    uno::WeakReference< ucb::XContent >,
-    OUStringHash
+    uno::WeakReference< ucb::XContent >
 >
 Contents;
 

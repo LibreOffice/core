@@ -65,7 +65,7 @@ private:
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
-    typedef std::unordered_map< OUString, ScRange, OUStringHash > NameRangeMap;
+    typedef std::unordered_map< OUString, ScRange > NameRangeMap;
     NameRangeMap    aRangeMap;
     ScViewData*     pViewData;
     ScDocument*     pDoc;

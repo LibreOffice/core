@@ -108,7 +108,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
         mutable css::uno::Reference< css::container::XNameAccess > xAccess;
     };
 
-    std::unordered_map< OUString, LocaleAccess, OUStringHash > m_aConfig;
+    std::unordered_map< OUString, LocaleAccess > m_aConfig;
 
     OUString tryLocale( const OUString& rBcp47, const OUString& rType ) const;
 
@@ -153,8 +153,8 @@ private:
 
         LocaleSubst() : bConfigRead( false ) {}
     };
-    std::unordered_map< OUString, LocaleSubst, OUStringHash > m_aSubst;
-    typedef std::unordered_set< OUString, OUStringHash > UniqueSubstHash;
+    std::unordered_map< OUString, LocaleSubst > m_aSubst;
+    typedef std::unordered_set< OUString > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
     void fillSubstVector( const css::uno::Reference< css::container::XNameAccess >& rFont,

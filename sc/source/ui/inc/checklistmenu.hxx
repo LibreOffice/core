@@ -241,8 +241,8 @@ class ScCheckListBox : public SvTreeListBox
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck );
     void CheckEntry( SvTreeListEntry* pEntry, bool bCheck );
     SvTreeListEntry* ShowCheckEntry( const OUString& sName, ScCheckListMember& rMember, bool bShow = true, bool bCheck = true );
-    void GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordered_set<OUString, OUStringHash>& vOut, OUString& rLabel );
-    std::unordered_set<OUString, OUStringHash> GetAllChecked();
+    void GetRecursiveChecked( SvTreeListEntry* pEntry, std::unordered_set<OUString>& vOut, OUString& rLabel );
+    std::unordered_set<OUString> GetAllChecked();
     bool IsChecked( const OUString& sName, SvTreeListEntry* pParent );
     SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );
     sal_uInt16 GetCheckedEntryCount() const;

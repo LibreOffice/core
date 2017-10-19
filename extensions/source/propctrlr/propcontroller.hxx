@@ -110,9 +110,9 @@ namespace pcr
         typedef css::uno::Reference< css::inspection::XPropertyHandler >
                                                         PropertyHandlerRef;
         typedef std::vector< PropertyHandlerRef >     PropertyHandlerArray;
-        typedef std::unordered_map< OUString, PropertyHandlerRef, OUStringHash >
+        typedef std::unordered_map< OUString, PropertyHandlerRef >
                                                         PropertyHandlerRepository;
-        typedef std::unordered_multimap< OUString, PropertyHandlerRef, OUStringHash >
+        typedef std::unordered_multimap< OUString, PropertyHandlerRef >
                                                         PropertyHandlerMultiRepository;
         PropertyHandlerRepository                       m_aPropertyHandlers;
         PropertyHandlerMultiRepository                  m_aDependencyHandlers;
@@ -130,7 +130,7 @@ namespace pcr
         /// the property we're just committing
         OUString                                        m_sCommittingProperty;
 
-        typedef std::unordered_map< OUString, sal_uInt16, OUStringHash >     HashString2Int16;
+        typedef std::unordered_map< OUString, sal_uInt16 >     HashString2Int16;
         HashString2Int16                                m_aPageIds;
 
         bool        m_bContainerFocusListening;

@@ -24,7 +24,7 @@ inline sal_Int32 getRefCount( const rtl_uString* p )
     return (p->refCount & 0x3FFFFFFF);
 }
 
-typedef std::unordered_set<OUString, OUStringHash> StrHashType;
+typedef std::unordered_set<OUString> StrHashType;
 typedef std::pair<StrHashType::iterator, bool> InsertResultType;
 typedef std::unordered_map<const rtl_uString*, OUString> StrStoreType;
 

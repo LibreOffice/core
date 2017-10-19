@@ -364,7 +364,7 @@ public:
     virtual void Clear() override;
 };
 
-typedef std::unordered_map< OUString, css::uno::Any, OUStringHash > VBAConstantsHash;
+typedef std::unordered_map< OUString, css::uno::Any > VBAConstantsHash;
 
 typedef std::vector< OUString > VBAConstantsVector;
 

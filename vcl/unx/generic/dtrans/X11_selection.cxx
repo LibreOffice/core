@@ -201,9 +201,9 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
     return aEncoding;
 }
 
-std::unordered_map< OUString, SelectionManager*, OUStringHash >& SelectionManager::getInstances()
+std::unordered_map< OUString, SelectionManager* >& SelectionManager::getInstances()
 {
-    static std::unordered_map< OUString, SelectionManager*, OUStringHash > aInstances;
+    static std::unordered_map< OUString, SelectionManager* > aInstances;
     return aInstances;
 }
 
@@ -455,7 +455,7 @@ SelectionManager::~SelectionManager()
     {
         osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
 
-        std::unordered_map< OUString, SelectionManager*, OUStringHash >::iterator it;
+        std::unordered_map< OUString, SelectionManager* >::iterator it;
         for( it = getInstances().begin(); it != getInstances().end(); ++it )
             if( it->second == this )
             {
@@ -671,7 +671,7 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
         aDisplayName = OStringToOUString( getenv( "DISPLAY" ), RTL_TEXTENCODING_ISO_8859_1 );
     SelectionManager* pInstance = nullptr;
 
-    std::unordered_map< OUString, SelectionManager*, OUStringHash >::iterator it = getInstances().find( aDisplayName );
+    std::unordered_map< OUString, SelectionManager* >::iterator it = getInstances().find( aDisplayName );
     if( it != getInstances().end() )
         pInstance = it->second;
     else pInstance = getInstances()[ aDisplayName ] = new SelectionManager();

@@ -124,8 +124,8 @@ struct OLEStreamData
     rtl::OString RVNGname;
 };
 
-typedef std::unordered_map<rtl::OUString, std::size_t, rtl::OUStringHash> NameMap_t;
-typedef std::unordered_map<rtl::OUString, SotStorageRefWrapper, rtl::OUStringHash> OLEStorageMap_t;
+typedef std::unordered_map<rtl::OUString, std::size_t> NameMap_t;
+typedef std::unordered_map<rtl::OUString, SotStorageRefWrapper> OLEStorageMap_t;
 
 /** Representation of an OLE2 storage.
   *

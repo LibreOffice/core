@@ -61,7 +61,7 @@ class VCL_DLLPUBLIC PPDKey
     friend class PPDParser;
     friend class CPDManager;
 
-    typedef std::unordered_map< OUString, PPDValue, OUStringHash > hash_type;
+    typedef std::unordered_map< OUString, PPDValue > hash_type;
     typedef std::vector< PPDValue* > value_type;
 
     OUString            m_aKey;
@@ -123,7 +123,7 @@ class VCL_DLLPUBLIC PPDParser
     friend class CPDManager;
     friend class PPDCache;
 
-    typedef std::unordered_map< OUString, PPDKey*, OUStringHash > hash_type;
+    typedef std::unordered_map< OUString, PPDKey* > hash_type;
     typedef std::vector< PPDKey* > value_type;
 
     void insertKey( const OUString& rKey, PPDKey* pKey );

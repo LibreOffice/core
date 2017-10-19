@@ -40,8 +40,7 @@ static const sal_uInt32 snStartupPropertyCount (1);
 class ModuleController::ResourceToFactoryMap
     : public std::unordered_map<
     OUString,
-    OUString,
-    OUStringHash>
+    OUString>
 {
 public:
     ResourceToFactoryMap() {}
@@ -50,8 +49,7 @@ public:
 class ModuleController::LoadedFactoryContainer
     : public std::unordered_map<
     OUString,
-    WeakReference<XInterface>,
-    OUStringHash>
+    WeakReference<XInterface>>
 {
 public:
     LoadedFactoryContainer() {}

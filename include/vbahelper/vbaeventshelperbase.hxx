@@ -216,7 +216,7 @@ protected:
 
 private:
     typedef std::map< sal_Int32, EventHandlerInfo > EventHandlerInfoMap;
-    typedef std::unordered_map< OUString, ModulePathMap, OUStringHash > EventHandlerPathMap;
+    typedef std::unordered_map< OUString, ModulePathMap > EventHandlerPathMap;
 
     EventHandlerInfoMap maEventInfos;
     EventHandlerPathMap maEventPaths;

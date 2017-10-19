@@ -91,8 +91,7 @@ typedef std::vector< ColumnMetaData > ColumnMetaDataVector;
 typedef std::unordered_map
 <
    OUString,
-   sal_Int32,
-   OUStringHash
+   sal_Int32
 > BaseTypeMap;
 
 struct ImplementationStatics

@@ -101,7 +101,7 @@ protected:
         PrinterInfo             m_aInfo;
     };
 
-    std::unordered_map< OUString, Printer, OUStringHash > m_aPrinters;
+    std::unordered_map< OUString, Printer > m_aPrinters;
     PrinterInfo                         m_aGlobalDefaults;
     std::vector< WatchFile >            m_aWatchFiles;
     OUString                     m_aDefaultPrinter;

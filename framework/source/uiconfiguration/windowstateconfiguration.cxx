@@ -199,8 +199,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
 
     private:
         typedef std::unordered_map< OUString,
-                                    WindowStateInfo,
-                                    OUStringHash > ResourceURLToInfoCache;
+                                    WindowStateInfo > ResourceURLToInfoCache;
 
         osl::Mutex                        m_aMutex;
         OUString                          m_aConfigWindowAccess;
@@ -1265,12 +1264,10 @@ public:
     virtual sal_Bool SAL_CALL hasElements() override;
 
     typedef std::unordered_map< OUString,
-                                OUString,
-                                OUStringHash > ModuleToWindowStateFileMap;
+                                OUString > ModuleToWindowStateFileMap;
 
     typedef std::unordered_map< OUString,
-                                css::uno::Reference< css::container::XNameAccess >,
-                                OUStringHash > ModuleToWindowStateConfigHashMap;
+                                css::uno::Reference< css::container::XNameAccess > > ModuleToWindowStateConfigHashMap;
 
 private:
     css::uno::Reference< css::uno::XComponentContext>         m_xContext;

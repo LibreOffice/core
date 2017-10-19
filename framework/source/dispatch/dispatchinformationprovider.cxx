@@ -77,7 +77,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     sal_Int32                                                                             c1        = lProvider.getLength();
     sal_Int32                                                                             i1        = 0;
 
-    std::unordered_map<OUString, css::frame::DispatchInformation, OUStringHash> lInfos;
+    std::unordered_map<OUString, css::frame::DispatchInformation> lInfos;
 
     for (i1=0; i1<c1; ++i1)
     {

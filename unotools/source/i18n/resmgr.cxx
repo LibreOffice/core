@@ -91,7 +91,7 @@ namespace Translate
 {
     std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
     {
-        static std::unordered_map<OString, std::locale, OStringHash> aCache;
+        static std::unordered_map<OString, std::locale> aCache;
         OString sIdentifier = rLocale.getGlibcLocaleString(".UTF-8").toUtf8();
         OString sUnique = sIdentifier + OString(pPrefixName);
         auto aFind = aCache.find(sUnique);

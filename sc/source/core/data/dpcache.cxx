@@ -334,7 +334,7 @@ struct InitDocData
         mbTailEmptyRows(false) {}
 };
 
-typedef std::unordered_set<OUString, OUStringHash> LabelSet;
+typedef std::unordered_set<OUString> LabelSet;
 
 class InsertLabel
 {

@@ -85,7 +85,7 @@ static OUString toUNOname( char const * p )
 
 class RTTI
 {
-    typedef std::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
+    typedef std::unordered_map< OUString, type_info * > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;

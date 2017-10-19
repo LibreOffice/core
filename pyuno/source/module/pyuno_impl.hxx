@@ -190,16 +190,14 @@ typedef std::unordered_map
 
 typedef std::unordered_map
 <
-OUString,
-PyRef,
-OUStringHash
+    OUString,
+    PyRef
 > ExceptionClassMap;
 
 typedef std::unordered_map
 <
     OUString,
-    css::uno::Sequence< sal_Int16 >,
-    OUStringHash
+    css::uno::Sequence< sal_Int16 >
 > MethodOutIndexMap;
 
 typedef std::unordered_set< PyRef , PyRef::Hash > ClassSet;

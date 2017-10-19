@@ -35,7 +35,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOOoEventMap_Impl:
-    public std::unordered_map< OUString, NameKey_Impl, OUStringHash >
+    public std::unordered_map< OUString, NameKey_Impl >
 {
 public:
 

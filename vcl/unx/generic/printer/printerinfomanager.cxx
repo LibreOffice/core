@@ -458,7 +458,7 @@ void PrinterInfoManager::initialize()
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
                 aPrinter.m_bModified    = false;
                 aPrinter.m_aGroup       = aConfig.GetGroupName( nGroup );
-                std::unordered_map< OUString, Printer, OUStringHash >::const_iterator find_it =
+                std::unordered_map< OUString, Printer >::const_iterator find_it =
                 m_aPrinters.find( aPrinterName );
                 if( find_it != m_aPrinters.end() )
                 {
@@ -537,7 +537,7 @@ void PrinterInfoManager::initialize()
 
 void PrinterInfoManager::listPrinters( ::std::vector< OUString >& rVector ) const
 {
-    std::unordered_map< OUString, Printer, OUStringHash >::const_iterator it;
+    std::unordered_map< OUString, Printer >::const_iterator it;
     rVector.clear();
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
         rVector.push_back( it->first );
@@ -546,7 +546,7 @@ void PrinterInfoManager::listPrinters( ::std::vector< OUString >& rVector ) cons
 const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter ) const
 {
     static PrinterInfo aEmptyInfo;
-    std::unordered_map< OUString, Printer, OUStringHash >::const_iterator it = m_aPrinters.find( rPrinter );
+    std::unordered_map< OUString, Printer >::const_iterator it = m_aPrinters.find( rPrinter );
 
     SAL_WARN_IF( it == m_aPrinters.end(), "vcl", "Do not ask for info about nonexistent printers" );
 
@@ -568,9 +568,9 @@ static bool checkWriteability( const OUString& rUniPath )
 bool PrinterInfoManager::writePrinterConfig()
 {
     // find at least one writeable config
-    std::unordered_map< OUString, Config*, OUStringHash > files;
-    std::unordered_map< OUString, int, OUStringHash > rofiles;
-    std::unordered_map< OUString, Config*, OUStringHash >::iterator file_it;
+    std::unordered_map< OUString, Config* > files;
+    std::unordered_map< OUString, int > rofiles;
+    std::unordered_map< OUString, Config* >::iterator file_it;
 
     for( ::std::vector< WatchFile >::const_iterator wit = m_aWatchFiles.begin(); wit != m_aWatchFiles.end(); ++wit )
     {
@@ -587,7 +587,7 @@ bool PrinterInfoManager::writePrinterConfig()
     Config* pGlobal = files.begin()->second;
     pGlobal->SetGroup( GLOBAL_DEFAULTS_GROUP );
 
-    std::unordered_map< OUString, Printer, OUStringHash >::iterator it;
+    std::unordered_map< OUString, Printer >::iterator it;
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
     {
         if( ! it->second.m_bModified )
@@ -757,7 +757,7 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
 {
     bool bSuccess = true;
 
-    std::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
+    std::unordered_map< OUString, Printer >::iterator it = m_aPrinters.find( rPrinterName );
     if( it != m_aPrinters.end() )
     {
         if( !it->second.m_aFile.isEmpty() )
@@ -809,7 +809,7 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
 {
     bool bSuccess = false;
 
-    std::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
+    std::unordered_map< OUString, Printer >::iterator it = m_aPrinters.find( rPrinterName );
     if( it != m_aPrinters.end() )
     {
         bSuccess = true;
@@ -855,7 +855,7 @@ bool PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUStr
 
 void PrinterInfoManager::setupJobContextData( JobData& rData )
 {
-    std::unordered_map< OUString, Printer, OUStringHash >::iterator it =
+    std::unordered_map< OUString, Printer >::iterator it =
     m_aPrinters.find( rData.m_aPrinterName );
     if( it != m_aPrinters.end() )
     {
@@ -967,8 +967,8 @@ static void lpgetSysQueueTokenHandler(
     const SystemCommandParameters* )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    std::unordered_set< OUString, OUStringHash > aUniqueSet;
-    std::unordered_set< OUString, OUStringHash > aOnlySet;
+    std::unordered_set< OUString > aUniqueSet;
+    std::unordered_set< OUString > aOnlySet;
     aUniqueSet.insert( OUString( "_all" ) );
     aUniqueSet.insert( OUString( "_default" ) );
 
@@ -1064,7 +1064,7 @@ static void standardSysQueueTokenHandler(
     const SystemCommandParameters* i_pParms)
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    std::unordered_set< OUString, OUStringHash > aUniqueSet;
+    std::unordered_set< OUString > aUniqueSet;
     OString aForeToken( i_pParms->pForeToken );
     OString aAftToken( i_pParms->pAftToken );
     /* Normal Unix print queue discovery, also used for Darwin 5 LPR printing

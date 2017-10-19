@@ -150,8 +150,7 @@ class SVT_DLLPUBLIC ToolboxController :
         DECL_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, void*, void );
 
         typedef std::unordered_map< OUString,
-                                    css::uno::Reference< css::frame::XDispatch >,
-                                    OUStringHash > URLToDispatchMap;
+                                    css::uno::Reference< css::frame::XDispatch > > URLToDispatchMap;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const OUString& aCommandURL );

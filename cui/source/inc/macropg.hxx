@@ -35,8 +35,7 @@
 
 class SvTreeListBox;
 
-typedef std::unordered_map< OUString, std::pair< OUString, OUString >,
-                            OUStringHash > EventsHash;
+typedef std::unordered_map< OUString, std::pair< OUString, OUString > > EventsHash;
 
 struct EventDisplayName
 {

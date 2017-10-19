@@ -28,7 +28,7 @@ namespace vcl
 class CommandImageResolver final
 {
 private:
-    typedef std::unordered_map<OUString, OUString, OUStringHash > CommandToImageNameMap;
+    typedef std::unordered_map<OUString, OUString > CommandToImageNameMap;
 
     CommandToImageNameMap m_aCommandToImageNameMap;
     std::vector<OUString> m_aImageCommandNameVector;

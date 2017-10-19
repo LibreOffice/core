@@ -117,8 +117,7 @@ private:
     typedef std::vector<ListenerDescriptor> ListenerList;
     typedef std::unordered_map
         <OUString,
-         ListenerList,
-         OUStringHash> ListenerMap;
+         ListenerList> ListenerMap;
     ListenerMap maListenerMap;
 
     /** Broadcast the given event to all listeners in the given list.

@@ -189,7 +189,7 @@ private:
     bool mbIsHighContrastMode;
     bool mbIsHighContrastModeSetManually;
 
-    typedef std::unordered_map<rtl::OUString,ThemeItem, rtl::OUStringHash> PropertyNameToIdMap;
+    typedef std::unordered_map<rtl::OUString,ThemeItem> PropertyNameToIdMap;
     PropertyNameToIdMap maPropertyNameToIdMap;
     typedef std::vector<rtl::OUString> PropertyIdToNameMap;
     PropertyIdToNameMap maPropertyIdToNameMap;

@@ -124,7 +124,7 @@ private:
     tParagraphStyleList maParagraphStyleList;
 
     /** unordered_map containing "name->rule" relation */
-    std::unordered_map<OUString, SwNumRule *, OUStringHash> * mpNumRuleMap;
+    std::unordered_map<OUString, SwNumRule *> * mpNumRuleMap;
 
     OUString msName;
     SwNumRuleType meRuleType;
@@ -203,7 +203,7 @@ public:
        @param pNumRuleMap      map to register in
      */
     void SetNumRuleMap(
-                std::unordered_map<OUString, SwNumRule *, OUStringHash>* pNumRuleMap );
+                std::unordered_map<OUString, SwNumRule *>* pNumRuleMap );
 
     static OUString GetOutlineRuleName();
 

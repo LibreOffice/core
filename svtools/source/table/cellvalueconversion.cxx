@@ -80,7 +80,7 @@ namespace svt
     class StandardFormatNormalizer;
     struct CellValueConversion_Data
     {
-        typedef std::unordered_map< OUString, std::shared_ptr< StandardFormatNormalizer >, OUStringHash >    NormalizerCache;
+        typedef std::unordered_map< OUString, std::shared_ptr< StandardFormatNormalizer > >    NormalizerCache;
 
         Reference< XNumberFormatter >           xNumberFormatter;
         bool                                    bAttemptedFormatterCreation;

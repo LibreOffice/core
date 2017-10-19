@@ -73,7 +73,7 @@
 
 struct SwTableEntry;
 
-typedef std::unordered_map<OUString, sal_uInt16, OUStringHash> NameToIdHash;
+typedef std::unordered_map<OUString, sal_uInt16> NameToIdHash;
 
 class SwStyleNameMapper
 {

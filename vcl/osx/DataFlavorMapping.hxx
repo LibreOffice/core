@@ -118,7 +118,7 @@ private:
 
 private:
   css::uno::Reference< css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
-  typedef std::unordered_map< OUString, NSString*, OUStringHash > OfficeOnlyTypes;
+  typedef std::unordered_map< OUString, NSString* > OfficeOnlyTypes;
   mutable OfficeOnlyTypes maOfficeOnlyTypes;
 };
 

@@ -60,12 +60,7 @@ static OUString ns_getImplementationName()
     return OUString(IMPLNAME);
 }
 
-typedef std::unordered_map
-<
-    OUString,
-    Reference<XInterface >,
-    OUStringHash
-> HashMap_OWString_Interface;
+typedef std::unordered_map< OUString, Reference<XInterface > > HashMap_OWString_Interface;
 
 
 class NamingService_Impl

@@ -1912,6 +1912,27 @@ using ::rtl::OStringHash;
 using ::rtl::OStringLiteral;
 #endif
 
+/// @cond INTERNAL
+/**
+  Make OString hashable by default for use in STL containers.
+
+  @since LibreOffice 6.0
+*/
+#if defined LIBO_INTERNAL_ONLY
+namespace std {
+
+template<>
+struct hash<::rtl::OString>
+{
+    std::size_t operator()(::rtl::OString const & s) const
+    { return std::size_t(s.hashCode()); }
+};
+
+}
+
+#endif
+/// @endcond
+
 #endif // INCLUDED_RTL_STRING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

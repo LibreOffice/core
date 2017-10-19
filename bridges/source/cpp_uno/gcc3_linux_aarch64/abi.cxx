@@ -81,7 +81,7 @@ public:
     std::type_info * getRtti(typelib_TypeDescription const & type);
 
 private:
-    typedef std::unordered_map<OUString, std::type_info *, OUStringHash> Map;
+    typedef std::unordered_map<OUString, std::type_info *> Map;
 
     void * app_;
 

@@ -40,7 +40,7 @@ namespace comphelper{
             such name sequences very easy ...
  */
 
-using SequenceAsHashMapBase = std::unordered_map<OUString, css::uno::Any, OUStringHash>;
+using SequenceAsHashMapBase = std::unordered_map<OUString, css::uno::Any>;
 
 class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
 {

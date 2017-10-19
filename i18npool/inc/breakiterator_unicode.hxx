@@ -101,7 +101,7 @@ protected:
         sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char* name, const OUString& rText);
 
 public:
-    typedef std::unordered_map< OString, std::shared_ptr< BI_ValueData >, OStringHash > BIMap;
+    typedef std::unordered_map< OString, std::shared_ptr< BI_ValueData > > BIMap;
 };
 
 }

@@ -187,7 +187,7 @@ public:
     typedef Sequence< Reference< XInterface > >                                                                 ObjectSequence;
 
     typedef std::unordered_set< sal_Unicode, HashUChar >                                                    UCharSet;
-    typedef std::unordered_map< OUString, UCharSet, OUStringHash >                                          UCharSetMap;
+    typedef std::unordered_map< OUString, UCharSet >                                          UCharSetMap;
     typedef std::unordered_map< Reference< XInterface >, UCharSetMap, HashReferenceXInterface >             UCharSetMapMap;
 
     typedef std::unordered_map< Reference< XInterface >, OUString, HashReferenceXInterface >         UOStringMap;

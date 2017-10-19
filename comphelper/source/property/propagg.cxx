@@ -75,7 +75,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
 
     // fill aDelegatorProps with names from _rProperties for a fast existence check
     // different kinds of properties are processed differently
-    std::unordered_set< OUString, OUStringHash > aDelegatorProps;
+    std::unordered_set< OUString > aDelegatorProps;
     aDelegatorProps.reserve( _rProperties.getLength() );
     for( auto &delegateProp: _rProperties )
     {

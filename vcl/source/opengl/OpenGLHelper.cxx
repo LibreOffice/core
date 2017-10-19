@@ -89,7 +89,7 @@ OString loadShader(const OUString& rFilename)
 
 OString& getShaderSource(const OUString& rFilename)
 {
-    static std::unordered_map<OUString, OString, OUStringHash> aMap;
+    static std::unordered_map<OUString, OString> aMap;
 
     if (aMap.find(rFilename) == aMap.end())
     {

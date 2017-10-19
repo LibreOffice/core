@@ -39,7 +39,7 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-typedef  std::unordered_map< OUString, sal_Int32, OUStringHash > ControlIndexMap;
+typedef  std::unordered_map< OUString, sal_Int32 > ControlIndexMap;
 typedef  std::vector< uno::Reference< awt::XControl > > ControlVec;
 
 class ControlArrayWrapper : public ::cppu::WeakImplHelper< container::XNameAccess, container::XIndexAccess >

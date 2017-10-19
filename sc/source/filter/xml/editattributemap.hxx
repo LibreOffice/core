@@ -36,7 +36,7 @@ public:
     const Entry* getEntryByItemID(sal_uInt16 nItemID) const;
 
 private:
-    typedef std::unordered_map<OUString, const Entry*, OUStringHash> StrToEntriesType;
+    typedef std::unordered_map<OUString, const Entry*> StrToEntriesType;
     typedef std::unordered_map<sal_uInt16, const Entry*> IndexToEntriesType;
     StrToEntriesType maAPIEntries;
     IndexToEntriesType maItemIDEntries;

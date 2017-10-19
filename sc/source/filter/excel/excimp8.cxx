@@ -112,7 +112,7 @@ using namespace ::comphelper;
 class OleNameOverrideContainer : public ::cppu::WeakImplHelper< container::XNameContainer >
 {
 private:
-    typedef std::unordered_map< OUString, uno::Reference< container::XIndexContainer >, OUStringHash > NamedIndexToOleName;
+    typedef std::unordered_map< OUString, uno::Reference< container::XIndexContainer > > NamedIndexToOleName;
     NamedIndexToOleName  IdToOleNameHash;
     ::osl::Mutex m_aMutex;
 public:

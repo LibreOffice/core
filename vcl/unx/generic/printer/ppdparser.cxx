@@ -80,7 +80,7 @@ namespace psp
         };
 
         typedef std::unordered_map< css::lang::Locale, OUString, LocaleHash, LocaleEqual > translation_map;
-        typedef std::unordered_map< OUString, translation_map, OUStringHash > key_translation_map;
+        typedef std::unordered_map< OUString, translation_map > key_translation_map;
 
         key_translation_map     m_aTranslations;
         public:
@@ -240,7 +240,7 @@ namespace psp
     {
     public:
         std::vector< std::unique_ptr<PPDParser> > aAllParsers;
-        std::unique_ptr<std::unordered_map< OUString, OUString, OUStringHash >> pAllPPDFiles;
+        std::unique_ptr<std::unordered_map< OUString, OUString >> pAllPPDFiles;
         PPDCache()
             : pAllPPDFiles(nullptr)
         {}
@@ -440,7 +440,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     if( rPPDCache.pAllPPDFiles )
         return;
 
-    rPPDCache.pAllPPDFiles.reset(new std::unordered_map< OUString, OUString, OUStringHash >);
+    rPPDCache.pAllPPDFiles.reset(new std::unordered_map< OUString, OUString >);
 
     // check installation directories
     std::vector< OUString > aPathList;
@@ -475,7 +475,7 @@ OUString PPDParser::getPPDFile( const OUString& rFile )
     PPDDecompressStream aStream( aPPD.PathToFileName() );
     if( ! aStream.IsOpen() )
     {
-        std::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
+        std::unordered_map< OUString, OUString >::const_iterator it;
         PPDCache &rPPDCache = thePPDCache::get();
 
         bool bRetry = true;

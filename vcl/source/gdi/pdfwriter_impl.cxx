@@ -713,7 +713,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
             // find or create a hierarchical field
             // first find the fully qualified name up to this field
             aDomain = aFullName.copy( 0, nTokenIndex-1 );
-            std::unordered_map< OString, sal_Int32, OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+            std::unordered_map< OString, sal_Int32 >::const_iterator it = m_aFieldNameMap.find( aDomain );
             if( it == m_aFieldNameMap.end() )
             {
                  // create new hierarchy field
@@ -774,7 +774,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
     // insert widget into its hierarchy field
     if( !aDomain.isEmpty() )
     {
-        std::unordered_map< OString, sal_Int32, OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+        std::unordered_map< OString, sal_Int32 >::const_iterator it = m_aFieldNameMap.find( aDomain );
         if( it != m_aFieldNameMap.end() )
         {
             OSL_ENSURE( it->second >= 0 && it->second < sal_Int32( m_aWidgets.size() ), "invalid field index" );
@@ -801,11 +801,11 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
 
     if( ! m_aContext.AllowDuplicateFieldNames )
     {
-        std::unordered_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aFullName );
+        std::unordered_map<OString, sal_Int32>::iterator it = m_aFieldNameMap.find( aFullName );
 
         if( it != m_aFieldNameMap.end() ) // not unique
         {
-            std::unordered_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
+            std::unordered_map< OString, sal_Int32 >::const_iterator check_it;
             OString aTry;
             sal_Int32 nTry = 2;
             do
@@ -2645,7 +2645,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         if( ! m_aRoleMap.empty() )
         {
             aLine.append( "/RoleMap<<" );
-            for( std::unordered_map<OString,OString,OStringHash>::const_iterator
+            for( std::unordered_map<OString,OString>::const_iterator
                  it = m_aRoleMap.begin(); it != m_aRoleMap.end(); ++it )
             {
                 aLine.append( '/' );
@@ -11422,7 +11422,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
     {
         PDFWidget& rGroupWidget = m_aWidgets[ group->second ];
         // check whether all kids have a unique OnValue
-        std::unordered_map< OUString, sal_Int32, OUStringHash > aOnValues;
+        std::unordered_map< OUString, sal_Int32 > aOnValues;
         int nChildren = rGroupWidget.m_aKidsIndex.size();
         bool bIsUnique = true;
         for( int nKid = 0; nKid < nChildren && bIsUnique; nKid++ )
