@@ -12,6 +12,7 @@ $(eval $(call gb_Library_Library,sdfilt))
 $(eval $(call gb_Library_set_include,sdfilt,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sd/inc \
+    -I$(SRCDIR)/sd/source/ui/inc \
 ))
 
 ifneq ($(strip $(dbg_anim_log)$(DBG_ANIM_LOG)),)
