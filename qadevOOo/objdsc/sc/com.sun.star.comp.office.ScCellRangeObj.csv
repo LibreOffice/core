@@ -103,8 +103,6 @@
 "ScCellRangeObj";"com::sun::star::style::ParagraphProperties";"ParaUserDefinedAttributes#optional"
 "ScCellRangeObj";"com::sun::star::style::ParagraphProperties";"NumberingIsNumber#optional"
 "ScCellRangeObj";"com::sun::star::style::ParagraphProperties";"ParaIsConnectBorder#optional"
-"ScCellRangeObj";"com::sun::star::sheet::XSheetOperation";"computeFunction()"
-"ScCellRangeObj";"com::sun::star::sheet::XSheetOperation";"clearContents()"
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesComplex";"CharHeightComplex"
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesComplex";"CharWeightComplex"
 "ScCellRangeObj";"com::sun::star::style::CharacterPropertiesComplex";"CharFontNameComplex"

@@ -104,8 +104,6 @@
 "ScTableSheetObj";"com::sun::star::style::ParagraphProperties";"ParaUserDefinedAttributes#optional"
 "ScTableSheetObj";"com::sun::star::style::ParagraphProperties";"NumberingIsNumber#optional"
 "ScTableSheetObj";"com::sun::star::style::ParagraphProperties";"ParaIsConnectBorder#optional"
-"ScTableSheetObj";"com::sun::star::sheet::XSheetOperation";"computeFunction()"
-"ScTableSheetObj";"com::sun::star::sheet::XSheetOperation";"clearContents()"
 "ScTableSheetObj";"com::sun::star::style::CharacterPropertiesComplex";"CharHeightComplex"
 "ScTableSheetObj";"com::sun::star::style::CharacterPropertiesComplex";"CharWeightComplex"
 "ScTableSheetObj";"com::sun::star::style::CharacterPropertiesComplex";"CharFontNameComplex"

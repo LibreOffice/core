@@ -107,8 +107,6 @@
 "ScCellRangesObj";"com::sun::star::style::ParagraphProperties";"ParaUserDefinedAttributes#optional"
 "ScCellRangesObj";"com::sun::star::style::ParagraphProperties";"NumberingIsNumber#optional"
 "ScCellRangesObj";"com::sun::star::style::ParagraphProperties";"ParaIsConnectBorder#optional"
-"ScCellRangesObj";"com::sun::star::sheet::XSheetOperation";"computeFunction()"
-"ScCellRangesObj";"com::sun::star::sheet::XSheetOperation";"clearContents()"
 "ScCellRangesObj";"com::sun::star::style::CharacterPropertiesComplex";"CharHeightComplex"
 "ScCellRangesObj";"com::sun::star::style::CharacterPropertiesComplex";"CharWeightComplex"
 "ScCellRangesObj";"com::sun::star::style::CharacterPropertiesComplex";"CharFontNameComplex"
