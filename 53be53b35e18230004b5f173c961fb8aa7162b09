@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f257e7ff",
+        "filename": "xmlsecurity/source/gpg/xmlsignature_gpgimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1001518
+      },
+      "writtenOn": "2017-10-20T12:59:31Z",
+      "side": 1,
+      "message": "Needs validating that exactly one signature is available, error out otherwise",
+      "revId": "53be53b35e18230004b5f173c961fb8aa7162b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_125b932f",
+        "filename": "xmlsecurity/source/gpg/xmlsignature_gpgimpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1001518
+      },
+      "writtenOn": "2017-10-20T12:59:31Z",
+      "side": 1,
+      "message": "Likewise",
+      "revId": "53be53b35e18230004b5f173c961fb8aa7162b09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
