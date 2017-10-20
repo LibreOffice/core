@@ -302,6 +302,14 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 SetTabNo( GetViewData().GetTabNo(), true );
                 break;
 
+            case SFX_HINT_LANGUAGECHANGED:
+            {
+                GetViewFrame()->GetBindings().Invalidate(SID_LANGUAGE_STATUS);
+                if ( ScGridWindow* pWin = GetViewData().GetActiveWin() )
+                    pWin->ResetAutoSpell();
+            }
+                break;
+
             default:
                 break;
         }
