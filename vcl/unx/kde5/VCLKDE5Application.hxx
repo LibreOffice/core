@@ -24,13 +24,15 @@
 
 #include <QtWidgets/QApplication>
 #include <QtCore/QAbstractNativeEventFilter>
+#include <KConfigCore/kconfig.h>
+
 
 #undef Region
 
-class VCLKDEApplication : public QApplication, public QAbstractNativeEventFilter
+class VCLKDE5Application : public QApplication, public QAbstractNativeEventFilter
 {
     public:
-        VCLKDEApplication();
+        VCLKDE5Application( int argv, char** argc);
         static void preDialogSetup();
         static void postDialogCleanup();
 };

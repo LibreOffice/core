@@ -22,6 +22,7 @@
 #include <memory>
 
 #include <unx/saldisp.hxx>
+#include <unx/salinst.h>
 
 //#include <fixx11h.h>
 //
@@ -31,16 +32,14 @@
 #include <QtCore/QTimer>
 #include <QtCore/QAbstractNativeEventFilter>
 
-#include <unx/salinst.h>
-
-class VCLKDEApplication;
+class VCLKDE5Application;
 
 class KDE5XLib : public QObject, public QAbstractNativeEventFilter, public SalXLib
 {
     Q_OBJECT
     private:
         bool m_bStartupDone;
-        std::unique_ptr<VCLKDEApplication> m_pApplication;
+        std::unique_ptr<VCLKDE5Application> m_pApplication;
         std::unique_ptr<char*[]> m_pFreeCmdLineArgs;
         std::unique_ptr<char*[]> m_pAppCmdLineArgs;
         int m_nFakeCmdLineArgs;

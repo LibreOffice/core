@@ -24,8 +24,8 @@
 
 #include "KDE5SalDisplay.hxx"
 
-VCLKDE5Application::VCLKDE5Application() :
-    QApplication()
+VCLKDE5Application::VCLKDE5Application( int argc, char** argv) :
+    QApplication( argc, argv)
 {
 }
 
@@ -53,7 +53,8 @@ void VCLKDE5Application::postDialogCleanup()
     // (such as the auto-extension flag), but that doesn't update KGlobal::config()
     // (which is probably a KDE bug), so force reading the new configuration,
     // otherwise the next opening of the dialog would use the old settings.
-    KGlobal::config()->reparseConfiguration();
+    KConfig config;
+    config.reparseConfiguration();
     // HACK: If Qt owns clipboard or selection, give up on their ownership now. Otherwise
     // LO core might ask for the contents, but it would block while doing so (i.e. it
     // doesn't seem to have an equivalent of QClipboard's "useEventLoopWhenWaiting"),
