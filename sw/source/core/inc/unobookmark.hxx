@@ -175,20 +175,15 @@ class SwXFieldmarkParameters
 typedef cppu::ImplInheritanceHelper< SwXBookmark,
     css::text::XFormField > SwXFieldmark_Base;
 
-class SwXFieldmark
+class SwXFieldmark final
     : public SwXFieldmark_Base
 {
-
-private:
     ::sw::mark::ICheckboxFieldmark* getCheckboxFieldmark();
     bool isReplacementObject;
-
-protected:
 
     SwXFieldmark(bool isReplacementObject, SwDoc* pDoc = nullptr);
 
 public:
-
     static css::uno::Reference<css::text::XTextContent>
         CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark * pMark,
                 bool isReplacementObject = false);

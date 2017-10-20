@@ -169,11 +169,10 @@ typedef cppu::WeakImplHelper
 >
 SwXTextFrameBaseClass;
 
-class SwXTextFrame : public SwXTextFrameBaseClass,
+class SwXTextFrame final : public SwXTextFrameBaseClass,
     public SwXText,
     public SwXFrame
 {
-protected:
     friend class SwXFrame; // just for CreateXFrame
 
     virtual const SwStartNode *GetStartNode() const override;
@@ -247,9 +246,8 @@ typedef cppu::ImplInheritanceHelper
     css::document::XEventsSupplier
 >
 SwXTextGraphicObjectBaseClass;
-class SwXTextGraphicObject : public SwXTextGraphicObjectBaseClass
+class SwXTextGraphicObject final : public SwXTextGraphicObjectBaseClass
 {
-protected:
     friend class SwXFrame; // just for CreateXFrame
 
     virtual ~SwXTextGraphicObject() override;
@@ -281,10 +279,10 @@ typedef cppu::ImplInheritanceHelper
     css::document::XEventsSupplier
 > SwXTextEmbeddedObjectBaseClass;
 
-class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass
+class SwXTextEmbeddedObject final : public SwXTextEmbeddedObjectBaseClass
 {
     css::uno::Reference<css::util::XModifyListener> m_xOLEListener;
-protected:
+
     friend class SwXFrame; // just for CreateXFrame
 
     virtual ~SwXTextEmbeddedObject() override;

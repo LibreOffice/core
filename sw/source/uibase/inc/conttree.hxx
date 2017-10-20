@@ -68,7 +68,7 @@ namespace o3tl {
 }
 
 /** TreeListBox for content indicator */
-class SwContentTree
+class SwContentTree final
     : public SvTreeListBox
     , public SfxListener
 {
@@ -125,7 +125,6 @@ class SwContentTree
     using SvTreeListBox::ExecuteDrop;
     using SvTreeListBox::EditEntry;
 
-protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
     virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
@@ -256,7 +255,7 @@ public:
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
 
-class SwGlobalTree : public SvTreeListBox
+class SwGlobalTree final : public SvTreeListBox
 {
 private:
     VclPtr<SwNavigationPI>  m_xDialog;
@@ -284,8 +283,6 @@ private:
     using SvTreeListBox::DoubleClickHdl;
     using SvTreeListBox::ExecuteDrop;
     using Window::Update;
-
-protected:
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) override;
 

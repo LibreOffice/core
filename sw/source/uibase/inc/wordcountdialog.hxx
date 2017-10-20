@@ -61,10 +61,10 @@ public:
     void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);
 };
 
-class SwWordCountWrapper : public SfxChildWindow
+class SwWordCountWrapper final : public SfxChildWindow
 {
     VclPtr<AbstractSwWordCountFloatDlg> xAbstDlg;
-protected:
+
     SwWordCountWrapper(    vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,

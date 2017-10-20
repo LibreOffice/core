@@ -23,12 +23,12 @@
 class SwRect;               // SwSaveClip
 #include <txtfrm.hxx>
 
-class SwSaveClip
+class SwSaveClip final
 {
     vcl::Region   aClip;
     const bool     bOn;
           bool     bChg;
-protected:
+
     VclPtr<OutputDevice> pOut;
     void ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
                    bool bEnlargeRect );

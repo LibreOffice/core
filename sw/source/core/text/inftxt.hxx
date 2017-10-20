@@ -677,7 +677,7 @@ public:
  * Because rInf is restored again in the DTOR, we can do this.
  * You could call it a "logical const", if you wish.
  */
-class SwTextSlot
+class SwTextSlot final
 {
     OUString aText;
     std::shared_ptr<vcl::TextLayoutCache> m_pOldCachedVclData;
@@ -688,8 +688,8 @@ class SwTextSlot
     sal_Int32 nIdx;
     sal_Int32 nLen;
     bool bOn;
-protected:
     SwTextSizeInfo *pInf;
+
 public:
     // The replacement string originates either from the portion via GetExpText()
     // or from the rCh, if it is not empty.

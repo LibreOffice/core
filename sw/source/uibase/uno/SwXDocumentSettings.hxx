@@ -31,13 +31,12 @@ class SwDocShell;
 class SwDoc;
 class SfxPrinter;
 
-class SwXDocumentSettings :
+class SwXDocumentSettings final :
         public comphelper::MasterPropertySet,
         public css::lang::XServiceInfo,
         public css::lang::XTypeProvider,
         public cppu::OWeakObject
 {
-protected:
     SwXTextDocument*        mpModel;
     SwDocShell*             mpDocSh;
     SwDoc*                  mpDoc;
@@ -54,7 +53,6 @@ protected:
     virtual void _preGetValues () override;
     virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue ) override;
     virtual void _postGetValues () override;
-protected:
     virtual ~SwXDocumentSettings()
         throw() override;
 public:

@@ -33,7 +33,7 @@ namespace sw { class StoredChapterNumberingRules; }
 
 #define MAX_NUM_RULES 9
 
-class SW_DLLPUBLIC SwNumRulesWithName
+class SW_DLLPUBLIC SwNumRulesWithName final
 {
     OUString maName;
     // the NumRule's formats _have_ to be independent of a document
@@ -58,7 +58,6 @@ class SW_DLLPUBLIC SwNumRulesWithName
 
     SwNumFormatGlobal* aFormats[ MAXLEVEL ];
 
-protected:
     friend class sw::StoredChapterNumberingRules;
     friend class SwChapterNumRules;
     void SetName(const OUString& rSet) {maName = rSet;}

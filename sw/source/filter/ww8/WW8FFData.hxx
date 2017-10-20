@@ -28,7 +28,7 @@ class SvStream;
 namespace sw
 {
 
-class WW8FFData
+class WW8FFData final
 {
 private:
     // offset 0x4
@@ -62,7 +62,6 @@ private:
 
     std::vector< OUString > msListEntries;
 
-protected:
     static void WriteOUString(SvStream * pStream, const OUString & rStr, bool bAddZero);
 
 public:

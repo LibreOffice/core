@@ -460,7 +460,7 @@ protected:
                                SwFltStackEntry& rEntry ) override;
 };
 
-class SwWW8FltRefStack : public SwFltEndStack
+class SwWW8FltRefStack final : public SwFltEndStack
 {
 public:
     SwWW8FltRefStack(SwDoc* pDo, sal_uLong nFieldFl)
@@ -473,11 +473,10 @@ public:
     //mapped to their position, hopefully the same, but very possibly
     //an additional pseudo bookmark
     std::map<OUString, OUString, SwWW8::ltstr> aFieldVarNames;
-protected:
+private:
     SwFltStackEntry *RefToVar(const SwField* pField,SwFltStackEntry& rEntry);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry& rEntry) override;
-private:
     SwWW8FltRefStack(const SwWW8FltRefStack&) = delete;
     SwWW8FltRefStack& operator=(const SwWW8FltRefStack&) = delete;
 };

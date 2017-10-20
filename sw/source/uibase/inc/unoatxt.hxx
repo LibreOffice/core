@@ -153,7 +153,7 @@ public:
     void    Invalidate();
 };
 
-class SwXAutoTextEntry
+class SwXAutoTextEntry final
         :public SfxListener
         ,public cppu::BaseMutex
         ,public cppu::WeakComponentImplHelper
@@ -181,7 +181,6 @@ class SwXAutoTextEntry
 
     void SAL_CALL disposing() override;
 
-protected:
     /** ensure that the current content (which may only be in-memory so far) is flushed to the auto text group file
 
         <p>If somebody modifies an auto text via this class, then this is not directly reflected to the respective
@@ -198,7 +197,6 @@ protected:
     // SfxListener overridables
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-protected:
     virtual ~SwXAutoTextEntry() override;    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:

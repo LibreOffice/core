@@ -22,8 +22,7 @@ class SwEditWin;
  *
  * The comment control only appears when the document has comments already.
  */
-class SwCommentRuler
-    : public SvxRuler
+class SwCommentRuler final : public SvxRuler
 {
 public:
     SwCommentRuler (
@@ -43,7 +42,7 @@ public:
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     const std::string CreateJsonNotification();
 
-protected:
+private:
     SwViewShell * mpViewShell;     //< Shell to check if there is any comments on doc and their visibility
     VclPtr<SwEditWin> mpSwWin;         //< Used to get SwView to change the SideBar visibility
     bool        mbIsHighlighted; //< If comment control is highlighted (mouse is over it)

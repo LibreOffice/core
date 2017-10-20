@@ -26,13 +26,12 @@
 
 class SwTableFUNC;
 
-class SwTableWidthDlg : public SvxStandardDialog
+class SwTableWidthDlg final : public SvxStandardDialog
 {
     VclPtr<NumericField>   m_pColNF;
     VclPtr<MetricField>    m_pWidthMF;
     SwTableFUNC     &rFnc;
 
-protected:
     virtual void    Apply() override;
     DECL_LINK(LoseFocusHdl, Edit&, void);
 

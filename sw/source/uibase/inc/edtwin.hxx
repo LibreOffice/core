@@ -55,7 +55,7 @@ enum class SdrHitKind;
     To translate the pixel positions from the buffer OutputDevice to the real
     pixel positions, use the PixelToLogic methods of this class.
   */
-class SwEditWin: public vcl::Window,
+class SwEditWin final : public vcl::Window,
                 public DropTargetHelper, public DragSourceHelper
 {
     static  QuickHelpData* m_pQuickHlpData;
@@ -173,8 +173,6 @@ class SwEditWin: public vcl::Window,
     void            MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                                 const bool bOnlyText, bool bLockView );
 
-protected:
-
     virtual void    DataChanged( const DataChangedEvent& ) override;
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -202,8 +200,8 @@ protected:
     bool    IsInHeaderFooter( const Point &rDocPt, FrameControlType &rControl ) const;
 
     bool    IsOverHeaderFooterFly( const Point& rDocPos, FrameControlType& rControl, bool& bOverFly, bool& bPageAnchored ) const;
-public:
 
+public:
     virtual void    KeyInput(const KeyEvent &rKEvt) override;
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);
 

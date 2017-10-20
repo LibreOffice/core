@@ -30,7 +30,6 @@ namespace sw
     {
         class OverlayRangesOutline : public sdr::overlay::OverlayObject
         {
-        protected:
             // geometry of overlay
             std::vector< basegfx::B2DRange > maRanges;
 

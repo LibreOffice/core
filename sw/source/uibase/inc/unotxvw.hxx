@@ -151,15 +151,15 @@ typedef cppu::WeakImplHelper<
                             css::beans::XPropertyState
                             > SwXTextViewCursor_Base;
 
-class SwXTextViewCursor : public SwXTextViewCursor_Base,
-public SwClient,
-public OTextCursorHelper
+class SwXTextViewCursor final : public SwXTextViewCursor_Base,
+                                public SwClient,
+                                public OTextCursorHelper
 {
     SwView*                         m_pView;
     const SfxItemPropertySet*       m_pPropSet;
-protected:
     bool        IsTextSelection( bool bAllowTables = true ) const;
     virtual     ~SwXTextViewCursor() override;
+
 public:
     SwXTextViewCursor(SwView* pVw);
 

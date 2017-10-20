@@ -177,7 +177,7 @@ public:
 
 // The FlyFrame-Format
 
-class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
+class SW_DLLPUBLIC SwFlyFrameFormat final : public SwFrameFormat
 {
     friend class SwDoc;
     OUString msTitle;
@@ -193,8 +193,8 @@ class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
     SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) = delete;
     SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) = delete;
 
-protected:
     SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrame );
+
 public:
     virtual ~SwFlyFrameFormat() override;
 

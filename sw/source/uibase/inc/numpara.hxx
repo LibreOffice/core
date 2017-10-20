@@ -27,7 +27,7 @@
 
 // with this TabPage numbering settings at the paragraph / paragraph style
 // are performed.
-class SwParagraphNumTabPage : public SfxTabPage
+class SwParagraphNumTabPage final : public SfxTabPage
 {
     VclPtr<VclHBox>                 m_pOutlineStartBX;
     VclPtr<ListBox>                 m_pOutlineLvLB;
@@ -61,7 +61,6 @@ class SwParagraphNumTabPage : public SfxTabPage
 
     static const sal_uInt16 aPageRg[];
 
-protected:
     static bool ExecuteEditNumStyle_Impl( sal_uInt16 nId, const OUString& rStr, const OUString& rRefStr,
                           SfxStyleFamily nFamily, sal_uInt16 nMask = 0 );
 

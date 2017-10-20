@@ -93,7 +93,7 @@ public:
 
 typedef std::vector<std::unique_ptr<SwWriteTableCell>> SwWriteTableCells;
 
-class SW_DLLPUBLIC SwWriteTableRow
+class SW_DLLPUBLIC SwWriteTableRow final
 {
     SwWriteTableCells m_Cells;       ///< all cells of the rows
     const SvxBrushItem *pBackground; // background
@@ -103,7 +103,6 @@ class SW_DLLPUBLIC SwWriteTableRow
 
     SwWriteTableRow & operator= (const SwWriteTableRow &) = delete;
 
-protected:
     // GCC >= 3.4 needs accessible T (const T&) to pass T as const T& argument.
     SwWriteTableRow( const SwWriteTableRow & );
 

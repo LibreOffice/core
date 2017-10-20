@@ -69,7 +69,7 @@ namespace com{ namespace sun{ namespace star{ namespace scanner{
     class XScannerManager2;
 }}}}
 
-class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::ConfigurationListener
+class SW_DLLPUBLIC SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
     OUString            m_sActAuthor;
 
@@ -115,7 +115,6 @@ class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::C
 
     virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
 
-protected:
     // Envelopes, labels.
     void                InsertEnv(SfxRequest&);
     void                InsertLab(SfxRequest&, bool bLabel);

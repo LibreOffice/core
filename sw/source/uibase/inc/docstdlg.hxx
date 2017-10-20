@@ -26,7 +26,7 @@
 #include <docstat.hxx>
 
 // DocInfo now as page
-class SwDocStatPage: public SfxTabPage
+class SwDocStatPage final : public SfxTabPage
 {
 public:
     SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet);
@@ -35,13 +35,12 @@ public:
 
     static VclPtr<SfxTabPage> Create(vcl::Window *pParent, const SfxItemSet *rSet);
 
-protected:
+private:
     virtual bool    FillItemSet(      SfxItemSet *rSet) override;
     virtual void    Reset      (const SfxItemSet *rSet) override;
 
     DECL_LINK(UpdateHdl, Button*, void);
 
-private:
     VclPtr<FixedText>      m_pPageNo;
     VclPtr<FixedText>      m_pTableNo;
     VclPtr<FixedText>      m_pGrfNo;

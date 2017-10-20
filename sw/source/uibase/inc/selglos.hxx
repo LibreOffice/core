@@ -26,9 +26,8 @@
 
 #include <vcl/button.hxx>
 
-class SwSelGlossaryDlg : public ModalDialog
+class SwSelGlossaryDlg final : public ModalDialog
 {
-protected:
     VclPtr<ListBox>  m_pGlosBox;
 
     DECL_LINK(DoubleClickHdl, ListBox&, void);

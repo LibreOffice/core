@@ -22,7 +22,7 @@ namespace sw {
         document as XML. This filter should be mostly be used for testing
         purpose.
       */
-    class LayoutDumpFilter : public cppu::WeakImplHelper
+    class LayoutDumpFilter final : public cppu::WeakImplHelper
                              <
                                css::document::XFilter,
                                css::document::XExporter,
@@ -30,7 +30,6 @@ namespace sw {
                                css::lang::XServiceInfo
                              >
     {
-    protected:
         css::uno::Reference< css::lang::XComponent > m_xSrcDoc;
 
     public:
