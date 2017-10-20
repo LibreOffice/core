@@ -118,6 +118,7 @@ internal.clean: $(addsuffix .clean,$(gbuild_internal_modules))
 $(eval $(call gb_Top_GbuildModulesRules,$(gbuild_modules)))
 
 gbuild_TARGETS := AllLangHelp \
+	AllLangMoTarget \
 	AllLangPackage \
 	AutoInstall \
 	CliLibrary \
