@@ -54,15 +54,15 @@ public:
         { return m_pScopes; }
     AstModule* getRoot()
         { return m_pRoot; }
-    const OString& getFileName()
+    const OString& getFileName() const
         { return m_fileName; }
     void setFileName(const OString& fileName)
         { m_fileName = fileName; addInclude(fileName); }
-    const OString& getMainFileName()
+    const OString& getMainFileName() const
         { return m_mainFileName; }
     void setMainFileName(const OString& mainFileName)
         { m_mainFileName = mainFileName; }
-    const OString& getRealFileName()
+    const OString& getRealFileName() const
         { return m_realFileName; }
     void setRealFileName(const OString& realFileName)
         { m_realFileName = realFileName; }
@@ -77,23 +77,23 @@ public:
             m_bIsDocValid = true;
         }
     OUString processDocumentation();
-    bool isInMainFile()
+    bool isInMainFile() const
         { return m_bIsInMainfile; }
     void setInMainfile(bool bInMainfile)
         { m_bIsInMainfile = bInMainfile; }
-    sal_uInt32 getErrorCount()
+    sal_uInt32 getErrorCount() const
         { return m_errorCount; }
     void incErrorCount()
         { m_errorCount++; }
-    sal_uInt32 getWarningCount()
+    sal_uInt32 getWarningCount() const
         { return m_warningCount; }
     void incWarningCount()
         { m_warningCount++; }
-    sal_uInt32 getLineNumber()
+    sal_uInt32 getLineNumber() const
         { return m_lineNumber; }
-    sal_uInt32 getOffsetStart()
+    sal_uInt32 getOffsetStart() const
         { return m_offsetStart; }
-    sal_uInt32 getOffsetEnd()
+    sal_uInt32 getOffsetEnd() const
         { return m_offsetEnd; }
     void setOffset( sal_uInt32 start, sal_uInt32 end)
         { m_offsetStart = start; m_offsetEnd = end; }
@@ -101,7 +101,7 @@ public:
         { m_lineNumber = lineNumber; }
     void incLineNumber()
         { m_lineNumber++; }
-    ParseState getParseState()
+    ParseState getParseState() const
         { return m_parseState; }
     void setParseState(ParseState parseState)
         { m_parseState = parseState; }

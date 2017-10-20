@@ -130,7 +130,7 @@ namespace cppu_threadpool
         }
     }
 
-    void ThreadPool::destroy( sal_Int64 nDisposeId )
+    void ThreadPool::destroy( sal_Int64 nDisposeId ) const
     {
         m_DisposedCallerAdmin->destroy( nDisposeId );
     }

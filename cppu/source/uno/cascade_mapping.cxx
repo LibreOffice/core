@@ -47,7 +47,7 @@ public:
 
     void mapInterface(void                            ** ppOut,
                       void                             * pInterface,
-                      typelib_InterfaceTypeDescription * pInterfaceTypeDescr);
+                      typelib_InterfaceTypeDescription * pInterfaceTypeDescr) const;
     MediatorMapping(uno_Environment * pFrom,
                     uno_Environment * pInterm,
                     uno_Environment * pTo);
@@ -121,7 +121,7 @@ extern "C" { static void s_mapInterface_v(va_list * pParam)
 void MediatorMapping::mapInterface(
     void                            ** ppOut,
     void                             * pInterface,
-    typelib_InterfaceTypeDescription * pInterfaceTypeDescr)
+    typelib_InterfaceTypeDescription * pInterfaceTypeDescr) const
 {
     if (*ppOut != nullptr)
     {

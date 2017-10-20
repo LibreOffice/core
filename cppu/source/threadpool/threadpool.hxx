@@ -121,7 +121,7 @@ namespace cppu_threadpool {
         virtual ~ThreadPool() override;
 
         void dispose( sal_Int64 nDisposeId );
-        void destroy( sal_Int64 nDisposeId );
+        void destroy( sal_Int64 nDisposeId ) const;
 
         bool addJob( const ::rtl::ByteSequence &aThreadId,
                      bool bAsynchron,

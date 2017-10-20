@@ -102,7 +102,7 @@ public:
     ~AstExpression();
 
     // Data Accessors
-    AstExprValue* getExprValue()
+    AstExprValue* getExprValue() const
         { return m_exprValue.get(); }
 
     // Evaluation and value coercion

@@ -284,8 +284,8 @@ private:
     bool                bOneInstance;
 protected:
     // needed for implementing XUnloadingPreference in inheriting classes
-    bool isOneInstance() {return bOneInstance;}
-    bool isInstance() {return xTheInstance.is();}
+    bool isOneInstance() const {return bOneInstance;}
+    bool isInstance() const {return xTheInstance.is();}
 };
 
 
@@ -485,7 +485,7 @@ public:
 private:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    Reference< XInterface > createModuleFactory();
+    Reference< XInterface > createModuleFactory() const;
 
     /** The registry key of the implementation section */
     Reference<XRegistryKey >    xImplementationKey;
@@ -688,7 +688,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
 
 
 // OSingleFactoryHelper
-Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
+Reference< XInterface > ORegistryFactoryHelper::createModuleFactory() const
 {
     OUString aActivatorUrl;
     OUString aActivatorName;

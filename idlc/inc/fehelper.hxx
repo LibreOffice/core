@@ -29,9 +29,9 @@ class FeDeclarator final
 public:
     FeDeclarator(const OString& name);
     ~FeDeclarator();
-    const OString& getName()
+    const OString& getName() const
         { return m_name; }
-    bool checkType(AstDeclaration const * pType);
+    bool checkType(AstDeclaration const * pType) const;
     static AstType const * compose(AstDeclaration const * pDecl);
 private:
     OString  m_name;
@@ -52,7 +52,7 @@ public:
             delete m_pName;
     }
 
-    NodeType getNodeType()
+    NodeType getNodeType() const
         { return m_nodeType; }
     OString* getName()
         { return m_pName; }
