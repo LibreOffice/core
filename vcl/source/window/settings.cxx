@@ -152,18 +152,9 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
     ImplGetFrame()->UpdateSettings( rSettings );
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-    // #97047: Force all fonts except Menu and Help to a fixed height
-    // to avoid UI scaling due to large fonts
-    // - but allow bigger fonts on bigger screens (i16682, i21238)
-    //   dialogs were designed to fit 800x600 with an 8pt font, so scale accordingly
-    int maxFontheight = 9; // #107886#: 9 is default for some asian systems, so always allow if requested
-    if( GetDesktopRectPixel().getHeight() > 600 )
-        maxFontheight = (int) ((( 8.0 * (double) GetDesktopRectPixel().getHeight()) / 600.0) + 1.5);
 
     vcl::Font aFont = aStyleSettings.GetMenuFont();
     int defFontheight = aFont.GetFontHeight();
-    if( defFontheight > maxFontheight )
-        defFontheight = maxFontheight;
 
     // if the UI is korean, chinese or another locale
     // where the system font size is kown to be often too small to
