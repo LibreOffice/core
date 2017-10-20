@@ -272,7 +272,7 @@ public:
     void SetActualWin(const OutputDevice* pWin);
     void SetMinMoveDistancePixel(sal_uInt16 nVal) { mnMinMovPix=nVal; TheresNewMapMode(); }
     void SetHitTolerancePixel(sal_uInt16 nVal) { mnHitTolPix=nVal; TheresNewMapMode(); }
-    sal_uInt16 GetHitTolerancePixel() const { return (sal_uInt16)mnHitTolPix; }
+    sal_uInt16 GetHitTolerancePixel() const { return mnHitTolPix; }
 
     // Data read access on logic HitTolerance and MinMoveTolerance
     sal_uInt16 getHitTolLog() const { return mnHitTolLog; }
