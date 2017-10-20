@@ -30,7 +30,16 @@
 
 #include <rtl/character.hxx>
 
+#if defined _MSC_VER
+#pragma warning ( push )
+// Silence warnings about redefinition of INT8_MIN etc in stdint.h
+// The flex-generated workdir/LexTarget/idlc/source/scanner.cxx defines them prior to these includes
+#pragma warning ( disable : 4005 )
+#endif
 #include <idlc.hxx>
+#if defined _MSC_VER
+#pragma warning ( pop )
+#endif
 #include <errorhandler.hxx>
 #include <fehelper.hxx>
 
