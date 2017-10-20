@@ -22,7 +22,7 @@
 
 OUString FwkResId(const char* pId)
 {
-    static std::locale loc(Translate::Create("fwe"));
+    static std::locale loc(Translate::Create("fwk"));
     return Translate::get(pId, loc);
 }
 
