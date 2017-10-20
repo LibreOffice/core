@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_32e88fe2",
+        "filename": "include/oox/vml/vmlshape.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-20T16:23:48Z",
+      "side": 1,
+      "message": "no need to be explicit",
+      "range": {
+        "startLine": 214,
+        "startChar": 4,
+        "endLine": 214,
+        "endChar": 12
+      },
+      "revId": "8876efdafea9039351cd2fb43ff42ae924dabf56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_12e1d3fe",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-20T16:23:48Z",
+      "side": 1,
+      "message": "missing initialization of the [mbIsSignatureLine]",
+      "range": {
+        "startLine": 255,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 1
+      },
+      "revId": "8876efdafea9039351cd2fb43ff42ae924dabf56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_122ab32c",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-20T16:23:48Z",
+      "side": 1,
+      "message": "maybe return xSignatures?",
+      "range": {
+        "startLine": 1237,
+        "startChar": 15,
+        "endLine": 1237,
+        "endChar": 22
+      },
+      "revId": "8876efdafea9039351cd2fb43ff42ae924dabf56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_b2d39f37",
+        "filename": "writerfilter/source/ooxml/OOXMLFastContextHandler.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1901,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-20T16:23:48Z",
+      "side": 1,
+      "message": "or || instead of \u0026\u0026?\n\nI would create create a new local flag\nbool hasWrapOrSignature \u003d (bIsWrap || bIsSignature)\nand then use it (! hasWrapOrSignature)\n\nBut i could be wrong in business logic here.\nSo, imho, the if-statement is too complex for understanding.\n\nanother solution could be:\n\nif (wrap)\n    xResult()\nelse if (bSign)\n    xResult()\nelse\n...\n\nwhich is more easy to debug in future...",
+      "range": {
+        "startLine": 1901,
+        "startChar": 27,
+        "endLine": 1901,
+        "endChar": 58
+      },
+      "revId": "8876efdafea9039351cd2fb43ff42ae924dabf56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_d2d66b26",
+        "filename": "xmlsecurity/source/helper/ooxmlsecparser.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-20T16:23:48Z",
+      "side": 1,
+      "message": "else case is missing.\n\nMaybe or something like that:\nSAL_INFO(\"xmlsecurity.ooxml\", \"Unknown xml element: \" \u003c\u003c rName);",
+      "range": {
+        "startLine": 143,
+        "startChar": 7,
+        "endLine": 143,
+        "endChar": 9
+      },
+      "revId": "8876efdafea9039351cd2fb43ff42ae924dabf56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
