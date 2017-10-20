@@ -10,6 +10,7 @@
 #include <test/calc_unoapi_test.hxx>
 #include <test/sheet/xcellseries.hxx>
 #include <test/sheet/xprintareas.hxx>
+#include <test/sheet/xsheetlinkable.hxx>
 #include <test/sheet/xsheetoperation.hxx>
 #include <test/sheet/xsheetpagebreak.hxx>
 #include <test/sheet/xspreadsheet.hxx>
@@ -27,12 +28,13 @@ using namespace css::uno;
 namespace sc_apitest
 {
 
-#define NUMBER_OF_TESTS 19
+#define NUMBER_OF_TESTS 20
 
 class ScTableSheetObj : public CalcUnoApiTest, public apitest::XCellSeries,
                                                public apitest::XPrintAreas,
                                                public apitest::XReplaceable,
                                                public apitest::XSearchable,
+                                               public apitest::XSheetLinkable,
                                                public apitest::XSheetOperation,
                                                public apitest::XSheetPageBreak,
                                                public apitest::XSpreadsheet,
@@ -45,27 +47,32 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    virtual OUString getFileURL() override;
+
     virtual uno::Reference< uno::XInterface > init() override;
     virtual uno::Reference< uno::XInterface > getXSpreadsheet() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetObj);
+
+    // XCellSeries
+    CPPUNIT_TEST(testFillAuto);
+    CPPUNIT_TEST(testFillSeries);
+
+    // XPrintAreas
+    CPPUNIT_TEST(testSetAndGetPrintTitleColumns);
+    CPPUNIT_TEST(testSetAndGetPrintTitleRows);
+
+    // XReplaceable
+    CPPUNIT_TEST(testReplaceAll);
+    CPPUNIT_TEST(testCreateReplaceDescriptor);
 
     // XSearchable
     CPPUNIT_TEST(testFindAll);
     CPPUNIT_TEST(testFindNext);
     CPPUNIT_TEST(testFindFirst);
 
-    // XReplaceable
-    CPPUNIT_TEST(testReplaceAll);
-    CPPUNIT_TEST(testCreateReplaceDescriptor);
-
-    // XPrintAreas
-    CPPUNIT_TEST(testSetAndGetPrintTitleColumns);
-    CPPUNIT_TEST(testSetAndGetPrintTitleRows);
-
-    // XCellSeries
-    CPPUNIT_TEST(testFillAuto);
-    CPPUNIT_TEST(testFillSeries);
+    // XSheetLinkable
+    CPPUNIT_TEST(testSheetLinkable);
 
     // XSheetOperation
     CPPUNIT_TEST(testComputeFunction);
@@ -76,9 +83,6 @@ public:
     CPPUNIT_TEST(testGetRowPageBreaks);
     CPPUNIT_TEST(testRemoveAllManualPageBreaks);
 
-    // XUniqueCellFormatRangesSupplier
-    CPPUNIT_TEST(testGetUniqueCellFormatRanges);
-
     // XSpreadsheet
     CPPUNIT_TEST(testCreateCursor);
     CPPUNIT_TEST(testCreateCursorByRange);
@@ -87,9 +91,13 @@ public:
     CPPUNIT_TEST(testCreateSubTotalDescriptor);
     CPPUNIT_TEST(testApplyRemoveSubTotals);
 
+    // XUniqueCellFormatRangesSupplier
+    CPPUNIT_TEST(testGetUniqueCellFormatRanges);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    OUString maFileURL;
     static sal_Int32 nTest;
     static uno::Reference< lang::XComponent > mxComponent;
 };
@@ -107,10 +115,10 @@ ScTableSheetObj::ScTableSheetObj():
 
 uno::Reference< uno::XInterface > ScTableSheetObj::init()
 {
-    OUString aFileURL;
-    createFileURL("ScTableSheetObj.ods", aFileURL);
+    //OUString aFileURL;
+    createFileURL("ScTableSheetObj.ods", maFileURL);
     if(!mxComponent.is())
-        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
+        mxComponent = loadFromDesktop(maFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
@@ -133,6 +141,11 @@ uno::Reference< uno::XInterface > ScTableSheetObj::getXSpreadsheet()
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(1), UNO_QUERY_THROW);
 
     return xSheet;
+}
+
+OUString ScTableSheetObj::getFileURL()
+{
+    return maFileURL;
 }
 
 void ScTableSheetObj::setUp()
