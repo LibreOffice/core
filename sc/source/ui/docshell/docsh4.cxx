@@ -30,11 +30,13 @@ using namespace ::com::sun::star;
 
 #include "scitems.hxx"
 #include <editeng/flstitem.hxx>
+#include <editeng/langitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/ehdl.hxx>
+#include <svtools/langtab.hxx>
 #include <basic/sbxcore.hxx>
 #include <basic/sberrors.hxx>
 #include <svtools/sfxecode.hxx>
@@ -52,6 +54,7 @@ using namespace ::com::sun::star;
 #include <svl/PasswordHelper.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
+#include <svl/slstitm.hxx>
 #include <unotools/securityoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -1120,6 +1123,83 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 sfx2::SfxNotebookBar::CloseMethod(*pBindings);
         }
         break;
+        case SID_LANGUAGE_STATUS:
+        {
+            sal_Int32 nPos = 0;
+            OUString aLangText;
+            const SfxStringItem* pItem = rReq.GetArg<SfxStringItem>(nSlot);
+            if ( pItem )
+                aLangText = pItem->GetValue();
+
+            if ( !aLangText.isEmpty() )
+            {
+                LanguageType eLang, eLatin, eCjk, eCtl;
+                const OUString aDocLangPrefix("Default_");
+                const OUString aNoLang("LANGUAGE_NONE");
+                const OUString aResetLang("RESET_LANGUAGES");
+
+                ScDocument& rDoc = GetDocument();
+                rDoc.GetLanguage( eLatin, eCjk, eCtl );
+
+                if ( aLangText == "*" )
+                {
+                    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                    if (pFact)
+                    {
+                        ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(GetActiveDialogParent(), SID_LANGUAGE_OPTIONS));
+                        pDlg->Execute();
+                    }
+
+                    rDoc.GetLanguage( eLang, eCjk, eCtl );
+                }
+                else if ( (nPos = aLangText.indexOf(aDocLangPrefix)) != -1 )
+                {
+                    aLangText = aLangText.replaceAt(nPos, aDocLangPrefix.getLength(), "");
+
+                    if ( aLangText == aNoLang )
+                    {
+                        eLang = LANGUAGE_NONE;
+                        rDoc.SetLanguage( eLang, eCjk, eCtl );
+                    }
+                    else if ( aLangText == aResetLang )
+                    {
+                        bool bAutoSpell;
+
+                        ScModule::GetSpellSettings(eLang, eCjk, eCtl, bAutoSpell);
+                        rDoc.SetLanguage(eLang, eCjk, eCtl);
+                    }
+                    else
+                    {
+                        eLang = SvtLanguageTable::GetLanguageType( aLangText );
+                        if ( eLang != LANGUAGE_DONTKNOW  && SvtLanguageOptions::GetScriptTypeOfLanguage(eLang) == SvtScriptType::LATIN )
+                        {
+                            rDoc.SetLanguage( eLang, eCjk, eCtl );
+                        }
+                        else
+                        {
+                            eLang = eLatin;
+                        }
+                    }
+                }
+
+                if ( eLang != eLatin )
+                {
+                    if ( ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell() )
+                    {
+                        ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewSh);
+                        if ( pInputHandler )
+                            pInputHandler->UpdateSpellSettings();
+
+                        pViewSh->UpdateDrawTextOutliner();
+                    }
+
+                    SetDocumentModified();
+                    Broadcast(SfxHint(SfxHintId::LanguageChanged));
+                    PostPaintGridAll();
+                }
+            }
+        }
+        break;
         default:
         {
             // small (?) hack -> forwarding of the slots to TabViewShell
@@ -1878,6 +1958,15 @@ void ScDocShell::GetState( SfxItemSet &rSet )
                                                                           "modules/scalc/ui/");
                         rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
                     }
+                }
+                break;
+
+            case SID_LANGUAGE_STATUS:
+                {
+                    LanguageType eLatin, eCjk, eCtl;
+
+                    GetDocument().GetLanguage( eLatin, eCjk, eCtl );
+                    rSet.Put(SfxStringItem(nWhich, SvtLanguageTable::GetLanguageString(eLatin)));
                 }
                 break;
 
