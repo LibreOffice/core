@@ -945,6 +945,7 @@ void BubbleWindow::RecalcTextRects()
 static uno::Reference<uno::XInterface> SAL_CALL
 createInstance(const uno::Reference<uno::XComponentContext>& xContext)
 {
+    SolarMutexGuard aGuard;
     return  *new UpdateCheckUI(xContext);
 }
 
