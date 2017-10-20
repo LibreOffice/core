@@ -399,18 +399,18 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                     if ( aBeg->eAct == PDFExtOutDevDataSync::EndGroupGfxLink )
                     {
                         Graphic& rGraphic = mGraphics.front();
-                        if ( rGraphic.IsLink() )
+                        if ( rGraphic.IsLink() && mParaRects.size() >= 2 )
                         {
                             GfxLinkType eType = rGraphic.GetLink().GetType();
-                            if ( eType == GfxLinkType::NativeJpg && mParaRects.size() >= 2 )
+                            if ( eType == GfxLinkType::NativeJpg )
                             {
                                 mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic);
                                 if ( !mbGroupIgnoreGDIMtfActions )
                                     mCurrentGraphic = rGraphic;
                             }
-                            else if ((eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf) && mParaRects.size() >= 2)
+                            else if ( eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf )
                             {
-                                if ( rOutDevData.HasAdequateCompression(rGraphic) || eType == GfxLinkType::NativePdf )
+                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic) )
                                     mCurrentGraphic = rGraphic;
                             }
                         }
@@ -804,44 +804,43 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic ) const
             rGraphic.GetLink().GetType() == GfxLinkType::NativePng ||
             rGraphic.GetLink().GetType() == GfxLinkType::NativePdf));
 
-    // small items better off as PNG anyway
-    if ( rGraphic.GetSizePixel().Width() < 32 &&
-         rGraphic.GetSizePixel().Height() < 32 )
-        return false;
-
-    // FIXME: ideally we'd also pre-empt the DPI related scaling too.
-
-    Size aSize = rGraphic.GetSizePixel();
     if (rGraphic.GetLink().GetDataSize() == 0)
         return false;
+
+    Size aSize = rGraphic.GetSizePixel();
+
+    // small items better off as PNG anyway
+    if ( aSize.Width() < 32 &&
+         aSize.Height() < 32 )
+        return false;
+
+    if (GetIsLosslessCompression())
+        return !GetIsReduceImageResolution();
+
+    // FIXME: ideally we'd also pre-empt the DPI related scaling too.
     sal_Int32 nCurrentRatio = (100 * aSize.Width() * aSize.Height() * 4) /
                                rGraphic.GetLink().GetDataSize();
 
-    if ( GetIsLosslessCompression() )
-        return !GetIsReduceImageResolution();
-    else
+    static const struct {
+        sal_Int32 mnQuality;
+        sal_Int32 mnRatio;
+    } aRatios[] = { // minimum tolerable compression ratios
+        { 100, 400 }, { 95, 700 }, { 90, 1000 }, { 85, 1200 },
+        { 80, 1500 }, { 75, 1700 }
+    };
+    sal_Int32 nTargetRatio = 10000;
+    bool bIsTargetRatioReached = false;
+    for (auto & rRatio : aRatios)
     {
-        static const struct {
-            sal_Int32 mnQuality;
-            sal_Int32 mnRatio;
-        } aRatios[] = { // minimum tolerable compression ratios
-            { 100, 400 }, { 95, 700 }, { 90, 1000 }, { 85, 1200 },
-            { 80, 1500 }, { 75, 1700 }
-        };
-        sal_Int32 nTargetRatio = 10000;
-        bool bIsTargetRatioReached = false;
-        for (auto & rRatio : aRatios)
+        if ( mnCompressionQuality > rRatio.mnQuality )
         {
-            if ( mnCompressionQuality > rRatio.mnQuality )
-            {
-                bIsTargetRatioReached = true;
-                break;
-            }
-            nTargetRatio = rRatio.mnRatio;
+            bIsTargetRatioReached = true;
+            break;
         }
-
-        return ((nCurrentRatio > nTargetRatio) && bIsTargetRatioReached);
+        nTargetRatio = rRatio.mnRatio;
     }
+
+    return ((nCurrentRatio > nTargetRatio) && bIsTargetRatioReached);
 }
 
 }
