@@ -58,7 +58,7 @@ class SwVirtFlyDrawObj : public SdrVirtObj
 private:
     SwFlyFrame *m_pFlyFrame;
 
-    // RotGrfFlyFrame: Helper to acces sthe rotation angle (in 10th degrees, left-handed)
+    // RotGrfFlyFrame: Helper to access the rotation angle (in 10th degrees, left-handed)
     // of a GraphicFrame
     sal_uInt16 getPossibleRotationFromFraphicFrame(Size& rSize) const;
 
