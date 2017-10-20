@@ -117,6 +117,7 @@ public:
     void NotifyChangeTextNode(SwTextNode *const pTextNode);
     static SwFormatMeta * CreatePoolDefault( const sal_uInt16 i_nWhich );
     ::sw::Meta * GetMeta() { return m_pMeta.get(); }
+    const ::sw::Meta * GetMeta() const { return m_pMeta.get(); }
 };
 
 namespace sw {
