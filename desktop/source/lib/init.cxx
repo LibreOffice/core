@@ -3557,6 +3557,8 @@ static void lo_destroy(LibreOfficeKit* pThis)
 
     comphelper::LibreOfficeKit::setStatusIndicatorCallback(nullptr, nullptr);
     uno::Reference <frame::XDesktop2> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
+    // FIXME: the terminate() call here is a no-op because it detects
+    // that LibreOfficeKit::isActive() and then returns early!
     bSuccess = xDesktop.is() && xDesktop->terminate();
 
     if (!bSuccess)

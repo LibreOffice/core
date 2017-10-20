@@ -15,7 +15,8 @@ $(eval $(call gb_Module_add_check_targets,libreofficekit, \
     CppunitTest_libreofficekit_checkapi \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,libreofficekit,\
+# tdf#113311 disabled because it can deadlock on shutdown
+#$(eval $(call gb_Module_add_subsequentcheck_targets,libreofficekit,\
     CppunitTest_libreofficekit_tiledrendering \
 ))
 
