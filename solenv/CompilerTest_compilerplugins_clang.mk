@@ -21,6 +21,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/droplong \
     compilerplugins/clang/test/externvar \
     compilerplugins/clang/test/expressionalwayszero \
+    compilerplugins/clang/test/faileddyncast \
     compilerplugins/clang/test/finalprotected \
     compilerplugins/clang/test/flatten \
     compilerplugins/clang/test/loopvartoosmall \

@@ -80,7 +80,13 @@ bool isAlwaysNull(CXXDynamicCastExpr const * expr) {
     return false;
 #endif
 
+#if 0
   return !DestRD->isDerivedFrom(SrcRD);
+#else
+  return !(DestRD->isDerivedFrom(SrcRD)
+           || SrcRD->isDerivedFrom(DestRD)
+           || SrcRD == DestRD);
+#endif
 }
 
 class FailedDynCast:
