@@ -859,7 +859,7 @@ typedef ::cppu::AggImplInheritanceHelper5   <   UnoControlBase
                                             ,   css::awt::XTextLayoutConstrains
                                             ,   css::awt::XItemListListener
                                             >   UnoListBoxControl_Base;
-class TOOLKIT_DLLPUBLIC UnoListBoxControl : public UnoListBoxControl_Base
+class TOOLKIT_DLLPUBLIC UnoListBoxControl final : public UnoListBoxControl_Base
 {
 public:
                         UnoListBoxControl();
@@ -919,12 +919,11 @@ public:
     OUString SAL_CALL getImplementationName(  ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-protected:
+private:
     void                ImplUpdateSelectedItemsProperty();
     virtual void        ImplSetPeerProperty( const OUString& rPropName, const css::uno::Any& rVal ) override;
     virtual void        updateFromModel() override;
 
-private:
     ActionListenerMultiplexer   maActionListeners;
     ItemListenerMultiplexer     maItemListeners;
 };

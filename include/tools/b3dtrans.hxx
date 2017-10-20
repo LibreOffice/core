@@ -174,15 +174,8 @@ protected:
 
 // B3D camera
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dCamera : public B3dViewport
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dCamera final : public B3dViewport
 {
-private:
-    basegfx::B3DPoint       aPosition;
-    basegfx::B3DPoint       aCorrectedPosition;
-    basegfx::B3DVector  aLookAt;
-    double                  fFocalLength;
-    double                  fBankAngle;
-
 public:
     B3dCamera(
         const basegfx::B3DPoint& rPos = basegfx::B3DPoint(0.0, 0.0, 1.0),
@@ -190,11 +183,18 @@ public:
         double fFocLen = 35.0, double fBnkAng = 0.0);
     virtual ~B3dCamera() override;
 
-protected:
+private:
     void CalcNewViewportValues();
     bool CalcFocalLength();
 
     virtual void DeviceRectangleChange() override;
+
+    basegfx::B3DPoint       aPosition;
+    basegfx::B3DPoint       aCorrectedPosition;
+    basegfx::B3DVector  aLookAt;
+    double                  fFocalLength;
+    double                  fBankAngle;
+
 };
 
 #endif

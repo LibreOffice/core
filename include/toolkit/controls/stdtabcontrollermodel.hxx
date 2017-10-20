@@ -79,18 +79,16 @@ typedef ::std::vector< ComponentEntry* > ComponentEntryList;
 
 #define CONTROLPOS_NOTFOUND 0xFFFFFFFF
 
-class StdTabControllerModel :   public css::awt::XTabControllerModel,
+class StdTabControllerModel final : public css::awt::XTabControllerModel,
                                 public css::lang::XServiceInfo,
                                 public css::io::XPersistObject,
                                 public css::lang::XTypeProvider,
                                 public ::cppu::OWeakAggObject
 {
-private:
     ::osl::Mutex                maMutex;
     UnoControlModelEntryList    maControls;
     bool                    mbGroupControl;
 
-protected:
     ::osl::Mutex&           GetMutex() { return maMutex; }
     sal_uInt32              ImplGetControlCount( const UnoControlModelEntryList& rList ) const;
     void                    ImplGetControlModels( css::uno::Reference< css::awt::XControlModel > ** pRefs, const UnoControlModelEntryList& rList ) const;

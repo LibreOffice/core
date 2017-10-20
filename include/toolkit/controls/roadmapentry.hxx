@@ -34,7 +34,7 @@
 
 typedef cppu::WeakImplHelper< css::lang::XServiceInfo > ORoadmapEntry_Base;
 
-class ORoadmapEntry :public ORoadmapEntry_Base
+class ORoadmapEntry final : public ORoadmapEntry_Base
             ,public ::comphelper::OMutexAndBroadcastHelper
             ,public ::comphelper::OPropertyContainer
             ,public ::comphelper::OPropertyArrayUsageHelper< ORoadmapEntry >
@@ -43,7 +43,7 @@ class ORoadmapEntry :public ORoadmapEntry_Base
 public:
        ORoadmapEntry();
 
-protected:
+private:
     DECLARE_XINTERFACE()        // merge XInterface implementations
     DECLARE_XTYPEPROVIDER()     // merge XTypeProvider implementations
 
@@ -61,19 +61,10 @@ protected:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-
-    // other stuff
-
-    // (e.g. DECLARE_SERVICE_INFO();)
-
-protected:
-    // <properties>
-    OUString     m_sLabel;
-    sal_Int32           m_nID;
+    OUString        m_sLabel;
+    sal_Int32       m_nID;
     bool            m_bEnabled;
     bool            m_bInteractive;
-
-    // </properties>
 };
 
 #endif
