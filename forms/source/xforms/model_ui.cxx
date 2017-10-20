@@ -23,7 +23,7 @@
 #include "mip.hxx"
 #include "evaluationcontext.hxx"
 #include "unohelper.hxx"
-#include "submission/serialization_app_xml.hxx"
+#include "serialization_app_xml.hxx"
 #include "resourcehelper.hxx"
 #include "xmlhelper.hxx"
 #include "convert.hxx"

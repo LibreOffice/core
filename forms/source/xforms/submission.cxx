@@ -24,9 +24,9 @@
 #include "mip.hxx"
 #include "evaluationcontext.hxx"
 #include "unohelper.hxx"
-#include "submission/submission_put.hxx"
-#include "submission/submission_post.hxx"
-#include "submission/submission_get.hxx"
+#include "submission_put.hxx"
+#include "submission_post.hxx"
+#include "submission_get.hxx"
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

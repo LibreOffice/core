@@ -17,20 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_GET_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_GET_HXX
+#ifndef INCLUDED_FORMS_SOURCE_INC_SERIALIZATION_APP_XML_HXX
+#define INCLUDED_FORMS_SOURCE_INC_SERIALIZATION_APP_XML_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/io/XPipe.hpp>
 
-#include "submission.hxx"
+#include "serialization.hxx"
 
-class CSubmissionGet : public CSubmission
+class CSerializationAppXML : public CSerialization
 {
-public:
-    CSubmissionGet(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment);
-    virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler) override;
+private:
+    css::uno::Reference< css::io::XPipe > m_xBuffer;
 
+    void serialize_node(const css::uno::Reference< css::xml::dom::XNode >& aNode);
+
+public:
+    CSerializationAppXML();
+
+    virtual void serialize() override;
+    virtual css::uno::Reference< css::io::XInputStream > getInputStream() override;
 };
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
