@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a430d35_57c6ed49",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-20T07:19:14Z",
+      "side": 1,
+      "message": "1. this scope has its own comment and it is easy to see the whole block (where it stars and where it end)\n2. Without it, the comment will comment only the first if-statement (until the first empty line) but it is a wrong.\n3. this block has local variables \u003d\u003e the scope makes an additional protection (code and variables isolation) for all following blocks inside this method",
+      "parentUuid": "1a430d35_b431cf0d",
+      "revId": "d9753f30c798837b593385552e27a24788b3b4cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a430d35_d4349bfc",
         "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2017-10-19T20:50:02Z",
       "side": 1,
       "message": "and this?",
+      "revId": "d9753f30c798837b593385552e27a24788b3b4cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_77c5a93a",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2017-10-20T07:19:14Z",
+      "side": 1,
+      "message": "see my comments for the first issue above",
+      "parentUuid": "1a430d35_d4349bfc",
       "revId": "d9753f30c798837b593385552e27a24788b3b4cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
