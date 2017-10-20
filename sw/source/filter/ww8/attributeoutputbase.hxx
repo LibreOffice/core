@@ -183,7 +183,7 @@ public:
     /// docx requires footnoteRef/endnoteRef tag at the beginning of each of them
     virtual bool FootnoteEndnoteRefTag() { return false; };
 
-    /// for docx footnotePr/endnotePr inside sectPr
+    /// for footnote/endnote section properties
     virtual void SectFootnoteEndnotePr() {};
 
     /// for docx w:commentReference

@@ -1317,6 +1317,18 @@ void WW8AttributeOutput::StartSection()
     m_rWW8Export.pO->clear();
 }
 
+void WW8AttributeOutput::SectFootnoteEndnotePr()
+{
+    const SwFootnoteInfo& rInfo = m_rWW8Export.m_pDoc->GetFootnoteInfo();
+    m_rWW8Export.InsUInt16( NS_sprm::sprmSRncFtn );
+    switch( rInfo.eNum )
+    {
+    case FTNNUM_PAGE:     m_rWW8Export.pO->push_back( (sal_uInt8) /*rncRstPage*/ 2 ); break;
+    case FTNNUM_CHAPTER:  m_rWW8Export.pO->push_back( (sal_uInt8) /*rncRstSect*/ 1 ); break;
+    default:              m_rWW8Export.pO->push_back( (sal_uInt8) /*rncCont*/ 0 ); break;
+    }
+}
+
 void WW8AttributeOutput::SectionFormProtection( bool bProtected )
 {
     //If the document is to be exported as protected, then if a segment
