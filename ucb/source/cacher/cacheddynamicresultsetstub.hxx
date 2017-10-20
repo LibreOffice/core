@@ -64,13 +64,12 @@ public:
 };
 
 
-class CachedDynamicResultSetStubFactory
+class CachedDynamicResultSetStubFactory final
                 : public cppu::OWeakObject
                 , public css::lang::XTypeProvider
                 , public css::lang::XServiceInfo
                 , public css::ucb::XCachedDynamicResultSetStubFactory
 {
-protected:
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
 public:

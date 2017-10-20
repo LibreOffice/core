@@ -362,13 +362,12 @@ private:
 };
 
 
-class CachedContentResultSetFactory
+class CachedContentResultSetFactory final
                 : public cppu::OWeakObject
                 , public css::lang::XTypeProvider
                 , public css::lang::XServiceInfo
                 , public css::ucb::XCachedContentResultSetFactory
 {
-protected:
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
 public:

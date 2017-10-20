@@ -137,13 +137,12 @@ public:
 };
 
 
-class CachedContentResultSetStubFactory
+class CachedContentResultSetStubFactory final
                 : public cppu::OWeakObject
                 , public css::lang::XTypeProvider
                 , public css::lang::XServiceInfo
                 , public css::ucb::XCachedContentResultSetStubFactory
 {
-protected:
     css::uno::Reference< css::lang::XMultiServiceFactory >    m_xSMgr;
 
 public:
