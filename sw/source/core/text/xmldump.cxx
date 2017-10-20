@@ -359,6 +359,9 @@ void SwFrame::dumpInfosAsXml( xmlTextWriterPtr writer ) const
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", Frame().Width() );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", Frame().Height() );
     xmlTextWriterWriteAttribute(writer, BAD_CAST("mbFixSize"), BAD_CAST(OString::boolean(HasFixSize()).getStr()));
+    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbValidPos"), BAD_CAST(OString::boolean(GetValidPosFlag()).getStr()));
+    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbValidSize"), BAD_CAST(OString::boolean(GetValidSizeFlag()).getStr()));
+    xmlTextWriterWriteAttribute(writer, BAD_CAST("mbValidPrtArea"), BAD_CAST(OString::boolean(GetValidPrtAreaFlag()).getStr()));
     xmlTextWriterEndElement( writer );
 
     // output the Prt
