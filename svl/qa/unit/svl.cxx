@@ -1333,6 +1333,56 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "1900-01-02 23:53.605";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
+    {   // tdf#33689 use English NfKeywords in non-English language
+        eLang = LANGUAGE_DUTCH;
+        sExpected = "Dutch: 1900/01/02 03:23:54";
+        sCode =     "\"Dutch:\" JJJJ/MM/DD UU:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "\"Dutch: \"YYYY/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        eLang = LANGUAGE_GERMAN;
+        sExpected = "German: 1900/01/02 03:23:54";
+        sCode =     "\"German: \"JJJJ/MM/TT HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "\"German: \"YYYY/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        eLang = LANGUAGE_FRENCH;
+        sExpected = "French: 1900/01/02 03:23:54";
+        sCode =     "\"French: \"AAAA/MM/JJ HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "\"French: \"YYYY/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        eLang = LANGUAGE_ITALIAN;
+        sExpected = "Italian: 1900/01/02 03:23:54";
+        sCode =     "\"Italian: \"AAAA/MM/GG HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "\"Italian: \"YYYY/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        eLang = LANGUAGE_PORTUGUESE;
+        sExpected = "Portuguese: 1900/01/02 03:23:54";
+        sCode =     "\"Portuguese: \"AAAA/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "\"Portuguese: \"YYYY/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        eLang = LANGUAGE_SPANISH_MODERN;
+        sExpected = "Spanish: 1900/01/02 03:23:54";
+        sCode =     "\"Spanish: \"AAAA/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "\"Spanish: \"YYYY/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        eLang = LANGUAGE_DANISH;
+        sExpected = "Danish: 1900/01/02 03:23:54";
+        sCode =     "\"Danish: \"YYYY/MM/DD TT:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "\"Danish: \"YYYY/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        eLang = LANGUAGE_FINNISH;
+        sExpected = "Finnish: 1900/01/02 03:23:54";
+        sCode =     "\"Finnish: \"VVVV/KK/PP TT:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        sCode =     "\"Finnish: \"YYYY/MM/DD HH:MM:SS";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+    }
 }
 
 void Test::testNfEnglishKeywordsIntegrity()
