@@ -32,17 +32,18 @@ published enum TextFitToSizeType
     */
     NONE,
 
-    /** The rendered glyph bitmaps are scaled up or down
+    /** The bitmap with the rendered glyphs is scaled up or down
         proportionally to fit the size of the shape.
         This may scale anisotropically.
         No AutoGrow and no Auto line-breaks in this case.
+
+        On fontwork custom shapes, the rendering is different:
+        each line of text is <em>separately</em> scaled
+        proportionally to fit the width.
     */
     PROPORTIONAL,
 
-    /** Like <code>PROPORTIONAL</code>, but each line of text
-        is separately scaled proportionally to fit the width.
-        No AutoGrow and no Auto line-breaks in this case.
-
+    /** Nowadays this is the same as `PROPORTIONAL`.
         @note This is actually only implemented on fontwork
               custom shapes, and the only supported option
               (other than NONE) on fontwork shapes.
