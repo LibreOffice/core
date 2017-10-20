@@ -68,10 +68,6 @@ cmd/sc_arrangemenu.png cmd/sc_bringtofront.png
 cmd/sc_updatecurindex.png cmd/sc_reload.png
 cmd/sc_removetableof.png cmd/sc_cancel.png
 
-# writer epub export
-cmd/lc_exportdirecttoepub.png cmd/lc_exportdirecttopdf.png
-cmd/sc_exportdirecttoepub.png cmd/sc_exportdirecttopdf.png
-
 # calc insert page breaks
 cmd/lc_insertrowbreak.png cmd/lc_insertpagebreak.png
 cmd/sc_insertrowbreak.png cmd/sc_insertpagebreak.png
