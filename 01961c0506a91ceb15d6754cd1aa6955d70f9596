@@ -40,6 +40,24 @@
       "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_94f8534b",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-10-20T05:11:13Z",
+      "side": 1,
+      "message": "spra is the FIRST three bits.  In this case 7, so operand size 3. Thanks for teaching me about doc-dump.py.\n\nAnother size 3 operand example is sprmSDxaColSpacing.",
+      "parentUuid": "1a430d35_21168355",
+      "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
