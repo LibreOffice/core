@@ -373,12 +373,12 @@ void SdOOXMLExportTest1::testBnc880763()
     // First object in the background has blue background color
     const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pObjGroup);
-    const SdrObject *pObj = dynamic_cast<SdrObject *>(pObjGroup->GetSubList()->GetObj(0));
+    const SdrObject *pObj = pObjGroup->GetSubList()->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x0000ff),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
 
     // Second object at the front has green background color
-    pObj = dynamic_cast<SdrObject *>(pPage->GetObj(2)); // FIXME should be 1, smartart import creates an additional empty group for some reason
+    pObj = pPage->GetObj(2); // FIXME should be 1, smartart import creates an additional empty group for some reason
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x00ff00),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
 
@@ -395,7 +395,7 @@ void SdOOXMLExportTest1::testBnc862510_5()
     // Same as testBnc870237, but here we check the horizontal spacing
     const SdrObjGroup *pObjGroup = dynamic_cast<SdrObjGroup *>(pPage->GetObj(0));
     CPPUNIT_ASSERT(pObjGroup);
-    const SdrObject* pObj = dynamic_cast<SdrObject*>(pObjGroup->GetSubList()->GetObj(1));
+    const SdrObject* pObj = pObjGroup->GetSubList()->GetObj(1);
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());

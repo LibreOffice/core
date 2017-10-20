@@ -48,8 +48,7 @@ SwAccessibleTextFrame::SwAccessibleTextFrame(
     msTitle(),
     msDesc()
 {
-    const SwFlyFrameFormat* pFlyFrameFormat =
-                    dynamic_cast<const SwFlyFrameFormat*>( rFlyFrame.GetFormat() );
+    const SwFlyFrameFormat* pFlyFrameFormat = rFlyFrame.GetFormat();
     msTitle = pFlyFrameFormat->GetObjTitle();
 
     msDesc = pFlyFrameFormat->GetObjDescription();
@@ -99,8 +98,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
             aEvent.NewValue <<= msTitle;
             FireAccessibleEvent( aEvent );
 
-            const SwFlyFrameFormat* pFlyFrameFormat =
-                            dynamic_cast<const SwFlyFrameFormat*>( pFlyFrame->GetFormat() );
+            const SwFlyFrameFormat* pFlyFrameFormat = pFlyFrame->GetFormat();
             if (!pFlyFrameFormat || !pFlyFrameFormat->GetObjDescription().isEmpty())
             {
                 break;
@@ -113,8 +111,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
             {
                 const OUString sOldDesc( msDesc );
 
-                const SwFlyFrameFormat* pFlyFrameFormat =
-                                dynamic_cast<const SwFlyFrameFormat*>( pFlyFrame->GetFormat() );
+                const SwFlyFrameFormat* pFlyFrameFormat = pFlyFrame->GetFormat();
                 const OUString& rDesc = pFlyFrameFormat->GetObjDescription();
                 msDesc = rDesc;
                 if ( msDesc.isEmpty() &&

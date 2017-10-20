@@ -135,7 +135,7 @@ SwView* SwModule::GetFirstView()
 
 SwView* SwModule::GetNextView(SwView const * pView)
 {
-    OSL_ENSURE(dynamic_cast<SwView const *>( pView),"return no SwView" );
+    OSL_ENSURE( pView,"return no SwView" );
     SwView* pNView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, true, checkSfxViewShell<SwView>));
     return pNView;
 }

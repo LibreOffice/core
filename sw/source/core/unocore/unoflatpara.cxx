@@ -387,7 +387,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 
                 while( pCnt && pCurrentPage->IsAnLower( pCnt ) )
                 {
-                    SwTextNode* pTextNode = dynamic_cast<SwTextNode*>( pCnt->GetNode()->GetTextNode() );
+                    SwTextNode* pTextNode = pCnt->GetNode()->GetTextNode();
 
                     if ( pTextNode &&
                         ((mnType == text::TextMarkupType::SPELLCHECK &&

@@ -1058,8 +1058,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             case NS_ooxml::LN_CT_AbstractNum_numStyleLink:
             {
                 OUString sStyleName = rSprm.getValue( )->getString( );
-                AbstractListDef* pAbstractListDef = dynamic_cast< AbstractListDef* >( m_pCurrentDefinition.get( ) );
-                pAbstractListDef->SetNumStyleLink(sStyleName);
+                m_pCurrentDefinition->SetNumStyleLink(sStyleName);
             }
             break;
             case NS_ooxml::LN_EG_RPrBase_rFonts: //contains font properties

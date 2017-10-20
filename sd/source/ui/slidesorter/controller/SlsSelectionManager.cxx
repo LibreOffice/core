@@ -108,7 +108,7 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
 
     const auto pViewShell = mrSlideSorter.GetViewShell();
     const auto pDrawViewShell = pViewShell ? std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell->GetViewShellBase().GetMainViewShell()) : nullptr;
-    const auto pDrawView = pDrawViewShell ? dynamic_cast<sd::DrawView*>(pDrawViewShell->GetDrawView()) : nullptr;
+    const auto pDrawView = pDrawViewShell ? pDrawViewShell->GetDrawView() : nullptr;
 
     if (pDrawView)
         pDrawView->BlockPageOrderChangedHint(true);

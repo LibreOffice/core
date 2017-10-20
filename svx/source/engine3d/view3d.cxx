@@ -507,7 +507,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
 
             if(pCompoundObj)
             {
-                E3dCompoundObject* pNewCompoundObj = dynamic_cast< E3dCompoundObject* >(pCompoundObj->Clone());
+                E3dCompoundObject* pNewCompoundObj = pCompoundObj->Clone();
 
                 if(pNewCompoundObj)
                 {

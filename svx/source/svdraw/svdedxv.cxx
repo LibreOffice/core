@@ -1490,18 +1490,17 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             // check deletion of entire TextObj
             SdrUndoAction* pDelUndo=nullptr;
             bool bDelObj=false;
-            SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( pTEObj );
-            if (pTextObj!=nullptr && bTextEditNewObj)
+            if (pTEObj!=nullptr && bTextEditNewObj)
             {
-                bDelObj=pTextObj->IsTextFrame() &&
-                        !pTextObj->HasText() &&
-                        !pTextObj->IsEmptyPresObj() &&
-                        !pTextObj->HasFill() &&
-                        !pTextObj->HasLine();
+                bDelObj=pTEObj->IsTextFrame() &&
+                        !pTEObj->HasText() &&
+                        !pTEObj->IsEmptyPresObj() &&
+                        !pTEObj->HasFill() &&
+                        !pTEObj->HasLine();
 
-                if(pTEObj->IsInserted() && bDelObj && pTextObj->GetObjInventor()==SdrInventor::Default && !bDontDeleteReally)
+                if(pTEObj->IsInserted() && bDelObj && pTEObj->GetObjInventor()==SdrInventor::Default && !bDontDeleteReally)
                 {
-                    SdrObjKind eIdent=(SdrObjKind)pTextObj->GetObjIdentifier();
+                    SdrObjKind eIdent=(SdrObjKind)pTEObj->GetObjIdentifier();
                     if(eIdent==OBJ_TEXT || eIdent==OBJ_TEXTEXT)
                     {
                         pDelUndo= GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pTEObj);

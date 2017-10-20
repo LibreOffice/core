@@ -199,8 +199,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
     if (!aBookmarkName.isEmpty())
     {
         IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
-        IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
-                *m_pPaM, aBookmarkName, ODF_FORMCHECKBOX ) );
+        IFieldmark* pFieldmark = pMarksAccess->makeNoTextFieldBookmark(
+                *m_pPaM, aBookmarkName, ODF_FORMCHECKBOX );
         OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
         if (pFieldmark!=nullptr) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
@@ -271,8 +271,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
         if (!aBookmarkName.isEmpty())
         {
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
-            IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
-                    pMarksAccess->makeNoTextFieldBookmark( *m_pPaM, aBookmarkName, ODF_FORMDROPDOWN ) );
+            IFieldmark *pFieldmark =
+                    pMarksAccess->makeNoTextFieldBookmark( *m_pPaM, aBookmarkName, ODF_FORMDROPDOWN );
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != nullptr )
             {

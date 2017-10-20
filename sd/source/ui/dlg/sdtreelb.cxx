@@ -1290,7 +1290,7 @@ SvTreeListEntry* SdPageObjsTLB::GetDropTarget (const Point& rLocation)
         sal_uInt16 nDepth (0);
         do
         {
-            pNext = dynamic_cast<SvTreeListEntry*>(NextVisible(pEntry, &nDepth));
+            pNext = NextVisible(pEntry, &nDepth);
             if (pNext != nullptr && nDepth > 0 && nDepth!=0xffff)
                 pEntry = pNext;
             else

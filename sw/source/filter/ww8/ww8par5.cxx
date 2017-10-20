@@ -530,8 +530,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             SwPosition aEndPos = *m_pPaM->GetPoint();
             SwPaM aFieldPam( m_aFieldStack.back().GetPtNode(), m_aFieldStack.back().GetPtContent(), aEndPos.nNode, aEndPos.nContent.GetIndex());
             IDocumentMarkAccess* pMarksAccess = m_rDoc.getIDocumentMarkAccess( );
-            IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeFieldBookmark(
-                        aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT ) );
+            IFieldmark *pFieldmark = pMarksAccess->makeFieldBookmark(
+                        aFieldPam, m_aFieldStack.back().GetBookmarkName(), ODF_FORMTEXT );
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=nullptr) {
                 const IFieldmark::parameter_map_t& rParametersToAdd = m_aFieldStack.back().getParameters();

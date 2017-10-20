@@ -845,9 +845,9 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
                 {
                     pSbxObj->Dump(rStrm, bFill);
                 }
-                else if (SbxVariable *pSbxVar = dynamic_cast<SbxVariable*>(pVar))
+                else
                 {
-                    pSbxVar->Dump(rStrm, bFill);
+                    pVar->Dump(rStrm, bFill);
                 }
             }
         }
