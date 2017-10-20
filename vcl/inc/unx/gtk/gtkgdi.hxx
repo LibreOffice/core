@@ -300,50 +300,50 @@ protected:
                            ControlType nType,
                            ControlPart nPart,
                            const tools::Rectangle& aCtrlRect,
-                           const std::list< tools::Rectangle >& aClip,
+                           const std::vector< tools::Rectangle >& aClip,
                            ControlState nState,
                            const ImplControlValue& aValue,
                            ControlCacheKey& rControlCacheKey);
 
     bool NWPaintGTKArrow( GdkDrawable* gdkDrawable,
                            const tools::Rectangle& rControlRectangle,
-                           const std::list< tools::Rectangle >& rClipList,
+                           const std::vector< tools::Rectangle >& rClipList,
                            ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKListHeader( GdkDrawable* gdkDrawable,
                            const tools::Rectangle& rControlRectangle,
-                           const std::list< tools::Rectangle >& rClipList,
+                           const std::vector< tools::Rectangle >& rClipList,
                            ControlState nState );
     bool NWPaintGTKFixedLine( GdkDrawable* gdkDrawable, ControlPart nPart,
                            const tools::Rectangle& rControlRectangle );
     bool NWPaintGTKFrame( GdkDrawable* gdkDrawable,
                            const tools::Rectangle& rControlRectangle,
-                           const std::list< tools::Rectangle >& rClipList,
+                           const std::vector< tools::Rectangle >& rClipList,
                            const ImplControlValue& aValue );
     bool NWPaintGTKWindowBackground( GdkDrawable* gdkDrawable,
                            const tools::Rectangle& rControlRectangle,
-                           const std::list< tools::Rectangle >& rClipList );
+                           const std::vector< tools::Rectangle >& rClipList );
     bool NWPaintGTKButtonReal( GtkWidget* button, GdkDrawable* gdkDrawable,
                            const tools::Rectangle& rControlRectangle,
-                           const std::list< tools::Rectangle >& rClipList,
+                           const std::vector< tools::Rectangle >& rClipList,
                            ControlState nState );
     bool NWPaintGTKButton( GdkDrawable* gdkDrawable,
                            const tools::Rectangle& rControlRectangle,
-                           const std::list< tools::Rectangle >& rClipList,
+                           const std::vector< tools::Rectangle >& rClipList,
                            ControlState nState );
     bool NWPaintGTKRadio( GdkDrawable* gdkDrawable,
                           const tools::Rectangle& rControlRectangle,
-                          const std::list< tools::Rectangle >& rClipList,
+                          const std::vector< tools::Rectangle >& rClipList,
                           ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKCheck( GdkDrawable* gdkDrawable,
                           const tools::Rectangle& rControlRectangle,
-                          const std::list< tools::Rectangle >& rClipList,
+                          const std::vector< tools::Rectangle >& rClipList,
                           ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKScrollbar( ControlPart nPart,
                               const tools::Rectangle& rControlRectangle,
                               ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKEditBox( GdkDrawable* gdkDrawable, ControlType nType,
                             const tools::Rectangle& rControlRectangle,
-                            const std::list< tools::Rectangle >& rClipList,
+                            const std::vector< tools::Rectangle >& rClipList,
                             ControlState nState );
     bool NWPaintGTKSpinBox(ControlType nType, ControlPart nPart,
                            const tools::Rectangle& rControlRectangle,
@@ -351,31 +351,31 @@ protected:
                            ControlCacheKey& rControlCacheKey);
     bool NWPaintGTKComboBox( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                              const tools::Rectangle& rControlRectangle,
-                             const std::list< tools::Rectangle >& rClipList,
+                             const std::vector< tools::Rectangle >& rClipList,
                              ControlState nState );
     bool NWPaintGTKTabItem( ControlType nType,
                             const tools::Rectangle& rControlRectangle,
                             ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKListBox( GdkDrawable* gdkDrawable, ControlPart nPart,
                             const tools::Rectangle& rControlRectangle,
-                            const std::list< tools::Rectangle >& rClipList,
+                            const std::vector< tools::Rectangle >& rClipList,
                             ControlState nState );
 
     bool NWPaintGTKToolbar( GdkDrawable* gdkDrawable, ControlPart nPart,
                             const tools::Rectangle& rControlRectangle,
-                            const std::list< tools::Rectangle >& rClipList,
+                            const std::vector< tools::Rectangle >& rClipList,
                             ControlState nState, const ImplControlValue& aValue );
     bool NWPaintGTKMenubar( GdkDrawable* gdkDrawable, ControlPart nPart,
                             const tools::Rectangle& rControlRectangle,
-                            const std::list< tools::Rectangle >& rClipList,
+                            const std::vector< tools::Rectangle >& rClipList,
                             ControlState nState );
     bool NWPaintGTKPopupMenu( GdkDrawable* gdkDrawable, ControlPart nPart,
                               const tools::Rectangle& rControlRectangle,
-                              const std::list< tools::Rectangle >& rClipList,
+                              const std::vector< tools::Rectangle >& rClipList,
                               ControlState nState );
     bool NWPaintGTKTooltip( GdkDrawable* gdkDrawable,
                             const tools::Rectangle& rControlRectangle,
-                            const std::list< tools::Rectangle >& rClipList );
+                            const std::vector< tools::Rectangle >& rClipList );
     bool NWPaintGTKProgress(
                             const tools::Rectangle& rControlRectangle,
                             const ImplControlValue& aValue );
