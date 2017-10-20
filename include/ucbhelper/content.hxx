@@ -91,11 +91,10 @@ class Content_Impl;
   * convenient API for frequently used functionality then the "raw"
   * UCB-API does.
   */
-class UCBHELPER_DLLPUBLIC Content
+class UCBHELPER_DLLPUBLIC Content final
 {
     rtl::Reference< Content_Impl > m_xImpl;
 
-protected:
     /// @throws css::ucb::CommandAbortedException
     /// @throws css::uno::RuntimeException,
     /// @throws css::uno::Exception

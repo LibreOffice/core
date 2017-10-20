@@ -74,13 +74,12 @@ public:
 };
 
 
-class CachedDynamicResultSetFactory
+class CachedDynamicResultSetFactory final
                 : public cppu::OWeakObject
                 , public css::lang::XTypeProvider
                 , public css::lang::XServiceInfo
                 , public css::ucb::XCachedDynamicResultSetFactory
 {
-protected:
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
 
 public:

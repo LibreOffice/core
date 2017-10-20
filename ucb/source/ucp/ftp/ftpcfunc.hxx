@@ -28,17 +28,6 @@
 #include <rtl/ustring.hxx>
 
 
-namespace ftp {
-
-    class FTPStreamContainer
-    {
-    protected:
-        ~FTPStreamContainer() {}
-    };
-
-}
-
-
 extern "C" {
 
     /** callback for curl_easy_perform(),

@@ -76,15 +76,12 @@ ResultSetColumnData::ResultSetColumnData()
  * css::sdbc::XResultSetMetaDataSupplier, which is required for
  * implementations of service com.sun.star.ucb.ContentResultSet.
  */
-class UCBHELPER_DLLPUBLIC ResultSetMetaData :
+class UCBHELPER_DLLPUBLIC ResultSetMetaData final :
                 public ::cppu::OWeakObject,
                 public css::lang::XTypeProvider,
                 public css::sdbc::XResultSetMetaData
 {
-private:
     std::unique_ptr<ucbhelper_impl::ResultSetMetaData_Impl> m_pImpl;
-
-protected:
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
     css::uno::Sequence< css::beans::Property >            m_aProps;
 
