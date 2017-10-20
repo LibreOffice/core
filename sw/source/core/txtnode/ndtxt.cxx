@@ -91,6 +91,7 @@
 #include <wrtsh.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svl/itemiter.hxx>
+#include <rdfhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1487,7 +1488,7 @@ static SwCharFormat* lcl_FindCharFormat( const SwCharFormats* pCharFormats, cons
 
 void lcl_CopyHint(
     const sal_uInt16 nWhich,
-    const SwTextAttr * const pHt,
+    SwTextAttr * const pHt,
     SwTextAttr *const pNewHt,
     SwDoc *const pOtherDoc,
     SwTextNode *const pDest )
@@ -1600,11 +1601,40 @@ void lcl_CopyHint(
         }
     case RES_TXTATR_META:
     case RES_TXTATR_METAFIELD:
-        OSL_ENSURE( pNewHt, "copying Meta should not fail!" );
-        OSL_ENSURE( pDest
-                    && (CH_TXTATR_INWORD == pDest->GetText()[pNewHt->GetStart()]),
-            "missing CH_TXTATR?");
-        break;
+        {
+            OSL_ENSURE(pNewHt, "copying Meta should not fail!");
+            OSL_ENSURE(pDest
+                       && (CH_TXTATR_INWORD == pDest->GetText()[pNewHt->GetStart()]),
+                       "missing CH_TXTATR?");
+#if 0
+            auto pSrcTextMeta = static_txtattr_cast<SwTextMeta*>(pHt);
+            SwFormatMeta& rSrcFormatMeta(static_cast<SwFormatMeta &>(pSrcTextMeta->GetAttr()));
+            if (::sw::Meta* pSrcMeta = rSrcFormatMeta.GetMeta())
+            {
+                if (SwDocShell* pSrcDocSh = pOtherDoc->GetDocShell())
+                {
+                    uno::Reference<frame::XModel> xSrcModel = pSrcDocSh->GetBaseModel();
+
+                    auto pDstTextMeta = static_txtattr_cast<SwTextMeta*>(pNewHt);
+                    SwFormatMeta & rDstFormatMeta(static_cast<SwFormatMeta &>(pDstTextMeta->GetAttr()));
+                    if (::sw::Meta* pDstMeta = rDstFormatMeta.GetMeta())
+                    {
+                        const SwDoc* const pDstDoc = pDest->GetDoc();
+                        if (const SwDocShell* pDstDocSh = pDstDoc->GetDocShell())
+                        {
+                            uno::Reference<frame::XModel> xDstModel = pDstDocSh->GetBaseModel();
+
+                            static const OUString metaNS("urn:bails");
+                            const css::uno::Reference<css::rdf::XResource> xDstSubject(pDstMeta->MakeUnoObject(), uno::UNO_QUERY);
+                            const css::uno::Reference<css::rdf::XResource> xSrcSubject(pSrcMeta->MakeUnoObject(), uno::UNO_QUERY);
+                            SwRDFHelper::cloneStatements(xSrcModel, xDstModel, metaNS, xSrcSubject, xDstSubject);
+                        }
+                    }
+                }
+            }
+#endif
+            break;
+        }
     }
 }
 
