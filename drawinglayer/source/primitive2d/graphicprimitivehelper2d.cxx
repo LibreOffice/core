@@ -101,6 +101,10 @@ namespace drawinglayer
 
                     maVirtualDevice->Erase();
                     maVirtualDeviceMask->Erase();
+                    const ::tools::Rectangle aRect(Point(0, 0), aTarget);
+                    maVirtualDeviceMask->SetFillColor(COL_BLACK);
+                    maVirtualDeviceMask->SetLineColor();
+                    maVirtualDeviceMask->DrawRect(aRect);
                 }
             }
 
