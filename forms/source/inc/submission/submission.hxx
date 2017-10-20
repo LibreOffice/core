@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_HXX
+#ifndef INCLUDED_FORMS_SOURCE_INC_SUBMISSION_SUBMISSION_HXX
+#define INCLUDED_FORMS_SOURCE_INC_SUBMISSION_SUBMISSION_HXX
 
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.h>
@@ -42,7 +42,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "serialization.hxx"
+#include "submission/serialization.hxx"
 
 #include <memory>
 

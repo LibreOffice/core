@@ -20,8 +20,8 @@
 
 #include <memory>
 
-#include "submission_post.hxx"
-#include "serialization_app_xml.hxx"
+#include "submission/submission_post.hxx"
+#include "submission/serialization_app_xml.hxx"
 #include "serialization_urlencoded.hxx"
 
 #include <osl/file.hxx>

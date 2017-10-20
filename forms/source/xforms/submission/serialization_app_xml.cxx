@@ -18,8 +18,8 @@
  */
 
 
-#include "serialization.hxx"
-#include "serialization_app_xml.hxx"
+#include "submission/serialization.hxx"
+#include "submission/serialization_app_xml.hxx"
 
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>

@@ -18,8 +18,8 @@
  */
 
 
-#include "submission_get.hxx"
-#include "serialization_app_xml.hxx"
+#include "submission/submission_get.hxx"
+#include "submission/serialization_app_xml.hxx"
 #include "serialization_urlencoded.hxx"
 
 #include <rtl/strbuf.hxx>

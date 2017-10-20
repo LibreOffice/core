@@ -24,7 +24,7 @@
 
 #include <rtl/strbuf.hxx>
 
-#include "serialization.hxx"
+#include "submission/serialization.hxx"
 
 class CSerializationURLEncoded : public CSerialization
 {

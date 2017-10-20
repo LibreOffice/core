@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_GET_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_GET_HXX
+#ifndef INCLUDED_FORMS_SOURCE_INC_SUBMISSION_SUBMISSION_GET_HXX
+#define INCLUDED_FORMS_SOURCE_INC_SUBMISSION_SUBMISSION_GET_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "submission.hxx"
+#include "submission/submission.hxx"
 
 class CSubmissionGet : public CSubmission
 {

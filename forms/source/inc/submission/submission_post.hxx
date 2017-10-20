@@ -17,17 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_PUT_HXX
-#define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_PUT_HXX
+#ifndef INCLUDED_FORMS_SOURCE_INC_SUBMISSION_SUBMISSION_POST_HXX
+#define INCLUDED_FORMS_SOURCE_INC_SUBMISSION_SUBMISSION_POST_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "submission/submission.hxx"
 
-#include "submission.hxx"
-
-class CSubmissionPut : public CSubmission
+class CSubmissionPost : public CSubmission
 {
 public:
-    CSubmissionPut(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment);
+    CSubmissionPost(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment);
     virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler) override;
 
 };

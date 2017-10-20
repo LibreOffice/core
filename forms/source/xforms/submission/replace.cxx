@@ -18,8 +18,8 @@
  */
 
 #include <memory>
-#include "submission.hxx"
-#include "serialization_app_xml.hxx"
+#include "submission/submission.hxx"
+#include "submission/serialization_app_xml.hxx"
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
