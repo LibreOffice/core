@@ -76,6 +76,24 @@
       "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_972bf593",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-10-20T11:29:08Z",
+      "side": 1,
+      "message": "I hoped to make the sprm parts to be clearer with my sprmids.hxx refactor :)",
+      "parentUuid": "1a430d35_21168355",
+      "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
