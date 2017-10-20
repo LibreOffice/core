@@ -125,6 +125,8 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
                     }
                 }
             }
+
+            LocalFree(argv2);
         }
 
         if ( _ltow( (long)GetCurrentProcessId(),szParentProcessId, 10 ) && bHeadlessMode )
@@ -172,6 +174,7 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
     } while ( fSuccess
               && ( EXITHELPER_CRASH_WITH_RESTART == dwExitCode || EXITHELPER_NORMAL_RESTART == dwExitCode ));
     delete[] lpCommandLine;
+    LocalFree(argv);
 
     return fSuccess ? dwExitCode : -1;
 }
