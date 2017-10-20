@@ -69,7 +69,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 # point weirdness (x87, registers, compiler optimization, ... whatever),
 # disable them until someone finds a real cure.
 
-ifneq ($(PLATFORMID),linux_x86)
+ifneq ($(filter-out linux_aarch64 linux_x86,$(PLATFORMID)),)
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_functions_test_old \
 	CppunitTest_sc_database_functions_test \
