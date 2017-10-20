@@ -30,6 +30,7 @@ void * com_sun_star_i18n_NativeNumberSupplier_get_implementation( void *, void *
 void * com_sun_star_i18n_NumberFormatCodeMapper_get_implementation( void *, void * );
 void * com_sun_star_comp_graphic_GraphicProvider_get_implementation( void *, void * );
 void * IndexedPropertyValuesContainer_get_implementation( void *, void * );
+void * com_sun_star_i18n_Transliteration_get_implementation( void *, void * );
 }
 
 const lib_to_factory_mapping *
@@ -60,6 +61,7 @@ lo_get_constructor_map(void)
         { "com_sun_star_i18n_NumberFormatCodeMapper_get_implementation", com_sun_star_i18n_NumberFormatCodeMapper_get_implementation },
         { "com_sun_star_comp_graphic_GraphicProvider_get_implementation", com_sun_star_comp_graphic_GraphicProvider_get_implementation },
         { "IndexedPropertyValuesContainer_get_implementation", IndexedPropertyValuesContainer_get_implementation },
+        { "com_sun_star_i18n_Transliteration_get_implementation", com_sun_star_i18n_Transliteration_get_implementation },
         { 0, 0 }
     };
 
