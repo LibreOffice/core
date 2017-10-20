@@ -85,6 +85,7 @@ public:
     void testInsertGraphicInvalidations();
     void testDocumentSizeWithTwoViews();
     void testDisableUndoRepair();
+    void testLanguageStatus();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -112,6 +113,7 @@ public:
     CPPUNIT_TEST(testInsertGraphicInvalidations);
     CPPUNIT_TEST(testDocumentSizeWithTwoViews);
     CPPUNIT_TEST(testDisableUndoRepair);
+    CPPUNIT_TEST(testLanguageStatus);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1412,6 +1414,55 @@ void ScTiledRenderingTest::testDisableUndoRepair()
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet2.GetItemState(SID_UNDO));
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet2.GetItem(SID_UNDO)));
     }
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testLanguageStatus()
+{
+    comphelper::LibreOfficeKit::setActive();
+    ScModelObj* pModelObj = createDoc("small.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    CPPUNIT_ASSERT(pDocSh);
+
+    // view #1
+    SfxViewShell* pView1 = SfxViewShell::Current();
+
+    // view #2
+    SfxLokHelper::createView();
+    SfxViewShell* pView2 = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pView1 != pView2);
+    const OUString aLangBolivia("Spanish (Bolivia)");
+    {
+        std::unique_ptr<SfxPoolItem> pItem1;
+        std::unique_ptr<SfxPoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem2);
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem1.get()));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem2.get()));
+        CPPUNIT_ASSERT(!dynamic_cast< const SfxStringItem* >(pItem1.get())->GetValue().isEmpty());
+        CPPUNIT_ASSERT(!dynamic_cast< const SfxStringItem* >(pItem1.get())->GetValue().isEmpty());
+    }
+
+    {
+        SfxStringItem aLangString(SID_LANGUAGE_STATUS, "Default_Spanish (Bolivia)");
+        pView1->GetViewFrame()->GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS,
+            SfxCallMode::SYNCHRON, { &aLangString });
+    }
+
+    {
+        std::unique_ptr<SfxPoolItem> pItem1;
+        std::unique_ptr<SfxPoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem2);
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem1.get()));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(pItem2.get()));
+        CPPUNIT_ASSERT_EQUAL(aLangBolivia, dynamic_cast< const SfxStringItem* >(pItem1.get())->GetValue());
+        CPPUNIT_ASSERT_EQUAL(aLangBolivia, dynamic_cast< const SfxStringItem* >(pItem1.get())->GetValue());
+    }
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 }
