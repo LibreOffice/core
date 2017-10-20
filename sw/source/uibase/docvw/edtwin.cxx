@@ -1844,7 +1844,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         if (rSh.IsInFrontOfLabel() && rSh.NumOrNoNum())
                             eKeyState = SwKeyState::NumOrNoNum;
                     }
-                    else
+                    else if (!rSh.IsCursorInParagraphMetadataField())
                     {
                         ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
                             "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
@@ -2020,7 +2020,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             }
                         }
                     }
-                    else
+                    else if (!rSh.IsCursorInParagraphMetadataField())
                     {
                         ScopedVclPtrInstance<MessageDialog>(this, "InfoReadonlyDialog",
                             "modules/swriter/ui/inforeadonlydialog.ui")->Execute();
