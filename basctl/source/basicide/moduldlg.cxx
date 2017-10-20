@@ -458,6 +458,13 @@ OrganizeDialog::OrganizeDialog(vcl::Window* pParent, sal_Int16 tabId,
 {
     get(m_pTabCtrl, "tabcontrol");
 
+    sal_uInt16 nPageCount = m_pTabCtrl->GetPageCount();
+    for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+    {
+        sal_uInt16 nPageId = m_pTabCtrl->GetPageId(nPage);
+        m_pTabCtrl->SetTabPage(nPageId, nullptr);
+    }
+
     m_pTabCtrl->SetActivatePageHdl(LINK(this, OrganizeDialog, ActivatePageHdl));
 
     if( tabId == 0 )

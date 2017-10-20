@@ -83,6 +83,13 @@ RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
     get(m_pCancelButton, "cancel");
     get(m_pTabControl, "notebook");
 
+    sal_uInt16 nPageCount = m_pTabControl->GetPageCount();
+    for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+    {
+        sal_uInt16 nPageId = m_pTabControl->GetPageId(nPage);
+        m_pTabControl->SetTabPage(nPageId, nullptr);
+    }
+
     OUString aTitle(GetText());
     SetText(aTitle.replaceAll("%s", m_aJobData.m_aPrinterName));
 
