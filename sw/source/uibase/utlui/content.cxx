@@ -2069,6 +2069,7 @@ bool SwContentTree::HasContentChanged()
                         for(size_t j = 0; j < nChildCount; ++j)
                         {
                             pEntry = Next(pEntry);
+                            assert(pEntry);
                             const SwContent* pCnt = pArrType->GetMember(j);
                             pEntry->SetUserData(const_cast<SwContent *>(pCnt));
                             OUString sEntryText = GetEntryText(pEntry);
@@ -2139,6 +2140,7 @@ bool SwContentTree::HasContentChanged()
                         for(size_t j = 0; j < nChildCount; ++j)
                         {
                             pEntry = Next(pEntry);
+                            assert(pEntry);
                             bNext = false;
                             const SwContent* pCnt = pArrType->GetMember(j);
                             pEntry->SetUserData(const_cast<SwContent *>(pCnt));
@@ -2172,6 +2174,7 @@ bool SwContentTree::HasContentChanged()
                         for(size_t j = 0; j < nChildCount; ++j)
                         {
                             const SwContent* pCnt = pArrType->GetMember(j);
+                            assert(pChild);
                             pChild->SetUserData(const_cast<SwContent *>(pCnt));
                             OUString sEntryText = GetEntryText(pChild);
                             if( sEntryText != pCnt->GetName() &&
@@ -2187,6 +2190,7 @@ bool SwContentTree::HasContentChanged()
                         for(size_t j = 0; j < nChildCount; ++j)
                         {
                             pChild = Next(pRemove);
+                            assert(pRemove);
                             GetModel()->Remove(pRemove);
                             pRemove = pChild;
                         }
