@@ -10233,7 +10233,7 @@ fi
 AC_SUBST(ENABLE_PDFIUM)
 
 SYSTEM_GPGMEPP=
-if test "$_os" = "Linux"; then
+if test "$_os" = "Linux" -o "$_os" = "Darwin"; then
     dnl ===================================================================
     dnl Check for system gpgme
     dnl ===================================================================

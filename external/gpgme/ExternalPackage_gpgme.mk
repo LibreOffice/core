@@ -13,8 +13,17 @@ $(eval $(call gb_ExternalPackage_use_external_project,gpgme,gpgme))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 
+ifeq ($(OS),LINUX)
+
 $(eval $(call gb_ExternalPackage_add_file,gpgme,$(LIBO_LIB_FOLDER)/libgpgmepp.so.6,lang/cpp/src/.libs/libgpgmepp.so.6.4.0))
 $(eval $(call gb_ExternalPackage_add_file,gpgme,$(LIBO_LIB_FOLDER)/libgpgme.so.11,src/.libs/libgpgme.so.11.18.0))
+
+else
+
+$(eval $(call gb_ExternalPackage_add_file,gpgme,$(LIBO_LIB_FOLDER)/libgpgmepp.6.dylib,lang/cpp/src/.libs/libgpgmepp.6.dylib))
+$(eval $(call gb_ExternalPackage_add_file,gpgme,$(LIBO_LIB_FOLDER)/libgpgme.11.dylib,src/.libs/libgpgme.11.dylib))
+
+endif
 
 endif # $(DISABLE_DYNLOADING)
 
