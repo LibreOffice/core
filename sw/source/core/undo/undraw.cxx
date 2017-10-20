@@ -237,7 +237,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
         // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
 
-        SwDrawFrameFormat* pDrawFrameFormat = dynamic_cast<SwDrawFrameFormat*>(rSave.pFormat);
+        SwDrawFrameFormat* pDrawFrameFormat = rSave.pFormat;
 
         // #i45952# - notify that position attributes are already set
         OSL_ENSURE(pDrawFrameFormat,
@@ -285,7 +285,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     // #i45718# - follow-up of #i35635# move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr[0].pObj );
 
-    SwDrawFrameFormat* pDrawFrameFormat = dynamic_cast<SwDrawFrameFormat*>(pObjArr[0].pFormat);
+    SwDrawFrameFormat* pDrawFrameFormat = pObjArr[0].pFormat;
 
     // #i45952# - notify that position attributes are already set
     OSL_ENSURE(pDrawFrameFormat,
@@ -382,7 +382,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     // #i45718# - follow-up of #i35635# move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr[0].pObj );
 
-    SwDrawFrameFormat* pDrawFrameFormat = dynamic_cast<SwDrawFrameFormat*>(pObjArr[0].pFormat);
+    SwDrawFrameFormat* pDrawFrameFormat = pObjArr[0].pFormat;
 
     // #i45952# - notify that position attributes are already set
     OSL_ENSURE(pDrawFrameFormat,
@@ -417,7 +417,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         ::lcl_RestoreAnchor( rSave.pFormat, rSave.nNodeIdx );
         rFlyFormats.push_back( rSave.pFormat );
 
-        SwDrawFrameFormat* pDrawFrameFormat = dynamic_cast<SwDrawFrameFormat*>(rSave.pFormat);
+        SwDrawFrameFormat* pDrawFrameFormat = rSave.pFormat;
 
         // #i45952# - notify that position attributes are already set
         OSL_ENSURE(pDrawFrameFormat,
@@ -514,7 +514,7 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
 
-        SwDrawFrameFormat* pDrawFrameFormat = dynamic_cast<SwDrawFrameFormat*>(rSave.pFormat);
+        SwDrawFrameFormat* pDrawFrameFormat = rSave.pFormat;
 
         // #i45952# - notify that position attributes are already set
         OSL_ENSURE(pDrawFrameFormat,

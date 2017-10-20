@@ -37,7 +37,6 @@ namespace drawinglayer
             maDecTrans(),
             mbNoDXArray(false)
         {
-            OSL_ENSURE(dynamic_cast< const TextSimplePortionPrimitive2D* >(&mrSource), "TextBreakupHelper with illegal primitive created (!)");
             maDecTrans = mrSource.getTextTransform();
             mbNoDXArray = mrSource.getDXArray().empty();
 

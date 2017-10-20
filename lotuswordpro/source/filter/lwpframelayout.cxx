@@ -714,7 +714,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
 bool LwpFrame::IsLeftWider()
 {
     rtl::Reference<LwpVirtualLayout> xLayout(m_pLayout->GetContainerLayout());
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*>(xLayout.get());
+    LwpVirtualLayout* pParent = xLayout.get();
     if (pParent)
     {
         LwpPoint aPoint = m_pLayout->GetOrigin();

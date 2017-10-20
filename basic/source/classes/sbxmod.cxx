@@ -1303,7 +1303,7 @@ void SbModule::ClearPrivateVars()
                 {
                     for( sal_uInt16 j = 0 ; j < pArray->Count() ; j++ )
                     {
-                        SbxVariable* pj = dynamic_cast<SbxVariable*>( pArray->Get( j ) );
+                        SbxVariable* pj = pArray->Get( j );
                         pj->SbxValue::Clear();
                     }
                 }
@@ -1356,7 +1356,7 @@ void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
                 {
                     for( sal_uInt16 j = 0 ; j < pArray->Count() ; j++ )
                     {
-                        SbxVariable* pVar = dynamic_cast<SbxVariable*>( pArray->Get( j ) );
+                        SbxVariable* pVar = pArray->Get( j );
                         implClearIfVarDependsOnDeletedBasic( pVar, pDeletedBasic );
                     }
                 }

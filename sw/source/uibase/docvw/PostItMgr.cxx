@@ -1680,7 +1680,7 @@ sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItFie
     for(const_iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
     {
         if ( (*i)->GetFormatField().GetField() == pField )
-            return dynamic_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt.get());
+            return (*i)->pPostIt.get();
     }
     return nullptr;
 }
@@ -1690,7 +1690,7 @@ sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const sal_uInt32 
     for(const_iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
     {
         if ( static_cast<const SwPostItField*>((*i)->GetFormatField().GetField())->GetPostItId() == nPostItId )
-            return dynamic_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt.get());
+            return (*i)->pPostIt.get();
     }
     return nullptr;
 }
@@ -2269,7 +2269,7 @@ bool SwPostItMgr::HasActiveSidebarWin() const
 bool SwPostItMgr::HasActiveAnnotationWin() const
 {
     return HasActiveSidebarWin() &&
-           dynamic_cast<sw::annotation::SwAnnotationWin*>(mpActivePostIt.get()) != nullptr;
+           mpActivePostIt != nullptr;
 }
 
 void SwPostItMgr::GrabFocusOnActiveSidebarWin()

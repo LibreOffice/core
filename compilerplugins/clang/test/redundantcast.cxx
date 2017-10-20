@@ -325,6 +325,25 @@ void testReinterpretConstCast() {
     (void) reinterpret_cast<std::size_t>((const_cast<int const *>(&n))); // expected-error-re {{redundant const_cast from 'int *' to 'const int *' within reinterpret_cast to fundamental type 'std::size_t' (aka 'unsigned {{.+}}') [loplugin:redundantcast]}}
 }
 
+void testDynamicCast() {
+
+    struct S1 { virtual ~S1(); };
+    struct S2 final: S1 {};
+    struct S3: S1 {};
+
+    S1 * s1 = nullptr;
+    S2 * s2 = nullptr;
+    void * v1 = nullptr;
+
+    (void) dynamic_cast<S2 *>(s1);
+    (void) dynamic_cast<S1 *>(s2);
+    (void) dynamic_cast<S2 *>(s2); // expected-error {{redundant dynamic cast from 'S2 *' to 'S2 *' [loplugin:redundantcast]}}
+    (void) dynamic_cast<S3 *>(s2);
+    // used in some assert in vcl
+    (void) dynamic_cast<S1 *>(static_cast<S1*>(v1));
+    (void) dynamic_cast<S2 *>(static_cast<S2*>(s1));  // expected-error {{redundant dynamic cast from 'S2 *' to 'S2 *' [loplugin:redundantcast]}}
+}
+
 int main() {
     testConstCast();
     testStaticCast();
@@ -332,6 +351,7 @@ int main() {
     testCStyleCast();
     testCStyleCastOfTemplateMethodResult(nullptr);
     testReinterpretConstCast();
+    testDynamicCast();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

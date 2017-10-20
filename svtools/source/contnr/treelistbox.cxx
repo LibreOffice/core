@@ -3413,20 +3413,13 @@ void SvTreeListBox::ModelNotification( SvListAction nActionId, SvTreeListEntry* 
     {
         case SvListAction::INSERTED:
         {
-            SvTreeListEntry* pEntry( dynamic_cast< SvTreeListEntry* >( pEntry1 ) );
-            if ( !pEntry )
-            {
-                SAL_WARN( "svtools.contnr", "SvTreeListBox::ModelNotification: invalid entry!" );
-                break;
-            }
-
-            SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SvLBoxItemType::ContextBmp ) );
+            SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry1->GetFirstItem( SvLBoxItemType::ContextBmp ) );
             if ( !pBmpItem )
                 break;
             const Image& rBitmap1( pBmpItem->GetBitmap1() );
             const Image& rBitmap2( pBmpItem->GetBitmap2() );
             short nMaxWidth = short( std::max( rBitmap1.GetSizePixel().Width(), rBitmap2.GetSizePixel().Width() ) );
-            nMaxWidth = pImpl->UpdateContextBmpWidthVector( pEntry, nMaxWidth );
+            nMaxWidth = pImpl->UpdateContextBmpWidthVector( pEntry1, nMaxWidth );
             if( nMaxWidth > nContextBmpWidthMax )
             {
                 nContextBmpWidthMax = nMaxWidth;

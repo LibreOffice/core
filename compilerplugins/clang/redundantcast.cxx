@@ -128,6 +128,8 @@ public:
 
     bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr);
 
+    bool VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr);
+
     bool VisitCallExpr(CallExpr const * expr);
 
     bool VisitCXXDeleteExpr(CXXDeleteExpr const * expr);
@@ -672,6 +674,28 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     report(
         DiagnosticsEngine::Warning,
         "redundant functional cast from %0 to %1", expr->getExprLoc())
+        << t2 << t1 << expr->getSourceRange();
+    return true;
+}
+
+bool RedundantCast::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    // ignore dynamic_cast<T1>(static_cast<T1>(void*)), it's necessary
+    if (auto subStaticCast = dyn_cast<CXXStaticCastExpr>(expr->getSubExpr())) {
+        if (loplugin::TypeCheck(subStaticCast->getSubExpr()->getType()).Pointer().Void())
+            return true;
+    }
+    // so far this only deals with dynamic casting from T to T
+    auto const sub = compat::getSubExprAsWritten(expr);
+    auto const t1 = expr->getTypeAsWritten();
+    auto const t2 = sub->getType();
+    if (t1.getCanonicalType() != t2.getCanonicalType())
+        return true;
+    report(
+        DiagnosticsEngine::Warning,
+        "redundant dynamic cast from %0 to %1", expr->getExprLoc())
         << t2 << t1 << expr->getSourceRange();
     return true;
 }

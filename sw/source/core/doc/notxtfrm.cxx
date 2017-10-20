@@ -1126,7 +1126,7 @@ bool SwNoTextFrame::IsTransparent() const
 void SwNoTextFrame::StopAnimation( OutputDevice* pOut ) const
 {
     // Stop animated graphics
-    const SwGrfNode* pGrfNd = dynamic_cast< const SwGrfNode* >(GetNode()->GetGrfNode());
+    const SwGrfNode* pGrfNd = GetNode()->GetGrfNode();
 
     if( pGrfNd && pGrfNd->IsAnimated() )
     {

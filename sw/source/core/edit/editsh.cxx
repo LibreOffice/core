@@ -460,7 +460,7 @@ OUString SwEditShell::GetDropText( const sal_Int32 nChars ) const
         SwPaM* pTemp = pCursor;
         while ( bPrev )
         {
-            SwPaM* pPrev2 = dynamic_cast< SwPaM* >( pTemp->GetPrev() );
+            SwPaM* pPrev2 = pTemp->GetPrev();
             bPrev = ( pPrev2 && pPrev2 != pLast );
             if ( bPrev )
             {

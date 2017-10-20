@@ -240,7 +240,7 @@ void SdOOXMLExportTest2::testBnc822341()
 
         const SdrPage *pPage = GetPage( 1, xDocShRef.get() );
 
-        const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
+        const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier() );
     }
@@ -273,7 +273,7 @@ void SdOOXMLExportTest2::testBnc822341()
         const SdrPage *pPage = pDoc->GetPage(1);
         CPPUNIT_ASSERT_MESSAGE( "no page", pPage != nullptr );
 
-        const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj(0) );
+        const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE( "no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL( static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier() );
     }
@@ -300,7 +300,7 @@ void SdOOXMLExportTest2::testMathObject()
             "a");
 
         const SdrPage *pPage = GetPage(1, xDocShRef);
-        const SdrObject* pObj = dynamic_cast<SdrObject*>(pPage->GetObj(0));
+        const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier());
     }
@@ -320,7 +320,7 @@ void SdOOXMLExportTest2::testMathObject()
             "a");
 
         const SdrPage *pPage = GetPage(1, xDocShRef);
-        const SdrObject* pObj = dynamic_cast<SdrObject*>(pPage->GetObj(0));
+        const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier());
     }
@@ -347,7 +347,7 @@ void SdOOXMLExportTest2::testMathObjectPPT2010()
             u"\U0001D44E"); // non-BMP char
 
         const SdrPage *pPage = GetPage(1, xDocShRef);
-        const SdrObject* pObj = dynamic_cast<SdrObject*>(pPage->GetObj(0));
+        const SdrObject* pObj = pPage->GetObj(0);
         CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(OBJ_OLE2), pObj->GetObjIdentifier());
     }

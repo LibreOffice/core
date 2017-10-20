@@ -2428,7 +2428,7 @@ void clearUnoMethodsForBasic( StarBASIC const * pBasic )
     SbUnoMethod* pMeth = pFirst;
     while( pMeth )
     {
-        SbxObject* pObject = dynamic_cast< SbxObject* >( pMeth->GetParent() );
+        SbxObject* pObject = pMeth->GetParent();
         if ( pObject )
         {
             StarBASIC* pModBasic = dynamic_cast< StarBASIC* >( pObject->GetParent() );

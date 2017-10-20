@@ -337,8 +337,8 @@ SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
     pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
     pDoc->getIDocumentContentOperations().InsertString(aPaM, "AAAAA");
     IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
-    sw::mark::IFieldmark *pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(
-            pMarksAccess->makeNoTextFieldBookmark(aPaM, "test", ODF_FORMDROPDOWN));
+    sw::mark::IFieldmark *pFieldmark =
+            pMarksAccess->makeNoTextFieldBookmark(aPaM, "test", ODF_FORMDROPDOWN);
     CPPUNIT_ASSERT(pFieldmark);
     uno::Sequence< OUString > vListEntries { "BBBBB" };
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntries;
