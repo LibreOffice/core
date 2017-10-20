@@ -366,12 +366,12 @@ SfxOleCodePageProperty::SfxOleCodePageProperty() :
 {
 }
 
-void SfxOleCodePageProperty::ImplLoad( SvStream& rStrm )
+void SfxOleCodePageProperty::ImplLoad(SvStream& rStrm)
 {
     // property type is signed int16, but we use always unsigned int16 for codepages
-    sal_uInt16 nCodePage;
-    rStrm.ReadUInt16( nCodePage );
-    SetCodePage( nCodePage );
+    sal_uInt16 nCodePage(0);
+    rStrm.ReadUInt16(nCodePage);
+    SetCodePage(nCodePage);
 }
 
 void SfxOleCodePageProperty::ImplSave( SvStream& rStrm )
