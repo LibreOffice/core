@@ -1147,7 +1147,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
 const off_t MAX_OFF_T = std::numeric_limits< off_t >::max();
 
 namespace {
-
+//coverity[result_independent_of_operands]
 template<typename T> bool exceedsOffT(T n) { return n > MAX_OFF_T; }
 
 }
