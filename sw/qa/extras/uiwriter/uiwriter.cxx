@@ -263,6 +263,7 @@ public:
     void testTdf112160();
     void testTdf112741();
     void testTdf112860();
+    void testTdf113287();
     void testLinesInSectionInTable();
     void testLinesMoveBackwardsInSectionInTable();
 
@@ -417,6 +418,7 @@ public:
     CPPUNIT_TEST(testLinesMoveBackwardsInSectionInTable);
     CPPUNIT_TEST(testTdf112741);
     CPPUNIT_TEST(testTdf112860);
+    CPPUNIT_TEST(testTdf113287);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5171,6 +5173,18 @@ void SwUiWriterTest::testTdf112860()
     // in the footer.
     // This crashed the layout.
     createDoc("tdf112860.fodt");
+}
+
+void SwUiWriterTest::testTdf113287()
+{
+    createDoc("tdf113287.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 2);
+    sal_uInt32 nCellTop = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/infos/bounds", "top").toUInt32();
+    sal_uInt32 nSectionTop = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/section/infos/bounds", "top").toUInt32();
+    // Make sure section frame is inside the cell frame.
+    // Expected greater than 4593, was only 3714.
+    CPPUNIT_ASSERT(nSectionTop > nCellTop);
 }
 
 void SwUiWriterTest::testTableInSectionInTable()
