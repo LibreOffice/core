@@ -3770,7 +3770,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         // we call crop (virtual method) on pSdrObject which calls VirtFlyDrawObj
         // crop. aRef needs to be adapted to concrete Object's boundaries which
         // is different from Crop-Ranges. This is because the Graphic and it's
-        // SdrObject representaion is inside the FlyFrame, but not identical
+        // SdrObject representation is inside the FlyFrame, but not identical
         // with it.
         const tools::Rectangle& rOutRect(pExternalSdrObject->GetCurrentBoundRect());
         const basegfx::B2DHomMatrix aExternalTransform(

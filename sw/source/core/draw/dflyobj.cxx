@@ -1037,7 +1037,7 @@ void SwVirtFlyDrawObj::addCropHandles(SdrHdlList& rTarget) const
     if(GetFlyFrame()->Frame().HasArea())
     {
         // Use InnerBound, OuterBound (same as GetFlyFrame()->Frame().SVRect())
-        // may have a distance to InnerBound which needs to be taken into acocunt.
+        // may have a distance to InnerBound which needs to be taken into account.
         // The Graphic is mapped to InnerBound, as is the rotated Graphic.
         const basegfx::B2DRange aTargetRange(getInnerBound());
 
