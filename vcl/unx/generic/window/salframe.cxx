@@ -689,8 +689,12 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         Atom a[3];
         int  n = 0;
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
+
+#ifndef DBG_UTIL
         if( pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING ) )
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_PING );
+#endif
+
         if( (nSalFrameStyle & SalFrameStyleFlags::OWNERDRAWDECORATION) )
             a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_TAKE_FOCUS );
         XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
@@ -3832,9 +3836,13 @@ bool X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
     }
     else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::WM_PROTOCOLS ) )
     {
+
+#ifndef DBG_UTIL
         if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::NET_WM_PING ) )
             rWMAdaptor.answerPing( this, pEvent );
-        else if( ! ( nStyle_ & SalFrameStyleFlags::PLUG )
+        else
+#endif
+            if( ! ( nStyle_ & SalFrameStyleFlags::PLUG )
               && ! (( nStyle_ & SalFrameStyleFlags::FLOAT ) && (nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION))
              )
         {
