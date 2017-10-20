@@ -153,6 +153,9 @@ public:
     /// Start of the section properties.
     virtual void StartSection() override;
 
+    // footnote / endnote section properties
+    virtual void SectFootnoteEndnotePr() override;
+
     /// End of the section properties.
     ///
     /// No-op for binary filters.
