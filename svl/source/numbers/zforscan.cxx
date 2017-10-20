@@ -1273,6 +1273,8 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 break;
             case NF_KEY_M:                          // M
             case NF_KEY_MM:                         // MM
+            case NF_KEY_MI:                         // M  minute detected in Finnish
+            case NF_KEY_MMI:                        // MM
                 /* Minute or month.
                    Minute if one of:
                    * preceded by time keyword H (ignoring separators)
@@ -1296,13 +1298,20 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     PreviousChar(i) == '['  )       // [M
                 {
                     eNewType = css::util::NumberFormat::TIME;
-                    nTypeArray[i] -= 2;             // 6 -> 4, 7 -> 5
+                    if ( nTypeArray[i] == NF_KEY_M || nTypeArray[i] == NF_KEY_MM )
+                    {
+                        nTypeArray[i] -= 2;             // 6 -> 4, 7 -> 5
+                    }
                     bIsTimeDetected = false;        // next M should be month
                     bHaveMinute = true;
                 }
                 else
                 {
                     eNewType = css::util::NumberFormat::DATE;
+                    if ( nTypeArray[i] == NF_KEY_MI || nTypeArray[i] == NF_KEY_MMI )
+                    {   // follow resolution of tdf#33689 for Finnish
+                        nTypeArray[i] += 2;             // 4 -> 6, 5 -> 7
+                    }
                 }
                 break;
             case NF_KEY_MMM:                        // MMM
