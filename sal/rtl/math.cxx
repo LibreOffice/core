@@ -373,7 +373,7 @@ inline void doubleToString(typename T::String ** pResult,
         case rtl_math_StringFormat_Automatic:
         {   // E or F depending on exponent magnitude
             int nPrec;
-            if (nExp <= -15 || nExp >= 15) // #58531# was <-16, >16
+            if (nExp <= -15 || nExp >= 15)  // was <-16, >16 in ancient versions, which leads to inaccuracies
             {
                 nPrec = 14;
                 eFormat = rtl_math_StringFormat_E;
@@ -525,7 +525,7 @@ inline void doubleToString(typename T::String ** pResult,
     {
         for (int i = 0; ; i++)
         {
-            if (i < 15)
+            if (i < 15)     // was 16 in ancient versions, which leads to inaccuracies
             {
                 int nDigit;
                 if (nDigits-1 == 0 && i > 0 && i < 14)
