@@ -133,6 +133,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_subtotalfieldobj \
 	CppunitTest_sc_arealinksobj \
 	CppunitTest_sc_cellrangesobj \
+	CppunitTest_sc_filterdescriptorbaseobj \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
