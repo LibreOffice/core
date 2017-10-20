@@ -16,6 +16,23 @@
       "revId": "944650f2a60fdbcba34d4e1d2ddc68522e982d09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_57f42d86",
+        "filename": "sfx2/source/sidebar/ResourceManager.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-20T08:14:32Z",
+      "side": 1,
+      "message": "...and you can get rid of those calls to trim() now",
+      "revId": "944650f2a60fdbcba34d4e1d2ddc68522e982d09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
