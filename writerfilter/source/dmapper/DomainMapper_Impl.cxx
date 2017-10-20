@@ -4874,7 +4874,10 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
             {
                 uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
 
-                if(!bIsAfterDummyPara)
+                if (!xCursor)
+                    return;
+
+                if (!bIsAfterDummyPara)
                     bIsStart = !xCursor->goLeft(1, false);
                 xCurrent = xCursor->getStart();
             }
