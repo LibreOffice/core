@@ -58,6 +58,24 @@
       "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_57d7cdbe",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-10-20T09:22:22Z",
+      "side": 1,
+      "message": "Ah, I got confused wrt. endianness. So it should be 3 according to the spec, but this patch would write 4; did you check what Word does, does it also write a padding?\n\nSounds a bit scary, IIRC we do skip unknown SPRMs based on spra, if it mentions 3 bytes but in fact we write 4, won\u0027t that mean an offset problem for all the remaining SPRMs?",
+      "parentUuid": "1a430d35_94f8534b",
+      "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
