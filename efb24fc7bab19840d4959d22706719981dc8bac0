@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_f2a52704",
+        "filename": "xmlsecurity/source/dialogs/digitalsignaturesdialog.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1001518
+      },
+      "writtenOn": "2017-10-20T13:20:02Z",
+      "side": 1,
+      "message": "there\u0027s about 7 places that perform this check - better to refactor into a single place with a type predicate",
+      "revId": "efb24fc7bab19840d4959d22706719981dc8bac0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
