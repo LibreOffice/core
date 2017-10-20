@@ -43,7 +43,7 @@ class SwWrtShell;
 class SwNumRule;
 class SwChapterNumRules;
 
-class SwOutlineTabDialog : public SfxTabDialog
+class SwOutlineTabDialog final : public SfxTabDialog
 {
     static     sal_uInt16    nNumLevel;
 
@@ -58,19 +58,18 @@ class SwOutlineTabDialog : public SfxTabDialog
 
     bool                bModified : 1;
 
-protected:
     DECL_LINK(CancelHdl, Button*, void);
     DECL_LINK( FormHdl, Button *, void );
     DECL_LINK( MenuSelectHdl, Menu *, bool );
 
-        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) override;
-        virtual short   Ok() override;
+    virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) override;
+    virtual short   Ok() override;
 
 public:
-        SwOutlineTabDialog(vcl::Window* pParent,
+    SwOutlineTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
-        virtual ~SwOutlineTabDialog() override;
+    virtual ~SwOutlineTabDialog() override;
     virtual void        dispose() override;
 
     SwNumRule*          GetNumRule() { return xNumRule.get(); }

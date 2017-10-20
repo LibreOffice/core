@@ -28,11 +28,10 @@ class SwTableNode;
 struct SwPosition;
 class SwPaM;
 
-class SwServerObject : public ::sfx2::SvLinkSource
+class SwServerObject final : public ::sfx2::SvLinkSource
 {
     using sfx2::SvLinkSource::SendDataChanged;
 
-protected:
     enum ServerModes { BOOKMARK_SERVER, TABLE_SERVER, SECTION_SERVER, NONE_SERVER } eType;
     union {
         ::sw::mark::IMark* pBkmk;

@@ -41,19 +41,14 @@ typedef ::cppu::WeakImplHelper
 ,   css::text::XFootnote
 > SwXFootnote_Base;
 
-class SwXFootnote
+class SwXFootnote final
     : public SwXFootnote_Base
     , public SwXText
 {
-
-private:
-
     friend class SwXFootnotes;
 
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
-
-protected:
 
     virtual const SwStartNode *GetStartNode() const override;
 

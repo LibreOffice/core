@@ -37,13 +37,12 @@ protected:
 };
 
 /// The physical access to the RTF document (for writing).
-class RtfExportFilter : public cppu::WeakImplHelper
+class RtfExportFilter final : public cppu::WeakImplHelper
     <
     css::document::XFilter,
     css::document::XExporter
     >
 {
-protected:
     css::uno::Reference<css::uno::XComponentContext> m_xCtx;
     css::uno::Reference<css::lang::XComponent> m_xSrcDoc;
 public:

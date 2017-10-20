@@ -1568,12 +1568,12 @@ public:
     sal_uInt16 GetCount() const { return cstd; }
 };
 
-class WW8Fonts
+class WW8Fonts final
 {
 private:
     WW8Fonts(const WW8Fonts&) = delete;
     WW8Fonts& operator=(const WW8Fonts&) = delete;
-protected:
+
     std::unique_ptr<WW8_FFN[]> pFontA;    // Array of Pointers to Font Description
     sal_uInt16 nMax;        // Array-Size
 

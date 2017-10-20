@@ -90,7 +90,7 @@ public:
 struct SwTableToTextSave;
 using SwTableToTextSaves = std::vector<std::unique_ptr<SwTableToTextSave>>;
 
-class SW_DLLPUBLIC SwNodes
+class SW_DLLPUBLIC SwNodes final
     : private BigPtrArray
 {
     friend class SwDoc;
@@ -135,7 +135,6 @@ class SW_DLLPUBLIC SwNodes
     SwNodes(SwNodes const&) = delete;
     SwNodes& operator=(SwNodes const&) = delete;
 
-protected:
     SwNodes( SwDoc* pDoc );
 
 public:

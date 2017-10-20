@@ -27,7 +27,7 @@ class SdrPageGridFrameList;
 class SwDrawModel;
 class SwDoc;
 
-class SwDPage : public FmFormPage, public SdrObjUserCall
+class SwDPage final : public FmFormPage, public SdrObjUserCall
 {
     SwDPage &operator=(const SwDPage&) = delete;
 
@@ -53,10 +53,9 @@ public:
 
     virtual css::uno::Reference< css::uno::XInterface > createUnoPage() override;
 
-protected:
+private:
     void lateInit(const SwDPage& rPage, SwDrawModel* pNewModel);
 
-private:
     SwDPage(const SwDPage& rSrcPage);
 };
 

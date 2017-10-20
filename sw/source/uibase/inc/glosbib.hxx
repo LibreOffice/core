@@ -63,7 +63,7 @@ public:
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;
 };
 
-class SwGlossaryGroupDlg : public SvxStandardDialog
+class SwGlossaryGroupDlg final : public SvxStandardDialog
 {
     VclPtr<FEdit>              m_pNameED;
     VclPtr<ListBox>            m_pPathLB;
@@ -84,7 +84,6 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
 
     bool            IsDeleteAllowed(const OUString &rGroup);
 
-protected:
     virtual void Apply() override;
     DECL_LINK( SelectHdl, SvTreeListBox*, void );
     DECL_LINK( NewHdl, Button *, void );

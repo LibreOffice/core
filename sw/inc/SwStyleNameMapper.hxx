@@ -75,12 +75,11 @@ struct SwTableEntry;
 
 typedef std::unordered_map<OUString, sal_uInt16> NameToIdHash;
 
-class SwStyleNameMapper
+class SwStyleNameMapper final
 {
     friend void InitCore();
     friend void FinitCore();
 
-protected:
     // UI Name tables
     static std::vector<OUString> *s_pTextUINameArray,
                             *s_pListsUINameArray,

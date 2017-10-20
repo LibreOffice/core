@@ -37,7 +37,7 @@ enum class AnchorState
     Tri
 };
 
-class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
+class AnchorOverlayObject final : public sdr::overlay::OverlayObjectWithBasePosition
 {
     public:
         static AnchorOverlayObject* CreateAnchorOverlayObject( SwView const & rDocView,
@@ -76,7 +76,7 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
         void SetAnchorState( const AnchorState aState );
         AnchorState GetAnchorState() const { return mAnchorState; }
 
-    protected:
+    private:
         /*                        6------------7
              1                   /
             /4\ ---------------5
@@ -97,7 +97,6 @@ class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
         // geometry creation for OverlayObject
         virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 
-    private:
         // object's geometry
         basegfx::B2DPolygon maTriangle;
         basegfx::B2DPolygon maLine;

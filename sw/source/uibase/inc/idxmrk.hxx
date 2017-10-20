@@ -25,10 +25,10 @@
 
 class SwWrtShell;
 
-class SwInsertIdxMarkWrapper : public SfxChildWindow
+class SwInsertIdxMarkWrapper final : public SfxChildWindow
 {
     ScopedVclPtr<AbstractMarkFloatDlg>  pAbstDlg;
-protected:
+
     SwInsertIdxMarkWrapper( vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
@@ -40,10 +40,10 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-class SwInsertAuthMarkWrapper : public SfxChildWindow
+class SwInsertAuthMarkWrapper final : public SfxChildWindow
 {
     ScopedVclPtr<AbstractMarkFloatDlg>  pAbstDlg;
-protected:
+
     SwInsertAuthMarkWrapper(    vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,

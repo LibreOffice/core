@@ -132,7 +132,7 @@ public:
 #endif
 };
 
-class SwSvxNumBulletTabDialog : public SfxTabDialog
+class SwSvxNumBulletTabDialog final : public SfxTabDialog
 {
     SwWrtShell&         rWrtSh;
     sal_uInt16 m_nSingleNumPageId;
@@ -140,15 +140,15 @@ class SwSvxNumBulletTabDialog : public SfxTabDialog
     sal_uInt16 m_nOptionsPageId;
     sal_uInt16 m_nPositionPageId;
 
-    protected:
-        virtual short   Ok() override;
-        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) override;
-        DECL_LINK(RemoveNumberingHdl, Button*, void);
-    public:
-        SwSvxNumBulletTabDialog(vcl::Window* pParent,
+    virtual short   Ok() override;
+    virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) override;
+    DECL_LINK(RemoveNumberingHdl, Button*, void);
+
+public:
+    SwSvxNumBulletTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
-        virtual ~SwSvxNumBulletTabDialog() override;
+    virtual ~SwSvxNumBulletTabDialog() override;
 };
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_NUM_HXX
 

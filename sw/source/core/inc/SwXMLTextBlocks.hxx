@@ -37,9 +37,8 @@ namespace o3tl {
     template<> struct typed_flags<SwXmlFlags> : is_typed_flags<SwXmlFlags, 0x0002> {};
 }
 
-class SwXMLTextBlocks : public SwImpBlocks
+class SwXMLTextBlocks final : public SwImpBlocks
 {
-protected:
     SfxObjectShellRef       xDocShellRef;
     SwXmlFlags              nFlags;
     OUString                aPackageName;
@@ -87,7 +86,6 @@ public:
                                  const SvxMacroTableDtor& rMacroTable ) override;
     virtual bool PutMuchEntries( bool bOn ) override;
 
-public:
     SwDoc* GetDoc() const { return m_xDoc.get(); }
     //void  SetDoc( SwDoc * pNewDoc);
     ErrCode StartPutBlock( const OUString& rShort, const OUString& rPackageName );
@@ -95,7 +93,6 @@ public:
     ErrCode GetBlockText( const OUString& rShort, OUString& rText );
     ErrCode PutBlockText( const OUString& rShort, const OUString& rText, const OUString& rPackageName );
     void MakeBlockText( const OUString& rText );
-
 };
 
 #endif

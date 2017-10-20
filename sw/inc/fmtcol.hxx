@@ -134,10 +134,10 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-class SwGrfFormatColl: public SwFormatColl
+class SwGrfFormatColl final : public SwFormatColl
 {
     friend class SwDoc;
-protected:
+
     SwGrfFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
                     SwGrfFormatColl* pDerFrom = nullptr )
         : SwFormatColl( rPool, pFormatCollName, aGrfFormatCollSetRange,
@@ -149,8 +149,6 @@ protected:
         : SwFormatColl( rPool, rFormatCollName, aGrfFormatCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )
     {}
-
-public:
 };
 
 // FEATURE::CONDCOLL
@@ -200,11 +198,11 @@ public:
 
 using SwFormatCollConditions = std::vector<std::unique_ptr<SwCollCondition>>;
 
-class SW_DLLPUBLIC SwConditionTextFormatColl : public SwTextFormatColl
+class SW_DLLPUBLIC SwConditionTextFormatColl final : public SwTextFormatColl
 {
     friend class SwDoc;
     friend class ::sw::DocumentStylePoolManager;
-protected:
+
     SwFormatCollConditions m_CondColls;
 
     SwConditionTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,

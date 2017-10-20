@@ -35,7 +35,7 @@ class RtfAttributeOutput;
 class SwFrameFormat;
 
 /// Handles export of drawings using RTF markup
-class RtfSdrExport : public EscherEx
+class RtfSdrExport final : public EscherEx
 {
     RtfExport& m_rExport;
 
@@ -71,7 +71,7 @@ public:
     /// Write editeng text, e.g. shape or comment.
     void WriteOutliner(const OutlinerParaObject& rParaObj, TextTypes eType);
 
-protected:
+private:
     /// Start the shape for which we just collected the information.
     ///
     /// Returns the element's tag number, -1 means we wrote nothing.
@@ -86,8 +86,6 @@ protected:
 
     void Commit(EscherPropertyContainer& rProps, const tools::Rectangle& rRect) override;
 
-private:
-
     void OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance = 0) override;
     void CloseContainer() override;
 
@@ -96,7 +94,6 @@ private:
 
     void AddShape(sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt32 nShapeId = 0) override;
 
-private:
     /// Add starting and ending point of a line to the m_pShapeAttrList.
     void AddLineDimensions(const tools::Rectangle& rRectangle);
 

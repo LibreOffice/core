@@ -56,9 +56,8 @@ class SvXMLItemMapEntries_impl;
 /** this class manages an array of SvXMLItemMapEntry. It is
     used for optimizing the static array on startup of import
     or export */
-class SvXMLItemMapEntries : public SvRefBase
+class SvXMLItemMapEntries final : public SvRefBase
 {
-protected:
     std::unique_ptr<SvXMLItemMapEntries_impl> mpImpl;
 
 public:

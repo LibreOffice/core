@@ -98,17 +98,12 @@ typedef ::cppu::WeakImplHelper
 ,   css::container::XEnumerationAccess
 > SwXHeadFootText_Base;
 
-class SwXHeadFootText
+class SwXHeadFootText final
     : public SwXHeadFootText_Base
     , public SwXText
 {
-
-private:
-
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
-
-protected:
 
     virtual const SwStartNode *GetStartNode() const override;
     virtual css::uno::Reference< css::text::XTextCursor >

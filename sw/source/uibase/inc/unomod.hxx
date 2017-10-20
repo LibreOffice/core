@@ -69,10 +69,10 @@ enum class SwXPrintSettingsType
     Document
 };
 
-class SwXPrintSettings : public comphelper::ChainablePropertySet
+class SwXPrintSettings final : public comphelper::ChainablePropertySet
 {
     friend class SwXDocumentSettings;
-protected:
+
     SwXPrintSettingsType meType;
     SwPrintData * mpPrtOpt;
     SwDoc *mpDoc;
@@ -97,11 +97,10 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-class SwXViewSettings : public comphelper::ChainablePropertySet
+class SwXViewSettings final : public comphelper::ChainablePropertySet
 {
-
     friend class SwXDocumentSettings;
-protected:
+
     SwView*                     pView;
     SwViewOption*       mpViewOption;
     const SwViewOption*         mpConstViewOption;

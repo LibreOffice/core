@@ -43,7 +43,7 @@ protected:
     virtual void    KeyInput( const KeyEvent&  ) override;
 };
 
-class SwInputWindow : public ToolBox
+class SwInputWindow final : public ToolBox
 {
 friend class InputEdit;
 
@@ -68,7 +68,6 @@ friend class InputEdit;
 
     using Window::IsActive;
 
-protected:
     virtual void    Resize() override;
     virtual void    Click() override;
     DECL_LINK( MenuHdl, Menu *, bool );
