@@ -3145,7 +3145,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                     break;
                                                     case css::drawing::EnhancedCustomShapeSegmentCommand::NOFILL :
                                                     {
-                                                        nVal = (msopathEscape << 13) | (5 << 8);
+                                                        nVal = (msopathEscape << 13) | (10 << 8);
                                                     }
                                                     break;
                                                     case css::drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE :
