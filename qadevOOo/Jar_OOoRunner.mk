@@ -626,7 +626,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XSheetConditionalEntry \
     qadevOOo/tests/java/ifc/sheet/_XSheetFilterable \
     qadevOOo/tests/java/ifc/sheet/_XSheetFilterableEx \
-    qadevOOo/tests/java/ifc/sheet/_XSheetFilterDescriptor \
     qadevOOo/tests/java/ifc/sheet/_XSpreadsheetView \
     qadevOOo/tests/java/ifc/style/_CharacterProperties \
     qadevOOo/tests/java/ifc/style/_CharacterPropertiesAsian \
