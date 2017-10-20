@@ -39,8 +39,8 @@
 #include <vcl/toolbox.hxx>
 
 #include <unx/gtk/gtkdata.hxx>
-#include "atkwrapper.hxx"
-#include "atkutil.hxx"
+#include "unx/gtk/a11y/atkwrapper.hxx"
+#include "unx/gtk/a11y/atkutil.hxx"
 
 #include <gtk/gtk.h>
 #include <config_version.h>

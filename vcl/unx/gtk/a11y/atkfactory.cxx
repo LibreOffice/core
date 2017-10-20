@@ -19,9 +19,9 @@
 
 #include <unx/gtk/gtkframe.hxx>
 #include <vcl/window.hxx>
-#include "atkwrapper.hxx"
-#include "atkfactory.hxx"
-#include "atkregistry.hxx"
+#include "unx/gtk/a11y/atkwrapper.hxx"
+#include "unx/gtk/a11y/atkfactory.hxx"
+#include "unx/gtk/a11y/atkregistry.hxx"
 
 using namespace ::com::sun::star;
 

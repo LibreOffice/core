@@ -31,8 +31,8 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include "atklistener.hxx"
-#include "atkwrapper.hxx"
+#include "unx/gtk/a11y/atklistener.hxx"
+#include "unx/gtk/a11y/atkwrapper.hxx"
 #include <vcl/svapp.hxx>
 
 #include <rtl/ref.hxx>

@@ -17,13 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKUTIL_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKUTIL_HXX
+#ifndef INCLUDED_VCL_INC_UNX_GTK_A11Y_ATKFACTORY_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_A11Y_ATKFACTORY_HXX
 
 #include <atk/atk.h>
 
-GType ooo_atk_util_get_type();
-void ooo_atk_util_ensure_event_listener();
+extern "C" {
+
+GType wrapper_factory_get_type();
+
+} // extern "C"
 
 #endif
 

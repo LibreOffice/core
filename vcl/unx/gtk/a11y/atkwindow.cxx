@@ -22,9 +22,9 @@
 #include <vcl/window.hxx>
 #include <vcl/popupmenuwindow.hxx>
 
-#include "atkwindow.hxx"
-#include "atkwrapper.hxx"
-#include "atkregistry.hxx"
+#include "unx/gtk/a11y/atkwindow.hxx"
+#include "unx/gtk/a11y/atkwrapper.hxx"
+#include "unx/gtk/a11y/atkregistry.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 

@@ -20,9 +20,9 @@
 #include <unx/gtk/atkbridge.hxx>
 #include <unx/gtk/gtkframe.hxx>
 
-#include "atkfactory.hxx"
-#include "atkutil.hxx"
-#include "atkwindow.hxx"
+#include "unx/gtk/a11y/atkfactory.hxx"
+#include "unx/gtk/a11y/atkutil.hxx"
+#include "unx/gtk/a11y/atkwindow.hxx"
 
 bool InitAtkBridge()
 {

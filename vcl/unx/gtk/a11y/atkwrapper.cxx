@@ -59,10 +59,10 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
-#include "atkwrapper.hxx"
-#include "atkregistry.hxx"
-#include "atklistener.hxx"
-#include "atktextattributes.hxx"
+#include "unx/gtk/a11y/atkwrapper.hxx"
+#include "unx/gtk/a11y/atkregistry.hxx"
+#include "unx/gtk/a11y/atklistener.hxx"
+#include "unx/gtk/a11y/atktextattributes.hxx"
 
 #include <string.h>
 #include <vector>

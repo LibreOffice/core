@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKLISTENER_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKLISTENER_HXX
+#ifndef INCLUDED_VCL_INC_UNX_GTK_A11Y_ATKLISTENER_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_A11Y_ATKLISTENER_HXX
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
-#include "atkwrapper.hxx"
+#include "unx/gtk/a11y/atkwrapper.hxx"
 
 class AtkListener : public ::cppu::WeakImplHelper< css::accessibility::XAccessibleEventListener >
 {
@@ -66,6 +66,6 @@ private:
         const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent);
 };
 
-#endif // INCLUDED_VCL_UNX_GTK_A11Y_ATKLISTENER_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

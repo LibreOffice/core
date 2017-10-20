@@ -17,19 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKREGISTRY_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKREGISTRY_HXX
+#ifndef INCLUDED_VCL_INC_UNX_GTK_A11Y_ATKUTIL_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_A11Y_ATKUTIL_HXX
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <atk/atk.h>
 
-AtkObject * ooo_wrapper_registry_get(const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible);
+GType ooo_atk_util_get_type();
+void ooo_atk_util_ensure_event_listener();
 
-void ooo_wrapper_registry_add(const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible, AtkObject *obj);
-
-void ooo_wrapper_registry_remove(
-    css::uno::Reference<css::accessibility::XAccessible> const & pAccessible);
-
-#endif // __ATK_REGISTRY_HXX_
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

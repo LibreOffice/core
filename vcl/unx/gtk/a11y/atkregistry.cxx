@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "atkregistry.hxx"
+#include "unx/gtk/a11y/atkregistry.hxx"
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;

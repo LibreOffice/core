@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GTK_A11Y_ATKWINDOW_HXX
-#define INCLUDED_VCL_UNX_GTK_A11Y_ATKWINDOW_HXX
+#ifndef INCLUDED_VCL_INC_UNX_GTK_A11Y_ATKWINDOW_HXX
+#define INCLUDED_VCL_INC_UNX_GTK_A11Y_ATKWINDOW_HXX
 
 #include <atk/atk.h>
 

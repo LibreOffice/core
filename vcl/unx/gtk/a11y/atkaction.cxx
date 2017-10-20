@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "atkwrapper.hxx"
+#include "unx/gtk/a11y/atkwrapper.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
