@@ -32,7 +32,7 @@
 #include <toolkit/helper/servicenames.hxx>
 
 
-class StdTabController :    public css::awt::XTabController,
+class StdTabController final : public css::awt::XTabController,
                             public css::lang::XServiceInfo,
                             public css::lang::XTypeProvider,
                             public ::cppu::OWeakAggObject
@@ -42,7 +42,6 @@ private:
     css::uno::Reference< css::awt::XTabControllerModel >  mxModel;
     css::uno::Reference< css::awt::XControlContainer >    mxControlContainer;
 
-protected:
     ::osl::Mutex&               GetMutex() { return maMutex; }
     static bool                 ImplCreateComponentSequence( css::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rControls, const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rModels, css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& rComponents, css::uno::Sequence< css::uno::Any>* pTabStops, bool bPeerComponent );
     // if sequence length of rModels is less than rControls, return only the matching elements in rModels sequence and remove corresponding elements from rControls

@@ -34,19 +34,17 @@
 //  class VCLXFont
 
 
-class TOOLKIT_DLLPUBLIC VCLXFont :  public css::awt::XFont2,
+class TOOLKIT_DLLPUBLIC VCLXFont final : public css::awt::XFont2,
                     public css::lang::XTypeProvider,
                     public css::lang::XUnoTunnel,
                     public ::cppu::OWeakObject
 {
-private:
     ::osl::Mutex    maMutex;
     css::uno::Reference< css::awt::XDevice> mxDevice;
     vcl::Font       maFont;
     std::unique_ptr<FontMetric>
                     mpFontMetric;
 
-protected:
     bool            ImplAssertValidFontMetric();
     ::osl::Mutex&   GetMutex() { return maMutex; }
 

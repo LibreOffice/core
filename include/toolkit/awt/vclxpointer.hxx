@@ -33,14 +33,12 @@
 //  class VCLXPointer
 
 
-class VCLXPointer: public cppu::WeakImplHelper<
+class VCLXPointer final : public cppu::WeakImplHelper<
     css::awt::XPointer, css::lang::XUnoTunnel, css::lang::XServiceInfo>
 {
-private:
     ::osl::Mutex    maMutex;
     Pointer         maPointer;
 
-protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
 
 public:

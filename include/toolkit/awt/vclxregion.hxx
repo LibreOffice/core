@@ -33,16 +33,14 @@
 //  class VCLXRegion
 
 
-class VCLXRegion :  public css::awt::XRegion,
+class VCLXRegion final : public css::awt::XRegion,
                     public css::lang::XTypeProvider,
                     public css::lang::XUnoTunnel,
                     public ::cppu::OWeakObject
 {
-private:
     ::osl::Mutex    maMutex;
     vcl::Region          maRegion;
 
-protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
 
 public:

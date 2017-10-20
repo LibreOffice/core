@@ -29,12 +29,10 @@
 
 //  class UnoPropertyArrayHelper
 
-class TOOLKIT_DLLPUBLIC UnoPropertyArrayHelper : public ::cppu::IPropertyArrayHelper
+class TOOLKIT_DLLPUBLIC UnoPropertyArrayHelper final : public ::cppu::IPropertyArrayHelper
 {
-private:
     std::set<sal_Int32>       maIDs;
 
-protected:
     bool    ImplHasProperty( sal_uInt16 nPropId ) const;
 
 public:

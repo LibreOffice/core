@@ -32,17 +32,15 @@
 //  class VCLXBitmap
 
 
-class VCLXBitmap :  public css::awt::XBitmap,
+class VCLXBitmap final : public css::awt::XBitmap,
                     public css::awt::XDisplayBitmap,
                     public css::lang::XTypeProvider,
                     public css::lang::XUnoTunnel,
                     public ::cppu::OWeakObject
 {
-private:
     ::osl::Mutex    maMutex;
     BitmapEx        maBitmap;
 
-protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
 
 

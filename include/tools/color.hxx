@@ -28,9 +28,8 @@ class SvStream;
 
 // Color
 
-class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Color final
 {
-protected:
     ColorData mnColor;
 
 public:

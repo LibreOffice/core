@@ -47,31 +47,11 @@ namespace toolkit
         control model, and a weak reference to the control. The reference to the model is freed when the model
         is being disposed.</p>
     */
-    class OAccessibleControlContext
+    class OAccessibleControlContext final
             :public ::comphelper::OAccessibleImplementationAccess
             ,public OAccessibleControlContext_Base
             ,public OAccessibleControlContext_IBase
     {
-    private:
-        css::uno::Reference< css::beans::XPropertySet >
-                    m_xControlModel;        // the model of the control which's context we implement
-        css::uno::Reference< css::beans::XPropertySetInfo >
-                    m_xModelPropsInfo;      // the cached property set info of the model
-
-    protected:
-        /// ctor. @see Init
-        OAccessibleControlContext();
-        virtual ~OAccessibleControlContext() override;
-
-        /** late ctor
-        */
-        void Init(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
-        );
-
-        // OCommonAccessibleComponent overridables
-        virtual css::awt::Rectangle implGetBounds(  ) override;
-
     public:
         /** creates an accessible context for an uno control
         @param _rxCreator
@@ -82,7 +62,7 @@ namespace toolkit
             const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
         );
 
-    protected:
+    private:
         // XInterface
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
@@ -107,7 +87,6 @@ namespace toolkit
         using comphelper::OAccessibleContextHelper::disposing;
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-    private:
         // retrieves the value of a string property from the model, if the property is present
         OUString getModelStringProperty( const sal_Char* _pPropertyName );
 
@@ -117,6 +96,24 @@ namespace toolkit
         void stopModelListening( );
 
         VclPtr< vcl::Window > implGetWindow( css::uno::Reference< css::awt::XWindow >* _pxUNOWindow = nullptr ) const;
+
+        /// ctor. @see Init
+        OAccessibleControlContext();
+        virtual ~OAccessibleControlContext() override;
+
+        /** late ctor
+        */
+        void Init(
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
+        );
+
+        // OCommonAccessibleComponent overridables
+        virtual css::awt::Rectangle implGetBounds(  ) override;
+
+        css::uno::Reference< css::beans::XPropertySet >
+                    m_xControlModel;        // the model of the control which's context we implement
+        css::uno::Reference< css::beans::XPropertySetInfo >
+                    m_xModelPropsInfo;      // the cached property set info of the model
     };
 
 
