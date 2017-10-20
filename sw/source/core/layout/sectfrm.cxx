@@ -765,10 +765,6 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     if( !mbValidPos && ToMaximize( false ) )
         mbValidSize = false;
 
-#if OSL_DEBUG_LEVEL > 1
-    const SwFormatCol &rCol = GetFormat()->GetCol();
-    (void)rCol;
-#endif
     SwLayoutFrame::MakeAll(getRootFrame()->GetCurrShell()->GetOut());
     UnlockJoin();
     if( m_pSection && IsSuperfluous() )
