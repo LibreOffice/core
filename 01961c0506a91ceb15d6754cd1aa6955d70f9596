@@ -94,6 +94,24 @@
       "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_5708ad2d",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2428,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-10-20T11:42:55Z",
+      "side": 1,
+      "message": "Ah, indeed, looking at sprmTTableWidth in our code, it\u0027s obvious that it\u0027s of 3 bytes, great. I missed that.",
+      "parentUuid": "1a430d35_972bf593",
+      "revId": "01961c0506a91ceb15d6754cd1aa6955d70f9596",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
