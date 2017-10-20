@@ -724,6 +724,15 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 SwRectFnSet aRectFnSet(GetUpper());
                 aRectFnSet.MakePos( *this, GetUpper(), GetPrev(), false );
             }
+
+            if (Frame().Height() == 0)
+            {
+                // SwLayoutFrame::MakeAll() is not called for to-be-deleted
+                // section frames (which would invalidate the position of the
+                // next frame via the SwLayNotify dtor), so call it manually.
+                if (SwFrame* pNext = GetNext())
+                    pNext->InvalidatePos();
+            }
         }
         mbValidSize = mbValidPos = mbValidPrtArea = true;
         return;
