@@ -403,9 +403,8 @@
         "--socket=x11",
         "--socket=wayland",
         "--socket=pulseaudio",
-        "--socket=system-bus",
-        "--socket=session-bus",
         "--filesystem=host",
-        "--env=LIBO_FLATPAK=1"
+        "--env=LIBO_FLATPAK=1",
+        "--own-name=org.libreoffice.LibreOfficeIpc0"
     ]
 }
