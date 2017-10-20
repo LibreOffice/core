@@ -142,6 +142,11 @@ long SwEditShell::Delete()
         EndAllAction();
         nRet = 1;
     }
+    else
+    {
+        nRet = RemoveParagraphMetadataFieldAtCursor(true) ? 1 : 0;
+    }
+
     return nRet;
 }
 

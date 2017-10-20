@@ -1513,29 +1513,62 @@ void SwEditShell::ValidateParagraphSignatures(bool updateDontRemove)
     }
 }
 
-bool SwEditShell::IsCursorInParagraphMetadataField() const
+uno::Reference<text::XTextField> lcl_GetParagraphMetadataFieldAtIndex(const SwDocShell* pDocSh, SwTextNode* pNode, const sal_uLong index)
 {
-    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
-    if (pNode != nullptr)
+    uno::Reference<text::XTextField> xTextField;
+    if (pNode != nullptr && pDocSh != nullptr)
     {
-        SwTextAttr* pAttr = pNode->GetTextAttrAt(GetCursor()->Start()->nContent.GetIndex(), RES_TXTATR_METAFIELD);
+        SwTextAttr* pAttr = pNode->GetTextAttrAt(index, RES_TXTATR_METAFIELD);
         SwTextMeta* pTextMeta = static_txtattr_cast<SwTextMeta*>(pAttr);
         if (pTextMeta != nullptr)
         {
             SwFormatMeta& rFormatMeta(static_cast<SwFormatMeta&>(pTextMeta->GetAttr()));
             if (::sw::Meta* pMeta = rFormatMeta.GetMeta())
             {
-                if (const SwDocShell* pDocSh = GetDoc()->GetDocShell())
+                const css::uno::Reference<css::rdf::XResource> xSubject(pMeta->MakeUnoObject(), uno::UNO_QUERY);
+                uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
+                const std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
+                if (aStatements.find(ParagraphSignatureRDFName) != aStatements.end() ||
+                    aStatements.find(ParagraphClassificationNameRDFName) != aStatements.end())
                 {
-                    const css::uno::Reference<css::rdf::XResource> xSubject(pMeta->MakeUnoObject(), uno::UNO_QUERY);
-                    uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
-                    const std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
-                    if (aStatements.find(ParagraphSignatureRDFName) != aStatements.end() ||
-                        aStatements.find(ParagraphClassificationNameRDFName) != aStatements.end())
-                        return true;
+                    xTextField = uno::Reference<text::XTextField>(xSubject, uno::UNO_QUERY);
                 }
             }
         }
+    }
+
+    return xTextField;
+}
+
+bool SwEditShell::IsCursorInParagraphMetadataField() const
+{
+    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+    const sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
+    uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
+    return xField.is();
+}
+
+bool SwEditShell::RemoveParagraphMetadataFieldAtCursor(const bool bBackspaceNotDel)
+{
+    SwTextNode* pNode = GetCursor()->Start()->nNode.GetNode().GetTextNode();
+    sal_uLong index = GetCursor()->Start()->nContent.GetIndex();
+    uno::Reference<text::XTextField> xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
+    if (!xField.is())
+    {
+        // Try moving the cursor to see if we're _facing_ a metafield or not,
+        // as opposed to being within one.
+        if (bBackspaceNotDel)
+            index--; // Backspace moves left
+        else
+            index++; // Delete moves right
+
+        xField = lcl_GetParagraphMetadataFieldAtIndex(GetDoc()->GetDocShell(), pNode, index);
+    }
+
+    if (xField.is())
+    {
+        lcl_RemoveParagraphMetadataField(xField);
+        return true;
     }
 
     return false;
