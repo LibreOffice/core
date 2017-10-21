@@ -16,6 +16,24 @@
       "revId": "7a3ee55941e6899e4265f5243415c006b127ec09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8d73e614",
+        "filename": "vcl/unx/generic/fontmanager/fontmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-10-21T20:30:21Z",
+      "side": 1,
+      "message": "Yes since \"rNames\" is cleared at the beginning of the method and not used before this line.\nSo call \"push_front\" or \"push_back\"/\"emplace_back\" when \"rNames\" is empty is equal.\nUnless I missed something?",
+      "parentUuid": "1a430d35_4dcd7e5c",
+      "revId": "7a3ee55941e6899e4265f5243415c006b127ec09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
