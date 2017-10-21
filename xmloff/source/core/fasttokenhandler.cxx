@@ -60,7 +60,7 @@ TokenMap::~TokenMap()
 sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength )
 {
     const struct xmltoken *pToken = Perfect_Hash::in_word_set( pStr, nLength );
-    return pToken ? pToken->nToken : XML_TOKEN_INVALID;
+    return pToken ? pToken->nToken : xmloff::XML_TOKEN_INVALID;
 }
 
 FastTokenHandler::FastTokenHandler() :
