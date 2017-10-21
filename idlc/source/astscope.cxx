@@ -83,7 +83,7 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
     return pDecl;
 }
 
-sal_uInt16 AstScope::getNodeCount(NodeType nodeType)
+sal_uInt16 AstScope::getNodeCount(NodeType nodeType) const
 {
     DeclList::const_iterator iter = getIteratorBegin();
     DeclList::const_iterator end = getIteratorEnd();
@@ -319,7 +319,7 @@ AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
     return nullptr;
 }
 
-AstDeclaration* AstScope::lookupForAdd(AstDeclaration const * pDecl)
+AstDeclaration* AstScope::lookupForAdd(AstDeclaration const * pDecl) const
 {
     if ( !pDecl )
         return nullptr;

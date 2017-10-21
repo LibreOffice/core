@@ -86,13 +86,13 @@ public:
         { return ((m_flags & AF_REMOVABLE) == AF_REMOVABLE); }
 
     bool dumpBlob(
-        typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex);
+        typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex) const;
 
 private:
     void dumpExceptions(
         typereg::Writer & writer, OUString const & documentation,
         DeclList const & exceptions, RTMethodMode flags,
-        sal_uInt16 * methodIndex);
+        sal_uInt16 * methodIndex) const;
 
     const sal_uInt32    m_flags;
     AstType const * m_pType;

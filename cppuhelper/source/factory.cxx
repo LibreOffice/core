@@ -284,8 +284,8 @@ private:
     bool                bOneInstance;
 protected:
     // needed for implementing XUnloadingPreference in inheriting classes
-    bool isOneInstance() {return bOneInstance;}
-    bool isInstance() {return xTheInstance.is();}
+    bool isOneInstance() const {return bOneInstance;}
+    bool isInstance() const {return xTheInstance.is();}
 };
 
 

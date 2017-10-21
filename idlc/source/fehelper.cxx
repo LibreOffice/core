@@ -30,7 +30,7 @@ FeDeclarator::~FeDeclarator()
 {
 }
 
-bool FeDeclarator::checkType(AstDeclaration const * type)
+bool FeDeclarator::checkType(AstDeclaration const * type) const
 {
     OString tmp(m_name);
     sal_Int32 count = m_name.lastIndexOf( ':' );
