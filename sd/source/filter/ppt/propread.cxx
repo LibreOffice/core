@@ -326,7 +326,13 @@ void Section::Read( SotStorageStream *pStrm )
 
     mnTextEnc = RTL_TEXTENCODING_MS_1252;
     sal_uInt32 nSecSize(0), nPropCount(0);
-    pStrm->ReadUInt32( nSecSize ).ReadUInt32( nPropCount );
+    pStrm->ReadUInt32(nSecSize).ReadUInt32(nPropCount);
+    if (nSecSize > nStrmSize)
+    {
+        SAL_WARN("sd.filter", "Section Len " << nSecSize << " claimed, only " << nStrmSize << " possible");
+        nSecSize = nStrmSize;
+    }
+
     while (nPropCount--)
     {
         sal_uInt32 nPropId(0), nPropOfs(0);
@@ -514,7 +520,7 @@ void Section::Read( SotStorageStream *pStrm )
         }
         pStrm->Seek(nCurrent);
     }
-    pStrm->Seek( nSecOfs + nSecSize );
+    pStrm->Seek(nSecOfs + nSecSize);
 }
 
 Section& Section::operator=( const Section& rSection )
