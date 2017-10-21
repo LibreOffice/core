@@ -246,7 +246,8 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
         readUInt32( rHeader.nV5Reserved );
 
         // seek to EndPos
-        rIStm.Seek(aStartPos + rHeader.nSize);
+        if (!checkSeek(rIStm, aStartPos + rHeader.nSize))
+            return false;
     }
 
     if ( rHeader.nHeight < 0 )
