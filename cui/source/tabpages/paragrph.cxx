@@ -617,6 +617,46 @@ void SvxStdParagraphTabPage::EnableRelativeMode()
     bRelativeMode = true;
 }
 
+void SvxStdParagraphTabPage::ActivatePage( const SfxItemSet& rSet )
+{
+    sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
+    SfxItemState eItemState = rSet.GetItemState( _nWhich );
+
+    if ( eItemState >= SfxItemState::DEFAULT )
+    {
+        const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>( rSet.Get( _nWhich ) );
+        SvxAdjust eAdjust = rAdj.GetAdjust();
+        if ( eAdjust == SvxAdjust::Center || eAdjust == SvxAdjust::Block )
+        {
+            _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+            eItemState = rSet.GetItemState( _nWhich );
+
+            if ( eItemState >= SfxItemState::DEFAULT )
+            {
+                const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet.Get( _nWhich ) );
+                SvxFrameDirection eFrameDirection = rFrameDirItem.GetValue();
+
+                if ( SvxFrameDirection::Horizontal_RL_TB == eFrameDirection )
+                    m_pExampleWin->EnableRTL( true );
+                else
+                    m_pExampleWin->EnableRTL( false );
+
+                if ( eAdjust == SvxAdjust::Block )
+                    m_pExampleWin->SetLastLine( rAdj.GetLastBlock() );
+            }
+        }
+        else
+        {
+            m_pExampleWin->EnableRTL( eAdjust == SvxAdjust::Right );
+            eAdjust = SvxAdjust::Left; //required for correct preview display
+            m_pExampleWin->SetLastLine( eAdjust );
+        }
+        m_pExampleWin->SetAdjust( eAdjust );
+
+        UpdateExample_Impl();
+    }
+}
+
 DeactivateRC SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     ELRLoseFocusHdl( *m_pFLineIndent );
@@ -1002,6 +1042,8 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet
     get(m_pPropertiesFL,"framePROPERTIES");
     get(m_pTextDirectionLB,"comboLB_TEXTDIRECTION");
 
+    SetExchangeSupport();
+
     SvtLanguageOptions aLangOptions;
     sal_uInt16 nLastLinePos = LASTLINEPOS_DEFAULT;
 
@@ -1168,6 +1210,12 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     return bModified;
 }
+
+void SvxParaAlignTabPage::ActivatePage( const SfxItemSet& rSet )
+{
+    Reset( &rSet );
+}
+
 void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 {
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
@@ -1250,6 +1298,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     {
         const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet->Get( _nWhich ) );
         m_pTextDirectionLB->SelectEntryValue( rFrameDirItem.GetValue() );
+        TextDirectionHdl_Impl( *m_pTextDirectionLB );
         m_pTextDirectionLB->SaveValue();
     }
 
@@ -1279,11 +1328,18 @@ void SvxParaAlignTabPage::ChangesApplied()
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
 {
+    if ( SvxFrameDirection::Environment == m_pTextDirectionLB->GetSelectEntryValue() )
+        if ( !m_pRight->IsChecked() )
+            m_pExampleWin->EnableRTL( false ); //this should be set to the environment frame direction...
+
     bool bJustify = m_pJustify->IsChecked();
     m_pLastLineFT->Enable(bJustify);
     m_pLastLineLB->Enable(bJustify);
     bool bLastLineIsBlock = m_pLastLineLB->GetSelectedEntryPos() == 2;
     m_pExpandCB->Enable(bJustify && bLastLineIsBlock);
+    //uncheck 'Expand ... word' when check box is not enabled
+    if(!m_pExpandCB->IsEnabled())
+        m_pExpandCB->Check(false);
     UpdateExample_Impl();
 }
 
@@ -1292,43 +1348,65 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl, ListBox&, void)
     //fdo#41350 only enable 'Expand last word' if last line is also justified
     bool bLastLineIsBlock = m_pLastLineLB->GetSelectedEntryPos() == 2;
     m_pExpandCB->Enable(bLastLineIsBlock);
+    //uncheck 'Expand ... word' when check box is not enabled
+    if(!m_pExpandCB->IsEnabled())
+        m_pExpandCB->Check(false);
     UpdateExample_Impl();
 }
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox&, void)
 {
     SvxFrameDirection eDir = m_pTextDirectionLB->GetSelectEntryValue();
+
     switch ( eDir )
     {
-        // check the default alignment for this text direction
-        case SvxFrameDirection::Horizontal_LR_TB :     m_pLeft->Check(); break;
-        case SvxFrameDirection::Horizontal_RL_TB :    m_pRight->Check(); break;
-        case SvxFrameDirection::Environment :       /* do nothing */ break;
+        case SvxFrameDirection::Horizontal_LR_TB :
+            if ( m_pRight->IsChecked() )
+                m_pLeft->Check();
+            else
+                m_pExampleWin->EnableRTL( false );
+            break;
+        case SvxFrameDirection::Horizontal_RL_TB :
+            if ( m_pLeft->IsChecked() )
+                m_pRight->Check();
+            else
+                m_pExampleWin->EnableRTL( true );
+            break;
+        case SvxFrameDirection::Environment :        /* do nothing */ break;
         default:
         {
             SAL_WARN( "cui.tabpages", "SvxParaAlignTabPage::TextDirectionHdl_Impl(): other directions not supported" );
         }
     }
+    AlignHdl_Impl( nullptr ); //tdf#113275
 }
 
 void SvxParaAlignTabPage::UpdateExample_Impl()
 {
     if ( m_pLeft->IsChecked() )
+    {
+        m_pExampleWin->EnableRTL( false );
         m_pExampleWin->SetAdjust( SvxAdjust::Left );
+        m_pExampleWin->SetLastLine(SvxAdjust::Left);
+    }
     else if ( m_pRight->IsChecked() )
-        m_pExampleWin->SetAdjust( SvxAdjust::Right );
+    {
+        m_pExampleWin->EnableRTL( true );
+        m_pExampleWin->SetAdjust( SvxAdjust::Left );
+        m_pExampleWin->SetLastLine(SvxAdjust::Left);
+    }
     else if ( m_pCenter->IsChecked() )
         m_pExampleWin->SetAdjust( SvxAdjust::Center );
     else if ( m_pJustify->IsChecked() )
     {
         m_pExampleWin->SetAdjust( SvxAdjust::Block );
-        SvxAdjust eLastBlock = SvxAdjust::Left;
         sal_Int32 nLBPos = m_pLastLineLB->GetSelectedEntryPos();
-        if(nLBPos == 1)
-            eLastBlock = SvxAdjust::Center;
+        if(nLBPos == 0)
+            m_pExampleWin->SetLastLine(SvxAdjust::Left);
+        else if(nLBPos == 1)
+            m_pExampleWin->SetLastLine(SvxAdjust::Center);
         else if(nLBPos == 2)
-            eLastBlock = SvxAdjust::Block;
-        m_pExampleWin->SetLastLine( eLastBlock );
+            m_pExampleWin->SetLastLine(SvxAdjust::Block);
     }
 
     m_pExampleWin->Invalidate();
