@@ -26,6 +26,7 @@
 enum class SvxPrevLineSpace
 {
     N1 = 0,
+    N115,
     N15,
     N2,
     Prop,
