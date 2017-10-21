@@ -587,10 +587,12 @@ void PropRead::Read()
                 sal_uInt32 nSectionOfs(0);
                 mpSvStream->ReadUInt32( nSectionOfs );
                 sal_uInt32 nCurrent = mpSvStream->Tell();
-                mpSvStream->Seek( nSectionOfs );
-                Section aSection(aSectCLSID.data());
-                aSection.Read( mpSvStream.get() );
-                maSections.push_back( o3tl::make_unique<Section>( aSection ) );
+                if (checkSeek(*mpSvStream, nSectionOfs))
+                {
+                    Section aSection(aSectCLSID.data());
+                    aSection.Read(mpSvStream.get());
+                    maSections.push_back(o3tl::make_unique<Section>(aSection));
+                }
                 mpSvStream->Seek( nCurrent );
             }
         }
