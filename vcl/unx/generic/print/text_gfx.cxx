@@ -66,7 +66,7 @@ void PrinterGfx::drawGlyph(const Point& rPoint,
 
     // draw the string
     // search for a glyph set matching the set font
-    std::list< GlyphSet >::iterator aIter;
+    std::vector< GlyphSet >::iterator aIter;
     for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
         if ( ((*aIter).GetFontID()  == mnFontID)
              && ((*aIter).IsVertical() == mbTextVertical))
@@ -158,10 +158,9 @@ void
 PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts )
 {
     // write glyphsets and reencodings
-    std::list< GlyphSet >::iterator aIter;
-    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
+    for (auto & PS3Font : maPS3Font)
     {
-        aIter->PSUploadFont (*pFile, *this, mbUploadPS42Fonts, rSuppliedFonts );
+        PS3Font.PSUploadFont (*pFile, *this, mbUploadPS42Fonts, rSuppliedFonts );
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
