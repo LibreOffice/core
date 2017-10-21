@@ -321,12 +321,8 @@ void Section::GetDictionary(Dictionary& rDict)
 
 void Section::Read( SotStorageStream *pStrm )
 {
-    sal_uInt32 nSecOfs, nPropSize, nStrmSize;
-    nSecOfs = pStrm->Tell();
-
-    pStrm->Seek( STREAM_SEEK_TO_END );
-    nStrmSize = pStrm->Tell();
-    pStrm->Seek( nSecOfs );
+    sal_uInt32 nSecOfs = pStrm->Tell();
+    sal_uInt32 nStrmSize = pStrm->remainingSize();
 
     mnTextEnc = RTL_TEXTENCODING_MS_1252;
     sal_uInt32 nSecSize(0), nPropCount(0);
@@ -339,15 +335,14 @@ void Section::Read( SotStorageStream *pStrm )
             break;
         auto nCurrent = pStrm->Tell();
         sal_uInt64 nOffset = nPropOfs + nSecOfs;
-        if (nOffset != pStrm->Seek(nOffset))
+        if (!checkSeek(*pStrm, nOffset))
             break;
         if ( nPropId )                  // do not read dictionary
         {
             sal_uInt32 nPropType(0), nVectorCount(0);
             pStrm->ReadUInt32(nPropType);
 
-            nPropSize = 4;
-
+            sal_uInt32 nPropSize = 4;
             if ( nPropType & VT_VECTOR )
             {
                 pStrm->ReadUInt32( nVectorCount );
@@ -436,7 +431,7 @@ void Section::Read( SotStorageStream *pStrm )
                     if ( ( nVectorCount - i ) > 1 )
                     {
                         nOffset = nPropOfs + nSecOfs + nPropSize;
-                        if (nOffset != pStrm->Seek(nOffset))
+                        if (!checkSeek(*pStrm, nOffset))
                             break;
                     }
                 }
@@ -503,7 +498,7 @@ void Section::Read( SotStorageStream *pStrm )
                 if (!pStrm->good())
                     break;
                 sal_uInt64 nPos = pStrm->Tell() + nSize;
-                if (nPos != pStrm->Seek(nPos))
+                if (!checkSeek(*pStrm, nPos))
                     break;
             }
             sal_uInt32 nSize = pStrm->Tell();

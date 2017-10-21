@@ -943,7 +943,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     // read property ID/position pairs
     typedef ::std::map< sal_Int32, sal_uInt32 > SfxOlePropPosMap;
     SfxOlePropPosMap aPropPosMap;
-    for( sal_Int32 nPropIdx = 0; (nPropIdx < nPropCount) && (rStrm.GetErrorCode() == ERRCODE_NONE) && !rStrm.IsEof(); ++nPropIdx )
+    for (sal_Int32 nPropIdx = 0; nPropIdx < nPropCount && rStrm.good(); ++nPropIdx)
     {
         sal_Int32 nPropId(0);
         sal_uInt32 nPropPos(0);
