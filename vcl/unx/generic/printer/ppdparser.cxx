@@ -239,7 +239,7 @@ namespace psp
     class PPDCache
     {
     public:
-        std::list< std::unique_ptr<PPDParser> > aAllParsers;
+        std::vector< std::unique_ptr<PPDParser> > aAllParsers;
         std::unique_ptr<std::unordered_map< OUString, OUString, OUStringHash >> pAllPPDFiles;
         PPDCache()
             : pAllPPDFiles(nullptr)
@@ -583,8 +583,8 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
                     rPPDCache.aAllParsers.end(),
                     [pNewParser] (std::unique_ptr<PPDParser> const & x) { return x.get() == pNewParser; } ),
                 rPPDCache.aAllParsers.end());
-        // insert new parser to list
-        rPPDCache.aAllParsers.push_front( std::unique_ptr<PPDParser>(pNewParser) );
+        // insert new parser to vector
+        rPPDCache.aAllParsers.emplace_back( std::unique_ptr<PPDParser>(pNewParser) );
     }
     return pNewParser;
 }
@@ -721,7 +721,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
         m_pTranslator( new PPDTranslator() )
 {
     // read in the file
-    std::list< OString > aLines;
+    std::vector< OString > aLines;
     PPDDecompressStream aStream( m_aFile );
     if( aStream.IsOpen() )
     {
@@ -815,7 +815,7 @@ PPDParser::PPDParser( const OUString& rFile ) :
     }
     SAL_INFO("vcl.unx.print",
             "constraints: (" << m_aConstraints.size() << " found)");
-    for( std::list< PPDConstraint >::const_iterator cit = m_aConstraints.begin(); cit != m_aConstraints.end(); ++cit )
+    for( std::vector< PPDConstraint >::const_iterator cit = m_aConstraints.begin(); cit != m_aConstraints.end(); ++cit )
     {
         SAL_INFO("vcl.unx.print", "*\"" << cit->m_pKey1->getKey() << "\" \""
                 << (cit->m_pOption1 ? cit->m_pOption1->m_aOption : "<nil>")
@@ -962,7 +962,7 @@ namespace
     }
 }
 
-void PPDParser::parse( ::std::list< OString >& rLines )
+void PPDParser::parse( ::std::vector< OString >& rLines )
 {
     // Name for PPD group into which all options are put for which the PPD
     // does not explicitly define a group.
@@ -974,7 +974,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
     // "Extra" group depending on the option.
     static const OString aDefaultPPDGroupName("General");
 
-    std::list< OString >::iterator line = rLines.begin();
+    std::vector< OString >::iterator line = rLines.begin();
     PPDParser::hash_type::const_iterator keyit;
 
     // name of the PPD group that is currently being processed
@@ -1814,8 +1814,8 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
         pNewValue == pKey->getDefaultValue() )
         return true;
 
-    const ::std::list< PPDParser::PPDConstraint >& rConstraints( m_pParser->getConstraints() );
-    for( ::std::list< PPDParser::PPDConstraint >::const_iterator it = rConstraints.begin(); it != rConstraints.end(); ++it )
+    const ::std::vector< PPDParser::PPDConstraint >& rConstraints( m_pParser->getConstraints() );
+    for( ::std::vector< PPDParser::PPDConstraint >::const_iterator it = rConstraints.begin(); it != rConstraints.end(); ++it )
     {
         const PPDKey* pLeft     = it->m_pKey1;
         const PPDKey* pRight    = it->m_pKey2;
