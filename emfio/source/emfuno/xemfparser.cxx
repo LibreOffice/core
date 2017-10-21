@@ -126,14 +126,14 @@ namespace emfio
                 // rough check - import and conv to primitive
                 GDIMetaFile aMtf;
                 std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xEmfStream));
-                sal_uInt32 nMetaType(0);
                 sal_uInt32 nOrgPos = pStream->Tell();
 
                 SvStreamEndian nOrigNumberFormat = pStream->GetEndian();
                 pStream->SetEndian(SvStreamEndian::LITTLE);
 
-                pStream->Seek(0x28);
-                pStream->ReadUInt32(nMetaType);
+                sal_uInt32 nMetaType(0);
+                if (checkSeek(*pStream, 0x28))
+                    pStream->ReadUInt32(nMetaType);
                 pStream->Seek(nOrgPos);
 
                 bool bReadError(false);
