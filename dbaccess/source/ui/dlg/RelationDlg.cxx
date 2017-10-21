@@ -182,6 +182,8 @@ IMPL_LINK_NOARG( ORelationDialog, OKClickHdl, Button*, void )
         nAttrib |= KeyRule::SET_DEFAULT;
     pConnData->SetUpdateRules( nAttrib );
 
+    pConnData->SetCardinality();
+
     m_xTableControl->SaveModified();
 
     //// if the ComboBoxes for the table selection are enabled (constructor with bAllowTableSelect==sal_True),
