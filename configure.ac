@@ -571,6 +571,7 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
+    test_kf5=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
         test_fontconfig=yes
@@ -664,6 +665,7 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
+    test_kf5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
@@ -692,6 +694,7 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
+    test_kf5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
@@ -717,6 +720,7 @@ dragonfly*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_kde4=yes
+    test_kf5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
@@ -740,6 +744,7 @@ linux-android*)
     test_freetype=no
     test_gtk=no
     test_kde4=no
+    test_kf5=no
     test_randr=no
     test_xrender=no
     _os=Android
@@ -1175,6 +1180,12 @@ AC_ARG_ENABLE(kde4,
     AS_HELP_STRING([--enable-kde4],
         [Determines whether to use Qt4/KDE4 vclplug on platforms where Qt4 and
          KDE4 are available.]),
+,)
+
+AC_ARG_ENABLE(kf5,
+    AS_HELP_STRING([--enable-kf5],
+        [Determines whether to use Kf5 vclplug on platforms where Qt5 and
+         KF5 are available.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(gui,
@@ -4500,6 +4511,7 @@ if test "$USING_X11" != TRUE; then
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
     test_kde4=no
+    test_kf5=no
     enable_cairo_canvas=no
 fi
 
@@ -9746,6 +9758,14 @@ if test "x$enable_kde4" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KDE4)
 
+ENABLE_KF5=""
+if test "x$enable_kf5" = "xyes"; then
+    ENABLE_KF5="TRUE"
+    AC_DEFINE(ENABLE_KF5)
+    R="$R kf5"
+fi
+AC_SUBST(ENABLE_KF5)
+
 
 build_vcl_plugins="$R"
 if test -z "$build_vcl_plugins"; then
@@ -10736,7 +10756,9 @@ MOC5="moc"
 KF5_GLIB_CFLAGS=""
 KF5_GLIB_LIBS=""
 KF5_HAVE_GLIB=""
-if test "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE"; then
+if test \( "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE" \) \
+    -o \( "$test_kf5" = "yes" -a "$ENABLE_KF5" = "TRUE" \)
+then
     qt5_incdirs="$QT5INC /usr/include/qt5 /usr/include $x_includes"
     qt5_libdirs="$QT5LIB /usr/lib/qt5 /usr/lib $x_libraries"
 

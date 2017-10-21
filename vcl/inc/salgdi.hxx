@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_SALGDI_HXX
 
 #include <vcl/metric.hxx>
+#include <vcl/sysdata.hxx>
 
 #include "impfontmetricdata.hxx"
 #include "salgdiimpl.hxx"
@@ -45,7 +46,6 @@ class OpenGLContext;
 class OutputDevice;
 class FreetypeFont;
 class CommonSalLayout;
-struct SystemGraphicsData;
 
 #if ENABLE_CAIRO_CANVAS
 struct SystemFontData;
