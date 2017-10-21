@@ -5973,20 +5973,26 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
     // we now have to iterate through all contained shape group containers
     do
     {
-        if(!ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
+        if (!ReadCommonRecordHeader(rSt, nVer, nInst, nFbt, nLength))
+            return;
         nReadDg += DFF_COMMON_RECORD_HEADER_SIZE;
         // Patriarch found (the upmost shape group container) ?
-        if( DFF_msofbtSpgrContainer == nFbt )
+        if (DFF_msofbtSpgrContainer == nFbt)
         {
-            if(!GetShapeGroupContainerData( rSt, nLength, true, nDrawingContainerId )) return;
+            if (!GetShapeGroupContainerData(rSt, nLength, true, nDrawingContainerId))
+                return;
         }
         // empty Shape Container ? (outside of shape group container)
-        else if( DFF_msofbtSpContainer == nFbt )
+        else if (DFF_msofbtSpContainer == nFbt)
         {
-            if(!GetShapeContainerData( rSt, nLength, ULONG_MAX, nDrawingContainerId )) return;
+            if (!GetShapeContainerData(rSt, nLength, ULONG_MAX, nDrawingContainerId))
+                return;
         }
         else
-            rSt.SeekRel( nLength );
+        {
+            if (!checkSeek(rSt, rSt.Tell() + nLength))
+                return;
+        }
         nReadDg += nLength;
     }
     while( nReadDg < nLenDg );
