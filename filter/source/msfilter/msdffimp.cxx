@@ -6194,7 +6194,8 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         }
         else
         {
-            rSt.SeekRel( nLength );
+            if (!checkSeek(rSt, rSt.Tell() + nLength))
+                return false;
             nReadSpCont += nLength;
         }
     }
