@@ -105,8 +105,8 @@ typedef enum __rtl_CipherError rtlCipherError;
     @see rtlCipherAlgorithm
     @see rtlCipherMode
 
-    @param  Algorithm [in] cipher algorithm.
-    @param  Mode      [in] cipher mode.
+    @param[in] Algorithm cipher algorithm.
+    @param[in] Mode      cipher mode.
     @return Cipher handle, or 0 upon failure.
  */
 SAL_DLLPUBLIC rtlCipher SAL_CALL rtl_cipher_create (
@@ -117,13 +117,13 @@ SAL_DLLPUBLIC rtlCipher SAL_CALL rtl_cipher_create (
 /** Inititialize a cipher for the given direction.
     @see rtlCipherDirection
 
-    @param  Cipher    [in] cipher handle.
-    @param  Direction [in] cipher direction.
-    @param  pKeyData  [in] key material buffer.
-    @param  nKeyLen   [in] key material length in bytes.
-    @param  pArgData  [in] initialization vector buffer.
-    @param  nArgLen   [in] initialization vector length in bytes.
-    @return rtl_Cipher_E_None upon success.
+    @param[in] Cipher    cipher handle.
+    @param[in] Direction cipher direction.
+    @param[in] pKeyData  key material buffer.
+    @param[in] nKeyLen   key material length in bytes.
+    @param[in] pArgData  initialization vector buffer.
+    @param[in] nArgLen   initialization vector length in bytes.
+    @retval rtl_Cipher_E_None upon success.
  */
 SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_init (
     rtlCipher           Cipher,
@@ -136,12 +136,12 @@ SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_init (
     @pre Initialized for a compatible cipher direction.
     @see     rtl_cipher_init()
 
-    @param  Cipher  [in]  cipher handle.
-    @param  pData   [in]  plaintext buffer.
-    @param  nDatLen [in]  plaintext length in bytes.
-    @param  pBuffer [out] ciphertext buffer.
-    @param  nBufLen [in]  ciphertext length in bytes.
-    @return rtl_Cipher_E_None upon success.
+    @param[in]  Cipher  cipher handle.
+    @param[in]  pData   plaintext buffer.
+    @param[in]  nDatLen plaintext length in bytes.
+    @param[out] pBuffer ciphertext buffer.
+    @param[in]  nBufLen ciphertext length in bytes.
+    @retval rtl_Cipher_E_None upon success.
  */
 SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_encode (
     rtlCipher   Cipher,
@@ -153,12 +153,12 @@ SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_encode (
     @pre Initialized for a compatible cipher direction.
     @see     rtl_cipher_init()
 
-    @param  Cipher  [in]  cipher handle.
-    @param  pData   [in]  ciphertext buffer.
-    @param  nDatLen [in]  ciphertext length in bytes.
-    @param  pBuffer [out] plaintext buffer.
-    @param  nBufLen [in]  plaintext length in bytes.
-    @return rtl_Cipher_E_None upon success.
+    @param[in]  Cipher  cipher handle.
+    @param[in]  pData   ciphertext buffer.
+    @param[in]  nDatLen ciphertext length in bytes.
+    @param[out] pBuffer plaintext buffer.
+    @param[in]  nBufLen plaintext length in bytes.
+    @retval rtl_Cipher_E_None upon success.
  */
 SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_decode (
     rtlCipher   Cipher,
@@ -167,7 +167,7 @@ SAL_DLLPUBLIC rtlCipherError SAL_CALL rtl_cipher_decode (
 ) SAL_THROW_EXTERN_C();
 
 /** Destroy a cipher handle.
-    @param  Cipher [in] cipher handle to be destroyed.
+    @param[in] Cipher cipher handle to be destroyed.
     @return None. Cipher handle destroyed and invalid.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroy (
@@ -227,7 +227,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_cipher_destroyBF (
 
     @see rtl_cipher_create()
 
-    @param  Mode [in] cipher mode. Must be rtl_Cipher_ModeStream.
+    @param[in] Mode cipher mode. Must be <code>rtl_Cipher_ModeStream</code>.
     @return Cipher handle, or 0 upon failure.
  */
 SAL_DLLPUBLIC rtlCipher SAL_CALL rtl_cipher_createARCFOUR (
