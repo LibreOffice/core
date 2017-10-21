@@ -118,6 +118,9 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
             {
                 case SvxPrevLineSpace::N1:
                     break;
+                case SvxPrevLineSpace::N115:
+                    aPnt.Y() += nH / 6.67; // 1/.15 = 6.(6)
+                    break;
                 case SvxPrevLineSpace::N15:
                     aPnt.Y() += nH / 2;
                     break;
