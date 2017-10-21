@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_cd9eceb7",
+        "filename": "vcl/unx/generic/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-21T12:12:50Z",
+      "side": 1,
+      "message": "that\u0027s the relevant part -",
+      "revId": "d79221521dbf1f650e7ec7806a0bd7e16bfa3e9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_eda54a04",
+        "filename": "vcl/unx/generic/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3840,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-10-21T12:12:50Z",
+      "side": 1,
+      "message": "this is just the window answering to WM_PING messages, I think this is redundant here - can you try without?",
+      "revId": "d79221521dbf1f650e7ec7806a0bd7e16bfa3e9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
