@@ -582,6 +582,35 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
         m_pAutoCB->Hide();
     }
 
+    _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
+    eItemState = rSet->GetItemState( _nWhich );
+
+    if ( eItemState >= SfxItemState::DEFAULT )
+    {
+        const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>( rSet->Get( _nWhich ) );
+        SvxAdjust eAdjust = rAdj.GetAdjust();
+        if ( eAdjust == SvxAdjust::Center || eAdjust == SvxAdjust::Block )
+        {
+            _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+            eItemState = rSet->GetItemState( _nWhich );
+
+            if ( eItemState >= SfxItemState::DEFAULT )
+            {
+                const SvxFrameDirectionItem& rFrameDirItem = static_cast<const SvxFrameDirectionItem&>( rSet->Get( _nWhich ) );
+                m_pExampleWin->EnableRTL( SvxFrameDirection::Horizontal_RL_TB == rFrameDirItem.GetValue() );
+            }
+        }
+        else if ( eAdjust == SvxAdjust::Right )
+        {
+            m_pExampleWin->EnableRTL();
+            eAdjust = SvxAdjust::Left;
+        }
+        m_pExampleWin->SetAdjust( eAdjust );
+        m_pExampleWin->SetLastLine( rAdj.GetLastBlock() );
+    }
+
+    UpdateExample_Impl();
+
     // this sets the min/max limits; do this _after_ setting the values,
     // because for Impress the min of first-line indent depends on value of
     // left-indent!
