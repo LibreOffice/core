@@ -1319,9 +1319,8 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
 
         // try to allocate the UserEditAtom via CurrentUserAtom
         sal_uInt32 nCurrentUserEdit = rParam.aCurrentUserAtom.nCurrentUserEdit;
-        if ( nCurrentUserEdit )
+        if (nCurrentUserEdit && checkSeek(rStCtrl, nCurrentUserEdit))
         {
-            rStCtrl.Seek( nCurrentUserEdit );
             ReadPptUserEditAtom( rStCtrl, aUserEditAtom );
         }
         if ( !aUserEditAtom.nOffsetPersistDirectory )
