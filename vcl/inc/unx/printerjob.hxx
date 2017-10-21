@@ -24,7 +24,7 @@
 #include "osl/file.hxx"
 #include "rtl/string.hxx"
 
-#include <list>
+#include <vector>
 
 namespace psp {
 
@@ -41,8 +41,8 @@ private:
     osl::File*              mpJobHeader;
     osl::File*              mpJobTrailer;
 
-    std::list< osl::File* > maPageList;
-    std::list< osl::File* > maHeaderList;
+    std::vector< osl::File* > maPageVector;
+    std::vector< osl::File* > maHeaderVector;
 
     JobData                 m_aDocumentJobData;
     JobData                 m_aLastJobData;
