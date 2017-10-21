@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_6d4cfa70",
+        "filename": "vcl/unx/generic/printer/ppdparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-21T10:57:39Z",
+      "side": 1,
+      "message": "you sure this is OK, and that nothing depends on the order of the parsers?",
+      "revId": "b946a928bd904d5248a3b8b06fa4624ded3b352d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
