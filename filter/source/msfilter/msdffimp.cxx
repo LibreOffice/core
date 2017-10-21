@@ -6304,9 +6304,9 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, tools::Rectangle
         // fetch matching info struct out of the pointer array
         SvxMSDffBLIPInfo& rInfo = (*m_pBLIPInfos)[ nIdx-1 ];
         // jump to the BLIP atom in the data stream
-        pStData->Seek( rInfo.nFilePos );
+        bOk = checkSeek(*pStData, rInfo.nFilePos);
         // possibly reset error status
-        if( pStData->GetError() )
+        if (!bOk || pStData->GetError())
             pStData->ResetError();
         else
             bOk = GetBLIPDirect( *pStData, rData, pVisArea );
@@ -6318,9 +6318,9 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, tools::Rectangle
                 pStData2->ResetError();
             sal_uLong nOldPosData2 = pStData2->Tell();
             // jump to the BLIP atom in the second data stream
-            pStData2->Seek( rInfo.nFilePos );
+            bOk = checkSeek(*pStData2, rInfo.nFilePos);
             // reset error status if necessary
-            if( pStData2->GetError() )
+            if (!bOk || pStData2->GetError())
                 pStData2->ResetError();
             else
                 bOk = GetBLIPDirect( *pStData2, rData, pVisArea );
