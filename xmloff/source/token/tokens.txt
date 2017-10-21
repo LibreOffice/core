@@ -190,6 +190,7 @@ author
 author-initials
 author-name
 auto
+auto-complete
 auto-grow-height
 auto-grow-width
 auto-reload
@@ -272,6 +273,7 @@ bottom-right
 BOTTOM_VALUES_DUMMY
 bottom-arc
 bottom-circle
+bound-column
 break-after
 break-before
 break-inside
@@ -529,6 +531,7 @@ default-style
 default-style-name
 degree
 delay
+delay-for-repeat
 delete-columns
 delete-rows
 deletion
@@ -592,6 +595,7 @@ ole-draw-aspect
 drawing
 drawings
 drawpool
+dropdown
 drop-cap
 dynamic
 edge-rounding
@@ -1055,6 +1059,7 @@ linenumbering-configuration
 linenumbering-separator
 lines
 lines-used
+linked-cell
 link-to-source-data
 list
 list-block
@@ -1065,6 +1070,7 @@ list-level
 list-level-style-bullet
 list-level-style-image
 list-level-style-number
+list-linkage-type
 list-name
 list-style
 list-style-name
@@ -1274,6 +1280,7 @@ open-vertical
 operation
 operator
 optimal
+option
 or
 order
 ordered-list
@@ -1671,6 +1678,7 @@ stay-on-top
 stdev
 stdevp
 steps
+step-size
 stock
 stock-updown-bars
 stock-with-volume
@@ -1750,6 +1758,7 @@ tables
 tan
 tanh
 target-cell-address
+target-frame
 target-frame-name
 target-range-address
 tb-rl
