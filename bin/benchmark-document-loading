@@ -32,21 +32,19 @@
 # ~/lo/master-suse/instdir/program/python ~/lo/master-suse/bin/benchmark-document-loading  --soffice=path:/home/tml/lo/master-suse/instdir/program/soffice --outdir=file://$PWD/out --userdir=file:///tmp/test $PWD/docs
 #
 
+import argparse
 import datetime
-import getopt
 import os
 import subprocess
 import sys
+import threading
 import time
 import urllib
-import uuid
-
-import signal
-import threading
 try:
     from urllib.parse import quote
 except ImportError:
     from urllib import quote
+import uuid
 
 try:
     import pyuno
@@ -72,11 +70,15 @@ validWriterFileExtensions = [ ".docx" , ".rtf", ".odt", ".fodt", ".doc" ]
 validImpressFileExtensions = [ ".ppt", ".pptx", ".odp", ".fodp" ]
 validDrawFileExtensions = [ ".odg", ".fodg" ]
 validRevereseFileExtensions = [ ".vsd", ".vdx", ".cdr", ".pub", ".wpd" ]
-validFileExtensions = dict([("calc", validCalcFileExtensions), ("writer", validWriterFileExtensions), ("impress", validImpressFileExtensions), ("draw", validDrawFileExtensions), ("reverse", validRevereseFileExtensions) ])
-flatODFTypes = dict([("calc", (".fods", "OpenDocument Spreadsheet Flat XML")), 
-                     ("writer", (".fodt", "OpenDocument Text Flat XML")), 
-                     ("impress", (".fodp", "OpenDocument Presentation Flat XML")), 
-                     ("draw", (".fodg", "OpenDocument Drawing Flat XML"))])
+validFileExtensions = {"calc": validCalcFileExtensions,
+                       "writer": validWriterFileExtensions,
+                       "impress": validImpressFileExtensions,
+                       "draw": validDrawFileExtensions,
+                       "reverse": validRevereseFileExtensions}
+flatODFTypes = {"calc": (".fods", "OpenDocument Spreadsheet Flat XML"),
+                "writer": (".fodt", "OpenDocument Text Flat XML"),
+                "impress": (".fodp", "OpenDocument Presentation Flat XML"),
+                "draw": (".fodg", "OpenDocument Drawing Flat XML")}
 
 outdir = ""
 
@@ -90,12 +92,12 @@ def partition(list, pred):
             right.append(e)
     return (left, right)
 
-def filelist(dir, suffix):
-    if len(dir) == 0:
+def filelist(directory, suffix):
+    if not directory:
         raise Exception("filelist: empty directory")
-    if not(dir[-1] == "/"):
-        dir += "/"
-    files = [dir + f for f in os.listdir(dir)]
+    if directory[-1] != "/":
+        directory += "/"
+    files = [directory + f for f in os.listdir(directory)]
 #    print(files)
     return [f for f in files
                     if os.path.isfile(f) and os.path.splitext(f)[1] == suffix]
@@ -103,8 +105,8 @@ def filelist(dir, suffix):
 def getFiles(dirs, suffix):
 #    print( dirs )
     files = []
-    for dir in dirs:
-        files += filelist(dir, suffix)
+    for d in dirs:
+        files += filelist(d, suffix)
     return files
 
 ### UNO utilities ###
@@ -130,20 +132,19 @@ class OfficeConnection:
         self.xContext = None
         self.pro = None
     def setUp(self):
-        (method, sep, rest) = self.args["--soffice"].partition(":")
+        (method, sep, rest) = self.args.soffice.partition(":")
         if sep != ":":
             raise Exception("soffice parameter does not specify method")
         if method == "path":
-                socket = "pipe,name=pytest" + str(uuid.uuid1())
-                try:
-                    userdir = self.args["--userdir"]
-                except KeyError:
-                    raise Exception("'path' method requires --userdir")
-                if not(userdir.startswith("file://")):
-                    raise Exception("--userdir must be file URL")
-                self.soffice = self.bootstrap(rest, userdir, socket)
+            socket = "pipe,name=pytest" + str(uuid.uuid1())
+            userdir = self.args.userdir
+            if not userdir:
+                raise Exception("'path' method requires --userdir")
+            if not userdir.startswith("file://"):
+                raise Exception("--userdir must be file URL")
+            self.soffice = self.bootstrap(rest, userdir, socket)
         elif method == "connect":
-                socket = rest
+            socket = rest
         else:
             raise Exception("unsupported connection method: " + method)
         self.xContext = self.connect(socket)
@@ -153,7 +154,7 @@ class OfficeConnection:
                 "-env:UserInstallation=" + userdir,
                 "--quickstart=no",
                 "--norestore", "--nologo", "--headless" ]
-        if "--valgrind" in self.args:
+        if self.args.valgrind:
             argv.append("--valgrind")
         os.putenv("SAL_LOG", "-INFO-WARN")
         os.putenv("LIBO_ONEWAY_STABLE_ODF_EXPORT", "YES")
@@ -201,9 +202,8 @@ class OfficeConnection:
 #            return ret
     def kill(self):
         command = "kill " + str(self.pro.pid)
-        killFile = open("killFile.log", "a")
-        killFile.write(command + "\n")
-        killFile.close()
+        with open("killFile.log", "a") as killFile:
+            killFile.write(command + "\n")
 #        print("kill")
 #        print(command)
         os.system(command)
@@ -303,11 +303,10 @@ def loadFromURL(xContext, url, t, component):
                 time.sleep(1)
         else:
             t.cancel()
-            logTimeSpent(uri, startTime)
+            logTimeSpent(url, startTime)
             return xDoc
-        file = open("file.log", "a")
-        file.write("layout did not finish\n")
-        file.close()
+        with open("file.log", "a") as fh:
+            fh.write("layout did not finish\n")
         return xDoc
     except pyuno.getClass("com.sun.star.beans.UnknownPropertyException"):
         xListener = None
@@ -336,11 +335,10 @@ def exportToODF(xContext, xDoc, baseName, t, component):
 
 def handleCrash(file, disposed):
 #    print("File: " + file + " crashed")
-    crashLog = open("crashlog.txt", "a")
-    crashLog.write('Crash:' + file + ' ')
-    if disposed == 1:
-        crashLog.write('through disposed\n')
-    crashLog.close()
+    with open("crashlog.txt", "a") as crashLog:
+        crashLog.write('Crash:' + file + ' ')
+        if disposed == 1:
+            crashLog.write('through disposed\n')
 #    crashed_files.append(file)
 # add here the remaining handling code for crashed files
 
@@ -358,13 +356,12 @@ class HandleFileTest:
         args = None
         try:
             url = "file://" + quote(self.file)
-            file = open("file.log", "a")
-            file.write(url + "\n")
-            file.close()
+            with open("file.log", "a") as fh:
+                fh.write(url + "\n")
             xDoc = None
             args = [connection]
             t = threading.Timer(60, alarm_handler, args)
-            t.start()      
+            t.start()
             xDoc = loadFromURL(xContext, url, t, self.component)
             self.state.goodFiles.append(self.file)
             exportToODF(xContext, xDoc, os.path.basename(urllib.parse.urlparse(url).path), t, self.component)
@@ -421,42 +418,30 @@ class State:
         self.badPropertyFiles = []
         self.timeoutFiles = []
 
-            
-def writeReport(state, startTime):
-    goodFiles = open("goodFiles.log", "w")
-    goodFiles.write("Files which loaded perfectly:\n")
-    goodFiles.write("Starttime: " + startTime.isoformat() +"\n")
-    for file in state.goodFiles:
-        goodFiles.write(file)
-        goodFiles.write("\n")
-    goodFiles.close()
-    badDisposedFiles = open("badDisposedFiles.log", "w")
-    badDisposedFiles.write("Files which crashed with DisposedException:\n")
-    badDisposedFiles.write("Starttime: " + startTime.isoformat() + "\n")
-    for file in state.badDisposedFiles:
-        badDisposedFiles.write(file)
-        badDisposedFiles.write("\n")
-    badDisposedFiles.close()
-    badPropertyFiles = open("badPropertyFiles.log", "w")
-    badPropertyFiles.write("Files which crashed with UnknownPropertyException:\n")
-    badPropertyFiles.write("Starttime: " + startTime.isoformat() + "\n")
-    for file in state.badPropertyFiles:
-        badPropertyFiles.write(file)
-        badPropertyFiles.write("\n")
-    badPropertyFiles.close()
-    timeoutFiles = open("timeoutFiles.log", "w")
-    timeoutFiles.write("Files which timed out:\n")
-    timeoutFiles.write("Starttime: " + startTime.isoformat() + "\n")
-    for file in state.timeoutFiles:
-        timeoutFiles.write(file)
-        timeoutFiles.write("\n")
-    timeoutFiles.close()
 
-def runHandleFileTests(opts, dirs):
+def write_state_report(files_list, start_time, report_filename, description):
+    with open(report_filename, "w") as fh:
+        fh.write("%s:\n" % description)
+        fh.write("Starttime: %s\n" % start_time.isoformat())
+        for f in files_list:
+            fh.write("%s\n" % f)
+
+
+def writeReport(state, startTime):
+    write_state_report(state.goodFiles, startTime, "goodFiles.log",
+                       "Files which loaded perfectly")
+    write_state_report(state.badDisposedFiles, startTime, "badDisposedFiles.log",
+                       "Files which crashed with DisposedException")
+    write_state_report(state.badPropertyFiles, startTime, "badPropertyFiles.log",
+                       "Files which crashed with UnknownPropertyException")
+    write_state_report(state.timeoutFiles, startTime, "timeoutFiles.log",
+                       "Files which timed out")
+
+def runHandleFileTests(opts):
     startTime = datetime.datetime.now()
     connection = PersistentConnection(opts)
     global outdir
-    outdir = opts["--outdir"] + "/" + startTime.strftime('%Y%m%d.%H%M%S')
+    outdir = os.path.join(opts.outdir, startTime.strftime('%Y%m%d.%H%M%S'))
     try:
         tests = []
         state = State()
@@ -464,7 +449,7 @@ def runHandleFileTests(opts, dirs):
         for component, validExtension in validFileExtensions.items():
             files = []
             for suffix in validExtension:
-                files.extend(getFiles(dirs, suffix))
+                files.extend(getFiles(opts.dirs, suffix))
             files.sort()
             tests.extend( (HandleFileTest(file, state, component) for file in files) )
         runConnectionTests(connection, simpleInvoke, tests)
@@ -473,38 +458,29 @@ def runHandleFileTests(opts, dirs):
         writeReport(state, startTime)
 
 def parseArgs(argv):
-    (optlist,args) = getopt.getopt(argv[1:], "hr",
-            ["help", "soffice=", "userdir=", "outdir=", "valgrind"])
-#    print(optlist)
-    return (dict(optlist), args)
+    epilog = "'location' is a pathname, not a URL. 'outdir' and 'userdir' are URLs.\n" \
+             "The 'directory' parameters should be full absolute pathnames, not URLs."
 
-def usage():
-    message = """usage: {program} [option]... [directory]..."
- -h | --help:      print usage information
- --soffice=method:location
-                   specify soffice instance to connect to
-                   supported methods: 'path', 'connect'
- --outdir=URL      specify the output directory for flat ODF exports
- --userdir=URL     specify user installation directory for 'path' method
- --valgrind        pass --valgrind to soffice for 'path' method
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
+                                     epilog=epilog)
+    parser.add_argument('--soffice', metavar='method:location', required=True,
+                        help="specify soffice instance to connect to\n"
+                             "supported methods: 'path', 'connect'")
+    parser.add_argument('--outdir', metavar='URL', required=True,
+                        help="specify the output directory for flat ODF exports")
+    parser.add_argument('--userdir', metavar='URL',
+                        help="specify user installation directory for 'path' method")
+    parser.add_argument('--valgrind', action='store_true',
+                        help="pass --valgrind to soffice for 'path' method")
+    parser.add_argument('dirs', metavar='directory', nargs='+')
 
- 'location' is a pathname, not a URL. 'outdir' and 'userdir' are URLs.
- The 'directory' parameters should be full absolute pathnames, not URLs."""
-    print(message.format(program = os.path.basename(sys.argv[0])))
+    args = parser.parse_args(argv[1:])
+
+    return args
 
 
 if __name__ == "__main__":
-    (opts,args) = parseArgs(sys.argv)
-    if len(args) == 0:
-        usage()
-        sys.exit(1)
-    if "-h" in opts or "--help" in opts:
-        usage()
-        sys.exit()
-    elif "--soffice" in opts and "--outdir" in opts:
-        runHandleFileTests(opts, args)
-    else:
-        usage()
-        sys.exit(1)
+    opts = parseArgs(sys.argv)
+    runHandleFileTests(opts)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
