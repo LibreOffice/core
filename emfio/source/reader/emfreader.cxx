@@ -1806,12 +1806,10 @@ namespace emfio
 
     bool EmfReader::ReadHeader()
     {
-        sal_uInt32      nType, nSignature, nVersion;
-        sal_uInt32      nHeaderSize, nPalEntries;
-
         // Spare me the METAFILEHEADER here
         // Reading the METAHEADER - EMR_HEADER ([MS-EMF] section 2.3.4.2 EMR_HEADER Record Types)
-        mpInputStream->ReadUInt32( nType ).ReadUInt32( nHeaderSize );
+        sal_uInt32 nType(0), nHeaderSize(0);
+        mpInputStream->ReadUInt32(nType).ReadUInt32(nHeaderSize);
         if (nType != 0x00000001)
         {
             // per [MS-EMF] 2.3.4.2 EMF Header Record Types, type MUST be 0x00000001
@@ -1827,7 +1825,8 @@ namespace emfio
         // picture frame size (RectL object)
         tools::Rectangle rclFrame = ReadRectangle(); // rectangle in device units 1/100th mm
 
-        mpInputStream->ReadUInt32( nSignature );
+        sal_uInt32 nSignature(0);
+        mpInputStream->ReadUInt32(nSignature);
 
         // nSignature MUST be the ASCII characters "FME", see [WS-EMF] 2.2.9 Header Object
         // and 2.1.14 FormatSignature Enumeration
@@ -1837,6 +1836,7 @@ namespace emfio
             return false;
         }
 
+        sal_uInt32 nVersion(0);
         mpInputStream->ReadUInt32(nVersion);  // according to [WS-EMF] 2.2.9, this SHOULD be 0x0001000, however
                                        // Microsoft note that not even Windows checks this...
         if (nVersion != 0x00010000)
@@ -1848,8 +1848,7 @@ namespace emfio
         mnEndPos += mnStartPos;
 
         sal_uInt32 nStrmPos = mpInputStream->Tell(); // checking if mnEndPos is valid
-        mpInputStream->Seek(STREAM_SEEK_TO_END);
-        sal_uInt32 nActualFileSize = mpInputStream->Tell();
+        sal_uInt32 nActualFileSize = nStrmPos + mpInputStream->remainingSize();
 
         if ( nActualFileSize < mnEndPos )
         {
@@ -1858,7 +1857,6 @@ namespace emfio
                                 << " bytes. Possible file corruption?");
             mnEndPos = nActualFileSize;
         }
-        mpInputStream->Seek(nStrmPos);
 
         mpInputStream->ReadInt32(mnRecordCount);
 
@@ -1878,7 +1876,7 @@ namespace emfio
         // it MUST be 0x000 and MUST be ignored... the thing is, having such a specific
         // value is actually pretty useful in checking if there is possible corruption
 
-        sal_uInt16 nReserved;
+        sal_uInt16 nReserved(0);
         mpInputStream->ReadUInt16(nReserved);
 
         if ( nReserved != 0x0000 )
@@ -1894,8 +1892,9 @@ namespace emfio
 
         mpInputStream->SeekRel(0x8);
 
-        sal_Int32 nPixX, nPixY, nMillX, nMillY;
+        sal_uInt32 nPalEntries(0);
         mpInputStream->ReadUInt32(nPalEntries);
+        sal_Int32 nPixX(0), nPixY(0), nMillX(0), nMillY(0);
         mpInputStream->ReadInt32(nPixX);
         mpInputStream->ReadInt32(nPixY);
         mpInputStream->ReadInt32(nMillX);
@@ -1906,8 +1905,7 @@ namespace emfio
         SetRefPix(Size( nPixX, nPixY ) );
         SetRefMill(Size( nMillX, nMillY ) );
 
-        mpInputStream->Seek(mnStartPos + nHeaderSize);
-        return true;
+        return checkSeek(*mpInputStream, mnStartPos + nHeaderSize);
     }
 
     tools::Rectangle EmfReader::ReadRectangle()
