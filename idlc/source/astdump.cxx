@@ -322,7 +322,7 @@ bool AstService::dump(RegistryKey& rKey)
 }
 
 bool AstAttribute::dumpBlob(
-    typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex)
+    typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex) const
 {
     RTFieldAccess accessMode = RTFieldAccess::INVALID;
 
@@ -383,7 +383,7 @@ bool AstAttribute::dumpBlob(
 
 void AstAttribute::dumpExceptions(
     typereg::Writer & writer, OUString const & documentation,
-    DeclList const & exceptions, RTMethodMode flags, sal_uInt16 * methodIndex)
+    DeclList const & exceptions, RTMethodMode flags, sal_uInt16 * methodIndex) const
 {
     if (!exceptions.empty()) {
         OSL_ASSERT(methodIndex != nullptr);

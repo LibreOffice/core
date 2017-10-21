@@ -129,7 +129,7 @@ private:
 
     SAL_DLLPRIVATE char read() { return pos_ == end_ ? '\0' : *pos_++; }
 
-    SAL_DLLPRIVATE char peek() { return pos_ == end_ ? '\0' : *pos_; }
+    SAL_DLLPRIVATE char peek() const { return pos_ == end_ ? '\0' : *pos_; }
 
     SAL_DLLPRIVATE void normalizeLineEnds(Span const & text);
 

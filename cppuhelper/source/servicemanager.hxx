@@ -313,7 +313,7 @@ private:
         override;
 
     // needs to be called with rBHelper.rMutex locked:
-    bool isDisposed() { return rBHelper.bDisposed || rBHelper.bInDispose; }
+    bool isDisposed() const { return rBHelper.bDisposed || rBHelper.bInDispose; }
 
     void removeEventListenerFromComponent(
         css::uno::Reference< css::lang::XComponent > const & component);

@@ -42,7 +42,7 @@ public:
         { return m_declarations.begin(); }
     DeclList::const_iterator getIteratorEnd() const
         { return m_declarations.end(); }
-    sal_uInt16 getNodeCount(NodeType nType);
+    sal_uInt16 getNodeCount(NodeType nType) const;
 
     // Name look up mechanism
     AstDeclaration* lookupByName(const OString& scopedName);
@@ -54,7 +54,7 @@ public:
     // Look up a predefined type by its ExprType
     AstDeclaration* lookupPrimitiveType(ExprType type);
 
-    AstDeclaration* lookupForAdd(AstDeclaration const * pDecl);
+    AstDeclaration* lookupForAdd(AstDeclaration const * pDecl) const;
 
 protected:
     AstDeclaration const * getLast() const
