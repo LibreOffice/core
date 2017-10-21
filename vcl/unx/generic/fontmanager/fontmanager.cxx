@@ -497,7 +497,7 @@ namespace
     }
 }
 
-void PrintFontManager::analyzeSfntFamilyName( void* pTTFont, ::std::list< OUString >& rNames )
+void PrintFontManager::analyzeSfntFamilyName( void* pTTFont, ::std::vector< OUString >& rNames )
 {
     OUString aFamily;
 
@@ -556,10 +556,10 @@ void PrintFontManager::analyzeSfntFamilyName( void* pTTFont, ::std::list< OUStri
     DisposeNameRecords( pNameRecords, nNameRecords );
     if( !aFamily.isEmpty() )
     {
-        rNames.push_front( aFamily );
-        for( ::std::set< OUString >::const_iterator it = aSet.begin(); it != aSet.end(); ++it )
-            if( *it != aFamily )
-                rNames.push_back( *it );
+        rNames.emplace_back( aFamily );
+        for (auto const& elem : aSet)
+            if( elem != aFamily )
+                rNames.emplace_back(elem);
     }
 }
 
@@ -575,7 +575,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
         TTGlobalFontInfo aInfo;
         GetTTGlobalFontInfo( pTTFont, & aInfo );
 
-        ::std::list< OUString > aNames;
+        ::std::vector< OUString > aNames;
         analyzeSfntFamilyName( pTTFont, aNames );
 
         // set family name from XLFD if possible
@@ -584,7 +584,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
             if( !aNames.empty() )
             {
                 pFont->m_aFamilyName = aNames.front();
-                aNames.pop_front();
+                aNames.erase(aNames.begin());
             }
             else
             {
@@ -777,13 +777,13 @@ void PrintFontManager::initialize()
     #endif
 }
 
-void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs )
+void PrintFontManager::getFontList( ::std::vector< fontID >& rFontIDs )
 {
     rFontIDs.clear();
     std::unordered_map< fontID, PrintFont* >::const_iterator it;
 
-    for( it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
-        rFontIDs.push_back( it->first );
+    for (auto const& font : m_aFonts)
+        rFontIDs.emplace_back(font.first);
 }
 
 void PrintFontManager::fillPrintFontInfo(PrintFont* pFont, FastPrintFontInfo& rInfo)
@@ -1185,7 +1185,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
 extern "C" {
 SAL_DLLPUBLIC_EXPORT const char * unit_online_get_fonts(void)
 {
-    std::list< fontID > aFontIDs;
+    std::vector< fontID > aFontIDs;
     PrintFontManager &rMgr = PrintFontManager::get();
     rMgr.getFontList(aFontIDs);
     OStringBuffer aBuf;
