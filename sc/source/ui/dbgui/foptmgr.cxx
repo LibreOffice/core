@@ -96,7 +96,7 @@ void ScFilterOptionsMgr::Init()
                                                 rQueryData.nRow2,
                                                 pViewData->GetTabNo() ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        OUStringBuffer theDbArea;
+        OUString theDbArea;
         OUString   theDbName(STR_DB_LOCAL_NONAME);
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
@@ -149,9 +149,9 @@ void ScFilterOptionsMgr::Init()
 
         if ( theDbName != STR_DB_LOCAL_NONAME )
         {
-            theDbArea.append(" (");
-            theDbArea.append(theDbName).append(')');
-            pFtDbArea->SetText( theDbArea.makeStringAndClear() );
+            theDbArea += " (" + theDbName + ")";
+
+            pFtDbArea->SetText( theDbArea );
         }
         else
         {

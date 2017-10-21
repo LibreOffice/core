@@ -246,22 +246,20 @@ std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
 
 OUString to_string(const Point& rPos)
 {
-    OUStringBuffer aBuffer;
-    aBuffer.append(OUString::number(rPos.X()));
-    aBuffer.append("x");
-    aBuffer.append(OUString::number(rPos.Y()));
+    OUString sStr = OUString::number(rPos.X())
+                  + "x"
+                  + OUString::number(rPos.Y());
 
-    return aBuffer.makeStringAndClear();
+    return sStr;
 }
 
 OUString to_string(const Size& rSize)
 {
-    OUStringBuffer aBuffer;
-    aBuffer.append(rSize.Width());
-    aBuffer.append("x");
-    aBuffer.append(rSize.Height());
+    OUString sStr = OUString::number(rSize.Width())
+                  + "x"
+                  + OUString::number(rSize.Height());
 
-    return aBuffer.makeStringAndClear();
+    return sStr;
 }
 
 }
