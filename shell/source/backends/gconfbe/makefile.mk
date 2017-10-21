@@ -42,7 +42,7 @@ CFLAGS+=-DENABLE_LOCKDOWN
 
 .IF "$(ENABLE_GCONF)"!=""
 COMPILER_WARN_ALL=TRUE
-PKGCONFIG_MODULES=gconf-2.0 gobject-2.0 ORBit-2.0 glib-2.0
+PKGCONFIG_MODULES=gconf-2.0 gobject-2.0 glib-2.0
 .INCLUDE: pkg_config.mk
 
 .IF "$(OS)" == "SOLARIS"

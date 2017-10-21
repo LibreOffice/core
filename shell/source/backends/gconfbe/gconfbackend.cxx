@@ -57,7 +57,6 @@
 #include "uno/lbnames.h"
 
 #include "gconfaccess.hxx"
-#include "orbit.h"
 
 namespace {
 
@@ -161,10 +160,13 @@ Service::Service(): enabled_(false) {
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("system.desktop-environment"))) >>=
             desktop;
-        enabled_ = desktop.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GNOME")) &&
-            ((orbit_major_version == 2 && orbit_minor_version >= 8) ||
-             orbit_major_version > 2);
+        enabled_ = desktop.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("GNOME"))
             // ORBit-2 versions < 2.8 cause a deadlock with the gtk+ VCL plugin
+            // But ORBit-2 version 2.8 was released in 2003 and ORBit is almost obsolete now.
+            /* &&
+            ((orbit_major_version == 2 && orbit_minor_version >= 8) ||
+             orbit_major_version > 2)*/;
+
     }
 }
 
