@@ -29,7 +29,7 @@
 #define JOBSETUP_SYSTEM_UNIX        3
 #define JOBSETUP_SYSTEM_MAC         4
 
-class ImplJobSetup
+class VCL_PLUGIN_PUBLIC ImplJobSetup
 {
 private:
     sal_uInt16      mnSystem;           //< System - JOBSETUP_SYSTEM_xxxx

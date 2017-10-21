@@ -87,6 +87,12 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_kde5 \
 ))
 endif
+ifneq ($(ENABLE_KF5),)
+$(eval $(call gb_Module_add_targets,vcl,\
+    CustomTarget_kf5_moc \
+    Library_vclplug_kf5 \
+))
+endif
 endif
 
 ifeq ($(OS),MACOSX)
