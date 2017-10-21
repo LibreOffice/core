@@ -1168,11 +1168,11 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                 {
                     // now check if the current content size is possible, or 6 bytes too small
                     sal_uInt32  nOldPos = rIn.Tell();
-                    sal_Int16   nNumElem, nNumElemReserved, nSize;
 
-                    rIn.Seek( nComplexDataFilePos );
-                    rIn. ReadInt16( nNumElem ).ReadInt16( nNumElemReserved ).ReadInt16( nSize );
-                    if ( nNumElemReserved >= nNumElem )
+                    sal_Int16 nNumElem(0), nNumElemReserved(0), nSize(0);
+                    if (checkSeek(rIn, nComplexDataFilePos))
+                        rIn.ReadInt16(nNumElem).ReadInt16(nNumElemReserved).ReadInt16(nSize);
+                    if (nNumElemReserved >= nNumElem)
                     {
                         // the size of these array elements is nowhere defined,
                         // what if the size is negative ?
