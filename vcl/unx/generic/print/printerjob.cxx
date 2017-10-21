@@ -158,7 +158,7 @@ PrinterJob::IsColorPrinter () const
 osl::File*
 PrinterJob::GetCurrentPageBody ()
 {
-    return maPageList.back();
+    return maPageVector.back();
 }
 
 /*
@@ -239,16 +239,13 @@ createSpoolDir ()
 
 PrinterJob::~PrinterJob ()
 {
-    std::list< osl::File* >::iterator pPage;
-    for (pPage = maPageList.begin(); pPage != maPageList.end(); ++pPage)
+    for (auto const& page : maPageVector)
     {
-        //(*pPage)->remove();
-        delete *pPage;
+        delete page;
     }
-    for (pPage = maHeaderList.begin(); pPage != maHeaderList.end(); ++pPage)
+    for (auto const& header : maHeaderVector)
     {
-        //(*pPage)->remove();
-        delete *pPage;
+        delete header;
     }
     // mpJobHeader->remove();
     delete mpJobHeader;
@@ -406,7 +403,7 @@ bool
 PrinterJob::EndJob()
 {
     // no pages ? that really means no print job
-    if( maPageList.empty() )
+    if( maPageVector.empty() )
         return false;
 
     // write document setup (done here because it
@@ -429,7 +426,7 @@ PrinterJob::EndJob()
     else
         aTrailer.append("\n%%Orientation: Portrait");
     aTrailer.append( "\n%%Pages: " );
-    aTrailer.append( (sal_Int32)maPageList.size() );
+    aTrailer.append( (sal_Int32)maPageVector.size() );
     aTrailer.append( "\n%%EOF\n" );
     WritePS (mpJobTrailer, aTrailer.getStr());
 
@@ -485,10 +482,10 @@ PrinterJob::EndJob()
     mpJobHeader->close();
 
     bool bSuccess = true;
-    std::list< osl::File* >::iterator pPageBody;
-    std::list< osl::File* >::iterator pPageHead;
-    for (pPageBody  = maPageList.begin(), pPageHead  = maHeaderList.begin();
-         pPageBody != maPageList.end() && pPageHead != maHeaderList.end();
+    std::vector< osl::File* >::iterator pPageBody;
+    std::vector< osl::File* >::iterator pPageHead;
+    for (pPageBody  = maPageVector.begin(), pPageHead  = maHeaderVector.begin();
+         pPageBody != maPageVector.end() && pPageHead != maHeaderVector.end();
          ++pPageBody, ++pPageHead)
     {
         if( *pPageHead )
@@ -573,14 +570,14 @@ PrinterJob::StartPage (const JobData& rJobSetup)
 {
     InitPaperSize (rJobSetup);
 
-    OUString aPageNo = OUString::number ((sal_Int32)maPageList.size()+1); // sequential page number must start with 1
+    OUString aPageNo = OUString::number ((sal_Int32)maPageVector.size()+1); // sequential page number must start with 1
     OUString aExt    = aPageNo + ".ps";
 
     osl::File* pPageHeader = CreateSpoolFile ( "psp_pghead", aExt);
     osl::File* pPageBody   = CreateSpoolFile ( "psp_pgbody", aExt);
 
-    maHeaderList.push_back (pPageHeader);
-    maPageList.push_back (pPageBody);
+    maHeaderVector.emplace_back (pPageHeader);
+    maPageVector.emplace_back (pPageBody);
 
     if( ! (pPageHeader && pPageBody) )
         return;
@@ -624,7 +621,7 @@ PrinterJob::StartPage (const JobData& rJobSetup)
      *  different.
      */
     bool bWriteFeatures = true;
-    if( 1 == maPageList.size() )
+    if( 1 == maPageVector.size() )
     {
         m_aDocumentJobData = rJobSetup;
         bWriteFeatures = false;
@@ -639,8 +636,8 @@ PrinterJob::StartPage (const JobData& rJobSetup)
 bool
 PrinterJob::EndPage ()
 {
-    osl::File* pPageHeader = maHeaderList.back();
-    osl::File* pPageBody   = maPageList.back();
+    osl::File* pPageHeader = maHeaderVector.back();
+    osl::File* pPageBody   = maPageVector.back();
 
     if( ! (pPageBody && pPageHeader) )
         return false;
