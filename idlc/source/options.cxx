@@ -368,7 +368,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
   return true;
 }
 
-OString Options::prepareHelp()
+OString Options::prepareHelp() const
 {
     OString help("\nusing: ");
     help += m_program + " [-options] <file_1> ... <file_n> | @<filename> | -stdin\n";
@@ -402,7 +402,7 @@ OString Options::prepareHelp()
     return help;
 }
 
-OString Options::prepareVersion()
+OString Options::prepareVersion() const
 {
     OString version(m_program);
     version += " Version 1.1\n\n";
@@ -410,7 +410,7 @@ OString Options::prepareVersion()
 }
 
 
-bool Options::isValid(const OString& option)
+bool Options::isValid(const OString& option) const
 {
     return (m_options.count(option) > 0);
 }

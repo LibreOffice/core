@@ -68,7 +68,7 @@ public:
         { return m_localName; }
     const OString&   getScopedName() const
         { return m_scopedName; }
-    const OString&   getFullName()
+    const OString&   getFullName() const
         { return m_fullName; }
     virtual const sal_Char* getRelativName() const
         { return m_fullName.getStr()+1; }
@@ -108,7 +108,7 @@ public:
 
     virtual bool dump(RegistryKey& rKey);
 
-    bool isPredefined() { return m_bPredefined; }
+    bool isPredefined() const { return m_bPredefined; }
     void setPredefined(bool bPredefined);
 
 protected:
