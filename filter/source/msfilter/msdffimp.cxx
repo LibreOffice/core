@@ -5950,7 +5950,8 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                 // now save the info for later access
                 m_pBLIPInfos->push_back(SvxMSDffBLIPInfo(nBLIPPos));
             }
-            rSt.SeekRel( nLength );
+            if (!checkSeek(rSt, rSt.Tell() + nLength))
+                return; // invalid offset
         }
         else return; // invalid input
     }
