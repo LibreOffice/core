@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_4dcd7e5c",
+        "filename": "vcl/unx/generic/fontmanager/fontmanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-10-21T18:37:29Z",
+      "side": 1,
+      "message": "sure about this change?",
+      "revId": "7a3ee55941e6899e4265f5243415c006b127ec09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
