@@ -20,12 +20,31 @@
 #pragma once
 
 #include <unx/geninst.h>
+#include <salusereventlist.hxx>
+
+#include <osl/conditn.hxx>
+
+#include <QtCore/QObject>
 
 class SalYieldMutex;
 class SalFrame;
 
-class Kf5Instance : public SalGenericInstance
+class Kf5Instance
+    : public QObject
+    , public SalGenericInstance
+    , public SalUserEventList
 {
+    Q_OBJECT
+
+    osl::Condition m_aWaitingYieldCond;
+    int m_postUserEventId;
+
+private Q_SLOTS:
+    bool ImplYield( bool bWait, bool bHandleAllCurrentEvents );
+
+Q_SIGNALS:
+    bool ImplYieldSignal( bool bWait, bool bHandleAllCurrentEvents );
+
 public:
     explicit Kf5Instance( SalYieldMutex* pMutex );
     virtual ~Kf5Instance() override;
@@ -70,6 +89,10 @@ public:
     virtual GenPspGraphics *CreatePrintGraphics() override;
 
     virtual bool            IsMainThread() const override;
+
+    virtual void            TriggerUserEventProcessing() override;
+    virtual void            ProcessEvent( SalUserEvent aEvent ) override;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
