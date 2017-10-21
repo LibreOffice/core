@@ -722,14 +722,13 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
 
 void GenPspGraphics::GetDevFontList( PhysicalFontCollection *pFontCollection )
 {
-    ::std::list< psp::fontID > aList;
+    ::std::vector< psp::fontID > aList;
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     rMgr.getFontList( aList );
 
-    ::std::list< psp::fontID >::iterator it;
     psp::FastPrintFontInfo aInfo;
-    for (it = aList.begin(); it != aList.end(); ++it)
-        if (rMgr.getFontFastInfo (*it, aInfo))
+    for (auto const& elem : aList)
+        if (rMgr.getFontFastInfo (elem, aInfo))
             AnnounceFonts( pFontCollection, aInfo );
 
     // register platform specific font substitutions if available
@@ -851,9 +850,8 @@ FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo
     aDFA.SetQuality(512);
 
     // add font family name aliases
-    ::std::list< OUString >::const_iterator it = rInfo.m_aAliases.begin();
-    for(; it != rInfo.m_aAliases.end(); ++it )
-        aDFA.AddMapName( *it );
+    for (auto const& alias : rInfo.m_aAliases)
+        aDFA.AddMapName(alias);
 
 #if OSL_DEBUG_LEVEL > 2
     if( aDFA.HasMapNames() )
