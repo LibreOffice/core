@@ -43,7 +43,7 @@ namespace rtl
 
         /** Retrieves a bootstrap parameter
            @param sName name of the bootstrap value. case insensitive.
-           @param outValue (out parameter). On success contains the value, otherwise
+           @param[out] outValue On success contains the value, otherwise
                   an empty string.
            @return false, if no value could be retrieved, otherwise true
            @see rtl_bootstrap_get()
@@ -55,9 +55,9 @@ namespace rtl
         /** Retrieves a bootstrap parameter
 
            @param sName name of the bootstrap value. case insensitive.
-           @param outValue (out parameter). Contains the value associated with sName.
-           @param aDefault if none of the other methods retrieved a value, outValue
-                           is assigned to a Default.
+           @param[out] outValue Contains the value associated with <code>sName</code>.
+           @param aDefault if none of the other methods retrieved a value,
+                           <code>outValue</code> is assigned to <code>aDefault</code>.
 
            @see rtl_bootstrap_get()
          */
@@ -118,14 +118,14 @@ namespace rtl
 
         /** Expands a macro using bootstrap variables.
 
-            @param macro    [inout]  The macro to be expanded
+            @param[in,out] macro The macro to be expanded
         */
         void expandMacrosFrom( ::rtl::OUString & macro ) const
             { rtl_bootstrap_expandMacros_from_handle( _handle, &macro.pData ); }
 
         /** Expands a macro using default bootstrap variables.
 
-            @param macro    [inout]  The macro to be expanded
+            @param[in,out] macro The macro to be expanded
         */
         static void expandMacros( ::rtl::OUString & macro )
             { rtl_bootstrap_expandMacros( &macro.pData ); }
