@@ -179,7 +179,7 @@ private:
        glyph in one of the subfonts, the mapping from unicode to the
        glyph has to be remembered */
 
-    std::list< GlyphSet > maPS3Font;
+    std::vector< GlyphSet > maPS3Font;
 
     sal_Int32       mnFontID;
     sal_Int32       mnTextAngle;
