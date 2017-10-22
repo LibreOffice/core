@@ -682,11 +682,6 @@ bool RedundantCast::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    // ignore dynamic_cast<T1>(static_cast<T1>(void*)), it's necessary
-    if (auto subStaticCast = dyn_cast<CXXStaticCastExpr>(expr->getSubExpr())) {
-        if (loplugin::TypeCheck(subStaticCast->getSubExpr()->getType()).Pointer().Void())
-            return true;
-    }
     // so far this only deals with dynamic casting from T to T
     auto const sub = compat::getSubExprAsWritten(expr);
     auto const t1 = expr->getTypeAsWritten();

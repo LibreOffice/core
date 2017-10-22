@@ -333,15 +333,11 @@ void testDynamicCast() {
 
     S1 * s1 = nullptr;
     S2 * s2 = nullptr;
-    void * v1 = nullptr;
 
     (void) dynamic_cast<S2 *>(s1);
     (void) dynamic_cast<S1 *>(s2);
     (void) dynamic_cast<S2 *>(s2); // expected-error {{redundant dynamic cast from 'S2 *' to 'S2 *' [loplugin:redundantcast]}}
     (void) dynamic_cast<S3 *>(s2);
-    // used in some assert in vcl
-    (void) dynamic_cast<S1 *>(static_cast<S1*>(v1));
-    (void) dynamic_cast<S2 *>(static_cast<S2*>(s1));  // expected-error {{redundant dynamic cast from 'S2 *' to 'S2 *' [loplugin:redundantcast]}}
 }
 
 int main() {
