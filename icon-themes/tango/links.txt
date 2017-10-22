@@ -621,3 +621,6 @@ cmd/sc_numberformatmenu.png cmd/sc_numberformatdecimal.png
 cmd/sc_formatimagemenu.png cmd/sc_insertgraphic.png
 cmd/sc_formatframemenu.png cmd/sc_inserttextframe.png
 
+cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
+cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
+
