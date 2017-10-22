@@ -118,13 +118,11 @@ namespace
 {
     bool lcl_IsContent(const SvTreeListEntry* pEntry)
     {
-        assert(dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
         return static_cast<const SwTypeNumber*>(pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
     }
 
     bool lcl_IsContentType(const SvTreeListEntry* pEntry)
     {
-        assert(dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
         return static_cast<const SwTypeNumber*>(pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
     }
 
@@ -1385,7 +1383,6 @@ void SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                                     )
                                 {
                                     pChild = Prev(pChild);
-                                    assert(!pChild || dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pChild->GetUserData())));
                                 }
                                 if(pChild)
                                     pChild = InsertEntry(sEntry, pChild,
@@ -1447,7 +1444,6 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
 
 bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 {
-    assert(!m_bIsRoot || dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
     if (!m_bIsRoot
         || (lcl_IsContentType(pParent) && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
         || (m_nRootType == ContentTypeId::OUTLINE))
@@ -1506,7 +1502,6 @@ bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 
 bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
-    assert(!m_bIsRoot || dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pParent->GetUserData())));
     if (!m_bIsRoot
         || (lcl_IsContentType(pParent) && static_cast<SwContentType*>(pParent->GetUserData())->GetType() == ContentTypeId::OUTLINE)
         || (m_nRootType == ContentTypeId::OUTLINE))
@@ -2428,7 +2423,6 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
                     if (nActLevel >= static_cast<SwOutlineContent*>(pEntry->GetUserData())->GetOutlineLevel())
                         break;
                     pEntry = Next(pEntry);
-                    assert(pEntry == nullptr || dynamic_cast<SwTypeNumber*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
                     nActEndPos++;
                 }
                 if (nDir == 1)
