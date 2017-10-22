@@ -99,8 +99,8 @@ const ::std::vector<OUString> sEnglishKeyword =
     "GGG",     // NF_KEY_GGG
     "R",       // NF_KEY_R
     "RR",      // NF_KEY_RR
-    "t" // NF_KEY_THAI_T Thai T modifier, speciality of Thai Excel, only used with Thai locale and converted to [NatNum1]
-};
+    "t"        // NF_KEY_THAI_T Thai T modifier, speciality of Thai Excel, only used with Thai locale and converted to [NatNum1]
+};             // only exception as lowercase
 }
 
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
