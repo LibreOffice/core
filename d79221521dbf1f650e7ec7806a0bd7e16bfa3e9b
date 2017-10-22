@@ -33,6 +33,24 @@
       "revId": "d79221521dbf1f650e7ec7806a0bd7e16bfa3e9b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_28974091",
+        "filename": "vcl/unx/generic/window/salframe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3840,
+      "author": {
+        "id": 1001697
+      },
+      "writtenOn": "2017-10-22T15:26:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a430d35_eda54a04",
+      "revId": "d79221521dbf1f650e7ec7806a0bd7e16bfa3e9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
