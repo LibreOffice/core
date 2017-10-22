@@ -155,8 +155,8 @@ double              GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_In
 /// @throws css::lang::IllegalArgumentException
 double              GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
                                 double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase );
-double              GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF );
-double              GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF );
+double              GetRmz( double fInterest, double fNper, double fPv, double fFv, sal_Int32 nPayType );
+double              GetZw( double fInterest, double fNper, double fPmt, double fPv, sal_Int32 nPayType );
 
 /// @throws css::uno::RuntimeException
 /// @throws css::lang::IllegalArgumentException
