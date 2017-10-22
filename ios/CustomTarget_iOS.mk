@@ -153,6 +153,14 @@ $(INSTDIR)/$(IOSAPP): $(IOSAPPPRJ)/project.pbxproj $(IOSGEN)/$(IOSKIT)
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/ios):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
+	$(call gb_Helper_print_on_error, \
+	    xcodebuild -xcconfig $(IOSAPPXC) -project $(IOSAPPPRJ) clean \
+	        , $(WORKDIR)/ios/build.log \
+	)
+	$(call gb_Helper_print_on_error, \
+	    xcodebuild -xcconfig $(IOSKITXC) -project $(IOSKITPRJ) clean \
+	        , $(WORKDIR)/ios/build.log \
+	)
 	rm -f $(IOSGEN)/$(IOSKIT)
 	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/project.xcworkspace
 	rm -rf $(SRCDIR)/ios/LibreOfficeKit/LibreOfficeKit.xcodeproj/xcuserdata
