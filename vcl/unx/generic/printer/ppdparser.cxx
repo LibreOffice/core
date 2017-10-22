@@ -584,7 +584,7 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
                     [pNewParser] (std::unique_ptr<PPDParser> const & x) { return x.get() == pNewParser; } ),
                 rPPDCache.aAllParsers.end());
         // insert new parser to vector
-        rPPDCache.aAllParsers.emplace_back( std::unique_ptr<PPDParser>(pNewParser) );
+        rPPDCache.aAllParsers.emplace_back(pNewParser);
     }
     return pNewParser;
 }
