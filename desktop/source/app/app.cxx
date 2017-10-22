@@ -1255,23 +1255,6 @@ struct ExecuteGlobals
 
 static ExecuteGlobals* pExecGlobals = nullptr;
 
-
-//This just calls Execute() for all normal uses of LibreOffice, but for
-//ui-testing if built with afl-clang-fast++ then on exit it will pseudo-restart
-//(up to 100 times)
-void Desktop::DoExecute()
-{
-#if !defined(__AFL_HAVE_MANUAL_CONTROL)
-    Execute();
-#else
-    while (__AFL_LOOP(1000))
-    {
-        Execute();
-        OpenDefault();
-    }
-#endif
-}
-
 int Desktop::Main()
 {
     pExecGlobals = new ExecuteGlobals();
@@ -1663,7 +1646,7 @@ int Desktop::Main()
                 // if this run of the office is triggered by restart, some additional actions should be done
                 DoRestartActionsIfNecessary( !rCmdLineArgs.IsInvisible() && !rCmdLineArgs.IsNoQuickstart() );
 
-                DoExecute();
+                Execute();
             }
         }
         catch(const css::document::CorruptedFilterConfigurationException& exFilterCfg)
