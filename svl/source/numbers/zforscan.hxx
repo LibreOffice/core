@@ -82,7 +82,11 @@ public:
     const OUString& GetFalseString() const    { return GetSpecialKeyword( NF_KEY_FALSE ); }
     const OUString& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
     const OUString& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
-    const OUString& GetErrorString() const    { return sErrStr; }
+    static const OUString& GetErrorString()   { return sErrStr; }
+    static const ::std::vector<Color> & GetStandardColor()
+        {
+            return StandardColor;
+        }
 
     const Date& GetNullDate() const           { return maNullDate; }
     const OUString& GetStandardName() const
@@ -94,7 +98,7 @@ public:
             return sNameStandardFormat;
         }
     sal_uInt16 GetStandardPrec() const          { return nStandardPrec; }
-    const Color& GetRedColor() const            { return StandardColor[4]; }
+    static const Color& GetRedColor()           { return StandardColor[4]; }
     Color* GetColor(OUString& sStr); // Set main colors or defines colors
 
     // the compatibility currency symbol for old automatic currency formats
@@ -154,7 +158,8 @@ public:
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords
     static const ::std::vector<OUString> sEnglishKeyword; // English Syntax keywords
-    Color StandardColor[NF_MAX_DEFAULT_COLORS]; // Standard color array
+    static ::std::vector<Color> StandardColor;  // Standard color array
+    static bool bStandardColorNeedInitialization; // initialize Standard color array
     Date maNullDate;                            // 30Dec1899
     OUString sNameStandardFormat;               // "Standard"
     sal_uInt16 nStandardPrec;                   // Default Precision for Standardformat
@@ -185,7 +190,7 @@ private: // Private section
     OUString sCurSymbol;                        // Currency symbol for compatibility format codes
     OUString sCurString;                        // Currency symbol in upper case
     OUString sCurAbbrev;                        // Currency abbreviation
-    OUString sErrStr;                           // String for error output
+    static const OUString sErrStr;              // String for error output
 
     bool bConvertMode;                          // Set in the convert mode
 
