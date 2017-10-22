@@ -38,9 +38,8 @@ using namespace svt;
 
 const sal_Unicode cNoBreakSpace = 0xA0;
 const sal_Unicode cNarrowNoBreakSpace = 0x202F;
-namespace
-{
-const ::std::vector<OUString> sEnglishKeyword =
+
+const ::std::vector<OUString> ImpSvNumberformatScan::sEnglishKeyword =
 {             // Syntax keywords in English (USA)
     //! All keywords MUST be UPPERCASE! In same order as NfKeywordTable
     "",        // NF_KEY_NONE 0
@@ -101,7 +100,6 @@ const ::std::vector<OUString> sEnglishKeyword =
     "RR",      // NF_KEY_RR
     "t"        // NF_KEY_THAI_T Thai T modifier, speciality of Thai Excel, only used with Thai locale and converted to [NatNum1]
 };             // only exception as lowercase
-}
 
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     : maNullDate( 30, 12, 1899)

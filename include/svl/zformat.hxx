@@ -475,6 +475,9 @@ public:
             return false;
         }
 
+    const NfKeywordTable & GetKeywords() const;
+    const ::std::vector<OUString> & GetEnglishKeywords() const;
+
 private:
     ImpSvNumFor NumFor[4];          // Array for the 4 subformats
     OUString sFormatstring;         // The format code string
