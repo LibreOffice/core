@@ -75,7 +75,7 @@ public:
 private:
     TypeCheck() = default;
 
-    clang::QualType const type_;
+    clang::QualType const type_{};
 };
 
 class DeclCheck {
