@@ -20,7 +20,6 @@ $(eval $(call gb_ExternalProject_use_externals,libvisio,\
 	icu \
 	libxml2 \
 	revenge \
-	zlib \
 ))
 
 $(call gb_ExternalProject_get_state_target,libvisio,build) :
@@ -31,6 +30,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
+			--disable-tests \
 			--disable-tools \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
