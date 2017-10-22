@@ -329,7 +329,7 @@ ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCalle
     {
         // Double check that this is indeed a vcl::Window instance.
         assert(dynamic_cast<vcl::Window *>(
-                        static_cast<vcl::Window *>(rLink.GetInstance())) ==
+                        static_cast<OutputDevice *>(rLink.GetInstance())) ==
                static_cast<vcl::Window *>(rLink.GetInstance()));
         pSVEvent->mpInstanceRef = static_cast<vcl::Window *>(rLink.GetInstance());
     }
