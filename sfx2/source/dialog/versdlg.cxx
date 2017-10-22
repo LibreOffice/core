@@ -262,7 +262,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
 OUString ConvertWhiteSpaces_Impl( const OUString& rText )
 {
     // converted linebreaks and tabs to blanks; it's necessary for the display
-    OUStringBuffer sConverted;
+    OUString sConverted;
     const sal_Unicode* pChars = rText.getStr();
     while ( *pChars )
     {
@@ -270,17 +270,16 @@ OUString ConvertWhiteSpaces_Impl( const OUString& rText )
         {
             case '\n' :
             case '\t' :
-                sConverted.append(' ');
+                sConverted += " ";
                 break;
 
             default:
-                sConverted.append(*pChars);
+                sConverted += OUString(*pChars);
         }
-
         ++pChars;
     }
 
-    return sConverted.makeStringAndClear();
+    return sConverted;
 }
 
 void SfxVersionDialog::Init_Impl()
