@@ -5541,9 +5541,20 @@ const NfKeywordTable & SvNumberformat::GetKeywords() const
 {
     return rScan.GetKeywords();
 }
+
 const ::std::vector<OUString> & SvNumberformat::GetEnglishKeywords() const
 {
     return ImpSvNumberformatScan::GetEnglishKeywords();
+}
+
+const ::std::vector<Color> & SvNumberformat::GetStandardColor() const
+{
+    return ImpSvNumberformatScan::GetStandardColor();
+}
+
+size_t SvNumberformat::GetMaxDefaultColors() const
+{
+    return ImpSvNumberformatScan::GetMaxDefaultColors();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
