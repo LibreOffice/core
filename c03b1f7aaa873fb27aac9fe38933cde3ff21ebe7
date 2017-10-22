@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_08e1a4fe",
+        "filename": "sfx2/source/dialog/versdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-22T20:22:54Z",
+      "side": 1,
+      "message": "Should be OUStringLiteral1 according to output of failed clang build.",
+      "range": {
+        "startLine": 277,
+        "startChar": 30,
+        "endLine": 277,
+        "endChar": 38
+      },
+      "revId": "c03b1f7aaa873fb27aac9fe38933cde3ff21ebe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
