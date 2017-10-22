@@ -556,10 +556,10 @@ void PrintFontManager::analyzeSfntFamilyName( void* pTTFont, ::std::vector< OUSt
     DisposeNameRecords( pNameRecords, nNameRecords );
     if( !aFamily.isEmpty() )
     {
-        rNames.emplace_back( aFamily );
+        rNames.push_back( aFamily );
         for (auto const& elem : aSet)
             if( elem != aFamily )
-                rNames.emplace_back(elem);
+                rNames.push_back(elem);
     }
 }
 
@@ -783,7 +783,7 @@ void PrintFontManager::getFontList( ::std::vector< fontID >& rFontIDs )
     std::unordered_map< fontID, PrintFont* >::const_iterator it;
 
     for (auto const& font : m_aFonts)
-        rFontIDs.emplace_back(font.first);
+        rFontIDs.push_back(font.first);
 }
 
 void PrintFontManager::fillPrintFontInfo(PrintFont* pFont, FastPrintFontInfo& rInfo)
