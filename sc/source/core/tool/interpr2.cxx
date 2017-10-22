@@ -1592,7 +1592,7 @@ void ScInterpreter::ScISPMT()
 }
 
 // financial functions
-double ScInterpreter::ScGetBw(double fInterest, double fNper, double fPmt,
+double ScInterpreter::ScGetPV(double fInterest, double fNper, double fPmt,
                               double fFv, bool bPayInAdvance)
 {
     double fPv;
@@ -1626,7 +1626,7 @@ void ScInterpreter::ScPV()
     nPmt   = GetDouble();
     nNper  = GetDouble();
     nInterest = GetDouble();
-    PushDouble(ScGetBw(nInterest, nNper, nPmt, nFv, bPayInAdvance));
+    PushDouble(ScGetPV(nInterest, nNper, nPmt, nFv, bPayInAdvance));
 }
 
 void ScInterpreter::ScSYD()
@@ -1644,7 +1644,7 @@ void ScInterpreter::ScSYD()
     }
 }
 
-double ScInterpreter::ScGetGDA(double fValue, double fRest, double fTimeLength,
+double ScInterpreter::ScGetDDB(double fValue, double fRest, double fTimeLength,
                 double fPeriod, double fFactor)
 {
     double fDdb, fInterest, fOldValue, fNewValue;
@@ -1689,7 +1689,7 @@ void ScInterpreter::ScDDB()
                         || nPeriod < 1.0 || nPeriod > nTimeLength)
             PushIllegalArgument();
         else
-            PushDouble(ScGetGDA(nValue, nRest, nTimeLength, nPeriod, nFactor));
+            PushDouble(ScGetDDB(nValue, nRest, nTimeLength, nPeriod, nFactor));
     }
 }
 
@@ -1756,7 +1756,7 @@ double ScInterpreter::ScInterVDB(double fValue,double fRest,double fTimeLength,
     {
         if(!bNowSln)
         {
-            fDdb = ScGetGDA(fValue, fRest, fTimeLength, (double) i, fFactor);
+            fDdb = ScGetDDB(fValue, fRest, fTimeLength, (double) i, fFactor);
             fSln = fSalvageValue/ (fTimeLength1 - (double) (i-1));
 
             if (fSln > fDdb)
@@ -1824,7 +1824,7 @@ void ScInterpreter::ScVDB()
             {
                 for (sal_uLong i = nLoopStart + 1; i <= nLoopEnd; i++)
                 {
-                    double fTerm = ScGetGDA(fValue, fRest, fTimeLength, (double) i, fFactor);
+                    double fTerm = ScGetDDB(fValue, fRest, fTimeLength, (double) i, fFactor);
 
                     //respect partial period in the Beginning/ End:
                     if ( i == nLoopStart+1 )
@@ -1900,7 +1900,7 @@ void ScInterpreter::ScSLN()
     }
 }
 
-double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
+double ScInterpreter::ScGetPMT(double fRate, double fNper, double fPv,
                        double fFv, bool bPayInAdvance)
 {
     double fPayment;
@@ -1933,7 +1933,7 @@ void ScInterpreter::ScPMT()
     nPv    = GetDouble();
     nNper  = GetDouble();
     nInterest = GetDouble();
-    PushDouble(ScGetRmz(nInterest, nNper, nPv, nFv, bFlag));
+    PushDouble(ScGetPMT(nInterest, nNper, nPv, nFv, bFlag));
 }
 
 void ScInterpreter::ScRRI()
@@ -1951,7 +1951,7 @@ void ScInterpreter::ScRRI()
     }
 }
 
-double ScInterpreter::ScGetZw(double fInterest, double fNper, double fPmt,
+double ScInterpreter::ScGetFV(double fInterest, double fNper, double fPmt,
                               double fPv, bool bFlag)
 {
     double fFv;
@@ -1983,7 +1983,7 @@ void ScInterpreter::ScFV()
     nPmt   = GetDouble();
     nNper  = GetDouble();
     nInterest = GetDouble();
-    PushDouble(ScGetZw(nInterest, nNper, nPmt, nPv, bFlag));
+    PushDouble(ScGetFV(nInterest, nNper, nPmt, nPv, bFlag));
 }
 
 void ScInterpreter::ScNper()
@@ -2176,7 +2176,7 @@ void ScInterpreter::ScRate()
 double ScInterpreter::ScGetCompoundInterest(double fInterest, double fPer, double fNper, double fPv,
                                  double fFv, bool bPayInAdvance, double& fPmt)
 {
-    fPmt = ScGetRmz(fInterest, fNper, fPv, fFv, bPayInAdvance);     // for PPMT also if fPer == 1
+    fPmt = ScGetPMT(fInterest, fNper, fPv, fFv, bPayInAdvance);     // for PPMT also if fPer == 1
     double fCompoundInterest;
     nFuncFmtType = css::util::NumberFormat::CURRENCY;
     if (fPer == 1.0)
@@ -2189,9 +2189,9 @@ double ScInterpreter::ScGetCompoundInterest(double fInterest, double fPer, doubl
     else
     {
         if (bPayInAdvance)
-            fCompoundInterest = ScGetZw(fInterest, fPer-2.0, fPmt, fPv, true) - fPmt;
+            fCompoundInterest = ScGetFV(fInterest, fPer-2.0, fPmt, fPv, true) - fPmt;
         else
-            fCompoundInterest = ScGetZw(fInterest, fPer-1.0, fPmt, fPv, false);
+            fCompoundInterest = ScGetFV(fInterest, fPer-1.0, fPmt, fPv, false);
     }
     return fCompoundInterest * fInterest;
 }
@@ -2268,7 +2268,7 @@ void ScInterpreter::ScCumIpmt()
             bool bPayInAdvance = ( bool ) fFlag;
             sal_uLong nStart = (sal_uLong) fStart;
             sal_uLong nEnd = (sal_uLong) fEnd ;
-            double fPmt = ScGetRmz(fInterest, fNper, fPv, 0.0, bPayInAdvance);
+            double fPmt = ScGetPMT(fInterest, fNper, fPv, 0.0, bPayInAdvance);
             double fCompoundInterest = 0.0;
             if (nStart == 1)
             {
@@ -2279,9 +2279,9 @@ void ScInterpreter::ScCumIpmt()
             for (sal_uLong i = nStart; i <= nEnd; i++)
             {
                 if (bPayInAdvance)
-                    fCompoundInterest += ScGetZw(fInterest, (double)(i-2), fPmt, fPv, true) - fPmt;
+                    fCompoundInterest += ScGetFV(fInterest, (double)(i-2), fPmt, fPv, true) - fPmt;
                 else
-                    fCompoundInterest += ScGetZw(fInterest, (double)(i-1), fPmt, fPv, false);
+                    fCompoundInterest += ScGetFV(fInterest, (double)(i-1), fPmt, fPv, false);
             }
             fCompoundInterest *= fInterest;
             PushDouble(fCompoundInterest);
@@ -2308,7 +2308,7 @@ void ScInterpreter::ScCumPrinc()
         else
         {
             bool bPayInAdvance = ( bool ) fFlag;
-            double fPmt = ScGetRmz(fInterest, fNper, fPv, 0.0, bPayInAdvance);
+            double fPmt = ScGetPMT(fInterest, fNper, fPv, 0.0, bPayInAdvance);
             double fPpmt = 0.0;
             sal_uLong nStart = (sal_uLong) fStart;
             sal_uLong nEnd = (sal_uLong) fEnd;
@@ -2323,9 +2323,9 @@ void ScInterpreter::ScCumPrinc()
             for (sal_uLong i = nStart; i <= nEnd; i++)
             {
                 if (bPayInAdvance)
-                    fPpmt += fPmt - (ScGetZw(fInterest, (double)(i-2), fPmt, fPv, true) - fPmt) * fInterest;
+                    fPpmt += fPmt - (ScGetFV(fInterest, (double)(i-2), fPmt, fPv, true) - fPmt) * fInterest;
                 else
-                    fPpmt += fPmt - ScGetZw(fInterest, (double)(i-1), fPmt, fPv, false) * fInterest;
+                    fPpmt += fPmt - ScGetFV(fInterest, (double)(i-1), fPmt, fPv, false) * fInterest;
             }
             PushDouble(fPpmt);
         }
