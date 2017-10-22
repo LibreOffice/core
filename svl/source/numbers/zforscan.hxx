@@ -87,6 +87,10 @@ public:
         {
             return StandardColor;
         }
+    static size_t GetMaxDefaultColors()
+        {
+            return NF_MAX_DEFAULT_COLORS;
+        }
 
     const Date& GetNullDate() const           { return maNullDate; }
     const OUString& GetStandardName() const

@@ -37,6 +37,7 @@
 #include <svl/zformat.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <svl/sharedstring.hxx>
+#include <tools/color.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <memory>
@@ -65,6 +66,7 @@ public:
     void testIsNumberFormat();
     void testUserDefinedNumberFormats();
     void testNfEnglishKeywordsIntegrity();
+    void testStandardColorIntegrity();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
@@ -78,6 +80,7 @@ public:
     CPPUNIT_TEST(testIsNumberFormat);
     CPPUNIT_TEST(testUserDefinedNumberFormats);
     CPPUNIT_TEST(testNfEnglishKeywordsIntegrity);
+    CPPUNIT_TEST(testStandardColorIntegrity);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1449,6 +1452,27 @@ void Test::testNfEnglishKeywordsIntegrity()
     CPPUNIT_ASSERT_EQUAL( sEnglishKeywords[NF_KEY_R], OUString("R") );
     CPPUNIT_ASSERT_EQUAL( sEnglishKeywords[NF_KEY_RR], OUString("RR") );
     CPPUNIT_ASSERT_EQUAL( sEnglishKeywords[NF_KEY_THAI_T], OUString("t") );
+}
+
+void Test::testStandardColorIntegrity()
+{
+    SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
+    const SvNumberformat* pNumberFormat = aFormatter.GetEntry(0);
+    const ::std::vector<Color> & aStandardColors = pNumberFormat->GetStandardColor();
+    const size_t nMaxDefaultColors = pNumberFormat->GetMaxDefaultColors();
+    CPPUNIT_ASSERT_EQUAL( nMaxDefaultColors, size_t(NF_KEY_LASTCOLOR) - size_t(NF_KEY_FIRSTCOLOR) + 1 );
+    CPPUNIT_ASSERT_EQUAL( nMaxDefaultColors, aStandardColors.size() );
+    // Colors must follow same order as in sEnglishKeyword
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[0].GetColor(), COL_BLACK );
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[1].GetColor(), COL_LIGHTBLUE );
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[2].GetColor(), COL_LIGHTGREEN );
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[3].GetColor(), COL_LIGHTCYAN );
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[4].GetColor(), COL_LIGHTRED );
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[5].GetColor(), COL_LIGHTMAGENTA );
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[6].GetColor(), COL_BROWN );
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[7].GetColor(), COL_GRAY );
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[8].GetColor(), COL_YELLOW );
+    CPPUNIT_ASSERT_EQUAL( aStandardColors[9].GetColor(), COL_WHITE );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
