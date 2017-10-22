@@ -1216,6 +1216,7 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         {
             eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             lcl_set_accept_focus( GTK_WINDOW(m_pWindow), false, true );
+            gtk_window_set_decorated( GTK_WINDOW(m_pWindow), false );
         }
         if( (nStyle & SalFrameStyleFlags::PARTIAL_FULLSCREEN )
             && getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
