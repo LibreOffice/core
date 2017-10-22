@@ -576,8 +576,8 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     osl::File* pPageHeader = CreateSpoolFile ( "psp_pghead", aExt);
     osl::File* pPageBody   = CreateSpoolFile ( "psp_pgbody", aExt);
 
-    maHeaderVector.emplace_back (pPageHeader);
-    maPageVector.emplace_back (pPageBody);
+    maHeaderVector.push_back (pPageHeader);
+    maPageVector.push_back (pPageBody);
 
     if( ! (pPageHeader && pPageBody) )
         return;

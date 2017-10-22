@@ -463,7 +463,7 @@ void PrinterInfoManager::initialize()
                 if( find_it != m_aPrinters.end() )
                 {
                     aPrinter.m_aAlternateFiles = find_it->second.m_aAlternateFiles;
-                    aPrinter.m_aAlternateFiles.emplace( find_it->second.m_aFile );
+                    aPrinter.m_aAlternateFiles.insert( find_it->second.m_aFile );
                 }
                 m_aPrinters[ aPrinterName ] = aPrinter;
             }
@@ -629,7 +629,7 @@ bool PrinterInfoManager::writePrinterConfig()
                     // update alternate file list
                     // be sure m_aAlternateFiles doesn't contain the m_aFile value
                     it->second.m_aAlternateFiles.erase( files.begin()->first );
-                    it->second.m_aAlternateFiles.emplace( it->second.m_aFile );
+                    it->second.m_aAlternateFiles.insert( it->second.m_aFile );
                     // update file
                     it->second.m_aFile = files.begin()->first;
                 }
