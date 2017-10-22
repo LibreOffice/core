@@ -18,6 +18,9 @@
     <style:style style:name="Footnote" style:family="table-cell" style:parent-style-name="Text">
         <style:text-properties fo:color="#808080" fo:font-style="italic"/>
     </style:style>
+    <style:style style:name="Hyperlink" style:family="table-cell" style:parent-style-name="Text">
+        <style:text-properties fo:color="#0000ee" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+    </style:style>
 
 <style:style style:name="Status" style:family="table-cell" style:parent-style-name="Default"/>
     <style:style style:name="Good" style:family="table-cell" style:parent-style-name="Status">
