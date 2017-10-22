@@ -771,11 +771,11 @@ private:
     void ScMIRR();
     void ScISPMT();
 
-    static double ScGetBw(double fInterest, double fNper, double fPmt,
+    static double ScGetPV(double fInterest, double fNper, double fPmt,
                           double fFv, bool bPayInAdvance);
     void ScPV();
     void ScSYD();
-    static double ScGetGDA(double fValue, double fRest, double fTimeLength,
+    static double ScGetDDB(double fValue, double fRest, double fTimeLength,
                            double fPeriod, double fFactor);
     void ScDDB();
     void ScDB();
@@ -784,11 +784,11 @@ private:
     void ScVDB();
     void ScPDuration();
     void ScSLN();
-    static double ScGetRmz(double fInterest, double fNper, double fPv,
+    static double ScGetPMT(double fInterest, double fNper, double fPv,
                            double fFv, bool bPayInAdvance);
     void ScPMT();
     void ScRRI();
-    static double ScGetZw(double fInterest, double fNper, double fPmt,
+    static double ScGetFV(double fInterest, double fNper, double fPmt,
                           double fPv, bool bFlag);
     void ScFV();
     void ScNper();
