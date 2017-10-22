@@ -433,8 +433,19 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
         case 90 :
         {
             nCount = rDGR.GetI();
-            if ( nCount )
-                pP = new DXFVector[ nCount ];
+            if ( rDGR.GetStatus() && nCount >= 0 )
+            {
+                try
+                {
+                    pP = new DXFVector[ nCount ];
+                }
+                catch (::std::bad_alloc)
+                {
+                    rDGR.SetError();
+                }
+            }
+            else
+                rDGR.SetError();
         }
         break;
         case 70: nFlags = rDGR.GetI(); break;
@@ -611,8 +622,19 @@ sal_Bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             case 93 :
             {
                 nPointCount = rDGR.GetI();
-                if ( nPointCount )
-                    pP = new DXFVector[ nPointCount ];
+                if ( rDGR.GetStatus() && nPointCount >= 0 )
+                {
+                    try
+                    {
+                        pP = new DXFVector[ nPointCount ];
+                    }
+                    catch (::std::bad_alloc)
+                    {
+                        rDGR.SetError();
+                    }
+                }
+                else
+                    rDGR.SetError();
             }
             break;
             case 72 : nHasBulgeFlag = rDGR.GetI(); break;
@@ -690,8 +712,19 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
         {
             bIsInBoundaryPathContext = sal_True;
             nBoundaryPathCount = rDGR.GetI();
-            if ( nBoundaryPathCount )
-                pBoundaryPathData = new DXFBoundaryPathData[ nBoundaryPathCount ];
+            if ( rDGR.GetStatus() && nBoundaryPathCount >= 0 )
+            {
+                try
+                {
+                    pBoundaryPathData = new DXFBoundaryPathData[ nBoundaryPathCount ];
+                }
+                catch (::std::bad_alloc)
+                {
+                    rDGR.SetError();
+                }
+            }
+            else
+                rDGR.SetError();
         }
         break;
         case 75 :

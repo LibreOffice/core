@@ -299,7 +299,6 @@ void DXFGroupReader::ReadLine(char * ptgt)
 long DXFGroupReader::ReadI()
 {
     char sl[DXF_MAX_STRING_LEN+1],*p;
-    long res,nv;
 
     ReadLine(sl);
 
@@ -312,17 +311,23 @@ long DXFGroupReader::ReadI()
         return 0;
     }
 
+    char *start = p;
     if (*p=='-') {
-        nv=-1;
         p++;
     }
-    else nv=1;
-
-    res=0;
-    do {
-        res=res*10+(long)(*p-'0');
+    while (*p>='0' && *p<='9') {
         p++;
-    } while (*p>='0' && *p<='9');
+    }
+
+    char prev = *p;
+    *p = '\0';
+    char *end;
+    long res = strtol(start, &end, 10);
+    *p = prev;
+    if (end != p) {
+        bStatus=sal_False;
+        return 0;
+    }
 
     while (*p==0x20) p++;
     if (*p!=0) {
@@ -330,7 +335,7 @@ long DXFGroupReader::ReadI()
         return 0;
     }
 
-    return res*nv;
+    return res;
 }
 
 
