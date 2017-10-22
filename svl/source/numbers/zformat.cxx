@@ -5537,4 +5537,13 @@ const SvNumberFormatter& SvNumberformat::GetFormatter() const
     return *rScan.GetNumberformatter();
 }
 
+const NfKeywordTable & SvNumberformat::GetKeywords() const
+{
+    return rScan.GetKeywords();
+}
+const ::std::vector<OUString> & SvNumberformat::GetEnglishKeywords() const
+{
+    return ImpSvNumberformatScan::GetEnglishKeywords();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

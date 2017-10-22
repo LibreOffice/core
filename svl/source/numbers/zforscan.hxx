@@ -65,6 +65,10 @@ public:
             }
             return sKeyword;
         }
+    static const ::std::vector<OUString> & GetEnglishKeywords()
+        {
+            return sEnglishKeyword;
+        }
     // Keywords used in output like true and false
     const OUString& GetSpecialKeyword( NfKeywordIndex eIdx ) const
         {
@@ -149,6 +153,7 @@ public:
 
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords
+    static const ::std::vector<OUString> sEnglishKeyword; // English Syntax keywords
     Color StandardColor[NF_MAX_DEFAULT_COLORS]; // Standard color array
     Date maNullDate;                            // 30Dec1899
     OUString sNameStandardFormat;               // "Standard"
