@@ -288,9 +288,14 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
 
     OUString aWinData = "V"
         + OUString::number(static_cast<sal_Int32>(nVersion))
-        + ","
-        + OUString(rInfo.bVisible ? "V" : "H")
-        + ","
+        + ",";
+
+    if( rInfo.bVisible )
+        aWinData+="V";
+    else
+        aWinData+="H";
+
+    aWinData += ","
         + OUString::number(static_cast<sal_Int32>(rInfo.nFlags));
 
     if ( !rInfo.aExtraString.isEmpty() )
