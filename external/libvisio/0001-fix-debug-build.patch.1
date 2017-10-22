@@ -1,0 +1,40 @@
+From 15f3774513d0181ad90da382297c175cc3424462 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sun, 22 Oct 2017 21:24:43 +0200
+Subject: [PATCH] fix debug build
+
+Change-Id: I860b6034e5d833900652aec8c3647eeae185e538
+---
+ src/lib/VDXParser.cpp  | 2 +-
+ src/lib/VSDXParser.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/VDXParser.cpp b/src/lib/VDXParser.cpp
+index f2f3154..0f07efd 100644
+--- a/src/lib/VDXParser.cpp
++++ b/src/lib/VDXParser.cpp
+@@ -916,7 +916,7 @@ xmlChar *libvisio::VDXParser::readStringData(xmlTextReaderPtr reader)
+     ret = xmlTextReaderRead(reader);
+     if (1 == ret && stringValue)
+     {
+-      VSD_DEBUG_MSG(("VDXParser::readStringData stringValue %s\n", (const char *)stringValue));
++      VSD_DEBUG_MSG(("VDXParser::readStringData stringValue %s\n", (const char *)stringValue.get()));
+       return stringValue.release();
+     }
+   }
+diff --git a/src/lib/VSDXParser.cpp b/src/lib/VSDXParser.cpp
+index 488be3a..efd46b9 100644
+--- a/src/lib/VSDXParser.cpp
++++ b/src/lib/VSDXParser.cpp
+@@ -555,7 +555,7 @@ xmlChar *libvisio::VSDXParser::readStringData(xmlTextReaderPtr reader)
+   std::unique_ptr<xmlChar, void (*)(void *)> stringValue(xmlTextReaderGetAttribute(reader, BAD_CAST("V")), xmlFree);
+   if (stringValue)
+   {
+-    VSD_DEBUG_MSG(("VSDXParser::readStringData stringValue %s\n", (const char *)stringValue));
++    VSD_DEBUG_MSG(("VSDXParser::readStringData stringValue %s\n", (const char *)stringValue.get()));
+     return stringValue.release();
+   }
+   return nullptr;
+-- 
+2.14.1
+
