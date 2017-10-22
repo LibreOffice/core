@@ -155,11 +155,6 @@ class Desktop : public Application
         */
         void                    CheckFirstRun( );
 
-        /** for ui-testing provide a mechanism to pseudo-restart by closing the
-            open frames and reopen the frame that appeared post initial startup
-        */
-        static void             DoExecute();
-
         static void             ShowBackingComponent(Desktop * progress);
 
         // on-demand acceptors
