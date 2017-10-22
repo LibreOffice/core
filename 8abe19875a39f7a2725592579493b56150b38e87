@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_28fae0bd",
+        "filename": "sc/source/ui/dbgui/foptmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-22T19:24:11Z",
+      "side": 1,
+      "message": "You better align +\u003d and the signs + on line 153. Like this:\ntheDbArea +\u003d \" (\"\n          + theDbName\n          + \")\";\n\nOr you can also simply write them all in one line since it wouldn\u0027t be long. Like this:\n    theDbArea +\u003d \" (\" + theDbName + \")\";",
+      "range": {
+        "startLine": 152,
+        "startChar": 12,
+        "endLine": 153,
+        "endChar": 34
+      },
+      "revId": "8abe19875a39f7a2725592579493b56150b38e87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_88ff54a9",
+        "filename": "vcl/source/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-22T19:24:11Z",
+      "side": 1,
+      "message": "Since it is no longer a buffer, it might also be conveniant to rename this variable to something like \"sStr\" or \"sPos\".",
+      "range": {
+        "startLine": 249,
+        "startChar": 13,
+        "endLine": 249,
+        "endChar": 20
+      },
+      "revId": "8abe19875a39f7a2725592579493b56150b38e87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_c82f9c3c",
+        "filename": "vcl/source/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-22T19:24:11Z",
+      "side": 1,
+      "message": "Should also be renamed consistently.",
+      "range": {
+        "startLine": 253,
+        "startChar": 11,
+        "endLine": 253,
+        "endChar": 18
+      },
+      "revId": "8abe19875a39f7a2725592579493b56150b38e87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_a82c104b",
+        "filename": "vcl/source/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-22T19:24:11Z",
+      "side": 1,
+      "message": "Since it is no longer a buffer, it might also be conveniant to rename this variable to something like \"sStr\" or \"sSize\".",
+      "range": {
+        "startLine": 258,
+        "startChar": 13,
+        "endLine": 258,
+        "endChar": 20
+      },
+      "revId": "8abe19875a39f7a2725592579493b56150b38e87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_e8261867",
+        "filename": "vcl/source/uitest/uiobject.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2017-10-22T19:24:11Z",
+      "side": 1,
+      "message": "Should also be renamed consistently.",
+      "range": {
+        "startLine": 262,
+        "startChar": 11,
+        "endLine": 262,
+        "endChar": 18
+      },
+      "revId": "8abe19875a39f7a2725592579493b56150b38e87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
