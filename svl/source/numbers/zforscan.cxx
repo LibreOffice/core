@@ -101,6 +101,11 @@ const ::std::vector<OUString> ImpSvNumberformatScan::sEnglishKeyword =
     "t"        // NF_KEY_THAI_T Thai T modifier, speciality of Thai Excel, only used with Thai locale and converted to [NatNum1]
 };             // only exception as lowercase
 
+::std::vector<Color> ImpSvNumberformatScan::StandardColor;
+bool ImpSvNumberformatScan::bStandardColorNeedInitialization = true;
+
+const OUString ImpSvNumberformatScan::sErrStr =  "###";
+
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     : maNullDate( 30, 12, 1899)
     , eNewLnge(LANGUAGE_DONTKNOW)
@@ -129,20 +134,23 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     bKeywordsNeedInit = true;            // locale dependent keywords
     bCompatCurNeedInit = true;           // locale dependent compatibility currency strings
 
-    StandardColor[0]  =  Color(COL_BLACK);
-    StandardColor[1]  =  Color(COL_LIGHTBLUE);
-    StandardColor[2]  =  Color(COL_LIGHTGREEN);
-    StandardColor[3]  =  Color(COL_LIGHTCYAN);
-    StandardColor[4]  =  Color(COL_LIGHTRED);
-    StandardColor[5]  =  Color(COL_LIGHTMAGENTA);
-    StandardColor[6]  =  Color(COL_BROWN);
-    StandardColor[7]  =  Color(COL_GRAY);
-    StandardColor[8]  =  Color(COL_YELLOW);
-    StandardColor[9]  =  Color(COL_WHITE);
+    if ( bStandardColorNeedInitialization )
+    {
+        bStandardColorNeedInitialization = false;
+        StandardColor.push_back( Color(COL_BLACK) );
+        StandardColor.push_back( Color(COL_LIGHTBLUE) );
+        StandardColor.push_back( Color(COL_LIGHTGREEN) );
+        StandardColor.push_back( Color(COL_LIGHTCYAN) );
+        StandardColor.push_back( Color(COL_LIGHTRED) );
+        StandardColor.push_back( Color(COL_LIGHTMAGENTA) );
+        StandardColor.push_back( Color(COL_BROWN) );
+        StandardColor.push_back( Color(COL_GRAY) );
+        StandardColor.push_back( Color(COL_YELLOW) );
+        StandardColor.push_back( Color(COL_WHITE) );
+    }
 
     nStandardPrec = 2;
 
-    sErrStr =  "###";
     Reset();
 }
 

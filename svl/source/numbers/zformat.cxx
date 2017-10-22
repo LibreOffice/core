@@ -2740,7 +2740,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 
     if (fNum > D_MAX_U_INT32 || rInfo.nCntExp > 9) // Too large
     {
-        sBuff = rScan.GetErrorString();
+        sBuff = ImpSvNumberformatScan::GetErrorString();
         return false;
     }
     if (rInfo.nCntExp == 0)
@@ -2758,7 +2758,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
 
         if (fNum1 > D_MAX_U_INT32)
         {
-            sBuff = rScan.GetErrorString();
+            sBuff = ImpSvNumberformatScan::GetErrorString();
             return false;
         }
         nFrac = (sal_uInt64) floor(fNum1);
@@ -2901,7 +2901,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     {
         if (fNumber > 1.0E10) // Too large
         {
-            sBuff = rScan.GetErrorString();
+            sBuff = ImpSvNumberformatScan::GetErrorString();
             return false;
         }
     }
@@ -2934,7 +2934,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     }
     if( floor( fTime ) > D_MAX_U_INT32 )
     {
-        sBuff = rScan.GetErrorString();
+        sBuff = ImpSvNumberformatScan::GetErrorString();
         return false;
     }
     sal_uInt32 nSeconds = (sal_uInt32)floor( fTime );
@@ -4097,7 +4097,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         }
         else
         {
-            sStr = rScan.GetErrorString();
+            sStr = ImpSvNumberformatScan::GetErrorString();
             return false;
         }
     }
@@ -4614,7 +4614,7 @@ void SvNumberformat::GetFormatSpecialInfo(bool& bThousand,
 
     const Color* pColor = NumFor[1].GetColor();
     IsRed = fLimit1 == 0.0 && fLimit2 == 0.0 && pColor
-        && (*pColor == rScan.GetRedColor());
+        && (*pColor == ImpSvNumberformatScan::GetRedColor());
 }
 
 void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
