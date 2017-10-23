@@ -631,7 +631,7 @@ void checkMap(
                                 entB.get()));
                     if (ent2A->getBase() != ent2B->getBase()) {
                         std::cerr
-                            << "single-interface--based servcie " << name
+                            << "single-interface--based service " << name
                             << " base changed from " << ent2A->getBase()
                             << " to " << ent2B->getBase()
                             << std::endl;

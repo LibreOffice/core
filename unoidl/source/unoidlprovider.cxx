@@ -1283,7 +1283,7 @@ rtl::Reference< Entity > readEntity(
                         file->uri,
                         ("UNOIDL format: bad mode " + OUString::number(v)
                          + " of property " + propName
-                         + " for accumulation-based servcie"));
+                         + " for accumulation-based service"));
                 }
                 props.emplace_back(
                     propName, propType,
