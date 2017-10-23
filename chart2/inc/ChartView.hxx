@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_INC_CHARTVIEW_HXX
 
 #include "ChartModel.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
+#include <chartview/ExplicitValueProvider.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 

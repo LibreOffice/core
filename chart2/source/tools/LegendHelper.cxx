@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "LegendHelper.hxx"
-#include "macros.hxx"
+#include <LegendHelper.hxx>
+#include <macros.hxx>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>

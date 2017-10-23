@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WrappedPropertySet.hxx"
-#include "macros.hxx"
+#include <WrappedPropertySet.hxx>
+#include <macros.hxx>
 
 #include <tools/solar.h>
 

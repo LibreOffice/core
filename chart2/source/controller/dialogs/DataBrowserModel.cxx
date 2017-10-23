@@ -19,18 +19,18 @@
 
 #include "DataBrowserModel.hxx"
 #include "DialogModel.hxx"
-#include "ChartModelHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "PropertyHelper.hxx"
-#include "ControllerLockGuard.hxx"
-#include "macros.hxx"
-#include "StatisticsHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "ExplicitCategoriesProvider.hxx"
+#include <ChartModelHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <PropertyHelper.hxx>
+#include <ControllerLockGuard.hxx>
+#include <macros.hxx>
+#include <StatisticsHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <ExplicitCategoriesProvider.hxx>
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>

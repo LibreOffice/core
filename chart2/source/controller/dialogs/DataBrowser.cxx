@@ -22,17 +22,17 @@
 
 #include "DataBrowser.hxx"
 #include "DataBrowserModel.hxx"
-#include "strings.hrc"
-#include "DataSeriesHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "CommonConverters.hxx"
-#include "macros.hxx"
-#include "NumberFormatterWrapper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "ResId.hxx"
-#include "bitmaps.hlst"
-#include "helpids.h"
+#include <strings.hrc>
+#include <DataSeriesHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <CommonConverters.hxx>
+#include <macros.hxx>
+#include <NumberFormatterWrapper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <ResId.hxx>
+#include <bitmaps.hlst>
+#include <helpids.h>
 
 #include <vcl/fixed.hxx>
 #include <vcl/image.hxx>

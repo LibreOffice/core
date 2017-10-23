@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "BaseGFXHelper.hxx"
+#include <BaseGFXHelper.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 
 using namespace ::com::sun::star;

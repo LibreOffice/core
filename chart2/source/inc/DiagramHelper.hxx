@@ -33,7 +33,7 @@
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 #include <utility>
 #include <vector>

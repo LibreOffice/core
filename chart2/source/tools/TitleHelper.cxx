@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TitleHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "macros.hxx"
-#include "AxisHelper.hxx"
-#include "DiagramHelper.hxx"
+#include <TitleHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <macros.hxx>
+#include <AxisHelper.hxx>
+#include <DiagramHelper.hxx>
 #include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <rtl/ustrbuf.hxx>

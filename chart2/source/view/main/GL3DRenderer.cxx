@@ -9,7 +9,7 @@
 
 #include <epoxy/gl.h>
 
-#include "GL3DRenderer.hxx"
+#include <GL3DRenderer.hxx>
 
 #include <cmath>
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -19,7 +19,7 @@
 #include <com/sun/star/awt/Size.hpp>
 
 #include <StaticGeometry.h>
-#include "glm/gtc/matrix_inverse.hpp"
+#include <glm/gtc/matrix_inverse.hpp>
 #include <memory>
 
 #define DEBUG_FBO 0

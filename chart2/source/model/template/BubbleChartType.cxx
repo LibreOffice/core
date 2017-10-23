@@ -18,12 +18,12 @@
  */
 
 #include "BubbleChartType.hxx"
-#include "PropertyHelper.hxx"
-#include "macros.hxx"
-#include "servicenames_charttypes.hxx"
-#include "CartesianCoordinateSystem.hxx"
-#include "AxisHelper.hxx"
-#include "AxisIndexDefines.hxx"
+#include <PropertyHelper.hxx>
+#include <macros.hxx>
+#include <servicenames_charttypes.hxx>
+#include <CartesianCoordinateSystem.hxx>
+#include <AxisHelper.hxx>
+#include <AxisIndexDefines.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>

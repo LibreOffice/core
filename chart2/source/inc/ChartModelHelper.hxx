@@ -31,7 +31,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include "charttoolsdllapi.hxx"
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 #include <vector>
 

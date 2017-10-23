@@ -19,9 +19,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_TOOLS_REGRESSIONCURVEMODEL_HXX
 #define INCLUDED_CHART2_SOURCE_TOOLS_REGRESSIONCURVEMODEL_HXX
 
-#include "MutexContainer.hxx"
-#include "OPropertySet.hxx"
-#include "ModifyListenerHelper.hxx"
+#include <MutexContainer.hxx>
+#include <OPropertySet.hxx>
+#include <ModifyListenerHelper.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>

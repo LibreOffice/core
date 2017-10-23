@@ -24,7 +24,7 @@
 
 #include "ChartTypeDialogController.hxx"
 #include "ChartTypeTemplateProvider.hxx"
-#include "TimerTriggeredControllerLock.hxx"
+#include <TimerTriggeredControllerLock.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <svtools/wizardmachine.hxx>

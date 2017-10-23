@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_ChartType_UNO.hxx"
-#include "dlg_ChartType.hxx"
-#include "servicenames.hxx"
+#include <dlg_ChartType_UNO.hxx>
+#include <dlg_ChartType.hxx>
+#include <servicenames.hxx>
 #include <osl/mutex.hxx>
 
 namespace chart

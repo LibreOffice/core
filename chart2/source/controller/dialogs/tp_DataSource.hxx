@@ -22,7 +22,7 @@
 #include <svtools/wizardmachine.hxx>
 
 #include "DialogModel.hxx"
-#include "TabPageNotifiable.hxx"
+#include <TabPageNotifiable.hxx>
 
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
@@ -39,7 +39,7 @@
 #include <utility>
 #include <vector>
 
-#include "RangeSelectionListener.hxx"
+#include <RangeSelectionListener.hxx>
 
 namespace chart
 {

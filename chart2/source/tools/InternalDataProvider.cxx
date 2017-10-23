@@ -21,20 +21,20 @@
 
 #include <valarray>
 
-#include "InternalDataProvider.hxx"
-#include "LabeledDataSequence.hxx"
-#include "DataSource.hxx"
-#include "PropertyHelper.hxx"
-#include "macros.hxx"
-#include "XMLRangeHelper.hxx"
-#include "ContainerHelper.hxx"
-#include "CommonConverters.hxx"
-#include "CommonFunctors.hxx"
-#include "UncachedDataSequence.hxx"
-#include "DataSourceHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ExplicitCategoriesProvider.hxx"
+#include <InternalDataProvider.hxx>
+#include <LabeledDataSequence.hxx>
+#include <DataSource.hxx>
+#include <PropertyHelper.hxx>
+#include <macros.hxx>
+#include <XMLRangeHelper.hxx>
+#include <ContainerHelper.hxx>
+#include <CommonConverters.hxx>
+#include <CommonFunctors.hxx>
+#include <UncachedDataSequence.hxx>
+#include <DataSourceHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ExplicitCategoriesProvider.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>

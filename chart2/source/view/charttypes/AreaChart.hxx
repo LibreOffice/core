@@ -21,7 +21,7 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_AREACHART_HXX
 
 #include <memory>
-#include "VSeriesPlotter.hxx"
+#include <VSeriesPlotter.hxx>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 
 namespace chart

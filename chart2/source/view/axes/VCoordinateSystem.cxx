@@ -17,24 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "VCoordinateSystem.hxx"
+#include <VCoordinateSystem.hxx>
 #include "VCartesianCoordinateSystem.hxx"
 #include "VPolarCoordinateSystem.hxx"
-#include "ScaleAutomatism.hxx"
-#include "VSeriesPlotter.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "servicenames_coosystems.hxx"
-#include "macros.hxx"
-#include "AxisIndexDefines.hxx"
-#include "ObjectIdentifier.hxx"
-#include "ExplicitCategoriesProvider.hxx"
-#include "AxisHelper.hxx"
-#include "ContainerHelper.hxx"
+#include <ScaleAutomatism.hxx>
+#include <VSeriesPlotter.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <servicenames_coosystems.hxx>
+#include <macros.hxx>
+#include <AxisIndexDefines.hxx>
+#include <ObjectIdentifier.hxx>
+#include <ExplicitCategoriesProvider.hxx>
+#include <AxisHelper.hxx>
+#include <ContainerHelper.hxx>
 #include "VAxisBase.hxx"
-#include "ViewDefines.hxx"
-#include "DataSeriesHelper.hxx"
-#include "defines.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
+#include <ViewDefines.hxx>
+#include <DataSeriesHelper.hxx>
+#include <defines.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "OPropertySet.hxx"
+#include <OPropertySet.hxx>
 #include "ImplOPropertySet.hxx"
 #include <cppuhelper/queryinterface.hxx>
 

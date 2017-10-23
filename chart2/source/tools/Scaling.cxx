@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Scaling.hxx"
+#include <Scaling.hxx>
 #include <rtl/math.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 namespace

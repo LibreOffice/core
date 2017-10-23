@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CharacterPropertyItemConverter.hxx"
+#include <CharacterPropertyItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include "macros.hxx"
-#include "ItemPropertyMap.hxx"
-#include "RelativeSizeHelper.hxx"
+#include <macros.hxx>
+#include <ItemPropertyMap.hxx>
+#include <RelativeSizeHelper.hxx>
 #include <editeng/memberids.h>
 #include <editeng/eeitem.hxx>
 #include <editeng/udlnitem.hxx>

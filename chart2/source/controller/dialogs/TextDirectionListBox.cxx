@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TextDirectionListBox.hxx"
-#include "ResId.hxx"
-#include "strings.hrc"
+#include <TextDirectionListBox.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
 #include <svl/languageoptions.hxx>
 #include <vcl/window.hxx>
 #include <vcl/builderfactory.hxx>

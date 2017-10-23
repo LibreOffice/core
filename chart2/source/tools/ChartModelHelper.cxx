@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartModelHelper.hxx"
-#include "macros.hxx"
-#include "DiagramHelper.hxx"
-#include "DataSourceHelper.hxx"
-#include "ControllerLockGuard.hxx"
-#include "RangeHighlighter.hxx"
-#include "InternalDataProvider.hxx"
-#include "ChartModel.hxx"
+#include <ChartModelHelper.hxx>
+#include <macros.hxx>
+#include <DiagramHelper.hxx>
+#include <DataSourceHelper.hxx>
+#include <ControllerLockGuard.hxx>
+#include <RangeHighlighter.hxx>
+#include <InternalDataProvider.hxx>
+#include <ChartModel.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>

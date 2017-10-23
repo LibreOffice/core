@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RegressionEquationItemConverter.hxx"
+#include <RegressionEquationItemConverter.hxx>
 #include "SchWhichPairs.hxx"
-#include "macros.hxx"
-#include "ItemPropertyMap.hxx"
-#include "GraphicPropertyItemConverter.hxx"
-#include "CharacterPropertyItemConverter.hxx"
-#include "MultipleItemConverter.hxx"
+#include <macros.hxx>
+#include <ItemPropertyMap.hxx>
+#include <GraphicPropertyItemConverter.hxx>
+#include <CharacterPropertyItemConverter.hxx>
+#include <MultipleItemConverter.hxx>
 #include <unonames.hxx>
 
 #include <svl/intitem.hxx>

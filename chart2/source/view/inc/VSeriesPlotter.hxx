@@ -25,7 +25,7 @@
 #include "LabelAlignment.hxx"
 #include "MinimumAndMaximumSupplier.hxx"
 #include "LegendEntryProvider.hxx"
-#include "ExplicitCategoriesProvider.hxx"
+#include <ExplicitCategoriesProvider.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 

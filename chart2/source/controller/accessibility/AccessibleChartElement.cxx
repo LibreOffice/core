@@ -18,11 +18,11 @@
  */
 
 #include "AccessibleChartElement.hxx"
-#include "CharacterProperties.hxx"
-#include "ObjectIdentifier.hxx"
-#include "ObjectNameProvider.hxx"
-#include "servicenames.hxx"
-#include "macros.hxx"
+#include <CharacterProperties.hxx>
+#include <ObjectIdentifier.hxx>
+#include <ObjectNameProvider.hxx>
+#include <servicenames.hxx>
+#include <macros.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>

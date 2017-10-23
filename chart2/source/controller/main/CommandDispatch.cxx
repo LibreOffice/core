@@ -18,8 +18,8 @@
  */
 
 #include "CommandDispatch.hxx"
-#include "CommonFunctors.hxx"
-#include "macros.hxx"
+#include <CommonFunctors.hxx>
+#include <macros.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <algorithm>

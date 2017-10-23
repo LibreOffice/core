@@ -18,8 +18,8 @@
  */
 
 #include "VAxisOrGridBase.hxx"
-#include "ShapeFactory.hxx"
-#include "CommonConverters.hxx"
+#include <ShapeFactory.hxx>
+#include <CommonConverters.hxx>
 #include "Tickmarks.hxx"
 
 namespace chart

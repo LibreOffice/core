@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_InsertDataLabel.hxx"
+#include <dlg_InsertDataLabel.hxx>
 #include "res_DataLabel.hxx"
 
 namespace chart

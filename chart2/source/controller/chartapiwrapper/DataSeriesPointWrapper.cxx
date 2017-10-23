@@ -18,19 +18,19 @@
  */
 
 #include "DataSeriesPointWrapper.hxx"
-#include "macros.hxx"
-#include "RegressionCurveHelper.hxx"
+#include <macros.hxx>
+#include <RegressionCurveHelper.hxx>
 #include "Chart2ModelContact.hxx"
-#include "ChartTypeHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "FillProperties.hxx"
-#include "CharacterProperties.hxx"
-#include "UserDefinedProperties.hxx"
+#include <ChartTypeHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <CharacterProperties.hxx>
+#include <UserDefinedProperties.hxx>
 #include "WrappedCharacterHeightProperty.hxx"
-#include "WrappedProperty.hxx"
-#include "WrappedIgnoreProperty.hxx"
+#include <WrappedProperty.hxx>
+#include <WrappedIgnoreProperty.hxx>
 #include "WrappedStatisticProperties.hxx"
 #include "WrappedSymbolProperties.hxx"
 #include "WrappedDataCaptionProperties.hxx"

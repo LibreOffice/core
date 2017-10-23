@@ -17,29 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartController.hxx"
-#include "ChartWindow.hxx"
-#include "ChartModelHelper.hxx"
-#include "TitleHelper.hxx"
-#include "ThreeDHelper.hxx"
-#include "DataSeriesHelper.hxx"
+#include <ChartController.hxx>
+#include <ChartWindow.hxx>
+#include <ChartModelHelper.hxx>
+#include <TitleHelper.hxx>
+#include <ThreeDHelper.hxx>
+#include <DataSeriesHelper.hxx>
 #include "UndoGuard.hxx"
-#include "ControllerLockGuard.hxx"
-#include "macros.hxx"
-#include "ResId.hxx"
-#include "strings.hrc"
-#include "ObjectIdentifier.hxx"
-#include "ReferenceSizeProvider.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "chartview/DrawModelWrapper.hxx"
+#include <ControllerLockGuard.hxx>
+#include <macros.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
+#include <ObjectIdentifier.hxx>
+#include <ReferenceSizeProvider.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <chartview/DrawModelWrapper.hxx>
 #include "ChartTransferable.hxx"
-#include "DrawViewWrapper.hxx"
-#include "LegendHelper.hxx"
-#include "AxisHelper.hxx"
-#include "RegressionCurveHelper.hxx"
+#include <DrawViewWrapper.hxx>
+#include <LegendHelper.hxx>
+#include <AxisHelper.hxx>
+#include <RegressionCurveHelper.hxx>
 #include "ShapeController.hxx"
-#include "DiagramHelper.hxx"
-#include "ObjectNameProvider.hxx"
+#include <DiagramHelper.hxx>
+#include <ObjectNameProvider.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>

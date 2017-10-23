@@ -19,12 +19,12 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_BARCHARTTYPETEMPLATE_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_BARCHARTTYPETEMPLATE_HXX
 
-#include "OPropertySet.hxx"
-#include "MutexContainer.hxx"
+#include <OPropertySet.hxx>
+#include <MutexContainer.hxx>
 #include <comphelper/uno3.hxx>
 
 #include "ChartTypeTemplate.hxx"
-#include "StackMode.hxx"
+#include <StackMode.hxx>
 
 namespace chart
 {

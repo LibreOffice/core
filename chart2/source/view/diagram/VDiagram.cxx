@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "VDiagram.hxx"
-#include "PropertyMapper.hxx"
-#include "ViewDefines.hxx"
-#include "Stripe.hxx"
-#include "macros.hxx"
-#include "ObjectIdentifier.hxx"
-#include "DiagramHelper.hxx"
-#include "BaseGFXHelper.hxx"
-#include "CommonConverters.hxx"
-#include "ChartTypeHelper.hxx"
-#include "ThreeDHelper.hxx"
-#include "defines.hxx"
+#include <VDiagram.hxx>
+#include <PropertyMapper.hxx>
+#include <ViewDefines.hxx>
+#include <Stripe.hxx>
+#include <macros.hxx>
+#include <ObjectIdentifier.hxx>
+#include <DiagramHelper.hxx>
+#include <BaseGFXHelper.hxx>
+#include <CommonConverters.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ThreeDHelper.hxx>
+#include <defines.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

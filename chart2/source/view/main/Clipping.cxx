@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Clipping.hxx"
-#include "CommonConverters.hxx"
-#include "BaseGFXHelper.hxx"
+#include <Clipping.hxx>
+#include <CommonConverters.hxx>
+#include <BaseGFXHelper.hxx>
 
 #include <osl/diagnose.h>
 

@@ -51,9 +51,9 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>
 
-#include "PropertyMapper.hxx"
-#include "VLineProperties.hxx"
-#include "Stripe.hxx"
+#include <PropertyMapper.hxx>
+#include <VLineProperties.hxx>
+#include <Stripe.hxx>
 
 #include <rtl/ustring.hxx>
 

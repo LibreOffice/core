@@ -19,14 +19,14 @@
 
 #include "Axis.hxx"
 #include "GridProperties.hxx"
-#include "macros.hxx"
-#include "CharacterProperties.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "UserDefinedProperties.hxx"
-#include "PropertyHelper.hxx"
-#include "CloneHelper.hxx"
-#include "AxisHelper.hxx"
-#include "EventListenerHelper.hxx"
+#include <macros.hxx>
+#include <CharacterProperties.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <UserDefinedProperties.hxx>
+#include <PropertyHelper.hxx>
+#include <CloneHelper.hxx>
+#include <AxisHelper.hxx>
+#include <EventListenerHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>

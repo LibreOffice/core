@@ -22,33 +22,33 @@
 
 #include <set>
 
-#include "ChartController.hxx"
-#include "servicenames.hxx"
-#include "ResId.hxx"
-#include "dlg_DataSource.hxx"
-#include "ChartModelHelper.hxx"
+#include <ChartController.hxx>
+#include <servicenames.hxx>
+#include <ResId.hxx>
+#include <dlg_DataSource.hxx>
+#include <ChartModelHelper.hxx>
 #include "ControllerCommandDispatch.hxx"
-#include "strings.hrc"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "ChartViewHelper.hxx"
+#include <strings.hrc>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <ChartViewHelper.hxx>
 
-#include "ChartWindow.hxx"
-#include "chartview/DrawModelWrapper.hxx"
-#include "DrawViewWrapper.hxx"
-#include "ObjectIdentifier.hxx"
-#include "DiagramHelper.hxx"
-#include "ControllerLockGuard.hxx"
+#include <ChartWindow.hxx>
+#include <chartview/DrawModelWrapper.hxx>
+#include <DrawViewWrapper.hxx>
+#include <ObjectIdentifier.hxx>
+#include <DiagramHelper.hxx>
+#include <ControllerLockGuard.hxx>
 #include "UndoGuard.hxx"
 #include "ChartDropTargetHelper.hxx"
 
-#include "macros.hxx"
-#include "dlg_CreationWizard.hxx"
-#include "dlg_ChartType.hxx"
-#include "AccessibleChartView.hxx"
+#include <macros.hxx>
+#include <dlg_CreationWizard.hxx>
+#include <dlg_ChartType.hxx>
+#include <AccessibleChartView.hxx>
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 #include "UndoActions.hxx"
-#include "ViewElementListProvider.hxx"
+#include <ViewElementListProvider.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 

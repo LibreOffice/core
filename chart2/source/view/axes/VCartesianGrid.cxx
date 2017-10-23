@@ -19,12 +19,12 @@
 
 #include "VCartesianGrid.hxx"
 #include "Tickmarks.hxx"
-#include "PlottingPositionHelper.hxx"
-#include "ShapeFactory.hxx"
-#include "ObjectIdentifier.hxx"
-#include "macros.hxx"
-#include "CommonConverters.hxx"
-#include "AxisHelper.hxx"
+#include <PlottingPositionHelper.hxx>
+#include <ShapeFactory.hxx>
+#include <ObjectIdentifier.hxx>
+#include <macros.hxx>
+#include <CommonConverters.hxx>
+#include <AxisHelper.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 

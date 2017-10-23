@@ -18,15 +18,15 @@
  */
 
 #include "PieChartTypeTemplate.hxx"
-#include "macros.hxx"
-#include "CommonConverters.hxx"
-#include "DiagramHelper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "DataSeriesHelper.hxx"
-#include "BaseGFXHelper.hxx"
-#include "AxisHelper.hxx"
-#include "ThreeDHelper.hxx"
-#include "PropertyHelper.hxx"
+#include <macros.hxx>
+#include <CommonConverters.hxx>
+#include <DiagramHelper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <DataSeriesHelper.hxx>
+#include <BaseGFXHelper.hxx>
+#include <AxisHelper.hxx>
+#include <ThreeDHelper.hxx>
+#include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

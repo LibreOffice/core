@@ -18,13 +18,13 @@
  */
 
 #include "tp_ChartType.hxx"
-#include "strings.hrc"
-#include "ResId.hxx"
-#include "ChartModelHelper.hxx"
-#include "DiagramHelper.hxx"
+#include <strings.hrc>
+#include <ResId.hxx>
+#include <ChartModelHelper.hxx>
+#include <DiagramHelper.hxx>
 #include "res_BarGeometry.hxx"
-#include "ControllerLockGuard.hxx"
-#include "macros.hxx"
+#include <ControllerLockGuard.hxx>
+#include <macros.hxx>
 #include "GL3DBarChartDialogController.hxx"
 #include <unonames.hxx>
 

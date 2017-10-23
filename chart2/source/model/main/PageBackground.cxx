@@ -18,11 +18,11 @@
  */
 
 #include "PageBackground.hxx"
-#include "macros.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "FillProperties.hxx"
-#include "UserDefinedProperties.hxx"
-#include "PropertyHelper.hxx"
+#include <macros.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <UserDefinedProperties.hxx>
+#include <PropertyHelper.hxx>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <rtl/uuid.h>

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_InsertAxis_Grid.hxx"
+#include <dlg_InsertAxis_Grid.hxx>
 
-#include "ResId.hxx"
-#include "chartview/ChartSfxItemIds.hxx"
-#include "helpids.h"
-#include "ObjectNameProvider.hxx"
+#include <ResId.hxx>
+#include <chartview/ChartSfxItemIds.hxx>
+#include <helpids.h>
+#include <ObjectNameProvider.hxx>
 
 #include <svl/eitem.hxx>
 

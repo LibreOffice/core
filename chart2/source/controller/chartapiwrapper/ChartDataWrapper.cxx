@@ -18,14 +18,14 @@
  */
 
 #include "ChartDataWrapper.hxx"
-#include "macros.hxx"
-#include "DiagramHelper.hxx"
-#include "DataSourceHelper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "CommonFunctors.hxx"
-#include "ChartModelHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "ControllerLockGuard.hxx"
+#include <macros.hxx>
+#include <DiagramHelper.hxx>
+#include <DataSourceHelper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <CommonFunctors.hxx>
+#include <ChartModelHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <ControllerLockGuard.hxx>
 #include "Chart2ModelContact.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -41,8 +41,8 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 
-#include "CharacterProperties.hxx"
-#include "FillProperties.hxx"
+#include <CharacterProperties.hxx>
+#include <FillProperties.hxx>
 
 #include <map>
 #include <algorithm>

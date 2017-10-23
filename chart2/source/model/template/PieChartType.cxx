@@ -18,12 +18,12 @@
  */
 
 #include "PieChartType.hxx"
-#include "PropertyHelper.hxx"
-#include "macros.hxx"
-#include "PolarCoordinateSystem.hxx"
-#include "AxisHelper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "AxisIndexDefines.hxx"
+#include <PropertyHelper.hxx>
+#include <macros.hxx>
+#include <PolarCoordinateSystem.hxx>
+#include <AxisHelper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <AxisIndexDefines.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>

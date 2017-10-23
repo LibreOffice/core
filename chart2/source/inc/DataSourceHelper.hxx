@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 #include "charttoolsdllapi.hxx"
 

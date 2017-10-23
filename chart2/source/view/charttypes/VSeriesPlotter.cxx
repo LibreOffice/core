@@ -18,32 +18,32 @@
  */
 
 #include <memory>
-#include "VSeriesPlotter.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
+#include <VSeriesPlotter.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
 #include <svl/zformat.hxx>
 
-#include "CommonConverters.hxx"
-#include "macros.hxx"
-#include "ViewDefines.hxx"
-#include "ObjectIdentifier.hxx"
-#include "StatisticsHelper.hxx"
-#include "PlottingPositionHelper.hxx"
-#include "LabelPositionHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "Clipping.hxx"
-#include "servicenames_charttypes.hxx"
-#include "NumberFormatterWrapper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "RegressionCurveHelper.hxx"
-#include "VLegendSymbolFactory.hxx"
-#include "FormattedStringHelper.hxx"
-#include "ResId.hxx"
-#include "strings.hrc"
-#include "RelativePositionHelper.hxx"
-#include "DateHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "defines.hxx"
+#include <CommonConverters.hxx>
+#include <macros.hxx>
+#include <ViewDefines.hxx>
+#include <ObjectIdentifier.hxx>
+#include <StatisticsHelper.hxx>
+#include <PlottingPositionHelper.hxx>
+#include <LabelPositionHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <Clipping.hxx>
+#include <servicenames_charttypes.hxx>
+#include <NumberFormatterWrapper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <VLegendSymbolFactory.hxx>
+#include <FormattedStringHelper.hxx>
+#include <ResId.hxx>
+#include <strings.hrc>
+#include <RelativePositionHelper.hxx>
+#include <DateHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <defines.hxx>
 
 //only for creation: @todo remove if all plotter are uno components and instantiated via servicefactory
 #include "BarChart.hxx"

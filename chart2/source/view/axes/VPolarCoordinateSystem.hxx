@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_AXES_VPOLARCOORDINATESYSTEM_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_VPOLARCOORDINATESYSTEM_HXX
 
-#include "VCoordinateSystem.hxx"
+#include <VCoordinateSystem.hxx>
 
 namespace chart
 {

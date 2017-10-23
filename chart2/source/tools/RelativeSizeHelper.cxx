@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RelativeSizeHelper.hxx"
-#include "macros.hxx"
+#include <RelativeSizeHelper.hxx>
+#include <macros.hxx>
 
 #include <vector>
 #include <algorithm>

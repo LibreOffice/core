@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartController.hxx"
-#include "macros.hxx"
+#include <ChartController.hxx>
+#include <macros.hxx>
 
-#include "dlg_DataEditor.hxx"
-#include "DataSourceHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ControllerLockGuard.hxx"
+#include <dlg_DataEditor.hxx>
+#include <DataSourceHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ControllerLockGuard.hxx>
 #include "UndoGuard.hxx"
-#include "ResId.hxx"
-#include "strings.hrc"
+#include <ResId.hxx>
+#include <strings.hrc>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

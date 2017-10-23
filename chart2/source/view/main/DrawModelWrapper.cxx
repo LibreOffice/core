@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "chartview/DrawModelWrapper.hxx"
-#include "macros.hxx"
-#include "AbstractShapeFactory.hxx"
+#include <chartview/DrawModelWrapper.hxx>
+#include <macros.hxx>
+#include <AbstractShapeFactory.hxx>
 #include "ChartItemPool.hxx"
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 #include <svx/unomodel.hxx>
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>

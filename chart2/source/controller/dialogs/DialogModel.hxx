@@ -19,12 +19,12 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DIALOGMODEL_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DIALOGMODEL_HXX
 
-#include "TimerTriggeredControllerLock.hxx"
+#include <TimerTriggeredControllerLock.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 #include <map>
 #include <memory>

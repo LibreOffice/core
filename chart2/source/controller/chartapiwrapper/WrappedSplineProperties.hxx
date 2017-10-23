@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDSPLINEPROPERTIES_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDSPLINEPROPERTIES_HXX
 
-#include "WrappedProperty.hxx"
+#include <WrappedProperty.hxx>
 #include "Chart2ModelContact.hxx"
 
 #include <memory>

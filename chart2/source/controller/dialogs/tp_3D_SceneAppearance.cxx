@@ -18,9 +18,9 @@
  */
 
 #include "tp_3D_SceneAppearance.hxx"
-#include "ChartModelHelper.hxx"
-#include "ThreeDHelper.hxx"
-#include "macros.hxx"
+#include <ChartModelHelper.hxx>
+#include <ThreeDHelper.hxx>
+#include <macros.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 

@@ -18,10 +18,10 @@
  */
 
 #include "WrappedSceneProperty.hxx"
-#include "macros.hxx"
-#include "DiagramHelper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "BaseGFXHelper.hxx"
+#include <macros.hxx>
+#include <DiagramHelper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <BaseGFXHelper.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;

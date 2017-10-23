@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CachedDataSequence.hxx"
-#include "macros.hxx"
-#include "PropertyHelper.hxx"
-#include "CommonFunctors.hxx"
-#include "ModifyListenerHelper.hxx"
+#include <CachedDataSequence.hxx>
+#include <macros.hxx>
+#include <PropertyHelper.hxx>
+#include <CommonFunctors.hxx>
+#include <ModifyListenerHelper.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>

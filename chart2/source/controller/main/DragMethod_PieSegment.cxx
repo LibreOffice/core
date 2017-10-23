@@ -19,10 +19,10 @@
 
 #include "DragMethod_PieSegment.hxx"
 
-#include "strings.hrc"
-#include "ResId.hxx"
-#include "macros.hxx"
-#include "ObjectIdentifier.hxx"
+#include <strings.hrc>
+#include <ResId.hxx>
+#include <macros.hxx>
+#include <ObjectIdentifier.hxx>
 #include <rtl/math.hxx>
 #include <svx/svdpagv.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

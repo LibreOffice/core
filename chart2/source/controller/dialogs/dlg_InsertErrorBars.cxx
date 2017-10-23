@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_InsertErrorBars.hxx"
-#include "res_ErrorBar.hxx"
-#include "ResId.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "ChartModelHelper.hxx"
-#include "ObjectIdentifier.hxx"
-#include "DiagramHelper.hxx"
-#include "AxisHelper.hxx"
-#include "ObjectNameProvider.hxx"
+#include <dlg_InsertErrorBars.hxx>
+#include <res_ErrorBar.hxx>
+#include <ResId.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
+#include <ChartModelHelper.hxx>
+#include <ObjectIdentifier.hxx>
+#include <DiagramHelper.hxx>
+#include <AxisHelper.hxx>
+#include <ObjectNameProvider.hxx>
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>

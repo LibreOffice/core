@@ -18,12 +18,12 @@
  */
 
 #include "VAxisProperties.hxx"
-#include "macros.hxx"
-#include "ViewDefines.hxx"
-#include "CommonConverters.hxx"
-#include "AxisHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartModelHelper.hxx"
+#include <macros.hxx>
+#include <ViewDefines.hxx>
+#include <CommonConverters.hxx>
+#include <AxisHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartModelHelper.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>

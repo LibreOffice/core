@@ -18,15 +18,15 @@
  */
 
 #include "BarChart.hxx"
-#include "ShapeFactory.hxx"
-#include "CommonConverters.hxx"
-#include "ObjectIdentifier.hxx"
-#include "LabelPositionHelper.hxx"
+#include <ShapeFactory.hxx>
+#include <CommonConverters.hxx>
+#include <ObjectIdentifier.hxx>
+#include <LabelPositionHelper.hxx>
 #include "BarPositionHelper.hxx"
-#include "macros.hxx"
-#include "AxisIndexDefines.hxx"
-#include "Clipping.hxx"
-#include "DateHelper.hxx"
+#include <macros.hxx>
+#include <AxisIndexDefines.hxx>
+#include <Clipping.hxx>
+#include <DateHelper.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 

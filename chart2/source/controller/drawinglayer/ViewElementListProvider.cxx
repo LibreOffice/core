@@ -18,11 +18,11 @@
  */
 
 #include <memory>
-#include "ViewElementListProvider.hxx"
-#include "chartview/DrawModelWrapper.hxx"
-#include "chartview/DataPointSymbolSupplier.hxx"
-#include "macros.hxx"
-#include "DrawViewWrapper.hxx"
+#include <ViewElementListProvider.hxx>
+#include <chartview/DrawModelWrapper.hxx>
+#include <chartview/DataPointSymbolSupplier.hxx>
+#include <macros.hxx>
+#include <DrawViewWrapper.hxx>
 
 #include <svx/xtable.hxx>
 #include <svx/XPropertyTable.hxx>

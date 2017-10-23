@@ -18,9 +18,9 @@
  */
 
 #include "WrappedSplineProperties.hxx"
-#include "macros.hxx"
-#include "FastPropertyIdRanges.hxx"
-#include "DiagramHelper.hxx"
+#include <macros.hxx>
+#include <FastPropertyIdRanges.hxx>
+#include <DiagramHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/CurveStyle.hpp>

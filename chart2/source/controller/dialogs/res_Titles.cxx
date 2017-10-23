@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "res_Titles.hxx"
-#include "ResId.hxx"
-#include "TitleDialogData.hxx"
+#include <res_Titles.hxx>
+#include <ResId.hxx>
+#include <TitleDialogData.hxx>
 #include <svtools/controldims.hxx>
 
 namespace chart

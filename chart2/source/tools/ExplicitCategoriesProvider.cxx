@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ExplicitCategoriesProvider.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "AxisHelper.hxx"
-#include "CommonConverters.hxx"
-#include "DataSourceHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "macros.hxx"
-#include "NumberFormatterWrapper.hxx"
+#include <ExplicitCategoriesProvider.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <AxisHelper.hxx>
+#include <CommonConverters.hxx>
+#include <DataSourceHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <macros.hxx>
+#include <NumberFormatterWrapper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>

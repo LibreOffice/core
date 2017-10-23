@@ -19,11 +19,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_FORMATTEDSTRING_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_FORMATTEDSTRING_HXX
 
-#include "MutexContainer.hxx"
-#include "OPropertySet.hxx"
+#include <MutexContainer.hxx>
+#include <OPropertySet.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
-#include "ModifyListenerHelper.hxx"
+#include <ModifyListenerHelper.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XFormattedString2.hpp>
 #include <com/sun/star/util/XCloneable.hpp>

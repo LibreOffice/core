@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PlottingPositionHelper.hxx"
-#include "CommonConverters.hxx"
-#include "ViewDefines.hxx"
-#include "Linear3DTransformation.hxx"
-#include "VPolarTransformation.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "PropertyMapper.hxx"
-#include "DateHelper.hxx"
-#include "defines.hxx"
+#include <PlottingPositionHelper.hxx>
+#include <CommonConverters.hxx>
+#include <ViewDefines.hxx>
+#include <Linear3DTransformation.hxx>
+#include <VPolarTransformation.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <PropertyMapper.hxx>
+#include <DateHelper.hxx>
+#include <defines.hxx>
 
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>

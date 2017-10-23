@@ -9,7 +9,7 @@
 
 #include "ChartColorWrapper.hxx"
 
-#include "ChartController.hxx"
+#include <ChartController.hxx>
 
 #include <svx/tbcontrl.hxx>
 

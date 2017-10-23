@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AxisHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "macros.hxx"
-#include "AxisIndexDefines.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "servicenames_coosystems.hxx"
-#include "DataSeriesHelper.hxx"
-#include "Scaling.hxx"
-#include "ChartModelHelper.hxx"
-#include "DataSourceHelper.hxx"
+#include <AxisHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <macros.hxx>
+#include <AxisIndexDefines.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <servicenames_coosystems.hxx>
+#include <DataSeriesHelper.hxx>
+#include <Scaling.hxx>
+#include <ChartModelHelper.hxx>
+#include <DataSourceHelper.hxx>
 #include <unonames.hxx>
 
 #include <unotools/saveopt.hxx>

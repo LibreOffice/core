@@ -18,7 +18,7 @@
  */
 
 #include "AccessibleViewForwarder.hxx"
-#include "AccessibleChartView.hxx"
+#include <AccessibleChartView.hxx>
 
 #include <vcl/window.hxx>
 

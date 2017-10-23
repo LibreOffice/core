@@ -18,14 +18,14 @@
  */
 
 #include "Legend.hxx"
-#include "macros.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "FillProperties.hxx"
-#include "CharacterProperties.hxx"
-#include "UserDefinedProperties.hxx"
-#include "LegendHelper.hxx"
-#include "CloneHelper.hxx"
-#include "PropertyHelper.hxx"
+#include <macros.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <CharacterProperties.hxx>
+#include <UserDefinedProperties.hxx>
+#include <LegendHelper.hxx>
+#include <CloneHelper.hxx>
+#include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>

@@ -11,7 +11,7 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_GL3DBARCHARTTYPETEMPLATE_HXX
 
 #include <MutexContainer.hxx>
-#include <ChartTypeTemplate.hxx>
+#include "ChartTypeTemplate.hxx"
 #include <OPropertySet.hxx>
 
 #include <comphelper/uno3.hxx>

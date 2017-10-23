@@ -20,9 +20,9 @@
 #include "tp_PointGeometry.hxx"
 #include "TabPageIds.h"
 #include "res_BarGeometry.hxx"
-#include "ResId.hxx"
+#include <ResId.hxx>
 
-#include "chartview/ChartSfxItemIds.hxx"
+#include <chartview/ChartSfxItemIds.hxx>
 
 #include <svl/intitem.hxx>
 #include <svx/svx3ditems.hxx>

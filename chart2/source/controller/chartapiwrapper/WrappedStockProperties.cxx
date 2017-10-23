@@ -18,11 +18,11 @@
  */
 
 #include "WrappedStockProperties.hxx"
-#include "macros.hxx"
-#include "FastPropertyIdRanges.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "ControllerLockGuard.hxx"
+#include <macros.hxx>
+#include <FastPropertyIdRanges.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <ControllerLockGuard.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

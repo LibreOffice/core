@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DataSeries.hxx"
+#include <DataSeries.hxx>
 #include "DataSeriesProperties.hxx"
 #include "DataPointProperties.hxx"
-#include "CharacterProperties.hxx"
-#include "UserDefinedProperties.hxx"
+#include <CharacterProperties.hxx>
+#include <UserDefinedProperties.hxx>
 #include "DataPoint.hxx"
-#include "macros.hxx"
-#include "DataSeriesHelper.hxx"
-#include "ContainerHelper.hxx"
-#include "CloneHelper.hxx"
-#include "ModifyListenerHelper.hxx"
-#include "EventListenerHelper.hxx"
+#include <macros.hxx>
+#include <DataSeriesHelper.hxx>
+#include <ContainerHelper.hxx>
+#include <CloneHelper.hxx>
+#include <ModifyListenerHelper.hxx>
+#include <EventListenerHelper.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>

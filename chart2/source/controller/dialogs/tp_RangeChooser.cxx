@@ -18,14 +18,14 @@
  */
 
 #include "tp_RangeChooser.hxx"
-#include "strings.hrc"
-#include "ResId.hxx"
-#include "macros.hxx"
-#include "DataSourceHelper.hxx"
-#include "DiagramHelper.hxx"
+#include <strings.hrc>
+#include <ResId.hxx>
+#include <macros.hxx>
+#include <DataSourceHelper.hxx>
+#include <DiagramHelper.hxx>
 #include "ChartTypeTemplateProvider.hxx"
 #include "DialogModel.hxx"
-#include "RangeSelectionHelper.hxx"
+#include <RangeSelectionHelper.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>

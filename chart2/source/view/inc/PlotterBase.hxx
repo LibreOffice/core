@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_PLOTTERBASE_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_PLOTTERBASE_HXX
 
-#include "chartview/ExplicitScaleValues.hxx"
+#include <chartview/ExplicitScaleValues.hxx>
 
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>

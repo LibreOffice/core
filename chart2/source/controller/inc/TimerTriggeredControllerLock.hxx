@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_TIMERTRIGGEREDCONTROLLERLOCK_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_TIMERTRIGGEREDCONTROLLERLOCK_HXX
 
-#include "ControllerLockGuard.hxx"
+#include <ControllerLockGuard.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 

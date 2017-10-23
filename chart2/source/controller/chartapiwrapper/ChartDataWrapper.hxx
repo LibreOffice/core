@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHARTDATAWRAPPER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHARTDATAWRAPPER_HXX
 
-#include "MutexContainer.hxx"
+#include <MutexContainer.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>

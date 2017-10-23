@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_ShapeParagraph.hxx"
-#include "ResId.hxx"
+#include <dlg_ShapeParagraph.hxx>
+#include <ResId.hxx>
 #include "TabPageIds.h"
 
 #include <svl/cjkoptions.hxx>

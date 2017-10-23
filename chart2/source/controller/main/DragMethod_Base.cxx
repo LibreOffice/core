@@ -19,11 +19,11 @@
 
 #include "DragMethod_Base.hxx"
 
-#include "strings.hrc"
-#include "ResId.hxx"
-#include "macros.hxx"
-#include "ObjectNameProvider.hxx"
-#include "ObjectIdentifier.hxx"
+#include <strings.hrc>
+#include <ResId.hxx>
+#include <macros.hxx>
+#include <ObjectNameProvider.hxx>
+#include <ObjectIdentifier.hxx>
 
 #include <rtl/math.hxx>
 #include <svx/svdpagv.hxx>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ResId.hxx"
-#include "ResourceManager.hxx"
+#include <ResId.hxx>
+#include <ResourceManager.hxx>
 #include <unotools/resmgr.hxx>
 
 namespace chart

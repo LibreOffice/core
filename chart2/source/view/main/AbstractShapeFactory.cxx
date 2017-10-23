@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "macros.hxx"
-#include "PropertyMapper.hxx"
-#include "CommonConverters.hxx"
+#include <macros.hxx>
+#include <PropertyMapper.hxx>
+#include <CommonConverters.hxx>
 
-#include "AbstractShapeFactory.hxx"
+#include <AbstractShapeFactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
@@ -41,8 +41,8 @@
 
 #include <osl/module.hxx>
 
-#include "OpenglShapeFactory.hxx"
-#include "ShapeFactory.hxx"
+#include <OpenglShapeFactory.hxx>
+#include <ShapeFactory.hxx>
 
 #include <config_features.h>
 

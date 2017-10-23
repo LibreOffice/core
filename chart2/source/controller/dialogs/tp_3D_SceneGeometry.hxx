@@ -27,7 +27,7 @@
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
 
-#include "ControllerLockGuard.hxx"
+#include <ControllerLockGuard.hxx>
 
 namespace chart
 {

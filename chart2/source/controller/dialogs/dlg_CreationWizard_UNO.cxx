@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_CreationWizard_UNO.hxx"
-#include "dlg_CreationWizard.hxx"
-#include "macros.hxx"
-#include "servicenames.hxx"
-#include "TimerTriggeredControllerLock.hxx"
+#include <dlg_CreationWizard_UNO.hxx>
+#include <dlg_CreationWizard.hxx>
+#include <macros.hxx>
+#include <servicenames.hxx>
+#include <TimerTriggeredControllerLock.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

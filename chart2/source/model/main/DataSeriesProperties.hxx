@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_DATASERIESPROPERTIES_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_DATASERIESPROPERTIES_HXX
 
-#include "PropertyHelper.hxx"
-#include "FastPropertyIdRanges.hxx"
+#include <PropertyHelper.hxx>
+#include <FastPropertyIdRanges.hxx>
 #include <com/sun/star/beans/Property.hpp>
 
 #include <vector>

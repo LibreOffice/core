@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "LifeTime.hxx"
-#include "macros.hxx"
+#include <LifeTime.hxx>
+#include <macros.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/util/XModifyListener.hpp>

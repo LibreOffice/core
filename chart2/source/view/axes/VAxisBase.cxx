@@ -18,10 +18,10 @@
  */
 
 #include "VAxisBase.hxx"
-#include "ShapeFactory.hxx"
-#include "CommonConverters.hxx"
+#include <ShapeFactory.hxx>
+#include <CommonConverters.hxx>
 #include "Tickmarks.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 
 #include <memory>
 

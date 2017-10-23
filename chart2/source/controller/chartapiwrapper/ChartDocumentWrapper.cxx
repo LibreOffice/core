@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartDocumentWrapper.hxx"
-#include "macros.hxx"
-#include "servicenames.hxx"
-#include "PropertyHelper.hxx"
-#include "TitleHelper.hxx"
-#include "LegendHelper.hxx"
-#include "ControllerLockGuard.hxx"
-#include "ModifyListenerHelper.hxx"
-#include "DisposeHelper.hxx"
+#include <ChartDocumentWrapper.hxx>
+#include <macros.hxx>
+#include <servicenames.hxx>
+#include <PropertyHelper.hxx>
+#include <TitleHelper.hxx>
+#include <LegendHelper.hxx>
+#include <ControllerLockGuard.hxx>
+#include <ModifyListenerHelper.hxx>
+#include <DisposeHelper.hxx>
 #include "DataSeriesPointWrapper.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
-#include "chartview/DrawModelWrapper.hxx"
+#include <chartview/ExplicitValueProvider.hxx>
+#include <chartview/DrawModelWrapper.hxx>
 #include "Chart2ModelContact.hxx"
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
-#include "DiagramHelper.hxx"
-#include "DataSourceHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "AxisHelper.hxx"
-#include "ThreeDHelper.hxx"
+#include <DiagramHelper.hxx>
+#include <DataSourceHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <AxisHelper.hxx>
+#include <ThreeDHelper.hxx>
 
 #include "TitleWrapper.hxx"
 #include "ChartDataWrapper.hxx"
@@ -45,7 +45,7 @@
 #include "LegendWrapper.hxx"
 #include "AreaWrapper.hxx"
 #include "WrappedAddInProperty.hxx"
-#include "WrappedIgnoreProperty.hxx"
+#include <WrappedIgnoreProperty.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>

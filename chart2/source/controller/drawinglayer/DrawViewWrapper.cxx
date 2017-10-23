@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewWrapper.hxx"
-#include "chartview/DrawModelWrapper.hxx"
-#include "ConfigurationAccess.hxx"
-#include "macros.hxx"
+#include <DrawViewWrapper.hxx>
+#include <chartview/DrawModelWrapper.hxx>
+#include <ConfigurationAccess.hxx>
+#include <macros.hxx>
 
 #include <unotools/lingucfg.hxx>
 #include <editeng/langitem.hxx>

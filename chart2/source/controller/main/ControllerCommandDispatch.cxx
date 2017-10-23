@@ -18,19 +18,19 @@
  */
 
 #include "ControllerCommandDispatch.hxx"
-#include "ChartModelHelper.hxx"
-#include "ChartModel.hxx"
-#include "DiagramHelper.hxx"
-#include "AxisHelper.hxx"
-#include "TitleHelper.hxx"
-#include "LegendHelper.hxx"
-#include "ObjectIdentifier.hxx"
-#include "macros.hxx"
-#include "ChartTypeHelper.hxx"
-#include "ChartController.hxx"
-#include "RegressionCurveHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "StatisticsHelper.hxx"
+#include <ChartModelHelper.hxx>
+#include <ChartModel.hxx>
+#include <DiagramHelper.hxx>
+#include <AxisHelper.hxx>
+#include <TitleHelper.hxx>
+#include <LegendHelper.hxx>
+#include <ObjectIdentifier.hxx>
+#include <macros.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ChartController.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <StatisticsHelper.hxx>
 #include "ShapeController.hxx"
 
 #include <vcl/svapp.hxx>

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_InsertTitle.hxx"
-#include "res_Titles.hxx"
-#include "ResId.hxx"
-#include "ObjectNameProvider.hxx"
+#include <dlg_InsertTitle.hxx>
+#include <res_Titles.hxx>
+#include <ResId.hxx>
+#include <ObjectNameProvider.hxx>
 
 namespace chart
 {

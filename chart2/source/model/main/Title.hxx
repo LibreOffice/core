@@ -19,9 +19,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_MAIN_TITLE_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_TITLE_HXX
 
-#include "ModifyListenerHelper.hxx"
-#include "OPropertySet.hxx"
-#include "MutexContainer.hxx"
+#include <ModifyListenerHelper.hxx>
+#include <OPropertySet.hxx>
+#include <MutexContainer.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XTitle.hpp>

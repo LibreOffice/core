@@ -22,8 +22,8 @@
 #include <memory>
 #include <utility>
 
-#include "AccessibleTextHelper.hxx"
-#include "DrawViewWrapper.hxx"
+#include <AccessibleTextHelper.hxx>
+#include <DrawViewWrapper.hxx>
 
 #include <vcl/svapp.hxx>
 

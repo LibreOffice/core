@@ -19,15 +19,15 @@
 
 #include "VLegend.hxx"
 #include "VButton.hxx"
-#include "macros.hxx"
-#include "PropertyMapper.hxx"
-#include "CommonConverters.hxx"
-#include "ObjectIdentifier.hxx"
-#include "RelativePositionHelper.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "RelativeSizeHelper.hxx"
-#include "LegendEntryProvider.hxx"
-#include "chartview/DrawModelWrapper.hxx"
+#include <macros.hxx>
+#include <PropertyMapper.hxx>
+#include <CommonConverters.hxx>
+#include <ObjectIdentifier.hxx>
+#include <RelativePositionHelper.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <RelativeSizeHelper.hxx>
+#include <LegendEntryProvider.hxx>
+#include <chartview/DrawModelWrapper.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

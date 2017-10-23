@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "MinimumAndMaximumSupplier.hxx"
+#include <MinimumAndMaximumSupplier.hxx>
 
 #include <com/sun/star/chart/TimeUnit.hpp>
 

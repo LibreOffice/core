@@ -18,10 +18,10 @@
  */
 
 #include "tp_LegendPosition.hxx"
-#include "ResId.hxx"
+#include <ResId.hxx>
 #include "TabPageIds.h"
-#include "res_LegendPosition.hxx"
-#include "chartview/ChartSfxItemIds.hxx"
+#include <res_LegendPosition.hxx>
+#include <chartview/ChartSfxItemIds.hxx>
 #include <svx/chrtitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>

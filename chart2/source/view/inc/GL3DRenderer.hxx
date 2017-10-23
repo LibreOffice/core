@@ -10,10 +10,10 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DRENDERER_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_GL3DRENDERER_HXX
 
-#include "glm/glm.hpp"
-#include "glm/gtx/transform.hpp"
-#include "glm/gtx/euler_angles.hpp"
-#include "glm/gtx/quaternion.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <boost/shared_array.hpp>

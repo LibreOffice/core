@@ -18,13 +18,13 @@
  */
 
 #include "Title.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 #include "FormattedString.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "FillProperties.hxx"
-#include "ContainerHelper.hxx"
-#include "CloneHelper.hxx"
-#include "PropertyHelper.hxx"
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <ContainerHelper.hxx>
+#include <CloneHelper.hxx>
+#include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

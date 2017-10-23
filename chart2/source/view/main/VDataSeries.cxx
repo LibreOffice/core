@@ -18,14 +18,14 @@
  */
 
 #include <memory>
-#include "VDataSeries.hxx"
-#include "ObjectIdentifier.hxx"
-#include "macros.hxx"
-#include "CommonConverters.hxx"
-#include "LabelPositionHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "DataSeriesHelper.hxx"
-#include "RegressionCurveHelper.hxx"
+#include <VDataSeries.hxx>
+#include <ObjectIdentifier.hxx>
+#include <macros.hxx>
+#include <CommonConverters.hxx>
+#include <LabelPositionHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <DataSeriesHelper.hxx>
+#include <RegressionCurveHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>

@@ -22,7 +22,7 @@
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 #include <svl/itemset.hxx>
-#include "TextDirectionListBox.hxx"
+#include <TextDirectionListBox.hxx>
 #include <svx/dialcontrol.hxx>
 #include <sfx2/tabdlg.hxx>
 

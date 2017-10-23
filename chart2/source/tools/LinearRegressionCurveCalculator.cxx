@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "LinearRegressionCurveCalculator.hxx"
-#include "macros.hxx"
-#include "RegressionCalculationHelper.hxx"
+#include <LinearRegressionCurveCalculator.hxx>
+#include <macros.hxx>
+#include <RegressionCalculationHelper.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>

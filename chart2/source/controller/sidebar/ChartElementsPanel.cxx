@@ -24,7 +24,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
 #include "ChartElementsPanel.hxx"
-#include "ChartController.hxx"
+#include <ChartController.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/fixed.hxx>
@@ -35,13 +35,13 @@
 #include <svl/stritem.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "LegendHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "AxisHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartTypeHelper.hxx"
+#include <LegendHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <AxisHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartTypeHelper.hxx>
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 
 using namespace css;

@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "charttoolsdllapi.hxx"
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 namespace chart
 {

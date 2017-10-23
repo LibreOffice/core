@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_InsertLegend.hxx"
-#include "res_LegendPosition.hxx"
+#include <dlg_InsertLegend.hxx>
+#include <res_LegendPosition.hxx>
 
 namespace chart
 {

@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AxisItemConverter.hxx"
-#include "ItemPropertyMap.hxx"
-#include "CharacterPropertyItemConverter.hxx"
-#include "GraphicPropertyItemConverter.hxx"
-#include "chartview/ChartSfxItemIds.hxx"
-#include "chartview/ExplicitValueProvider.hxx"
+#include <AxisItemConverter.hxx>
+#include <ItemPropertyMap.hxx>
+#include <CharacterPropertyItemConverter.hxx>
+#include <GraphicPropertyItemConverter.hxx>
+#include <chartview/ChartSfxItemIds.hxx>
+#include <chartview/ExplicitValueProvider.hxx>
 #include "SchWhichPairs.hxx"
-#include "macros.hxx"
-#include "ChartModelHelper.hxx"
-#include "AxisHelper.hxx"
-#include "CommonConverters.hxx"
-#include "ChartTypeHelper.hxx"
+#include <macros.hxx>
+#include <ChartModelHelper.hxx>
+#include <AxisHelper.hxx>
+#include <CommonConverters.hxx>
+#include <ChartTypeHelper.hxx>
 #include <unonames.hxx>
 #include <memory>
 

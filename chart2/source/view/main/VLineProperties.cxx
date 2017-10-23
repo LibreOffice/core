@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "VLineProperties.hxx"
-#include "macros.hxx"
+#include <VLineProperties.hxx>
+#include <macros.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 namespace chart

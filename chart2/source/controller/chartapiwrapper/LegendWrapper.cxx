@@ -18,9 +18,9 @@
  */
 
 #include "LegendWrapper.hxx"
-#include "macros.hxx"
+#include <macros.hxx>
 #include "Chart2ModelContact.hxx"
-#include "LegendHelper.hxx"
+#include <LegendHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -30,13 +30,13 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
-#include "CharacterProperties.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "FillProperties.hxx"
-#include "UserDefinedProperties.hxx"
+#include <CharacterProperties.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <UserDefinedProperties.hxx>
 #include "WrappedCharacterHeightProperty.hxx"
-#include "PositionAndSizeHelper.hxx"
-#include "WrappedDirectStateProperty.hxx"
+#include <PositionAndSizeHelper.hxx>
+#include <WrappedDirectStateProperty.hxx>
 #include "WrappedAutomaticPositionProperties.hxx"
 #include "WrappedScaleTextProperties.hxx"
 

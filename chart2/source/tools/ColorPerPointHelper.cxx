@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ColorPerPointHelper.hxx"
-#include "macros.hxx"
+#include <ColorPerPointHelper.hxx>
+#include <macros.hxx>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 

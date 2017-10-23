@@ -22,7 +22,7 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 
 #include "ChartAxisPanel.hxx"
-#include "ChartController.hxx"
+#include <ChartController.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/fixed.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CREATIONWIZARD_UNO_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CREATIONWIZARD_UNO_HXX
 
-#include "MutexContainer.hxx"
+#include <MutexContainer.hxx>
 #include <cppuhelper/component.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WrappedProperty.hxx"
-#include "macros.hxx"
+#include <WrappedProperty.hxx>
+#include <macros.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 using namespace ::com::sun::star;

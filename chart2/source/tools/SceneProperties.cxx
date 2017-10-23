@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SceneProperties.hxx"
-#include "macros.hxx"
-#include "ChartTypeHelper.hxx"
-#include "ThreeDHelper.hxx"
+#include <SceneProperties.hxx>
+#include <macros.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ThreeDHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>

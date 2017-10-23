@@ -26,7 +26,7 @@
 #include <vcl/tabctrl.hxx>
 #include <svx/xtable.hxx>
 
-#include "ControllerLockGuard.hxx"
+#include <ControllerLockGuard.hxx>
 
 namespace chart
 {

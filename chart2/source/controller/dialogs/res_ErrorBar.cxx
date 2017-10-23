@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "res_ErrorBar.hxx"
-#include "ResId.hxx"
-#include "bitmaps.hlst"
-#include "RangeSelectionHelper.hxx"
-#include "TabPageNotifiable.hxx"
-#include "macros.hxx"
-#include "helpids.h"
+#include <res_ErrorBar.hxx>
+#include <ResId.hxx>
+#include <bitmaps.hlst>
+#include <RangeSelectionHelper.hxx>
+#include <TabPageNotifiable.hxx>
+#include <macros.hxx>
+#include <helpids.h>
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>

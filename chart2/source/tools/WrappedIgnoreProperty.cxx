@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WrappedIgnoreProperty.hxx"
-#include "macros.hxx"
+#include <WrappedIgnoreProperty.hxx>
+#include <macros.hxx>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>

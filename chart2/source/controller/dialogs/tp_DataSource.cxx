@@ -18,16 +18,16 @@
  */
 
 #include "tp_DataSource.hxx"
-#include "strings.hrc"
-#include "ResId.hxx"
-#include "chartview/ChartSfxItemIds.hxx"
-#include "macros.hxx"
+#include <strings.hrc>
+#include <ResId.hxx>
+#include <chartview/ChartSfxItemIds.hxx>
+#include <macros.hxx>
 #include "ChartTypeTemplateProvider.hxx"
-#include "RangeSelectionHelper.hxx"
-#include "DataSeriesHelper.hxx"
+#include <RangeSelectionHelper.hxx>
+#include <DataSeriesHelper.hxx>
 #include "tp_DataSourceControls.hxx"
-#include "ControllerLockGuard.hxx"
-#include "DataSourceHelper.hxx"
+#include <ControllerLockGuard.hxx>
+#include <DataSourceHelper.hxx>
 #include <com/sun/star/sheet/XRangeSelection.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>

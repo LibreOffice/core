@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "chartview/DataPointSymbolSupplier.hxx"
-#include "AbstractShapeFactory.hxx"
-#include "macros.hxx"
+#include <chartview/DataPointSymbolSupplier.hxx>
+#include <AbstractShapeFactory.hxx>
+#include <macros.hxx>
 
 namespace chart
 {

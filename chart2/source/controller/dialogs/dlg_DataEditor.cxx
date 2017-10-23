@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_DataEditor.hxx"
-#include "strings.hrc"
+#include <dlg_DataEditor.hxx>
+#include <strings.hrc>
 #include "DataBrowser.hxx"
 
-#include "ResId.hxx"
+#include <ResId.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>

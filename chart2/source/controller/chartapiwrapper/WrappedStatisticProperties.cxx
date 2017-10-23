@@ -19,12 +19,12 @@
 
 #include "WrappedStatisticProperties.hxx"
 #include "WrappedSeriesOrDiagramProperty.hxx"
-#include "macros.hxx"
-#include "FastPropertyIdRanges.hxx"
-#include "RegressionCurveHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ErrorBar.hxx"
-#include "StatisticsHelper.hxx"
+#include <macros.hxx>
+#include <FastPropertyIdRanges.hxx>
+#include <RegressionCurveHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ErrorBar.hxx>
+#include <StatisticsHelper.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

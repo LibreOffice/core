@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PolynomialRegressionCurveCalculator.hxx"
-#include "macros.hxx"
-#include "RegressionCalculationHelper.hxx"
+#include <PolynomialRegressionCurveCalculator.hxx>
+#include <macros.hxx>
+#include <RegressionCalculationHelper.hxx>
 
 #include <cmath>
 #include <rtl/math.hxx>

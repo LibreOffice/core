@@ -13,7 +13,7 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/implbase.hxx>
 
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 
 #include <vector>
 

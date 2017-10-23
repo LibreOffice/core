@@ -18,20 +18,20 @@
  */
 
 #include "DiagramWrapper.hxx"
-#include "macros.hxx"
-#include "servicenames_charttypes.hxx"
+#include <macros.hxx>
+#include <servicenames_charttypes.hxx>
 #include "DataSeriesPointWrapper.hxx"
 #include "AxisWrapper.hxx"
-#include "AxisHelper.hxx"
+#include <AxisHelper.hxx>
 #include "Chart2ModelContact.hxx"
-#include "PositionAndSizeHelper.hxx"
+#include <PositionAndSizeHelper.hxx>
 #include "WallFloorWrapper.hxx"
 #include "MinMaxLineWrapper.hxx"
 #include "UpDownBarWrapper.hxx"
-#include "DiagramHelper.hxx"
-#include "DataSourceHelper.hxx"
-#include "ChartModelHelper.hxx"
-#include "WrappedIgnoreProperty.hxx"
+#include <DiagramHelper.hxx>
+#include <DataSourceHelper.hxx>
+#include <ChartModelHelper.hxx>
+#include <WrappedIgnoreProperty.hxx>
 #include "WrappedAxisAndGridExistenceProperties.hxx"
 #include "WrappedStatisticProperties.hxx"
 #include "WrappedSymbolProperties.hxx"
@@ -40,12 +40,12 @@
 #include "WrappedStockProperties.hxx"
 #include "WrappedSceneProperty.hxx"
 #include "WrappedGL3DProperties.hxx"
-#include "RelativePositionHelper.hxx"
-#include "ControllerLockGuard.hxx"
-#include "ModifyListenerHelper.hxx"
-#include "DisposeHelper.hxx"
+#include <RelativePositionHelper.hxx>
+#include <ControllerLockGuard.hxx>
+#include <ModifyListenerHelper.hxx>
+#include <DisposeHelper.hxx>
 #include "WrappedAutomaticPositionProperties.hxx"
-#include "CommonConverters.hxx"
+#include <CommonConverters.hxx>
 #include <unonames.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -57,10 +57,10 @@
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include "LinePropertiesHelper.hxx"
-#include "FillProperties.hxx"
-#include "UserDefinedProperties.hxx"
-#include "SceneProperties.hxx"
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <UserDefinedProperties.hxx>
+#include <SceneProperties.hxx>
 
 #include <algorithm>
 #include <map>

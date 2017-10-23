@@ -18,8 +18,8 @@
  */
 
 #include "ChartDropTargetHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "DataSourceHelper.hxx"
+#include <DiagramHelper.hxx>
+#include <DataSourceHelper.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>

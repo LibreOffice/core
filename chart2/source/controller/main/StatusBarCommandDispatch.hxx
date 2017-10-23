@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_STATUSBARCOMMANDDISPATCH_HXX
 
 #include "CommandDispatch.hxx"
-#include "ObjectIdentifier.hxx"
+#include <ObjectIdentifier.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

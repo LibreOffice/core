@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_PLOTTINGPOSITIONHELPER_HXX
 
 #include "LabelAlignment.hxx"
-#include "chartview/ExplicitScaleValues.hxx"
+#include <chartview/ExplicitScaleValues.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <rtl/math.hxx>

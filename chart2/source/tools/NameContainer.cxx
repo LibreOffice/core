@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "NameContainer.hxx"
+#include <NameContainer.hxx>
 
 #include <com/sun/star/uno/Any.hxx>
  #include <cppuhelper/supportsservice.hxx>

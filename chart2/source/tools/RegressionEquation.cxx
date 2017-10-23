@@ -18,13 +18,13 @@
  */
 
 #include "RegressionEquation.hxx"
-#include "LinePropertiesHelper.hxx"
-#include "FillProperties.hxx"
-#include "UserDefinedProperties.hxx"
-#include "CharacterProperties.hxx"
-#include "PropertyHelper.hxx"
-#include "macros.hxx"
-#include "ContainerHelper.hxx"
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <UserDefinedProperties.hxx>
+#include <CharacterProperties.hxx>
+#include <PropertyHelper.hxx>
+#include <macros.hxx>
+#include <ContainerHelper.hxx>
 #include <unonames.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

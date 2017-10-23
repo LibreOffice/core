@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "3DChartObjects.hxx"
+#include <3DChartObjects.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 

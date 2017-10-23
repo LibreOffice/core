@@ -19,14 +19,14 @@
 
 #include "DragMethod_RotateDiagram.hxx"
 
-#include "SelectionHelper.hxx"
-#include "CommonConverters.hxx"
-#include "ChartModelHelper.hxx"
-#include "macros.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "ThreeDHelper.hxx"
-#include "defines.hxx"
+#include <SelectionHelper.hxx>
+#include <CommonConverters.hxx>
+#include <ChartModelHelper.hxx>
+#include <macros.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <ThreeDHelper.hxx>
+#include <defines.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 

@@ -20,8 +20,8 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_SCATTERCHARTTYPETEMPLATE_HXX
 
 #include "ChartTypeTemplate.hxx"
-#include "OPropertySet.hxx"
-#include "MutexContainer.hxx"
+#include <OPropertySet.hxx>
+#include <MutexContainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/CurveStyle.hpp>
 

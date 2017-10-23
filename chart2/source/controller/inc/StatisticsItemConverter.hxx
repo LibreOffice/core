@@ -23,7 +23,7 @@
 
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
-#include "NumberFormatterWrapper.hxx"
+#include <NumberFormatterWrapper.hxx>
 
 #include <vector>
 

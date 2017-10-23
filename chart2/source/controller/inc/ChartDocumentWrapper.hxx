@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CHARTDOCUMENTWRAPPER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_CHARTDOCUMENTWRAPPER_HXX
 
-#include "WrappedPropertySet.hxx"
+#include <WrappedPropertySet.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

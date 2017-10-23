@@ -23,7 +23,7 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include "ChartErrorBarPanel.hxx"
-#include "ChartController.hxx"
+#include <ChartController.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/fixed.hxx>

@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_DIAGRAMWRAPPER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_DIAGRAMWRAPPER_HXX
 
-#include "WrappedPropertySet.hxx"
-#include "DiagramHelper.hxx"
+#include <WrappedPropertySet.hxx>
+#include <DiagramHelper.hxx>
 
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>

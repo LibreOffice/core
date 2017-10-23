@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEILLUMINATION_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEILLUMINATION_HXX
 
-#include "TimerTriggeredControllerLock.hxx"
+#include <TimerTriggeredControllerLock.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 

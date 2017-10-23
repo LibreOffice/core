@@ -9,7 +9,7 @@
 
 #include "VButton.hxx"
 
-#include "AbstractShapeFactory.hxx"
+#include <AbstractShapeFactory.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -18,9 +18,9 @@
 
 #include <memory>
 
-#include "CommonConverters.hxx"
+#include <CommonConverters.hxx>
 #include <editeng/unoprnms.hxx>
-#include "macros.hxx"
+#include <macros.hxx>
 
 namespace chart
 {

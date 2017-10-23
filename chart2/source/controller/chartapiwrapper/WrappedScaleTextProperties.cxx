@@ -18,8 +18,8 @@
  */
 
 #include "WrappedScaleTextProperties.hxx"
-#include "FastPropertyIdRanges.hxx"
-#include "macros.hxx"
+#include <FastPropertyIdRanges.hxx>
+#include <macros.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

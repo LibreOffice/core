@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_NETCHARTTYPETEMPLATE_HXX
 
 #include "ChartTypeTemplate.hxx"
-#include "StackMode.hxx"
+#include <StackMode.hxx>
 
 namespace chart
 {

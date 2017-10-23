@@ -19,11 +19,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_MACROS_HXX
 #define INCLUDED_CHART2_SOURCE_INC_MACROS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <typeinfo>
 
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 
 #define ASSERT_EXCEPTION(ex)  SAL_WARN("chart2", "Exception caught. " << ex )
 

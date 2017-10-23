@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
-#include "ChartModel.hxx"
+#include <ChartModel.hxx>
 
 #include <vector>
 

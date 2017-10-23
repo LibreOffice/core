@@ -19,10 +19,10 @@
 
 #include "tp_Scale.hxx"
 
-#include "ResId.hxx"
-#include "strings.hrc"
-#include "chartview/ChartSfxItemIds.hxx"
-#include "AxisHelper.hxx"
+#include <ResId.hxx>
+#include <strings.hrc>
+#include <chartview/ChartSfxItemIds.hxx>
+#include <AxisHelper.hxx>
 
 #include <svx/svxids.hrc>
 #include <rtl/math.hxx>

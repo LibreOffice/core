@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_RANGECHOOSER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_RANGECHOOSER_HXX
 
-#include "RangeSelectionListener.hxx"
-#include "TabPageNotifiable.hxx"
+#include <RangeSelectionListener.hxx>
+#include <TabPageNotifiable.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>

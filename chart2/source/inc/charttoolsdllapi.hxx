@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CHARTTOOLSDLLAPI_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CHARTTOOLSDLLAPI_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined OOO_DLLIMPLEMENTATION_CHARTTOOLS
 #define OOO_DLLPUBLIC_CHARTTOOLS SAL_DLLPUBLIC_EXPORT

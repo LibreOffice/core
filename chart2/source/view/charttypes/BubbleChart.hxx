@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_BUBBLECHART_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_CHARTTYPES_BUBBLECHART_HXX
 
-#include "VSeriesPlotter.hxx"
+#include <VSeriesPlotter.hxx>
 #include <com/sun/star/drawing/Direction3D.hpp>
 
 namespace chart

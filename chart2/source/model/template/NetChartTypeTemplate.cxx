@@ -18,11 +18,11 @@
  */
 
 #include "NetChartTypeTemplate.hxx"
-#include "macros.hxx"
-#include "PolarCoordinateSystem.hxx"
-#include "DiagramHelper.hxx"
-#include "servicenames_charttypes.hxx"
-#include "DataSeriesHelper.hxx"
+#include <macros.hxx>
+#include <PolarCoordinateSystem.hxx>
+#include <DiagramHelper.hxx>
+#include <servicenames_charttypes.hxx>
+#include <DataSeriesHelper.hxx>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>

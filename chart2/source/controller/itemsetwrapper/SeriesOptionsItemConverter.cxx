@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SeriesOptionsItemConverter.hxx"
+#include <SeriesOptionsItemConverter.hxx>
 #include "SchWhichPairs.hxx"
 
-#include "macros.hxx"
-#include "ItemPropertyMap.hxx"
-#include "GraphicPropertyItemConverter.hxx"
-#include "MultipleItemConverter.hxx"
-#include "ChartModelHelper.hxx"
-#include "AxisHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "ChartTypeHelper.hxx"
-#include "DataSeriesHelper.hxx"
+#include <macros.hxx>
+#include <ItemPropertyMap.hxx>
+#include <GraphicPropertyItemConverter.hxx>
+#include <MultipleItemConverter.hxx>
+#include <ChartModelHelper.hxx>
+#include <AxisHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <ChartTypeHelper.hxx>
+#include <DataSeriesHelper.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>

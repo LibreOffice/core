@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ACCESSIBLETEXTHELPER_HXX
 
 #include <memory>
-#include "MutexContainer.hxx"
+#include <MutexContainer.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>

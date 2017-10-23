@@ -12,7 +12,7 @@
 
 #include "PropertyMapper.hxx"
 #include "VLineProperties.hxx"
-#include "BaseGFXHelper.hxx"
+#include <BaseGFXHelper.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

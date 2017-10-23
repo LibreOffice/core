@@ -18,8 +18,8 @@
  */
 
 #include "tp_PolarOptions.hxx"
-#include "ResId.hxx"
-#include "chartview/ChartSfxItemIds.hxx"
+#include <ResId.hxx>
+#include <chartview/ChartSfxItemIds.hxx>
 
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

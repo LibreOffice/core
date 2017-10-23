@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_MINMAXLINEWRAPPER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_MINMAXLINEWRAPPER_HXX
 
-#include "MutexContainer.hxx"
-#include "WrappedIgnoreProperty.hxx"
+#include <MutexContainer.hxx>
+#include <WrappedIgnoreProperty.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
 #include <com/sun/star/chart2/XDiagram.hpp>

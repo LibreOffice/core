@@ -18,7 +18,7 @@
  */
 
 #include "ImplOPropertySet.hxx"
-#include "CloneHelper.hxx"
+#include <CloneHelper.hxx>
 
 #include <algorithm>
 #include <iterator>

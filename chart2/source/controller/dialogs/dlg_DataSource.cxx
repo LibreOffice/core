@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlg_DataSource.hxx"
-#include "strings.hrc"
-#include "ResId.hxx"
+#include <dlg_DataSource.hxx>
+#include <strings.hrc>
+#include <ResId.hxx>
 #include "ChartTypeTemplateProvider.hxx"
-#include "DiagramHelper.hxx"
+#include <DiagramHelper.hxx>
 #include "DialogModel.hxx"
-#include "helpids.h"
+#include <helpids.h>
 
 #include "tp_RangeChooser.hxx"
 #include "tp_DataSource.hxx"

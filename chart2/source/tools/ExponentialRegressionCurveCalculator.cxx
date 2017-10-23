@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ExponentialRegressionCurveCalculator.hxx"
-#include "macros.hxx"
-#include "RegressionCalculationHelper.hxx"
+#include <ExponentialRegressionCurveCalculator.hxx>
+#include <macros.hxx>
+#include <RegressionCalculationHelper.hxx>
 #include <SpecialCharacters.hxx>
 
 #include <rtl/math.hxx>

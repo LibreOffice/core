@@ -20,7 +20,7 @@
 #include "Tickmarks_Dates.hxx"
 #include "DateScaling.hxx"
 #include <rtl/math.hxx>
-#include "DateHelper.hxx"
+#include <DateHelper.hxx>
 
 namespace chart
 {

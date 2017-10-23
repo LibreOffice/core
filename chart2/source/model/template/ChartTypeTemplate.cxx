@@ -18,18 +18,18 @@
  */
 
 #include "ChartTypeTemplate.hxx"
-#include "PropertyHelper.hxx"
-#include "macros.hxx"
-#include "DataSeriesHelper.hxx"
+#include <PropertyHelper.hxx>
+#include <macros.hxx>
+#include <DataSeriesHelper.hxx>
 #include "DataInterpreter.hxx"
-#include "CommonConverters.hxx"
-#include "ChartTypeHelper.hxx"
+#include <CommonConverters.hxx>
+#include <ChartTypeHelper.hxx>
 
-#include "CartesianCoordinateSystem.hxx"
-#include "AxisHelper.hxx"
-#include "LegendHelper.hxx"
-#include "DiagramHelper.hxx"
-#include "AxisIndexDefines.hxx"
+#include <CartesianCoordinateSystem.hxx>
+#include <AxisHelper.hxx>
+#include <LegendHelper.hxx>
+#include <DiagramHelper.hxx>
+#include <AxisIndexDefines.hxx>
 #include <unonames.hxx>
 
 #include <cppuhelper/component_context.hxx>

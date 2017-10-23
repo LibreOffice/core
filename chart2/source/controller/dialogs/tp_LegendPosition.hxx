@@ -22,8 +22,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 
-#include "res_LegendPosition.hxx"
-#include "TextDirectionListBox.hxx"
+#include <res_LegendPosition.hxx>
+#include <TextDirectionListBox.hxx>
 
 namespace chart
 {

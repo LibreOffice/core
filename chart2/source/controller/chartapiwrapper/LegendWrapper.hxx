@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_LEGENDWRAPPER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_LEGENDWRAPPER_HXX
 
-#include "WrappedPropertySet.hxx"
+#include <WrappedPropertySet.hxx>
 #include "ReferenceSizePropertyProvider.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>

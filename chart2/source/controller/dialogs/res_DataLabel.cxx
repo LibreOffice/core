@@ -19,7 +19,7 @@
 
 #include "res_DataLabel.hxx"
 
-#include "chartview/ChartSfxItemIds.hxx"
+#include <chartview/ChartSfxItemIds.hxx>
 #include "dlg_NumberFormat.hxx"
 
 #include <svx/numinf.hxx>

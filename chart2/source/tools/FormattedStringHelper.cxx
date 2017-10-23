@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FormattedStringHelper.hxx"
-#include "macros.hxx"
-#include "PropertyHelper.hxx"
+#include <FormattedStringHelper.hxx>
+#include <macros.hxx>
+#include <PropertyHelper.hxx>
 #include <com/sun/star/chart2/FormattedString.hpp>
 
 namespace chart

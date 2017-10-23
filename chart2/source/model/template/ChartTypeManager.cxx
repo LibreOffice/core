@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ChartTypeManager.hxx"
-#include "macros.hxx"
-#include "StackMode.hxx"
+#include <ChartTypeManager.hxx>
+#include <macros.hxx>
+#include <StackMode.hxx>
 
-#include "CartesianCoordinateSystem.hxx"
+#include <CartesianCoordinateSystem.hxx>
 
 #include "LineChartTypeTemplate.hxx"
 #include "BarChartTypeTemplate.hxx"

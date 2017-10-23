@@ -21,7 +21,7 @@
 
 #include <config_features.h>
 
-#include "LifeTime.hxx"
+#include <LifeTime.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>

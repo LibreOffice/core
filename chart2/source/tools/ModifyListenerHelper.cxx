@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ModifyListenerHelper.hxx"
-#include "WeakListenerAdapter.hxx"
-#include "macros.hxx"
+#include <ModifyListenerHelper.hxx>
+#include <WeakListenerAdapter.hxx>
+#include <macros.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>
 
