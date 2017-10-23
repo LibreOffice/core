@@ -32,7 +32,7 @@
 #include "drawdoc.hxx"
 #include "sdcgmfilter.hxx"
 
-#include "../../ui/inc/DrawDocShell.hxx"
+#include "DrawDocShell.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
