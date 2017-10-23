@@ -27,10 +27,10 @@
 #include <unotools/securityoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docmacromode.hxx>
-#include "bitset.hxx"
+#include <bitset.hxx>
 #include <vcl/timer.hxx>
 
-#include <appbaslib.hxx>
+#include "appbaslib.hxx"
 
 namespace svtools { class AsynchronLink; }
 

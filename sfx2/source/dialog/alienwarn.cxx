@@ -23,7 +23,7 @@
 #include <sfx2/sfxuno.hxx>
 #include <unotools/saveopt.hxx>
 #include <vcl/msgbox.hxx>
-#include "alienwarn.hxx"
+#include <alienwarn.hxx>
 
 SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName,
                                              const OUString& _rDefaultExtension, bool rDefaultIsAlien)

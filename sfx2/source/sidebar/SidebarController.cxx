@@ -33,11 +33,11 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/titledockwin.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fixed.hxx>
-#include "splitwin.hxx"
+#include <splitwin.hxx>
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>

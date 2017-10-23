@@ -19,9 +19,9 @@
 
 
 #include "impframe.hxx"
-#include "objshimp.hxx"
+#include <objshimp.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include "workwin.hxx"
+#include <workwin.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>

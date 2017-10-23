@@ -19,7 +19,7 @@
 
 
 #include <sfx2/sfxsids.hrc>
-#include "sorgitm.hxx"
+#include <sorgitm.hxx>
 #include <osl/diagnose.h>
 #include <typeinfo>
 

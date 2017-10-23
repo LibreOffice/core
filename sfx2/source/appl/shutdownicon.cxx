@@ -23,7 +23,7 @@
 
 #include <boost/logic/tribool.hpp>
 #include <config_folders.h>
-#include <shutdownicon.hxx>
+#include "shutdownicon.hxx"
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
 #include <osl/mutex.hxx>

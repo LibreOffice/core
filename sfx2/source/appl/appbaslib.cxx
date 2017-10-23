@@ -19,10 +19,10 @@
 
 #include <config_features.h>
 
-#include "appbaslib.hxx"
+#include <appbaslib.hxx>
 
 #include <sfx2/sfxuno.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/app.hxx>
 
 #include <basic/basmgr.hxx>

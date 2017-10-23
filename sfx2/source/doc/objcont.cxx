@@ -53,12 +53,12 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
-#include "objshimp.hxx"
+#include <objshimp.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/dispatch.hxx>
@@ -67,11 +67,11 @@
 #include <svtools/strings.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/doctempl.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
-#include "openflag.hxx"
+#include <openflag.hxx>
 #include "querytemplate.hxx"
 #include <memory>
 

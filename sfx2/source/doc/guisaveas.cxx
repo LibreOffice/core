@@ -50,7 +50,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/io/IOException.hpp>
 
-#include "guisaveas.hxx"
+#include <guisaveas.hxx>
 
 #include <unotools/pathoptions.hxx>
 #include <svl/itemset.hxx>
@@ -78,7 +78,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfxtypes.hxx>
-#include "alienwarn.hxx"
+#include <alienwarn.hxx>
 
 #include <sfx2/docmacromode.hxx>
 #include <comphelper/interaction.hxx>

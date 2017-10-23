@@ -18,12 +18,12 @@
  */
 
 
-#include "srchdlg.hxx"
+#include <srchdlg.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxuno.hxx>
 
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <tools/debug.hxx>
 #include <unotools/viewoptions.hxx>
 

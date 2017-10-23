@@ -89,7 +89,7 @@
 
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/viewfac.hxx>
-#include "workwin.hxx"
+#include <workwin.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <objshimp.hxx>
@@ -106,13 +106,13 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docstoragemodifylistener.hxx>
 #include <sfx2/brokenpackageint.hxx>
 #include "graphhelp.hxx"
-#include "docundomanager.hxx"
+#include <docundomanager.hxx>
 #include <openurlhint.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>

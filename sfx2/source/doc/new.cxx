@@ -31,13 +31,13 @@
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>
 
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/docfile.hxx>
-#include "preview.hxx"
+#include <preview.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/waitobj.hxx>
 

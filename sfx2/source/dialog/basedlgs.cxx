@@ -41,9 +41,9 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include "workwin.hxx"
+#include <workwin.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 
 using namespace ::com::sun::star::uno;
 

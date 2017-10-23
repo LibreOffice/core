@@ -63,7 +63,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include "doctemplateslocal.hxx"
-#include "sfxurlrelocator.hxx"
+#include <sfxurlrelocator.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -82,11 +82,11 @@ using namespace ::ucbhelper;
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "sfx2/strings.hrc"
-#include "strings.hxx"
+#include <sfx2/strings.hrc>
+#include <strings.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/templatefoldercache.hxx>
 

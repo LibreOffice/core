@@ -29,11 +29,11 @@
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
 
-#include "splitwin.hxx"
-#include "workwin.hxx"
+#include <splitwin.hxx>
+#include <workwin.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/app.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>

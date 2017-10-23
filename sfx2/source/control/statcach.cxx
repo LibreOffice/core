@@ -35,11 +35,11 @@
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/app.hxx>
-#include "statcach.hxx"
+#include <statcach.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/msgpool.hxx>

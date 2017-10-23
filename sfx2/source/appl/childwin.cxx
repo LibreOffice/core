@@ -34,8 +34,8 @@
 #include <sfx2/module.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/dispatch.hxx>
-#include "workwin.hxx"
-#include "childwinimpl.hxx"
+#include <workwin.hxx>
+#include <childwinimpl.hxx>
 
 static const sal_uInt16 nVersion = 2;
 

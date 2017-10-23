@@ -26,19 +26,19 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include "sfxtypes.hxx"
-#include "appdata.hxx"
+#include <sfxtypes.hxx>
+#include <appdata.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/app.hxx>
-#include "arrdecl.hxx"
+#include <arrdecl.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/msgpool.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/docfile.hxx>
-#include "workwin.hxx"
+#include <workwin.hxx>
 
 
 SfxFilterMatcher& SfxApplication::GetFilterMatcher()

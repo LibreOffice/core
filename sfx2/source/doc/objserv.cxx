@@ -76,12 +76,12 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/objsh.hxx>
-#include "objshimp.hxx"
-#include "sfxtypes.hxx"
+#include <objshimp.hxx>
+#include <sfxtypes.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "versdlg.hxx"
-#include "sfx2/strings.hrc"
+#include <versdlg.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/sfxhelp.hxx>
@@ -95,9 +95,9 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include "helpids.h"
+#include <helpids.h>
 
-#include "guisaveas.hxx"
+#include <guisaveas.hxx>
 #include <sfx2/saveastemplatedlg.hxx>
 #include <memory>
 #include <cppuhelper/implbase.hxx>
@@ -115,7 +115,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::task;
 
 #define SfxObjectShell
-#include "sfxslots.hxx"
+#include <sfxslots.hxx>
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxObjectShell, SfxShell)
 

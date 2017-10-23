@@ -36,7 +36,7 @@
 #include <svtools/treelistbox.hxx>
 #include <unotools/moduleoptions.hxx>
 
-#include "srchdlg.hxx"
+#include <srchdlg.hxx>
 
 // context menu ids
 #define MID_OPEN                                1

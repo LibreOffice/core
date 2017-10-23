@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "arrdecl.hxx"
+#include <arrdecl.hxx>
 #include <map>
 
 #include <cppuhelper/implbase.hxx>
@@ -80,19 +80,19 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "objshimp.hxx"
-#include "sfxtypes.hxx"
+#include <objshimp.hxx>
+#include <sfxtypes.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/request.hxx>
-#include "sfx2/strings.hrc"
-#include "appdata.hxx"
+#include <sfx2/strings.hrc>
+#include <appdata.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <basic/basmgr.hxx>
 #include <svtools/strings.hrc>
 #include <sfx2/QuerySaveDocument.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <sfx2/msg.hxx>
-#include "appbaslib.hxx"
+#include <appbaslib.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <shellimpl.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
@@ -108,7 +108,7 @@ using namespace ::com::sun::star::document;
 using ::basic::BasicManagerRepository;
 #include <uno/mapping.hxx>
 
-#include "sfxslots.hxx"
+#include <sfxslots.hxx>
 
 namespace {
 

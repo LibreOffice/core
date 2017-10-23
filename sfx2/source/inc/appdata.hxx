@@ -29,7 +29,7 @@
 #include <sfx2/app.hxx>
 #include <o3tl/enumarray.hxx>
 
-#include "bitset.hxx"
+#include <bitset.hxx>
 #include <memory>
 #include <vector>
 

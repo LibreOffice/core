@@ -76,12 +76,12 @@
 #include <unotools/ucbhelper.hxx>
 
 #include <sfx2/sfxresid.hxx>
-#include "sfxurlrelocator.hxx"
+#include <sfxurlrelocator.hxx>
 #include "doctemplateslocal.hxx"
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
-#include "sfx2/strings.hrc"
-#include "doctempl.hrc"
+#include <sfx2/strings.hrc>
+#include <doctempl.hrc>
 
 #include <memory>
 #include <vector>

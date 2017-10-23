@@ -23,7 +23,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
-#include "openflag.hxx"
+#include <openflag.hxx>
 
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>

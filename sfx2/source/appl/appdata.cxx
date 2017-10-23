@@ -28,22 +28,22 @@
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/viewfrm.hxx>
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/doctempl.hxx>
-#include "arrdecl.hxx"
+#include <arrdecl.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/unoctitm.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
-#include "objshimp.hxx"
+#include <objshimp.hxx>
 #include "imestatuswindow.hxx"
-#include "appbaslib.hxx"
+#include <appbaslib.hxx>
 #include <childwinimpl.hxx>
 
 #include <basic/basicmanagerrepository.hxx>

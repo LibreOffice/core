@@ -19,9 +19,9 @@
 
 #include <sfx2/hintpost.hxx>
 
-#include "arrdecl.hxx"
+#include <arrdecl.hxx>
 #include <sfx2/app.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 
 
 SfxHintPoster::SfxHintPoster(const Link<SfxRequest*,void>& rLink)

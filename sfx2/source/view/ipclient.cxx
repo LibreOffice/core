@@ -48,8 +48,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include "workwin.hxx"
-#include "guisaveas.hxx"
+#include <workwin.hxx>
+#include <guisaveas.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/ehdl.hxx>
 

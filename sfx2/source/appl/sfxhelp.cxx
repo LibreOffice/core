@@ -54,14 +54,14 @@
 #include <vcl/layout.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-#include "openuriexternally.hxx"
+#include <openuriexternally.hxx>
 
 #include "newhelp.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "helper.hxx"
-#include "sfx2/strings.hrc"
+#include <helper.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxuno.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frame.hxx>

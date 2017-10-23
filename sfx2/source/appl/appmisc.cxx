@@ -47,7 +47,7 @@
 
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/app.hxx>
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/docfac.hxx>
@@ -56,17 +56,17 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include "workwin.hxx"
+#include <workwin.hxx>
 #include <sfx2/fcontnr.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "openflag.hxx"
+#include <openflag.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objface.hxx>
-#include "helper.hxx"
+#include <helper.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
@@ -77,7 +77,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 #define SfxApplication
-#include "sfxslots.hxx"
+#include <sfxslots.hxx>
 
 SFX_IMPL_INTERFACE(SfxApplication,SfxShell)
 

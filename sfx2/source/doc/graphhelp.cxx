@@ -51,8 +51,8 @@
 
 #include <sfx2/sfxresid.hxx>
 #include "graphhelp.hxx"
-#include "sfx2/strings.hrc"
-#include "bitmaps.hlst"
+#include <sfx2/strings.hrc>
+#include <bitmaps.hlst>
 
 #include <memory>
 

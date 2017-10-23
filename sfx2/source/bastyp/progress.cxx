@@ -27,7 +27,7 @@
 #include <svl/eitem.hxx>
 #include <tools/time.hxx>
 
-#include "appdata.hxx"
+#include <appdata.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -35,14 +35,14 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/docfile.hxx>
-#include "workwin.hxx"
+#include <workwin.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/msg.hxx>
-#include "sfxslots.hxx"
-#include "sfxbasecontroller_internal.hxx"
+#include <sfxslots.hxx>
+#include <sfxbasecontroller_internal.hxx>
 #include <time.h>
 
 using namespace ::com::sun::star::uno;

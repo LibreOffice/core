@@ -66,21 +66,21 @@
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
-#include "openflag.hxx"
-#include "sfx2/strings.hrc"
+#include <openflag.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/doctempl.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "helper.hxx"
+#include <helper.hxx>
 #include "fltlst.hxx"
 #include <sfx2/request.hxx>
-#include "arrdecl.hxx"
+#include <arrdecl.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <vector>

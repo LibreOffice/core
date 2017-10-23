@@ -19,7 +19,7 @@
 
 #include <sal/log.hxx>
 
-#include "bitset.hxx"
+#include <bitset.hxx>
 
 #include <string.h>
 #include <limits.h>

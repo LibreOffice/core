@@ -110,22 +110,22 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
-#include "appopen.hxx"
-#include "objshimp.hxx"
-#include "sfxtypes.hxx"
-#include "sfx2/strings.hrc"
+#include <appopen.hxx>
+#include <objshimp.hxx>
+#include <sfxtypes.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
-#include "openflag.hxx"
-#include "helper.hxx"
+#include <openflag.hxx>
+#include <helper.hxx>
 #include <sfx2/event.hxx>
-#include "fltoptint.hxx"
+#include <fltoptint.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "graphhelp.hxx"
-#include "appbaslib.hxx"
-#include "appdata.hxx"
-#include <objstor.hxx>
+#include <appbaslib.hxx>
+#include <appdata.hxx>
+#include "objstor.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;

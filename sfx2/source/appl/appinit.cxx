@@ -49,9 +49,9 @@
 #include <vcl/edit.hxx>
 
 #include <sfx2/unoctitm.hxx>
-#include "sfx2/strings.hrc"
-#include "appdata.hxx"
-#include "arrdecl.hxx"
+#include <sfx2/strings.hrc>
+#include <appdata.hxx>
+#include <arrdecl.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/evntconf.hxx>
@@ -59,12 +59,12 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/viewsh.hxx>
-#include "nochaos.hxx"
+#include <nochaos.hxx>
 #include <sfx2/fcontnr.hxx>
-#include "helper.hxx"
-#include "sfxpicklist.hxx"
+#include <helper.hxx>
+#include <sfxpicklist.hxx>
 #include <ctrlfactoryimpl.hxx>
 #include <shellimpl.hxx>
 

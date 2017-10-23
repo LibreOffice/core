@@ -48,9 +48,9 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/request.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "arrdecl.hxx"
+#include <arrdecl.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
@@ -61,20 +61,20 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "appdata.hxx"
-#include "openflag.hxx"
-#include "sfx2/strings.hrc"
+#include <appdata.hxx>
+#include <openflag.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/module.hxx>
 #include <sfx2/event.hxx>
 #include "imestatuswindow.hxx"
-#include "workwin.hxx"
+#include <workwin.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/stbitem.hxx>
-#include "eventsupplier.hxx"
+#include <eventsupplier.hxx>
 #include <sfx2/dockwin.hxx>
-#include "shellimpl.hxx"
+#include <shellimpl.hxx>
 
 #include <unotools/saveopt.hxx>
 #include <svtools/helpopt.hxx>
@@ -95,7 +95,7 @@
 #include <rtl/strbuf.hxx>
 #include <memory>
 #include <framework/sfxhelperfunctions.hxx>
-#include "fwkhelper.hxx"
+#include <fwkhelper.hxx>
 
 using namespace ::com::sun::star;
 

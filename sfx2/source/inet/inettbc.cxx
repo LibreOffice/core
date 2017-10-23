@@ -18,7 +18,7 @@
  */
 
 
-#include "inettbc.hxx"
+#include <inettbc.hxx>
 
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -42,8 +42,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
-#include "sfxtypes.hxx"
-#include "helper.hxx"
+#include <sfxtypes.hxx>
+#include <helper.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <osl/module.hxx>
 #include <sfx2/app.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include "shutdownicon.hxx"
 
 #include <config_gio.h>

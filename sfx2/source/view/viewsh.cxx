@@ -66,21 +66,21 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
-#include "arrdecl.hxx"
+#include <arrdecl.hxx>
 #include <sfx2/docfac.hxx>
-#include "sfx2/strings.hrc"
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/mailmodelapi.hxx>
-#include "bluthsndapi.hxx"
+#include <bluthsndapi.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/ipclient.hxx>
-#include "workwin.hxx"
+#include <workwin.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/lokhelper.hxx>
-#include "openuriexternally.hxx"
+#include <openuriexternally.hxx>
 #include <shellimpl.hxx>
 
 #include <vector>
@@ -94,7 +94,7 @@ using namespace ::com::sun::star::util;
 using namespace ::cppu;
 
 #define SfxViewShell
-#include "sfxslots.hxx"
+#include <sfxslots.hxx>
 
 
 class SfxClipboardChangeListener : public ::cppu::WeakImplHelper<

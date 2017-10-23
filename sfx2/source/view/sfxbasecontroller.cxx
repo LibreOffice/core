@@ -55,7 +55,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/userinputinterception.hxx>
 
-#include <viewimp.hxx>
+#include "viewimp.hxx"
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -76,7 +76,7 @@
 #include <sfx2/event.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/strings.hrc>
-#include "sfxbasecontroller_internal.hxx"
+#include <sfxbasecontroller_internal.hxx>
 
 #include <unordered_map>
 

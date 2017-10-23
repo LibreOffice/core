@@ -59,16 +59,16 @@
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/dinfdlg.hxx>
-#include "helper.hxx"
+#include <helper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include "documentfontsdialog.hxx"
-#include "dinfdlg.hrc"
-#include "sfx2/strings.hrc"
-#include "strings.hxx"
-#include "bitmaps.hlst"
+#include <documentfontsdialog.hxx>
+#include <dinfdlg.hrc>
+#include <sfx2/strings.hrc>
+#include <strings.hxx>
+#include <bitmaps.hlst>
 #include <vcl/help.hxx>
 #include <vcl/builderfactory.hxx>
 

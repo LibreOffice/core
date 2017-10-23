@@ -18,7 +18,7 @@
  */
 
 
-#include "docundomanager.hxx"
+#include <docundomanager.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>

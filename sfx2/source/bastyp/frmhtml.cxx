@@ -27,7 +27,7 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
-#include "sfxtypes.hxx"
+#include <sfxtypes.hxx>
 
 static sal_Char const sHTML_SC_yes[] =  "YES";
 static sal_Char const sHTML_SC_no[] =       "NO";

@@ -19,9 +19,9 @@
 
 
 #include "impviewframe.hxx"
-#include "statcach.hxx"
+#include <statcach.hxx>
 #include <sfx2/viewfac.hxx>
-#include "workwin.hxx"
+#include <workwin.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>

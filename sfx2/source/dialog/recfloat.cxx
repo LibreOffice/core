@@ -20,8 +20,8 @@
 #include <svl/eitem.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "recfloat.hxx"
-#include "sfx2/strings.hrc"
+#include <recfloat.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
