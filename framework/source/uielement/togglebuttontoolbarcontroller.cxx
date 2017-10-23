@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "uielement/togglebuttontoolbarcontroller.hxx"
+#include <uielement/togglebuttontoolbarcontroller.hxx>
 
 #include <framework/addonsoptions.hxx>
 

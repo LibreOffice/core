@@ -31,7 +31,7 @@
 #include <framework/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configuration.hxx>
-#include "officecfg/Office/Common.hxx"
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>

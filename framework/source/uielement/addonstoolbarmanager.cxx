@@ -21,7 +21,7 @@
 #include <uielement/toolbarmerger.hxx>
 
 #include <uielement/generictoolbarcontroller.hxx>
-#include "services.h"
+#include <services.h>
 #include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/resource.hxx>

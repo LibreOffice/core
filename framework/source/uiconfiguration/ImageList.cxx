@@ -28,7 +28,7 @@
 #include <vcl/image.hxx>
 #include <vcl/imagerepository.hxx>
 #include <vcl/ImageTree.hxx>
-#include <image.h>
+#include "image.h"
 #include "ImageList.hxx"
 
 ImageList::ImageList()

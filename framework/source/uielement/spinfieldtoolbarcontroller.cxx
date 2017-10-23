@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <wchar.h>
 
-#include "uielement/spinfieldtoolbarcontroller.hxx"
+#include <uielement/spinfieldtoolbarcontroller.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

@@ -19,7 +19,7 @@
 
 #include <uielement/toolbarmodemenucontroller.hxx>
 
-#include "services.h"
+#include <services.h>
 #include <framework/sfxhelperfunctions.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

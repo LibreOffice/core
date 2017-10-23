@@ -19,7 +19,7 @@
 
 #include <uielement/newmenucontroller.hxx>
 
-#include "services.h"
+#include <services.h>
 #include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
