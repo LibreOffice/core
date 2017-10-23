@@ -383,7 +383,10 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 
     const SfxPoolItem* pItem = nullptr;
     if ( SfxItemState::SET == rSet->GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
+    {
         m_pYearValueField->SetValue( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
+        TwoFigureHdl(*m_pYearValueField);
+    }
     else
         m_pYearFrame->Enable(false);
 
