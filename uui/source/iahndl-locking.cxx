@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include "getcontinuations.hxx"
 #include "openlocked.hxx"
 #include "trylater.hxx"

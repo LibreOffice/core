@@ -42,7 +42,7 @@
 #include <vcl/svapp.hxx>
 
 #include "authfallbackdlg.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "getcontinuations.hxx"
 #include "passwordcontainer.hxx"
 #include "loginerr.hxx"

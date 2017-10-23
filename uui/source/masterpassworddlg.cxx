@@ -19,7 +19,7 @@
 
 #include <unotools/resmgr.hxx>
 #include <vcl/layout.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include "masterpassworddlg.hxx"
 
 // MasterPasswordDialog---------------------------------------------------

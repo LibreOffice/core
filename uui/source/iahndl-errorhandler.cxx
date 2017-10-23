@@ -31,8 +31,8 @@
 #include <svx/dialogs.hrc>
 #include <unotools/resmgr.hxx>
 
-#include "ids.hxx"
-#include "ids.hrc"
+#include <ids.hxx>
+#include <ids.hrc>
 #include "getcontinuations.hxx"
 
 #include "iahndl.hxx"

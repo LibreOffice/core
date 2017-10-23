@@ -35,8 +35,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "ids.hxx"
-#include "ids.hrc"
+#include <ids.hxx>
+#include <ids.hrc>
 #include "getcontinuations.hxx"
 #include "sslwarndlg.hxx"
 #include "unknownauthdlg.hxx"

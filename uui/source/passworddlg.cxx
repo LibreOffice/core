@@ -18,7 +18,7 @@
  */
 
 #include "passworddlg.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>

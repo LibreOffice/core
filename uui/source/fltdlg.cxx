@@ -19,7 +19,7 @@
 
 #include "fltdlg.hxx"
 
-#include "ids.hxx"
+#include <ids.hxx>
 
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <cppuhelper/implbase.hxx>
