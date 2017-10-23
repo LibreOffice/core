@@ -174,6 +174,8 @@ void FileControl::Resize()
 
 void FileControl::GetFocus()
 {
+    if (!maEdit || maEdit->IsDisposed())
+        return;
     maEdit->GrabFocus();
 }
 
