@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cdatasection.hxx>
+#include "cdatasection.hxx"
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 

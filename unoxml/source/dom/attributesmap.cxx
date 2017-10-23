@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <attributesmap.hxx>
+#include "attributesmap.hxx"
 
 #include <string.h>
 
-#include <element.hxx>
-#include <document.hxx>
+#include "element.hxx"
+#include "document.hxx"
 
 using namespace css::uno;
 using namespace css::xml::dom;

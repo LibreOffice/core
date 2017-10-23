@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <documentbuilder.hxx>
+#include "documentbuilder.hxx"
 
 #include <string.h>
 #include <stdio.h>
@@ -44,7 +44,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 
 #include <node.hxx>
-#include <document.hxx>
+#include "document.hxx"
 
 using namespace css::io;
 using namespace css::lang;

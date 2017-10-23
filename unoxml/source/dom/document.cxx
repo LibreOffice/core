@@ -31,14 +31,14 @@
 #include "documenttype.hxx"
 #include "elementlist.hxx"
 #include "domimplementation.hxx"
-#include <entity.hxx>
-#include <notation.hxx>
+#include "entity.hxx"
+#include "notation.hxx"
 
-#include "event.hxx"
-#include "mutationevent.hxx"
-#include "uievent.hxx"
-#include "mouseevent.hxx"
-#include "eventdispatcher.hxx"
+#include <event.hxx>
+#include <mutationevent.hxx>
+#include <uievent.hxx>
+#include <mouseevent.hxx>
+#include <eventdispatcher.hxx>
 
 #include <string.h>
 

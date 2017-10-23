@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <childlist.hxx>
+#include "childlist.hxx"
 
 #include <libxml/tree.h>
 
 #include <node.hxx>
-#include <document.hxx>
+#include "document.hxx"
 
 using namespace css::uno;
 using namespace css::xml::dom;

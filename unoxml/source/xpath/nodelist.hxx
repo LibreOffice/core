@@ -30,8 +30,8 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 
-#include "libxml/tree.h"
-#include "libxml/xpath.h"
+#include <libxml/tree.h>
+#include <libxml/xpath.h>
 
 #include <memory>
 

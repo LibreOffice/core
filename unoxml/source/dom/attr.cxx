@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <attr.hxx>
+#include "attr.hxx"
 
 #include <string.h>
 
@@ -28,7 +28,7 @@
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 
-#include <document.hxx>
+#include "document.hxx"
 
 using namespace css::uno;
 using namespace css::xml::dom;

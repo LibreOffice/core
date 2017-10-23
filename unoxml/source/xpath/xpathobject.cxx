@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xpathobject.hxx>
+#include "xpathobject.hxx"
 
 #include <string.h>
 
 #include "../dom/document.hxx"
-#include <nodelist.hxx>
+#include "nodelist.hxx"
 
 using namespace css::uno;
 using namespace css::xml::dom;

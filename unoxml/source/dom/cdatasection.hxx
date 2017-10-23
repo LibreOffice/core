@@ -24,7 +24,7 @@
 #include <com/sun/star/xml/dom/XCDATASection.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <text.hxx>
+#include "text.hxx"
 
 namespace DOM
 {

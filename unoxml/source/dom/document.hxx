@@ -46,7 +46,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
 
-#include "node.hxx"
+#include <node.hxx>
 
 namespace DOM
 {
