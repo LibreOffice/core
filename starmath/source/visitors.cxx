@@ -9,9 +9,9 @@
 
 #include <tools/gen.hxx>
 #include <vcl/lineinfo.hxx>
-#include "visitors.hxx"
+#include <visitors.hxx>
 #include "tmpdevice.hxx"
-#include "cursor.hxx"
+#include <cursor.hxx>
 #include <cassert>
 
 // SmDefaultingVisitor

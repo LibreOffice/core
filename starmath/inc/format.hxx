@@ -23,7 +23,7 @@
 #include <svl/hint.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include "utility.hxx"
-#include <types.hxx>
+#include "types.hxx"
 
 
 #define FNTNAME_TIMES   "Times New Roman"

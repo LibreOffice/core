@@ -20,7 +20,7 @@
 #ifndef INCLUDED_STARMATH_SOURCE_CFGITEM_HXX
 #define INCLUDED_STARMATH_SOURCE_CFGITEM_HXX
 
-#include "utility.hxx"
+#include <utility.hxx>
 
 #include <deque>
 #include <vector>

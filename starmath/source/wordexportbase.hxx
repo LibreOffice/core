@@ -10,7 +10,7 @@
 #ifndef INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
 #define INCLUDED_STARMATH_SOURCE_WORDEXPORTBASE_HXX
 
-#include "node.hxx"
+#include <node.hxx>
 
 /**
  Base class implementing writing of formulas to Word.

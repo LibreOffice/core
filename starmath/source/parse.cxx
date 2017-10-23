@@ -22,9 +22,9 @@
 #include <i18nlangtag/lang.h>
 #include <unotools/syslocale.hxx>
 #include <o3tl/make_unique.hxx>
-#include "parse.hxx"
-#include "strings.hrc"
-#include "smmod.hxx"
+#include <parse.hxx>
+#include <strings.hrc>
+#include <smmod.hxx>
 #include "cfgitem.hxx"
 #include <cassert>
 #include <stack>

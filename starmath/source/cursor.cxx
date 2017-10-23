@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <memory>
-#include "cursor.hxx"
-#include "visitors.hxx"
-#include "document.hxx"
-#include "view.hxx"
+#include <cursor.hxx>
+#include <visitors.hxx>
+#include <document.hxx>
+#include <view.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/editeng.hxx>
 #include <cassert>

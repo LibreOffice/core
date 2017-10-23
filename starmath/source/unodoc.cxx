@@ -21,8 +21,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "register.hxx"
-#include "smdll.hxx"
-#include "document.hxx"
+#include <smdll.hxx>
+#include <document.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;

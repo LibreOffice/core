@@ -11,7 +11,7 @@
 #define INCLUDED_STARMATH_QA_CPPUNIT_MOCK_VISITOR_HXX
 
 #include <cppunit/TestAssert.h>
-#include "visitors.hxx"
+#include <visitors.hxx>
 
 /** Simple visitor for testing SmVisitor */
 class MockVisitor : public SmVisitor

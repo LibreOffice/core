@@ -71,9 +71,9 @@
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
 #include <svx/svxids.hrc>
-#include "cursor.hxx"
+#include <cursor.hxx>
 #include <tools/diagnose_ex.h>
-#include "visitors.hxx"
+#include <visitors.hxx>
 #include "accessibility.hxx"
 #include "cfgitem.hxx"
 #include <memory>
@@ -84,7 +84,7 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
 #define SmDocShell
-#include "smslots.hxx"
+#include <smslots.hxx>
 
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmDocShell, SfxObjectShell)

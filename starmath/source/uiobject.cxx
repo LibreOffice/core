@@ -10,7 +10,7 @@
 #include <memory>
 #include "uiobject.hxx"
 
-#include "ElementsDockingWindow.hxx"
+#include <ElementsDockingWindow.hxx>
 
 ElementUIObject::ElementUIObject(const VclPtr<SmElementsControl>& xElementSelector,
         const OUString& rID):

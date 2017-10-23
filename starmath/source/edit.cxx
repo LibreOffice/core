@@ -19,8 +19,8 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-#include "starmath.hrc"
-#include "helpids.h"
+#include <starmath.hrc>
+#include <helpids.h>
 
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
@@ -34,9 +34,9 @@
 #include <sfx2/viewfrm.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 
-#include "edit.hxx"
-#include "view.hxx"
-#include "document.hxx"
+#include <edit.hxx>
+#include <view.hxx>
+#include <document.hxx>
 #include "cfgitem.hxx"
 #include "accessibility.hxx"
 #include <memory>

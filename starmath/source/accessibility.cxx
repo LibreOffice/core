@@ -57,7 +57,7 @@
 #include <document.hxx>
 #include <view.hxx>
 #include <o3tl/make_unique.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace com::sun::star;
 using namespace com::sun::star::lang;

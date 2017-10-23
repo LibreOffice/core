@@ -35,14 +35,14 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/ucsubset.hxx>
 
-#include "dialog.hxx"
-#include "starmath.hrc"
-#include "strings.hrc"
-#include "helpids.h"
+#include <dialog.hxx>
+#include <starmath.hrc>
+#include <strings.hrc>
+#include <helpids.h>
 #include "cfgitem.hxx"
-#include "smmod.hxx"
-#include "symbol.hxx"
-#include "view.hxx"
+#include <smmod.hxx>
+#include <symbol.hxx>
+#include <view.hxx>
 
 #include <algorithm>
 

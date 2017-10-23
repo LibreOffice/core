@@ -56,18 +56,18 @@
 
 #include <unotools/streamwrap.hxx>
 
-#include "unomodel.hxx"
-#include "view.hxx"
+#include <unomodel.hxx>
+#include <view.hxx>
 #include "cfgitem.hxx"
-#include "dialog.hxx"
-#include "document.hxx"
-#include "starmath.hrc"
-#include "strings.hrc"
+#include <dialog.hxx>
+#include <document.hxx>
+#include <starmath.hrc>
+#include <strings.hrc>
 #include "mathmlimport.hxx"
-#include "cursor.hxx"
+#include <cursor.hxx>
 #include "accessibility.hxx"
-#include "ElementsDockingWindow.hxx"
-#include "helpids.h"
+#include <ElementsDockingWindow.hxx>
+#include <helpids.h>
 #include <cassert>
 #include <memory>
 
@@ -81,7 +81,7 @@
 #define CMD_BOX_PADDING_TOP 10
 
 #define SmViewShell
-#include "smslots.hxx"
+#include <smslots.hxx>
 
 using namespace css;
 using namespace css::accessibility;

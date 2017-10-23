@@ -18,7 +18,7 @@
  */
 
 #include <svl/languageoptions.hxx>
-#include "format.hxx"
+#include <format.hxx>
 #include <cassert>
 
 

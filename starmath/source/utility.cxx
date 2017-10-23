@@ -19,11 +19,11 @@
 
 #include <vcl/builderfactory.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
-#include "utility.hxx"
-#include "dialog.hxx"
-#include "view.hxx"
+#include <utility.hxx>
+#include <dialog.hxx>
+#include <view.hxx>
 
 
 // return pointer to active SmViewShell, if this is not possible

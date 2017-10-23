@@ -25,7 +25,7 @@
 #include <sot/storage.hxx>
 
 #include "eqnolefilehdr.hxx"
-#include "node.hxx"
+#include <node.hxx>
 
 void MathType::Init()
 {
