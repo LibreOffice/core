@@ -27,10 +27,10 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/sheet/FormulaToken.hpp>
-#include "formula/errorcodes.hxx"
-#include "formula/token.hxx"
-#include "formula/tokenarray.hxx"
-#include "formula/FormulaCompiler.hxx"
+#include <formula/errorcodes.hxx>
+#include <formula/token.hxx>
+#include <formula/tokenarray.hxx>
+#include <formula/FormulaCompiler.hxx>
 #include <formula/compiler.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <memory>

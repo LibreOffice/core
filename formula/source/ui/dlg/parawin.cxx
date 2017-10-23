@@ -23,12 +23,12 @@
 #include <vcl/settings.hxx>
 
 #include "parawin.hxx"
-#include "formula/formdata.hxx"
-#include "formula/IFunctionDescription.hxx"
+#include <formula/formdata.hxx>
+#include <formula/IFunctionDescription.hxx>
 #include <formula/funcvarargs.h>
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "core_resource.hxx"
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <core_resource.hxx>
 
 namespace formula
 {

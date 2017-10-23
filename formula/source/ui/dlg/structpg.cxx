@@ -20,13 +20,13 @@
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include "structpg.hxx"
-#include "formula/formdata.hxx"
-#include "formula/formula.hxx"
-#include "formula/IFunctionDescription.hxx"
-#include "bitmaps.hlst"
+#include <formula/formdata.hxx>
+#include <formula/formula.hxx>
+#include <formula/IFunctionDescription.hxx>
+#include <bitmaps.hlst>
 
 namespace formula
 {

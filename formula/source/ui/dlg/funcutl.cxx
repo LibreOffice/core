@@ -23,13 +23,13 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/fixed.hxx>
 
-#include "formula/funcutl.hxx"
-#include "formula/IControlReferenceHandler.hxx"
+#include <formula/funcutl.hxx>
+#include <formula/IControlReferenceHandler.hxx>
 #include "ControlHelper.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "core_resource.hxx"
-#include "com/sun/star/accessibility/AccessibleRole.hpp"
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <core_resource.hxx>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 namespace formula
 {
