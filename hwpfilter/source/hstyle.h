@@ -23,8 +23,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <hwplib.h>
-#include <hinfo.h>
+#include "hwplib.h"
+#include "hinfo.h"
 /**
  * @short Using for global style object like "Standard"
  */

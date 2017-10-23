@@ -998,7 +998,7 @@ YY_MALLOC_DECL
 #endif
 #endif
 
-#include <lexer.hxx>
+#include "lexer.hxx"
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
