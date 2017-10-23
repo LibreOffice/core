@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/interlck.h"
-#include "rtl/ustring.hxx"
-#include "uno/environment.hxx"
+#include <osl/interlck.h>
+#include <rtl/ustring.hxx>
+#include <uno/environment.hxx>
 #include <uno/lbnames.h>
-#include "uno/mapping.hxx"
-#include "uno/dispatcher.h"
+#include <uno/mapping.hxx>
+#include <uno/dispatcher.h>
 
-#include "cppu/EnvDcp.hxx"
+#include <cppu/EnvDcp.hxx>
 
 #include "cascade_mapping.hxx"
 

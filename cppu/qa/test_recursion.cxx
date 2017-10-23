@@ -25,7 +25,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "Rec.hpp"
+#include <Rec.hpp>
 
 namespace
 {

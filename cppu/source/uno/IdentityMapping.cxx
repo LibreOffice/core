@@ -19,11 +19,11 @@
 
 #include "IdentityMapping.hxx"
 
-#include "typelib/typedescription.h"
-#include "uno/mapping.h"
-#include "uno/environment.hxx"
+#include <typelib/typedescription.h>
+#include <uno/mapping.h>
+#include <uno/environment.hxx>
 
-#include "osl/interlck.h"
+#include <osl/interlck.h>
 
 
 using namespace ::com::sun::star;

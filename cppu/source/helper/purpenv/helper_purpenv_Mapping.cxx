@@ -18,14 +18,14 @@
  */
 
 
-#include "cppu/helper/purpenv/Mapping.hxx"
+#include <cppu/helper/purpenv/Mapping.hxx>
 
 #include "Proxy.hxx"
 
-#include "osl/interlck.h"
-#include "uno/environment.hxx"
-#include "uno/dispatcher.h"
-#include "typelib/typedescription.h"
+#include <osl/interlck.h>
+#include <uno/environment.hxx>
+#include <uno/dispatcher.h>
+#include <typelib/typedescription.h>
 
 using namespace com::sun::star;
 

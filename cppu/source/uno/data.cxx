@@ -20,9 +20,9 @@
 
 #include <cstddef>
 
-#include "osl/mutex.hxx"
-#include "sal/log.hxx"
-#include "uno/data.h"
+#include <osl/mutex.hxx>
+#include <sal/log.hxx>
+#include <uno/data.h>
 
 #include "constr.hxx"
 #include "destr.hxx"

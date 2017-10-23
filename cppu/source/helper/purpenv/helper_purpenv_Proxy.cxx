@@ -20,10 +20,10 @@
 
 #include "Proxy.hxx"
 
-#include "sal/alloca.h"
-#include "uno/dispatcher.h"
-#include "typelib/typedescription.hxx"
-#include "cppu/EnvDcp.hxx"
+#include <sal/alloca.h>
+#include <uno/dispatcher.h>
+#include <typelib/typedescription.hxx>
+#include <cppu/EnvDcp.hxx>
 
 using namespace com::sun::star;
 
