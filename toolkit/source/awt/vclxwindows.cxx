@@ -18,7 +18,7 @@
  */
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include "toolkit/awt/scrollabledialog.hxx"
+#include <toolkit/awt/scrollabledialog.hxx>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
@@ -57,9 +57,9 @@
 
 #include <vcl/group.hxx>
 
-#include "helper/accessibilityclient.hxx"
-#include "helper/imagealign.hxx"
-#include "helper/tkresmgr.hxx"
+#include <helper/accessibilityclient.hxx>
+#include <helper/imagealign.hxx>
+#include <helper/tkresmgr.hxx>
 #include "vclxwindows_internal.hxx"
 
 using ::com::sun::star::uno::Any;

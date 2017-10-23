@@ -28,7 +28,7 @@
 #include <vcl/unowrap.hxx>
 #include <vcl/window.hxx>
 
-#include "helper/accessibilityclient.hxx"
+#include <helper/accessibilityclient.hxx>
 
 //  class UnoWrapper
 

@@ -25,7 +25,7 @@
 
 #include <vcl/image.hxx>
 
-#include "helper/tkresmgr.hxx"
+#include <helper/tkresmgr.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::graphic::XGraphic;

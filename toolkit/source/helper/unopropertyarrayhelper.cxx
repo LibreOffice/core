@@ -21,7 +21,7 @@
 #include <toolkit/helper/property.hxx>
 #include <map>
 
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/unopropertyarrayhelper.hxx>
 
 //  class UnoPropertyArrayHelper
 

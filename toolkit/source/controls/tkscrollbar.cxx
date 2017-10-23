@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "toolkit/controls/tkscrollbar.hxx"
-#include "toolkit/helper/property.hxx"
+#include <toolkit/controls/tkscrollbar.hxx>
+#include <toolkit/helper/property.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
 
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/unopropertyarrayhelper.hxx>
 
 namespace toolkit
 {

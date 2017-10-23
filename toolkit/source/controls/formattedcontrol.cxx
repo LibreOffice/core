@@ -29,7 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/unopropertyarrayhelper.hxx>
 
 namespace toolkit
 {

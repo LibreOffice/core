@@ -27,7 +27,7 @@
 #include <osl/mutex.hxx>
 #include <tools/solar.h>
 
-#include "helper/accessibilityclient.hxx"
+#include <helper/accessibilityclient.hxx>
 
 namespace toolkit
 {

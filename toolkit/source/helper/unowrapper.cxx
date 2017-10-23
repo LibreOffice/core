@@ -28,14 +28,14 @@
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxgraphics.hxx>
 
-#include "toolkit/dllapi.h"
+#include <toolkit/dllapi.h>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>
 
 #include <tools/debug.hxx>
 
-#include "helper/unowrapper.hxx"
+#include <helper/unowrapper.hxx>
 
 using namespace ::com::sun::star;
 

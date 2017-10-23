@@ -20,7 +20,7 @@
 #include <com/sun/star/awt/ImagePosition.hpp>
 #include <com/sun/star/awt/ImageAlign.hpp>
 
-#include "helper/imagealign.hxx"
+#include <helper/imagealign.hxx>
 
 namespace toolkit
 {

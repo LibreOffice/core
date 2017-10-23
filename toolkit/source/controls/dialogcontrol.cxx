@@ -47,13 +47,13 @@
 #include <functional>
 #include <map>
 #include <unordered_map>
-#include "osl/file.hxx"
+#include <osl/file.hxx>
 
 #include <vcl/tabctrl.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
-#include "toolkit/controls/unocontrols.hxx"
+#include <toolkit/controls/unocontrols.hxx>
 
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/unopropertyarrayhelper.hxx>
 #include "controlmodelcontainerbase_internal.hxx"
 
 using namespace ::com::sun::star;

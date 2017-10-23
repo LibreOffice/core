@@ -28,7 +28,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#include "helper/tkresmgr.hxx"
+#include <helper/tkresmgr.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

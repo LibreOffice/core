@@ -37,7 +37,7 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/unopropertyarrayhelper.hxx>
 
 using namespace css::awt;
 using namespace css::container;

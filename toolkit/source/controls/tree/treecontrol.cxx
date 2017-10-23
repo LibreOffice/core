@@ -18,7 +18,7 @@
  */
 
 
-#include <treecontrol.hxx>
+#include "treecontrol.hxx"
 
 #include <com/sun/star/awt/tree/XTreeControl.hpp>
 #include <com/sun/star/awt/tree/XTreeDataModel.hpp>
@@ -28,7 +28,7 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
 
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/unopropertyarrayhelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

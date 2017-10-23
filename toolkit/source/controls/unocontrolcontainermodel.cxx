@@ -22,7 +22,7 @@
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/unopropertyarrayhelper.hxx>
 
 //  class UnoControlContainerModel
 

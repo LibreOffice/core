@@ -60,8 +60,8 @@
 
 #include <algorithm>
 
-#include "helper/imagealign.hxx"
-#include "helper/unopropertyarrayhelper.hxx"
+#include <helper/imagealign.hxx>
+#include <helper/unopropertyarrayhelper.hxx>
 
 using namespace css;
 using namespace css::awt;
