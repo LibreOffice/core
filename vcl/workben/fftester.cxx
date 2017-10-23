@@ -55,7 +55,6 @@ using namespace cppu;
 extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
-typedef bool (*WFilterCall)(const OUString &rUrl);
 typedef bool (*FFilterCall)(SvStream &rStream);
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
@@ -404,16 +403,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (strcmp(argv[2], "xls") == 0)
         {
-            static WFilterCall pfnImport(nullptr);
+            static FFilterCall pfnImport(nullptr);
             if (!pfnImport)
             {
                 osl::Module aLibrary;
                 aLibrary.loadRelative(&thisModule, "libscfiltlo.so", SAL_LOADMODULE_LAZY);
-                pfnImport = reinterpret_cast<WFilterCall>(
+                pfnImport = reinterpret_cast<FFilterCall>(
                     aLibrary.getFunctionSymbol("TestImportXLS"));
                 aLibrary.release();
             }
-            ret = (int) (*pfnImport)(out);
+            SvFileStream aFileStream(out, StreamMode::READ);
+            ret = (int) (*pfnImport)(aFileStream);
         }
         else if (strcmp(argv[2], "hwp") == 0)
         {

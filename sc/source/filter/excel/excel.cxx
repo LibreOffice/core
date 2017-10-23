@@ -32,6 +32,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <scitems.hxx>
 #include <svl/stritem.hxx>
+#include <unotools/streamwrap.hxx>
 #include <filter.hxx>
 #include <document.hxx>
 #include <optuno.hxx>
@@ -243,10 +244,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportCalcRTF(SvStream &rStrea
     return ScFormatFilter::Get().ScImportRTF(rStream, OUString(), &aDocument, aRange) == ERRCODE_NONE;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(const OUString &rURL)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(SvStream& rStream)
 {
     ScDLL::Init();
-    SfxMedium aMedium(rURL, StreamMode::READ);
+    SfxMedium aMedium;
+    css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
+    aMedium.GetItemSet()->Put(SfxUsrAnyItem(SID_INPUTSTREAM, css::uno::makeAny(xStm)));
     ScDocument aDocument;
     ScDocOptions aDocOpt = aDocument.GetDocOptions();
     aDocOpt.SetLookUpColRowNames(false);
