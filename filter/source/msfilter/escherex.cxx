@@ -41,10 +41,10 @@
 #include <svx/svdopath.hxx>
 #include <stdlib.h>
 #include <vcl/graphicfilter.hxx>
-#include "svx/EnhancedCustomShapeTypeNames.hxx"
-#include "svx/EnhancedCustomShapeGeometry.hxx"
+#include <svx/EnhancedCustomShapeTypeNames.hxx>
+#include <svx/EnhancedCustomShapeGeometry.hxx>
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
-#include "svx/EnhancedCustomShape2d.hxx"
+#include <svx/EnhancedCustomShape2d.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>

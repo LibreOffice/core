@@ -19,7 +19,7 @@
 
 
 #include <string.h>
-#include <dxftblrd.hxx>
+#include "dxftblrd.hxx"
 
 //----------------------------------DXFLType-----------------------------------
 

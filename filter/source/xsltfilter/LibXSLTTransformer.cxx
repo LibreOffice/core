@@ -44,8 +44,8 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XStreamListener.hpp>
 
-#include <LibXSLTTransformer.hxx>
-#include <OleHandler.hxx>
+#include "LibXSLTTransformer.hxx"
+#include "OleHandler.hxx"
 #include <memory>
 
 using namespace ::cppu;

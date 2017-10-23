@@ -47,7 +47,7 @@
 #include <vcl/gradient.hxx>
 
 #include "main.hxx"
-#include <outact.hxx>
+#include "outact.hxx"
 
 
 using namespace ::com::sun::star;

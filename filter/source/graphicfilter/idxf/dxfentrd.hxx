@@ -20,8 +20,8 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFENTRD_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IDXF_DXFENTRD_HXX
 
-#include <dxfgrprd.hxx>
-#include <dxfvec.hxx>
+#include "dxfgrprd.hxx"
+#include "dxfvec.hxx"
 
 #include <deque>
 #include <memory>

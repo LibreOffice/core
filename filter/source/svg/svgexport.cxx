@@ -20,7 +20,7 @@
 #include "svgwriter.hxx"
 #include "svgfontexport.hxx"
 #include "svgfilter.hxx"
-#include "svgscript.hxx"
+#include <svgscript.hxx>
 #include "impsvgdialog.hxx"
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>

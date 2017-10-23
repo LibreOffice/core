@@ -18,8 +18,8 @@
  */
 
 
-#include <main.hxx>
-#include <outact.hxx>
+#include "main.hxx"
+#include "outact.hxx"
 
 
 void CGM::ImplDoClass3()

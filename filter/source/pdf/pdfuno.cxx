@@ -22,9 +22,9 @@
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <pdffilter.hxx>
-#include <pdfdialog.hxx>
-#include <pdfinteract.hxx>
+#include "pdffilter.hxx"
+#include "pdfdialog.hxx"
+#include "pdfinteract.hxx"
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

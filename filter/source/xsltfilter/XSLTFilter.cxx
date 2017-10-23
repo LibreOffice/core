@@ -69,7 +69,7 @@
 
 #include <xmloff/attrlist.hxx>
 
-#include <LibXSLTTransformer.hxx>
+#include "LibXSLTTransformer.hxx"
 
 #define TRANSFORMATION_TIMEOUT_SEC 60
 

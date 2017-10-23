@@ -21,8 +21,8 @@
 #include "pdfinteract.hxx"
 #include "impdialog.hxx"
 
-#include "com/sun/star/task/XInteractionRequest.hpp"
-#include "com/sun/star/task/PDFExportException.hpp"
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/task/PDFExportException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 

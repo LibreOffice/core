@@ -19,7 +19,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 #include "xmlfiltertabpagebasic.hxx"
 #include "xmlfiltersettingsdialog.hxx"
 

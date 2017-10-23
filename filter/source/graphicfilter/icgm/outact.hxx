@@ -31,7 +31,7 @@
 #define CGM_OUTACT_MAX_GROUP_LEVEL 64
 
 #include "cgm.hxx"
-#include <chart.hxx>
+#include "chart.hxx"
 #include <tools/poly.hxx>
 #include <array>
 #include <memory>

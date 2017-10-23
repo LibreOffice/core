@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "svgreader.hxx"
+#include <svgreader.hxx>
 #include <xmloff/attrlist.hxx>
-#include "gfxtypes.hxx"
+#include <gfxtypes.hxx>
 #include "units.hxx"
-#include "parserfragments.hxx"
+#include <parserfragments.hxx>
 #include "tokenmap.hxx"
 #include "b2dellipse.hxx"
 

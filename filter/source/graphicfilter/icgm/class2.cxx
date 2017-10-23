@@ -18,7 +18,7 @@
  */
 
 
-#include <main.hxx>
+#include "main.hxx"
 
 
 void CGM::ImplDoClass2()

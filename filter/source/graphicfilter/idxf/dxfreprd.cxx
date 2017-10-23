@@ -20,9 +20,9 @@
 
 #include <string.h>
 #include "dxfreprd.hxx"
-#include "osl/nlsupport.h"
-#include "officecfg/Setup.hxx"
-#include "officecfg/Office/Linguistic.hxx"
+#include <osl/nlsupport.h>
+#include <officecfg/Setup.hxx>
+#include <officecfg/Office/Linguistic.hxx>
 #include <unotools/wincodepage.hxx>
 #include <unotools/configmgr.hxx>
 
