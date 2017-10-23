@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "Shape.hxx"
+#include <Shape.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -28,13 +28,13 @@
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
 
-#include "strings.hxx"
-#include "strings.hrc"
-#include "core_resource.hxx"
-#include "Tools.hxx"
-#include "RptObject.hxx"
-#include "FormatCondition.hxx"
-#include "ReportHelperImpl.hxx"
+#include <strings.hxx>
+#include <strings.hrc>
+#include <core_resource.hxx>
+#include <Tools.hxx>
+#include <RptObject.hxx>
+#include <FormatCondition.hxx>
+#include <ReportHelperImpl.hxx>
 
 namespace reportdesign
 {

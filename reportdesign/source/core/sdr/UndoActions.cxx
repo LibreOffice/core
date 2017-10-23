@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "UndoActions.hxx"
-#include "UndoEnv.hxx"
+#include <UndoActions.hxx>
+#include <UndoEnv.hxx>
 #include "formatnormalizer.hxx"
-#include "conditionupdater.hxx"
-#include "strings.hxx"
-#include "rptui_slotid.hrc"
-#include "RptDef.hxx"
-#include "core_resource.hxx"
-#include "RptObject.hxx"
-#include "RptPage.hxx"
-#include "strings.hrc"
-#include "RptModel.hxx"
+#include <conditionupdater.hxx>
+#include <strings.hxx>
+#include <rptui_slotid.hrc>
+#include <RptDef.hxx>
+#include <core_resource.hxx>
+#include <RptObject.hxx>
+#include <RptPage.hxx>
+#include <strings.hrc>
+#include <RptModel.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

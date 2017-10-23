@@ -21,7 +21,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svtools/transfer.hxx>
-#include "GroupsSorting.hxx"
+#include <GroupsSorting.hxx>
 
 namespace rptui
 {

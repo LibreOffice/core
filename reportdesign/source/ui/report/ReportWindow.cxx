@@ -16,12 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "ReportWindow.hxx"
-#include "ReportSection.hxx"
-#include "SectionView.hxx"
-#include "ViewsWindow.hxx"
-#include "DesignView.hxx"
-#include "UITools.hxx"
+#include <ReportWindow.hxx>
+#include <ReportSection.hxx>
+#include <SectionView.hxx>
+#include <ViewsWindow.hxx>
+#include <DesignView.hxx>
+#include <UITools.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svl/itempool.hxx>
@@ -29,18 +29,18 @@
 
 #include <vcl/settings.hxx>
 
-#include "RptDef.hxx"
-#include "dlgedfunc.hxx"
-#include "RptModel.hxx"
-#include "strings.hxx"
-#include "RptPage.hxx"
-#include "ReportController.hxx"
-#include "EndMarker.hxx"
-#include "ColorChanger.hxx"
-#include "ScrollHelper.hxx"
+#include <RptDef.hxx>
+#include <dlgedfunc.hxx>
+#include <RptModel.hxx>
+#include <strings.hxx>
+#include <RptPage.hxx>
+#include <ReportController.hxx>
+#include <EndMarker.hxx>
+#include <ColorChanger.hxx>
+#include <ScrollHelper.hxx>
 
-#include "helpids.h"
-#include "dlgedfac.hxx"
+#include <helpids.h>
+#include <dlgedfac.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 

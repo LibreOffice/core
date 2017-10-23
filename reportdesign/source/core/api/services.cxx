@@ -19,15 +19,15 @@
 #include <sal/types.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include "ReportDefinition.hxx"
-#include "FormattedField.hxx"
-#include "FixedText.hxx"
-#include "ImageControl.hxx"
-#include "FormatCondition.hxx"
-#include "ReportEngineJFree.hxx"
-#include "Function.hxx"
-#include "Shape.hxx"
-#include "FixedLine.hxx"
+#include <ReportDefinition.hxx>
+#include <FormattedField.hxx>
+#include <FixedText.hxx>
+#include <ImageControl.hxx>
+#include <FormatCondition.hxx>
+#include <ReportEngineJFree.hxx>
+#include <Function.hxx>
+#include <Shape.hxx>
+#include <FixedLine.hxx>
 
 /********************************************************************************************/
 

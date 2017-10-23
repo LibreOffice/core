@@ -22,15 +22,15 @@
 #include <iterator>
 #include <map>
 
-#include "GeometryHandler.hxx"
+#include <GeometryHandler.hxx>
 
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "strings.hxx"
-#include "reportformula.hxx"
+#include <strings.hxx>
+#include <reportformula.hxx>
 
 #include <i18nutil/searchopt.hxx>
 #include <unotools/textsearch.hxx>
@@ -69,17 +69,17 @@
 #include <tools/fldunit.hxx>
 #include <vcl/stdtext.hxx>
 
-#include "core_resource.hxx"
-#include "stringarray.hrc"
-#include "strings.hrc"
-#include "RptDef.hxx"
-#include "UITools.hxx"
+#include <core_resource.hxx>
+#include <stringarray.hrc>
+#include <strings.hrc>
+#include <RptDef.hxx>
+#include <UITools.hxx>
 
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 
-#include "metadata.hxx"
+#include <metadata.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
@@ -101,8 +101,8 @@
 #include <editeng/brushitem.hxx>
 #include <sfx2/docfilt.hxx>
 
-#include "dlgpage.hxx"
-#include "helpids.h"
+#include <dlgpage.hxx>
+#include <helpids.h>
 #include <toolkit/helper/convert.hxx>
 #include <o3tl/functional.hxx>
 

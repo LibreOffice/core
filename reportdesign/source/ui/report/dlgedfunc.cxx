@@ -37,19 +37,19 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "dlgedfunc.hxx"
-#include "ReportSection.hxx"
-#include "DesignView.hxx"
-#include "ReportController.hxx"
-#include "SectionView.hxx"
-#include "ViewsWindow.hxx"
-#include "ReportWindow.hxx"
-#include "RptObject.hxx"
-#include "ScrollHelper.hxx"
-#include "UITools.hxx"
+#include <dlgedfunc.hxx>
+#include <ReportSection.hxx>
+#include <DesignView.hxx>
+#include <ReportController.hxx>
+#include <SectionView.hxx>
+#include <ViewsWindow.hxx>
+#include <ReportWindow.hxx>
+#include <RptObject.hxx>
+#include <ScrollHelper.hxx>
+#include <UITools.hxx>
 
 #include <strings.hxx>
-#include "UndoEnv.hxx"
+#include <UndoEnv.hxx>
 #include <RptModel.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <tools/diagnose_ex.h>

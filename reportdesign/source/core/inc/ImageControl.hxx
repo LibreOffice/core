@@ -25,7 +25,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include "ReportHelperDefines.hxx"
+#include <ReportHelperDefines.hxx>
 
 namespace reportdesign
 {

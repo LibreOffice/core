@@ -30,9 +30,9 @@
 
 #include <memory>
 
-#include "Formula.hxx"
-#include "AddField.hxx"
-#include "helpids.h"
+#include <Formula.hxx>
+#include <AddField.hxx>
+#include <helpids.h>
 
 
 namespace rptui

@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RptModel.hxx"
-#include "RptPage.hxx"
+#include <RptModel.hxx>
+#include <RptPage.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/svapp.hxx>
 
-#include "UndoActions.hxx"
-#include "UndoEnv.hxx"
-#include "ReportUndoFactory.hxx"
-#include "ReportDefinition.hxx"
+#include <UndoActions.hxx>
+#include <UndoEnv.hxx>
+#include <ReportUndoFactory.hxx>
+#include <ReportDefinition.hxx>
 
 #include <svx/tbcontrl.hxx>
-#include "rptui_slotid.hrc"
-#include "RptDef.hxx"
-#include "strings.hxx"
-#include "FixedLine.hxx"
-#include "FormattedField.hxx"
-#include "FixedText.hxx"
-#include "ImageControl.hxx"
-#include "Shape.hxx"
+#include <rptui_slotid.hrc>
+#include <RptDef.hxx>
+#include <strings.hxx>
+#include <FixedLine.hxx>
+#include <FormattedField.hxx>
+#include <FixedText.hxx>
+#include <ImageControl.hxx>
+#include <Shape.hxx>
 
 namespace rptui
 {

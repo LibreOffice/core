@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DesignView.hxx"
-#include "ReportController.hxx"
+#include <DesignView.hxx>
+#include <ReportController.hxx>
 #include <comphelper/types.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/viewoptions.hxx>
-#include "RptDef.hxx"
-#include "UITools.hxx"
-#include "RptObject.hxx"
-#include "propbrw.hxx"
+#include <RptDef.hxx>
+#include <UITools.hxx>
+#include <RptObject.hxx>
+#include <propbrw.hxx>
 #include <toolkit/helper/convert.hxx>
-#include "helpids.h"
-#include "SectionView.hxx"
-#include "ReportSection.hxx"
-#include "rptui_slotid.hrc"
+#include <helpids.h>
+#include <SectionView.hxx>
+#include <ReportSection.hxx>
+#include <rptui_slotid.hrc>
 #include <svx/svxids.hrc>
-#include "AddField.hxx"
-#include "ScrollHelper.hxx"
-#include "Navigator.hxx"
-#include "SectionWindow.hxx"
-#include "strings.hrc"
+#include <AddField.hxx>
+#include <ScrollHelper.hxx>
+#include <Navigator.hxx>
+#include <SectionWindow.hxx>
+#include <strings.hrc>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

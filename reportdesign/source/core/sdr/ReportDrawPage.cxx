@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "ReportDrawPage.hxx"
-#include "RptObject.hxx"
-#include "RptModel.hxx"
-#include "RptDef.hxx"
-#include "strings.hxx"
+#include <ReportDrawPage.hxx>
+#include <RptObject.hxx>
+#include <RptModel.hxx>
+#include <RptDef.hxx>
+#include <strings.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>

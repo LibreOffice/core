@@ -16,19 +16,19 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "FixedText.hxx"
+#include <FixedText.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "strings.hxx"
+#include <strings.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include "strings.hrc"
-#include "core_resource.hxx"
-#include "Tools.hxx"
+#include <strings.hrc>
+#include <core_resource.hxx>
+#include <Tools.hxx>
 #include <tools/color.hxx>
 #include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "FormatCondition.hxx"
+#include <FormatCondition.hxx>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
-#include "ReportHelperImpl.hxx"
+#include <ReportHelperImpl.hxx>
 
 namespace reportdesign
 {

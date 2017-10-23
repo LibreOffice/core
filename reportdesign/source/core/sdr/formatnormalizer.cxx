@@ -18,7 +18,7 @@
  */
 
 #include "formatnormalizer.hxx"
-#include "RptModel.hxx"
+#include <RptModel.hxx>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>

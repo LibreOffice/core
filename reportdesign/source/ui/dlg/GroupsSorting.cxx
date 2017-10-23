@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "GroupsSorting.hxx"
+#include <GroupsSorting.hxx>
 #include <connectivity/dbtools.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/editbrowsebox.hxx>
@@ -26,16 +26,16 @@
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
-#include "strings.hrc"
-#include "rptui_slotid.hrc"
-#include "core_resource.hxx"
-#include "helpids.h"
+#include <strings.hrc>
+#include <rptui_slotid.hrc>
+#include <core_resource.hxx>
+#include <helpids.h>
 #include "GroupExchange.hxx"
-#include "UITools.hxx"
-#include "UndoActions.hxx"
-#include "strings.hxx"
-#include "ReportController.hxx"
-#include "ColumnInfo.hxx"
+#include <UITools.hxx>
+#include <UndoActions.hxx>
+#include <strings.hxx>
+#include <ReportController.hxx>
+#include <ColumnInfo.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/property.hxx>

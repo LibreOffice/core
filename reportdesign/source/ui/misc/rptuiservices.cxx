@@ -18,12 +18,12 @@
  */
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include "ReportController.hxx"
-#include "statusbarcontroller.hxx"
-#include "DefaultInspection.hxx"
-#include "ReportComponentHandler.hxx"
-#include "GeometryHandler.hxx"
-#include "DataProviderHandler.hxx"
+#include <ReportController.hxx>
+#include <statusbarcontroller.hxx>
+#include <DefaultInspection.hxx>
+#include <ReportComponentHandler.hxx>
+#include <GeometryHandler.hxx>
+#include <DataProviderHandler.hxx>
 
 /********************************************************************************************/
 

@@ -24,7 +24,7 @@
 #include "xmlEnums.hxx"
 #include "xmlControlProperty.hxx"
 #include "xmlComponent.hxx"
-#include "strings.hxx"
+#include <strings.hxx>
 
 namespace rptxml
 {

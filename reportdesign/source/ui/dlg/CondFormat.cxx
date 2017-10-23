@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "CondFormat.hxx"
+#include <CondFormat.hxx>
 
-#include "strings.hxx"
-#include "strings.hrc"
-#include "rptui_slotid.hrc"
-#include "core_resource.hxx"
-#include "helpids.h"
-#include "UITools.hxx"
-#include "ReportController.hxx"
+#include <strings.hxx>
+#include <strings.hrc>
+#include <rptui_slotid.hrc>
+#include <core_resource.hxx>
+#include <helpids.h>
+#include <UITools.hxx>
+#include <ReportController.hxx>
 #include "Condition.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -42,7 +42,7 @@
 #include <comphelper/property.hxx>
 
 #include <algorithm>
-#include "UndoActions.hxx"
+#include <UndoActions.hxx>
 
 
 namespace rptui

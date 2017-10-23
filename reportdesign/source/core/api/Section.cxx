@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "Section.hxx"
+#include <Section.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -25,18 +25,18 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "strings.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
-#include "Tools.hxx"
-#include "RptModel.hxx"
-#include "RptPage.hxx"
-#include "ReportDefinition.hxx"
-#include "Shape.hxx"
+#include <strings.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
+#include <Tools.hxx>
+#include <RptModel.hxx>
+#include <RptPage.hxx>
+#include <ReportDefinition.hxx>
+#include <Shape.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/svapp.hxx>
-#include "RptObject.hxx"
-#include "ReportDrawPage.hxx"
+#include <RptObject.hxx>
+#include <ReportDrawPage.hxx>
 #include <comphelper/property.hxx>
 
 namespace reportdesign

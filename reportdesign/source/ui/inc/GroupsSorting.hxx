@@ -30,7 +30,7 @@
 #include <com/sun/star/report/XGroups.hpp>
 #include <com/sun/star/report/XGroup.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include "GroupProperties.hxx"
+#include <GroupProperties.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <svtools/svmedit.hxx>

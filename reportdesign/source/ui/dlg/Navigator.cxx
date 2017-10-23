@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Navigator.hxx"
+#include <Navigator.hxx>
 
-#include "strings.hxx"
-#include "bitmaps.hlst"
-#include "ReportController.hxx"
-#include "UITools.hxx"
-#include "RptUndo.hxx"
-#include "reportformula.hxx"
+#include <strings.hxx>
+#include <bitmaps.hlst>
+#include <ReportController.hxx>
+#include <UITools.hxx>
+#include <RptUndo.hxx>
+#include <reportformula.hxx>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XFixedText.hpp>
@@ -32,9 +32,9 @@
 #include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/report/XShape.hpp>
-#include "helpids.h"
-#include "strings.hrc"
-#include "rptui_slotid.hrc"
+#include <helpids.h>
+#include <strings.hrc>
+#include <rptui_slotid.hrc>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/containermultiplexer.hxx>
 #include <comphelper/types.hxx>
@@ -43,8 +43,8 @@
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
 #include <svl/solar.hrc>
-#include "ReportVisitor.hxx"
-#include "core_resource.hxx"
+#include <ReportVisitor.hxx>
+#include <core_resource.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>

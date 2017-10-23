@@ -19,7 +19,7 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_RPTUNDO_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_RPTUNDO_HXX
 
-#include "UndoActions.hxx"
+#include <UndoActions.hxx>
 #include <functional>
 
 namespace com { namespace sun { namespace star {

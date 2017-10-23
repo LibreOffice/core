@@ -21,25 +21,25 @@
 
 #include <vector>
 
-#include "ReportDefinition.hxx"
+#include <ReportDefinition.hxx>
 
-#include "FixedLine.hxx"
-#include "FixedText.hxx"
-#include "FormattedField.hxx"
-#include "Functions.hxx"
-#include "Groups.hxx"
-#include "ImageControl.hxx"
-#include "ReportComponent.hxx"
-#include "ReportHelperImpl.hxx"
-#include "RptDef.hxx"
-#include "RptModel.hxx"
-#include "Section.hxx"
-#include "Shape.hxx"
-#include "Tools.hxx"
-#include "UndoEnv.hxx"
-#include "strings.hrc"
-#include "core_resource.hxx"
-#include "strings.hxx"
+#include <FixedLine.hxx>
+#include <FixedText.hxx>
+#include <FormattedField.hxx>
+#include <Functions.hxx>
+#include <Groups.hxx>
+#include <ImageControl.hxx>
+#include <ReportComponent.hxx>
+#include <ReportHelperImpl.hxx>
+#include <RptDef.hxx>
+#include <RptModel.hxx>
+#include <Section.hxx>
+#include <Shape.hxx>
+#include <Tools.hxx>
+#include <UndoEnv.hxx>
+#include <strings.hrc>
+#include <core_resource.hxx>
+#include <strings.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>

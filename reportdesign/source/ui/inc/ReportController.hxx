@@ -21,7 +21,7 @@
 
 #include "DesignView.hxx"
 #include "ReportControllerObserver.hxx"
-#include "RptDef.hxx"
+#include <RptDef.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
