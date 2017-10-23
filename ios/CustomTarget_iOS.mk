@@ -158,7 +158,7 @@ $(call gb_CustomTarget_get_clean_target,ios/ios):
 	        , $(WORKDIR)/ios/build.log \
 	)
 	$(call gb_Helper_print_on_error, \
-	    xcodebuild -xcconfig $(IOSKITXC) -project $(IOSKITPRJ) clean \
+	    xcodebuild -xcconfig $(IOSKITXC) -configuration Debug -project $(IOSKITPRJ) clean \
 	        , $(WORKDIR)/ios/build.log \
 	)
 	rm -f $(IOSGEN)/$(IOSKIT)

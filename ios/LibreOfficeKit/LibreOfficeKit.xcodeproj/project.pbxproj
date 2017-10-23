@@ -25,6 +25,7 @@
 /* Begin PBXFileReference section */
 		39503A6E1F94C3B700F19C78 /* LibreOfficeKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LibreOfficeKit.h; sourceTree = "<group>"; };
 		39503A721F94CBA000F19C78 /* LibreOfficeKit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = LibreOfficeKit.c; sourceTree = "<group>"; };
+		3950BAE11F9CA739001A4E96 /* loKit.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = loKit.xcconfig; path = ../../../../../../Users/jani/lo_ios/workdir/ios/loKit.xcconfig; sourceTree = "<group>"; };
 		39B5D2151F78130F008FB162 /* libLibreOfficeKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLibreOfficeKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -42,6 +43,7 @@
 		3969A8C91F782610006F06A9 /* Support files */ = {
 			isa = PBXGroup;
 			children = (
+				3950BAE11F9CA739001A4E96 /* loKit.xcconfig */,
 			);
 			name = "Support files";
 			sourceTree = "<group>";
@@ -138,6 +140,7 @@
 /* Begin XCBuildConfiguration section */
 		39B5D21C1F78130F008FB162 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3950BAE11F9CA739001A4E96 /* loKit.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -210,6 +213,7 @@
 		};
 		39B5D21D1F78130F008FB162 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3950BAE11F9CA739001A4E96 /* loKit.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -277,6 +281,7 @@
 		};
 		39B5D21F1F78130F008FB162 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3950BAE11F9CA739001A4E96 /* loKit.xcconfig */;
 			buildSettings = {
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
@@ -289,6 +294,7 @@
 		};
 		39B5D2201F78130F008FB162 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3950BAE11F9CA739001A4E96 /* loKit.xcconfig */;
 			buildSettings = {
 				MACH_O_TYPE = staticlib;
 				OTHER_LDFLAGS = "";
