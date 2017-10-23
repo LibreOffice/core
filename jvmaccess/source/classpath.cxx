@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "jvmaccess/classpath.hxx"
+#include <jvmaccess/classpath.hxx>
 
 #include <cassert>
 #include <vector>
 
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/uri/UriReferenceFactory.hpp"
-#include "com/sun/star/uri/XVndSunStarExpandUrlReference.hpp"
-#include "com/sun/star/util/theMacroExpander.hpp"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarExpandUrlReference.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
-#include "jni.h"
+#include <jni.h>
 
 jobjectArray jvmaccess::ClassPath::translateToUrls(
     css::uno::Reference< css::uno::XComponentContext > const & context,

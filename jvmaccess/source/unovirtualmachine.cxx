@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "jvmaccess/unovirtualmachine.hxx"
+#include <jvmaccess/unovirtualmachine.hxx>
 
-#include "jvmaccess/virtualmachine.hxx"
-#include "sal/log.hxx"
+#include <jvmaccess/virtualmachine.hxx>
+#include <sal/log.hxx>
 
-#include "jni.h"
+#include <jni.h>
 
 namespace jvmaccess {
 
