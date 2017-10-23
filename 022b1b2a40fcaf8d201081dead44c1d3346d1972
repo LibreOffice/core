@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_c3ecdf2b",
+        "filename": "sfx2/source/bastyp/bitset.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-23T15:29:32Z",
+      "side": 1,
+      "message": "shouldn\u0027t the \"1\" be at least unsigned then, if int is 32-bit and (nBit % 32) is 31, where this would now cause undefined behavior?",
+      "revId": "022b1b2a40fcaf8d201081dead44c1d3346d1972",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
