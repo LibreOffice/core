@@ -19,17 +19,17 @@
 
 #include <sal/config.h>
 
-#include "osl/process.h"
-#include "rtl/ustring.hxx"
-#include "rtl/string.hxx"
-#include "rtl/strbuf.hxx"
+#include <osl/process.h>
+#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 
-#include "osl/thread.h"
+#include <osl/thread.h>
 #include <osl/diagnose.h>
 #include "recently_used_file.hxx"
 
-#include "xml_parser.hxx"
-#include "i_xml_parser_event_handler.hxx"
+#include <xml_parser.hxx>
+#include <i_xml_parser_event_handler.hxx>
 
 #include <map>
 #include <vector>

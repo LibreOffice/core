@@ -18,7 +18,7 @@
  */
 
 
-#include <localebackend.hxx>
+#include "localebackend.hxx"
 
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>

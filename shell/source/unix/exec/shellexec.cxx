@@ -35,7 +35,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "uno/current_context.hxx"
+#include <uno/current_context.hxx>
 
 #include <string.h>
 #include <errno.h>
