@@ -30,7 +30,7 @@ class SfxItemSet;
 class ImpItemListRow;
 class BrowserMouseEvent;
 
-class SdrItemBrowserControl: public BrowseBox
+class SdrItemBrowserControl final : public BrowseBox
 {
 friend class ImpItemEdit;
     std::vector<std::unique_ptr<ImpItemListRow>> aList;
@@ -46,7 +46,6 @@ friend class ImpItemEdit;
     bool bDontHideIneffectiveItems;
     bool bDontSortItems;
 
-private:
     void ImpCtor();
     void ImpSetEntry(const ImpItemListRow& rEntry, std::size_t nEntryNum);
     void ImpSaveWhich();
@@ -54,7 +53,6 @@ private:
     std::size_t GetCurrentPos() const;
     bool BeginChangeEntry(std::size_t nPos);
 
-protected:
     virtual long GetRowCount() const override;
     virtual bool SeekRow(long nRow) override;
     virtual void PaintField(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const override;
@@ -64,6 +62,7 @@ protected:
     void SetDirty(); // is called for example in mode switches
     virtual tools::Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) override;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
+
 public:
     SdrItemBrowserControl(vcl::Window* pParent);
     virtual ~SdrItemBrowserControl() override;

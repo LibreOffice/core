@@ -47,9 +47,7 @@ namespace accessibility
                                             css::accessibility::XAccessibleTable,
                                             css::view::XSelectionChangeListener
                                           > AccessibleTableShape_Base;
-/** @descr
-*/
-class AccessibleTableShape : public AccessibleTableShape_Base, public css::accessibility::XAccessibleTableSelection
+class AccessibleTableShape final : public AccessibleTableShape_Base, public css::accessibility::XAccessibleTableSelection
 {
 public:
     AccessibleTableShape( const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo );
@@ -130,7 +128,7 @@ public:
     // Get the currently active cell which is text editing
     AccessibleCell* GetActiveAccessibleCell();
 
-protected:
+private:
     virtual OUString CreateAccessibleBaseName() override;
 
     sdr::table::SvxTableController* getTableController();
@@ -138,7 +136,6 @@ protected:
     /// @throws css::lang::IndexOutOfBoundsException
     void checkCellPosition( sal_Int32 nCol, sal_Int32 nRow );
 
-private:
     rtl::Reference< AccessibleTableShapeImpl > mxImpl;
     sal_Int32 GetIndexOfSelectedChild( sal_Int32 nSelectedChildIndex ) const;
 };

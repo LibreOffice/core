@@ -75,10 +75,8 @@ public:
 |*
 \************************************************************************/
 
-class E3dObjList : public SdrObjList
+class E3dObjList final : public SdrObjList
 {
-    E3dObjList &operator=(const E3dObjList& rSrcList) = delete;
-
 public:
     E3dObjList();
     SVX_DLLPUBLIC virtual ~E3dObjList() override;
@@ -90,7 +88,9 @@ public:
     virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
 
-protected:
+private:
+    E3dObjList &operator=(const E3dObjList& rSrcList) = delete;
+
     SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
 };
 

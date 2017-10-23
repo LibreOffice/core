@@ -45,7 +45,7 @@ class SdrObject;
 // and when they have been removed
 
 
-class FmFormPageImpl
+class FmFormPageImpl final
 {
     css::uno::Reference< css::form::XForm >               xCurrentForm;
     css::uno::Reference< css::form::XForms >              m_xForms;
@@ -89,7 +89,7 @@ public:
 
     void        SetFormsCreationHdl( const Link<FmFormPageImpl&,void>& _rFormsCreationHdl ) { m_aFormsCreationHdl = _rFormsCreationHdl; }
 
-protected:
+private:
     /** finds a form with a given data source signature
         @param rForm
             the form to start the search with. This form, including all possible sub forms,
@@ -138,7 +138,6 @@ private:
     css::uno::Reference< css::container::XMap >
         impl_createControlShapeMap_nothrow();
 
-private:
     FmFormPageImpl( const FmFormPageImpl& ) = delete;
     FmFormPageImpl& operator=( const FmFormPageImpl& ) = delete;
 };

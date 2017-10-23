@@ -43,8 +43,8 @@ struct SVX_DLLPUBLIC SdrDragStatUserData
     virtual ~SdrDragStatUserData() = 0;
 };
 
-class SVX_DLLPUBLIC SdrDragStat {
-protected:
+class SVX_DLLPUBLIC SdrDragStat final
+{
     SdrHdl*  pHdl;      // The Handle for the User
     SdrView* pView;
     SdrPageView* pPageView;
@@ -76,8 +76,8 @@ protected:
     std::unique_ptr<SdrDragStatUserData>  mpUserData;     // Userdata
 
     void Clear(bool bLeaveOne);
-protected:
     Point&       Pnt(sal_uIntPtr nNum)               { return mvPnts[nNum]; }
+
 public:
     SdrDragStat()                                    { Reset(); }
     ~SdrDragStat();

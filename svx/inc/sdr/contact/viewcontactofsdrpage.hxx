@@ -129,9 +129,8 @@ public:
     virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const override;
 };
 
-class ViewContactOfGrid : public ViewContactOfPageSubObject
+class ViewContactOfGrid final : public ViewContactOfPageSubObject
 {
-protected:
     bool                                        mbFront : 1;
 
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
@@ -144,9 +143,8 @@ public:
     bool getFront() const { return mbFront; }
 };
 
-class ViewContactOfHelplines : public ViewContactOfPageSubObject
+class ViewContactOfHelplines final : public ViewContactOfPageSubObject
 {
-protected:
     bool                                        mbFront : 1;
 
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;

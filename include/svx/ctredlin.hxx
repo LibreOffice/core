@@ -189,10 +189,8 @@ public:
 };
 
 /// Tabpage with the filter text entries etc.
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter: public TabPage
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxTPFilter final : public TabPage
 {
-private:
-
     Link<SvxTPFilter*,void>  aReadyLink;
     Link<SvxTPFilter*,void>  aRefLink;
 
@@ -224,8 +222,6 @@ private:
     DECL_LINK( ModifyListBoxHdl, ListBox&, void );
     DECL_LINK( ModifyDate, Edit&, void );
     DECL_LINK( RefHandle, Button*, void );
-
-protected:
 
     void            EnableDateLine1(bool bFlag);
     void            EnableDateLine2(bool bFlag);

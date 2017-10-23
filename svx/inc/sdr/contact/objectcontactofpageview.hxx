@@ -30,9 +30,8 @@ namespace sdr
 {
     namespace contact
     {
-        class ObjectContactOfPageView : public ObjectContact, public Idle
+        class ObjectContactOfPageView final : public ObjectContact, public Idle
         {
-        protected:
             // the owner of this ObjectContactOfPageView. Set from constructor and not
             // to be changed in any way.
             SdrPageWindow&                                      mrPageWindow;

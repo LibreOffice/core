@@ -133,9 +133,8 @@ public:
     basegfx::B3DVector GetLightDirection(sal_uInt32 nNum) const;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLightCtl3D : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLightCtl3D final : public Control
 {
-private:
     // local controls
     VclPtr<Svx3DLightControl>  maLightControl;
     VclPtr<ScrollBar>          maHorScroller;
@@ -171,7 +170,7 @@ public:
 
     virtual Size GetOptimalSize() const override;
 
-protected:
+private:
 
     DECL_LINK( InternalInteractiveChange, Svx3DLightControl*, void);
     DECL_LINK( InternalSelectionChange, Svx3DLightControl*, void);

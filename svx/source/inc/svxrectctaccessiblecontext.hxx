@@ -70,16 +70,14 @@ typedef ::cppu::WeakAggComponentImplHelper6<
             css::lang::XServiceInfo >
             SvxRectCtlAccessibleContext_Base;
 
-class SvxRectCtlAccessibleContext : public ::cppu::BaseMutex, public SvxRectCtlAccessibleContext_Base
+class SvxRectCtlAccessibleContext final : public ::cppu::BaseMutex, public SvxRectCtlAccessibleContext_Base
 {
 public:
     // internal
     SvxRectCtlAccessibleContext(
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
         SvxRectCtl&      rRepresentation );
-protected:
-    virtual ~SvxRectCtlAccessibleContext() override;
-public:
+
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext() override;
@@ -191,8 +189,20 @@ public:
     virtual void SAL_CALL
         deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
 
+    /** Selects a new child by point.
 
-protected:
+        <p>If the child was not selected before, the state of the child will
+        be updated. If the point is not invalid, the index will internally set to NOCHILDSELECTED</p>
+
+        @param eButton
+            Button which belongs to the child which should be selected.
+    */
+    void selectChild( RectPoint ePoint );
+    void FireChildFocus( RectPoint eButton );
+
+private:
+    virtual ~SvxRectCtlAccessibleContext() override;
+
     // internals
     /// @throws css::lang::IndexOutOfBoundsException
     void checkChildIndex( long nIndexOfChild );
@@ -206,20 +216,6 @@ protected:
             Index of the new child which should be selected.
     */
     void selectChild( long nIndexOfChild );
-
-public:
-    /** Selects a new child by point.
-
-        <p>If the child was not selected before, the state of the child will
-        be updated. If the point is not invalid, the index will internally set to NOCHILDSELECTED</p>
-
-        @param eButton
-            Button which belongs to the child which should be selected.
-    */
-    void selectChild( RectPoint ePoint );
-    void FireChildFocus( RectPoint eButton );
-
-protected:
 
     /// @Return the object's current bounding box relative to the desktop.
     ///
@@ -239,7 +235,6 @@ protected:
     /// @throws css::lang::DisposedException if it's not alive
     void ThrowExceptionIfNotAlive();
 
-private:
     /** Description of this object.  This is not a constant because it can
         be set from the outside.
     */

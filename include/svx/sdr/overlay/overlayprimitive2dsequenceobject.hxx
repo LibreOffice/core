@@ -29,9 +29,8 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayPrimitive2DSequenceObject : public OverlayObjectWithBasePosition
+        class SVX_DLLPUBLIC OverlayPrimitive2DSequenceObject final : public OverlayObjectWithBasePosition
         {
-        protected:
             // the sequence of primitives to show
             const drawinglayer::primitive2d::Primitive2DContainer    maSequence;
 

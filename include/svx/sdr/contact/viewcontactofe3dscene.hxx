@@ -34,14 +34,8 @@ namespace basegfx {
 
 namespace sdr { namespace contact {
 
-class SVX_DLLPUBLIC ViewContactOfE3dScene : public ViewContactOfSdrObj
+class SVX_DLLPUBLIC ViewContactOfE3dScene final : public ViewContactOfSdrObj
 {
-protected:
-    // Create a Object-Specific ViewObjectContact, set ViewContact and
-    // ObjectContact. Always needs to return something. Default is to create
-    // a standard ViewObjectContact containing the given ObjectContact and *this
-    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
-
 public:
     // basic constructor, used from SdrObject.
     explicit ViewContactOfE3dScene(E3dScene& rScene);
@@ -73,16 +67,11 @@ public:
     drawinglayer::primitive3d::Primitive3DContainer getAllPrimitive3DContainer() const;
     basegfx::B3DRange getAllContentRange3D() const;
 
-protected:
-    // the 3d transformation stack
-    drawinglayer::geometry::ViewInformation3D           maViewInformation3D;
-
-    // the object transformation
-    basegfx::B2DHomMatrix                               maObjectTransformation;
-
-    // attributes
-    drawinglayer::attribute::SdrSceneAttribute          maSdrSceneAttribute;
-    drawinglayer::attribute::SdrLightingAttribute       maSdrLightingAttribute;
+private:
+    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // ObjectContact. Always needs to return something. Default is to create
+    // a standard ViewObjectContact containing the given ObjectContact and *this
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
     // create methods for ViewInformation3D and ObjectTransformation
     void createViewInformation3D(const ::basegfx::B3DRange& rContentRange);
@@ -95,6 +84,16 @@ protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data
     virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+
+    // the 3d transformation stack
+    drawinglayer::geometry::ViewInformation3D           maViewInformation3D;
+
+    // the object transformation
+    basegfx::B2DHomMatrix                               maObjectTransformation;
+
+    // attributes
+    drawinglayer::attribute::SdrSceneAttribute          maSdrSceneAttribute;
+    drawinglayer::attribute::SdrLightingAttribute       maSdrLightingAttribute;
 };
 
 }}

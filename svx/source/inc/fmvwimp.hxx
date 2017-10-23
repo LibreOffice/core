@@ -87,7 +87,7 @@ typedef ::cppu::WeakImplHelper <   css::container::XIndexAccess
                                 ,   css::form::runtime::XFormControllerContext
                                 >   FormViewPageWindowAdapter_Base;
 
-class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
+class FormViewPageWindowAdapter final : public FormViewPageWindowAdapter_Base
 {
     friend class FmXFormView;
 
@@ -96,9 +96,6 @@ class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
     css::uno::Reference<css::uno::XComponentContext>                              m_xContext;
     FmXFormView*                m_pViewImpl;
     VclPtr<vcl::Window>         m_pWindow;
-
-protected:
-    virtual ~FormViewPageWindowAdapter() override;
 
 public:
     FormViewPageWindowAdapter(  const css::uno::Reference<css::uno::XComponentContext>& _rContext,
@@ -118,7 +115,9 @@ public:
 
     const ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
 
-protected:
+private:
+    virtual ~FormViewPageWindowAdapter() override;
+
     css::uno::Reference< css::form::runtime::XFormController >  getController( const css::uno::Reference< css::form::XForm >& xForm ) const;
     void setController(
             const css::uno::Reference< css::form::XForm >& xForm,

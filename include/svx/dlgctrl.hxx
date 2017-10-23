@@ -144,12 +144,9 @@ public:
 |* Control for editing bitmaps
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPixelCtl : public Control
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPixelCtl final : public Control
 {
 private:
-    using OutputDevice::SetLineColor;
-
-protected:
     sal_uInt16      nLines, nSquares;
     Color       aPixelColor;
     Color       aBackgroundColor;
@@ -159,6 +156,8 @@ protected:
     //Add member identifying position
     Point       aFocusPosition;
     rtl::Reference<SvxPixelCtlAccessible>  m_xAccess;
+
+    using OutputDevice::SetLineColor;
 
     tools::Rectangle   implCalFocusRect( const Point& aPosition );
     void    ChangePixel( sal_uInt16 nPixel );

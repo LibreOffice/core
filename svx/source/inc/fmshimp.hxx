@@ -151,7 +151,7 @@ struct SdrViewEvent;
 class FmFormShell;
 class FmFormView;
 class FmFormObj;
-class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
+class SVX_DLLPUBLIC FmXFormShell final : public FmXFormShell_BASE
                                     ,public FmXFormShell_CFGBASE
                                     ,public svx::IControllerFeatureInvalidation
 {
@@ -256,10 +256,9 @@ public:
     SAL_DLLPRIVATE void
                 didPrepareClose_Lock(bool bDid) { m_bPreparedClose = bDid; }
 
-public:
     SAL_DLLPRIVATE FmXFormShell(FmFormShell& _rShell, SfxViewFrame* _pViewFrame);
 
-protected:
+private:
     SAL_DLLPRIVATE virtual ~FmXFormShell() override;
 
 // EventListener
@@ -313,7 +312,7 @@ public:
     SAL_DLLPRIVATE bool GetY2KState_Lock(sal_uInt16 & n);
     SAL_DLLPRIVATE void SetY2KState_Lock(sal_uInt16 n);
 
-protected:
+private:
     // form handling
     /// load or unload the forms on a page
     SAL_DLLPRIVATE void loadForms_Lock( FmFormPage* _pPage, const LoadFormsFlags _nBehaviour );
@@ -522,7 +521,7 @@ public:
 
     SAL_DLLPRIVATE static OString SlotToIdent(sal_uInt16 nSlot);
 
-protected:
+private:
     DECL_DLLPRIVATE_LINK( OnLoadForms_Lock, void*, void );
 };
 

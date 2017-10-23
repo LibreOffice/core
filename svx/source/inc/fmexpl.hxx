@@ -277,7 +277,7 @@ namespace svxform
 
     class NavigatorTreeModel;
 
-    class OFormComponentObserver
+    class OFormComponentObserver final
         :public ::cppu::WeakImplHelper <   css::beans::XPropertyChangeListener
                                         ,   css::container::XContainerListener
                                         >
@@ -306,7 +306,7 @@ namespace svxform
         bool IsLocked() const { return m_nLocks != 0; }
         bool CanUndo() const { return m_bCanUndo; }
         void ReleaseModel() { m_pNavModel = nullptr; }
-    protected:
+    private:
         void Insert(const css::uno::Reference< css::uno::XInterface >& xIface, sal_Int32 nIndex);
         void Remove( const css::uno::Reference< css::uno::XInterface >& _rxElement );
     };

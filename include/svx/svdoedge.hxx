@@ -35,13 +35,12 @@ namespace sdr { namespace properties {
 
 
 /// Utility class SdrObjConnection
-class SdrObjConnection
+class SdrObjConnection final
 {
     friend class                SdrEdgeObj;
     friend class                ImpEdgeHdl;
     friend class                SdrCreateView;
 
-protected:
     Point                       aObjOfs;       // set during dragging of a node
     SdrObject*                  pObj;          // referenced object
     sal_uInt16                  nConId;        // connector number

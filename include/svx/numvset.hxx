@@ -93,15 +93,14 @@ public:
             const css::lang::Locale& rLocale);
 };
 
-class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
+class SVX_DLLPUBLIC SvxBmpNumValueSet final : public SvxNumValueSet
 {
     Idle        aFormatIdle;
     bool        bGrfNotFound;
 
     void init();
 
-protected:
-        DECL_LINK(FormatHdl_Impl, Timer *, void);
+    DECL_LINK(FormatHdl_Impl, Timer *, void);
 
 public:
     SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits);
@@ -109,7 +108,6 @@ public:
     virtual void dispose() override;
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) override;
-
 };
 
 #endif

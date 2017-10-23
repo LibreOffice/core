@@ -26,18 +26,19 @@
 #include <vcl/button.hxx>
 
 
-class SvxFmAbsRecWin : public NumericField
+class SvxFmAbsRecWin final : public NumericField
 {
-    SfxToolBoxControl*  m_pController;
-        // for invalidating our content when losing the focus
 public:
     SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController );
 
     virtual void KeyInput( const KeyEvent& rKeyEvt ) override;
     virtual void LoseFocus() override;
 
-protected:
+private:
     void FirePosition( bool _bForce );
+
+    SfxToolBoxControl*  m_pController;
+        // for invalidating our content when losing the focus
 };
 
 

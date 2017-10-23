@@ -31,9 +31,8 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewObjectContactOfE3d : public ViewObjectContactOfSdrObj
+        class ViewObjectContactOfE3d final : public ViewObjectContactOfSdrObj
         {
-        protected:
             // Primitive3D sequence of the ViewContact. This contains all necessary information
             // for the graphical visualisation and needs to be supported by all VCs which
             // can be visualized.

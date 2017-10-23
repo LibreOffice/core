@@ -30,9 +30,8 @@
 
 #include <vector>
 
-class SVX_DLLPUBLIC XDash
+class SVX_DLLPUBLIC XDash final
 {
-protected:
     css::drawing::DashStyle  eDash;
     sal_uInt16               nDots;
     sal_uInt32               nDotLen;

@@ -36,9 +36,8 @@ namespace sdr
             Transparent
         };
 
-        class SVX_DLLPUBLIC OverlaySelection : public OverlayObject
+        class SVX_DLLPUBLIC OverlaySelection final : public OverlayObject
         {
-        protected:
             // type of overlay
             OverlayType                         meOverlayType;
 

@@ -512,11 +512,10 @@ public:
     void                        setGridListener( FmGridListener* _pListener ) { m_pGridListener = _pListener; }
 
     // helper class to grant access to selected methods from within the DbCellControl class
-    struct GrantControlAccess
+    struct GrantControlAccess final
     {
         friend class DbCellControl;
         friend class RowSetEventListener;
-    protected:
         GrantControlAccess() { }
     };
 

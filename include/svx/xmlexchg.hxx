@@ -61,9 +61,7 @@ namespace svx
 
     //= OXFormsTransferable
 
-    class SVX_DLLPUBLIC OXFormsTransferable : public TransferableHelper {
-
-        protected:
+    class SVX_DLLPUBLIC OXFormsTransferable final : public TransferableHelper {
 
             // TransferableHelper overridables
             virtual void        AddSupportedFormats() override;

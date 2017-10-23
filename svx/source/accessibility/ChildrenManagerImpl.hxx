@@ -71,7 +71,7 @@ typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
 
     @see ChildrenManager
 */
-class ChildrenManagerImpl
+class ChildrenManagerImpl final
     :   public MutexOwner,
         public cppu::WeakComponentImplHelper<
             css::document::XEventListener,
@@ -281,7 +281,8 @@ public:
         (css::beans::XPropertySet* pSet) override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
         GetAccessibleCaption (const css::uno::Reference<css::drawing::XShape>& xShape) override;
-protected:
+
+private:
     /** This list holds the descriptors of all currently visible shapes and
         associated accessible object.
 
@@ -334,8 +335,6 @@ protected:
     virtual void SAL_CALL disposing() override;
 
     void impl_dispose();
-
-private:
 
     ChildrenManagerImpl (const ChildrenManagerImpl&) = delete;
     ChildrenManagerImpl& operator= (const ChildrenManagerImpl&) = delete;

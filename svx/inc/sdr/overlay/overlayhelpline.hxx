@@ -28,9 +28,8 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayHelplineStriped : public OverlayObjectWithBasePosition
+        class OverlayHelplineStriped final : public OverlayObjectWithBasePosition
         {
-        protected:
             // remember HelpLineKind
             SdrHelpLineKind                             meKind;
 

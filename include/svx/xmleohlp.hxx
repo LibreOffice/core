@@ -41,7 +41,7 @@ class SvGlobalName;
 class OutputStorageWrapper_Impl;
 
 
-class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper :
+class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper final :
     public cppu::WeakComponentImplHelper< css::document::XEmbeddedObjectResolver, css::container::XNameAccess >
 {
     ::osl::Mutex                maMutex;
@@ -82,8 +82,6 @@ class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper :
 
     SVX_DLLPRIVATE css::uno::Reference< css::io::XInputStream > ImplGetReplacementImage(
                                 const css::uno::Reference< css::embed::XEmbeddedObject >& xObj );
-
-protected:
 
                                 SvXMLEmbeddedObjectHelper();
                                 virtual ~SvXMLEmbeddedObjectHelper() override;

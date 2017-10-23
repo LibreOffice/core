@@ -30,9 +30,8 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlayManagerBuffered : public OverlayManager
+        class OverlayManagerBuffered final : public OverlayManager
         {
-        protected:
             // The VirtualDevice for draw window content buffering, this
             // is the view content without overlay
             ScopedVclPtr<VirtualDevice>             mpBufferDevice;

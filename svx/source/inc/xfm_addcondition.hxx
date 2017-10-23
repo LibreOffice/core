@@ -30,25 +30,15 @@ namespace svxform
 {
 
     typedef ::svt::OGenericUnoDialog OAddConditionDialogBase;
-    class OAddConditionDialog
+    class OAddConditionDialog final
             :public OAddConditionDialogBase
             ,public ::comphelper::OPropertyArrayUsageHelper< OAddConditionDialog >
     {
-    private:
-        // <properties>
-        css::uno::Reference< css::beans::XPropertySet >
-                                m_xBinding;
-        OUString                m_sFacetName;
-        OUString                m_sConditionValue;
-        css::uno::Reference< css::xforms::XModel >
-                                m_xWorkModel;
-        // </properties>
-
     public:
         static css::uno::Reference< css::uno::XInterface >
             SAL_CALL Create( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
-    protected:
+    private:
         OAddConditionDialog( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         // XTypeProvider
@@ -65,10 +55,16 @@ namespace svxform
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
-    protected:
         // OGenericUnoDialog overridables
         virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;
         virtual void executedDialog(sal_Int16 _nExecutionResult) override;
+
+        css::uno::Reference< css::beans::XPropertySet >
+                                m_xBinding;
+        OUString                m_sFacetName;
+        OUString                m_sConditionValue;
+        css::uno::Reference< css::xforms::XModel >
+                                m_xWorkModel;
     };
 
 

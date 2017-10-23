@@ -72,7 +72,7 @@ namespace accessibility {
                                 >   AccessibleControlShape_Base;
 /** @descr
 */
-class AccessibleControlShape
+class AccessibleControlShape final
         :public AccessibleShape
         ,public AccessibleControlShape_Base
 {
@@ -85,8 +85,8 @@ public:
 
     const css::uno::Reference< css::beans::XPropertySet >& SAL_CALL  GetControlModel( ) { return m_xControlModel;} ;
     AccessibleControlShape* SAL_CALL GetLabeledByControlShape();
-protected:
 
+private:
     //---  XAccessibleComponent  -------------------------------
     /// forward the focus to the contained control(in alive mode)
     virtual void SAL_CALL grabFocus( ) override;
@@ -128,7 +128,6 @@ protected:
     virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
     virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
 
-protected:
     /** Initialize a new shape.  See the documentation of the base' constructor
         for the reason of this method's existence.
     */
@@ -182,7 +181,9 @@ protected:
     */
     void        initializeComposedState( );
 
-private:
+    AccessibleControlShape(const AccessibleControlShape&) = delete;
+    AccessibleControlShape& operator= (const AccessibleControlShape&) = delete;
+
     css::uno::Reference< css::beans::XPropertySet >
                     m_xControlModel;
     css::uno::Reference< css::beans::XPropertySetInfo >
@@ -207,11 +208,6 @@ private:
     bool        m_bMultiplexingStates   : 1;    // are we currently multiplexing state changes of the native context?
     bool        m_bDisposeNativeContext : 1;    // do we need to dispose mxNativeContextComponent?
     bool        m_bWaitingForControl    : 1;    // if we are created before our control exists, we need to wait for it to appear ...
-
-private:
-    AccessibleControlShape(const AccessibleControlShape&) = delete;
-
-    AccessibleControlShape& operator= (const AccessibleControlShape&) = delete;
 };
 
 } // end of namespace accessibility

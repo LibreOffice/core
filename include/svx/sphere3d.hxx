@@ -27,13 +27,12 @@
  * SphereObject with diameter r3DSize.
  * The count of planes depends on the horizontal and vertical segment count.
  */
-class SVX_DLLPUBLIC E3dSphereObj : public E3dCompoundObject
+class SVX_DLLPUBLIC E3dSphereObj final : public E3dCompoundObject
 {
 private:
     basegfx::B3DPoint               aCenter;
     basegfx::B3DVector              aSize;
 
-protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);

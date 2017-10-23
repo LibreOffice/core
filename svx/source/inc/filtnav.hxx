@@ -148,7 +148,7 @@ public:
 };
 
 
-class FmFilterModel : public FmParentData
+class FmFilterModel final : public FmParentData
                      ,public SfxBroadcaster
                      ,public ::svxform::OSQLParserClient
 {
@@ -180,7 +180,7 @@ public:
     static void AppendFilterItems( FmFormItem& _rItem );
     void EnsureEmptyFilterRows( FmParentData& _rItem );
 
-protected:
+private:
     void Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
     void Remove( const ::std::vector<FmFilterData*>::iterator& rPos );
     FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const css::uno::Reference< css::form::runtime::XFormController > & xController) const;
@@ -227,7 +227,7 @@ protected:
 };
 
 
-class FmFilterNavigator : public SvTreeListBox, public SfxListener
+class FmFilterNavigator final : public SvTreeListBox, public SfxListener
 {
     enum DROP_ACTION{ DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
 
@@ -252,7 +252,7 @@ public:
         );
     const FmFilterModel* GetFilterModel() const {return m_pModel;}
 
-protected:
+private:
 
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
     virtual void Command( const CommandEvent& rEvt ) override;
@@ -274,7 +274,6 @@ protected:
     DECL_LINK(OnRemove, void*, void);
     DECL_LINK(OnDropActionTimer, Timer*, void);
 
-private:
     /** returns the first form item and the selected FilterItems in the vector
         @param  _rItemList
             Is filled inside. <OUT/>

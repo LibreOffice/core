@@ -69,7 +69,7 @@ public:
     void                    ReplaceObject( const IMapObjectPtr& pNewIMapObject ) { mpObj = pNewIMapObject; }
 };
 
-class IMapWindow : public GraphCtrl, public DropTargetHelper
+class IMapWindow final : public GraphCtrl, public DropTargetHelper
 {
     NotifyInfo          aInfo;
     ImageMap            aIMap;
@@ -81,8 +81,6 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
                         mxDocumentFrame;
 
                         DECL_LINK( MenuSelectHdl, Menu*, bool );
-
-protected:
 
     // GraphCtrl
     virtual void        MouseButtonUp(const MouseEvent& rMEvt) override;

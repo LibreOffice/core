@@ -42,12 +42,11 @@ public:
 };
 
 
-class SVX_DLLPUBLIC SdrPathObj : public SdrTextObj
+class SVX_DLLPUBLIC SdrPathObj final : public SdrTextObj
 {
 private:
     friend class ImpPathForDragAndCreate;
 
-protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
     basegfx::B2DPolyPolygon maPathPolygon;
@@ -129,7 +128,7 @@ public:
     // rip at given point
     SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
 
-protected:
+private:
     virtual SdrObjGeoData* NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;

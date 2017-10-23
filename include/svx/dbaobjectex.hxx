@@ -34,11 +34,8 @@ namespace svx
 
     //= OComponentTransferable
 
-    class SAL_WARN_UNUSED SVX_DLLPUBLIC OComponentTransferable : public TransferableHelper
+    class SAL_WARN_UNUSED SVX_DLLPUBLIC OComponentTransferable final : public TransferableHelper
     {
-    protected:
-        ODataAccessDescriptor   m_aDescriptor;
-
     public:
         /** construct the transferable
         */
@@ -58,12 +55,14 @@ namespace svx
         static ODataAccessDescriptor
                         extractComponentDescriptor(const TransferableDataHelper& _rData);
 
-    protected:
+    private:
         // TransferableHelper overridables
         virtual void        AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
 
         static SotClipboardFormatId getDescriptorFormatId(bool _bExtractForm);
+
+        ODataAccessDescriptor   m_aDescriptor;
     };
 
 

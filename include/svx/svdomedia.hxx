@@ -30,7 +30,7 @@ class Graphic;
 namespace sdr { namespace contact { class ViewContactOfSdrMediaObj; } }
 
 
-class SVX_DLLPUBLIC SdrMediaObj : public SdrRectObj
+class SVX_DLLPUBLIC SdrMediaObj final : public SdrRectObj
 {
     friend class sdr::contact::ViewContactOfSdrMediaObj;
 
@@ -69,12 +69,11 @@ public:
                                     GetInputStream();
         void                        SetInputStream(css::uno::Reference<css::io::XInputStream> const&);
 
-protected:
+private:
 
         void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
         virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
 
-private:
         struct Impl;
         std::unique_ptr<Impl> m_xImpl;
 };

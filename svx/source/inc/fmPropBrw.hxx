@@ -40,7 +40,7 @@ public:
 class SfxBindings;
 class FmFormShell;
 
-class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
+class FmPropBrw final : public SfxFloatingWindow, public SfxControllerItem
 {
     bool            m_bInitialStateChange;
     OUString        m_sLastActivePage;
@@ -61,7 +61,6 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
     css::uno::Reference< css::awt::XWindow >
                     m_xFrameContainerWindow;
 
-protected:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const override;
     virtual bool Close() override;
@@ -86,10 +85,9 @@ public:
 
     using SfxFloatingWindow::StateChanged;
 
-protected:
+private:
     virtual void        Resize() override;
 
-private:
     /** creates the PropertyBrowser (aka ObjectInspector) and plugs it into our frame
 
         This method ensures that a new component is created every time the XModel which
