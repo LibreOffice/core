@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "wrapper/EventHandler.hxx"
+#include <wrapper/EventHandler.hxx>
 
 namespace avmedia
 {

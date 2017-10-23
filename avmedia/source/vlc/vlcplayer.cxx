@@ -24,7 +24,7 @@
 #include "vlcplayer.hxx"
 #include "vlcwindow.hxx"
 #include "vlcframegrabber.hxx"
-#include "wrapper/Instance.hxx"
+#include <wrapper/Instance.hxx>
 
 using namespace ::com::sun::star;
 

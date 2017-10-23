@@ -9,10 +9,10 @@
 
 #include <rtl/ustring.h>
 #include "Types.hxx"
-#include "wrapper/Player.hxx"
-#include "wrapper/Media.hxx"
+#include <wrapper/Player.hxx>
+#include <wrapper/Media.hxx>
 #include "SymbolLoader.hxx"
-#include "wrapper/Common.hxx"
+#include <wrapper/Common.hxx>
 
 struct libvlc_media_t;
 

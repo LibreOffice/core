@@ -12,7 +12,7 @@
 
 #include <functional>
 #include <salhelper/thread.hxx>
-#include "wrapper/ThreadsafeQueue.hxx"
+#include <wrapper/ThreadsafeQueue.hxx>
 
 namespace avmedia
 {

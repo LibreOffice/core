@@ -25,10 +25,10 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <cppuhelper/basemutex.hxx>
 
-#include "wrapper/Instance.hxx"
-#include "wrapper/Media.hxx"
-#include "wrapper/Player.hxx"
-#include "wrapper/EventManager.hxx"
+#include <wrapper/Instance.hxx>
+#include <wrapper/Media.hxx>
+#include <wrapper/Player.hxx>
+#include <wrapper/EventManager.hxx>
 
 namespace avmedia {
 namespace vlc {

@@ -32,8 +32,8 @@
 
 #include "vlcframegrabber.hxx"
 #include "vlcplayer.hxx"
-#include "wrapper/Player.hxx"
-#include "wrapper/EventManager.hxx"
+#include <wrapper/Player.hxx>
+#include <wrapper/EventManager.hxx>
 
 using namespace ::com::sun::star;
 

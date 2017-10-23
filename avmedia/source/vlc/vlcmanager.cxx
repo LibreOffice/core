@@ -13,11 +13,11 @@
 #include <cppuhelper/supportsservice.hxx>
 #include "vlcmanager.hxx"
 #include "vlcplayer.hxx"
-#include "wrapper/Instance.hxx"
-#include "wrapper/EventManager.hxx"
-#include "wrapper/Media.hxx"
-#include "wrapper/Player.hxx"
-#include "wrapper/Common.hxx"
+#include <wrapper/Instance.hxx>
+#include <wrapper/EventManager.hxx>
+#include <wrapper/Media.hxx>
+#include <wrapper/Player.hxx>
+#include <wrapper/Common.hxx>
 
 using namespace ::com::sun::star;
 
