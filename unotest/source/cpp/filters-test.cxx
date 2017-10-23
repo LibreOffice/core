@@ -16,7 +16,7 @@
 #include <osl/thread.h>
 #include <rtl/cipher.h>
 
-#include "cppunit/TestAssert.h"
+#include <cppunit/TestAssert.h>
 
 namespace test {
 

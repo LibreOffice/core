@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "com/sun/star/bridge/UnoUrlResolver.hpp"
-#include "com/sun/star/bridge/XUnoUrlResolver.hpp"
-#include "com/sun/star/connection/NoConnectException.hpp"
-#include "com/sun/star/frame/Desktop.hpp"
-#include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/bootstrap.hxx"
-#include "cppunit/TestAssert.h"
-#include "osl/process.h"
-#include "osl/test/uniquepipename.hxx"
-#include "osl/time.h"
-#include "sal/macros.h"
-#include "sal/types.h"
-#include "unotest/officeconnection.hxx"
-#include "unotest/toabsolutefileurl.hxx"
+#include <com/sun/star/bridge/UnoUrlResolver.hpp>
+#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+#include <com/sun/star/connection/NoConnectException.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/bootstrap.hxx>
+#include <cppunit/TestAssert.h>
+#include <osl/process.h>
+#include <osl/test/uniquepipename.hxx>
+#include <osl/time.h>
+#include <sal/macros.h>
+#include <sal/types.h>
+#include <unotest/officeconnection.hxx>
+#include <unotest/toabsolutefileurl.hxx>
 
 #include "getargument.hxx"
 
