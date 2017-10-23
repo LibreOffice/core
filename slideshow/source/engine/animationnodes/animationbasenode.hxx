@@ -21,12 +21,12 @@
 
 #include <com/sun/star/animations/XAnimate.hpp>
 
-#include "basecontainernode.hxx"
-#include "activitiesfactory.hxx"
-#include "shapeattributelayer.hxx"
-#include "shapeattributelayerholder.hxx"
-#include "attributableshape.hxx"
-#include "shapesubset.hxx"
+#include <basecontainernode.hxx>
+#include <activitiesfactory.hxx>
+#include <shapeattributelayer.hxx>
+#include <shapeattributelayerholder.hxx>
+#include <attributableshape.hxx>
+#include <shapesubset.hxx>
 
 namespace slideshow {
 namespace internal {

@@ -35,14 +35,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "slidechangebase.hxx"
-#include "transitionfactory.hxx"
+#include <transitionfactory.hxx>
 #include "transitionfactorytab.hxx"
 #include "transitiontools.hxx"
 #include "parametricpolypolygonfactory.hxx"
-#include "animationfactory.hxx"
+#include <animationfactory.hxx>
 #include "clippingfunctor.hxx"
 #include "combtransition.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 #include <memory>
 
 

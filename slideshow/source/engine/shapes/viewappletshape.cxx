@@ -48,7 +48,7 @@
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 
 #include "viewappletshape.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 
 using namespace ::com::sun::star;

@@ -20,7 +20,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <discreteactivitybase.hxx>
+#include "discreteactivitybase.hxx"
 
 
 namespace slideshow

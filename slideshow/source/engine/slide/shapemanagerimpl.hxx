@@ -22,17 +22,17 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
 
-#include "shape.hxx"
-#include "subsettableshapemanager.hxx"
-#include "eventmultiplexer.hxx"
+#include <shape.hxx>
+#include <subsettableshapemanager.hxx>
+#include <eventmultiplexer.hxx>
 #include "layermanager.hxx"
-#include "viewupdate.hxx"
-#include "shapemaps.hxx"
-#include "cursormanager.hxx"
-#include "hyperlinkarea.hxx"
-#include "listenercontainer.hxx"
-#include "shapelistenereventhandler.hxx"
-#include "mouseeventhandler.hxx"
+#include <viewupdate.hxx>
+#include <shapemaps.hxx>
+#include <cursormanager.hxx>
+#include <hyperlinkarea.hxx>
+#include <listenercontainer.hxx>
+#include <shapelistenereventhandler.hxx>
+#include <mouseeventhandler.hxx>
 
 #include <set>
 #include <map>

@@ -42,23 +42,23 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 
-#include "slide.hxx"
-#include "slideshowcontext.hxx"
+#include <slide.hxx>
+#include <slideshowcontext.hxx>
 #include "slideanimations.hxx"
-#include "doctreenode.hxx"
-#include "screenupdater.hxx"
-#include "cursormanager.hxx"
-#include "shapeimporter.hxx"
-#include "slideshowexceptions.hxx"
-#include "eventqueue.hxx"
-#include "activitiesqueue.hxx"
+#include <doctreenode.hxx>
+#include <screenupdater.hxx>
+#include <cursormanager.hxx>
+#include <shapeimporter.hxx>
+#include <slideshowexceptions.hxx>
+#include <eventqueue.hxx>
+#include <activitiesqueue.hxx>
 #include "layermanager.hxx"
 #include "shapemanagerimpl.hxx"
-#include "usereventqueue.hxx"
+#include <usereventqueue.hxx>
 #include "userpaintoverlay.hxx"
-#include "event.hxx"
+#include <event.hxx>
 #include "targetpropertiescreator.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 #include <iterator>
 #include <functional>

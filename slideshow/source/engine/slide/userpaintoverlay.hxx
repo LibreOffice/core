@@ -22,8 +22,8 @@
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include "unoview.hxx"
-#include "rgbcolor.hxx"
+#include <unoview.hxx>
+#include <rgbcolor.hxx>
 
 #include <memory>
 #include <vector>

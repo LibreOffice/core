@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_SLIDECHANGEBASE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_SLIDECHANGEBASE_HXX
 
-#include "unoview.hxx"
-#include "vieweventhandler.hxx"
-#include "numberanimation.hxx"
-#include "slide.hxx"
-#include "screenupdater.hxx"
-#include "soundplayer.hxx"
+#include <unoview.hxx>
+#include <vieweventhandler.hxx>
+#include <numberanimation.hxx>
+#include <slide.hxx>
+#include <screenupdater.hxx>
+#include <soundplayer.hxx>
 
 #include <memory>
 #include <boost/optional.hpp>

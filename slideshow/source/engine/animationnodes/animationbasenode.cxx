@@ -26,10 +26,10 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 #include "nodetools.hxx"
-#include "doctreenode.hxx"
+#include <doctreenode.hxx>
 #include "animationbasenode.hxx"
-#include "delayevent.hxx"
-#include "framerate.hxx"
+#include <delayevent.hxx>
+#include <framerate.hxx>
 
 #include <boost/optional.hpp>
 #include <algorithm>

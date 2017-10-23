@@ -21,7 +21,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONTRANSITIONFILTERNODE_HXX
 
 #include "animationbasenode.hxx"
-#include "com/sun/star/animations/XTransitionFilter.hpp"
+#include <com/sun/star/animations/XTransitionFilter.hpp>
 
 namespace slideshow {
 namespace internal {

@@ -19,10 +19,10 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONAUDIONODE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONAUDIONODE_HXX
 
-#include "basecontainernode.hxx"
-#include "soundplayer.hxx"
-#include "com/sun/star/animations/XAnimationNode.hpp"
-#include "com/sun/star/animations/XAudio.hpp"
+#include <basecontainernode.hxx>
+#include <soundplayer.hxx>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/animations/XAudio.hpp>
 
 namespace slideshow {
 namespace internal {

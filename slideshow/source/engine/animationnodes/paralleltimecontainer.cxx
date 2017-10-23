@@ -19,7 +19,7 @@
 
 
 #include "paralleltimecontainer.hxx"
-#include "delayevent.hxx"
+#include <delayevent.hxx>
 
 #include <functional>
 

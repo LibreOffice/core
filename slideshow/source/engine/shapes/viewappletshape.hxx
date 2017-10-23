@@ -25,7 +25,7 @@
 
 #include <memory>
 
-#include "viewlayer.hxx"
+#include <viewlayer.hxx>
 
 namespace com { namespace sun { namespace star {
 namespace frame {

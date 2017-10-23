@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <basegfx/numeric/ftools.hxx>
 
-#include "animationnodefactory.hxx"
+#include <animationnodefactory.hxx>
 #include "paralleltimecontainer.hxx"
 #include "sequentialtimecontainer.hxx"
 #include "propertyanimationnode.hxx"
@@ -39,7 +39,7 @@
 #include "animationaudionode.hxx"
 #include "animationcommandnode.hxx"
 #include "nodetools.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 #include <memory>
 

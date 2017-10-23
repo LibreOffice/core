@@ -19,7 +19,7 @@
 
 
 #include "animationtransitionfilternode.hxx"
-#include "transitionfactory.hxx"
+#include <transitionfactory.hxx>
 
 namespace slideshow {
 namespace internal {

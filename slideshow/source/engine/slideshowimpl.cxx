@@ -47,7 +47,7 @@
 #include <basegfx/utils/canvastools.hxx>
 
 #include <vcl/font.hxx>
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -70,29 +70,29 @@
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 
-#include "unoviewcontainer.hxx"
-#include "transitionfactory.hxx"
-#include "eventmultiplexer.hxx"
-#include "usereventqueue.hxx"
-#include "eventqueue.hxx"
-#include "cursormanager.hxx"
-#include "slideshowcontext.hxx"
-#include "activitiesqueue.hxx"
-#include "activitiesfactory.hxx"
-#include "interruptabledelayevent.hxx"
-#include "slide.hxx"
-#include "shapemaps.hxx"
-#include "slideview.hxx"
-#include "tools.hxx"
-#include "unoview.hxx"
-#include "slidebitmap.hxx"
+#include <unoviewcontainer.hxx>
+#include <transitionfactory.hxx>
+#include <eventmultiplexer.hxx>
+#include <usereventqueue.hxx>
+#include <eventqueue.hxx>
+#include <cursormanager.hxx>
+#include <slideshowcontext.hxx>
+#include <activitiesqueue.hxx>
+#include <activitiesfactory.hxx>
+#include <interruptabledelayevent.hxx>
+#include <slide.hxx>
+#include <shapemaps.hxx>
+#include <slideview.hxx>
+#include <tools.hxx>
+#include <unoview.hxx>
+#include <slidebitmap.hxx>
 #include "rehearsetimingsactivity.hxx"
 #include "waitsymbol.hxx"
 #include "effectrewinder.hxx"
-#include "framerate.hxx"
+#include <framerate.hxx>
 #include "pointersymbol.hxx"
 
 #include <map>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_REHEARSETIMINGSACTIVITY_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_REHEARSETIMINGSACTIVITY_HXX
 
-#include "activity.hxx"
+#include <activity.hxx>
 
 #include <basegfx/range/b2drange.hxx>
 

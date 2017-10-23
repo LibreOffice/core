@@ -23,11 +23,11 @@
 #include <osl/diagnose.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 
-#include "attributableshape.hxx"
-#include "doctreenodesupplier.hxx"
+#include <attributableshape.hxx>
+#include <doctreenodesupplier.hxx>
 #include "gdimtftools.hxx"
 #include "viewshape.hxx"
-#include "hyperlinkarea.hxx"
+#include <hyperlinkarea.hxx>
 
 #include <boost/optional.hpp>
 #include <set>

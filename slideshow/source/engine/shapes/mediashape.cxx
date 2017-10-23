@@ -25,9 +25,9 @@
 #include "mediashape.hxx"
 #include "viewmediashape.hxx"
 #include "externalshapebase.hxx"
-#include "slideshowcontext.hxx"
-#include "shape.hxx"
-#include "tools.hxx"
+#include <slideshowcontext.hxx>
+#include <shape.hxx>
+#include <tools.hxx>
 
 #include <algorithm>
 

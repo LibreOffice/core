@@ -20,7 +20,7 @@
 
 // must be first
 
-#include <simplecontinuousactivitybase.hxx>
+#include "simplecontinuousactivitybase.hxx"
 
 
 namespace slideshow

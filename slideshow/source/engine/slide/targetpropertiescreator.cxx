@@ -30,7 +30,7 @@
 #include <vector>
 
 #include "targetpropertiescreator.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 namespace slideshow
 {

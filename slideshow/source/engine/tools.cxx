@@ -42,9 +42,9 @@
 
 #include <cppcanvas/basegfxfactory.hxx>
 
-#include "unoview.hxx"
-#include "smilfunctionparser.hxx"
-#include "tools.hxx"
+#include <unoview.hxx>
+#include <smilfunctionparser.hxx>
+#include <tools.hxx>
 
 #include <limits>
 

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_PARALLELTIMECONTAINER_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_PARALLELTIMECONTAINER_HXX
 
-#include "basecontainernode.hxx"
+#include <basecontainernode.hxx>
 
 namespace slideshow {
 namespace internal {

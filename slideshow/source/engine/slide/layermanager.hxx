@@ -22,11 +22,11 @@
 
 #include <cppcanvas/spritecanvas.hxx>
 
-#include "unoview.hxx"
-#include "unoviewcontainer.hxx"
-#include "attributableshape.hxx"
+#include <unoview.hxx>
+#include <unoviewcontainer.hxx>
+#include <attributableshape.hxx>
 #include "layer.hxx"
-#include "tools.hxx"
+#include <tools.hxx>
 
 #include <algorithm>
 #include <functional>

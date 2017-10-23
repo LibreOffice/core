@@ -36,12 +36,12 @@
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 
-#include "eventqueue.hxx"
-#include "screenupdater.hxx"
-#include "eventmultiplexer.hxx"
-#include "activitiesqueue.hxx"
-#include "slideshowcontext.hxx"
-#include "mouseeventhandler.hxx"
+#include <eventqueue.hxx>
+#include <screenupdater.hxx>
+#include <eventmultiplexer.hxx>
+#include <activitiesqueue.hxx>
+#include <slideshowcontext.hxx>
+#include <mouseeventhandler.hxx>
 #include "rehearsetimingsactivity.hxx"
 
 #include <algorithm>

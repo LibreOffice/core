@@ -28,16 +28,16 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
-#include "activity.hxx"
-#include "slideshowcontext.hxx"
+#include <activity.hxx>
+#include <slideshowcontext.hxx>
 #include "userpaintoverlay.hxx"
-#include "mouseeventhandler.hxx"
-#include "eventmultiplexer.hxx"
-#include "screenupdater.hxx"
-#include "vieweventhandler.hxx"
+#include <mouseeventhandler.hxx>
+#include <eventmultiplexer.hxx>
+#include <screenupdater.hxx>
+#include <vieweventhandler.hxx>
 
-#include "slide.hxx"
-#include "cursormanager.hxx"
+#include <slide.hxx>
+#include <cursormanager.hxx>
 
 using namespace ::com::sun::star;
 

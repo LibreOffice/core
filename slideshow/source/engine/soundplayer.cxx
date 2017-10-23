@@ -31,7 +31,7 @@
 
 #include <avmedia/mediawindow.hxx>
 
-#include "soundplayer.hxx"
+#include <soundplayer.hxx>
 
 #include <algorithm>
 

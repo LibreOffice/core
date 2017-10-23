@@ -38,20 +38,20 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 
-#include "activity.hxx"
-#include "wakeupevent.hxx"
-#include "eventqueue.hxx"
+#include <activity.hxx>
+#include <wakeupevent.hxx>
+#include <eventqueue.hxx>
 #include "drawinglayeranimation.hxx"
 #include "drawshapesubsetting.hxx"
 #include "drawshape.hxx"
-#include "shapesubset.hxx"
-#include "shapeattributelayerholder.hxx"
-#include "slideshowcontext.hxx"
-#include "tools.hxx"
+#include <shapesubset.hxx>
+#include <shapeattributelayerholder.hxx>
+#include <slideshowcontext.hxx>
+#include <tools.hxx>
 #include "gdimtftools.hxx"
-#include "eventmultiplexer.hxx"
+#include <eventmultiplexer.hxx>
 #include "intrinsicanimationactivity.hxx"
-#include "intrinsicanimationeventhandler.hxx"
+#include <intrinsicanimationeventhandler.hxx>
 
 #include <vector>
 #include <memory>

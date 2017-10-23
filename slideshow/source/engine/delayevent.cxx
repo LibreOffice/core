@@ -19,7 +19,7 @@
 
 
 #include <osl/diagnose.h>
-#include "delayevent.hxx"
+#include <delayevent.hxx>
 
 namespace slideshow {
 namespace internal {

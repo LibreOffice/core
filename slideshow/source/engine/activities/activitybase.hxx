@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYBASE_HXX
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACTIVITYBASE_HXX
 
-#include "animationactivity.hxx"
+#include <animationactivity.hxx>
 #include "activityparameters.hxx"
-#include "animatableshape.hxx"
-#include "shapeattributelayer.hxx"
+#include <animatableshape.hxx>
+#include <shapeattributelayer.hxx>
 
 namespace slideshow {
 namespace internal {

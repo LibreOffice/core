@@ -21,11 +21,11 @@
 
 #include <tools/diagnose_ex.h>
 
-#include "animationactivity.hxx"
-#include "animation.hxx"
-#include "animatableshape.hxx"
-#include "shapeattributelayer.hxx"
-#include "activitiesfactory.hxx"
+#include <animationactivity.hxx>
+#include <animation.hxx>
+#include <animatableshape.hxx>
+#include <shapeattributelayer.hxx>
+#include <activitiesfactory.hxx>
 
 namespace slideshow {
 namespace internal {

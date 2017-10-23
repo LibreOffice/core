@@ -23,10 +23,10 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
-#include "shapemanager.hxx"
-#include "basenode.hxx"
-#include "doctreenode.hxx"
-#include "attributableshape.hxx"
+#include <shapemanager.hxx>
+#include <basenode.hxx>
+#include <doctreenode.hxx>
+#include <attributableshape.hxx>
 
 
 #if defined(DBG_UTIL)

@@ -26,7 +26,7 @@
 #include <memory>
 #include <vcl/vclptr.hxx>
 
-#include "viewlayer.hxx"
+#include <viewlayer.hxx>
 
 class SystemChildWindow;
 namespace vcl { class Window; }

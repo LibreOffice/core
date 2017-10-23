@@ -19,7 +19,7 @@
 
 
 #include <tools/diagnose_ex.h>
-#include <gdimtftools.hxx>
+#include "gdimtftools.hxx"
 
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -44,7 +44,7 @@
 
 #include <unotools/streamwrap.hxx>
 
-#include "tools.hxx"
+#include <tools.hxx>
 
 using namespace ::com::sun::star;
 

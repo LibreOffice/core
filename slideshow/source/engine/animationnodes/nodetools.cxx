@@ -21,7 +21,7 @@
 #include <com/sun/star/animations/Timing.hpp>
 
 #include <tools.hxx>
-#include <nodetools.hxx>
+#include "nodetools.hxx"
 
 
 using namespace ::com::sun::star;

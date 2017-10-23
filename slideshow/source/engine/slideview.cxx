@@ -20,11 +20,11 @@
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
-#include "eventqueue.hxx"
-#include "eventmultiplexer.hxx"
-#include "slideview.hxx"
-#include "delayevent.hxx"
-#include "unoview.hxx"
+#include <eventqueue.hxx>
+#include <eventmultiplexer.hxx>
+#include <slideview.hxx>
+#include <delayevent.hxx>
+#include <unoview.hxx>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
