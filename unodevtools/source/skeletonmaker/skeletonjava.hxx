@@ -21,7 +21,7 @@
 
 #include <fstream>
 
-#include "codemaker/generatedtypeset.hxx"
+#include <codemaker/generatedtypeset.hxx>
 #include "skeletoncommon.hxx"
 
 namespace skeletonmaker { namespace java {
