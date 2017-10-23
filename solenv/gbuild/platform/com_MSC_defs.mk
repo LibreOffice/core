@@ -149,6 +149,7 @@ gb_CFLAGS := \
 	-Gs \
 	-GS \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
+	$(if $(HAVE_THREADSAFE_STATICS),,-Zc:threadSafeInit-) \
 	-nologo \
 	-W4 \
 	-wd4091 \
@@ -190,6 +191,7 @@ gb_CXXFLAGS := \
 	-GS \
 	-Gy \
 	$(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD) \
+	$(if $(HAVE_THREADSAFE_STATICS),,-Zc:threadSafeInit-) \
 	-nologo \
 	-W4 \
 	-wd4091 \
