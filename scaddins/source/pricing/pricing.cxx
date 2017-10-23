@@ -24,8 +24,8 @@
 
 #include "pricing.hxx"
 #include "black_scholes.hxx"
-#include "pricing.hrc"
-#include "strings.hrc"
+#include <pricing.hrc>
+#include <strings.hrc>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>

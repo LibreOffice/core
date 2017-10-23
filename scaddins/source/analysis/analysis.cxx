@@ -18,7 +18,7 @@
  */
 
 #include "analysis.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "bessel.hxx"
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>

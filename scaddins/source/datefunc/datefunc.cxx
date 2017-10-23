@@ -18,8 +18,8 @@
  */
 
 #include "datefunc.hxx"
-#include "datefunc.hrc"
-#include "strings.hrc"
+#include <datefunc.hrc>
+#include <strings.hrc>
 #include <com/sun/star/util/Date.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>

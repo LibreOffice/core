@@ -28,8 +28,8 @@
 #include <algorithm>
 #include <memory>
 #include "analysishelper.hxx"
-#include "analysis.hrc"
-#include "strings.hrc"
+#include <analysis.hrc>
+#include <strings.hrc>
 #include "deffuncname.hxx"
 
 using namespace                 ::com::sun::star;
