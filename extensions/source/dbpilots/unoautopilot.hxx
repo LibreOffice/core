@@ -23,7 +23,7 @@
 #include <svtools/genericunodialog.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "componentmodule.hxx"
+#include <componentmodule.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

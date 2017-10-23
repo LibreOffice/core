@@ -21,16 +21,16 @@
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 
 #include <osl/mutex.hxx>
-#include "com/sun/star/uno/Any.h"
-#include "com/sun/star/uno/Reference.h"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/awt/Rectangle.hpp"
-#include "com/sun/star/awt/XActionListener.hpp"
-#include "com/sun/star/awt/XControlModel.hpp"
-#include "com/sun/star/awt/XDialog.hpp"
-#include "com/sun/star/awt/XTopWindowListener.hpp"
-#include "com/sun/star/beans/NamedValue.hpp"
-#include "com/sun/star/frame/XTerminateListener.hpp"
+#include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/XActionListener.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/XTopWindowListener.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 

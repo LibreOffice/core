@@ -18,8 +18,8 @@
  */
 
 #include "selectlabeldialog.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <strings.hrc>
+#include <bitmaps.hlst>
 #include "formbrowsertools.hxx"
 #include "formstrings.hxx"
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 
 namespace pcr

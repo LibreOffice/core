@@ -26,8 +26,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <vcl/stdtext.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "strings.hrc"
-#include "componentmodule.hxx"
+#include <strings.hrc>
+#include <componentmodule.hxx>
 #include <vcl/waitobj.hxx>
 
 

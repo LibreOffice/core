@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/inspection/XStringRepresentation.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/script/CannotConvertException.hpp"
-#include "com/sun/star/script/XTypeConverter.hpp"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/inspection/XStringRepresentation.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
@@ -36,8 +36,8 @@
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbconversion.hxx>
-#include "strings.hrc"
-#include "yesno.hrc"
+#include <strings.hrc>
+#include <yesno.hrc>
 #include "pcrservices.hxx"
 #include <comphelper/types.hxx>
 #include "modulepcr.hxx"

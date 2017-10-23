@@ -27,12 +27,12 @@
 #include "datman.hxx"
 #include "bibview.hxx"
 #include "bibresid.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "bibconfig.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>

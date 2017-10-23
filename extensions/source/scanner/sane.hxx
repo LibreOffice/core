@@ -23,7 +23,7 @@
 #include <osl/module.h>
 #include <vcl/bitmap.hxx>
 #include <sane/sane.h>
-#include <scanner.hxx>
+#include "scanner.hxx"
 
 
 class BitmapTransporter: public cppu::WeakImplHelper<css::awt::XBitmap>

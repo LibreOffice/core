@@ -18,9 +18,9 @@
  */
 
 #include "commonpagesdbp.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "componentmodule.hxx"
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <componentmodule.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

@@ -27,7 +27,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/util/Time.hpp>
 #include "modulepcr.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 
 namespace pcr

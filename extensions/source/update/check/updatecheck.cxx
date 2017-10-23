@@ -51,7 +51,7 @@
 #endif
 #endif
 
-#include <onlinecheck.hxx>
+#include "onlinecheck.hxx"
 #include "updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
 

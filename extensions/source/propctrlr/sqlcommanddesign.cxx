@@ -19,8 +19,8 @@
 
 #include "sqlcommanddesign.hxx"
 #include "formstrings.hxx"
-#include "command.hrc"
-#include "strings.hrc"
+#include <command.hrc>
+#include <strings.hrc>
 #include "modulepcr.hxx"
 #include "unourl.hxx"
 

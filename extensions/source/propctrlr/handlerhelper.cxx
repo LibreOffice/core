@@ -18,14 +18,14 @@
  */
 
 #include "handlerhelper.hxx"
-#include "strings.hrc"
-#include "yesno.hrc"
+#include <strings.hrc>
+#include <yesno.hrc>
 #include <comphelper/extract.hxx>
 #include "modulepcr.hxx"
 #include "enumrepresentation.hxx"
 #include "formmetadata.hxx"
 
-#include "com/sun/star/inspection/StringRepresentation.hpp"
+#include <com/sun/star/inspection/StringRepresentation.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifiable.hpp>

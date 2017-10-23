@@ -22,8 +22,8 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "strings.hrc"
-#include "componentmodule.hxx"
+#include <strings.hrc>
+#include <componentmodule.hxx>
 #include <vcl/fixed.hxx>
 
 

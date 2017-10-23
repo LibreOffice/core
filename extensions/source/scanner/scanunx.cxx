@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scanner.hxx>
-#include <sanedlg.hxx>
+#include "scanner.hxx"
+#include "sanedlg.hxx"
 #include <osl/thread.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <memory>

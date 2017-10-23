@@ -25,7 +25,7 @@
 
 #include <cmath>
 
-#include <grid.hxx>
+#include "grid.hxx"
 #include <vcl/builderfactory.hxx>
 
 #include <algorithm>

@@ -21,7 +21,7 @@
 #include "formlinkdialog.hxx"
 
 #include "modulepcr.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "formstrings.hxx"
 #include <sal/log.hxx>
 #include <vcl/combobox.hxx>

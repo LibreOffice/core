@@ -20,10 +20,10 @@
 
 #include "eventhandler.hxx"
 #include "pcrservices.hxx"
-#include "helpids.h"
-#include "propctrlr.h"
+#include <helpids.h>
+#include <propctrlr.h>
 #include "formbrowsertools.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "formstrings.hxx"
 #include "handlerhelper.hxx"
 #include "modulepcr.hxx"

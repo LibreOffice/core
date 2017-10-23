@@ -47,9 +47,9 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/strings.hrc>
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #define PROPERTY_TITLE          "BubbleHeading"
 #define PROPERTY_TEXT           "BubbleText"

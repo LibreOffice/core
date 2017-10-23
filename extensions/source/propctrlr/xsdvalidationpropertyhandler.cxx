@@ -25,8 +25,8 @@
 #include "formmetadata.hxx"
 #include "xsddatatypes.hxx"
 #include "modulepcr.hxx"
-#include "strings.hrc"
-#include "propctrlr.h"
+#include <strings.hrc>
+#include <propctrlr.h>
 #include "newdatatype.hxx"
 #include "xsdvalidationhelper.hxx"
 #include "pcrcommon.hxx"

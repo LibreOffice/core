@@ -52,14 +52,14 @@
 #include <svtools/svmedit.hxx>
 
 #include "bibresid.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "bibcont.hxx"
 #include "bibbeam.hxx"
 #include "bibmod.hxx"
 #include "bibview.hxx"
 #include "framectr.hxx"
 #include "datman.hxx"
-#include <bibconfig.hxx>
+#include "bibconfig.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 

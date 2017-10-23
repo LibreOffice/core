@@ -19,7 +19,7 @@
 
 #include "newdatatype.hxx"
 #include "modulepcr.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 namespace pcr
 {

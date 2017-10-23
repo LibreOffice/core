@@ -41,7 +41,7 @@
 #include <com/sun/star/ucb/XCommandProcessor2.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
+#include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument3.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

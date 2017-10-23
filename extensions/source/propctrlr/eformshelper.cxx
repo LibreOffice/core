@@ -20,7 +20,7 @@
 #include <memory>
 #include "eformshelper.hxx"
 #include "formstrings.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "modulepcr.hxx"
 #include "propeventtranslation.hxx"
 #include "formbrowsertools.hxx"

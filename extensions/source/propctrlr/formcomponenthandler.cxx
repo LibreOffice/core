@@ -20,14 +20,14 @@
 
 #include "controltype.hxx"
 #include "pcrservices.hxx"
-#include "propctrlr.h"
+#include <propctrlr.h>
 #include "fontdialog.hxx"
 #include "formcomponenthandler.hxx"
 #include "formlinkdialog.hxx"
 #include "formmetadata.hxx"
-#include "strings.hrc"
-#include "showhide.hrc"
-#include "yesno.hrc"
+#include <strings.hrc>
+#include <showhide.hrc>
+#include <yesno.hrc>
 #include "formstrings.hxx"
 #include "handlerhelper.hxx"
 #include "listselectiondlg.hxx"

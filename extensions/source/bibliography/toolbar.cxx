@@ -23,7 +23,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <datman.hxx>
+#include "datman.hxx"
 #include <o3tl/any.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/miscopt.hxx>
@@ -34,8 +34,8 @@
 #include "bibbeam.hxx"
 #include "bibview.hxx"
 #include "bibresid.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <strings.hrc>
+#include <bitmaps.hlst>
 
 #include "bibtools.hxx"
 

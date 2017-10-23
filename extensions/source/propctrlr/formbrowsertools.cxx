@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
-#include "strings.hrc"
+#include <strings.hrc>
 #include "modulepcr.hxx"
 #include "formstrings.hxx"
 
