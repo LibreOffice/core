@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGIO_HXX
 #define INCLUDED_SOT_SOURCE_SDSTOR_STGIO_HXX
 
-#include <stgcache.hxx>
-#include <stgelem.hxx>
+#include "stgcache.hxx"
+#include "stgelem.hxx"
 #include <tools/link.hxx>
 #include <tools/solar.h>
 

@@ -20,9 +20,9 @@
 #include <memory>
 #include <algorithm>
 
-#include "rtl/string.h"
+#include <rtl/string.h>
 #include "stgole.hxx"
-#include "sot/storinfo.hxx"
+#include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
 
 #ifdef _MSC_VER
