@@ -36,9 +36,11 @@
 
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
+#include <svtools/strings.hrc>
 #include <unotools/pathoptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/lingucfg.hxx>
+#include <unotools/resmgr.hxx>
 #include <osl/file.hxx>
 
 #include <stdio.h>
@@ -745,9 +747,10 @@ sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
     return bRes;
 }
 
-OUString SAL_CALL Hyphenator::getServiceDisplayName( const Locale& /*rLocale*/ )
+OUString SAL_CALL Hyphenator::getServiceDisplayName(const Locale& rLocale)
 {
-    return OUString( "Libhyphen Hyphenator" );
+    std::locale loc(Translate::Create("svt", LanguageTag(rLocale)));
+    return Translate::get(STR_DESCRIPTION_LIBHYPHEN, loc);
 }
 
 void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )

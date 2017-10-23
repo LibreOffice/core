@@ -30,10 +30,13 @@
 #include <osl/mutex.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
+#include <unotools/resmgr.hxx>
 
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
+
+#include <svtools/strings.hrc>
 
 #include "nthesimp.hxx"
 #include <linguistic/misc.hxx>
@@ -517,9 +520,10 @@ Reference< XInterface > SAL_CALL Thesaurus_CreateInstance(
     return xService;
 }
 
-OUString SAL_CALL Thesaurus::getServiceDisplayName( const Locale& /*rLocale*/ )
+OUString SAL_CALL Thesaurus::getServiceDisplayName(const Locale& rLocale)
 {
-    return OUString( "Mythes Thesaurus" );
+    std::locale loc(Translate::Create("svt", LanguageTag(rLocale)));
+    return Translate::get(STR_DESCRIPTION_MYTHES, loc);
 }
 
 void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
