@@ -25,8 +25,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "cppuhelper/unourl.hxx"
-#include "rtl/malformeduriexception.hxx"
+#include <cppuhelper/unourl.hxx>
+#include <rtl/malformeduriexception.hxx>
 
 #include <com/sun/star/connection/AlreadyAcceptingException.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include "services.hxx"
+#include <services.hxx>
 #include "acceptor.hxx"
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.Acceptor"

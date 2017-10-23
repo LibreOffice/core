@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/security.hxx"
+#include <osl/security.hxx>
 
 #include <uno/mapping.hxx>
 
@@ -25,8 +25,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "cppuhelper/unourl.hxx"
-#include "rtl/malformeduriexception.hxx"
+#include <cppuhelper/unourl.hxx>
+#include <rtl/malformeduriexception.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -34,7 +34,7 @@
 #include <com/sun/star/connection/NoConnectException.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 
-#include "services.hxx"
+#include <services.hxx>
 #include "connector.hxx"
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.io.Connector"

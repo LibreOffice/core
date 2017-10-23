@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-#include "services.hxx"
+#include <services.hxx>
 #include "streamhelper.hxx"
 
 // Implementation and service names
