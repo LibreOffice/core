@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <cstddef>
@@ -18,15 +18,15 @@
 #include <utility>
 #include <vector>
 
-#include "osl/file.h"
-#include "osl/file.hxx"
-#include "osl/process.h"
-#include "rtl/process.h"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/main.h"
-#include "sal/types.h"
-#include "unoidl/unoidl.hxx"
+#include <osl/file.h>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <rtl/process.h>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/main.h>
+#include <sal/types.h>
+#include <unoidl/unoidl.hxx>
 
 namespace {
 

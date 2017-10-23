@@ -10,12 +10,12 @@
 #ifndef INCLUDED_UNOIDL_SOURCE_SOURCEFILEPROVIDER_HXX
 #define INCLUDED_UNOIDL_SOURCE_SOURCEFILEPROVIDER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 
-#include "rtl/ref.hxx"
-#include "unoidl/unoidl.hxx"
+#include <rtl/ref.hxx>
+#include <unoidl/unoidl.hxx>
 
 namespace unoidl { namespace detail {
 

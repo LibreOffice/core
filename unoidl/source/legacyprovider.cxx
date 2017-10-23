@@ -7,19 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <cstring>
 #include <vector>
 
-#include "registry/reader.hxx"
-#include "registry/registry.hxx"
-#include "registry/regtype.h"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "unoidl/unoidl.hxx"
+#include <registry/reader.hxx>
+#include <registry/registry.hxx>
+#include <registry/regtype.h>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <unoidl/unoidl.hxx>
 
 #include "legacyprovider.hxx"
 
