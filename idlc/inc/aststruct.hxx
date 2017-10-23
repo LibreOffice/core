@@ -19,8 +19,8 @@
 #ifndef INCLUDED_IDLC_INC_ASTSTRUCT_HXX
 #define INCLUDED_IDLC_INC_ASTSTRUCT_HXX
 
-#include <asttype.hxx>
-#include <astscope.hxx>
+#include "asttype.hxx"
+#include "astscope.hxx"
 #include "idlctypes.hxx"
 
 class AstStruct;

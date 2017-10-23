@@ -19,9 +19,9 @@
 #ifndef INCLUDED_IDLC_INC_IDLC_HXX
 #define INCLUDED_IDLC_INC_IDLC_HXX
 
-#include <idlctypes.hxx>
-#include <aststack.hxx>
-#include <options.hxx>
+#include "idlctypes.hxx"
+#include "aststack.hxx"
+#include "options.hxx"
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'

@@ -19,9 +19,9 @@
 #ifndef INCLUDED_IDLC_INC_ERRORHANDLER_HXX
 #define INCLUDED_IDLC_INC_ERRORHANDLER_HXX
 
-#include <astdeclaration.hxx>
-#include <astexpression.hxx>
-#include <astenum.hxx>
+#include "astdeclaration.hxx"
+#include "astexpression.hxx"
+#include "astenum.hxx"
 
 enum class ErrorCode
 {

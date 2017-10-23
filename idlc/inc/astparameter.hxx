@@ -20,7 +20,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTPARAMETER_HXX
 #define INCLUDED_IDLC_INC_ASTPARAMETER_HXX
 
-#include <astmember.hxx>
+#include "astmember.hxx"
 
 enum Direction { DIR_IN, DIR_OUT, DIR_INOUT };
 

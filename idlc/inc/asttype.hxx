@@ -19,7 +19,7 @@
 #ifndef INCLUDED_IDLC_INC_ASTTYPE_HXX
 #define INCLUDED_IDLC_INC_ASTTYPE_HXX
 
-#include <astdeclaration.hxx>
+#include "astdeclaration.hxx"
 
 class AstType : public AstDeclaration
 {

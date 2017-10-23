@@ -19,8 +19,8 @@
 #ifndef INCLUDED_IDLC_INC_ASTSERVICE_HXX
 #define INCLUDED_IDLC_INC_ASTSERVICE_HXX
 
-#include <astdeclaration.hxx>
-#include <astscope.hxx>
+#include "astdeclaration.hxx"
+#include "astscope.hxx"
 
 class AstService : public AstDeclaration
                  , public AstScope

@@ -19,8 +19,8 @@
 #ifndef INCLUDED_IDLC_INC_FEHELPER_HXX
 #define INCLUDED_IDLC_INC_FEHELPER_HXX
 
-#include <asttype.hxx>
-#include <astinterface.hxx>
+#include "asttype.hxx"
+#include "astinterface.hxx"
 
 #include <vector>
 

@@ -20,7 +20,7 @@
 #include <astinterface.hxx>
 #include <astattribute.hxx>
 #include <astoperation.hxx>
-#include "idlc.hxx"
+#include <idlc.hxx>
 
 #include <registry/version.h>
 #include <registry/writer.hxx>

@@ -19,11 +19,11 @@
 #ifndef INCLUDED_IDLC_INC_ASTSCOPE_HXX
 #define INCLUDED_IDLC_INC_ASTSCOPE_HXX
 
-#include <idlc.hxx>
+#include "idlc.hxx"
 
 class AstExpression;
-#include <astdeclaration.hxx>
-#include <astexpression.hxx>
+#include "astdeclaration.hxx"
+#include "astexpression.hxx"
 
 class AstScope
 {

@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include <idlc.hxx>
+#include "idlc.hxx"
 
 // Enum to define all the different operators to combine expressions
 enum class ExprComb

@@ -18,7 +18,7 @@
  */
 
 
-#include "options.hxx"
+#include <options.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/string.hxx>
