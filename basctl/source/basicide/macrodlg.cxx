@@ -18,14 +18,14 @@
  */
 
 
-#include <macrodlg.hxx>
+#include "macrodlg.hxx"
 #include <basidesh.hxx>
 #include <strings.hrc>
 
 #include <iderdll.hxx>
-#include <iderdll2.hxx>
+#include "iderdll2.hxx"
 
-#include <moduldlg.hxx>
+#include "moduldlg.hxx"
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>

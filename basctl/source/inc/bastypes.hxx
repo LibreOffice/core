@@ -19,10 +19,10 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_BASTYPES_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_BASTYPES_HXX
 
-#include <scriptdocument.hxx>
+#include "scriptdocument.hxx"
 
-#include <sbxitem.hxx>
-#include <iderid.hxx>
+#include "sbxitem.hxx"
+#include "iderid.hxx"
 #include <svtools/tabbar.hxx>
 #include <vcl/toolbox.hxx>
 #include <basic/sbdef.hxx>

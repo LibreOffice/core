@@ -18,12 +18,12 @@
  */
 
 
-#include <moduldlg.hxx>
+#include "moduldlg.hxx"
 #include <basidesh.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <iderdll.hxx>
-#include <iderdll2.hxx>
+#include "iderdll2.hxx"
 #include <o3tl/make_unique.hxx>
 #include <svx/passwd.hxx>
 #include <ucbhelper/content.hxx>
