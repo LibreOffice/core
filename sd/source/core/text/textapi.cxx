@@ -26,7 +26,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/outlobj.hxx>
-#include "Outliner.hxx"
+#include <Outliner.hxx>
 #include <svx/svdpool.hxx>
 
 using namespace ::com::sun::star::uno;

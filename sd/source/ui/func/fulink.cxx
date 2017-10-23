@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fulink.hxx"
+#include <fulink.hxx>
 
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
@@ -25,10 +25,10 @@
 
 #include <svx/svxdlg.hxx>
 
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "ViewShell.hxx"
-#include "app.hrc"
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <ViewShell.hxx>
+#include <app.hrc>
 #include <memory>
 
 class SfxRequest;

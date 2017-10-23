@@ -32,12 +32,12 @@
 #include <svx/xoutbmp.hxx>
 #include <osl/file.hxx>
 
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
-#include "sdattr.hxx"
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
+#include <sdattr.hxx>
 #include "htmlex.hxx"
-#include "sdhtmlfilter.hxx"
+#include <sdhtmlfilter.hxx>
 
 
 SdHTMLFilter::SdHTMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :

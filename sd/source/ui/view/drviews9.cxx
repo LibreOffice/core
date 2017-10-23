@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/svdpagv.hxx>
@@ -48,14 +48,14 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "drawview.hxx"
-#include "DrawDocShell.hxx"
-#include "sdresid.hxx"
-#include "fupoor.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <drawview.hxx>
+#include <DrawDocShell.hxx>
+#include <sdresid.hxx>
+#include <fupoor.hxx>
 
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>

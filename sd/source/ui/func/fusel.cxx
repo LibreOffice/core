@@ -19,13 +19,13 @@
 
 #include <config_features.h>
 
-#include "fusel.hxx"
+#include <fusel.hxx>
 #include <basic/sbstar.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/scene3d.hxx>
-#include "drawview.hxx"
+#include <drawview.hxx>
 #include <svtools/imapobj.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -44,29 +44,29 @@
 
 #include <svx/svdotable.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "GraphicDocShell.hxx"
-#include "sdmod.hxx"
-#include "DrawDocShell.hxx"
-#include "stlpool.hxx"
-#include "anminfo.hxx"
-#include "fudraw.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "FrameView.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "DrawViewShell.hxx"
-#include "ToolBarManager.hxx"
-#include "pgjump.hxx"
+#include <GraphicDocShell.hxx>
+#include <sdmod.hxx>
+#include <DrawDocShell.hxx>
+#include <stlpool.hxx>
+#include <anminfo.hxx>
+#include <fudraw.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <FrameView.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <DrawViewShell.hxx>
+#include <ToolBarManager.hxx>
+#include <pgjump.hxx>
 #include <svx/globl3d.hxx>
-#include "Client.hxx"
+#include <Client.hxx>
 
-#include "slideshow.hxx"
+#include <slideshow.hxx>
 
 #include <svx/svdundo.hxx>
 #include <avmedia/mediawindow.hxx>

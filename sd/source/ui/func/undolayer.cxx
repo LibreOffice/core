@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "undolayer.hxx"
+#include <undolayer.hxx>
 
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "DrawViewShell.hxx"
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <DrawViewShell.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
 
 
 SdLayerModifyUndoAction::SdLayerModifyUndoAction(

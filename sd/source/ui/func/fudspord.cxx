@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fudspord.hxx"
+#include <fudspord.hxx>
 
 #include <svx/svxids.hrc>
 #include <vcl/pointr.hxx>
 
-#include "app.hrc"
-#include "fupoor.hxx"
-#include "ViewShell.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
+#include <app.hrc>
+#include <fupoor.hxx>
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
 
 namespace sd {
 

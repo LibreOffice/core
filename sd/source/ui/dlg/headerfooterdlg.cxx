@@ -26,7 +26,7 @@
 #include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
@@ -34,12 +34,12 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 
-#include "helpids.h"
-#include "Outliner.hxx"
-#include "headerfooterdlg.hxx"
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "ViewShell.hxx"
+#include <helpids.h>
+#include <Outliner.hxx>
+#include <headerfooterdlg.hxx>
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <ViewShell.hxx>
 
 // preview control for presentation layout
 #include <vcl/ctrl.hxx>
@@ -52,8 +52,8 @@
 #include <vcl/decoview.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include "undoheaderfooter.hxx"
-#include "sdundogr.hxx"
+#include <undoheaderfooter.hxx>
+#include <sdundogr.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

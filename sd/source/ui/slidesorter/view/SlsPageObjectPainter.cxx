@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "view/SlsPageObjectPainter.hxx"
+#include <view/SlsPageObjectPainter.hxx>
 
-#include "model/SlsPageDescriptor.hxx"
-#include "view/SlideSorterView.hxx"
-#include "view/SlsPageObjectLayouter.hxx"
-#include "view/SlsLayouter.hxx"
-#include "view/SlsTheme.hxx"
+#include <model/SlsPageDescriptor.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsPageObjectLayouter.hxx>
+#include <view/SlsLayouter.hxx>
+#include <view/SlsTheme.hxx>
 #include "SlsFramePainter.hxx"
-#include "cache/SlsPageCache.hxx"
-#include "controller/SlsProperties.hxx"
-#include "Window.hxx"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
+#include <cache/SlsPageCache.hxx>
+#include <controller/SlsProperties.hxx>
+#include <Window.hxx>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
-#include "CustomAnimationEffect.hxx"
+#include <CustomAnimationEffect.hxx>
 #include <memory>
 
 using namespace ::drawinglayer::primitive2d;

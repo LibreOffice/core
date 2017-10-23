@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sddll.hxx"
+#include <sddll.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -65,24 +65,24 @@
 #include <svx/postattr.hxx>
 #include <svx/svdetc.hxx>
 
-#include "annotationmanager.hxx"
+#include <annotationmanager.hxx>
 #include "annotationmanagerimpl.hxx"
 #include "annotationwindow.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
-#include "Annotation.hxx"
-#include "ToolBarManager.hxx"
-#include "DrawDocShell.hxx"
-#include "DrawViewShell.hxx"
-#include "DrawController.hxx"
-#include "sdresid.hxx"
-#include "EventMultiplexer.hxx"
-#include "ViewShellManager.hxx"
-#include "helpids.h"
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "textapi.hxx"
-#include "optsitem.hxx"
+#include <Annotation.hxx>
+#include <ToolBarManager.hxx>
+#include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
+#include <DrawController.hxx>
+#include <sdresid.hxx>
+#include <EventMultiplexer.hxx>
+#include <ViewShellManager.hxx>
+#include <helpids.h>
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <textapi.hxx>
+#include <optsitem.hxx>
 
 #include <memory>
 

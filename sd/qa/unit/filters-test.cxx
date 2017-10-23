@@ -24,8 +24,8 @@
 #include <svx/svdtext.hxx>
 #include <svx/svdotext.hxx>
 
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 
 #include <osl/process.h>
 #include <osl/thread.h>

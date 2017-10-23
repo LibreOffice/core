@@ -28,7 +28,7 @@
 
 #include <vcl/timer.hxx>
 
-#include <sddllapi.h>
+#include "sddllapi.h"
 
 #include <list>
 #include <map>

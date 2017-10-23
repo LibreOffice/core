@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_SHELL_SLIDESORTERSERVICE_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_SHELL_SLIDESORTERSERVICE_HXX
 
-#include "SlideSorter.hxx"
+#include <SlideSorter.hxx>
 
-#include "tools/PropertySet.hxx"
+#include <tools/PropertySet.hxx>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/SlideSorter.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>

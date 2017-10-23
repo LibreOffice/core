@@ -22,7 +22,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/unopool.hxx>
 
-#include "drawdoc.hxx"
+#include <drawdoc.hxx>
 #include "unopool.hxx"
 
 using namespace ::com::sun::star;

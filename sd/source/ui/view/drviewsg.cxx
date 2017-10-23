@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
-#include "ViewShellImplementation.hxx"
+#include <DrawViewShell.hxx>
+#include <ViewShellImplementation.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/imapdlg.hxx>
@@ -28,16 +28,16 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
-#include "drawdoc.hxx"
-#include "slideshow.hxx"
-#include "imapinfo.hxx"
-#include "sdmod.hxx"
-#include "optsitem.hxx"
-#include "FrameView.hxx"
-#include "drawview.hxx"
-#include "fupoor.hxx"
+#include <drawdoc.hxx>
+#include <slideshow.hxx>
+#include <imapinfo.hxx>
+#include <sdmod.hxx>
+#include <optsitem.hxx>
+#include <FrameView.hxx>
+#include <drawview.hxx>
+#include <fupoor.hxx>
 
 namespace sd {
 

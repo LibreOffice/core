@@ -25,10 +25,10 @@
 #include <sfx2/objsh.hxx>
 
 #include <vcl/jobset.hxx>
-#include "glob.hxx"
-#include "sdmod.hxx"
-#include "pres.hxx"
-#include "sddllapi.h"
+#include <glob.hxx>
+#include <sdmod.hxx>
+#include <pres.hxx>
+#include <sddllapi.h>
 #include "fupoor.hxx"
 
 class SfxStyleSheetBasePool;

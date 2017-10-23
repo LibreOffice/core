@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuolbull.hxx"
+#include <fuolbull.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/numitem.hxx>
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 
 #include <editeng/editdata.hxx>
 #include <svx/svxids.hrc>
-#include "OutlineView.hxx"
-#include "OutlineViewShell.hxx"
-#include "DrawViewShell.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "sdabstdlg.hxx"
+#include <OutlineView.hxx>
+#include <OutlineViewShell.hxx>
+#include <DrawViewShell.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <sdabstdlg.hxx>
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/svdoutl.hxx>

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Window.hxx"
-#include "DrawDocShell.hxx"
+#include <Window.hxx>
+#include <DrawDocShell.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
@@ -44,18 +44,18 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 
-#include "sdmod.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "sdattr.hxx"
-#include "fusearch.hxx"
-#include "ViewShell.hxx"
-#include "View.hxx"
-#include "slideshow.hxx"
-#include "fuhhconv.hxx"
+#include <sdmod.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <sdattr.hxx>
+#include <fusearch.hxx>
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <slideshow.hxx>
+#include <fuhhconv.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;

@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuconcs.hxx"
+#include <fuconcs.hxx>
 #include <svx/svdpagv.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 #include <svl/aeitem.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -49,21 +49,21 @@
 #include <svx/svdocapt.hxx>
 
 #include <svx/svdomeas.hxx>
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "ToolBarManager.hxx"
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <ToolBarManager.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <svx/gallery.hxx>
 #include <svl/itempool.hxx>
 
-#include "sdresid.hxx"
-#include "View.hxx"
-#include "sdpage.hxx"
-#include "Window.hxx"
-#include "stlpool.hxx"
-#include "drawdoc.hxx"
+#include <sdresid.hxx>
+#include <View.hxx>
+#include <sdpage.hxx>
+#include <Window.hxx>
+#include <stlpool.hxx>
+#include <drawdoc.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 namespace sd {
 

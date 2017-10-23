@@ -19,27 +19,27 @@
 
 #include <config_features.h>
 
-#include "ViewShellImplementation.hxx"
+#include <ViewShellImplementation.hxx>
 
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "app.hrc"
-#include "helpids.h"
-#include "sdattr.hxx"
-#include "sdabstdlg.hxx"
-#include "unmodpg.hxx"
-#include "Window.hxx"
-#include "optsitem.hxx"
-#include "DrawDocShell.hxx"
-#include "DrawController.hxx"
-#include "FactoryIds.hxx"
-#include "slideshow.hxx"
-#include "ViewShellBase.hxx"
-#include "FrameView.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShellHint.hxx"
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <app.hrc>
+#include <helpids.h>
+#include <sdattr.hxx>
+#include <sdabstdlg.hxx>
+#include <unmodpg.hxx>
+#include <Window.hxx>
+#include <optsitem.hxx>
+#include <DrawDocShell.hxx>
+#include <DrawController.hxx>
+#include <FactoryIds.hxx>
+#include <slideshow.hxx>
+#include <ViewShellBase.hxx>
+#include <FrameView.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShellHint.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -51,7 +51,7 @@
 #include <basic/sbstar.hxx>
 #include <xmloff/autolayout.hxx>
 
-#include "undo/undoobjects.hxx"
+#include <undo/undoobjects.hxx>
 
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 

@@ -43,8 +43,8 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::ui::dialogs;
 
-#include "pres.hxx"
-#include "sdabstdlg.hxx"
+#include <pres.hxx>
+#include <sdabstdlg.hxx>
 #include <memory>
 
 class SdHtmlOptionsDialog : public cppu::WeakImplHelper

@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 #include <svx/xtable.hxx>
-#include "sdattr.hxx"
+#include <sdattr.hxx>
 #include <svl/aeitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
@@ -35,17 +35,17 @@
 #include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "anminfo.hxx"
-#include "unoaprms.hxx"
-#include "sdundogr.hxx"
-#include "drawview.hxx"
-#include "Window.hxx"
-#include "sdresid.hxx"
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <anminfo.hxx>
+#include <unoaprms.hxx>
+#include <sdundogr.hxx>
+#include <drawview.hxx>
+#include <Window.hxx>
+#include <sdresid.hxx>
 
 using namespace ::com::sun::star;
 

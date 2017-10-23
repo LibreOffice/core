@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "DrawViewShell.hxx"
-#include "sdmod.hxx"
+#include <DrawViewShell.hxx>
+#include <sdmod.hxx>
 
 #include <comphelper/lok.hxx>
 

@@ -18,9 +18,9 @@
  */
 
 #include <memory>
-#include "tools/IconCache.hxx"
+#include <tools/IconCache.hxx>
 
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 #include <unordered_map>

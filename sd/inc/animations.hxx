@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_INC_ANIMATIONS_HXX
 #define INCLUDED_SD_INC_ANIMATIONS_HXX
 
-#include <sddllapi.h>
+#include "sddllapi.h"
 
 namespace sd
 {

@@ -19,11 +19,11 @@
 
 #include "ShellStackGuard.hxx"
 
-#include "framework/ConfigurationController.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <framework/ConfigurationController.hxx>
+#include <framework/FrameworkHelper.hxx>
 
-#include "DrawController.hxx"
-#include "ViewShellBase.hxx"
+#include <DrawController.hxx>
+#include <ViewShellBase.hxx>
 #include <sfx2/printer.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>

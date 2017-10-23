@@ -35,20 +35,20 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/unoprov.hxx>
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
-#include "FrameView.hxx"
-#include "createpresentation.hxx"
-#include "unomodel.hxx"
-#include "slideshow.hxx"
+#include <FrameView.hxx>
+#include <createpresentation.hxx>
+#include <unomodel.hxx>
+#include <slideshow.hxx>
 #include "slideshowimpl.hxx"
-#include "sdattr.hrc"
-#include "FactoryIds.hxx"
-#include "ViewShell.hxx"
+#include <sdattr.hrc>
+#include <FactoryIds.hxx>
+#include <ViewShell.hxx>
 #include "SlideShowRestarter.hxx"
-#include "DrawController.hxx"
-#include "customshowlist.hxx"
-#include "unopage.hxx"
+#include <DrawController.hxx>
+#include <customshowlist.hxx>
+#include <unopage.hxx>
 
 using ::com::sun::star::presentation::XSlideShowController;
 using ::sd::framework::FrameworkHelper;

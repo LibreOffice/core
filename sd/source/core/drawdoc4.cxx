@@ -24,11 +24,11 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
-#include "Outliner.hxx"
+#include <Outliner.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/outliner.hxx>
 
-#include "DrawDocShell.hxx"
+#include <DrawDocShell.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <vcl/settings.hxx>
@@ -94,20 +94,20 @@
 #include <editeng/langitem.hxx>
 #include <editeng/frmdiritem.hxx>
 
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "strings.hrc"
-#include "glob.hxx"
-#include "stlpool.hxx"
-#include "helpids.h"
-#include "sdiocmpt.hxx"
-#include "shapelist.hxx"
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <strings.hrc>
+#include <glob.hxx>
+#include <stlpool.hxx>
+#include <helpids.h>
+#include <sdiocmpt.hxx>
+#include <shapelist.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svl/itemset.hxx>
-#include "app.hrc"
-#include "strings.hxx"
+#include <app.hrc>
+#include <strings.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

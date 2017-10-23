@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "undo/undofactory.hxx"
-#include "undo/undoobjects.hxx"
+#include <undo/undofactory.hxx>
+#include <undo/undoobjects.hxx>
 
 using namespace sd;
 

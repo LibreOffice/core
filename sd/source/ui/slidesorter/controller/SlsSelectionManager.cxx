@@ -17,37 +17,37 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "controller/SlsSelectionManager.hxx"
+#include <controller/SlsSelectionManager.hxx>
 
-#include "SlideSorter.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsAnimator.hxx"
-#include "controller/SlsAnimationFunction.hxx"
-#include "controller/SlsCurrentSlideManager.hxx"
-#include "controller/SlsFocusManager.hxx"
-#include "controller/SlsPageSelector.hxx"
-#include "controller/SlsProperties.hxx"
-#include "controller/SlsScrollBarManager.hxx"
-#include "controller/SlsSlotManager.hxx"
-#include "controller/SlsSelectionObserver.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageEnumerationProvider.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "view/SlideSorterView.hxx"
-#include "view/SlsLayouter.hxx"
-#include "drawdoc.hxx"
-#include "drawview.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "Window.hxx"
+#include <SlideSorter.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsAnimator.hxx>
+#include <controller/SlsAnimationFunction.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
+#include <controller/SlsFocusManager.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <controller/SlsProperties.hxx>
+#include <controller/SlsScrollBarManager.hxx>
+#include <controller/SlsSlotManager.hxx>
+#include <controller/SlsSelectionObserver.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsLayouter.hxx>
+#include <drawdoc.hxx>
+#include <drawview.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <Window.hxx>
 #include <svx/svxids.hrc>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "app.hrc"
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <app.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

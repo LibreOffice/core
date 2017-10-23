@@ -42,7 +42,7 @@
 #include <editeng/unofield.hxx>
 #include <notifydocumentevent.hxx>
 #include <unomodel.hxx>
-#include <unopool.hxx>
+#include "unopool.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
@@ -76,9 +76,9 @@
 // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
-#include "DrawDocShell.hxx"
-#include "ViewShellBase.hxx"
-#include <UnoDocumentSettings.hxx>
+#include <DrawDocShell.hxx>
+#include <ViewShellBase.hxx>
+#include "UnoDocumentSettings.hxx"
 
 #include <Annotation.hxx>
 #include <drawdoc.hxx>
@@ -87,22 +87,22 @@
 
 #include <strings.hrc>
 #include <strings.hxx>
-#include <unolayer.hxx>
+#include "unolayer.hxx"
 #include <unoprnms.hxx>
 #include <unopage.hxx>
-#include <unocpres.hxx>
-#include <unoobj.hxx>
+#include "unocpres.hxx"
+#include "unoobj.hxx"
 #include <stlpool.hxx>
-#include <unopback.hxx>
+#include "unopback.hxx"
 #include <unokywds.hxx>
 
-#include "FrameView.hxx"
-#include "ClientView.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "app.hrc"
-#include "optsitem.hxx"
+#include <FrameView.hxx>
+#include <ClientView.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <app.hrc>
+#include <optsitem.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>

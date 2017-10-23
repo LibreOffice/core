@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/string.hxx>
@@ -41,18 +41,18 @@
 #include <svx/fmshell.hxx>
 #include <svl/cjkoptions.hxx>
 
-#include "FrameView.hxx"
-#include "Outliner.hxx"
-#include "app.hrc"
+#include <FrameView.hxx>
+#include <Outliner.hxx>
+#include <app.hrc>
 
-#include "sdmod.hxx"
-#include "stlsheet.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "Window.hxx"
-#include "ViewShellBase.hxx"
-#include "FormShellManager.hxx"
-#include "anminfo.hxx"
+#include <sdmod.hxx>
+#include <stlsheet.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <Window.hxx>
+#include <ViewShellBase.hxx>
+#include <FormShellManager.hxx>
+#include <anminfo.hxx>
 
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>

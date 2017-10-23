@@ -20,12 +20,12 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "DrawDocShell.hxx"
-#include "sdmod.hxx"
-#include "sdiocmpt.hxx"
-#include "vectdlg.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <DrawDocShell.hxx>
+#include <sdmod.hxx>
+#include <sdiocmpt.hxx>
+#include <vectdlg.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>

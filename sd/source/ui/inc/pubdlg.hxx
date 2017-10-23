@@ -27,8 +27,8 @@
 #include <vcl/field.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
-#include "resltn.hxx"
-#include "pres.hxx"
+#include <resltn.hxx>
+#include <pres.hxx>
 #include "assclass.hxx"
 
 #include <memory>

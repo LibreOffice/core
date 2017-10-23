@@ -22,9 +22,9 @@
 
 #include <svtools/transfer.hxx>
 
-#include "sdresid.hxx"
-#include "pres.hxx"
-#include "sddllapi.h"
+#include <sdresid.hxx>
+#include <pres.hxx>
+#include <sddllapi.h>
 #include <svtools/treelistbox.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>

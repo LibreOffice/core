@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "helper/simplereferencecomponent.hxx"
+#include <helper/simplereferencecomponent.hxx>
 
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "osl/diagnose.h"
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <osl/diagnose.h>
 
 #include <new>
 

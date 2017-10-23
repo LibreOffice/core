@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fusnapln.hxx"
+#include <fusnapln.hxx>
 #include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
-#include "sdattr.hxx"
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "DrawViewShell.hxx"
-#include "Window.hxx"
-#include "sdenumdef.hxx"
-#include "sdresid.hxx"
-#include "sdabstdlg.hxx"
-#include "app.hrc"
+#include <sdattr.hxx>
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <DrawViewShell.hxx>
+#include <Window.hxx>
+#include <sdenumdef.hxx>
+#include <sdresid.hxx>
+#include <sdabstdlg.hxx>
+#include <app.hrc>
 #include <svx/svdpagv.hxx>
 #include <memory>
 

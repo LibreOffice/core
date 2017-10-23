@@ -19,12 +19,12 @@
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include "facreg.hxx"
-#include "sddll.hxx"
+#include <facreg.hxx>
+#include <sddll.hxx>
 
 #include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include <string.h>
 #include <memory>

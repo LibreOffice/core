@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WindowUpdater.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "View.hxx"
+#include <WindowUpdater.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <View.hxx>
 
 #include <vcl/split.hxx>
 #include <sfx2/childwin.hxx>

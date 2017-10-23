@@ -19,7 +19,7 @@
 
 #include "GenericConfigurationChangeRequest.hxx"
 
-#include "framework/FrameworkHelper.hxx"
+#include <framework/FrameworkHelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

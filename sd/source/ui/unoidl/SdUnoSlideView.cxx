@@ -19,17 +19,17 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-#include "DrawController.hxx"
-#include "SdUnoSlideView.hxx"
+#include <DrawController.hxx>
+#include <SdUnoSlideView.hxx>
 
-#include "SlideSorter.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsPageSelector.hxx"
-#include "controller/SlsCurrentSlideManager.hxx"
-#include "model/SlsPageEnumerationProvider.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "sdpage.hxx"
+#include <SlideSorter.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <sdpage.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "morphdlg.hxx"
+#include <morphdlg.hxx>
 
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "sdmod.hxx"
-#include "sdiocmpt.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <sdmod.hxx>
+#include <sdiocmpt.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xenum.hxx>

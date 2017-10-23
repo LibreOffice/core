@@ -31,8 +31,8 @@
 #include <svx/unoshape.hxx>
 
 #include "unopback.hxx"
-#include "drawdoc.hxx"
-#include "unokywds.hxx"
+#include <drawdoc.hxx>
+#include <unokywds.hxx>
 
 using namespace ::com::sun::star;
 

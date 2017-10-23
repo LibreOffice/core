@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuprobjs.hxx"
+#include <fuprobjs.hxx>
 
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <editeng/outliner.hxx>
 #include <svl/hint.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
-#include "strings.hrc"
-#include "strings.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
 
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "OutlineViewShell.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "glob.hxx"
-#include "prlayout.hxx"
-#include "unchss.hxx"
-#include "sdabstdlg.hxx"
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <OutlineViewShell.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <glob.hxx>
+#include <prlayout.hxx>
+#include <unchss.hxx>
+#include <sdabstdlg.hxx>
 #include <memory>
 
 namespace sd {

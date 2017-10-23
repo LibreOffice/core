@@ -23,7 +23,7 @@
 #include <svl/lstner.hxx>
 #include <svl/ctloptions.hxx>
 #include <vcl/vclptr.hxx>
-#include "sddllapi.h"
+#include <sddllapi.h>
 
 #include <vector>
 

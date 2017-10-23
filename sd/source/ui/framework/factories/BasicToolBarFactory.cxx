@@ -19,13 +19,13 @@
 
 #include "BasicToolBarFactory.hxx"
 
-#include "ViewTabBar.hxx"
-#include "facreg.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <ViewTabBar.hxx>
+#include <facreg.hxx>
+#include <framework/FrameworkHelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include "DrawController.hxx"
+#include <DrawController.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

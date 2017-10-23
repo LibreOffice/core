@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "zoomlist.hxx"
+#include <zoomlist.hxx>
 
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 
-#include "ViewShell.hxx"
+#include <ViewShell.hxx>
 
 namespace sd {
 

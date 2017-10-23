@@ -27,10 +27,10 @@
 #include <vcl/toolbox.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "strings.hrc"
-#include "gluectrl.hxx"
-#include "sdresid.hxx"
-#include "app.hrc"
+#include <strings.hrc>
+#include <gluectrl.hxx>
+#include <sdresid.hxx>
+#include <app.hrc>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

@@ -33,8 +33,8 @@
 
 #include <vcl/lstbox.hxx>
 
-#include "sdresid.hxx"
-#include "misc/scopelock.hxx"
+#include <sdresid.hxx>
+#include <misc/scopelock.hxx>
 
 class SdDrawDocument;
 class BitmapEx;

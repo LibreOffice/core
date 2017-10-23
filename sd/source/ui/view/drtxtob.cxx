@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "TextObjectBar.hxx"
+#include <TextObjectBar.hxx>
 
 #include <svx/svxids.hrc>
 
@@ -51,25 +51,25 @@
 
 #include <sfx2/objface.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
 
-#include "drawdoc.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "ToolBarManager.hxx"
-#include "futempl.hxx"
-#include "sdresid.hxx"
-#include "Window.hxx"
-#include "OutlineView.hxx"
+#include <drawdoc.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <ToolBarManager.hxx>
+#include <futempl.hxx>
+#include <sdresid.hxx>
+#include <Window.hxx>
+#include <OutlineView.hxx>
 
 using namespace sd;
 using namespace ::com::sun::star;
 
 #define TextObjectBar
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 namespace sd {
 

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuconnct.hxx"
+#include <fuconnct.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "drawdoc.hxx"
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <drawdoc.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <memory>

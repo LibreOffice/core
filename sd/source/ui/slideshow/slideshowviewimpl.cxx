@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <slideshowviewimpl.hxx>
-#include <slideshowimpl.hxx>
+#include "slideshowviewimpl.hxx"
+#include "slideshowimpl.hxx"
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/awt/Pointer.hpp>

@@ -18,7 +18,7 @@
  */
 
 #include "FullScreenPane.hxx"
-#include "ViewShellBase.hxx"
+#include <ViewShellBase.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/wrkwin.hxx>

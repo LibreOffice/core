@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "GraphicObjectBar.hxx"
+#include <GraphicObjectBar.hxx>
 
 #include <limits.h>
 #include <vcl/msgbox.hxx>
@@ -35,19 +35,19 @@
 
 #include <sfx2/objface.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
-#include "strings.hrc"
-#include "DrawDocShell.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
+#include <strings.hrc>
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
 
 using namespace sd;
 #define GraphicObjectBar
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 namespace sd {
 

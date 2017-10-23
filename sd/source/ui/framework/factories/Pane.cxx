@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/Pane.hxx"
+#include <framework/Pane.hxx>
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

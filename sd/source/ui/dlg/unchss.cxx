@@ -25,14 +25,14 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
 
-#include "unchss.hxx"
+#include <unchss.hxx>
 
-#include "strings.hrc"
-#include "glob.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "stlsheet.hxx"
-#include "strings.hxx"
+#include <strings.hrc>
+#include <glob.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <stlsheet.hxx>
+#include <strings.hxx>
 
 StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
                                            SfxStyleSheet* pTheStyleSheet,

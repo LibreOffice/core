@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuchar.hxx"
+#include <fuchar.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
 
@@ -29,14 +29,14 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include "View.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShell.hxx"
-#include "DrawDocShell.hxx"
-#include "sdabstdlg.hxx"
+#include <View.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShell.hxx>
+#include <DrawDocShell.hxx>
+#include <sdabstdlg.hxx>
 #include <memory>
 
 namespace sd {

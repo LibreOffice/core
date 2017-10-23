@@ -26,7 +26,7 @@
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include "TabControl.hxx"
-#include "pres.hxx"
+#include <pres.hxx>
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/scanner/XScannerManager2.hpp>

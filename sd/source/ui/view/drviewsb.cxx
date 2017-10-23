@@ -39,28 +39,28 @@
 #include <unotools/useroptions.hxx>
 #include <tools/diagnose_ex.h>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "Outliner.hxx"
-#include "Window.hxx"
-#include "sdmod.hxx"
-#include "sdattr.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "sdresid.hxx"
-#include "sdpage.hxx"
-#include "DrawViewShell.hxx"
-#include "drawview.hxx"
-#include "unmodpg.hxx"
-#include "undolayer.hxx"
-#include "ViewShellBase.hxx"
-#include "FormShellManager.hxx"
-#include "LayerTabBar.hxx"
-#include "sdabstdlg.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "SlideSorter.hxx"
-#include "controller/SlideSorterController.hxx"
+#include <Outliner.hxx>
+#include <Window.hxx>
+#include <sdmod.hxx>
+#include <sdattr.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <sdresid.hxx>
+#include <sdpage.hxx>
+#include <DrawViewShell.hxx>
+#include <drawview.hxx>
+#include <unmodpg.hxx>
+#include <undolayer.hxx>
+#include <ViewShellBase.hxx>
+#include <FormShellManager.hxx>
+#include <LayerTabBar.hxx>
+#include <sdabstdlg.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <SlideSorter.hxx>
+#include <controller/SlideSorterController.hxx>
 
 namespace sd {
 

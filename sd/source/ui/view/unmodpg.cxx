@@ -23,15 +23,15 @@
 #include <svx/svdviter.hxx>
 #include <svx/svdview.hxx>
 
-#include "strings.hrc"
-#include "strings.hxx"
-#include "glob.hxx"
-#include "app.hrc"
+#include <strings.hrc>
+#include <strings.hxx>
+#include <glob.hxx>
+#include <app.hrc>
 
-#include "unmodpg.hxx"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
+#include <unmodpg.hxx>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
 
 
 ModifyPageUndoAction::ModifyPageUndoAction(

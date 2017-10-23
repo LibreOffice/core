@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSINSERTANIMATOR_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSINSERTANIMATOR_HXX
 
-#include "controller/SlsAnimator.hxx"
+#include <controller/SlsAnimator.hxx>
 #include <memory>
 
 namespace sd { namespace slidesorter { namespace view {

@@ -8,11 +8,11 @@
  */
 
 #include <memory>
-#include "uiobject.hxx"
+#include <uiobject.hxx>
 
-#include "Window.hxx"
-#include "DrawViewShell.hxx"
-#include "sdpage.hxx"
+#include <Window.hxx>
+#include <DrawViewShell.hxx>
+#include <sdpage.hxx>
 
 #include <svx/uiobject.hxx>
 

@@ -17,29 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SlideSorter.hxx"
+#include <SlideSorter.hxx>
 
-#include "SlideSorterViewShell.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsScrollBarManager.hxx"
-#include "controller/SlsProperties.hxx"
-#include "controller/SlsAnimator.hxx"
-#include "view/SlideSorterView.hxx"
-#include "view/SlsTheme.hxx"
-#include "model/SlideSorterModel.hxx"
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsScrollBarManager.hxx>
+#include <controller/SlsProperties.hxx>
+#include <controller/SlsAnimator.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsTheme.hxx>
+#include <model/SlideSorterModel.hxx>
 
-#include "strings.hrc"
-#include "DrawController.hxx"
-#include "ViewShellBase.hxx"
-#include "ViewShellManager.hxx"
-#include "Window.hxx"
+#include <strings.hrc>
+#include <DrawController.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
+#include <Window.hxx>
 
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <sfx2/dispatch.hxx>
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

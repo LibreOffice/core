@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "View.hxx"
+#include <View.hxx>
 #include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
@@ -54,21 +54,21 @@
 #include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/embedhlp.hxx>
-#include "DrawDocShell.hxx"
-#include "fupoor.hxx"
-#include "tablefunction.hxx"
-#include "Window.hxx"
-#include "sdxfer.hxx"
-#include "sdpage.hxx"
-#include "DrawViewShell.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "imapinfo.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "strmname.h"
-#include "unomodel.hxx"
-#include "ViewClipboard.hxx"
+#include <DrawDocShell.hxx>
+#include <fupoor.hxx>
+#include <tablefunction.hxx>
+#include <Window.hxx>
+#include <sdxfer.hxx>
+#include <sdpage.hxx>
+#include <DrawViewShell.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <imapinfo.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <strmname.h>
+#include <unomodel.hxx>
+#include <ViewClipboard.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <comphelper/storagehelper.hxx>

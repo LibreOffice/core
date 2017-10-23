@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
-#include "PresentationViewShell.hxx"
+#include <DrawViewShell.hxx>
+#include <PresentationViewShell.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
@@ -31,35 +31,35 @@
 #include <svx/fmshell.hxx>
 #include <editeng/eeitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include "AccessibleDrawDocumentView.hxx"
+#include <AccessibleDrawDocumentView.hxx>
 
 #include <sfx2/viewfrm.hxx>
-#include "LayerTabBar.hxx"
+#include <LayerTabBar.hxx>
 
-#include "strings.hrc"
-#include "app.hrc"
-#include "helpids.h"
-#include "optsitem.hxx"
-#include "sdmod.hxx"
-#include "FrameView.hxx"
-#include "sdattr.hxx"
-#include "futext.hxx"
-#include "sdpage.hxx"
-#include "stlpool.hxx"
-#include "prntopts.hxx"
-#include "sdresid.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "Outliner.hxx"
-#include "Client.hxx"
-#include "slideshow.hxx"
-#include "unokywds.hxx"
-#include "SdUnoDrawView.hxx"
-#include "ViewShellBase.hxx"
-#include "FormShellManager.hxx"
-#include "DrawController.hxx"
+#include <strings.hrc>
+#include <app.hrc>
+#include <helpids.h>
+#include <optsitem.hxx>
+#include <sdmod.hxx>
+#include <FrameView.hxx>
+#include <sdattr.hxx>
+#include <futext.hxx>
+#include <sdpage.hxx>
+#include <stlpool.hxx>
+#include <prntopts.hxx>
+#include <sdresid.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <Outliner.hxx>
+#include <Client.hxx>
+#include <slideshow.hxx>
+#include <unokywds.hxx>
+#include <SdUnoDrawView.hxx>
+#include <ViewShellBase.hxx>
+#include <FormShellManager.hxx>
+#include <DrawController.hxx>
 #include <memory>
 
 namespace sd {

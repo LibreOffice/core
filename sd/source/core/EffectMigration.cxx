@@ -30,8 +30,8 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <TransitionPreset.hxx>
 #include <EffectMigration.hxx>

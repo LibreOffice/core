@@ -22,10 +22,10 @@
 
 #include <sal/types.h>
 
-#include "pres.hxx"
+#include <pres.hxx>
 
-#include "model/SlsEnumeration.hxx"
-#include "model/SlsSharedPageDescriptor.hxx"
+#include <model/SlsEnumeration.hxx>
+#include <model/SlsSharedPageDescriptor.hxx>
 
 #include <functional>
 #include <memory>

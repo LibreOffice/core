@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "fuinsert.hxx"
+#include <fuinsert.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -71,21 +71,21 @@
 #include <svx/charthelper.hxx>
 #include <comphelper/lok.hxx>
 
-#include "app.hrc"
-#include "sdresid.hxx"
-#include "View.hxx"
-#include "sdmod.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "DrawViewShell.hxx"
-#include "DrawDocShell.hxx"
-#include "GraphicDocShell.hxx"
-#include "strings.hrc"
-#include "drawdoc.hxx"
-#include "sdgrffilter.hxx"
-#include "sdxfer.hxx"
+#include <app.hrc>
+#include <sdresid.hxx>
+#include <View.hxx>
+#include <sdmod.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <DrawViewShell.hxx>
+#include <DrawDocShell.hxx>
+#include <GraphicDocShell.hxx>
+#include <strings.hrc>
+#include <drawdoc.hxx>
+#include <sdgrffilter.hxx>
+#include <sdxfer.hxx>
 #include <vcl/svapp.hxx>
-#include "undo/undoobjects.hxx"
+#include <undo/undoobjects.hxx>
 #include <memory>
 
 using namespace com::sun::star;

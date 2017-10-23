@@ -66,7 +66,7 @@
 #include <svx/gallery.hxx>
 
 #include <svx/dialogs.hrc>
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 
 #include "CustomAnimationDialog.hxx"
 #include "CustomAnimationPane.hxx"
@@ -74,9 +74,9 @@
 
 #include <avmedia/mediawindow.hxx>
 
-#include "filedlg.hxx"
-#include "strings.hrc"
-#include "helpids.h"
+#include <filedlg.hxx>
+#include <strings.hrc>
+#include <helpids.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;

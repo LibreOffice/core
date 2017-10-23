@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_SMARTTAG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_SMARTTAG_HXX
 
-#include "helper/simplereferencecomponent.hxx"
+#include <helper/simplereferencecomponent.hxx>
 #include <rtl/ref.hxx>
 #include <set>
 #include <svx/svdhdl.hxx>

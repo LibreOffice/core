@@ -19,8 +19,8 @@
 
 
 #include <memory>
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <sfx2/docfile.hxx>
@@ -42,26 +42,26 @@
 #include <sot/formats.hxx>
 #include <xmloff/autolayout.hxx>
 
-#include "strings.hrc"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "stlpool.hxx"
-#include "sdresid.hxx"
-#include "sdiocmpt.hxx"
-#include "strmname.h"
-#include "anminfo.hxx"
-#include "customshowlist.hxx"
-#include "sdxfer.hxx"
+#include <strings.hrc>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <stlpool.hxx>
+#include <sdresid.hxx>
+#include <sdiocmpt.hxx>
+#include <strmname.h>
+#include <anminfo.hxx>
+#include <customshowlist.hxx>
+#include <sdxfer.hxx>
 
-#include "unmovss.hxx"
-#include "unchss.hxx"
-#include "unprlout.hxx"
-#include "DrawDocShell.hxx"
-#include "GraphicDocShell.hxx"
-#include "ViewShell.hxx"
-#include "View.hxx"
-#include "ViewShellBase.hxx"
-#include "strings.hxx"
+#include <unmovss.hxx>
+#include <unchss.hxx>
+#include <unprlout.hxx>
+#include <DrawDocShell.hxx>
+#include <GraphicDocShell.hxx>
+#include <ViewShell.hxx>
+#include <View.hxx>
+#include <ViewShellBase.hxx>
+#include <strings.hxx>
 
 using namespace ::com::sun::star;
 

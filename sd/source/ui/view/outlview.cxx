@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "OutlineView.hxx"
+#include <OutlineView.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -51,22 +51,22 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/fhgtitem.hxx>
 
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "Window.hxx"
-#include "sdpage.hxx"
-#include "pres.hxx"
-#include "OutlineViewShell.hxx"
-#include "app.hrc"
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "Outliner.hxx"
-#include "EventMultiplexer.hxx"
-#include "ViewShellBase.hxx"
-#include "ViewShellManager.hxx"
-#include "undo/undoobjects.hxx"
-#include "undo/undomanager.hxx"
-#include "stlsheet.hxx"
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <Window.hxx>
+#include <sdpage.hxx>
+#include <pres.hxx>
+#include <OutlineViewShell.hxx>
+#include <app.hrc>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <Outliner.hxx>
+#include <EventMultiplexer.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
+#include <undo/undoobjects.hxx>
+#include <undo/undomanager.hxx>
+#include <stlsheet.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FormShellManager.hxx"
+#include <FormShellManager.hxx>
 
-#include "EventMultiplexer.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "ViewShellManager.hxx"
-#include "Window.hxx"
+#include <EventMultiplexer.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
+#include <Window.hxx>
 #include <svx/fmshell.hxx>
 
 namespace sd {

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "View.hxx"
+#include <View.hxx>
 
 #include <vector>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -46,24 +46,24 @@
 #include <sfx2/objsh.hxx>
 #include <svtools/embedtransfer.hxx>
 
-#include "navigatr.hxx"
-#include "anminfo.hxx"
-#include "strings.hrc"
-#include "sdxfer.hxx"
-#include "sdresid.hxx"
-#include "sdmod.hxx"
-#include "DrawViewShell.hxx"
-#include "DrawDocShell.hxx"
-#include "fudraw.hxx"
-#include "drawdoc.hxx"
-#include "Window.hxx"
-#include "sdpage.hxx"
-#include "unoaprms.hxx"
-#include "drawview.hxx"
-#include "helpids.h"
+#include <navigatr.hxx>
+#include <anminfo.hxx>
+#include <strings.hrc>
+#include <sdxfer.hxx>
+#include <sdresid.hxx>
+#include <sdmod.hxx>
+#include <DrawViewShell.hxx>
+#include <DrawDocShell.hxx>
+#include <fudraw.hxx>
+#include <drawdoc.hxx>
+#include <Window.hxx>
+#include <sdpage.hxx>
+#include <unoaprms.hxx>
+#include <drawview.hxx>
+#include <helpids.h>
 #include <vcl/svapp.hxx>
 
-#include "slideshow.hxx"
+#include <slideshow.hxx>
 #include <memory>
 
 namespace sd {

@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "GraphicViewShellBase.hxx"
+#include <GraphicViewShellBase.hxx>
 
-#include "GraphicDocShell.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "app.hrc"
-#include "framework/DrawModule.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <GraphicDocShell.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <app.hrc>
+#include <framework/DrawModule.hxx>
+#include <framework/FrameworkHelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>

@@ -22,7 +22,7 @@
 
 #include <memory>
 
-#include "sdundo.hxx"
+#include <sdundo.hxx>
 
 class SdDrawDocument;
 class SdPage;

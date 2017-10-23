@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSINSERTIONINDICATORHANDLER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSINSERTIONINDICATORHANDLER_HXX
 
-#include "view/SlsInsertAnimator.hxx"
+#include <view/SlsInsertAnimator.hxx>
 
-#include "view/SlsLayouter.hxx"
-#include "sdxfer.hxx"
+#include <view/SlsLayouter.hxx>
+#include <sdxfer.hxx>
 
 namespace sd { namespace slidesorter { class SlideSorter; } }
 namespace sd { namespace slidesorter { namespace view {

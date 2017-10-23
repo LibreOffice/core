@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fulinend.hxx"
+#include <fulinend.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -25,13 +25,13 @@
 #include <svx/svdopath.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "strings.hrc"
-#include "ViewShell.hxx"
-#include "helpids.h"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "View.hxx"
-#include "Window.hxx"
+#include <strings.hrc>
+#include <ViewShell.hxx>
+#include <helpids.h>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <View.hxx>
+#include <Window.hxx>
 #include <memory>
 #include <o3tl/make_unique.hxx>
 

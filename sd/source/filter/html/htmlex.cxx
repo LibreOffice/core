@@ -73,16 +73,16 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include "drawdoc.hxx"
+#include <drawdoc.hxx>
 #include "htmlpublishmode.hxx"
-#include "Outliner.hxx"
-#include "sdpage.hxx"
-#include "sdattr.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "anminfo.hxx"
-#include "imapinfo.hxx"
-#include "sdresid.hxx"
+#include <Outliner.hxx>
+#include <sdpage.hxx>
+#include <sdattr.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <anminfo.hxx>
+#include <imapinfo.hxx>
+#include <sdresid.hxx>
 #include "buttonset.hxx"
 
 using namespace ::com::sun::star;

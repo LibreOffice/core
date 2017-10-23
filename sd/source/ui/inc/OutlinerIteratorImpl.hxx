@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_OUTLINERITERATORIMPL_HXX
 
 #include <svx/svdobj.hxx>
-#include "OutlinerIterator.hxx"
+#include <OutlinerIterator.hxx>
 #include <memory>
 
 class SdDrawDocument;

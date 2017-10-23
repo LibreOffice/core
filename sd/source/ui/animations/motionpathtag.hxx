@@ -24,8 +24,8 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include "smarttag.hxx"
-#include "CustomAnimationEffect.hxx"
+#include <smarttag.hxx>
+#include <CustomAnimationEffect.hxx>
 
 class SdrPathObj;
 

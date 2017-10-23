@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <pptexsoundcollection.hxx>
+#include "pptexsoundcollection.hxx"
 #include "epptdef.hxx"
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

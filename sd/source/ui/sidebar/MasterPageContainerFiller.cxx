@@ -21,7 +21,7 @@
 
 #include "MasterPageDescriptor.hxx"
 #include "MasterPageContainerProviders.hxx"
-#include "TemplateScanner.hxx"
+#include <TemplateScanner.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

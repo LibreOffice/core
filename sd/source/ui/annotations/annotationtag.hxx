@@ -23,7 +23,7 @@
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include "smarttag.hxx"
+#include <smarttag.hxx>
 
 namespace sd {
 

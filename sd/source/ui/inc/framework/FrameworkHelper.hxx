@@ -20,9 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_FRAMEWORKHELPER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FRAMEWORK_FRAMEWORKHELPER_HXX
 
-#include "ViewShell.hxx"
+#include <ViewShell.hxx>
 
-#include "tools/SdGlobalResourceContainer.hxx"
+#include <tools/SdGlobalResourceContainer.hxx>
 
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>

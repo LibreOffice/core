@@ -49,16 +49,16 @@
 
 #include <sfx2/docinf.hxx>
 
-#include "strings.hrc"
-#include "strings.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
 #include "pptin.hxx"
-#include "Outliner.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "pres.hxx"
-#include "stlpool.hxx"
-#include "anminfo.hxx"
+#include <Outliner.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <pres.hxx>
+#include <stlpool.hxx>
+#include <anminfo.hxx>
 #include <svx/gallery.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/itempool.hxx>
@@ -71,12 +71,12 @@
 #include <vcl/bitmapaccess.hxx>
 #include <xmloff/autolayout.hxx>
 
-#include "customshowlist.hxx"
-#include "sddll.hxx"
+#include <customshowlist.hxx>
+#include <sddll.hxx>
 
-#include "DrawDocShell.hxx"
-#include "FrameView.hxx"
-#include "optsitem.hxx"
+#include <DrawDocShell.hxx>
+#include <FrameView.hxx>
+#include <optsitem.hxx>
 
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/progress.hxx>

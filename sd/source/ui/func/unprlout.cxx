@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unprlout.hxx"
+#include <unprlout.hxx>
 
-#include "strings.hrc"
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
 
 
 SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(

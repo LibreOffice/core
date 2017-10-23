@@ -37,15 +37,15 @@
 #include <svx/unoapi.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include "Window.hxx"
-#include "ViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "View.hxx"
-#include "AccessibleOutlineView.hxx"
-#include "AccessibleOutlineEditSource.hxx"
+#include <Window.hxx>
+#include <ViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <View.hxx>
+#include <AccessibleOutlineView.hxx>
+#include <AccessibleOutlineEditSource.hxx>
 #include <drawdoc.hxx>
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
 
 #include <memory>
 

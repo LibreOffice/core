@@ -19,9 +19,9 @@
 
 #include <config_features.h>
 
-#include "ViewShell.hxx"
-#include "GraphicViewShell.hxx"
-#include "GraphicViewShellBase.hxx"
+#include <ViewShell.hxx>
+#include <GraphicViewShell.hxx>
+#include <GraphicViewShellBase.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <svtools/strings.hrc>
@@ -30,12 +30,12 @@
 #include <utility>
 #include <vector>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "sdabstdlg.hxx"
+#include <sdabstdlg.hxx>
 
-#include "fupoor.hxx"
+#include <fupoor.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/prtqry.hxx>
 #include <svx/svdopage.hxx>
@@ -53,24 +53,24 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "stlsheet.hxx"
-#include "WindowUpdater.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "drawview.hxx"
+#include <stlsheet.hxx>
+#include <WindowUpdater.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <drawview.hxx>
 
-#include "sdattr.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "unoaprms.hxx"
-#include "sdundogr.hxx"
-#include "Window.hxx"
-#include "DrawDocShell.hxx"
-#include "FrameView.hxx"
-#include "framework/FrameworkHelper.hxx"
-#include "optsitem.hxx"
-#include "sdresid.hxx"
-#include "undo/undomanager.hxx"
+#include <sdattr.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <unoaprms.hxx>
+#include <sdundogr.hxx>
+#include <Window.hxx>
+#include <DrawDocShell.hxx>
+#include <FrameView.hxx>
+#include <framework/FrameworkHelper.hxx>
+#include <optsitem.hxx>
+#include <sdresid.hxx>
+#include <undo/undomanager.hxx>
 
 #include <svx/svxids.hrc>
 #include <sfx2/request.hxx>

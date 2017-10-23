@@ -42,7 +42,7 @@
 #include "CustomAnimationPane.hxx"
 #include "CustomAnimationDialog.hxx"
 #include "CustomAnimationList.hxx"
-#include "createcustomanimationpanel.hxx"
+#include <createcustomanimationpanel.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 
@@ -58,23 +58,23 @@
 #include <svx/svxids.hrc>
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
-#include "DrawViewShell.hxx"
-#include "DrawController.hxx"
-#include "sdresid.hxx"
-#include "drawview.hxx"
-#include "slideshow.hxx"
-#include "undoanim.hxx"
-#include "optsitem.hxx"
-#include "sddll.hxx"
-#include "sdmod.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <DrawViewShell.hxx>
+#include <DrawController.hxx>
+#include <sdresid.hxx>
+#include <drawview.hxx>
+#include <slideshow.hxx>
+#include <undoanim.hxx>
+#include <optsitem.hxx>
+#include <sddll.hxx>
+#include <sdmod.hxx>
+#include <framework/FrameworkHelper.hxx>
 
-#include "EventMultiplexer.hxx"
+#include <EventMultiplexer.hxx>
 
-#include "strings.hrc"
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "app.hrc"
+#include <strings.hrc>
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <app.hrc>
 
 #include <svx/svdetc.hxx>
 #include <svx/strings.hrc>

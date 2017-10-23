@@ -27,7 +27,7 @@
 #include <vcl/layout.hxx>
 #include <tools/fract.hxx>
 #include <vcl/dialog.hxx>
-#include "sdenumdef.hxx"
+#include <sdenumdef.hxx>
 /************************************************************************/
 
 class SfxItemSet;

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fusearch.hxx"
+#include <fusearch.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
@@ -25,16 +25,16 @@
 #include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <sfx2/bindings.hxx>
-#include "fupoor.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "app.hrc"
-#include "sdmod.hxx"
-#include "View.hxx"
-#include "Outliner.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "ViewShellBase.hxx"
+#include <fupoor.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <app.hrc>
+#include <sdmod.hxx>
+#include <View.hxx>
+#include <Outliner.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <ViewShellBase.hxx>
 
 class SfxRequest;
 

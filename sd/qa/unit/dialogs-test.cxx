@@ -28,25 +28,25 @@
 #include <svx/svdotext.hxx>
 #include <vcl/sound.hxx>
 
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 
 #include <osl/process.h>
 #include <osl/thread.h>
 
-#include "sdabstdlg.hxx"
+#include <sdabstdlg.hxx>
 #include <vcl/pngwrite.hxx>
-#include "unomodel.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "DrawViewShell.hxx"
+#include <unomodel.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <DrawViewShell.hxx>
 #include <app.hrc>
-#include "stlsheet.hxx"
-#include "sdattr.hrc"
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "sdattr.hxx"
+#include <stlsheet.hxx>
+#include <sdattr.hrc>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <sdattr.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>

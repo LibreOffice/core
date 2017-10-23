@@ -19,7 +19,7 @@
 
 #include "PageListWatcher.hxx"
 
-#include "sdpage.hxx"
+#include <sdpage.hxx>
 #include <tools/debug.hxx>
 #include <svx/svdmodel.hxx>
 

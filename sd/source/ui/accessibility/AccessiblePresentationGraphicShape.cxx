@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessiblePresentationGraphicShape.hxx"
+#include <AccessiblePresentationGraphicShape.hxx>
 
-#include "SdShapeTypes.hxx"
+#include <SdShapeTypes.hxx>
 
 #include <svx/DescriptionGenerator.hxx>
 #include <rtl/ustring.h>

@@ -21,33 +21,33 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "PresentationViewShell.hxx"
-#include "optsitem.hxx"
-#include "sddll.hxx"
+#include <PresentationViewShell.hxx>
+#include <optsitem.hxx>
+#include <sddll.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svxids.hrc>
 #include <svx/ruler.hxx>
-#include "FrameView.hxx"
-#include "sdresid.hxx"
-#include "DrawDocShell.hxx"
-#include "slideshow.hxx"
-#include "sdattr.hxx"
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "drawview.hxx"
-#include "app.hrc"
-#include "strings.hrc"
-#include "ViewShellBase.hxx"
-#include "FactoryIds.hxx"
+#include <FrameView.hxx>
+#include <sdresid.hxx>
+#include <DrawDocShell.hxx>
+#include <slideshow.hxx>
+#include <sdattr.hxx>
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <drawview.hxx>
+#include <app.hrc>
+#include <strings.hrc>
+#include <ViewShellBase.hxx>
+#include <FactoryIds.hxx>
 
-#include "fupoor.hxx"
-#include "Window.hxx"
+#include <fupoor.hxx>
+#include <Window.hxx>
 
 #define PresentationViewShell
 using namespace sd;
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

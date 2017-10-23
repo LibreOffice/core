@@ -22,7 +22,7 @@
 
 #include <com/sun/star/drawing/XSlidePreviewCache.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include "cache/SlsPageCache.hxx"
+#include <cache/SlsPageCache.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <memory>

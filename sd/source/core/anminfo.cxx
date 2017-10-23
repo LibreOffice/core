@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/xtable.hxx"
+#include <svx/xtable.hxx>
 #include <svx/svdopath.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>
 
-#include "anminfo.hxx"
-#include "glob.hxx"
-#include "sdiocmpt.hxx"
-#include "drawdoc.hxx"
+#include <anminfo.hxx>
+#include <glob.hxx>
+#include <sdiocmpt.hxx>
+#include <drawdoc.hxx>
 
 #include <tools/tenccvt.hxx>
 

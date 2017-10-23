@@ -28,21 +28,21 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include "CustomAnimationList.hxx"
-#include "CustomAnimationPreset.hxx"
+#include <CustomAnimationPreset.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <o3tl/make_unique.hxx>
 
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 
-#include "svtools/svlbitm.hxx"
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/svlbitm.hxx>
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 
 
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <strings.hrc>
+#include <bitmaps.hlst>
 
 #include <algorithm>
 #include <memory>

@@ -26,7 +26,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include "sdtreelb.hxx"
-#include "pres.hxx"
+#include <pres.hxx>
 
 // forward
 namespace sd {

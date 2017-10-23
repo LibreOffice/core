@@ -19,18 +19,18 @@
 
 #include "CurrentMasterPagesSelector.hxx"
 #include "PreviewValueSet.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
+#include <ViewShellBase.hxx>
+#include <DrawViewShell.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include "MasterPageContainer.hxx"
 #include "MasterPageDescriptor.hxx"
-#include "EventMultiplexer.hxx"
-#include "app.hrc"
-#include "DrawDocShell.hxx"
+#include <EventMultiplexer.hxx>
+#include <app.hrc>
+#include <DrawDocShell.hxx>
 
-#include "sdresid.hxx"
-#include "helpids.h"
+#include <sdresid.hxx>
+#include <helpids.h>
 
 #include <vcl/image.hxx>
 #include <svx/svdmodel.hxx>

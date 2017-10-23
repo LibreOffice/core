@@ -36,9 +36,9 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <avmedia/mediawindow.hxx>
-#include "filedlg.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
+#include <filedlg.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 #include <vcl/graphicfilter.hxx>
 
 // -----------      SdFileDialog_Imp        ---------------------------

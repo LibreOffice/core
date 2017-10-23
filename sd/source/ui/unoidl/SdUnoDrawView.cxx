@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SdUnoDrawView.hxx"
+#include <SdUnoDrawView.hxx>
 
-#include "DrawController.hxx"
-#include "DrawDocShell.hxx"
-#include "DrawViewShell.hxx"
-#include "drawdoc.hxx"
+#include <DrawController.hxx>
+#include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
+#include <drawdoc.hxx>
 #include "unolayer.hxx"
-#include "unomodel.hxx"
-#include "unopage.hxx"
-#include "Window.hxx"
-#include "pres.hxx"
+#include <unomodel.hxx>
+#include <unopage.hxx>
+#include <Window.hxx>
+#include <pres.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>

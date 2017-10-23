@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSPAGEENUMERATIONPROVIDER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSPAGEENUMERATIONPROVIDER_HXX
 
-#include "model/SlsPageEnumeration.hxx"
+#include <model/SlsPageEnumeration.hxx>
 
 namespace sd { namespace slidesorter { namespace model {
 

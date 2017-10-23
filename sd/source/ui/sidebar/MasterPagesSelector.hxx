@@ -22,15 +22,15 @@
 
 #include <memory>
 #include "MasterPageContainer.hxx"
-#include "SlideSorterViewShell.hxx"
+#include <SlideSorterViewShell.hxx>
 #include "PreviewValueSet.hxx"
 #include "ISidebarReceiver.hxx"
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 
-#include "pres.hxx"
+#include <pres.hxx>
 #include <sfx2/shell.hxx>
 #include <vcl/image.hxx>
-#include "glob.hxx"
+#include <glob.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/ui/XSidebar.hpp>
 

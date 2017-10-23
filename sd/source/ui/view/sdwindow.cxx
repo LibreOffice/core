@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Window.hxx"
+#include <Window.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 
@@ -28,18 +28,18 @@
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 
-#include "app.hrc"
-#include "helpids.h"
-#include "ViewShell.hxx"
-#include "DrawViewShell.hxx"
-#include "View.hxx"
-#include "FrameView.hxx"
-#include "OutlineViewShell.hxx"
-#include "drawdoc.hxx"
-#include "AccessibleDrawDocumentView.hxx"
-#include "WindowUpdater.hxx"
-#include "ViewShellBase.hxx"
-#include "uiobject.hxx"
+#include <app.hrc>
+#include <helpids.h>
+#include <ViewShell.hxx>
+#include <DrawViewShell.hxx>
+#include <View.hxx>
+#include <FrameView.hxx>
+#include <OutlineViewShell.hxx>
+#include <drawdoc.hxx>
+#include <AccessibleDrawDocumentView.hxx>
+#include <WindowUpdater.hxx>
+#include <ViewShellBase.hxx>
+#include <uiobject.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

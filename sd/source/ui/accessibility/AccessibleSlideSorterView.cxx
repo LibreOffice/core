@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleSlideSorterView.hxx"
-#include "AccessibleSlideSorterObject.hxx"
+#include <AccessibleSlideSorterView.hxx>
+#include <AccessibleSlideSorterObject.hxx>
 
-#include "SlideSorter.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsPageSelector.hxx"
-#include "controller/SlsFocusManager.hxx"
-#include "controller/SlsSelectionManager.hxx"
-#include "view/SlideSorterView.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "SlideSorterViewShell.hxx"
+#include <SlideSorter.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <controller/SlsFocusManager.hxx>
+#include <controller/SlsSelectionManager.hxx>
+#include <view/SlideSorterView.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <SlideSorterViewShell.hxx>
 
-#include "ViewShellHint.hxx"
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
+#include <ViewShellHint.hxx>
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
 
-#include "sdresid.hxx"
-#include "strings.hrc"
+#include <sdresid.hxx>
+#include <strings.hrc>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

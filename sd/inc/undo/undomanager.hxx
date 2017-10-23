@@ -22,7 +22,7 @@
 
 #include <misc/scopelock.hxx>
 #include <svx/sdrundomanager.hxx>
-#include "sddllapi.h"
+#include <sddllapi.h>
 
 class SfxViewShell;
 

@@ -31,21 +31,21 @@
 // following ones for InsertSdPage()
 #include <svx/svdlayer.hxx>
 
-#include "DrawDocShell.hxx"
+#include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
-#include "unoprnms.hxx"
+#include <unoprnms.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <svx/svdpool.hxx>
-#include "FrameView.hxx"
-#include "DrawViewShell.hxx"
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "app.hrc"
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <FrameView.hxx>
+#include <DrawViewShell.hxx>
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <app.hrc>
+#include <strings.hrc>
+#include <sdresid.hxx>
 
-#include "unokywds.hxx"
+#include <unokywds.hxx>
 #include "unowcntr.hxx"
 #include <vcl/svapp.hxx>
 

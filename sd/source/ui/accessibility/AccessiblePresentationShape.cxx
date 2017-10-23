@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessiblePresentationShape.hxx"
+#include <AccessiblePresentationShape.hxx>
 
-#include "SdShapeTypes.hxx"
+#include <SdShapeTypes.hxx>
 
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
 #include <svx/DescriptionGenerator.hxx>
 #include <rtl/ustring.h>
 

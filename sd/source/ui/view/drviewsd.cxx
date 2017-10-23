@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawViewShell.hxx"
+#include <DrawViewShell.hxx>
 
 #include <svx/svxids.hrc>
 #include <svl/aeitem.hxx>
@@ -30,15 +30,15 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "pgjump.hxx"
-#include "NavigatorChildWindow.hxx"
-#include "navigatr.hxx"
-#include "drawview.hxx"
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <pgjump.hxx>
+#include <NavigatorChildWindow.hxx>
+#include <navigatr.hxx>
+#include <drawview.hxx>
 
 namespace sd {
 

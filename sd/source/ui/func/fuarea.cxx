@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuarea.hxx"
+#include <fuarea.hxx>
 
 #include <svx/svxids.hrc>
 #include <vcl/msgbox.hxx>
@@ -26,12 +26,12 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include "ViewShell.hxx"
+#include <ViewShell.hxx>
 
-#include "drawdoc.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "app.hrc"
+#include <drawdoc.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <app.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <memory>

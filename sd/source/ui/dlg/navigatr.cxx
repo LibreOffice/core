@@ -38,22 +38,22 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/sfxresid.hxx>
 
-#include "pres.hxx"
-#include "navigatr.hxx"
-#include "pgjump.hxx"
-#include "app.hrc"
-#include "strings.hrc"
+#include <pres.hxx>
+#include <navigatr.hxx>
+#include <pgjump.hxx>
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "bitmaps.hlst"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "sdresid.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "slideshow.hxx"
-#include "FrameView.hxx"
-#include "helpids.h"
+#include <bitmaps.hlst>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <sdresid.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawViewShell.hxx>
+#include <slideshow.hxx>
+#include <FrameView.hxx>
+#include <helpids.h>
 
 namespace {
 static const sal_uInt16 nShowNamedShapesFilter=1;

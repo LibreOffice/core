@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fucon3d.hxx"
+#include <fucon3d.hxx>
 #include <vcl/waitobj.hxx>
 
 #include <svx/svxids.hrc>
@@ -35,14 +35,14 @@
 #include <svx/lathe3d.hxx>
 #include <svx/camera3d.hxx>
 
-#include "app.hrc"
+#include <app.hrc>
 
-#include "View.hxx"
-#include "Window.hxx"
-#include "ViewShell.hxx"
-#include "drawdoc.hxx"
-#include "ViewShellBase.hxx"
-#include "ToolBarManager.hxx"
+#include <View.hxx>
+#include <Window.hxx>
+#include <ViewShell.hxx>
+#include <drawdoc.hxx>
+#include <ViewShellBase.hxx>
+#include <ToolBarManager.hxx>
 #include <svx/svx3ditems.hxx>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>

@@ -23,13 +23,13 @@
 #include <svl/stritem.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include "tmplctrl.hxx"
-#include "ViewShellBase.hxx"
-#include "drawdoc.hxx"
-#include "sdattr.hrc"
-#include "app.hrc"
+#include <tmplctrl.hxx>
+#include <ViewShellBase.hxx>
+#include <drawdoc.hxx>
+#include <sdattr.hrc>
+#include <app.hrc>
 #include <sdresid.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 SFX_IMPL_STATUSBAR_CONTROL( SdTemplateControl, SfxStringItem );
 

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSVISIBLEAREAMANAGER_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSVISIBLEAREAMANAGER_HXX
 
-#include "controller/SlsAnimator.hxx"
-#include "model/SlsSharedPageDescriptor.hxx"
+#include <controller/SlsAnimator.hxx>
+#include <model/SlsSharedPageDescriptor.hxx>
 #include <boost/optional.hpp>
 
 namespace sd { namespace slidesorter { namespace controller {

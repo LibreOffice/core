@@ -24,7 +24,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
-#include "sdpage.hxx"
+#include <sdpage.hxx>
 
 class SdDrawDocument;
 

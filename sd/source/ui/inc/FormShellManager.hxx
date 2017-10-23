@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_FORMSHELLMANAGER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_FORMSHELLMANAGER_HXX
 
-#include <ViewShellManager.hxx>
+#include "ViewShellManager.hxx"
 
 #include <tools/link.hxx>
 #include <svl/lstner.hxx>

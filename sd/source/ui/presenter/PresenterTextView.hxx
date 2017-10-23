@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERTEXTVIEW_HXX
 #define INCLUDED_SD_SOURCE_UI_PRESENTER_PRESENTERTEXTVIEW_HXX
 
-#include "tools/PropertySet.hxx"
+#include <tools/PropertySet.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/basemutex.hxx>

@@ -24,7 +24,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
-#include "pres.hxx"
+#include <pres.hxx>
 
 class SdrObjUserCall;
 class SdPage;

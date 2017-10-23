@@ -22,7 +22,7 @@
 #include <memory>
 #include <utility>
 
-#include "DrawDocShell.hxx"
+#include <DrawDocShell.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
@@ -56,33 +56,33 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "strmname.h"
-#include "FrameView.hxx"
-#include "optsitem.hxx"
-#include "Outliner.hxx"
-#include "sdattr.hxx"
-#include "drawdoc.hxx"
-#include "ViewShell.hxx"
-#include "sdmod.hxx"
-#include "View.hxx"
-#include "EffectMigration.hxx"
-#include "CustomAnimationEffect.hxx"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "Window.hxx"
-#include "OutlineViewShell.hxx"
-#include "sdxmlwrp.hxx"
-#include "sdpptwrp.hxx"
-#include "sdcgmfilter.hxx"
-#include "sdgrffilter.hxx"
-#include "sdhtmlfilter.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <strmname.h>
+#include <FrameView.hxx>
+#include <optsitem.hxx>
+#include <Outliner.hxx>
+#include <sdattr.hxx>
+#include <drawdoc.hxx>
+#include <ViewShell.hxx>
+#include <sdmod.hxx>
+#include <View.hxx>
+#include <EffectMigration.hxx>
+#include <CustomAnimationEffect.hxx>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <Window.hxx>
+#include <OutlineViewShell.hxx>
+#include <sdxmlwrp.hxx>
+#include <sdpptwrp.hxx>
+#include <sdcgmfilter.hxx>
+#include <sdgrffilter.hxx>
+#include <sdhtmlfilter.hxx>
+#include <framework/FrameworkHelper.hxx>
 
-#include "SdUnoDrawView.hxx"
+#include <SdUnoDrawView.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

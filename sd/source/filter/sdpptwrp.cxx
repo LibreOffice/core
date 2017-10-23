@@ -26,10 +26,10 @@
 #include <svx/svxerr.hxx>
 #include <unotools/fltrcfg.hxx>
 
-#include "sdpptwrp.hxx"
+#include <sdpptwrp.hxx>
 #include "ppt/pptin.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 #include <tools/urlobj.hxx>
 
 

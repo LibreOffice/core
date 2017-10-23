@@ -22,8 +22,8 @@
 
 #include <vcl/image.hxx>
 #include <svl/lstner.hxx>
-#include "EventMultiplexer.hxx"
-#include "ViewShellBase.hxx"
+#include <EventMultiplexer.hxx>
+#include <ViewShellBase.hxx>
 
 namespace sd
 {

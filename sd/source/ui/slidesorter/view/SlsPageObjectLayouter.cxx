@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "view/SlsPageObjectLayouter.hxx"
+#include <view/SlsPageObjectLayouter.hxx>
 
-#include "model/SlsPageDescriptor.hxx"
-#include "view/SlsFontProvider.hxx"
-#include "view/SlsTheme.hxx"
-#include "tools/IconCache.hxx"
-#include "Window.hxx"
+#include <model/SlsPageDescriptor.hxx>
+#include <view/SlsFontProvider.hxx>
+#include <view/SlsTheme.hxx>
+#include <tools/IconCache.hxx>
+#include <Window.hxx>
 
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 namespace sd { namespace slidesorter { namespace view {
 

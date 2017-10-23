@@ -19,9 +19,9 @@
 
 #include <sfx2/linkmgr.hxx>
 
-#include "pglink.hxx"
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
+#include <pglink.hxx>
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
 
 /*************************************************************************
 |*

@@ -28,8 +28,8 @@
 
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
-#include "fadedef.h"
-#include "sddllapi.h"
+#include <fadedef.h>
+#include <sddllapi.h>
 
 namespace sd {
     class SlideShow;

@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "view/SlsInsertionIndicatorOverlay.hxx"
+#include <view/SlsInsertionIndicatorOverlay.hxx>
 
-#include "SlideSorter.hxx"
-#include "model/SlsPageEnumeration.hxx"
-#include "view/SlideSorterView.hxx"
-#include "view/SlsLayouter.hxx"
-#include "view/SlsPageObjectLayouter.hxx"
-#include "view/SlsTheme.hxx"
-#include "cache/SlsPageCache.hxx"
+#include <SlideSorter.hxx>
+#include <model/SlsPageEnumeration.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsLayouter.hxx>
+#include <view/SlsPageObjectLayouter.hxx>
+#include <view/SlsTheme.hxx>
+#include <cache/SlsPageCache.hxx>
 #include "SlsFramePainter.hxx"
 #include "SlsLayeredDevice.hxx"
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "sdmod.hxx"
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <sdmod.hxx>
 
 #include <vcl/virdev.hxx>
 #include <basegfx/range/b2drectangle.hxx>

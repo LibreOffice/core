@@ -71,32 +71,32 @@
 #include <svtools/cliplistener.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "PresentationViewShell.hxx"
+#include <PresentationViewShell.hxx>
 
-#include "Outliner.hxx"
-#include "drawdoc.hxx"
-#include "DrawViewShell.hxx"
-#include "sdresid.hxx"
-#include "sdpage.hxx"
-#include "Client.hxx"
-#include "DrawDocShell.hxx"
-#include "zoomlist.hxx"
-#include "slideshow.hxx"
-#include "drawview.hxx"
-#include "View.hxx"
-#include "ViewShellBase.hxx"
-#include "ViewShellManager.hxx"
-#include "LayerTabBar.hxx"
-#include "fupoor.hxx"
-#include "Window.hxx"
-#include "fuediglu.hxx"
-#include "fubullet.hxx"
-#include "fuconcs.hxx"
-#include "fuformatpaintbrush.hxx"
-#include "stlsheet.hxx"
+#include <Outliner.hxx>
+#include <drawdoc.hxx>
+#include <DrawViewShell.hxx>
+#include <sdresid.hxx>
+#include <sdpage.hxx>
+#include <Client.hxx>
+#include <DrawDocShell.hxx>
+#include <zoomlist.hxx>
+#include <slideshow.hxx>
+#include <drawview.hxx>
+#include <View.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
+#include <LayerTabBar.hxx>
+#include <fupoor.hxx>
+#include <Window.hxx>
+#include <fuediglu.hxx>
+#include <fubullet.hxx>
+#include <fuconcs.hxx>
+#include <fuformatpaintbrush.hxx>
+#include <stlsheet.hxx>
 
 #include <config_features.h>
 

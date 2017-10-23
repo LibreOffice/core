@@ -16,7 +16,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/anytostring.hxx>
-#include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>

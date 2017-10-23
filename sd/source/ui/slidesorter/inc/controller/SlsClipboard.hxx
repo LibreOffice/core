@@ -21,15 +21,15 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSCLIPBOARD_HXX
 
 #include <memory>
-#include "ViewClipboard.hxx"
-#include "controller/SlsSelectionObserver.hxx"
-#include "sdxfer.hxx"
+#include <ViewClipboard.hxx>
+#include <controller/SlsSelectionObserver.hxx>
+#include <sdxfer.hxx>
 
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <svx/svdpage.hxx>
 
-#include "sddllapi.h"
+#include <sddllapi.h>
 
 #include <set>
 

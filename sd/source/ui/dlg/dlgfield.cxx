@@ -27,13 +27,13 @@
 #include <editeng/langitem.hxx>
 #include <unotools/useroptions.hxx>
 
-#include "strings.hrc"
-#include "sdattr.hxx"
-#include "sdresid.hxx"
-#include "sdmod.hxx"
-#include "dlgfield.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
+#include <strings.hrc>
+#include <sdattr.hxx>
+#include <sdresid.hxx>
+#include <sdmod.hxx>
+#include <dlgfield.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 
 /**
  * dialog to edit field commands

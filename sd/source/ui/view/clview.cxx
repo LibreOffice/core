@@ -19,9 +19,9 @@
 
 #include <sfx2/app.hxx>
 
-#include "ClientView.hxx"
-#include "drawview.hxx"
-#include "sdpage.hxx"
+#include <ClientView.hxx>
+#include <drawview.hxx>
+#include <sdpage.hxx>
 
 namespace sd {
 

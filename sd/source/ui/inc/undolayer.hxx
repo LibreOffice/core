@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_UNDOLAYER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_UNDOLAYER_HXX
 
-#include "sdundo.hxx"
+#include <sdundo.hxx>
 
 class SdDrawDocument;
 class SdrLayer;

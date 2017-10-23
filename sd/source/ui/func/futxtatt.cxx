@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "futxtatt.hxx"
+#include <futxtatt.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "drawdoc.hxx"
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <drawdoc.hxx>
 #include <memory>
 
 namespace sd {

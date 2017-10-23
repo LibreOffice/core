@@ -26,7 +26,7 @@
 #include <vcl/event.hxx>
 #include <rtl/ref.hxx>
 
-#include "helper/simplereferencecomponent.hxx"
+#include <helper/simplereferencecomponent.hxx>
 
 class SdDrawDocument;
 class SfxRequest;

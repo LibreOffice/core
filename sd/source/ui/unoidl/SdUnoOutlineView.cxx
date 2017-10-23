@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SdUnoOutlineView.hxx"
+#include <SdUnoOutlineView.hxx>
 
-#include "DrawController.hxx"
-#include "OutlineViewShell.hxx"
-#include "sdpage.hxx"
-#include "unopage.hxx"
+#include <DrawController.hxx>
+#include <OutlineViewShell.hxx>
+#include <sdpage.hxx>
+#include <unopage.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/unopage.hxx>

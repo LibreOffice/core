@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuoaprms.hxx"
+#include <fuoaprms.hxx>
 
-#include "sdattr.hxx"
+#include <sdattr.hxx>
 #include <svx/svdpagv.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/svdundo.hxx>
@@ -30,19 +30,19 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/aeitem.hxx>
-#include "svx/xtable.hxx"
+#include <svx/xtable.hxx>
 
-#include "strings.hrc"
-#include "drawdoc.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "anminfo.hxx"
-#include "unoaprms.hxx"
-#include "sdundogr.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "sdabstdlg.hxx"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <drawdoc.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <anminfo.hxx>
+#include <unoaprms.hxx>
+#include <sdundogr.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <sdabstdlg.hxx>
+#include <sdresid.hxx>
 #include <tools/helpers.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <memory>

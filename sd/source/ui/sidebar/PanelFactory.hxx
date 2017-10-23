@@ -22,7 +22,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
-#include "framework/Pane.hxx"
+#include <framework/Pane.hxx>
 
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

@@ -19,7 +19,7 @@
 
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 
-#include "fuconbez.hxx"
+#include <fuconbez.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/svdopath.hxx>
 #include <svl/intitem.hxx>
@@ -32,18 +32,18 @@
 #include <svx/svxids.hrc>
 #include <svx/svdpagv.hxx>
 
-#include "app.hrc"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "ToolBarManager.hxx"
-#include "drawdoc.hxx"
+#include <app.hrc>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <ToolBarManager.hxx>
+#include <drawdoc.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#include "CustomAnimationEffect.hxx"
+#include <CustomAnimationEffect.hxx>
 
 using namespace ::com::sun::star::uno;
 

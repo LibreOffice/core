@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ViewShellManager.hxx"
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "Window.hxx"
-#include "DrawDocShell.hxx"
-#include "FormShellManager.hxx"
+#include <ViewShellManager.hxx>
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <Window.hxx>
+#include <DrawDocShell.hxx>
+#include <FormShellManager.hxx>
 
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>

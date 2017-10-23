@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ViewClipboard.hxx"
+#include <ViewClipboard.hxx>
 
-#include "DrawDocShell.hxx"
-#include "View.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
+#include <DrawDocShell.hxx>
+#include <View.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
 
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "sdxfer.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <sdxfer.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
 
 #include <svx/svdpagv.hxx>
 #include <vcl/svapp.hxx>

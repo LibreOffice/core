@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "view/SlsInsertAnimator.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsAnimationFunction.hxx"
-#include "view/SlideSorterView.hxx"
-#include "view/SlsLayouter.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageEnumerationProvider.hxx"
+#include <view/SlsInsertAnimator.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsAnimationFunction.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsLayouter.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
 
 #include <memory>
 #include <set>

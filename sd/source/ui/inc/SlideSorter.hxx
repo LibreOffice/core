@@ -26,7 +26,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/scrbar.hxx>
-#include "sddllapi.h"
+#include <sddllapi.h>
 #include <memory>
 
 class ScrollBar;

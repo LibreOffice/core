@@ -24,17 +24,17 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <vcl/gdimtf.hxx>
 #include <svl/itemset.hxx>
-#include "resltn.hxx"
+#include <resltn.hxx>
 #include <svtools/colrdlg.hxx>
 #include <svtools/ehdl.hxx>
 
-#include "strings.hrc"
-#include "DrawDocShell.hxx"
-#include "Window.hxx"
-#include "ViewShell.hxx"
-#include "assclass.hxx"
+#include <strings.hrc>
+#include <DrawDocShell.hxx>
+#include <Window.hxx>
+#include <ViewShell.hxx>
+#include <assclass.hxx>
 
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 #include "htmlpublishmode.hxx"
 
 #include <memory>

@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "custsdlg.hxx"
+#include <custsdlg.hxx>
 
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
 
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "cusshow.hxx"
-#include "sdmod.hxx"
-#include "customshowlist.hxx"
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <cusshow.hxx>
+#include <sdmod.hxx>
+#include <customshowlist.hxx>
 #include <vcl/msgbox.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 // SdCustomShowDlg
 SdCustomShowDlg::SdCustomShowDlg( vcl::Window* pWindow,

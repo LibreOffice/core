@@ -22,7 +22,7 @@
 #include <svx/svdoutl.hxx>
 
 #include <AccessibleOutlineEditSource.hxx>
-#include "OutlineView.hxx"
+#include <OutlineView.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
 namespace accessibility

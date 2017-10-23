@@ -17,26 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "LayerTabBar.hxx"
+#include <LayerTabBar.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include "sdattr.hxx"
-#include "sdmod.hxx"
-#include "helpids.h"
-#include "app.hrc"
-#include "strings.hrc"
+#include <sdattr.hxx>
+#include <sdmod.hxx>
+#include <helpids.h>
+#include <app.hrc>
+#include <strings.hrc>
 
-#include "DrawViewShell.hxx"
-#include "Window.hxx"
-#include "View.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
-#include "DrawDocShell.hxx"
-#include "drawview.hxx"
-#include "undolayer.hxx"
+#include <DrawViewShell.hxx>
+#include <Window.hxx>
+#include <View.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
+#include <DrawDocShell.hxx>
+#include <drawview.hxx>
+#include <undolayer.hxx>
 
 namespace sd {
 

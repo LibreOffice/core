@@ -21,7 +21,7 @@
 #include "ChangeRequestQueueProcessor.hxx"
 #include "ConfigurationTracer.hxx"
 
-#include "framework/ConfigurationController.hxx"
+#include <framework/ConfigurationController.hxx>
 #include "ConfigurationUpdater.hxx"
 
 #include <vcl/svapp.hxx>

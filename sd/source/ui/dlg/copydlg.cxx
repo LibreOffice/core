@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "copydlg.hxx"
+#include <copydlg.hxx>
 #include <comphelper/string.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/dlgutil.hxx>
@@ -30,11 +30,11 @@
 
 #include <sfx2/app.hxx>
 
-#include "sdattr.hxx"
+#include <sdattr.hxx>
 
-#include "View.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
+#include <View.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
 
 
 namespace sd {

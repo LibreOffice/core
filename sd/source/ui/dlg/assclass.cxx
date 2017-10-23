@@ -20,7 +20,7 @@
 #include <tools/debug.hxx>
 #include <vcl/ctrl.hxx>
 
-#include "assclass.hxx"
+#include <assclass.hxx>
 
 Assistent::Assistent(int nNoOfPages)
     : mnPages(nNoOfPages), mnCurrentPage(1)

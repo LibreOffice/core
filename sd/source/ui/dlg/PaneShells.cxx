@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "PaneShells.hxx"
+#include <PaneShells.hxx>
 
-#include "PaneChildWindows.hxx"
+#include <PaneChildWindows.hxx>
 
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <strings.hrc>
+#include <sdresid.hxx>
 
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>

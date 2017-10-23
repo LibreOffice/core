@@ -21,9 +21,9 @@
 #define INCLUDED_SD_SOURCE_UI_INC_TEMPLATESCANNER_HXX
 
 #include "tools/AsynchronousTask.hxx"
-#include "sddllapi.h"
+#include <sddllapi.h>
 #include <ucbhelper/content.hxx>
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <memory>

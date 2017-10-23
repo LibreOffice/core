@@ -55,18 +55,18 @@
 #include <svl/itempool.hxx>
 #include <svl/IndexedStyleSheets.hxx>
 
-#include "stlpool.hxx"
-#include "sdresid.hxx"
-#include "stlsheet.hxx"
-#include "strings.hrc"
-#include "glob.hxx"
-#include "drawdoc.hxx"
-#include "sdmod.hxx"
-#include "sdpage.hxx"
-#include "helpids.h"
+#include <stlpool.hxx>
+#include <sdresid.hxx>
+#include <stlsheet.hxx>
+#include <strings.hrc>
+#include <glob.hxx>
+#include <drawdoc.hxx>
+#include <sdmod.hxx>
+#include <sdpage.hxx>
+#include <helpids.h>
 #include <svl/itemset.hxx>
-#include "app.hrc"
-#include "strings.hxx"
+#include <app.hrc>
+#include <strings.hxx>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
 

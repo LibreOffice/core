@@ -24,7 +24,7 @@
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include "../ppt/pptanimations.hxx"
-#include <pptexsoundcollection.hxx>
+#include "pptexsoundcollection.hxx"
 #include <filter/msfilter/escherex.hxx>
 
 #ifdef DBG_ANIM_LOG

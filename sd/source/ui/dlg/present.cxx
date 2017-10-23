@@ -24,11 +24,11 @@
 #include <svl/itemset.hxx>
 #include <vcl/svapp.hxx>
 
-#include "sdattr.hxx"
-#include "present.hxx"
-#include "sdresid.hxx"
-#include "cusshow.hxx"
-#include "customshowlist.hxx"
+#include <sdattr.hxx>
+#include <present.hxx>
+#include <sdresid.hxx>
+#include <cusshow.hxx>
+#include <customshowlist.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

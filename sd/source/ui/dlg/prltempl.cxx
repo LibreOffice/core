@@ -34,15 +34,15 @@
 #include <editeng/colritem.hxx>
 #include <svl/cjkoptions.hxx>
 
-#include "DrawDocShell.hxx"
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "prltempl.hxx"
-#include "bulmaper.hxx"
+#include <DrawDocShell.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <prltempl.hxx>
+#include <bulmaper.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxgrahicitem.hxx>
 #include <svx/flagsdef.hxx>
-#include "drawdoc.hxx"
+#include <drawdoc.hxx>
 #define IS_OUTLINE(x) (x >= PO_OUTLINE_1 && x <= PO_OUTLINE_9)
 
 /**

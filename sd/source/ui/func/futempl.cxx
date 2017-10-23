@@ -21,7 +21,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include "futempl.hxx"
+#include <futempl.hxx>
 
 #include <editeng/editdata.hxx>
 #include <editeng/bulletitem.hxx>
@@ -45,26 +45,26 @@
 #include <svx/xlndsit.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlnedit.hxx>
-#include "app.hrc"
-#include "stlsheet.hxx"
-#include "sdpage.hxx"
-#include "stlpool.hxx"
-#include "sdmod.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "drawview.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShell.hxx"
+#include <app.hrc>
+#include <stlsheet.hxx>
+#include <sdpage.hxx>
+#include <stlpool.hxx>
+#include <sdmod.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <drawview.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShell.hxx>
 
-#include "strings.hrc"
-#include "prlayout.hxx"
+#include <strings.hrc>
+#include <prlayout.hxx>
 #include <svx/xfillit.hxx>
-#include "sdresid.hxx"
-#include "OutlineViewShell.hxx"
-#include "helpids.h"
-#include "sdabstdlg.hxx"
+#include <sdresid.hxx>
+#include <OutlineViewShell.hxx>
+#include <helpids.h>
+#include <sdabstdlg.hxx>
 #include <memory>
 
 using namespace com::sun::star::uno;

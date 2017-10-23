@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "SdShapeTypes.hxx"
-#include "AccessiblePresentationShape.hxx"
-#include "AccessiblePresentationGraphicShape.hxx"
-#include "AccessiblePresentationOLEShape.hxx"
+#include <SdShapeTypes.hxx>
+#include <AccessiblePresentationShape.hxx>
+#include <AccessiblePresentationGraphicShape.hxx>
+#include <AccessiblePresentationOLEShape.hxx>
 #include <rtl/ustring.hxx>
 
 namespace accessibility {

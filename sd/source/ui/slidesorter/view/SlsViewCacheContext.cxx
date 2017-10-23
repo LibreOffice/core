@@ -19,15 +19,15 @@
 
 #include "SlsViewCacheContext.hxx"
 
-#include "SlideSorter.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "model/SlsPageEnumerationProvider.hxx"
-#include "view/SlideSorterView.hxx"
-#include "sdpage.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "tools/IdleDetection.hxx"
+#include <SlideSorter.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
+#include <view/SlideSorterView.hxx>
+#include <sdpage.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <tools/IdleDetection.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <vcl/window.hxx>

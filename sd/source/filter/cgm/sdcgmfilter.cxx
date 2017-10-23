@@ -27,12 +27,12 @@
 #include <svx/xflclit.hxx>
 #include <svx/xfillit0.hxx>
 
-#include "sddll.hxx"
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
-#include "sdcgmfilter.hxx"
+#include <sddll.hxx>
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <sdcgmfilter.hxx>
 
-#include "DrawDocShell.hxx"
+#include <DrawDocShell.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

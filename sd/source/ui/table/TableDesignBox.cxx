@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ViewShellBase.hxx"
+#include <ViewShellBase.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "TableDesignPane.hxx"
 #include <vcl/builderfactory.hxx>

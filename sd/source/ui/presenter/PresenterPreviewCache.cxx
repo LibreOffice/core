@@ -18,11 +18,11 @@
  */
 
 #include "PresenterPreviewCache.hxx"
-#include "facreg.hxx"
+#include <facreg.hxx>
 
-#include "cache/SlsCacheContext.hxx"
-#include "tools/IdleDetection.hxx"
-#include "sdpage.hxx"
+#include <cache/SlsCacheContext.hxx>
+#include <tools/IdleDetection.hxx>
+#include <sdpage.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 

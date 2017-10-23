@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include "sddllapi.h"
+#include <sddllapi.h>
 
 class SdFileDialog_Imp;
 

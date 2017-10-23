@@ -32,15 +32,15 @@
 
 #include <map>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "rtl/ref.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <rtl/ref.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <svx/svditer.hxx>
 
-#include "CustomAnimationCloner.hxx"
-#include "sdpage.hxx"
+#include <CustomAnimationCloner.hxx>
+#include <sdpage.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;

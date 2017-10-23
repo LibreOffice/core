@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSPAGESELECTOR_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSPAGESELECTOR_HXX
 
-#include "model/SlsSharedPageDescriptor.hxx"
+#include <model/SlsSharedPageDescriptor.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vector>
 #include <memory>
 
-#include "sddllapi.h"
+#include <sddllapi.h>
 
 class SdPage;
 

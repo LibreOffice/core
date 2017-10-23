@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "futhes.hxx"
+#include <futhes.hxx>
 
 #include <editeng/outliner.hxx>
 #include <vcl/layout.hxx>
@@ -30,16 +30,16 @@
 #include <svx/dialmgr.hxx>
 #include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
-#include "app.hrc"
-#include "strings.hrc"
-#include "drawdoc.hxx"
-#include "sdmod.hxx"
-#include "View.hxx"
-#include "Outliner.hxx"
-#include "DrawViewShell.hxx"
-#include "OutlineViewShell.hxx"
-#include "Window.hxx"
-#include "sdresid.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <drawdoc.hxx>
+#include <sdmod.hxx>
+#include <View.hxx>
+#include <Outliner.hxx>
+#include <DrawViewShell.hxx>
+#include <OutlineViewShell.hxx>
+#include <Window.hxx>
+#include <sdresid.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

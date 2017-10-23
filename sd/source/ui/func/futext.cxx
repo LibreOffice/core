@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "futext.hxx"
+#include <futext.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editerr.hxx>
 #include <svx/dlgutil.hxx>
@@ -52,23 +52,23 @@
 #include <svx/svdetc.hxx>
 #include <editeng/editview.hxx>
 
-#include "sdresid.hxx"
-#include "app.hrc"
+#include <sdresid.hxx>
+#include <app.hrc>
 
-#include "ViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "View.hxx"
-#include "Outliner.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "sdmod.hxx"
-#include "FrameView.hxx"
-#include "ToolBarManager.hxx"
-#include "DrawDocShell.hxx"
-#include "strings.hrc"
-#include "pres.hxx"
-#include "optsitem.hxx"
+#include <ViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <View.hxx>
+#include <Outliner.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <sdmod.hxx>
+#include <FrameView.hxx>
+#include <ToolBarManager.hxx>
+#include <DrawDocShell.hxx>
+#include <strings.hrc>
+#include <pres.hxx>
+#include <optsitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

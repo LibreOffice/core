@@ -19,7 +19,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <unowcntr.hxx>
+#include "unowcntr.hxx"
 
 using namespace ::com::sun::star;
 

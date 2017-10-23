@@ -17,24 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "controller/SlsPageSelector.hxx"
+#include <controller/SlsPageSelector.hxx>
 
-#include "SlideSorter.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsSelectionManager.hxx"
-#include "controller/SlsAnimator.hxx"
-#include "controller/SlsCurrentSlideManager.hxx"
-#include "controller/SlsVisibleAreaManager.hxx"
-#include "model/SlsPageDescriptor.hxx"
-#include "model/SlsPageEnumerationProvider.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "view/SlideSorterView.hxx"
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsSelectionManager.hxx>
+#include <controller/SlsAnimator.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
+#include <controller/SlsVisibleAreaManager.hxx>
+#include <model/SlsPageDescriptor.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <view/SlideSorterView.hxx>
 
-#include "sdpage.hxx"
-#include "ViewShell.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShellBase.hxx"
+#include <sdpage.hxx>
+#include <ViewShell.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShellBase.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <memory>

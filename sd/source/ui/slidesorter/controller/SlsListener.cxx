@@ -19,27 +19,27 @@
 
 #include "SlsListener.hxx"
 
-#include "SlideSorter.hxx"
-#include "SlideSorterViewShell.hxx"
-#include "ViewShellHint.hxx"
-#include "controller/SlideSorterController.hxx"
-#include "controller/SlsPageSelector.hxx"
-#include "controller/SlsCurrentSlideManager.hxx"
-#include "controller/SlsSelectionManager.hxx"
-#include "controller/SlsSelectionObserver.hxx"
-#include "model/SlideSorterModel.hxx"
-#include "model/SlsPageEnumerationProvider.hxx"
-#include "view/SlideSorterView.hxx"
-#include "cache/SlsPageCache.hxx"
-#include "cache/SlsPageCacheManager.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
+#include <SlideSorter.hxx>
+#include <SlideSorterViewShell.hxx>
+#include <ViewShellHint.hxx>
+#include <controller/SlideSorterController.hxx>
+#include <controller/SlsPageSelector.hxx>
+#include <controller/SlsCurrentSlideManager.hxx>
+#include <controller/SlsSelectionManager.hxx>
+#include <controller/SlsSelectionObserver.hxx>
+#include <model/SlideSorterModel.hxx>
+#include <model/SlsPageEnumerationProvider.hxx>
+#include <view/SlideSorterView.hxx>
+#include <cache/SlsPageCache.hxx>
+#include <cache/SlsPageCacheManager.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
 
-#include "strings.hrc"
-#include "ViewShellBase.hxx"
-#include "ViewShellManager.hxx"
-#include "FrameView.hxx"
-#include "EventMultiplexer.hxx"
+#include <strings.hrc>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
+#include <FrameView.hxx>
+#include <EventMultiplexer.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/FrameActionEvent.hpp>

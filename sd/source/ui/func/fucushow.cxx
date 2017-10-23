@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fucushow.hxx"
+#include <fucushow.hxx>
 
 #include <svx/svxids.hrc>
 
-#include "app.hrc"
-#include "sdresid.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
+#include <app.hrc>
+#include <sdresid.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "sdabstdlg.hxx"
+#include <sdabstdlg.hxx>
 #include <memory>
 
 namespace sd {

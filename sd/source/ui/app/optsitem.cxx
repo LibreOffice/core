@@ -26,9 +26,9 @@
 #include <tools/helpers.hxx>
 #include <unotools/syslocale.hxx>
 
-#include "sdmod.hxx"
-#include "optsitem.hxx"
-#include "FrameView.hxx"
+#include <sdmod.hxx>
+#include <optsitem.hxx>
+#include <FrameView.hxx>
 #include <sdattr.hrc>
 
 using namespace ::utl;

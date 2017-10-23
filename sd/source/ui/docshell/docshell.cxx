@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DrawDocShell.hxx"
+#include <DrawDocShell.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -55,32 +55,32 @@
 
 #include <sfx2/fcontnr.hxx>
 
-#include "app.hrc"
-#include "sdmod.hxx"
-#include "strmname.h"
-#include "stlpool.hxx"
-#include "strings.hrc"
-#include "View.hxx"
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
+#include <app.hrc>
+#include <sdmod.hxx>
+#include <strmname.h>
+#include <stlpool.hxx>
+#include <strings.hrc>
+#include <View.hxx>
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
 
-#include "fupoor.hxx"
-#include "fusearch.hxx"
-#include "ViewShell.hxx"
-#include "sdresid.hxx"
-#include "slideshow.hxx"
-#include "drawview.hxx"
-#include "FrameView.hxx"
-#include "unomodel.hxx"
-#include "undo/undomanager.hxx"
-#include "undo/undofactory.hxx"
-#include "OutlineView.hxx"
-#include "ViewShellBase.hxx"
+#include <fupoor.hxx>
+#include <fusearch.hxx>
+#include <ViewShell.hxx>
+#include <sdresid.hxx>
+#include <slideshow.hxx>
+#include <drawview.hxx>
+#include <FrameView.hxx>
+#include <unomodel.hxx>
+#include <undo/undomanager.hxx>
+#include <undo/undofactory.hxx>
+#include <OutlineView.hxx>
+#include <ViewShellBase.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 using namespace sd;
 #define DrawDocShell
-#include "sdslots.hxx"
+#include <sdslots.hxx>
 
 SFX_IMPL_SUPERCLASS_INTERFACE(DrawDocShell, SfxObjectShell);
 

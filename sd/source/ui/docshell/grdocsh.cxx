@@ -27,16 +27,16 @@
 
 #include <sfx2/objface.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "GraphicDocShell.hxx"
-#include "DrawDocShell.hxx"
-#include "drawdoc.hxx"
-#include "sdresid.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <GraphicDocShell.hxx>
+#include <DrawDocShell.hxx>
+#include <drawdoc.hxx>
+#include <sdresid.hxx>
 
 using namespace sd;
 #define GraphicDocShell
-#include "sdgslots.hxx"
+#include <sdgslots.hxx>
 
 namespace sd
 {

@@ -36,8 +36,8 @@
 
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include "DrawViewShell.hxx"
-#include "sdpage.hxx"
-#include "drawdoc.hxx"
+#include <sdpage.hxx>
+#include <drawdoc.hxx>
 #include "FrameView.hxx"
 #include "PresentationViewShell.hxx"
 #include <editeng/outlobj.hxx>

@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fubullet.hxx"
+#include <fubullet.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/fontitem.hxx>
-#include "OutlineViewShell.hxx"
-#include "DrawViewShell.hxx"
-#include "ViewShellBase.hxx"
-#include "Window.hxx"
-#include "drawdoc.hxx"
-#include "strings.hrc"
-#include "sdresid.hxx"
+#include <OutlineViewShell.hxx>
+#include <DrawViewShell.hxx>
+#include <ViewShellBase.hxx>
+#include <Window.hxx>
+#include <drawdoc.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -38,10 +38,10 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "drawview.hxx"
+#include <drawview.hxx>
 #include <memory>
 
-#include "app.hrc"
+#include <app.hrc>
 
 namespace sd {
 

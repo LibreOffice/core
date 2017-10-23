@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sddll.hxx"
+#include <sddll.hxx>
 
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -47,15 +47,15 @@
 #include <o3tl/enumrange.hxx>
 
 #include "TableDesignPane.hxx"
-#include "createtabledesignpanel.hxx"
+#include <createtabledesignpanel.hxx>
 
-#include "DrawDocShell.hxx"
-#include "ViewShellBase.hxx"
-#include "DrawViewShell.hxx"
-#include "DrawController.hxx"
-#include "strings.hrc"
-#include "sdresid.hxx"
-#include "EventMultiplexer.hxx"
+#include <DrawDocShell.hxx>
+#include <ViewShellBase.hxx>
+#include <DrawViewShell.hxx>
+#include <DrawController.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
+#include <EventMultiplexer.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

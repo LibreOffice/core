@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "framework/PresentationFactory.hxx"
+#include <framework/PresentationFactory.hxx>
 
-#include "DrawController.hxx"
-#include "ViewShellBase.hxx"
-#include "facreg.hxx"
+#include <DrawController.hxx>
+#include <ViewShellBase.hxx>
+#include <facreg.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <tools/diagnose_ex.h>
-#include "slideshow.hxx"
+#include <slideshow.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "view/SlsToolTip.hxx"
-#include "view/SlideSorterView.hxx"
-#include "view/SlsLayouter.hxx"
-#include "view/SlsTheme.hxx"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
+#include <view/SlsToolTip.hxx>
+#include <view/SlideSorterView.hxx>
+#include <view/SlsLayouter.hxx>
+#include <view/SlsTheme.hxx>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 
 #include <vcl/settings.hxx>
 #include <vcl/help.hxx>

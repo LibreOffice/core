@@ -46,12 +46,12 @@
 #include <svx/svddrgmt.hxx>
 
 #include "CustomAnimationPane.hxx"
-#include "View.hxx"
+#include <View.hxx>
 #include "motionpathtag.hxx"
-#include "sdpage.hxx"
-#include "ViewShell.hxx"
-#include "app.hrc"
-#include "Window.hxx"
+#include <sdpage.hxx>
+#include <ViewShell.hxx>
+#include <app.hrc>
+#include <Window.hxx>
 
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>

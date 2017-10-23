@@ -20,7 +20,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
-#include "View.hxx"
+#include <View.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/request.hxx>
 #include <svx/obj3d.hxx>
@@ -55,29 +55,29 @@
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <vcl/virdev.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "Window.hxx"
-#include "Client.hxx"
-#include "drawdoc.hxx"
-#include "DrawDocShell.hxx"
-#include "sdmod.hxx"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "DrawViewShell.hxx"
-#include "futext.hxx"
-#include "fuinsfil.hxx"
-#include "slideshow.hxx"
-#include "stlpool.hxx"
-#include "FrameView.hxx"
-#include "ViewClipboard.hxx"
-#include "undo/undomanager.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <Window.hxx>
+#include <Client.hxx>
+#include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <sdmod.hxx>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <DrawViewShell.hxx>
+#include <futext.hxx>
+#include <fuinsfil.hxx>
+#include <slideshow.hxx>
+#include <stlpool.hxx>
+#include <FrameView.hxx>
+#include <ViewClipboard.hxx>
+#include <undo/undomanager.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdotable.hxx>
-#include "EventMultiplexer.hxx"
-#include "ViewShellBase.hxx"
-#include "ViewShellManager.hxx"
+#include <EventMultiplexer.hxx>
+#include <ViewShellBase.hxx>
+#include <ViewShellManager.hxx>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -93,7 +93,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include "DrawController.hxx"
+#include <DrawController.hxx>
 
 #include <memory>
 #include <numeric>

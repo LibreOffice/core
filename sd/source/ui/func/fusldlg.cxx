@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fusldlg.hxx"
+#include <fusldlg.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "drawdoc.hxx"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "strings.hrc"
-#include "sdattr.hxx"
-#include "sdmod.hxx"
-#include "ViewShell.hxx"
-#include "Window.hxx"
-#include "optsitem.hxx"
-#include "sdabstdlg.hxx"
+#include <drawdoc.hxx>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
+#include <sdattr.hxx>
+#include <sdmod.hxx>
+#include <ViewShell.hxx>
+#include <Window.hxx>
+#include <optsitem.hxx>
+#include <sdabstdlg.hxx>
 #include <memory>
 
 namespace sd {

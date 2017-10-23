@@ -33,12 +33,12 @@
 #include <svx/dlgutil.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "sdattr.hxx"
-#include "sdresid.hxx"
-#include "optsitem.hxx"
-#include "tpoption.hxx"
-#include "strings.hrc"
-#include "app.hrc"
+#include <sdattr.hxx>
+#include <sdresid.hxx>
+#include <optsitem.hxx>
+#include <tpoption.hxx>
+#include <strings.hrc>
+#include <app.hrc>
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 

@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSREQUESTQUEUE_HXX
 
 #include "SlsRequestPriorityClass.hxx"
-#include "cache/SlsCacheContext.hxx"
+#include <cache/SlsCacheContext.hxx>
 #include <drawdoc.hxx>
 #include <osl/mutex.hxx>
 #include <svx/sdrpageuser.hxx>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fuconstr.hxx"
+#include <fuconstr.hxx>
 
 #include <svx/svxids.hrc>
 #include <svl/aeitem.hxx>
@@ -27,18 +27,18 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include "app.hrc"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "fudraw.hxx"
-#include "View.hxx"
-#include "Window.hxx"
-#include "ViewShell.hxx"
-#include "drawdoc.hxx"
-#include "FrameView.hxx"
-#include "sdpage.hxx"
-#include "sdresid.hxx"
-#include "stlpool.hxx"
+#include <app.hrc>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <fudraw.hxx>
+#include <View.hxx>
+#include <Window.hxx>
+#include <ViewShell.hxx>
+#include <drawdoc.hxx>
+#include <FrameView.hxx>
+#include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <stlpool.hxx>
 #include <svx/globl3d.hxx>
 
 using namespace com::sun::star;

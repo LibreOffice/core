@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_PRLTEMPL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_PRLTEMPL_HXX
 
-#include "sdresid.hxx"
+#include <sdresid.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/tabarea.hxx>
 
-#include "prlayout.hxx"
+#include <prlayout.hxx>
 
 class SfxObjectShell;
 class SfxStyleSheetBase;

@@ -22,11 +22,11 @@
 #include <svl/itempool.hxx>
 #include <svl/aeitem.hxx>
 
-#include "sdattr.hxx"
-#include "View.hxx"
-#include "sdresid.hxx"
-#include "drawdoc.hxx"
-#include "dlgsnap.hxx"
+#include <sdattr.hxx>
+#include <View.hxx>
+#include <sdresid.hxx>
+#include <drawdoc.hxx>
+#include <dlgsnap.hxx>
 
 /**
  * dialog to adjust grid (scarcely ESO!)
