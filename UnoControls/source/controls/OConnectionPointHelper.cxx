@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "OConnectionPointHelper.hxx"
+#include <OConnectionPointHelper.hxx>
 
-#include "OConnectionPointContainerHelper.hxx"
+#include <OConnectionPointContainerHelper.hxx>
 
 #include <com/sun/star/lang/InvalidListenerException.hpp>
 #include <cppuhelper/queryinterface.hxx>

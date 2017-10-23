@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "OConnectionPointContainerHelper.hxx"
+#include <OConnectionPointContainerHelper.hxx>
 
-#include "OConnectionPointHelper.hxx"
+#include <OConnectionPointHelper.hxx>
 
 #include <cppuhelper/queryinterface.hxx>
 

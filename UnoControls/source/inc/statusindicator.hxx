@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ref.hxx>
 
-#include "basecontainercontrol.hxx"
+#include <basecontainercontrol.hxx>
 
 namespace unocontrols{
 

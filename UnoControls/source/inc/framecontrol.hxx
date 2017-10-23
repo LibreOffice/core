@@ -27,7 +27,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <rtl/ref.hxx>
 
-#include "basecontrol.hxx"
+#include <basecontrol.hxx>
 #include "OConnectionPointContainerHelper.hxx"
 
 //  namespaces
