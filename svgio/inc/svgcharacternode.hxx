@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVGIO_INC_SVGCHARACTERNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGCHARACTERNODE_HXX
 
-#include <svgnode.hxx>
+#include "svgnode.hxx"
 
 namespace drawinglayer { namespace primitive2d { class TextSimplePortionPrimitive2D; }}
 

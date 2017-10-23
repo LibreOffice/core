@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVGIO_INC_SVGDOCUMENT_HXX
 #define INCLUDED_SVGIO_INC_SVGDOCUMENT_HXX
 
-#include <svgnode.hxx>
+#include "svgnode.hxx"
 #include <unordered_map>
 
 namespace svgio

@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SVGIO_INC_SVGIMAGENODE_HXX
 #define INCLUDED_SVGIO_INC_SVGIMAGENODE_HXX
 
-#include <svgnode.hxx>
-#include <svgstyleattributes.hxx>
+#include "svgnode.hxx"
+#include "svgstyleattributes.hxx"
 #include <memory>
 
 namespace svgio

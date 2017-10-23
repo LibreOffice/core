@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVGIO_INC_SVGTITLEDESCNODE_HXX
 #define INCLUDED_SVGIO_INC_SVGTITLEDESCNODE_HXX
 
-#include <svgnode.hxx>
+#include "svgnode.hxx"
 
 
 namespace svgio

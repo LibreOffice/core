@@ -23,7 +23,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <svgpaint.hxx>
+#include "svgpaint.hxx"
 #include <vector>
 
 namespace svgio
