@@ -737,12 +737,13 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uInt32 nFormatId) cons
         return SwResId(pStart[nFormatId]);
 
     OUString aRet;
-    if (strcmp(*pStart, FMT_NUM_ARY[0]))
+    if (*pStart == FMT_NUM_ARY[0])
     {
         if (xNumberingInfo.is())
         {
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();
+            sal_Int32 nOffset = aSwFields[nPos].nFormatLength;
             sal_uInt32 nValidEntry = 0;
             for (sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
             {
@@ -750,7 +751,7 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uInt32 nFormatId) cons
                 if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N &&
                         (nCurrent != (NumberingType::BITMAP | LINK_TOKEN)))
                 {
-                    if (nValidEntry == nFormatId)
+                    if (nValidEntry == nFormatId - nOffset)
                     {
                         sal_uInt32 n = SvxNumberingTypeTable::FindIndex(pTypes[nType]);
                         if (n != RESARRAY_INDEX_NOTFOUND)
