@@ -16,6 +16,24 @@
       "revId": "1f20be8f404b2d7319b4751cc8b23d58b8ab380a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a430d35_8347374a",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 5928,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-10-23T14:13:11Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll let it stay here as I changed, but will simply use the WINDOWS_SDK_ARCH in com_MSC_defs.mk",
+      "parentUuid": "1a430d35_035b472f",
+      "revId": "1f20be8f404b2d7319b4751cc8b23d58b8ab380a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
