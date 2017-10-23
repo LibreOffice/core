@@ -13,7 +13,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

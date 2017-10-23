@@ -11,7 +11,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 #include <iostream>
 
 using namespace css;

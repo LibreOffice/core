@@ -20,7 +20,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <rtl/ustring.hxx>
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
 using namespace css::uno;

@@ -12,7 +12,7 @@
 #include <com/sun/star/sheet/XCellSeries.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

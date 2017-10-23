@@ -9,7 +9,7 @@
 
 #define USE_CPPUNIT 1
 
-#include "test/xmldiff.hxx"
+#include <test/xmldiff.hxx>
 
 #include <libxml/xpath.h>
 #include <libxml/parser.h>

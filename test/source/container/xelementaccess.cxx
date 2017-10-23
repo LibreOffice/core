@@ -9,7 +9,7 @@
 
 #include <test/container/xelementaccess.hxx>
 #include <com/sun/star/container/XElementAccess.hpp>
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
 using namespace css::uno;

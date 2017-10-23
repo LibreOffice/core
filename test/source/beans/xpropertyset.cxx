@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "test/beans/xpropertyset.hxx"
-#include "cppunit/extensions/HelperMacros.h"
+#include <test/beans/xpropertyset.hxx>
+#include <cppunit/extensions/HelperMacros.h>
 
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -9,7 +9,7 @@
 
 #include <com/sun/star/container/XNamed.hpp>
 #include <test/container/xnamed.hxx>
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
 using namespace css::uno;

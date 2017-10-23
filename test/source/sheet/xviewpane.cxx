@@ -11,7 +11,7 @@
 #include <com/sun/star/sheet/XViewPane.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
-#include "cppunit/TestAssert.h"
+#include <cppunit/TestAssert.h>
 
 using namespace css;
 using namespace css::uno;

@@ -12,7 +12,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
 
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 #include <iostream>
 
 using namespace css;

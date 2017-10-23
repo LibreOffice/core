@@ -27,7 +27,7 @@
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 
 #include <rtl/ustring.hxx>
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 #include <iostream>
 
 using namespace css;

@@ -33,7 +33,7 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/scheduler.hxx>
 
-#include <isheadless.hxx>
+#include "isheadless.hxx"
 
 #include <memory>
 #include <cstring>

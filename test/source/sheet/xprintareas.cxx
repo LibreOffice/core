@@ -10,7 +10,7 @@
 #include <test/sheet/xprintareas.hxx>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 #include <rtl/ustring.hxx>
 
 using namespace css;

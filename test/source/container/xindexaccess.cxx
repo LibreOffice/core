@@ -9,7 +9,7 @@
 
 #include <test/container/xindexaccess.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 
 using namespace css;
 using namespace css::uno;

@@ -23,7 +23,7 @@
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
 #include <rtl/ustring.hxx>
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 #include <iostream>
 
 using namespace css;

@@ -19,7 +19,7 @@
 #include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
 
-#include "cppunit/extensions/HelperMacros.h"
+#include <cppunit/extensions/HelperMacros.h>
 #include <rtl/ustring.hxx>
 
 using namespace css;
