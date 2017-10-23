@@ -36,7 +36,7 @@
  *
  ************************************************************************/
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include <config_lgpl.h>
 
 #undef LANGUAGE_NONE
@@ -53,7 +53,7 @@
 #undef LANGUAGE_NONE
 
 #include "SolverComponent.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
