@@ -25,7 +25,7 @@
 #include <vector>
 #include <rtl/ustring.hxx>
 
-#include "jni.h"
+#include <jni.h>
 
 
 extern "C" {

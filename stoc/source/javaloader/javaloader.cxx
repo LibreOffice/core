@@ -39,7 +39,7 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include "jni.h"
+#include <jni.h>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
