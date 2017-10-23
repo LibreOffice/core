@@ -26,7 +26,7 @@
 #include <com/sun/star/io/IOException.hpp>
 
 #include "xolefactory.hxx"
-#include "oleembobj.hxx"
+#include <oleembobj.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 

@@ -29,9 +29,9 @@
 #include <comphelper/documentconstants.hxx>
 
 #include "xfactory.hxx"
-#include "commonembobj.hxx"
-#include "specialobject.hxx"
-#include "oleembobj.hxx"
+#include <commonembobj.hxx>
+#include <specialobject.hxx>
+#include <oleembobj.hxx>
 
 
 using namespace ::com::sun::star;
