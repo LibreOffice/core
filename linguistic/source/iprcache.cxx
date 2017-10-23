@@ -20,8 +20,8 @@
 
 #include <string.h>
 
-#include "iprcache.hxx"
-#include "linguistic/misc.hxx"
+#include <iprcache.hxx>
+#include <linguistic/misc.hxx>
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <osl/mutex.hxx>

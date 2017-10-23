@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 
 #include "thesdsp.hxx"
-#include "linguistic/lngprops.hxx"
+#include <linguistic/lngprops.hxx>
 
 using namespace osl;
 using namespace com::sun::star;

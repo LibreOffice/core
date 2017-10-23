@@ -29,7 +29,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <rtl/ustring.hxx>
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 #include "defs.hxx"
 
 

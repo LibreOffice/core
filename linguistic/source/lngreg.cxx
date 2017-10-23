@@ -22,7 +22,7 @@
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include <lngreg.hxx>
+#include "lngreg.hxx"
 
 using namespace com::sun::star::lang;
 

@@ -41,10 +41,10 @@
 
 #include <rtl/instance.hxx>
 
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 #include "defs.hxx"
-#include "linguistic/lngprops.hxx"
-#include "linguistic/hyphdta.hxx"
+#include <linguistic/lngprops.hxx>
+#include <linguistic/hyphdta.hxx>
 
 using namespace osl;
 using namespace com::sun::star;

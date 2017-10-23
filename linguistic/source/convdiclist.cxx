@@ -47,7 +47,7 @@
 #include "defs.hxx"
 #include "hhconvdic.hxx"
 #include "lngreg.hxx"
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 
 using namespace osl;
 using namespace com::sun::star;

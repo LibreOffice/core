@@ -35,7 +35,7 @@
 #include <memory>
 
 #include "lngopt.hxx"
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 #include "defs.hxx"
 
 class LngSvcMgr;

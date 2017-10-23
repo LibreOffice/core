@@ -61,7 +61,7 @@
 #include <map>
 #include <vector>
 
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 #include "defs.hxx"
 #include "lngopt.hxx"
 #include "lngreg.hxx"

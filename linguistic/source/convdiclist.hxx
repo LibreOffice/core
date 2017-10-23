@@ -27,7 +27,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <rtl/ref.hxx>
 
-#include "linguistic/misc.hxx"
+#include <linguistic/misc.hxx>
 #include "lngopt.hxx"
 
 
