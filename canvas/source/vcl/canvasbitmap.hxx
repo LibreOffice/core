@@ -34,7 +34,7 @@
 
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
-#include <canvasbitmaphelper.hxx>
+#include "canvasbitmaphelper.hxx"
 
 #include "impltools.hxx"
 #include "repainttarget.hxx"
