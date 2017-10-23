@@ -9,7 +9,7 @@
 
 #include "RemoteFilesDialog.hxx"
 #include <comphelper/stillreadwriteinteraction.hxx>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 class FileViewContainer : public vcl::Window
 {

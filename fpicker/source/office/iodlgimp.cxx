@@ -18,7 +18,7 @@
  */
 
 #include "iodlgimp.hxx"
-#include "svtools/headbar.hxx"
+#include <svtools/headbar.hxx>
 #include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
 #include <tools/urlobj.hxx>
@@ -26,16 +26,16 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
-#include "svl/eitem.hxx"
-#include "unotools/viewoptions.hxx"
-#include "svtools/fileview.hxx"
-#include "svtools/inettbc.hxx"
+#include <svl/eitem.hxx>
+#include <unotools/viewoptions.hxx>
+#include <svtools/fileview.hxx>
+#include <svtools/inettbc.hxx>
 #include "iodlg.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
-#include "svtools/imagemgr.hxx"
+#include <strings.hrc>
+#include <bitmaps.hlst>
+#include <svtools/imagemgr.hxx>
 #include <unotools/localfilehelper.hxx>
-#include "unotools/useroptions.hxx"
+#include <unotools/useroptions.hxx>
 #include <svl/svlresid.hxx>
 #include <svl/svl.hrc>
 

@@ -23,7 +23,7 @@
 #include "iodlg.hxx"
 #include <svtools/PlaceEditDialog.hxx>
 #include "PlacesListBox.hxx"
-#include "fpsofficeResMgr.hxx"
+#include <fpsofficeResMgr.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/fixed.hxx>
@@ -32,25 +32,25 @@
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <unotools/ucbhelper.hxx>
-#include "svtools/ehdl.hxx"
-#include "svl/urihelper.hxx"
-#include "unotools/pathoptions.hxx"
-#include "unotools/viewoptions.hxx"
-#include "svtools/fileview.hxx"
-#include "svtools/sfxecode.hxx"
-#include "svtools/svtabbx.hxx"
-#include "svtools/treelistentry.hxx"
+#include <svtools/ehdl.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
+#include <svtools/fileview.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svtools/svtabbx.hxx>
+#include <svtools/treelistentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "fpicker/strings.hrc"
-#include "svtools/helpids.h"
+#include <fpicker/strings.hrc>
+#include <svtools/helpids.h>
 #include <svtools/strings.hrc>
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <strings.hrc>
+#include <bitmaps.hlst>
 #include "asyncfilepicker.hxx"
 #include "iodlgimp.hxx"
-#include "svtools/inettbc.hxx"
-#include "unotools/syslocale.hxx"
+#include <svtools/inettbc.hxx>
+#include <unotools/syslocale.hxx>
 #include "QueryFolderName.hxx"
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -78,7 +78,7 @@
 #include <vcl/settings.hxx>
 
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include "fpinteraction.hxx"
 #include <osl/process.h>
 

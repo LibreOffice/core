@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include "svl/inettype.hxx"
+#include <svl/inettype.hxx>
 #include "asyncfilepicker.hxx"
 #include "OfficeControlAccess.hxx"
 #include "fpsmartcontent.hxx"
