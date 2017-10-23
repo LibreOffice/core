@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "i18nlangtag/languagetagicu.hxx"
-#include "i18nlangtag/languagetag.hxx"
+#include <i18nlangtag/languagetagicu.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 
 // static
