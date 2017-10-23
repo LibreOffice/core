@@ -20,14 +20,14 @@
 
 #include "classfile.hxx"
 
-#include "codemaker/global.hxx"
-#include "codemaker/options.hxx"
-#include "codemaker/unotype.hxx"
+#include <codemaker/global.hxx>
+#include <codemaker/options.hxx>
+#include <codemaker/unotype.hxx>
 
-#include "osl/diagnose.h"
-#include "rtl/string.h"
-#include "rtl/string.hxx"
-#include "sal/types.h"
+#include <osl/diagnose.h>
+#include <rtl/string.h>
+#include <rtl/string.hxx>
+#include <sal/types.h>
 
 #include <map>
 #include <utility>

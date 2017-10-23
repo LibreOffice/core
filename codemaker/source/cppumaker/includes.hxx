@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
 #define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_INCLUDES_HXX
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 #include "dependencies.hxx"
 

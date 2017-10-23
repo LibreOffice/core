@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
 #define INCLUDED_CODEMAKER_SOURCE_JAVAMAKER_CLASSFILE_HXX
 
-#include "codemaker/unotype.hxx"
-#include "sal/types.h"
+#include <codemaker/unotype.hxx>
+#include <sal/types.h>
 
 #include <list>
 #include <map>

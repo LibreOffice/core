@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "codemaker/commoncpp.hxx"
+#include <codemaker/commoncpp.hxx>
 
-#include "codemaker/options.hxx"
-#include "codemaker/typemanager.hxx"
-#include "codemaker/unotype.hxx"
+#include <codemaker/options.hxx>
+#include <codemaker/typemanager.hxx>
+#include <codemaker/unotype.hxx>
 
-#include "rtl/strbuf.hxx"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include <vector>
 

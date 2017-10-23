@@ -21,8 +21,8 @@
 #include <string.h>
 
 #include "cppuoptions.hxx"
-#include "osl/thread.h"
-#include "osl/process.h"
+#include <osl/thread.h>
+#include <osl/process.h>
 
 using ::rtl::OString;
 

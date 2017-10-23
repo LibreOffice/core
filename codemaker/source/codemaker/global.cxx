@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl/process.h"
-#include "rtl/strbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "osl/thread.h"
-#include "osl/file.hxx"
+#include <osl/process.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <osl/thread.h>
+#include <osl/file.hxx>
 
 #include <string.h>
 #include <errno.h>
@@ -36,7 +36,7 @@
 #   include <unistd.h>
 #endif
 
-#include "codemaker/global.hxx"
+#include <codemaker/global.hxx>
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'
