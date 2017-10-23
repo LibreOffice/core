@@ -23,8 +23,8 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <HashMaps.hxx>
-#include <ZipPackageEntry.hxx>
+#include "HashMaps.hxx"
+#include "ZipPackageEntry.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 

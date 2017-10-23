@@ -24,7 +24,7 @@
 #include <ZipOutputStream.hxx>
 #include <ZipPackageStream.hxx>
 #include <PackageConstants.hxx>
-#include <ZipPackageFolderEnumeration.hxx>
+#include "ZipPackageFolderEnumeration.hxx"
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -32,7 +32,7 @@
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <rtl/digest.h>
-#include <ContentInfo.hxx>
+#include "ContentInfo.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <EncryptedDataHeader.hxx>
 #include <rtl/instance.hxx>

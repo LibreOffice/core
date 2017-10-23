@@ -19,7 +19,7 @@
 #ifndef INCLUDED_PACKAGE_INC_ZIPENUMERATION_HXX
 #define INCLUDED_PACKAGE_INC_ZIPENUMERATION_HXX
 
-#include <HashMaps.hxx>
+#include "HashMaps.hxx"
 
 class ZipEnumeration
 {

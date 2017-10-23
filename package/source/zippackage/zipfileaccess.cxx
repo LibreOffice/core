@@ -28,7 +28,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <zipfileaccess.hxx>
 #include <ZipEnumeration.hxx>
-#include <ZipPackageSink.hxx>
+#include "ZipPackageSink.hxx"
 #include <EncryptionData.hxx>
 
 #include <ucbhelper/content.hxx>

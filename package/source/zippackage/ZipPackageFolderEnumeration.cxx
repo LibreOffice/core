@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ZipPackageFolderEnumeration.hxx>
-#include <ContentInfo.hxx>
+#include "ZipPackageFolderEnumeration.hxx"
+#include "ContentInfo.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;

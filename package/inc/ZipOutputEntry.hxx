@@ -27,7 +27,7 @@
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
 #include <package/Deflater.hxx>
-#include <CRC32.hxx>
+#include "CRC32.hxx"
 #include <atomic>
 
 struct ZipEntry;

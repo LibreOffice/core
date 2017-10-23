@@ -19,7 +19,7 @@
 #ifndef INCLUDED_PACKAGE_INC_HASHMAPS_HXX
 #define INCLUDED_PACKAGE_INC_HASHMAPS_HXX
 
-#include <ZipEntry.hxx>
+#include "ZipEntry.hxx"
 #include <rtl/ref.hxx>
 #include <unordered_map>
 

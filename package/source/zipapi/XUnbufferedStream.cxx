@@ -21,7 +21,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 
-#include <XUnbufferedStream.hxx>
+#include "XUnbufferedStream.hxx"
 #include <EncryptionData.hxx>
 #include <PackageConstants.hxx>
 #include <ZipFile.hxx>

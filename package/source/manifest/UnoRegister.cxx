@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ManifestReader.hxx>
-#include <ManifestWriter.hxx>
+#include "ManifestReader.hxx"
+#include "ManifestWriter.hxx"
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <ZipPackage.hxx>

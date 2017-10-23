@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ManifestWriter.hxx>
-#include <ManifestExport.hxx>
+#include "ManifestWriter.hxx"
+#include "ManifestExport.hxx"
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>

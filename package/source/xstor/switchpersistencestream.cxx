@@ -23,7 +23,7 @@
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <switchpersistencestream.hxx>
+#include "switchpersistencestream.hxx"
 
 using namespace ::com::sun::star;
 

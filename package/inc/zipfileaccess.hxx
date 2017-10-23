@@ -32,8 +32,8 @@
 #include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <ZipFile.hxx>
-#include <HashMaps.hxx>
+#include "ZipFile.hxx"
+#include "HashMaps.hxx"
 
 #include <memory>
 

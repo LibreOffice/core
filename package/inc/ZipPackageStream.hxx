@@ -24,12 +24,12 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <ZipPackageEntry.hxx>
+#include "ZipPackageEntry.hxx"
 #include <rtl/ref.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <EncryptionData.hxx>
+#include "EncryptionData.hxx"
 
 #define PACKAGE_STREAM_NOTSET           0
 #define PACKAGE_STREAM_PACKAGEMEMBER    1
