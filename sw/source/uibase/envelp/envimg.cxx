@@ -28,7 +28,7 @@
 #include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <envimg.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <cmdid.h>
 

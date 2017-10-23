@@ -21,15 +21,15 @@
 
 #include <svx/svdobj.hxx>
 #include <svx/svdovirt.hxx>
-#include <swtypes.hxx>
-#include <fmtanchr.hxx>
-#include <frmfmt.hxx>
+#include "swtypes.hxx"
+#include "fmtanchr.hxx"
+#include "frmfmt.hxx"
 #include <list>
 #include <vector>
 #include <memory>
 
 #include "calbck.hxx"
-#include <anchoreddrawobject.hxx>
+#include "anchoreddrawobject.hxx"
 
 class SfxPoolItem;
 class SwFrameFormat;

@@ -20,21 +20,21 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
-#include "dcontact.hxx"
-#include "pagefrm.hxx"
-#include "rootfrm.hxx"
-#include "pam.hxx"
-#include "swregion.hxx"
-#include "dflyobj.hxx"
-#include "flyfrm.hxx"
-#include "frmtool.hxx"
+#include <dcontact.hxx>
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
+#include <pam.hxx>
+#include <swregion.hxx>
+#include <dflyobj.hxx>
+#include <flyfrm.hxx>
+#include <frmtool.hxx>
 #include "porfly.hxx"
 #include "porfld.hxx"
-#include "txtfly.hxx"
+#include <txtfly.hxx>
 #include "txtpaint.hxx"
-#include "txtatr.hxx"
-#include "notxtfrm.hxx"
-#include "fmtcnct.hxx"
+#include <txtatr.hxx>
+#include <notxtfrm.hxx>
+#include <fmtcnct.hxx>
 #include "inftxt.hxx"
 #include <svx/obj3d.hxx>
 #include <editeng/txtrange.hxx>
@@ -54,9 +54,9 @@
 #include <svx/svdoedge.hxx>
 
 #ifdef DBG_UTIL
-#include "viewsh.hxx"
-#include "viewopt.hxx"
-#include "doc.hxx"
+#include <viewsh.hxx>
+#include <viewopt.hxx>
+#include <doc.hxx>
 #endif
 
 using namespace ::com::sun::star;

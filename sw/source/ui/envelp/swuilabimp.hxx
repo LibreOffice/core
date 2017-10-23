@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_ENVELP_SWUILABIMP_HXX
 #define INCLUDED_SW_SOURCE_UI_ENVELP_SWUILABIMP_HXX
 
-#include "labimp.hxx"
+#include <labimp.hxx>
 #include <com/sun/star/text/XAutoTextContainer2.hpp>
 #include <vcl/layout.hxx>
 

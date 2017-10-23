@@ -33,9 +33,9 @@
 #include <view.hxx>
 #include <basesh.hxx>
 #include <drpcps.hxx>
-#include <envfmt.hxx>
+#include "envfmt.hxx"
 #include <fmtcol.hxx>
-#include "swuipardlg.hxx"
+#include <swuipardlg.hxx>
 #include <chrdlgmodes.hxx>
 #include <pattern.hxx>
 #include <poolfmt.hxx>
@@ -46,7 +46,7 @@
 
 #include <memory>
 
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <swuiexp.hxx>
 
 namespace {

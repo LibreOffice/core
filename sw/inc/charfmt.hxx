@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_CHARFMT_HXX
 #define INCLUDED_SW_INC_CHARFMT_HXX
 
-#include <format.hxx>
+#include "format.hxx"
 
 class SW_DLLPUBLIC SwCharFormat : public SwFormat
 {

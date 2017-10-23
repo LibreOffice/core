@@ -18,24 +18,24 @@
  */
 
 #include <tools/bigint.hxx>
-#include "pagefrm.hxx"
-#include "txtfrm.hxx"
+#include <pagefrm.hxx>
+#include <txtfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include "frmtool.hxx"
-#include "dflyobj.hxx"
-#include "hints.hxx"
+#include <frmtool.hxx>
+#include <dflyobj.hxx>
+#include <hints.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtsrnd.hxx>
 #include <txatbase.hxx>
 
-#include "tabfrm.hxx"
-#include "flyfrms.hxx"
-#include "crstate.hxx"
-#include "sectfrm.hxx"
+#include <tabfrm.hxx>
+#include <flyfrms.hxx>
+#include <crstate.hxx>
+#include <sectfrm.hxx>
 
 #include <tocntntanchoredobjectposition.hxx>
 #include <dcontact.hxx>

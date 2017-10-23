@@ -28,7 +28,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <conttree.hxx>
+#include "conttree.hxx"
 #include <ndarr.hxx>
 
 class SwWrtShell;

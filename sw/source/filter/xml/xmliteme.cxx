@@ -33,11 +33,11 @@
 #include <tools/fldunit.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
-#include "fmtornt.hxx"
+#include <fmtornt.hxx>
 #include <unomid.h>
-#include "frmfmt.hxx"
-#include "fmtfsize.hxx"
-#include "swrect.hxx"
+#include <frmfmt.hxx>
+#include <fmtfsize.hxx>
+#include <swrect.hxx>
 #include "xmlexp.hxx"
 #include <editeng/memberids.h>
 #include <comphelper/processfactory.hxx>

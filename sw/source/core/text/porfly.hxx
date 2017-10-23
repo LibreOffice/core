@@ -22,7 +22,7 @@
 #include <ascharanchoredobjectposition.hxx>
 
 #include "porglue.hxx"
-#include "flyfrms.hxx"
+#include <flyfrms.hxx>
 
 class SwDrawContact;
 class SwFlyInContentFrame;

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 
@@ -30,16 +30,16 @@
 #include <fmtfollowtextflow.hxx>
 #include <svx/swframevalidation.hxx>
 
-#include "cmdid.h"
+#include <cmdid.h>
 #include <docsh.hxx>
-#include "uitool.hxx"
-#include "wrtsh.hxx"
-#include "swmodule.hxx"
-#include "viewopt.hxx"
-#include "frmatr.hxx"
-#include "frmmgr.hxx"
-#include "globals.hrc"
-#include "wrap.hxx"
+#include <uitool.hxx>
+#include <wrtsh.hxx>
+#include <swmodule.hxx>
+#include <viewopt.hxx>
+#include <frmatr.hxx>
+#include <frmmgr.hxx>
+#include <globals.hrc>
+#include <wrap.hxx>
 
 using namespace ::com::sun::star;
 

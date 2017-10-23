@@ -21,8 +21,8 @@
 
 #include "swdllapi.h"
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 #include <svl/eitem.hxx>
 
 class IntlWrapper;

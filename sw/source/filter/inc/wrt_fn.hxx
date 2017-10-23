@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_FILTER_INC_WRT_FN_HXX
 #define INCLUDED_SW_SOURCE_FILTER_INC_WRT_FN_HXX
-#include "hintids.hxx"
+#include <hintids.hxx>
 
 // some forward declarations
 class SwNode;

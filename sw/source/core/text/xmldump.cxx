@@ -7,19 +7,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "frame.hxx"
-#include "frmfmt.hxx"
-#include "ftnfrm.hxx"
-#include "sectfrm.hxx"
-#include "tabfrm.hxx"
-#include "txtfrm.hxx"
-#include "hffrm.hxx"
-#include "rootfrm.hxx"
-#include "editsh.hxx"
+#include <frame.hxx>
+#include <frmfmt.hxx>
+#include <ftnfrm.hxx>
+#include <sectfrm.hxx>
+#include <tabfrm.hxx>
+#include <txtfrm.hxx>
+#include <hffrm.hxx>
+#include <rootfrm.hxx>
+#include <editsh.hxx>
 #include "porlin.hxx"
 #include "porlay.hxx"
 #include "portxt.hxx"
-#include "sortedobjs.hxx"
+#include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <libxml/xmlwriter.h>
 #include <SwPortionHandler.hxx>

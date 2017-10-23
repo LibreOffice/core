@@ -24,8 +24,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <flyfrm.hxx>
 #include "accembedded.hxx"
-#include "cntfrm.hxx"
-#include "ndole.hxx"
+#include <cntfrm.hxx>
+#include <ndole.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 

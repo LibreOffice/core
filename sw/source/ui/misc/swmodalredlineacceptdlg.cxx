@@ -38,7 +38,7 @@
 
 #include <vector>
 #include <redlndlg.hxx>
-#include "swmodalredlineacceptdlg.hxx"
+#include <swmodalredlineacceptdlg.hxx>
 
 #include <unomid.h>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <comphelper/lok.hxx>
 #include <tools/mapunit.hxx>
 #include <svx/svdtrans.hxx>
@@ -30,24 +30,24 @@
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmturl.hxx>
-#include "viewsh.hxx"
-#include "viewimp.hxx"
-#include "cntfrm.hxx"
-#include "frmatr.hxx"
-#include "doc.hxx"
+#include <viewsh.hxx>
+#include <viewimp.hxx>
+#include <cntfrm.hxx>
+#include <frmatr.hxx>
+#include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include "dview.hxx"
-#include "dflyobj.hxx"
-#include "flyfrm.hxx"
-#include "frmfmt.hxx"
-#include "viewopt.hxx"
-#include "frmtool.hxx"
-#include "flyfrms.hxx"
-#include "ndnotxt.hxx"
-#include "grfatr.hxx"
-#include "pagefrm.hxx"
-#include "rootfrm.hxx"
-#include "wrtsh.hxx"
+#include <dview.hxx>
+#include <dflyobj.hxx>
+#include <flyfrm.hxx>
+#include <frmfmt.hxx>
+#include <viewopt.hxx>
+#include <frmtool.hxx>
+#include <flyfrms.hxx>
+#include <ndnotxt.hxx>
+#include <grfatr.hxx>
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
+#include <wrtsh.hxx>
 #include <ndgrf.hxx>
 #include <frmmgr.hxx>
 

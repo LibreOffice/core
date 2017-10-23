@@ -22,8 +22,8 @@
 
 #include <vcl/pdfextoutdevdata.hxx>
 #include <i18nlangtag/lang.h>
-#include <swrect.hxx>
-#include <swtypes.hxx>
+#include "swrect.hxx"
+#include "swtypes.hxx"
 
 #include <map>
 #include <memory>

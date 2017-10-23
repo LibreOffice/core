@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <o3tl/make_unique.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/lrspitem.hxx>
@@ -27,11 +27,11 @@
 #include <svtools/htmltokn.h>
 #include <editeng/boxitem.hxx>
 
-#include "doc.hxx"
-#include "pam.hxx"
-#include "ndtxt.hxx"
-#include "shellio.hxx"
-#include "paratr.hxx"
+#include <doc.hxx>
+#include <pam.hxx>
+#include <ndtxt.hxx>
+#include <shellio.hxx>
+#include <paratr.hxx>
 #include "htmlnum.hxx"
 #include "css1kywd.hxx"
 #include "swcss1.hxx"

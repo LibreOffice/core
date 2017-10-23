@@ -23,7 +23,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/group.hxx>
 
-#include "envlop.hxx"
+#include <envlop.hxx>
 
 class SwTextFormatColl;
 

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_TXTFLD_HXX
 #define INCLUDED_SW_INC_TXTFLD_HXX
 
-#include <txatbase.hxx>
+#include "txatbase.hxx"
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 

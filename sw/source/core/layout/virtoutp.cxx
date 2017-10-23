@@ -18,8 +18,8 @@
  */
 
 #include "virtoutp.hxx"
-#include "viewopt.hxx"
-#include "rootfrm.hxx"
+#include <viewopt.hxx>
+#include <rootfrm.hxx>
 
 /* The SWLayVout class manages the virtual output devices.
  * RootFrame has a static member of this class which is created in FrameInit

@@ -25,8 +25,8 @@
 
 #include <svx/svdobj.hxx>
 #include "swdllapi.h"
-#include <editsh.hxx>
-#include <flyenum.hxx>
+#include "editsh.hxx"
+#include "flyenum.hxx"
 
 #include <svx/svdtypes.hxx>
 #include <sot/formats.hxx>

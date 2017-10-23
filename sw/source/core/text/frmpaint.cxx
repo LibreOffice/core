@@ -29,7 +29,7 @@
 #include <fmtline.hxx>
 #include <lineinfo.hxx>
 #include <charfmt.hxx>
-#include "rootfrm.hxx"
+#include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>

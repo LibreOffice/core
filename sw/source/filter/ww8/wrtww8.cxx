@@ -101,7 +101,7 @@
 #include <xmloff/odffields.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include "dbgoutsw.hxx"
+#include <dbgoutsw.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
@@ -115,10 +115,10 @@
 #include "WW8Sttbf.hxx"
 #include <editeng/charrotateitem.hxx>
 #include "WW8FibData.hxx"
-#include "numrule.hxx"
-#include "fmtclds.hxx"
-#include "rdfhelper.hxx"
-#include "fmtclbl.hxx"
+#include <numrule.hxx>
+#include <fmtclds.hxx>
+#include <rdfhelper.hxx>
+#include <fmtclbl.hxx>
 
 using namespace css;
 using namespace sw::util;

@@ -22,10 +22,10 @@
 #include <tools/datetime.hxx>
 #include <rtl/ustring.hxx>
 
-#include <pam.hxx>
-#include <swtable.hxx>
+#include "pam.hxx"
+#include "swtable.hxx"
 
-#include <IDocumentRedlineAccess.hxx>
+#include "IDocumentRedlineAccess.hxx"
 
 #include <cstddef>
 #include <memory>

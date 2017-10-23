@@ -32,7 +32,7 @@
 #include <docufld.hxx>
 #include <wrtsh.hxx>
 
-#include <flddinf.hxx>
+#include "flddinf.hxx"
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

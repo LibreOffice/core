@@ -21,11 +21,11 @@
 
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
-#include <hintids.hxx>
-#include <format.hxx>
-#include <calbck.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
+#include "calbck.hxx"
 #include <boost/optional.hpp>
-#include <pagedesc.hxx>
+#include "pagedesc.hxx"
 
 class SwPageDesc;
 class SwHistory;

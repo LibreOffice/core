@@ -23,7 +23,7 @@
 #include <assert.h>
 
 #include <tools/solar.h>
-#include <swdllapi.h>
+#include "swdllapi.h"
 #include <array>
 #include <memory>
 

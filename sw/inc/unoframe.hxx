@@ -33,9 +33,9 @@
 
 #include <sfx2/objsh.hxx>
 
-#include <flyenum.hxx>
-#include <frmfmt.hxx>
-#include <unotext.hxx>
+#include "flyenum.hxx"
+#include "frmfmt.hxx"
+#include "unotext.hxx"
 
 class SdrObject;
 class SwDoc;

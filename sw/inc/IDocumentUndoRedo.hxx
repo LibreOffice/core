@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 
-#include <swundo.hxx>
+#include "swundo.hxx"
 
 class SwRewriter;
 class SwNodes;

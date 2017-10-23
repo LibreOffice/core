@@ -27,7 +27,7 @@
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <i18nlangtag/languagetag.hxx>
-#include <swdllapi.h>
+#include "swdllapi.h"
 
 enum class SvtScriptType;
 

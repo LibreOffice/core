@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -75,15 +75,15 @@
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 // FOOTNOTES
-#include "doc.hxx"
+#include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include "swerror.h"
-#include "charatr.hxx"
-#include "paratr.hxx"
-#include "frmatr.hxx"
-#include "poolfmt.hxx"
-#include "fltini.hxx"
+#include <swerror.h>
+#include <charatr.hxx>
+#include <paratr.hxx>
+#include <frmatr.hxx>
+#include <poolfmt.hxx>
+#include <fltini.hxx>
 #include "css1kywd.hxx"
 #include "wrthtml.hxx"
 #include "htmlnum.hxx"

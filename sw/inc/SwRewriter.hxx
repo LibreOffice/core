@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <rtl/ustring.hxx>
-#include <swdllapi.h>
+#include "swdllapi.h"
 
 enum SwUndoArg
 {

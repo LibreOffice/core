@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTLAYOUTACCESS_HXX
 #define INCLUDED_SW_INC_IDOCUMENTLAYOUTACCESS_HXX
 
-#include <swtypes.hxx>
+#include "swtypes.hxx"
 
 class SwViewShell;
 class SwRootFrame;

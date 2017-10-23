@@ -23,7 +23,7 @@
 #include <vcl/font.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/mempool.hxx>
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 #include "swcache.hxx"
 
 class OutputDevice;

@@ -20,8 +20,8 @@
 #define INCLUDED_SW_INC_FMTLINE_HXX
 
 #include <svl/poolitem.hxx>
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 #include "swdllapi.h"
 
 class IntlWrapper;

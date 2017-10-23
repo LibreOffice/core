@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "flyfrm.hxx"
+#include <rootfrm.hxx>
+#include <cntfrm.hxx>
+#include <flyfrm.hxx>
 
 void SwFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {

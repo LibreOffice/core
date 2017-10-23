@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 #include <view.hxx>
 #include <IMark.hxx>
 #include <expfld.hxx>
 #include <swmodule.hxx>
-#include <fldref.hxx>
+#include "fldref.hxx"
 #include <reffld.hxx>
 #include <wrtsh.hxx>
 

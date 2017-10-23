@@ -22,7 +22,7 @@
 
 #include "layfrm.hxx"
 #include <vector>
-#include "frmfmt.hxx"
+#include <frmfmt.hxx>
 #include <anchoredobject.hxx>
 
 class SwPageFrame;

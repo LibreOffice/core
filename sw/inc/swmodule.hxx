@@ -30,7 +30,7 @@
 
 #include "swdllapi.h"
 #include "shellid.hxx"
-#include <fldupde.hxx>
+#include "fldupde.hxx"
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 

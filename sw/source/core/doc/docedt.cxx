@@ -37,8 +37,8 @@
 #include <txtfrm.hxx>
 #include <breakit.hxx>
 #include <vcl/layout.hxx>
-#include "strings.hrc"
-#include "editsh.hxx"
+#include <strings.hrc>
+#include <editsh.hxx>
 #include <fmtfld.hxx>
 #include <docufld.hxx>
 #include <unoflatpara.hxx>

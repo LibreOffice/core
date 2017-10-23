@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -35,28 +35,28 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/i18nmap.hxx>
 #include <editeng/protitem.hxx>
-#include "poolfmt.hxx"
-#include "fmtfsize.hxx"
-#include "fmtornt.hxx"
-#include "fmtfordr.hxx"
-#include "doc.hxx"
+#include <poolfmt.hxx>
+#include <fmtfsize.hxx>
+#include <fmtornt.hxx>
+#include <fmtfordr.hxx>
+#include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include "swtable.hxx"
-#include "swtblfmt.hxx"
-#include "pam.hxx"
-#include "unotbl.hxx"
-#include "unotextrange.hxx"
-#include "unocrsr.hxx"
-#include "cellatr.hxx"
-#include "swddetbl.hxx"
-#include "ddefld.hxx"
+#include <swtable.hxx>
+#include <swtblfmt.hxx>
+#include <pam.hxx>
+#include <unotbl.hxx>
+#include <unotextrange.hxx>
+#include <unocrsr.hxx>
+#include <cellatr.hxx>
+#include <swddetbl.hxx>
+#include <ddefld.hxx>
 #include <sfx2/linkmgr.hxx>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
 #include <vcl/svapp.hxx>
-#include "ndtxt.hxx"
+#include <ndtxt.hxx>
 
 #include <vector>
 #include <memory>

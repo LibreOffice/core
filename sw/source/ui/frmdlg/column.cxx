@@ -19,9 +19,9 @@
 
 #include <cstdint>
 
-#include "column.hxx"
+#include <column.hxx>
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -44,21 +44,21 @@
 #include <sal/macros.h>
 
 #include <helpids.h>
-#include "globals.hrc"
-#include "swtypes.hxx"
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "docsh.hxx"
-#include "uitool.hxx"
-#include "cmdid.h"
-#include "viewopt.hxx"
-#include "format.hxx"
-#include "frmmgr.hxx"
-#include "frmdlg.hxx"
-#include "colmgr.hxx"
-#include "prcntfld.hxx"
-#include "paratr.hxx"
-#include "strings.hrc"
+#include <globals.hrc>
+#include <swtypes.hxx>
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <docsh.hxx>
+#include <uitool.hxx>
+#include <cmdid.h>
+#include <viewopt.hxx>
+#include <format.hxx>
+#include <frmmgr.hxx>
+#include <frmdlg.hxx>
+#include <colmgr.hxx>
+#include <prcntfld.hxx>
+#include <paratr.hxx>
+#include <strings.hrc>
 #include <section.hxx>
 #include <docary.hxx>
 #include <pagedesc.hxx>

@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_ANCHOREDOBJECTPOSITION_HXX
 
 #include <swtypes.hxx>
-#include <frame.hxx>
+#include "frame.hxx"
 
 class SdrObject;
 class SwFrame;

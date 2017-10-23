@@ -21,9 +21,9 @@
 
 #include <sal/config.h>
 
-#include <docary.hxx>
-#include <unocoll.hxx>
-#include <unobaseclass.hxx>
+#include "docary.hxx"
+#include "unocoll.hxx"
+#include "unobaseclass.hxx"
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
 class SwRangeRedline;

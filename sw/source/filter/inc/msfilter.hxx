@@ -32,7 +32,7 @@
 #include <rtl/textenc.h>
 #include <tools/gen.hxx>
 #include <filter/msfilter/util.hxx>
-#include <fltshell.hxx>
+#include "fltshell.hxx"
 #include <redline.hxx>
 #include <shellio.hxx>
 #include <svl/zforlist.hxx>

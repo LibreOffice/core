@@ -29,7 +29,7 @@
 #include <svx/strarray.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/checklbx.hxx>
-#include <caption.hxx>
+#include "caption.hxx"
 
 class SwFieldMgr;
 class SvTreeListEntry;

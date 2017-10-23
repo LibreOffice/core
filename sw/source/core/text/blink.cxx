@@ -18,10 +18,10 @@
  */
 
 #include <memory>
-#include "viewsh.hxx"
-#include "rootfrm.hxx"
-#include "txtfrm.hxx"
-#include "blink.hxx"
+#include <viewsh.hxx>
+#include <rootfrm.hxx>
+#include <txtfrm.hxx>
+#include <blink.hxx>
 #include "porlin.hxx"
 #include "porlay.hxx"
 

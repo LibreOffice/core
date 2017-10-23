@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_ENVELP_LABFMT_HXX
 
 #include "swuilabimp.hxx"
-#include "labimg.hxx"
+#include <labimg.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/idle.hxx>
 class SwLabFormatPage;

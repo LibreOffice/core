@@ -21,7 +21,7 @@
 
 #include <sfx2/module.hxx>
 
-#include <swdllapi.h>
+#include "swdllapi.h"
 
 namespace sw { class Filters; }
 

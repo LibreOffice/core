@@ -21,11 +21,11 @@
 
 #include <tools/mempool.hxx>
 #include <tools/ref.hxx>
-#include <tblenum.hxx>
-#include <swtypes.hxx>
-#include <calbck.hxx>
-#include <swrect.hxx>
-#include <swtblfmt.hxx>
+#include "tblenum.hxx"
+#include "swtypes.hxx"
+#include "calbck.hxx"
+#include "swrect.hxx"
+#include "swtblfmt.hxx"
 
 #include <memory>
 #include <vector>

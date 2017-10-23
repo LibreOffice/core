@@ -26,12 +26,12 @@
 #include <unotextcursor.hxx>
 #include <unotextrange.hxx>
 #include <unocrsr.hxx>
-#include "doc.hxx"
+#include <doc.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <tools/datetime.hxx>
-#include "poolfmt.hxx"
-#include "unoredline.hxx"
+#include <poolfmt.hxx>
+#include <unoredline.hxx>
 #include <o3tl/any.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/svapp.hxx>

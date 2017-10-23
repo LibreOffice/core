@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_CROSSREFBOOKMARK_HXX
 
 #include <IMark.hxx>
-#include <bookmrk.hxx>
+#include "bookmrk.hxx"
 #include <rtl/ustring.hxx>
 #include <vcl/keycod.hxx>
 

@@ -28,7 +28,7 @@
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
 #include <calbck.hxx>
 #include <modeltoviewhelper.hxx>
-#include <unotextmarkup.hxx>
+#include "unotextmarkup.hxx"
 
 #include <set>
 

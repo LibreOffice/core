@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swrect.hxx"
-#include "paratr.hxx"
-#include "viewopt.hxx"
+#include <swrect.hxx>
+#include <paratr.hxx>
+#include <viewopt.hxx>
 #include <SwPortionHandler.hxx>
 #include "porglue.hxx"
 #include "inftxt.hxx"

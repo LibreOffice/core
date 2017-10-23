@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_FLYPOS_HXX
 #define INCLUDED_SW_INC_FLYPOS_HXX
 
-#include <swdllapi.h>
+#include "swdllapi.h"
 #include <memory>
 #include <set>
 

@@ -28,7 +28,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <pagedesc.hxx>
-#include "poolfmt.hxx"
+#include <poolfmt.hxx>
 #include <redline.hxx>
 #include <section.hxx>
 #include <unoprnms.hxx>

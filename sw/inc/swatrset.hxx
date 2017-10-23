@@ -22,7 +22,7 @@
 #include <tools/mempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
-#include <swdllapi.h>
+#include "swdllapi.h"
 
 class SwModify;
 class SwDoc;

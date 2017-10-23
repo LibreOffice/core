@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <editeng/protitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fmmodel.hxx>
@@ -27,26 +27,26 @@
 #include <editeng/outliner.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
-#include "swtypes.hxx"
-#include "pagefrm.hxx"
-#include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "flyfrm.hxx"
-#include "frmfmt.hxx"
-#include "dflyobj.hxx"
-#include "dcontact.hxx"
-#include "textboxhelper.hxx"
-#include "frmatr.hxx"
-#include "viewsh.hxx"
-#include "viewimp.hxx"
-#include "dview.hxx"
-#include "dpage.hxx"
-#include "doc.hxx"
-#include "mdiexp.hxx"
+#include <swtypes.hxx>
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
+#include <cntfrm.hxx>
+#include <flyfrm.hxx>
+#include <frmfmt.hxx>
+#include <dflyobj.hxx>
+#include <dcontact.hxx>
+#include <textboxhelper.hxx>
+#include <frmatr.hxx>
+#include <viewsh.hxx>
+#include <viewimp.hxx>
+#include <dview.hxx>
+#include <dpage.hxx>
+#include <doc.hxx>
+#include <mdiexp.hxx>
 #include <ndole.hxx>
 #include <ndgrf.hxx>
 #include <fmtanchr.hxx>
-#include "shellres.hxx"
+#include <shellres.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentLayoutAccess.hxx>

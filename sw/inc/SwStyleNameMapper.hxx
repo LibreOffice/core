@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <SwGetPoolIdFromName.hxx>
+#include "SwGetPoolIdFromName.hxx"
 #include "swdllapi.h"
 
 #include <unordered_map>

@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
-#include "cntfrm.hxx"
-#include "doc.hxx"
+#include <hintids.hxx>
+#include <cntfrm.hxx>
+#include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include "pam.hxx"
-#include "flyfrm.hxx"
-#include "ndtxt.hxx"
-#include "frmfmt.hxx"
+#include <pam.hxx>
+#include <flyfrm.hxx>
+#include <ndtxt.hxx>
+#include <frmfmt.hxx>
 #include <fmtflcnt.hxx>
 #include <txtflcnt.hxx>
 #include <fmtanchr.hxx>
-#include "swfont.hxx"
-#include "txtfrm.hxx"
-#include "flyfrms.hxx"
+#include <swfont.hxx>
+#include <txtfrm.hxx>
+#include <flyfrms.hxx>
 #include <objectformatter.hxx>
 #include <calbck.hxx>
 

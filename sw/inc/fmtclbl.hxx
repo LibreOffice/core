@@ -20,8 +20,8 @@
 #define INCLUDED_SW_INC_FMTCLBL_HXX
 
 #include <svl/eitem.hxx>
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 #include "swdllapi.h"
 
 /// If text in multi-column sections should be evenly distributed.

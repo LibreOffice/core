@@ -21,8 +21,8 @@
 
 #include <vcl/virdev.hxx>
 
-#include "swtypes.hxx"
-#include "swrect.hxx"
+#include <swtypes.hxx>
+#include <swrect.hxx>
 
 class SwViewShell;
 #define VIRTUALHEIGHT 64

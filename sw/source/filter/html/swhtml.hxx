@@ -30,7 +30,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 
-#include "calbck.hxx"
+#include <calbck.hxx>
 
 #include <memory>
 #include <vector>

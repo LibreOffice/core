@@ -88,14 +88,14 @@
 #include "WW8FFData.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
-#include "docsh.hxx"
-#include "IDocumentStylePoolAccess.hxx"
+#include <docsh.hxx>
+#include <IDocumentStylePoolAccess.hxx>
 #include <oox/ole/olehelper.hxx>
 #include <fstream>
 #include <unotools/streamwrap.hxx>
 #include <fmtinfmt.hxx>
 #include <fmturl.hxx>
-#include "sfx2/sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include <svl/urihelper.hxx>
 #include <unotools/saveopt.hxx>
 #include <o3tl/enumrange.hxx>

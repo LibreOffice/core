@@ -20,12 +20,12 @@
 #define INCLUDED_SW_INC_IMARK_HXX
 
 #include <vcl/keycod.hxx>
-#include <calbck.hxx>
-#include <pam.hxx>
+#include "calbck.hxx"
+#include "pam.hxx"
 #include <boost/operators.hpp>
 #include <map>
 #include <memory>
-#include <swdllapi.h>
+#include "swdllapi.h"
 
 struct SwPosition;
 

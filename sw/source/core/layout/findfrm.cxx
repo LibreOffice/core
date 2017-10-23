@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pagefrm.hxx"
-#include "rootfrm.hxx"
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
 #include <swtable.hxx>
 
-#include "tabfrm.hxx"
-#include "sectfrm.hxx"
-#include "flyfrms.hxx"
-#include "ftnfrm.hxx"
-#include "txtftn.hxx"
-#include "fmtftn.hxx"
+#include <tabfrm.hxx>
+#include <sectfrm.hxx>
+#include <flyfrms.hxx>
+#include <ftnfrm.hxx>
+#include <txtftn.hxx>
+#include <fmtftn.hxx>
 #include <txtfrm.hxx>
 #include <calbck.hxx>
 #include <viewopt.hxx>

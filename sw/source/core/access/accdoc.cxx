@@ -32,16 +32,16 @@
 #include <doc.hxx>
 #include <accmap.hxx>
 #include "accdoc.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include <pagefrm.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <swatrset.hxx>
 #include <frmatr.hxx>
-#include "unostyle.hxx"
-#include "docsh.hxx"
+#include <unostyle.hxx>
+#include <docsh.hxx>
 #include <crsrsh.hxx>
-#include "fesh.hxx"
+#include <fesh.hxx>
 #include <fmtclds.hxx>
 #include <flyfrm.hxx>
 #include <colfrm.hxx>

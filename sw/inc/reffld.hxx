@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_REFFLD_HXX
 #define INCLUDED_SW_INC_REFFLD_HXX
 
-#include <fldbas.hxx>
+#include "fldbas.hxx"
 
 class SfxPoolItem;
 class SwDoc;

@@ -28,18 +28,18 @@
 #include <view.hxx>
 #include <dbfld.hxx>
 #include <wrtsh.hxx>
-#include <flddb.hxx>
-#include <flddinf.hxx>
-#include <fldvar.hxx>
-#include <flddok.hxx>
-#include <fldfunc.hxx>
-#include <fldref.hxx>
+#include "flddb.hxx"
+#include "flddinf.hxx"
+#include "fldvar.hxx"
+#include "flddok.hxx"
+#include "fldfunc.hxx"
+#include "fldref.hxx"
 #include <fldedt.hxx>
 
 #include <cmdid.h>
 #include <helpids.h>
 #include <globals.hrc>
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

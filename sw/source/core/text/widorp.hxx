@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_TEXT_WIDORP_HXX
 class SwTextFrame;
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 #include "itrtxt.hxx"
 
 class SwTextFrameBreak

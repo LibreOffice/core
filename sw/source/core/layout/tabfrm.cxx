@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pagefrm.hxx"
-#include "rootfrm.hxx"
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include "viewimp.hxx"
-#include "swtable.hxx"
-#include "dflyobj.hxx"
+#include <viewimp.hxx>
+#include <swtable.hxx>
+#include <dflyobj.hxx>
 #include <anchoreddrawobject.hxx>
 #include <fetab.hxx>
 #include <fmtanchr.hxx>
-#include "viewopt.hxx"
-#include "hints.hxx"
-#include "dbg_lay.hxx"
+#include <viewopt.hxx>
+#include <hints.hxx>
+#include <dbg_lay.hxx>
 #include <ftnidx.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/keepitem.hxx>
@@ -42,13 +42,13 @@
 #include <fmtpdsc.hxx>
 #include <fmtfsize.hxx>
 #include <swtblfmt.hxx>
-#include "tabfrm.hxx"
-#include "rowfrm.hxx"
-#include "cellfrm.hxx"
-#include "flyfrms.hxx"
-#include "txtfrm.hxx"
-#include "htmltbl.hxx"
-#include "sectfrm.hxx"
+#include <tabfrm.hxx>
+#include <rowfrm.hxx>
+#include <cellfrm.hxx>
+#include <flyfrms.hxx>
+#include <txtfrm.hxx>
+#include <htmltbl.hxx>
+#include <sectfrm.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>

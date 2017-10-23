@@ -19,13 +19,13 @@
 #ifndef INCLUDED_SW_INC_POSTITHELPER_HXX
 #define INCLUDED_SW_INC_POSTITHELPER_HXX
 
-#include <swrect.hxx>
-#include <fmtfld.hxx>
-#include <redline.hxx>
+#include "swrect.hxx"
+#include "fmtfld.hxx"
+#include "redline.hxx"
 #include <cstddef>
 #include <vector>
 #include <vcl/window.hxx>
-#include <SidebarWindowsTypes.hxx>
+#include "SidebarWindowsTypes.hxx"
 
 class SfxBroadcaster;
 class SwRootFrame;

@@ -72,7 +72,7 @@
 #include <viewsh.hxx>
 #include <unodraw.hxx>
 #include <unotextrange.hxx>
-#include "dcontact.hxx"
+#include <dcontact.hxx>
 
 #include "swcss1.hxx"
 #include "swhtml.hxx"

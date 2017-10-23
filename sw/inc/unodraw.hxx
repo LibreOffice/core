@@ -20,8 +20,8 @@
 #define INCLUDED_SW_INC_UNODRAW_HXX
 
 #include <svx/fmdpage.hxx>
-#include <calbck.hxx>
-#include <frmfmt.hxx>
+#include "calbck.hxx"
+#include "frmfmt.hxx"
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XShape.hpp>

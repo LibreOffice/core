@@ -22,8 +22,8 @@
 #include <tools/fract.hxx>
 #include <tools/color.hxx>
 #include "swdllapi.h"
-#include <swtypes.hxx>
-#include <frmfmt.hxx>
+#include "swtypes.hxx"
+#include "frmfmt.hxx"
 #include <editeng/numitem.hxx>
 #include <editeng/borderline.hxx>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>

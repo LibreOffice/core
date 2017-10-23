@@ -23,7 +23,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
 
-#include <calbck.hxx>
+#include "calbck.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace text { class XTextContent; }

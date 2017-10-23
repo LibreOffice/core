@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "txtfrm.hxx"
-#include "pagefrm.hxx"
-#include "swtable.hxx"
-#include "frmfmt.hxx"
-#include "rowfrm.hxx"
-#include "tabfrm.hxx"
+#include <txtfrm.hxx>
+#include <pagefrm.hxx>
+#include <swtable.hxx>
+#include <frmfmt.hxx>
+#include <rowfrm.hxx>
+#include <tabfrm.hxx>
 #include <calbck.hxx>
 
 void SwTextNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const

@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_FMTAUTOFMT_HXX
 
 #include <svl/poolitem.hxx>
-#include <format.hxx>
+#include "format.hxx"
 #include <memory>
 
 class SwFormatAutoFormat: public SfxPoolItem

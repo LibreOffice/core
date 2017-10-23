@@ -25,7 +25,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <actctrl.hxx>
+#include "actctrl.hxx"
 
 class SwWrtShell;
 class SwTableAutoFormat;

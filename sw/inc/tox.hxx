@@ -26,9 +26,9 @@
 #include <svl/poolitem.hxx>
 
 #include <editeng/svxenum.hxx>
-#include <swtypes.hxx>
-#include <toxe.hxx>
-#include <calbck.hxx>
+#include "swtypes.hxx"
+#include "toxe.hxx"
+#include "calbck.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vector>

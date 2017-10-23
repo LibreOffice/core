@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/util/DateTime.hpp>
-#include "redline.hxx"
+#include <redline.hxx>
 
 #include <map>
 

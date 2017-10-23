@@ -21,9 +21,9 @@
 #define INCLUDED_SW_INC_CALBCK_HXX
 
 #include "swdllapi.h"
-#include <ring.hxx>
-#include <hintids.hxx>
-#include <hints.hxx>
+#include "ring.hxx"
+#include "hintids.hxx"
+#include "hints.hxx"
 #include <typeinfo>
 #include <type_traits>
 

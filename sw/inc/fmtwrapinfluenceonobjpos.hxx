@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_INC_FMTWRAPINFLUENCEONOBJPOS_HXX
 #define INCLUDED_SW_INC_FMTWRAPINFLUENCEONOBJPOS_HXX
 
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 #include <svl/poolitem.hxx>
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 

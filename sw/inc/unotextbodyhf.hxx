@@ -27,7 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <unotext.hxx>
+#include "unotext.hxx"
 
 class SwDoc;
 class SwFrameFormat;

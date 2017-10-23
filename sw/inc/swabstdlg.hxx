@@ -24,7 +24,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/syswin.hxx>
-#include <globals.hrc>
+#include "globals.hrc"
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/frame/XModel.hpp>
@@ -36,7 +36,7 @@
 #include <boost/optional.hpp>
 #include "dbmgr.hxx"
 #include <cnttab.hxx>
-#include <tblenum.hxx>
+#include "tblenum.hxx"
 
 class SfxViewFrame;
 class SfxBindings;

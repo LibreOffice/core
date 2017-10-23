@@ -27,7 +27,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/Metadatable.hxx>
 
-#include <frmfmt.hxx>
+#include "frmfmt.hxx"
 #include <vector>
 
 namespace com { namespace sun { namespace star {

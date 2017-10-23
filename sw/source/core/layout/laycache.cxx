@@ -38,7 +38,7 @@
 #include <frmtool.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
-#include "viewopt.hxx"
+#include <viewopt.hxx>
 #include <flyfrm.hxx>
 #include <sortedobjs.hxx>
 

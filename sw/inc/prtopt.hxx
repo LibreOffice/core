@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_PRTOPT_HXX
 
 #include <unotools/configitem.hxx>
-#include <printdata.hxx>
+#include "printdata.hxx"
 
 class SwPrintOptions : public SwPrintData, public utl::ConfigItem
 {

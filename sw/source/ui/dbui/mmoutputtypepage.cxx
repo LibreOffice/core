@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <mmoutputtypepage.hxx>
+#include "mmoutputtypepage.hxx"
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>
 #include <strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <swtypes.hxx>
 
 #include <rtl/ref.hxx>

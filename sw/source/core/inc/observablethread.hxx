@@ -23,7 +23,7 @@
 #include <rtl/ref.hxx>
 #include <osl/interlck.h>
 #include <salhelper/simplereferenceobject.hxx>
-#include <ifinishedthreadlistener.hxx>
+#include "ifinishedthreadlistener.hxx"
 #include <memory>
 
 /** class for an observable thread

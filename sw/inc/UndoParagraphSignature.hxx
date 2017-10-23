@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_UNDOPARAGRAPHSIGNATURE_HXX
 #define INCLUDED_SW_INC_UNDOPARAGRAPHSIGNATURE_HXX
 
-#include <undobj.hxx>
+#include "undobj.hxx"
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>

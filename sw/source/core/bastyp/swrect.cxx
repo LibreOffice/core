@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swrect.hxx"
+#include <swrect.hxx>
 
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>

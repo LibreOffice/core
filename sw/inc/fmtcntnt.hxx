@@ -21,8 +21,8 @@
 
 #include <memory>
 #include <svl/poolitem.hxx>
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 
 class SwNodeIndex;
 class SwStartNode;

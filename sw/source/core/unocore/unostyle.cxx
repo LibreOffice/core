@@ -56,7 +56,7 @@
 #include <fmtpdsc.hxx>
 #include <strings.hrc>
 #include <poolfmt.hxx>
-#include "unoevent.hxx"
+#include <unoevent.hxx>
 #include <fmtruby.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/printer.hxx>
@@ -88,7 +88,7 @@
 #include <swunohelper.hxx>
 #include <svx/xbtmpit.hxx>
 
-#include "ccoll.hxx"
+#include <ccoll.hxx>
 
 #include <cassert>
 #include <memory>

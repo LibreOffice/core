@@ -52,10 +52,10 @@
 #include <svx/rotmodit.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/lineitem.hxx>
-#include <fmtpdsc.hxx>
-#include <fmtlsplt.hxx>
-#include <fmtrowsplt.hxx>
-#include <fmtornt.hxx>
+#include "fmtpdsc.hxx"
+#include "fmtlsplt.hxx"
+#include "fmtrowsplt.hxx"
+#include "fmtornt.hxx"
 #include "swdllapi.h"
 
 struct SwAfVersions;

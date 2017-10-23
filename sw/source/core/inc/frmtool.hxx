@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_FRMTOOL_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_FRMTOOL_HXX
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 #include "layfrm.hxx"
-#include "frmatr.hxx"
+#include <frmatr.hxx>
 #include "swcache.hxx"
 #include <editeng/lrspitem.hxx>
-#include <swfont.hxx>
-#include <flyfrm.hxx>
+#include "swfont.hxx"
+#include "flyfrm.hxx"
 #include <basegfx/utils/b2dclipstate.hxx>
 
 class SwPageFrame;

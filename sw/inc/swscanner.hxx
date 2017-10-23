@@ -21,7 +21,7 @@
 #define INCLUDED_SW_INC_SWSCANNER_HXX
 
 #include <i18nlangtag/lang.h>
-#include <modeltoviewhelper.hxx>
+#include "modeltoviewhelper.hxx"
 
 class SwTextNode;
 

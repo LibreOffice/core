@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_SWSERV_HXX
 
 #include <sfx2/linksrc.hxx>
-#include <IMark.hxx>
+#include "IMark.hxx"
 
 class SwSectionNode;
 class SwBaseLink;

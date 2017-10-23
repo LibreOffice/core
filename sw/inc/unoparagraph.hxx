@@ -37,7 +37,7 @@
 
 #include <sfx2/Metadatable.hxx>
 
-#include <unobaseclass.hxx>
+#include "unobaseclass.hxx"
 
 struct SwPosition;
 class SwPaM;

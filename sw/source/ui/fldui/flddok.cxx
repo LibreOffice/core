@@ -23,7 +23,7 @@
 #include <globals.hrc>
 #include <strings.hrc>
 #include <chpfld.hxx>
-#include <flddok.hxx>
+#include "flddok.hxx"
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

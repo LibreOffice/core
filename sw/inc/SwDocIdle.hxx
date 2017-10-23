@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWDOCIDLE_HXX
 #define INCLUDED_SW_INC_SWDOCIDLE_HXX
 
-#include <doc.hxx>
+#include "doc.hxx"
 #include <vcl/idle.hxx>
 
 namespace sw {

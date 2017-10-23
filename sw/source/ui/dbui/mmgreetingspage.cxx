@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <mmgreetingspage.hxx>
+#include "mmgreetingspage.hxx"
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
-#include <mmaddressblockpage.hxx>
+#include "mmaddressblockpage.hxx"
 #include <swtypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>

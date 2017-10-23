@@ -24,7 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svtools/treelistentry.hxx>
 #include <swtypes.hxx>
-#include <labfmt.hxx>
+#include "labfmt.hxx"
 #include <unotools.hxx>
 #include <unoatxt.hxx>
 #include <unomid.h>

@@ -70,7 +70,7 @@
 
 #include <memory>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

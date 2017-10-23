@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_NOTEURL_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_NOTEURL_HXX
 
-#include "swrect.hxx"
+#include <swrect.hxx>
 
 #include <rtl/ustring.hxx>
 

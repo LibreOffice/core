@@ -25,7 +25,7 @@
 #include <tools/gen.hxx>
 #include <editeng/svxfont.hxx>
 #include <swtypes.hxx>
-#include <drawfont.hxx>
+#include "drawfont.hxx"
 #include <editeng/borderline.hxx>
 #include <boost/optional.hpp>
 #include <o3tl/enumarray.hxx>

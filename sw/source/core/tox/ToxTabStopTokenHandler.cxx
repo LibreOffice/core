@@ -7,20 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ToxTabStopTokenHandler.hxx"
+#include <ToxTabStopTokenHandler.hxx>
 
-#include "editeng/tstpitem.hxx"
-#include "editeng/lrspitem.hxx"
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
 
-#include "cntfrm.hxx"
-#include "fmtfsize.hxx"
-#include "fmtpdsc.hxx"
-#include "frmfmt.hxx"
-#include "ndtxt.hxx"
-#include "pagedesc.hxx"
-#include "pagefrm.hxx"
-#include "swrect.hxx"
-#include "tox.hxx"
+#include <cntfrm.hxx>
+#include <fmtfsize.hxx>
+#include <fmtpdsc.hxx>
+#include <frmfmt.hxx>
+#include <ndtxt.hxx>
+#include <pagedesc.hxx>
+#include <pagefrm.hxx>
+#include <swrect.hxx>
+#include <tox.hxx>
 
 namespace sw {
 

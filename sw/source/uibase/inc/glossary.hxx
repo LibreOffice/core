@@ -33,7 +33,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <actctrl.hxx>
+#include "actctrl.hxx"
 
 class SwGlossaryHdl;
 class SwNewGlosNameDlg;

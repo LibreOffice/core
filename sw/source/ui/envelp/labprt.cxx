@@ -22,7 +22,7 @@
 #include <vcl/print.hxx>
 #include <wrtsh.hxx>
 #include <label.hxx>
-#include <labprt.hxx>
+#include "labprt.hxx"
 #include <labimg.hxx>
 
 #include <cmdid.h>

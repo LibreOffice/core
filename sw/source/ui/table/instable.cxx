@@ -19,17 +19,17 @@
 
 #include <vcl/msgbox.hxx>
 
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "itabenum.hxx"
-#include "instable.hxx"
-#include "tblafmt.hxx"
-#include "modcfg.hxx"
-#include "swmodule.hxx"
+#include <wrtsh.hxx>
+#include <view.hxx>
+#include <itabenum.hxx>
+#include <instable.hxx>
+#include <tblafmt.hxx>
+#include <modcfg.hxx>
+#include <swmodule.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
 
-#include "swabstdlg.hxx"
+#include <swabstdlg.hxx>
 #include <swuiexp.hxx>
 #include <memory>
 

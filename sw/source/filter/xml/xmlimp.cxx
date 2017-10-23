@@ -48,14 +48,14 @@
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
 #include <unotextrange.hxx>
-#include "unocrsr.hxx"
+#include <unocrsr.hxx>
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <editsh.hxx>
 #include <strings.hrc>
 #include "xmlimp.hxx"
 #include "xmltexti.hxx"
-#include "swdll.hxx"
+#include <swdll.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <docsh.hxx>
 #include <editeng/unolingu.hxx>

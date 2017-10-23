@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "ToxWhitespaceStripper.hxx"
+#include <ToxWhitespaceStripper.hxx>
 
-#include "rtl/ustrbuf.hxx"
-#include "sal/log.hxx"
+#include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 
 namespace sw {

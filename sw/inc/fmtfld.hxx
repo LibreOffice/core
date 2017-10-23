@@ -27,7 +27,7 @@
 #include <svl/SfxBroadcaster.hxx>
 
 #include "swdllapi.h"
-#include <calbck.hxx>
+#include "calbck.hxx"
 
 class SwField;
 class SwTextField;

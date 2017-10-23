@@ -24,15 +24,15 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/numitem.hxx>
 #include "swdllapi.h"
-#include <swtypes.hxx>
-#include <calbck.hxx>
-#include <hints.hxx>
-#include <SwNumberTreeTypes.hxx>
-#include <ndarr.hxx>
+#include "swtypes.hxx"
+#include "calbck.hxx"
+#include "hints.hxx"
+#include "SwNumberTreeTypes.hxx"
+#include "ndarr.hxx"
 #include <unordered_map>
 #include <memory>
 #include <vector>
-#include <charfmt.hxx>
+#include "charfmt.hxx"
 
 class SwTextFormatColl;
 class IDocumentListsAccess;

@@ -18,12 +18,12 @@
  */
 
 #include <swtypes.hxx>
-#include <addresslistdialog.hxx>
-#include <selectdbtabledialog.hxx>
-#include <createaddresslistdialog.hxx>
+#include "addresslistdialog.hxx"
+#include "selectdbtabledialog.hxx"
+#include "createaddresslistdialog.hxx"
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
-#include <mmaddressblockpage.hxx>
+#include "mmaddressblockpage.hxx"
 #include <dbmgr.hxx>
 #include <dbconfig.hxx>
 #include <unotools/tempfile.hxx>

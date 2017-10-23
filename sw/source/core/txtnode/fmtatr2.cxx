@@ -20,7 +20,7 @@
 #include <libxml/xmlwriter.h>
 #include <hintids.hxx>
 #include <poolfmt.hxx>
-#include "unomid.h"
+#include <unomid.h>
 
 #include <basic/sbxvar.hxx>
 #include <o3tl/any.hxx>

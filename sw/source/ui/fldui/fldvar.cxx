@@ -30,7 +30,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <swmodule.hxx>
-#include <fldvar.hxx>
+#include "fldvar.hxx"
 #include <calc.hxx>
 #include <svl/zformat.hxx>
 #include <globals.hrc>

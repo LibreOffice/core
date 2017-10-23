@@ -18,8 +18,8 @@
  */
 
 #include "txtpaint.hxx"
-#include "swrect.hxx"
-#include "rootfrm.hxx"
+#include <swrect.hxx>
+#include <rootfrm.hxx>
 
 SwSaveClip::~SwSaveClip()
 {

@@ -18,7 +18,7 @@
  */
 
 #include "txtcache.hxx"
-#include "txtfrm.hxx"
+#include <txtfrm.hxx>
 #include "porlay.hxx"
 
 SwTextLine::SwTextLine( SwTextFrame const *pFrame, SwParaPortion *pNew ) :

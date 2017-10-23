@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "noteurl.hxx"
+#include <noteurl.hxx>
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imap.hxx>

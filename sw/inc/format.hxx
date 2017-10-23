@@ -21,9 +21,9 @@
 
 #include <tools/solar.h>
 #include "swdllapi.h"
-#include <swatrset.hxx>
-#include <calbck.hxx>
-#include <hintids.hxx>
+#include "swatrset.hxx"
+#include "calbck.hxx"
+#include "hintids.hxx"
 #include <memory>
 
 class IDocumentSettingAccess;

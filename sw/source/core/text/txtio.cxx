@@ -19,12 +19,12 @@
 
 #ifdef DBG_UTIL
 
-#include "viewsh.hxx"
-#include "viewopt.hxx"
-#include "txtatr.hxx"
-#include "txtfrm.hxx"
-#include "rootfrm.hxx"
-#include "flyfrms.hxx"
+#include <viewsh.hxx>
+#include <viewopt.hxx>
+#include <txtatr.hxx>
+#include <txtfrm.hxx>
+#include <rootfrm.hxx>
+#include <flyfrms.hxx>
 #include "inftxt.hxx"
 #include "porexp.hxx"
 #include "porfld.hxx"
@@ -41,7 +41,7 @@
 #include "portxt.hxx"
 #include "pordrop.hxx"
 #include "pormulti.hxx"
-#include "ndhints.hxx"
+#include <ndhints.hxx>
 
 #if OSL_DEBUG_LEVEL < 2
 

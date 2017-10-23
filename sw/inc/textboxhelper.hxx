@@ -19,7 +19,7 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <swdllapi.h>
+#include "swdllapi.h"
 
 class SdrPage;
 class SdrObject;

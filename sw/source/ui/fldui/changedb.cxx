@@ -40,7 +40,7 @@
 
 #include <globals.hrc>
 #include <strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #include <unomid.h>
 

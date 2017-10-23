@@ -19,9 +19,9 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "swtypes.hxx"
-#include "pattern.hxx"
-#include "strings.hrc"
+#include <swtypes.hxx>
+#include <pattern.hxx>
+#include <strings.hrc>
 
 SwBackgroundDlg::SwBackgroundDlg(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet)

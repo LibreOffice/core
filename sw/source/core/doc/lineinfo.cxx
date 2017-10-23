@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "doc.hxx"
+#include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
-#include "lineinfo.hxx"
-#include "charfmt.hxx"
-#include "poolfmt.hxx"
-#include "rootfrm.hxx"
-#include "viewsh.hxx"
+#include <lineinfo.hxx>
+#include <charfmt.hxx>
+#include <poolfmt.hxx>
+#include <rootfrm.hxx>
+#include <viewsh.hxx>
 #include <set>
 
 void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )

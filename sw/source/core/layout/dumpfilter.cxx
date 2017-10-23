@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "dumpfilter.hxx"
+#include <dumpfilter.hxx>
 
 #include <wrtsh.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -20,8 +20,8 @@
 #define INCLUDED_SW_INC_EXPFLD_HXX
 
 #include "swdllapi.h"
-#include <fldbas.hxx>
-#include <cellfml.hxx>
+#include "fldbas.hxx"
+#include "cellfml.hxx"
 #include <set>
 #include <memory>
 #include <vector>

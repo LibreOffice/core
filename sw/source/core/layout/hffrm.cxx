@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "pagefrm.hxx"
+#include <pagefrm.hxx>
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 #include <fmtfsize.hxx>
-#include "viewopt.hxx"
-#include "hffrm.hxx"
-#include "rootfrm.hxx"
-#include "txtfrm.hxx"
-#include "sectfrm.hxx"
-#include "flyfrm.hxx"
-#include "frmtool.hxx"
-#include "hfspacingitem.hxx"
+#include <viewopt.hxx>
+#include <hffrm.hxx>
+#include <rootfrm.hxx>
+#include <txtfrm.hxx>
+#include <sectfrm.hxx>
+#include <flyfrm.hxx>
+#include <frmtool.hxx>
+#include <hfspacingitem.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <o3tl/make_unique.hxx>

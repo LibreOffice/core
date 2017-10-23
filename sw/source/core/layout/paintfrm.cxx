@@ -78,7 +78,7 @@
 
 #include <svtools/borderhelper.hxx>
 
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>

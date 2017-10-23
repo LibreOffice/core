@@ -42,7 +42,7 @@
 #include "redlnitr.hxx"
 #include "porfly.hxx"
 #include "atrhndl.hxx"
-#include "rootfrm.hxx"
+#include <rootfrm.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>

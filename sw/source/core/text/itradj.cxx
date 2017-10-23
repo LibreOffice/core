@@ -20,8 +20,8 @@
 #include <vcl/outdev.hxx>
 #include <IDocumentSettingAccess.hxx>
 
-#include "frame.hxx"
-#include "paratr.hxx"
+#include <frame.hxx>
+#include <paratr.hxx>
 #include "itrtxt.hxx"
 #include "porglue.hxx"
 #include "porlay.hxx"

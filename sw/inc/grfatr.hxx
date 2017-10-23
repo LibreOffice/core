@@ -19,15 +19,15 @@
 #ifndef INCLUDED_SW_INC_GRFATR_HXX
 #define INCLUDED_SW_INC_GRFATR_HXX
 
-#include <hintids.hxx>
+#include "hintids.hxx"
 #include <tools/gen.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/grfcrop.hxx>
 #include "swdllapi.h"
-#include <swatrset.hxx>
-#include <format.hxx>
+#include "swatrset.hxx"
+#include "format.hxx"
 
 enum class MirrorGraph
 {

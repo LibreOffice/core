@@ -95,10 +95,10 @@
  * frame types and FrameIds.
  */
 
-#include "dbg_lay.hxx"
+#include <dbg_lay.hxx>
 
-#include "flyfrm.hxx"
-#include "txtfrm.hxx"
+#include <flyfrm.hxx>
+#include <txtfrm.hxx>
 #include <fntcache.hxx>
 
 #include <comphelper/string.hxx>

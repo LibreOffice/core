@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_INC_FRMATR_HXX
 #define INCLUDED_SW_INC_FRMATR_HXX
 
-#include <hintids.hxx>
-#include <format.hxx>
+#include "hintids.hxx"
+#include "format.hxx"
 #include <editeng/pbinitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>

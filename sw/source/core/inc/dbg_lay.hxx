@@ -61,7 +61,7 @@ enum class DbgAction {
 
 #include <tools/solar.h>
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 
 class SwImplProtocol;
 class SwFrame;

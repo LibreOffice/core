@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 
-#include "multmrk.hxx"
-#include "toxmgr.hxx"
+#include <multmrk.hxx>
+#include <toxmgr.hxx>
 
 SwMultiTOXMarkDlg::SwMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr& rTOXMgr)
     : SvxStandardDialog(pParent, "SelectIndexDialog",

@@ -28,10 +28,10 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/window.hxx>
 
-#include <docufld.hxx>
-#include <postithelper.hxx>
-#include <swrect.hxx>
-#include <SidebarWindowsTypes.hxx>
+#include "docufld.hxx"
+#include "postithelper.hxx"
+#include "swrect.hxx"
+#include "SidebarWindowsTypes.hxx"
 
 class PopupMenu;
 class OutlinerParaObject;

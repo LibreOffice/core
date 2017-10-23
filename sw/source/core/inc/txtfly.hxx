@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TXTFLY_HXX
 
-#include "swtypes.hxx"
-#include "swrect.hxx"
+#include <swtypes.hxx>
+#include <swrect.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <memory>
 #include <vector>

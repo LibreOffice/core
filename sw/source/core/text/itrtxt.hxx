@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_ITRTXT_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_ITRTXT_HXX
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 #include "itratr.hxx"
 #include "inftxt.hxx"
 

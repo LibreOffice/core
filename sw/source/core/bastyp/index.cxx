@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "index.hxx"
+#include <index.hxx>
 
 #include <assert.h>
 #include <sal/log.hxx>

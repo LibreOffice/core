@@ -33,8 +33,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/colorbox.hxx>
 #include <fmtclbl.hxx>
-#include <colex.hxx>
-#include <prcntfld.hxx>
+#include "colex.hxx"
+#include "prcntfld.hxx"
 
 const int nMaxCols = 99;
 class SwColMgr;

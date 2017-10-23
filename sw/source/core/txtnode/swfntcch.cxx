@@ -21,10 +21,10 @@
 
 #include <shellio.hxx>
 #include <viewsh.hxx>
-#include "swfntcch.hxx"
-#include "fmtcol.hxx"
-#include "fntcache.hxx"
-#include "swfont.hxx"
+#include <swfntcch.hxx>
+#include <fmtcol.hxx>
+#include <fntcache.hxx>
+#include <swfont.hxx>
 
 // from atrstck.cxx
 extern const sal_uInt8 StackPos[];

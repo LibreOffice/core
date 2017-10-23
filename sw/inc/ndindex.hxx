@@ -24,9 +24,9 @@
 
 #include <tools/solar.h>
 
-#include <node.hxx>
-#include <ring.hxx>
-#include <ndarr.hxx>
+#include "node.hxx"
+#include "ring.hxx"
+#include "ndarr.hxx"
 
 class SwNode;
 class SwNodes;

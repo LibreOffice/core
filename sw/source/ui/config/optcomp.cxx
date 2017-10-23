@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "optcomp.hxx"
+#include <optcomp.hxx>
 
-#include "docsh.hxx"
-#include "swmodule.hxx"
-#include "swtypes.hxx"
-#include "uiitems.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
+#include <docsh.hxx>
+#include <swmodule.hxx>
+#include <swtypes.hxx>
+#include <uiitems.hxx>
+#include <view.hxx>
+#include <wrtsh.hxx>
 
-#include "globals.hrc"
+#include <globals.hrc>
 #include <unotools/configmgr.hxx>
 #include <vcl/layout.hxx>
 #include <sfx2/docfile.hxx>

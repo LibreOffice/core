@@ -32,7 +32,7 @@
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/fntctrl.hxx>
-#include <fontcfg.hxx>
+#include "fontcfg.hxx"
 class SfxPrinter;
 class SwStdFontConfig;
 class SwWrtShell;

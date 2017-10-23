@@ -23,9 +23,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 
-#include <swtypes.hxx>
-#include <flyenum.hxx>
-#include <pam.hxx>
+#include "swtypes.hxx"
+#include "flyenum.hxx"
+#include "pam.hxx"
 
 #include <map>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_ASCHARANCHOREDOBJECTPOSITION_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_ASCHARANCHOREDOBJECTPOSITION_HXX
 
-#include <anchoredobjectposition.hxx>
+#include "anchoredobjectposition.hxx"
 #include <sal/types.h>
 #include <swtypes.hxx>
 #include <swrect.hxx>

@@ -18,12 +18,12 @@
  */
 
 #include <memory>
-#include "layouter.hxx"
-#include "doc.hxx"
-#include "sectfrm.hxx"
-#include "pagefrm.hxx"
-#include "ftnfrm.hxx"
-#include "txtfrm.hxx"
+#include <layouter.hxx>
+#include <doc.hxx>
+#include <sectfrm.hxx>
+#include <pagefrm.hxx>
+#include <ftnfrm.hxx>
+#include <txtfrm.hxx>
 #include <IDocumentLayoutAccess.hxx>
 
 #include <movedfwdfrmsbyobjpos.hxx>

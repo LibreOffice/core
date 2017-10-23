@@ -33,9 +33,9 @@
 #include <svx/fmshell.hxx>
 #include <editeng/editstat.hxx>
 #include "swdllapi.h"
-#include <swtypes.hxx>
-#include <shellid.hxx>
-#include <IMark.hxx>
+#include "swtypes.hxx"
+#include "shellid.hxx"
+#include "IMark.hxx"
 
 class Button;
 class ImageButton;

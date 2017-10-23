@@ -21,13 +21,13 @@
 #include <svl/stritem.hxx>
 #include <unotools/tempfile.hxx>
 
-#include "init.hxx"
-#include "iodetect.hxx"
-#include "swtypes.hxx"
-#include "doc.hxx"
-#include "docsh.hxx"
-#include "shellres.hxx"
-#include "docufld.hxx"
+#include <init.hxx>
+#include <iodetect.hxx>
+#include <swtypes.hxx>
+#include <doc.hxx>
+#include <docsh.hxx>
+#include <shellres.hxx>
+#include <docufld.hxx>
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 

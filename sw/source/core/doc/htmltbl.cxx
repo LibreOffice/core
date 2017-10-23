@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include "hintids.hxx"
+#include <hintids.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
@@ -27,23 +27,23 @@
 #include <fmtfsize.hxx>
 #include <frmfmt.hxx>
 #include <docary.hxx>
-#include "ndtxt.hxx"
-#include "doc.hxx"
+#include <ndtxt.hxx>
+#include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include "swtable.hxx"
-#include "rootfrm.hxx"
-#include "docsh.hxx"
-#include "flyfrm.hxx"
-#include "poolfmt.hxx"
-#include "viewsh.hxx"
-#include "tabfrm.hxx"
-#include "viewopt.hxx"
-#include "htmltbl.hxx"
-#include "ndindex.hxx"
+#include <swtable.hxx>
+#include <rootfrm.hxx>
+#include <docsh.hxx>
+#include <flyfrm.hxx>
+#include <poolfmt.hxx>
+#include <viewsh.hxx>
+#include <tabfrm.hxx>
+#include <viewopt.hxx>
+#include <htmltbl.hxx>
+#include <ndindex.hxx>
 #include <calbck.hxx>
 #include <o3tl/numeric.hxx>
 #ifdef DBG_UTIL
-#include "tblrwcl.hxx"
+#include <tblrwcl.hxx>
 #endif
 
 using namespace ::com::sun::star;

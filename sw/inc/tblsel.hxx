@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_INC_TBLSEL_HXX
 #define INCLUDED_SW_INC_TBLSEL_HXX
 
-#include <swtable.hxx>
-#include <swrect.hxx>
+#include "swtable.hxx"
+#include "swrect.hxx"
 #include "swdllapi.h"
 
 #include <o3tl/sorted_vector.hxx>

@@ -32,7 +32,7 @@
 #include <wrtsh.hxx>
 #include <expfld.hxx>
 #include <fldtdlg.hxx>
-#include <fldpage.hxx>
+#include "fldpage.hxx"
 #include <docufld.hxx>
 #include <cmdid.h>
 #include <globals.hrc>

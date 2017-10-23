@@ -27,7 +27,7 @@
 #include <vcl/group.hxx>
 #include <svtools/treelistbox.hxx>
 
-#include "numfmtlb.hxx"
+#include <numfmtlb.hxx>
 #include "fldpage.hxx"
 
 namespace com{namespace sun{ namespace star{ namespace beans{

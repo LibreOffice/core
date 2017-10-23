@@ -26,8 +26,8 @@
 #include <ooo/vba/office/MsoDocProperties.hpp>
 #include <memory>
 #include "wordvbahelper.hxx"
-#include "fesh.hxx"
-#include "docsh.hxx"
+#include <fesh.hxx>
+#include <docsh.hxx>
 using namespace ::ooo::vba;
 using namespace css;
 

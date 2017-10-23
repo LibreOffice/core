@@ -21,7 +21,7 @@
 
 #include <vcl/field.hxx>
 #include <swdllapi.h>
-#include <uitool.hxx>
+#include "uitool.hxx"
 
 //Wraps a MetricField with extra features
 class SW_DLLPUBLIC PercentField

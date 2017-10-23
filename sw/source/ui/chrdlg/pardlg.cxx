@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svl/style.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svl/cjkoptions.hxx>
-#include "docsh.hxx"
-#include "wrtsh.hxx"
-#include "frmatr.hxx"
-#include "view.hxx"
-#include "globals.hrc"
-#include "swuipardlg.hxx"
-#include "pagedesc.hxx"
-#include "paratr.hxx"
-#include "drpcps.hxx"
-#include "uitool.hxx"
-#include "viewopt.hxx"
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <frmatr.hxx>
+#include <view.hxx>
+#include <globals.hrc>
+#include <swuipardlg.hxx>
+#include <pagedesc.hxx>
+#include <paratr.hxx>
+#include <drpcps.hxx>
+#include <uitool.hxx>
+#include <viewopt.hxx>
 #include <numpara.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <svx/svxids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

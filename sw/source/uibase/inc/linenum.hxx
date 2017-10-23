@@ -23,7 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
-#include <numberingtypelistbox.hxx>
+#include "numberingtypelistbox.hxx"
 
 namespace vcl { class Window; }
 class SwView;

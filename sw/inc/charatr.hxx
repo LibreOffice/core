@@ -19,8 +19,8 @@
 #ifndef INCLUDED_SW_INC_CHARATR_HXX
 #define INCLUDED_SW_INC_CHARATR_HXX
 
-#include <format.hxx>
-#include <hintids.hxx>
+#include "format.hxx"
+#include "hintids.hxx"
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/shdditem.hxx>

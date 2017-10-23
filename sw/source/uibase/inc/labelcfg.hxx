@@ -21,7 +21,7 @@
 
 #include <unotools/configitem.hxx>
 #include <swdllapi.h>
-#include <labrec.hxx>
+#include "labrec.hxx"
 
 #include <map>
 #include <vector>

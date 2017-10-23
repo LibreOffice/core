@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "addrdlg.hxx"
+#include <addrdlg.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/pageids.hxx>
 

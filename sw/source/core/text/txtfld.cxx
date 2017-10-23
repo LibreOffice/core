@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <charfmt.hxx>
 
-#include "viewsh.hxx"
-#include "doc.hxx"
-#include "rootfrm.hxx"
-#include "pagefrm.hxx"
-#include "ndtxt.hxx"
-#include "fldbas.hxx"
-#include "viewopt.hxx"
-#include "flyfrm.hxx"
-#include "viewimp.hxx"
-#include "txtatr.hxx"
-#include "swfont.hxx"
-#include "fntcache.hxx"
+#include <viewsh.hxx>
+#include <doc.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <ndtxt.hxx>
+#include <fldbas.hxx>
+#include <viewopt.hxx>
+#include <flyfrm.hxx>
+#include <viewimp.hxx>
+#include <txtatr.hxx>
+#include <swfont.hxx>
+#include <fntcache.hxx>
 #include "porfld.hxx"
 #include "porftn.hxx"
 #include "porref.hxx"
@@ -41,16 +41,16 @@
 #include "porhyph.hxx"
 #include "porfly.hxx"
 #include "itrform2.hxx"
-#include "chpfld.hxx"
-#include "dbfld.hxx"
-#include "expfld.hxx"
-#include "docufld.hxx"
-#include "pagedesc.hxx"
+#include <chpfld.hxx>
+#include <dbfld.hxx>
+#include <expfld.hxx>
+#include <docufld.hxx>
+#include <pagedesc.hxx>
 #include "pormulti.hxx"
-#include "fmtmeta.hxx"
-#include "reffld.hxx"
-#include "flddat.hxx"
-#include "fmtautofmt.hxx"
+#include <fmtmeta.hxx>
+#include <reffld.hxx>
+#include <flddat.hxx>
+#include <fmtautofmt.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <svl/itemiter.hxx>
 

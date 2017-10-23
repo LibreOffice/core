@@ -21,7 +21,7 @@
 #include "itrform2.hxx"
 #include "porglue.hxx"
 #include "porexp.hxx"
-#include "blink.hxx"
+#include <blink.hxx>
 #include "redlnitr.hxx"
 #include "porfly.hxx"
 #include "porrst.hxx"

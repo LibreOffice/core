@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWTBLFMT_HXX
 #define INCLUDED_SW_INC_SWTBLFMT_HXX
 
-#include <frmfmt.hxx>
+#include "frmfmt.hxx"
 
 class SwDoc;
 

@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_PAGEMARGINPOPUP_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include <swdllapi.h>
+#include "swdllapi.h"
 #include <vcl/vclenum.hxx>
 #include <functional>
 

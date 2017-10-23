@@ -19,9 +19,9 @@
 #ifndef INCLUDED_SW_INC_TXTINET_HXX
 #define INCLUDED_SW_INC_TXTINET_HXX
 
-#include <txatbase.hxx>
-#include <txtatr.hxx>
-#include <calbck.hxx>
+#include "txatbase.hxx"
+#include "txtatr.hxx"
+#include "calbck.hxx"
 
 class SwTextNode;
 class SwCharFormat;

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TXTTYPES_HXX
 
-#include "swtypes.hxx"
+#include <swtypes.hxx>
 
 // Portiontypen
 #define POR_LIN         0x0000

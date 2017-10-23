@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
+#include <hintids.hxx>
 
 #include <sfx2/htmlmode.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "swtypes.hxx"
-#include "wrtsh.hxx"
-#include "viewopt.hxx"
-#include "macassgn.hxx"
-#include "swevent.hxx"
-#include "docsh.hxx"
-#include "globals.hrc"
-#include "strings.hrc"
-#include "view.hxx"
+#include <swtypes.hxx>
+#include <wrtsh.hxx>
+#include <viewopt.hxx>
+#include <macassgn.hxx>
+#include <swevent.hxx>
+#include <docsh.hxx>
+#include <globals.hrc>
+#include <strings.hrc>
+#include <view.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/svxdlg.hxx>

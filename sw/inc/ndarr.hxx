@@ -30,10 +30,10 @@
 
 #include <svtools/embedhlp.hxx>
 
-#include <bparr.hxx>
-#include <ndtyp.hxx>
+#include "bparr.hxx"
+#include "ndtyp.hxx"
 #include <o3tl/sorted_vector.hxx>
-#include <ring.hxx>
+#include "ring.hxx"
 
 class Graphic;
 class GraphicObject;

@@ -21,7 +21,7 @@
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <mailconfigpage.hxx>
-#include <mmgreetingspage.hxx>
+#include "mmgreetingspage.hxx"
 #include <swmessdialog.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>

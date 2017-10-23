@@ -19,27 +19,27 @@
 
 #include <ToxTextGenerator.hxx>
 
-#include "chpfld.hxx"
-#include "cntfrm.hxx"
-#include "fchrfmt.hxx"
-#include "doc.hxx"
+#include <chpfld.hxx>
+#include <cntfrm.hxx>
+#include <fchrfmt.hxx>
+#include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include "fmtinfmt.hxx"
-#include "ndtxt.hxx"
-#include "pagedesc.hxx"
-#include "tox.hxx"
-#include "txmsrt.hxx"
-#include "fmtautofmt.hxx"
-#include "DocumentSettingManager.hxx"
-#include "SwStyleNameMapper.hxx"
-#include "swatrset.hxx"
-#include "ToxWhitespaceStripper.hxx"
-#include "ToxLinkProcessor.hxx"
-#include "ToxTabStopTokenHandler.hxx"
-#include "txatbase.hxx"
+#include <fmtinfmt.hxx>
+#include <ndtxt.hxx>
+#include <pagedesc.hxx>
+#include <tox.hxx>
+#include <txmsrt.hxx>
+#include <fmtautofmt.hxx>
+#include <DocumentSettingManager.hxx>
+#include <SwStyleNameMapper.hxx>
+#include <swatrset.hxx>
+#include <ToxWhitespaceStripper.hxx>
+#include <ToxLinkProcessor.hxx>
+#include <ToxTabStopTokenHandler.hxx>
+#include <txatbase.hxx>
 
-#include "svl/itemiter.hxx"
+#include <svl/itemiter.hxx>
 
 #include <cassert>
 #include <memory>

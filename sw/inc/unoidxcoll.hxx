@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_UNOIDXCOLL_HXX
 #define INCLUDED_SW_INC_UNOIDXCOLL_HXX
 
-#include <unocoll.hxx>
+#include "unocoll.hxx"
 
 class SwXDocumentIndexes
     : public SwCollectionBaseClass

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <mmaddressblockpage.hxx>
+#include "mmaddressblockpage.hxx"
 #include <mailmergewizard.hxx>
 #include <swtypes.hxx>
-#include <addresslistdialog.hxx>
+#include "addresslistdialog.hxx"
 #include <vcl/layout.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/xtextedt.hxx>
@@ -37,7 +37,7 @@
 #include <globals.hrc>
 #include <strings.hrc>
 #include <dbui.hrc>
-#include "mmaddressblockpage.hrc"
+#include <mmaddressblockpage.hrc>
 #include <helpids.h>
 
 using namespace svt;

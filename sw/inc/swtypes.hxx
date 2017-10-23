@@ -21,7 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <tools/mapunit.hxx>
-#include <SwGetPoolIdFromName.hxx>
+#include "SwGetPoolIdFromName.hxx"
 
 #include <limits.h>
 #include <com/sun/star/uno/Reference.h>

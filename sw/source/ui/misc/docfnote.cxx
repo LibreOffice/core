@@ -22,7 +22,7 @@
 #include <view.hxx>
 #include <docsh.hxx>
 #include <docfnote.hxx>
-#include <impfnote.hxx>
+#include "impfnote.hxx"
 #include <ftninfo.hxx>
 #include <fmtcol.hxx>
 #include <pagedesc.hxx>

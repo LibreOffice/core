@@ -22,8 +22,8 @@
 #include <cstddef>
 
 #include <swtypes.hxx>
-#include <createaddresslistdialog.hxx>
-#include <customizeaddresslistdialog.hxx>
+#include "createaddresslistdialog.hxx"
+#include "customizeaddresslistdialog.hxx"
 #include <mmconfigitem.hxx>
 #include <comphelper/string.hxx>
 #include <vcl/scrbar.hxx>

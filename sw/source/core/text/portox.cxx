@@ -18,7 +18,7 @@
  */
 
 #include <SwPortionHandler.hxx>
-#include "viewopt.hxx"
+#include <viewopt.hxx>
 
 #include "portox.hxx"
 #include "inftxt.hxx"

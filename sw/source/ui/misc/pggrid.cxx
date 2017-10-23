@@ -35,11 +35,11 @@
 #include <pggrid.hxx>
 #include <tgrditem.hxx>
 
-#include "wrtsh.hxx"
-#include "doc.hxx"
-#include "uiitems.hxx"
-#include "swmodule.hxx"
-#include "view.hxx"
+#include <wrtsh.hxx>
+#include <doc.hxx>
+#include <uiitems.hxx>
+#include <swmodule.hxx>
+#include <view.hxx>
 
 SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, "TextGridPage", "modules/swriter/ui/textgridpage.ui", &rSet),

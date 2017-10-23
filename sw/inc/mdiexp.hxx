@@ -21,8 +21,8 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
-#include <tblenum.hxx>
-#include <swdllapi.h>
+#include "tblenum.hxx"
+#include "swdllapi.h"
 
 class SwRect;
 class Size;

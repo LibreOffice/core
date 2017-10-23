@@ -23,19 +23,19 @@
 #include <helpids.h>
 #include <uiitems.hxx>
 #include <modcfg.hxx>
-#include "swmodule.hxx"
-#include "usrpref.hxx"
-#include "wrtsh.hxx"
-#include "linkenum.hxx"
+#include <swmodule.hxx>
+#include <usrpref.hxx>
+#include <wrtsh.hxx>
+#include <linkenum.hxx>
 #include <uitool.hxx>
 #include <view.hxx>
 
-#include "globals.hrc"
-#include "strings.hrc"
-#include "optload.hrc"
-#include "cmdid.h"
+#include <globals.hrc>
+#include <strings.hrc>
+#include <optload.hrc>
+#include <cmdid.h>
 
-#include "optload.hxx"
+#include <optload.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <fldmgr.hxx>

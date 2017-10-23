@@ -27,7 +27,7 @@
 // classes <Point>, <Size> and <Rectangle>
 #include <tools/gen.hxx>
 // datatype <SwTwips>
-#include <swtypes.hxx>
+#include "swtypes.hxx"
 
 class SwViewShell;
 class SwRootFrame;

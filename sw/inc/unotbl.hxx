@@ -36,11 +36,11 @@
 
 #include <comphelper/uno3.hxx>
 
-#include <calbck.hxx>
-#include <TextCursorHelper.hxx>
-#include <unotext.hxx>
-#include <frmfmt.hxx>
-#include <unocrsr.hxx>
+#include "calbck.hxx"
+#include "TextCursorHelper.hxx"
+#include "unotext.hxx"
+#include "frmfmt.hxx"
+#include "unocrsr.hxx"
 
 class SwTable;
 class SwTableBox;

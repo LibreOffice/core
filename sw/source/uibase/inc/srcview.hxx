@@ -23,7 +23,7 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/outdev.hxx>
 
-#include <srcedtw.hxx>
+#include "srcedtw.hxx"
 #include <shellid.hxx>
 
 class SwDocShell;

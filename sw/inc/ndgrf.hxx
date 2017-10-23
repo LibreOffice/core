@@ -21,7 +21,7 @@
 #define INCLUDED_SW_INC_NDGRF_HXX
 #include <sfx2/lnkbase.hxx>
 #include <svtools/grfmgr.hxx>
-#include <ndnotxt.hxx>
+#include "ndnotxt.hxx"
 #include <com/sun/star/embed/XStorage.hpp>
 #include <memory>
 class SwAsyncRetrieveInputStreamThreadConsumer;
