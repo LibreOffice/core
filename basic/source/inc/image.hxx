@@ -20,9 +20,9 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_IMAGE_HXX
 #define INCLUDED_BASIC_SOURCE_INC_IMAGE_HXX
 
-#include <sbintern.hxx>
+#include "sbintern.hxx"
 #include <rtl/ustring.hxx>
-#include <filefmt.hxx>
+#include "filefmt.hxx"
 #include <o3tl/typed_flags_set.hxx>
 
 // This class reads in the image that's been produced by the compiler
