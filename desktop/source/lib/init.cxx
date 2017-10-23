@@ -3421,6 +3421,13 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
             Application::EnableHeadlessMode(true);
 
+#ifdef IOS
+            // mpDefInst need to be initialized, which only happens in InitVCL(),
+            // there might be more elegant ways to get InitVCL() called, but
+            // this one works :-)
+            InitVCL();
+#endif
+
             if (eStage == PRE_INIT)
             {
                 InitVCL();
