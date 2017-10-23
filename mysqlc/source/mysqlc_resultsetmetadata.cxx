@@ -19,7 +19,7 @@
 
 #include "mysqlc_resultsetmetadata.hxx"
 #include "mysqlc_general.hxx"
-#include "cppconn/exception.h"
+#include <cppconn/exception.h>
 
 #include <rtl/ustrbuf.hxx>
 
