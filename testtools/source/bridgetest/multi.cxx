@@ -18,13 +18,13 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "multi.hxx"
 
-#include "rtl/string.hxx"
-#include "rtl/textenc.h"
-#include "rtl/ustring.hxx"
+#include <rtl/string.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
 
 #include <sstream>
 
