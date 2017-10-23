@@ -979,16 +979,10 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Rotate 1~80°</value>
         </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
       </node>
       <node oor:name=".uno:RotateReset" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Reset R~otation</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:NewHtmlDoc" oor:op="replace">
@@ -2673,9 +2667,6 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Word Count</value>
         </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
       </node>
       <node oor:name=".uno:StylesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -3194,9 +3185,6 @@
       <node oor:name=".uno:Watermark" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Watermark...</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
     </node>
