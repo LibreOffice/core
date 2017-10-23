@@ -19,9 +19,9 @@
 #ifndef INCLUDED_JVMFWK_SOURCE_LIBXMLUTIL_HXX
 #define INCLUDED_JVMFWK_SOURCE_LIBXMLUTIL_HXX
 
-#include "libxml/parser.h"
-#include "libxml/xpath.h"
-#include "rtl/ustring.hxx"
+#include <libxml/parser.h>
+#include <libxml/xpath.h>
+#include <rtl/ustring.hxx>
 
 namespace jfw
 {

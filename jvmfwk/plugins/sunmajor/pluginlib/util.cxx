@@ -22,17 +22,17 @@
 
 #include "util.hxx"
 
-#include "osl/process.h"
-#include "osl/security.hxx"
-#include "osl/file.hxx"
-#include "osl/module.hxx"
+#include <osl/process.h>
+#include <osl/security.hxx>
+#include <osl/file.hxx>
+#include <osl/module.hxx>
 #include <osl/diagnose.h>
 #include <osl/getglobalmutex.hxx>
-#include "rtl/byteseq.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/instance.hxx"
-#include "salhelper/linkhelper.hxx"
-#include "salhelper/thread.hxx"
+#include <rtl/byteseq.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
+#include <salhelper/linkhelper.hxx>
+#include <salhelper/thread.hxx>
 #include <memory>
 #include <utility>
 #include <algorithm>

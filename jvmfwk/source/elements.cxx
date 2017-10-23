@@ -22,20 +22,20 @@
 #include <cassert>
 #include <memory>
 
-#include "elements.hxx"
-#include "osl/mutex.hxx"
-#include "osl/file.hxx"
-#include "fwkutil.hxx"
+#include <elements.hxx>
+#include <osl/mutex.hxx>
+#include <osl/file.hxx>
+#include <fwkutil.hxx>
 #include "fwkbase.hxx"
 #include "framework.hxx"
 #include "libxmlutil.hxx"
-#include "osl/thread.hxx"
+#include <osl/thread.hxx>
 #include <algorithm>
-#include "libxml/parser.h"
-#include "libxml/xpath.h"
-#include "libxml/xpathInternals.h"
-#include "rtl/bootstrap.hxx"
-#include "boost/optional.hpp"
+#include <libxml/parser.h>
+#include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
+#include <rtl/bootstrap.hxx>
+#include <boost/optional.hpp>
 #include <string.h>
 
 // For backwards compatibility, the nFeatures and nRequirements flag words are

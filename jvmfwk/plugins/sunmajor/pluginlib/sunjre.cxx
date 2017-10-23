@@ -18,7 +18,7 @@
  */
 
 
-#include "osl/thread.h"
+#include <osl/thread.h>
 #include "sunjre.hxx"
 #include "sunversion.hxx"
 #include "diagnostics.h"
