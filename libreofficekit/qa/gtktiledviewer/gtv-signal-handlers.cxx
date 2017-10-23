@@ -9,10 +9,10 @@
 
 #include <gtk/gtk.h>
 
-#include <gtv-application-window.hxx>
-#include <gtv-helpers.hxx>
-#include <gtv-lokdocview-signal-handlers.hxx>
-#include <gtv-lok-dialog.hxx>
+#include "gtv-application-window.hxx"
+#include "gtv-helpers.hxx"
+#include "gtv-lokdocview-signal-handlers.hxx"
+#include "gtv-lok-dialog.hxx"
 
 #include <sal/types.h>
 

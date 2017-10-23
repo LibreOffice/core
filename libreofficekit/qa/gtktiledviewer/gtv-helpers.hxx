@@ -12,7 +12,7 @@
 
 #include <gtk/gtk.h>
 
-#include <gtv-signal-handlers.hxx>
+#include "gtv-signal-handlers.hxx"
 
 #include <map>
 #include <string>

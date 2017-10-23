@@ -15,7 +15,7 @@
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-#include <gtv-main-toolbar.hxx>
+#include "gtv-main-toolbar.hxx"
 
 #include <string>
 

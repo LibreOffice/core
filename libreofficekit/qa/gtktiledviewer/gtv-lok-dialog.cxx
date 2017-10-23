@@ -17,10 +17,10 @@
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-#include <gtv-application-window.hxx>
-#include <gtv-signal-handlers.hxx>
-#include <gtv-helpers.hxx>
-#include <gtv-lok-dialog.hxx>
+#include "gtv-application-window.hxx"
+#include "gtv-signal-handlers.hxx"
+#include "gtv-helpers.hxx"
+#include "gtv-lok-dialog.hxx"
 
 #include <com/sun/star/awt/Key.hpp>
 #include <vcl/event.hxx>

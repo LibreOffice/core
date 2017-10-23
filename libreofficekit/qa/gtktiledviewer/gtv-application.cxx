@@ -9,8 +9,8 @@
 
 #include <gtk/gtk.h>
 
-#include <gtv-application.hxx>
-#include <gtv-application-window.hxx>
+#include "gtv-application.hxx"
+#include "gtv-application-window.hxx"
 
 #include <string>
 
