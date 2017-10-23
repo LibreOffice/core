@@ -25,9 +25,9 @@
 #include "rtfreferenceproperties.hxx"
 #include "rtfskipdestination.hxx"
 
-#include "officecfg/Setup.hxx"
-#include "officecfg/Office/Linguistic.hxx"
-#include "unotools/wincodepage.hxx"
+#include <officecfg/Setup.hxx>
+#include <officecfg/Office/Linguistic.hxx>
+#include <unotools/wincodepage.hxx>
 
 using namespace com::sun::star;
 
