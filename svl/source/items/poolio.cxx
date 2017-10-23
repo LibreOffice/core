@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "poolio.hxx"
+#include <poolio.hxx>
 
 #include <sal/log.hxx>
 #include <tools/solar.h>

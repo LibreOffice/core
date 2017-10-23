@@ -26,7 +26,7 @@
 #include <sal/log.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
-#include "poolio.hxx"
+#include <poolio.hxx>
 
 #include <algorithm>
 #include <cassert>

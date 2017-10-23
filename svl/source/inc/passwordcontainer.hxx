@@ -39,7 +39,7 @@
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
 
-#include "syscreds.hxx"
+#include <syscreds.hxx>
 
 #define MEMORY_RECORD         0
 #define PERSISTENT_RECORD     1
