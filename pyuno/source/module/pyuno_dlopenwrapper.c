@@ -19,9 +19,9 @@
 
 /* make Python.h go first as a hack to work around _POSIX_C_SOURCE redefinition
    warnings: */
-#include "Python.h"
+#include <Python.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +31,7 @@
 #endif
 #include <dlfcn.h>
 
-#include "rtl/string.h"
+#include <rtl/string.h>
 
 /* A wrapper around libpyuno.so, making sure the latter is loaded RTLD_GLOBAL
    so that C++ exception handling works with old GCC versions (that determine
