@@ -20,11 +20,11 @@
 #ifndef INCLUDED_STORE_SOURCE_STORBIOS_HXX
 #define INCLUDED_STORE_SOURCE_STORBIOS_HXX
 
-#include "sal/types.h"
-#include "rtl/ref.hxx"
-#include "osl/mutex.hxx"
+#include <sal/types.h>
+#include <rtl/ref.hxx>
+#include <osl/mutex.hxx>
 
-#include "store/types.h"
+#include <store/types.h>
 #include "object.hxx"
 #include "lockbyte.hxx"
 #include "storbase.hxx"

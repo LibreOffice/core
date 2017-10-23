@@ -19,13 +19,13 @@
 
 #include "lockbyte.hxx"
 
-#include "sal/types.h"
-#include "osl/diagnose.h"
-#include "osl/file.h"
-#include "osl/process.h"
-#include "rtl/alloc.h"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
+#include <sal/types.h>
+#include <osl/diagnose.h>
+#include <osl/file.h>
+#include <osl/process.h>
+#include <rtl/alloc.h>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include "object.hxx"
 #include "storbase.hxx"

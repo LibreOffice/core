@@ -20,15 +20,15 @@
 #ifndef INCLUDED_STORE_SOURCE_STORDATA_HXX
 #define INCLUDED_STORE_SOURCE_STORDATA_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <memory>
 
-#include "sal/types.h"
-#include "sal/macros.h"
-#include "rtl/string.h"
+#include <sal/types.h>
+#include <sal/macros.h>
+#include <rtl/string.h>
 
-#include "store/types.h"
+#include <store/types.h>
 #include "storbase.hxx"
 
 namespace store

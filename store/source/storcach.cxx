@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include "storcach.hxx"
 
-#include "sal/log.hxx"
-#include "sal/types.h"
-#include "sal/macros.h"
-#include "rtl/alloc.h"
-#include "osl/diagnose.h"
+#include <sal/log.hxx>
+#include <sal/types.h>
+#include <sal/macros.h>
+#include <rtl/alloc.h>
+#include <osl/diagnose.h>
 
-#include "store/types.h"
+#include <store/types.h>
 #include "object.hxx"
 #include "storbase.hxx"
 

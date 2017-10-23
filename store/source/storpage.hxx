@@ -20,7 +20,7 @@
 #ifndef INCLUDED_STORE_SOURCE_STORPAGE_HXX
 #define INCLUDED_STORE_SOURCE_STORPAGE_HXX
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #include "object.hxx"
 #include "lockbyte.hxx"

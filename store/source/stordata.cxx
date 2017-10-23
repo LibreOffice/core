@@ -22,7 +22,7 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 
-#include "store/types.h"
+#include <store/types.h>
 #include "storbase.hxx"
 #include "storbios.hxx"
 
