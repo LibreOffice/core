@@ -30,7 +30,7 @@
 #include <comphelper/simplefileaccessinteraction.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/streamwrap.hxx>
-#include <ucblockbytes.hxx>
+#include "ucblockbytes.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;

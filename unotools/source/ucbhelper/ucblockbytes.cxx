@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ucblockbytes.hxx>
+#include "ucblockbytes.hxx"
 
 #include <sal/macros.h>
 #include <comphelper/processfactory.hxx>

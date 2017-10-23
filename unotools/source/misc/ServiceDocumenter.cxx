@@ -6,7 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <ServiceDocumenter.hxx>
+#include "ServiceDocumenter.hxx"
 #include <unotoolsservices.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
