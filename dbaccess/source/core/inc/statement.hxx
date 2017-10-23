@@ -34,7 +34,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase3.hxx>
-#include "apitools.hxx"
+#include <apitools.hxx>
 
 
 //  OStatementBase

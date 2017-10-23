@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_TABLEFIELDINFO_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_TABLEFIELDINFO_HXX
 
-#include "QEnumTypes.hxx"
+#include <QEnumTypes.hxx>
 #include <sal/types.h>
 
 namespace dbaui

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "VertSplitView.hxx"
+#include <VertSplitView.hxx>
 
 #include <vcl/split.hxx>
 #include <vcl/settings.hxx>

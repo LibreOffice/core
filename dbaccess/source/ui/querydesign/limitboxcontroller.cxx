@@ -8,7 +8,7 @@
  */
 
 #include "limitboxcontroller.hxx"
-#include "uiservices.hxx"
+#include <uiservices.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -19,9 +19,9 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "LimitBox.hxx"
-#include "dbu_reghelper.hxx"
-#include "core_resource.hxx"
+#include <LimitBox.hxx>
+#include <dbu_reghelper.hxx>
+#include <core_resource.hxx>
 
 
 using namespace ::com::sun::star;

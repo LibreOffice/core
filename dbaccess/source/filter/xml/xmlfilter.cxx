@@ -27,7 +27,7 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include "xmlfilter.hxx"
 #include "xmlservices.hxx"
-#include "flt_reghelper.hxx"
+#include <flt_reghelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -43,8 +43,8 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include "xmlDatabase.hxx"
 #include "xmlEnums.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include "xmlStyleImport.hxx"
 #include <xmloff/xmluconv.hxx>
@@ -60,7 +60,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/DriversConfig.hxx>
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;

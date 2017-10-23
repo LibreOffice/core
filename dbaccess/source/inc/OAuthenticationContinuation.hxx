@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_INC_OAUTHENTICATIONCONTINUATION_HXX
 #define INCLUDED_DBACCESS_SOURCE_INC_OAUTHENTICATIONCONTINUATION_HXX
 
-#include "dbadllapi.hxx"
+#include <dbadllapi.hxx>
 
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ucb/RememberAuthentication.hpp>

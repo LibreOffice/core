@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 
@@ -29,7 +29,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <rtl/strbuf.hxx>
 
 namespace dbaxml

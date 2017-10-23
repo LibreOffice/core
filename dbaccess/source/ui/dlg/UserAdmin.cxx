@@ -18,8 +18,8 @@
  */
 
 #include "UserAdmin.hxx"
-#include "UITools.hxx"
-#include "dbu_dlg.hxx"
+#include <UITools.hxx>
+#include <dbu_dlg.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -32,11 +32,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbcx/XUser.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#include "stringconstants.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "core_resource.hxx"
-#include "dbadmin.hxx"
+#include <stringconstants.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <core_resource.hxx>
+#include <dbadmin.hxx>
 #include <vcl/layout.hxx>
 #include <sfx2/passwd.hxx>
 

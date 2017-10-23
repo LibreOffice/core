@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
-#include "ContentHelper.hxx"
+#include <ContentHelper.hxx>
 
 #include <map>
 

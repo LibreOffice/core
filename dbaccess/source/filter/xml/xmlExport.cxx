@@ -20,7 +20,7 @@
 #include "xmlExport.hxx"
 #include "xmlAutoStyle.hxx"
 #include "xmlservices.hxx"
-#include "flt_reghelper.hxx"
+#include <flt_reghelper.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -31,8 +31,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include "xmlEnums.hxx"
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

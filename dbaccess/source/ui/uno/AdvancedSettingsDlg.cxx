@@ -19,10 +19,10 @@
 
 #include <sal/config.h>
 
-#include "uiservices.hxx"
-#include "unoadmin.hxx"
-#include "dbu_reghelper.hxx"
-#include "advancedsettingsdlg.hxx"
+#include <uiservices.hxx>
+#include <unoadmin.hxx>
+#include <dbu_reghelper.hxx>
+#include <advancedsettingsdlg.hxx>
 #include <comphelper/processfactory.hxx>
 
 namespace dbaui

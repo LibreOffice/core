@@ -19,11 +19,11 @@
 
 #include <string.h>
 
-#include "table.hxx"
+#include <table.hxx>
 #include <definitioncolumn.hxx>
-#include "stringconstants.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <stringconstants.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
 #include "CIndexes.hxx"
 
 #include <osl/diagnose.h>
@@ -43,8 +43,8 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 
-#include "sdbcoretools.hxx"
-#include "ContainerMediator.hxx"
+#include <sdbcoretools.hxx>
+#include <ContainerMediator.hxx>
 
 using namespace dbaccess;
 using namespace connectivity;

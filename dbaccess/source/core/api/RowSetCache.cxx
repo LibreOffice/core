@@ -27,10 +27,10 @@
 #include "RowSetCache.hxx"
 #include "StaticSet.hxx"
 #include "WrappedResultSet.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
 
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
@@ -50,7 +50,7 @@
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/sqlparse.hxx>
-#include "sqlbison.hxx"
+#include <sqlbison.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 

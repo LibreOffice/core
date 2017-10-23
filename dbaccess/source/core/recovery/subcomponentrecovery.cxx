@@ -19,7 +19,7 @@
 
 #include "subcomponentrecovery.hxx"
 
-#include "sdbcoretools.hxx"
+#include <sdbcoretools.hxx>
 #include "storagexmlstream.hxx"
 #include "subcomponentloader.hxx"
 #include "settingsimport.hxx"

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "linkeddocuments.hxx"
+#include <core_resource.hxx>
+#include <linkeddocuments.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -37,10 +37,10 @@
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
-#include "strings.hrc"
-#include "strings.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
 #include <svl/filenotation.hxx>
-#include "browserids.hxx"
+#include <browserids.hxx>
 #include <sfx2/new.hxx>
 #include <sfx2/app.hxx>
 #include <basic/sbx.hxx>
@@ -55,7 +55,7 @@
 #include <connectivity/dbtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
-#include "com/sun/star/sdb/RowSetVetoException.hpp"
+#include <com/sun/star/sdb/RowSetVetoException.hpp>
 
 namespace dbaui
 {

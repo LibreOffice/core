@@ -18,13 +18,13 @@
  */
 
 #include "AppDetailPageHelper.hxx"
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <connectivity/dbtools.hxx>
-#include "tabletree.hxx"
-#include "UITools.hxx"
-#include "dbtreelistbox.hxx"
+#include <tabletree.hxx>
+#include <UITools.hxx>
+#include <dbtreelistbox.hxx>
 #include <com/sun/star/awt/XTabController.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -51,22 +51,22 @@
 #include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "AppView.hxx"
-#include "helpids.h"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "callbacks.hxx"
+#include <helpids.h>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <callbacks.hxx>
 #include <dbaccess/IController.hxx>
-#include "stringconstants.hxx"
-#include "dbaccess_slotid.hrc"
-#include "databaseobjectview.hxx"
-#include "imageprovider.hxx"
+#include <stringconstants.hxx>
+#include <dbaccess_slotid.hrc>
+#include <databaseobjectview.hxx>
+#include <imageprovider.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include "AppController.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>

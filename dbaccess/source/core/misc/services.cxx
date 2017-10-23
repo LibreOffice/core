@@ -19,8 +19,8 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include "DatabaseDataProvider.hxx"
-#include "dbadllapi.hxx"
+#include <DatabaseDataProvider.hxx>
+#include <dbadllapi.hxx>
 
 #include <databasecontext.hxx>
 

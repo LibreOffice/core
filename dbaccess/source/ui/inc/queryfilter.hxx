@@ -32,7 +32,7 @@
 #include <connectivity/sqliterator.hxx>
 
 #include <connectivity/predicateinput.hxx>
-#include "svx/ParseContext.hxx"
+#include <svx/ParseContext.hxx>
 
 namespace com
 {

@@ -18,8 +18,8 @@
  */
 
 #include "commanddefinition.hxx"
-#include "apitools.hxx"
-#include "stringconstants.hxx"
+#include <apitools.hxx>
+#include <stringconstants.hxx>
 
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

@@ -19,12 +19,12 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TEDITCONTROL_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_TEDITCONTROL_HXX
 
-#include "TableDesignControl.hxx"
-#include "TableDesignView.hxx"
+#include <TableDesignControl.hxx>
+#include <TableDesignView.hxx>
 #include "TableFieldDescWin.hxx"
-#include "TableRow.hxx"
-#include "QEnumTypes.hxx"
-#include "TypeInfo.hxx"
+#include <TableRow.hxx>
+#include <QEnumTypes.hxx>
+#include <TypeInfo.hxx>
 
 class Edit;
 class SfxUndoManager;

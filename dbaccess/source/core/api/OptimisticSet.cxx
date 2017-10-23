@@ -20,8 +20,8 @@
 
 #include <memory>
 #include "OptimisticSet.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <strings.hrc>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -32,8 +32,8 @@
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include "stringconstants.hxx"
-#include "apitools.hxx"
+#include <stringconstants.hxx>
+#include <apitools.hxx>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <cppuhelper/typeprovider.hxx>
@@ -47,8 +47,8 @@
 #include <string.h>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include "querycomposer.hxx"
-#include "composertools.hxx"
+#include <querycomposer.hxx>
+#include <composertools.hxx>
 
 using namespace dbaccess;
 using namespace ::connectivity;

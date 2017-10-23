@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "browserids.hxx"
-#include "brwctrlr.hxx"
-#include "brwview.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
-#include "queryfilter.hxx"
-#include "queryorder.hxx"
-#include "sqlmessage.hxx"
+#include <browserids.hxx>
+#include <brwctrlr.hxx>
+#include <brwview.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
+#include <queryfilter.hxx>
+#include <queryorder.hxx>
+#include <sqlmessage.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

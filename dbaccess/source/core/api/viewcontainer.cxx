@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "viewcontainer.hxx"
-#include "stringconstants.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
-#include "View.hxx"
+#include <viewcontainer.hxx>
+#include <stringconstants.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
+#include <View.hxx>
 
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/types.hxx>

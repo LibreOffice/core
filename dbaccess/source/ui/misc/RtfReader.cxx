@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "RtfReader.hxx"
+#include <RtfReader.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -31,20 +31,20 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
 #include <svtools/rtftoken.h>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "strings.hrc"
+#include <strings.hrc>
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
 #include <tools/color.hxx>
-#include "WExtendPages.hxx"
-#include "QEnumTypes.hxx"
-#include "UITools.hxx"
+#include <WExtendPages.hxx>
+#include <QEnumTypes.hxx>
+#include <UITools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

@@ -18,7 +18,7 @@
  */
 
 
-#include "dbu_reghelper.hxx"
+#include <dbu_reghelper.hxx>
 
 #include <comphelper/sequence.hxx>
 

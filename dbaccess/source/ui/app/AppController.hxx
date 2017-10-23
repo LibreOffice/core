@@ -20,14 +20,14 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_APPCONTROLLER_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPCONTROLLER_HXX
 
-#include "AppElementType.hxx"
-#include "callbacks.hxx"
-#include "commontypes.hxx"
-#include "dsntypes.hxx"
+#include <AppElementType.hxx>
+#include <callbacks.hxx>
+#include <commontypes.hxx>
+#include <dsntypes.hxx>
 #include <dbaccess/genericcontroller.hxx>
-#include "linkeddocuments.hxx"
-#include "core_resource.hxx"
-#include "TableCopyHelper.hxx"
+#include <linkeddocuments.hxx>
+#include <core_resource.hxx>
+#include <TableCopyHelper.hxx>
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>

@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_TABLEDESIGN_FIELDDESCGENWIN_HXX
 
 #include <vcl/tabpage.hxx>
-#include "IClipBoardTest.hxx"
+#include <IClipBoardTest.hxx>
 
 namespace dbaui
 {

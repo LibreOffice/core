@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ColumnControlWindow.hxx"
-#include "FieldControls.hxx"
+#include <ColumnControlWindow.hxx>
+#include <FieldControls.hxx>
 #include <unotools/syslocale.hxx>
 #include <connectivity/dbtools.hxx>
-#include "UITools.hxx"
-#include "core_resource.hxx"
-#include "dbu_pageids.hxx"
-#include "strings.hrc"
+#include <UITools.hxx>
+#include <core_resource.hxx>
+#include <dbu_pageids.hxx>
+#include <strings.hrc>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/NumberFormatter.hpp>
 

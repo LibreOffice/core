@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "FieldDescControl.hxx"
-#include "FieldControls.hxx"
+#include <core_resource.hxx>
+#include <FieldDescControl.hxx>
+#include <FieldControls.hxx>
 #include <tools/diagnose_ex.h>
-#include "TableDesignHelpBar.hxx"
+#include <TableDesignHelpBar.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
 #include <vector>
-#include "FieldDescriptions.hxx"
-#include "dlgattr.hxx"
+#include <FieldDescriptions.hxx>
+#include <dlgattr.hxx>
 #include <svx/numfmtsh.hxx>
 #include <svx/svxids.hrc>
 #include <svx/algitem.hxx>
@@ -44,14 +44,14 @@
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "QEnumTypes.hxx"
-#include "helpids.h"
+#include <QEnumTypes.hxx>
+#include <helpids.h>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/string.hxx>
-#include "UITools.hxx"
-#include "strings.hrc"
+#include <UITools.hxx>
+#include <strings.hrc>
 #include <osl/diagnose.h>
 
 using namespace dbaui;

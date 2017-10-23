@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "queryfilter.hxx"
-#include "core_resource.hxx"
+#include <queryfilter.hxx>
+#include <core_resource.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -35,8 +35,8 @@
 #include <osl/diagnose.h>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/dbtools.hxx>
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
 using namespace dbaui;

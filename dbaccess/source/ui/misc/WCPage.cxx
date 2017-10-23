@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WCPage.hxx"
-#include "WCopyTable.hxx"
-#include "WColumnSelect.hxx"
-#include "WExtendPages.hxx"
+#include <WCPage.hxx>
+#include <WCopyTable.hxx>
+#include <WColumnSelect.hxx>
+#include <WExtendPages.hxx>
 
-#include "defaultobjectnamecheck.hxx"
-#include "helpids.h"
-#include "strings.hrc"
-#include "core_resource.hxx"
+#include <defaultobjectnamecheck.hxx>
+#include <helpids.h>
+#include <strings.hrc>
+#include <core_resource.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -35,7 +35,7 @@
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::dbaui;

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "definitioncontainer.hxx"
-#include "stringconstants.hxx"
-#include "apitools.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <definitioncontainer.hxx>
+#include <stringconstants.hxx>
+#include <apitools.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

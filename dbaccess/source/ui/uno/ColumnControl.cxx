@@ -19,11 +19,11 @@
 
 #include "ColumnControl.hxx"
 #include "ColumnPeer.hxx"
-#include "stringconstants.hxx"
-#include "uiservices.hxx"
-#include "apitools.hxx"
+#include <stringconstants.hxx>
+#include <uiservices.hxx>
+#include <apitools.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
-#include "dbu_reghelper.hxx"
+#include <dbu_reghelper.hxx>
 #include <comphelper/processfactory.hxx>
 
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl()

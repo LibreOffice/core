@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbtreelistbox.hxx"
-#include "dbu_pageids.hxx"
-#include "browserids.hxx"
-#include "listviewitems.hxx"
-#include "callbacks.hxx"
+#include <dbtreelistbox.hxx>
+#include <dbu_pageids.hxx>
+#include <browserids.hxx>
+#include <listviewitems.hxx>
+#include <callbacks.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
@@ -37,7 +37,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 #include <memory>
 #include <o3tl/make_unique.hxx>

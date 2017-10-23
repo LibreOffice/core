@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <strings.hrc>
 #include "datasource.hxx"
 #include "databasedocument.hxx"
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include "documenteventexecutor.hxx"
-#include "databasecontext.hxx"
+#include <databasecontext.hxx>
 #include "documentcontainer.hxx"
-#include "sdbcoretools.hxx"
-#include "recovery/dbdocrecovery.hxx"
+#include <sdbcoretools.hxx>
+#include <recovery/dbdocrecovery.hxx>
 
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/document/XExporter.hpp>

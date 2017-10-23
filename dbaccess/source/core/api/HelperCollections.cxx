@@ -19,8 +19,8 @@
 
 #include "HelperCollections.hxx"
 
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 
 namespace dbaccess
 {

@@ -18,13 +18,13 @@
  */
 
 #include "composerdialogs.hxx"
-#include "uiservices.hxx"
+#include <uiservices.hxx>
 
-#include "dbu_reghelper.hxx"
+#include <dbu_reghelper.hxx>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include "stringconstants.hxx"
-#include "queryfilter.hxx"
-#include "queryorder.hxx"
+#include <stringconstants.hxx>
+#include <queryfilter.hxx>
+#include <queryorder.hxx>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>

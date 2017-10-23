@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ConnectionLine.hxx"
-#include "ConnectionLineData.hxx"
-#include "TableWindow.hxx"
-#include "TableWindowListBox.hxx"
-#include "TableConnection.hxx"
+#include <ConnectionLine.hxx>
+#include <ConnectionLineData.hxx>
+#include <TableWindow.hxx>
+#include <TableWindowListBox.hxx>
+#include <TableConnection.hxx>
 #include <vcl/svapp.hxx>
 #include <math.h>
 #include <osl/diagnose.h>

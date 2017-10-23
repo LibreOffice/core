@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <sfx2/docfilt.hxx>
-#include "callbacks.hxx"
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
-#include "dbu_pageids.hxx"
-#include "dlgsave.hxx"
-#include "dbtreelistbox.hxx"
-#include "defaultobjectnamecheck.hxx"
+#include <callbacks.hxx>
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
+#include <dbu_pageids.hxx>
+#include <dlgsave.hxx>
+#include <dbtreelistbox.hxx>
+#include <defaultobjectnamecheck.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
@@ -66,8 +66,8 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
-#include "TypeInfo.hxx"
-#include "FieldDescriptions.hxx"
+#include <TypeInfo.hxx>
+#include <FieldDescriptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -75,26 +75,26 @@
 #include <svx/svxids.hrc>
 
 #include <svl/itempool.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <svl/itemset.hxx>
-#include "sbagrid.hrc"
+#include <sbagrid.hrc>
 #include <svl/rngitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/numinf.hxx>
 #include <svl/zforlist.hxx>
-#include "dlgattr.hxx"
+#include <dlgattr.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#include "strings.hrc"
-#include "sqlmessage.hxx"
+#include <strings.hrc>
+#include <sqlmessage.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <vcl/toolbox.hxx>
-#include "dlgsize.hxx"
+#include <dlgsize.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <unotools/configmgr.hxx>
 #include <svtools/helpopt.hxx>

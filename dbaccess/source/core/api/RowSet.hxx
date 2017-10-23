@@ -25,7 +25,7 @@
 #include <atomic>
 #include <cstddef>
 
-#include "apitools.hxx"
+#include <apitools.hxx>
 #include "RowSetBase.hxx"
 
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>

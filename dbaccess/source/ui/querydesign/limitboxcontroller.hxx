@@ -15,7 +15,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/vclptr.hxx>
 
-#include "apitools.hxx"
+#include <apitools.hxx>
 
 namespace dbaui
 {

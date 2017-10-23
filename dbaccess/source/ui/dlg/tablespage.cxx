@@ -18,18 +18,18 @@
  */
 
 #include "tablespage.hxx"
-#include "dbu_dlg.hxx"
-#include "dsitems.hxx"
-#include "browserids.hxx"
-#include "datasourceconnector.hxx"
+#include <dbu_dlg.hxx>
+#include <dsitems.hxx>
+#include <browserids.hxx>
+#include <datasourceconnector.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include "stringlistitem.hxx"
+#include <stringlistitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/waitobj.hxx>
@@ -40,14 +40,14 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#include "sqlmessage.hxx"
+#include <sqlmessage.hxx>
 #include <vcl/msgbox.hxx>
-#include "helpids.h"
-#include "UITools.hxx"
+#include <helpids.h>
+#include <UITools.hxx>
 #include <osl/diagnose.h>
 #include <svtools/imgdef.hxx>
-#include "svtools/treelistentry.hxx"
-#include "TablesSingleDlg.hxx"
+#include <svtools/treelistentry.hxx>
+#include <TablesSingleDlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>

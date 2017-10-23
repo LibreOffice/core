@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "apitools.hxx"
-#include "stringconstants.hxx"
+#include <apitools.hxx>
+#include <stringconstants.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

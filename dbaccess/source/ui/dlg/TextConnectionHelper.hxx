@@ -22,9 +22,9 @@
 
 #include "ConnectionPageSetup.hxx"
 #include "adminpages.hxx"
-#include "charsetlistbox.hxx"
+#include <charsetlistbox.hxx>
 #include <ucbhelper/content.hxx>
-#include "curledit.hxx"
+#include <curledit.hxx>
 #include <svtools/roadmapwizard.hxx>
 #include <vcl/field.hxx>
 #include <rtl/ustring.hxx>

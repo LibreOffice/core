@@ -19,10 +19,10 @@
 
 #include "FieldDescGenWin.hxx"
 #include <osl/diagnose.h>
-#include "helpids.h"
-#include "TableDesignHelpBar.hxx"
+#include <helpids.h>
+#include <TableDesignHelpBar.hxx>
 #include "TableFieldControl.hxx"
-#include "TableDesignView.hxx"
+#include <TableDesignView.hxx>
 #include "TEditControl.hxx"
 
 using namespace dbaui;

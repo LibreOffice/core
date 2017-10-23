@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sbamultiplex.hxx"
+#include <sbamultiplex.hxx>
 using namespace dbaui;
 
 // the listener multiplexers

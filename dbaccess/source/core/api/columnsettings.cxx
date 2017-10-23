@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "columnsettings.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <columnsettings.hxx>
+#include <stringconstants.hxx>
+#include <strings.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

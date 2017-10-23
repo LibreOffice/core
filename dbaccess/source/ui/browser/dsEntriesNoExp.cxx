@@ -21,16 +21,16 @@
 
 #include <memory>
 
-#include "unodatbr.hxx"
-#include "browserids.hxx"
-#include "listviewitems.hxx"
-#include "imageprovider.hxx"
+#include <unodatbr.hxx>
+#include <browserids.hxx>
+#include <listviewitems.hxx>
+#include <imageprovider.hxx>
 #include <osl/diagnose.h>
 #include "dbtreeview.hxx"
-#include "dbtreelistbox.hxx"
-#include "strings.hrc"
+#include <dbtreelistbox.hxx>
+#include <strings.hrc>
 #include "dbtreemodel.hxx"
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 using namespace ::com::sun::star::frame;
 using namespace ::dbtools;

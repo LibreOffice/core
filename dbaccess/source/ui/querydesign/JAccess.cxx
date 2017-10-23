@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "JAccess.hxx"
-#include "JoinTableView.hxx"
-#include "TableWindow.hxx"
+#include <JAccess.hxx>
+#include <JoinTableView.hxx>
+#include <TableWindow.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include "JoinDesignView.hxx"
-#include "JoinController.hxx"
-#include "TableConnection.hxx"
+#include <JoinDesignView.hxx>
+#include <JoinController.hxx>
+#include <TableConnection.hxx>
 
 namespace dbaui
 {

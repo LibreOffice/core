@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ContainerMediator.hxx"
-#include "apitools.hxx"
-#include "column.hxx"
-#include "strings.hrc"
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
-#include "sdbcoretools.hxx"
+#include <ContainerMediator.hxx>
+#include <apitools.hxx>
+#include <column.hxx>
+#include <strings.hrc>
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
+#include <sdbcoretools.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

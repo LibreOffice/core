@@ -18,10 +18,10 @@
  */
 
 #include "RTableConnection.hxx"
-#include "RelationTableView.hxx"
+#include <RelationTableView.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include "ConnectionLine.hxx"
+#include <ConnectionLine.hxx>
 
 using namespace dbaui;
 // class ORelationTableConnection

@@ -18,16 +18,16 @@
  */
 
 #include "querydlg.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "QTableConnectionData.hxx"
-#include "core_resource.hxx"
-#include "querycontroller.hxx"
-#include "QueryTableView.hxx"
-#include "QueryDesignView.hxx"
+#include <core_resource.hxx>
+#include <querycontroller.hxx>
+#include <QueryTableView.hxx>
+#include <QueryDesignView.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include "RelationControl.hxx"
+#include <RelationControl.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 

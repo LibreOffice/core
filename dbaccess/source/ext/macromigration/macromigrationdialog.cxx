@@ -18,8 +18,8 @@
  */
 
 #include "docinteraction.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <strings.hrc>
 #include "macromigrationdialog.hxx"
 #include "macromigrationpages.hxx"
 #include "migrationengine.hxx"

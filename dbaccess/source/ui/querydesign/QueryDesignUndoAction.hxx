@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNUNDOACTION_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNUNDOACTION_HXX
 
-#include "GeneralUndo.hxx"
+#include <GeneralUndo.hxx>
 #include <vcl/vclptr.hxx>
 
 namespace dbaui

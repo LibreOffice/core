@@ -19,9 +19,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLEWINDOW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QTABLEWINDOW_HXX
 
-#include "TableWindow.hxx"
+#include <TableWindow.hxx>
 #include "QTableWindowData.hxx"
-#include "TableFieldDescription.hxx"
+#include <TableFieldDescription.hxx>
 
 namespace dbaui
 {

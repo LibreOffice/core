@@ -18,19 +18,19 @@
  */
 
 #include <config_features.h>
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "detailpages.hxx"
-#include "sqlmessage.hxx"
-#include "dsmeta.hxx"
+#include <sqlmessage.hxx>
+#include <dsmeta.hxx>
 #include "advancedsettings.hxx"
 #include "DbAdminImpl.hxx"
-#include "dsitems.hxx"
+#include <dsitems.hxx>
 #include "dbfindex.hxx"
 #include "dsnItem.hxx"
 
-#include "helpids.h"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
+#include <helpids.h>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
 
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
@@ -44,7 +44,7 @@
 #endif
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
-#include "dbadmin.hxx"
+#include <dbadmin.hxx>
 #include <comphelper/types.hxx>
 
 namespace dbaui

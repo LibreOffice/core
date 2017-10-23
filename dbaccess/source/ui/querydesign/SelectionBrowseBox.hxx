@@ -20,9 +20,9 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_SELECTIONBROWSEBOX_HXX
 
 #include <svtools/editbrowsebox.hxx>
-#include "TableFieldDescription.hxx"
-#include "JoinExchange.hxx"
-#include "QEnumTypes.hxx"
+#include <TableFieldDescription.hxx>
+#include <JoinExchange.hxx>
+#include <QEnumTypes.hxx>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <svtools/transfer.hxx>
 

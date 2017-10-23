@@ -18,9 +18,9 @@
  */
 
 #include "objectnames.hxx"
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

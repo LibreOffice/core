@@ -21,7 +21,7 @@
 
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XOutParameters.hpp>
-#include <preparedstatement.hxx>
+#include "preparedstatement.hxx"
 
 namespace dbaccess
 {

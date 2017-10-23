@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_SUBCOMPONENTMANAGER_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_SUBCOMPONENTMANAGER_HXX
 
-#include "AppElementType.hxx"
+#include <AppElementType.hxx>
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

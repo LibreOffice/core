@@ -18,15 +18,15 @@
  */
 
 #include "datasource.hxx"
-#include "userinformation.hxx"
+#include <userinformation.hxx>
 #include "commandcontainer.hxx"
-#include "stringconstants.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <stringconstants.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
 #include "connection.hxx"
 #include "SharedConnection.hxx"
 #include "databasedocument.hxx"
-#include "OAuthenticationContinuation.hxx"
+#include <OAuthenticationContinuation.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

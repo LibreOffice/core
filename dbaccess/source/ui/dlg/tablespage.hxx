@@ -23,7 +23,7 @@
 #include "adminpages.hxx"
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <vcl/layout.hxx>
-#include "tabletree.hxx"
+#include <tabletree.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 namespace dbaui

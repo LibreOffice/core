@@ -41,7 +41,7 @@
 #include <com/sun/star/container/XContainerApproveListener.hpp>
 
 #include "definitioncontainer.hxx"
-#include "apitools.hxx"
+#include <apitools.hxx>
 
 namespace dbtools
 {

@@ -19,13 +19,13 @@
 
 #include "TableFieldDescWin.hxx"
 #include <osl/diagnose.h>
-#include "FieldDescriptions.hxx"
-#include "strings.hrc"
-#include "TableDesignHelpBar.hxx"
+#include <FieldDescriptions.hxx>
+#include <strings.hrc>
+#include <TableDesignHelpBar.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/settings.hxx>
-#include "helpids.h"
-#include "core_resource.hxx"
+#include <helpids.h>
+#include <core_resource.hxx>
 
 #define STANDARD_MARGIN                  6
 #define DETAILS_HEADER_HEIGHT           25

@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WNameMatch.hxx"
+#include <WNameMatch.hxx>
 #include <osl/diagnose.h>
-#include "FieldDescriptions.hxx"
-#include "WCopyTable.hxx"
-#include "helpids.h"
-#include "core_resource.hxx"
-#include "strings.hrc"
-#include "bitmaps.hlst"
+#include <FieldDescriptions.hxx>
+#include <WCopyTable.hxx>
+#include <helpids.h>
+#include <core_resource.hxx>
+#include <strings.hrc>
+#include <bitmaps.hlst>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <o3tl/make_unique.hxx>
 

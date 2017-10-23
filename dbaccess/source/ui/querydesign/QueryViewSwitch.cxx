@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "QueryViewSwitch.hxx"
-#include "QueryDesignView.hxx"
-#include "QueryTextView.hxx"
-#include "querycontainerwindow.hxx"
-#include "strings.hrc"
-#include "browserids.hxx"
-#include "adtabdlg.hxx"
-#include "querycontroller.hxx"
-#include "sqledit.hxx"
+#include <QueryViewSwitch.hxx>
+#include <QueryDesignView.hxx>
+#include <QueryTextView.hxx>
+#include <querycontainerwindow.hxx>
+#include <strings.hrc>
+#include <browserids.hxx>
+#include <adtabdlg.hxx>
+#include <querycontroller.hxx>
+#include <sqledit.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

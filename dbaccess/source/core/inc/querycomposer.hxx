@@ -29,7 +29,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/sqlparse.hxx>
-#include "apitools.hxx"
+#include <apitools.hxx>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
 

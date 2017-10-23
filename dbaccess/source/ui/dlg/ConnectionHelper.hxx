@@ -22,7 +22,7 @@
 
 #include "adminpages.hxx"
 #include <ucbhelper/content.hxx>
-#include "curledit.hxx"
+#include <curledit.hxx>
 #include <sfx2/filedlghelper.hxx>
 
 namespace dbaui

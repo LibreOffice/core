@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbu_reghelper.hxx"
-#include "uiservices.hxx"
+#include <dbu_reghelper.hxx>
+#include <uiservices.hxx>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include "DBTypeWizDlgSetup.hxx"
-#include "dbwizsetup.hxx"
+#include <dbwizsetup.hxx>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <vcl/msgbox.hxx>

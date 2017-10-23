@@ -18,14 +18,14 @@
  */
 
 #include <string.h>
-#include "composertools.hxx"
-#include "strings.hrc"
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
+#include <composertools.hxx>
+#include <strings.hrc>
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
 #include "HelperCollections.hxx"
-#include "SingleSelectQueryComposer.hxx"
-#include "sqlbison.hxx"
-#include "sdbcoretools.hxx"
+#include <SingleSelectQueryComposer.hxx>
+#include <sqlbison.hxx>
+#include <sdbcoretools.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>

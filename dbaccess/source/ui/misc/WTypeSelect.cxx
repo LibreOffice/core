@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "WTypeSelect.hxx"
-#include "stringconstants.hxx"
-#include "bitmaps.hlst"
+#include <WTypeSelect.hxx>
+#include <stringconstants.hxx>
+#include <bitmaps.hlst>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include "FieldDescriptions.hxx"
-#include "WCopyTable.hxx"
-#include "helpids.h"
-#include "strings.hrc"
+#include <FieldDescriptions.hxx>
+#include <WCopyTable.hxx>
+#include <helpids.h>
+#include <strings.hrc>
 #include <tools/stream.hxx>
 #include <svtools/svparser.hxx>
-#include "UITools.hxx"
-#include "core_resource.hxx"
-#include "sqlmessage.hxx"
-#include "FieldControls.hxx"
+#include <UITools.hxx>
+#include <core_resource.hxx>
+#include <sqlmessage.hxx>
+#include <FieldControls.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include "dbaccess_slotid.hrc"
+#include <dbaccess_slotid.hrc>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;

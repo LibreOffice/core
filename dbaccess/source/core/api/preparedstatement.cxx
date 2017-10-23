@@ -18,7 +18,7 @@
  */
 
 
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -30,8 +30,8 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <preparedstatement.hxx>
-#include <resultcolumn.hxx>
-#include <resultset.hxx>
+#include "resultcolumn.hxx"
+#include "resultset.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 

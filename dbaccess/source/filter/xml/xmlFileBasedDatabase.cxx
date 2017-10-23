@@ -23,15 +23,15 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <svl/filenotation.hxx>
 #include <unotools/pathoptions.hxx>
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;

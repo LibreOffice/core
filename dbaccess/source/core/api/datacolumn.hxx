@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
-#include <resultcolumn.hxx>
+#include "resultcolumn.hxx"
 namespace dbaccess
 {
 

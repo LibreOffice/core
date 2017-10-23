@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dlgsize.hxx"
-#include "dbu_dlg.hxx"
-#include "core_resource.hxx"
+#include <dlgsize.hxx>
+#include <dbu_dlg.hxx>
+#include <core_resource.hxx>
 
 namespace dbaui
 {

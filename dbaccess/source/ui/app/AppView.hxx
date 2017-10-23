@@ -26,8 +26,8 @@
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <vcl/fixed.hxx>
 #include <unotools/eventlisteneradapter.hxx>
-#include "IClipBoardTest.hxx"
-#include "AppElementType.hxx"
+#include <IClipBoardTest.hxx>
+#include <AppElementType.hxx>
 
 namespace com{ namespace sun { namespace star { namespace beans    { class XPropertySet; } } } }
 

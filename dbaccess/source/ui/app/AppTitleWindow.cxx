@@ -18,7 +18,7 @@
  */
 
 #include "AppTitleWindow.hxx"
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

@@ -17,24 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "FieldDescriptions.hxx"
+#include <FieldDescriptions.hxx>
 #include "TEditControl.hxx"
-#include "TableController.hxx"
-#include "TableDesignView.hxx"
-#include "TableRow.hxx"
-#include "TypeInfo.hxx"
-#include "UITools.hxx"
-#include "browserids.hxx"
-#include "core_resource.hxx"
-#include "dbu_reghelper.hxx"
-#include "stringconstants.hxx"
-#include "strings.hrc"
-#include "defaultobjectnamecheck.hxx"
-#include "dlgsave.hxx"
-#include "dsmeta.hxx"
-#include "indexdialog.hxx"
-#include "sqlmessage.hxx"
-#include "uiservices.hxx"
+#include <TableController.hxx>
+#include <TableDesignView.hxx>
+#include <TableRow.hxx>
+#include <TypeInfo.hxx>
+#include <UITools.hxx>
+#include <browserids.hxx>
+#include <core_resource.hxx>
+#include <dbu_reghelper.hxx>
+#include <stringconstants.hxx>
+#include <strings.hrc>
+#include <defaultobjectnamecheck.hxx>
+#include <dlgsave.hxx>
+#include <dsmeta.hxx>
+#include <indexdialog.hxx>
+#include <sqlmessage.hxx>
+#include <uiservices.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

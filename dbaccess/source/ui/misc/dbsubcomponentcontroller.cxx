@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "browserids.hxx"
-#include "commontypes.hxx"
-#include "core_resource.hxx"
+#include <browserids.hxx>
+#include <commontypes.hxx>
+#include <core_resource.hxx>
 #include <dbaccess/dataview.hxx>
-#include "strings.hrc"
-#include "strings.hxx"
-#include "stringconstants.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
+#include <stringconstants.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 
 #include <com/sun/star/frame/XUntitledNumbers.hpp>

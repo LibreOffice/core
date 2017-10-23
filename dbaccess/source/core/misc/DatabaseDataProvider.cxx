@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DatabaseDataProvider.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <DatabaseDataProvider.hxx>
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>

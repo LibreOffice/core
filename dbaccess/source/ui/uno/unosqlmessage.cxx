@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sqlmessage.hxx"
-#include "uiservices.hxx"
-#include "unosqlmessage.hxx"
-#include "dbu_reghelper.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
+#include <sqlmessage.hxx>
+#include <uiservices.hxx>
+#include <unosqlmessage.hxx>
+#include <dbu_reghelper.hxx>
+#include <stringconstants.hxx>
+#include <strings.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/typeprovider.hxx>

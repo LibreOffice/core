@@ -26,11 +26,11 @@
 #include <vcl/split.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/mnemonic.hxx>
-#include "IClipBoardTest.hxx"
+#include <IClipBoardTest.hxx>
 #include "AppTitleWindow.hxx"
-#include "AppElementType.hxx"
+#include <AppElementType.hxx>
 #include <svtools/treelistbox.hxx>
-#include "VertSplitView.hxx"
+#include <VertSplitView.hxx>
 
 #include <vector>
 

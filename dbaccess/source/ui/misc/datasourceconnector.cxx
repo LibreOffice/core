@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "datasourceconnector.hxx"
+#include <core_resource.hxx>
+#include <datasourceconnector.hxx>
 #include <osl/diagnose.h>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -34,14 +34,14 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/button.hxx>
 #include <svl/filenotation.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/exc_hlp.hxx>
-#include "strings.hrc"
-#include "strings.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
 
 namespace dbaui
 {

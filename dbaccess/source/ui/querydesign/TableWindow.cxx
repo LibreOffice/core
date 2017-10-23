@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableWindow.hxx"
-#include "TableWindowListBox.hxx"
-#include "QueryTableView.hxx"
-#include "QueryDesignView.hxx"
-#include "TableWindowData.hxx"
-#include "imageprovider.hxx"
+#include <TableWindow.hxx>
+#include <TableWindowListBox.hxx>
+#include <QueryTableView.hxx>
+#include <QueryDesignView.hxx>
+#include <TableWindowData.hxx>
+#include <imageprovider.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
@@ -34,16 +34,16 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include "querycontroller.hxx"
-#include "strings.hrc"
-#include "stringconstants.hxx"
-#include "bitmaps.hlst"
+#include <querycontroller.hxx>
+#include <strings.hrc>
+#include <stringconstants.hxx>
+#include <bitmaps.hlst>
 #include <comphelper/extract.hxx>
-#include "UITools.hxx"
-#include "TableWindowAccess.hxx"
-#include "browserids.hxx"
+#include <UITools.hxx>
+#include <TableWindowAccess.hxx>
+#include <browserids.hxx>
 #include <connectivity/dbtools.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 
 using namespace dbaui;
 using namespace ::utl;

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "bookmarkcontainer.hxx"
-#include "stringconstants.hxx"
-#include "apitools.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <bookmarkcontainer.hxx>
+#include <stringconstants.hxx>
+#include <apitools.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
 
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>

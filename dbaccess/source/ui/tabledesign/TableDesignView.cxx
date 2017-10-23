@@ -17,19 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableDesignView.hxx"
-#include "TableController.hxx"
-#include "helpids.h"
-#include "FieldDescriptions.hxx"
+#include <TableDesignView.hxx>
+#include <TableController.hxx>
+#include <helpids.h>
+#include <FieldDescriptions.hxx>
 #include "TEditControl.hxx"
 #include "TableFieldDescWin.hxx"
-#include "TableRow.hxx"
+#include <TableRow.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <unotools/syslocale.hxx>
 #include <vcl/settings.hxx>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <memory>
 
 using namespace ::dbaui;

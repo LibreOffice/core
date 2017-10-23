@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <resultset.hxx>
-#include "stringconstants.hxx"
-#include "apitools.hxx"
+#include "resultset.hxx"
+#include <stringconstants.hxx>
+#include <apitools.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -30,7 +30,7 @@
 #include <comphelper/types.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <datacolumn.hxx>
+#include "datacolumn.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>

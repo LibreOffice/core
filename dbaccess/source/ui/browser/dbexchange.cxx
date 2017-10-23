@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbexchange.hxx"
+#include <dbexchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
-#include "TokenWriter.hxx"
-#include "stringconstants.hxx"
+#include <TokenWriter.hxx>
+#include <stringconstants.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <comphelper/processfactory.hxx>
 
 namespace dbaui

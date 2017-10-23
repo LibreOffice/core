@@ -31,7 +31,7 @@
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <svl/poolitem.hxx>

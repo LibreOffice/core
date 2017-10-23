@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSAVE_HXX
 
-#include "apitools.hxx"
+#include <apitools.hxx>
 #include <vcl/dialog.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

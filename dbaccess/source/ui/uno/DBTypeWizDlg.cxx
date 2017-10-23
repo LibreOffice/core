@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbu_reghelper.hxx"
-#include "uiservices.hxx"
+#include <dbu_reghelper.hxx>
+#include <uiservices.hxx>
 #include "DBTypeWizDlg.hxx"
-#include "dbwiz.hxx"
+#include <dbwiz.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace dbaui;

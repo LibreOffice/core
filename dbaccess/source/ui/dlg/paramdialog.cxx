@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "paramdialog.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "commontypes.hxx"
+#include <core_resource.hxx>
+#include <paramdialog.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <commontypes.hxx>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/layout.hxx>
 #include <osl/diagnose.h>

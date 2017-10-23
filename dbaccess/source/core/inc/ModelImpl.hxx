@@ -20,10 +20,10 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_INC_MODELIMPL_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_MODELIMPL_HXX
 
-#include "apitools.hxx"
+#include <apitools.hxx>
 #include "bookmarkcontainer.hxx"
 #include "ContentHelper.hxx"
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "documentevents.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

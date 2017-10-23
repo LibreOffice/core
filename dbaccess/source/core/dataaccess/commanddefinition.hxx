@@ -20,13 +20,13 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMMANDDEFINITION_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMMANDDEFINITION_HXX
 
-#include "commandbase.hxx"
-#include "apitools.hxx"
+#include <commandbase.hxx>
+#include <apitools.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <com/sun/star/sdb/XQueryDefinition.hpp>
-#include "datasettings.hxx"
-#include "ContentHelper.hxx"
+#include <datasettings.hxx>
+#include <ContentHelper.hxx>
 #include "ComponentDefinition.hxx"
 
 #include <comphelper/propertycontainer.hxx>

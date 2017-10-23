@@ -20,10 +20,10 @@
 #include "QueryTabConnUndoAction.hxx"
 #include "QTableConnection.hxx"
 #include "QTableWindow.hxx"
-#include "QueryTableView.hxx"
+#include <QueryTableView.hxx>
 #include "QueryAddTabConnUndoAction.hxx"
 #include "QueryTabWinShowUndoAct.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 using namespace dbaui;
 

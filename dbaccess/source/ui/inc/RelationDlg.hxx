@@ -26,7 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include "JoinTableView.hxx"
 #include "RelControliFace.hxx"
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "RelationControl.hxx"
 
 namespace dbaui

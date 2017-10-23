@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_ADVANCEDSETTINGS_HXX
 
 #include "adminpages.hxx"
-#include "dsmeta.hxx"
+#include <dsmeta.hxx>
 
 #include <svtools/dialogcontrolling.hxx>
 

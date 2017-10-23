@@ -18,7 +18,7 @@
  */
 
 #include <cppuhelper/factory.hxx>
-#include "flt_reghelper.hxx"
+#include <flt_reghelper.hxx>
 #include "xmlservices.hxx"
 
 using namespace ::dbaxml;

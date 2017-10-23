@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMMANDCONTAINER_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMMANDCONTAINER_HXX
 
-#include "definitioncontainer.hxx"
+#include <definitioncontainer.hxx>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 

@@ -18,9 +18,9 @@
  */
 
 #include <osl/diagnose.h>
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "dbmm_types.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 namespace dbmm
 {

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableWindowListBox.hxx"
-#include "TableWindow.hxx"
-#include "QueryDesignView.hxx"
-#include "QueryTableView.hxx"
-#include "querycontroller.hxx"
-#include "JoinExchange.hxx"
+#include <TableWindowListBox.hxx>
+#include <TableWindow.hxx>
+#include <QueryDesignView.hxx>
+#include <QueryTableView.hxx>
+#include <querycontroller.hxx>
+#include <JoinExchange.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <vcl/svapp.hxx>

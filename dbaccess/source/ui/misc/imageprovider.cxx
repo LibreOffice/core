@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "imageprovider.hxx"
-#include "dbu_pageids.hxx"
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
-#include "bitmaps.hlst"
+#include <imageprovider.hxx>
+#include <dbu_pageids.hxx>
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
+#include <bitmaps.hlst>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicColorMode.hpp>

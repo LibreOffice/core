@@ -19,8 +19,8 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNFIELDUNDOACT_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNFIELDUNDOACT_HXX
 
-#include "GeneralUndo.hxx"
-#include "strings.hrc"
+#include <GeneralUndo.hxx>
+#include <strings.hrc>
 #include "SelectionBrowseBox.hxx"
 
 namespace dbaui

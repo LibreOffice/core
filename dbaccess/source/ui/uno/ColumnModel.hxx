@@ -29,7 +29,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/compbase4.hxx>
-#include "apitools.hxx"
+#include <apitools.hxx>
 
 namespace dbaui
 {

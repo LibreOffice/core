@@ -22,8 +22,8 @@
 
 #include <svtools/genericunodialog.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include "dsntypes.hxx"
-#include "core_resource.hxx"
+#include <dsntypes.hxx>
+#include <core_resource.hxx>
 
 class SfxItemSet;
 class SfxItemPool;

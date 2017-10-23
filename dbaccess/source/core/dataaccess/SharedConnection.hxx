@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_SHAREDCONNECTION_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_SHAREDCONNECTION_HXX
 
-#include "connectivity/ConnectionWrapper.hxx"
+#include <connectivity/ConnectionWrapper.hxx>
 #include <cppuhelper/component.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <cppuhelper/compbase.hxx>

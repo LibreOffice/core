@@ -19,15 +19,15 @@
 
 #include "commandcontainer.hxx"
 #include "connection.hxx"
-#include "strings.hrc"
-#include "core_resource.hxx"
-#include "databasecontext.hxx"
+#include <strings.hrc>
+#include <core_resource.hxx>
+#include <databasecontext.hxx>
 #include "databasedocument.hxx"
 #include "datasource.hxx"
-#include "stringconstants.hxx"
-#include "ModelImpl.hxx"
-#include "userinformation.hxx"
-#include "sdbcoretools.hxx"
+#include <stringconstants.hxx>
+#include <ModelImpl.hxx>
+#include <userinformation.hxx>
+#include <sdbcoretools.hxx>
 
 #include <com/sun/star/beans/PropertyBag.hpp>
 #include <com/sun/star/container/XSet.hpp>

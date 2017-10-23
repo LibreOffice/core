@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "tablecontainer.hxx"
-#include "stringconstants.hxx"
-#include "table.hxx"
+#include <tablecontainer.hxx>
+#include <stringconstants.hxx>
+#include <table.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/enumhelper.hxx>
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <strings.hrc>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -43,11 +43,11 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
-#include "TableDeco.hxx"
-#include "sdbcoretools.hxx"
-#include "ContainerMediator.hxx"
-#include "definitioncolumn.hxx"
-#include "objectnameapproval.hxx"
+#include <TableDeco.hxx>
+#include <sdbcoretools.hxx>
+#include <ContainerMediator.hxx>
+#include <definitioncolumn.hxx>
+#include <objectnameapproval.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace dbaccess;

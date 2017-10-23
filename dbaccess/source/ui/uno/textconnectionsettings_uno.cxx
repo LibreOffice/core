@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "textconnectionsettings.hxx"
-#include "uiservices.hxx"
-#include "dbu_reghelper.hxx"
-#include "core_resource.hxx"
-#include "apitools.hxx"
-#include "unoadmin.hxx"
-#include "stringconstants.hxx"
-#include "propertystorage.hxx"
+#include <textconnectionsettings.hxx>
+#include <uiservices.hxx>
+#include <dbu_reghelper.hxx>
+#include <core_resource.hxx>
+#include <apitools.hxx>
+#include <unoadmin.hxx>
+#include <stringconstants.hxx>
+#include <propertystorage.hxx>
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

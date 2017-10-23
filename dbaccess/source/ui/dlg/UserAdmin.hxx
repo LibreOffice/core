@@ -25,7 +25,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>
-#include "TableGrantCtrl.hxx"
+#include <TableGrantCtrl.hxx>
 #include "adminpages.hxx"
 #include <comphelper/uno3.hxx>
 

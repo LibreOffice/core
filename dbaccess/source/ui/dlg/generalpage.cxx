@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include "dsnItem.hxx"
 #include "generalpage.hxx"
 #include <connectivity/dbexception.hxx>
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
-#include "dsitems.hxx"
-#include "stringconstants.hxx"
-#include "dbadmin.hxx"
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
+#include <dsitems.hxx>
+#include <stringconstants.hxx>
+#include <dbadmin.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
 #include <vcl/stdtext.hxx>
@@ -37,7 +37,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "DriverSettings.hxx"
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/confignode.hxx>
 #include <osl/diagnose.h>

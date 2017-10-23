@@ -24,8 +24,8 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <statement.hxx>
-#include <column.hxx>
+#include "statement.hxx"
+#include "column.hxx"
 
 namespace dbaccess
 {

@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "QueryDesignView.hxx"
-#include "QueryTableView.hxx"
+#include <QueryDesignView.hxx>
+#include <QueryTableView.hxx>
 #include "QTableWindow.hxx"
 #include <vcl/toolbox.hxx>
-#include "querycontroller.hxx"
-#include "sqlbison.hxx"
+#include <querycontroller.hxx>
+#include <sqlbison.hxx>
 #include <vcl/split.hxx>
 #include <svl/undo.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include "adtabdlg.hxx"
+#include <adtabdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/layout.hxx>
-#include "browserids.hxx"
+#include <browserids.hxx>
 #include "SelectionBrowseBox.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
+#include <strings.hrc>
+#include <strings.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
@@ -48,14 +48,14 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <connectivity/PColumn.hxx>
 #include "QTableConnection.hxx"
-#include "ConnectionLine.hxx"
-#include "ConnectionLineData.hxx"
+#include <ConnectionLine.hxx>
+#include <ConnectionLineData.hxx>
 #include "QTableConnectionData.hxx"
-#include "core_resource.hxx"
-#include "stringconstants.hxx"
-#include "UITools.hxx"
-#include "querycontainerwindow.hxx"
-#include "sqlmessage.hxx"
+#include <core_resource.hxx>
+#include <stringconstants.hxx>
+#include <UITools.hxx>
+#include <querycontainerwindow.hxx>
+#include <sqlmessage.hxx>
 #include <unotools/syslocale.hxx>
 #include <memory>
 #include <set>

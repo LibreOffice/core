@@ -20,13 +20,13 @@
 #include <dbaccess/genericcontroller.hxx>
 #include <comphelper/uno3.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include "browserids.hxx"
+#include <browserids.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <dbaccess/dataview.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <vcl/stdtext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -42,8 +42,8 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include "UITools.hxx"
-#include "commontypes.hxx"
+#include <UITools.hxx>
+#include <commontypes.hxx>
 
 #include <com/sun/star/ui/XSidebarProvider.hpp>
 #include <sfx2/sidebar/UnoSidebar.hxx>
@@ -51,7 +51,7 @@
 
 #include <vcl/waitobj.hxx>
 #include <svl/urihelper.hxx>
-#include "datasourceconnector.hxx"
+#include <datasourceconnector.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>

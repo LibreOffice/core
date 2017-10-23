@@ -21,11 +21,11 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DBWIZ_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include "IItemSetHelper.hxx"
 #include <comphelper/uno3.hxx>
 #include <svtools/wizardmachine.hxx>
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 #include <memory>
 
 namespace com { namespace sun { namespace star {

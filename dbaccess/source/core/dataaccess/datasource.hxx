@@ -35,8 +35,8 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/embed/XTransactionListener.hpp>
-#include "apitools.hxx"
-#include "bookmarkcontainer.hxx"
+#include <apitools.hxx>
+#include <bookmarkcontainer.hxx>
 #include <rtl/ref.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -45,12 +45,12 @@
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include "ContentHelper.hxx"
+#include <ContentHelper.hxx>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include "ModelImpl.hxx"
+#include <ModelImpl.hxx>
 
 namespace dbaccess
 {

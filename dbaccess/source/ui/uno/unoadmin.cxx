@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include "dbu_reghelper.hxx"
-#include "unoadmin.hxx"
-#include "dbadmin.hxx"
+#include <dbu_reghelper.hxx>
+#include <unoadmin.hxx>
+#include <dbadmin.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>

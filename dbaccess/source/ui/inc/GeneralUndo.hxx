@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_GENERALUNDO_HXX
 
 #include <svl/undo.hxx>
-#include "core_resource.hxx"
+#include <core_resource.hxx>
 
 namespace dbaui
 {

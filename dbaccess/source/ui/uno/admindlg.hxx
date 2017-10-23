@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_ADMINDLG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_UNO_ADMINDLG_HXX
 
-#include "unoadmin.hxx"
+#include <unoadmin.hxx>
 
 namespace dbaui
 {

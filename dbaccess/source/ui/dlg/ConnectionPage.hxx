@@ -23,7 +23,7 @@
 #include "ConnectionHelper.hxx"
 #include "adminpages.hxx"
 #include <ucbhelper/content.hxx>
-#include "curledit.hxx"
+#include <curledit.hxx>
 
 namespace dbaui
 {

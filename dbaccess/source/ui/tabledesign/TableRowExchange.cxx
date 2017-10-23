@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableRowExchange.hxx"
+#include <TableRowExchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include "TableRow.hxx"
+#include <TableRow.hxx>
 
 namespace dbaui
 {

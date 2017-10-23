@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 #include <utility>
 
 #include <string.h>
 #include "RowSet.hxx"
-#include "stringconstants.hxx"
-#include "sdbcoretools.hxx"
-#include "SingleSelectQueryComposer.hxx"
+#include <stringconstants.hxx>
+#include <sdbcoretools.hxx>
+#include <SingleSelectQueryComposer.hxx>
 #include "CRowSetColumn.hxx"
 #include "CRowSetDataColumn.hxx"
 #include "RowSetCache.hxx"
-#include "strings.hrc"
-#include "core_resource.hxx"
-#include "tablecontainer.hxx"
+#include <strings.hrc>
+#include <core_resource.hxx>
+#include <tablecontainer.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>

@@ -20,13 +20,13 @@
 #include "AppController.hxx"
 #include "AppDetailView.hxx"
 #include "AppView.hxx"
-#include "core_resource.hxx"
-#include "dbaccess_slotid.hrc"
-#include "strings.hrc"
-#include "stringconstants.hxx"
-#include "defaultobjectnamecheck.hxx"
-#include "dlgsave.hxx"
-#include "UITools.hxx"
+#include <core_resource.hxx>
+#include <dbaccess_slotid.hrc>
+#include <strings.hrc>
+#include <stringconstants.hxx>
+#include <defaultobjectnamecheck.hxx>
+#include <dlgsave.hxx>
+#include <UITools.hxx>
 #include "subcomponentmanager.hxx"
 
 #include <com/sun/star/container/XChild.hpp>

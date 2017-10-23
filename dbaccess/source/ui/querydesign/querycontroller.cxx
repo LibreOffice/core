@@ -17,30 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "adtabdlg.hxx"
-#include "browserids.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
-#include "query.hrc"
-#include "dbu_reghelper.hxx"
-#include "dbu_pageids.hxx"
-#include "stringconstants.hxx"
-#include "defaultobjectnamecheck.hxx"
-#include "dlgsave.hxx"
-#include "uiservices.hxx"
+#include <adtabdlg.hxx>
+#include <browserids.hxx>
+#include <core_resource.hxx>
+#include <strings.hrc>
+#include <query.hrc>
+#include <dbu_reghelper.hxx>
+#include <dbu_pageids.hxx>
+#include <stringconstants.hxx>
+#include <defaultobjectnamecheck.hxx>
+#include <dlgsave.hxx>
+#include <uiservices.hxx>
 #include "QTableWindow.hxx"
 #include "QTableWindowData.hxx"
-#include "querycontainerwindow.hxx"
-#include "querycontroller.hxx"
-#include "QueryDesignView.hxx"
-#include "QueryTableView.hxx"
-#include "QueryTextView.hxx"
-#include "QueryViewSwitch.hxx"
-#include "sqlmessage.hxx"
-#include "TableConnectionData.hxx"
-#include "TableFieldDescription.hxx"
-#include "UITools.hxx"
-#include "QueryPropertiesDialog.hxx"
+#include <querycontainerwindow.hxx>
+#include <querycontroller.hxx>
+#include <QueryDesignView.hxx>
+#include <QueryTableView.hxx>
+#include <QueryTextView.hxx>
+#include <QueryViewSwitch.hxx>
+#include <sqlmessage.hxx>
+#include <TableConnectionData.hxx>
+#include <TableFieldDescription.hxx>
+#include <UITools.hxx>
+#include <QueryPropertiesDialog.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XChild.hpp>

@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableGrantCtrl.hxx"
-#include "core_resource.hxx"
+#include <TableGrantCtrl.hxx>
+#include <core_resource.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
-#include "strings.hrc"
-#include "UITools.hxx"
+#include <strings.hrc>
+#include <UITools.hxx>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::container;

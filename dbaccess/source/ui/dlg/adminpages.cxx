@@ -18,19 +18,19 @@
  */
 
 #include "adminpages.hxx"
-#include "core_resource.hxx"
-#include "dbadmin.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <dbadmin.hxx>
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include "stringconstants.hxx"
-#include "dsitems.hxx"
+#include <stringconstants.hxx>
+#include <dsitems.hxx>
 #include "dsselect.hxx"
 #include "odbcconfig.hxx"
 #include "optionalboolitem.hxx"
-#include "sqlmessage.hxx"
+#include <sqlmessage.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/accel.hxx>

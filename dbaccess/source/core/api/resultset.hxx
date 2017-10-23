@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_RESULTSET_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_RESULTSET_HXX
 
-#include "column.hxx"
+#include <column.hxx>
 #include <connectivity/warningscontainer.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ScrollHelper.hxx"
+#include <ScrollHelper.hxx>
 
 #define LISTBOX_SCROLLING_AREA  12
 namespace dbaui

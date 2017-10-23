@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "core_resource.hxx"
-#include "dbwizsetup.hxx"
-#include "dsmeta.hxx"
+#include <core_resource.hxx>
+#include <dbwizsetup.hxx>
+#include <dsmeta.hxx>
 #include "DBSetupConnectionPages.hxx"
-#include "dbu_dlg.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "dsitems.hxx"
+#include <dbu_dlg.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <dsitems.hxx>
 #include "dsnItem.hxx"
 
 #include <unotools/pathoptions.hxx>
@@ -32,18 +32,18 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <vcl/msgbox.hxx>
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 #include "adminpages.hxx"
 #include <sfx2/docfilt.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "generalpage.hxx"
-#include "stringlistitem.hxx"
-#include "propertysetitem.hxx"
+#include <stringlistitem.hxx>
+#include <propertysetitem.hxx>
 #include <unotools/confignode.hxx>
 #include "DbAdminImpl.hxx"
-#include "helpids.h"
+#include <helpids.h>
 #include "ConnectionPageSetup.hxx"
-#include "UITools.hxx"
+#include <UITools.hxx>
 #include <dbaccess/AsynchronousLink.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>

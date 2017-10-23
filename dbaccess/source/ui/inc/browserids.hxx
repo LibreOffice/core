@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_BROWSERIDS_HXX
 
 #include <svx/svxids.hrc>
-#include "dbaccess_slotid.hrc"
+#include <dbaccess_slotid.hrc>
 
 #define ID_BROWSER_COPY                     SID_COPY
 #define ID_BROWSER_CUT                      SID_CUT

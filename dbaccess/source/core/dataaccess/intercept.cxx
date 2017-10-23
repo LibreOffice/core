@@ -19,7 +19,7 @@
 
 
 #include "intercept.hxx"
-#include "stringconstants.hxx"
+#include <stringconstants.hxx>
 
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/util/XModifiable.hpp>

@@ -18,13 +18,13 @@
  */
 
 #include "TableUndo.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 #include "TEditControl.hxx"
-#include "TableRow.hxx"
-#include "browserids.hxx"
-#include "TableController.hxx"
-#include "TableDesignView.hxx"
-#include "FieldDescriptions.hxx"
+#include <TableRow.hxx>
+#include <browserids.hxx>
+#include <TableController.hxx>
+#include <TableDesignView.hxx>
+#include <FieldDescriptions.hxx>
 
 using namespace dbaui;
 using namespace ::svt;

@@ -23,7 +23,7 @@
 
 #include <map>
 
-#include "ModelImpl.hxx"
+#include <ModelImpl.hxx>
 #include "documenteventnotifier.hxx"
 
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>

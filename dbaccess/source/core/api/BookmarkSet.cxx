@@ -18,8 +18,8 @@
  */
 
 #include "BookmarkSet.hxx"
-#include "core_resource.hxx"
-#include "strings.hrc"
+#include <core_resource.hxx>
+#include <strings.hrc>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <connectivity/dbexception.hxx>
 

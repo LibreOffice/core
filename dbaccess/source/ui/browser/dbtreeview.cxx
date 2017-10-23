@@ -19,9 +19,9 @@
 
 #include "dbtreeview.hxx"
 #include <svtools/treelistbox.hxx>
-#include "dbtreelistbox.hxx"
+#include <dbtreelistbox.hxx>
 #include "dbtreemodel.hxx"
-#include "helpids.h"
+#include <helpids.h>
 
 namespace dbaui
 {

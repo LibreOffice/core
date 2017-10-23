@@ -17,21 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "com/sun/star/beans/XMultiPropertySet.hpp"
-#include "com/sun/star/beans/XPropertiesChangeListener.hpp"
-#include "officecfg/Office/Common.hxx"
-#include "sqledit.hxx"
-#include "QueryTextView.hxx"
-#include "querycontainerwindow.hxx"
-#include "helpids.h"
-#include "browserids.hxx"
-#include "querycontroller.hxx"
-#include "undosqledit.hxx"
-#include "QueryDesignView.hxx"
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
+#include <officecfg/Office/Common.hxx>
+#include <sqledit.hxx>
+#include <QueryTextView.hxx>
+#include <querycontainerwindow.hxx>
+#include <helpids.h>
+#include <browserids.hxx>
+#include <querycontroller.hxx>
+#include <undosqledit.hxx>
+#include <QueryDesignView.hxx>
 #include <vcl/settings.hxx>
 #include <cppuhelper/implbase.hxx>
 

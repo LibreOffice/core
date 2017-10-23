@@ -20,18 +20,18 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMPONENTDEFINITION_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_COMPONENTDEFINITION_HXX
 
-#include "commandbase.hxx"
+#include <commandbase.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "datasettings.hxx"
+#include <datasettings.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "ContentHelper.hxx"
-#include "apitools.hxx"
+#include <ContentHelper.hxx>
+#include <apitools.hxx>
 #include <column.hxx>
 
 #include <memory>

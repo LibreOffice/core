@@ -18,7 +18,7 @@
  */
 
 #include "DbAdminImpl.hxx"
-#include "dsmeta.hxx"
+#include <dsmeta.hxx>
 
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>
@@ -26,19 +26,19 @@
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include "DriverSettings.hxx"
-#include "IItemSetHelper.hxx"
-#include "UITools.hxx"
-#include "core_resource.hxx"
-#include "dbu_dlg.hxx"
-#include "stringconstants.hxx"
-#include "strings.hrc"
-#include "strings.hxx"
-#include "dsitems.hxx"
+#include <IItemSetHelper.hxx>
+#include <UITools.hxx>
+#include <core_resource.hxx>
+#include <dbu_dlg.hxx>
+#include <stringconstants.hxx>
+#include <strings.hrc>
+#include <strings.hxx>
+#include <dsitems.hxx>
 #include "dsnItem.hxx"
 #include "optionalboolitem.hxx"
-#include "propertysetitem.hxx"
-#include "stringlistitem.hxx"
-#include "OAuthenticationContinuation.hxx"
+#include <propertysetitem.hxx>
+#include <stringlistitem.hxx>
+#include <OAuthenticationContinuation.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/XStorable.hpp>

@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_GENERALPAGE_HXX
 
 #include "adminpages.hxx"
-#include "opendoccontrols.hxx"
+#include <opendoccontrols.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "databaseobjectview.hxx"
-#include "stringconstants.hxx"
-#include "strings.hxx"
-#include "asyncmodaldialog.hxx"
+#include <databaseobjectview.hxx>
+#include <stringconstants.hxx>
+#include <strings.hxx>
+#include <asyncmodaldialog.hxx>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "TableFieldDescription.hxx"
+#include <TableFieldDescription.hxx>
 
 #include <osl/diagnose.h>
 #include <com/sun/star/sdbc/DataType.hpp>

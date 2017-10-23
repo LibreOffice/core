@@ -20,9 +20,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_DSSELECT_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_DSSELECT_HXX
 
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include "odbcconfig.hxx"
-#include "commontypes.hxx"
+#include <commontypes.hxx>
 
 #include <vcl/dialog.hxx>
 #include <vcl/lstbox.hxx>

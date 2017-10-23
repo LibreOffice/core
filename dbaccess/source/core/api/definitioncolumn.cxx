@@ -19,10 +19,10 @@
 
 #include <bitset>
 
-#include "apitools.hxx"
-#include "stringconstants.hxx"
-#include "definitioncolumn.hxx"
-#include "sdbcoretools.hxx"
+#include <apitools.hxx>
+#include <stringconstants.hxx>
+#include <definitioncolumn.hxx>
+#include <sdbcoretools.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

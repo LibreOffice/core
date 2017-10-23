@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_DRIVERSETTINGS_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_DRIVERSETTINGS_HXX
 
-#include "dsntypes.hxx"
+#include <dsntypes.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/vclptr.hxx>
 #include <vector>
