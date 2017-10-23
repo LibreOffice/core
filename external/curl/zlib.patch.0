@@ -45,9 +45,9 @@
 + else
 +  ZLIB_LIBS=""
 +
+   if test -z "$OPT_ZLIB" ; then
  
      if test -n "$PKG_CONFIG"; then
-       PKGCONFIG="$PKG_CONFIG"
 @@ -21005,6 +21020,7 @@
  $as_echo "$as_me: found both libz and libz.h header" >&6;}
      curl_zlib_msg="enabled"
@@ -87,9 +87,9 @@
 + else
 +  ZLIB_LIBS=""
 +
-   CURL_CHECK_PKGCONFIG(zlib)
+   if test -z "$OPT_ZLIB" ; then
+     CURL_CHECK_PKGCONFIG(zlib)
  
-   if test "$PKGCONFIG" != "no" ; then
 @@ -975,6 +986,7 @@
      AC_MSG_NOTICE([found both libz and libz.h header])
      curl_zlib_msg="enabled"

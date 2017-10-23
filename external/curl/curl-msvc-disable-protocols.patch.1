@@ -22,3 +22,14 @@ disable protocols nobody needs in MSVC build
 +#define CURL_DISABLE_TFTP 1
 +
  #endif /* HEADER_CURL_CONFIG_WIN32_H */
+--- curl/winbuild/MakefileBuild.vc.orig	2017-10-23 23:41:21.393200000 +0200
++++ curl/winbuild/MakefileBuild.vc	2017-10-23 23:34:16.028000000 +0200
+@@ -431,7 +431,7 @@
+ 
+ EXE_OBJS = $(CURL_OBJS) $(CURL_DIROBJ)\curl.res
+ 
+-all : $(TARGET) $(PROGRAM_NAME)
++all : $(TARGET)
+ 
+ package: $(TARGET)
+ 	@cd $(DIRDIST)
