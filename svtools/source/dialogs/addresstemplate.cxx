@@ -50,7 +50,7 @@
 #include <algorithm>
 #include <map>
 #include <array>
-#include "strings.hxx"
+#include <strings.hxx>
 
 
 namespace svt

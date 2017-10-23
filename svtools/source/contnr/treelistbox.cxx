@@ -39,8 +39,8 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 #include <svtools/viewdataentry.hxx>
-#include "svimpbox.hxx"
-#include "uitest/uiobject.hxx"
+#include <svimpbox.hxx>
+#include <uitest/uiobject.hxx>
 
 #include <set>
 #include <string.h>

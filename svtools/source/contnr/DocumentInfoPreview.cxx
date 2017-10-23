@@ -40,7 +40,7 @@
 #include <unotools/ucbhelper.hxx>
 
 #include "fileview.hxx"
-#include "templwin.hrc"
+#include <templwin.hrc>
 #include "templwin.hxx"
 
 namespace svtools {

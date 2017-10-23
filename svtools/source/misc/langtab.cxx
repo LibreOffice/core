@@ -32,7 +32,7 @@
 #include <unotools/syslocale.hxx>
 #include <tools/resary.hxx>
 #include <officecfg/VCL.hxx>
-#include "langtab.hrc"
+#include <langtab.hrc>
 
 using namespace ::com::sun::star;
 

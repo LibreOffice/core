@@ -27,7 +27,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/seleng.hxx>
 #include <tools/debug.hxx>
-#include "svtaccessiblefactory.hxx"
+#include <svtaccessiblefactory.hxx>
 
 #include <limits.h>
 

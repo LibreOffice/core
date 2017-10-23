@@ -38,8 +38,8 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <vcl/lazydelete.hxx>
-#include "bitmaps.hlst"
-#include "strings.hxx"
+#include <bitmaps.hlst>
+#include <strings.hxx>
 
 // globals *******************************************************************
 

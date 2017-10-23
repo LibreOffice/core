@@ -29,8 +29,8 @@
 #include <svtools/strings.hrc>
 #include <svtools/sfxecode.hxx>
 #include <memory>
-#include "errtxt.hrc"
-#include "strings.hxx"
+#include <errtxt.hrc>
+#include <strings.hxx>
 
 static DialogMask aWndFunc(
     vcl::Window *pWin,            // Parent of the dialog

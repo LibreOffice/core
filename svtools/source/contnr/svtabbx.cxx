@@ -27,7 +27,7 @@
 #include <vcl/builderfactory.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include "svtaccessiblefactory.hxx"
+#include <svtaccessiblefactory.hxx>
 #include <o3tl/make_unique.hxx>
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;

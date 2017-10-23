@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_INC_ICONVIEWIMPL_HXX
 #define INCLUDED_SVTOOLS_SOURCE_INC_ICONVIEWIMPL_HXX
 
-#include <svimpbox.hxx>
+#include "svimpbox.hxx"
 
 class SvTreeListBox;
 class Point;

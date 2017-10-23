@@ -18,7 +18,7 @@
  */
 
 
-#include "unoiface.hxx"
+#include <unoiface.hxx>
 
 MultiLineEdit::MultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
     : VclMultiLineEdit( pParent,nWinStyle )

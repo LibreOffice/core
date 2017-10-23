@@ -29,7 +29,7 @@
 #include <svtools/svtresid.hxx>
 
 #include <svtools/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #include <algorithm>
 #include <tools/multisel.hxx>

@@ -9,7 +9,7 @@
  */
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "cppunit/plugin/TestPlugIn.h"
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include <svtools/grfmgr.hxx>
 

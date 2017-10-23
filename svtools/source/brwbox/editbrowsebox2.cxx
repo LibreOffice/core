@@ -23,7 +23,7 @@
 #include "editbrowseboximpl.hxx"
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "svtaccessiblefactory.hxx"
+#include <svtaccessiblefactory.hxx>
 
 namespace svt
 {

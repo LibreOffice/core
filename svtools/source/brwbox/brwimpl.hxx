@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
 #define INCLUDED_SVTOOLS_SOURCE_BRWBOX_BRWIMPL_HXX
 
-#include "svtaccessiblefactory.hxx"
+#include <svtaccessiblefactory.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <map>

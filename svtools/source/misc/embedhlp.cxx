@@ -21,7 +21,7 @@
 #include <svtools/embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svtools/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <svtools/svtresid.hxx>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
