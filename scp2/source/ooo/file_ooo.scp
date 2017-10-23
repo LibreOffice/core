@@ -653,6 +653,15 @@ End
 #endif
 
 #if defined WITH_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Sq
+	Dir = FILELIST_DIR;
+	Name = "Dictionary/dict-sq.filelist";
+	Styles = (PACKED, FORCELANGUAGEPACK, FILELIST);
+	TXT_FILE_BODY;
+End
+#endif
+
+#if defined WITH_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sr
 	Dir = FILELIST_DIR;
 	Name = "Dictionary/dict-sr.filelist";

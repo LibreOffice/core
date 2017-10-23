@@ -599,6 +599,17 @@ Module gid_Module_Root_Extension_Dictionary_Sl
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Sq
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SQ );
+    Files = (gid_File_Extension_Dictionary_Sq);
+    InstallOrder = "2000";
+    Sortkey = "505";
+    Spellcheckerlanguage = "sq";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Sr
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_SR );
     Files = (gid_File_Extension_Dictionary_Sr);

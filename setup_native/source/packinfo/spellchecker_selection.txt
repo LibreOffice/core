@@ -74,6 +74,7 @@ ru = "ru,de,uk"
 si = "si"
 sk = "sk"
 sl = "sl"
+sq = "sq"
 sv = "sv,de"
 sr = "sr"
 # ! Note the package 'sr' also holds the dictionaries for 'sr-Latn' (formerly 'sh') !

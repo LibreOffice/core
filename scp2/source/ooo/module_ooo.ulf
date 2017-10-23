@@ -298,6 +298,12 @@ en-US = "Slovenian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_SL]
 en-US = "Slovenian spelling dictionary, hyphenation rules, and thesaurus"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_SQ]
+en-US = "Albanian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_SQ]
+en-US = "Albanian spelling dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_SR]
 en-US = "Serbian"
 
