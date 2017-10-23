@@ -8,14 +8,14 @@
  */
 
 #include <sal/types.h>
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 // Just verify that all the generated headers can be included (i.e., that all
 // the identifiers are valid and do not clash:
-#include "officecfg/officecfg_qa_allheaders.hxx"
+#include <officecfg/officecfg_qa_allheaders.hxx>
 
 namespace {
 
