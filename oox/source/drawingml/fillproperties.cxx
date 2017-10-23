@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/fillproperties.hxx"
+#include <drawingml/fillproperties.hxx>
 
 #include <iterator>
 
@@ -35,9 +35,9 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
 #include <oox/core/fragmenthandler.hxx>
-#include "oox/helper/graphichelper.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
+#include <oox/helper/graphichelper.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>

@@ -17,29 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <osl/diagnose.h>
 
 #include <oox/helper/attributelist.hxx>
-#include "oox/helper/propertyset.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/helper/propertyset.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include "headerfootercontext.hxx"
-#include "oox/ppt/backgroundproperties.hxx"
-#include "oox/ppt/slidefragmenthandler.hxx"
-#include "oox/ppt/slidetimingcontext.hxx"
-#include "oox/ppt/slidetransitioncontext.hxx"
-#include "oox/ppt/slidemastertextstylescontext.hxx"
-#include "oox/ppt/pptshapegroupcontext.hxx"
-#include "oox/ppt/pptshape.hxx"
-#include "oox/vml/vmldrawing.hxx"
-#include "oox/vml/vmldrawingfragment.hxx"
-#include "drawingml/clrschemecontext.hxx"
-#include "drawingml/textliststyle.hxx"
-#include "oox/ppt/pptimport.hxx"
+#include <oox/ppt/backgroundproperties.hxx>
+#include <oox/ppt/slidefragmenthandler.hxx>
+#include <oox/ppt/slidetimingcontext.hxx>
+#include <oox/ppt/slidetransitioncontext.hxx>
+#include <oox/ppt/slidemastertextstylescontext.hxx>
+#include <oox/ppt/pptshapegroupcontext.hxx>
+#include <oox/ppt/pptshape.hxx>
+#include <oox/vml/vmldrawing.hxx>
+#include <oox/vml/vmldrawingfragment.hxx>
+#include <drawingml/clrschemecontext.hxx>
+#include <drawingml/textliststyle.hxx>
+#include <oox/ppt/pptimport.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>

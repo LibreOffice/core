@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/transform2dcontext.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/drawingml/shape.hxx"
-#include "drawingml/customshapeproperties.hxx"
-#include "drawingml/textbody.hxx"
+#include <drawingml/transform2dcontext.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/drawingml/shape.hxx>
+#include <drawingml/customshapeproperties.hxx>
+#include <drawingml/textbody.hxx>
 #include <oox/token/namespaces.hxx>
 
 using namespace ::com::sun::star;

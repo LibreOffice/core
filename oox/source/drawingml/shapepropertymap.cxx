@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/shapepropertymap.hxx"
+#include <oox/drawingml/shapepropertymap.hxx>
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include "oox/helper/modelobjecthelper.hxx"
+#include <oox/helper/modelobjecthelper.hxx>
 #include <oox/token/properties.hxx>
 
 namespace oox {

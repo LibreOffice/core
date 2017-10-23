@@ -22,8 +22,8 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
-#include "oox/core/fragmenthandler2.hxx"
-#include "oox/drawingml/color.hxx"
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/drawingml/color.hxx>
 
 namespace oox { namespace ppt {
 

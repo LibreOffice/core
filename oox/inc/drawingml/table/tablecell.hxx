@@ -26,8 +26,8 @@
 #include <drawingml/textliststyle.hxx>
 #include <com/sun/star/table/XCell.hpp>
 
-#include "drawingml/fillproperties.hxx"
-#include "drawingml/lineproperties.hxx"
+#include <drawingml/fillproperties.hxx>
+#include <drawingml/lineproperties.hxx>
 
 #include <vector>
 #include <map>

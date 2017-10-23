@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/progressbar.hxx"
+#include <oox/helper/progressbar.hxx>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include "oox/helper/helper.hxx"
+#include <oox/helper/helper.hxx>
 
 namespace oox {
 

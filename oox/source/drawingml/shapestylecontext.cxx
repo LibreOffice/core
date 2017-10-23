@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/shapestylecontext.hxx"
+#include <drawingml/shapestylecontext.hxx>
 
-#include "oox/helper/attributelist.hxx"
-#include "drawingml/colorchoicecontext.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <drawingml/colorchoicecontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

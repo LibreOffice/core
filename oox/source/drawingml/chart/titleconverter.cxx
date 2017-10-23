@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/titleconverter.hxx"
+#include <drawingml/chart/titleconverter.hxx>
 
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
@@ -27,17 +27,17 @@
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <osl/diagnose.h>
-#include "drawingml/textbody.hxx"
-#include "drawingml/textparagraph.hxx"
-#include "drawingml/chart/datasourceconverter.hxx"
-#include "drawingml/chart/titlemodel.hxx"
-#include "oox/helper/containerhelper.hxx"
+#include <drawingml/textbody.hxx>
+#include <drawingml/textparagraph.hxx>
+#include <drawingml/chart/datasourceconverter.hxx>
+#include <drawingml/chart/titlemodel.hxx>
+#include <oox/helper/containerhelper.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/drawing/Alignment.hpp>
 
-#include "oox/drawingml/chart/modelbase.hxx"
+#include <oox/drawingml/chart/modelbase.hxx>
 namespace oox {
 namespace drawingml {
 namespace chart {

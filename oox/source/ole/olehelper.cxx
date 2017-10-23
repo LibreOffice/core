@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ole/olehelper.hxx"
+#include <oox/ole/olehelper.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <sot/storage.hxx>
 #include <osl/diagnose.h>
-#include "oox/helper/binaryinputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>
-#include "oox/helper/graphichelper.hxx"
+#include <oox/helper/graphichelper.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "oox/ole/axcontrol.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/ole/olestorage.hxx"
+#include <oox/ole/axcontrol.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/ole/olestorage.hxx>
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

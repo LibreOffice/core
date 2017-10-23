@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/chart/chartconverter.hxx"
+#include <oox/drawingml/chart/chartconverter.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include "drawingml/chart/chartspaceconverter.hxx"
-#include "drawingml/chart/chartspacemodel.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/core/xmlfilterbase.hxx"
+#include <drawingml/chart/chartspaceconverter.hxx>
+#include <drawingml/chart/chartspacemodel.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 #include <osl/diagnose.h>
 
 using ::oox::drawingml::chart::DataSequenceModel;

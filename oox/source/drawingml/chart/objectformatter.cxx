@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/objectformatter.hxx"
+#include <drawingml/chart/objectformatter.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -25,15 +25,15 @@
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
-#include "oox/core/xmlfilterbase.hxx"
-#include "drawingml/fillproperties.hxx"
-#include "drawingml/lineproperties.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "drawingml/textbody.hxx"
-#include "drawingml/textparagraph.hxx"
-#include "oox/drawingml/theme.hxx"
-#include "drawingml/chart/chartspacemodel.hxx"
-#include "oox/helper/modelobjecthelper.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <drawingml/fillproperties.hxx>
+#include <drawingml/lineproperties.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <drawingml/textbody.hxx>
+#include <drawingml/textparagraph.hxx>
+#include <oox/drawingml/theme.hxx>
+#include <drawingml/chart/chartspacemodel.hxx>
+#include <oox/helper/modelobjecthelper.hxx>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/token/properties.hxx>
 

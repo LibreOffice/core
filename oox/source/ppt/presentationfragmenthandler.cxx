@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "comphelper/anytostring.hxx"
+#include <comphelper/anytostring.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 #include <tools/multisel.hxx>
 

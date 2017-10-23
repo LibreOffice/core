@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/plotareaconverter.hxx"
+#include <drawingml/chart/plotareaconverter.hxx>
 
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
@@ -28,9 +28,9 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <osl/diagnose.h>
-#include "drawingml/chart/axisconverter.hxx"
-#include "drawingml/chart/plotareamodel.hxx"
-#include "drawingml/chart/typegroupconverter.hxx"
+#include <drawingml/chart/axisconverter.hxx>
+#include <drawingml/chart/plotareamodel.hxx>
+#include <drawingml/chart/typegroupconverter.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>

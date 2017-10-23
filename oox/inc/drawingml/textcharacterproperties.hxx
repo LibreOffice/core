@@ -25,7 +25,7 @@
 #include <oox/drawingml/color.hxx>
 #include <drawingml/textfont.hxx>
 
-#include "drawingml/fillproperties.hxx"
+#include <drawingml/fillproperties.hxx>
 
 namespace oox { class PropertySet; }
 

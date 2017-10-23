@@ -26,8 +26,8 @@
 #include <ooo/vba/excel/XWorkbook.hpp>
 
 #include <oox/helper/binaryoutputstream.hxx>
-#include "oox/helper/propertyset.hxx"
-#include "oox/token/properties.hxx"
+#include <oox/helper/propertyset.hxx>
+#include <oox/token/properties.hxx>
 
 #include <sot/storage.hxx>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/titlemodel.hxx"
+#include <drawingml/chart/titlemodel.hxx>
 #include <oox/token/tokens.hxx>
 
 namespace oox {

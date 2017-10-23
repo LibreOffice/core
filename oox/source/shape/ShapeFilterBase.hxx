@@ -22,10 +22,10 @@
 
 #include <memory>
 #include <rtl/ref.hxx>
-#include "oox/vml/vmldrawing.hxx"
-#include "drawingml/table/tablestylelist.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/vml/vmldrawing.hxx>
+#include <drawingml/table/tablestylelist.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 namespace oox {
 namespace shape {

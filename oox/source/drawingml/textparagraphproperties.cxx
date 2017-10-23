@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/textparagraphproperties.hxx"
+#include <drawingml/textparagraphproperties.hxx>
 
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -33,10 +33,10 @@
 
 #include <osl/diagnose.h>
 
-#include "oox/helper/helper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
+#include <oox/helper/helper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 

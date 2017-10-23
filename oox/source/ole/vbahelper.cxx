@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ole/vbahelper.hxx"
+#include <oox/ole/vbahelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-#include "oox/helper/binaryinputstream.hxx"
+#include <oox/helper/binaryinputstream.hxx>
 
 namespace oox {
 namespace ole {

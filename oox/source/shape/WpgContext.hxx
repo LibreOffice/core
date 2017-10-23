@@ -10,8 +10,8 @@
 #ifndef INCLUDED_OOX_SOURCE_SHAPE_WPGCONTEXT_HXX
 #define INCLUDED_OOX_SOURCE_SHAPE_WPGCONTEXT_HXX
 
-#include "oox/core/contexthandler2.hxx"
-#include "oox/drawingml/shape.hxx"
+#include <oox/core/contexthandler2.hxx>
+#include <oox/drawingml/shape.hxx>
 
 namespace oox
 {

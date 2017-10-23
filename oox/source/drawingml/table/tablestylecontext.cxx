@@ -18,9 +18,9 @@
  */
 
 
-#include "drawingml/table/tablestylecontext.hxx"
-#include "drawingml/table/tablebackgroundstylecontext.hxx"
-#include "drawingml/table/tablepartstylecontext.hxx"
+#include <drawingml/table/tablestylecontext.hxx>
+#include <drawingml/table/tablebackgroundstylecontext.hxx>
+#include <drawingml/table/tablepartstylecontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

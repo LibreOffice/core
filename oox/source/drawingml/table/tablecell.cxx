@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/table/tablecell.hxx"
-#include "drawingml/table/tableproperties.hxx"
+#include <drawingml/table/tablecell.hxx>
+#include <drawingml/table/tableproperties.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "drawingml/textbody.hxx"
-#include "oox/drawingml/theme.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/helper/propertyset.hxx"
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <drawingml/textbody.hxx>
+#include <oox/drawingml/theme.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/helper/propertyset.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>

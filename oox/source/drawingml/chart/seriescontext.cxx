@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/seriescontext.hxx"
+#include <drawingml/chart/seriescontext.hxx>
 
-#include "drawingml/shapepropertiescontext.hxx"
-#include "drawingml/textbodycontext.hxx"
-#include "drawingml/chart/datasourcecontext.hxx"
-#include "drawingml/chart/seriesmodel.hxx"
-#include "drawingml/chart/titlecontext.hxx"
+#include <drawingml/shapepropertiescontext.hxx>
+#include <drawingml/textbodycontext.hxx>
+#include <drawingml/chart/datasourcecontext.hxx>
+#include <drawingml/chart/seriesmodel.hxx>
+#include <drawingml/chart/titlecontext.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>

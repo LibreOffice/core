@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/core/xmlfilterbase.hxx"
+#include <oox/core/xmlfilterbase.hxx>
 
 #include <cstdio>
 #include <set>
@@ -39,16 +39,16 @@
 #include <rtl/instance.hxx>
 #include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
-#include "oox/core/fastparser.hxx"
-#include "oox/core/fragmenthandler.hxx"
-#include "oox/core/recordparser.hxx"
-#include "oox/core/relationshandler.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/helper/zipstorage.hxx"
+#include <oox/core/fastparser.hxx>
+#include <oox/core/fragmenthandler.hxx>
+#include <oox/core/recordparser.hxx>
+#include <oox/core/relationshandler.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/helper/zipstorage.hxx>
 #include <oox/ole/olestorage.hxx>
 #include <oox/token/namespaces.hxx>
-#include "oox/token/properties.hxx"
+#include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>

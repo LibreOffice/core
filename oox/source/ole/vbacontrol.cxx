@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ole/vbacontrol.hxx"
+#include <oox/ole/vbacontrol.hxx>
 
 #include <algorithm>
 #include <set>
@@ -30,14 +30,14 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/helper/storagebase.hxx"
-#include "oox/helper/textinputstream.hxx"
-#include "oox/ole/vbahelper.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/helper/storagebase.hxx>
+#include <oox/helper/textinputstream.hxx>
+#include <oox/ole/vbahelper.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <unordered_map>

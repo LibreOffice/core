@@ -31,12 +31,12 @@
 #include <tools/urlobj.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include "oox/ppt/pptimport.hxx"
-#include "oox/drawingml/chart/chartconverter.hxx"
-#include "oox/dump/pptxdumper.hxx"
-#include "drawingml/table/tablestylelistfragmenthandler.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/ole/vbaproject.hxx"
+#include <oox/ppt/pptimport.hxx>
+#include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/dump/pptxdumper.hxx>
+#include <drawingml/table/tablestylelistfragmenthandler.hxx>
+#include <oox/helper/graphichelper.hxx>
+#include <oox/ole/vbaproject.hxx>
 #include <oox/ppt/presentationfragmenthandler.hxx>
 #include <oox/token/tokens.hxx>
 

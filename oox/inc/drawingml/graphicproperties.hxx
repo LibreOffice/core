@@ -26,7 +26,7 @@
 
 #include <oox/helper/helper.hxx>
 
-#include "drawingml/fillproperties.hxx"
+#include <drawingml/fillproperties.hxx>
 
 namespace oox {
     class GraphicHelper;

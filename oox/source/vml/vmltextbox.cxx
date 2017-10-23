@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/vml/vmltextbox.hxx"
+#include <oox/vml/vmltextbox.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <svx/unopage.hxx>

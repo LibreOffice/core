@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/datasourcecontext.hxx"
+#include <drawingml/chart/datasourcecontext.hxx>
 
-#include "oox/drawingml/chart/datasourcemodel.hxx"
+#include <oox/drawingml/chart/datasourcemodel.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <oox/core/xmlfilterbase.hxx>

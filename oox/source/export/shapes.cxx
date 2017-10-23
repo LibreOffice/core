@@ -22,9 +22,9 @@
 #include <config_global.h>
 #include <unotools/mediadescriptor.hxx>
 #include <filter/msfilter/util.hxx>
-#include "oox/core/xmlfilterbase.hxx"
-#include "oox/export/shapes.hxx"
-#include "oox/export/utils.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/export/shapes.hxx>
+#include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
 #include <oox/token/tokens.hxx>

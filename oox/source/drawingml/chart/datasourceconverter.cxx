@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/datasourceconverter.hxx"
+#include <drawingml/chart/datasourceconverter.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include "oox/drawingml/chart/chartconverter.hxx"
-#include "oox/drawingml/chart/datasourcemodel.hxx"
-#include "oox/token/properties.hxx"
+#include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
+#include <oox/token/properties.hxx>
 
 namespace oox {
 namespace drawingml {

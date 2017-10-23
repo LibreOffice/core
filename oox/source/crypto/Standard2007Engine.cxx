@@ -8,7 +8,7 @@
  *
  */
 
-#include "oox/crypto/Standard2007Engine.hxx"
+#include <oox/crypto/Standard2007Engine.hxx>
 
 #include <oox/crypto/CryptTools.hxx>
 #include <oox/helper/binaryinputstream.hxx>

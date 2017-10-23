@@ -26,8 +26,8 @@
 
 #include <rtl/ustring.hxx>
 
-#include "oox/drawingml/shape.hxx"
-#include "drawingml/fillproperties.hxx"
+#include <oox/drawingml/shape.hxx>
+#include <drawingml/fillproperties.hxx>
 #include <oox/token/tokens.hxx>
 
 namespace com { namespace sun { namespace star {

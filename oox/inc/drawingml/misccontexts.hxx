@@ -22,7 +22,7 @@
 
 #include <drawingml/colorchoicecontext.hxx>
 
-#include "drawingml/fillproperties.hxx"
+#include <drawingml/fillproperties.hxx>
 
 namespace oox {
 namespace drawingml {

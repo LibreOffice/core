@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/binarystreambase.hxx"
+#include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/helper.hxx>
 
 #include <com/sun/star/io/XSeekable.hpp>

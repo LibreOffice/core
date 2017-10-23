@@ -19,19 +19,19 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include "oox/ppt/timenode.hxx"
-#include "oox/ppt/pptshape.hxx"
-#include "oox/ppt/slidepersist.hxx"
-#include "drawingml/fillproperties.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/vml/vmldrawing.hxx"
+#include <oox/ppt/timenode.hxx>
+#include <oox/ppt/pptshape.hxx>
+#include <oox/ppt/slidepersist.hxx>
+#include <drawingml/fillproperties.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/vml/vmldrawing.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include "oox/core/xmlfilterbase.hxx"
-#include "drawingml/textliststyle.hxx"
-#include "drawingml/textparagraphproperties.hxx"
+#include <oox/core/xmlfilterbase.hxx>
+#include <drawingml/textliststyle.hxx>
+#include <drawingml/textparagraphproperties.hxx>
 
 #include <osl/diagnose.h>
 

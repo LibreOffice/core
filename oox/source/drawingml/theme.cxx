@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/theme.hxx"
+#include <oox/drawingml/theme.hxx>
 #include <oox/token/tokens.hxx>
 #include <drawingml/textcharacterproperties.hxx>
 

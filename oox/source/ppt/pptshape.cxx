@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ppt/pptshape.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include "drawingml/textbody.hxx"
+#include <oox/ppt/pptshape.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <drawingml/textbody.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -29,7 +29,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include "oox/ppt/slidepersist.hxx"
+#include <oox/ppt/slidepersist.hxx>
 #include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;

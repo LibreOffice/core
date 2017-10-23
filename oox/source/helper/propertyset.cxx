@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/propertyset.hxx"
+#include <oox/helper/propertyset.hxx>
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
-#include "oox/helper/propertymap.hxx"
+#include <oox/helper/propertymap.hxx>
 
 namespace oox {
 

@@ -19,14 +19,14 @@
 
 #include "conditioncontext.hxx"
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/animations/AnimationEndSync.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 
-#include "oox/helper/attributelist.hxx"
-#include "oox/ppt/animationspersist.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/ppt/animationspersist.hxx>
 #include "animationtypes.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

@@ -21,14 +21,14 @@
 
 #include <basegfx/numeric/ftools.hxx>
 
-#include "oox/helper/attributelist.hxx"
-#include "oox/token/properties.hxx"
-#include "drawingml/fillproperties.hxx"
-#include "drawingml/lineproperties.hxx"
-#include "drawingml/textbody.hxx"
-#include "drawingml/textparagraph.hxx"
-#include "drawingml/textrun.hxx"
-#include "drawingml/customshapeproperties.hxx"
+#include <oox/helper/attributelist.hxx>
+#include <oox/token/properties.hxx>
+#include <drawingml/fillproperties.hxx>
+#include <drawingml/lineproperties.hxx>
+#include <drawingml/textbody.hxx>
+#include <drawingml/textparagraph.hxx>
+#include <drawingml/textrun.hxx>
+#include <drawingml/customshapeproperties.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

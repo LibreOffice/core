@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/attributelist.hxx"
+#include <oox/helper/attributelist.hxx>
 
 #include <cassert>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sax/fastattribs.hxx>
-#include "oox/token/tokenmap.hxx"
+#include <oox/token/tokenmap.hxx>
 
 namespace oox {
 

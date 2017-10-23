@@ -19,7 +19,7 @@
 
 #include "layoutatomvisitors.hxx"
 
-#include "drawingml/customshapeproperties.hxx"
+#include <drawingml/customshapeproperties.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

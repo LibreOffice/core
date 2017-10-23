@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/ole/vbaproject.hxx"
+#include <oox/ole/vbaproject.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -36,16 +36,16 @@
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.h>
-#include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertyset.hxx"
-#include "oox/helper/textinputstream.hxx"
-#include "oox/ole/olestorage.hxx"
-#include "oox/ole/vbacontrol.hxx"
-#include "oox/ole/vbahelper.hxx"
-#include "oox/ole/vbainputstream.hxx"
-#include "oox/ole/vbamodule.hxx"
-#include "oox/token/properties.hxx"
+#include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/helper/textinputstream.hxx>
+#include <oox/ole/olestorage.hxx>
+#include <oox/ole/vbacontrol.hxx>
+#include <oox/ole/vbahelper.hxx>
+#include <oox/ole/vbainputstream.hxx>
+#include <oox/ole/vbamodule.hxx>
+#include <oox/token/properties.hxx>
 
 namespace oox {
 namespace ole {

@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "oox/vml/vmlformatting.hxx"
+#include <oox/vml/vmlformatting.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -25,13 +25,13 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
-#include "oox/drawingml/color.hxx"
-#include "oox/drawingml/drawingmltypes.hxx"
-#include "drawingml/fillproperties.hxx"
-#include "drawingml/lineproperties.hxx"
-#include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/graphichelper.hxx"
+#include <oox/drawingml/color.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <drawingml/fillproperties.hxx>
+#include <drawingml/lineproperties.hxx>
+#include <oox/drawingml/shapepropertymap.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/graphichelper.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <svx/svdtrans.hxx>

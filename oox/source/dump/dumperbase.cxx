@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/dump/dumperbase.hxx"
+#include <oox/dump/dumperbase.hxx>
 
 #include <algorithm>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -28,9 +28,9 @@
 #include <osl/file.hxx>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/binaryoutputstream.hxx"
-#include "oox/helper/textinputstream.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/binaryoutputstream.hxx>
+#include <oox/helper/textinputstream.hxx>
 #include <tools/time.hxx>
 
 #if OOX_INCLUDE_DUMPER

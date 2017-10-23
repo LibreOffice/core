@@ -8,7 +8,7 @@
  *
  */
 
-#include "oox/crypto/DocumentDecryption.hxx"
+#include <oox/crypto/DocumentDecryption.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <sax/tools/converter.hxx>

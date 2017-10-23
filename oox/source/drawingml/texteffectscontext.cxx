@@ -8,7 +8,7 @@
  *
  */
 
-#include "drawingml/texteffectscontext.hxx"
+#include <drawingml/texteffectscontext.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

@@ -22,7 +22,7 @@
 
 #include <memory>
 
-#include "oox/drawingml/shape.hxx"
+#include <oox/drawingml/shape.hxx>
 #include "diagram.hxx"
 #include "diagramlayoutatoms.hxx"
 

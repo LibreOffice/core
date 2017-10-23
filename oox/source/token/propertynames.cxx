@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/token/propertynames.hxx"
+#include <oox/token/propertynames.hxx>
 
 namespace oox {
 
@@ -26,7 +26,7 @@ PropertyNameVector::PropertyNameVector()
     static const sal_Char* sppcPropertyNames[] =
     {
         // include auto-generated C array with property names as C strings
-#include "propertynames.inc"
+#include <propertynames.inc>
         ""
     };
 

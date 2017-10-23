@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/textbodycontext.hxx"
-#include "drawingml/textbodypropertiescontext.hxx"
-#include "drawingml/textparagraph.hxx"
-#include "drawingml/textparagraphpropertiescontext.hxx"
-#include "drawingml/textcharacterpropertiescontext.hxx"
-#include "drawingml/textliststylecontext.hxx"
-#include "drawingml/textfield.hxx"
-#include "drawingml/textfieldcontext.hxx"
+#include <drawingml/textbodycontext.hxx>
+#include <drawingml/textbodypropertiescontext.hxx>
+#include <drawingml/textparagraph.hxx>
+#include <drawingml/textparagraphpropertiescontext.hxx>
+#include <drawingml/textcharacterpropertiescontext.hxx>
+#include <drawingml/textliststylecontext.hxx>
+#include <drawingml/textfield.hxx>
+#include <drawingml/textfieldcontext.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 

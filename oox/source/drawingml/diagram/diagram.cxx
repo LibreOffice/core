@@ -23,13 +23,13 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <editeng/unoprnms.hxx>
-#include "drawingml/textbody.hxx"
-#include "drawingml/textparagraph.hxx"
-#include "drawingml/textrun.hxx"
-#include "drawingml/diagram/diagram.hxx"
-#include "drawingml/fillproperties.hxx"
-#include "oox/ppt/pptshapegroupcontext.hxx"
-#include "oox/ppt/pptshape.hxx"
+#include <drawingml/textbody.hxx>
+#include <drawingml/textparagraph.hxx>
+#include <drawingml/textrun.hxx>
+#include <drawingml/diagram/diagram.hxx>
+#include <drawingml/fillproperties.hxx>
+#include <oox/ppt/pptshapegroupcontext.hxx>
+#include <oox/ppt/pptshape.hxx>
 
 #include "diagramlayoutatoms.hxx"
 #include "layoutatomvisitors.hxx"

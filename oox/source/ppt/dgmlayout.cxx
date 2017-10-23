@@ -18,11 +18,11 @@
  */
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include "oox/ppt/dgmlayout.hxx"
-#include "oox/drawingml/theme.hxx"
-#include "oox/drawingml/themefragmenthandler.hxx"
-#include "drawingml/diagram/diagram.hxx"
-#include "oox/dump/pptxdumper.hxx"
+#include <oox/ppt/dgmlayout.hxx>
+#include <oox/drawingml/theme.hxx>
+#include <oox/drawingml/themefragmenthandler.hxx>
+#include <drawingml/diagram/diagram.hxx>
+#include <oox/dump/pptxdumper.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

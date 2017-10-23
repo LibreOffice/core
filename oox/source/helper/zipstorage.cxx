@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/helper/zipstorage.hxx"
+#include <oox/helper/zipstorage.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
 #include <comphelper/storagehelper.hxx>
-#include "oox/helper/helper.hxx"
+#include <oox/helper/helper.hxx>
 
 namespace oox {
 
