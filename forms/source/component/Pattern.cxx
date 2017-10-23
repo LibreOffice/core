@@ -18,7 +18,7 @@
  */
 
 #include "Pattern.hxx"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

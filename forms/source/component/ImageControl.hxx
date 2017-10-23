@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_IMAGECONTROL_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_IMAGECONTROL_HXX
 
-#include "FormComponent.hxx"
+#include <FormComponent.hxx>
 #include "imgprod.hxx"
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>

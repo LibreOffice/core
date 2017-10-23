@@ -19,11 +19,11 @@
 
 
 #include "navbarcontrol.hxx"
-#include "frm_strings.hxx"
-#include "FormComponent.hxx"
-#include "componenttools.hxx"
-#include "navtoolbar.hxx"
-#include "commandimageprovider.hxx"
+#include <frm_strings.hxx>
+#include <FormComponent.hxx>
+#include <componenttools.hxx>
+#include <navtoolbar.hxx>
+#include <commandimageprovider.hxx>
 
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/awt/PosSize.hpp>

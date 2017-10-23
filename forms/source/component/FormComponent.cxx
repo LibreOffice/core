@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "componenttools.hxx"
-#include "FormComponent.hxx"
-#include "strings.hrc"
-#include "frm_resource.hxx"
-#include "services.hxx"
+#include <componenttools.hxx>
+#include <FormComponent.hxx>
+#include <strings.hrc>
+#include <frm_resource.hxx>
+#include <services.hxx>
 
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>

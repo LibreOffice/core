@@ -20,10 +20,10 @@
 #include <config_features.h>
 
 #include "formoperations.hxx"
-#include "frm_strings.hxx"
-#include "frm_resource.hxx"
-#include "strings.hrc"
-#include "services.hxx"
+#include <frm_strings.hxx>
+#include <frm_resource.hxx>
+#include <strings.hrc>
+#include <services.hxx>
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>

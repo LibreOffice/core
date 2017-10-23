@@ -21,7 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_COMPONENT_COMBOBOX_HXX
 
 #include <memory>
-#include "FormComponent.hxx"
+#include <FormComponent.hxx>
 #include "errorbroadcaster.hxx"
 #include "entrylisthelper.hxx"
 #include "cachedrowset.hxx"

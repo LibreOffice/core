@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include "propertybaghelper.hxx"
+#include <propertybaghelper.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -59,13 +59,13 @@
 
 
 #include <tools/link.hxx>
-#include "InterfaceContainer.hxx"
+#include <InterfaceContainer.hxx>
 
 #include <connectivity/parameters.hxx>
 #include <connectivity/filtermanager.hxx>
 #include <connectivity/warningscontainer.hxx>
 
-#include "listenercontainers.hxx"
+#include <listenercontainers.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>

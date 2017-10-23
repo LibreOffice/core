@@ -19,7 +19,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
 
-#include "FormComponent.hxx"
+#include <FormComponent.hxx>
 
 
 namespace frm

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "FormattedField.hxx"
-#include "services.hxx"
-#include "property.hxx"
-#include "frm_resource.hxx"
-#include "strings.hrc"
-#include "propertybaghelper.hxx"
+#include <services.hxx>
+#include <property.hxx>
+#include <frm_resource.hxx>
+#include <strings.hrc>
+#include <propertybaghelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/numbers.hxx>
 #include <connectivity/dbtools.hxx>

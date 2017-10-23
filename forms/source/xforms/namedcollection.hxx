@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_XFORMS_NAMEDCOLLECTION_HXX
 #define INCLUDED_FORMS_SOURCE_XFORMS_NAMEDCOLLECTION_HXX
 
-#include <collection.hxx>
+#include "collection.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 

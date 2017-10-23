@@ -18,7 +18,7 @@
  */
 
 #include "entrylisthelper.hxx"
-#include "FormComponent.hxx"
+#include <FormComponent.hxx>
 
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>

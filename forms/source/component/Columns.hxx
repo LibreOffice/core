@@ -20,8 +20,8 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_COLUMNS_HXX
 
-#include "cloneable.hxx"
-#include "frm_strings.hxx"
+#include <cloneable.hxx>
+#include <frm_strings.hxx>
 
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>

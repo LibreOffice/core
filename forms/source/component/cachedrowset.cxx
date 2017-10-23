@@ -19,8 +19,8 @@
 
 
 #include "cachedrowset.hxx"
-#include "services.hxx"
-#include "frm_strings.hxx"
+#include <services.hxx>
+#include <frm_strings.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>

@@ -20,13 +20,13 @@
 #include <config_features.h>
 
 #include "ListBox.hxx"
-#include "property.hxx"
-#include "services.hxx"
-#include "frm_resource.hxx"
-#include "strings.hrc"
+#include <property.hxx>
+#include <services.hxx>
+#include <frm_resource.hxx>
+#include <strings.hrc>
 #include "BaseListBox.hxx"
-#include "listenercontainers.hxx"
-#include "componenttools.hxx"
+#include <listenercontainers.hxx>
+#include <componenttools.hxx>
 
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>

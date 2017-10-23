@@ -21,7 +21,7 @@
 
 #include <com/sun/star/form/FormComponentType.hpp>
 
-#include "services.hxx"
+#include <services.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/container.hxx>

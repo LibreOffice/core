@@ -21,9 +21,9 @@
 #define INCLUDED_FORMS_SOURCE_COMPONENT_GRID_HXX
 
 #include "errorbroadcaster.hxx"
-#include "FormComponent.hxx"
-#include "formcontrolfont.hxx"
-#include "InterfaceContainer.hxx"
+#include <FormComponent.hxx>
+#include <formcontrolfont.hxx>
+#include <InterfaceContainer.hxx>
 
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/form/XLoadable.hpp>

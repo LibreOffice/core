@@ -21,7 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_COMPONENT_DATE_HXX
 
 #include "EditBase.hxx"
-#include "limitedformats.hxx"
+#include <limitedformats.hxx>
 
 
 namespace frm

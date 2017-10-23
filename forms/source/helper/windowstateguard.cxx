@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "windowstateguard.hxx"
-#include "frm_strings.hxx"
+#include <windowstateguard.hxx>
+#include <frm_strings.hxx>
 
 #include <com/sun/star/awt/XWindowListener2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

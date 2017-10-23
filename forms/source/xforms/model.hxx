@@ -21,7 +21,7 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_MODEL_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <propertysetbase.hxx>
+#include "propertysetbase.hxx"
 #include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FORMS_SOURCE_COMPONENT_HIDDEN_HXX
 #define INCLUDED_FORMS_SOURCE_COMPONENT_HIDDEN_HXX
 
-#include "FormComponent.hxx"
+#include <FormComponent.hxx>
 
 
 namespace frm

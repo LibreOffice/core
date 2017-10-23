@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "resettable.hxx"
+#include <resettable.hxx>
 
 #include <cppuhelper/weak.hxx>
 

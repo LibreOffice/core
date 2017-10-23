@@ -18,8 +18,8 @@
  */
 
 #include "FixedText.hxx"
-#include "services.hxx"
-#include "property.hxx"
+#include <services.hxx>
+#include <property.hxx>
 #include <comphelper/processfactory.hxx>
 
 

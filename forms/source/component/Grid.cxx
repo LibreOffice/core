@@ -22,8 +22,8 @@
 #include "Columns.hxx"
 #include "findpos.hxx"
 #include "Grid.hxx"
-#include "property.hxx"
-#include "services.hxx"
+#include <property.hxx>
+#include <services.hxx>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XLoadable.hpp>

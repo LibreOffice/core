@@ -18,8 +18,8 @@
  */
 
 #include "GroupBox.hxx"
-#include "property.hxx"
-#include "services.hxx"
+#include <property.hxx>
+#include <services.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 

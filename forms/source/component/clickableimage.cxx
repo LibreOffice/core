@@ -18,9 +18,9 @@
  */
 
 #include "clickableimage.hxx"
-#include "controlfeatureinterception.hxx"
-#include "urltransformer.hxx"
-#include "componenttools.hxx"
+#include <controlfeatureinterception.hxx>
+#include <urltransformer.hxx>
+#include <componenttools.hxx>
 #include <com/sun/star/form/XSubmit.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -40,7 +40,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <osl/mutex.hxx>
-#include "services.hxx"
+#include <services.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <comphelper/processfactory.hxx>
