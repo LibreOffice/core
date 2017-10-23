@@ -1,0 +1,25 @@
+From cc71d75b4d9b88b5c920cd039bab3e707e71568b Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Mon, 23 Oct 2017 12:55:43 +0200
+Subject: [PATCH] add missing include for std::min
+
+Change-Id: I2088057657f3ce23b91dbbc7b4f5840914dbcaa8
+---
+ src/lib/IWASnappyStream.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lib/IWASnappyStream.cpp b/src/lib/IWASnappyStream.cpp
+index 7b28681..9cc84c3 100644
+--- a/src/lib/IWASnappyStream.cpp
++++ b/src/lib/IWASnappyStream.cpp
+@@ -9,6 +9,7 @@
+ 
+ #include "IWASnappyStream.h"
+ 
++#include <algorithm>
+ #include <cassert>
+ #include <limits>
+ #include <memory>
+-- 
+2.14.1
+
