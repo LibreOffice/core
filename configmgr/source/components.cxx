@@ -68,7 +68,7 @@
 #include "xcsparser.hxx"
 
 #if ENABLE_DCONF
-#include <dconf.hxx>
+#include "dconf.hxx"
 #endif
 
 #if defined(_WIN32)

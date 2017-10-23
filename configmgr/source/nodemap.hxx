@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include "config_map.hxx"
 #include <rtl/ref.hxx>
-#include <node.hxx>
+#include "node.hxx"
 
 namespace configmgr {
 
