@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a430d35_035b472f",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 5928,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-10-23T14:10:18Z",
+      "side": 1,
+      "message": "The MSVC branch has always failed to set HAVE_THREADSAFE_STATICS\u003dTRUE for the below AC_SUBST, which wasn\u0027t a problem because the only use of that var was in GCC-only solenv/gbuild/platform/com_GCC_defs.mk.  But if it is now also used in solenv/gbuild/platform/com_GCC_defs.mk, that would cause -Zc:threadSafeInit- to be used even in cases where it should not be (x64 build with \u003e\u003d 2015).",
+      "revId": "1f20be8f404b2d7319b4751cc8b23d58b8ab380a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
