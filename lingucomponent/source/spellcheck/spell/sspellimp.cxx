@@ -35,8 +35,10 @@
 #include <linguistic/lngprops.hxx>
 #include <linguistic/spelldta.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <svtools/strings.hrc>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/useroptions.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -579,9 +581,10 @@ sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
     return bRes;
 }
 
-OUString SAL_CALL SpellChecker::getServiceDisplayName( const Locale& /*rLocale*/ )
+OUString SAL_CALL SpellChecker::getServiceDisplayName(const Locale& rLocale)
 {
-    return OUString( "Hunspell SpellChecker" );
+    std::locale loc(Translate::Create("svt", LanguageTag(rLocale)));
+    return Translate::get(STR_DESCRIPTION_HUNSPELL, loc);
 }
 
 void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
