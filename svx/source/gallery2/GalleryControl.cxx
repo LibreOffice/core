@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "GalleryControl.hxx"
+#include <GalleryControl.hxx>
 
-#include "svx/strings.hrc"
-#include "svx/galmisc.hxx"
-#include "svx/gallery1.hxx"
+#include <svx/strings.hrc>
+#include <svx/galmisc.hxx>
+#include <svx/gallery1.hxx>
 #include "galbrws1.hxx"
-#include "galbrws2.hxx"
+#include <galbrws2.hxx>
 #include "GallerySplitter.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

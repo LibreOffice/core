@@ -29,7 +29,7 @@
 #include <svl/whiter.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
-#include "svx/xexch.hxx"
+#include <svx/xexch.hxx>
 #include <memory>
 #include <utility>
 

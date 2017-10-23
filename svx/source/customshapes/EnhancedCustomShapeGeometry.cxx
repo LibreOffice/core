@@ -22,7 +22,7 @@
 #include <cmath>
 #include <limits>
 
-#include "svx/EnhancedCustomShapeGeometry.hxx"
+#include <svx/EnhancedCustomShapeGeometry.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 
 static const sal_Int32 MIN_INT32 = std::numeric_limits<sal_Int32>::min();

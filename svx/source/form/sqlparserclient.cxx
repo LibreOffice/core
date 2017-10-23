@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sqlparserclient.hxx"
-#include "svx/ParseContext.hxx"
+#include <sqlparserclient.hxx>
+#include <svx/ParseContext.hxx>
 
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlparse.hxx>

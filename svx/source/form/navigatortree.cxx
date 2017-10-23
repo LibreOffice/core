@@ -23,17 +23,17 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 
-#include "helpids.h"
-#include "fmexpl.hxx"
-#include "fmshimp.hxx"
-#include "fmservs.hxx"
-#include "fmundo.hxx"
-#include "fmpgeimp.hxx"
-#include "fmitems.hxx"
-#include "fmobj.hxx"
-#include "fmprop.hxx"
+#include <helpids.h>
+#include <fmexpl.hxx>
+#include <fmshimp.hxx>
+#include <fmservs.hxx>
+#include <fmundo.hxx>
+#include <fmpgeimp.hxx>
+#include <fmitems.hxx>
+#include <fmobj.hxx>
+#include <fmprop.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
@@ -50,8 +50,8 @@
 
 #include <svx/svxdlg.hxx>
 #include <svx/strings.hrc>
-#include "bitmaps.hlst"
-#include "svtools/treelistentry.hxx"
+#include <bitmaps.hlst>
+#include <svtools/treelistentry.hxx>
 
 namespace svxform
 {

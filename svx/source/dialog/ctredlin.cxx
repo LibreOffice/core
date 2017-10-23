@@ -27,14 +27,14 @@
 #include <sfx2/module.hxx>
 #include <unotools/textsearch.hxx>
 #include <svtools/svlbitm.hxx>
-#include "svtools/viewdataentry.hxx"
+#include <svtools/viewdataentry.hxx>
 #include <unotools/charclass.hxx>
 
 #include <editeng/unolingu.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/strings.hrc"
+#include <svx/strings.hrc>
 #include <svx/ctredlin.hxx>
-#include "helpids.h"
+#include <helpids.h>
 
 #define WRITER_DATE     2
 #define CALC_DATE       3

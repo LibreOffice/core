@@ -20,7 +20,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/spacinglistbox.hxx>
 #include <vcl/builderfactory.hxx>
-#include "spacing.hrc"
+#include <spacing.hrc>
 
 SpacingListBox::SpacingListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)

@@ -20,7 +20,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
-#include "fmservs.hxx"
+#include <fmservs.hxx>
 
 using namespace com::sun::star;
 

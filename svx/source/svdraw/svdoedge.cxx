@@ -18,8 +18,8 @@
  */
 
 #include "svddrgm1.hxx"
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

@@ -18,17 +18,17 @@
  */
 
 
-#include "svx/svxerr.hxx"
-#include "fmpgeimp.hxx"
-#include "fmundo.hxx"
-#include "svx/fmtools.hxx"
-#include "fmprop.hxx"
-#include "fmservs.hxx"
-#include "fmobj.hxx"
-#include "formcontrolfactory.hxx"
-#include "svx/svditer.hxx"
-#include "svx/strings.hrc"
-#include "treevisitor.hxx"
+#include <svx/svxerr.hxx>
+#include <fmpgeimp.hxx>
+#include <fmundo.hxx>
+#include <svx/fmtools.hxx>
+#include <fmprop.hxx>
+#include <fmservs.hxx>
+#include <fmobj.hxx>
+#include <formcontrolfactory.hxx>
+#include <svx/svditer.hxx>
+#include <svx/strings.hrc>
+#include <treevisitor.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/container/EnumerableMap.hpp>

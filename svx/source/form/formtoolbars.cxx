@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "formtoolbars.hxx"
+#include <formtoolbars.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/diagnose.h>

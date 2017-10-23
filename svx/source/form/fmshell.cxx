@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fmvwimp.hxx"
+#include <fmvwimp.hxx>
 #include <svx/fmshell.hxx>
-#include "svx/fmtools.hxx"
-#include "fmservs.hxx"
-#include "fmprop.hxx"
-#include "fmpgeimp.hxx"
-#include "fmitems.hxx"
-#include "fmundo.hxx"
+#include <svx/fmtools.hxx>
+#include <fmservs.hxx>
+#include <fmprop.hxx>
+#include <fmpgeimp.hxx>
+#include <fmitems.hxx>
+#include <fmundo.hxx>
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -50,40 +50,40 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
-#include "svx/svditer.hxx"
-#include "fmobj.hxx"
+#include <svx/svditer.hxx>
+#include <fmobj.hxx>
 
 #include <svx/svxids.hrc>
 
-#include "fmexch.hxx"
+#include <fmexch.hxx>
 #include <svx/fmglob.hxx>
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/svdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/dialmgr.hxx>
-#include "fmshimp.hxx"
+#include <fmshimp.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/viewsh.hxx>
-#include "fmexpl.hxx"
-#include "formcontrolling.hxx"
+#include <fmexpl.hxx>
+#include <formcontrolling.hxx>
 #include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
-#include "fmdocumentclassification.hxx"
-#include "formtoolbars.hxx"
+#include <fmdocumentclassification.hxx>
+#include <formtoolbars.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/strings.hrc>
 
-#include "svx/sdrobjectfilter.hxx"
+#include <svx/sdrobjectfilter.hxx>
 
 #define FmFormShell
-#include "svxslots.hxx"
+#include <svxslots.hxx>
 
-#include "tbxform.hxx"
+#include <tbxform.hxx>
 #include <comphelper/property.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 

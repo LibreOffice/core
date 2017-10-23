@@ -27,7 +27,7 @@
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include "svx/layctrl.hxx"
+#include <svx/layctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

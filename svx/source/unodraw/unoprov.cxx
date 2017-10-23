@@ -32,17 +32,17 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <editeng/unotext.hxx>
 #include <svx/unoshprp.hxx>
 #include <editeng/editeng.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/strings.hrc>
-#include "strings.hxx"
+#include <strings.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 
-#include <shapeimpl.hxx>
+#include "shapeimpl.hxx"
 #include <unordered_map>
 
 using namespace ::com::sun::star;

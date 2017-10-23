@@ -22,7 +22,7 @@
 #include <vcl/window.hxx>
 #include <vcl/graph.hxx>
 #include <tools/urlobj.hxx>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 class SfxBindings;
 

@@ -20,7 +20,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/samecontentlistbox.hxx>
 #include <vcl/builderfactory.hxx>
-#include "samecontent.hrc"
+#include <samecontent.hrc>
 
 SameContentListBox::SameContentListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)

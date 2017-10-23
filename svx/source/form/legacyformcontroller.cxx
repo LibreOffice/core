@@ -18,7 +18,7 @@
  */
 
 
-#include "fmservs.hxx"
+#include <fmservs.hxx>
 
 #include <com/sun/star/form/XFormController.hpp>
 #include <com/sun/star/form/runtime/FormController.hpp>

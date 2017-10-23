@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "fmtextcontroldialogs.hxx"
+#include <fmtextcontroldialogs.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/strings.hrc>
 
 #include <editeng/eeitem.hxx>
 
-#include "svx/flagsdef.hxx"
+#include <svx/flagsdef.hxx>
 #include <svl/intitem.hxx>
 
 #include <svl/cjkoptions.hxx>

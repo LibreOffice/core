@@ -24,7 +24,7 @@
 #include <svx/xtable.hxx>
 #include <svx/xpool.hxx>
 #include <svx/strings.hrc>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 #include <svx/dlgctrl.hxx>
 #include <svx/dialmgr.hxx>
 #include <tools/poly.hxx>
@@ -34,7 +34,7 @@
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include "svxpixelctlaccessiblecontext.hxx"
+#include <svxpixelctlaccessiblecontext.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svxrectctaccessiblecontext.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

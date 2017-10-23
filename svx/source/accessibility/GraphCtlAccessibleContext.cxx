@@ -38,7 +38,7 @@
 
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
-#include "GraphCtlAccessibleContext.hxx"
+#include <GraphCtlAccessibleContext.hxx>
 #include <svx/graphctl.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdpage.hxx>

@@ -18,10 +18,10 @@
  */
 
 
-#include "fmprop.hxx"
-#include "fmservs.hxx"
-#include "svx/fmtools.hxx"
-#include "svx/fmglob.hxx"
+#include <fmprop.hxx>
+#include <fmservs.hxx>
+#include <svx/fmtools.hxx>
+#include <svx/fmglob.hxx>
 
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -22,18 +22,18 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmglob.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 
-#include "fmprop.hxx"
+#include <fmprop.hxx>
 
-#include "fmundo.hxx"
-#include "helpids.h"
-#include "fmexpl.hxx"
-#include "svx/strings.hrc"
-#include "fmshimp.hxx"
-#include "fmobj.hxx"
+#include <fmundo.hxx>
+#include <helpids.h>
+#include <fmexpl.hxx>
+#include <svx/strings.hrc>
+#include <fmshimp.hxx>
+#include <fmobj.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/container/XContainer.hpp>

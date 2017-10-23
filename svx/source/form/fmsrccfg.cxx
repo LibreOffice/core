@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/fmsrccfg.hxx"
+#include <svx/fmsrccfg.hxx>
 
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>

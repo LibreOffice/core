@@ -36,12 +36,12 @@
 #include <svx/sdasitm.hxx>
 #include <svx/dialmgr.hxx>
 
-#include "coreservices.hxx"
-#include "helpids.h"
+#include <coreservices.hxx>
+#include <helpids.h>
 #include "extrusioncontrols.hxx"
-#include "extrusiondepthdialog.hxx"
+#include <extrusiondepthdialog.hxx>
 
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

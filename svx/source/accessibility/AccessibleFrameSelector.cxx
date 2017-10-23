@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "AccessibleFrameSelector.hxx"
+#include <AccessibleFrameSelector.hxx>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -33,10 +33,10 @@
 #include <vcl/settings.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/dialmgr.hxx>
-#include "editeng/unolingu.hxx"
+#include <editeng/unolingu.hxx>
 
 #include <svx/strings.hrc>
-#include "frmsel.hrc"
+#include <frmsel.hrc>
 
 namespace svx {
 namespace a11y {

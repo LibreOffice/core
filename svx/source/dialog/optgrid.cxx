@@ -23,9 +23,9 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/optgrid.hxx"
+#include <svx/optgrid.hxx>
 #include <svx/strings.hrc>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 
 // local functions
 static void    lcl_GetMinMax(MetricField const & rField, long& nFirst, long& nLast, long& nMin, long& nMax)

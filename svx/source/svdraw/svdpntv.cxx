@@ -37,7 +37,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>
 #include <svdibrow.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <sdr/overlay/overlayrollingrectangle.hxx>

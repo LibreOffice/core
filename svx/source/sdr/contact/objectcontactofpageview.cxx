@@ -38,7 +38,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/lok.hxx>
 
-#include "eventhandler.hxx"
+#include <eventhandler.hxx>
 #include <memory>
 
 using namespace com::sun::star;

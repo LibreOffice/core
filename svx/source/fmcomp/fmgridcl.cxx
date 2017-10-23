@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/fmgridif.hxx"
-#include "fmitems.hxx"
-#include "fmprop.hxx"
-#include "svx/fmtools.hxx"
-#include "fmservs.hxx"
-#include "fmurl.hxx"
-#include "formcontrolfactory.hxx"
-#include "gridcell.hxx"
-#include "gridcols.hxx"
-#include "svx/dbaexchange.hxx"
-#include "svx/dialmgr.hxx"
-#include "svx/strings.hrc"
-#include "svx/fmgridcl.hxx"
-#include "svx/svxdlg.hxx"
-#include "svx/svxids.hrc"
-#include "bitmaps.hlst"
+#include <svx/fmgridif.hxx>
+#include <fmitems.hxx>
+#include <fmprop.hxx>
+#include <svx/fmtools.hxx>
+#include <fmservs.hxx>
+#include <fmurl.hxx>
+#include <formcontrolfactory.hxx>
+#include <gridcell.hxx>
+#include <gridcols.hxx>
+#include <svx/dbaexchange.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
+#include <svx/fmgridcl.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
+#include <bitmaps.hlst>
 
 #include <com/sun/star/form/XConfirmDeleteListener.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>

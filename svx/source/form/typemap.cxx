@@ -29,9 +29,9 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/postitem.hxx>
-#include "svx/clipfmtitem.hxx"
+#include <svx/clipfmtitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include "editeng/fontitem.hxx"
+#include <editeng/fontitem.hxx>
 #include <editeng/charreliefitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/colritem.hxx>
@@ -49,6 +49,6 @@
 
 #include <editeng/memberids.h>
 #define SFX_TYPEMAP
-#include "svxslots.hxx"
+#include <svxslots.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

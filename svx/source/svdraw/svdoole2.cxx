@@ -68,11 +68,11 @@
 
 #include <svx/charthelper.hxx>
 #include <svx/svdmodel.hxx>
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
-#include "unomlstr.hxx"
+#include <unomlstr.hxx>
 #include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
 #include <sdr/properties/oleproperties.hxx>
@@ -85,7 +85,7 @@
 #include <editeng/outlobj.hxx>
 #include <svx/svdpage.hxx>
 #include <rtl/ref.hxx>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
 

@@ -46,7 +46,7 @@
 #include <svx/xlnedit.hxx>
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 using namespace css;
 using namespace css::uno;

@@ -29,12 +29,12 @@
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include "helpids.h"
+#include <helpids.h>
 
-#include "svx/drawitem.hxx"
-#include "svx/xattr.hxx"
+#include <svx/drawitem.hxx>
+#include <svx/xattr.hxx>
 #include <svx/xtable.hxx>
-#include "svx/linectrl.hxx"
+#include <svx/linectrl.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/unoapi.hxx>

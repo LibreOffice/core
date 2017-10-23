@@ -19,8 +19,8 @@
 
 
 #include <rtl/strbuf.hxx>
-#include "svx/fmtools.hxx"
-#include "svx/fmsrccfg.hxx"
+#include <svx/fmtools.hxx>
+#include <svx/fmsrccfg.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/wldcrd.hxx>
@@ -41,9 +41,9 @@
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "fmprop.hxx"
-#include "fmservs.hxx"
-#include "svx/fmsrcimp.hxx"
+#include <fmprop.hxx>
+#include <fmservs.hxx>
+#include <svx/fmsrcimp.hxx>
 #include <svx/fmsearch.hxx>
 
 #include <comphelper/numbers.hxx>

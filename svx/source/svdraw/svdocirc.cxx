@@ -26,8 +26,8 @@
 #include <math.h>
 #include <svl/style.hxx>
 
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 
 #include <sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <sdr/properties/circleproperties.hxx>

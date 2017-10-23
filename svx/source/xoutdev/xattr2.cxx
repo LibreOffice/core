@@ -24,7 +24,7 @@
 #include <i18nutil/unicode.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>

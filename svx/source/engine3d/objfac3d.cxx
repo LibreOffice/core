@@ -18,13 +18,13 @@
  */
 
 #include <svx/svdpage.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/polygn3d.hxx>
-#include "svx/objfac3d.hxx"
+#include <svx/objfac3d.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/scene3d.hxx>
 

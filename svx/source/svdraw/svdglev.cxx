@@ -22,8 +22,8 @@
 #include <math.h>
 
 #include <svx/svdundo.hxx>
-#include "svx/strings.hrc"
-#include "svdglob.hxx"
+#include <svx/strings.hrc>
+#include <svdglob.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdtrans.hxx>

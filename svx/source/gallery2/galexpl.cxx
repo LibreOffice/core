@@ -21,10 +21,10 @@
 #include <unotools/pathoptions.hxx>
 #include <rtl/instance.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "svx/gallery1.hxx"
-#include "svx/galtheme.hxx"
-#include "svx/gallery.hxx"
-#include "galobj.hxx"
+#include <svx/gallery1.hxx>
+#include <svx/galtheme.hxx>
+#include <svx/gallery.hxx>
+#include <galobj.hxx>
 
 namespace
 {

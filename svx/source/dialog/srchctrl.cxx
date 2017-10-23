@@ -23,7 +23,7 @@
 #include <svx/svxids.hrc>
 
 #include "srchctrl.hxx"
-#include "svx/srchdlg.hxx"
+#include <svx/srchdlg.hxx>
 #include <svl/srchitem.hxx>
 
 SvxSearchController::SvxSearchController

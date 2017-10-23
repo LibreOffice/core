@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "DefaultShapesPanel.hxx"
+#include <DefaultShapesPanel.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/dispatchcommand.hxx>

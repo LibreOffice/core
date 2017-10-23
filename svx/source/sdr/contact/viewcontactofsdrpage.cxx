@@ -40,7 +40,7 @@
 #include <svdglob.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 namespace sdr { namespace contact {
 

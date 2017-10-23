@@ -28,7 +28,7 @@
 #include <vcl/settings.hxx>
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
-#include "svx/dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/unitconv.hxx>
 

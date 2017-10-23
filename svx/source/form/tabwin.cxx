@@ -18,9 +18,9 @@
  */
 
 
-#include "tabwin.hxx"
-#include "svx/fmtools.hxx"
-#include "fmservs.hxx"
+#include <tabwin.hxx>
+#include <svx/fmtools.hxx>
+#include <fmservs.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/svxids.hrc>
@@ -33,14 +33,14 @@
 #include <com/sun/star/util/XLocalizedAliases.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "helpids.h"
+#include <helpids.h>
 #include <svx/fmshell.hxx>
-#include "fmshimp.hxx"
+#include <fmshimp.hxx>
 #include <svx/fmpage.hxx>
 
-#include "fmpgeimp.hxx"
+#include <fmpgeimp.hxx>
 
-#include "fmprop.hxx"
+#include <fmprop.hxx>
 
 #include <svx/dialmgr.hxx>
 #include <svx/svdpagv.hxx>
@@ -49,9 +49,9 @@
 #include <comphelper/property.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <vcl/settings.hxx>
-#include "tabwin.hrc"
+#include <tabwin.hrc>
 
 const long STD_WIN_SIZE_X = 120;
 const long STD_WIN_SIZE_Y = 150;

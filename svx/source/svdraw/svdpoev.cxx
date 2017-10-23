@@ -24,8 +24,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdundo.hxx>
-#include "svx/strings.hrc"
-#include "svdglob.hxx"
+#include <svx/strings.hrc>
+#include <svdglob.hxx>
 #include <svx/svdtrans.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

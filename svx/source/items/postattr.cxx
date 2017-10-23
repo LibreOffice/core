@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/postattr.hxx"
+#include <svx/postattr.hxx>
 #include <editeng/itemtype.hxx>
 #include <svx/strings.hrc>
 #include <svx/svxitems.hrc>

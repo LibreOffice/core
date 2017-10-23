@@ -20,20 +20,20 @@
 
 #include <sal/macros.h>
 
-#include "helpids.h"
-#include "fmprop.hxx"
-#include "fmPropBrw.hxx"
-#include "svx/strings.hrc"
-#include "fmservs.hxx"
-#include "fmshimp.hxx"
-#include "fmpgeimp.hxx"
+#include <helpids.h>
+#include <fmprop.hxx>
+#include <fmPropBrw.hxx>
+#include <svx/strings.hrc>
+#include <fmservs.hxx>
+#include <fmshimp.hxx>
+#include <fmpgeimp.hxx>
 
-#include "svx/dialmgr.hxx"
-#include "svx/fmpage.hxx"
-#include "svx/fmshell.hxx"
-#include "svx/sdrpagewindow.hxx"
-#include "svx/svdpagv.hxx"
-#include "svx/svxids.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/fmpage.hxx>
+#include <svx/fmshell.hxx>
+#include <svx/sdrpagewindow.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svxids.hrc>
 
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>

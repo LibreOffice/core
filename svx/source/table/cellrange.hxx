@@ -23,7 +23,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <cppuhelper/implbase1.hxx>
 
-#include "tablemodel.hxx"
+#include <tablemodel.hxx>
 
 
 namespace sdr { namespace table {

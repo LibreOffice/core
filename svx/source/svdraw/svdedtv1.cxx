@@ -28,10 +28,10 @@
 #include <tools/bigint.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "getallcharpropids.hxx"
-#include "svdglob.hxx"
-#include "svx/svditer.hxx"
-#include "svx/strings.hrc"
+#include <getallcharpropids.hxx>
+#include <svdglob.hxx>
+#include <svx/svditer.hxx>
+#include <svx/strings.hrc>
 
 #include <svx/AffineMatrixItem.hxx>
 #include <svx/e3dsceneupdater.hxx>

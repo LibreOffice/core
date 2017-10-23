@@ -19,7 +19,7 @@
 
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
-#include "svx/DescriptionGenerator.hxx"
+#include <svx/DescriptionGenerator.hxx>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -37,14 +37,14 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <svx/IAccessibleParent.hxx>
 #include <svx/svdouno.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include "svx/strings.hrc"
+#include <svx/strings.hrc>
 #include <vcl/svapp.hxx>
 #include <algorithm>
 

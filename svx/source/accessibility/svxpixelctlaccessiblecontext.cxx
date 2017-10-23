@@ -42,7 +42,7 @@
 
 #include <unotools/accessiblerelationsethelper.hxx>
 
-#include "svxpixelctlaccessiblecontext.hxx"
+#include <svxpixelctlaccessiblecontext.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 
 using namespace ::cppu;

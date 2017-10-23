@@ -19,12 +19,12 @@
 
 #include <config_features.h>
 
-#include "svx/txencbox.hxx"
+#include <svx/txencbox.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/txenctab.hxx"
+#include <svx/txenctab.hxx>
 #include <svx/strings.hrc>
 #if HAVE_FEATURE_DBCONNECTIVITY
-#include "svx/dbcharsethelper.hxx"
+#include <svx/dbcharsethelper.hxx>
 #endif
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
@@ -33,7 +33,7 @@
 #include <rtl/locale.h>
 #include <rtl/strbuf.hxx>
 #include <osl/nlsupport.h>
-#include "txenctab.hrc"
+#include <txenctab.hrc>
 
 SvxTextEncodingBox::SvxTextEncodingBox( vcl::Window* pParent, WinBits nBits )
     : ListBox( pParent, nBits )

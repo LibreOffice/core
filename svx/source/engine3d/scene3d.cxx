@@ -18,9 +18,9 @@
  */
 
 
-#include "svx/strings.hrc"
-#include "svdglob.hxx"
-#include "svx/svditer.hxx"
+#include <svx/strings.hrc>
+#include <svdglob.hxx>
+#include <svx/svditer.hxx>
 
 #include <stdlib.h>
 #include <svx/globl3d.hxx>
@@ -40,7 +40,7 @@
 #include <sdr/properties/e3dsceneproperties.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/svddrag.hxx>
-#include <helperminimaldepth3d.hxx>
+#include "helperminimaldepth3d.hxx"
 #include <algorithm>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

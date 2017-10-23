@@ -18,9 +18,9 @@
  */
 
 
-#include "fmcontrolbordermanager.hxx"
+#include <fmcontrolbordermanager.hxx>
 
-#include "fmprop.hxx"
+#include <fmprop.hxx>
 
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>

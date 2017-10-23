@@ -29,7 +29,7 @@
 #include <vector>
 #include <map>
 
-#include "svx/svdotable.hxx"
+#include <svx/svdotable.hxx>
 
 namespace tools { class Rectangle; }
 

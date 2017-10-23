@@ -19,8 +19,8 @@
 
 
 #include <svx/svdopage.hxx>
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>

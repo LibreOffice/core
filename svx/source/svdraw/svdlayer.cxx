@@ -21,8 +21,8 @@
 
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
-#include "svdglob.hxx"
-#include "svx/strings.hrc"
+#include <svdglob.hxx>
+#include <svx/strings.hrc>
 
 bool SdrLayerIDSet::IsEmpty() const
 {

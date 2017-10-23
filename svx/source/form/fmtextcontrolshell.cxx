@@ -18,18 +18,18 @@
  */
 
 
-#include "fmprop.hxx"
-#include "fmtextcontroldialogs.hxx"
-#include "fmtextcontrolfeature.hxx"
-#include "fmtextcontrolshell.hxx"
-#include "editeng/crossedoutitem.hxx"
-#include "svx/dialmgr.hxx"
-#include "editeng/editeng.hxx"
-#include "editeng/eeitem.hxx"
-#include "svx/fmglob.hxx"
-#include "editeng/scriptspaceitem.hxx"
-#include "svx/svxids.hrc"
-#include "editeng/udlnitem.hxx"
+#include <fmprop.hxx>
+#include <fmtextcontroldialogs.hxx>
+#include <fmtextcontrolfeature.hxx>
+#include <fmtextcontrolshell.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <svx/dialmgr.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <svx/fmglob.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <svx/svxids.hrc>
+#include <editeng/udlnitem.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>

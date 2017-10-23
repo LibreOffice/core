@@ -24,7 +24,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 
-#include "eventhandler.hxx"
+#include <eventhandler.hxx>
 
 namespace sdr
 {

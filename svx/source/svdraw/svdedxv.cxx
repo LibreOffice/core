@@ -37,19 +37,19 @@
 #include <svx/sdtfchim.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
-#include "svx/svditer.hxx"
-#include "svx/svdpagv.hxx"
-#include "svx/svdpage.hxx"
-#include "svx/svdetc.hxx"
-#include "svx/svdotable.hxx"
+#include <svx/svditer.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdotable.hxx>
 #include <svx/selectioncontroller.hxx>
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
 #include <svx/svddrgv.hxx>
-#include "svx/strings.hrc"
-#include "svdglob.hxx"
-#include "svx/globl3d.hxx"
+#include <svx/strings.hrc>
+#include <svdglob.hxx>
+#include <svx/globl3d.hxx>
 #include <svx/textchain.hxx>
 #include <svx/textchaincursor.hxx>
 #include <editeng/outliner.hxx>

@@ -20,7 +20,7 @@
 #include <svx/svdobj.hxx>
 #include <config_features.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -54,10 +54,10 @@
 #include <vcl/virdev.hxx>
 #include <vector>
 
-#include "svx/shapepropertynotifier.hxx"
-#include "svdglob.hxx"
-#include "svx/svdotable.hxx"
-#include "svx/xlinjoit.hxx"
+#include <svx/shapepropertynotifier.hxx>
+#include <svdglob.hxx>
+#include <svx/svdotable.hxx>
+#include <svx/xlinjoit.hxx>
 
 #include <svx/fmmodel.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>

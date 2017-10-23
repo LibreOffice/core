@@ -18,7 +18,7 @@
  */
 
 
-#include "svx/shapepropertynotifier.hxx"
+#include <svx/shapepropertynotifier.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 

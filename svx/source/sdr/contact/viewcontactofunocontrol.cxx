@@ -28,7 +28,7 @@
 #include <svx/svdview.hxx>
 #include <svx/sdrpagewindow.hxx>
 
-#include "svx/sdrpaintwindow.hxx"
+#include <svx/sdrpaintwindow.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

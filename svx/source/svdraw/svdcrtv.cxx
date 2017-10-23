@@ -19,7 +19,7 @@
 
 
 #include <svx/svdcrtv.hxx>
-#include "svx/xattr.hxx"
+#include <svx/xattr.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdoedge.hxx>
@@ -35,7 +35,7 @@
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include "fmobj.hxx"
+#include <fmobj.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>

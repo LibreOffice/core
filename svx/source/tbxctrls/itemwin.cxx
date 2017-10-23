@@ -39,11 +39,11 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xtable.hxx>
-#include "svx/drawitem.hxx"
+#include <svx/drawitem.hxx>
 #include <svx/dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dlgutil.hxx>
 #include <svx/itemwin.hxx>
-#include "svx/linectrl.hxx"
+#include <svx/linectrl.hxx>
 #include <svtools/colorcfg.hxx>
 
 using namespace ::com::sun::star;

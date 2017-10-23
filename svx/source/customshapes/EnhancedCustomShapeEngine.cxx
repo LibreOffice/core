@@ -27,14 +27,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 #include <rtl/ref.hxx>
-#include "svx/EnhancedCustomShape2d.hxx"
+#include <svx/EnhancedCustomShape2d.hxx>
 #include "EnhancedCustomShape3d.hxx"
 #include "EnhancedCustomShapeFontWork.hxx"
 #include "EnhancedCustomShapeHandle.hxx"
-#include "svx/EnhancedCustomShapeGeometry.hxx"
+#include <svx/EnhancedCustomShapeGeometry.hxx>
 #include <svx/unoshape.hxx>
-#include "svx/unopage.hxx"
-#include "svx/unoapi.hxx"
+#include <svx/unopage.hxx>
+#include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
@@ -46,7 +46,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <uno/mapping.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/unotools.hxx>

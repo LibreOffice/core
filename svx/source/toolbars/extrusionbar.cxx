@@ -37,10 +37,10 @@
 #include <svx/strings.hrc>
 #include <svx/svdview.hxx>
 #include <editeng/colritem.hxx>
-#include "svx/chrtitem.hxx"
+#include <svx/chrtitem.hxx>
 
 #include <svx/extrusionbar.hxx>
-#include "extrusiondepthdialog.hxx"
+#include <extrusiondepthdialog.hxx>
 
 using namespace ::svx;
 using namespace ::cppu;

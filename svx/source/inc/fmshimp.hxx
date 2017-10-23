@@ -45,8 +45,8 @@
 #include <svx/svxids.hrc>
 #include <svl/lstner.hxx>
 
-#include "svx/fmtools.hxx"
-#include "svx/fmsrccfg.hxx"
+#include <svx/fmtools.hxx>
+#include <svx/fmsrccfg.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/component.hxx>
 #include <comphelper/container.hxx>

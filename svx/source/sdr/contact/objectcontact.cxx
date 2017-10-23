@@ -25,7 +25,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/animation/objectanimator.hxx>
 
-#include "eventhandler.hxx"
+#include <eventhandler.hxx>
 
 using namespace com::sun::star;
 

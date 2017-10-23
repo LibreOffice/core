@@ -22,12 +22,12 @@
 #include <memory>
 
 #include <sal/macros.h>
-#include "datanavi.hxx"
-#include "fmservs.hxx"
+#include <datanavi.hxx>
+#include <fmservs.hxx>
 
-#include "helpids.h"
-#include "bitmaps.hlst"
-#include "fpicker/strings.hrc"
+#include <helpids.h>
+#include <bitmaps.hlst>
+#include <fpicker/strings.hrc>
 #include <svx/svxids.hrc>
 #include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
@@ -36,7 +36,7 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include "svtools/treelistentry.hxx"
+#include <svtools/treelistentry.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objitem.hxx>
@@ -51,7 +51,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>

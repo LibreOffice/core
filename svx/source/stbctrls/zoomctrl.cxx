@@ -34,7 +34,7 @@
 #include "stbctrls.h"
 #include <svx/dialmgr.hxx>
 #include "modctrl_internal.hxx"
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 

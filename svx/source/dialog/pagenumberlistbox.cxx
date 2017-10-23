@@ -22,7 +22,7 @@
 #include <editeng/numitem.hxx>
 #include <vcl/builderfactory.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
-#include "numberingtype.hrc"
+#include <numberingtype.hrc>
 
 PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)

@@ -31,22 +31,22 @@
 #include <sax/tools/converter.hxx>
 #include <sfx2/docfile.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "xmloff/xmlnmspe.hxx"
-#include "xmloff/nmspmap.hxx"
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/nmspmap.hxx>
 
-#include "xmloff/xmltoken.hxx"
-#include "xmloff/xmlmetae.hxx"
-#include "xmloff/DashStyle.hxx"
-#include "xmloff/GradientStyle.hxx"
-#include "xmloff/HatchStyle.hxx"
-#include "xmloff/ImageStyle.hxx"
-#include "xmloff/MarkerStyle.hxx"
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlmetae.hxx>
+#include <xmloff/DashStyle.hxx>
+#include <xmloff/GradientStyle.hxx>
+#include <xmloff/HatchStyle.hxx>
+#include <xmloff/ImageStyle.hxx>
+#include <xmloff/MarkerStyle.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
-#include "svx/xmlgrhlp.hxx"
+#include <svx/xmlgrhlp.hxx>
 
-#include "xmlxtexp.hxx"
+#include <xmlxtexp.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <memory>

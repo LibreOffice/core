@@ -32,13 +32,13 @@
 #define TMP_STR_BEGIN   "["
 #define TMP_STR_END     "]"
 
-#include "svx/drawitem.hxx"
-#include "svx/xattr.hxx"
+#include <svx/drawitem.hxx>
+#include <svx/xattr.hxx>
 #include <svx/xtable.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
-#include "helpids.h"
+#include <helpids.h>
 #include <memory>
 #include <o3tl/make_unique.hxx>
 

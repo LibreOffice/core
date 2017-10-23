@@ -42,7 +42,7 @@
 #include <svx/unoapi.hxx>
 
 #include <svx/svdmodel.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unopage.hxx>

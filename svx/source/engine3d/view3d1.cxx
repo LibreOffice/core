@@ -18,7 +18,7 @@
  */
 
 
-#include "svx/svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svxids.hrc>
@@ -26,7 +26,7 @@
 #include <svx/fmview.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/e3ditem.hxx>
 #include <editeng/colritem.hxx>

@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/lang/NoSupportException.hpp"
-#include "svx/svdotable.hxx"
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <svx/svdotable.hxx>
 #include "cellcursor.hxx"
 #include "tablelayouter.hxx"
-#include "cell.hxx"
-#include "svx/svdmodel.hxx"
-#include "svx/strings.hrc"
-#include "svdglob.hxx"
+#include <cell.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/strings.hrc>
+#include <svdglob.hxx>
 
 
 using namespace ::com::sun::star::uno;

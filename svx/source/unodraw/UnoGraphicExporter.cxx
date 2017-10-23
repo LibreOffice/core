@@ -52,9 +52,9 @@
 #include <editeng/numitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
-#include "svx/xoutbmp.hxx"
+#include <svx/xoutbmp.hxx>
 #include <vcl/graphicfilter.hxx>
-#include "svx/unoapi.hxx"
+#include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/fmview.hxx>
@@ -64,7 +64,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/flditem.hxx>
-#include <UnoGraphicExporter.hxx>
+#include "UnoGraphicExporter.hxx"
 #include <memory>
 
 #define MAX_EXT_PIX         2048

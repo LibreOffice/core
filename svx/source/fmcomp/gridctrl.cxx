@@ -18,15 +18,15 @@
  */
 
 #include <sal/macros.h>
-#include "helpids.h"
+#include <helpids.h>
 #include <svx/gridctrl.hxx>
-#include "gridcell.hxx"
-#include "svx/fmtools.hxx"
+#include <gridcell.hxx>
+#include <svx/fmtools.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 
-#include "fmprop.hxx"
+#include <fmprop.hxx>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
@@ -47,12 +47,12 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 
-#include "svx/strings.hrc"
+#include <svx/strings.hrc>
 
 #include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
-#include "fmservs.hxx"
-#include "sdbdatacolumn.hxx"
+#include <fmservs.hxx>
+#include <sdbdatacolumn.hxx>
 
 #include <comphelper/property.hxx>
 #include <cppuhelper/implbase.hxx>

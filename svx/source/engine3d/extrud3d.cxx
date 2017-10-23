@@ -18,10 +18,10 @@
  */
 
 
-#include "svx/strings.hrc"
-#include "svdglob.hxx"
+#include <svx/strings.hrc>
+#include <svdglob.hxx>
 #include <svx/svdpage.hxx>
-#include "svx/globl3d.hxx"
+#include <svx/globl3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/scene3d.hxx>
 

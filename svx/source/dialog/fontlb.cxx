@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svx/fontlb.hxx"
+#include <svx/fontlb.hxx>
 #include <o3tl/make_unique.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 
 SvLBoxFontString::SvLBoxFontString()
     : SvLBoxString()

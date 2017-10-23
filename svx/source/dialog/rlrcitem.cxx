@@ -27,9 +27,9 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/tstpitem.hxx>
-#include "editeng/protitem.hxx"
+#include <editeng/protitem.hxx>
 #include "rlrcitem.hxx"
-#include "svx/rulritem.hxx"
+#include <svx/rulritem.hxx>
 #include <svl/eitem.hxx>
 
 SvxRulerItem::SvxRulerItem(sal_uInt16 _nId, SvxRuler &rRul, SfxBindings &rBindings)

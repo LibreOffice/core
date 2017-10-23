@@ -19,7 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <vcl/layout.hxx>
-#include "svx/passwd.hxx"
+#include <svx/passwd.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 

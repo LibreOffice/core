@@ -44,17 +44,17 @@
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 
-#include "svx/gallery.hxx"
+#include <svx/gallery.hxx>
 #include <svx/dlgutil.hxx>
 
 #include <svx/fontworkgallery.hxx>
-#include "coreservices.hxx"
+#include <coreservices.hxx>
 
 #include <algorithm>
 #include <memory>
 
-#include "helpids.h"
-#include "bitmaps.hlst"
+#include <helpids.h>
+#include <bitmaps.hlst>
 
 using ::svtools::ToolbarMenu;
 

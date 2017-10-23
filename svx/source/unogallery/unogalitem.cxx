@@ -20,8 +20,8 @@
 
 #include "unogalitem.hxx"
 #include "unogaltheme.hxx"
-#include "svx/galtheme.hxx"
-#include "svx/galmisc.hxx"
+#include <svx/galtheme.hxx>
+#include <svx/galmisc.hxx>
 #include <svx/fmmodel.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
@@ -29,7 +29,7 @@
 #include <svl/itempool.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "galobj.hxx"
+#include <galobj.hxx>
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

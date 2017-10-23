@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "eventhandler.hxx"
+#include <eventhandler.hxx>
 
 #include <algorithm>
 #include <tools/debug.hxx>

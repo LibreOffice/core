@@ -34,7 +34,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/charscaleitem.hxx>
-#include "svx/EnhancedCustomShapeTypeNames.hxx"
+#include <svx/EnhancedCustomShapeTypeNames.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdoashp.hxx>
 #include <editeng/outliner.hxx>

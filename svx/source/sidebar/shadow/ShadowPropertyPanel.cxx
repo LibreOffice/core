@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <ShadowPropertyPanel.hxx>
+#include "ShadowPropertyPanel.hxx"
 #include <comphelper/string.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <svx/colorbox.hxx>

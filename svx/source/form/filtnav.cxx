@@ -18,11 +18,11 @@
  */
 
 #include <memory>
-#include "filtnav.hxx"
-#include "fmexch.hxx"
-#include "helpids.h"
-#include "fmitems.hxx"
-#include "fmprop.hxx"
+#include <filtnav.hxx>
+#include <fmexch.hxx>
+#include <helpids.h>
+#include <fmitems.hxx>
+#include <fmprop.hxx>
 #include <svx/strings.hrc>
 
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -54,10 +54,10 @@
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 #include <svtools/svlbitm.hxx>
-#include "svtools/treelistentry.hxx"
-#include "svtools/viewdataentry.hxx"
+#include <svtools/treelistentry.hxx>
+#include <svtools/viewdataentry.hxx>
 
-#include "bitmaps.hlst"
+#include <bitmaps.hlst>
 
 #include <functional>
 

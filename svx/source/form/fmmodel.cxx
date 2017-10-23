@@ -18,9 +18,9 @@
  */
 
 
-#include "fmundo.hxx"
-#include "fmdocumentclassification.hxx"
-#include "fmcontrollayout.hxx"
+#include <fmundo.hxx>
+#include <fmdocumentclassification.hxx>
+#include <fmcontrollayout.hxx>
 
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>

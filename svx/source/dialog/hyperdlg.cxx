@@ -19,7 +19,7 @@
 
 #include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
-#include "svx/hyperdlg.hxx"
+#include <svx/hyperdlg.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfxsids.hrc>
