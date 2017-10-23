@@ -19,7 +19,7 @@
 
 #include "options.hxx"
 
-#include "osl/diagnose.h"
+#include <osl/diagnose.h>
 
 #include <stdio.h>
 #include <string.h>
