@@ -18,8 +18,8 @@
 
 #include <rtl/ref.hxx>
 
-#include "DocumentHandlerForOds.hxx"
-#include "ImportFilter.hxx"
+#include <DocumentHandlerForOds.hxx>
+#include <ImportFilter.hxx>
 #include "WpftFilterFixture.hxx"
 #include "WpftLoader.hxx"
 #include "wpftimport.hxx"

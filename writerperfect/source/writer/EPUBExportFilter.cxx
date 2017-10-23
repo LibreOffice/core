@@ -9,7 +9,7 @@
 
 #include "EPUBExportFilter.hxx"
 
-#include "config_libepubgen.h"
+#include <config_libepubgen.h>
 
 #include <libepubgen/EPUBTextGenerator.h>
 #include <libepubgen/libepubgen-decls.h>

@@ -12,7 +12,7 @@
 
 #include <librevenge-stream/librevenge-stream.h>
 #include <com/sun/star/uno/Reference.h>
-#include <writerperfectdllapi.h>
+#include "writerperfectdllapi.h"
 #include <memory>
 
 namespace com

@@ -8,9 +8,9 @@
 #ifndef INCLUDED_WRITERPERFECT_SOURCE_DRAW_PAGEMAKERIMPORTFILTER_HXX
 #define INCLUDED_WRITERPERFECT_SOURCE_DRAW_PAGEMAKERIMPORTFILTER_HXX
 
-#include "ImportFilter.hxx"
+#include <ImportFilter.hxx>
 
-#include "DocumentHandlerForOdg.hxx"
+#include <DocumentHandlerForOdg.hxx>
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter

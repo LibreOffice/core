@@ -32,8 +32,8 @@
 
 #include <unotools/mediadescriptor.hxx>
 
-#include <DocumentHandler.hxx>
-#include <WPXSvInputStream.hxx>
+#include "DocumentHandler.hxx"
+#include "WPXSvInputStream.hxx"
 
 #include <xmloff/attrlist.hxx>
 

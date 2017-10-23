@@ -22,10 +22,10 @@
 
 #include <libwps/libwps.h>
 
-#include "WPFTEncodingDialog.hxx"
-#include "WPFTResMgr.hxx"
+#include <WPFTEncodingDialog.hxx>
+#include <WPFTResMgr.hxx>
 #include "MSWorksCalcImportFilter.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 #include <iostream>
 

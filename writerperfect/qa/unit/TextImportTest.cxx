@@ -17,8 +17,8 @@
 
 #include <rtl/ref.hxx>
 
-#include "DocumentHandlerForOdt.hxx"
-#include "ImportFilter.hxx"
+#include <DocumentHandlerForOdt.hxx>
+#include <ImportFilter.hxx>
 #include "WpftFilterFixture.hxx"
 #include "WpftLoader.hxx"
 #include "wpftimport.hxx"

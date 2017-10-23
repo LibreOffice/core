@@ -24,7 +24,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 
-#include <writerperfectdllapi.h>
+#include "writerperfectdllapi.h"
 
 #include <climits>
 

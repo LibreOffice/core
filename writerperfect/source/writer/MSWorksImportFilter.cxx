@@ -13,10 +13,10 @@
 
 #include <libwps/libwps.h>
 
-#include "WPFTEncodingDialog.hxx"
-#include "WPFTResMgr.hxx"
+#include <WPFTEncodingDialog.hxx>
+#include <WPFTResMgr.hxx>
 #include "MSWorksImportFilter.hxx"
-#include "strings.hrc"
+#include <strings.hrc>
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XInterface;
