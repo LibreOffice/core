@@ -20,9 +20,9 @@
 #ifndef INCLUDED_IDL_INC_DATABASE_HXX
 #define INCLUDED_IDL_INC_DATABASE_HXX
 
-#include <module.hxx>
-#include <hash.hxx>
-#include <lex.hxx>
+#include "module.hxx"
+#include "hash.hxx"
+#include "lex.hxx"
 #include <rtl/string.hxx>
 #include <tools/pstm.hxx>
 

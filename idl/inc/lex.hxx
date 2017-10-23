@@ -21,7 +21,7 @@
 #define INCLUDED_IDL_INC_LEX_HXX
 
 #include <sal/types.h>
-#include <hash.hxx>
+#include "hash.hxx"
 #include <tools/stream.hxx>
 #include <vector>
 #include <memory>

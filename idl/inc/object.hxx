@@ -20,8 +20,8 @@
 #ifndef INCLUDED_IDL_INC_OBJECT_HXX
 #define INCLUDED_IDL_INC_OBJECT_HXX
 
-#include <types.hxx>
-#include <slot.hxx>
+#include "types.hxx"
+#include "slot.hxx"
 #include <vector>
 
 class SvMetaClass;
